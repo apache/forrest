@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.3 2003/01/27 08:18:16 jefft Exp $
+$Id: site2xhtml.xsl,v 1.4 2003/01/27 11:39:55 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -172,7 +172,7 @@ $Id: site2xhtml.xsl,v 1.3 2003/01/27 08:18:16 jefft Exp $
 						         
 						         <xsl:choose>
 						         	<xsl:when test="string-length(toca)>15">
-						         	  <li><a href="{toca/@href}"><xsl:value-of select="substring(toca,0,15)" />...</a></li>
+						         	  <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,15)" />...</a></li>
 						         	</xsl:when>
 						         	<xsl:otherwise>
 						              <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>						         	 
@@ -184,7 +184,7 @@ $Id: site2xhtml.xsl,v 1.3 2003/01/27 08:18:16 jefft Exp $
 						              
 								          <xsl:choose>
 								         	<xsl:when test="string-length(toca)>15">
-								         	  <li><a href="{toca/@href}"><xsl:value-of select="substring(toca,0,15)" />...</a></li>
+								         	  <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,15)" />...</a></li>
 								         	</xsl:when>
 								         	<xsl:otherwise>
 								              <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>						         	 
