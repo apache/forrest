@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.37 $
+$Revision: 1.38 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -171,8 +171,8 @@ $Revision: 1.37 $
 
       <map:match pattern="**body-*.html">
         <map:select type="exists">
-          <map:when test="content/xdocs/{1}{2}.ehtml">
-            <map:generate src="content/xdocs/{1}{2}.ehtml" />
+          <map:when test="{project:content.xdocs}{1}{2}.ehtml">
+            <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
             <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
             <map:serialize type="xml" />
           </map:when>
@@ -187,16 +187,16 @@ $Revision: 1.37 $
 
         <map:select type="exists">
           
-          <map:when test="content/xdocs/{1}.ihtml">
-            <map:generate src="content/xdocs/{1}.ihtml" type="html" />
+          <map:when test="{project:content.xdocs}{1}.ihtml">
+            <map:generate src="{project:content.xdocs}{1}.ihtml" type="html" />
             <map:transform src="resources/stylesheets/html2document.xsl" />
             <map:transform type="idgen" />
             <map:serialize type="xml-document"/>
           </map:when>
 
-          <map:when test="content/xdocs/{1}.cwiki">
+          <map:when test="{project:content.xdocs}{1}.cwiki">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="text2xml" src="content/xdocs/{1}{2}.cwiki" />
+              <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
               <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
               <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
               <!--  Dynamically generated equivalents.  Matchers need to be added to
@@ -211,9 +211,9 @@ $Revision: 1.37 $
             </map:match>
           </map:when>
 
-          <map:when test="content/xdocs/{1}.txt">
+          <map:when test="{project:content.xdocs}{1}.txt">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="text2xml" src="content/xdocs/{1}{2}.txt" />
+              <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
               <map:transform src="resources/stylesheets/text2document.xsl">
                 <map:parameter name="filename" value="{2}" />
               </map:transform>
@@ -222,9 +222,9 @@ $Revision: 1.37 $
           </map:when>
           
           <map:otherwise>
-            <map:generate src="content/xdocs/{1}.xml" />
+            <map:generate src="{project:content.xdocs}{1}.xml" />
             <map:call resource="transform-to-document">
-              <map:parameter name="src" value="content/xdocs/{1}.xml" />
+              <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
             </map:call>
             <map:serialize type="xml-document"/>
           </map:otherwise>

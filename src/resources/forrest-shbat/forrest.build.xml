@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/05 10:12:09 $              |
+    |             $Date: 2003/10/12 12:51:32 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -114,6 +114,14 @@ FORREST SITE BUILDER
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"       property="tools.jar.present"/>
 
+    <!-- Define filters for project.* properties -->
+    <mkdir dir="${project.temp-dir}"/>
+    <property name="projfilters" value="${project.temp-dir}/projfilters.properties"/>
+    <echoproperties prefix="project" destfile="${projfilters}"/>
+    <filter filtersfile="${projfilters}"/>
+    <filter token="forrest.home" value="${forrest.home}"/>
+    <filter token="project.home" value="${project.home}"/>
+ 
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
@@ -403,7 +411,7 @@ FORREST SITE BUILDER
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
-    copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
+    copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status, copy-translations"/>
 
   <target name="copy-conf" if="conf.present">

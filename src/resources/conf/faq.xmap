@@ -12,7 +12,7 @@ Example URL:  http://localhost:8888/faq.pdf       # PDF of FAQ
 Used by    :  sitemap.xmap, which binds these generic pipelines to URLs.
 Uses       :  content/xdocs/**.xml, depending on URL binding.
 
-$Revision: 1.19 $
+$Revision: 1.20 $
 ==================================================== -->
 
 
@@ -100,7 +100,7 @@ $Revision: 1.19 $
         <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl">
           <map:parameter name="numbersections" value="false"/>
           <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
-          <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
+          <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
         </map:transform>
         <map:serialize type="fo2pdf"/>
       </map:match>
@@ -129,9 +129,9 @@ $Revision: 1.19 $
       <!-- ============================================================ -->
 
       <map:match pattern="**.xml">
-        <map:generate type="file" src="content/xdocs/{0}" />
+        <map:generate type="file" src="{project:content.xdocs}{0}" />
         <map:call resource="transform-to-document">
-          <map:parameter name="src" value="content/xdocs/{0}" />
+          <map:parameter name="src" value="{project:content.xdocs}{0}" />
         </map:call>
         <map:serialize type="xml-document"/>
       </map:match>
