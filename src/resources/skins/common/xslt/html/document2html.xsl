@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.6 2003/01/17 00:55:28 crossley Exp $
+$Id: document2html.xsl,v 1.7 2003/01/27 03:57:16 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -123,15 +123,6 @@ $Id: document2html.xsl,v 1.6 2003/01/17 00:55:28 crossley Exp $
          the title element name later on -->
     <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
     <a name="{generate-id()}"/>
-    <a>
-      <xsl:attribute name="name">
-        <xsl:text>xpointer(</xsl:text>
-        <xsl:for-each select="ancestor-or-self::*">
-          <xsl:value-of select="concat('/',local-name(),'[')"/><xsl:number/><xsl:text>]</xsl:text>
-        </xsl:for-each>
-        <xsl:text>)</xsl:text>
-      </xsl:attribute>
-    </a>
     <xsl:apply-templates select="@id"/>
     <!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
     <xsl:element name="{concat('h',$sectiondepth + 2)}">
@@ -265,15 +256,6 @@ $Id: document2html.xsl,v 1.6 2003/01/17 00:55:28 crossley Exp $
         <xsl:text>#</xsl:text>
         <xsl:if test="@id">
           <xsl:value-of select="@id"/>
-        </xsl:if>
-        <!-- these won't be used anymore since ids get added automatically based
-        on the title of the section -->
-        <xsl:if test="not(@id)">
-          <xsl:text>xpointer(</xsl:text>
-          <xsl:for-each select="ancestor-or-self::*">
-            <xsl:value-of select="concat('/',local-name(),'[')"/><xsl:number/><xsl:text>]</xsl:text>
-          </xsl:for-each>
-          <xsl:text>)</xsl:text>
         </xsl:if>
       </xsl:attribute>
       <xsl:value-of select="title"/>
