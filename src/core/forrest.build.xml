@@ -22,8 +22,8 @@ FORREST SITE BUILDER
   <description>
     *=======================================================*
     |                 Forrest Site Builder                  |
-    |                        ${version}                        |
-    |             $Date: 2004/02/05 13:36:25 $              |
+    |                        0.6-dev                        |
+    |             $Date: 2004/02/05 14:58:14 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -342,12 +342,13 @@ FORREST SITE BUILDER
        param: location to clean ${project.webapp}
        param: file to clean ${project.brokenlinkfile}
        =============================================================== -->
-  <target name="clean-site" depends="init-props" description="Clean all directories and files generated during the build">
+  <target name="clean" depends="init-props" description="Clean all directories and files generated during the build">
     <delete failonerror="false" dir="${project.site-dir}"/>
     <delete failonerror="false" dir="${project.temp-dir}"/>
     <delete failonerror="false" dir="${project.webapp}"/>
     <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
+  <target name="clean-site" depends="clean"/>
   
   <!-- ===============================================================
        Checks if the current project contains Forrest docs, and sets
