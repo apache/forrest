@@ -36,19 +36,23 @@ Revision:
     <xsl:template match="/refentry">
         <document>
             <header>
-              <xsl:apply-templates select="refnamediv"/>
+            <title><xsl:value-of select="refmeta/refentrytitle"/><xsl:apply-templates select="refmeta/manvolnum"/></title>
             </header>
             <body>
+              <xsl:apply-templates select="refnamediv"/>
               <xsl:apply-templates select="refsynopsisdiv"/>
               <xsl:apply-templates select="refsect1"/>
             </body>
         </document>
     </xsl:template>
     
+    <xsl:template match="manvolnum">
+      (<xsl:value-of select="."/>)
+    </xsl:template>
+
     <xsl:template match="refsect1">
        <section>
-         <xsl:apply-templates select="title"/>
-         <xsl:apply-templates select="para"/>
+         <xsl:apply-templates/>
        </section>
     </xsl:template>
     
@@ -60,14 +64,24 @@ Revision:
     </xsl:template>
     
     <xsl:template match="refnamediv">
-        <title><xsl:value-of select="refname"/><xsl:apply-templates select="refdescriptor"/></title>
+        <section>
+        <title>NAME</title>
+        <p>
+        <xsl:value-of select="refname"/>
         <xsl:apply-templates select="refpurpose"/>
+        </p>
+        <xsl:apply-templates select="refdescriptor"/>
+        </section>
     </xsl:template>
     
-    <xsl:template match="refdescriptor">, <xsl:value-of select="."/></xsl:template>
+    <xsl:template match="refdescriptor">
+        <p>
+            <xsl:value-of select="."/>
+        </p>
+    </xsl:template>
 
     <xsl:template match="refpurpose">
-      <abstract><xsl:value-of select="."/></abstract>
+      - <xsl:value-of select="."/>
     </xsl:template>
 
       <xsl:template match="/book">
@@ -405,6 +419,15 @@ Revision:
                   <xsl:apply-templates/>
             </source>
       </xsl:template>
+      <xsl:template match="variablelist">
+          <dl>
+            <xsl:apply-templates/>
+          </dl>
+      </xsl:template>
+      <xsl:template match="varlistentry">
+         <dt><xsl:apply-templates select="term"/></dt>
+         <dd><xsl:apply-templates select="listitem/*"/></dd>
+      </xsl:template>
       <xsl:template match="orderedlist">
             <ol>
                   <xsl:apply-templates/>
@@ -604,6 +627,14 @@ Revision:
       <xsl:template match="trademark">
             <xsl:apply-templates/>
             <sup>TM</sup>
+      </xsl:template>
+      <xsl:template match="email">
+        &lt;<link>
+            <xsl:attribute name="href">
+                <xsl:value-of select="concat('mailto:',.)"/>
+            </xsl:attribute>
+             <xsl:apply-templates/>
+         </link>&gt;
       </xsl:template>
 
       <!-- Filched from Norm Walsh's inline.xsl -->
