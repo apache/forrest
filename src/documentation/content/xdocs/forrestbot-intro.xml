@@ -3,9 +3,9 @@
 
 <document>
  <header>
-  <title>Your Project - getting started with using Forrest</title>
-  <subtitle>Overview</subtitle>
-  <version>0.1</version>
+  <title>Forrestbot introduction</title>
+  <subtitle>Getting started with using Forrestbot</subtitle>
+  <version>0.2</version>
   <authors>
    <person name="David Crossley" email="crossley@apache.org"/>
   </authors>
@@ -32,18 +32,24 @@
    it can be called from cron to automate your website update, it can operate
    as a centralised docs-build service for a set of remote projects, it can do
    tasks in parallel, and do even more.
+   See some websites that are automatically built with ForrestBot at
+   <link href="http://forrestbot.cocoondev.org/">http://forrestbot.cocoondev.org/</link>
   </p>
   <p>
    This document provides a concise overview of one particular scenario. See
    <link href="forrestbot.html">The ForrestBot</link> for details and understand
    <link href="forrest-contract.html">Our Contract</link>.
+   We assume that you have built and configured Forrest as described in 
+   <link href="your-project.html">Using Forrest</link>.
+  </p>
+  <p>
    Please send your feedback to <code>forrest-dev</code> - the ForrestBot
    will be enhanced to meet diverse needs.
   </p>
   <p>
    (Building the documentation for the actual Forrest project is a separate
    issue. Use
-   <code>./build.sh clean docs</code> ... that will provide overview
+   <code>./build.sh site</code> ... that will provide overview
    documentation about how Forrest operates and how you can help to improve it.)
   </p>
  </section>
@@ -62,15 +68,15 @@
 
  <section>
   <title>Establish project configuration</title>
-  <p>
-<code>cp $FORREST_HOME/forrestbot.conf.xml $PROJECT_HOME/yourproject.conf.xml</code>
-   and edit it to replace the <code><![CDATA[<project>]]></code>
+  <p>See the sample configurations at
+   <code>xml-forrest/src/resources/forrestbot/samples/</code>
+   copy one and edit it to replace the <code><![CDATA[<project>]]></code>
    definitions with our own, i.e.
   </p>
 <source><![CDATA[
   <project name="yourProject-local">
     <prepare>
-        <skin name="basic"/>
+        <skin name="forrest-site"/>
     </prepare>
     <get-src type="local-copy">
       <project-dir name="/home/you/yourproject" />
@@ -85,22 +91,19 @@
 
  <section>
   <title>Run ForrestBot</title>
-  <source>
-[you@localhost] cd $FORREST_HOME
-[you@localhost] ./build.sh clean
-[you@localhost] ./build.sh bot \
--Dbot.forrestbot.xconf=$PROJECT_HOME/yourproject.conf.xml \
--Dtemplate.echo=true
-  </source>
+<source><![CDATA[
+[you@locahost]$ cd $PROJECT_HOME
+[you@locahost]$ forrestbot -Dbot.config=<name>
+... where <name> is the pathname to your configuration file.
+]]></source>
  </section>
 
  <section>
   <title>Next Steps</title>
   <p>Some enhancements to your local ForrestBot would be ...</p>
   <ul>
-   <li>Add your own skin at 
-   <code>$SRC_DOC/skins/yourproject</code> by copying one of the skins from
-   <code>$FORREST_HOME/src/resources/skins</code> (use basic or forrest-site)
+   <li>Add your own skin as described in 
+   <link href="your-project.html">Using Forrest</link>.
    </li>
    <li>Configure another <code><![CDATA[<project>]]></code> to conduct a secure
      copy to your public website.

@@ -5,7 +5,7 @@
     <title>The ForrestBot</title> 
     <authors><person name="Marc Portier" email="mpo@outerthought.org"/></authors> 
     <abstract>This document explains how the Forrest project can be used to
-      centrally build the HTML documentation for different projects. It also explains
+      centrally build the documentation for different projects. It also explains
       which pieces in the Forrest distribution form this
       functionality, and how they could be extended in the future.</abstract> 
   </header> 
@@ -13,7 +13,7 @@
     <section> 
     <title>Foreword</title> 
     <p>This document explains how the Forrest project can be used to
-      centrally build the HTML documentation for different projects.
+      centrally build the documentation for different projects.
       It also explains which pieces in the Forrest distribution form this
       functionality, and how they could be extended in the future.</p> 
     <p>See some related documents:</p>
@@ -21,37 +21,39 @@
      <li><link href="forrest-contract.html">Our Contract</link>
       - explains the rules with which your project should comply
      </li>
-     <li><link href="your-project.html">Your Project</link>
-      - getting started with using Forrest (concise overview of forrestbot)
+     <li><link href="forrestbot-intro.html">Forrestbot introduction</link>
+      - concise overview of Forrestbot
      </li>
     </ul>
     </section> 
 
     <section> 
-      <title>Using the Forrest Bot</title> 
+      <title>Using the Forrestbot</title> 
       <section> 
         <title>Setting up the centralized service</title> 
-        <p>Historically the bot has been thought of as a script that regularly
-          is executed. The goal being to publish a purely static website that
-          near-real-time-like updates to newly available content. </p> 
+        <p>The goal is to publish a static website that can be updated
+          in near-real-time to accomodate newly available content. Forrestbot
+          can run on one machine, get content from another machine, and publish
+          to yet another machine.</p> 
         <p>Running the bot is as easy as calling the following in your shell.
           (executed in the root dir of the distribution.)</p> 
         <source>build bot -Dbot.forrestbot.xconf=myOwn.conf.xml -Dtemplate.echo=[true|false]</source> 
         <p>It is quite typical to perform this from a shell script that gets
           scheduled for execution on a regular basis.</p> 
-        <p>The actions the bot is going to take are defined in the XML
-          file pointed at with the <code>bot.forrestbot.xconf</code> System property. (if
-          not specified with <code>-Dbot.forrest.xconf</code> the default config from the
-          distribution is taken: <code>./forrestbot.conf.xml</code>) </p> 
       </section> 
       <section> 
         <title>Describing your project to the bot</title> 
         <fixme author="mpo">There is not yet a DTD for this configuration
           file.</fixme> 
-        <p>The bot's work is defined in an XML configuration file, which
-          has one (optional) child-element for setting cross-project defaults followed by
-          a list of project-elements that hold the configuration for the various projects
-          the bot is going to work on.</p> 
+        <p>The actions the bot is going to take are defined in the XML
+          file pointed at with the <code>bot.forrestbot.xconf</code> System
+          property. (if not specified with <code>-Dbot.forrest.xconf</code>
+          then the default config from the
+          distribution is taken: <code>./forrestbot.conf.xml</code>) </p> 
+        <p>This configuration file has one (optional) child-element for
+          setting cross-project defaults, followed by a list of
+          project-elements that hold the configuration for the various projects
+          that the bot is going to work on.</p> 
         <source><![CDATA[<?xml version="1.0"?>
 <forrest-config>
   <defaults>
