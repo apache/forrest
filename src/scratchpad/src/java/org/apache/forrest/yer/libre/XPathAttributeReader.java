@@ -61,7 +61,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.DOMException;
 import org.apache.xpath.XPathAPI;
-import org.apache.avalon.excalibur.xml.Parser;
+import org.apache.excalibur.xml.dom.DOMParser;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -75,7 +75,7 @@ import java.io.IOException;
  *
  * [FIXME this babe needs serious Avalon enabling in the ]
  * @author $Author: jefft $
- * @version CVS $Id: XPathAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+ * @version CVS $Id: XPathAttributeReader.java,v 1.3.6.1 2003/01/29 17:25:50 jefft Exp $
  */
 public class XPathAttributeReader implements LibreAttributeReader
 {
@@ -129,7 +129,7 @@ public class XPathAttributeReader implements LibreAttributeReader
   public Document getDOMDocument(InputStream inXML)  {
 
     Document doc = null;
-    Parser excaliburParser = this.helper.getExcaliburParser();
+    DOMParser excaliburParser = this.helper.getExcaliburDOMParser();
     if (excaliburParser != null) {
       try {
         doc = excaliburParser.parseDocument(new InputSource(inXML));

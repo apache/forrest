@@ -63,7 +63,8 @@ import org.apache.cocoon.components.source.SourceUtil;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.avalon.excalibur.pool.Recyclable;
-import org.apache.avalon.excalibur.xml.EntityResolver;
+import org.apache.excalibur.xml.EntityResolver;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
@@ -101,7 +102,7 @@ import java.io.IOException;
  *   parser can be recycled.
  *
  * @author $Author: jefft $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.5 2002/11/04 10:53:53 jefft Exp $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.5.6.1 2003/01/29 17:25:50 jefft Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
@@ -233,7 +234,7 @@ extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
       getLogger().error("Some strange thing just happened!!", e);
       throw new ProcessingException("XNIConfigurable.generate()",e);
     } finally {
-      this.manager.release(catalogResolver);
+      this.manager.release((Component)catalogResolver);
     }
   }
 }

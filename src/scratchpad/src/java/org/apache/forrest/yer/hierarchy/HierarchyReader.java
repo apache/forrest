@@ -88,10 +88,10 @@ import org.apache.forrest.sax.SAXConvenience;
  *  http://xml.org/sax/features/namespace-prefixes</code> set to true.
  *  @link http://saxproject.org/?selected=namespaces
  *
- * [FIXME: consider implementing org.apache.avalon.excalibur.xml in some
+ * [FIXME: consider implementing org.apache.excalibur.xml in some
  *  sister class of this or something... more catchup on avalon needed.]
- * @author $Author: mpo $
- * @version CVS $Id: HierarchyReader.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
+ * @author $Author: jefft $
+ * @version CVS $Id: HierarchyReader.java,v 1.4.2.1 2003/01/29 17:25:50 jefft Exp $
  */
 public class HierarchyReader
 {

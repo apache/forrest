@@ -313,6 +313,10 @@ CHANGE HISTORY:
     </zeroOrMore>
   </define>
 
+<!-- CH: contents confirmed by inspection of Web3RfcTransformer.java -->
+  <define name="web3RfcTransformer.contents">
+    <optional><element name="system"><text/></element></optional>
+  </define>
   <define name="IdGeneratorTransformer.contents">
     <zeroOrMore>
       <element name="element">
@@ -410,7 +414,7 @@ CHANGE HISTORY:
           <ref name="map.flow-interpreters"/>
         </optional>
         <optional>
-          <ref name="map.pipelines"/>
+          <ref name="map.pipes"/>
         </optional>
       </interleave>
     </element>
@@ -475,6 +479,7 @@ CHANGE HISTORY:
           <ref name="i18nTransformer.contents"/>
           <ref name="encodeURLTransformer.contents"/>
           <ref name="linkRewriterTransformer.contents"/>
+          <ref name="web3RfcTransformer.contents"/>
           <ref name="IdGeneratorTransformer.contents"/>
           <optional><ref name="mapping"/></optional>
         </interleave>
@@ -953,6 +958,36 @@ CHANGE HISTORY:
     <ref name="component.attr"/>
   </define>
 
+<!-- Pipes ======================================== -->
+  <define name="map.pipes">
+    <element name="map:pipes">
+      <ref name="map.pipes.attlist"/>
+      <zeroOrMore> 
+        <ref name="map.pipe"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="map.pipes.attlist" combine="interleave">
+    <ref name="universal.attr"/>
+    <ref name="default.attr"/>
+  </define>
+
+  <define name="map.pipe">
+    <element name="map:pipe">
+      <ref name="map.pipe.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="map.pipe.attlist" combine="interleave">
+    <ref name="universal.attr"/>
+    <ref name="name.attr"/>
+    <ref name="src.attr"/>
+    <ref name="component.attr"/>
+    <optional>
+       <ref name="autoCachingPoint"/>
+     </optional>
+  </define>
+
 <!-- =============================================================== -->
 <!-- Views -->
 <!-- =============================================================== -->
@@ -1112,9 +1147,6 @@ CHANGE HISTORY:
         <zeroOrMore>
           <ref name="map.handle-errors"/>
         </zeroOrMore>
-        <optional>
-          <ref name="autoCachingPoint"/>
-        </optional>
       </optional>
 
       <!-- Schematron rules for map:pipeline follow -->

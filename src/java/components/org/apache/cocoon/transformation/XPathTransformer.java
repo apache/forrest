@@ -50,11 +50,11 @@
 */
 package org.apache.cocoon.transformation;
 
-import org.apache.avalon.excalibur.xml.Parser;
+import org.apache.excalibur.xml.dom.DOMParser;
+import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
-import org.apache.avalon.excalibur.xml.xpath.XPathProcessor;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.caching.Cacheable;
 import org.apache.cocoon.caching.CacheValidity;
@@ -120,7 +120,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.1 2003/01/12 12:25:40 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.1.2.1 2003/01/29 17:25:48 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
@@ -129,8 +129,7 @@ public class XPathTransformer
 
     /** XPath Processor */
     private XPathProcessor processor = null;
-    /** DOM Parser */
-    private Parser parser = null;
+    private DOMParser parser = null;
 
     /** XPath specifying nodes to include. Defaults to the root node */
     protected String include = null;
@@ -156,9 +155,9 @@ public class XPathTransformer
             getLogger().error("cannot obtain XPathProcessor", e);
         }
         try {
-            this.parser = (Parser)this.manager.lookup(Parser.ROLE);
+            this.parser = (DOMParser)this.manager.lookup(DOMParser.ROLE);
         } catch (Exception e) {
-            getLogger().error("cannot obtain Parser", e);
+            getLogger().error("cannot obtain DOMParser", e);
         }
     }
 
