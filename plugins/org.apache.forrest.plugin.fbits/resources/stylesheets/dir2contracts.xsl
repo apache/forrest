@@ -31,6 +31,7 @@
   -->
   <xsl:template match="/">
       <contracts xmlns:xhtml="http://www.w3.org/1999/xhtml">
+      <xsl:value-of select="$contentDir"/>
         <xsl:apply-templates select="//dir:file"/>                    
       </contracts>
   </xsl:template>

@@ -25,7 +25,7 @@
 
   <map:pipeline>
    <map:match pattern="static.get">
-     <map:generate src="src/documentation/content/xdocs/fbits/c-fontsize-fct.xml"/>
+     <map:generate src="fbits/c-fontsize-fct.xml"/>
      <map:transform src="resources/stylesheets/contract.xsl"/>
      <map:serialize type="xml"/>
    </map:match>
@@ -53,13 +53,21 @@ output e.g.
 -->
   <map:pipeline>
     <map:match pattern="contracts-dir.get">
-		  <map:generate type="directory" src="{forrest:plugins}/leather/resources/fbits">
+		  <map:generate type="directory" src="fbits">
         <map:parameter name="depth" value="1"/>
         <!-- sorted alphabetically -->
       	<map:parameter name="reverse" value="false"/>
       </map:generate>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+  <!-- transform this dir-list -->
+  <map:pipeline>
+    <map:match pattern="contracts.get">
+		  <map:generate src="cocoon:/contracts-dir.get"/>
       <map:transform src="resources/stylesheets/dir2contracts.xsl">
-        <map:parameter name="contentDir" value="{realpath:leather/fbits}"/>
+        <map:parameter name="resources-uri" value="{request:contextPath}/fbits/"/>
+        <map:parameter name="contentDir" value="{realpath:fbits}"/>
       </map:transform>
       <map:serialize type="xml"/>
     </map:match>
@@ -68,7 +76,7 @@ output e.g.
   <map:pipeline>
     <map:match pattern="ft.get">
 		   <map:generate src="src/documentation/ft-leather.xml"/>
-       <map:transform src="leather/resources/stylesheets/ft2xhtml.xsl">
+       <map:transform src="resources/stylesheets/ft2xhtml.xsl">
           <map:parameter name="contextPath" value="{request:contextPath}"/>
        </map:transform>
        <map:serialize type="xml"/>
