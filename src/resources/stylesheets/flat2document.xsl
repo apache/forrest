@@ -8,7 +8,11 @@
   <document>
     <header>
       <title>DTD documentation</title>
-      <subtitle><xsl:value-of select="@sysid"/></subtitle>
+      <subtitle>
+        <xsl:call-template name="trailingfilename">
+          <xsl:with-param name="string" select="@sysid"/>
+        </xsl:call-template>
+      </subtitle>
     </header>
     <body>
       <section><title>Top-level element(s)</title>
@@ -118,6 +122,20 @@
       <br/>
     </xsl:if>
   </dd>
+</xsl:template>
+
+<xsl:template name="trailingfilename">
+  <xsl:param name="string"/>
+  <xsl:choose>
+    <xsl:when test="contains($string,'/')">
+      <xsl:call-template name="trailingfilename">
+        <xsl:with-param name="string" select="substring-after($string,'/')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
