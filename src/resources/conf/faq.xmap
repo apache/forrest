@@ -7,10 +7,40 @@
     <map:transformers default="xslt"/>
     <map:readers default="resource"/>
     <map:matchers default="wildcard"/>
-    <map:selectors default="browser"/>
+    <map:actions>
+      <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.components.sourcetype.SourceTypeAction">
+        <sourcetype name="faq-v10">
+          <document-declaration public-id="-//APACHE//DTD FAQ V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="faq-v11">
+          <document-declaration public-id="-//APACHE//DTD FAQ V1.1//EN" />
+        </sourcetype>
+      </map:action>
+    </map:actions>
+ 
+    <map:selectors default="browser">
+      <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
+    </map:selectors>
   </map:components>
 
   <map:resources>
+    <map:resource name="transform-to-document">
+      <map:act type="sourcetype" src="{src}">
+        <map:select type="parameter">
+          <map:parameter name="parameter-selector-test" value="{sourcetype}" />
+          <map:when test="faq-v10">
+            <map:transform src="resources/stylesheets/faqv10tofaqv11.xsl" label="content" />
+            <map:transform src="resources/stylesheets/faq2document.xsl" label="content" />
+          </map:when>
+          <map:when test="faq-v11">
+            <map:transform src="resources/stylesheets/faq2document.xsl" label="content" />
+          </map:when>
+          <map:otherwise />
+        </map:select>
+      </map:act>
+      <map:transform type="idgen" />
+    </map:resource>
+ 
     <map:resource name="skinit">
       <map:transform src="skins/{forrest:skin}/xslt/html/{type}.xsl">
         <map:parameter name="notoc" value="{notoc}"/>
@@ -56,15 +86,11 @@
       <!-- SOURCE FORMATS                                               -->
       <!-- ============================================================ -->
 
-      <map:match pattern="**/*.xml">
-        <map:generate type="file" src="content/xdocs/{1}/{2}.xml" />
-        <map:transform src="resources/stylesheets/faq2document.xsl" label="content" />
-        <map:serialize type="xml"/>
-      </map:match>
-
-      <map:match pattern="*.xml">
-        <map:generate type="file" src="content/xdocs/{1}.xml" />
-        <map:transform src="resources/stylesheets/faq2document.xsl" label="content" />
+      <map:match pattern="**.xml">
+        <map:generate type="file" src="content/xdocs/{0}" />
+        <map:call resource="transform-to-document">
+          <map:parameter name="src" value="content/xdocs/{0}" />
+        </map:call>
         <map:serialize type="xml"/>
       </map:match>
 
