@@ -137,7 +137,7 @@ No navigation is provided and no rendering of graphics is attempted.
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="p[@xml:space='preserve']">
+  <xsl:template match="p[@xml:space='preserve']|source">
     <xsl:param name="level" select="'1'"/>
     <xsl:value-of select="."/>
     <xsl:call-template name="cr"/>
