@@ -45,8 +45,8 @@
         <xsl:if test="$config/group-url"><a href="{$config/group-url}"><img src="{$root}{$config/group-logo}" alt="{$config/group-name} logo" border="0"/></a></xsl:if></td>
         <td bgcolor="#294563" align="center" width="100%"><a href="{$config/project-url}"><img src="{$root}{$config/project-logo}" border="0" alt="{$config/project-name} site" /></a></td>
         <td bgcolor="#294563" rowspan="2" valign="top">
-          <xsl:if test="not($config/disable-search) or $config/disable-search='false' and $config/project-url and $config/project-name">
-          <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:{$config/project-url}'" target="_blank">
+          <xsl:if test="not($config/disable-search) or $config/disable-search='false' and $config/searchsite-domain and $config/searchsite-name">
+          <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:{$config/searchsite-domain}'" target="_blank">
             <table bgcolor="#4C6C8F" cellpadding="0" cellspacing="0" border="0" summary="search">
               <tr>
                 <td colspan="3"><img src="{$spacer}" alt="" width="1" height="10" /></td>
@@ -58,7 +58,7 @@
                   <input type="text" id="query" size="15"/><img src="{$spacer}" alt="" width="5" height="1" /><input type="submit" value="Search" name="Search"/>
                   <br />
                   <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-                  the <xsl:value-of select="$config/project-name"/> site
+                  the <xsl:value-of select="$config/searchsite-name"/> site
 <!-- setting search options off for the moment -->
 <!--
                     <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
