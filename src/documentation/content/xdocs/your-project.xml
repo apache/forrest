@@ -204,22 +204,37 @@ jeff@expresso:~/apache/xml-mysite$ tree
         into the <code>build/site</code> directory:
       </p>
       <figure src="images/new-project.png" height="356" width="500" alt="New project"/>
+    </section>
+    <section>
+      <title>Seeding an existing project</title>
+      <p>
+        In the section above, we have run 'forrest seed' in an empty directory. If you
+        have an existing codebase which you wish to add Forrest docs to, run 'forrest
+        seed' in your project base directory, and the Forrest doc structure will be
+        grafted onto your project.
+      </p>
+      <p>
+        If your project already has XML documentation, it may be easier to tell
+        Forrest where it lives, rather than rearrange your project directories to
+        accommodate Forrest. This can be done by editing forrest.properties. Consult
+        the <link href="#Changing_the_layout">Changing the layout</link> section for
+        more details.
+      </p>
+    </section>
+    <section>
+      <title>Customizing your project</title>
+      <p>
+        Having seeded a project with template docs, you will now want to customize it
+        to your project's needs. Here we will deal with configuring the skin, and
+        changing the project layout.
+      </p>
       <section>
-        <title>Seeding an existing project</title>
+        <title>Configuring the Forrest skin: skinconf.xml</title>
+
         <p>
-          In the section above, we have run 'forrest seed' in an empty directory. If you
-          have an existing codebase which you wish to add Forrest docs to, run 'forrest
-          seed' in your project base directory, and the Forrest doc structure will be
-          grafted onto your project.
-        </p>
-      </section>
-      <section>
-        <title>Customizing your project: skinconf.xml</title>
-        <p>
-          Having seeded a project with template docs, you will now want to customize it
-          to your project's needs. Most Forrest skins can be customized through a single
-          XML file, <code>src/documentation/skinconf.xml</code>, which (minus its DTD)
-          looks like this:
+          Most Forrest skins can be customized through a single XML file,
+          <code>src/documentation/skinconf.xml</code>, which (minus its DTD) looks
+          like this:
         </p>
         <source><![CDATA[
           <?xml version="1.0"?>
@@ -287,54 +302,8 @@ jeff@expresso:~/apache/xml-mysite$ tree
           command in the site root, and the site should be updated.
         </p>
       </section>
-      <section>
-        <title>Adding content</title>
-        <p>
-          Now you can start adding content of your own, in
-          src/documentation/content/xdocs.
-        </p>
-        <section>
-          <title>book.xml</title>
-          <p>
-            Whenever adding a new file, you should add an entry to that directory's
-            <code>book.xml</code> file. book.xml is like a site index, and is rendered as
-            the vertical column of links in the default skin. Each directory below xdocs/
-            should have it's own book.xml, with links suitably adjusted. Have a look at
-            Forrest's own xdocs for an example.
-          </p>
-        </section>
-        <section>
-          <title>tabs.xml</title>
-          <p>
-            The <code>tabs.xml</code> file is used to produce the 'tabs' in the top-left
-            corner of the default skin. Tabs allow users to quickly just to sections of
-            your site. Again, consult Forrest's own docs for a usage example.
-          </p>
-        </section>
-        <section>
-          <title>Images</title>
-          <p>
-            Images usually go in src/documentation/resources/images/. The default sitemap
-            maps this directory to <code>images/</code>, so image tags will typically look
-            like &lt;figure src="images/project-logo.png" alt="Project Logo"/&gt; 
-          </p>
-        </section>
-      </section>
-    </section>
-
-    <section>
-      <title>Advanced usage</title>
-      <p>
-        Armed with only the techniques described above, it is quite easy to generate a
-        basic Forrest site. This section deals with more advanced customizations and
-        techniques that can make Forrest development much easier.
-      </p>
-      <section>
-        <title>Creating a custom skin</title>
-        <p>TODO: add content</p>
-      </section>
-      <section>
-        <title>Changing the default layout</title>
+      <section id="Changing_the_layout">
+        <title>Changing the layout: forrest.properties</title>
         <p>
           For a simple site, Forrest's default directory layout may seem rather
           cumbersome.  Forrest allows you to place files anywhere you want in your
@@ -397,20 +366,513 @@ project.skinconf=${project.content-dir}/skinconf.xml
          </note>
        </section>
 
-       <section>
-         <title>"It's too slow!" Developing as a webapp</title>
-         <p>
-           In comparison to simpler tools like <link
-             href="http://jakarta.apache.org/velocity/anakia.html">Anakia</link>,
-           Cocoon's command-line mode (and hence Forrest) is painfully slow.
-         </p>
-         <p>
-           As the <link href="dreams.html">dream list</link> notes, Forrest was
-           originally intended to be used for dynamic sites, and the Cocoon crawler used
-           only to create static snapshots for mirroring. 
-         </p>
-         <p>TODO: add more content</p>
-       </section>
      </section>
- </body>
+
+
+    <section>
+      <title>Adding content</title>
+      <p>
+        Now you can start adding content of your own, in
+        src/documentation/content/xdocs.
+      </p>
+      <section>
+        <title>book.xml</title>
+        <p>
+          Whenever adding a new file, you should add an entry to that directory's
+          <code>book.xml</code> file. book.xml is like a site index, and is rendered as
+          the vertical column of links in the default skin. Each directory below xdocs/
+          should have its own book.xml, with links suitably adjusted. Have a look at
+          Forrest's own xdocs for an example.</p>
+        <note>Yes, we know it's a pain having to edit every directory's book.xml
+          file when making changes. The <link href="libre-intro.html">Libre</link>
+          effort will hopefully put an end to this</note>
+      </section>
+      <section>
+        <title>tabs.xml</title>
+        <p>
+          The <code>tabs.xml</code> file is used to produce the 'tabs' in the top-left
+          corner of the default skin.
+        </p>
+        <figure src="images/tabs.png" alt="Tabs"/>
+        <p>
+          Tabs allow users to quickly just to sections of your site. Again, consult
+          Forrest's own docs for a usage example.
+        </p>
+      </section>
+      <section>
+        <title>Images</title>
+        <p>
+          Images usually go in src/documentation/resources/images/. The default sitemap
+          maps this directory to <code>images/</code>, so image tags will typically look
+          like &lt;figure src="images/project-logo.png" alt="Project Logo"/&gt; 
+        </p>
+      </section>
+    </section>
+
+
+    <section>
+      <title>Advanced customizations: sitemap.xmap</title>
+      <p>
+        The Cocoon sitemap is a set of rules for generating content (HTML, PDFs etc)
+        from XML sources. Forrest has a default sitemap, which is adequate for
+        everyday sites (like the <link href="http://xml.apache.org/forrest">Forrest
+          site</link> itself).
+      </p>
+      <p>
+        Sometimes, one needs to go beyond the default set of rules. This is where
+        Forrest really shines, because its Cocoon backend allows virtually any
+        processing pipeline to be defined. For example, one can:
+      </p>
+      <ul>
+        <li>Transform custom XML content types with XSLT stylesheets</li>
+        <li>Generate PNG or JPEG images from <link
+            href="http://www.w3.org/TR/SVG/">SVG</link> XML files.</li>
+        <li>Integrate external XML feeds (eg RSS) into your site's content</li>
+        <li>Merge XML sources via aggregation, or make content from large XML
+          sources available as "virtual" files.</li>
+        <li>Read content from exotic sources like <link
+            href="http://www.rpbourret.com/xml/XMLDBLinks.htm">XML
+            databases</link></li>
+      </ul>
+      <p>
+        If your site defines its own sitemap, it must perform all the operations of
+        the Forrest default.  To get started, simply copy the Forrest sitemap from
+        <code>xml-forrest/src/resources/conf/sitemap.xmap</code> into your
+        <code>src/documentation</code> directory (or wherever
+        <code>${project.sitemap}</code> points to).
+      </p>
+      <p>
+        The sitemap syntax is described in the <link
+          href="http://xml.apache.org/cocoon/userdocs/concepts/sitemap.html">Cocoon
+          sitemap docs</link>. The Forrest sitemap is fairly complicated, and
+        partially described in <link href="primer.html#sitemap">The Forrest
+          Primer</link>. Be aware that order matters; your sitemap additions should
+        be before the catch-all sitemap rules (eg &lt;map:match
+        pattern="*.html"&gt;), or they won't trigger.
+      </p>
+        <section>
+          <title>Example: Adding a new content type</title>
+          <note>This section will shortly be made obsolete by <link
+              href="cap.html">Content Aware Pipelines (CAPs)</link>.</note>
+          <p>
+            Say that download.xml lists downloads for a certain package. It would be
+            best to represent download information in a custom XML format:
+          </p>
+          <source><![CDATA[
+<document> 
+  ...
+  <body>
+    <section>
+      <title>Downloading binaries</title>
+      <p>
+        Here are the binaries for FooProject
+      </p>
+      <release version="0.9.13" date="2002-10-11">
+        <downloads>
+          <file
+            url="http://prdownloads.sourceforge.net/aft/fooproj-0.9.13-bin.zip?download"
+            name="fooproj-0.9.13-bin.zip"
+            size="5738322"/>
+          <file
+            url="http://prdownloads.sourceforge.net/aft/fooproj-0.9.13-src.zip?download"
+            name="fooproj-0.9.13-src.zip"
+            size="10239777"/>
+        </downloads>
+      </release>
+      <release version="0.9.12" date="2002-10-08">
+        <downloads>
+          .....
+        </downloads>
+      </release>
+    </section>
+    <section>
+      <title>Getting FooProject from CVS</title>
+        ....
+    </section>
+  </body>
+</document>
+          ]]></source>
+        <p>
+          To handle these special tags, one would write a stylesheet to convert
+          them to regular documentv11 format. Here is such a stylesheet,
+          download2document.xsl:
+        </p>
+        <source><![CDATA[
+<?xml version="1.0" encoding="utf-8"?>
+
+<xsl:stylesheet
+  version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:template match="release">
+    <section>
+      <title>Version <xsl:value-of select="@version"/> (released <xsl:value-of select="@date"/>)</title>
+      <table>
+        <tr><th>File</th><th>Size</th></tr>
+        <xsl:apply-templates select="downloads/*"/>
+      </table>
+    </section>
+  </xsl:template>
+
+  <xsl:template match="file">
+    <tr>
+      <td><link href="{@url}"><xsl:value-of select="@name"/></link></td>
+      <td><xsl:value-of select="format-number(@size div (1024*1024), '##.##')"/> MB</td>
+    </tr>
+  </xsl:template>
+
+
+  <xsl:template match="@* | node() | comment()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+
+</xsl:stylesheet>
+
+]]></source>
+          <p>
+            Place this in the default stylesheets directory,
+            <code>src/documentation/resources/stylesheets</code> (or wherever
+            ${project.stylesheets-dir} points).
+          </p>
+          <p>
+            Then in src/documentation/sitemap.xmap, add a 'matcher' like this:
+          </p>
+          <source><![CDATA[
+            <map:match pattern="body-download.xml">
+              <map:generate src="content/xdocs/download.xml"/>
+              <map:transform src="resources/stylesheets/download2document.xsl"/>
+              <map:call resource="skinit">
+                <map:parameter name="type" value="document2html"/>
+                <map:parameter name="resource" value="download"/>
+              </map:call>
+            </map:match>
+            ]]></source>
+          <p> 
+            This should be added in the general region of the other 'body-*.xml'
+            matchers.
+          </p>
+          <p>
+            Why 'body-download.xml'? We want to fit in with the existing mechanism
+            that Forrest has of assembling a page's XML content:
+          </p>
+          <source><![CDATA[
+            <map:match pattern="*.html">
+              <map:aggregate element="site">
+                <map:part src="cocoon:/book-{1}.xml"/>
+                <map:part src="cocoon:/tab-{1}.xml"/>
+                <map:part src="cocoon:/body-{1}.xml"
+                  label="content"/>
+              </map:aggregate>
+              ...
+              ]]></source>
+            <p>
+              So when Cocoon gets a request for 'download.html', it will do an
+              internal request for 'body-download.xml' to get the file's XML
+              contents. Usually, this would be met by the following sitemap rule:
+            </p>
+            <source><![CDATA[
+              <map:match pattern="body-**.xml">
+                <map:generate src="content/xdocs/{1}.xml"/>
+                <map:call resource="skinit">
+                  <map:parameter name="type" value="document2html"/>
+                  <map:parameter name="resource" value="{1}"/>
+                  <map:parameter name="dir" value="{1}"/>
+                </map:call>
+              </map:match>
+              ]]></source>
+            <p>
+              By declaring a custom 'body-download.xml' rule <em>before</em> this
+              rule, we intercept the request, and can apply our stylesheet.
+            </p>
+          </section>
+          <section>
+            <title>Example: integrating external RSS content</title>
+            <p>
+              Using the same idea described in the previous section, we can do things
+              like retrieve an RSS feed, and integrate it into our website:
+            </p>
+            <source><![CDATA[
+              <map:match pattern="body-weblog.xml">
+                <map:generate src="http://radio.weblogs.com/0107791/rss.xml"/>
+                <map:transform src="resources/stylesheets/rss2document.xsl"/>
+                <map:call resource="skinit">
+                  <map:parameter name="type" value="document2html"/>
+                  <map:parameter name="resource" value="download"/>
+                </map:call>
+              </map:match>
+              ]]></source>
+          </section>
+        <section>
+          <title>Example: Generating PNG from SVG</title>
+          <p>
+            <link href="http://www.w3.org/TR/SVG/">SVG</link> (Scalar Vector
+            Graphics) is an XML format for creating images. Using SVG, one can create
+            dynamic images; logos with embedded version numbers and so forth.
+          </p>
+          <p>
+            Forrest's sitemap contains the following rule, mapping
+            <code>images/*</code> to files in the <code>resources/images</code>
+            directory:
+          </p>
+          <source><![CDATA[
+            <map:match pattern="images/**.*">
+              <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
+            </map:match>
+            ]]></source>
+          <p>
+            Let's create a 'virtual' <code>images/svg/</code> directory, containing
+            PNG images dynamically generated from SVG source in resources/images.
+            Place the following rule <em>before</em> the default
+            <code>images/**.*</code> rule:
+          </p>
+          <source><![CDATA[
+            <map:match pattern="images/svg/*.png">
+              <map:generate src="resources/images/{1}.svg"/>
+              <map:serialize type="svg2png"/>
+            </map:match>
+            ]]></source>
+          <p>
+            Now, we can place SVG images in
+            <code>src/documentation/resources/images/*.svg</code>, and display them
+            with tags like &lt;figure src="images/svg/*.png"/&gt;.
+          </p>
+          <p>
+            Here is a simple SVG
+            logo, <code>logo.svg</code>, displaying 'FooProject' with a shadow and
+            gradient fill:
+          </p>
+          <source><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" width="340" height="65" viewBox="0 0 340 60">
+  <title>FooProject logo</title>
+
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop style="stop-color:white" offset="0"/>
+      <stop style="stop-color:lightgreen" offset="1"/>
+    </linearGradient>
+
+    <filter id="shadowFilter"  filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2 2" result="blur"/>
+      <feOffset in="blur" dx="4" dy="4" result="offsetBlur"/>
+      <feComposite in="SourceGraphic" in2="offsetBlur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadowFilter)" fill="url(#gradient)">
+    <text x="51%" y="70%" style="font-size:40pt; font-family:Arial ; text-anchor: middle ; font-family: Verdana">
+      FooProject
+    </text>
+  </g>
+</svg>
+            ]]></source>
+          <p>
+            Place this file in
+            <code>src/documentation/resources/images/logo.svg</code>. Then edit
+            <code>src/documentation/skinconf.xml</code>, and use this image as the
+            project logo with the line:
+          </p>
+          <source><![CDATA[
+            <project-logo>images/svg/logo.png</project-logo>
+            ]]></source>
+          <p>
+            Your project should now have a PNG logo looking like this:
+          </p>
+          <figure src="images/sample-logo.png" alt="Sample logo"/>
+        </section>
+      </section>
+
+      <section>
+        <title>Forrest skins</title>
+        <p>
+          As Forrest separates content from presentation, we can plug in different
+          "skins" to instantly change a site's look &amp; feel.  Forrest provides one
+          primary skin, <code>forrest-site</code>, and a handful of others in various
+          states of maintenance.
+        </p>
+        <p>
+          To change the skin, edit the <code>forrest.properties</code> file, and
+          change the following entry:
+        </p>
+        <source>
+          project.skin=forrest-site
+        </source>
+        <note>
+          The mechanism for defining which skin to use will change in the future from
+          Ant @token@ values to Cocoon input module values.
+        </note>
+        <section>
+          <title>Defining a new skin</title>
+          <p>
+            Projects can define their own skin, in the
+            <code>src/documentation/skins</code> directory (or wherever
+            <code>${project.skins-dir}</code> points). The default sitemap assumes a
+            certain skin layout, so the easiest way to create a new skin is by
+            copying an existing Forrest skin.  For example, copy
+            <code>xml-forrest/src/resources/skins/forrest-site</code> to
+            <code>src/documentation/skins/myskin</code>, and add
+            <code>project.skin=myskin</code> to default.properties.
+          </p>
+          <p>
+            The two most interesting XSLT stylesheets involved are:
+          </p>
+          <dl>
+            <dt>xslt/html/document2html.xsl</dt>
+            <dd>
+              This stylesheet is applied to individual documentv11 XML files, and
+              converts them to HTML suitable for embedding in a larger HTML page.
+            </dd>
+            <dt>xslt/html/site2xhtml.xsl</dt>
+            <dd>
+              This stylesheet generates the final HTML file from an intermediate
+              'site' format produced by the other stylesheets. It defines the general
+              layout, and adds the header and footer.
+            </dd>
+          </dl>
+        </section>
+      </section>
+
+      <section>
+        <title>Forrest webapps: developing docs faster</title>
+        <p>
+          In comparison to simpler tools like <link
+            href="http://jakarta.apache.org/velocity/anakia.html">Anakia</link>,
+          Cocoon's command-line mode (and hence Forrest) is painfully slow.  As the
+          <link href="dreams.html">dream list</link> notes, Forrest was originally
+          intended to be used for dynamic sites, and the Cocoon crawler used only to
+          create static snapshots for mirroring.  This section describes how, by
+          developing with a "live" Forrest webapp instance, Forrest-based doc
+          development can be faster and easier than comparable tools.
+        </p>
+        <section>
+          <title>Installing a servlet engine</title>
+          <p>
+            To run a "live" forrest, you'll need a servlet container, like <link
+              href="http://jakarta.apache.org/tomcat">Jakarta Tomcat</link>. The
+            best choice is currently <link
+              href="http://jakarta.apache.org/builds/jakarta-tomcat/release/v3.3.1/bin/">Tomcat
+              3.3.1</link>, which has been fairly well tested with Forrest,
+            restarts much faster than 4.x, and handles context reloads well.
+          </p>
+        </section>
+        <section>
+          <title>Generating a site webapp</title>
+          <p>
+            To generate a webapp rather than a static HTML site, run <code>forrest
+              webapp</code> in your project root.  If successful, you should see a
+            message like:
+          </p>
+          <source><![CDATA[
+---------------------------------
+Webapp generated in /tmp/myproj/build/webapp
+
+To run in Tomcat, add this to the config file (usu. server.xml):
+
+<Context path='/MyProject'
+            docBase='/tmp/myproj/build/webapp'
+            reloadable='true'/>
+---------------------------------
+]]></source>
+          <p>
+            For Tomcat 3.3, add the &lt;Context&gt; line to
+            <code>$TOMCAT_HOME/conf/apps.xml</code>:
+          </p>
+          <source><![CDATA[
+            <?xml version="1.0" encoding="ISO-8859-1"?>
+            <webapps>
+              ....
+              <Context path='/MyProject'
+                docBase='/tmp/myproj/build/webapp'
+                reloadable='true'/>
+            </webapps>
+            ]]></source>
+          <p>
+            Then restart Tomcat, and point your browser at
+            http://localhost:8080/MyProject. You should see a dynamically generated
+            page identical to that produced by the Cocoon crawler.
+          </p>
+        </section>
+        <section>
+          <title>Using the webapp</title>
+          <p>
+            With the setup above, you can edit the XML files in
+            <code>build/webapp/content/xdocs</code>, and see the changes immediately
+            in the browser.
+          </p>
+          <p>
+            To get the edited content back to it's home directory, either copy it
+            once you've finished editing, or symlink the
+            <code>src/documentation/content/xdocs</code> directory to
+            <code>build/webapp/content/xdocs</code>.
+          </p>
+
+          <note>In the future, we are hoping that Forrest will be able to work with
+            <em>in-place</em> content, eliminating the step of copying everything
+            into the build/ directory.  There are also suggestions for making
+            webapp-based content generation the primary technique. Future
+            directions like these are debated on <link
+              href="mailto:forrest-dev@xml.apache.org">forrest-dev</link>; please
+            join if you have any suggestions.
+          </note>
+        </section>
+     </section>
+      <section>
+        <title>XML validation</title>
+        <p>
+          As of October 2002, Forrest does not validate XML content before trying to
+          render it.  It is thus strongly recommended that users do their own XML
+          validation, rather than try to understand XSLT failure messages.
+        </p>
+        <p>
+          Each XML file should have a DOCTYPE declaration at the top, indicating its
+          content type. The DOCTYPE declaration is <em>required</em> if the XML is to
+          be considered valid. Most files will have the following DOCTYPE
+          declaration:
+        </p>
+        <source><![CDATA[
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+]]></source>
+        <p>
+          Forrest provides an SGML Catalog,
+          <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
+          associating DTDs with public identifiers (<code>-//APACHE//DTD
+            Documentation V1.1//EN</code> above). If you have an XML editor that
+          understands SGML or XML catalogs, let it know where this catalog file is,
+          and you will be able to validate any Forrest XML file, regardless of
+          location.
+        </p>
+        <section>
+          <title>Case study: setting up xmllint</title>
+          <p>
+            On *nix systems, one of the best XML validation tools is
+            <code>xmllint</code>, that comes as part of the libxml2 package. It is
+            very fast, can validate whole directories of files at once, and can
+            configured to use Forrest's catalog file for validation.
+          </p>
+          <p>
+            To tell xmllint where the Forrest catalog is, add the path to the catalog
+            file to the <code>SGML_CATALOG_FILES</code> variable. For example:
+          </p>
+          <source>export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
+            /home/jeff/apache/xml/xml-forrest/src/resources/schema/catalog
+          </source>
+          <p>
+            Then Forrest XML files can be validated as follows:
+          </p>
+          <source>
+            xmllint --valid --noout --catalogs *.xml
+          </source>
+          <p>
+            For users of the vim editor, the following .vimrc entries are useful:
+          </p>
+          <source>
+            au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
+            au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
+          </source>
+        </section>
+      </section>
+   </body>
 </document>
