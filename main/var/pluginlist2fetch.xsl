@@ -55,7 +55,7 @@
             <fail unless="plugin.present">
               Unable to download the 
               "<xsl:value-of select="$plugin-name" />" plugin from 
-              <xsl:value-of select="plugin[@name=$plugin-name]/@url" />. 
+              <xsl:value-of select="plugin[@name=$plugin-name]/@url" />
               There are a number of possible causes for this:
               
               One possible problem is that you do not have write access to 
@@ -68,7 +68,7 @@
               
               To manually install a plugin download the plugin zip file from
               <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
-              extract it into to <xsl:value-of select="$plugin-dir"/>/<xsl:value-of select="$plugin-name" />.</fail>
+              extract it into to <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></fail>
             <echo>Plugin "<xsl:value-of select="$plugin-name" />" correctly installed.</echo>
          </target>
       </project>
