@@ -19,7 +19,8 @@ if exist "%HOME%\antrc_pre.bat" call "%HOME%\antrc_pre.bat"
 if "%OS%"=="Windows_NT" @setlocal
 
 rem %~dp0 is expanded pathname of the current script under NT
-set DEFAULT_ANT_HOME=%~dp0..
+if "%OS%"=="Windows_NT" set DEFAULT_ANT_HOME=%~dp0..
+if NOT "%OS%"=="Windows_NT" set DEFAULT_ANT_HOME=..
 
 if "%ANT_HOME%"=="" set ANT_HOME=%DEFAULT_ANT_HOME%
 set DEFAULT_ANT_HOME=
@@ -66,14 +67,17 @@ goto end
 :checkJava
 set _JAVACMD=%JAVACMD%
 set LOCALCLASSPATH=%CLASSPATH%
-for %%i in ("%ANT_HOME%\lib\*.jar") do call "%ANT_HOME%\bin\forrestpath.bat" "%%i"
+
+cd /d "%ANT_HOME%\lib\"
+for %%i in ("*.jar") do call "%ANT_HOME%\bin\forrestpath.bat" "%ANT_HOME%\lib\%%i"
+cd /d %PWD%
 
 
 if "%JAVA_HOME%" == "" goto noJavaHome
 if not exist "%JAVA_HOME%\bin\java.exe" goto noJavaHome
 if "%_JAVACMD%" == "" set _JAVACMD=%JAVA_HOME%\bin\java.exe
-if exist "%JAVA_HOME%\lib\tools.jar" call "%ANT_HOME%\bin\lcp.bat" %%JAVA_HOME%%\lib\tools.jar
-if exist "%JAVA_HOME%\lib\classes.zip" call "%ANT_HOME%\bin\lcp.bat" %%JAVA_HOME%%\lib\classes.zip
+if exist "%JAVA_HOME%\lib\tools.jar" call "%ANT_HOME%\bin\lcp.bat" %JAVA_HOME%\lib\tools.jar
+if exist "%JAVA_HOME%\lib\classes.zip" call "%ANT_HOME%\bin\lcp.bat" %JAVA_HOME%\lib\classes.zip
 goto checkJikes
 
 :noJavaHome

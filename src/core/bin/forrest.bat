@@ -16,15 +16,17 @@ rem limitations under the License.
 if "%OS%"=="Windows_NT" @setlocal
 
 rem ----- use the location of this script to infer $FORREST_HOME -------
-set DEFAULT_FORREST_HOME=%~dp0\..
+if "%OS%"=="Windows_NT" set DEFAULT_FORREST_HOME=%~dp0\..
+if NOT "%OS%"=="Windows_NT" set DEFAULT_FORREST_HOME=..
 if "%FORREST_HOME%"=="" set FORREST_HOME=%DEFAULT_FORREST_HOME%
 
 rem ----- set the current working dir as the PROJECT_HOME variable  ----
-call "%FORREST_HOME%\bin\setpwdvar.bat"
+if "%OS%"=="Windows_NT" call "%FORREST_HOME%\bin\setpwdvar.bat"
+if NOT "%OS%"=="Windows_NT" call "%FORREST_HOME%\bin\setpwdvar98.bat"
 set PROJECT_HOME=%PWD%
 
 rem ----- set the ant file to use --------------------------------------
-set ANTFILE=%%FORREST_HOME%%\forrest.build.xml
+set ANTFILE=%FORREST_HOME%\forrest.build.xml
 
 rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
@@ -33,7 +35,9 @@ set ANT_HOME=%FORREST_HOME%\..\..\tools\ant
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-for %%i in ("%FORREST_HOME%\..\..\lib\endorsed\*.jar") do call "%FORREST_HOME%\bin\appendcp.bat" "%%i"
+cd /d "%FORREST_HOME%\..\..\lib\endorsed\"
+for %%i in ("*.jar") do call %FORREST_HOME%\bin\appendcp.bat "%FORREST_HOME%\..\..\lib\endorsed\%%i"
+cd /d %PWD%
 
 echo.
 echo Apache Forrest.  Run 'forrest -projecthelp' to list options
