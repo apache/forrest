@@ -1,6 +1,6 @@
 function init() 
-{ 
-  ndeSetTextSize();
+{ //embedded in the doc
+  //ndeSetTextSize();
 }
 
 function checkBrowser(){
@@ -93,9 +93,19 @@ function ndeGetDocTextSize()
   }
   else if (body.currentStyle)
   {
-    size = body.currentStyle.fontSize;
+   size = body.currentStyle.fontSize;
   }
+
+  //fix IE bug
+  if( isNaN(size)){
+    if(size.substring(size.length-1)=="%"){
+      return
+    }
+
+  }
+
   return size;
+
 }
 
 

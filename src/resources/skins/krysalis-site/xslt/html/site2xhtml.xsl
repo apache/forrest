@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.15 2003/05/22 02:33:33 jefft Exp $
+$Id: site2xhtml.xsl,v 1.16 2003/06/12 13:25:00 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -37,7 +37,7 @@ $Id: site2xhtml.xsl,v 1.15 2003/05/22 02:33:33 jefft Exp $
         <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
       </head>
       <body bgcolor="#FFFFFF" text="#000000" onload="init()">
-
+        <script type="text/javascript">ndeSetTextSize();</script>
         <!-- ================================= top bar with logo's and search box ===================================  -->
 
         <xsl:comment>================= start Banner ==================</xsl:comment>
