@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20000303 Stylable//EN" "http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd">
+
+<svg width="500" height="300">
+
+	<title>Forrest Graphing</title>
+	<desc>version 1.1</desc>
+
+	<style type="text/css">
+		text {font-family: 'Verdana'; font-size: 10px; stroke: none; fill: #000088; }
+		.tick { fill:none; stroke: #000088; stroke-width: 1px; }
+		#border { fill: none; stroke: #000088; stroke-width: 1px; }
+		#h_ruler { fill: #000088; }
+		#graph { fill: rgb(192,192,255); stroke: #000088; stroke-width: 1px; }
+		#events { fill: black; stroke: black; stroke-width: 1px; }
+		#events text { text-anchor: middle; }
+	</style>
+
+	<defs>
+		<line id="day-tick" class="tick" x1="0" y1="0" x2="0" y2="3"/>
+		<line id="week-tick" class="tick" x1="0" y1="0" x2="0" y2="6"/>
+		<line id="month-tick" class="tick" x1="0" y1="0" x2="0" y2="9"/>
+		<g id="days">
+			<use x="3" xlink:href="#day-tick"/>
+			<use x="6" xlink:href="#day-tick"/>
+			<use x="9" xlink:href="#day-tick"/>
+			<use x="12" xlink:href="#day-tick"/>
+			<use x="15" xlink:href="#day-tick"/>
+			<use x="18" xlink:href="#day-tick"/>
+		</g>
+		<g id="week">
+			<use x="0" xlink:href="#days"/>
+			<use x="21" xlink:href="#week-tick"/>
+		</g>
+		<g id="last-week">
+			<use x="0" xlink:href="#days"/>
+			<use x="21" xlink:href="#month-tick"/>
+		</g>
+		<g id="month">
+		 <use x="0" xlink:href="#week"/>
+		 <use x="21" xlink:href="#week"/>
+		 <use x="42" xlink:href="#week"/>
+		 <use x="63" xlink:href="#last-week"/>
+		</g>
+        <path id="down-triangle" d="M0,0 l-3,-4.5 l6,0 z"/>		
+        <path id="up-triangle" d="M0,0 l-3,4.5 l6,0 z"/>		
+        <path id="left-triangle" d="M0,0 l4.5,-3 l0,6 z"/>		
+        <path id="right-triangle" d="M0,0 l-4.5,-3 l0,6 z"/>		
+	</defs>
+	
+	<g transform="translate(50 50)">
+
+	 <g id="graph" transform="matrix(-1 0 0 -1 400 100)">
+ 		<polygon points="0,0 0,70 14,72 66,90 107,63 180,34 207,73 242,34 269,32 347,43 400,34 400,0"/>
+ 	</g>
+	
+		<g id="h_ruler">
+ 	 <g transform="matrix(-1 0 0 -1 400 98)">
+  	 <use x="0" xlink:href="#month"/>
+  		<use x="84" xlink:href="#month"/>
+  		<use x="168" xlink:href="#month"/>
+  		<use x="252" xlink:href="#month"/>
+  		<use x="336" xlink:href="#month"/>
+  	</g>
+ 		<text x="313" y="86">d</text>
+ 		<text x="229" y="86">n</text>
+ 		<text x="145" y="86">o</text>
+ 		<text x="61" y="86">s</text>
+ 	</g>
+
+ 	<rect id="border" x="0" y="0" width="400" height="100"/>
+
+	</g>
+
+	<g id="events" transform="translate(50)">
+		<g transform="translate(61)">
+			<use x="0" y="49" xlink:href="#down-triangle"/>
+			<use x="0" y="151" xlink:href="#up-triangle"/>
+			<line x1="0" y1="50" x2="0" y2="150"/>
+			<text x="0" y="40">2.1</text>
+			<text x="0" y="165">29 Aug 2001</text>
+		</g>
+		<g transform="translate(181)">
+			<use x="0" y="49" xlink:href="#down-triangle"/>
+			<use x="0" y="151" xlink:href="#up-triangle"/>
+			<line x1="0" y1="50" x2="0" y2="150"/>
+			<text x="0" y="40">2.2</text>
+			<text x="0" y="165">10 Oct 2001</text>
+		</g>
+		<g transform="translate(211)">
+			<use x="0" y="40" xlink:href="#down-triangle"/>
+			<use x="0" y="170" xlink:href="#up-triangle"/>
+			<line x1="0" y1="40" x2="0" y2="170"/>
+			<text x="0" y="30">2.2.1</text>
+			<text x="0" y="185">20 Oct 2001</text>
+		</g>
+
+	</g>
+
+	<g id="values" transform="translate(450 80)">
+		<use xlink:href="#left-triangle"/>
+		<text x="7" y="4">543</text>
+	</g>
+	
+</svg>
