@@ -61,8 +61,8 @@ This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="starts-with(., '/')">
-          <!-- already is an absolute path, strip the leading slash -->
-          <xsl:value-of select="substring-after(., '/')"/>
+          <!-- already is an absolute path -->
+          <xsl:value-of select="."/>
         </xsl:when>
         <xsl:otherwise>
           <!-- the path needs to be absolutized -->
