@@ -23,7 +23,7 @@
  
 
  <!-- FIXME (JJP):  bugzilla is hardwired -->
- <xsl:variable name="bugzilla" select="'http://nagoya.apache.org/bugzilla/buglist.cgi?bug_id='"/>
+ <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
 
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 

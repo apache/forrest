@@ -73,7 +73,7 @@
 
         <p>
           If you think you found a bug, please report it to
-          <a href="http://nagoya.apache.org/bugzilla/">Apache's Bugzilla</a>;
+          <a href="http://issues.apache.org/bugzilla/">Apache's Bugzilla</a>;
           a message will automatically be sent to the developer mailing list and you'll
           be kept in contact automatically with the further progress on that bug.
         </p>
