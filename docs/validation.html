@@ -1,0 +1,709 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>XML Validation</title>
+<link type="text/css" href="../skin/page.css" rel="stylesheet">
+<link rel="shortcut icon" href="../favicon.ico">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<!--================= start Navigation Path ==================-->
+<table summary="navigation path" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td nowrap="nowrap" valign="middle" bgcolor="#CFDCED" height="20"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><!--===== breadcrumb trail (javascript-generated) ====--><font size="2" face="Arial, Helvetica, Sans-serif"><a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script></font></td>
+</tr>
+<tr>
+<td bgcolor="#4C6C8F" height="2"><img height="2" width="2" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+<!--================= end Navigation Path ==================-->
+<!--================= start Banner ==================-->
+<table summary="header with logos" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<!--================= start Group Logo ==================-->
+<td bgcolor="#294563"><a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../images/group-logo.gif" title="The Apache Software Foundation"></a></td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="100%" align="center" bgcolor="#294563"><a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../images/project-logo.gif" title="Apache Forrest"></a></td>
+<!--================= end Project Logo ==================-->
+<!--================= start Search ==================--><td valign="top" rowspan="2" bgcolor="#294563">
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0" bgcolor="#4C6C8F">
+<tr>
+<td colspan="3"><img height="10" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap"><input value="forrest.apache.org" name="as_sitesearch" type="hidden"><input size="15" name="as_q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="Search" type="submit">
+<br>
+<font face="Arial, Helvetica, Sans-serif" size="2" color="white">
+                          the Apache Forrest site
+                          
+                          
+                        </font></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img alt="" border="0" height="10" width="9" src="../skin/images/search-left.gif"></td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td><img alt="" border="0" height="10" width="9" src="../skin/images/search-right.gif"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Search ==================--><td bgcolor="#294563"><img height="10" width="10" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td valign="bottom" bgcolor="#294563" colspan="2">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<table summary="tab bar" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="../index.html">Home</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
+</td><td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="selected tab" style="height: 1.8em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-left.gif"></td><td valign="middle" bgcolor="#4C6C8F"><font color="#ffffff" size="2" face="Arial, Helvetica, Sans-serif"><b><a class="base-selected" href="../docs/your-project.html">Documentation</a></b></font></td><td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-right.gif"></td>
+</tr>
+</table>
+</td><td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="../community/index.html">Community</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
+</td><td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="../community/howto/index.html">How-to</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<!--================= end Tabs ==================-->
+</td><td bgcolor="#294563"></td>
+</tr>
+<tr>
+<td height="10" bgcolor="#4C6C8F" colspan="4"></td>
+</tr>
+</table>
+<!--================= end Banner ==================-->
+<!--================= start Menu, NavBar, Content ==================-->
+<table summary="page content" bgcolor="#ffffff" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top">
+<table summary="menu" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<!--================= start left top NavBar ==================-->
+<td rowspan="3" valign="top">
+<table summary="blue line" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td bgcolor="#294563"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td bgcolor="#CFDCED"><font color="#4C6C8F" size="4" face="Arial, Helvetica, Sans-serif">&nbsp;</font></td>
+</tr>
+<tr>
+<td bgcolor="#294563"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+</td>
+<!--================= end left top NavBar ==================--><td bgcolor="#294563"><img width="1" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td valign="bottom" bgcolor="#4C6C8F"><img width="10" height="10" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap" valign="top" bgcolor="#4C6C8F">
+<!--================= start Menu items ==================-->
+<div class="menu">
+<ul>
+<li>
+<font color="#CFDCED">Documentation</font>
+<ul>
+    
+<li>
+<a href="../docs/your-project.html">Using Forrest</a>
+</li>
+    
+<li>
+<span class="sel"><font color="#ffcc00">XML Validation</font></span>
+</li>
+    
+<li>
+<a href="../docs/linking.html">Menus and Linking</a>
+</li>
+    
+<li>
+<a href="../docs/sitemap-ref.html">Sitemap Reference</a>
+</li>
+    
+<li>
+<a href="../docs/searching.html">Searching</a>
+</li>
+    
+<li>
+<a href="../docs/skin-package.html">Skin Packages</a>
+</li>
+    
+    
+<li>
+<a href="../docs/forrest-contract.html">Our Contract</a>
+</li>
+    
+<li>
+<a href="../docs/compliance.html">Standards Compliance</a>
+</li>
+    
+<li>
+<a href="../docs/dtd-docs.html">DTD documentation</a>
+</li>
+    
+<li>
+<a href="../docs/catalog.html">Using DTD Catalogs</a>
+</li>
+    
+<li>
+<a href="../docs/cap.html">Sourcetype Action</a>
+</li>
+    
+<li>
+<a href="../docs/oowriter.html">OpenOffice Writer</a>
+</li>    
+    
+<li>
+<a href="../docs/forrestbar.html">The ForrestBar</a>
+</li>
+    
+<li>
+<a href="../docs/forrestbot.html">Forrestbot</a>
+</li>
+    
+<li>
+<a href="../docs/upgrading_06.html">Upgrading to 0.6</a>
+</li>
+    
+<li>
+<a href="../docs/upgrading_05.html">Upgrading to 0.5</a>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Older Docs</font>
+<ul>
+    
+<li>
+<a href="../docs/primer.html">Forrest Primer</a>
+</li>
+    
+<li>
+<a href="../docs/libre-intro.html">Libre</a>
+</li>
+    
+<li>
+<a href="../docs/dreams.html">Dream list</a>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Some Samples</font>
+<ul>
+    
+<li>
+<a href="../docs/document-v12.html">document-v12</a>
+</li>
+    
+<li>
+<a href="../docs/wiki-sample.html">Wiki Reference</a>
+</li>
+ 
+</ul>
+</li>
+</ul>
+</div>
+<!--================= end Menu items ==================-->
+</td><td valign="bottom" bgcolor="#4C6C8F"><img width="10" height="10" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td bgcolor="#294563"><img width="1" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td valign="bottom" align="left" colspan="2" rowspan="2" bgcolor="#4C6C8F"><img height="10" width="10" border="0" alt="" src="../skin/images/menu-left.gif"></td><td bgcolor="#4C6C8F"><img height="10" width="10" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td valign="bottom" align="right" colspan="2" rowspan="2" bgcolor="#4C6C8F"><img height="10" width="10" border="0" alt="" src="../skin/images/menu-right.gif"></td>
+</tr>
+<tr>
+<td height="1" bgcolor="#294563"><img width="1" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+</td><td valign="top" width="100%">
+<table summary="content" width="100%" border="0" cellpadding="0" cellspacing="0">
+<!--================= start middle NavBar ==================-->
+<tr>
+<td colspan="4" bgcolor="#294563"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td align="left" width="10" bgcolor="#CFDCED"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td align="left" width="50%" bgcolor="#CFDCED"><font color="#4C6C8F" size="3" face="Arial, Helvetica, Sans-serif">
+                &nbsp;
+                
+                </font><img width="10" height="8" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td align="right" width="50%" bgcolor="#CFDCED"><font color="#4C6C8F" size="3" face="Arial, Helvetica, Sans-serif">
+                &nbsp;
+                
+                </font><img width="10" height="8" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td width="10" bgcolor="#CFDCED"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="4" bgcolor="#294563"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<!--================= end middle NavBar ==================-->
+<!--================= start Content==================-->
+<tr>
+<td align="left" width="10"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td colspan="2" align="left" width="100%">
+<div class="content">
+<table class="title" summary="">
+<tr>
+<td valign="middle">
+<h1>XML Validation</h1>
+</td><td nowrap="nowrap" width="40" align="center"><a class="dida" href="validation.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a></td>
+</tr>
+</table>
+<h3>DTDs, catalogs and whatnot</h3>
+<ul class="minitoc">
+<li>
+<a href="#xml_validation">XML validation</a>
+</li>
+<li>
+<a href="#Validating+new+XML+types">Validating new XML types</a>
+<ul class="minitoc">
+<li>
+<a href="#Creating+or+extending+a+DTD">Creating or extending a DTD</a>
+</li>
+<li>
+<a href="#Associating+DTDs+with+document+types">Associating DTDs with document types</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#entities">Referring to entities</a>
+</li>
+<li>
+<a href="#Validating+in+an+XML+editor">Validating in an XML editor</a>
+</li>
+<li>
+<a href="#relaxng">Validation using RELAX NG</a>
+</li>
+</ul>
+    
+<a name="N10013"></a><a name="xml_validation"></a>
+<h3>XML validation</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        By default, Forrest will try to validate your XML before generating
+        HTML or a webapp from it, and fail if any XML files are not valid.
+        Validation can be performed manually by typing
+        '<span class="codefrag">forrest validate</span>' in the project root.
+      </p>
+<p>
+        For an XML file to be valid, it <em>must</em> have a DOCTYPE
+        declaration at the top, indicating its content type.  Hence by
+        default, any Forrest-processed XML file that lacks a DOCTYPE
+        declaration will cause the build to break.
+      </p>
+<p>
+        Despite the strict default behavior, Forrest is quite flexible about
+        validation.  Validation can be switched off for certain sections of a
+        project.  In validated sections, it is possible for projects to specify
+        exactly what files they want (and don't want) validated.  Forrest
+        validation is controlled through a set of properties in
+        <span class="codefrag">forrest.properties</span>:
+      </p>
+<pre class="code">
+##############
+# validation properties
+
+# These props determine if validation is performed at all
+# Values are inherited unless overridden.
+# Eg, if forrest.validate=false, then all others are false unless set to true.
+#forrest.validate=true
+#forrest.validate.xdocs=${forrest.validate}
+#forrest.validate.skinconf=${forrest.validate}
+#forrest.validate.sitemap=${forrest.validate}
+#forrest.validate.stylesheets=${forrest.validate}
+#forrest.validate.skins=${forrest.validate}
+#forrest.validate.skins.stylesheets=${forrest.validate.skins}
+
+
+# Key:
+# *.failonerror=(true|false)    stop when an XML file is invalid
+# *.includes=(pattern)         Comma-separated list of path patterns to validate
+# *.excludes=(pattern)         Comma-separated list of path patterns to not validate
+
+#forrest.validate.failonerror=true
+#forrest.validate.includes=**/*
+#forrest.validate.excludes=
+#
+#forrest.validate.xdocs.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.xdocs.includes=**/*.x*
+#forrest.validate.xdocs.excludes=
+#
+#forrest.validate.skinconf.includes=${skinconf-file}
+#forrest.validate.skinconf.excludes=
+#forrest.validate.skinconf.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.sitemap.includes=${sitemap-file}
+#forrest.validate.sitemap.excludes=
+#forrest.validate.sitemap.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.stylesheets.includes=**/*.xsl
+#forrest.validate.stylesheets.excludes=
+#forrest.validate.stylesheets.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.skins.includes=**/*
+#forrest.validate.skins.excludes=**/*.xsl
+#forrest.validate.skins.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.skins.stylesheets.includes=**/*.xsl
+#forrest.validate.skins.stylesheets.excludes=
+#forrest.validate.skins.stylesheets.failonerror=${forrest.validate.skins.failonerror}
+      </pre>
+<p>
+        For example, to avoid validating
+        <span class="codefrag">${project.xdocs-dir}</span>/slides.xml and everything inside the
+        <span class="codefrag">${project.xdocs-dir}/manual/</span> directory, add this to
+        <span class="codefrag">forrest.properties</span>:
+      </p>
+<pre class="code">forrest.validate.excludes=slides.xml, manual/**</pre>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+        The <span class="codefrag">failonerror</span> properties only work for files validated
+        with &lt;xmlvalidate&gt;, not (yet) for those validated
+        with &lt;jing&gt;, where <span class="codefrag">failonerror</span> defaults to
+        <span class="codefrag">true</span>.
+      </div>
+</div>
+</div>
+
+    
+<a name="N1004E"></a><a name="Validating+new+XML+types"></a>
+<h3>Validating new XML types</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        Forrest provides an <a class="external" href="http://www.oasis-open.org/committees/entity/spec.html">OASIS Catalog</a>
+        [see <a class="external" href="http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html">tutorial</a>]
+        <span class="codefrag">forrest/src/core/context/resources/schema/catalog.xcat</span>
+        as a means of associating public identifiers
+        (e.g. <span class="codefrag">-//APACHE//DTD Documentation V1.1//EN</span> above) with DTDs.
+        If you <a href="../docs/your-project.html#adding_new_content_type">add a new content type</a>, you
+        should add the DTD to <span class="codefrag">${project.schema-dir}/dtd/</span> and add
+        an entry to the <span class="codefrag">${project.schema-dir}/catalog.xcat</span> file.  This
+        section describes the details of this process.
+      </p>
+<a name="N1006F"></a><a name="Creating+or+extending+a+DTD"></a>
+<h4>Creating or extending a DTD</h4>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+          The main Forrest DTDs are designed to be modular and extensible, so
+          it is fairly easy to create a new document type that is a superset
+          of one from Forrest.  This is what we'll demonstrate here, using our
+          earlier <a href="../docs/your-project.html#adding_new_content_type">download format</a>
+          as an example.  Our download format adds a group of new elements to
+          the standard 'documentv11' format.  Our new elements are described
+          by the following DTD:
+        </p>
+<pre class="code">
+&lt;!ELEMENT release (downloads)&gt;
+&lt;!ATTLIST release
+version CDATA #REQUIRED
+date CDATA #REQUIRED&gt;
+
+&lt;!ELEMENT downloads (file*)&gt;
+
+&lt;!ELEMENT file EMPTY&gt;
+&lt;!ATTLIST file
+url CDATA #REQUIRED
+name CDATA #REQUIRED
+size CDATA #IMPLIED&gt;
+        </pre>
+<p>
+          The document-v11 entities are defined in a reusable 'module':
+          <span class="codefrag">forrest/src/core/context/resources/schema/dtd/document-v11.mod</span>
+          The
+          <span class="codefrag">forrest/src/core/context/resources/schema/dtd/document-v11.dtd</span>
+          file provides a full description and basic example of how to pull in
+          modules.  In our example, our DTD reuses modules
+          <span class="codefrag">common-charents-v10.mod</span> and
+          <span class="codefrag">document-v11.mod</span>.  Here is the full DTD, with
+          explanation to follow.
+        </p>
+<pre class="code">
+&lt;!-- ===================================================================
+
+Download Doc format
+
+PURPOSE:
+This DTD provides simple extensions on the Apache DocumentV11 format to link
+to a set of downloadable files.
+
+TYPICAL INVOCATION:
+
+&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+"download-v11.dtd"&gt;
+
+
+AUTHORS:
+Jeff Turner &lt;jefft@apache.org&gt;
+
+COPYRIGHT:
+  Copyright 2002-2004 The Apache Software Foundation
+                                                                                                    
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+                                                                                                    
+      http://www.apache.org/licenses/LICENSE-2.0
+                                                                                                    
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+==================================================================== --&gt;
+
+
+&lt;!-- =============================================================== --&gt;
+&lt;!-- Include the Common ISO Character Entity Sets --&gt;
+&lt;!-- =============================================================== --&gt;
+
+&lt;!ENTITY % common-charents PUBLIC
+"-//APACHE//ENTITIES Common Character Entity Sets V1.0//EN"
+"common-charents-v10.mod"&gt;
+%common-charents;
+
+&lt;!-- =============================================================== --&gt;
+&lt;!-- Document --&gt;
+&lt;!-- =============================================================== --&gt;
+
+&lt;!ENTITY % document PUBLIC
+"-//APACHE//ENTITIES Documentation V1.1//EN"
+"document-v11.mod"&gt;
+
+&lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
+&lt;!ENTITY % local.sections "|release"&gt;
+
+%document;
+
+&lt;!ELEMENT release (downloads)&gt;
+&lt;!ATTLIST release
+version CDATA #REQUIRED
+date CDATA #REQUIRED&gt;
+
+&lt;!ELEMENT downloads (file*)&gt;
+
+&lt;!ELEMENT file EMPTY&gt;
+&lt;!ATTLIST file
+url CDATA #REQUIRED
+name CDATA #REQUIRED
+size CDATA #IMPLIED&gt;
+
+&lt;!-- =============================================================== --&gt;
+&lt;!-- End of DTD --&gt;
+&lt;!-- =============================================================== --&gt;
+        </pre>
+<p>This custom DTD should be placed in <span class="codefrag">src/documentation/resources/schema/dtd/</span>
+</p>
+<p>
+          The &lt;!ENTITY % ... &gt; blocks are so-called 
+          <a class="external" href="http://www.xml.com/axml/target.html#dt-PERef">parameter
+            entities</a>.  They are like macros, whose content will be
+          inserted when a parameter-entity reference, like
+          <span class="codefrag">%common-charents;</span> or <span class="codefrag">%document;</span> is
+          inserted.
+        </p>
+<p>
+          In our DTD, we first pull in the 'common-charents' entity, which
+          defines character symbol sets.  We then define the 'document'
+          entity.  However, before the <span class="codefrag">%document;</span> PE reference, we
+          first override the 'local.section' entity.  This is a hook into
+          document-v11.mod.  By setting its value to '|release', we declare
+          that our &lt;release&gt; element is to be allowed wherever "local
+          sections" are used.  There are five or so such hooks for different
+          areas of the document; see document-v11.dtd for more details.  We then
+          import the %document; contents, and declare the rest of our DTD
+          elements.
+        </p>
+<p>
+          We now have a DTD for the 'download' document type. 
+        </p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+        
+<a class="external" href="http://www.oasis-open.org/docbook/documentation/reference/html/ch05.html">Chapter
+            5: Customizing DocBook</a> of Norman Walsh's "DocBook: The
+          Definitive Guide" gives a complete overview of the process of
+          customizing a DTD.
+        </div>
+</div>
+</div>
+<a name="N100B8"></a><a name="Associating+DTDs+with+document+types"></a>
+<h4>Associating DTDs with document types</h4>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+          Recall that our DOCTYPE declaration for our download document type
+          is:
+        </p>
+<pre class="code">&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+          "download-v11.dtd"&gt;
+        </pre>
+<p>
+          We only care about the quoted section after <span class="codefrag">PUBLIC</span>, called
+          the "public identifier", which globally identifies our document type.
+          We cannot rely on the subsequent "system identifier" part
+          ("download-v11.dtd"), because as a relative reference it is liable to
+          break.  The solution Forrest uses is to ignore the system id, and rely
+          on a mapping from the public ID to a stable DTD location, via a
+          Catalog file.</p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+          See <a class="external" href="http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html">this article</a> for a good
+          introduction to catalogs and the Cocoon documentation
+          <a class="external" href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
+        </div>
+</div>
+<p>
+          Forrest provides a standard catalog file at
+          <span class="codefrag">forrest/src/core/context/resources/schema/catalog.xcat</span>
+          for the document
+          types that Forrest provides.  Projects can augment this with their
+          own catalog file located in
+          <span class="codefrag">${project.schema-dir}/catalog.xcat</span>.
+          Use the "project.catalog" property in <span class="codefrag">forrest.properties</span>
+          if you need a different pathname. Remember to raise the "verbosity"
+          level if you suspect problems with your catalog.
+        </p>
+<p>
+          Forrest uses the XML Catalog syntax by default, although the SGML
+          format can also be used.  Here is what the XML Catalog format looks
+          like:
+        </p>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;!-- OASIS XML Catalog for Forrest --&gt;
+&lt;catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"&gt;
+  &lt;public publicId="-//Acme//DTD Download Documentation V1.0//EN"
+    uri="dtd/download.dtd"/&gt;
+&lt;/catalog&gt;</pre>
+<p>
+          The format is described in <a class="external" href="http://www.oasis-open.org/committees/entity/spec.html">the
+          spec</a>, and is fairly simple and very powerful.
+          The "<span class="codefrag">public</span>" elements map
+          a public identifier to a DTD (relative to the catalog file).
+        </p>
+<p>
+          We now have a custom DTD and a catalog mapping which lets Forrest
+          locate the DTD.  Now if we were to run <span class="codefrag">'forrest validate'</span>
+          our download file would validate along with all the others.  If
+          something goes wrong, try running <span class="codefrag">'forrest -v validate'</span> to
+          see the error in more detail. Remember to raise the "verbosity"
+          level in <span class="codefrag">forrest.properties</span> if you suspect problems
+          with your catalog.
+        </p>
+</div>
+</div>
+
+    
+<a name="N10103"></a><a name="entities"></a>
+<h3>Referring to entities</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        Look at the source of this document
+        (<span class="codefrag">xdocs/validation.xml</span>) and see how the entity set
+        <span class="codefrag">"Numeric and Special Graphic"</span> is declared in the
+        document type declaration.
+      </p>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+        
+<tr>
+          
+<td colspan="1" rowspan="1">ISOnum.pen</td> 
+          <td colspan="1" rowspan="1">&amp;half;</td> 
+          <td colspan="1" rowspan="1">&frac12;</td> 
+        
+</tr>
+      
+</table>
+</div>
+
+    
+<a name="N10128"></a><a name="Validating+in+an+XML+editor"></a>
+<h3>Validating in an XML editor</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        If you have an XML editor that understands SGML or XML catalogs, let
+        it know where the Forrest catalog file is, and you will be able to
+        validate any Forrest XML file, regardless of location, as you edit
+        your files. See the 
+        <a href="../docs/catalog.html">configuration notes</a> your favourite
+        editor.
+      </p>
+</div>
+
+    
+<a name="N10136"></a><a name="relaxng"></a>
+<h3>Validation using RELAX NG</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        Other validation is also conducted during build-time using RELAX NG.
+        This validates all of the important configuration files, both in
+        Forrest itself and in your project. At the moment it processes all
+        skinconf.xml files, all sitemap.xmap files, and all XSLT stylesheets.
+      </p>
+<p>
+        The RNG grammars to do this are located in the
+        <span class="codefrag">src/core/context/resources/schema/relaxng</span> directory.
+        If you want to
+        know more about this, and perhaps extend it for your own use, then
+        see <span class="codefrag">src/core/context/resources/schema/relaxng/README.txt</span>
+        and the Ant targets in the various build.xml files.
+      </p>
+</div>
+  
+<div class="attribution">
+<span class="version">
+          version 1.19</span>
+</div>
+</div>
+</td><td width="10"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<!--================= end Content==================-->
+</table>
+</td>
+</tr>
+</table>
+<!--================= end Menu, NavBar, Content ==================-->
+<!--================= start Footer ==================-->
+<table summary="footer" cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td colspan="2" height="1" bgcolor="#4C6C8F"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"><a href="../skin/images/label.gif"></a><a href="../skin/images/page.gif"></a><a href="../skin/images/chapter.gif"></a><a href="../skin/images/chapter_open.gif"></a><a href="../skin/images/current.gif"></a></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#CFDCED" class="copyright" align="center"><font size="2" face="Arial, Helvetica, Sans-Serif"><a href="http://www.apache.org/licenses/LICENSE-2.0">
+              Copyright &copy; 2002-2004&nbsp;
+              The Apache Software Foundation.</a>
+          All rights reserved.
+          <script type="text/javascript" language="JavaScript"><!--
+              document.write(" - "+"Last Published: " + document.lastModified);
+            //  --></script></font></td>
+</tr>
+<tr>
+<td colspan="2" align="left" bgcolor="#CFDCED" class="logos"></td>
+</tr>
+</table>
+<!--================= end Footer ==================-->
+</body>
+</html>
