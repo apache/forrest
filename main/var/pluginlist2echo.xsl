@@ -27,21 +27,41 @@ can be provided through plugins.
 Plugins may be maintained by other people and be available from
 outside the Forrest distribution. The list below details all known plugins.
 </echo>
-  	    <xsl:apply-templates select="plugin" />
+
+<echo>
+=============
+Input Plugins
+=============
+</echo>
+  	    <xsl:apply-templates select="plugin[@type='input']" />
+
+<echo>
+==============
+Output Plugins
+==============
+</echo>
+  	    <xsl:apply-templates select="plugin[@type='output']" />
+
+<echo>
+================
+Internal Plugins
+================
+</echo>
+  	    <xsl:apply-templates select="plugin[@type='internal']" />
 	    </target>
 	  </project>
 	</xsl:template>
 	
 	<xsl:template match="plugin">
-<echo>
-* <xsl:value-of select="@name"/>
-  - <xsl:value-of select="normalize-space(description)"/>
-
-  - Author: <xsl:value-of select="@author"/>
-  - Website: <xsl:value-of select="@website"/>
-  - Version:  <xsl:value-of select="@version"/>
-  - Required Forrest Version: <xsl:value-of select="forrestVersion"/> 
-</echo>
+    <echo>
+    * <xsl:value-of select="@name"/>
+      - <xsl:value-of select="normalize-space(description)"/>
+    
+      - Author: <xsl:value-of select="@author"/>
+      - Website: <xsl:value-of select="@website"/>
+      - Version:  <xsl:value-of select="@version"/>
+      - Required Forrest Version: <xsl:value-of select="forrestVersion"/> 
+    </echo>
 	</xsl:template>	
 	
 </xsl:stylesheet>
