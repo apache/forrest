@@ -25,7 +25,7 @@
 </xsl:template> 
 <xsl:template match="color[@name='subtab-unselected']">
 .level2tabstrip { background-color: <xsl:value-of select="@value"/>;}
-.datenote { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
+.datenote { background-color: <xsl:value-of select="@value"/>; white-space:nowrap;} </xsl:template> 
 
 <xsl:template match="color[@name='heading']">
 .heading { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
@@ -69,7 +69,7 @@ body         { background-color: <xsl:value-of select="@value"/>;} </xsl:templat
 
 
   <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.3 2004/01/08 16:18:44 nicolaken Exp $ */
+/* $Id: forrest.css.xslt,v 1.4 2004/01/09 13:53:23 brondsem Exp $ */
    <xsl:apply-templates/>
   </xsl:template>
 
