@@ -161,12 +161,12 @@ and ensure that the locations indicated by that value are accessible
        tofile="${project.temp-dir}/internal.xmap"/>
   </target>
 
-  <target name="fetch-plugins-descriptors" if="plugin.unavailable">
+  <target name="fetch-plugins-descriptors" if="plugin.unavailable" depends="init-proxy">
     <delete>
       <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
     </delete>
   
-    <var name="plugin-counter" value="1" depends="init-proxy"/>
+    <var name="plugin-counter" value="1"/>
     <for list="${forrest.plugins.descriptors}" param="url">
       <sequential>
         <echo>fetching descriptor: @{url}</echo>
