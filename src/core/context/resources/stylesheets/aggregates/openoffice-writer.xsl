@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!-- OpenOffice Writer files are stored in .swx files which are 
+<!-- OpenOffice.org Writer files are stored in .swx files which are 
      ZIP files. Content, style, meta, ... are stored
      n different files within these archives. In order to generate 
      *one* XML file containing all parts this aggregation using
