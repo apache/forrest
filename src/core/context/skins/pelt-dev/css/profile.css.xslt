@@ -64,6 +64,10 @@
 .boxed { background-color: <xsl:value-of select="@value"/>;} 
 .underlined_5 	{border-bottom: solid 5px <xsl:value-of select="@value"/>;}
 .underlined_10 	{border-bottom: solid 10px <xsl:value-of select="@value"/>;}
+table caption { 
+	background-color: <xsl:value-of select="@value"/>; 
+	color: <xsl:value-of select="@font"/>;
+}
 </xsl:template> 
 <xsl:template match="color[@name='feedback']">    
 #feedback {
@@ -133,9 +137,11 @@
     background-color: <xsl:value-of select="@value"/>;
 }   
 </xsl:template--> 
-<xsl:template match="color[@name='searchbox']"> #top .searchbox { 
+<xsl:template match="color[@name='searchbox']"> 
+#top .searchbox { 
     background-color: <xsl:value-of select="@value"/> ;
-    color: <xsl:value-of select="@font"/>; } 
+    color: <xsl:value-of select="@font"/>; 
+} 
 </xsl:template>
 
 <!--xsl:template match="color[@name='body']">
@@ -158,7 +164,7 @@ a:hover { color:<xsl:value-of select="@hlink"/>}
 
 
 <!-- ==================== other colors ============================ -->
-<!--xsl:template match="color[@name='highlight']"> 
+<xsl:template match="color[@name='highlight']"> 
 .highlight        { background-color: <xsl:value-of select="@value"/>;} 
 </xsl:template> 
 
@@ -179,12 +185,12 @@ a:hover { color:<xsl:value-of select="@hlink"/>}
 </xsl:template> 
 
 <xsl:template match="color[@name='table']"> 
-.content .ForrestTable      { background-color: <xsl:value-of select="@value"/>;} 
+.ForrestTable      { background-color: <xsl:value-of select="@value"/>;} 
 </xsl:template> 
 
 <xsl:template match="color[@name='table-cell']"> 
-.content .ForrestTable td   { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template--> 
+.ForrestTable td   { background-color: <xsl:value-of select="@value"/>;} 
+</xsl:template> 
 
 
 </xsl:stylesheet>

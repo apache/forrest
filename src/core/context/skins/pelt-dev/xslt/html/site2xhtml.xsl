@@ -344,10 +344,10 @@ document.write("Last Published: " + document.lastModified);
         <h3 class="underlined_5"><xsl:value-of select="h2"/></h3>
       </xsl:when>
       <xsl:when test="//skinconfig/headings/@type='boxed'">
-       	<h3 class="boxed"><xsl:value-of select="h1"/></h3>
+       	<h3 class="boxed"><xsl:value-of select="h2"/></h3>
       </xsl:when>
       <xsl:otherwise>
-        <h3 class="h4"><xsl:value-of select="h1"/></h3>
+        <h3 class="h4"><xsl:value-of select="h2"/></h3>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
