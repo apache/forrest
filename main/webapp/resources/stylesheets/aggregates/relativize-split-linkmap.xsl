@@ -56,6 +56,7 @@ document.
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:param name="path"/>
+  <!-- FIXME: This is a hard-code value -->
   <xsl:param name="site-root" select="'http://localhost:8787/forrest/'"/>
 
   <xsl:variable name="tab">
