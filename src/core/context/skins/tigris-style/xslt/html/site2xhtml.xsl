@@ -132,11 +132,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:if>        </td>
         
         <!-- ( =================  Search ================== ) -->        
-	  <!-- FIXME (Florian Haas): I think either this or the
-	  lateral search bar should go away. Keeping both is confusing
-	  to users, and tedious to maintain. -->
 	  <td align="right" valign="top">
-	    <xsl:if test="$config/search">
+	    <xsl:if test="$config/search and not($config/search/@box-location = 'alt')">
 	      <div id="login" align="right" class="right">
 		<xsl:choose>
 		  <xsl:when test="$config/search/@provider = 'lucene'">
@@ -309,7 +306,7 @@ if (VERSION > 3) {
     <!-- ( ================= end Menu items ================== ) -->
 
     <!-- ( =================  Search ================== ) -->       
-      <xsl:if test="$config/search">
+      <xsl:if test="$config/search and $config/search/@box-location = 'alt'">
 	<xsl:choose>
 	  <!-- Lucene search -->
 	  <xsl:when test="$config/search/@provider = 'lucene'">
