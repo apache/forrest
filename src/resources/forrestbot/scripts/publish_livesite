@@ -6,102 +6,143 @@
 ###################################################
 . `dirname $0`/local-vars
 
+function log() {
+  echo "%% $@"
+}
+
 MODULE=${1:-xml-forrest}
 case $MODULE in
-	xml-forrest) TARGET="forrest" ;;
-        xml-forrest-template) TARGET="forrest-sample" ;;
-        xml-site) TARGET="/" ;;
+  xml-forrest) TARGET="forrest" ;;
+  xml-forrest-template) TARGET="forrest-sample" ;;
+  xml-site) TARGET="/" ;;
 esac
+log "MODULE is $MODULE"
+[ "$MODULE" = "xml-site" ] && ARGS=-l
+log "ARGS is $ARGS"
 
 SRC_DIR=$WEBAPP/sites/$MODULE
 LIVECVS=$XML_SITE/targets/$TARGET
 
 function sanity_checks()
 {
-[ -z "$TARGET" ] && echo "Unknown module: $MODULE" && exit;
+  [ -z "$TARGET" ] && echo "Unknown module: $MODULE" && exit;
 
-if [ -z "$XML_SITE" ]; then
-	echo "Please set the XML_SITE var in local-vars-`uname -n`"
-	exit
-fi	
-if [ ! -d "$SRC_DIR" ]; then
-  echo "Expected website contents in $SRC_DIR"
-  exit
-fi
-if [ ! -d "$LIVECVS" ]; then
-  echo "Expected checked-out xml-site/ HTML in non-existent directory $LIVECVS"
-  exit
-fi
+  if [ -z "$XML_SITE" ]; then
+    echo "Please set the XML_SITE var in local-vars-`uname -n`"
+    exit
+  fi	
+  if [ ! -d "$SRC_DIR" ]; then
+    echo "Expected website contents in $SRC_DIR"
+    exit
+  fi
+  if [ ! -d "$LIVECVS" ]; then
+    echo "Expected checked-out xml-site/ HTML in non-existent directory $LIVECVS"
+    exit
+  fi
 }
 
 function copy_contents()
 {
-echo "Updating $LIVECVS from $SRC_DIR"
-pushd .
-cd $LIVECVS
-cvsco
-cvs up -dP
-echo "Copying generated docs to xml-site.."
-echo "  src  : $SRC_DIR/*"
-echo "  dest : $PWD" 
-cp -r -p $SRC_DIR/* .
+  log "Updating $LIVECVS from $SRC_DIR"
+  pushd .
+  cd $LIVECVS
+  [ "$MODULE" = "xml-site" ] && echo "update xml-site root"
+  cvsco $ARGS
+  cvs up $ARGS -dP
+  log "Copying generated docs to xml-site.."
+  log "  src  : $SRC_DIR/*"
+  log "  dest : $PWD" 
+  cp -r -p $SRC_DIR/* .
 }
 
 
 function addfiles()
 {
-  echo "addfiles '$@'"
+  log "addfiles '$@'"
   local TXTFILES
   local BINFILES
-local DIRS
+  local DIRS
   for i in $@; do
     #echo "Processing $i.."
     if [ -d "$i" ]; then
-      echo "Directory: $i"
+      log "Directory: $i"
       DIRS="$DIRS $i"
 
       continue
     fi
     local MIME=`file -bi $i 2>/dev/null`
     unset istext
-    echo $MIME | grep text > /dev/null && istext="yes"
+    log $MIME | grep text > /dev/null && istext="yes"
     if [ "$istext" = "yes" ]; then
-      echo "Adding as TEXT ($MIME): $i"
+      log "Adding as TEXT ($MIME): $i"
       TXTFILES="$TXTFILES $i"
     else
-      echo "Adding as BINARY ($MIME): $i"
+      log "Adding as BINARY ($MIME): $i"
       BINFILES="$BINFILES $i"
     fi
   done
   [ ! -z "$TXTFILES" ] && cvsdo add $TXTFILES
   [ ! -z "$BINFILES" ] && cvs add -kb $BINFILES
   if [ ! -z "$DIRS" ]; then
-    echo "Processing dirs $DIRS"
+    log "Processing dirs $DIRS"
     for d in $DIRS; do
-      echo "Processing dir $d"
-	  unset newfiles ; newfiles=`find $d -type f -not -path "*CVS*"`
-	  unset newdirs ; newdirs=`find $d -type d -not -name "CVS" | tr '\n' ' '`
-	  echo "  dirs: '$newdirs'"
-	  echo "  files: '$files'"
-          cvs add $newdirs
-	  addfiles $newfiles
+      log "Processing dir $d"
+      unset newfiles ; newfiles=`find $d -type f -not -path "*CVS*"`
+      unset newdirs ; newdirs=`find $d -type d -not -name "CVS" | tr '\n' ' '`
+      log "  dirs: '$newdirs'"
+      log "  files: '$files'"
+      cvs add $newdirs
+      addfiles $newfiles
     done
   fi
   unset TXTFILES BINFILES DIRS
 }
 
+function update_xmlsite()
+{ 
+  log "Generating list of new-to-CVS xml-site files in $PWD.."
+  NEW_FILES=`(cvs up -l ;cvs up images skin) | grep '^\?' | cut -d\  -f 2 | tr '\n' ' '`
+  log "Adding new files to CVS: '$NEW_FILES'"
+  [ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
+}
+
+function commit()
+{
+  log "Now committing to CVS"
+  [ "MODULE" = "xml-site" ] && commitfiles="`(cvs up -l ;cvs up images skin) | cut -d\  -f 2 | tr '\n' ' '`"
+  log Committing $commitfiles
+  cvs ci -m "Automatic publish at `date` from http://forrestbot.cocoondev.org."
+  popd
+  log "xml-site update of '$MODULE' complete!"
+}
+
+######################################################
+## Script body starts here
+######################################################
+
+
+# Check the module exists and all required variables are set
 sanity_checks
+
+# Copy generated content across to to the CVS module checkout
 copy_contents
 
+if [ "$MODULE" = "xml-site" ]; then
+  # Special handling for the xml.apache.org pages, which are directly in the
+  # targets/ directory
+  update_xmlsite
 
-echo "Generating list of new-to-CVS files.."
-NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
-echo "Adding new files to CVS: $NEW_FILES"
-[ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
+else 
+  log "Generating list of new-to-CVS files.."
+  NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
+  log "Adding new files to CVS: $NEW_FILES"
+  [ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
+fi
 
-cvs up > /tmp/cvslist 2>&1
-echo "Now committing to CVS"
-#cvs ci -m "Automatic publish at `date` by forrestrunner."
-#cvs ci
-popd
-echo "xml-site update complete!"
+echo $PWD
+echo cvs up $ARGS
+cvs up $ARGS > /tmp/cvslist 2>&1
+
+# Commit copied and added files
+commit
+
