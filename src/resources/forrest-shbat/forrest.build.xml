@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/26 12:15:35 $              |
+    |             $Date: 2003/05/28 02:36:22 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -72,6 +72,11 @@ FORREST SITE BUILDER
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
     <property name="project.status"      location="${project.home}/status.xml" />
+
+    <!-- Files we don't want copied from build/* to src/* by the backcopy
+    command. Relative to build/webapp -->
+    <property name="forrest.backcopy.excludes" value="**/breadcrumbs.js,WEB-INF/**,status.xml"/>
+
     <!-- FIXME: rename project.content-dir to project.documentation-dir -->
     <property name="project.content-dir" location="${project.home}/src/documentation" />
     <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
@@ -940,15 +945,17 @@ forrest.properties.
   <target name="backcopy" depends="init-props"
     description="If anything has been edited in build/webapps, copies them back to src/documentation">
     <!--
-    Copy files to src/* if they already exist there, or exist in the Forrest
-    distribution and have been locally modified
+    Copy everything EXCEPT docs that are in the Forrest context directory and
+    have been modified.
+    This translates to: copy all docs that are not in the Forrest context
+    directory, or that are, but are different.
     -->
     <copy toDir="${project.content-dir}" filtering="false" overwrite="false">
-      <fileset dir="${project.webapp}">
-        <!-- Bah. Pesky @tokens@, ruining this nice elegant backcopy.. -->
-        <exclude name="**/breadcrumbs.js"/>
+      <fileset dir="${project.webapp}" excludes="${forrest.backcopy.excludes}">
         <or>
-          <present targetdir="${project.content-dir}"/>
+          <not>
+            <present targetdir="${forrest.home}/context"/>
+          </not>
           <and>
             <present targetdir="${forrest.home}/context"/>
             <different targetdir="${forrest.home}/context"/>
