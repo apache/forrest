@@ -76,13 +76,18 @@
      <title>
       <xsl:variable name="title" select="st:document/st:sections/st:section/st:title/st:textsequence"/>
       <xsl:choose>
+       <!-- make this configurable: FOR-270
        <xsl:when test="$title">
         <xsl:value-of select="$title"/>
        </xsl:when>
-       <xsl:otherwise>
+       -->
+       <xsl:when test="$name">
         <xsl:call-template name="splitString">
          <xsl:with-param name="restOfString" select="$name"/>
         </xsl:call-template>
+       </xsl:when>
+       <xsl:otherwise>
+        <xsl:value-of select="$title"/>
        </xsl:otherwise>
       </xsl:choose>
      </title>  
