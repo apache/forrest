@@ -53,7 +53,21 @@
         <title>Types of Plugin</title>
         <p>There are three types of plugin, <code>input</code>,
         <code>output</code> and <code>internal</code>. Each plugin has a 
-        specific role to play and extends a different part of Forrest.</p>
+        specific role to play and extends a different part of Forrest:</p>
+        
+<source>
+                            internal plugins
+                       (site.xml, abs-linkmap etc.)
+                                   |
+                                  \|/
+                                   .
+          input format --> intermediate format --> output format 
+                        .                       .
+                       /|\                     /|\
+                        |                       |
+                   input plugin            output plugin
+                     (**.xml)         (**.html, **.pdf etc.) 
+</source>
         
         <section id="inputPlugins">
           <title>Input Plugins</title>
@@ -85,19 +99,21 @@
         <section id="internalPlugins">
           <title>Internal Plugins</title>
           
-          <p>Internal plugins provide ways of extending or overriding Forrests
+          <p>Internal plugins are for advanced use only. They provide ways 
+          of extending or overriding Forrests
           internal operations. For example, the IMSManifest plugin
           allows Forrest projects to use an IMS Manifest file instead of 
           a site.xml and tabs.xml.</p>
           
-          <p>Internal plugins provide a <code>sitemap.xmap</code> file. 
+          <p>Internal plugins provide a <code>internal.xmap</code> file. 
           This provides the infrastructure matchers (i.e. 
           site.xml, faq.xml, issues.xml), and will be mounted before 
           *any* of the Forrest matches. This sitemap can override any behaviour 
           within Forrest and so developers of these plugins must be especially
           careful with the construction of their matchers since they will be
           processed before any other matchers and consequently can easily break
-          existing functionality.</p>
+          existing functionality. You must only do a &lt;map:generate ...&gt;
+          if you are certain you are going to process the full result. </p>
         </section>
       </section>
       
