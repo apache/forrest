@@ -62,11 +62,14 @@
 
 <xsl:template match="color[@name='subheading']">
 .subheading { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
+</xsl:template--> 
 
 <xsl:template match="color[@name='published']">
-.published { color: <xsl:value-of select="@value"/>;}
-</xsl:template--> 
+#published { 
+    color: <xsl:value-of select="@font"/>;
+    background: <xsl:value-of select="@value"/>; 
+}
+</xsl:template> 
 
 <xsl:template match="color[@name='navstrip']">
 #main .breadtrail {background: <xsl:value-of select="@value"/>; }
@@ -118,11 +121,11 @@ a:hover { color:<xsl:value-of select="@hlink"/>}
                                 color:<xsl:value-of select="@vlink"/>} 
 .menupage a:hover { background-color: <xsl:value-of select="@value"/>;
                                 color:<xsl:value-of select="@hlink"/>} 
-</xsl:template>
+</xsl:template-->
 
 <xsl:template match="color[@name='footer']"> 
-.footer      { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template--> 
+#footer       { background-color: <xsl:value-of select="@value"/>;} 
+</xsl:template> 
 
 
 <!-- ==================== other colors ============================ -->
