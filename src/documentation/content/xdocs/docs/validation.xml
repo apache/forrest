@@ -32,13 +32,13 @@
     <section id="xml_validation">
       <title>XML validation</title>
       <p>
-        By default, Forrest will try to validate your XML before generating
+        By default, Forrest will validate your XML before generating
         HTML or a webapp from it, and fail if any XML files are not valid.
-        Validation can be performed manually by typing
-        '<code>forrest validate</code>' in the project root.
+        Validation can be performed manually by doing
+        '<code>forrest validate</code>' in the project root directory.
       </p>
       <p>
-        For an XML file to be valid, it <em>must</em> have a DOCTYPE
+        For an XML file to be valid, it <em>must</em> have a document type
         declaration at the top, indicating its content type.  Hence by
         default, any Forrest-processed XML file that lacks a DOCTYPE
         declaration will cause the build to break.
@@ -55,9 +55,9 @@
 ##############
 # validation properties
 
-# These props determine if validation is performed at all
+# This set of properties determine if validation is performed
 # Values are inherited unless overridden.
-# Eg, if forrest.validate=false, then all others are false unless set to true.
+# e.g. if forrest.validate=false then all others are false unless set to true.
 #forrest.validate=true
 #forrest.validate.xdocs=${forrest.validate}
 #forrest.validate.skinconf=${forrest.validate}
@@ -66,40 +66,13 @@
 #forrest.validate.skins=${forrest.validate}
 #forrest.validate.skins.stylesheets=${forrest.validate.skins}
 
-
-# Key:
-# *.failonerror=(true|false)    stop when an XML file is invalid
-# *.includes=(pattern)         Comma-separated list of path patterns to validate
-# *.excludes=(pattern)         Comma-separated list of path patterns to not validate
-
+# *.failonerror=(true|false) - stop when an XML file is invalid
 #forrest.validate.failonerror=true
-#forrest.validate.includes=**/*
-#forrest.validate.excludes=
-#
-#forrest.validate.xdocs.failonerror=${forrest.validate.failonerror}
-#
-#forrest.validate.xdocs.includes=**/*.x*
+
+# *.excludes=(pattern) - comma-separated list of path patterns to not validate
+# e.g.
+#forrest.validate.xdocs.excludes=samples/subdir/**, samples/faq.xml
 #forrest.validate.xdocs.excludes=
-#
-#forrest.validate.skinconf.includes=${skinconf-file}
-#forrest.validate.skinconf.excludes=
-#forrest.validate.skinconf.failonerror=${forrest.validate.failonerror}
-#
-#forrest.validate.sitemap.includes=${sitemap-file}
-#forrest.validate.sitemap.excludes=
-#forrest.validate.sitemap.failonerror=${forrest.validate.failonerror}
-#
-#forrest.validate.stylesheets.includes=**/*.xsl
-#forrest.validate.stylesheets.excludes=
-#forrest.validate.stylesheets.failonerror=${forrest.validate.failonerror}
-#
-#forrest.validate.skins.includes=**/*
-#forrest.validate.skins.excludes=**/*.xsl
-#forrest.validate.skins.failonerror=${forrest.validate.failonerror}
-#
-#forrest.validate.skins.stylesheets.includes=**/*.xsl
-#forrest.validate.skins.stylesheets.excludes=
-#forrest.validate.skins.stylesheets.failonerror=${forrest.validate.skins.failonerror}
       </source>
       <p>
         For example, to avoid validating
@@ -107,7 +80,7 @@
         <code>${project.xdocs-dir}/manual/</code> directory, add this to
         <code>forrest.properties</code>:
       </p>
-      <source>forrest.validate.excludes=slides.xml, manual/**</source>
+      <source>forrest.validate.xdocs.excludes=slides.xml, manual/**</source>
       <note>
         The <code>failonerror</code> properties only work for files validated
         with Ant's &lt;xmlvalidate&gt; and not (yet) for those validated
