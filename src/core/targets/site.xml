@@ -97,20 +97,30 @@
         <mkdir dir="${project.site-dir}/skin/images"/>
          <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
          <!-- Copy forrest skin images -->
+         <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
            <fileset dir="${forrest.skins-dir}/common/images"/>
+        </copy>
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
            <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
         </copy>
+
         <!-- Copy project skin images -->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
           <fileset dir="${project.skins-dir}/common/images"/>
+        </copy>
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
           <fileset dir="${project.skins-dir}/${project.skin}/images"/>
         </copy>
  
 
         <!-- Copy all other non-resource files -->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -119,13 +129,20 @@
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
+        </copy>
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
           <fileset dir="${forrest.skins-dir}/${project.skin}">
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
         </copy>
         
+        
         <!-- Copy all other non-resource files from project skins-->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -134,6 +151,11 @@
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
+        </copy>
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
           <fileset dir="${project.skins-dir}/${project.skin}">
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
