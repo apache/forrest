@@ -5,6 +5,7 @@
 
   <xsl:template match="document">
     <td colspan="2" valign="top" class="content">
+      <!-- got rid of printable page link for the time being
       <table>
         <tr>
           <td valign="middle">
@@ -14,7 +15,7 @@
                   <xsl:value-of select="header/title"/>
                 </h2>
               </xsl:when>
-              <xsl:otherwise> </xsl:otherwise>
+              <xsl:otherwise>&#160;</xsl:otherwise>
             </xsl:choose>
           </td>
           <td align="center" width="80" nowrap="nowrap">
@@ -24,6 +25,15 @@
           </td>
         </tr>
       </table>
+      -->
+      <xsl:choose>
+        <xsl:when test="normalize-space(header/title)!=''">
+          <h2>
+            <xsl:value-of select="header/title"/>
+          </h2>
+        </xsl:when>
+        <xsl:otherwise>&#160;</xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="header/authors">
         <font size="-2">
           <p>

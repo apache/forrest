@@ -14,7 +14,7 @@
       <body>
 
         <div class="path">
-          <a href="#">path not implemented yet</a>
+          <a href="http://xml.apache.org/">xml.apache.org</a> :: <a href="http://xml.apache.org/forrest/">forrest</a>
         </div>
 
         <table class="top" cellspacing="0" cellpadding="0" summary="top bar">
@@ -30,7 +30,7 @@
                 <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:xml.apache.org'">
                   <input type="hidden" name="q"/>
                   <input type="text" id="query" size="15"/>&#160;<input type="button" value="Search" name="Search"/><br/>
-                  <input type="radio" name="web" value="web">web site&#160;</input>&#160;<input type="radio" name="mail" value="mail">mail lists</input>
+                  <!-- <input type="radio" name="web" value="web">web site&#160;</input>&#160;<input type="radio" name="mail" value="mail">mail lists</input> -->
                 </form>
               </div>
             </td>
@@ -39,8 +39,9 @@
 
         <div class="tabs">
           <span class="tab">
-            <a href="#">tabs</a>
+            <a href="http://xml.apache.org/forrest/">Home</a>
           </span>
+          <!--
           <span class="tab">
             <a href="#">not</a>
           </span>
@@ -50,7 +51,9 @@
           <span class="tab">
             <a href="#">yet</a>
           </span>
+          -->
         </div>
+
 
         <div class="topline">&#160;</div>
 
@@ -60,9 +63,11 @@
             <td rowspan="2" valign="top" nowrap="nowrap">
               <xsl:apply-templates select="div[@class='menu']"/>
             </td>
-            <td valign="top" class="navbar" align="left">no chunking yet</td>
+            <!-- <td valign="top" class="navbar" align="left">no chunking yet</td> -->
+            <td valign="top" class="navbar" align="left">&#160;</td>
             <td width="*" valign="top" class="navbar" align="right">
-              <a href="#">&lt;&lt; prev</a> <strong>[x]</strong> <a href="#">next &gt;&gt;</a>
+              <!-- <a href="#">&lt;&lt; prev</a> <strong>[x]</strong> <a href="#">next &gt;&gt;</a> -->
+              &#160;
             </td>
           </tr>
           <tr>
