@@ -211,6 +211,7 @@ public class IdGeneratorTransformer
             String id = null;
             try {
               id = processor.evaluateAsString(sect, idXPath);
+              id.trim();
             } catch (Exception e) {
                 throw new SAXException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e, e);
             }
