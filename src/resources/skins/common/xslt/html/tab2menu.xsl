@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
+$Id: tab2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -28,12 +28,6 @@ $Id: tab2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
   <!-- ================================================================ -->
   <!-- These templates SHOULD be overridden                             -->
   <!-- ================================================================ -->
-
-  <xsl:template match="tabs">
-    <div class="tab">
-      <xsl:call-template name="base-tabs"/>
-    </div>
-  </xsl:template>
 
   <!-- Called before first tag -->
   <xsl:template name="pre-separator">
@@ -64,6 +58,15 @@ $Id: tab2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
   </xsl:template>
 
 
+  <!-- ================================================================ -->
+  <!-- These templates CAN be overridden                             -->
+  <!-- ================================================================ -->
+
+  <xsl:template match="tabs">
+    <div class="tab">
+      <xsl:call-template name="base-tabs"/>
+    </div>
+  </xsl:template>
 
 
   <!-- ================================================================ -->

@@ -6,45 +6,14 @@ book2menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
   </div>
 which is then merged with other HTML by site2xhtml.xsl
 
-$Id: book2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
+$Id: book2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:template match="menu">
-    <div class="menu">
-      <xsl:call-template name="base-menu"/>
-    </div>
-  </xsl:template>
-
-  <xsl:template name="base-menu">
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:param name="path"/>
-
-  <xsl:include href="pathutils.xsl"/>
-
-  <xsl:variable name="filename-noext">
-    <xsl:call-template name="filename-noext">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:template match="book">
-    <xsl:apply-templates select="menu"/>
-  </xsl:template>
-
-  <xsl:template match="menu-item">
-    <xsl:choose>
-      <xsl:when test="starts-with(@href, $filename-noext)">
-        <xsl:call-template name="selected"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="unselected"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+  <!-- ================================================================ -->
+  <!-- These templates SHOULD be overridden                             -->
+  <!-- ================================================================ -->
 
   <xsl:template name="selected">
     <xsl:value-of select="@label"/>
@@ -55,8 +24,52 @@ $Id: book2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
   </xsl:template>
 
   <xsl:template name="print-external">
+    <!-- Use apply-imports when overriding -->
     <xsl:value-of select="@label"/>
   </xsl:template>
+
+
+  <!-- ================================================================ -->
+  <!-- These templates CAN be overridden                                -->
+  <!-- ================================================================ -->
+
+  <xsl:template match="book">
+    <xsl:apply-templates select="menu"/>
+  </xsl:template>
+
+
+  <xsl:template match="menu">
+    <div class="menu">
+      <xsl:call-template name="base-menu"/>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="menu-item">
+    <!-- Use apply-imports when overriding -->
+    <xsl:choose>
+      <xsl:when test="starts-with(@href, $filename-noext)">
+        <xsl:call-template name="selected"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="unselected"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ================================================================ -->
+  <!-- These templates SHOULD NOT be overridden                         -->
+  <!-- ================================================================ -->
+
+
+  <xsl:param name="path"/>
+
+  <xsl:include href="pathutils.xsl"/>
+
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:template match="external">
     <li>
@@ -76,5 +89,9 @@ $Id: book2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
   <xsl:template match="menu-item[@type='hidden']"/>
 
   <xsl:template match="external[@type='hidden']"/>
+
+  <xsl:template name="base-menu">
+    <xsl:apply-templates/>
+  </xsl:template>
 
 </xsl:stylesheet>
