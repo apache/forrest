@@ -35,9 +35,12 @@
   
   <purpose title="Purpose">
     <p>
-      By default Forrest generates a pdf-file for each site of your project. As well you can create a pdf of the whole site. But sometimes it may be necessary to
-                generate a pdf-file out of selected tab. Trying to say only parts of the site. This howto describes how you can get at it.
-</p>
+      By default Forrest generates a pdf file for each separate document of
+      your project.
+      As well you can create a pdf of the whole site. But sometimes it may
+      be necessary to generate a pdf file out of selected tab, i.e. only for
+      certain parts of the site.
+    </p>
   </purpose>
 
   <prerequisites title="Prerequisites">
@@ -48,7 +51,8 @@
   </prerequisites>
 
   <steps title="Steps">
-    <p>Define a project <code>sitemap.xmap</code> and create a new
+    <p>The procedure outlined below will define a project
+      <code>sitemap.xmap</code> and create a new
       <code>pdf-tab.xmap</code> based on the <code>aggregate.xmap</code>
     </p>
 
@@ -73,21 +77,22 @@
   <section>
     <title>Edit project sitemap.xmap</title>
     <note>
-      This is a workaround for Issue
-#FIXME
+      This is a workaround for Issue FOR-202
     </note>
     <p>
       Edit the project <code>sitemap.xmap</code> to comment-out the match
       for the sitemap like this:
     </p>
     <source><![CDATA[
-<!--map:pipeline internal-only="false">
+<!--
+<map:pipeline internal-only="false">
 <map:select type="exists">
-<map:when test="{project:sitemap}">
-<map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
-</map:when>  
+  <map:when test="{project:sitemap}">
+    <map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
+  </map:when>  
 </map:select>
-</map:pipeline-->]]>
+</map:pipeline
+-->]]>
     </source>
   </section>
 
@@ -96,19 +101,19 @@
     <p>
       Insert the following lines after the
       <code><![CDATA[<map:match pattern="site.xml">]]></code>
-      pipeline (around line 194):
+      pipeline in the isection called "SOURCE FORMATS".
     </p>
     <source><![CDATA[
 ...
 <map:match pattern="foo.xml">
-   <map:mount uri-prefix="" src="foo.xmap" check-reload="yes" />
+   <map:mount uri-prefix="" src="pdf-tab.xmap" check-reload="yes" />
 </map:match>
 ...]]>
     </source>
   </section>
 
   <section>
-    <title>Edit the file <code>foo.xmap</code></title>
+    <title>Edit the file <code>pdf-tab.xmap</code></title>
     <p>
       The <code><![CDATA[<map:match pattern="*.xml">]]></code> element
       should look like the following:
@@ -150,9 +155,14 @@
 ...]]>
     </source>
     <p>
-      So it takes all the elements of <code><![CDATA[<MyFooSite>]]></code> - that means <code><![CDATA[<MyFootSite>]]></code>
+      So it takes all the elements of <code><![CDATA[<MyFooSite>]]></code>
+      - that means <code><![CDATA[<MyFootSite>]]></code>
       and its "children" - for the content of the pdf file to be generated.
     </p>
+<fixme author="open">
+Some of this information needs to move higher up in this howto to be other
+Steps, rather than be Explanation.
+</fixme>
     <p>
       Line 8 defines the title of the pdf file by taking the content
       of the project-name variable in
@@ -165,9 +175,12 @@
       <br/>
       <code><![CDATA[<map:parameter name="ignore" value="{1}"/>]]></code>
       <br/>
-      just before the title definition (<code><![CDATA[<map:parameter name="title" value=".../>]]></code>). Be sure to
-      delete it or comment it out if you like to generate a pdf-file for specific sites. You only need it for
-      the generation of one pdf-file for the whole project (this is what <code>aggregate.xmap</code> usually does).
+      just before the title definition
+      (<code><![CDATA[<map:parameter name="title" value=".../>]]></code>).
+      Be sure to delete it or comment it out if you like to generate a
+      pdf-file for specific sites. You only need it for the generation of
+      one pdf-file for the whole project (this is what
+      <code>aggregate.xmap</code> usually does).
     </note>
     <p>
       In site.xml, add something like
@@ -179,8 +192,10 @@
 ]]>
     </source>
     <p>
-      This allows you to link to it via a <code><![CDATA[<link href="site:whole_foosite">]]></code> reference. If you need
-      it in the menue entries add the label attribute to the <code><![CDATA[<whole_foosite>]]></code> element:
+      This allows you to link to it via a
+      <code><![CDATA[<link href="site:whole_foosite">]]></code>
+      reference. If you need it in the menu entries add the label
+      attribute to the <code><![CDATA[<whole_foosite>]]></code> element:
       <code><![CDATA[<whole_foosite label="My first PDF-file" href="FooSite.pdf"/>]]></code>
     </p>
   </section>
