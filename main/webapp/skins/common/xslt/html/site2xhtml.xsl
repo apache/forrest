@@ -36,6 +36,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:variable name="config" select="//skinconfig"/>
+  <!-- If true, a txt link for this page will not be generated -->
+  <xsl:variable name="disable-txt-link" select="//skinconfig/disable-txt-link"/>
   <!-- If true, a PDF link for this page will not be generated -->
   <xsl:variable name="disable-pdf-link" select="//skinconfig/disable-pdf-link"/>
   <!-- If true, a "print" link for this page will not be generated -->

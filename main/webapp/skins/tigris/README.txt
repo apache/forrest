@@ -14,3 +14,4 @@ tigris.css
  changed: for each image url(), removed the "../"
  changed: "inline-block" to "inline" at line 709 (fixes CSS validation error)
  added: .pdflink .xmllink .podlink .printlink
+ added: .txtlink
