@@ -68,7 +68,7 @@
     <echo>
     --------------------------------------------------------------
 
-          ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
+     ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
 
     --------------------------------------------------------------
      Using ${ant.version}
@@ -80,21 +80,24 @@
 
      forrest-typical targets:
 
-		 dist ------------- build all incarnation distributions:
-		 dist-shbat ------- build the forrest.sh/bat incarnation (requires ant to *run*)
-		 dist-cent      ??? ??? future target making centipede-cent
-		 dist-maven     ??? ??? future target making maven plugin
-		 dist-jar       ??? ??? future target making jar that has both main as ant-task wrapper classes
+     dist ------------- build all incarnation distributions:
+     dist-shbat ------- build the forrest.sh/bat incarnation (requires ant to *run*)
+
+     futrure targets:
+
+     dist-cent      ??? ??? future target making centipede-cent
+     dist-maven     ??? ??? future target making maven plugin
+     dist-jar       ??? ??? future target making jar that has both main as ant-task wrapper classes
 
 
-		 forrest-test targets:
+     forrest-test targets:
 
      docs ------------- generates static Forrest website for itself as the project to run on.
      webapp ----------- builds webapp (.war) deployable version of Forrest website
      bot.run ---------- runs the forrestbot using the configuration specified in
                         forrestbot.conf.xml
 
-		 
+     
      default centipede targets:
 
      compile ---------- compiles the source code
@@ -184,94 +187,156 @@
   <!-- =================================================================== -->
   <!-- Make all known distributions                                        -->
   <!-- =================================================================== -->
-	<target name="dist" 
-	        description="Makes all the known incarnations of forrest"
-					depends="dist-shbat" />
+  <target name="dist" 
+          description="Makes all the known incarnations of forrest"
+          depends="dist-shbat" />
 
-	
+  
   <!-- =================================================================== -->
   <!-- Make the zip that holds what a fresh site should look like          -->
   <!-- =================================================================== -->
-	<target name="fresh-site-zip" depends="init">
-	  <property name="fresh-site.zip" value="./build/fresh-site.zip" />
-		<echo>
-			TODO... COMPLETE THIS
-			... I need to build a zip that holds the typical content of a basic (empty forrest project)
-			    (including the siteplan.xml, a hint fot build.xml, status.xml,...)
-					(see what acorn provides, I really think this should just be managed in some 
-					  ./src/resources/fresh-site directory if you ask me )
-		</echo>
-	</target>
+  <target name="fresh-site-zip" depends="init">
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="fresh-site.zip" value="./build/fresh-site.zip" />
+    <zip destfile="${fresh-site.zip}" basedir="${resource.dir}/fresh-site" />
+  </target>
 
-	
+  
   <!-- =================================================================== -->
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- =================================================================== -->
-	<target name="webapp-webinf" depends="init, compile" >
-	  <property name="webapp.webinf.dir" value="./build/webapp/WEB-INF" />
-		<echo>
-			TODO... COMPLETE THIS
-			... I need to build the WEB-INF directory for inclusion in the webapp and 
-			    in the many distributions that will use me.
-					Those distributions need me to extend their classpath when calling the 
-					cocoon CLI.
-		</echo>
-	</target>
+  <target name="webapp-webinf" depends="init, compile" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="webapp.webinf.dir" value="./build/webapp/WEB-INF" />
+
+    <mkdir dir="${webapp.webinf.dir}" />
+    <copy todir="${webapp.webinf.dir}" >
+      <fileset dir="${resource.dir}/conf" >
+        <exclude name="sitemap.xmap" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${webapp.webinf.dir}/classes" />
+    <copy todir="${webapp.webinf.dir}/classes" >
+      <fileset dir="${resource.dir}/schema">
+        <include name="CatalogManager.properties"/>
+      </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+    </copy>
+
+    <mkdir dir="${webapp.webinf.dir}/lib"/>
+    <copy todir="${webapp.webinf.dir}/lib">
+      <fileset dir="./lib/endorsed"    />
+      <fileset dir="./lib/core"/>
+      <fileset dir="./lib/optional"/>
+      <fileset dir="./src/scratchpad/lib"/>
+    </copy>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Make the bare context directory like cocoon (CLI or webapp) needs it-->
+  <!-- =================================================================== -->
+  <target name="bare-context-dir" depends="init, compile" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="bare-context.dir" value="./build/bare-context" />
+
+    <!-- Copy entity catalog, entities and class files -->
+    <copy todir="${bare-context.dir}/resources/schema" >
+      <fileset dir="${resource.dir}/schema"/>
+    </copy>
+
+    <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${bare-context.dir}">
+      <fileset dir="${resource.dir}/conf">
+        <include name="sitemap.xmap"/>
+<!-- this is already in the WEB-INF, I think we don't need it any more?
+        <include name="cocoon.xconf"/>
+        <include name="logkit.xconf"/>
+-->
+      </fileset>
+    </copy>
+
+    <!-- Copy libraries -->
+    <copy todir="${bare-context.dir}/library/" >
+      <fileset dir="${resource.dir}/library" />
+    </copy>
+
+    <!-- Copy skins -->
+    <copy todir="${bare-context.dir}/skins/" >
+      <fileset dir="${resource.dir}/skins" />
+    </copy>
+
+  </target>
+
 
 
   <!-- =================================================================== -->
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
-	<target name="dist-shbat" depends="compile, fresh-site-zip, webapp-webinf" >
-		<!-- TODO: decide on a better place to read/set this prop from/to -->
-		<property name="dist-shbat.dir" value="./build/dist/shbat" />
+  <target name="dist-shbat" 
+          depends="fresh-site-zip, webapp-webinf, bare-context-dir" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="dist-shbat.dir" value="./build/dist/shbat" />
 
-		<!-- fresh drop-off location for the distribution -->
-		<delete dir="${dist-shbat.dir}" />
-		<mkdir dir="${dist-shbat.dir}" />
+    <!-- fresh drop-off location for the distribution -->
+    <delete dir="${dist-shbat.dir}" />
+    <mkdir dir="${dist-shbat.dir}" />
 
-		<!-- copy the ant script at the heart of the distribution -->
-		<copy todir="${dist-shbat.dir}" file="forrest.build.xml" />
+    <!-- copy the ant script at the heart of the distribution -->
+    <copy todir="${dist-shbat.dir}" file="forrest.build.xml" />
 
-		<!-- copy the fresh-site.zip to clone from -->
-		<copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
-		
-		<!-- copy the prepared and wrapper stuff for the distribution -->
-		<copy todir="${dist-shbat.dir}">
-			<fileset dir="./src/resources/forrest-shbat" />
-		</copy>
+    <!-- copy the prepared and wrapper stuff for the distribution -->
+    <copy todir="${dist-shbat.dir}">
+      <fileset dir="./src/resources/forrest-shbat" />
+    </copy>
 
-		<!-- copy the web-inf as needed by the cocoon CLI -->
-		<mkdir dir="${dist-shbat.dir}/WEB-INF">
-		<copy todir="${dist-shbat.dir}/WEB-INF">
-			<fileset dir="${webapp.webinf.dir}" />
-		</copy>
+    <!-- copy the fresh-site.zip to clone from -->
+    <copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
+    
+    <!-- copy the web-inf as needed by the cocoon CLI -->
+    <mkdir dir="${dist-shbat.dir}/WEB-INF" />
+    <copy todir="${dist-shbat.dir}/WEB-INF">
+      <fileset dir="${webapp.webinf.dir}" />
+    </copy>
 
-		<echo>
+    <!-- copy the bare-context dir as needed by the cocoon CLI -->
+    <mkdir dir="${dist-shbat.dir}/context" />
+    <copy todir="${dist-shbat.dir}/context">
+      <fileset dir="${bare-context.dir}" />
+    </copy>
+
+    <echo>
   *-----------------------------------------------------------------
-	| installation notice 
-	*-----------------------------------------------------------------
-	| You have succesfully build the shell-bat version of forrest.
-	| Please find it at: ${dist-shbat.dir}
-	| Please copy the contents to the install directory of your choice
-	| Please have the environment variable FORREST_HOME point to it.
-	| It is recommended to add
-	|    unix: $FORREST_HOME/bin: to your $PATH
-	|    win: %FORREST_HOME%\bin; to your %PATH%
-	| Calling
-	|    unix: $FORREST_HOME/bin/forrest.sh usage 
-	|    win: %FORREST_HOME%\bin\forrest.bat usage
-	| will explain how to use this distribution.
-	| More help at http://xml.apache.org/forrest and forrest-dev@xml.apache.org
-	*-----------------------------------------------------------------
-		</echo>
-	</target>
+  | installation notice 
+  *-----------------------------------------------------------------
+  | You have succesfully build the shell-bat version of forrest.
+  | Please find it at: ${dist-shbat.dir}
+  | Please copy the contents to the install directory of your choice
+  | Please have the environment variable FORREST_HOME point to it.
+  | It is recommended to add
+  |    unix: $FORREST_HOME/bin: to your $PATH
+  |    win: %FORREST_HOME%\bin; to your %PATH%
+  | Calling
+  |    unix: $FORREST_HOME/bin/forrest.sh usage 
+  |    win: %FORREST_HOME%\bin\forrest.bat usage
+  | will explain how to use this distribution.
+  | More help at http://xml.apache.org/forrest and forrest-dev@xml.apache.org
+  *-----------------------------------------------------------------
+    </echo>
+  </target>
 
 
   <!-- =================================================================== -->
   <!-- Validate xml                                                        -->
   <!-- =================================================================== -->
-  <target name="validate-docs" description="Checks that the xml files are valid and conform to the DTD.">
+  <target name="validate-docs" 
+	        description="Checks that the xml files are valid and conform to the DTD.">
     <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
        className="org.apache.xerces.parsers.SAXParser">
        <classpath>
@@ -289,13 +354,13 @@
   <!-- Generate project-site                                               -->
   <!-- =================================================================== -->
   <target name="site" >
-			<echo>
-			NOT DONE YET - probably depends on some compilation stuff (rather then on our distributions?) 
-			... this should set forrest.home and project.home and get the docs out.
-			via the forrest.build.xml instead.
-			should have some comment inside explaining THIS IS NOT the way to do it 
-			for your own projects.
-			</echo>
+      <echo>
+      NOT DONE YET - probably depends on some compilation stuff (rather then on our distributions?) 
+      ... this should set forrest.home and project.home and get the docs out.
+      via the forrest.build.xml instead.
+      should have some comment inside explaining THIS IS NOT the way to do it 
+      for your own projects.
+      </echo>
   </target>
 
 
@@ -303,11 +368,11 @@
   <!-- Generate cocoon-webapp for project-site                             -->
   <!-- =================================================================== -->
   <target name="webapp" >
-			<echo>
-			NOT DONE YET - probably depends on some compilation stuff 
-			... this should set forrest.home and project.home and get the docs out.
-			via the forrest.build.xml instead.
-			</echo>
+      <echo>
+      NOT DONE YET - probably depends on some compilation stuff 
+      ... this should set forrest.home and project.home and get the docs out.
+      via the forrest.build.xml instead.
+      </echo>
   </target>
 
 
@@ -321,9 +386,9 @@
          <fileset dir="src/resources/forrestbar" includes="content/**/*" />
       </jar>
       <copy file="src/resources/forrestbar/install.js" 
-			      todir="${build.dir}/work/forrestbar" overwrite="true" />
+            todir="${build.dir}/work/forrestbar" overwrite="true" />
       <zip zipfile="${build.dir}/forrestbar.xpi" 
-			     basedir="${build.dir}/work/forrestbar" />
+           basedir="${build.dir}/work/forrestbar" />
   </target>
 
 
