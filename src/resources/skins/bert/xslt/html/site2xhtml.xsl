@@ -26,7 +26,7 @@
     <!-- ================================= top bar with logo's and search box ===================================  -->
         <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="header with logos">
       <tr>
-        <td bgcolor="#294563"><a href="@group-logo.href@"><img src="@group-logo.src@" alt="Apache XML" width="145" height="50" border="0"/></a></td>
+        <td bgcolor="#294563"><a href="@group-logo.href@"><img src="@group-logo.src@" alt="Apache XML" width="220" height="65" border="0"/></a></td>
         <td bgcolor="#294563" align="center" width="100%"><a href="@project-logo.href@"><img src="@project-logo.src@" border="0" width="220" height="65" alt="Forrest logo" /></a></td>
         <td bgcolor="#294563" rowspan="2" valign="top">
           <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:xml.apache.org'" target="_blank">
@@ -201,8 +201,8 @@
     <table border="0" height="20" width="100%" cellpadding="0" cellspacing="0" summary="footer">
       <tr>
         <td align="right" width="100%">
-          <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo" border="0"/></a>
-          <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" alt="Krysalis Centipede Logo" border="0"/></a>
+          <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" width="88" height="31" alt="Cocoon Logo" border="0"/></a>
+          <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" width="138" height="31" alt="Krysalis Centipede Logo" border="0"/></a>
         </td>
         <td width="10"><img src="skin/images/spacer.gif" alt="" height="1" width="10" /></td>
       </tr>
