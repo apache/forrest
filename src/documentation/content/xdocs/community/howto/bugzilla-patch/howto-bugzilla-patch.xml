@@ -8,21 +8,32 @@
     <authors>
       <person name="David Crossley" email="crossley@apache.org"/>
     </authors>
-  <abstract>Bugzilla is the Internet-based mechanism to facilitate contributions to any
+    <abstract>
+Bugzilla is the Internet-based mechanism to facilitate contributions to any
 Apache project. This includes changes to code and documents
-(Patches), and also reports of bugs and suggestions for enhancement.
-We will explain how to create your Bugzilla account, how to enter a patch
-description, and, finally, how to attach the actual patch file.</abstract>
-  <last-modified-content-date date="2002-05-19"/>
+(Patches), and also reports of flaws in the system (Bugs), and suggestions
+for enhancement.
+In this How-to we will concentrate on the Patch tracking capabilities of
+Bugzilla. We will explain how to create your genereal Bugzilla account,
+how to enter a patch description, and finally how to attach the actual patch
+file.
+    </abstract>
+    <last-modified-content-date date="2002-05-25"/>
   </header>
 
   <audience title="Intended Audience">
 <p>
 This document is meant for first-time users of Bugzilla.
-The Bugzilla interface can be daunting, so this concise explanation will help you get started. Once you can submit a patch via Bugzilla, you can proceed to make more substantial
-contributions. Of course, this how-to concentrates on Cocoon-specific contributions.
+The web interface can be daunting, so this concise explanation will help
+you to start. After your first patch submission, you can proceed to make more
+substantial contributions.
+</p> 
+
+<p> 
+As our example we use the contribution of a simple documentation patch for
+the Apache Cocoon project. The principles apply to any project.
 </p>
-</audience>
+  </audience>
 
   <prerequisites title="Prerequisites">
 <p>
@@ -32,7 +43,7 @@ Bugzilla contributors should:
 <li>Understand what a Patch is and how to make one.
 <!-- See <link href="howto-patch.html">How to Prepare a Patch</link> -->
 <!-- See <link href="">How to Prepare a Patch</link> (Doc under development). -->
-Note that a new complete document is still just a &quot;patch.&quot;
+Note that a new complete document is still just a &quot;patch&quot;.
 </li>
 <li>Understand that Bugzilla is the Apache Bug Database. Bugzilla does not
 distinguish between a Bug report, a Patch submission, and an Enhancement suggestion. They are all <em>&quot;Bugs&quot;</em> as far as Bugzilla is concerned.
@@ -48,10 +59,11 @@ Here is how to proceed. Go to
 in another browser window.
 </p>
 
-	<section title="1. Open a Bugzilla Account" >
+	<section title="1. Create your Bugzilla Account">
 <p>
-Read the online instructions from the home page. To create your Bugzilla account, click on the &quot;Open a new Bugzilla account" link. Do not worry, you will
-not be sent spam email nor bombarded with advertisements by setting up this account.
+Follow the link the home page to &quot;Open a new Bugzilla account&quot;.
+Do not worry, you will not be sent spam email nor bombarded with advertisements
+by setting up this account. It is purely a workgroup tool.
 </p>
 
 <p>
@@ -62,85 +74,89 @@ email automatically when your patch is applied by a Cocoon committer.
 </p>
 	</section>
 
-	<section title="2. Enter a new bug report" >
-	
-<p><img src="my-images/bugzilla-screen.gif" alt="Bugzilla Screen" height="342" width="479" /></p>
+	<section title="2. Enter a new bug report">
 	
 <p>
-Choose the "Enter a new bug report" link from the Bugzilla home page. First, you will be asked to select the relevant project ... choose Cocoon 2 of course. Next, you will be
-asked to provide your account details. Following that, you will be presented
-an input form for the various details ...
-
+Follow the "Enter a new bug report" link from the Bugzilla home page. First,
+you will be asked to select the relevant project ... choose Cocoon 2 of course.
+Next, you will be asked to provide your account details. Following that, you
+will be presented an input form for the various details ...
 </p>
 
+<p><img src="my-images/bugzilla-screen.gif" alt="Bugzilla Screen" height="342" width="479" /></p>
 
-
-	<section title="Specify Version" >
+	<section title="Specify Version">
 <p>
-<!--FIXME: (DS) Default in my browser is 2.0, not Current CVS. Does it matter?-->
-Specify the version of Cocoon that you prepared your patch against here. Choose  
+This is the version of Cocoon that you prepared your patch against. Choose
 <code>Current CVS</code> if you have an up-to-date local working copy
-of HEAD branch or a very recent nightly build. Otherwise, choose the relevant
-release version.
+of HEAD branch or a very recent nightly build. Otherwise choose the relevant
+release version. This is a very important step, as you will confuse the
+committer if your changes do not match the repository. If you are unsure, then
+please say so in the description at step 12.
 </p>
 	</section>
 
-	<section title="Specify Component" >
+	<section title="Specify Component">
 <p>
 Follow the &quot;Component&quot; link for description of the available
-components. If you do not know which component is relevant, then just use <code>core</code>.
+components. If you do not know which component is relevant, then just use
+<code>core</code>.
 </p>
 	</section>
 
-	<section title="Specify Platform" >
+	<section title="Specify Platform">
 <p>
-This choice informs bug reporting. Perhaps it's relevant for your patch.
-Otherwise, specify the <code>All</code> option.
+This is really meant for bug reporting. Perhaps it could be relevant for a
+patch. You would usually specify the <code>All</code> option.
 </p>
 	</section>
 
-	<section title="Specify Operating System (OS)" >
+	<section title="Specify Operating System (OS)">
 <p>
-This choice informs bug reporting. Perhaps it's relevant for your patch.
-Otherwise, specify the <code>All</code> option.
+Really meant for bug reporting. Perhaps it could be relevant for a patch.
+You would usually specify the <code>All</code> option.
 </p>
 	</section>
 
-	<section title="Specify Severity" >
+	<section title="Specify Severity">
 <p>
-Severity defined here means the impact that would arise if your patch is not applied. For a documentation
+The impact that would arise if your patch is not applied. For a documentation
 patch, the severity would usually be the default <code>Normal</code>.
-However, if your patch addressed some serious lack, or if it fixed a misguided configuration
+However, if it addressed some serious lack or fixed a misguided configuration
 statement, then the impact could be <code>major</code>.
 </p>
 <p>
 <!--FIXME: (DS) Why include this if it isn't recommended for a patch? -->
-(The <code>enhancement</code> option should not be used for a patch, as it is
-intended for suggesting something that should be done. Use this option wisely. It
-would be better to discuss it on the mailing list first, and then, when clear, describe it here.)
+<!--       (DC) To try to discourage them from using it. Does it need
+better words? -->
+(The <code>enhancement</code> option would not be used for a patch, as it is
+intended for suggesting something that should be done. Use this option wisely.
+It would be better to discuss it on the mailing list first.)
 </p>
 	</section>
 
-	<section title="Specify Initial State" >
+	<section title="Specify Initial State">
 <p>
 Use the <code>New</code> option.
 </p>
 	</section>
 
-	<section title="Specify Assigned To" >
+	<section title="Specify Assigned To">
 <p>
-Leave this blank. Your patch will be automatically assigned to the
+Leave it blank. Your patch will be automatically assigned to the
 <code>cocoon-dev</code> mailing list. When a committer takes on your patch,
-that committer will assign the bug to him or herself. This prevents duplication of effort by other committers.
+that committer will assign the bug to their own email address. This pevents
+duplication of effort by other committers.
 </p>
 <p>
-The Cc field can be used if you need to copy bug reports and any
-follow-up to some other person. Remember that your report will be sent automatically 
-to the <code>cocoon-dev</code> mailing list, so you don't need to Cc anyone there.
+The Cc field can be used if you need the bug reports, and any follow-up, to be
+copied to some other person. Remember that your report will be sent
+automatically to the <code>cocoon-dev</code> mailing list, so you do not need
+to Cc anyone there.
 </p>
 	</section>
 
-	<section title="Specify URL" >
+	<section title="Specify URL">
 <p>
 If the patch refers to a particular document, then provide the website URL.
 If it refers to an issue with one of the local Cocoon Samples, then provide
@@ -148,7 +164,7 @@ the localhost URL.
 </p>
 	</section>
 
-	<section title="Carefully choose the Summary" >
+	<section title="Carefully choose the Summary">
 <p>
 The summary will become the all-important title of the bug. Use it wisely. You want
 to draw attention to your patch. Just as with posting email to the listervers,
@@ -156,23 +172,24 @@ choosing a poor title may cause your posting to be easily overlooked.
 Use up all the characters available ... about 60 maximum.
 </p>
 <p>
-Start the Summary with the <code>[PATCH]</code> tag. This will insure that it is 
-included in the Cocoon automated patch queue summary posted to the mailing lists.
-The patch queue summary reminds people what patches are pending. If you omit this tag, then your patch may easily be overlooked.
+Start the Summary with the <code>[PATCH]</code> tag. This will ensure that it
+is included in the Cocoon automated patch queue summary posted to the mailing
+lists. The patch queue summary reminds people what patches are pending. If you
+omit this tag, then your patch may easily be overlooked.
 </p>
 	</section>
 
-	<section title="Description" >
+	<section title="Description">
 <p>
 Provide a brief explanation of what your patch does. Supply any instructions
 to help the committer apply your patch efficiently. Note any issues that may
 remain. It may help to list each file that you are submitting and briefly
-describe what it is. A committer will need to provide a descriptive log message 
+describe what it is. A committer will need to provide a descriptive log message
 when committing your work. Providing a clear description here will help them.
 </p>
 <p>
-Consider writing the Description and Summary text before entering 
-your patch report. You could save it in a local text file beforehand and 
+Consider writing the Description and Summary text before you start entering
+your patch report. You could save it in a local text file beforehand and
 then copy-and-paste it when the time comes.
 </p>
 <p>
@@ -184,7 +201,7 @@ If this were a bug report, then it would need extensive description.
 	</section>
 	
 
-	<section title="3. Send the patch report" >
+	<section title="3. Send the patch report">
 <p>
 Review your options, then press the <strong>Commit</strong> button. This will
 add an entry to the bug database and email a report to the 
@@ -197,7 +214,7 @@ have just created ...
 </p>
 	</section>
 
-	<section title="4. Create an attachment of the actual patch" >
+	<section title="4. Create an attachment of the actual patch">
 <p>
 You will be presented with a status screen saying that your bug report
 was accepted and that email was sent to <code>cocoon-dev</code> mailing list.
@@ -208,28 +225,25 @@ Now you have a choice ... proceed to review your bug report by selecting the
 link &quot;Back to Bug #XXXXX&quot;. If you forgot to mention something,
 then you can add more comments. From that screen, follow the link
 &quot;Create a new attachment&quot;.
-</p>
-
-<p>
 Otherwise follow the link from this status screen to &quot;Attach a file to
 this bug&quot;.
 </p>
 
-	<section title="Specify the file to be uploaded" >
+	<section title="Specify the file to be uploaded">
 <p>
 Provide the local pathname to your patchfile, e.g.
 <code>/home/me/work/cocoon/patch/howto-bugzilla.tar.gz</code>
 </p>
 	</section>
 
-	<section title="Describe the attachment" >
+	<section title="Describe the attachment">
 <p>
 Provide a concise one line description, e.g.
 <code>Gzipped TAR archive with new docs and diffs</code>
 </p>
 	</section>
 
-	<section title="Specify the contentType of the attachment" >
+	<section title="Specify the contentType of the attachment">
 <p>
 If it is a Gzipped TAR archive (*.tar.gz) or a .zip archive, then select
 &quot;<code>Binary file (application/octet-stream)</code>&quot;.
@@ -242,35 +256,37 @@ If the patch is just a single diff file, then select
 	
 	</section>
 
-	<section title="5. Submit the attachment" >
+	<section title="5. Submit the attachment">
 <p>
-When you are ready, press the <strong>Submit</strong> button. As with Step 3,
+When you are ready, press the <strong>Submit</strong> button. As for Step 3,
 you will be presented with a status screen saying that your attachment
 was accepted and that email was sent to <code>cocoon-dev</code> mailing list.
 </p>
 	</section>
 
-	<section title="6. Be patient" >
+	<section title="6. Be patient">
 <p>
 Now your patch will wait inside Bugzilla until one of the Cocoon committers
-assigns the patch to him or herself and starts to process it and apply it to the
-master CVS repository. As the registered owner of the Bug, you will be sent an automatic email at each of these stages.
+assigns the patch to their own email address and starts to process it to apply
+it to the master CVS repository. As the registered owner of the Bug, you will
+be sent an automatic email at each of these stages.
 </p>
 	</section>
 
-	<section title="7. Add more description or attachments if necessary" >
+	<section title="7. Add more description or attachments if necessary">
 <p>
 Until the patch is applied by the committer and the Bug report is closed, you
 can still add more to your bug report. However, only do this when
 absolutely necessary because the patch should not be
-changing while the committer is trying to commit it. If you just want to make further changes, then it would be better to wait until your patch is
+changing while the committer is trying to commit it. If you just want to make
+further changes, then it would be better to wait until your patch is
 applied. Then you can make a new patch. Remember that the committer has full
 veto and may decide to make some slight modifications to your patch. So it
 is far better to wait.
 </p>
 	</section>
 
-	<section title="8. Adding subsequent patches to the same document or program" >
+	<section title="8. Adding subsequent patches to the same document or program">
 <p>
 If you want to make more patches to the same file, then please open a new Bug
 rather than re-open the old one. After all, once the original patch is
@@ -304,8 +320,9 @@ links should you need to know more.
 
   <section title="Search Bugzilla">
 <p>
-Bugzilla has a very powerful search interface. Now that you have a login account,
-Bugzilla can remember customized queries which you can run with a single click.
+Bugzilla has a very powerful search interface. Now that you have a login
+account, Bugzilla can remember customized queries which you can run with a
+single click.
 </p>
 	</section>
 
@@ -318,7 +335,7 @@ Bugzilla is at
 <link href="http://nagoya.apache.org/bugzilla/">http://nagoya.apache.org/bugzilla/</link>
 </li>
 <li>
-Very helpful Bug Writing Guidelines are available directly from the
+Helpful Bug Writing Guidelines are available directly from the
 Bug entry interface.
 </li>
 	</ul>
