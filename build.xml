@@ -207,7 +207,18 @@
 	<mkdir dir="${dist-shbat.dir}/ant" />
 	<copy todir="${dist-shbat.dir}/ant">
 		<fileset dir="tools/ant" />
-	</copy>
+  </copy>
+
+  <!-- Copy forrestbot -->
+	<mkdir dir="${dist-shbat.dir}/forrestbot" />
+	<copy todir="${dist-shbat.dir}/forrestbot">
+    <fileset dir="src/resources/forrestbot">
+      <exclude name="bin"/>
+    </fileset>
+  </copy>
+  <copy todir="${dist-shbat.dir}/bin">
+    <fileset dir="src/resources/forrestbot/bin"/>
+  </copy>
 
 	<!-- Fix bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
