@@ -2,7 +2,8 @@
 
 <xsl:stylesheet
   version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
 
 <xsl:variable name="graph_width">500</xsl:variable>
 <xsl:variable name="graph_height">150</xsl:variable>
@@ -48,8 +49,6 @@
         fill: none;
         stroke: #000088;
         stroke-width: 1px; }
-      #h_ruler {
-        fill: #000088; }
       #graph {
         fill: rgb(192,192,255);
         stroke: #000088;
@@ -60,6 +59,8 @@
         stroke-width: 1px; }
       #events text {
         text-anchor: middle; }
+      #horizontalRuler {
+        fill: #000088; }
     </style>
 
     <defs>
@@ -114,7 +115,7 @@
 
     <rect id="border" x="0" y="0" width="{$graph_width}" height="{$graph_height}"/>
 
-    <g id="h_ruler">
+    <g id="horizontalRuler">
       <g transform="matrix(1 0 0 -1 0 {$graph_height - 2})">
         <xsl:for-each select="datum">
           <use x="{(position() -1) * $x_scale}" xlink:href="#week"/>
