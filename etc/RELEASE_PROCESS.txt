@@ -20,14 +20,14 @@ Preparations
 Building the distribution
 -------------------------
 
- - Edit module.xml and replace the '-dev' text with '':
+ - Edit module.xml and replace the '-dev' text with '' i.e. nothing:
     ...
     <project name="xml-forrest">
         <version fix="0" major="0" minor="6" tag="-dev"/>
 
- - Edit status.xml, remove the -dev from the current <release> tag, and set the
-   date.  Also add a new <release> for development on the next version  e.g.
-   from:
+ - Edit status.xml, remove the -dev from the current <release> tag,
+   and set the release date.  Also add a new <release> for development
+   on the next version  e.g. from:
 
     <release version="0.6-dev" date="unreleased">
       ...
@@ -40,8 +40,12 @@ Building the distribution
       ...
 
  - Edit src/core/forrest.build.xml to update the version tag to remove
-   the "-dev" which is embedded in the Ant script:
+   the "-dev". there are two occurences:
+   around line 29:
+   <property name="version" value="0.6-dev"/>  
 
+    around line 52:
+    <description>
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
                                 ^^^^
@@ -55,6 +59,8 @@ Building the distribution
 
  - Check out a fresh copy from SVN to make sure you have no local modifications,
    especially those that might be hidden by svn:ignore settings.
+
+ - Set your Java version to be the lowest specified of our supported versions.
 
  - Run 'build release-dist' to generate the distributions.
    - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
@@ -115,6 +121,7 @@ Upload and announcement
      !! Always refer them to the mirror facility
      !! Never mention the URL www.apache.org/ dist/ in email.
    Use the template at etc/announcement.txt
+   Use your spelling checker!
    
 See previous announcements:
 0.2   http://marc.theaimsgroup.com/?l=xml-apache-announce&m=103746673310573
