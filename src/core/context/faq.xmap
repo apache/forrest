@@ -154,40 +154,6 @@ $Revision: 1.5 $
 
       <!-- Special matcher for FAQ PDFs, so we can pass an extra
       'numbersections' param into document2fo.xsl -->
-      <map:match pattern="**.pdf">
-        <map:aggregate element="site">
-          <map:part src="cocoon:/skinconf.xml"/>
-          <map:part src="cocoon:/{1}.xml"/>
-        </map:aggregate>
-        <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pdf"/>
-        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
-        <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-               <map:parameter name="numbersections" value="false"/>
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:when>
-          <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-              <map:parameter name="numbersections" value="false"/>
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:when>
-          <map:otherwise>
-            <map:transform src="{forrest:context}/skins/common/xslt/fo/document2fo.xsl">
-              <map:parameter name="numbersections" value="false"/>
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
-        <map:serialize type="fo2pdf"/>
-      </map:match>
-      
       <map:match pattern="**.fo">
         <map:aggregate element="site">
           <map:part src="cocoon:/skinconf.xml"/>

@@ -428,73 +428,54 @@ $Revision: 1.12 $
         </map:call>
       </map:match>
 
-      <map:match pattern="**faq.pdf">
-        <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
-      </map:match>
+      <!-- generate faq.fo specially  -->
       <map:match pattern="**faq.fo">
         <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
       </map:match>
 
+      <!-- generate .pdf files from .fo -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
-        <map:aggregate element="site">
-          <map:part src="cocoon:/skinconf.xml"/>
-          <map:part src="cocoon:/{1}{2}.xml"/>
-        </map:aggregate>
-        <!-- <map:transform type="idgen"/> -->
-        <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pdf"/>
-        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
-        <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:when>
-          <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:when>
-          <map:otherwise>
-            <map:transform src="{forrest:context}/skins/common/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
+        <map:generate src="cocoon:/{1}{2}.fo"/>
         <map:serialize type="fo2pdf"/>
       </map:match>
 
+
+      <!-- generate .fo from .xml  -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).fo$">
-        <map:aggregate element="site">
-          <map:part src="cocoon:/skinconf.xml"/>
-          <map:part src="cocoon:/{1}{2}.xml"/>
-        </map:aggregate>
-        <!-- <map:transform type="idgen"/> -->
-        <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
         <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:when>
-          <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
+          <map:when test="{project:content.xdocs}{1}{2}.fo">
+            <map:generate src="{project:content.xdocs}{1}{2}.fo"/>
           </map:when>
           <map:otherwise>
-            <map:transform src="{forrest:context}/skins/common/xslt/fo/document2fo.xsl">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
+            <map:aggregate element="site">
+              <map:part src="cocoon:/skinconf.xml"/>
+              <map:part src="cocoon:/{1}{2}.xml"/>
+            </map:aggregate>
+            <!-- <map:transform type="idgen"/> -->
+            <map:transform type="xinclude"/>
+            <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
+            <map:select type="exists">
+              <map:when test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
+                <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+                </map:transform>
+              </map:when>
+              <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
+                <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+                </map:transform>
+              </map:when>
+              <map:otherwise>
+                <map:transform src="{forrest:context}/skins/common/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+                </map:transform>
+              </map:otherwise>
+            </map:select>
+        </map:otherwise>
+      </map:select>
         <map:serialize type="xml"/>
       </map:match>
 
