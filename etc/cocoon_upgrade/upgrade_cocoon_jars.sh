@@ -22,7 +22,7 @@ JARSUFFIX=`date +%Y%m%d`
 ## lib/core/, whereas 'testing' copies them to the distribution in
 ## build/dist/shbat/*
 UPGRADE_TYPE=testing
-UPGRADE_TYPE=real
+#UPGRADE_TYPE=real
 #
 ######################################################################
 
@@ -184,7 +184,8 @@ copy excalibur-store
 #excalibur-xmlutil-20030306.jar
 copy excalibur-xmlutil
 #fop-0.20.4.jar
-bcopy fop
+## We use a later version of FOP than Cocoon's
+#bcopy fop
 #jakarta-oro-2.0.6.jar
 #jakarta-regexp-1.2.jar
 copy jakarta-regexp
