@@ -38,7 +38,7 @@
     <fox:label>
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
       <xsl:text> </xsl:text>
-      <xsl:value-of select="title"/>
+      <xsl:value-of select="normalize-space(title)"/>
 
     </fox:label>
     <xsl:apply-templates select="section" mode="outline"/>
