@@ -81,13 +81,21 @@
            <td>&#160;</td>
           </tr>
         </table>
+        <table>
+          <tr>
+            <td align="right"> 
+              <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo" border="0"/></a> 
+              <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" alt="Krysalis Centipede Logo" border="0"/></a>         
+            </td>
+          </tr>
+        </table>      
         <div class="copyright">
-          Copyright &#x00A9;@year@ @vendor@. All Rights Reserved.
+           <script language="JavaScript">
+            <![CDATA[<!-- 
+              document.write("Copyright @year@ @vendor@. All Rights Reserved. - "+"Last Published: " + document.lastModified); 
+            //  -->]]>
+          </script>
         </div>
-        
-        <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo" border="0"/></a> 
-        <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" alt="Krysalis Centipede Logo" border="0"/></a>         
-      
       </body>
     </html>
   </xsl:template>
