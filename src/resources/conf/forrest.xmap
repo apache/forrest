@@ -4,9 +4,19 @@
   <map:components>
     <map:generators default="file">
       <map:generator name="html" src="org.apache.cocoon.generation.HTMLGenerator" />
+      <map:generator name="text2xml" src="org.apache.cocoon.generation.TextGenerator" />
     </map:generators>
     <map:serializers default="html"/>
-    <map:transformers default="xslt"/>
+    <map:transformers default="xslt">
+      <map:transformer name="lexer" src="org.apache.cocoon.transformation.LexicalTransformer" logger="sitemap.transformer.lexer"/>
+      <map:transformer name="parser" src="org.apache.cocoon.transformation.ParserTransformer" logger="sitemap.transformer.parser">
+        <parameter name="flatten" value="true"/>
+        <parameter name="ignoring" value="true"/>
+      </map:transformer>
+    </map:transformers>
+
+
+
     <map:readers default="resource"/>
     <map:matchers default="wildcard"/>
     <map:actions>
@@ -134,22 +144,6 @@
         </map:act>
       </map:match>
 
-
-        <!--
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}.cwiki" />
-          <map:generate src="content/xdocs/{../1}.cwiki" type="textparser">
-            <map:parameter name="grammar" value="chaperon/grammars/wiki.grm" />
-            <map:parameter name="includeignorabletokens" value="true" />
-          </map:generate>
-          <map:transform src="resources/stylesheets/wiki2htmlpage.xsl" />
-          <map:transform src="resources/stylesheets/wiki2html.xsl" />
-          <map:transform src="resources/stylesheets/html2document.xsl" />
-          <map:transform type="idgen" />
-          <map:serialize type="xml"/>
-        </map:act>
-        -->
-
         <!-- ============================================================ -->
         <!-- SOURCE FORMATS                                               -->
         <!-- ============================================================ -->
@@ -163,6 +157,20 @@
           <map:transform type="idgen" />
           <map:serialize type="xml"/>
         </map:act>
+        <map:act type="resource-exists">
+          <map:parameter name="url" value="content/xdocs/{1}.cwiki" />
+          <map:generate type="text2xml" src="content/xdocs/{../1}.cwiki" />
+          <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
+          <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
+          <!--  Dynamically generated equivalents.  Matchers need to be added to
+          the root sitemap for this to work.
+          <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+          <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+          -->
+          <map:transform src="resources/stylesheets/wiki2document.xsl"/>
+          <map:transform type="idgen" />
+          <map:serialize type="xml"/>
+        </map:act>
 
         <map:generate src="content/xdocs/{1}.xml" />
         <map:call resource="transform-to-document">
@@ -170,6 +178,33 @@
         </map:call>
         <map:serialize type="xml"/>
       </map:match>
+
+
+      <!--
+      These pipelines dynamically generate the wiki.{xlex,xgrm} files used in
+      the *.cwiki pipeline.  They are not used by default to avoid the overhead.
+   <map:match pattern="*.xlex">
+    <map:generate                src="resources/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
+    <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
+    <map:transform               src="resources/grammars/text4regex.xsl"/>
+    <map:transform type="lexer"  src="resources/grammars/regex.xlex"/>
+    <map:transform type="parser" src="resources/grammars/regex.xgrm"/>
+    <map:transform               src="resources/grammars/grm2xlex.xsl"/>
+    <map:serialize type="xml"/>
+   </map:match>
+   
+   <map:match pattern="*.xgrm">
+    <map:generate                src="resources/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
+    <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
+    <map:transform               src="resources/grammars/text4regex.xsl"/>
+    <map:transform type="lexer"  src="resources/grammars/regex.xlex"/>
+    <map:transform type="parser" src="resources/grammars/regex.xgrm"/>
+    <map:transform               src="resources/grammars/grm2xgrm.xsl"/>
+    <map:serialize type="xml"/>
+   </map:match>
+      -->
 
     </map:pipeline>
   </map:pipelines>

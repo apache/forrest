@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/04/11 11:26:29 $              |
+    |             $Date: 2003/04/26 12:23:14 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -82,6 +82,7 @@ FORREST SITE BUILDER
     <property name="project.stylesheets-dir" location="${project.content-dir}/resources/stylesheets" />
     <property name="project.images-dir"  location="${project.content-dir}/resources/images" />
     <property name="project.schema-dir"  location="${project.content-dir}/resources/schema" />
+    <property name="project.grammars-dir" location="${project.content-dir}/resources/grammars" />
     <property name="project.catalog"     location="${project.schema-dir}/catalog.xcat" />
     <property name="forrest.catalog.verbosity" value="1" />
     <property name="project.skins-dir"   location="${project.content-dir}/skins" />
@@ -104,6 +105,7 @@ FORREST SITE BUILDER
     <available property="sitemap.present" file="${project.sitemap-dir}" type="dir"/>
     <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
     <available property="images.present" file="${project.images-dir}" type="dir"/>
+    <available property="grammars.present" file="${project.grammars-dir}" type="dir"/>
     <available property="schema.present" file="${project.schema-dir}" type="dir"/>
     <available property="stylesheets.present" file="${project.stylesheets-dir}" type="dir"/>
     <available property="lib.present" file="${project.lib-dir}" type="dir"/>
@@ -373,11 +375,11 @@ FORREST SITE BUILDER
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
   <target name="project-context-bot" depends="init, examine-proj, copy-conf, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-content, copy-lib, 
+    copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-sitemap, copy-conf,
-    copy-xdocs, copy-stylesheets, copy-images, copy-content, copy-lib, 
+    copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
@@ -421,6 +423,13 @@ FORREST SITE BUILDER
     <copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${project.images-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-grammars" if="grammars.present">
+    <copy toDir="${project.ctxt-dir}/resources/grammars" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.grammars-dir}"/>
     </copy>
   </target>
 
