@@ -39,8 +39,8 @@ Uses       :  resources/schema/dtd/*.dtd
 
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="*.dtdx.xml">
-        <map:generate type="nekodtd" src="{forrest:context}/resources/schema/dtd/{1}.dtd">
+      <map:match type="regexp" pattern="^(.*?)([^/]*)\.dtdx\.xml$">
+        <map:generate type="nekodtd" src="{forrest:context}/resources/schema/dtd/{2}.dtd">
           <map:parameter name="config-class" value="org.cyberneko.dtd.DTDConfiguration" />
         </map:generate>
         <map:transform src="resources/stylesheets/dtdx2flat.xsl" />
