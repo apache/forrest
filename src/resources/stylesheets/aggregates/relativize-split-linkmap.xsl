@@ -48,7 +48,7 @@ Jeff Turner <jefft@apache.org>
     <xsl:value-of select="string(//*[starts-with(@href, $path)]/@tab)"/>
   </xsl:variable>
 
-  <xsl:include href="dotdots.xsl"/>
+  <xsl:include href="../dotdots.xsl"/>
 
   <!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
