@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators default="file"/>
+    <map:serializers default="html"/>
+    <map:matchers default="wildcard"/>
+    <map:selectors default="browser">
+      <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
+    </map:selectors>
+    <map:transformers default="xslt">
+      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+        <catalogues default="tabs">
+          <catalogue id="tabs" name="tabs" location="{project:translations}"/>
+        </catalogues>
+        <!-- <untranslated-text>untranslated</untranslated-text-->
+        <cache-at-startup>true</cache-at-startup>
+      </map:transformer>
+    </map:transformers>
+    <map:actions>
+      <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
+    </map:actions>
+  </map:components> 
+
+  <map:resources>
+    <map:resource name="skinit">
+      <map:select type="exists">
+        <map:when test="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+          <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+            <map:parameter name="notoc" value="{notoc}"/>
+            <!-- For backwards-compat with 0.2 - 0.4 skins -->
+            <map:parameter name="isfaq" value="{notoc}"/>
+            <map:parameter name="nopdf" value="{nopdf}"/>
+            <map:parameter name="path" value="{path}"/>
+            <map:parameter name="config-file" value="{project:skinconf}"/>
+          </map:transform>
+        </map:when>
+        <map:otherwise>
+          <map:transform src="{forrest:home}context/skins/{forrest:skin}/xslt/html/{type}.xsl">
+            <map:parameter name="notoc" value="{notoc}"/>
+            <!-- For backwards-compat with 0.2 - 0.4 skins -->
+            <map:parameter name="isfaq" value="{notoc}"/>
+            <map:parameter name="nopdf" value="{nopdf}"/>
+            <map:parameter name="path" value="{path}"/>
+            <map:parameter name="config-file" value="{project:skinconf}"/>
+          </map:transform>
+        </map:otherwise>
+      </map:select>
+      <map:serialize/>
+    </map:resource>
+  </map:resources>
+
+  <map:pipelines>
+    <map:pipeline >
+      <map:match pattern="**tab-*.html">
+        <map:generate src="{project:content.xdocs}tabs.xml"/>
+        <map:select type="config">
+          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:when test="true">
+            <map:act type="locale">
+              <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
+              <map:transform type="i18n">
+                <map:parameter name="locale" value="{lang}{country}{variant}"/>
+              </map:transform>
+            </map:act>
+          </map:when>
+        </map:select>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="tab2menu"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+        </map:call>
+      </map:match>      
+    </map:pipeline>
+  </map:pipelines>
+
+</map:sitemap>
