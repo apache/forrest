@@ -19,11 +19,10 @@
 <howto>
  <header>
   <title>How to create a PDF document for each tab</title>
-  <version>0.2</version>
   <abstract>This How-To describes the generation of a PDF document for each
     group of documents that is defined by a tab. 
   </abstract>
-  <last-modified-content-date date="2004-07-18"/>
+  <last-modified-content-date date="2004-07-19"/>
  </header>
 
   <audience title="Intended Audience">
@@ -100,7 +99,7 @@
     <p>
       Insert the following lines after the
       <code><![CDATA[<map:match pattern="site.xml">]]></code>
-      pipeline in the isection called "SOURCE FORMATS".
+      pipeline in the section called "SOURCE FORMATS".
     </p>
     <source><![CDATA[
 ...
@@ -135,33 +134,42 @@
 </map:match>]]>
     </source>
   </section>
-<section>
-<title>Edit your site.xml</title>
-<p> Add in your site.xml in the about element <code><![CDATA[<whole_foosite href="pdf-tab.html" label="sub site" />]]></code>
-Your site.xml should look like the following.
-</p>
-<source><![CDATA[... 
+  <section>
+    <title>Edit your site.xml</title>
+    <p>Add the following entry to your site.xml in the
+      <code><![CDATA[<about>]]></code> element
+    </p>
+    <source><![CDATA[... 
+<whole_foosite href="pdf-tab.html" label="sub site" />]]>
+    </source>
+    <p>
+      Your site.xml should look like this ...
+    </p>
+    <source><![CDATA[... 
 <about label="About">
   <index label="Index" href="index.html" description="Welcome to MyProj"/>
-  <changes label="Changes" href="changes.html" description="History of Changes" />
+  <changes label="Changes" href="changes.html"
+    description="History of Changes" />
   <todo label="Todo" href="todo.html" description="Todo List" />
   <whole_foosite href="pdf-tab.html" label="pdf-tab" />
 </about>
 ...]]>
-</source>
+    </source>
     <p>
       This allows you to link to it via a
       <code><![CDATA[<link href="site:whole_foosite">]]></code>
       reference. 
     </p>
-	<p>Add to every element that should be included in the pdf-tab.pdf the attribute <code>wholesite="true"</code>. Like the following.</p>
-	<source><![CDATA[ 
-<sample-wiki label="Wiki page" href="wiki-sample.html" description="wiki-sample" wholesite="true"/>]]>
-	</source>
-	<note>This attribute will be inherit by all chrildren of the element. 
-	 Do not use it in the father element that contains the 
+	  <p>Add to every element that should be included in the pdf-tab.pdf
+      the attribute <code>wholesite="true"</code></p>
+	  <source><![CDATA[
+<sample-wiki label="Wiki page" href="wiki-sample.html"
+  description="wiki-sample" wholesite="true"/>]]>
+	  </source>
+	  <note>This attribute will be inherited by all children of the element. 
+	 Do not use it in the parent element that contains the 
 	 <code><![CDATA[<whole_foosite href="pdf-tab.html" label="pdf-tab" />]]></code> 
-	 as child (will cause a <code>stack overflow</code> when you do)!!!
+	 as the child (will cause a <code>stack overflow</code> if you do)!!!
 	</note>
   </section>
   <section>
@@ -170,7 +178,9 @@ Your site.xml should look like the following.
       Line 4 of our example
       <br/>
       <code><![CDATA[<map:parameter name="include" value="//*[@wholesite='true']"/>]]></code>
-     looks at your site.xml and will match every element containing the <code>wholesite="true"</code> attribute. Imaging you want the samples tab exported:
+      looks at your site.xml and will match every element containing the
+      <code>wholesite="true"</code> attribute. For example, to use the "samples"
+      tab ...
     </p>
     <source><![CDATA[
 ...
@@ -180,9 +190,10 @@ Your site.xml should look like the following.
 ...]]>
     </source>
     <p>
-      It matches <strong>all</strong> the elements that contains <code>wholesite="true"</code>
-      - in our example <code><![CDATA[<samples>]]></code>
-      and its "children" - for the content of the pdf file to be generated.
+      It matches <strong>all</strong> of the elements that contain
+      <code>wholesite="true"</code>
+      (in our example <code><![CDATA[<samples>]]></code>
+      and its "children") for the content of the pdf file to be generated.
     </p>
     <p>
       Line 8 defines the title of the pdf file by taking the content
@@ -204,6 +215,19 @@ Your site.xml should look like the following.
       <code>aggregate.xmap</code> usually does).
     </note>
   </section>
-
   </steps>
+
+  <feedback title="Feedback and further development of this How-To">
+    <p>
+      Please provide feedback about this document via the
+      <link href="site:mail-lists">mailing lists</link>.
+    </p>
+    <p>
+      In the future, this ability will probably be incorporated into the
+      main Forrest process.
+    </p>
+    <fixme author="open">
+      This document will need to be modified when Issue FOR-202 is solved.
+    </fixme>
+  </feedback>
 </howto>
