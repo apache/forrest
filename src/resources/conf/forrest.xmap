@@ -62,22 +62,19 @@
   <map:pipelines>
     <map:pipeline>
 
-      <map:match pattern="**.xml">
+      <!-- ============================================================ -->
+      <!-- INTERMEDIATE FORMATS                                         -->
+      <!-- ============================================================ -->
 
+      <map:match pattern="**body-*.xml">
         <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}.ihtml" />
-          <map:generate src="content/xdocs/{../1}.ihtml" type="html" />
-          <map:transform src="resources/stylesheets/html2document.xsl" />
-          <map:transform type="idgen" />
-          <map:serialize type="xml"/>
-        </map:act>
-
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}.ehtml" />
-          <map:generate src="content/xdocs/{../1}.ehtml" />
+          <map:parameter name="url" value="content/xdocs/{1}{2}.ehtml" />
+          <map:generate src="content/xdocs/{../1}{../2}.ehtml" />
           <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
           <map:serialize type="xml" />
         </map:act>
+      </map:match>
+
 
         <!--
         <map:act type="resource-exists">
@@ -93,6 +90,20 @@
           <map:serialize type="xml"/>
         </map:act>
         -->
+
+        <!-- ============================================================ -->
+        <!-- SOURCE FORMATS                                               -->
+        <!-- ============================================================ -->
+
+      <map:match pattern="**.xml">
+
+        <map:act type="resource-exists">
+          <map:parameter name="url" value="content/xdocs/{1}.ihtml" />
+          <map:generate src="content/xdocs/{../1}.ihtml" type="html" />
+          <map:transform src="resources/stylesheets/html2document.xsl" />
+          <map:transform type="idgen" />
+          <map:serialize type="xml"/>
+        </map:act>
 
         <map:generate src="content/xdocs/{1}.xml" />
         <map:call resource="transform-to-document">
