@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/09/02 21:20:30 $              |
+    |             $Date: 2003/09/03 17:56:13 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -68,6 +68,8 @@ FORREST SITE BUILDER
     <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
     <property name="project.debuglevel"  value="ERROR"                         />
     <property name="project.start-uri"   value="index.html"                    />
+    <property name="project.configfile"   value="${project.ctxt-dir}/WEB-INF/cli.xconf" />
+    <property name="project.logkitfile"   value="${project.ctxt-dir}/WEB-INF/logkit.xconf" />
 
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
@@ -607,9 +609,10 @@ Use the 'seed' target to create a template project structure.
         <jvmarg line="${forrest.jvmargs}"/>
         <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
         <arg value="--logLevel=${project.debuglevel}"/>
+        <arg value="--logKitconfig=${project.logkitfile}"/>
         <arg value="--destDir=${project.site-dir}"/>
-        <arg value="--xconf=WEB-INF/cli.xconf"/>
-        <arg value="index.html"/>
+        <arg value="--xconf=${project.configfile}"/>
+        <arg value="${project.start-uri}"/>
         <classpath>
           <path refid="forrest.cp"/>
         </classpath>
