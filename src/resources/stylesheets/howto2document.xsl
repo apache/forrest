@@ -35,22 +35,26 @@
   </xsl:template>
   
   <xsl:template match="howto/header/abstract">
-    <section>
+    <section id="Overview">
      <title>Overview</title>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
   
   <xsl:template match="purpose | prerequisites | audience | steps | extension  | faqs | tips | references | feedback ">
-    <section>
+    <xsl:variable name="title">
       <xsl:choose>
         <xsl:when test="normalize-space(@title)!=''">
-          <title><xsl:value-of select="@title"/></title>
+          <xsl:value-of select="@title"/>
         </xsl:when>
         <xsl:otherwise>
-          <title><xsl:value-of select="name()"/></title>
+          <xsl:value-of select="name()"/>
         </xsl:otherwise>
       </xsl:choose>
+    </xsl:variable>
+
+    <section id="{$title}">
+        <title><xsl:value-of select="$title"/></title>
      <xsl:apply-templates/>
     </section>
   </xsl:template>
@@ -72,7 +76,7 @@
     </xsl:template>
   
   <xsl:template match="revisions">
-    <section>
+    <section id="revisions">
      <title>Revisions</title>
     <p>Find a problem with this document? Consider contacting the author or submitting your own revision. For instructions, read the How To Submit a Revision.</p>
       <ul>

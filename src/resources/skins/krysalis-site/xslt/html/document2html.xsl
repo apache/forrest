@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.5 2003/02/09 16:18:50 nicolaken Exp $
+$Id: document2html.xsl,v 1.6 2003/02/11 11:46:55 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -71,14 +71,20 @@ $Id: document2html.xsl,v 1.5 2003/02/09 16:18:50 nicolaken Exp $
       <toc>
         <xsl:for-each select="section">
           <tocc>
-            <toca href="#{generate-id()}">
+            <toca>
+              <xsl:attribute name="href">
+                <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
+              </xsl:attribute>
               <xsl:value-of select="title"/>
             </toca>
             <xsl:if test="section">
               <toc2>
                 <xsl:for-each select="section">
                   <tocc>
-                    <toca href="#{generate-id()}">
+                    <toca>
+                      <xsl:attribute name="href">
+                        <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
+                      </xsl:attribute>
                       <xsl:value-of select="title"/>
                     </toca>
                   </tocc>
@@ -90,6 +96,17 @@ $Id: document2html.xsl,v 1.5 2003/02/09 16:18:50 nicolaken Exp $
       </toc>
     </xsl:if>
     <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template name="generate-id">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="@id">
