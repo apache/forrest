@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.3 2003/12/28 22:54:16 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -32,7 +32,8 @@ $Id: site2xhtml.xsl,v 1.3 2003/12/28 22:54:16 nicolaken Exp $
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/quirks.css"; 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/inst.css"; 
-          /*  ]]> */
+          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/forrest.css"; 
+         /*  ]]> */
         </style>
         <link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" />
         <script src="{$root}skin/tigris.js" type="text/javascript"></script>
