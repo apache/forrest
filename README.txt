@@ -1,9 +1,9 @@
 What is Apache Forrest
 ----------------------
-Forrest is an XML standards-oriented documentation framework based
-on Apache Cocoon, providing XSLT stylesheets and schemas, images
-and other resources. Forrest uses these to render the XML source content
-into a website via command-line, robot, or a dynamic web application.
+Apache Forrest is an XML standards-oriented documentation framework
+based upon Apache Cocoon, providing XSLT stylesheets and schemas,
+images and other resources. Forrest uses these to render the source
+content into a website via command-line, robot, or dynamic application.
 
 Requirements
 ------------
