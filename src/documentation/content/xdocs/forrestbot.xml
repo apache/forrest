@@ -38,7 +38,7 @@
           to yet another machine.</p>
         <p>Running the bot is as easy as calling the following in your shell.
           (executed in the root dir of the distribution.)</p>
-        <source>build bot -Dbot.forrestbot.xconf=myOwn.conf.xml -Dtemplate.echo=[true|false]</source>
+        <source>build bot -Dbot.config=myOwn.conf.xml -Dtemplate.echo=[true|false]</source>
         <p>It is quite typical to perform this from a shell script that gets
           scheduled for execution on a regular basis.</p>
       </section>
@@ -47,11 +47,11 @@
         <fixme author="mpo">There is not yet a DTD for this configuration
           file.</fixme>
         <p>The actions the bot is going to take are defined in the XML
-          file pointed at with the <code>bot.forrestbot.xconf</code> System
-          property. (if not specified with <code>-Dbot.forrest.xconf</code>
+          file pointed at with the <code>bot.config</code> System
+          property. (if not specified with <code>-Dbot.config</code>
           then the default config from the
           distribution is taken: <code>./forrestbot.conf.xml</code>) </p>
-        <p>This configuration file has one (optional) child-element for
+        <p>This configuration file has one (required, but optionally empty) child-element for
           setting cross-project defaults, followed by a list of
           project-elements that hold the configuration for the various projects
           that the bot is going to work on.</p>
@@ -119,7 +119,8 @@
       &lt;user name=&quot;anoncvs&quot;/&gt;
       &lt;passwd name=&quot;anoncvs&quot;/&gt;
       &lt;module name=&quot;xml-forrest&quot;/&gt;
-      &lt;dir name=&quot;src/documentation&quot;/&gt;
+      &lt;content-dir name=&quot;src/documentation&quot;/&gt;
+      &lt;project-dir name=&quot;&quot;/&gt;
     &lt;/get-src&gt;
 
     &lt;generate&gt;
@@ -147,28 +148,31 @@
               <dd>forrest-site</dd>
             </dl>
             <dl>
-              <dt>get.cvs.host</dt>
+              <dt>get-src.cvs.host</dt>
               <dd>cvs.apache.org</dd>
             </dl>
             <dl>
-              <dt>get.cvs.root</dt>
+              <dt>get-src.cvs.root</dt>
               <dd>/home/cvspublic</dd>
             </dl>
             <dl>
-              <dt>get.cvs.user</dt>
+              <dt>get-src.cvs.user</dt>
               <dd>anoncvs</dd>
             </dl>
             <dl>
-              <dt>passwd</dt>
+              <dt>get-src.cvs.passwd</dt>
               <dd>anoncvs</dd>
             </dl>
             <dl>
-              <dt>get.cvs.module</dt>
+              <dt>get-src.cvs.module</dt>
               <dd>xml-forrest</dd>
             </dl>
             <dl>
-              <dt>get.cvs.dir</dt>
+              <dt>get-src.cvs.content-dir</dt>
               <dd>src/documentation</dd>
+            </dl><dl>
+              <dt>get-src.cvs.project-dir</dt>
+              <dd></dd>
             </dl>
             <dl>
               <dt>generate.debuglevel</dt>
@@ -321,7 +325,7 @@
             <li><code>&lt;destination&gt;</code> @name holds the path to the directory on the remote host where the generated content needs to be published.  The process is using the <code>ftp cd</code> command to get there.  This means this directory has to exist.</li>
           </ul>
         </section>
-        <warning>Currently the ant distribution that is included in forrest cvs is not offering the required NetComponents.jar to actually support this type of deployment. If you want to use it anyway you should use get the required jar from <link href="http://www.savarese.org/oro/downloads/index.html#NetComponents">http://www.savarese.org/oro/downloads</link> and drop that into your <code>{forrest-sandbox}/tools/antipede/lib</code> directory.  </warning>
+        <warning>Currently the ant distribution that is included in forrest cvs is not offering the required NetComponents.jar to actually support this type of deployment. If you want to use it anyway you should get the required jar from <link href="http://www.savarese.org/oro/downloads/index.html#NetComponents">http://www.savarese.org/oro/downloads</link> and drop that into your <code>{forrest-sandbox}/tools/antipede/lib</code> directory.  </warning>
       </section>
       <section>
         <title>

@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                       0.3.1-dev                       |
-    |             $Date: 2003/01/31 09:38:28 $              |
+    |             $Date: 2003/02/08 05:50:38 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -549,6 +549,7 @@ Use the 'seed' target to create a template project structure.
     <mkdir dir="${project.work-dir}"/>
 
     <parallel>
+
       <java classname="org.apache.cocoon.Main"
         fork="true"
         dir="."
@@ -566,7 +567,6 @@ Use the 'seed' target to create a template project structure.
         <arg value="${project.start-uri}"/>              <!-- starting page -->
         <arg value="-V" />                          <!-- be verbose -->
       </java>
-
       <sequential>
         <!-- 
         | Copy all non-xdocs content across, as we cannot rely on crawling to
@@ -589,13 +589,16 @@ Use the 'seed' target to create a template project structure.
           <fileset dir="${skindir}/images"/>
         </copy>
 
-        <!-- Copy CSS and JS files -->
+        <!-- Copy all other non-resource files -->
         <copy toDir="${project.site-dir}/skin" filtering="false"
           overwrite="true"
           failonerror="false">
-          <fileset dir="${skindir}/css"/>
-          <fileset
-            dir="${skindir}/scripts"/>
+          <mapper type="flatten"/>
+          <fileset dir="${skindir}">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+
         </copy>
 
       </sequential>

@@ -21,7 +21,7 @@ Note that text and image are mandatory parts of the template.
     <xsl:param name="root"/>
     <a href="{$url}">
       <xsl:choose>
-        <xsl:when test="$logo">
+        <xsl:when test="$logo and not($logo = '')">
           <img alt="{$name}" class="logoImage" border="0">
             <xsl:attribute name="src">
 	      <xsl:if test="not(starts-with($logo, 'http://'))"><xsl:value-of select="$root"/></xsl:if>

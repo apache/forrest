@@ -59,7 +59,6 @@
       <map:serializers default="html">
          <map:serializer name="html" mime-type="text/html" src="org.apache.cocoon.serialization.HTMLSerializer">
             <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
-
             <encoding>ISO-8859-1</encoding>
          </map:serializer>
 
@@ -69,9 +68,7 @@
 
          <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
             <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
-
             <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
-
             <encoding>ISO-8859-1</encoding>
          </map:serializer>
 
@@ -446,7 +443,7 @@
 
                <map:transform src="library/xslt/html2document.xsl" />
 
-               <map:transform type="linkrewriter" src="cocoon:/linkmap" />
+               <map:transform type="linkrewriter" src="cocoon:/{../1}/linkmap" />
 
                <map:transform type="idgen" />
 
@@ -462,7 +459,7 @@
                <map:parameter name="url" value="content/xdocs/{1}/{2}.ehtml" />
                <map:generate src="content/xdocs/{../1}/{../2}.ehtml"/>
                <map:transform src="library/xslt/html2htmlbody.xsl" />
-               <map:transform type="linkrewriter" src="cocoon:/linkmap" />
+               <map:transform type="linkrewriter" src="cocoon:/{../1}/linkmap" />
                <map:serialize type="xml"/>
             </map:act>
 
@@ -482,7 +479,7 @@
 
                <map:transform src="library/xslt/html2document.xsl" />
 
-               <map:transform type="linkrewriter" src="cocoon:/linkmap" />
+               <map:transform type="linkrewriter" src="cocoon:/{../1}/linkmap" />
 
                <map:transform type="idgen" />
 
@@ -686,6 +683,11 @@
 
                <map:match pattern="**.pdf">
                   <map:read src="content/{1}.pdf" mime-type="application/pdf" />
+               </map:match>
+
+               <map:match pattern="**.swf">
+                 <map:read src="content/{1}.swf"
+                   mime-type="application/x-shockwave-flash" />
                </map:match>
 
                <map:match pattern="**">
