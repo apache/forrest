@@ -7,7 +7,7 @@
 #
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.4-dev
+COCOON_VERSION=2.1.4
 COCOON_HOME=$BASE/../../../cocoon-2.1
 FORREST=$BASE/../..
 NEKODTD_VERSION=0.1.9
@@ -169,7 +169,7 @@ upgrade_endorsed
 #avalon-framework-4.1.3.jar
 copy avalon-framework
 #batik-all-1.5b2.jar
-bcopy batik-all
+#bcopy batik-all
 #chaperon-20030208.jar
 bcopy chaperon
 #cocoon-20030311.jar
