@@ -1,0 +1,39 @@
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+  <map:pipelines>
+
+    <map:pipeline>
+
+      <map:match pattern="testsuite/index.xml">
+        <map:aggregate element="testsuite">
+          <map:part src="cocoon://testsuite/rss2document.xsl/01"/>
+        <!-- Add new units over here -->
+        </map:aggregate>
+        <map:transform src="test2document.xsl"/>
+        <map:serialize type="xml"/>
+      </map:match>
+
+    </map:pipeline>
+
+    <map:pipeline internal-only="true">
+      <!-- Test any XSL stylesheet.
+           The test contains:
+           * {2}-input.xml
+           * {2}-test.xsl
+           * {2}-output.xml (if used by test.xsl)
+      -->
+      <map:match pattern="testsuite/*/*">
+        <map:generate src="testunits/{1}/{2}-input.xml"/>
+        <map:transform src="{forrest:stylesheets}/{1}"/>
+        <map:transform src="testunits/{1}/{2}-test.xsl"/>
+        <map:transform src="{project:content.xdocs}/code/set_id.xsl">
+          <map:parameter name="id" value="{1} / {2}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+
+    </map:pipeline>
+
+  </map:pipelines>
+
+</map:sitemap>
