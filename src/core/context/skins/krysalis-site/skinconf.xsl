@@ -8,29 +8,29 @@
   <!-- Krysalis -->
     <color name="header"    value="#FFFFFF"/>
 
-    <color name="tab-selected" value="#a5b6c6"/>
-    <color name="tab-unselected" value="#F7F7F7"/>
-    <color name="subtab-selected" value="#a5b6c6"/>
-    <color name="subtab-unselected" value="#a5b6c6"/>
+    <color name="tab-selected" value="#a5b6c6" link="#000000" vlink="#000000" hlink="#000000"/>
+    <color name="tab-unselected" value="#F7F7F7"  link="#000000" vlink="#000000" hlink="#000000"/>
+    <color name="subtab-selected" value="#a5b6c6"  link="#000000" vlink="#000000" hlink="#000000"/>
+    <color name="subtab-unselected" value="#a5b6c6"  link="#000000" vlink="#000000" hlink="#000000"/>
 
     <color name="heading" value="#a5b6c6"/>
     <color name="subheading" value="#CFDCED"/>
         
-    <color name="navstrip" value="#CFDCED"/>
+    <color name="navstrip" value="#CFDCED" font="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
     <color name="toolbox" value="#a5b6c6"/>
     <color name="border" value="#a5b6c6"/>
-    
-    <color name="menu" value="#F7F7F7"/>    
+        
+    <color name="menu" value="#F7F7F7" link="#000000" vlink="#000000" hlink="#000000"/>    
     <color name="dialog" value="#F7F7F7"/>
             
-    <color name="body"      value="#ffffff"/>
+    <color name="body"    value="#ffffff" link="#0F3660" vlink="#009999" hlink="#000066"/>
     
     <color name="table" value="#a5b6c6"/>    
     <color name="table-cell" value="#ffffff"/>    
-    <color name="highlight" value="#yellow"/>
-    <color name="fixme" value="#c60"/>
-    <color name="note" value="#069"/>
-    <color name="warning" value="#900"/>
+    <color name="highlight" value="#ffff00"/>
+    <color name="fixme" value="#cc6600"/>
+    <color name="note" value="#006699"/>
+    <color name="warning" value="#990000"/>
     <color name="code" value="#a5b6c6"/>
         
     <color name="footer" value="#a5b6c6"/>
@@ -54,16 +54,16 @@
        <color name="header" value="#FFFFFF"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-selected'])">
-      <color name="tab-selected" value="#a5b6c6"/>
+      <color name="tab-selected" value="#a5b6c6" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-unselected'])">
-      <color name="tab-unselected" value="#F7F7F7"/>
+      <color name="tab-unselected" value="#F7F7F7"  link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='subtab-selected'])">
-      <color name="subtab-selected" value="#a5b6c6"/>
+      <color name="subtab-selected" value="#a5b6c6"  link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='subtab-unselected'])">
-      <color name="subtab-unselected" value="#a5b6c6"/>
+      <color name="subtab-unselected" value="#a5b6c6"  link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='heading'])">
       <color name="heading" value="#a5b6c6"/>
@@ -72,7 +72,7 @@
       <color name="subheading" value="#CFDCED"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='navstrip'])">
-      <color name="navstrip" value="#CFDCED"/>
+      <color name="navstrip" value="#CFDCED" font="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='toolbox'])">
        <color name="toolbox" value="#a5b6c6"/>
@@ -81,13 +81,13 @@
        <color name="border" value="#a5b6c6"/>
      </xsl:if>       
      <xsl:if test="not(color[@name='menu'])">
-       <color name="menu" value="#F7F7F7"/>    
+      <color name="menu" value="#F7F7F7" link="#000000" vlink="#000000" hlink="#000000"/>    
      </xsl:if>  
      <xsl:if test="not(color[@name='dialog'])">
       <color name="dialog" value="#F7F7F7"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='body'])">
-      <color name="body" value="#ffffff"/>
+      <color name="body" value="#ffffff" link="#0F3660" vlink="#009999" hlink="#000066"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='table'])">
       <color name="table" value="#a5b6c6"/>    

@@ -37,12 +37,7 @@
 #toptabs th {
 	background-image: url('images/rc-t-l-10-1header-2tab-selected-3tab-selected.png');
 }
-.app h3 {
-	background-image: url('images/rc-t-l-10-1body-2heading-3heading.png');
-}
-.app h4 {
-	background-image: url('images/rc-t-l-10-1body-2subheading-3subheading.png');
-}
+      
 </xsl:template>
 
 <xsl:template match="group-logo">
@@ -136,9 +131,56 @@
 </xsl:template> 
 
 <xsl:template match="color[@name='heading']"> 
-.app h3 {background-color: <xsl:value-of select="@value"/>;}</xsl:template> 
+
+<xsl:choose>
+    <xsl:when test="../../headings/@type='underlined'">
+.app h3 {	
+    background-color: transparent;
+    color: <xsl:value-of select="../color[@name='body']/@font"/>;
+	border-bottom: 2px solid <xsl:value-of select="@value"/>;
+}
+    </xsl:when>
+    <xsl:when test="../../headings/@type='boxed'">
+.app h3 {
+    background-color: <xsl:value-of select="@value"/>;
+	background-image: url('images/rc-t-l-10-1body-2heading-3heading.png');
+}
+    </xsl:when>
+    <xsl:otherwise>
+.app h3 {
+    color: <xsl:value-of select="../color[@name='body']/@font"/>;
+	background-color: transparent;
+}
+    </xsl:otherwise>
+</xsl:choose>
+
+
+</xsl:template> 
 <xsl:template match="color[@name='subheading']"> 
-.app h4  { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
+
+<xsl:choose>
+    <xsl:when test="../../headings/@type='underlined'">
+.app h4 {	
+    background-color: transparent;
+    color: <xsl:value-of select="../color[@name='body']/@font"/>;
+	border-bottom: 1px solid <xsl:value-of select="@value"/>;
+}
+    </xsl:when>
+    <xsl:when test="../../headings/@type='boxed'">
+.app h4 {
+    background-color: <xsl:value-of select="@value"/>;
+	background-image: url('images/rc-t-l-10-1body-2subheading-3subheading.png');
+}
+    </xsl:when>
+    <xsl:otherwise>
+.app h4 {
+    color: <xsl:value-of select="../color[@name='body']/@font"/>;
+	background-color: transparent;
+}
+    </xsl:otherwise>
+</xsl:choose>
+
+</xsl:template> 
 
 <xsl:template match="color[@name='navstrip']"> 
 #topmodule    { background-color: <xsl:value-of select="@value"/>;

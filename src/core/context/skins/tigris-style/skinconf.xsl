@@ -23,7 +23,7 @@
     <color name="menu" value="#ffffff"/>    
     <color name="dialog" value="#eeeeee"/>
             
-    <color name="body"  value="#ffffff"/>
+    <color name="body"      value="#ffffff"/>
     
     <color name="table" value="#ccc"/>    
     <color name="table-cell" value="#ffffff"/>   
