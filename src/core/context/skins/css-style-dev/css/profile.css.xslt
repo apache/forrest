@@ -81,8 +81,21 @@
 </xsl:template> 
 
 <xsl:template match="color[@name='navstrip']">
-#main .breadtrail {background: <xsl:value-of select="@value"/>; }
-#top .breadtrail {background: <xsl:value-of select="@value"/>; }
+#main .breadtrail {
+	background: <xsl:value-of select="@value"/>; 
+	color: <xsl:value-of select="@font"/>;
+}
+#main .breadtrail a:link {  color: <xsl:value-of select="@link"/>;  }
+#main .breadtrail a:visited { color: <xsl:value-of select="@vlink"/>; }
+#main .breadtrail a:hover { color: <xsl:value-of select="@hlink"/>; }
+#top .breadtrail {
+	background: <xsl:value-of select="@value"/>; 
+	color: <xsl:value-of select="@font"/>;
+}
+#top .breadtrail a:link {  color: <xsl:value-of select="@link"/>;  }
+#top .breadtrail a:visited { color: <xsl:value-of select="@vlink"/>; }
+#top .breadtrail a:hover { color: <xsl:value-of select="@hlink"/>; }
+
 </xsl:template> 
 
 <!--xsl:template match="color[@name='toolbox']">
