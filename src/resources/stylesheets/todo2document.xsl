@@ -7,7 +7,7 @@
  <xsl:template match="/">
   <xsl:apply-templates select="//todo"/>
  </xsl:template>
- 
+
  <xsl:template match="todo">
   <document>
    <header>
@@ -27,11 +27,11 @@
      <li>
       <strong><xsl:text>[</xsl:text><xsl:value-of select="@context"/><xsl:text>]</xsl:text></strong><xsl:text> </xsl:text>
       <xsl:apply-templates mode="copy"/>
-      <xsl:text> </xsl:text>&#8594;<xsl:text> </xsl:text><xsl:value-of select="@assigned-to"/>
+      <xsl:text> </xsl:text>&#8594;<xsl:text> </xsl:text><xsl:value-of select="@dev"/>
      </li>
     </xsl:for-each>
    </ul>
   </section>
  </xsl:template>
- 
+
 </xsl:stylesheet>

@@ -29,15 +29,13 @@ NOTES:
 
 AUTHORS:
   Stefano Mazzocchi <stefano@apache.org>
+  Steven Noels <stevenn@apache.org>
 
 FIXME:
 
 CHANGE HISTORY:
 [Version 1.0]
-  19991129 Initial version. (SM)
-  20000316 Added bugfixing attribute. (SM)
-[Version 1.1]
-  20011212 Used public identifiers for external entities (SM)
+  20020611 Initial version. (SN)
 
 COPYRIGHT:
   Copyright (c) @year@ The Apache Software Foundation.
@@ -59,33 +57,22 @@ COPYRIGHT:
 %document;
 
 <!-- =============================================================== -->
-<!-- Common entities -->
+<!-- Include the Common elements -->
 <!-- =============================================================== -->
 
-<!ENTITY % types "add|remove|update|fix">
+<!ENTITY % common PUBLIC
+    "-//APACHE//ENTITIES Common Elements V1.0//EN"
+    "common-elems-v10.mod">
+%common;
 
 <!-- =============================================================== -->
-<!-- Document Type Definition -->
+<!-- Include the Changes module -->
 <!-- =============================================================== -->
 
-<!ELEMENT changes (title, devs, release*)>
-<!ATTLIST changes %common.att;>
-
-    <!ELEMENT devs (person+)>
-    <!ATTLIST devs %common.att;>
-
-    <!ELEMENT release (action+)>
-    <!ATTLIST release %common.att;
-                      version  CDATA  #REQUIRED
-                      date     CDATA  #REQUIRED>
-
-        <!ELEMENT action (%content.mix;)*>
-        <!ATTLIST action %common.att;
-                         dev  IDREF  #REQUIRED
-                         type (%types;)  #IMPLIED
-                         due-to CDATA #IMPLIED
-                         due-to-email CDATA #IMPLIED
-                         fixes-bug CDATA #IMPLIED>
+<!ENTITY % changes PUBLIC
+    "-//APACHE//ENTITIES Changes V1.1//EN"
+    "changes-v11.mod">
+%changes;
 
 <!-- =============================================================== -->
 <!-- End of DTD -->

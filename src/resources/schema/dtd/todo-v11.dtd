@@ -10,7 +10,7 @@ PURPOSE:
 
 TYPICAL INVOCATION:
 
-  <!DOCTYPE document PUBLIC
+  <!DOCTYPE todo PUBLIC
        "-//APACHE//DTD Todo Vx.y//EN"
        "todo-vxy.dtd">
 
@@ -59,34 +59,23 @@ COPYRIGHT:
     "document-v11.mod">
 %document;
 
-
 <!-- =============================================================== -->
-<!-- Common entities -->
-<!-- =============================================================== -->
-
-<!ENTITY % priorities "showstopper|high|medium|low|wish|dream">
-
-<!ENTITY % contexts "build|docs|code|admin|design">
-
-<!-- =============================================================== -->
-<!-- Document Type Definition -->
+<!-- Include the Common elements -->
 <!-- =============================================================== -->
 
-<!ELEMENT todo (devs, actions*)>
-<!ATTLIST todo %common.att;
-               %title.att;>
+<!ENTITY % common PUBLIC
+    "-//APACHE//ENTITIES Common Elements V1.0//EN"
+    "common-elems-v10.mod">
+%common;
 
-    <!ELEMENT devs (person+)>
-    <!ATTLIST devs %common.att;>
+<!-- =============================================================== -->
+<!-- Include the Todo module -->
+<!-- =============================================================== -->
 
-    <!ELEMENT actions (action+)>
-    <!ATTLIST actions %common.att;
-                     priority     (%priorities;)  #IMPLIED>
-
-        <!ELEMENT action (%content.mix;)*>
-        <!ATTLIST action %common.att;
-                         assigned-to  IDREF           #IMPLIED
-                         context      (%contexts;)    #REQUIRED>
+<!ENTITY % todo PUBLIC
+    "-//APACHE//ENTITIES Todo V1.1//EN"
+    "todo-v11.mod">
+%todo;
 
 <!-- =============================================================== -->
 <!-- End of DTD -->
