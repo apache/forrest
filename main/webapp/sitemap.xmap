@@ -314,6 +314,16 @@ $Revision: 1.12 $
                           pass-through="true"/>
              </map:when>  
            </map:select>
+      </map:pipeline>     
+      
+      <!-- FIXME: temporary fix to get PDF-output plugin working
+           this mount should be managed by the plugns framework -->
+      <map:pipeline internal-only="false">
+        <map:select type="exists">
+          <map:when test="{forrest:plugins}/org.apache.forrest.plugin.leather/output.xmap">
+            <map:mount uri-prefix="" src="{forrest:plugins}/org.apache.forrest.plugin.leather/output.xmap" check-reload="yes" pass-through="true"/>
+          </map:when>
+        </map:select>
       </map:pipeline>
       
       
