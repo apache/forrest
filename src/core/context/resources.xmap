@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.11 $
+$Revision: 1.12 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -23,7 +23,9 @@ $Revision: 1.11 $
          <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer" />
          <map:serializer name="text"   mime-type="text/plain"  src="org.apache.cocoon.serialization.TextSerializer"/>
       </map:serializers>
-      <map:transformers default="xslt" />
+      <map:transformers default="xslt">
+        <map:transformer name="skinconf" src="org.apache.forrest.skinconf.SkinconfTransformer"/>
+      </map:transformers>
       <map:readers default="resource" />
       <map:matchers default="wildcard" />
       <map:selectors default="browser" />
@@ -136,7 +138,7 @@ $Revision: 1.11 $
       </map:resource>
 
       <map:resource name="pipe-svg2png-corner-resource">
-        <map:generate src="cocoon:/skinconf" />
+        <map:generate src="cocoon:/skin/skinconf.xml" />
         <map:transform src="{path}">
             <map:parameter name="orientation-tb" 
                          value="{orientation-tb}"/>
@@ -156,7 +158,7 @@ $Revision: 1.11 $
       </map:resource>
       
       <map:resource name="generate-resource">
-        <map:generate src="cocoon:/skinconf" />
+        <map:generate src="cocoon:/skin/skinconf.xml" />
         <map:transform src="{path}"/>
       </map:resource>
       
@@ -170,8 +172,8 @@ $Revision: 1.11 $
    
    <map:pipelines>
        
-      <map:pipeline internal-only="true">
-         <map:match pattern="skinconf">
+      <map:pipeline internal-only="false">
+         <map:match pattern="**skin/skinconf.xml">
            <map:generate src="{project:skinconf}" />
            <map:select type="exists">
              <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
@@ -180,10 +182,11 @@ $Revision: 1.11 $
            </map:select>
            <map:select type="exists">
              <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
-               <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+               <map:transform src="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl"/>
              </map:when>
            </map:select>
            <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+           <map:transform type="skinconf"/>
            <map:serialize type="xml" />
          </map:match>
        </map:pipeline>
