@@ -43,24 +43,12 @@ $Id: document2html.xsl,v 1.4 2004/01/13 08:19:53 nicolaken Exp $
   <xsl:variable name="disable-print-link" select="$config/disable-print-link"/>
   <!-- If true, an XML link for this page will not be generated -->
   <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
-  <!-- Get the section depth to use when generating the minitoc (default is 2) -->
-  <xsl:variable name="config-max-depth" select="$config/toc/@level"/>
   <!-- Get the location where to generate the minitoc -->
   <xsl:variable name="minitoc-location" select="$config/toc/@location"/>
   <!-- Whether to obfuscate email links -->
   <xsl:variable name="obfuscate-mail-links" select="$config/obfuscate-mail-links"/>
   <!-- If true, an the images on all external links will not be added -->
   <xsl:variable name="disable-external-link-image" select="$config/disable-external-link-image"/>  
-
-
-  <xsl:variable name="max-depth">
-    <xsl:choose>
-      <xsl:when test="string-length($config-max-depth)&gt;0">
-        <xsl:value-of select="$config-max-depth"/>
-      </xsl:when>
-      <xsl:otherwise>2</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
 
   <xsl:param name="dynamic-page" select="'false'"/>  
   <xsl:param name="notoc"/>
@@ -175,7 +163,7 @@ if (VERSION > 3) {
   </xsl:template>
   
   <xsl:template match="body">
-    <xsl:if test="$max-depth&gt;0 and not($notoc='true')" >
+    <xsl:if test="$config/toc">
       <xsl:call-template name="minitoc">
         <xsl:with-param name="tocroot" select="."/>
         <xsl:with-param name="depth">1</xsl:with-param>
@@ -362,12 +350,12 @@ if (VERSION > 3) {
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
     <xsl:param name="depth"/>     
-    <xsl:if test="count($tocroot/section) > 0">
+    <xsl:if test="count($tocroot/section) >= $config/toc/@min-sections">
       <ul class="minitoc">
         <xsl:for-each select="$tocroot/section">
           <li>
             <xsl:call-template name="toclink"/>
-            <xsl:if test="$depth&lt;$max-depth">
+            <xsl:if test="$depth&lt;$config/toc/@max-depth">
               <xsl:call-template name="minitoc">
                 <xsl:with-param name="tocroot" select="."/>
                 <xsl:with-param name="depth" select="$depth + 1"/>
