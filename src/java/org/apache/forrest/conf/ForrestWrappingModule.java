@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.cocoon.components.modules.input;
+package org.apache.forrest.conf;
 
 
 /**
