@@ -449,7 +449,7 @@ Revision:
                   <xsl:apply-templates/>
             </table>
       </xsl:template>
-      <xsl:template match="graphic">
+      <xsl:template match="graphic|imageobject">
             <tr>
                   <td>
                         <img alt="{@srccredit}" src="{@fileref}"/>
