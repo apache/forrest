@@ -87,18 +87,33 @@
   <xsl:choose>
    <xsl:when test="contains(.,'|')">
 
-    <xsl:variable name="href" select="substring-before(substring-after(.,'|'),']')"/>
     <xsl:variable name="text" select="substring-after(substring-before(.,'|'),'[')"/>
+    <xsl:variable name="href" select="substring-before(substring-after(.,'|'),']')"/>
 
     <xsl:choose>
      <xsl:when test="string(number($href)) != 'NaN'">
       <link href="#{$href}">
        <xsl:value-of select="$text"/>
       </link>
-     </xsl:when>
-     <xsl:when test="starts-with($href,'http') or contains($href, '.html') or contains($href, '.pdf')">
+    </xsl:when>
+
+    <xsl:when test="contains($href, '.png') or
+      contains($href, '.gif') or
+      contains($href, '.jpeg') or
+      contains($href, '.jpg')">
+      <xsl:choose>
+        <xsl:when test="contains($href, 'http://')">
+          <img src="{$href}" alt="{$text}"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="images/{$href}" alt="{$text}"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+
+    <xsl:when test="starts-with($href,'http') or contains($href, '.html') or contains($href, '.pdf')">
       <link href="{$href}">
-       <xsl:value-of select="$text"/>
+        <xsl:value-of select="$text"/>
       </link>
      </xsl:when>
      <xsl:otherwise>
@@ -113,6 +128,20 @@
     <xsl:variable name="href" select="substring(.,2,string-length(.)-2)"/>
     
     <xsl:choose>
+      <xsl:when test="contains($href, '.png') or
+        contains($href, '.gif') or
+        contains($href, '.jpeg') or
+        contains($href, '.jpg')">
+        <xsl:choose>
+          <xsl:when test="contains($href, 'http://')">
+            <img src="{$href}" alt=""/>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="images/{$href}" alt=""/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+
      <xsl:when test="string(number($href)) != 'NaN'">
       <link href="#{$href}">
        [<xsl:value-of select="$href"/>]
