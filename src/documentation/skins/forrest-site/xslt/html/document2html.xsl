@@ -72,6 +72,7 @@
   </xsl:template>
 
   <xsl:template match="section/section">
+    <a name="{generate-id()}"/>
     <h4>
       <xsl:value-of select="@title"/>
     </h4>
