@@ -15,11 +15,9 @@ http://www.oasis-open.org/committees/relax-ng/
 The RELAX NG tutorial:
 	http://www.oasis-open.org/committees/relax-ng/tutorial.html
 
-The definition of the non-XML syntax used here (.rnx files):
-	http://www.thaiopensource.com/relaxng/nonxml/syntax.html
-
-The RELAX NG Compact Syntax spec (less readable than the one above):
-  http://www.oasis-open.org/committees/relax-ng/compact-20020607.html
+The RELAX NG Compact Syntax spec (definition of the non-XML syntax
+used here *.rnx files):
+  http://www.oasis-open.org/committees/relax-ng/compact-20021121.html
 
 Jing RELAX NG validator in Java:
 	http://www.thaiopensource.com/relaxng/
@@ -34,4 +32,4 @@ $FORREST_HOME/lib/endorsed/*.jar to your classpath first.
 
 -- 
 jefft@apache.org
-$Id: README.txt,v 1.2 2002/11/14 09:06:35 crossley Exp $
+$Id: README.txt,v 1.3 2003/01/22 06:39:34 crossley Exp $
