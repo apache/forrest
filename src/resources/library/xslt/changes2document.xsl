@@ -18,7 +18,7 @@
     <title>History of Changes</title>
    </header>
    <body>
-    <p><link href="changes.rss"><img src="images/rss.png"/></link></p>    
+    <p><link href="changes.rss"><img src="images/rss.png" alt="RSS"/></link></p>    
     <xsl:apply-templates/>
    </body>
   </document>
