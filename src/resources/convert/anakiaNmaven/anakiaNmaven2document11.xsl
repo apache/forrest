@@ -47,6 +47,12 @@
         </header>
     </xsl:template>
 
+    <xsl:template match="P|p">
+        <p>
+          <xsl:apply-templates/>
+        </p>
+    </xsl:template>
+    
     <xsl:template match="figure">
         <figure alt="{title}" src= "{graphic/@fileref}" />
     </xsl:template>
@@ -64,17 +70,17 @@
        
     </xsl:template>
     
-    <xsl:template match="source">
+    <xsl:template match="source|blockquote">
       <xsl:choose>
     	<xsl:when test="name(..)='p'">
     	  <code>
-    	    <xsl:apply-templates/>
+    	    <xsl:value-of select="." />
     	  </code> 
     	</xsl:when>
       
     	<xsl:otherwise>
     	  <source>
-    	    <xsl:apply-templates/>
+    	    <xsl:value-of select="." />
     	  </source> 
     	</xsl:otherwise>
        </xsl:choose>
@@ -165,21 +171,56 @@
         
     <xsl:template match="b">
       <strong>
-        <xsl:apply-templates/>
+        <xsl:value-of select = "."/>
       </strong>
     </xsl:template>
     
     <xsl:template match="i">
       <em>
-        <xsl:apply-templates/>
+        <xsl:value-of select = "."/>
       </em>
     </xsl:template>
 
-    <!-- Strip fonts -->
+    <xsl:template match="table">
+      <table>
+            <xsl:apply-templates select="node()"/>
+      </table>
+    </xsl:template>
+    
+            
+    <xsl:template match="br">
+      <xsl:choose>
+	    <xsl:when test="normalize-space(text())">
+	    	    
+		  <xsl:choose>
+		    <xsl:when test="name(..)='p'">
+		        <xsl:apply-templates/>
+		      <br/> 
+		    </xsl:when>
+	  	    <xsl:otherwise>
+		      <p>
+	            <xsl:apply-templates/>
+		      </p>
+		    </xsl:otherwise>
+	       </xsl:choose>
+	      
+	    </xsl:when>
+  	    <xsl:otherwise>
+	      <br/>
+	    </xsl:otherwise>
+       </xsl:choose>
+    </xsl:template>
+    
+    <!-- Strip -->
     <xsl:template match="font">
       <xsl:apply-templates/>
     </xsl:template>
-            
+
+    <xsl:template match="h1|h2|h3|h4">
+     <xsl:comment> -ATTENTION- THIS IS A SECTION, PLEASE ENCLOSE THE SECTION CONTENTS... -ATTENTION- </xsl:comment>
+     <section><title><xsl:apply-templates/></title> <xsl:comment>... HERE! :-)</xsl:comment></section>
+    </xsl:template>
+                
     <xsl:template match="node()|@*" priority="-1">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
