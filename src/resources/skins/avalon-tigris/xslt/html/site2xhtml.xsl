@@ -1,25 +1,28 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-   <!-- Default skinconf.xml in the skins/ directory -->
-  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
-  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-  <xsl:param name="path"/>
-  <xsl:include href="pathutils.xsl"/>
-  <xsl:include href="dotdots.xsl"/>
-  <xsl:include href="renderlogo.xsl"/>
+<!--
+site2xhtml.xsl is the final stage in HTML page production.  It merges HTML from
+document2html.xsl, tab2menu.xsl and book2menu.xsl, and adds the site header,
+footer, searchbar, css etc.  As input, it takes XML of the form:
 
-  <xsl:variable name="root">
-    <xsl:call-template name="dotdots">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:call-template>
-  </xsl:variable>
- 
-  <xsl:variable name="filename">
-    <xsl:call-template name="filename">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:call-template>
-  </xsl:variable>
-  
+<site>
+  <div class="menu">
+    ...
+  </div>
+  <div class="tab">
+    ...
+  </div>
+  <div class="content">
+    ...
+  </div>
+</site>
+
+$Id: site2xhtml.xsl,v 1.3 2002/11/16 20:58:12 jefft Exp $
+-->
+
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
+
   <xsl:template match="site">
     <html>
       <head>
@@ -165,13 +168,6 @@
 
       </body>
     </html>
-    </xsl:template>
-
-    <xsl:template match="node()|@*" priority="-1">
-      <xsl:copy>
-        <xsl:apply-templates select="@*"/>
-        <xsl:apply-templates/>
-      </xsl:copy>
     </xsl:template>
 
 </xsl:stylesheet>
