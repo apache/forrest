@@ -4,7 +4,18 @@
   <xsl:include href = "split.xsl"/>
 
   <xsl:param name="isfaq"/>
-  <xsl:param name="resource"/>
+  <xsl:param name="resource"/> <!-- Filename part, eg 'index' from index.html' -->
+  <xsl:param name="dir"/>
+  <xsl:include href="dotdots.xsl"/>
+
+  <xsl:variable name="root">
+    <xsl:call-template name="dotdots">
+      <xsl:with-param name="path" select="$dir"/>
+    </xsl:call-template>
+  </xsl:variable>
+ 
+  <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
+
   <xsl:template match="document">
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
@@ -18,7 +29,7 @@
             <!--td align="center" width="80" nowrap><a href="" class="dida"><img src="images/singlepage.gif"><br>
               single page<br>
               version</a></td-->
-            <td align="center" width="80" nowrap="nowrap"><a href="{$resource}.pdf" class="dida"><img border="0" src="skin/images/printer.gif"/><br/>
+            <td align="center" width="80" nowrap="nowrap"><a href="{$resource}.pdf" class="dida"><img border="0" src="{$skin-img-dir}/printer.gif"/><br/>
               print-friendly<br/>
               version</a></td>
           </tr>

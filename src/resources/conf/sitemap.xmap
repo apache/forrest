@@ -29,6 +29,7 @@
       <use-request-parameters>false</use-request-parameters>
       <use-browser-capabilities-db>false</use-browser-capabilities-db>
       <use-deli>false</use-deli>
+      <!-- transformer-factory>com.icl.saxon.TransformerFactoryImpl</transformer-factory -->
       <!-- transformer-factory>org.apache.xalan.xsltc.trax.TransformerFactoryImpl</transformer-factory -->
     </map:transformer>
   </map:transformers>
@@ -81,8 +82,7 @@
     <map:action logger="sitemap.action.request" name="request" src="org.apache.cocoon.acting.RequestParamAction"/>
   </map:actions-->
 
-
-    <!--
+  <!--
      The different pipeline implementations
   -->
   <map:pipelines default="caching">
@@ -113,7 +113,11 @@
   <map:resource name="skinit">
    <map:transform src="skins/{defaults:skin}/xslt/html/{type}.xsl">
      <map:parameter name="isfaq" value="{isfaq}"/>
+     <map:parameter name="dir" value="{dir}"/>
      <map:parameter name="resource" value="{resource}"/>
+     <!-- Can set an alternative project skinconfig here 
+     <map:parameter name="config-file" value="../../../../skinconf.xml"/>
+     -->
    </map:transform>
    <map:serialize/>
   </map:resource>
@@ -156,6 +160,7 @@
     <map:call resource="skinit">
      <map:parameter name="type" value="tab2menu"/>
      <map:parameter name="resource" value="{1}"/>
+     <map:parameter name="dir" value="{1}/"/>
     </map:call>
   </map:match>
 
@@ -175,7 +180,9 @@
      <map:generate type="file-nolabel" src="status.xml"/>
      <map:transform src="library/xslt/todo2document.xsl" label="content"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="todo"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="todo"/>
+      <map:parameter name="dir" value=""/>
      </map:call>
    </map:match>
 
@@ -183,7 +190,9 @@
      <map:generate type="file-nolabel" src="status.xml"/>
      <map:transform src="library/xslt/changes2document.xsl" label="content"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="changes"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="changes"/>
+      <map:parameter name="dir" value=""/>
      </map:call>
    </map:match>
 
@@ -191,7 +200,9 @@
      <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="faq"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="faq"/>
+      <map:parameter name="dir" value=""/>
       <map:parameter name="isfaq" value="true"/>
 
      </map:call>
@@ -201,7 +212,9 @@
    <map:match pattern="body-community/*/index.xml">
      <map:generate src="content/xdocs/community/{1}/index.xml"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="dir" value="community/{1}/"/>
      </map:call>
    </map:match>
 
@@ -209,7 +222,9 @@
    <map:match pattern="body-community**revision-*.xml">
      <map:generate src="content/xdocs/community{1}revision-{2}.xml"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="dir" value="community/{1}/"/>
      </map:call>
    </map:match>
 
@@ -221,7 +236,9 @@
      </map:aggregate>
      <map:transform src="library/xslt/{1}2document.xsl" label="content"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="{3}"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="{3}"/>
+      <map:parameter name="dir" value="community/{1}/{2}/"/>
      </map:call>
    </map:match>
 
@@ -257,6 +274,7 @@
      <map:transform src="library/xslt/doclist2document.xsl"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
+      <map:parameter name="dir" value="community/{1}/{2}/"/>
      </map:call>
    </map:match>
 
@@ -270,14 +288,18 @@
      <map:transform src="library/xslt/flat2document.xsl"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
-      <map:parameter name="isfaq" value="true"/>      <map:parameter name="resource" value="{1}.dtdx"/>
+      <map:parameter name="isfaq" value="true"/>
+      <map:parameter name="resource" value="{1}.dtdx"/>
+      <map:parameter name="dir" value="{1}"/>
      </map:call>
    </map:match>
 
    <map:match pattern="body-**.xml">
      <map:generate src="content/xdocs/{1}.xml"/>
      <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="resource" value="{1}"/>
+      <map:parameter name="dir" value="{1}"/>
      </map:call>
    </map:match>
 
@@ -289,6 +311,7 @@
     </map:aggregate>
     <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
+      <map:parameter name="dir" value=""/>
     </map:call>
    </map:match>
 
@@ -300,6 +323,7 @@
     </map:aggregate>
      <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
+      <map:parameter name="dir" value="{1}/"/>
      </map:call>
    </map:match>
 
@@ -395,6 +419,10 @@
     </map:call>
    </map:match>
 
+   <!-- WARNING: You are strongly advised not to make use of this target, as it
+   leads to browsers having to cache multiple copies of the images, one per
+   directory. See the forrest-site skin XSLTs for an example of how to make
+   all image references use the 'skin/images/**.*' rule above -->
    <map:match pattern="**/skin/images/**.*">
     <map:call resource="skin-read">
       <map:parameter name="path" value="images/{2}.{3}"/>
@@ -411,6 +439,7 @@
     <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
    </map:match>
 
+   <!-- WARNING: See above: this target should not be made use of -->
    <map:match pattern="**/images/**.*">
     <map:read src="resources/images/{2}.{3}" mime-type="image/{3}"/>
    </map:match>

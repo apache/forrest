@@ -4,7 +4,7 @@
                    The Apache Software License, Version 1.1
  ============================================================================
 
- Copyright (C) @year@ The Apache Software Foundation. All rights reserved.
+ Copyright (C) @skinconfig.year@ The Apache Software Foundation. All rights reserved.
 
  Redistribution and use in source and binary forms, with or without modifica-
  tion, are permitted provided that the following conditions are met:
@@ -73,14 +73,14 @@
  * you use this script (you can leave it as an empty array if you wish)
  */
 var PREPREND_CRUMBS = new Array();
-   if(!("@link1@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@link1@", "@link1.href@" ) );
+   if(!("@skinconfig.trail.link1.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link1.name@", "@skinconfig.trail.link1.href@" ) );
    }
-   if(!("@link2@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@link2@", "@link2.href@" ) );
+   if(!("@skinconfig.trail.link2.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link2.name@", "@skinconfig.trail.link2.href@" ) );
    }
-   if(!("@link3@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@link3@", "@link3.href@" ) );
+   if(!("@skinconfig.trail.link3.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link3.name@", "@skinconfig.trail.link3.href@" ) );
    }
 
 /**

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:param name="resource"/>
+  <xsl:param name="resource"/> <!-- filename, eg 'index.html' -->
   <xsl:template match="book">
     <div class="menu">
       <ul>
