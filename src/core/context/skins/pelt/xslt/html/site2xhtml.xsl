@@ -206,21 +206,22 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |centerstrip with menu and mainarea
   +-->
-    <div id="main">
+    <div id="main">       
         <div id="publishedStrip">
 <xsl:comment>+
     |start Subtabs
-    +</xsl:comment>&#160;
-		<xsl:apply-templates select="span[@id='level2tabs']"/>       
+    +</xsl:comment>
+            <div id="level2tabs">
+		<xsl:apply-templates select="span[@id='level2tabs']/node()"/>       
+            </div>
 <xsl:comment>+
     |end Endtabs
     +</xsl:comment>
-         <span class="lastmodified">
             <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
-         </span>
         </div>
+
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
