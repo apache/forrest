@@ -101,11 +101,25 @@ CATALOG \
         <title>xmllint validating parser</title>
         <p>
           "xmllint" is part of the "libxml2" package.
+          It is very fast and powerful, with are many facilities. It can
+          validate whole directories of files at once.
           Set the SGML_CATALOG_FILES environment variable.
         </p>
         <source>
-export SGML_CATALOG_FILES=$FORREST/src/core/context/resources/schema/catalog
+export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
+$FORREST/src/core/context/resources/schema/catalog
 xmllint --valid --catalogs --noout mydoc.xml
+        </source>
+      </section>
+
+      <section id="vim">
+        <title>Vim</title>
+          <p>
+            The following .vimrc entries are useful:
+          </p>
+        <source>
+au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
+au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
         </source>
       </section>
 
