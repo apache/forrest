@@ -69,7 +69,7 @@ import org.apache.cocoon.util.HashMap;
 /**
  * @TODO
  * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @version CVS $Id: AbstractWrappingModule.java,v 1.1 2004/01/27 15:22:42 nicolaken Exp $
+ * @version CVS $Id: AbstractWrappingModule.java,v 1.2 2004/01/28 14:42:31 nicolaken Exp $
  */
 public abstract class AbstractWrappingModule extends AbstractLogEnabled
     implements InputModule, Configurable, Serviceable, Disposable {
@@ -85,25 +85,25 @@ public abstract class AbstractWrappingModule extends AbstractLogEnabled
         
         Configuration childConf = config.getChild("component-instance");
         String childClassName = childConf.getAttribute("class");
-        logger.debug("Loading wrapped class:"+childClassName)
+        getLogger().debug("Loading wrapped class:"+childClassName);
         
         try{
             child = (InputModule) Class.forName(childClassName).newInstance();
-            logger.debug("Wrapped class instantiated:"+child);
+            getLogger().debug("Wrapped class instantiated:"+child);
             
             if(child instanceof LogEnabled){
                 ((LogEnabled)child).enableLogging( getLogger() );
-                logger.debug("Wrapped class LogEnabled");
+                getLogger().debug("Wrapped class LogEnabled");
             }   
             
             if(child instanceof Serviceable){
                 ((Serviceable)child).service( manager );
-                logger.debug("Wrapped class Serviced");
+                getLogger().debug("Wrapped class Serviced");
             }   
     
             if(child instanceof Configurable){
                 ((Configurable)child).configure(config.getChild("component-instance"));
-                logger.debug("Wrapped class Configured");
+                getLogger().debug("Wrapped class Configured");
             }  
                 
         }catch(Exception e){
