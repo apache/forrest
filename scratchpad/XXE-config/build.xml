@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--
+XXE Forrest plugin builder
+
+ - You must update catalog.xml manually based on changes to forrest's catalog.xcat
+-->
+
+<project basedir="." name="xxe-forrest" default="update">
+
+  <target name="-init">
+    <property environment="env"/>
+  </target>  
+  
+  <target name="update" depends="copy-dtds, copy-catalog" description="Update schemas from FORREST_HOME"/>
+  
+  <target name="copy-dtds" depends="-init" description="Copy DTDs from FORREST_HOME">
+    <copy todir=".">
+      <fileset dir="${env.FORREST_HOME}/context/resources/schema/">
+        <include name="entity/**"/>
+        <include name="dtd/**"/>
+      </fileset>
+    </copy>
+  </target>  
+
+  <target name="copy-catalog" depends="-init" description="Copy Catalog from FORREST_HOME">
+    <copy file="${env.FORREST_HOME}/context/resources/schema/catalog.forrest.xcat" tofile="catalog.xml"/>
+  </target>  
+
+</project>
