@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/12/21 00:31:56 $              |
+    |             $Date: 2004/01/17 02:20:30 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -41,7 +41,7 @@ FORREST SITE BUILDER
 <!-- ***************************************************************** -->
 
   <!-- ===============================================================
-       Loads user defined settings.
+       Loads user defined settings for local deployment.
        Steps back to defaults when they are not set.
        Echo's the settings if requested.
        =============================================================== -->
@@ -105,7 +105,7 @@ FORREST SITE BUILDER
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
-
+  
   <target name="examine-proj" depends="init-props">
     <available property="conf.present" file="${conf-dir}" type="dir"/>
     <available property="raw-content.present" file="${raw-content-dir}" type="dir"/>
@@ -275,7 +275,7 @@ FORREST SITE BUILDER
 
 
   <!-- ===============================================================
-       Fills the Cocoon context dir to work in 
+       Fills the Cocoon context dir for local execution 
        with the forrest-predefines.
        param: name of the skin to use ${project.skin} (now)
        param: location to make temporary context-dir ${project.webapp} 
@@ -304,6 +304,7 @@ FORREST SITE BUILDER
       <fileset dir="${forrest.home}/context" >
         <include name="*.xmap" />
         <include name="WEB-INF/*.xconf" />
+        <exclude name="WEB-INF/cocoon-live.xconf"/>
       </fileset>
     </copy>
 
@@ -312,7 +313,6 @@ FORREST SITE BUILDER
     <mkdir dir="${project.webapp}/WEB-INF/lib"/>
     <mkdir dir="${project.webapp}/WEB-INF/classes"/>
   </target>
-
 
   <!-- ===============================================================
        Fills the Cocoon context dir to work in 
@@ -618,12 +618,17 @@ ${project.site-dir}
   </target>
 
   <!-- ===============================================================
-       Builds a cocoon webapp for your project.
+       Builds a cocoon webapp for local execution.
+       Note, this webapp is not suitable for deploying remotely as it
+       is configured to allow editing of files in the ${project.home} 
+       directory.
        param: location to put generated webapp ${project.webapp}
        =============================================================== -->
-  <target name="webapp" depends="init, validate, project.webapp.defined, ensure-content, prepare-context,
+  <target name="webapp-local" depends="init, validate, project.webapp.defined, ensure-content, prepare-context,
          load-project-props"
-   description="Generates a dynamic servlet-based website (an unpackaged webapp)">
+   description="Generates a dynamic servlet-based website (an unpackaged webapp).
+   Note this webapp is suitable for local execution only, use the 'webapp'
+   target if you wish to deploy remotely.">
     <!-- this will need revisions in the case of the siteplan
     extra project-custom classes then will need to be warred in as well. -->
     <mkdir dir="${project.webapp}/WEB-INF"/>
@@ -660,7 +665,176 @@ ${project.site-dir}
     </condition>
     <antcall target="lucene-index"/>
 
-    <loadfile  property="webapp-generated-message" srcFile="${forrest.home}/var/webapp-generated-message.txt">
+    <loadfile  property="webapp-local-generated-message" srcFile="${forrest.home}/var/webapp-local-generated-message.txt">
+        <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${webapp-local-generated-message}</echo>
+  </target>
+
+  <!-- ===============================================================
+       Builds a cocoon webapp of your project for remote deployment.
+       param: location to put generated webapp ${project.webapp}
+       =============================================================== -->
+  <target name="webapp" depends="webapp-local, copy-xdocs, copy-content"
+   description="Generates a dynamic servlet-based website (an unpackaged webapp).">
+   
+   <!-- 
+    | Copy all non-xdocs content across to the webapp
+   -->
+   <copy toDir="${project.webapp}" 
+     overwrite="true" failonerror="false">
+     <fileset dir="${content-dir}/content">
+       <exclude name="xdocs/**"/>
+     </fileset>
+   </copy>
+   <copy toDir="${project.webapp}/resources" 
+     overwrite="true" failonerror="false">
+     <fileset dir="${content-dir}/resources"/>
+   </copy>
+
+   <!-- Copy Skins -->
+   <!-- Copy forrest skin images -->
+   <copy toDir="${project.webapp}/skin/common/images" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/common/images"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/images" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
+   </copy>
+   <!-- Copy project skin images -->
+   <copy toDir="${project.webapp}/skin/common/images" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/common/images"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/images" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/${project.skin}/images"/>
+   </copy>
+ 
+   <!-- Copy forrest skin XSLT files -->
+   <copy toDir="${project.webapp}/skin/common/xslt" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/common/xslt"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/xslt" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/${project.skin}/xslt"/>
+   </copy>
+   <!-- Copy project skin XSLT files -->
+   <copy toDir="${project.webapp}/skin/common/xslt" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/common/xslt"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/xslt" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/${project.skin}/xslt"/>
+   </copy>
+ 
+   <!-- Copy forrest skin CSS files -->
+   <copy toDir="${project.webapp}/skin/common/css" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/common/css"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/css" overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/${project.skin}/css"/>
+   </copy>
+   <!-- Copy project skin CSS files -->
+   <copy toDir="${project.webapp}/skin/common/css" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/common/css"/>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}/css" overwrite="true"
+     failonerror="false">
+     <fileset dir="${project.skins-dir}/${project.skin}/css"/>
+   </copy>
+ 
+   <!-- Copy all other non-resource files from Forrest skins -->
+   <copy toDir="${project.webapp}/skin/common" 
+     overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/common">
+       <exclude name="images/**"/>
+       <exclude name="xslt/**"/>
+       <exclude name="css/**"/>
+     </fileset>
+   </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}" 
+     overwrite="true"
+     failonerror="false">
+     <fileset dir="${forrest.skins-dir}/${project.skin}">
+       <exclude name="images/**"/>
+       <exclude name="xslt/**"/>
+       <exclude name="css/**"/>
+     </fileset>
+   </copy>
+        
+   <!-- Copy all other non-resource files from project skins-->
+   <copy toDir="${project.webapp}/skin/common" 
+      overwrite="true"
+      failonerror="false">
+      <fileset dir="${project.skins-dir}/common">
+        <exclude name="images/**"/>
+        <exclude name="xslt/**"/>
+        <exclude name="css/**"/>
+      </fileset>
+    </copy>
+   <copy toDir="${project.webapp}/skin/${project.skin}" 
+      overwrite="true"
+      failonerror="false">
+      <fileset dir="${project.skins-dir}/${project.skin}">
+        <exclude name="images/**"/>
+        <exclude name="xslt/**"/>
+        <exclude name="css/**"/>
+      </fileset>
+    </copy>
+   
+    <!-- copy custom xmaps -->
+    <copy toDir="${project.webapp}" 
+      overwrite="true"
+      failonerror="false">
+      <fileset dir="${project.content-dir}">
+        <include name="*.xmap"/>
+      </fileset>
+    </copy>
+    
+    <!-- copy skinconf -->
+    <copy toDir="${project.webapp}" 
+      overwrite="true"
+      failonerror="false"
+      file="${skinconf}"/>
+    
+    <!-- copy Schemas -->
+    <copy toDir="${project.webapp}/resources"
+      overwrite="true"
+      failonerror="false">
+      <fileset dir="${forrest.home}/context/resources"/>
+    </copy>
+    
+    <!-- Change the filter tokens for cocoon.xconf.
+         Note that we don't need to change the
+         forrest filters since either these are the same as for the local
+         webapp or their values can be fixed in the cocoon.xconf template. -->
+    <!-- FIXME: Do these tokens need to be customisable via forrest.properties? -->
+    <filter token="project.home" value="."/>
+    <filter token="project.skins-dir" value="skin"/>
+    <filter token="project.skinconf" value="../../../../skinconf.xml"/>
+    <filter token="project.content-dir" value="."/>
+    <filter token="project.raw-content-dir" value="content"/>
+    <filter token="project.xdocs-dir" value="content/xdocs"/>
+    <filter token="project.translations-dir" value="translations"/>
+    <filter token="project.stylesheets-dir" value="resources/stylesheets"/>
+    <filter token="project.images-dir" value="resources/images"/>
+    <filter token="local-catalog" value="resources/schema/catalog.xcat"/>
+      
+    <copy tofile="${project.webapp}/WEB-INF/cocoon.xconf" 
+      filtering="true" 
+      overwrite="true"
+      file="${forrest.home}/context/WEB-INF/cocoon-live.xconf" />
+    
+    <loadfile  property="webapp-generated-message" 
+      srcFile="${forrest.home}/var/webapp-generated-message.txt">
         <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${webapp-generated-message}</echo>
@@ -670,7 +844,7 @@ ${project.site-dir}
        Builds a cocoon .war for your project based on the siteplan.
        param: location to put generated war ${project.war}
        =============================================================== -->
- <target name="war" depends="webapp, copy-xdocs,copy-content "
+ <target name="war" depends="webapp"
    description="Generates a dynamic servlet-based website (an packaged .war file)">
 
    <jar destfile="${project.war}" basedir="${project.webapp}"/>
@@ -869,7 +1043,7 @@ to validate this site.
 
   <target name="run" 
    description="Run Jetty with configuration set by the jetty.run property"
-   depends="webapp">
+   depends="webapp-local">
 
     <java classname="org.mortbay.jetty.Server"
           dir="${project.webapp}"

@@ -76,7 +76,7 @@
   <flow-interpreters default="JavaScript" logger="flow">
     <component-instance class="org.apache.cocoon.components.flow.javascript.JavaScriptInterpreter" name="JavaScript">
       <load-on-startup>resource://org/apache/cocoon/components/flow/javascript/system.js</load-on-startup>
-      <reload-scripts>true</reload-scripts>
+      <reload-scripts>false</reload-scripts>
       <check-time>4000</check-time>
       <!--  <debugger>enabled</debugger> -->  <!-- JavaScript Debugger support -->
     </component-instance>
@@ -164,23 +164,23 @@
         <menu-scheme>@menu-scheme@</menu-scheme>
         <bugtracking-url>@bugtracking-url@</bugtracking-url>
         <i18n>@i18n@</i18n>
-        <home>@forrest.home@/</home>
-        <skins-dir>@forrest.home@/context/skins/</skins-dir>
-        <stylesheets>@forrest.home@/context/resources/stylesheets</stylesheets>
+        <home>.</home>
+        <skins-dir>skin/</skins-dir>
+        <stylesheets>resources/stylesheets</stylesheets>
       </values>
     </component-instance>
 
     <component-instance name="project"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
       <values>
         <skin>@skin@</skin>
-        <skinconf>@project.home@/@project.skinconf@</skinconf>        
-        <doc>@project.home@/@project.content-dir@/</doc>
-        <content>@project.home@/@project.raw-content-dir@/</content>
-        <content.xdocs>@project.home@/@project.xdocs-dir@/</content.xdocs>
-        <translations>@project.home@/@project.translations-dir@</translations>
-        <resources.stylesheets>@project.home@/@project.stylesheets-dir@/</resources.stylesheets>
-        <resources.images>@project.home@/@project.images-dir@/</resources.images>
-        <skins-dir>@project.home@/@project.skins-dir@/</skins-dir>
+        <skinconf>@project.skinconf@</skinconf>        
+        <doc>@project.content-dir@/</doc>
+        <content>@project.raw-content-dir@/</content>
+        <content.xdocs>@project.xdocs-dir@/</content.xdocs>
+        <translations>@project.translations-dir@</translations>
+        <resources.stylesheets>@project.stylesheets-dir@/</resources.stylesheets>
+        <resources.images>@project.images-dir@/</resources.images>
+        <skins-dir>@project.skins-dir@/</skins-dir>
       </values>
     </component-instance>
 
@@ -226,7 +226,6 @@
     <component-instance class="org.apache.excalibur.source.impl.ResourceSourceFactory" name="resource"/>
     <component-instance class="org.apache.cocoon.components.source.impl.ContextSourceFactory" name="context"/>
     <component-instance class="org.apache.cocoon.components.source.impl.SitemapSourceFactory" name="cocoon"/>
-    <component-instance class="org.apache.cocoon.components.source.impl.ZipSourceFactory" name="zip"/>
     <!-- the "*" protocol handles all uri schemes that are not explicitely specified. This includes all
          JDK standard protocols, with special handling of the "file:" protocol which is modifiable
          (can be written to) and traversable (directory structures can be crawled). -->
@@ -268,8 +267,7 @@
       |     <parameter name="verbosity" value="2"/>
       +-->
   <entity-resolver logger="core.resolver">
-    <parameter name="catalog" value="@forrest.home@/context/resources/schema/catalog.xcat"/>
-    <parameter name="local-catalog" value="@local-catalog@"/>
+    <parameter name="catalog" value="@local-catalog@"/>
     <parameter name="verbosity" value="@catalog-verbosity@"/>
   </entity-resolver>
 
