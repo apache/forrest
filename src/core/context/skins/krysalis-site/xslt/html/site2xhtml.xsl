@@ -476,7 +476,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <xsl:when test="span/@class='sel'">
               <div class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="span" /></div>
-                <xsl:if test="//tocitems/tocitem"> 
+                <xsl:if test="//tocitems/tocitem and contains($config/toc/@location,'dd')"> 
+                <xsl:value-of select="$config/toc/@location"/>
                   <div class="menupageitemgroup">
                       <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">

@@ -276,7 +276,10 @@ if (VERSION > 3) {
 
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
+    
+    
     <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
+    <xsl:if test="contains($config/toc/@location,'page')"> 
       <ul class="minitoc">
         <xsl:for-each select="$tocroot/tocitem">
           <li>
@@ -291,6 +294,7 @@ if (VERSION > 3) {
           </li>
         </xsl:for-each>
       </ul>
+    </xsl:if>
     </xsl:if>
   </xsl:template>
 
