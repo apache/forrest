@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN"
+"document-v11.dtd" [
+<!ENTITY catalog_spec
+'http://www.oasis-open.org/committees/entity/background/9401.html'>
+<!ENTITY catalog_intro
+'http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html'>
+]>
+
+<document>
+  <header>
+    <title>XML Validation</title>
+    <subtitle>DTDs, catalogs and whatnot</subtitle>
+    <version>1.0</version>
+    <authors>
+      <person name="Jeff Turner" email="jefft@apache.org"/>
+    </authors>
+  </header>
+
+  <body>
+    <section id="xml_validation">
+      <title>XML validation</title>
+      <p>
+        By default, Forrest will try to validate your XML before generating
+        HTML or a webapp from it, and fail if any XML files are not valid.
+        Validation can be performed manually by typing 'forrest validate' in
+        the project root.
+      </p>
+      <p>
+        For an XML file to be valid, it <em>must</em> have a DOCTYPE
+        declaration at the top, indicating its content type.  Hence by
+        default, all Forrest-processed XML files must have a DOCTYPE
+        declaration, or the build will break.
+      </p>
+      <p>
+        Despite the strict default behavior, Forrest is quite flexible about
+        validation.  It is also possible to projects to specify exactly what
+        files they want (and don't want) validated, through the
+        <code>forrest.validate.excludes</code> and
+        <code>forrest.validate.includes</code> properties, set in
+        <code>forrest.properties</code>.  Each specifies a comma-separated
+        list of paths relative to <code>${project.xdocs-dir}</code>.  For
+        example, to avoid validating
+        <code>${project.xdocs-dir}</code>/slides.xml and everything inside the
+        <code>${project.xdocs-dir}/manual/</code> directory, add this to
+        <code>forrest.properties</code>:
+      </p>
+      <source>forrest.validate.excludes=slides.xml, manual/**</source>
+      <p>
+        XML validation can also be made non-fatal by setting the following in
+        <code>forrest.properties</code>:
+      </p>
+      <source>forrest.validation.failonerror=false</source>
+    </section>
+
+    <section>
+      <title>Validating new XML types</title>
+      <p>
+        Forrest provides a <link href="&catalog_spec;">SGML Catalog</link>
+        [<link href="&catalog_intro;">tutorial</link>],
+        <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
+        associating public identifiers (<code>-//APACHE//DTD Documentation
+          V1.1//EN</code> above) with DTDs.
+        If you <link href="http://localhost:8787/forrest/your-project.html#adding_new_content_type">add a new content type</link>, you
+        should add the DTD to <code>${project.schema-dir}/dtd/</code>, and add
+        an entry to the <code>${project.schema-dir}/catalog</code> file.  This
+        section describes the details of this process.
+      </p>
+
+      <section>
+        <title>Creating or extending a DTD</title>
+        <p>
+          The main Forrest DTDs are designed to be modular and extensible, so
+          it is fairly easy to create a new document type that is a superset
+          of one from Forrest.  This is what we'll demonstrate here, using our
+          earlier <link href="http://localhost:8787/forrest/adding_new_content_type">download format</link>
+          as an example.  Our download format adds a group of new elements to
+          the standard 'documentv11' format.  Our new elements are described
+          by the following DTD:
+        </p>
+        <source>            &lt;!ELEMENT release (downloads)&gt;
+          &lt;!ATTLIST release
+          version CDATA #REQUIRED
+          date CDATA #REQUIRED&gt;
+
+          &lt;!ELEMENT downloads (file*)&gt;
+
+          &lt;!ELEMENT file EMPTY&gt;
+          &lt;!ATTLIST file
+          url CDATA #REQUIRED
+          name CDATA #REQUIRED
+          size CDATA #IMPLIED&gt;
+        </source>
+        <p>
+          The documentv11 entities are defined in a reusable 'module':
+          <code>xml-forrest/src/resources/schema/dtd/document-v11.mod</code>
+          The
+          <code>xml-forrest/src/resources/schema/dtd/document-v11.dtd</code>
+          file provides a full description and basic example of how to pull in
+          modules.  In our example, our DTD reuses modules
+          <code>common-charents-v10.mod</code> and
+          <code>document-v11.mod</code>.  Here is the full DTD, with
+          explanation to follow.
+        </p>
+        <source>&lt;!-- ===================================================================
+
+          Download Doc format
+
+          PURPOSE:
+          This DTD provides simple extensions on the Apache DocumentV11 format to link
+          to a set of downloadable files.
+
+          TYPICAL INVOCATION:
+
+          &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+          "download-v11.dtd"&gt;
+
+
+          AUTHORS:
+          Jeff Turner &lt;jefft@apache.org&gt;
+
+
+          COPYRIGHT:
+          Copyright (c) 2002 The Apache Software Foundation.
+
+          Permission to copy in any form is granted provided this notice is
+          included in all copies. Permission to redistribute is granted
+          provided this file is distributed untouched in all its parts and
+          included files.
+
+          ==================================================================== --&gt;
+
+
+          &lt;!-- =============================================================== --&gt;
+          &lt;!-- Include the Common ISO Character Entity Sets --&gt;
+          &lt;!-- =============================================================== --&gt;
+
+          &lt;!ENTITY % common-charents PUBLIC
+          "-//APACHE//ENTITIES Common Character Entity Sets V1.0//EN"
+          "common-charents-v10.mod"&gt;
+          %common-charents;
+
+          &lt;!-- =============================================================== --&gt;
+          &lt;!-- Document --&gt;
+          &lt;!-- =============================================================== --&gt;
+
+          &lt;!ENTITY % document PUBLIC
+          "-//APACHE//ENTITIES Documentation V1.1//EN"
+          "document-v11.mod"&gt;
+
+          &lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
+          &lt;!ENTITY % local.sections "|release"&gt;
+
+          %document;
+
+          &lt;!ELEMENT release (downloads)&gt;
+          &lt;!ATTLIST release
+          version CDATA #REQUIRED
+          date CDATA #REQUIRED&gt;
+
+          &lt;!ELEMENT downloads (file*)&gt;
+
+          &lt;!ELEMENT file EMPTY&gt;
+          &lt;!ATTLIST file
+          url CDATA #REQUIRED
+          name CDATA #REQUIRED
+          size CDATA #IMPLIED&gt;
+
+          &lt;!-- =============================================================== --&gt;
+          &lt;!-- End of DTD --&gt;
+          &lt;!-- =============================================================== --&gt;
+
+        </source>
+        <p>
+          The &lt;!ENTITY % ... &gt; blocks are so-called <link href="http://www.xml.com/axml/target.html#dt-PERef">parameter
+            entities</link>.  They are like macros, whose content will be
+          inserted when a parameter-entity reference, like
+          <code>%common-charents;</code> or <code>%document;</code>, is
+          inserted.
+        </p>
+        <p>
+          In our DTD, we first pull in the 'common-charents' entity, which
+          defines character symbol sets.  We then define the 'document'
+          entity.  However, before <code>%document;</code> PE reference, we
+          first override the 'local.section' entity.  This is a hook into
+          document-v11.mod.  By setting its value to '|release', we declare
+          that our &lt;release&gt; element is to be allowed wherever "local
+          sections" are used.  There are 5 or so such hooks for different
+          areas of the document; see document-v11.dtd for more details.  We
+          then import the %document; contents, and declare the rest of our DTD
+          elements.
+        </p>
+        <p>
+          We now have a DTD for the 'download' document type. 
+        </p>
+      </section>
+      <section>
+        <title>Associating DTDs with document types</title>
+        <p>
+          Recall that our DOCTYPE declaration for our download document type
+          is:
+        </p>
+        <source>            &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+          "download-v11.dtd"&gt;
+        </source>
+        <p>
+          We only care about the quoted section after <code>PUBLIC</code>, called
+          the "public identifier", which globally identifies our document type.
+          We cannot rely on the subsequent "system identifier" part
+          ("download-v11.dtd"), because as a relative reference it is liable to
+          break.  The solution Forrest uses is to ignore the system id, and rely
+          on a mapping from the public ID to a stable DTD location, via a
+          Catalog file.</p>
+        <note>
+          See <link href="&catalog_intro;">this article</link> for a good
+          introduction to catalogs.
+        </note>
+        <p>
+          Forrest provides a standard catalog file,
+          <code>xml-forrest/src/resources/schema/catalog</code>, for document
+          types it provides.  Projects can augment this with their own catalog
+          file in <code>${project.schema-dir}/catalog</code>.  Here is what ours
+          should look like:
+        </p>
+        <source>            -- OASIS TR 9401 Catalog for our project --
+
+          OVERRIDE YES
+
+          -- custom doctype --
+          PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "dtd/download-v11.dtd"
+        </source>
+        <p>
+          The format is described in <link href="http://www.oasis-open.org/committees/entity/background/9401.html">the
+            spec</link>, but is fairly simple.  In particular, lines beginning
+          with PUBLIC map a public identifier to a DTD (relative to the catalog
+          file).
+        </p>
+        <p>
+          We now have a custom DTD and a catalog mapping which lets Forrest
+          locate the DTD.  Now if we were to run 'forrest validate', our
+          download file would validate along with all the others.
+        </p>
+      </section>
+    </section>
+    <section>
+      <title>Validating in an editor</title>
+      <p>
+        If you have an XML editor that understands SGML or XML catalogs, let
+        it know where the Forrest catalog file is, and you will be able to
+        validate any Forrest XML file, regardless of location, as you edit
+        your files.
+      </p>
+      <section>
+        <title>Case study: setting up xmllint</title>
+        <p>
+          On *nix systems, one of the best XML validation tools is
+          <code>xmllint</code>, that comes as part of the libxml2 package. It is
+          very fast, can validate whole directories of files at once, and can
+          configured to use Forrest's catalog file for validation.
+        </p>
+        <p>
+          To tell xmllint where the Forrest catalog is, add the path to the catalog
+          file to the <code>SGML_CATALOG_FILES</code> variable. For example:
+        </p>
+        <source>export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
+          /home/jeff/apache/xml/xml-forrest/src/resources/schema/catalog
+        </source>
+        <p>
+          Then Forrest XML files can be validated as follows:
+        </p>
+        <source>            xmllint --valid --noout --catalogs *.xml
+        </source>
+        <p>
+          For users of the vim editor, the following .vimrc entries are useful:
+        </p>
+        <source>
+          au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
+          au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
+        </source>
+      </section>
+    </section>
+  </body>
+</document>
