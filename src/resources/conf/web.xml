@@ -108,33 +108,30 @@
     <!--
       This parameter is used to list classes that should be loaded
       at initialization time of the servlet.
-      Usually this classes are JDBC Drivers used
+      For example, JDBC Drivers used need to be named here.
+      Additional entries may be inserted here during build depending on your 
+      build properties.
     -->
     <init-param>
       <param-name>load-class</param-name>
       <param-value>
+        <!-- For parent ComponentManager sample:
+        org.apache.cocoon.samples.parentcm.Configurator -->
         <!-- For IBM WebSphere:
         com.ibm.servlet.classloader.Handler -->
-
-        <!-- For Database Driver: -->
-        <!--
-        org.hsqldb.jdbcDriver -->
-
-        <!-- For PostgeSQL Database: 
-             org.postgresql.Driver -->
-
-        <!-- For Oracle Database:
-             oracle.jdbc.driver.OracleDriver -->
-
-        <!-- ODBC 
-             sun.jdbc.odbc.JdbcOdbcDriver -->
- 
-        <!-- For parent ComponentManager sample:
-        org.apache.cocoon.samples.parentcm.Configurator
-        -->
       </param-value>
     </init-param>
 
+    <!--
+      Causes all files in multipart requests to be processed.
+      Default is false for security reasons.  
+      Unsupported values will be interpreted as false.
+    -->
+    <init-param>
+      <param-name>enable-uploads</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    
     <!--
       This parameter allows to specify where Cocoon should put uploaded files.
       The path specified can be either absolute or relative to the context 
@@ -151,11 +148,12 @@
 
     <!--
       Causes all files in multipart requests to be saved to upload-dir.
-      Default is true.  Unsupported values will be interpreted as false.
+      Default is true for security reasons.  
+      Unsupported values will be interpreted as false.
     -->
     <init-param>
       <param-name>autosave-uploads</param-name>
-      <param-value>false</param-value>
+      <param-value>true</param-value>
     </init-param>
 
     <!--
@@ -227,7 +225,7 @@
       String as a parameter. That String will be equal to the text after the
       '/'.
 
-      Cocoon honors the LogEnabled and Initializable interfaces for this class,
+      Cocoon honors the LogEnabled, Initializable and Disposable interfaces for this class,
       if it implements them.
 
       If you uncomment the following lines the parent CM is set to the Parent CM sample, which will look up
@@ -238,19 +236,6 @@
       <param-value>org.apache.cocoon.samples.parentcm.ParentComponentManager/org/apache/cocoon/samples/parentcm/ParentCMConfiguration</param-value>
     </init-param>
     -->
-
-    <!--
-      This parameter allows you to select the request factory. Possible
-      choices are as follows:
-        - org.apache.cocoon.components.request.MultipartRequestFactoryImpl
-          This is the default factory.
-        - org.apache.cocoon.components.request.SimpleRequestFactoryImpl
-          This factory does not allow uploads.
-    -->
-    <init-param>
-      <param-name>request-factory</param-name>
-      <param-value>org.apache.cocoon.components.request.MultipartRequestFactoryImpl</param-value>
-    </init-param>
 
     <!--
       If you set this parameter to 'true' or 'yes', Cocoon will add processing
@@ -303,7 +288,8 @@
     -->
 
     <!--
-      Set form encoding. This will be the character set used to decode request parameters 
+      Set form encoding. This will be the character set used to decode request parameters.
+      If not set the ISO-8859-1 encoding will be assumed. 
     -->
     <!--
     <init-param>
@@ -386,8 +372,6 @@
     <extension>grm</extension>
     <mime-type>text/plain</mime-type>
   </mime-mapping>
-
-
 
   <mime-mapping>
     <extension>swf</extension>
