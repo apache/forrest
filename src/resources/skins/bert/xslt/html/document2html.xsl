@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="isfaq"/>
+  <xsl:param name="resource"/>
   <xsl:template match="document">
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
-        <h1>
-          <xsl:value-of select="header/title"/>
-        </h1>
+        <table class="title">
+          <tr> 
+            <td valign="middle"> 
+              <h1>
+                <xsl:value-of select="header/title"/>
+              </h1>
+            </td>
+            <!--td align="center" width="80" nowrap><a href="" class="dida"><img src="images/singlepage.gif"><br>
+              single page<br>
+              version</a></td-->
+            <td align="center" width="80" nowrap="nowrap"><a href="{$resource}.pdf" class="dida"><img border="0" src="skin/images/printer.gif"/><br/>
+              print-friendly<br/>
+              version</a></td>
+          </tr>
+        </table>
       </xsl:if>
       <xsl:if test="normalize-space(header/subtitle)!=''">
         <h3>
