@@ -82,8 +82,13 @@
          directory: Specifies directory to use. Absolute or relative to the
                     work directory.
   -->
-  <persistent-store logger="core.store.persistent">
+
+  <persistent-store class="org.apache.cocoon.components.store.JispFilesystemStore"
+                    logger="core.store.persistent">
     <parameter name="use-cache-directory" value="true"/>
+    <parameter name="datafile" value="cocoon-cache.dat"/>
+    <parameter name="indexfile" value="cocoon-cache.idx"/>
+    <parameter name="order" value="1701"/>
   </persistent-store>
 
   <!-- Memory Storing: -->
@@ -432,24 +437,24 @@
    <!-- =============== Sitemap In/Out/Database Modules ==================== -->
    
    <input-modules logger="core.modules.input">
-	  <component-instance class="org.apache.cocoon.components.modules.input.RequestParameterModule" name="request"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.RequestAttributeModule" name="attribute"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.RequestURIModule" name="URI"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.HeaderAttributeModule" name="header"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.SessionAttributeModule" name="session"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.StringConstantModule" name="constant"/>
-	  <component-instance class="org.apache.cocoon.components.modules.input.RandomNumberModule" name="random"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestParameterModule" name="request"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestAttributeModule" name="attribute"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestURIModule" name="URI"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.HeaderAttributeModule" name="header"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.SessionAttributeModule" name="session"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.StringConstantModule" name="constant"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RandomNumberModule" name="random"/>
       <component-instance class="org.apache.cocoon.components.modules.input.CollectionMetaModule" name="collection"/>
       <component-instance class="org.apache.cocoon.components.modules.input.DigestMetaModule" name="digest"/>
       <component-instance class="org.apache.cocoon.components.modules.input.DateInputModule" name="date"/>
       <component-instance class="org.apache.cocoon.components.modules.input.NullInputModule" name="nullinput"/>
       <component-instance class="org.apache.cocoon.components.modules.input.DefaultsMetaModule" name="defaults">
-		 <input-module name="request"/>
-		 <values>
-			<skin>defaultSkin</skin>
-			<base-url>http://localhost:8080/cocoon</base-url>
-		 </values>
-	  </component-instance>
+     <input-module name="request"/>
+     <values>
+      <skin>defaultSkin</skin>
+      <base-url>http://localhost:8080/cocoon</base-url>
+     </values>
+    </component-instance>
    </input-modules>
 
    <output-modules logger="core.modules.output">
