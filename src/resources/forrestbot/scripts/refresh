@@ -1,16 +1,20 @@
 #!/bin/sh
 
-# Regenerate a site's HTML with the forrestbot.
+###################################################
+# Regenerate a site's HTML with the latest Forrest.
+###################################################
 
 SCRIPT=${1}
-[ -z "$SCRIPT" ] && echo >&2 "Usage: $0 <forrestbot script>" && exit 1
+[ -z "$SCRIPT" ] && echo >&2 "Usage: $0 <forrestbot script>
+Where <forrestbot script> is the name of a file in ../samples
+Eg: $0 xml-forrest-template-cvs.xml" && exit 1
 
 . `dirname $0`/local-vars
 # default 20 minute timeout. 
 export CVS_RSH=ssh
 export PATH=$JAVA_HOME/bin:$PATH
-# Leaving EMAIL blank causes no email to be sent
 TSTAMP=`date +%Y-%m-%d-%k-%M`
+# Leaving EMAIL blank causes no email to be sent
 EMAIL=
 LOGS=$WEBAPP/logs
 DEST_DIR=$WEBAPP/sites
@@ -37,6 +41,7 @@ function setup()
 	fi
 }
 
+# Delete and rebuild the shbat distribution, optionally updating xml-forrest 
 function rebuild_forrest()
 {
   pushd .
@@ -51,6 +56,7 @@ function rebuild_forrest()
   popd
 }
 
+# Populate the work/ directory with customized forrestbot scripts
 function prepare_workdir()
 {
 	pushd .
@@ -66,6 +72,8 @@ function prepare_workdir()
 	popd
 }
 
+# Run the forrestbot on $SCRIPT. Set a watchdog thread to kill the forrestbot
+# if it seems to hang
 function forrestbot()
 {
 	cd $WORK
@@ -82,7 +90,7 @@ function forrestbot()
 	kill $watchdogpid >/dev/null 2>&1
 }
 
-
+# Copy forrestbot log files to webapp
 function copy_logs()
 {
 	mkdir -p $LOGS/old

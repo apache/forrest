@@ -1,5 +1,10 @@
 #!/bin/sh
 
+###################################################
+# A dubious script which commits generated website
+# contents to xml-site/targets/$MODULE 
+###################################################
+
 MODULE=${1:-xml-forrest}
 case $MODULE in
 	xml-forrest) TARGET="forrest" ;;
@@ -11,8 +16,12 @@ if [ -z "$XML_SITE" ]; then
 	echo "Please set the XML_SITE var in local-vars-`uname -n`"
 	exit
 fi	
+SRC_DIR=$WEBAPP/sites/$MODULE
+if [ ! -d "$SRC_DIR" ]; then
+  echo "Expected website contents in $SRC_DIR"
+  exit
+fi
 LIVECVS=$XML_SITE/targets/$TARGET
-SRC_DIR=$BASE/webapp/sites/$MODULE
 
 echo "Updating $LIVECVS from $SRC_DIR"
 pushd .
@@ -38,5 +47,3 @@ cvs up > /tmp/cvslist 2>&1
 cvs ci -m "Automatic update at `date` by forrestrunner."
 #cvs ci
 popd
-
-# still testing

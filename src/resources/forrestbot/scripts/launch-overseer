@@ -1,9 +1,19 @@
 #!/bin/sh
 
-# Convenience script for running 'overseer' from the console and watching the
-# output.
+###################################################
+# Convenience script for running 'overseer' for use
+# by the webapp, and watching the output.
+###################################################
 
 . `dirname $0`/local-vars
-./overseer < $WEBAPP/WEB-INF/commands > overseer.log &
+
+NAMEDPIPE=$WEBAPP/WEB-INF/commands
+
+if [ ! -p "$NAMEDPIPE" -a -e "$NAMEDPIPE" ]; then
+  echo "$NAMEDPIPE exists and is not a named pipe. Please delete it and try again"
+  exit
+fi
+[ ! -e "$NAMEDPIPE" ] && mkfifo $NAMEDPIPE
+./overseer < $NAMEDPIPE > overseer.log &
 echo overseer pid: $!
 tail -f $WEBAPP/WEB-INF/refresh_log.txt overseer.log
