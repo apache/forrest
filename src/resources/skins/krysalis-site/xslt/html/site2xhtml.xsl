@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.16 2003/06/12 13:25:00 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.17 2003/07/22 15:49:20 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -35,6 +35,7 @@ $Id: site2xhtml.xsl,v 1.16 2003/06/12 13:25:00 nicolaken Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
+        <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
       </head>
       <body bgcolor="#FFFFFF" text="#000000" onload="init()">
         <script type="text/javascript">ndeSetTextSize();</script>
@@ -357,8 +358,22 @@ $Id: site2xhtml.xsl,v 1.16 2003/06/12 13:25:00 nicolaken Exp $
 
 
   <xsl:template name="innermenuli">
-    <div class="menutitle"><xsl:value-of select="font"/></div>
-      <div class="menuitemgroup">
+    <xsl:variable name="tagid">
+      <xsl:choose>
+    	<xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selected</xsl:when>
+       	<xsl:otherwise><xsl:value-of select="font"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="whichGroup">
+      <xsl:choose>
+    	<xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selectedmenuitemgroup</xsl:when>
+       	<xsl:otherwise>menuitemgroup</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    
+    <div class="menutitle" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="font"/></div>
+      <div class="{$whichGroup}" id="{$tagid}">
         <xsl:for-each select= "ul/li">
 
           <xsl:choose>
