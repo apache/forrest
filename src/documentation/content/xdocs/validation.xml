@@ -11,9 +11,10 @@
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>$Revision: 1.6 $</version>
+    <version>$Revision: 1.7 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
+      <person name="David Crossley" email="crossley@apache.org"/>
     </authors>
   </header>
 
@@ -357,6 +358,24 @@ size CDATA #IMPLIED&gt;
           au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
         </source>
       </section>
+    </section>
+
+    <anchor id="relaxng"/>
+    <section>
+      <title>Validation using RELAX NG</title>
+      <p>
+        Other validation is also conducted during build-time using RELAX NG.
+        This validates all of the important configuration files, both in
+        Forrest itself and in your project. At the moment it processes all
+        skinconf.xml files, all sitemap.xmap files, and all XSLT stylesheets.
+      </p>
+      <p>
+        The RNG grammars to do this are located in the
+        <code>src/resources/schema/relaxng</code> directory. If you want to
+        know more about this, and perhaps extend it for your own use, then
+        see <code>src/resources/schema/relaxng/README.txt</code> and the Ant
+        targets in the various build.xml files.
+      </p>
     </section>
   </body>
 </document>
