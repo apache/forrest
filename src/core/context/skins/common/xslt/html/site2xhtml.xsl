@@ -180,7 +180,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   <!-- Add links to any standards-compliance logos -->
   <xsl:template name="compliancy-logos">
-    <xsl:if test="//skinconfig/disable-compliance-links = 'false'">
+    <xsl:if test="$filename = 'index.html' and //skinconfig/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" height="31" width="88" border="0"/></a>

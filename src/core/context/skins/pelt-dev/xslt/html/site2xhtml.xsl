@@ -321,7 +321,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   <!-- Add links to any standards-compliance logos -->
   <xsl:template name="compliancy-logos">
-    <xsl:if test="$config/disable-compliance-links = 'false'">
+    <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" style="height: 31px; width: 88px;" /></a>
@@ -477,7 +477,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     +</xsl:comment>
     	<meta name="Generator" content="Apache Forrest"/>
 		<meta name="Forrest-version" content="SVN-Head (0.6-dev)"/>
-      	<meta name="Forrest-skin-name" content="css-style"/>
+      	<meta name="Forrest-skin-name" content="pelt"/>
 <xsl:comment>+
     |end generator meta
     +</xsl:comment>
