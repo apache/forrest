@@ -6,6 +6,8 @@
 
   <xsl:output method="xml"/>
 
+  <xsl:include href="pdfoutline.xsl"/>
+
   <xsl:template match="/">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
       <fo:layout-master-set>
@@ -80,6 +82,8 @@
           </fo:repeatable-page-master-alternatives>
         </fo:page-sequence-master>
       </fo:layout-master-set>
+
+      <xsl:apply-templates select="/document" mode="outline"/>
       
       <fo:page-sequence master-reference="book">
         <xsl:apply-templates/>
@@ -151,7 +155,9 @@
         padding-before="24pt"
         padding-after="24pt"
         font-size="24pt"
-        font-weight="bold">
+        font-weight="bold"
+        id="{generate-id()}">
+
         <xsl:value-of select="header/title"/>
       </fo:block>
       
@@ -201,7 +207,9 @@
       font-family="serif"
       font-size="{$size}pt"
       font-weight="bold"
-      space-before="12pt">
+      space-before="12pt"
+      id="{generate-id()}">
+
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="title"/>
@@ -591,5 +599,3 @@
 
 
 </xsl:stylesheet>
-
-
