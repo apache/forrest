@@ -1,4 +1,12 @@
 <?xml version="1.0"?>
+<!-- ===============================================
+Default Forrest sitemap, defining the whole site.
+Delegates to the other *.xmap files.
+
+$Revision: 1.106 $
+==================================================== -->
+
+
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
@@ -6,17 +14,17 @@
       <!--
       <map:generator name="html" src="org.apache.cocoon.generation.HTMLGenerator" />
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
-      <map:generator name="libre" src="org.apache.forrest.yer.use.cocoon.HierarchyGenerator" />
-      <map:generator name="textparser" src="org.apache.cocoon.generation.TextParserGenerator" />
       -->
     </map:generators>
 
     <map:transformers default="xslt">
+      <!-- Generates @id attributes from <title> strings -->
       <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
         <element>//*[local-name() = 'section']</element>
         <id>title/text()</id>
       </map:transformer>
 
+      <!-- Rewrites links, e.g. transforming href="site:index" to href="../index.html" -->
       <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
         <link-attrs>href src</link-attrs>
         <schemes>site ext</schemes>
@@ -38,7 +46,7 @@
       </map:transformer>
 
       <map:transformer name="xpath" logger="sitemap.transformer.xpath" src="org.apache.cocoon.transformation.XPathTransformer" />
-      <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer" logger="sitemap.transformer.xsltc" pool-max="32" pool-min="8" pool-grow="2">
+      <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer" logger="sitemap.transformer.xslt" pool-max="32" pool-min="8" pool-grow="2">
         <use-request-parameters>false</use-request-parameters>
         <use-browser-capabilities-db>false</use-browser-capabilities-db>
         <use-deli>false</use-deli>
@@ -97,6 +105,7 @@
 
   <map:views>
 
+    <!-- Define a 'links view', which the command-line crawler uses to discover a page's links -->
     <map:view name="links" from-position="last">
       <map:transform src="resources/stylesheets/filterlinks.xsl">
         <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
@@ -131,51 +140,56 @@
 
       <!-- ============================================================ -->
       <!-- SOURCE FORMATS                                               -->
-      <!--                 Raw XML sources, typically doc-v11 format    -->
+      <!--                 Raw XML sources, typically doc-v12 format    -->
       <!-- ============================================================ -->
 
-      <map:match pattern="**linkmap*">
-        <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" />
+      <!-- Body content -->
+      <map:match pattern="**.xml">
+        <map:match pattern="changes.xml">
+          <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="todo.xml">
+          <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="**dtdx.xml">
+          <map:mount uri-prefix="" src="dtd.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="**issues.xml">
+          <map:mount uri-prefix="" src="issues.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="**faq.xml">
+          <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="community/**index.xml">
+          <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="community/*/**.xml">
+          <map:mount uri-prefix="" src="revisions.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="site.xml">
+          <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
+        </map:match>
+
+        <map:match pattern="**.xml">
+          <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
+        </map:match>
       </map:match>
 
+      <!-- Menu content -->
       <map:match pattern="**menulinks*">
         <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
       </map:match>
 
-      <map:match pattern="changes.xml">
-        <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="todo.xml">
-        <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="**dtdx.xml">
-        <map:mount uri-prefix="" src="dtd.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="**issues.xml">
-        <map:mount uri-prefix="" src="issues.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="**faq.xml">
-        <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="community/**index.xml">
-        <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="community/*/**.xml">
-        <map:mount uri-prefix="" src="revisions.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="site.xml">
-        <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="**.xml">
-        <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
+      <!-- Link mappings -->
+      <map:match pattern="**linkmap*">
+        <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" />
       </map:match>
 
     </map:pipeline>
