@@ -1,7 +1,7 @@
                                Forrestbot Scripts
 
                                 jefft@apache.org
-                 $Revision: 1.4 $ $Date: 2003/01/19 05:22:42 $
+                 $Revision: 1.5 $ $Date: 2003/01/19 07:02:30 $
                             ------------------------
 
 This directory contains shell scripts for using the Forrestbot from a webapp or
@@ -13,6 +13,7 @@ refresh                  # Main driver script. Refreshes a single site via a for
 refresh_all              # Convenience wrapper for 'refresh' which regens all sites. Suitable for cron use
 local-vars               # Script defining local variables, with defaults. Frontend to local-vars-`uname -n`
 local-vars-`uname -n`    # Script containing local variable definitions. MUST BE DEFINED FOR YOUR SITE
+local-vars-sample        # Template local-vars-`uname -n` file, containing explanations of the variables
 publish_livesite         # WIP script to commit files to the Apache xml-site/targets/forrest module
 work/                    # Runtime-generated directory containing forrestbot files
 
@@ -47,5 +48,7 @@ forrest-dev/forrest-dev for the username/password.
 2) Run the 'launch-overseer' command.  The 'refresh' button in the webapp
 should now trigger a regen of the selected site.
 
+Note: You can customize the usernames/passwords in
+../webapp/WEB-INF/users.properties
 
 --Jeff
