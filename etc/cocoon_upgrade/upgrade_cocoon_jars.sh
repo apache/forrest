@@ -15,8 +15,8 @@ NEKOPULL_VERSION=0.2.3
 NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
-JARSUFFIX=`date +%Y%m%d`
-#JARSUFFIX=m2
+#JARSUFFIX=`date +%Y%m%d`
+JARSUFFIX=2.1.1
 
 ## We need to identify the old Cocoon jar amongst all the others.  This pattern
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
@@ -181,7 +181,7 @@ bzcopy batik
 #cocoon-chaperon-block-20030311.jar
 bzcopy chaperon
 #cocoon-fop-block-20030311.jar
-#bzcopy fop
+bzcopy fop
 #cocoon-html-block-20030311.jar
 bzcopy html
 #cocoon-jfor-block-20030311.jar
@@ -228,7 +228,7 @@ copy excalibur-store
 #excalibur-xmlutil-20030306.jar
 copy excalibur-xmlutil
 #fop-0.20.4.jar
-bcopy fop
+#bcopy fop
 #jakarta-oro-2.0.6.jar
 #jakarta-regexp-1.2.jar
 copy jakarta-regexp
@@ -238,7 +238,7 @@ copy jakarta-regexp
 #jisp-2.0.1.jar
 copy jisp
 #jtidy-04aug2000r7-dev.jar
-copy jtidy
+bcopy jtidy
 #logkit-1.1.jar
 copy logkit
 #lucene-1.2.jar
