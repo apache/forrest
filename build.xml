@@ -171,13 +171,55 @@
 
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Validate the important core configuration files                     -->
+  <!-- =================================================================== -->
+  <target name="validate-config" depends="init"
+          description="Validate the important core configuration files">
+<!-- FIXME allow switch
+          if="validate.config">
+-->
+    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
+      <classpath>
+        <fileset dir="./lib/core" includes="*.jar" />
+      </classpath>
+    </taskdef>
+    <!-- skinconf.xml -->
+    <echo message="validating **/skinconf.xml ..."/>
+    <jing rngfile="./src/resources/schema/relaxng/skinconf-v10.rng">
+      <fileset dir="./src/resources" includes="**/skinconf.xml"/>
+      <fileset dir="./src/documentation" includes="**/skinconf.xml"/>
+    </jing>
+    <!-- All stylesheets **/*.xsl -->
+    <echo message="validating stylesheets **/*.xsl ..."/>
+    <jing rngfile="./src/resources/schema/relaxng/xslt.rng">
+      <fileset dir="./src/resources" includes="**/*.xsl"/>
+      <fileset dir="./tools" includes="**/*.xsl"/>
+    </jing>
+    <!-- sitemap.xmap -->
+    <echo message="validating **/sitemap.xmap ..."/>
+    <jing rngfile="./src/resources/schema/relaxng/sitemap-v05.rng">
+      <fileset dir="./src/resources" includes="**/sitemap.xmap"/>
+<!-- FIXME: Excluded for the moment because it breaks.
+      <fileset dir="./src/resources/editor" includes="editor.xmap"/>
+-->
+    </jing>
+    <!-- book.xml -->
+<!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
+    <echo message="validating **/book.xml ..."/>
+    <jing rngfile="./src/resources/schema/relaxng/book-v01.rng">
+      <fileset dir="./src/documentation" includes="**/book.xml"/>
+      <fileset dir="./src/resources" includes="**/book.xml"/>
+    </jing>
+-->
+  </target>
 
 
   <!-- =================================================================== -->
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
   <target name="dist-shbat" 
-          depends="fresh-site-zip, webapp-webinf, bare-context-dir" >
+          depends="validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
     <property name="dist-shbat.dir" value="./build/dist/shbat" />
 
