@@ -31,7 +31,7 @@ CP=$CLASSPATH
 export CP
 unset CLASSPATH
 
-CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S`"
+CLASSPATH="`echo ../lib/endorsed/*.jar | tr ' ' $S`"
 export CLASSPATH
 
 echo "Using classpath: $CLASSPATH"
