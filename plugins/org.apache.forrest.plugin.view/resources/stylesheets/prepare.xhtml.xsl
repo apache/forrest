@@ -38,12 +38,12 @@
 		      <alias:call-template name="{@name}-head" />
 			  </xsl:for-each>
 		   </alias:template>
-	    <xsl:comment>All xhtml css elements requested by the forrest:template</xsl:comment>
+	    <!--<xsl:comment>All xhtml css elements requested by the forrest:template</xsl:comment>
 			<alias:template name="getCss">
 			  <xsl:for-each select="/*/forrest:properties/*[@css='true']">
 		      <alias:call-template name="{@name}-css" />
 			  </xsl:for-each>
-		   </alias:template>
+		   </alias:template>-->
 		   	   
        <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
 			 <alias:template name="getBody">
@@ -54,7 +54,7 @@
         <xhtml>
       		<head>
     				<alias:call-template name="getHead"/>
-            <style type="text/css">
+            <!--<style type="text/css">
 body {
 	text-align:center;
 	font-family: verdana, helvetica, sans;
@@ -84,9 +84,13 @@ p {margin-left: 50px}
     clear:both;
 }
 <alias:call-template name="getCss"/>
-</style>
-            <!--<link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
-                />-->
+</style>-->
+            <link rel="stylesheet" type="text/css" >
+              <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
+            </link>
+             <link rel="stylesheet" type="text/css" >
+              <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
+            </link>
 						<title>
                 <alias:value-of select="div[@id='content']/h1"/>
             </title>

@@ -109,6 +109,14 @@
      <map:transform src="resources/stylesheets/contract.property.xsl"/>
      <map:serialize type="xml"/>
    </map:match>
+  <!--
+  Get the css of the requested contract. 
+  -->
+   <map:match pattern="get.contract-css.*">
+     <map:generate src="cocoon:/resolve.contract.{1}"/>
+     <map:transform src="resources/stylesheets/contract.css.xsl"/>
+     <map:serialize type="txt"/>
+   </map:match>
 <!-- ls.fbits 
   list the default fbits-->
   <map:pipeline>
@@ -140,7 +148,7 @@ transform this dir-list and add more information
     <map:match pattern="ls.contracts.l">
 		  <map:generate src="cocoon:/ls.contracts"/>
       <map:transform src="resources/stylesheets/ls.contracts.xsl">
-        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.views"/>
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.view"/>
       </map:transform>
       <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
       <map:serialize type="xhtml"/>
@@ -153,7 +161,7 @@ transform this dir-list of the project and add more information
     <map:match pattern="ls.contracts.project.l">
 		  <map:generate src="cocoon:/ls.contracts.project"/>
       <map:transform src="resources/stylesheets/ls.contracts.xsl">
-        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.views"/>
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.view"/>
       </map:transform>
       <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
       <map:serialize type="xhtml"/>
@@ -195,8 +203,8 @@ transform this dir-list of the project and add more information
      	<map:serialize type="xhtml"/>
     </map:match>
     <map:match pattern="**/*.html">
-      <map:generate src="cocoon://{1}{2}/{3}.page"/>
-      <map:transform src="cocoon://prepare.xhtml.{1}">
+      <map:generate src="cocoon://{1}/{2}.page"/>
+      <map:transform src="cocoon://prepare.xhtml.{1}/{2}">
         <map:parameter name="path" value="{0}"/>
       </map:transform>
      	<map:serialize type="xhtml"/>

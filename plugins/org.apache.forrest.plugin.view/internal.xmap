@@ -52,7 +52,7 @@
 	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
 	      <encoding>UTF-8</encoding>
 	    </map:serializer>
-      <map:serializer name="txt" 
+      <map:serializer name="text" 
 			   src="org.apache.cocoon.serialization.TextSerializer"
 			   mime-type="text/plain" 
 			   logger="sitemap.serializer.text" 
@@ -70,7 +70,105 @@
   -->
 
 
+
 <!--
+  3. views
+  prepares and transforms the requested contracts (fbits) and populate them with the content (nuggets).
+  -->
+  <map:pipeline>
+  <!--
+    View config resolver
+    File specific views have priority before default ones.
+    If no views can be found in the project we use the default one of the view plugin.
+    -->
+    <map:match pattern="prepare.view.**">
+      <map:select type="exists">
+        <!--
+          Here we will have to test, whether the requested page needs a specific view.
+          This will be assumed as soon there is a .fv
+          e.g. index.xml + index.fv
+          -->
+        <map:when test="{project:content.xdocs}{1}.fv">
+          <map:generate src="{project:content.xdocs}{1}.fv"/>
+        </map:when>
+				<!--
+          If there is no file specific view then use the default.fv of the project stored in "project.conf-dir".
+          -->
+        <map:when test="{project:conf}/default.fv">
+          <map:generate src="{project:conf}/default.fv"/>
+        </map:when>
+        <!--
+          If the above not matches then get the default view of this plugin.
+          -->
+        <map:otherwise>
+          <map:generate src="src/documentation/default.fv"/>
+        </map:otherwise>
+      </map:select>
+     	<map:serialize type="xml"/>
+    </map:match>
+    
+    <!--Add nuggets to the view that the content can be used later on.-->
+    <map:match pattern="prepare.view-nugget.**">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.view.xsl">
+        <map:parameter name="view" value="{1}"/>
+      </map:transform>
+      <map:transform type="xinclude"/>
+     	<map:serialize type="xml"/>
+    </map:match>
+<!--
+  Aggregate the contract-templates requested by the view with xinclude.
+  The result is a stylesheet with all needed xsl:templates.
+  -->
+    <map:match pattern="prepare.include.**">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.include.xsl">
+	      <map:parameter name="config-file" value="{project:skinconf}"/>
+      </map:transform>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+    
+    <!--
+      Aggregate the forrest:properties requested by the *.fv.
+      The result is an aggregation of properties which defines the templates to be call.
+      -->
+    <map:match pattern="prepare.properties.**">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.properties.xsl"/>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+    <!--
+      Aggregate all contracts-templates requested by the view.
+      Create a xsl that can be used for the last step of the transformation of the view.
+  		--> 
+    <map:match pattern="prepare.xhtml.**">
+      <map:aggregate element="forrest:filter">
+        <map:part src="cocoon://prepare.view.{1}" />
+        <map:part src="cocoon://prepare.properties.{1}" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/prepare.xhtml.xsl" >
+        <map:parameter name="request" value="{1}"/>
+      </map:transform>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+    <!--
+      Aggregate all contracts-css requested by the view.
+  		--> 
+    <map:match pattern="skin/contracts-**.css">
+      <map:aggregate element="forrest:css">
+        <map:part src="cocoon://skinconf.xml" />
+        <map:part src="cocoon://prepare.properties.{1}" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/prepare.css.xsl" />
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="text" mime-type="text/css"/>
+    </map:match>
+  </map:pipeline>
+  
+  <!--
   2. nuggets
   This is the content producing factory.
   -->
@@ -102,97 +200,28 @@
         </map:aggregate>
         <map:serialize type="xml"/>
       </map:match>
- 
+      
+       <map:match pattern="**.js">
+        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match>
+      <map:match pattern="**.css">
+        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match>
+      <map:match pattern="**images**">
+        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match>
+      <map:match pattern="**.png">
+        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match>
+     <map:match pattern="**.ico">
+        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match> 
   </map:pipeline>  
 
   
 <!-- END
 	2. nuggets
 	-->
-<!--
-  3. views
-  prepares and transforms the requested contracts (fbits) and populate them with the content (nuggets).
-  -->
-  <map:pipeline>
-  <!--
-    View config resolver
-    File specific views have priority before default ones.
-    If no views can be found in the project we use the default one of the view plugin.
-    -->
-    <map:match pattern="prepare.view.*">
-      <map:select type="exists">
-        <!--
-          Here we will have to test, whether the requested page needs a specific view.
-          This will be assumed as soon there is a .fv
-          e.g. index.xml + index.fv
-          -->
-        <map:when test="{project:content.xdocs}{1}.fv">
-          <map:generate src="{project:content.xdocs}{1}.fv"/>
-        </map:when>
-				<!--
-          If there is no file specific view then use the default.fv of the project stored in "project.conf-dir".
-          -->
-        <map:when test="{project:conf}/default.fv">
-          <map:generate src="{project:conf}/default.fv"/>
-        </map:when>
-        <!--
-          If the above not matches then get the default view of this plugin.
-          -->
-        <map:otherwise>
-          <map:generate src="src/documentation/default.fv"/>
-        </map:otherwise>
-      </map:select>
-     	<map:serialize type="xml"/>
-    </map:match>
-    
-    <!--Add nuggets to the view that the content can be used later on.-->
-    <map:match pattern="prepare.view-nugget.*">
-      <map:generate src="cocoon:/prepare.view.{1}"/>
-      <map:transform src="resources/stylesheets/prepare.view.xsl">
-        <map:parameter name="view" value="{1}"/>
-      </map:transform>
-      <map:transform type="xinclude"/>
-     	<map:serialize type="xml"/>
-    </map:match>
-<!--
-  Aggregate the contract-templates requested by the view with xinclude.
-  The result is a stylesheet with all needed xsl:templates.
-  -->
-    <map:match pattern="prepare.include.*">
-      <map:generate src="cocoon:/prepare.view.{1}"/>
-      <map:transform src="resources/stylesheets/prepare.include.xsl">
-	      <map:parameter name="config-file" value="{project:skinconf}"/>
-      </map:transform>
-      <map:transform type="xinclude"/> 
-     	<map:serialize type="xml"/>
-    </map:match>
-    
-    <!--
-      Aggregate the forrest:properties requested by the *.fv.
-      The result is an aggregation of properties which defines the templates to be call.
-      -->
-    <map:match pattern="prepare.properties.*">
-      <map:generate src="cocoon:/prepare.view.{1}"/>
-      <map:transform src="resources/stylesheets/prepare.properties.xsl"/>
-      <map:transform type="xinclude"/> 
-     	<map:serialize type="xml"/>
-    </map:match>
-    <!--
-      Aggregate all contracts-templates requested by the view.
-      Create a xsl that can be used for the last step of the transformation of the view.
-  		--> 
-    <map:match pattern="prepare.xhtml.*">
-      <map:aggregate element="forrest:filter">
-        <map:part src="cocoon://prepare.view.{1}" />
-        <map:part src="cocoon://prepare.properties.{1}" /> 
-      </map:aggregate>
-      <map:transform src="resources/stylesheets/prepare.xhtml.xsl" >
-        <map:parameter name="request" value="{1}"/>
-      </map:transform>
-      <map:transform type="xinclude"/> 
-     	<map:serialize type="xml"/>
-    </map:match>
-
-  </map:pipeline>
+  
  </map:pipelines>
 </map:sitemap>
