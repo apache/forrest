@@ -41,8 +41,15 @@ Jeff Turner <jefft@apache.org>
 
   <xsl:template match="@href">
     <xsl:attribute name="href">
-      <xsl:value-of select="$root"/><xsl:value-of select="."/>
-    </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="starts-with(., 'http:') or starts-with(., 'https:')">
+          <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$root"/><xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+      </xsl:attribute>
   </xsl:template>
 
   <xsl:template match="@*|node()" priority="-1">
