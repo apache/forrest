@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.7 $
+$Revision: 1.8 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -136,7 +136,7 @@ $Revision: 1.7 $
       </map:resource>
 
       <map:resource name="pipe-svg2png-corner-resource">
-        <map:generate src="{project:skinconf}" />
+        <map:generate src="cocoon:/skinconf" />
         <map:transform src="{path}">
             <map:parameter name="orientation-tb" 
                          value="{orientation-tb}"/>
@@ -156,7 +156,7 @@ $Revision: 1.7 $
       </map:resource>
       
       <map:resource name="generate-resource">
-        <map:generate src="{project:skinconf}" />
+        <map:generate src="cocoon:/skinconf" />
         <map:transform src="{path}"/>
       </map:resource>
       
@@ -169,6 +169,29 @@ $Revision: 1.7 $
    </map:resources>
    
    <map:pipelines>
+   
+      <map:pipeline internal-only="true">
+         <map:match pattern="skinconf">
+           <map:generate src="{project:skinconf}" />
+           <map:select type="exists">
+             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
+               <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+             </map:when>
+           </map:select>
+           <map:select type="exists">
+             <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
+               <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+             </map:when>
+           </map:select>
+           <map:select type="exists">
+             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
+               <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+             </map:when>
+           </map:select>
+           <map:serialize type="xml" />
+         </map:match>
+       </map:pipeline>
+               
        <map:pipeline>
          <map:match pattern="**skin/**.js">
             <map:call resource="skin-read">
