@@ -39,7 +39,7 @@ rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
 cd /d "%FORREST_HOME%\lib\endorsed\"
-for %%i in ("*.jar") do call %FORREST_HOME%\bin\appendcp.bat "%FORREST_HOME%\lib\endorsed\%%i"
+for %%i in ("*.jar") do call "%FORREST_HOME%\bin\appendcp.bat" "%FORREST_HOME%\lib\endorsed\%%i"
 cd /d %PWD%
 
 echo.
