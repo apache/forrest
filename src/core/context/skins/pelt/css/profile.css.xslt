@@ -131,12 +131,12 @@ table caption {
 	color: <xsl:value-of select="@font"/>;
 } 
 </xsl:template> 
-<!--xsl:template match="color[@name='menuheading']">
+<xsl:template match="color[@name='menuheading']">
 #menu h1 {
     color: <xsl:value-of select="@font"/>;
     background-color: <xsl:value-of select="@value"/>;
 }   
-</xsl:template--> 
+</xsl:template> 
 <xsl:template match="color[@name='searchbox']"> 
 #top .searchbox { 
     background-color: <xsl:value-of select="@value"/> ;
@@ -144,19 +144,14 @@ table caption {
 } 
 </xsl:template>
 
-<!--xsl:template match="color[@name='body']">
+<xsl:template match="color[@name='body']">
 body         { background-color: <xsl:value-of select="@value"/>;
                color: <xsl:value-of select="@font"/>;} 
 a:link { color:<xsl:value-of select="@link"/>} 
 a:visited { color:<xsl:value-of select="@vlink"/>} 
 a:hover { color:<xsl:value-of select="@hlink"/>} 
-.menupage a:link { background-color: <xsl:value-of select="@value"/>;
-                                color:<xsl:value-of select="@link"/>} 
-.menupage a:visited { background-color: <xsl:value-of select="@value"/>;
-                                color:<xsl:value-of select="@vlink"/>} 
-.menupage a:hover { background-color: <xsl:value-of select="@value"/>;
-                                color:<xsl:value-of select="@hlink"/>} 
-</xsl:template-->
+
+</xsl:template>
 
 <xsl:template match="color[@name='footer']"> 
 #footer       { background-color: <xsl:value-of select="@value"/>;} 

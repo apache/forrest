@@ -74,6 +74,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 src="{$root}skin/getBlank.js"></script>
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/menu.js"></script>
+	        <script type="text/javascript" language="javascript" 
+				src="{$root}skin/fontsize.js"></script>
 <!--+
   |favicon
   +-->
@@ -89,7 +91,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |HTML-body
   +-->
-      <body>
+      <body onload="init()">
+		<script type="text/javascript">ndeSetTextSize();</script>
 <!--+Site structure
   +++++++++++++++++++++++++++
      +=========================+
@@ -210,22 +213,29 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
         </div>
-        <xsl:choose>
-        <xsl:when test="$config/trail/@location='alt'">
-            <!--breadtrail location='alt'-->
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
-              <div class="breadtrail">
+        <div class="breadtrail">
+          <xsl:choose>
+           <xsl:when test="$config/trail/@location='alt'">
+            <!--breadtrail location='alt'-->
                   <xsl:call-template name="breadcrumbs"/>
-              </div>    
-        </xsl:when>
-        <xsl:otherwise>
-            <!--*NO* breadtrail-->
-            <div class="breadtrail" >&#160;</div>
-        </xsl:otherwise>
-</xsl:choose>
-
+           </xsl:when>
+           <xsl:otherwise>
+             <!--*NO* breadtrail-->
+             &#160;
+           </xsl:otherwise>
+          </xsl:choose>
+	      <xsl:if test="$disable-font-script = 'false'">
+			<span class="trail">
+	        Font size: 
+	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
+	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
+	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+            </span>
+           </xsl:if>
+         </div>
 <xsl:comment>+
     |start Menu, mainarea
     +</xsl:comment>
