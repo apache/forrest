@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.3 $
+$Revision: 1.4 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -197,14 +197,9 @@ $Revision: 1.3 $
           <map:when test="{project:content.xdocs}{1}.cwiki">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
               <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
-              <map:transform type="lexer"   src="{forrest:home}/context/resources/grammars/wiki.xlex"/>
-              <map:transform type="parser"  src="{forrest:home}/context/resources/grammars/wiki.xgrm"/>
-              <!--  Dynamically generated equivalents.  Matchers need to be added to
-              the root sitemap for this to work.
               <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
               <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-              -->
-              <map:transform src="{forrest:stylesheets}/wiki2document.xsl">
+              <map:transform src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
                 <map:parameter name="name" value="{2}" />
               </map:transform>
               <map:serialize type="xml-document"/>
@@ -232,34 +227,47 @@ $Revision: 1.3 $
         </map:select>
 
       </map:match>
+  </map:pipeline>
+  
+  <map:pipeline type="caching" internal-only="true">
 
-
-      <!--
-      These pipelines dynamically generate the wiki.{xlex,xgrm} files used in
-      the *.cwiki pipeline.  They are not used by default to avoid the overhead.
       <map:match pattern="*.xlex">
-        <map:generate type="text2xml" src="{forrest:home}/context/resources/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/grm.xlex"/>
-        <map:transform type="parser" src="{forrest:home}/context/esources/grammars/grm.xgrm"/>
-        <map:transform               src="{forrest:home}/context/resources/grammars/text4regex.xsl"/>
-        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/regex.xlex"/>
-        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/regex.xgrm"/>
-        <map:transform               src="{forrest:home}/context/resources/grammars/grm2xlex.xsl"/>
+        <map:select type="exists">
+          <map:when test="{forrest:home}/context/resources/chaperon/grammars/{1}.xlex">
+            <map:read src="{forrest:home}/context/resources/chaperon/grammars/{1}.xlex"/>
+          </map:when>
+          <map:otherwise>
+        <map:generate  type="text2xml"   src="{forrest:home}/context/resources/chaperon/grammars/{1}.grm"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/grm.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/grm.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/text4regex.xsl"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/regex.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/regex.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/grm2xlex.xsl"/>
         <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
       </map:match>
 
       <map:match pattern="*.xgrm">
-        <map:generate type="text2xml"  src="{forrest:home}/context/resources/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/grm.xlex"/>
-        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/grm.xgrm"/>
-        <map:transform               src="{forrest:home}/context/resources/grammars/text4regex.xsl"/>
-        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/regex.xlex"/>
-        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/regex.xgrm"/>
-        <map:transform               src="{forrest:home}/context/resources/grammars/grm2xgrm.xsl"/>
+        <map:select type="exists">
+          <map:when test="{forrest:home}/context/resources/chaperon/grammars/{1}.xgrm">
+            <map:read src="{forrest:home}/context/resources/chaperon/grammars/{1}.xgrm"/>
+          </map:when>
+          <map:otherwise>
+        <map:generate  type="text2xml"   src="{forrest:home}/context/resources/chaperon/grammars/{1}.grm"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/grm.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/grm.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/text4regex.xsl"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/regex.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/regex.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/grm2xgrm.xsl"/>
         <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
       </map:match>
-      -->
 
     </map:pipeline>
+    
   </map:pipelines>
 </map:sitemap>
