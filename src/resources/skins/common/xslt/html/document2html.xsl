@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.22 2003/08/30 05:26:48 crossley Exp $
+$Id: document2html.xsl,v 1.23 2003/09/03 11:01:41 cheche Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -94,6 +94,9 @@ $Id: document2html.xsl,v 1.22 2003/08/30 05:26:48 crossley Exp $
           </font>
         </p>
       </xsl:if>
+      <xsl:apply-templates select="header/version"/>
+      <xsl:apply-templates select="header/type"/>
+      <xsl:apply-templates select="header/notice"/>
       <xsl:apply-templates select="header/abstract"/>
       <xsl:apply-templates select="body"/>
     </div>
@@ -218,6 +221,14 @@ if (VERSION > 3) {
       <div class="content">
         <xsl:apply-templates/>
       </div>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="notice">
+    <div class="notice">
+    <!-- FIXME: i18n Transformer here -->
+    <xsl:text>Notice: </xsl:text>
+      <xsl:apply-templates/>
     </div>
   </xsl:template>
 
@@ -360,6 +371,41 @@ if (VERSION > 3) {
     </xsl:if>
   </xsl:template>
   
+  <xsl:template match="version">
+    <p class="version">
+    <!-- FIXME: i18n Transformer here -->
+    <xsl:text>Version: </xsl:text>
+      <xsl:apply-templates select="@major"/>
+      <xsl:apply-templates select="@minor"/>
+      <xsl:apply-templates select="@fix"/>
+      <xsl:apply-templates select="@tag"/>
+    </p>
+  </xsl:template>
+  
+  <xsl:template match="@major">
+     <xsl:value-of select="."/>
+  </xsl:template>
+  
+  <xsl:template match="@minor">
+     <xsl:value-of select="concat('.',.)"/>
+  </xsl:template>
+  
+  <xsl:template match="@fix">
+     <xsl:value-of select="concat('.',.)"/>
+  </xsl:template>
+  
+  <xsl:template match="@tag">
+     <xsl:value-of select="concat('-',.)"/>
+  </xsl:template>
+
+  <xsl:template match="type">
+    <p class="type">
+    <!-- FIXME: i18n Transformer here -->
+    <xsl:text>Type: </xsl:text>
+    <xsl:value-of select="."/>
+    </p>
+  </xsl:template>
+
   <xsl:template match="abstract">
     <p>
       <xsl:apply-templates/>
