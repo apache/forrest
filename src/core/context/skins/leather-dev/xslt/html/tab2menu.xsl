@@ -23,7 +23,7 @@ For example, if we had tabs with paths:
 Tab1:  ''
 Tab2:  'community'
 Tab3:  'community/howto'
-Tab4:  'community/howto/xmlform/index.html'
+Tab4:  'community/howto/form/index.html'
 
 Then if the current path was 'community/howto/foo', Tab3 would be highlighted.
 The rule is: the tab with the longest path that forms a prefix of the current
