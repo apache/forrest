@@ -558,6 +558,9 @@
         <xsl:when test="starts-with(string(@src), 'images/') or contains(string(@src), '../images')">
           <xsl:value-of select="concat($ctxbasedir, 'resources/images/' , substring-after(@src, 'images'))"/>
         </xsl:when>
+        <xsl:when test="starts-with(string(@src), 'http') ">
+          <xsl:value-of select="@src"/>
+        </xsl:when>
         <xsl:otherwise><xsl:value-of select="concat($ctxbasedir, $xmlbasedir, @src)"/></xsl:otherwise>
       </xsl:choose>
       </xsl:variable>
