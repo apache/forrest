@@ -218,6 +218,7 @@
       font-size="{$size}pt"
       font-weight="bold"
       space-before="12pt"
+      space-after="4pt"
       id="{generate-id()}">
 
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
