@@ -21,7 +21,7 @@
       </map:act>
 
       <!-- If no book.xml, generate it from the linkmap. -->
-      <map:generate src="cocoon://{dir}linkmap/{dir}" />
+      <map:generate src="cocoon://{dir}linkmap/{path}" />
       <!-- The above generates the subset of the linkmap relevant to our directory. -->
       <map:transform src="resources/stylesheets/site2book.xsl" />
       <map:serialize type="xml"/>
@@ -31,15 +31,17 @@
   <map:pipelines>
     <map:pipeline>
 
-      <map:match pattern="**/book.xml">
+      <map:match pattern="**/book-*.xml">
         <map:call resource="book">
           <map:parameter name="dir" value="{1}/" />
+          <map:parameter name="path" value="{1}/{2}" />
         </map:call>
       </map:match>
 
-      <map:match pattern="book.xml">
+      <map:match pattern="book-*.xml">
         <map:call resource="book">
           <map:parameter name="dir" value="" />
+          <map:parameter name="path" value="{1}" />
         </map:call>
       </map:match>
 

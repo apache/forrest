@@ -55,12 +55,11 @@ Jeff Turner <jefft@apache.org>
       </xsl:call-template>
     </xsl:variable>
     <xsl:copy>
-      <xsl:if test="not(normalize-space($newtab)='')">
+      <!-- <xsl:if test="not(normalize-space($newtab)='')"> -->
         <xsl:attribute name="tab">
           <xsl:value-of select="$newtab"/>
         </xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates select="@*|node()"/>
+        <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
 
