@@ -50,7 +50,7 @@ type="xpathdirectory">
     <xsl:param name="sort-order" select="'ascending'"/>
     <xsl:param name="sort-case-order" select="'upper-first'"/>
     <xsl:param name="sort-select" select="'.'"/>
-            
+
     <xsl:template match="/">
         <book copyright="" software="" title="">
             <!--
@@ -64,8 +64,8 @@ type="xpathdirectory">
 
     <xsl:template match="dir:directory">
         <menu label="{translate(@name,'-_',' ')}">
-           <xsl:apply-templates select="dir:file">
-                <xsl:sort order="{$sort-order}"  case-order="{$sort-case-order}" select="dyn:evaluate($sort-select)"/>
+            <xsl:apply-templates select="dir:file">
+                <xsl:sort case-order="{$sort-case-order}" order="{$sort-order}" select="dyn:evaluate($sort-select)"/>
             </xsl:apply-templates>
         </menu>
         <xsl:apply-templates select="dir:directory [descendant::dir:file]"/>
@@ -93,28 +93,23 @@ type="xpathdirectory">
                         <xsl:variable name="path" select="concat($path, @name, '/')"/>
                         <xsl:value-of select="$path"/>
                     </xsl:for-each>
-                    <xsl:value-of select="concat($corename, '.', $served-extension)"/>
+                    <!-- indirection to allow get-href overriding -->
+                    <xsl:call-template name="get-href">
+                        <xsl:with-param name="corename" select="$corename"/>
+                    </xsl:call-template>
                 </xsl:attribute>
             </menu-item>
         </xsl:if>
     </xsl:template>
 
-    <!-- label is  short-title, title and in last resort filename
-         override this to your needs -->
+    <!-- override this to your needs. For example, see xpathdirectory2book.xsl -->
     <xsl:template name="get-label">
         <xsl:param name="corename"/>
-        <xsl:choose>
-            <xsl:when test="dir:xpath/meta[@name='short-title']">
-                <xsl:value-of select="dir:xpath/meta[@name='short-title']"/>
-            </xsl:when>
-            <xsl:when test="dir:xpath/title">
-                <xsl:value-of select="dir:xpath/title"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$corename"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="translate($corename,'-_',' ')"/>
     </xsl:template>
 
-    
+    <xsl:template name="get-href">
+        <xsl:param name="corename"/>
+        <xsl:value-of select="concat($corename, '.', $served-extension)"/>
+    </xsl:template>
 </xsl:stylesheet>
