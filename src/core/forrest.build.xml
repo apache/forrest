@@ -196,6 +196,18 @@ skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  
 
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
+
+    <!-- Gather some information about this Forrest instance,
+      to be used later by Cocoon. -->
+    <tstamp prefix="generate">
+      <format property="timestamp" timezone="en" pattern="yyyy-MM-dd'T'HH:mm'Z'"/>
+    </tstamp>
+    <echo file="${forrest.home}/context/WEB-INF/info.xml">&lt;info>
+  &lt;project-skin>${project.skin}&lt;/project-skin>
+  &lt;forrest-version>${version}&lt;/forrest-version>
+  &lt;generate-timestamp>${generate.timestamp}&lt;/generate-timestamp>
+&lt;/info>
+    </echo>
   </target>
   
   <target name="examine-proj" depends="init-props">
