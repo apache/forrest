@@ -34,9 +34,12 @@ outside the Forrest distribution. The list below details all known plugins.
 	
 	<xsl:template match="plugin">
 <echo>
-* <xsl:value-of select="@name"/> - <xsl:value-of select="normalize-space(description)"/>
-  - author: <xsl:value-of select="@author"/>
-  - website: <xsl:value-of select="@website"/> 	    
+* <xsl:value-of select="@name"/>
+  - <xsl:value-of select="normalize-space(description)"/>
+
+  - Author: <xsl:value-of select="@author"/>
+  - Website: <xsl:value-of select="@website"/>
+  - Version:  <xsl:value-of select="@version"/>
 </echo>
 	</xsl:template>	
 	
