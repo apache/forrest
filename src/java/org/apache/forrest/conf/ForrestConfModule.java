@@ -169,11 +169,11 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 		if (skinName.equals("krysalis-site") || skinName.equals("forrest-site")
 				|| skinName.equals("forrest-css")) {
 			props.remove("project.skin");
-			props.setProperty("project.skin", "book-tab");
+			props.setProperty("project.skin", "crust");
 		} else if (skinName.equals("avalon-tigris")
 				|| skinName.equals("tigris-style")) {
 			props.remove("project.skin");
-			props.setProperty("project.skin", "tigris-style-1_1");
+			props.setProperty("project.skin", "tigris");
 		}
 	}
 
