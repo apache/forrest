@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<project basedir="." name="plugins">
+   <!-- public targets -->     
+     
+  <target name="available-plugins"
+          depends="init-props, plugin-unavailable, fetch-plugins-descriptors"
+          description="What plugins are available?">
+    <for param="plugin-descriptor-file">
+      <path>
+        <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+      </path>
+      <sequential>
+        <xslt in="@{plugin-descriptor-file}" 
+          out="${project.temp-dir}/pluginlist2echobuild.xml"
+          style="${forrest.home}/var/pluginlist2echo.xsl"/>  
+    <ant antfile="${project.temp-dir}/pluginlist2echobuild.xml"/>
+      </sequential>
+    </for>
+  </target>  
+          
+  <!-- private -->        
+                
+  <target name="init-plugins" depends="init-props, install-required-plugins"/>   
+
+  <target name="plugin-unavailable">   
+    <property name="plugin.unavailable" value="true"/>
+  </target>  
+  
+  <target name="check-plugin">   
+    <condition property="plugin.unavailable">
+      <and>
+        <not>
+          <available type="dir" file="${forrest.plugins-dir}/${plugin.name}"/>
+        </not>
+        <not>
+          <available type="file" file="${forrest.plugins-dir}/${plugin.name}.zip"/>
+        </not>
+      </and>
+    </condition>
+  </target>  
+            
+  <target name="unpack-plugin"
+          depends="init-props">
+     <unzip dest="${forrest.plugins-dir}/">
+       <fileset dir="${forrest.plugins-dir}/">
+          <include name="${plugin.name}.zip"/>
+        </fileset>
+     </unzip>       
+     <delete>
+        <fileset dir="${forrest.plugins-dir}/">
+          <include name="${plugin.name}.zip"/>
+        </fileset>
+     </delete>
+  </target>  
+  
+  <target name="configure-plugin" if="plugin.unavailable">
+     <!-- add the snippet to plugins/sitemap.xmap that will mount the plugin
+          specific sitemap -->
+     <xslt in="${forrest.plugins-dir}/sitemap.xmap"
+       out="${forrest.plugins-dir}/sitemap.xmap.new"
+       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin.name}"/>  
+     </xslt>
+     <move file="${forrest.plugins-dir}/sitemap.xmap" 
+       tofile="${forrest.plugins-dir}/sitemap.xmap.old"/>
+     <move file="${forrest.plugins-dir}/sitemap.xmap.new" 
+       tofile="${forrest.plugins-dir}/sitemap.xmap"/>
+  </target>
+
+  <target name="fetch-plugins-descriptors" if="plugin.unavailable">
+    <delete>
+      <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+    </delete>
+  
+    <var name="plugin-counter" value="1"/>
+    <for list="${forrest.plugins.descriptors}" param="url">
+      <sequential>
+        <echo>fetching descriptor: @{url}</echo>
+        <get src="@{url}" 
+           dest="${forrest.plugins-dir}/plugins-${plugin-counter}.xml"
+           verbose="true" usetimestamp="true" ignoreerrors="true"/>
+        <math result="plugin-counter" operand1="${plugin-counter}" operation="+" operand2="1" datatype="int"/>
+      </sequential>
+    </for>
+  </target>  
+  
+  <target name="fetch-plugin" 
+          if = "plugin.unavailable"
+          depends="init-props, fetch-plugins-descriptors">
+    <for param="plugin-descriptor-file">
+      <path>
+        <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+      </path>
+      <sequential>
+        <xslt in="@{plugin-descriptor-file}" 
+          out="${project.temp-dir}/pluginlist2fetchbuild.xml"
+          style="${forrest.home}/var/pluginlist2fetch.xsl"
+          force="true">
+          <param name="plugin-name" expression="${plugin.name}"/>  
+          <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>      
+          <param name="forrest-version" expression="${version}"/>   
+       </xslt>  
+       <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/> 
+      </sequential>
+    </for>
+  </target>    
+  
+  <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin, configure-plugin"/>
+  
+  <target name="install-required-plugins">
+    <for list="${project.required.plugins}" param="name">
+      <sequential>
+        <echo>Installing plugin: @{name}</echo>
+        <antcall target="install-plugin">
+          <param name="plugin.name" value="@{name}"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
+  
+</project>

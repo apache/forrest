@@ -35,6 +35,7 @@
     <property name="forrest.version" value="0.7-dev"/>
 
     <property name="java.dir"              location="src/java"/>
+    <property name="plugins.dir"           location="plugins"/>
     <property name="build.dir"             location="build"/>
     <property name="build.docs"            location="${build.dir}/docs"/>
     <property name="build.classes"         location="${build.dir}/classes"/>
@@ -68,7 +69,11 @@
     </echo>
     
     <mkdir dir="${build.dir}"/>
-        
+    
+    <mkdir dir="${plugins.dir}"/>
+    <copy file="src/core/var/initial_plugins_sitemap.xmap"
+      tofile="${plugins.dir}/sitemap.xmap"/>
+    
     <path id="classpath">
       <fileset dir="lib" includes="**/*.jar"/>
       <fileset dir="${tools.dir}/jetty" includes="servlet*.jar"/>
@@ -79,6 +84,7 @@
 
   <target name="clean" depends="init" description="Delete all generated files">
     <delete dir="${build.dir}"/>
+    <delete dir="${plugins.dir}"/>
     <delete dir="${forrestbot.dir}/logs"/>
     <delete dir="${forrestbot.dir}/work"/>
     <delete dir="${forrestbot.dir}/build"/>
