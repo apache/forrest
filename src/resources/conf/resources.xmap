@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.8 $
+$Revision: 1.9 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -27,10 +27,17 @@ $Revision: 1.8 $
 
    <map:resources>
       <map:resource name="skin-read">
-         <map:read src="skins/{forrest:skin}/{path}" mime-type="{mime-type}" />
+            <map:select type="exists">
+               <map:when test="skins/{forrest:skin}/{path}">
+                  <map:read src="skins/{forrest:skin}/{path}" mime-type="{mime-type}" />
+               </map:when>
+               <map:otherwise>
+                  <map:read src="skins/common/{path}" mime-type="{mime-type}" />
+               </map:otherwise>
+            </map:select>
       </map:resource>
    </map:resources>
-
+   
    <map:pipelines>
       <map:pipeline>
          <map:match pattern="skin/**.js">
@@ -104,8 +111,16 @@ $Revision: 1.8 $
                <map:when test="resources/images/{1}.png">
                   <map:read src="resources/images/{1}.png" mime-type="image/png" />
                </map:when>
-               <map:otherwise>
+               <map:when test="{project:resources.images}/{1}.png">
                   <map:read src="{project:resources.images}/{1}.png" mime-type="image/png" />
+               </map:when>
+               <map:otherwise>
+                 <!-- needed for compatibility for the standard resources/images that are now
+                      in the common skin -->
+                 <map:call resource="skin-read">
+                   <map:parameter name="path" value="images/{1}.png" />
+                   <map:parameter name="mime-type" value="image/png" />
+                 </map:call>
                </map:otherwise>
             </map:select>
          </map:match>
@@ -118,8 +133,16 @@ $Revision: 1.8 $
                <map:when test="resources/images/{1}.{2}">
                   <map:read src="resources/images/{1}.{2}" mime-type="image/{2}" />
                </map:when>
-               <map:otherwise>
+               <map:when test="{project:resources.images}/{1}.{2}">
                   <map:read src="{project:resources.images}/{1}.{2}" mime-type="image/{2}" />
+               </map:when>
+               <map:otherwise>
+                 <!-- needed for compatibility for the standard resources/images that are now
+                      in the common skin -->
+                 <map:call resource="skin-read">
+                   <map:parameter name="path" value="images/{1}.{2}" />
+                   <map:parameter name="mime-type" value="image/{2}" />
+                 </map:call>
                </map:otherwise>
             </map:select>
          </map:match>
