@@ -26,19 +26,22 @@ FORREST SITE BUILDER
 
 <project default="site" basedir="." name="forrest">
 
-  <property name="forrest.version" value="0.7-dev"/>
-  <property name="forrest.home"        		  location="${basedir}" />
-  <property name="forrest.root-dir"           location="${forrest.home}/.."/>
+  <property environment="env" />
+  <property name="forrest.home"               location="${env.FORREST_HOME}" />
+  <property name="forrest.version"            value="0.7-dev"/>
 
-  <property name="forrest.lib-dir"            location="${forrest.root-dir}/lib"/>
+  <property name="forrest.lib-dir"            location="${forrest.home}/lib"/>
   <property name="forrest.core.lib-dir"       location="${forrest.lib-dir}/core"/>
   <property name="forrest.endorsed.lib-dir"   location="${forrest.lib-dir}/endorsed"/>
   <property name="forrest.optional.lib-dir"   location="${forrest.lib-dir}/optional"/>
 
-  <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>
-  <property name="forrest.jetty.lib-dir"      location="${forrest.root-dir}/tools/jetty"/>
+  <property name="forrest.ant.lib-dir"        location="${forrest.home}/tools/ant/lib"/>
+  <property name="forrest.jetty.lib-dir"      location="${forrest.home}/tools/jetty"/>
 
-  <property name="forrest.build.lib-dir"      location="${forrest.root-dir}/build"/>
+  <property name="forrest.build.lib-dir"      location="${forrest.home}/build"/>
+  
+  <property name="forrest.core"               location="${forrest.home}/main"/>
+  <property name="forrest.core.webapp"        location="${forrest.core}/webapp"/>
 
   <import file="targets/validate.xml"/>
   <import file="targets/webapp.xml"/>
@@ -94,20 +97,20 @@ FORREST SITE BUILDER
     <echo message="Loading user specific properties from ${user.home}${/}forrest.properties" />
     <property file="${user.home}/forrest.properties" />
     <echo message="Loading default properties from ${forrest.home}${/}webapp${/}default-forrest.properties" />
-    <property file="${forrest.home}/webapp/default-forrest.properties" />
+    <property file="${forrest.core.webapp}/default-forrest.properties" />
 
     <!-- people should use forrest.properties to override following defaults  -->
-    <property name="forrest.skins-dir"   location="${forrest.home}/webapp/skins"/>
-    <property name="forrest.plugins-dir"   location="${forrest.root-dir}/build/plugins"/>
-    <property name="project.site-dir"    location="${project.build-dir}/site"    />
-    <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
-    <property name="project.webapp"      location="${project.build-dir}/webapp" />
+    <property name="forrest.skins-dir"     location="${forrest.core.webapp}/skins"/>
+    <property name="forrest.plugins-dir"   location="${forrest.home}/build/plugins"/>
+    <property name="project.site-dir"      location="${project.build-dir}/site"    />
+    <property name="project.war"           location="${project.build-dir}/${project.name}.war" />
+    <property name="project.webapp"        location="${project.build-dir}/webapp" />
 
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
 
     <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
-    <property name="project.configfile"     value="${forrest.home}/webapp/WEB-INF/cli.xconf" />
-    <property name="project.logkitfile"     value="${forrest.home}/webapp/WEB-INF/logkit.xconf" />
+    <property name="project.configfile"     value="${forrest.core.webapp}/WEB-INF/cli.xconf" />
+    <property name="project.logkitfile"     value="${forrest.core.webapp}/WEB-INF/logkit.xconf" />
     <property name="project.logger"         value="debug" />
 
     <property name="status"      location="${project.home}/${project.status}" />
@@ -261,7 +264,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="load-project-props" depends="validation-props, prepare-context" if="skinconf.present">
     <xslt in="${skinconf}"
           out="${project.temp-dir}/no-doctype-project-skinconf.xml"
-          style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
+          style="${forrest.core.webapp}/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
     </xslt>
 
@@ -271,9 +274,9 @@ The skin that most likely resembles these ones is called 'pelt'.
 
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
   <target name="load-forrest-props" unless="skinconf.present">
-     <xslt in="${forrest.home}/webapp/skinconf.xml"
+     <xslt in="${forrest.core.webapp}/skinconf.xml"
            out="${project.temp-dir}/no-doctype-forrest-skinconf.xml"
-           style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
+           style="${forrest.core.webapp}/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
     </xslt>
 
@@ -319,7 +322,7 @@ The skin that most likely resembles these ones is called 'pelt'.
        Echo's the settings if requested. [-Dforrest.echo=true]
        =============================================================== -->
   <target name="echo-settings" if="forrest.echo">
-    <loadfile property="echo-settings-message" srcFile="${forrest.home}/var/echo-settings-message.txt">
+    <loadfile property="echo-settings-message" srcFile="${forrest.core}/var/echo-settings-message.txt">
        <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${echo-settings-message}</echo>
@@ -333,7 +336,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="-prepare-classpath">
     <path id="forrest.cp">
          <pathelement path="${env.CLASSPATH}" />
-         <pathelement location="${forrest.home}/webapp/WEB-INF/classes"/>
+         <pathelement location="${forrest.core.webapp}/WEB-INF/classes"/>
          <pathelement location="${forrest.build.lib-dir}/xml-forrest.jar"/>
          <pathelement location="${project.classes-dir}"/>
          <fileset dir="${forrest.jetty.lib-dir}" casesensitive="no">
@@ -401,9 +404,9 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="seed" depends="ensure-nocontent"
     description="* Seeds a directory with a template project doc structure">
      <copy todir="${project.home}" overwrite="false">
-        <fileset dir="${forrest.home}/fresh-site"/>
+        <fileset dir="${forrest.core}/fresh-site"/>
      </copy>
-     <loadfile  property="template-project-created-message" srcFile="${forrest.home}/var/template-project-created-message.txt">
+     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message.txt">
         <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${template-project-created-message}</echo>
@@ -429,7 +432,7 @@ The skin that most likely resembles these ones is called 'pelt'.
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/webapp"
+          dir="${forrest.core.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
@@ -450,7 +453,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/webapp"
+          dir="${forrest.core.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
@@ -460,7 +463,7 @@ The skin that most likely resembles these ones is called 'pelt'.
        <jvmarg line="${forrest.jvmargs}"/>
        <jvmarg
          value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.endorsed.lib-dir}"/>
-       <arg line="${forrest.home}/webapp/jettyconf.xml" />
+       <arg line="${forrest.core.webapp}/jettyconf.xml" />
        <syspropertyset>
          <propertyref prefix="forrest."/>
          <propertyref prefix="project."/>

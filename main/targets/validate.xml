@@ -127,7 +127,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
       <xmlcatalog id="fcatalog" >
         <catalogpath>
           <pathelement
-            location="${forrest.home}/webapp/resources/schema/catalog.xcat"/>
+            location="${forrest.core.webapp}/resources/schema/catalog.xcat"/>
           <pathelement location="${catalog}"/>
         </catalogpath>
       </xmlcatalog>
@@ -164,7 +164,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
 
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap" description="Validate the project sitemap">
-    <jing rngfile="${forrest.home}/webapp/resources/schema/relaxng/sitemap-v06.rng">
+    <jing rngfile="${forrest.core.webapp}/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${content-dir}"
         includes="${forrest.validate.sitemap.includes}"
         excludes="${forrest.validate.sitemap.excludes}">
@@ -176,7 +176,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
 
   <target name="validate-stylesheets" depends="validation-props"
     if="validate.stylesheets" description="Validate XSL files">
-    <jing rngfile="${forrest.home}/webapp/resources/schema/relaxng/xslt.rng">
+    <jing rngfile="${forrest.core.webapp}/resources/schema/relaxng/xslt.rng">
       <fileset dir="${stylesheets-dir}"
         includes="${forrest.validate.stylesheets.includes}"
         excludes="${forrest.validate.stylesheets.excludes}" />
@@ -188,7 +188,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
 
   <target name="validate-skins-stylesheets" depends="validation-props"
     if="validate.skins.stylesheets">
-    <jing rngfile="${forrest.home}/webapp/resources/schema/relaxng/xslt.rng">
+    <jing rngfile="${forrest.core.webapp}/resources/schema/relaxng/xslt.rng">
       <fileset dir="${skins-dir}"
         includes="${forrest.validate.skins.stylesheets.includes}"
         excludes="${forrest.validate.skins.stylesheets.excludes}"/>
@@ -205,7 +205,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
       </available>
     </condition>
 
-    <loadfile property="skin-not-found-message" srcFile="${forrest.home}/var/skin-not-found-message.txt">
+    <loadfile property="skin-not-found-message" srcFile="${forrest.core}/var/skin-not-found-message.txt">
       <filterchain><expandproperties/></filterchain>
     </loadfile>
       

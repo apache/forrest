@@ -41,7 +41,7 @@
     extra project-custom classes then will need to be warred in as well. -->
 <!--  should be already there
     <mkdir dir="${project.webapp}/WEB-INF"/>
-    <copy file="${forrest.home}/webapp/WEB-INF/web.xml" filtering="true" 
+    <copy file="${forrest.core.webapp}/WEB-INF/web.xml" filtering="true" 
       todir="${project.webapp}/WEB-INF"/>
 -->
     
@@ -54,7 +54,7 @@
     <available file="${content-dir}/jettyconf.xml" 
       property="custom_jetty_config"/>
 
-    <loadfile  property="webapp-local-generated-message" srcFile="${forrest.home}/var/webapp-local-generated-message.txt">
+    <loadfile  property="webapp-local-generated-message" srcFile="${forrest.core}/var/webapp-local-generated-message.txt">
         <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${webapp-local-generated-message}</echo>
@@ -103,7 +103,7 @@
     </copy>
                   
     <copy toDir="${project.webapp}/WEB-INF/classes">
-      <fileset dir="${forrest.home}/webapp/WEB-INF/classes"/>
+      <fileset dir="${forrest.core.webapp}/WEB-INF/classes"/>
     </copy>
 
     <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
@@ -131,7 +131,7 @@
       file="${project.temp-dir}/build-info.xml"/>
 
     <loadfile  property="webapp-generated-message" 
-      srcFile="${forrest.home}/var/webapp-generated-message.txt">
+      srcFile="${forrest.core}/var/webapp-generated-message.txt">
         <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${webapp-generated-message}</echo>

@@ -47,7 +47,7 @@ echo Apache Forrest.  Run 'forrest -projecthelp' to list options
 echo.
 rem ----- call ant.. ---------------------------------------------------
 echo.
-call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME%" -Dforrest.home="%FORREST_HOME%\main" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
+call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME%" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%

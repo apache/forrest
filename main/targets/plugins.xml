@@ -28,7 +28,7 @@
       <sequential>
         <xslt in="@{plugin-descriptor-file}" 
           out="${project.temp-dir}/pluginlist2echobuild.xml"
-          style="${forrest.home}/var/pluginlist2echo.xsl"/>  
+          style="${forrest.core}/var/pluginlist2echo.xsl"/>  
     <ant antfile="${project.temp-dir}/pluginlist2echobuild.xml"/>
       </sequential>
     </for>
@@ -84,7 +84,7 @@
      <echo>Mounting input plugin: ${plugin-name}</echo>
      <xslt in="${forrest.plugins-dir}/input.xmap"
        out="${forrest.plugins-dir}/input.xmap.new"
-       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="input"/>  
@@ -93,7 +93,7 @@
        tofile="${forrest.plugins-dir}/input.xmap"/>
      <xslt in="${forrest.plugins-dir}/resources.xmap"
        out="${forrest.plugins-dir}/resources.xmap.new"
-       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="resources"/>  
@@ -110,7 +110,7 @@
      <echo>Mounting output plugin: ${plugin.name}</echo>
      <xslt in="${forrest.plugins-dir}/output.xmap"
        out="${forrest.plugins-dir}/output.xmap.new"
-       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="output"/>  
@@ -127,7 +127,7 @@
      <echo>Mounting internals plugin: ${plugin-name}</echo>
      <xslt in="${forrest.plugins-dir}/internal.xmap"
        out="${forrest.plugins-dir}/internal.xmap.new"
-       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="internal"/>  
@@ -163,7 +163,7 @@
       <sequential>
         <xslt in="@{plugin-descriptor-file}" 
           out="${project.temp-dir}/pluginlist2fetchbuild.xml"
-          style="${forrest.home}/var/pluginlist2fetch.xsl"
+          style="${forrest.core}/var/pluginlist2fetch.xsl"
           force="true">
           <param name="plugin-name" expression="${plugin.name}"/>  
           <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>      
@@ -180,16 +180,16 @@
     description="ensure the required plugins are available locally, if any are not download them automatically">
     
     <mkdir dir="${forrest.plugins-dir}"/>
-    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+    <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/input.xmap"
       overwrite="true"/>
-    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+    <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/resources.xmap"
       overwrite="true"/>
-    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+    <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/output.xmap"
       overwrite="true"/>
-    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+    <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/internal.xmap"
       overwrite="true"/>
     
