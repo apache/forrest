@@ -21,14 +21,20 @@
        param: location to put generated war ${project.war}
        =============================================================== -->
  <target name="war" depends="webapp"
-   description="Generates a dynamic servlet-based website (an packaged .war file)">
+   description="Generates a dynamic servlet-based website (a packaged .war file)">
 
-   <jar destfile="${project.war}" basedir="${project.webapp}"/>
+   <war destfile="${project.war}" basedir="${project.webapp}"/>
    <echo>
 ---------------------------------
 Webapp .war file generated:
 ${project.war}
----------------------------------
+
+Please keep in mind that you may have to copy some jar files to
+wherever your servlet container looks for "endorsed" libraries. These
+files are found in ${forrest.home}/lib/endorsed. You may also copy
+them to the endorsed directory in your JDK installation if you wish to
+use them globally for your entire system.
+----------------------------------
    </echo>
   </target> 
 </project>
