@@ -367,3 +367,21 @@
     </antcall>
 
   </target>
+  
+
+
+   <target name="forrestbar" depends="init">
+   
+      <mkdir dir="${build.dir}" />
+      <mkdir dir="${build.dir}/work/forrestbar" />
+         
+      <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
+         <fileset dir="src/resources/forrestbar" includes="content/**/*" />
+      </jar>
+         
+      <copy file="src/resources/forrestbar/install.js" todir="${build.dir}/work/forrestbar" overwrite="true" />
+
+      <zip zipfile="${build.dir}/forrestbar.xpi" basedir="${build.dir}/work/forrestbar" />
+      
+   </target>
+  
