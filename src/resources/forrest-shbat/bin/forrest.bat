@@ -15,6 +15,10 @@ Rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
 set ANT_HOME="%FORREST_HOME%\ant"
 
+set OLD_CLASSPATH=%CLASSPATH%
+set CLASSPATH=
+for %%i in ("%FORREST_HOME%\lib\endorsed\*.jar") do call appendcp.bat %%i
+
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 
 Rem ----- call ant.. ---------------------------------------------------
