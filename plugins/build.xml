@@ -16,21 +16,30 @@
 -->
 <project default="dist" basedir="." name="Forrest build file">
   
-  <property name="plugins.dist-dir" value="dist"/>
+  <property name="plugins.dist-dir" value="../site-author/content/plugins"/>
+  <property name="plugins.localDeploy-dir" value="../build/plugins"/>
   
   <target name="init">
     <mkdir dir="${plugins.dist-dir}"/>  
   </target>
   
-  <target name="cleanDist">
-    <delete dir="${plugins.dist-dir}"/>
+  <!-- FIXME: Forrest should really use the plugins in-place if they are available as source -->
+  <target name="local-deploy"
+          description="Deploy a plugin locally"
+          depends="init">
+    <input message="Which plugin do you want to package?"
+           addproperty="plugin-name"/>
+    <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
+      <fileset dir="${plugin-name}">
+       <exclude name="**/build/**"/>
+      </fileset>
+    </copy>
   </target>
   
-    
-  
+  <!-- FIXME: needs to append FOrrest version number to filename -->
   <target name="dist"
           description="Build the distribution archive for all the plugins"
-          depends="cleanDist, init">
+          depends="init">
     <input message="Which plugin do you want to package?"
            addproperty="plugin-name"/>
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
