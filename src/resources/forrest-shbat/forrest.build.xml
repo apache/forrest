@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.4-dev                        |
-    |             $Date: 2003/01/31 09:37:57 $              |
+    |             $Date: 2003/01/31 12:14:16 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -549,24 +549,6 @@ Use the 'seed' target to create a template project structure.
     <mkdir dir="${project.work-dir}"/>
 
     <parallel>
-      <java classname="org.apache.cocoon.Main"
-        fork="true"
-        dir="."
-        failonerror="true"
-        classpathref="forrest.cp">
-        <jvmarg
-          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-        <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
-        <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
-        <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
-        <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
-        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
-        <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
-        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
-        <arg value="${project.start-uri}"/>              <!-- starting page -->
-        <arg value="-V" />                          <!-- be verbose -->
-      </java>
-
       <sequential>
         <!-- 
         | Copy all non-xdocs content across, as we cannot rely on crawling to
@@ -589,13 +571,15 @@ Use the 'seed' target to create a template project structure.
           <fileset dir="${skindir}/images"/>
         </copy>
 
-        <!-- Copy CSS and JS files -->
+        <!-- Copy all other non-resource files -->
         <copy toDir="${project.site-dir}/skin" filtering="false"
           overwrite="true"
           failonerror="false">
-          <fileset dir="${skindir}/css"/>
-          <fileset
-            dir="${skindir}/scripts"/>
+          <mapper type="flatten"/>
+          <fileset dir="${skindir}">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
         </copy>
 
       </sequential>
