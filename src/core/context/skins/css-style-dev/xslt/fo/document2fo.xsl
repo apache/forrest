@@ -7,5 +7,3 @@
 <xsl:import href="../../../common/xslt/fo/document2fo.xsl"/>
 
 </xsl:stylesheet>
-
-
