@@ -17,9 +17,9 @@
 <!--
 Stylesheet which makes site.xml links relative to the site root.
 
-If the current path ($path) is HTML, links with have ..'s added, to make the
-URIs relative to some root.  Eg, given an 'absolutized' file (from
-absolutize-linkmap.xsl):
+If the current path ($path) is HTML, links will have ..'s added, to make the
+URIs relative to some root,
+e.g. given an 'absolutized' file (from absolutize-linkmap.xsl):
 
 <site href="">
   <community href="community/">
