@@ -223,7 +223,6 @@ public class HTMLTag implements JSComparable {
         this.file = f;
         this.line = l;
         this.startColumn = c;
-        this.charNum = charNum;
         this.endColumn = startColumn + origText.length() - 1;
         this.replaceText = replaceText;
         this.packageName = packageName;
@@ -252,7 +251,6 @@ public class HTMLTag implements JSComparable {
         this.file = f;
         this.line = l;
         this.startColumn = c;
-        this.charNum = charNum;
         this.length = length;
         this.packageName = packageName;
         this.type = TYPE_COMMENT;
@@ -272,7 +270,6 @@ public class HTMLTag implements JSComparable {
         this.file = f;
         this.line = l;
         this.startColumn = c;
-        this.charNum = charNum;
         this.length = length;
         this.packageName = packageName;
         this.type = type;
