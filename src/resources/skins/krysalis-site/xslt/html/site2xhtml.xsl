@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.13 2003/03/26 15:35:07 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -48,28 +48,33 @@ $Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
             <xsl:comment>================= start Group Logo ==================</xsl:comment>
             <td bgcolor="{$header-color}">
               <xsl:if test="$config/group-url">
+                <div class="headerlogo">
                 <xsl:call-template name="renderlogo">
                   <xsl:with-param name="name" select="$config/group-name"/>
                   <xsl:with-param name="url" select="$config/group-url"/>
                   <xsl:with-param name="logo" select="$config/group-logo"/>
                   <xsl:with-param name="root" select="$root"/>
                 </xsl:call-template>
+                </div>
+                <span class="textheader"><xsl:value-of select="$config/group-name"/></span>
               </xsl:if>
             </td>
             <xsl:comment>================= end Group Logo ==================</xsl:comment>
             <xsl:comment>================= start Project Logo ==================</xsl:comment>
-            <td bgcolor="{$header-color}" align="center" width="100%">
+            <td bgcolor="{$header-color}" align="center" >
+             <div class="headerlogo">
               <xsl:call-template name="renderlogo">
                 <xsl:with-param name="name" select="$config/project-name"/>
                 <xsl:with-param name="url" select="$config/project-url"/>
                 <xsl:with-param name="logo" select="$config/project-logo"/>
                 <xsl:with-param name="root" select="$root"/>
               </xsl:call-template>
+              </div>
             </td>
             <xsl:comment>================= end Project Logo ==================</xsl:comment>
 
             <xsl:comment>================= start Search ==================</xsl:comment>
-            <td bgcolor="{$header-color}" rowspan="2" valign="top">
+            <td class="search" align="right" bgcolor="{$header-color}" rowspan="2" valign="top">
               <xsl:if test="not($config/disable-search) or
                 $config/disable-search='false' and $config/searchsite-domain and
                 $config/searchsite-name">
@@ -89,13 +94,11 @@ $Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
                         <img src="{$spacer}" alt="" width="5" height="1" />
                         <input type="submit" value="Search" name="Search"/>
                         <br />
-                        <span class="search">
                           the <xsl:value-of select="$config/searchsite-name"/> site
                           <!-- setting search options off for the moment -->
                           <!--
                           <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
                           -->
-                        </span>
                       </td>
                       <td><img src="{$spacer}" alt="" width="1" height="1" /></td>
                     </tr>
@@ -115,7 +118,9 @@ $Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
             </td>
             <xsl:comment>================= end Search ==================</xsl:comment>
 
-            <td bgcolor="{$header-color}"><img src="{$spacer}" alt="" width="10" height="10" /></td>
+            <td align="right" bgcolor="{$header-color}"><img src="{$spacer}" alt="" width="10" height="10" />
+              <span class="textheader"><xsl:value-of select="$config/project-name"/></span>
+            </td>
           </tr>
           <tr>
             <td colspan="2" bgcolor="{$header-color}" valign="bottom">
@@ -197,7 +202,7 @@ $Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
                   </tr> 
                   <tr> 
                   <td><img src="{$spacer}" alt="" height="1" width="1" /></td>
-                  <td colspan="4" height="5">
+                  <td colspan="4" height="5" class="logos">
                   <a href="{$url}">
                     <img alt="{$name} logo" border="0">
                       <xsl:attribute name="src">
@@ -239,9 +244,9 @@ $Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
                   <td bgcolor="{$background-bars}" width="50%" align="right">
                     <!-- ============ Page navigation =========== -->
                       <span class="trail">Font size: 
-                                 &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
-                                 &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
-                                 &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
+                        &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
+                        &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+                        &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
                     </span>
                     <img src="{$spacer}" alt="" height="8" width="10" />
                   </td>
