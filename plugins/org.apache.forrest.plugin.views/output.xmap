@@ -110,7 +110,7 @@
   Get the forrest:properties of the requested contract. 
   This will determine which templates (css, head, body) we have to call later on
   -->
-   <map:match pattern="get.contract-meta.*">
+   <map:match pattern="get.contract-property.*">
      <map:generate src="cocoon:/resolve.contract.{1}"/>
      <map:transform src="resources/stylesheets/contract.property.xsl"/>
      <map:serialize type="xml"/>
@@ -153,9 +153,10 @@
 				<map:aggregate element="site">
           <map:part src="cocoon://skinconf.xml"/>
           <map:part src="cocoon://build-info"/>
-          <map:part src="cocoon://tab-{1}"/>
-          <map:part src="cocoon://menu-{1}"/>
-          <map:part src="cocoon://body-{1}"/>
+          <map:part src="cocoon://tab-{1}.html"/>
+          <map:part src="cocoon://menu-{1}.html"/>
+          <map:part src="cocoon://body-{1}.html"/>
+          <map:part src="cocoon:/prepare.view.{1}"/>
         </map:aggregate>
         <map:serialize type="xml"/>
     </map:match>
@@ -216,9 +217,9 @@
       Aggregate the forrest:properties requested by the *.fv.
       The result is an aggregation of properties which defines the templates to be call.
       -->
-    <map:match pattern="prepare.meta.*">
+    <map:match pattern="prepare.properties.*">
       <map:generate src="cocoon:/prepare.view.{1}"/>
-      <map:transform src="resources/stylesheets/prepare.meta.xsl"/>
+      <map:transform src="resources/stylesheets/prepare.properties.xsl"/>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
     </map:match>
@@ -229,7 +230,7 @@
     <map:match pattern="prepare.xhtml.*">
       <map:aggregate element="forrest:filter">
         <map:part src="cocoon:/prepare.view.{1}" />
-        <map:part src="cocoon:/prepare.meta.{1}" /> 
+        <map:part src="cocoon:/prepare.properties.{1}" /> 
       </map:aggregate>
       <map:transform src="resources/stylesheets/prepare.xhtml.xsl" >
         <map:parameter name="request" value="{1}"/>
@@ -242,7 +243,7 @@
   Here we are overriding the default skin generation.
   -->   
     <map:match pattern="*.html">
-      <map:generate src="cocoon:/{0}.page"/>
+      <map:generate src="cocoon:/{1}.page"/>
       <map:transform src="cocoon:/prepare.xhtml.{1}"/>
      	<map:serialize type="xhtml"/>
     </map:match>

@@ -77,6 +77,7 @@
 			 <alias:template name="getBody">
           <xsl:apply-templates select="/*/forrest:view"/>
 		   </alias:template>
+       
        <alias:template match="site">
         <xhtml>
       		<head>
@@ -209,10 +210,23 @@ p {margin-left: 50px}
   
   <xsl:template match="forrest:contract">
     <xsl:variable name="name" select="@name"/>
-	    <xsl:apply-templates/>
+    
     <!--Test whether there is a body template needed-->
     <xsl:if test="/*/forrest:properties/*[@body='true' and @name=$name]">
-	    <alias:call-template name="{@name}-body" />
+      <!--If next son is not forrest:properties go on-->
+      <xsl:choose>
+        <xsl:when test="not(forrest:properties[@contract=$name])">
+          <xsl:apply-templates/>
+          <alias:call-template name="{@name}-body" />
+        </xsl:when>
+        <xsl:when test="forrest:properties[@contract=$name]">
+          <alias:call-template name="{@name}-body" >
+          <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
+            <alias:with-param name="{@name}" select=".//forrest:properties[@contract='{$name}']/forrest:property[@name='{@name}']" />
+          </xsl:for-each>
+          </alias:call-template>
+        </xsl:when>
+      </xsl:choose>
     </xsl:if>
   </xsl:template>
 

@@ -26,7 +26,7 @@
   <xsl:template match="/">
     <forrest:properties >
 	    <xsl:for-each select="forrest:view//forrest:contract">
-	      <xi:include href="cocoon:/get.contract-meta.{@name}"/>
+	      <xi:include href="cocoon:/get.contract-property.{@name}"/>
 	    </xsl:for-each>
     </forrest:properties>
   </xsl:template>
