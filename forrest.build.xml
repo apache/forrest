@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 
 <!--
-Ant template-targets holding the actions forrest can peform on your project.
-Eventually all of this should be wrapped up into a Java Class and/or ant task
+FORREST SITE BUILDER
 
-This should be called by some forrest.bat or forrest.sh having a project-dir
-as its argument (. if none)
-That should be passed to here with -Dproject.home
+ - The runtime part of Forrest
+ - Contains actions Forrest can peform on any Forrest-using project.
+ - This is typically called by forrest.bat or forrest.sh
 -->
 
 
@@ -14,10 +13,11 @@ That should be passed to here with -Dproject.home
 
   <description>
     *=======================================================*
-    |   Forrest ant based site building target-templates    | 
+    |                Forrest Site Builder                   |
     *=======================================================*
                               by
                   Marc Portier (mpo@apache.org)
+                  Jeff Turner (jefft@apache.org)
   
         Call this through the ./bin/forrest.sh or *.bat
   </description>
@@ -115,8 +115,8 @@ That should be passed to here with -Dproject.home
     <filter filtersfile="${skinfilters}"/>
   </target>
 
-  <target name="init" depends="init-props, init-skinprops" description="Sets up
-    properties and filters"/>
+  <!-- Sets up properties and filters -->
+  <target name="init" depends="init-props, init-skinprops"/>
 
   <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
@@ -172,51 +172,6 @@ That should be passed to here with -Dproject.home
       <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
       <pathelement location="${tools.jar}"/>
     </path>
-  </target>
-
-
-  <!-- ===============================================================
-       Display the usage of this script. 
-       =============================================================== -->
-  <target name="usage" depends="init">
-    <echo><![CDATA[
-    Usage: This ant file holds the targets for letting the forrest 
-    project work for your project.
-
-    It is recommended that you have a FORREST_HOME environment variable
-    that points to where this ant script (and the required directories) 
-    is located.
-
-    You can call these from your project ant file like this:
-    <property environment="ENV" />
-
-    <ant antfile="($forrest.home)/forrest.build.xml" 
-         target="(your-target-of-choice)" >
-      <property name="project.home" value="."/>
-      <property name="forrest.home" value="${ENV.FORREST_HOME}"/>
-    </ant>
-    
-    Relative to project.home there will be a number of default
-    paths forrest will use to do the requested work.
-    To see these (and their use), use the nested property:
-      <property name="forrest.echo" value="true" />
-
-    To override these you could do one of:
-    - write them down in a file ${project.home}/forrest.properties
-      (using Java Property file syntax)
-    - set them as nested properties to the <ant> task.
-    - set them from the command-line, eg -Dforrest.echo=true
-
-    Targets to call:
-    [site building targets]
-    site ----------  Build your static project site.
-    webapp --------  Bundle your documents in a dynamic cocoon-based webapp to deploy.
-    `
-    [project seeding targets]
-
-    
-    TODO... COMPLETE THIS:
-    ]]></echo>
   </target>
 
 
@@ -407,6 +362,25 @@ That should be passed to here with -Dproject.home
     <delete dir="${project.site-dir}"/>
   </target>
 
+  <!-- ===============================================================
+       Checks if the current project contains Forrest docs, and sets
+       the 'project.empty' property if no docs are found.
+       =============================================================== -->
+       <target name="check-contentdir" depends="init-props">
+         <available property="project.content.present" file="${project.xdocs-dir}"
+           type="dir"/>
+       </target>
+
+       <target name="ensure-content" depends="check-contentdir"
+         unless="project.content.present">
+         <echo>
+------------------------------------------------
+This project has no content in ${project.xdocs-dir}.
+Use the 'seed' target to create a template project structure.
+------------------------------------------------
+         </echo>
+         <fail message="Project has no content"/>
+       </target>
 
   <!-- ===============================================================
        Makes the site.
@@ -418,7 +392,9 @@ That should be passed to here with -Dproject.home
        param: debuglevel for logging ${project.debuglevel}
        param: location of log-file ${project.logfile}
        =============================================================== -->
-  <target name="site" depends="init, prepare-context, clean-site, prepare-classpath">
+ <target name="site" depends="ensure-content, init, prepare-context, clean-site, prepare-classpath"
+   if="project.content.present"
+         description="Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this
          actually clears the cache, not yet clear why it is really needed? -->
     <delete dir="${project.work-dir}"/>
@@ -438,7 +414,9 @@ That should be passed to here with -Dproject.home
       <arg value="-V" />                          <!-- be verbose -->
     </java>
     <echo>
-Generation just finished. Please check the file ${project.brokenlinkfile} for any broken links in the generated site.
+Generation just finished. Please check the file
+${project.brokenlinkfile}
+for any broken links in the generated site.
     </echo>
   </target>
 
@@ -457,7 +435,9 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
        Builds a cocoon webapp for your project based on the siteplan.
        param: location to put generated webapp ${project.webapp}
        =============================================================== -->
-  <target name="webapp" depends="init, project.webapp.defined, prepare-context">
+  <target name="webapp" depends="init, project.webapp.defined, prepare-context,
+         load-project-props"
+   description="Generates a dynamic servlet-based website (an unpackaged webapp)">
     <!-- this will need revisions in the case of the siteplan
     extra project-custom classes then will need to be warred in as well. -->
     <mkdir dir="${project.webapp}/WEB-INF"/>
@@ -474,6 +454,17 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
         <include name="classes/**"/>
       </fileset>
     </copy>
+    <echo>
+---------------------------------
+Webapp generated in ${project.webapp}
+
+To run in Tomcat, add this to the config file (usu. server.xml):
+
+&lt;Context path='/${skinconfig.project-name}'
+            docBase='${project.webapp}'
+            reloadable='true'/&gt;
+---------------------------------
+    </echo>
   </target>
 
   <!-- ===============================================================
@@ -481,7 +472,8 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
        param: location of siteplan ${project.siteplan}
        param: location to put generated war ${project.war}
        =============================================================== -->
-  <target name="war" depends="init, prepare-context">
+ <target name="war" depends="init, prepare-context"
+   description="Generates a dynamic servlet-based website (an packaged .war file)">
     <!-- this will need revisions in the case of the siteplan
          extra project-custom classes then will need to be warred in as well. -->
     <war warfile="${project.war}"
@@ -546,10 +538,41 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
         dependend task for doing that alone.
         >>> filling this with stuff from smart acorn.xml idea.
        =============================================================== -->
-  <target name="seed">
+ <target name="seed"
+         description="Seeds a directory with a template project doc structure">
     <unzip src="${forrest.home}/fresh-site.zip" 
-           dest="${project.home}"
-           overwrite="false"                       />
+      dest="${project.home}"
+      overwrite="false"/>
+    <echo>
+-------------------------------
+~~ Template project created! ~~
+
+Here is an outline of the generated files:
+
+/                         # ${basedir}
+/status.xml               # File listing project developers, todo list and change log
+/forrest.properties       # Optional file describing this site's layout to Forrest
+/src/documentation/       # Doc-specific files
+/src/documentation/skinconf.xml    # Info about your project used by the skin
+/src/documentation/content/xdocs   # XML content.
+/src/documentation/content/xdocs/index.xml  # Home page
+/src/documentation/content/xdocs/book.xml   # Navigation file defining site structure
+/src/documentation/content/xdocs/tabs.xml   # Skin-specific 'tabs' file.
+/src/documentation/resources/images         # Project images (logos, etc)
+
+
+What to do now?
+
+- Try rendering this template to HTML by typing 'forrest.sh'. View the generated HTML
+  in a browser to make sure everything works.
+- Edit status.xml and src/documentation/skinconf.xml and customize for your project.
+- Replace src/documentation/resources/images/project-logo.gif with your project logo.
+- Start adding content in xdocs/, remembering to add new files to book.xml
+- Give any feedback you have to forrest-dev@xml.apache.org
+
+Thanks for using Apache Forrest
+-------------------------------
+    </echo>
   </target>
 
 
@@ -607,7 +630,7 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
   </target>
 
 
-  <target name="bot" depends="bot.conf2build, prepare-classpath" >
+  <target name="bot" depends="bot.conf2build, prepare-classpath" description="Run the ForrestBot">
     <!-- delegates to the generated XML file -->
     <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
   </target>
