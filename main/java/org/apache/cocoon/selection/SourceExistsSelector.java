@@ -20,16 +20,16 @@ import java.util.Map;
 
 import java.io.IOException;
 
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
+
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.avalon.framework.component.Composable;
 
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
-
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
 
 /**
  * Selects the first of a set of Sources that exists in the context.
@@ -57,7 +57,7 @@ import org.apache.avalon.framework.component.ComponentManager;
  * </pre>
  */
 public class SourceExistsSelector extends AbstractLogEnabled
-  implements ThreadSafe, Selector, Composable {
+  implements ThreadSafe, Selector, Serviceable {
 
     SourceResolver resolver = null;
 
@@ -65,7 +65,7 @@ public class SourceExistsSelector extends AbstractLogEnabled
      * Set the current <code>ComponentManager</code> instance used by this
      * <code>Composable</code>.
      */
-    public void compose(ComponentManager manager) throws ComponentException {
+    public void service(ServiceManager manager) throws ServiceException {
         this.resolver = (SourceResolver)manager.lookup(SourceResolver.ROLE);
     }
 

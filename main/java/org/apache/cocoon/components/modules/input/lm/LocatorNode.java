@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.service.ServiceManager;
@@ -67,7 +66,7 @@ public final class LocatorNode extends AbstractNode {
         String base = configuration.getAttribute("base", null);
         if (base != null) {
             try {
-                m_baseLocation = VariableResolverFactory.getResolver(base, new WrapperComponentManager(super.m_manager));
+                m_baseLocation = VariableResolverFactory.getResolver(base, super.m_manager);
             } catch (PatternException e) {
                 final String message = "Illegal pattern syntax for locator attribute 'base'" +
                 		" at " + configuration.getLocation();

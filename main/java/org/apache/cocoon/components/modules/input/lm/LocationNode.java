@@ -17,7 +17,6 @@ package org.apache.cocoon.components.modules.input.lm;
 
 import java.util.Map;
 
-import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.service.ServiceManager;
@@ -50,8 +49,7 @@ public class LocationNode extends AbstractNode {
     public void build(final Configuration configuration) throws ConfigurationException {
         try {
             m_src = VariableResolverFactory.getResolver(
-            		configuration.getAttribute("src"), 
-					new WrapperComponentManager(super.m_manager));
+            		configuration.getAttribute("src"), super.m_manager);
         } catch (PatternException e) {
             final String message = "Illegal pattern syntax at for location attribute 'src'" +
             		" at " + configuration.getLocation();

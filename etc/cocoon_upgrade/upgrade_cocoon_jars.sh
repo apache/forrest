@@ -17,23 +17,25 @@
 ######################################################################
 # A script for upgrading Forrest's jars with those from Cocoon.  Use at own
 # risk!  Make sure you build Cocoon before running this.  If your cocoon-2.1
-# directory is not on the same level as xml-forrest/, set the COCOON_HOME variable
-# below.
-#
+# directory is not on the same level as xml-forrest/, set the COCOON_HOME
+# variable below.
+
 cd $PWD/../../../../
 BASE=$PWD/`dirname $0`
+
 ## MUST BE OVERRIDDEN:
 COCOON_VERSION=2.2.0-dev
-COCOON_HOME=$BASE/cocoon/trunk
-FORREST=$BASE/forrest/trunk
+COCOON_HOME=$BASE/cocoon/2.2
+FORREST=$BASE/forrest/van
+
+## CAN BE OVERRIDDEN:
+JARSUFFIX=${COCOON_VERSION}-r111170
+
+## Not necessary, at least for Cocoon 2.2.x
 NEKODTD_VERSION=0.1.10
 NEKODTD_HOME=$BASE/nekodtd-$NEKODTD_VERSION
 NEKOPULL_VERSION=0.2.4
 NEKOPULL_HOME=$BASE/nekopull-$NEKOPULL_VERSION
-
-## CAN be overridden:
-#JARSUFFIX=`date +%Y%m%d`
-JARSUFFIX=$COCOON_VERSION
 
 ## We need to identify the old Cocoon jar amongst all the others.  This pattern
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
@@ -62,9 +64,19 @@ function sanity_check()
   checkdir "$FORREST" FORREST
   checkdir "$COCOON_HOME" COCOON_HOME
   checkdir "$FLIB" FLIB
-  checkdir "$NEKODTD_HOME" NEKODTD_HOME
-  checkdir "$NEKOPULL_HOME" NEKOPULL_HOME
+#  checkdir "$NEKODTD_HOME" NEKODTD_HOME
+#  checkdir "$NEKOPULL_HOME" NEKOPULL_HOME
 #
+}
+
+function remove()
+{
+  echo -n "Removing:            $1              "
+  push
+  cd $FLIB
+  rm $1*
+  pop
+  echo "done."
 }
 
 function copy()
@@ -158,7 +170,9 @@ sanity_check
 #copy_local_properties
 #build_cocoon
 
-upgrade_neko
+# Let's get rid of jars / licenses unused in latest version of cocoon
+remove jcs
+
 upgrade_endorsed
 
 #set -vx
@@ -191,8 +205,6 @@ bzcopy linkrewriter
 bzcopy lucene
 #cocoon-profiler-block-20030311.jar
 bzcopy profiler
-#jakarta-bcel needed by the wiki stuff
-copy jakarta-bcel
 #commons-collections-2.1.jar
 copy commons-collections
 #commons-jxpath-1.1b1.jar
@@ -202,7 +214,7 @@ copy commons-collections
 #excalibur-cli-1.0.jar
 copy commons-cli
 #excalibur-component-20020916.jar
-copy excalibur-component
+#copy excalibur-component
 #excalibur-concurrent-20020820.jar
 #copy excalibur-concurrent
 copy util.concurrent
@@ -218,7 +230,7 @@ copy excalibur-io
 #excalibur-logger-20020820.jar
 copy excalibur-logger
 #excalibur-monitor-20020820.jar
-copy excalibur-monitor
+#copy excalibur-monitor
 #excalibur-naming-1.0.jar
 copy excalibur-naming
 #excalibur-pool-20020820.jar
@@ -233,11 +245,11 @@ copy excalibur-xmlutil
 #bcopy fop
 #jakarta-oro-2.0.6.jar
 #jakarta-regexp-1.2.jar
-copy jakarta-regexp
+#copy jakarta-regexp
 # We'll keep our own jing thankyou
 #copy jing
 # jcs-1.0-dev-20040516.jar
-copy jcs
+#copy jcs
 #commons-logging-1.0.3.jar needed by jcs
 copy commons-logging
 #jtidy-04aug2000r7-dev.jar
@@ -249,13 +261,13 @@ bcopy lucene
 #nekodtd-20020615.jar
 #nekopull.jar
 copy xml-commons-resolver
+copy ehcache
 #xml-forrest-components.jar
 #xml-forrest-scratchpad.jar
 
 
 #######
 # New jars not in the 2003-03-11 snapshot
-copy excalibur-event
 copy util.concurrent
 
 if [ "$UPGRADE_TYPE" = "real_with_cvs" ]; then
@@ -282,5 +294,10 @@ fi
 echo "All done.  Upgraded Cocoon jars copied to:"
 echo "  $FLIB"
 echo "  $FLIB_ENDORSED"
+
+echo
+echo "Please check that licenses for each of the jars exist along side"
+echo "the jars in lib/core and lib/endorsed."
+echo
 
 # vim: set noexpandtab list:

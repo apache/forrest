@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
@@ -72,8 +71,8 @@ public abstract class AbstractNode extends AbstractLogEnabled {
             final String value = children[i].getAttribute("value");
             try {
                 parameters.put(
-                    VariableResolverFactory.getResolver(name, new WrapperComponentManager(m_manager)),
-                    VariableResolverFactory.getResolver(value, new WrapperComponentManager(m_manager)));
+                    VariableResolverFactory.getResolver(name, m_manager),
+                    VariableResolverFactory.getResolver(value, m_manager));
             } catch(PatternException pe) {
                 String msg = "Invalid pattern '" + value + "' at " 
                     + children[i].getLocation();
