@@ -49,8 +49,8 @@ References
 XMLmind XML Editor
     http://www.xmlmind.com/xmleditor/
 Apache Forrest
-    http://xml.apache.org/forrest/
+    http://forrest.apache.org/
 Instructions for other Forrest XML Editors
-    http://xml.apache.org/forrest/catalog.html
+    http://forrest.apache.org/docs/catalog.html
 XXE Custom Configuration Info
     http://www.xmlmind.com/xmleditor/_distrib/docs/configure/index.html
