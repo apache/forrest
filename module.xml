@@ -1,0 +1,77 @@
+<module name="xml-forrest">
+    <url href="http://xml.apache.org/forrest/"/>
+
+  <!-- tells forrest to kick in for the site -->
+    <forrest version="0.1">
+        <skin name="xml-apache-site" style="xml-apache-site"/>
+    <!-- other forrest available skins
+    <skin name="jakarta-site" style="jakarta-site"/>
+    <skin name="cocoon-printer" style="cocoon-printer"/>  -->
+    </forrest>
+    <cvs repository="xml"/>
+    <mailing-lists>
+        <mailing-list mail="forrest-dev@xml.apache.org"
+             subscribe="forrest-dev-subscribe@xml.apache.org"
+             unsubscribe="forrest-dev-unsubscribe@xml.apache.org"
+             user="developer"/>
+    </mailing-lists>
+    <description>Forrest provides a sound technological infrastructure for open software development for the Apache Software Foundation based on ASF software, ASF practices and experience, and modern software design principles.</description>
+    <detailed>Ever seen &apos;sourceforge&apos;? ok, than you know what a technological insfrastructure for open development is. Ever seen Mozilla&apos;s &apos;tinkerbox&apos; and &apos;bonsai&apos;? ok, then you know what we mean for &apos;helping tools&apos;. Take all the wishes/dreams that you ever had when you were participating in an OSS community... well, we want Forrest to make them possible.</detailed>
+    <what>
+        <goal>publishing system for documentation</goal>
+        <goal>analysis of logs and publishing of results</goal>
+    </what>
+    <why>If you ever participated in ASF open development you know why: there is always the feeling that you are left on your own, that each project, effort, community mail list and invidual has to struggle to keep up with the others    and to keep coherence. This effort was started by those who believe that a better and more coherent technical infrastructure is a first step in the right direction.</why>
+    <licence>This software is released under the Apache Public License 1.1.
+           For detailed legal and licensing issues, please read the LICENSE.* files
+           in the /legal directory.</licence>
+    <credits>
+        <credit>This software includes software developed by the Krysalis Project
+            (http://www.krysalis.org/).</credit>
+        <credit>This product includes software developed by CollabNet
+            (http://www.Collab.Net/).</credit>
+    </credits>
+    <project name="Forrest">
+        <version fix="0" major="0" minor="1" tag="dev"/>
+        <package>org.apache.forrest</package>
+        <ant target="gump" vm="1.2"/>
+
+    <!-- script name="build"/> -->
+
+    <!-- Project jars Forrest build strictly depends on -->
+    <!-- needed for build -->
+        <depend project="jakarta-ant"/>
+        <depend project="xml-xerces"/>
+        <depend project="xml-xalan2"/>
+        <depend project="xml-cocoon2"/>
+        <depend project="jtidy"/>
+        <depend project="junit"/>
+<!-- this causes Gump build to fail
+    <depend project="IzPress"/>
+-->
+
+    <!-- Project jars Forrest build can use  -->
+    <!-- <option project="xxx"/> -->
+
+    <!-- Work dirs to be included in classpath  -->
+        <work nested="build/xml-forrest/classes"/>
+        <work nested="build/xml-forrest/testcases"/>
+        <work nested="tools/tmp/anttasks"/>
+        <home nested="build/xml-forrest"/>
+
+    <!-- jars - the result of the build  -->
+        <jar id="poi" name="xml-forrest.jar"/>
+        <jar id="scratchpad" name="xml-forrest-scratchpad.jar"/>
+        <jar id="contrib" name="xml-forrest-contrib.jar"/>
+        <jar id="examples" name="xml-forrest-examples.jar"/>
+
+    <!-- Javadocs - location in the build dirs  -->
+        <javadoc parent="build/xml-forrest/javadocs"/>
+
+    <!-- Getting ready for automatic site updates
+    <deliver fromdir="build/xml-forrest/docs"
+             tosite="xml-apache-org"
+             todir="forrest/" />
+    -->
+    </project>
+</module>
