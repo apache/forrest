@@ -260,17 +260,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           <div class="copyright">
  			Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
           </div>
-          <div id="feedback">
-          	<xsl:value-of select="$config/feedback"/>
-          	<a id="feedbackto">
-          		<xsl:attribute name="href">
-    			    <xsl:value-of select="$config/feedback/@href"/>
-       				<xsl:value-of select="$path"/>
-          		</xsl:attribute>
-	          	<xsl:value-of select="$config/feedback/@to"/>
-          	</a>
-          	
-          </div>
+          
           <xsl:if test="$filename = 'index.html'">
             <div class="logos">
               <!-- W3C logos -->
@@ -309,6 +299,17 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               </xsl:call-template>
             </div>
           </xsl:if>
+		  <div id="feedback">
+          	<xsl:value-of select="$config/feedback"/>
+          	<a id="feedbackto">
+          		<xsl:attribute name="href">
+    			    <xsl:value-of select="$config/feedback/@href"/>
+       				<xsl:value-of select="$path"/>
+          		</xsl:attribute>
+	          	<xsl:value-of select="$config/feedback/@to"/>
+          	</a>
+          	
+          </div>
 <xsl:comment>+
     |end bottomstrip
     +</xsl:comment>
