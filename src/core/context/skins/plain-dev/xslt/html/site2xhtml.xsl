@@ -20,13 +20,7 @@
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
   
   <xsl:template match="site">
-    <html>
-      <body>
-        <!-- include ssi top --> 
-        <xsl:apply-templates select="div[@class='content']"/>
-        <!-- include ssi bottom --> 
-      </body>
-    </html>
+     <xsl:apply-templates select="html"/>
   </xsl:template>
  
  

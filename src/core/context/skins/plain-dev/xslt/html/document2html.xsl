@@ -31,81 +31,59 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
   
   <xsl:template match="document">
-    <div class="content">
-      <xsl:if test="normalize-space(header/title)!=''">
-         <h2><xsl:value-of select="header/title"/></h2>
-      </xsl:if>
-      <xsl:if test="normalize-space(header/subtitle)!=''">
-        <h3><xsl:value-of select="header/subtitle"/></h3>
-      </xsl:if>
-      <xsl:if test="header/abstract">
-        <p class="abstract">
-          <xsl:value-of select="header/abstract"/>
-        </p>
-      </xsl:if>
-
-        <xsl:apply-templates select="body"/>
-
-       <xsl:if test="header/authors">
-        <p class="authors">
+   <html>
+       <head>
+          <xsl:if test="normalize-space(header/title)!=''">
+            <title><xsl:value-of select="header/title"/></title>
+          </xsl:if>         
+          <link rel     = "schema.DC"
+               href    = "http://purl.org/DC/elements/1.0/"/>
+          <xsl:if test="normalize-space(header/subtitle)!=''">
+             <meta name    = "DC.Subject"      content = "{header/subtitle}"/>
+          </xsl:if>
+          <xsl:if test="header/authors">
             <xsl:for-each select="header/authors/person">
-              <xsl:choose>
-                <xsl:when test="position()=1">by&#160;</xsl:when>
-                <xsl:otherwise>,&#160;</xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="@name"/>
+              <meta name    = "DC.Creator"      content = "{@name}"/>
             </xsl:for-each>
-        </p>
-      </xsl:if>
-    </div>  
+          </xsl:if>
+          <xsl:if test="header/abstract">
+              <meta name    = "DC.Description"  content = "{header/abstract}"/>
+          </xsl:if>          
+       </head>
+    <body>
+      <!-- include ssi top --> 
+        <xsl:apply-templates select="body"/>
+      <!-- include ssi bottom --> 
+    </body>  
+    </html>
   </xsl:template>
 
   <xsl:template match="body">
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template name="generate-id">
-    <xsl:choose>
-      <xsl:when test="@id">
-        <xsl:value-of select="@id"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="generate-id(.)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="@id">
-    <xsl:apply-imports/>
-  </xsl:template>
-
   <xsl:template match="section">
-    <a name="{generate-id()}"/>
-
-    <xsl:apply-templates select="@id"/>
-
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
-
     <xsl:choose>
       <xsl:when test="$level=1">
-        <h3><xsl:value-of select="title"/></h3>
+        <h1><xsl:value-of select="title"/></h1>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="$level=2">
-        <h4><xsl:value-of select="title"/></h4>
+        <h2><xsl:value-of select="title"/></h2>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
-        <h4 class="faq"><xsl:value-of select="title"/></h4>
+        <h3 class="faq"><xsl:value-of select="title"/></h3>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
       <xsl:when test="$level=3">
-        <h4><xsl:value-of select="title"/></h4>
+        <h3><xsl:value-of select="title"/></h3>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
       <xsl:otherwise>
-        <h5><xsl:value-of select="title"/></h5>
+        <h4><xsl:value-of select="title"/></h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:otherwise>
     </xsl:choose>
@@ -167,24 +145,13 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   </xsl:template>
   
   <xsl:template match="table">
-    <xsl:apply-templates select="@id"/>
-    <xsl:if test="caption">
-        <h4><xsl:value-of select="caption"/></h4>
-    </xsl:if> 
-    <xsl:apply-templates select="caption"/>
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
-        <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
-        <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
-        <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
-        <xsl:if test="@class"><xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute></xsl:if>
-        <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
-      
+    <table>
         <xsl:apply-templates/>
     </table>
   </xsl:template>
 
   <xsl:template match="caption">
-    <!-- do not show caption elements, they are already in other places-->  
+    <xsl:value-of select="."/> 
   </xsl:template>
   
   <xsl:template match="title">
