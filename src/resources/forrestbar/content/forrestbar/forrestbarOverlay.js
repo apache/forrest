@@ -29,23 +29,30 @@ function navProject(searchID) {
 }
 
 function navNews() {
-	navigate('http://xml.apache.org/news.html');
+	navigate('http://www.apache.org/foundation/news.html');
 }
 
 function navDownload() {
-	navigate('http://xml.apache.org/dist/');
+	navigate('http://www.apache.org/dyn/closer.cgi');
 }
 
+function navGumpNightly() {
+	navigate('http://cvs.apache.org/builds/gump/latest/');
+}
+	
 function navCode() {
-	navigate('http://xml.apache.org/cvs.html');
+	navigate('http://cvs.apache.org/viewcvs/');
 }
 
 function navTools() {
 	navigate('http://nagoya.apache.org/');
 }
 
+function navLocalForrest() {
+	navigate('http://127.0.0.1:8888/');
+}
+
 function navAskSam() {
 	navigate('mailto:forrest-user@xml.apache.org');
 }
-
 
