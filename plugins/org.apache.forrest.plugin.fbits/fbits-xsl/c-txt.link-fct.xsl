@@ -19,37 +19,42 @@
   <description>
     This functions will output the TXT link with image and print link.
   </description>
-
-	<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	  <xsl:template name="txt" mode="xhtml-head">
-	    <head/>
-	  </xsl:template>
-	  
-	  <xsl:template name="txt" mode="xhtml-body">
-<body>
-      <script type="text/javascript" language="Javascript">
-function printit() {
-  if (window.print) {
-    window.focus();
-    window.print();
-  }
-}
-        </script>
-
-        <script type="text/javascript" language="Javascript">
-var NS = (navigator.appName == "Netscape");
-var VERSION = parseInt(navigator.appVersion);
-if (VERSION > 3) {
-  document.write('<div class="txt" title="Print this Page">');
-  document.write('  <a href="javascript:printit()" class="dida">');
-  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
-  document.write('    <br />');
-  document.write('  PRINT</a>');
-  document.write('</div>');
-}
-        </script>
-    </body>
-	  </xsl:template>
+  
+  
+  <xsl type="xhtml">
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		  <xsl:template name="txt-head">
+		    <head/>
+		  </xsl:template>
+		  
+		  <xsl:template name="txt-body">
+	<body>
+	      <script type="text/javascript" language="Javascript">
+	function printit() {
+	  if (window.print) {
+	    window.focus();
+	    window.print();
+	  }
+	}
+	        </script>
 	
-	</xsl:stylesheet>
+	        <script type="text/javascript" language="Javascript">
+	var NS = (navigator.appName == "Netscape");
+	var VERSION = parseInt(navigator.appVersion);
+	if (VERSION > 3) {
+	  document.write('<div class="txt" title="Print this Page">');
+	  document.write('  <a href="javascript:printit()" class="dida">');
+	  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
+	  document.write('    <br />');
+	  document.write('  PRINT</a>');
+	  document.write('</div>');
+	}
+	        </script>
+	    </body>
+		  </xsl:template>
+		
+		</xsl:stylesheet>
+  </xsl>
+
+	
 </forrest:contract>

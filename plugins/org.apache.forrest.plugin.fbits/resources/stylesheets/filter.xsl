@@ -14,20 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!--
-site2xml.xsl is the final stage in XML page production.  It merges HTML from
-document2html.xsl, tab2menu.xsl and book2menu.xsl, and adds the site header,
-footer, searchbar, css etc.  As input, it takes XML of the form:
-
-<elements>
-  <branding/>
-  <search/>
-  <menu/>
-  <content/>
-  <siteinfo/>
-</elements>
-
--->
 
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 

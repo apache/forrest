@@ -14,27 +14,37 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="pdf-fct" nc="pdf" tlc="content"
+<forrest:contract name="meta-nug" nc="meta" tlc=""
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This functions will output the PDF link with image.
+    This functions will output the html meta information.
   </description>
-
-	<xsl type="xhtml">
+  
+  
+  <xsl type="xhtml">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  <xsl:template name="pdf-head">
-		    <head/>
+		  <xsl:template name="meta-head">
+		    <head>
+			    <meta name="Generator" content="Apache Forrest"/>
+			    <meta name="Forrest-version">
+			      <xsl:attribute name="content">
+			        <xsl:value-of select="//info/forrest-version"/>
+			      </xsl:attribute>
+			    </meta>
+			    <meta name="Forrest-skin-name">
+			      <xsl:attribute name="content">
+			        <xsl:value-of select="//info/project-skin"/>
+			      </xsl:attribute>
+			    </meta>
+		    </head>
 		  </xsl:template>
 		  
-		  <xsl:template name="pdf-body">
-		    <body>
-		      <div id="pdf" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
-		        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF - icon"/><br/>
-		        PDF</a>
-		      </div>
-		    </body>
+		  <xsl:template name="meta-body">
+				<body/>
 		  </xsl:template>
 		
 		</xsl:stylesheet>
-	</xsl>
+  </xsl>
+
+	
 </forrest:contract>

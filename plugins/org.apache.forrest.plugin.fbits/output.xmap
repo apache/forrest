@@ -18,6 +18,7 @@
   <map:components>
     <map:generators default="file">
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.generation.JXTemplateGenerator"/>
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude"
@@ -28,7 +29,10 @@
   </map:components>
 
 <map:pipelines>
-
+<!--
+  [poc] - Proof of concept pipeline
+  you can transform xsl 
+  -->
 	<map:pipeline>
     <map:match pattern="x">
       <map:generate src="cocoon:/x-src"/>
@@ -36,42 +40,39 @@
       <map:serialize type="xml" />
     </map:match>
   </map:pipeline>
-
+<!--
+  [poc] - Proof of concept pipeline src
+  you can transform xsl input xsl
+  -->
 	<map:pipeline>
     <map:match pattern="x-src">
       <map:generate src="resources/stylesheets/test.xsl"/>
       <map:serialize type="xml" />
     </map:match>
   </map:pipeline>
-
+<!--
+  contract-transformer 
+  -->
   <map:pipeline>
-   <map:match pattern="static.get">
-     <map:generate src="fbits/c-fontsize-fct.xml"/>
-     <map:transform src="resources/stylesheets/contract.xsl"/>
+   <map:match pattern="get.fbits.*">
+     <map:generate type="jx" src="fbits-xsl/c-{1}-fct.xsl"/>
+     <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
      <map:serialize type="xml"/>
    </map:match>
   </map:pipeline>
   
-  <map:pipeline>
-   <map:match pattern="f.*.get">
-     <map:generate src="fbits/c-{1}-fct.xml"/>
-     <map:transform src="resources/stylesheets/contract.xsl"/>
-     <map:serialize type="xml"/>
-   </map:match>
-  </map:pipeline>
-
 <!-- 
-1. check all aviable fct
-2. check which fct are needed
+  
+1. check all aviable fct -> ls.fbits
+2. check which fct are needed -> is be controlled by the forrest:templates
 3. check where to place them
 4. output the xhtml
 -->
 
-<!-- XSL
-1. check all aviable fct 
--->
+<!-- ls.fbits 
+  list the default fbits-->
   <map:pipeline>
-    <map:match pattern="contracts-dir-fbits-xsl.get">
+    <map:match pattern="ls.fbits">
 		  <map:generate type="directory" src="fbits-xsl">
         <map:parameter name="depth" value="1"/>
         <!-- sorted alphabetically -->
@@ -81,8 +82,9 @@
     </map:match>
   </map:pipeline>
 
-<!--
-transform this dir-list 
+<!--ls.fbits.l
+transform this dir-list and add more information 
+
 output e.g.
 <contracts>
   <contract file-name="c-fontsize-fct.xml" css="fontsize" name="fontsize-fct">
@@ -94,23 +96,47 @@ output e.g.
 </contracts>
 -->
   <map:pipeline>
-    <map:match pattern="contracts-xsl.get">
-		  <map:generate src="cocoon:/contracts-dir-fbits-xsl.get"/>
-      <map:transform src="resources/stylesheets/dir2contracts-xsl.xsl">
+    <map:match pattern="ls.fbits.l">
+		  <map:generate src="cocoon:/ls.fbits"/>
+      <map:transform src="resources/stylesheets/ls.fbits.xsl">
         <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.fbits"/>
       </map:transform>
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
 
+<!--
+  load main forrest:view
+  -->
+	<map:pipeline>
+    <map:match pattern="view">
+      <map:generate src="src/documentation/leather.ft"/>
+      <map:serialize type="xml" />
+    </map:match>
+  </map:pipeline>
+  
  <!-- XSL
 2. check which fct are needed and include them in the output
 -->
+
+  <map:pipeline>
+    <map:match pattern="view.fbits">
+      <map:aggregate element="filter">
+        <map:part src="cocoon:/view" />
+        <map:part src="cocoon:/ls.fbits.l" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/view.filter.xsl"/>
+      <map:transform type="xinclude"/>
+      <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+<!--POINTER-->
   <map:pipeline>
     <map:match pattern="ft.get">
       <map:aggregate element="filter">
         <map:part src="src/documentation/leather.ft" />
-        <map:part src="cocoon:/contracts-xsl.get" /> 
+        <map:part src="cocoon:/ls.fbits.l" /> 
       </map:aggregate>
       <map:transform src="resources/stylesheets/ft-filter.xsl"/>
       <map:transform type="xinclude"/>
@@ -173,7 +199,7 @@ output e.g.
         <map:part src="cocoon:/contracts.get" /> 
       </map:aggregate>
       <map:transform src="resources/stylesheets/filter.xsl"/>
-      <map:transform type="xinclude"/>
+      <map:transform type="xinclude"/> 
       <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
       <map:serialize type="xml"/>
     </map:match>
@@ -182,7 +208,7 @@ output e.g.
   
 <!--f:t directly transformed to div id="@name"-->
   <map:pipeline>
-    <map:match pattern="ft.get">
+    <map:match pattern="ft.div.get">
 		   <map:generate src="src/documentation/ft-leather.xml"/>
        <map:transform src="resources/stylesheets/ft2xhtml.xsl">
           <map:parameter name="contextPath" value="{request:contextPath}"/>

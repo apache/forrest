@@ -20,19 +20,21 @@
     This functions will output the POD link with image.
   </description>
 
-	<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	  <xsl:template name="xml" mode="xhtml-head">
-	    <head/>
-	  </xsl:template>
-	  
-	  <xsl:template name="xml" mode="xhtml-body">
-	    <body>
-	      <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">
-	        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" /><br/>
-	        POD</a>
-	      </div>
-	    </body>
-	  </xsl:template>
-	
-	</xsl:stylesheet>
+	<xsl type="xhtml">
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		  <xsl:template name="xml-head">
+		    <head/>
+		  </xsl:template>
+		  
+		  <xsl:template name="xml-body">
+		    <body>
+		      <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">
+		        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" /><br/>
+		        POD</a>
+		      </div>
+		    </body>
+		  </xsl:template>
+		
+		</xsl:stylesheet>
+	</xsl>
 </forrest:contract>
