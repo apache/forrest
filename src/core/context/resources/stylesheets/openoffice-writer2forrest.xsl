@@ -96,13 +96,15 @@
     <strong>
       <xsl:apply-templates/>
     </strong>
-  </xsl:template>
+  </xsl:template>  
   <!--+
-      | Images
+      | emphasised text
       +-->
-  <xsl:template match="draw:image[@xlink:show]">
-    <img src="{@xlink:href}" alt="{@draw:name}"/>
-  </xsl:template>
+  <xsl:template match="text:span[@text:style-name='Emphasis']">
+    <em>
+      <xsl:apply-templates/>
+    </em>
+  </xsl:template>    
   <!--+
       | Code
       +-->
@@ -154,6 +156,12 @@
     <xsl:apply-templates select="text:ordered-list"/>    
   </xsl:template>
   <!--+
+      | Images
+      +-->
+  <xsl:template match="draw:image[@xlink:show]">
+    <img src="{@xlink:href}" alt="{@draw:name}"/>
+  </xsl:template>  
+  <!--+
       | Tables
       | Note (RP): need some improvement, maybe forrest-doc isn't good enough
       | for many talbe requirements ...
@@ -194,7 +202,7 @@
       <xsl:value-of select="."/>
     </link>
   </xsl:template>
-  <xsl:template match="text:a[@office:target-frame-name='_top']">
+  <xsl:template match="text:a[@office:target-frame-name='_new']">
     <jump href="{@xlink:href}" title="{@office:name}">
       <xsl:value-of select="."/>
     </jump>
