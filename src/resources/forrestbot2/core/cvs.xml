@@ -9,30 +9,47 @@
   <property name="build.cvsmodule-dir"    value="work/cvsmodules"/>
   <property name="build.work-dir"         value="work/${ant.project.name}"/>
 
-  <property name="project.root-dir" value="."/>
+  <condition property="root-dir" value="/${project.root-dir}">
+    <isset property="project.root-dir"/>
+  </condition>
+  <property name="root-dir" value=""/>
 
   <target name="getsrc">
 
     <cvspass cvsroot=":pserver:${user}@${host}:${root}" password="${password}"/>
 
-    <cvs cvsRoot=":pserver:${user}@${host}:${root}"
-      package="${module}/${project.root-dir}"
+    <echo><![CDATA[<cvs cvsRoot=":pserver:${user}@${host}:${root}"
+      package="${module}${root-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="false"
       command="checkout -l"
-      />
-
-    <loadproperties srcFile="${build.cvsmodule-dir}/${module}/${project.root-dir}/forrest.properties"/>
-    <loadproperties srcFile="${bot.home}/default-forrest.properties"/>
+      />]]></echo>
 
     <cvs cvsRoot=":pserver:${user}@${host}:${root}"
-      package="${module}/${project.root-dir}/${project.content-dir}"
+      package="${module}${root-dir}"
+      dest="${build.cvsmodule-dir}"
+      quiet="true"
+      command="checkout -l"
+      />
+
+    <echo>Loading ${build.cvsmodule-dir}/${module}${root-dir}/forrest.properties..</echo>
+    <loadproperties srcFile="${build.cvsmodule-dir}/${module}${root-dir}/forrest.properties"/>
+    <loadproperties srcFile="${bot.home}/default-forrest.properties"/>
+
+    <echo><![CDATA[<cvs cvsRoot=":pserver:${user}@${host}:${root}"
+      package="${module}${root-dir}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="false"
+      />]]></echo>
+
+    <cvs cvsRoot=":pserver:${user}@${host}:${root}"
+      package="${module}${root-dir}/${project.content-dir}"
+      dest="${build.cvsmodule-dir}"
+      quiet="true"
       />
 
     <copy todir="${build.work-dir}">
-      <fileset dir="${build.cvsmodule-dir}/${module}/${project.root-dir}"/>
+      <fileset dir="${build.cvsmodule-dir}/${module}${root-dir}"/>
     </copy>
 
   </target>
