@@ -76,18 +76,48 @@
     <delete dir="${build.dir}"/>
   </target>
 
-  <target name="release-dist-source" depends="init"
+  <target name="release-dist-src" depends="init"
     description="Makes a source release distribution">
     <mkdir dir="${dist.dir}"/>
+
+    <!-- Hackery to fix linefeeds and permissions before zipping -->
+    <patternset id="scripts">
+      <include name="**/*.bat"/>
+      <include name="**/*.sh"/>
+      <include name="**/ant"/>
+      <include name="**/forrest"/>
+    </patternset>
+
+    <patternset id="noscripts">
+      <exclude name="**/*.bat"/>
+      <exclude name="**/*.sh"/>
+      <exclude name="**/ant"/>
+      <exclude name="**/forrest"/>
+    </patternset>
+
+    <property name="tmp-scripts" location="${build.dir}/tmp/scripts"/>
+    <mkdir dir="${tmp-scripts}"/>
+    <copy todir="${tmp-scripts}">
+      <fileset dir=".">
+        <patternset refid="scripts"/>
+      </fileset>
+    </copy>
+    <fixcrlf eol="crlf" srcdir="${tmp-scripts}" includes="**/*.bat"/>
+    <fixcrlf eol="lf" srcdir="${tmp-scripts}" excludes="**/*.bat"/>
+    <chmod dir="${tmp-scripts}" perm="ugo+rx" excludes="**/*.bat"/> 
+
     <property name="release-name-src" value="${name}-${version}-src"/>
     <zip
       file="${dist.dir}/${release-name-src}.zip" >
       <zipfileset dir="." prefix="${release-name-src}">
         <exclude name="build/**"/>
+        <patternset refid="noscripts"/>
       </zipfileset>
-      <zipfileset dir="etc"  prefix="${release-name-src}" includes="RELEASE-NOTES-${version}.txt"/>
+      <zipfileset prefix="${release-name-src}" dir="${tmp-scripts}"/>
+      <zipfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
     </zip>
   </target>
+
 
   <target name="release-dist-bin" depends="init, dist-shbat" 
     description="Makes a binary release distribution">
@@ -102,7 +132,7 @@
 
   <target name="release-dist" 
     description="Makes source and binary release distributions"
-    depends="release-dist-bin, release-dist-source"/>
+    depends="release-dist-bin, release-dist-src"/>
 
 
 
