@@ -16,7 +16,6 @@
     <link>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="node()"/>
-      <xsl:apply-templates/>
     </link>
   </xsl:template>
 
