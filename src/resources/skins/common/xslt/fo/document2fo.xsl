@@ -4,7 +4,12 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
-  <xsl:output method="xml"/>
+  <!-- the skinconf file -->
+  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
+  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
+  <!-- Get the section depth to use when generating the minitoc (default is 2) -->
+  <xsl:variable name="toc-max-depth" select="number($config/toc/@level)"/>
+
   <xsl:param name="numbersections" select="'true'"/>
 
   <!-- Section depth at which we stop numbering and just indent -->
@@ -218,14 +223,8 @@
     <xsl:param name="level">0</xsl:param>
 
     <xsl:variable name="size">
-      <xsl:choose>
-        <xsl:when test="number($level) = 1">
-          <xsl:value-of select="14"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="12"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <!-- 14pt for level 1 12pt for level 2 -->
+      <xsl:value-of select="14-number($level)"/>
     </xsl:variable>
     
     <fo:block
@@ -688,6 +687,48 @@
       font-size="8pt">
       <xsl:apply-templates/>
     </fo:inline>
+  </xsl:template>
+
+  <xsl:template match="body[count(//section) != 0]">
+    <xsl:if test="$toc-max-depth > 0">
+      <fo:block font-family="serif" font-size="14pt" font-weight="bold" 
+      space-after="5pt" space-before="5pt" text-align="justify" width="7.5in"> 
+        <!-- insert i18n stuff here -->
+        <xsl:text>Table of contents</xsl:text>
+      </fo:block>
+      <fo:block font-family="sans" font-size="12pt" space-after="5pt" 
+      space-before="0pt" text-align="justify" width="7.5in">
+          <xsl:apply-templates select="section" mode="toc" />
+      </fo:block>
+    </xsl:if>
+    <xsl:apply-templates />
+  </xsl:template>
+
+  <xsl:template match="section" mode="toc">
+    <fo:block space-before="5pt" text-align-last="justify">
+      <fo:inline>
+        <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
+        <xsl:text>. </xsl:text>
+        <xsl:value-of select="title" />
+        <fo:leader leader-pattern="dots" />
+        <fo:page-number-citation ref-id="{generate-id(  )}" />
+      </fo:inline>
+        <xsl:if test="$toc-max-depth > 1">
+          <xsl:apply-templates select="section" mode="toc2" /> 
+        </xsl:if>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="section" mode="toc2">
+    <fo:block start-indent=".5em" text-align-last="justify" text-indent=".5em">
+      <fo:inline padding-start="1em">
+        <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
+        <xsl:text>. </xsl:text>
+        <xsl:value-of select="title" />
+        <fo:leader leader-pattern="dots" />
+        <fo:page-number-citation ref-id="{generate-id(  )}" />
+      </fo:inline>
+    </fo:block>
   </xsl:template>
 
 <!-- ====================================================================== -->
