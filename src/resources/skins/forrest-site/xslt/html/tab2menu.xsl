@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="resource"/>
+  <xsl:include href="dotdots.xsl"/>
   
   <xsl:template name="spacer">
     <td width="8">
@@ -14,7 +15,17 @@
           <tr>
             <td bgcolor="#B2C4E0" width="5" valign="top"><img src="skin/images/tab-left.gif" alt="" width="5" height="5" /></td>
             <td bgcolor="#B2C4E0" valign="middle">
-              <a href="/forrest/{@dir}"><font face="Arial, Helvetica, Sans-serif" size="2"><xsl:value-of select="@label"/></font></a>
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:call-template name="dotdots">
+                    <xsl:with-param name="path" select="$resource"/>
+                  </xsl:call-template>
+                  <xsl:if test="@dir != ''">
+                    <xsl:value-of select="concat(translate(normalize-space(translate(@dir, ' /', '/ ')), ' /', '/ '), '/')"/>
+                    <!-- The above expression strips duplicate and trailing /'s. Cunning :) :) -->
+                  </xsl:if>
+                </xsl:attribute>
+                <font face="Arial, Helvetica, Sans-serif" size="2"><xsl:value-of select="@label"/></font></a>
             </td>
             <td bgcolor="#B2C4E0" width="5" valign="top"><img src="skin/images/tab-right.gif" alt="" width="5" height="5" />
             </td>

@@ -77,6 +77,10 @@
 
   </map:selectors>
 -->
+  <map:actions>
+    <map:action logger="sitemap.action.request" name="request" src="org.apache.cocoon.acting.RequestParamAction"/>
+  </map:actions>
+
 
     <!--
      The different pipeline implementations
@@ -329,6 +333,14 @@
     <map:generate src="{1}/{2}.xml"/>
     <map:transform src="skins/@skin@/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
+   </map:match>
+
+   <!-- ================  Directory redirects   =========================== -->
+   <!-- Redirect any request for a directory to the directory's index.html file  -->
+   <map:match pattern="**/">
+     <map:act type="request">
+       <map:redirect-to uri="{context}/{../1}/index.html"/>
+     </map:act>
    </map:match>
 
    <!-- ================  Libre   =========================== -->

@@ -1,13 +1,25 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="resource"/>
+  <xsl:include href="dotdots.xsl"/>
   
   <xsl:template name="spacer">
     <td> | </td>
   </xsl:template>
   
   <xsl:template name="not-selected">
-      <td> <a href="/{@dir}"><xsl:value-of select="@label"/></a> </td>
+      <td>
+         <a>
+           <xsl:attribute name="href">
+             <xsl:call-template name="dotdots">
+               <xsl:with-param name="path" select="$resource"/>
+             </xsl:call-template>
+             <xsl:if test="@dir != ''">
+               <xsl:value-of select="concat(translate(normalize-space(translate(@dir, ' /', '/ ')), ' /', '/ '), '/')"/>
+             </xsl:if>
+           </xsl:attribute>
+           <xsl:value-of select="@label"/></a>
+      </td>
   </xsl:template>
   
   <xsl:template name="selected">
