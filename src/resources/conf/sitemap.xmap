@@ -17,12 +17,22 @@
   </map:generators>
 
   <map:transformers default="xslt">
+  <!--
    <map:transformer     name="xslt"      src="org.apache.cocoon.transformation.TraxTransformer">
     <use-request-parameters>false</use-request-parameters>
     <use-browser-capabilities-db>false</use-browser-capabilities-db>
    </map:transformer>
+  -->
+    <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer"
+                        logger="sitemap.transformer.xsltc"
+                        pool-max="32" pool-min="8" pool-grow="2">
+      <use-request-parameters>false</use-request-parameters>
+      <use-browser-capabilities-db>false</use-browser-capabilities-db>
+      <use-deli>false</use-deli>
+      <!-- transformer-factory>org.apache.xalan.xsltc.trax.TransformerFactoryImpl</transformer-factory -->
+    </map:transformer>
   </map:transformers>
-
+      
   <map:readers default="resource">
    <map:reader name="resource"       src="org.apache.cocoon.reading.ResourceReader"/>
   </map:readers>
@@ -61,6 +71,19 @@
 
   </map:selectors>
 -->
+
+    <!--
+     The different pipeline implementations
+  -->
+  <map:pipelines default="caching">
+     <map:pipeline name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
+     <map:pipeline name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
+     <!-- The following two can be used for profiling:
+     <map:pipeline name="profile-caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
+     <map:pipeline name="profile-noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
+     -->
+  </map:pipelines>
+  
  </map:components>
 
 <!-- =========================== Views =================================== -->

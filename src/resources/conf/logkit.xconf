@@ -49,6 +49,15 @@
       <append>false</append>
     </cocoon>
    
+    <!-- The logger for the flow layer -->
+    <cocoon id="flow">
+      <filename>${context-root}/WEB-INF/logs/flow.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
     <!--
       This log file gets only messages with log level ERROR and below.
     -->
@@ -98,6 +107,12 @@
         <log-target id-ref="error"/>
       </category>
 
+      <!-- Cocoon source repository logger -->
+      <category name="repositories" log-level="INFO">
+        <log-target id-ref="core"/>
+        <log-target id-ref="error"/>
+      </category>
+
       <log-target id-ref="core"/>
       <log-target id-ref="error"/>
     </category>
@@ -111,5 +126,10 @@
       <log-target id-ref="access"/>
       <log-target id-ref="error"/>
     </category> 
+
+    <category name="flow" log-level="DEBUG">
+      <log-target id-ref="flow"/>
+      <log-target id-ref="error"/>
+    </category>
   </categories>
 </logkit>

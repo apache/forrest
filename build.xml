@@ -244,6 +244,7 @@
       <fileset dir="${documentation.context.dir}/conf">
         <include name="sitemap.xmap"/>
         <include name="cocoon.xconf"/>
+        <include name="logkit.xconf"/>
       </fileset>
     </copy>
     <copy todir="${build.context}/WEB-INF/" filtering="on">
@@ -251,7 +252,7 @@
         <exclude name="sitemap.xmap"/>
       </fileset>
     </copy>
-
+    
     <!-- Copy libraries -->
     <copy todir="${build.context}/library/" filtering="on">
       <fileset dir="${documentation.context.dir}/library">
@@ -369,7 +370,8 @@
       <arg value="-c."/>
       <arg value="-d../docs"/>
       <arg value="-w../work"/>
-      <arg value="-l../work/cocoon.log"/>
+      <arg value="-b../brokenlinks.txt"/>      
+      <arg value="-k../work/logkit.xconf"/>
       <arg value="-u${centipede.tools.cents.forrest.loglevel}"/>
       <arg value="index.html"/>
       <classpath>
