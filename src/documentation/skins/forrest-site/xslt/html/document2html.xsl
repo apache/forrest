@@ -26,14 +26,16 @@
         </tr>
       </table>
       -->
-      <xsl:choose>
-        <xsl:when test="normalize-space(header/title)!=''">
-          <h2>
-            <xsl:value-of select="header/title"/>
-          </h2>
-        </xsl:when>
-        <xsl:otherwise>&#160;</xsl:otherwise>
-      </xsl:choose>
+      <xsl:if test="normalize-space(header/title)!=''">
+        <h2>
+          <xsl:value-of select="header/title"/>
+        </h2>
+      </xsl:if>
+      <xsl:if test="normalize-space(header/subtitle)!=''">
+        <h3>
+          <xsl:value-of select="header/subtitle"/>
+        </h3>
+      </xsl:if>
       <xsl:if test="header/authors">
         <font size="-2">
           <p>
