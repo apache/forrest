@@ -735,7 +735,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
     </tr>
   </xsl:template>
 
-
   <xsl:template match="@* | node() | comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
@@ -744,7 +743,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
   </xsl:template>
 
 </xsl:stylesheet>
-
 ]]></source>
           <p>
             Place this file in the default stylesheets directory,
@@ -755,8 +753,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
             Now we will create a project sitemap to control the
             transformation of our custom xml
             structure into the Forrest intermediate xdocs structure.
-            We need to register our new
-            DTD and associate a transformation with it.
           </p>
 <warning>
 This section of the document is currently being enhanced to reflect the
@@ -764,11 +760,37 @@ new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
 </warning>
           <note>
             The <link href="site:sitemap-ref">Sitemap
-            Reference</link> provides details on how the sitemap works, and
-            how it can be customized for specific projects.  Specifically, the
-            part to read is <link href="site:sitemap-ref/forrest_xmap">the
-            forrest.xmap section</link>.
+            Reference</link> provides details about how the sitemap works.
           </note>
+          <p>
+            Add the following as the file
+            <code>src/documentation/sitemap.xmap</code> ...
+          </p>
+          <source><![CDATA[<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+ <map:pipelines>
+  <map:pipeline>
+   <map:match pattern="**download.xml">
+    <map:generate src="{project:content.xdocs}{1}download.xml" />
+    <map:transform src="{project:resources.stylesheets}/download2document.xsl" />
+    <map:serialize type="xml"/>
+   </map:match>
+  </map:pipeline>
+ </map:pipelines>
+</map:sitemap>
+]]></source>
+          <p>
+            That will intercept the request for the body content, for only
+            this specific "download" document, and will transform it into the
+            intermediate Forrest "document" format. The normal Forrest machinery
+            will handle the aggregation with navigation menus etc. and will
+            apply the normal skin.
+          </p>
+<!--
+          <p>
+            We need to register our new
+            DTD and associate a transformation with it.
+          </p>
           <ol>
             <li>Override <code>forrest.xmap</code> in your project by copying
               <code>$FORREST_HOME/context/forrest.xmap</code> to your project's
@@ -793,6 +815,7 @@ new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
 </map:when>]]></source>
             </li>
           </ol>
+-->
             <section id="new_dtd">
               <title>Registering a new DTD</title>
               <p>
