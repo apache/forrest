@@ -18,6 +18,9 @@
       </map:transformer>
 
       <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
+        <link-attrs>href src</link-attrs>
+        <schemes>site ext</schemes>
+
         <input-module name="site">
           <input-module name="linkmap">
             <file src="{src}" reloadable="false" />
@@ -196,10 +199,7 @@
           <map:when test="content/xdocs/{1}{2}.ehtml">
             <map:generate src="content/xdocs/{1}{2}.ehtml" />
             <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
-            <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
-              <map:parameter name="link-attrs" value="href src"/>
-              <map:parameter name="schemes" value="site ext"/>
-            </map:transform>
+            <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -211,10 +211,7 @@
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="idgen"/>
         <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
-          <map:parameter name="link-attrs" value="href src"/>
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:call resource="skinit">
           <map:parameter name="type" value="document2html"/>
           <map:parameter name="path" value="/{1}{2}.xml"/>
@@ -224,9 +221,7 @@
 
       <map:match pattern="**menu-*.html">
         <map:generate src="cocoon:/{1}book-{2}.html"/>
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:call resource="skinit">
           <map:parameter name="type" value="book2menu"/>
           <map:parameter name="path" value="/{1}{2}.xml"/>
@@ -235,9 +230,7 @@
 
       <map:match pattern="**tab-*.html">
         <map:generate src="content/xdocs/tabs.xml" />
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:call resource="skinit">
           <map:parameter name="type" value="tab2menu"/>
           <map:parameter name="path" value="{1}{2}"/>
@@ -312,11 +305,7 @@
         <map:transform type="idgen"/>
         -->
         <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pdf">
-          <map:parameter name="link-attrs" value="href src"/>
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
-
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pdf"/>
         <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl">
           <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
           <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
