@@ -27,6 +27,7 @@
      <xsl:if test="not(obfuscate-mail-links)">     
        <obfuscate-mail-links>true</obfuscate-mail-links>
      </xsl:if>
+
      <!--
      <xsl:if test="not(searchsite-domain)">     
        <searchsite-domain>mydomain</searchsite-domain>
@@ -133,11 +134,84 @@
     PDF page's footer. -->
   </credits>     
   </xsl:if>
- 
+
      <xsl:copy>
-      <xsl:copy-of select="*"/>
+      <xsl:copy-of select="@*"/>
+      <xsl:copy-of select="node()[not(name(.)='colors')]"/>     
+      <xsl:apply-templates select="colors"/>
      </xsl:copy> 
+
     </xsl:template>
 
-  
+    <xsl:template match="colors">
+    <colors>
+     <xsl:if test="not(color[@name=''])">
+       <color name="header" value="#294563"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='tab-selected'])">
+      <color name="tab-selected" value="#4a6d8c"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='tab-unselected'])">
+      <color name="tab-unselected" value="#b5c7e7"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='subtab-selected'])">
+      <color name="subtab-selected" value="#4a6d8c"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='subtab-unselected'])">
+      <color name="subtab-unselected" value="#4a6d8c"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='heading'])">
+      <color name="heading" value="#294563"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='subheading'])">
+      <color name="subheading" value="#4a6d8c"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='navstrip'])">
+      <color name="navstrip" value="#cedfef"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='toolbox'])">
+       <color name="toolbox" value="#294563"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='menu'])">
+       <color name="menu" value="#4a6d8c"/>    
+     </xsl:if>  
+     <xsl:if test="not(color[@name='dialog'])">
+      <color name="dialog" value="#4a6d8c"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='body'])">
+      <color name="body" value="#ffffff"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='table'])">
+      <color name="table" value="#7099C5"/>    
+     </xsl:if>  
+     <xsl:if test="not(color[@name='table-cell'])">
+      <color name="table-cell" value="#f0f0ff"/>    
+     </xsl:if>  
+     <xsl:if test="not(color[@name='highlight'])">
+       <color name="highlight" value="#yellow"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='fixme'])">
+       <color name="fixme" value="#c60"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='note'])">
+       <color name="note" value="#069"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='warning'])">
+       <color name="warning" value="#900"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='code'])">
+       <color name="code" value="#CFDCED"/>
+     </xsl:if>  
+     <xsl:if test="not(color[@name='footer'])">
+       <color name="footer" value="#cedfef"/>
+     </xsl:if>  
+
+     <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:copy-of select="node()[name(.)='color']"/>     
+     </xsl:copy> 
+
+      </colors> 
+    </xsl:template>
+    
 </xsl:stylesheet>
