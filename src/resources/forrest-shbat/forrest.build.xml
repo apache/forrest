@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/03/15 06:21:49 $              |
+    |             $Date: 2003/03/19 07:03:52 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -395,7 +395,8 @@ FORREST SITE BUILDER
    </target>
 
   <target name="copy-xdocs" if="xdocs.present">
-    <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false">
+    <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false"
+      preservelastmodified="true">
       <fileset dir="${project.xdocs-dir}"/>
     </copy>
   </target>
@@ -638,7 +639,7 @@ for any broken links in the generated site.
     extra project-custom classes then will need to be warred in as well. -->
     <mkdir dir="${project.webapp}/WEB-INF"/>
     <copy file="${forrest.home}/WEB-INF/web.xml" todir="${project.webapp}/WEB-INF"/>
-    <copy todir="${project.webapp}">
+    <copy todir="${project.webapp}" preservelastmodified="true">
       <fileset dir="${project.ctxt-dir}" >
         <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
       </fileset>
