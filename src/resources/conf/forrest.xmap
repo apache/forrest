@@ -14,11 +14,17 @@
         <sourcetype name="document-v10">
           <document-declaration public-id="-//APACHE//DTD Documentation V1.0//EN" />
         </sourcetype>
-        <sourcetype name="document-v11">
-          <document-declaration public-id="-//APACHE//DTD Documentation V1.1//EN" />
-        </sourcetype>
         <sourcetype name="howto-v10">
           <document-declaration public-id="-//APACHE//DTD How-to V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v10">
+          <document-declaration public-id="-//APACHE//DTD Todo V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v10">
+          <document-declaration public-id="-//APACHE//DTD Changes V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="document-v11">
+          <document-declaration public-id="-//APACHE//DTD Documentation V1.1//EN" />
         </sourcetype>
         <sourcetype name="docbook-v4.2">
           <document-declaration public-id="-//OASIS//DTD DocBook XML V4.2//EN" />
@@ -46,6 +52,15 @@
 
           <map:when test="howto-v10">
             <map:transform src="resources/stylesheets/howto2document.xsl" label="content" />
+          </map:when>
+
+          <map:when test="changes-v10">
+            <map:transform src="resources/stylesheets/changesv10tochangesv11.xsl" label="content" />
+            <map:transform src="resources/stylesheets/changes2document.xsl" label="content" />
+          </map:when>
+
+          <map:when test="todo-v10">
+            <map:transform src="resources/stylesheets/todo2document.xsl" label="content" />
           </map:when>
 
           <map:when test="docbook-v4.2">
