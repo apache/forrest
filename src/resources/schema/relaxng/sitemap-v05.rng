@@ -948,19 +948,9 @@ currently sucessfully validated:
   <define name="map.action">
     <element name="map:action">
       <ref name="map.action.attlist"/>
-      <interleave>
-        <optional><ref name="create-session"/></optional>
-        <optional><ref name="store-in-session"/></optional>
-        <optional><ref name="store-in-request"/></optional>
-        <optional><ref name="store-in-cookie"/></optional>
-        <optional><ref name="locale-attribute"/></optional>
-        <optional><ref name="language-attribute"/></optional>
-        <optional><ref name="country-attribute"/></optional>
-        <optional><ref name="variant-attribute"/></optional>
-        <optional><ref name="descriptor"/></optional>
-        <optional><ref name="throw-exception"/></optional>
-        <optional><ref name="output"/></optional>
-      </interleave>
+      <zeroOrMore>
+        <ref name="anyElement"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="map.action.attlist" combine="interleave">
@@ -968,141 +958,6 @@ currently sucessfully validated:
     <ref name="name.attr"/>
     <ref name="src.attr"/>
     <ref name="component.attr"/>
-  </define>
-
-  <define name="create-session">
-    <element name="create-session">
-      <ref name="create-session.attlist"/>
-      <choice>
-        <value>yes</value>
-        <value>no</value>
-        <value>true</value>
-        <value>false</value>
-      </choice>
-    </element>
-  </define>
-  <define name="create-session.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="store-in-session">
-    <element name="store-in-session">
-      <ref name="store-in-session.attlist"/>
-      <choice>
-        <value>yes</value>
-        <value>no</value>
-        <value>true</value>
-        <value>false</value>
-      </choice>      
-    </element>
-  </define>
-  <define name="store-in-session.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="store-in-request">
-    <element name="store-in-request">
-      <ref name="store-in-request.attlist"/>
-      <choice>
-        <value>yes</value>
-        <value>no</value>
-        <value>true</value>
-        <value>false</value>
-      </choice>
-    </element>
-  </define>
-  <define name="store-in-request.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="store-in-cookie">
-    <element name="store-in-cookie">
-      <ref name="store-in-cookie.attlist"/>
-      <choice>
-        <value>yes</value>
-        <value>no</value>
-        <value>true</value>
-        <value>false</value>
-      </choice>
-    </element>
-  </define>
-  <define name="store-in-cookie.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="locale-attribute">
-    <element name="locale-attribute">
-      <ref name="locale-attribute.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="locale-attribute.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="language-attribute">
-    <element name="language-attribute">
-      <ref name="language-attribute.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="language-attribute.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="country-attribute">
-    <element name="country-attribute">
-      <ref name="country-attribute.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="country-attribute.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="variant-attribute">
-    <element name="variant-attribute">
-      <ref name="variant-attribute.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="variant-attribute.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="descriptor">
-    <element name="descriptor">
-      <ref name="descriptor.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="descriptor.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="throw-exception">
-    <element name="throw-exception" a:defaultValue="false">
-      <ref name="throw-exception.attlist"/>
-      <choice>
-        <value>yes</value>
-        <value>no</value>
-        <value>true</value>
-        <value>false</value>
-      </choice>
-    </element>
-  </define>
-  <define name="throw-exception.attlist" combine="interleave">
-    <ref name="universal.attr"/>
-  </define>
-
-  <define name="output">
-    <element name="output-module">
-      <ref name="output.attlist"/>
-      <data type="string" />
-    </element>
-  </define>
-  <define name="output.attlist" combine="interleave">
-    <ref name="universal.attr"/>
   </define>
 
 <!-- =============================================================== -->
@@ -1300,6 +1155,9 @@ currently sucessfully validated:
   <define name="map.select">
     <element name="map:select">
       <ref name="map.select.attlist"/>
+      <zeroOrMore>
+        <ref name="map.parameter"/>
+      </zeroOrMore>
       <zeroOrMore>
         <ref name="map.when"/>
       </zeroOrMore>
