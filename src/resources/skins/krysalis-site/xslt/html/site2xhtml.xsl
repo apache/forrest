@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.7.2.1 2003/02/09 14:24:31 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -309,7 +309,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
         <xsl:call-template name="compliancy-logos"/>
 
         <xsl:if test="$filename = 'index.html' and $config/credits">
-          <xsl:for-each select="$config/credits/credit">
+          <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
             <xsl:variable name="name" select="name"/>
             <xsl:variable name="url" select="url"/>
             <xsl:variable name="image" select="image"/>
