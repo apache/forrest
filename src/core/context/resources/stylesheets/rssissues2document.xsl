@@ -23,9 +23,9 @@
     </header>
     <body>
       <note>These are the open issues for our upcoming release listed in our
-       <link href="http://issues.cocoondev.org/jira/secure/BrowseProject.jspa?id=10000">issue tracking system</link>
+       <link href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">issue tracking system</link>
        (see 
-       <link href="http://issues.cocoondev.org/jira/secure/IssueNavigator.jspa?pid=10000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
+       <link href="http://issues.cocoondev.org/secure/IssueNavigator.jspa?pid=10000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
       The listing below is regenerated on each Forrest run.</note>
       <xsl:apply-templates select="channel/item"/>
     </body>
