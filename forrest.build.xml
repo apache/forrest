@@ -60,7 +60,6 @@ FORREST SITE BUILDER
     <property name="project.work-dir"    value="${project.temp-dir}/work"      />
     <property name="project.ctxt-dir"    value="${project.temp-dir}/context"   />
 
-    <property name="project.logfile"     value="${project.temp-dir}/forrest.log"/>
     <property name="project.brokenlinkfile" value="${project.temp-dir}/brokenlinks.txt"/>
     <property name="project.debuglevel"  value="ERROR"                         />
     <property name="project.start-uri"   value="index.html"                    />
@@ -68,6 +67,7 @@ FORREST SITE BUILDER
     <!-- odd one in the list: forrest provides this, 
          project now has a means to override it? -->
     <property name="project.configfile"  value="${forrest.home}/WEB-INF/cocoon.xconf"/>
+    <property name="project.logkitfile"  value="${forrest.home}/WEB-INF/logkit.xconf"/>
 
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
@@ -81,6 +81,7 @@ FORREST SITE BUILDER
     <property name="project.skins-dir"   value="${project.content-dir}/skins" />
     <property name="project.skinconf"    value="${project.content-dir}/skinconf.xml" />
     <available property="project.skinconf.present" file="${project.skinconf}" type="file"/>
+    <property name="project.conf-dir"     value="${project.content-dir}/conf" />
     <property name="project.lib-dir"     value="${project.content-dir}/lib" />
     <property name="project.classes-dir" value="${project.content-dir}/classes" />
 
@@ -136,6 +137,8 @@ FORREST SITE BUILDER
       | project.siteplan    = ${project.siteplan} 
       | //cocoon.xconf location
       | project.configfile  = ${project.configfile}
+      | //logkit.xconf location
+      | project.logkitfile  = ${project.logkitfile}
       | //temp dir to throw stuf in (i.e. work and ctxt)
       | project.temp-dir    = ${project.temp-dir} 
       | //temp working directory for generation process
@@ -144,8 +147,6 @@ FORREST SITE BUILDER
       | project.ctxt-dir    = ${project.ctxt-dir} 
       | //debuglevel for logging (INFO, DEBUG, WARN, ERROR, FAIL)
       | project.debuglevel  = ${project.debuglevel}
-      | //logfile location
-      | project.logfile     = ${project.logfile}
       | //list of broken links put in:
       | project.brokenlinkfile = ${project.brokenlinkfile}
       | //check if you have tools.jar installed.
@@ -254,11 +255,12 @@ FORREST SITE BUILDER
        param: location to find project descriptors == ${project.home} 
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
-  <target name="project-context" depends="init, bare-context, examine-proj, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib,
+  <target name="project-context" depends="init, bare-context, examine-proj, copy-conf, copy-sitemap,
+    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="examine-proj">
+    <available property="conf.present" file="${project.conf-dir}" type="dir"/>
     <available property="sitemap.present" file="${project.sitemap}"/>
     <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
     <available property="images.present" file="${project.images-dir}" type="dir"/>
@@ -270,6 +272,13 @@ FORREST SITE BUILDER
     <available property="skinconf.present" file="${project.skinconf}"/>
     <available property="status.present" file="${project.status}"/>
   </target>
+
+  <target name="copy-conf" if="conf.present">
+    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.conf-dir}"/>
+    </copy>
+ </target>
 
   <target name="copy-sitemap" if="sitemap.present">
     <copy file="${project.sitemap}" toDir="${project.ctxt-dir}" filtering="true"
@@ -371,6 +380,16 @@ FORREST SITE BUILDER
            type="dir"/>
        </target>
 
+       <target name="ensure-nocontent" depends="check-contentdir"
+         if="project.content.present">
+         <echo>
+------------------------------------------------
+This project already has content in ${project.xdocs-dir}.
+------------------------------------------------
+         </echo>
+         <fail message="Project already has content"/>
+       </target>
+
        <target name="ensure-content" depends="check-contentdir"
          unless="project.content.present">
          <echo>
@@ -390,7 +409,7 @@ Use the 'seed' target to create a template project structure.
        param: location to make temporary context-dir ${project.ctxt-dir} 
        param: location to make temporary work-dir ${project.content-dir}
        param: debuglevel for logging ${project.debuglevel}
-       param: location of log-file ${project.logfile}
+       param: location of log-file ${project.logkitfile}
        =============================================================== -->
  <target name="site" depends="ensure-content, init, prepare-context, clean-site, prepare-classpath"
    if="project.content.present"
@@ -406,17 +425,22 @@ Use the 'seed' target to create a template project structure.
       <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
       <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
       <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
-      <arg value="-l${project.logfile}"/>    <!-- log of processing -->
       <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
       <arg value="-C${project.configfile}"/>      <!-- cocoon.xconf file to use -->
       <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
+      <arg value="-k${project.logkitfile}"/>  <!-- output list of broken links -->
       <arg value="${project.start-uri}"/>              <!-- starting page -->
       <arg value="-V" />                          <!-- be verbose -->
     </java>
     <echo>
-Generation just finished. Please check the file
+------------------------------
+Static site generated at:
+  ${project.site-dir}
+
+Please check the file
 ${project.brokenlinkfile}
 for any broken links in the generated site.
+------------------------------
     </echo>
   </target>
 
@@ -538,7 +562,7 @@ To run in Tomcat, add this to the config file (usu. server.xml):
         dependend task for doing that alone.
         >>> filling this with stuff from smart acorn.xml idea.
        =============================================================== -->
- <target name="seed"
+ <target name="seed" depends="ensure-nocontent"
          description="Seeds a directory with a template project doc structure">
     <unzip src="${forrest.home}/fresh-site.zip" 
       dest="${project.home}"

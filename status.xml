@@ -52,11 +52,6 @@
      facility - replacement for */book.xml
     </action>
     <action context="code" dev="open">
-     PDF generation is not working for every document, because the sitemap.xmap
-     is missing some matches for special documents (faq, changes, todo, doclist)
-     and also the match for documents in sub-directories is not working.
-    </action>
-    <action context="code" dev="open">
      Images (&lt;figure&gt;) are not yet handled by the PDF generation.
      see <code>skins/forrest-site/xslt/fo/document2fo.xsl</code> and email
      <link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102725960101549">Re: document2Fo.xsl</link>
@@ -99,7 +94,18 @@
 
   <changes>
    <release version="0.1" date="2002">
-    <action dev="JT" type="fix" context="build">
+    <action dev="JT" type="fix" context="code">
+     Fixed a bug where the log files weren't being created. Thanks to Vladimir
+     Bossicard for reporting.
+    </action>
+    <action dev="JT" type="add" context="code">
+     User projects can now override the default cocoon.xconf and logkit.xconf files,
+     by placing these files in src/documentation/conf
+    </action>
+    <action dev="JT" type="fix" context="docs">
+     PDFs for faq, changes and todo now work.
+    </action>
+     <action dev="JT" type="fix" context="build">
      "Change History" images (update.jpg, add.jpg etc) are now provided by
      default by Forrest (in images/), and need not be supplied by user projects.
     </action>
