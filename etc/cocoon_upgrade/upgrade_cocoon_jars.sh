@@ -196,7 +196,8 @@ copy jakarta-bcel
 #commons-collections-2.1.jar
 copy commons-collections
 #commons-jxpath-1.1b1.jar
-copy commons-jxpath
+# Remove for now, it brakes external links
+#copy commons-jxpath
 #commons-lang-1.0.1.jar
 #excalibur-cli-1.0.jar
 copy commons-cli
