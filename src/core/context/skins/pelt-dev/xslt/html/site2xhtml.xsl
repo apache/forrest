@@ -465,6 +465,43 @@ document.write("Last Published: " + document.lastModified);
       </div>
     </xsl:if>
   </xsl:template>
+<xsl:template match="div[@id='skinconf-toc-page']">
+    <xsl:if test="$config/toc">
+      <xsl:if test="contains($minitoc-location,'page')">
+        <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="//tocitems"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="minitoc">  
+    <xsl:param name="tocroot"/>
+    
+    
+    <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
+    <xsl:if test="contains($config/toc/@location,'page')"> 
+	<div id="minitoc-area">
+      <ul id="minitoc">
+        <xsl:for-each select="$tocroot/tocitem">
+          <li>
+            <a href="{@href}">
+              <xsl:value-of select="@title"/>
+            </a>
+            <xsl:if test="@level&lt;//skinconfig/toc/@max-depth+1">
+              <xsl:call-template name="minitoc">
+                <xsl:with-param name="tocroot" select="."/>
+              </xsl:call-template>
+            </xsl:if>
+          </li>
+        </xsl:for-each>
+      </ul>
+	</div>
+    </xsl:if>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>

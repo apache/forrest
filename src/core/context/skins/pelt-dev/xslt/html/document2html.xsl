@@ -54,14 +54,65 @@ imported document2html.xsl for details.
       
     </div>
   </xsl:template>
+  <xsl:template match="body">
+    <div id="skinconf-toc-page"/>
+    <xsl:apply-templates/>
+  </xsl:template>
   
+  
+  <xsl:template match="@id">
+    <xsl:apply-imports/>
+  </xsl:template>
+
   <xsl:template match="section">
-    <!-- count the number of section in the ancestor-or-self axis to compute
-         the title element name later on -->
-    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
     <a name="{generate-id()}"/>
     <xsl:apply-templates select="@id"/>
-    <!-- generate a title element, level 1 -> h2, level 2 -> h3 and so on... -->
+
+    <xsl:variable name = "level" select = "count(ancestor::section)+1" />
+
+    <xsl:choose>
+      <xsl:when test="$level=1">
+        <div class="skinconf-heading-{$level}">
+          <h1><xsl:value-of select="title"/></h1>
+        </div>
+        <div class="section"><xsl:apply-templates/></div>  
+      </xsl:when>
+      <xsl:when test="$level=2">
+        <div class="skinconf-heading-{$level}">
+          <h1><xsl:value-of select="title"/></h1>
+        </div>
+        <xsl:apply-templates select="*[not(self::title)]"/>
+      </xsl:when>
+      <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
+      <xsl:when test="$level=3 and $notoc='true'">
+        <h4 class="faq"><xsl:value-of select="title"/></h4>
+        <div align="right"><a href="#{@id}-menu">^</a></div>
+        <div style="margin-left: 15px">
+          <xsl:apply-templates select="*[not(self::title)]"/>
+        </div>
+      </xsl:when>
+      <xsl:when test="$level=3">
+        <h4><xsl:value-of select="title"/></h4>
+        <xsl:apply-templates select="*[not(self::title)]"/>
+
+      </xsl:when>
+
+      <xsl:otherwise>
+        <h5><xsl:value-of select="title"/></h5>
+        <xsl:apply-templates select="*[not(self::title)]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+
+  </xsl:template>  
+  
+  
+  <!--xsl:template match="section"-->
+    <!-- count the number of section in the ancestor-or-self axis to compute
+         the title element name later on -
+    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
+    <a name="{generate-id()}"/>
+    <xsl:apply-templates select="@id"/-->
+    <!-- generate a title element, level 1 -> h2, level 2 -> h3 and so on... -
     <xsl:element name="{concat('h',$sectiondepth + 1)}">
       <xsl:value-of select="title"/>
       <xsl:if test="$notoc='true' and $sectiondepth = 3">
@@ -70,7 +121,7 @@ imported document2html.xsl for details.
     </xsl:element>
 
     <xsl:apply-templates select="*[not(self::title)]"/>
-  </xsl:template>
+  </xsl:template-->
   
   <!-- Generates the "printer friendly version" link -->
   <!--xsl:template name="printlink">
