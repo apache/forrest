@@ -159,17 +159,21 @@
         </map:act>
         <map:act type="resource-exists">
           <map:parameter name="url" value="content/xdocs/{1}.cwiki" />
-          <map:generate type="text2xml" src="content/xdocs/{../1}.cwiki" />
-          <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
-          <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
-          <!--  Dynamically generated equivalents.  Matchers need to be added to
-          the root sitemap for this to work.
-          <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-          <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-          -->
-          <map:transform src="resources/stylesheets/wiki2document.xsl"/>
-          <map:transform type="idgen" />
-          <map:serialize type="xml"/>
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="content/xdocs/{1}{2}.cwiki" />
+            <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
+            <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
+            <!--  Dynamically generated equivalents.  Matchers need to be added to
+            the root sitemap for this to work.
+            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+            -->
+            <map:transform src="resources/stylesheets/wiki2document.xsl">
+              <map:parameter name="name" value="{2}" />
+            </map:transform>
+            <map:transform type="idgen" />
+            <map:serialize type="xml"/>
+          </map:match>
         </map:act>
 
         <map:generate src="content/xdocs/{1}.xml" />
