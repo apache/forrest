@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
 <document>
   <header>
@@ -15,50 +30,55 @@
     <section>
       <title>The way it works...</title>
       <p>
-        Now let us go into it...
+         You have to define your own sitemap.xmap and create a new foo.xmap based on the aggregate.xmap.
       </p>
       <ol>
         <li>
-          Change to the <code>[project]/src/documentation</code> directory.
+          Simply copy the sitemap.xmap that you wish to over-ride, from Forrest sitemaps at ${FORREST_HOME}/src/core/context/sitemap.xmap into your src/documentation directory (or wherever ${project.sitemap-dir} points to).
         </li>
         <li>
-          You have to define your own aggregate.xmap. 
-          Simply copy the relevant sitemaps that you wish to over-ride, from Forrest sitemaps at forrest/src/core/context/*.xmap into your src/documentation directory (or wherever ${project.sitemap-dir} points to).
-          Copy aggregate.xmap to e.g. foo.xmap.
+          Then copy the aggregate.xmap from Forrest sitemaps into your ${project.sitemap-dir} and rename it to foo.xmap.
         </li>
         <li>
-          Edit the file <code>sitemap.xmap</code> and insert the following lines after the &lt;map:match pattern="site.xml"&gt;
+          <strong>Edit the file <code>sitemap.xmap</code></strong> - Comment the match for the sitemap like this:
+          <source xml:space="preserve"><![CDATA[
+      <!--map:pipeline internal-only="false">
+      <map:select type="exists">
+        <map:when test="{project:sitemap}">
+          <map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
+        </map:when>  
+      </map:select>
+      </map:pipeline-->]]>
+          </source>
+          
+         Insert the following lines after the <![CDATA[<map:match pattern="site.xml">]]>
           pipeline (around line 194):
-          <source xml:space="preserve">
-          <![CDATA[ 
+          <source xml:space="preserve"><![CDATA[
 ...
-&lt;map:match pattern="foo.xml"&gt;
-   &lt;map:mount uri-prefix="" src="foo.xmap" check-reload="yes" /&gt;
-&lt;/map:match&gt;
-...
-]]>
+<map:match pattern="foo.xml">
+   <map:mount uri-prefix="" src="foo.xmap" check-reload="yes" />
+</map:match>
+...]]>
           </source>
         </li>
         <li>
-          Edit the file <code>foo.xmap</code>; the <![CDATA[&lt;map:match pattern="*.xml"&gt; ]]>element should look like the
+          Edit the file <code>foo.xmap</code>; the <![CDATA[<map:match pattern="*.xml"> ]]>element should look like the
           following:
-         <source xml:space="preserve">
-         <![CDATA[
-&lt;map:match pattern="*.xml"&gt;
-  &lt;map:generate src="cocoon://abs-linkmap"/&gt;
-  &lt;map:transform type="xpath"&gt;
-     &lt;map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/&gt;
-  &lt;/map:transform&gt;
-  &lt;map:transform src="resources/stylesheets/site2book.xsl" /&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl"&gt;
-     &lt;map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/&gt;
-  &lt;/map:transform&gt;
-  &lt;map:transform type="cinclude"/&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/&gt;
-  &lt;map:serialize type="xml"/&gt;
-&lt;/map:match&gt;
-]]>
+         <source xml:space="preserve"><![CDATA[
+<map:match pattern="*.xml">
+  <map:generate src="cocoon://abs-linkmap"/>
+  <map:transform type="xpath">
+     <map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/>
+  </map:transform>
+  <map:transform src="resources/stylesheets/site2book.xsl" />
+  <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
+     <map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/>
+  </map:transform>
+  <map:transform type="cinclude"/>
+  <map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/>
+  <map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/>
+  <map:serialize type="xml"/>
+</map:match>]]>
           </source>
         </li>
         <li>
@@ -67,50 +87,47 @@
             <li>
                Line 4 of our example
               <br/>
-              <code><![CDATA[&lt;map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/&gt;]]></code>
+              <code><![CDATA[<map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/>]]></code>
               looks at your site.xml and finds something like:
-              <source xml:space="preserve">
-              <![CDATA[
+              <source xml:space="preserve"><![CDATA[
 ...
-&lt;MyFooSite label="Your foo site"&gt;
-  &lt;firstchapter label="Introduction" href="first.html"/&gt;
-  &lt;sec_chapter label="Conclusion" href="second.html/&gt;
-&lt;/MyFooSite&gt;
-...
-]]>
+<MyFooSite label="Your foo site">
+  <firstchapter label="Introduction" href="first.html"/>
+  <sec_chapter label="Conclusion" href="second.html"/>
+</MyFooSite>
+...]]>
               </source>
-              So it takes all the elements of <code><![CDATA[&lt;MyFooSite&gt;]]></code> - that means <code><![CDATA[&lt;MyFootSite&gt;]]></code>
+              So it takes all the elements of <code><![CDATA[<MyFooSite>]]></code> - that means <code><![CDATA[<MyFootSite>]]></code>
               and its "children" - for the content of the pdf-file to generate.
             </li>
             <li>
               Line 8 defines the title of the pdf-file by taking the content of the project-name variable in
               <code>skinconf.xml</code> and adding some funny text:
               <br/>
-              <code><![CDATA[&lt;map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/&gt;]]></code>
+              <code><![CDATA[<map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/>]]></code>
             </li>
           </ul>
           <note>
             In the original <code>aggregate.xmap</code> there is the line
             <br/>
-            <code><![CDATA[&lt;map:parameter name="ignore" value="{1}"/&gt;]]></code>
+            <code><![CDATA[<map:parameter name="ignore" value="{1}"/>]]></code>
             <br/>
-            just before the title definition (<code><![CDATA[&lt;map:parameter name="title" value=".../&gt;]]></code>). Be sure to
+            just before the title definition (<code><![CDATA[<map:parameter name="title" value=".../>]]></code>). Be sure to
             delete it or comment it out if you like to generate a pdf-file for specific sites. You only need it for
             the generation of one pdf-file for the whole project (this is what <code>aggregate.xmap</code> usually does).
           </note>
         </li>
         <li>
           In site.xml, add something like
-          <source xml:space="preserve">
-          <![CDATA[
-&lt;all&gt;
-  &lt;whole_foosite href="FooSite.pdf"/&gt;
-&lt;/all&gt;
+          <source xml:space="preserve"><![CDATA[
+<all label="Your foo site" >
+  <whole_foosite href="foo.html" label="sub site" />
+</all>
 ]]>
           </source>
-          This allows you to link to it via a <code><![CDATA[&lt;link href="site:whole_foosite"&gt;]]></code> reference. If you need
-          it in the menue entries add the label attribute to the <code><![CDATA[&lt;whole_foosite&gt;]]></code> element:
-          <code><![CDATA[&lt;whole_foosite label="My first PDF-file" href="FooSite.pdf"/&gt;]]></code>
+          This allows you to link to it via a <code><![CDATA[<link href="site:whole_foosite">]]></code> reference. If you need
+          it in the menue entries add the label attribute to the <code><![CDATA[<whole_foosite>]]></code> element:
+          <code><![CDATA[<whole_foosite label="My first PDF-file" href="FooSite.pdf"/>]]></code>
         </li>
       </ol>
       <p>
