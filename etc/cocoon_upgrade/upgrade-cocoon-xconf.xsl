@@ -126,7 +126,7 @@
       <xsl:copy-of select="component-instance[@name='defaults']/@class"/>
       <xsl:element name="values">
         <skin>@skin@</skin>
-        <skinconf>@project.home@/@project.skinconf@</skinconf>
+        <skinconf>@project.webapp@/skinconf.xml</skinconf>
         <doc>@project.home@/@project.content-dir@/</doc>
         <content>@project.home@/@project.raw-content-dir@/</content>
         <content.xdocs>@project.home@/@project.xdocs-dir@/</content.xdocs>
