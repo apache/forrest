@@ -53,6 +53,6 @@ function navLocalForrest() {
 }
 
 function navAskSam() {
-	navigate('mailto:forrest-user@xml.apache.org');
+	navigate('http://search.apache.org/');
 }
 
