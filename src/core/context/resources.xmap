@@ -38,9 +38,7 @@ $Revision: 1.13 $
          <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer" />
          <map:serializer name="text"   mime-type="text/plain"  src="org.apache.cocoon.serialization.TextSerializer"/>
       </map:serializers>
-      <map:transformers default="xslt">
-        <map:transformer name="skinconf" src="org.apache.forrest.skinconf.SkinconfTransformer"/>
-      </map:transformers>
+      <map:transformers default="xslt"/>
       <map:readers default="resource" />
       <map:matchers default="wildcard" />
       <map:selectors default="browser" />
@@ -157,7 +155,7 @@ $Revision: 1.13 $
       </map:resource>
 
       <map:resource name="pipe-svg2png-corner-resource">
-        <map:generate src="cocoon:/skin/skinconf.xml" />
+        <map:generate src="cocoon://skinconf.xml" />
         <map:transform src="{path}">
             <map:parameter name="orientation-tb" 
                          value="{orientation-tb}"/>
@@ -177,7 +175,7 @@ $Revision: 1.13 $
       </map:resource>
       
       <map:resource name="generate-resource">
-        <map:generate src="cocoon:/skin/skinconf.xml" />
+        <map:generate src="cocoon://skinconf.xml" />
         <map:transform src="{path}"/>
       </map:resource>
       
@@ -191,25 +189,6 @@ $Revision: 1.13 $
    
    <map:pipelines>
        
-      <map:pipeline internal-only="false">
-         <map:match pattern="**skin/skinconf.xml">
-           <map:generate src="{project:skinconf}" />
-           <map:select type="exists">
-             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
-               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
-           <map:select type="exists">
-             <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
-               <map:transform src="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
-           <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
-           <map:transform type="skinconf"/>
-           <map:serialize type="xml" />
-         </map:match>
-       </map:pipeline>
-               
        <map:pipeline>
          <map:match pattern="**skin/**.js">
             <map:call resource="skin-read">

@@ -40,6 +40,9 @@ $Revision: 1.12 $
     </map:generators>
 
     <map:transformers default="xslt">
+      <!-- Add values to skinconf that need extra processing like the color shades -->
+      <map:transformer name="skinconf" src="org.apache.forrest.skinconf.SkinconfTransformer"/>
+              
       <!-- Generates @id attributes from <title> strings -->
       <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
         <element>//*[local-name() = 'section']</element>
@@ -211,19 +214,26 @@ $Revision: 1.12 $
   <!-- =========================== Pipelines ================================= -->
   <map:pipelines>
 
-    <map:pipeline internal-only="false">
-      <map:match pattern="skinconf.xml">
-        <map:generate src="{project:skinconf}" />
-        <map:serialize type="xml" />
-      </map:match>
-    </map:pipeline>
+      <map:pipeline internal-only="false">
+         <map:match pattern="skinconf.xml">
+           <map:generate src="{project:skinconf}" />
+           <map:select type="exists">
+             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
+               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
+             </map:when>
+           </map:select>
+           <map:select type="exists">
+             <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
+               <map:transform src="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl"/>
+             </map:when>
+           </map:select>
+           <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+           <map:transform type="skinconf"/>
+           <map:serialize type="xml" />
+         </map:match>
+       </map:pipeline>
 
     <map:pipeline internal-only="false">
-
-      <map:match pattern="**skinconf.xml">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>  
-        
       <!-- ============================================================ -->
       <!-- SOURCE FORMATS                                               -->
       <!--                 Raw XML sources, typically doc-v12 format    -->
