@@ -310,9 +310,9 @@
 	  	        <!-- Strip -->
 	            <xsl:apply-templates/>
 		    </xsl:otherwise>
-	       </xsl:choose>
+	    </xsl:choose>
     
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="./*"/>
     </xsl:template>
 
     <xsl:template match="@*|*|text()|processing-instruction()|comment()">
