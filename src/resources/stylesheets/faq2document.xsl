@@ -28,10 +28,14 @@
 
   <xsl:template match="part" mode="index">
     <li>
+	  <xsl:attribute name="id">
+        <xsl:call-template name="generate-id"/><xsl:text>-menu</xsl:text>
+	  </xsl:attribute>
       <link>
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
         </xsl:attribute>
+	  <xsl:number level="multiple" count="faq|part" format="1.1. "/>
        <xsl:apply-templates select="title"/>
       </link>
        <ul>
@@ -42,6 +46,9 @@
 
   <xsl:template match="faq" mode="index">
     <li>
+	  <xsl:attribute name="id">
+        <xsl:call-template name="generate-id"/><xsl:text>-menu</xsl:text>
+	  </xsl:attribute>
       <link>
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
@@ -52,25 +59,29 @@
   </xsl:template>
 
   <xsl:template match="part">
-    <section>
-      <xsl:attribute name="id">
-        <xsl:call-template name="generate-id"/>
-      </xsl:attribute>
+    <xsl:variable name="id">
+      <xsl:call-template name="generate-id"/>
+    </xsl:variable>
+    <section id="{$id}">
       <title>
-      <xsl:value-of select="title"/>
-     </title>
+        <xsl:number level="multiple" count="faq|part" format="1.1. "/>
+        <xsl:value-of select="title"/>
+      </title>
       <xsl:apply-templates select="faq|part"/>
     </section>
   </xsl:template>
 
   <xsl:template match="faq">
-    <section>
-      <xsl:attribute name="id">
-        <xsl:call-template name="generate-id"/>
-      </xsl:attribute>
-     <title>
-      <xsl:value-of select="question"/>
-     </title>
+    <xsl:variable name="id">
+      <xsl:call-template name="generate-id"/>
+    </xsl:variable>
+
+    <section id="{$id}">
+      <title>
+        <xsl:number level="multiple" count="faq|part" format="1.1. "/>
+        <xsl:value-of select="question"/>
+      </title>
+      <link href="#{$id}-menu">^</link>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
