@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+<map:components>
+  <map:serializers>
+    <map:serializer logger="sitemap.serializer.sxw"  mime-type="application/vnd.sun.xml.writer" name="sxw" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+    <map:serializer logger="sitemap.serializer.sxc"  mime-type="application/vnd.sun.xml.calc" name="sxc" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+    <map:serializer logger="sitemap.serializer.sxd"  mime-type="application/vnd.sun.xml.draw" name="sxd" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+    <map:serializer logger="sitemap.serializer.sxi"  mime-type="application/vnd.sun.xml.impress" name="sxi" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+  </map:serializers>
+</map:components>
+
+<map:pipelines>
+
+  <map:pipeline>
+
+    <!-- FIXME: check there isn't a RAW sxi file available -->
+    <map:match type="regexp" pattern="^(.*?)([^/]*).sxi$">
+      <map:generate src="cocoon://{1}{2}.xml"/>
+      <map:transform type="xsltc" src="resources/stylesheets/xdoc2sxi.xsl"/>
+      <map:serialize type="sxi"/>
+    </map:match>  
+  
+  </map:pipeline>
+</map:pipelines>
+
+</map:sitemap>

@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="local-deploy" basedir="." name="Forrest_Plugins_build_file">
+  <property environment="env"/>
+  <property name="forrest.home"               location="${env.FORREST_HOME}"/>   
+  <property name="forrest.core"               location="${env.FORREST_HOME}/main" />  
+  <property name="forrest.ant.lib.dir"        location="${forrest.home}/tools/ant/lib"/>  
+  <property name="forrest.build.dir"          location="${forrest.home}/build"/>
+  <property name="forrest.plugins.dir"        location="${forrest.home}/plugins"/>
+  
+  <property name="plugins.dir"                location="${ant.file.Forrest_Plugins_build_file}/.."/>
+  <property name="plugins.dist-dir"           location="build/dist"/>
+  <property name="plugins.localDeploy-dir"    location="${forrest.build.dir}/plugins"/>
+  
+  <property name="plugin.src.dir"             value="src"/>
+  <property name="plugin.java.dir"            value="${plugin.src.dir}/java"/>
+	
+  <property name="plugin.resources.dir"       value="resources"/>
+  <property name="plugin.lib.dir"             value="lib"/>
+  <property name="plugin.stylesheets.dir"     value="${plugin.resources.dir}/stylesheets"/>
+  
+  <property name="plugin.template.dir"        value="pluginTemplate"/>
+  
+  <property name="deploy.svn.user"            value=""/>
+  <property name="deploy.svn.password"        value=""/>
+  <property name="deploy.svn.url"             value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
+  <property name="deploy.svn.svn-dir"         location="${forrest.build.dir}/svn-plugins-deploy"/>
+  <property name="deploy.svn.svn-filestoadd"  location="build/svn-deploy.toadd"/>
+  
+  <property name="build.dir"                  location="build"/>
+  <property name="build.classes"              location="${build.dir}/classes"/>
+    
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <fileset dir="${forrest.ant.lib.dir}" includes="ant-contrib-*.jar" />
+    </classpath>
+  </taskdef>
+
+  <taskdef resource="taskdef.properties">
+    <classpath>
+      <fileset dir="${forrest.ant.lib.dir}" includes="jsvn-0.9-dev.jar"/>
+    </classpath>
+  </taskdef>
+  
+  <target name="init">
+    <tstamp>
+      <format property="YEAR" pattern="yyyy" locale="en"/>
+    </tstamp>
+    
+    <property name="build.compiler.emacs"       value="on"/>
+    <property name="build.compiler.warnings"    value="true"/>
+    <property name="build.compiler.pedantic"    value="false"/>
+    <property name="build.compiler.depend"      value="true"/>
+    <property name="build.compiler.fulldepend"  value="true"/>
+    <property name="build.compiler.debug"       value="on"/>    
+    <property name="build.compiler.optimize"    value="off"/>
+    <property name="build.compiler.deprecation" value="on"/>
+    <property name="build.compiler.nowarn"      value="on"/>    
+    <property name="build.compiler.type"        value="classic"/>
+    <property name="build.compiler.vm"          value="1.2"/>
+    
+    <input message="Which plugin do you wish to operate on (plugin-name)?"
+           addproperty="plugin-name"/>
+           
+    <mkdir dir="${build.dir}"/>
+    
+    <buildnumber file="${build.dir}/build.number"/>
+    <echo>
+      --------------------------------------------------------------
+
+      Using ${ant.version}
+      Build file ${ant.file}
+      Use 'build.[sh|bat] -projecthelp' to see other options.
+      Build system home ${ant.home}
+      Build number ${build.number}
+      Project Name ${ant.project.name}
+      Java Version ${ant.java.version}      
+      Timestamp ${DSTAMP}${TSTAMP}
+      
+      --------------------------------------------------------------
+    </echo>
+    
+    <path id="classpath">
+      <fileset dir="${forrest.home}/lib" includes="**/*.jar"/>
+      <fileset dir="${plugin.lib.dir}" includes="*.jar"/>
+      <fileset dir="${plugin.lib.dir}" includes="*.zip"/>
+    </path>
+  	
+    <available file="${plugin.java.dir}" property="java_exists" type="dir"/>
+    
+  </target>
+  
+  <target name="clean" depends="init">
+    <delete dir="${plugins.localDeploy-dir}/${plugin-name}"/>
+    <delete dir="${plugins.dist-dir}"/>
+  </target>
+  
+  
+  <!-- FIXME: Forrest should really use the plugins in-place if they are available as source -->
+  <target name="local-deploy"
+          description="Deploy a plugin locally"
+          depends="init, clean, jar">
+          
+    <echo>Locally deploying ${plugin-name}</echo>
+    
+    <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
+      <fileset dir="${plugins.dir}/${plugin-name}">
+        <exclude name="build/**"/>
+      </fileset>
+    </copy>
+  	<copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
+  	      file="${build.dir}/${plugin-name}.jar"
+  	      failonerror="false"/>
+    <antcall target="build"/>
+  </target>
+  
+  <target name="build"
+          description="Any local actions that need to be carried out by the plugin are done here"/>
+  
+  <target name="deploy-plugins.xml"
+          description="Deployes the plugins descriptor file (plugins.xml) to the website SVN repository"
+          depends="checkout-deployed">
+    <copy todir="${deploy.svn.svn-dir}" 
+          overwrite="true"
+          file="${forrest.plugins.dir}/plugins.xml"/>
+    <!-- check in to SVN -->
+    <svncommit
+        target="${deploy.svn.svn-dir}"
+        repositoryurl="${deploy.svn.url}"
+        commitmessage="Deployment plugins descriptor file (plugins.xml) (deployed by 'deploy-plugins.xml' target of plugin build script)"
+    />
+  </target>
+          
+  <target name="deploy"
+          description="Deploy the plugin to SVN"
+          depends="dist, checkout-deployed, deploy-plugins.xml">
+    <echo>Deploying ${plugin-name} to the web server</echo>
+  	    
+    <!-- copy new files into sandbox -->
+    <copy todir="${deploy.svn.svn-dir}" 
+          overwrite="true" 
+          file="${plugins.dist-dir}/${plugin-name}.zip"/>
+     
+    <!-- add new files to SVN -->
+    <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
+      <arg value="status"/>
+    </exec>
+    <!-- the status columns make all lines invalid filenames
+      we remove the status columns for the new files so the only valid
+      filenames in the list are new files
+    -->
+    <replace file="${deploy.svn.svn-filestoadd}" token="?      " value=""/>
+    <replace file="${deploy.svn.svn-filestoadd}" token="M      " value=""/>
+    <!-- don't fail on error here because
+      1) the targets file might have 'bad' filenames but we should continue
+      2) we would've already failed if the svn executable wasn't found
+    -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}">
+      <arg value="add"/>
+      <arg value="--targets"/>
+      <arg value="${deploy.svn.svn-filestoadd}"/>
+    </exec>
+    <!-- check in to SVN -->
+    <svncommit
+        target="${deploy.svn.svn-dir}"
+        repositoryurl="${deploy.svn.url}"
+        commitmessage="Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"
+    />
+  </target>
+   
+  <target name="checkout-deployed" 
+	      description="Retrieve the currently deployed plugin files">    
+	<!-- get current plugins directory from SVN -->
+    <svncheckout
+        repositoryurl="${deploy.svn.url}"
+        username="${deploy.svn.user}"
+        password="${deploy.svn.password}"
+        destination="${deploy.svn.svn-dir}"
+        failonerror="true"
+    />
+  </target>
+	
+  <target name="docs" depends="local-deploy">
+    <echo>Building Docs for ${plugin-name}</echo>
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site">
+      <property name="project.home" value="${basedir}"/>
+    </ant>    
+  </target>
+  
+  <!-- FIXME: needs to append FOrrest version number to filename -->
+  <target name="dist"
+          description="Build the distribution archive for all the plugins"
+          depends="init, test, docs">
+    <mkdir dir="${plugins.dist-dir}"/>  
+    <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
+       basedir="${plugins.dir}/${plugin-name}"
+       includes="**"
+       excludes="**/build/**"/>
+  </target>
+  
+  <target name="seedPlugin"
+    description="Create a new plugin directory in the current working directory and seed it with initial set of files"
+    depends="init">
+    <mkdir dir="${plugin-name}"/>
+    <mkdir dir="${plugin-name}/${plugin.src.dir}"/>
+    <mkdir dir="${plugin-name}/${plugin.resources.dir}"/>
+    <mkdir dir="${plugin-name}/${plugin.stylesheets.dir}"/>
+    <copy todir="${plugin-name}"
+          filtering="true">
+      <fileset dir="${plugin.template.dir}"/>
+      <filterset>
+        <filter token="plugin-name" value="${plugin-name}"/>
+      </filterset>
+    </copy>
+    
+    <input message="What type of plugin do you wish to create? "
+           validargs="input,output,internal"
+           addproperty="plugin-type"/>
+    <move file="${plugin-name}/sitemap.xmap"
+          tofile="${plugin-name}/${plugin-type}.xmap"/>
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- Compile java classes                                         -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="init" if="java_exists">
+    <mkdir dir="${build.classes}"/>
+    <javac srcdir=   "${plugin.java.dir}"
+      destdir=       "${build.classes}"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
+  	
+  	<copy todir="${build.classes}">
+  		<fileset dir="${plugin.java.dir}">
+  			<exclude name="**/*.java"/>
+		</fileset>
+  	</copy>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Jar Cocoon classes                                                  -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="init, compile" if="java_exists">
+    <jar destfile="${build.dir}/${plugin-name}.jar"
+	     basedir="${build.classes}"/>
+  </target>
+	
+  <target name="test" depends="init, clean, docs"/>
+</project>
+  
+  
