@@ -67,7 +67,7 @@
        param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
-    validate, init, bare-context, copy-sitemap, copy-conf, upgrade-skinconf, copy-status"/>
+    validate, init, bare-context, copy-sitemap, copy-conf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.webapp}/WEB-INF" filtering="false"
@@ -99,14 +99,6 @@
       </fileset>
       <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
     </copy>
-  </target>
-
-  <target name="upgrade-skinconf" if="skinconf.present">
-     <!-- FIXME: hardcode values here -->
-     <xslt in="${skinconf}" out="${project.webapp}/skinconf.xml" 
-           style="${forrest.home}/context/resources/stylesheets/upgrade-skinconf.xsl">
-      <xmlcatalog refid="fcatalog"/>
-    </xslt>
   </target>
 
   <target name="copy-status" if="status.present">
