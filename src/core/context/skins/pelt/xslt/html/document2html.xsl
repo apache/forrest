@@ -25,13 +25,12 @@ imported document2html.xsl for details.
 
   <xsl:template match="document">
     <div id="content">
-
       <div id="skinconf-printlink"/>
       <div id="skinconf-xmllink"/>
       <div id="skinconf-podlink"/>
       <div id="skinconf-txtlink"/>
       <div id="skinconf-pdflink"/>
-
+      <div id="disable-font-script"/>
       <xsl:if test="normalize-space(header/title)!=''">
         <h1><xsl:value-of select="header/title"/></h1>
       </xsl:if>

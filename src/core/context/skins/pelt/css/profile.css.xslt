@@ -79,14 +79,8 @@ table caption {
 	color: <xsl:value-of select="@font"/>;
 }   
 </xsl:template>
-<xsl:template match="color[@name='published']">
-#published { 
-    color: <xsl:value-of select="@font"/>;
-    background: <xsl:value-of select="@value"/>; 
-}
-</xsl:template> 
 
-<xsl:template match="color[@name='navstrip']">
+<xsl:template match="color[@name='breadtrail']">
 #main .breadtrail {
 	background: <xsl:value-of select="@value"/>; 
 	color: <xsl:value-of select="@font"/>;
@@ -100,10 +94,22 @@ table caption {
 }
 #top .breadtrail a:link {  color: <xsl:value-of select="@link"/>;  }
 #top .breadtrail a:visited { color: <xsl:value-of select="@vlink"/>; }
-#top .breadtrail a:hover { color: <xsl:value-of select="@hlink"/>; }
-
+#top .breadtrail a:hover { color: <xsl:value-of select="@hlink"/>; }    
+</xsl:template>
+<!--Fix for other (old) profiles-->
+<xsl:template match="color[@name='navstrip']">
+#published { 
+    color: <xsl:value-of select="@font"/>;
+    background: <xsl:value-of select="@value"/>; 
+}
 </xsl:template> 
-
+<!--has to go after the nav-strip (no 'navstrip')-->
+<xsl:template match="color[@name='published']">
+#published { 
+    color: <xsl:value-of select="@font"/>;
+    background: <xsl:value-of select="@value"/>; 
+}
+</xsl:template> 
 <xsl:template match="color[@name='toolbox']">
 #menu .menupagetitle  { background-color: <xsl:value-of select="@value"/>}
 </xsl:template> 
