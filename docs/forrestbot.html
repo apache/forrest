@@ -78,6 +78,15 @@
 <td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-left.gif"></td><td valign="middle" bgcolor="#4C6C8F"><font color="#ffffff" size="2" face="Arial, Helvetica, Sans-serif"><b><a class="base-selected" href="../docs/your-project.html">Documentation</a></b></font></td><td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-right.gif"></td>
 </tr>
 </table>
+</td><td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="../howto/index.html">How-To</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
 </td>
 </tr>
 </table>
@@ -348,6 +357,9 @@
 <a href="#deploy.cvs">deploy.cvs</a>
 </li>
 <li>
+<a href="#deploy.svn">deploy.svn</a>
+</li>
+<li>
 <a href="#notify">notify</a>
 </li>
 <li>
@@ -364,7 +376,6 @@
 <a href="#Forrestbot+design">Forrestbot design</a>
 </li>
 </ul>
-
     
 <a name="N1000D"></a><a name="Overview"></a>
 <h3>Overview</h3>
@@ -399,9 +410,15 @@
 	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
 	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
 	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
+	&lt;property name="deploy.scp.dest" value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
 
 	&lt;!-- here we specify to use two notification implementations --&gt;
 	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
+
+	&lt;!-- here we specify to deploy with the scp implementation --&gt;
+	&lt;target name="deploy" depends="deploy.scp"/&gt;
+
+	&lt;!-- the default implementation for getsrc is getsrc.cvs, which is what we want --&gt;
 
 	&lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
 	&lt;property environment="env"/&gt;
@@ -410,8 +427,9 @@
 
 </pre>
 <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and getsrc.cvs.
-      Next, specify what implementations will be used by each workstage.</p>
+      Here, we set properties that will be used by notify.email and
+      getsrc.cvs. Next, specify what implementations will be used by each
+      workstage.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
 <tr>
@@ -474,7 +492,8 @@
 <ul>
               
 <li>
-<a href="#deploy.local">deploy.local</a> (default)</li>
+<a href="#deploy.local">deploy.local</a>
+              (default)</li>
 
               
 <li>
@@ -484,6 +503,11 @@
               
 <li>
 <a href="#deploy.cvs">deploy.cvs</a>
+</li>
+
+              
+<li>
+<a href="#deploy.svn">deploy.svn</a>
 </li>
             
 </ul>
@@ -500,7 +524,8 @@
 <ul>
               
 <li>
-<a href="#notify.local">notify.local</a> (default)</li>
+<a href="#notify.local">notify.local</a>
+              (default)</li>
 
               
 <li>
@@ -519,19 +544,19 @@
       your own implementation of a workstage, or use any other ant tasks to do
       additional work.</p>
 <p></p>
-<p>Many workstages use usernames and passwords. You may want to keep them
-      out of your project's xml file (especially if you store that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
+<p>Many workstages use usernames and passwords. You may want to keep
+      them out of your project's xml file (especially if you store that file
+      in CVS or SVN). A nice way to do this is make a simple buildfile (e.g.
       my-settings.xml) that just sets those properties (don't include it in
       CVS/SVN!). Then in your project buildfile, have <span class="codefrag">&lt;import
       file="my-settings.xml"/&gt;</span>.</p>
-<a name="N100C0"></a><a name="Workstage+Properties"></a>
+<a name="N100C5"></a><a name="Workstage+Properties"></a>
 <h4>Workstage Properties</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
-<a name="N100C9"></a><a name="Misc+Properties"></a>
+<a name="N100CE"></a><a name="Misc+Properties"></a>
 <h5>Misc Properties</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -564,7 +589,7 @@
           
 </table>
 </div>
-<a name="N10100"></a><a name="getsrc.local"></a>
+<a name="N10105"></a><a name="getsrc.local"></a>
 <h5>getsrc.local</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -597,7 +622,7 @@
           
 </table>
 </div>
-<a name="N10137"></a><a name="getsrc.cvs"></a>
+<a name="N1013C"></a><a name="getsrc.cvs"></a>
 <h5>getsrc.cvs</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -671,8 +696,8 @@
               
 <td colspan="1" rowspan="1">getsrc.cvs.module</td>
 
-              <td colspan="1" rowspan="1">CVS module name (an alias, or full path) to the directory that
-              contains forrest.properties</td>
+              <td colspan="1" rowspan="1">CVS module name (an alias, or full path) to the directory
+              that contains forrest.properties</td>
 
               <td colspan="1" rowspan="1">${ant.project.name}</td>
 
@@ -695,7 +720,7 @@
           
 </table>
 </div>
-<a name="N101DF"></a><a name="getsrc.svn"></a>
+<a name="N101E4"></a><a name="getsrc.svn"></a>
 <h5>getsrc.svn</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -717,7 +742,7 @@
               
 <td colspan="1" rowspan="1">getsrc.svn.url</td>
 
-              <td colspan="1" rowspan="1">full repository URL for project (this directory must contain
+              <td colspan="1" rowspan="1">Full repository URL for project (this directory must contain
               forrest.properties)</td>
 
               <td colspan="1" rowspan="1"></td>
@@ -741,7 +766,7 @@
           
 </table>
 </div>
-<a name="N1022D"></a><a name="build.forrest"></a>
+<a name="N10232"></a><a name="build.forrest"></a>
 <h5>build.forrest</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -786,7 +811,7 @@
           
 </table>
 </div>
-<a name="N1027C"></a><a name="deploy.scp"></a>
+<a name="N10281"></a><a name="deploy.scp"></a>
 <h5>deploy.local</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -819,12 +844,12 @@
           
 </table>
 </div>
-<a name="N102B4"></a><a name="deploy.local"></a>
+<a name="N102B9"></a><a name="deploy.local"></a>
 <h5>deploy.scp</h5>
 <div style="margin-left: 0 ; border: 2px">
-<p>${user.home}/.ssh/known_hosts must properly recognize the host, so
-          you should manually make an ssh connection to the host if you never
-          have before.</p>
+<p>${user.home}/.ssh/known_hosts must properly recognize the host,
+          so you should manually make an ssh connection to the host if you
+          never have before.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -845,20 +870,33 @@
 <td colspan="1" rowspan="1">deploy.scp.dest</td>
 
               <td colspan="1" rowspan="1">Full destination reference in the format
-              user[:password]@host:/directory/path</td>
+              user@host:/directory/path</td>
 
               <td colspan="1" rowspan="1"></td>
 
               <td colspan="1" rowspan="1">Yes</td>
             
 </tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.scp.password</td>
+
+              <td colspan="1" rowspan="1">Password for user@host</td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">No. You will be prompted for it if it is not set.</td>
+            
+</tr>
           
 </table>
 </div>
-<a name="N102EE"></a><a name="deploy.cvs"></a>
+<a name="N10309"></a><a name="deploy.cvs"></a>
 <h5>deploy.cvs</h5>
 <div style="margin-left: 0 ; border: 2px">
-<p>This is only available on *nix operating systems. </p>
+<p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -954,7 +992,79 @@
           
 </table>
 </div>
-<a name="N1039A"></a><a name="notify"></a>
+<a name="N103B5"></a><a name="deploy.svn"></a>
+<h5>deploy.svn</h5>
+<div style="margin-left: 0 ; border: 2px">
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+            
+<tr>
+              
+<th colspan="1" rowspan="1">Property</th>
+
+              <th colspan="1" rowspan="1">Description</th>
+
+              <th colspan="1" rowspan="1">Default Value</th>
+
+              <th colspan="1" rowspan="1">Required?</th>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.svn.user</td>
+
+              <td colspan="1" rowspan="1">SVN username to use when committing changes</td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">Yes</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.svn.password</td>
+
+              <td colspan="1" rowspan="1">SVN password</td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">Yes</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.svn.url</td>
+
+              <td colspan="1" rowspan="1">Full repository URL</td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">Yes</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.svn.commit-message</td>
+
+              <td colspan="1" rowspan="1">Message to use when committing. You probably want to put a
+              machine name or person's name here.</td>
+
+              <td colspan="1" rowspan="1">Automatic publish from forrestbot</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+          
+</table>
+</div>
+<a name="N1042F"></a><a name="notify"></a>
 <h5>notify</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>These settings are used by all notify implementations.</p>
@@ -1026,12 +1136,12 @@
           
 </table>
 </div>
-<a name="N10416"></a><a name="notify.local"></a>
+<a name="N104AB"></a><a name="notify.local"></a>
 <h5>notify.local</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>No properties.</p>
 </div>
-<a name="N10420"></a><a name="notify.email"></a>
+<a name="N104B5"></a><a name="notify.email"></a>
 <h5>notify.email</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -1080,12 +1190,12 @@
 </div>
 
     
-<a name="N10471"></a><a name="Forrestbot+design"></a>
+<a name="N10506"></a><a name="Forrestbot+design"></a>
 <h3>Forrestbot design</h3>
 <div style="margin-left: 0 ; border: 2px">
-<p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
-      task is used to import multiple buildfiles into a single build. The
-      following is the flow of control when running forrestbot:</p>
+<p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's
+      import task is used to import multiple buildfiles into a single build.
+      The following is the flow of control when running forrestbot:</p>
 <ul>
         
 <li>Your buildfile<ul>
@@ -1106,8 +1216,8 @@
 </ul>
 <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or other
-      post-build activities.</p>
+      other workstages buildfiles can implement reporting, deployment, or
+      other post-build activities.</p>
 <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
 </div>
