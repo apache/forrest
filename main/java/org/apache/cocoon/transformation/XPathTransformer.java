@@ -237,7 +237,7 @@ public class XPathTransformer
      * (or <code>xmlns:prefix</code>) attribute added to define the node's namespace.
      */
     private void copyNamespaceDeclarations(final Node oldNode, Node newNode) {
-      if (newNode.getNodeType() == Document.ELEMENT_NODE) {
+      if (newNode.getNodeType() == Node.ELEMENT_NODE) {
         String prefix = oldNode.getPrefix();
         String nsURI = oldNode.getNamespaceURI();
         Element newElem = (Element)newNode;
