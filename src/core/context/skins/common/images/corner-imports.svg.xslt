@@ -9,12 +9,12 @@
     <xsl:param name="fg-color-name"/>    
 
    <!-- if not all colors are present, don't even try to render the corners -->
-    <xsl:variable name="size"><xsl:choose>
+    <xsl:variable name="isize"><xsl:choose>
     	<xsl:when test="$bg-color-name and $stroke-color-name and $fg-color-name"><xsl:value-of select="$size"/></xsl:when>
     	<xsl:otherwise>0</xsl:otherwise>
     </xsl:choose></xsl:variable>
-    <xsl:variable name="smallersize" select="number($size)-1"/>
-    <xsl:variable name="biggersize" select="number($size)+1"/>     
+    <xsl:variable name="smallersize" select="number($isize)-1"/>
+    <xsl:variable name="biggersize" select="number($isize)+1"/>     
     <xsl:variable name="bg"><xsl:if test="skinconfig/colors/color[@name=$bg-color-name]">fill:<xsl:value-of select="skinconfig/colors/color[@name=$bg-color-name]/@value"/>;</xsl:if></xsl:variable>
     <xsl:variable name="fill"><xsl:if test="skinconfig/colors/color[@name=$stroke-color-name]">fill:<xsl:value-of select="skinconfig/colors/color[@name=$stroke-color-name]/@value"/>;</xsl:if></xsl:variable>
     <xsl:variable name="stroke"><xsl:if test="skinconfig/colors/color[@name=$fg-color-name]">stroke:<xsl:value-of select="skinconfig/colors/color[@name=$fg-color-name]/@value"/>;</xsl:if></xsl:variable>
@@ -23,7 +23,7 @@
 
         	
 
-<svg width="{$size}" height="{$size}">
+<svg width="{$isize}" height="{$isize}">
     <!-- background-->
     <rect x="-1" y="-1" width="{$biggersize}" height="{$biggersize}" style="{$bg}stroke-width:0"/>
 <!-- 0,0 0,-4 4,0 4,-4-->
@@ -45,21 +45,21 @@
     <xsl:variable name="flip-tb-translate">
       <xsl:choose>
     	<xsl:when test="$orientation-tb='t'">0</xsl:when>
-    	<xsl:otherwise>-<xsl:value-of select="$size" /></xsl:otherwise>
+    	<xsl:otherwise>-<xsl:value-of select="$isize" /></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
     <xsl:variable name="flip-lr-translate">
       <xsl:choose>
     	<xsl:when test="$orientation-lr='l'">0</xsl:when>
-    	<xsl:otherwise>-<xsl:value-of select="$size" /></xsl:otherwise>
+    	<xsl:otherwise>-<xsl:value-of select="$isize" /></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>    
     
     <!-- flip transform -->
     <g transform="scale({$flip-lr-scale},{$flip-tb-scale}) translate({$flip-lr-translate}, {$flip-tb-translate})"> 
       <xsl:call-template name = "figure" >
-     	<xsl:with-param name="size"><xsl:value-of select="$size" /></xsl:with-param>
+     	<xsl:with-param name="isize"><xsl:value-of select="$isize" /></xsl:with-param>
      	<xsl:with-param name="smallersize"><xsl:value-of select="$smallersize" /></xsl:with-param>
      	<xsl:with-param name="biggersize"><xsl:value-of select="$biggersize" /></xsl:with-param>
      	<xsl:with-param name="bg"><xsl:value-of select="$bg" /></xsl:with-param>
