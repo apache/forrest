@@ -172,8 +172,10 @@ Example:</P>
 myfile.javadocs.html 
 myfile.html </PRE><H4>
 Step 3: Filtering (content)</H4>
-<P>This is a new step, that adds navigation, metadata, extra content
+<P>This is a new step, that adds navigation, metadata, extra content, functionality
 and transformations to the content stream.</P>
+<P>The filtering stages should use different filtering files to not produce markup 
+that is not needed by the view.</P>
 <P>Navigation is the addition of the 'tab' and 'linkmap' information
 to the stream. 
 </P>
@@ -182,34 +184,39 @@ to the stream.
 <P>Nuggets of information can be added based on the URL and on the
 contents of the main source. For example, newsfeeds about the page
 being processed.</P>
+<P>Fbits should be insert only as placeholder that the view can populate them 
+with the actual functionality</P>
 <P>Filtering on the main content can be done, like the automatic
 creation of links based on the site.xml linkmap or footnote
 processing.</P>
 <P>These filtering steps are to be done by plugins (filtering
 plugins). 
 </P>
-<H4>Step 4: Skinning (presentation)</H4>
-<P>Based on the skin specified, the content is transformed in a
+<H4>Step 4: Viewing (presentation)</H4>
+<P>Based on the view specified, the content is transformed in a
 format that contains presentation information. Example formats are
 html, fo (formatting objects) and svg.</P>
-<P>Note that this part adds functionality to the content. For
+<P>Note that this part adds functionality implementation to the content. For
 example, a search item can be displayed, or widgets can be used.
 These are fbits, or functionality bits, and are different from
 nuggets, which are extra content. 
 </P>
-<P>Note that fbits are skin dependant, so that a skin can decide to
+<P>Note that fbits are view dependant, so that a view can decide to
 implement them or not. The configuration of these bits are to be done
-with the new generic skinconf format.</P>
-<P>Example of current fbits are the search pane, the project and
-group logos, the page format selector, etc.</P>
+with the new generic skinconf format and a new templating language.</P>
+<P>Example of current fbits are the search pane, the page format selector, etc.</P>
+<P>This new templating language will be forrest:templates, which contains forrest:view
+and forrest:template.</P>
 <H4>Step 5: Theming (presentation)</H4>
-<P>Here the result of the skinning is given to theming, that adds
+<P>The view is creating the html-skelleton that is
+used for <EM>theming</EM>. Themes are view dependend but e.g. you can write
+<EM>one</EM> theme for <EM>x</EM> view derivatives. Theming adds
 colors and general appearance info. In html it's css files for
 example, or the skinconf color information.</P>
 <H4>Step 6: Serializing (presentation)</H4>
 <P>The presentation is transformed to the actual final format with
 output plugins. For example a fo presentation can be outputted as
-pdf, rtf, doc, ps, etc. 
+xhtml, pdf, rtf, doc, ps, etc. 
 </P>
 <H2><A NAME="dt"></A>A Schemas for Forrest 1.0 config files</H2>
 <P><EM>To be added.</EM></P>
