@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.13 2002/11/16 20:58:13 jefft Exp $
+$Id: site2xhtml.xsl,v 1.14 2002/11/17 00:45:41 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -250,14 +250,10 @@ $Id: site2xhtml.xsl,v 1.13 2002/11/16 20:58:13 jefft Exp $
         </td>
       </tr>
       <tr>
-      <td class="logos" bgcolor="{$background-bars}" align="left">
-        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
-            <a href="{$config/host-url}"><img src="{$config/host-logo}" alt="{$config/host-name} logo" border="0"/></a>
-        </xsl:if>
-      </td>
-      <td class="logos" bgcolor="{$background-bars}" align="right">
+      <td class="logos" bgcolor="{$background-bars}" align="left" colspan="2">
         <xsl:if test="$filename = 'index.html' and $config/credits">
-          <div align="right">
+          <div>
+            <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
           <xsl:for-each select="$config/credits/credit">
             <xsl:variable name="name" select="name"/>
             <xsl:variable name="url" select="url"/>
@@ -276,8 +272,20 @@ $Id: site2xhtml.xsl,v 1.13 2002/11/16 20:58:13 jefft Exp $
             <img src="{$spacer}" border="0" alt="" width="5" height="1" />
             </a>
           </xsl:for-each>
-            </div>
+          </div>
         </xsl:if>
+        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+          <div class="host">
+            <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
+            <xsl:call-template name="renderlogo">
+              <xsl:with-param name="name" select="$config/host-name"/>
+              <xsl:with-param name="url" select="$config/host-url"/>
+              <xsl:with-param name="logo" select="$config/host-logo"/>
+              <xsl:with-param name="root" select="$root"/>
+            </xsl:call-template>
+          </div>
+        </xsl:if>
+
         </td>
       </tr>
     </table>
