@@ -106,6 +106,27 @@
       </section>
       
       <section>
+        <title>Naming Conventions</title>
+        <p>Technically you can name a plugin anything you like. However, we
+        do have some naming conventions that we recomend you follow. This is
+        to minimis the chances of collision between plugins from different
+        developers.</p>
+        
+        <p>The name should be structured like a java package name, and should
+        include a relevant reverse domain name. For example:</p>
+        
+        <source>org.apache.forrest.plugin.PLUGINNAME</source>
+        <source>net.sf.forrestPlugins.PLUGINNAME</source>
+        
+        <p>In addition the name of the plugin should indicate the type of plugin
+        it is:</p>
+        
+        <source>NAME-input</source>
+        <source>NAME-output</source>
+        <source>NAME-internal</source>
+      </section>
+      
+      <section>
         <title>An Example Plugin</title>
   
         <p>In order to fully understand the applicability of Forrest Plugins we 
@@ -160,7 +181,7 @@
 
      
 <source>
-IMSManifest
+org.apache.forrest.plugin.IMSManifest-internal
   |
   |-- sitemap.xmap
   |
@@ -183,7 +204,7 @@ IMSManifest
   <map:select type="exists">
     <map:when test="{project:content.xdocs}imsmanifest.xml">
        <map:generate src="{project:content.xdocs}imsmanifest.xml" />
-       <map:transform src="{forrest:plugins}/IMSManifest/resources/stylesheets/imsmanifest2site.xsl"/>
+       <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.IMSManifest-internal/resources/stylesheets/imsmanifest2site.xsl"/>
        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
        <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
      <map:serialize type="xml"/>
@@ -216,9 +237,9 @@ IMSManifest
 
   <source><![CDATA[
 <map:select type="exists">
-  <map:when test="{forrest:plugins}/IMSManifest/sitemap.xmap">
+  <map:when test="{forrest:plugins}/org.apache.forrest.plugin.IMSManifest-internal/sitemap.xmap">
     <map:mount uri-prefix="" 
-      src="{forrest:plugins}/IMSManifest/sitemap.xmap" 
+      src="{forrest:plugins}/org.apache.forrest.plugin.IMSManifest-internal/sitemap.xmap" 
       check-reload="yes" 
       pass-through="true"/>
   </map:when>
