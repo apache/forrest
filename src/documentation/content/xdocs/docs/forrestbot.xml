@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN"
+"document-v12.dtd">
+<document>
+  <header>
+    <title>Forrestbot</title>
+  </header>
+
+  <body>
+    <warning>This documentation applies to the forrestbot in the current
+    development version (i.e. svn trunk) and not the forrestbot included with
+    Forrest 0.5.1 or any previous release. Documentation for that forrestbot is
+    <link href="site:forrestbot-old">here</link>. This page is incomplete and
+    may have errors.</warning>
+
+    <section>
+      <title>Overview</title>
+
+      <p>Forrestbot lets you automate building &amp; deploying websites. There
+      are implementations to get source from various locations, build it, then
+      deploy it somewhere. It can notify you afterwards, and it keeps a log of
+      the build process. Each workstage has multiple implementations; you can
+      use one or more of each.</p>
+    </section>
+
+    <section>
+      <title>Using Forrestbot</title>
+
+      <p>Simply execute:</p>
+
+      <source>forrest -f mybuildfile.xml</source>
+
+      <p>The next section explains how to create your buildfile.</p>
+    </section>
+
+    <section>
+      <title>Creating a buildfile</title>
+
+      <p>A sample buildfile:</p>
+
+      <source>&lt;project name="mysampleproject"&gt;
+	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
+	&lt;property name="notify.email.to" value="me@domain.com"/&gt;
+	&lt;property name="notify.administrator" value="Your Name &amp;lt;me@domain.com&gt;"/&gt;
+	&lt;property name="getsrc.cvs.user" value="anoncvs"/&gt;
+	&lt;property name="getsrc.cvs.password" value="anoncvs"/&gt;
+	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
+	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
+	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
+
+	&lt;!-- here we specify to use two notification implementations --&gt;
+	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
+
+	&lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
+	&lt;property environment="env"/&gt;
+	&lt;import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/&gt;
+&lt;/project&gt;
+
+</source>
+
+      <p>First, set properties needed by the workstages you are going to use.
+      Here, we set properties that will be used by notify.email and getsrc.cvs.
+      Next, specify what implementations will be used by each workstage.</p>
+
+      <table>
+        <tr>
+          <th>Workstage</th>
+
+          <th>Implementations</th>
+        </tr>
+
+        <tr>
+          <td>getsrc</td>
+
+          <td><ul>
+              <li><link href="#getsrc.local">getsrc.local</link></li>
+
+              <li><link href="#getsrc.cvs">getsrc.cvs</link> (default)</li>
+
+              <li><link href="#getsrc.svn">getsrc.svn</link></li>
+            </ul></td>
+        </tr>
+
+        <tr>
+          <td>build</td>
+
+          <td><ul>
+              <li><link href="#build.forrest">build.forrest</link></li>
+            </ul></td>
+        </tr>
+
+        <tr>
+          <td>deploy</td>
+
+          <td><ul>
+              <li><link href="#deploy.local">deploy.local</link> (default)</li>
+
+              <li><link href="#deploy.scp">deploy.scp</link></li>
+
+              <li><link href="#deploy.cvs">deploy.cvs</link></li>
+            </ul></td>
+        </tr>
+
+        <tr>
+          <td><link href="#notify">notify</link></td>
+
+          <td><ul>
+              <li><link href="#notify.local">notify.local</link> (default)</li>
+
+              <li><link href="#notify.email">notify.email</link></li>
+            </ul></td>
+        </tr>
+      </table>
+
+      <p>If you want to do more advanced processing for your project, you can
+      override the 'main' target, which by default is <code>&lt;target
+      name="main" depends="getsrc, build, deploy, notify"/&gt;</code>, create
+      your own implementation of a workstage, or use any other ant tasks to do
+      additional work.</p>
+
+      <p></p>
+
+      <p>Many workstages use usernames and passwords. You may want to keep them
+      out of your project's xml file (especially if you store that file in CVS
+      or SVN). A nice way to do this is make a simple buildfile (e.g.
+      my-settings.xml) that just sets those properties (don't include it in
+      CVS/SVN!). Then in your project buildfile, have <code>&lt;import
+      file="my-settings.xml"/&gt;</code>.</p>
+
+      <section>
+        <title>Workstage Properties</title>
+
+        <p>Each workstage implementation is configurable with properties. The
+        following tables describe each property and whether or not you are
+        required to set it in your buildfile.</p>
+
+        <section>
+          <title>Misc Properties</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>ant.project.name (you specify this by &lt;project
+              name="____"&gt; in your buildfile)</td>
+
+              <td>This must be unique for each project.</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="getsrc.local">
+          <title>getsrc.local</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.local.root-dir</td>
+
+              <td>Absolute path to the project's root directory on the local
+              computer</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="getsrc.cvs">
+          <title>getsrc.cvs</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.user</td>
+
+              <td>CVS username</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.password</td>
+
+              <td>CVS password</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.root</td>
+
+              <td>CVS root directory</td>
+
+              <td>/home/cvsroot</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.host</td>
+
+              <td>CVS host</td>
+
+              <td>cvs.apache.org</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.module</td>
+
+              <td>CVS module name (an alias, or full path) to the directory that
+              contains forrest.properties</td>
+
+              <td>${ant.project.name}</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.tag</td>
+
+              <td>CVS tag or branch name</td>
+
+              <td></td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="getsrc.svn">
+          <title>getsrc.svn</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.svn.url</td>
+
+              <td>full repository URL for project (this directory must contain
+              forrest.properties)</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.svn.revision</td>
+
+              <td>Revision number to fetch</td>
+
+              <td>HEAD</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="build.forrest">
+          <title>build.forrest</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>build.work-dir</td>
+
+              <td>Directory to temporarily hold working files</td>
+
+              <td>work</td>
+
+              <td>No</td>
+            </tr>
+
+            <tr>
+              <td>build.log-dir</td>
+
+              <td>Directory to hold log files</td>
+
+              <td>logs</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="deploy.scp">
+          <title>deploy.local</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.local.dir</td>
+
+              <td>Path to deploy site to. Relative paths will be relative to
+              ${bot.home}</td>
+
+              <td>sites/${ant.project.name}</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="deploy.local">
+          <title>deploy.scp</title>
+
+          <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
+          you should manually make an ssh connection to the host if you never
+          have before.</p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.scp.dest</td>
+
+              <td>Full destination reference in the format
+              user[:password]@host:/directory/path</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+
+        <section>
+          <title>deploy.cvs</title>
+
+          <p>This is only available on *nix operating systems. </p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.user</td>
+
+              <td>CVS username to use when committing changes</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.password</td>
+
+              <td>CVS password</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.root</td>
+
+              <td>CVS root</td>
+
+              <td>/home/cvs</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.host</td>
+
+              <td>CVS host</td>
+
+              <td>cvs.apache.org</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.module</td>
+
+              <td>CVS module</td>
+
+              <td>${ant.project.name}</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.commit-message</td>
+
+              <td>Message to use when committing. You probably want to put a
+              machine name or person's name here.</td>
+
+              <td>Automatic publish from forrestbot</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="notify">
+          <title>notify</title>
+
+          <p>These settings are used by all notify implementations.</p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>notify.administrator</td>
+
+              <td>Name and email address of the forrestbot administrator</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>notify.log</td>
+
+              <td>Log file</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+
+            <tr>
+              <td>notify.deploy-location</td>
+
+              <td>Deployed location</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+
+            <tr>
+              <td>notify.completion-status</td>
+
+              <td>Result of the build</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="notify.local">
+          <title>notify.local</title>
+
+          <p>No properties.</p>
+        </section>
+
+        <section id="notify.email">
+          <title>notify.email</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>notify.email.host</td>
+
+              <td>SMTP host through which the email will be sent.</td>
+
+              <td>localhost</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>notify.email.to</td>
+
+              <td>Email address to send notification to.</td>
+
+              <td>${user.name}@localhost</td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title>Forrestbot design</title>
+
+      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
+      task is used to import multiple buildfiles into a single build. The
+      following is the flow of control when running forrestbot:</p>
+
+      <ul>
+        <li>Your buildfile<ul>
+            <li>forrestbot.xml<ul>
+                <li>workstage buildfiles</li>
+
+                <li>forrest.build.xml</li>
+              </ul></li>
+          </ul></li>
+      </ul>
+
+      <p>The workstage buildfiles set up the properties and files so that the
+      main forrest buildfile (forrest.build.xml) will run. After it is run,
+      other workstages buildfiles can implement reporting, deployment, or other
+      post-build activities.</p>
+
+      <p>Your buildfile can specify which workstages you want to use, set
+      properties for them, and do any additional pre- and post-processing.</p>
+    </section>
+  </body>
+</document>
