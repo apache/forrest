@@ -24,6 +24,10 @@ imported document2html.xsl for details.
   <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
 
   <xsl:template match="document">
+    <meta-data>
+      <xsl:apply-templates select="header/meta"/>   
+    </meta-data>
+    
     <div id="content">
       <div id="skinconf-printlink"/>
       <div id="skinconf-xmllink"/>

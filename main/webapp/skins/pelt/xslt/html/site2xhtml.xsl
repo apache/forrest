@@ -50,6 +50,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |generator meta
   +-->
             <xsl:call-template name="html-meta"/>
+            <xsl:apply-templates select="//meta-data"/>
 <!--+
   |title
   +-->
