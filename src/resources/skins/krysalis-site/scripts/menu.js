@@ -69,7 +69,7 @@ function SwitchMenu(obj)
     var el = document.getElementById(obj);
     var title = document.getElementById(obj+'Title');
 
-    if(obj=="selected"&&el.style.display == ""){
+    if(obj.indexOf("_selected_")==0&&el.style.display == ""){
       //nicolaken: doesn't work :-(
       //title.style.backgroundImage = "url('images/chapter_open.gif')";
       el.style.display = "block";
