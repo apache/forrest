@@ -1,23 +1,34 @@
 <project name="local">
 
-  <property name="local.root-dir" value="${user.home}/apache/xml/${ant.project.name}/${project.root-dir}"/>
   <property name="build.work-dir"         value="work/${ant.project.name}"/>
 
   <target name="getsrc">
+    <echo>
+      ....... local.getsrc START
+      Copying source from ${project.root-dir}
+    </echo>
     <mkdir dir="${build.work-dir}"/>
     <copy todir="${build.work-dir}">
-      <fileset dir="${local.root-dir}">
+      <fileset dir="${project.root-dir}">
         <include name="forrest.properties"/>
         <include name="status.xml"/>
         <include name="module.xml"/>
       </fileset>
     </copy>
+    <echo>
+      Loading ${build.work-dir}/forrest.properties..
+    </echo>
     <loadproperties srcFile="${build.work-dir}/forrest.properties"/>
     <loadproperties srcFile="${bot.home}/default-forrest.properties"/>
-
+    <echo>
+      Copying source from ${project.root-dir}/${project.content-dir}
+    </echo>
     <copy todir="${build.work-dir}/${project.content-dir}">
-      <fileset dir="${local.root-dir}/${project.content-dir}"/>
+      <fileset dir="${project.root-dir}/${project.content-dir}"/>
     </copy>
+    <echo>
+      ....... local.getsrc END
+    </echo>
   </target>
 
   <target name="deploy">
