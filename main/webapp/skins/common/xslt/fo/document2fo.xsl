@@ -954,4 +954,16 @@
    </fo:block>
  </xsl:template>
 
+<!-- ====================================================================== -->
+<!-- Temporary section - subject to change on short notice  -->
+<!-- ====================================================================== -->
+
+ <xsl:template match="//style"> 
+   <!-- HACK: The OpenOffice.org input plugin currently produces
+   intermediate documents that contain a style element, invalid per
+   the Forrest Document DTD. This style element must be ignored
+   here. To find out why this is done this way, read the comments
+   attached to issue FOR-433. -->
+ </xsl:template>
+
 </xsl:stylesheet>
