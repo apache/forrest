@@ -28,5 +28,36 @@
     <!-- set a property to be used in the notify target -->
     <property name="notify.deploy-location" value="${deploy.local.dir}"/>
   </target>
+  
+  <property name="deploy.cvs.user" value="anoncvs"/>
+  <property name="deploy.cvs.password" value="anoncvs"/>
+  <property name="deploy.cvs.root" value="/home/cvs"/>
+  <property name="deploy.cvs.host" value="cvs.apache.org"/>
+  <property name="deploy.cvs.module" value="${ant.project.name}"/>
+  
+  <property name="deploy.cvsmodule-dir" value="work/cvsmodules-deploy/${ant.project.name}"/>
+  
+  <target name="deploy.cvs">
+    <property name="deploy.cvs.fullroot" value=":ext:${deploy.cvs.user}@${deploy.cvs.host}:${deploy.cvs.root}"/>
+    <!-- log in -->
+    <cvspass cvsroot="${deploy.cvs.fullroot}" password="${deploy.cvs.password}"/>
+    <!-- get current CVS source -->
+    <cvs cvsRoot="${deploy.cvs.fullroot}"
+      package="${deploy.cvs.module}"
+      dest="${deploy.cvsmodule-dir}"
+      command="checkout"
+      failonerror="true"
+      />
+    <!-- copy new files into sandbox -->
+    <copy todir="${deploy.cvsmodule-dir}">
+      <fileset dir="${build.site-dir}"/>
+    </copy>
+    <!-- check in to CVS -->
+    <cvs command="commit" cvsRoot="${deploy.cvs.fullroot}"
+      dest="${build.site-dir}"
+      failonerror="true"
+      noexec="true"
+      />
+  </target>
 
 </project>
