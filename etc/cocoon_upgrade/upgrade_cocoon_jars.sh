@@ -130,6 +130,26 @@ function upgrade_endorsed()
   echo "done"
 }
 
+function copy_local_blocks_properties()
+{
+  echo -n "Copy local.blocks.properties to $COCOON 		"
+  push
+  cp -bu local.blocks.properties $COCOON
+  pop
+  echo "done"
+}
+
+function build_cocoon()
+{
+  echo -n "Builing Cocoon 		"
+  push
+  cd $COCOON
+  $COCOON/build.sh clean
+  $COCOON/build.sh
+  pop
+  echo "done"
+}
+
 
 echo "Performing $UPGRADE_TYPE upgrade. New jars copied to:"
 echo "  $FLIB"
@@ -137,6 +157,9 @@ echo "  $FLIB_ENDORSED"
 
 
 sanity_check
+#Commented by default
+#copy_local_blocks_properties
+#build_cocoon
 
 upgrade_neko
 upgrade_endorsed
