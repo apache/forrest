@@ -46,7 +46,6 @@ function copy_contents()
   log "Updating $LIVECVS from $SRC_DIR"
   pushd .
   cd $LIVECVS
-  [ "$MODULE" = "xml-site" ] && echo "update xml-site root"
   cvsco $ARGS
   cvs up $ARGS -dP
   log "Copying generated docs to xml-site.."
@@ -67,7 +66,6 @@ function addfiles()
     if [ -d "$i" ]; then
       log "Directory: $i"
       DIRS="$DIRS $i"
-
       continue
     fi
     local MIME=`file -bi $i 2>/dev/null`
