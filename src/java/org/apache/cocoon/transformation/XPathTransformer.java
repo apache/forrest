@@ -342,7 +342,7 @@ public class XPathTransformer
     private final void printNode(String msg, Node node) {
         getLogger().info(msg+" "+node.getNodeName());
     }
-
+/*
     private final void printDeepNode(String msg, Node node) {
         try {
             getLogger().info(msg+" "+XMLUtils.serializeNodeToXML(node));
@@ -350,7 +350,7 @@ public class XPathTransformer
             getLogger().error("Error printing node", pe);
         }
     }
-
+*/
     // Cache methods
 
     /**
