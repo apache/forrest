@@ -153,7 +153,7 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
         </td>
         <td bgcolor="{$header-color}"></td>
       </tr>
-      <tr height="16">
+      <tr>
         <td colspan="4" bgcolor="{$menu-border}" height="10" ><xsl:apply-templates select="div[@class='level2tab']"/></td>
       </tr>
     </table>
