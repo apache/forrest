@@ -208,8 +208,8 @@ FORREST SITE BUILDER
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
   <target name="load-forrest-props" unless="skinconf.present">
     <xmlproperty file="${forrest.home}/context/skinconf.xml"
-      collapseattributes="true" validate="true"/> <!-- Assume Forrest skinconf is valid -->
-<!-- FIXME: remove wild assumption -->
+      collapseattributes="true" validate="true"/>
+    <!-- Forrest skinconf should have been previously validated in buld.xml -->
   </target>
 
   <!-- Define filters equating to elements in the skinconf.xml file. Skins can
@@ -540,10 +540,10 @@ Use the 'seed' target to create a template project structure.
    -->
 
    <target name="site" depends="prepare-context, -site"
-     if="project.content.present"
      description="Generates a static HTML website for this project"/>
 
-   <target name="-site" depends="init, -prepare-classpath">
+   <target name="-site" depends="init, -prepare-classpath"
+     if="project.content.present">
     <!-- clean out the temp space, if we don't cocoon fails on this
          actually clears the cache, not yet clear why it is really needed? -->
     <delete dir="${project.work-dir}"/>
@@ -707,7 +707,7 @@ Thanks for using Apache Forrest
 
 
   <target name="validate" depends="validation-props, validate-xdocs,
-    validate-skinconf, validate-sitemap, validate-skins,
+    validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
 
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
@@ -767,6 +767,32 @@ Thanks for using Apache Forrest
         excludes="${forrest.validate.skins.stylesheets.excludes}"/>
     </jing>
     <echo message="...validated skin stylesheets"/>
+  </target>
+
+  <!-- Check that ${project.skin} points to an existing skin. -->
+  <target name="validate-skinchoice">
+    <condition property="project.skin.present">
+      <available file="${project.skin}" type="dir">
+        <filepath path="${project.skins-dir}"/>
+        <filepath path="${forrest.home}/context/skins"/>
+      </available>
+    </condition>
+
+    <fail unless="project.skin.present">
+------------------------------------------------
+Error: The skin '${project.skin}' could not be found in:
+
+${project.skins-dir}
+
+And is not provided by Forrest in
+
+${forrest.home}/context/skins
+
+Please check the $${project.skins-dir} and $${project.skin} properties in
+forrest.properties.
+------------------------------------------------
+    </fail>
+    <echo message="...validated existence of skin '${project.skin}'"/>
   </target>
   
   
