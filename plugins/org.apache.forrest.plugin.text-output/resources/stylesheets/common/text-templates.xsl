@@ -307,7 +307,8 @@
     <xsl:param name="mincolwidth">10</xsl:param>
     <xsl:param name="width" select="$document-width"/>
     <xsl:variable name="cols">
-      <xsl:value-of select="count(tr[1]/th|tr[1]/td)"/>
+      <xsl:value-of select="count(tr[1]/th|tr[1]/td) - count(tr[1]/th[@colspan]|tr[1]/td[@colspan]) + sum(tr[1]/th/@colspan) + sum(tr[1]/td/@colspan)"/>
+
     </xsl:variable>
 
     <xsl:variable name="indent" select="$level * $indent-per-level"/>
