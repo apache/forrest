@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/23 13:35:54 $              |
+    |             $Date: 2003/11/09 09:52:29 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -114,7 +114,6 @@ FORREST SITE BUILDER
     <filter filtersfile="${projfilters}"/>
     <filter token="forrest.home" value="${forrest.home}"/>
     <filter token="project.home" value="${project.home}"/>
- 
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
@@ -529,8 +528,8 @@ Use the 'seed' target to create a template project structure.
 
    <target name="site" depends="init, webapp, -prepare-classpath" if="project.content.present"
      description="Generates a static HTML website for this project">
-    <!-- clean out the temp space, if we don't cocoon fails on this
-         actually clears the cache, not yet clear why it is really needed? -->
+    <!-- clean out the temp space, if we don't cocoon fails on this.
+         actually clears the cache, not yet sure why it is really needed? -->
     <delete dir="${project.cocoon-work-dir}"/>
     <mkdir dir="${project.cocoon-work-dir}"/>
 
@@ -608,17 +607,28 @@ Use the 'seed' target to create a template project structure.
             <exclude name="xslt/**"/>
           </fileset>
         </copy>
+        <!-- This place is our last chance to give them help messages.
+             Hopefully Cocoon won't issue messages until these tasks are done.
+         -->
+        <echo>------------------------------
+Static site will be generated at:
+${project.site-dir}
 
-      </sequential>
-    </parallel>
-    <echo>
-------------------------------
-Static site generated at:
-  ${project.site-dir}
-
-Please check the file
+Note that there are various reasons for "build failed" messages.
+* Cocoon will report the status of each document:
+  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
+* Even if only one link is broken, you will still get "failed".
+* Your site would still be generated, but some pages would be broken.
+* Please check the file:
 ${project.brokenlinkfile}
 for any broken links in the generated site.
+------------------------------
+        </echo>
+      </sequential>
+    </parallel>
+    <echo>------------------------------
+Static site was successfully generated at:
+${project.site-dir}
 ------------------------------
     </echo>
   </target>
