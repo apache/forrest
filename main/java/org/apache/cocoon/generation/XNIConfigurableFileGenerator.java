@@ -15,7 +15,6 @@
  */
 package org.apache.cocoon.generation;
 
-import org.apache.cocoon.generation.ComposerGenerator;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.ResourceNotFoundException;
 import org.apache.cocoon.components.source.SourceUtil;
@@ -62,7 +61,7 @@ import java.io.IOException;
  *
  */
 public class XNIConfigurableFileGenerator
-extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
+extends ServiceableGenerator implements CacheableProcessingComponent, Recyclable
 {
 
   /** Default constructor
