@@ -26,10 +26,15 @@
     <!-- header --> 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-<td align="left" valign="top"><a href="http://jakarta.apache.org/index.html"><img src="common/images/group-logo.gif" border="0" vspace="0" hspace="0"/></a></td><td bgcolor="#ffffff" align="left" valign="top" width="100%"><img src="common/images/project-logo.gif" align="right" border="0" vspace="0" hspace="0"/></td>
+<td align="left" valign="top"><a href="@group-logo.href@"><img src="@group-logo.src@" border="0" vspace="0" hspace="0"/></a></td><td bgcolor="#ffffff" align="left" valign="top" width="100%"><a href="@project-logo.href@"><img src="@project-logo.src@" align="right" border="0" vspace="0" hspace="0"/></a></td>
 </tr>
 <tr>
-<td bgcolor="#525d76" colspan="2"><span class="c1"><a href="http://www.apache.org/" class="black">www.apache.org &gt;</a><a href="http://jakarta.apache.org/" class="black">jakarta.apache.org &gt;</a></span></td>
+<td bgcolor="#525d76" colspan="2">
+<span class="c1">
+      <a href="@link1.href@" class="black">@link1@ &#160;&gt;&#160;</a>
+      <a href="@link2.href@" class="black">@link2@ &#160;&gt;&#160;</a>
+      <a href="@link3.href@" class="black">@link3@</a>    
+</span></td>
 </tr>
 <tr>
 <td height="8"></td>
@@ -64,7 +69,7 @@
         </tr>
         <tr>
           <td align="center">
-            <i>Copyright &#x00A9; 2002 Apache Software Foundation</i>
+            <i>Copyright &#x00A9; @year@ @vendor@. All Rights Reserved.</i>
           </td>
         </tr>
         <tr>
@@ -74,8 +79,9 @@
         </tr>        
         <tr>
           <td width="100%" align="right">
-            <a href="http://krysalis.org/"><img src="images/krysalis-compatible.jpg" alt="Krysalis Logo"/></a> 
-            <a href="http://xml.apache.org/cocoon/"><img src="images/built-with-cocoon.gif" alt="Cocoon Logo"/></a> 
+            <a href="http://krysalis.org/"><img src="skin/images/krysalis-compatible.jpg" alt="Krysalis Logo"/></a> 
+            <a href="http://xml.apache.org/cocoon/"><img src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo"/></a> 
+            <a href="http://jakarta.apache.org/ant/"><img src="skin/images/ant_logo_medium.gif" alt="Ant Logo"/></a> 
           </td>
         </tr>
       </tbody>

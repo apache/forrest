@@ -19,7 +19,11 @@
                               <tbody>
                                 <tr>
                                   <td bgcolor="#f3dd61">
-                                    <span class="title"><xsl:value-of select="header/title"/></span>
+                                    <span class="title"><xsl:value-of select="header/title"/>
+                                     <xsl:if test="header/subtitle">
+                                      &#160;-&#160;<i><xsl:value-of select="header/subtitle"/></i>
+                                     </xsl:if>
+                                    </span>
                                   </td>
                                 </tr>
                               </tbody>
@@ -32,10 +36,6 @@
                 </tr>
               </tbody>
             </table>
-      </xsl:if>
-      
-      <xsl:if test="header/subtitle">
-        <font color="#525D76"><i><xsl:value-of select="header/subtitle"/></i></font><br/>
       </xsl:if>
 
       <font color="#000000" size="-2">
@@ -51,9 +51,9 @@
           </a>
         </p>
       </font>
-      
+
       <xsl:apply-templates select="body"/>
- 
+
     </body>
   </xsl:template>
 
@@ -65,10 +65,16 @@
     <xsl:apply-templates/>
   </xsl:template>
 
- 
-  <xsl:template name="section" match="section">
+
+  <xsl:template match="section">
+    <xsl:call-template name="dosection">
+       <xsl:with-param name="level"><xsl:value-of select="count(ancestor::section)+1"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="dosection">
     <xsl:param name="level"/>
-    
+
     <div align="right">
       <table border="0" cellpadding="2" cellspacing="0">
         <xsl:attribute name="width"><xsl:value-of select="number(100)-(1*(number($level)-1))"/>%</xsl:attribute>
@@ -96,29 +102,29 @@
         </tr>
       </table>
     </div><br/>
-    
+
   </xsl:template>
-    
+
   <xsl:template match="s1">
-    <xsl:call-template name="section">
+    <xsl:call-template name="dosection">
        <xsl:with-param name="level">1</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="s2">
-    <xsl:call-template name="section">
+    <xsl:call-template name="dosection">
        <xsl:with-param name="level">2</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="s3">
-    <xsl:call-template name="section">
+    <xsl:call-template name="dosection">
        <xsl:with-param name="level">3</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="s4">
-    <xsl:call-template name="section">
+    <xsl:call-template name="dosection">
        <xsl:with-param name="level">4</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -163,10 +169,10 @@
         <td><font size="-1"><ul><li><xsl:value-of select="@alt"/></li></ul></font></td>
       </tr>
     </xsl:if>
-    
+
       </table>
     </div>
-          
+
       </xsl:when>
     </xsl:choose>
   </xsl:template>
