@@ -21,41 +21,56 @@ package org.apache.forrest.forrestbot.webapp.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.forrest.forrestbot.webapp.Config;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
-class ExecutorThread extends Thread {
-	private Process proc;
+// based on class from http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html
+class StreamGobbler extends Thread {
+	private InputStream is;
+	private Priority type;
 	private Logger log;
-	private boolean debug; 
-	
-	public ExecutorThread(String id, Process p) {
-		super(id);
-		proc = p;
-		log = Logger.getLogger(Executor.class + " " + id);
+	private boolean debug;
+
+
+	StreamGobbler(InputStream is, Priority type) {
+		this.is = is;
+		this.type = type;
+		log = Logger.getLogger(Executor.class + " " + type.toString());
 		debug = Boolean.valueOf(Config.getProperty("debug-exec")).booleanValue();
 	}
 
+	// we have to read from the buffer whether we're going to debug or not; on some systems things will freeze up if the output isn't read
 	public void run() {
-		BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		BufferedReader brErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
 		try {
-			String line;
-			while ((line = brErr.readLine()) != null) {
-				if (debug)
-					log.error(line);
-			}
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String line = null;
 			while ((line = br.readLine()) != null) {
 				if (debug)
-					log.debug(line);
+					log.log(type, line);
 			}
-		} catch (IOException e) {
-			log.warn("error reading from process output", e);
-			return;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
+	}
+}
+
+class ExecutorThread extends Thread {
+	private Process proc;
+
+	public ExecutorThread(String id, Process p) {
+		super(id);
+		proc = p;
+	}
+
+	public void run() {
+        StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream(), Priority.ERROR);
+        errorGobbler.start();
+		StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), Priority.DEBUG);
+		outputGobbler.start();
 	}
 
 }
