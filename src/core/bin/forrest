@@ -36,9 +36,23 @@ fi
 
 if [ -z "$FORREST_HOME" ] ; then
   # use the location of this script to infer $FORREST_HOME
-  realpath_listing=$(ls -l $0)
-  realpath="${realpath_listing#*-> }" # strip everything before '-> '
-  realpath="/${realpath#*/}" # strip before '/' in case there wasn't a ->
+  whoami=`basename $0`
+  whereami=`echo $0 | sed -e "s#^[^/]#\`pwd\`/&#"`
+  whereami=`dirname $whereami`
+
+  # Resolve any symlinks of the now absolute path, $whereami
+  realpath_listing=`ls -l $whereami/$whoami`
+  case "$realpath_listing" in
+    *-\>\ /*)
+      realpath=`echo $realpath_listing | sed -e "s#^.*-> ##"`
+      ;;
+    *-\>*)
+      realpath=`echo $realpath_listing | sed -e "s#^.*-> #$whereami/#"`
+      ;;
+    *)
+      realpath=$whereami/$whoami
+      ;;
+  esac
   FORREST_HOME=`dirname "$realpath"`/..
 fi
 
