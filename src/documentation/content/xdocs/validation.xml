@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN"
 "document-v11.dtd" [
-<!ENTITY catalog_spec
-'http://www.oasis-open.org/committees/entity/background/9401.html'>
-<!ENTITY catalog_intro
-'http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html'>
+
 ]>
 
 <document>
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>$Revision: 1.14 $</version>
+    <version>$Revision: 1.14.2.1 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
       <person name="David Crossley" email="crossley@apache.org"/>
@@ -109,12 +106,12 @@
     <section>
       <title>Validating new XML types</title>
       <p>
-        Forrest provides a <link href="&catalog_spec;">SGML Catalog</link>
-        [<link href="&catalog_intro;">tutorial</link>],
+        Forrest provides a <link href="ext:catalog_spec">SGML Catalog</link>
+        [<link href="ext:catalog_intro">tutorial</link>],
         <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
         associating public identifiers (<code>-//APACHE//DTD Documentation
           V1.1//EN</code> above) with DTDs.
-        If you <link href="your-project.html#adding_new_content_type">add a new content type</link>, you
+        If you <link href="site:new_content_type">add a new content type</link>, you
         should add the DTD to <code>${project.schema-dir}/dtd/</code> and add
         an entry to the <code>${project.schema-dir}/catalog</code> file.  This
         section describes the details of this process.
@@ -126,7 +123,7 @@
           The main Forrest DTDs are designed to be modular and extensible, so
           it is fairly easy to create a new document type that is a superset
           of one from Forrest.  This is what we'll demonstrate here, using our
-          earlier <link href="your-project.html#adding_new_content_type">download format</link>
+          earlier <link href="site:new_content_type">download format</link>
           as an example.  Our download format adds a group of new elements to
           the standard 'documentv11' format.  Our new elements are described
           by the following DTD:
@@ -274,9 +271,9 @@ size CDATA #IMPLIED&gt;
           on a mapping from the public ID to a stable DTD location, via a
           Catalog file.</p>
         <note>
-          See <link href="&catalog_intro;">this article</link> for a good
+          See <link href="ext:catalog_intro">this article</link> for a good
           introduction to catalogs and the Cocoon documentation
-          <link href="http://xml.apache.org/cocoon/userdocs/concepts/catalog.html">Entity resolution with catalogs</link>.
+          <link href="ext:cocoon/catalogs">Entity resolution with catalogs</link>.
         </note>
         <p>
           Forrest provides a standard catalog file at
@@ -300,7 +297,7 @@ size CDATA #IMPLIED&gt;
           PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "dtd/download-v11.dtd"
         </source>
         <p>
-          The format is described in <link href="&catalog_spec;">the
+          The format is described in <link href="ext:catalog_spec">the
             spec</link>, and is fairly simple.  Lines beginning with
           <code>PUBLIC</code> map a public identifier to a DTD (relative to the
           catalog file).
