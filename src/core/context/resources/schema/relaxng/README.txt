@@ -31,5 +31,4 @@ If you're running JDK 1.3.x or lower, you'll need to add
 $FORREST_HOME/lib/endorsed/*.jar to your classpath first.
 
 -- 
-jefft@apache.org
 $Id: README.txt,v 1.1 2003/10/20 15:38:12 nicolaken Exp $
