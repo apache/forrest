@@ -86,7 +86,7 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 			return;
 		}
 		
-		Job forrest = new ForrestRunner(workingDirectory.toOSString(), "run");
+		Job forrest = new ForrestRunner(workingDirectory.toOSString(), ForrestRunner.COMMAND_START);
 		forrest.schedule();
 	}
 
