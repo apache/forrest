@@ -421,11 +421,6 @@ document.write("Last Published: " + document.lastModified);
       </xsl:choose>
     </xsl:variable>
     
-    
- <!--    <div class="menutitle" id="{$tagid}Title" 
-        onclick="SwitchMenu('{$tagid}', '{$tagid}Title', '{$root}skin/')">
-        <xsl:value-of select="h1"/>
-    </div>-->   
     <div class="menutitle" id="{$tagid}Title" 
         onclick="SwitchMenu('{$tagid}', '{$root}skin/')">
         <xsl:if test="contains($tagid, '_selected_')" >
