@@ -364,14 +364,14 @@ skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  
 
 
   <target name="run" 
-   depends="init, run_custom_jetty, run_default_jetty"
+   depends="init, webapp-local, run_custom_jetty, run_default_jetty"
    description="* Run Jetty (instant live webapp)"/>
  
   <target name="run_custom_jetty"
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/context"
+          dir="${project-webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
@@ -389,7 +389,7 @@ skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/context"
+          dir="${project.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
