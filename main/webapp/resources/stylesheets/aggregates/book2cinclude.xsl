@@ -40,6 +40,7 @@ See http://127.0.0.1:8888/book-wholesite.html to see what the book xml looks lik
 
 
   <xsl:template match="menu[contains(@href, ':')]"/>  <!-- Ignore all non-local links -->
+  <xsl:template match="menu[contains(@href, '/')]"/>  <!-- Ignore directories -->
   <xsl:template match="menu[not(contains(@href, '.'))]">
     <section>
       <title><xsl:value-of select="@label"/></title>
