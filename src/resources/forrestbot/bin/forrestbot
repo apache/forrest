@@ -1,7 +1,35 @@
 #!/bin/sh
 
-# use the location of this script to infer $FORREST_HOME
-FORREST_HOME=`dirname "$0"`/..
+# Try to determine the FORREST_HOME
+if [ -z "$FORREST_HOME" ] ; then
+  # Note: this piece of code is based on ant's shell script
+
+  ## resolve links - $0 may be a link to ant's home
+  PRG=$0
+  progname=`basename $0`
+  saveddir=`pwd`
+
+  # need this for relative symlinks
+  cd `dirname $PRG`
+
+  while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '.*/.*' > /dev/null; then
+  PRG="$link"
+    else
+  PRG="`dirname $PRG`/$link"
+    fi
+  done
+
+  FORREST_HOME=`dirname "$PRG"`/..
+
+  # make it fully qualified
+  FORREST_HOME=`cd "$FORREST_HOME" && pwd`
+
+  cd $saveddir
+fi
+
 FORRESTBOT_HOME="$FORREST_HOME/forrestbot"
 
 # set the ant file to use
