@@ -13,13 +13,13 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.11 2003/02/09 06:12:44 jefft Exp $
+$Id: document2html.xsl,v 1.12 2003/02/11 21:54:42 stevenn Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- If non-blank, a PDF link for this page will not be generated -->
   <xsl:param name="nopdf"/>
-  <xsl:param name="isfaq"/>
+  <xsl:param name="notoc"/>
   <xsl:param name="path"/>
   <!-- <xsl:include href="split.xsl"/> -->
   <xsl:include href="dotdots.xsl"/>
@@ -89,7 +89,7 @@ $Id: document2html.xsl,v 1.11 2003/02/09 06:12:44 jefft Exp $
 
 
   <xsl:template match="body">
-    <xsl:if test="section and not($isfaq='true')">
+    <xsl:if test="section and not($notoc='true')">
       <ul class="minitoc">
         <xsl:for-each select="section">
           <li>
@@ -127,7 +127,7 @@ $Id: document2html.xsl,v 1.11 2003/02/09 06:12:44 jefft Exp $
     <!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
     <xsl:element name="{concat('h',$sectiondepth + 2)}">
       <xsl:value-of select="title"/>
-      <xsl:if test="$isfaq='true' and $sectiondepth = 3">
+      <xsl:if test="$notoc='true' and $sectiondepth = 3">
         <span style="float: right"><a href="#{@id}-menu">^</a></span>
       </xsl:if>
     </xsl:element>
@@ -135,7 +135,7 @@ $Id: document2html.xsl,v 1.11 2003/02/09 06:12:44 jefft Exp $
     <!-- Indent FAQ entry text 15 pixels -->
     <xsl:variable name="indent">
       <xsl:choose>
-        <xsl:when test="$isfaq='true' and $sectiondepth = 3">
+        <xsl:when test="$notoc='true' and $sectiondepth = 3">
           <xsl:text>15</xsl:text>
         </xsl:when>
         <xsl:otherwise>
