@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -135,7 +134,7 @@ public class LocationMapModule extends AbstractLogEnabled
         }
         finally {
             if (parser != null) {
-                m_manager.release((Component) parser);
+                m_manager.release(parser);
             }
         }
         return configuration;

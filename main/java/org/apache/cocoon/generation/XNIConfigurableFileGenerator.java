@@ -22,7 +22,6 @@ import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.excalibur.xml.EntityResolver;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
@@ -200,7 +199,7 @@ extends ServiceableGenerator implements CacheableProcessingComponent, Recyclable
       getLogger().error("Some strange thing just happened!!", e);
       throw new ProcessingException("XNIConfigurable.generate()",e);
     } finally {
-      this.manager.release((Component)catalogResolver);
+      this.manager.release(catalogResolver);
     }
   }
 }

@@ -26,7 +26,6 @@ import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.util.HashUtil;
-import org.apache.cocoon.xml.XMLUtils;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.NOPValidity;
 import org.apache.excalibur.xml.dom.DOMParser;
@@ -97,8 +96,8 @@ public class XPathTransformer
             String source, Parameters parameters)
         throws ProcessingException, SAXException, IOException {
         super.setup(resolver, objectModel, source, parameters);
-        this.include = (String)parameters.getParameter("include", "/");
-        this.exclude = (String)parameters.getParameter("exclude", null);
+        this.include = parameters.getParameter("include", "/");
+        this.exclude = parameters.getParameter("exclude", null);
         }
 
 
@@ -148,7 +147,7 @@ public class XPathTransformer
         Document newDoc = parser.createDocument();
         NodeList nodes = processor.selectNodeList(doc, xpath);
         for (int i=0; i<nodes.getLength(); i++) {
-            Node node = (Node)nodes.item(i);
+            Node node = nodes.item(i);
             addNode(newDoc, node);
         }
         return newDoc;
@@ -166,8 +165,8 @@ public class XPathTransformer
             return doc;
         }
         NodeList nodes = processor.selectNodeList(doc, xpath);
-        for (int i=0; i<nodes.getLength(); i++) {
-            Node node = (Node)nodes.item(i);
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
             // Detach this node. Attr nodes need to be handled specially
             if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
                 Attr attrNode = (Attr)node;
@@ -263,8 +262,8 @@ public class XPathTransformer
      */
     private Node findOrCreateNode(Node parent, Node newNode) {
         NodeList otherChildren = parent.getChildNodes();
-        for (int i=0; i<otherChildren.getLength(); i++) {
-            Node child = (Node)otherChildren.item(i);
+        for (int i = 0; i < otherChildren.getLength(); i++) {
+            Node child = otherChildren.item(i);
             if (nodeEquality(child, newNode)) {
                 // Found existing equivalent node
                 return child;

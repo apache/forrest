@@ -47,15 +47,12 @@ import org.apache.commons.lang.SystemUtils;
  */
 public class ForrestConfUtils
 {
-    private String             forrestHome, projectHome, contextHome;
-
     public final static String defaultHome = "context:/";
 
     private final static String getSystemProperty(String propertyName) {
 
         //if the property is not set, default to the webapp context
         String propertyValue = System.getProperty(propertyName, defaultHome);
-
         return propertyValue;
     }
 
@@ -120,5 +117,5 @@ public class ForrestConfUtils
         props.remove("project.skin");
         props.setProperty("project.skin", skinStoUse);
     }
-    
+
 }
