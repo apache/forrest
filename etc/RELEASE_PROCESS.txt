@@ -20,34 +20,34 @@ Preparations
 Building the distribution
 -------------------------
 
- - Edit module.xml and replace the '-dev' text with '' i.e. nothing:
-    ...
-    <project name="xml-forrest">
-        <version fix="0" major="0" minor="6" tag="-dev"/>
+ - Edit build.xml and replace the '-dev' text with '' i.e. nothing:
+   around line 35:
+   <property name="version" value="0.7-dev"/>  
+   to:
+   <property name="version" value="0.7"/>  
 
  - Edit status.xml, remove the -dev from the current <release> tag,
    and set the release date.  Also add a new <release> for development
    on the next version  e.g. from:
 
-    <release version="0.6-dev" date="unreleased">
+    <release version="0.7-dev" date="not yet released">
       ...
- 
    to:
-
-    <release version="0.7-dev" date="unreleased">
+    <release version="0.8-dev" date="not yet released">
     </release>
-    <release version="0.6" date="2002-02-13">
+    <release version="0.7" date="2002-02-13">
       ...
 
- - Edit src/core/forrest.build.xml to update the version tag to remove
-   the "-dev". there are two occurences:
+ - Edit src/core/forrest.build.xml to update the version tag to remove "-dev".
+   There are two occurences:
    around line 29:
-   <property name="version" value="0.6-dev"/>  
+   <property name="version" value="0.7-dev"/>  
+                                      ^^^^
 
     around line 52:
     <description>
     |                 Forrest Site Builder                  |
-    |                        0.6-dev                        |
+    |                        0.7-dev                        |
                                 ^^^^
 
  - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
@@ -93,7 +93,7 @@ Building the distribution
     https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch \
     https://svn.apache.org/repos/asf/forrest/tags/forrest_xy
    where 'xy' is a compact form of the version (e.g. 04, 041, 05).
-   See http://svn.apache.org/repos/asf/forrest/tags/D
+   See http://svn.apache.org/repos/asf/forrest/tags/
 
 Upload and announcement
 -----------------------
@@ -144,20 +144,19 @@ See previous announcements:
 Cleanups
 --------
 
- - Edit module.xml, increment the version and add a -dev tag:
-
-    <project name="xml-forrest">
-        <version fix="0" major="0" minor="7" tag="-dev"/>
+ - Edit build.xml, increment the version and add a -dev tag:
+   around line 35:
+   <property name="version" value="0.8-dev"/>  
 
  - Edit src/core/forrest.build.xml and update the version:
 
    around line 29:
-   <property name="version" value="0.7-dev"/>  
+   <property name="version" value="0.8-dev"/>  
 
     around line 52:
     <description>
     |                 Forrest Site Builder                  |
-    |                        0.7-dev                        |
+    |                        0.8-dev                        |
 
 
 
