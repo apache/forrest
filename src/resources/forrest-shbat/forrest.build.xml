@@ -509,23 +509,21 @@ FORREST SITE BUILDER
 
   <target name="ensure-nocontent" depends="check-contentdir"
     if="project.content.present">
-    <echo>
+    <fail>
 ------------------------------------------------
 This project already has content in ${project.xdocs-dir}.
 ------------------------------------------------
-    </echo>
-    <fail message="Project already has content"/>
+    </fail>
   </target>
 
   <target name="ensure-content" depends="check-contentdir"
     unless="project.content.present">
-    <echo>
+    <fail>
 ------------------------------------------------
 This project has no content in ${project.xdocs-dir}.
 Use the 'seed' target to create a template project structure.
 ------------------------------------------------
-    </echo>
-    <fail message="Project has no content"/>
+    </fail>
   </target>
 
   <!-- ===============================================================
@@ -580,13 +578,12 @@ for any broken links in the generated site.
 
 
   <target name="project.webapp.defined" unless="project.webapp">
-    <echo>
+    <fail>
       ------------------------------------------------
       Error: $${project.webapp} variable has not been set. This is where the
       webapp will be assembled. Please define it in the calling script.
       ------------------------------------------------
-    </echo>
-    <fail message="project.webapp variable not set"/>
+    </fail>
   </target>
 
   <!-- ===============================================================
