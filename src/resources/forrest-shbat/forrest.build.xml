@@ -718,12 +718,11 @@ Thanks for using Apache Forrest
     <basename file="${project.catalog}" property="catalog-file"/>
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
-        <catalogfiles dir="${project.schema-dir}">
-          <include name="${catalog-file}"/>
-        </catalogfiles>
-        <catalogfiles dir="${forrest.home}/context/resources/schema">
-          <include name="catalog" />
-        </catalogfiles>
+        <catalogpath>
+          <pathelement location="${project.schema-dir}/${catalog-file}"/>
+          <pathelement
+            location="${forrest.home}/context/resources/schema/catalog"/>
+        </catalogpath>
       </xmlcatalog>
       <fileset dir="${project.xdocs-dir}"
         includes="${forrest.validate.xdocs.includes}"
