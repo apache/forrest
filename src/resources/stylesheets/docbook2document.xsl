@@ -446,7 +446,7 @@ Revision:
                               <xsl:value-of select="title"/>
                         </td>
                   </tr>
-                  <xsl:apply-templates/>
+                  <xsl:apply-templates select="*[not(self::title)]"/>
             </table>
       </xsl:template>
 
