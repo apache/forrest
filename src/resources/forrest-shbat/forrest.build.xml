@@ -137,7 +137,7 @@ FORREST SITE BUILDER
         <isset property="skinconf.present"/>
       </and>
     </condition>
-    <basename file="${project.skinconf}" property="skinconf-file}"/>
+    <basename file="${project.skinconf}" property="skinconf-file"/>
     <property name="forrest.validate.skinconf.includes" value="${skinconf-file}"/>
     <property name="forrest.validate.skinconf.excludes" value=""/>
     <property name="forrest.validate.skinconf.failonerror"
@@ -665,7 +665,8 @@ Thanks for using Apache Forrest
 
 
 
-  <target name="validate" depends="validation-props, validate-xdocs, validate-skins,
+  <target name="validate" depends="validation-props, validate-xdocs,
+    validate-skinconf, validate-skins,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
 
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
@@ -689,8 +690,8 @@ Thanks for using Apache Forrest
     if="validate.skinconf">
     <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
       <fileset dir="${project.content-dir}"
-        includes="forrest.validate.skinconf.includes"
-        excludes="forrest.validate.skinconf.excludes"/>
+        includes="${forrest.validate.skinconf.includes}"
+        excludes="${forrest.validate.skinconf.excludes}"/>
     </jing>
     <echo message="...validated skinconf"/>
   </target>
