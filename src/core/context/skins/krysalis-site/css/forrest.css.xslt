@@ -9,14 +9,11 @@
   
 <!-- ==================== main block colors ============================ -->
 <xsl:template match="color[@name='header']">
-.header         { background-color: <xsl:value-of select="@value"/>;} 
-.subborder.trail {border-bottom: 1px solid <xsl:value-of select="@value"/>;
-                  border-top: 1px solid <xsl:value-of select="@value"/>; } 
-.footer          {border-top: 1px solid <xsl:value-of select="@value"/>; } </xsl:template>
+.header         { background-color: <xsl:value-of select="@value"/>;}  </xsl:template>
 <xsl:template match="color[@name='tab-selected']"> 
 .tab.selected      { background-color: <xsl:value-of select="@value"/>;} 
 .border         { background-color: <xsl:value-of select="@value"/>;} 
-.menu           { border-color: <xsl:value-of select="@value"/>;}</xsl:template> 
+</xsl:template> 
 <xsl:template match="color[@name='tab-unselected']"> 
 .tab.unselected      { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
 <xsl:template match="color[@name='subtab-selected']">
@@ -37,6 +34,13 @@
 
 <xsl:template match="color[@name='toolbox']">
 <!-- toolbox unused -->
+</xsl:template> 
+
+<xsl:template match="color[@name='border']">
+.subborder.trail {border-bottom: 1px solid <xsl:value-of select="@value"/>;
+                  border-top: 1px solid <xsl:value-of select="@value"/>; } 
+.footer          {border-top: 1px solid <xsl:value-of select="@value"/>; }
+.menu           { border-color: <xsl:value-of select="@value"/>;}
 </xsl:template> 
 
 <xsl:template match="color[@name='menu']">
