@@ -50,27 +50,21 @@
 */
 package org.apache.forrest.skinconf;
 
+import java.awt.Color;
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
-import org.apache.excalibur.source.Source;
-import org.apache.excalibur.source.SourceException;
-import org.apache.cocoon.components.source.SourceUtil;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.transformation.AbstractTransformer;
 import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.awt.Color;
-
 /**
  * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @version CVS $Id: SkinconfTransformer.java,v 1.1 2004/01/19 18:06:15 nicolaken Exp $
+ * @version CVS $Id: SkinconfTransformer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class SkinconfTransformer
   extends AbstractTransformer {

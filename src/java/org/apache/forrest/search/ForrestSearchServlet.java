@@ -59,9 +59,7 @@ package org.apache.forrest.search;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,7 +69,7 @@ import org.w3c.dom.Document;
 /**
  * <p>This sevlet processes all search request inside a Forrest site.</p>
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearchServlet.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
+ * @version $Id: ForrestSearchServlet.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class ForrestSearchServlet extends HttpServlet {
 

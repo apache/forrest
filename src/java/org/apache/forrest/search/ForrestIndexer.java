@@ -58,19 +58,13 @@ package org.apache.forrest.search;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.Date;
 
-import org.apache.lucene.analysis.Analyzer;
-
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-
 import org.apache.lucene.util.Arrays;
 
 /**
@@ -95,7 +89,7 @@ import org.apache.lucene.util.Arrays;
  * or status.xml) and force the indexer to skip them.</li>
  *
  * @author Ramon Prades [RPR]
- * @version CVS $Id: ForrestIndexer.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
+ * @version CVS $Id: ForrestIndexer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class ForrestIndexer {
 

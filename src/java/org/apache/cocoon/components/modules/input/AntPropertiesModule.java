@@ -50,13 +50,12 @@
 */
 package org.apache.cocoon.components.modules.input;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Enumeration;
 
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -65,10 +64,9 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.commons.lang.StringUtils;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Input module for accessing properties in a properties file 

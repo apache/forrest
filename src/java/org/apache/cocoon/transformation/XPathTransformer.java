@@ -50,36 +50,28 @@
 */
 package org.apache.cocoon.transformation;
 
-import org.apache.excalibur.xml.dom.DOMParser;
-import org.apache.excalibur.xml.xpath.XPathProcessor;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.impl.validity.NOPValidity;
-
-import org.apache.cocoon.ProcessingException;
-import org.apache.cocoon.environment.SourceResolver;
-import org.apache.cocoon.caching.CacheableProcessingComponent;
-import org.apache.cocoon.xml.XMLUtils;
-import org.apache.cocoon.util.HashUtil;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.NamedNodeMap;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
+
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.cocoon.ProcessingException;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
+import org.apache.cocoon.environment.SourceResolver;
+import org.apache.cocoon.util.HashUtil;
+import org.apache.cocoon.xml.XMLUtils;
+import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.NOPValidity;
+import org.apache.excalibur.xml.dom.DOMParser;
+import org.apache.excalibur.xml.xpath.XPathProcessor;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * A transformer that prunes the source tree based on <code>include</code> and
@@ -123,7 +115,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer

@@ -57,20 +57,14 @@
 package org.apache.forrest.search;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Vector;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -112,7 +106,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * <p><em>(Hope my English it's not too bad ;-)</em></p>
  *
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocumentSAXParser.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
+ * @version $Id: ForrestDocumentSAXParser.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 
 public class ForrestDocumentSAXParser extends DefaultHandler {

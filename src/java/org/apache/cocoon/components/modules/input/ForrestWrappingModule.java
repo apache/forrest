@@ -51,22 +51,11 @@
 
 package org.apache.cocoon.components.modules.input;
 
-import java.util.Iterator;
-import java.util.Map;
-
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.logger.LogEnabled;
-
-import org.apache.cocoon.util.HashMap;
 
 /**
  * @TODO
  * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @version CVS $Id: ForrestWrappingModule.java,v 1.1 2004/01/27 15:22:42 nicolaken Exp $
+ * @version CVS $Id: ForrestWrappingModule.java,v 1.2 2004/02/19 23:39:50 nicolaken Exp $
  */
 public class ForrestWrappingModule extends AbstractWrappingModule{
     

@@ -50,38 +50,28 @@
 */
 package org.apache.cocoon.transformation;
 
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.excalibur.xml.xpath.XPathProcessor;
-import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.impl.validity.NOPValidity;
-import org.apache.cocoon.ProcessingException;
-import org.apache.cocoon.environment.SourceResolver;
-import org.apache.cocoon.caching.CacheableProcessingComponent;
-import org.apache.cocoon.xml.XMLUtils;
-import org.apache.cocoon.util.HashUtil;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Text;
-import org.w3c.dom.Element;
-import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.Map;
-import java.util.Stack;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.cocoon.ProcessingException;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
+import org.apache.cocoon.environment.SourceResolver;
+import org.apache.cocoon.util.HashUtil;
+import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.NOPValidity;
+import org.apache.excalibur.xml.xpath.XPathProcessor;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * A Transformer for adding a URL-encoded 'id' attribute to a node, whose value
