@@ -48,7 +48,7 @@ if [ "$UPGRADE_TYPE" = "real" -o "$UPGRADE_TYPE" = "real_with_cvs" ]; then
   FLIB=$FORREST/lib/core
   FLIB_ENDORSED=$FORREST/lib/endorsed
 elif [ "$UPGRADE_TYPE" = "testing" ]; then
-  FLIB=$FDIST/WEB-INF/lib
+  FLIB=$FDIST/lib/core
   FLIB_ENDORSED=$FDIST/lib/endorsed
 fi
 
