@@ -148,6 +148,19 @@ FORREST SITE BUILDER
     <property name="forrest.validate.skinconf.failonerror"
       value="${forrest.validate.failonerror}" />
 
+    <property name="forrest.validate.sitemap" value="${forrest.validate}"/>
+    <condition property="validate.sitemap">
+      <and>
+        <istrue value="${forrest.validate.sitemap}"/>
+        <isset property="sitemap.present"/>
+      </and>
+    </condition>
+    <basename file="${project.sitemap}" property="sitemap-file"/>
+    <property name="forrest.validate.sitemap.includes" value="${sitemap-file}"/>
+    <property name="forrest.validate.sitemap.excludes" value=""/>
+    <property name="forrest.validate.sitemap.failonerror"
+      value="${forrest.validate.failonerror}" />
+
     <property name="forrest.validate.stylesheets" value="${forrest.validate}"/>
     <condition property="validate.stylesheets">
       <and>
@@ -694,7 +707,7 @@ Thanks for using Apache Forrest
 
 
   <target name="validate" depends="validation-props, validate-xdocs,
-    validate-skinconf, validate-skins,
+    validate-skinconf, validate-sitemap, validate-skins,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
 
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
@@ -722,6 +735,16 @@ Thanks for using Apache Forrest
         excludes="${forrest.validate.skinconf.excludes}"/>
     </jing>
     <echo message="...validated skinconf"/>
+  </target>
+
+  <target name="validate-sitemap" depends="validation-props"
+    if="validate.sitemap">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v05.rng">
+      <fileset dir="${project.content-dir}"
+        includes="${forrest.validate.sitemap.includes}"
+        excludes="${forrest.validate.sitemap.excludes}"/>
+    </jing>
+    <echo message="...validated sitemap"/>
   </target>
 
   <target name="validate-stylesheets" depends="validation-props"
