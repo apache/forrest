@@ -22,8 +22,8 @@ FORREST SITE BUILDER
   <description>
     *=======================================================*
     |                 Forrest Site Builder                  |
-    |                        0.6-dev                        |
-    |             $Date: 2004/02/05 14:58:14 $              |
+    |                        ${version}                        |
+    |             $Date: 2004/02/09 02:47:45 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -247,6 +247,7 @@ FORREST SITE BUILDER
         <exclude name="skins/**" />
         <exclude name="resources/**" />        
         <exclude name="WEB-INF/*.xconf" />
+        <exclude name="jettyconf.xml" />
       </fileset>
     </copy>
 
@@ -342,13 +343,12 @@ FORREST SITE BUILDER
        param: location to clean ${project.webapp}
        param: file to clean ${project.brokenlinkfile}
        =============================================================== -->
-  <target name="clean" depends="init-props" description="Clean all directories and files generated during the build">
+  <target name="clean-site" depends="init-props" description="Clean all directories and files generated during the build">
     <delete failonerror="false" dir="${project.site-dir}"/>
     <delete failonerror="false" dir="${project.temp-dir}"/>
     <delete failonerror="false" dir="${project.webapp}"/>
     <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
-  <target name="clean-site" depends="clean"/>
   
   <!-- ===============================================================
        Checks if the current project contains Forrest docs, and sets
@@ -448,7 +448,29 @@ Use the 'seed' target to create a template project structure.
 
 
   <target name="run" 
-   description="Run Jetty with configuration set by the jetty.run property"
+   depends="webapp-local, run_custom_jetty, run_default_jetty"/>
+ 
+  <target name="run_custom_jetty"
+   if="custom_jetty_config"
+   description="Run Jetty with configuration file found in the project">
+    <java classname="org.mortbay.jetty.Server"
+          dir="${project.webapp}"
+          fork="yes"
+          maxmemory="${forrest.maxmemory}"
+          failonerror="yes">
+       <classpath>
+         <path refid="forrest.cp"/>
+       </classpath>
+       <jvmarg line="${forrest.jvmargs}"/>
+       <jvmarg line="${forrest.basic.jvmargs}"/>
+       <jvmarg
+         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+       <arg line="${content-dir}/jettyconf.xml" />
+    </java>
+  </target>
+  
+  <target name="run_default_jetty"
+   description="Run Jetty with configuration file found in Forrest"
    depends="webapp-local">
     <java classname="org.mortbay.jetty.Server"
           dir="${project.webapp}"
@@ -462,7 +484,7 @@ Use the 'seed' target to create a template project structure.
        <jvmarg line="${forrest.basic.jvmargs}"/>
        <jvmarg
          value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
-       <arg line="jettyconf.xml" />
+       <arg line="${forrest.home}/context/jettyconf.xml" />
     </java>
   </target>  
 
