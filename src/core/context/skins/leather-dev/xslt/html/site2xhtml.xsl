@@ -179,13 +179,23 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |start Search
     +</xsl:comment> 
              <div class="search-input">
+             <xsl:choose>
+              <xsl:when test="$config/search/@provider = 'lucene'">
+                <!-- Lucene search -->
+                <form method="get" action="{$root}{$lucene-search}">
+                  <input type="text" id="query" name="queryString" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>
+		  &#160;
+		  <input type="submit" value="Search" name="Search"/>
+		 </form>
+	      </xsl:when>
+	      <xsl:otherwise>
                 <form class="roundtopsmall" method="get" action="http://www.google.com/search"> 
                     <input type="hidden" 
                     name="sitesearch" value="{$config/search/@domain}"/> 
-                    <input type="text" id="query" name="q" size="15" 
-                    value="Search the site:" 
-                    onFocus="getBlank (this, 'Search the site:');"/>&#160; 
+                    <input type="text" id="query" name="q" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>&#160; 
                     <input type="submit" value="Search" name="Search"/> </form>
+        </xsl:otherwise>
+</xsl:choose>
             </div>
 <xsl:comment>+
     |end search
