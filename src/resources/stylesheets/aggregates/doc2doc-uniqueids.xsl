@@ -23,6 +23,6 @@
     <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
-  <xsl:include href="copyover.xsl"/>
+  <xsl:include href="../copyover.xsl"/>
 
 </xsl:stylesheet>

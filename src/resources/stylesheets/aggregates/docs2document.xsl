@@ -7,6 +7,6 @@
       <xsl:copy-of select="body/node()" />
   </xsl:template>
 
-  <xsl:include href="copyover.xsl"/>
+  <xsl:include href="../copyover.xsl"/>
 
 </xsl:stylesheet>

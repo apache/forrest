@@ -85,6 +85,6 @@ Jeff Turner <jefft@apache.org>
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:include href="copyover.xsl"/>
+  <xsl:include href="../copyover.xsl"/>
 
 </xsl:stylesheet>
