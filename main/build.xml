@@ -282,6 +282,19 @@
 
 
   <!-- =================================================================== -->
+  <!-- deploy the required plugins locally                                 -->
+  <!-- =================================================================== -->
+  <target name="requiredPlugins" depends="init">
+    <ant antfile="../plugins/build.xml" 
+      target="local-deploy">
+      <property name="plugin-name" 
+        value="org.apache.forrest.plugin.pdf-output"/>
+      <property name="basedir" 
+        value="../plugins"/>
+    </ant>
+  </target>
+  
+  <!-- =================================================================== -->
   <!-- Compile Cocoon java classes                                         -->
   <!-- =================================================================== -->
   <target name="compile" depends="init">
@@ -299,7 +312,7 @@
   <!-- =================================================================== -->
   <!-- Jar Cocoon classes                                                  -->
   <!-- =================================================================== -->
-  <target name="jar" depends="init, compile">
+  <target name="jar" depends="init, compile, requiredPlugins">
     <jar destfile="${build.dir}/xml-forrest.jar"
       basedir="${build.classes}"/>
     <echo>
