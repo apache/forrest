@@ -71,6 +71,14 @@
   -->
  <map:pipeline>
   <!--
+    FIXME:
+    The next pipes have to be refactored and then to go into the view-interface (internal plugin)
+    e.g. resources/templates/{1}.ft -> should become 
+    first {project:view-skin}/templates/{1}.ft 
+    then {project:skin}/templates/{1}.ft
+    -->
+  <!--FIXME:START-->
+  <!--
     Resolving factory
     Project implementation of templates have priority before default ones.
     If no implementation can be found we use the noFt (~ - no forrest:template) implementation.
@@ -117,6 +125,15 @@
      <map:transform src="resources/stylesheets/contract.css.xsl"/>
      <map:serialize type="txt"/>
    </map:match>
+<!--FIXME:END-->
+<!--
+    FIXME:
+    The next pipes have to be refactored and then to go into an input plugin
+    e.g. resources/templates -> should become 
+    first {project:view-skin}/templates 
+    then {project:skin}/templates
+    -->
+  <!--FIXME:START-->
 <!-- ls.fbits 
   list the default fbits-->
   <map:pipeline>
@@ -145,28 +162,30 @@
 transform this dir-list and add more information 
 -->
   <map:pipeline>
-    <map:match pattern="ls.contracts.l">
+    <map:match pattern="ls.contracts.l.xml">
 		  <map:generate src="cocoon:/ls.contracts"/>
       <map:transform src="resources/stylesheets/ls.contracts.xsl">
         <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.view"/>
       </map:transform>
       <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
-      <map:serialize type="xhtml"/>
+      <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
 <!--ls.fbits.l
 transform this dir-list of the project and add more information 
 -->
   <map:pipeline>
-    <map:match pattern="ls.contracts.project.l">
+    <map:match pattern="ls.contracts.project.l.xml">
 		  <map:generate src="cocoon:/ls.contracts.project"/>
       <map:transform src="resources/stylesheets/ls.contracts.xsl">
         <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.view"/>
       </map:transform>
       <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
-      <map:serialize type="xhtml"/>
+      <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
+  <!--FIXME:END-->
+  
    <!--
     Get some util-templates from the common skin.
     -->
@@ -187,10 +206,7 @@ transform this dir-list of the project and add more information
         <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-<!-- END
-  1. fbits
-  -->
-  
+
   <!--
   Last processing step. 
   Here we are overriding the default skin generation.
