@@ -56,7 +56,7 @@ Author: Jörg Werner
               <td width="100" align="center">
           <xsl:choose>
             <xsl:when test="$page &gt; 1">
-              <a href="index.html?page={$page - 1}">
+              <a href="index_{$page - 1}.html">
                 <img border="0" src="button/Previous"/>
               </a>
             </xsl:when>
@@ -66,7 +66,7 @@ Author: Jörg Werner
               <td width="100" align="center">
           <xsl:choose>
             <xsl:when test="($page * $rows * $cols) &lt; count($all_hits)">
-              <a href="index.html?page={$page + 1}">
+              <a href="index_{$page + 1}.html">
                 <img border="0" src="button/Next"/>
               </a>
             </xsl:when>
