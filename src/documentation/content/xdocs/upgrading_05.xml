@@ -3,18 +3,87 @@
 <document> 
   <header> 
     <title>Upgrading to Forrest 0.5</title> 
-    <version>$Revision: 1.2 $</version>
+    <version>$Revision: 1.3 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
+      <person name="Dave Brondsema" email="dave@brondsema.net"/>
     </authors>
   </header> 
   <body> 
-    <p>
-      This page describes changes to Forrest that affect people upgrading from 0.4 and earlier versions to 0.5.  A full
-      list of changes is visible in the <link href="site:changes">changelog</link>.  Please post your upgrade
-      experiences to the <link href="site:mail-lists/forrest-dev">forrest-dev mailing list</link>. As more experience is
-      gained, this document will be updated.  
-    </p>
+    <section>
+      <title>Introduction</title>
+      <p>
+      This page describes changes to Forrest that affect people who are
+      upgrading from 0.4 and earlier to the 0.5 version.
+      Please post your upgrade experiences to the
+      <link href="site:mail-lists/forrest-dev">forrest-dev mailing list</link>.
+      As more experience is gained, this document will be updated.  
+      </p>
+      <p>
+      See the concise list of new features and then the specific upgrade tips.
+      </p>
+    </section>
+
+    <section>
+      <title>New Features</title>
+      <p>This new version includes many changes, as it as been under
+      development for a long time (mainly awaiting the Cocoon 2.1 release).
+      The following list shows some of the key new features for Forrest 0.5
+      (for the full list of changes, see the
+      <link href="site:changes">change log</link>).
+      </p>
+      <ul>
+        <li>Better handling of project sitemaps.</li>
+
+        <li>Docbook support. The DTDs are shipped. Document types are
+        automatically detected by the sitemap and there is a basic stylesheet
+        which converts DocBook documents to intermediate forrest document-v12
+        for standard rendering. For rendering as full DocBook, see
+        <link href="site:faq/docbook">this FAQ entry</link>.
+       </li>
+
+        <li>Configuration of URLs to ignore with cli.xconf configuration.</li>
+
+        <li>Skin enhancements.</li>
+
+        <li>The document-v12 DTDs are added. You can still use the old
+        document-v11 DTDs if you would rather. However it is easy to upgrade
+        - just change the document type declarations in you project's xdocs
+        and run '<code>forrest validate-xdocs</code>'.</li>
+
+        <li>Automated handling of documents in Wiki syntax. See the
+         fresh-site example which are generated when you
+         '<code>forrest seed</code>' a new project.</li>
+
+        <li>The '<code>forrest backcopy</code>' target copies all
+         types of content that you may have edited under the webapp while
+         doing a '<code>forrest run</code>'.</li>
+
+        <li>Latest version of Cocoon, including:
+          <ul>
+            <li>New command-line interface; static rendering is much faster</li>
+          </ul>
+        </li>
+
+        <li>Flag for email obfuscation.</li>
+
+        <li>Support for raw un-processed content. See 
+        <link href="site:faq/link_raw">this FAQ entry</link>.
+        </li>
+
+        <li>Element <code>&lt;abstract&gt;</code> is now rendered in the 
+        HTML output.</li>
+
+        <li>Images scale properly in PDF output. See also
+        <link href="site:faq/pdf_images">this FAQ entry</link>.
+        </li>
+
+        <li>Configurable table-of-content depth with new 'toc' element in
+        the <code>skinconf.xml</code> configuration.</li>
+
+        <li>Filename extensions do not change</li>
+      </ul>
+    </section>
     <section>
       <title>Upgrading the sitemap</title>
       <p>
@@ -23,16 +92,19 @@
         everything, a 'driver' sitemap.xmap now delegates to a number of mounted subsitemaps handling different functional
         areas.  The new sitemap is fully described in the <link href="ext:sitemap-ref">Sitemap Reference</link>.
       </p>
-      <p>Users that have overridden and augmented the Forrest 0.4 sitemap.xmap will need to:</p>
+      <p>Users that have overridden and augmented the Forrest 0.4 sitemap.xmap
+      (run '<code>forrest overrides</code>' to see if your project has)
+      will need to:</p>
       <ol>
         <li>Move their overridden sitemap (<code>src/documentation/sitemap.xmap</code>) out the way</li>
         <li>Copy the new sitemap, $FORREST_HOME/context/sitemap.xmap, to <code>src/documentation</code></li>
-        <li>Reapply customizations to the new sitemap.xmap.  Customizations can be determined by comparing the modified
+        <li>Reapply your customizations to the new sitemap.xmap.  Customizations can be determined by comparing your modified
           sitemap.xmap with <link
             href="http://cvs.apache.org/viewcvs.cgi/*checkout*/xml-forrest/src/resources/conf/sitemap.xmap?rev=1.66&amp;only_with_tag=FORREST_04">original
             Forrest 0.4 sitemap</link>.</li>
       </ol>
     </section>
+
     <section>
       <title>Version-specific sitemaps</title>
       <p>Forrest 0.5 now supports <em>version-specific sitemaps</em>.  Ie., if your project's overridden sitemap is
@@ -67,16 +139,60 @@
         current version.</note>
     </section>
     <section>
-      <title>Excluding URLs: filterlinks.xsl removed</title>
-      <p>In Forrest 0.4, URLs could be excluded from command-line processing by overriding and editing
-        <code>filterlinks.xsl</code>, and excluding the link nodes.  Forrest 0.5 uses the rewritten command-line from
-        Cocoon 2.1.1, which apart from being twice as fast, <strong>does not use filterlinks.xsl</strong>.  Instead,
-        patterns for command-line inclusion and exclusion can be specified in cli.xconf, as described in <link
-          href="site:faq/ignoring_javadocs">this FAQ entry</link>.
+      <title>Excluding URLs: filterlinks.xsl removed and cli.xconf added</title>
+      <p>In Forrest 0.4 certain URLs could be excluded from command-line
+      processing by overriding and editing
+      <code>filterlinks.xsl</code> and so excluding the link nodes.
+      </p>
+      <p>Forrest 0.5 uses the re-written command-line from Cocoon 2.1.1 which,
+      apart from being twice as fast,
+      <strong>does not use filterlinks.xsl</strong>.  Instead, patterns for
+      command-line inclusion and exclusion can be specified in cli.xconf,
+      as described in
+      <link href="site:faq/ignoring_javadocs">this FAQ entry</link>. There is
+      already a default cli.xconf but you can over-ride that with your own if
+      needed by copying <code>resources/conf/cli.xconf</code> from the Forrest
+      distribution into your project's top-level directory.
       </p>
     </section>
+
+    <section>
+      <title>Skin invocation changes</title>
+      <p>Users with custom skins <em>may</em> need to update them, depending on what use they make of passed-in XSLT
+        parameters.  If your custom skin does not appear to work with 0.5, look in Forrest's <code>sitemap.xmap</code>
+        for occurrences of <code>{forrest:skin}</code>, and check that the callee (your XSLT) is expecting what the
+        caller (the sitemap) is passing it.  Forrest skins can be used as a reference.</p>
+    </section>
+
+    <section>
+      <title>Upgrading skinconf.xml</title>
+      <p>Look at the <link
+        href="http://cvs.apache.org/viewcvs/xml-forrest/src/resources/fresh-site/src/documentation/skinconf.xml.diff?r1=1.7%3AFORREST_04&#38;tr1=1.1&#38;r2=1.15%3AFORREST_05_RC&#38;tr2=1.15&#38;diff_format=h">differences
+        for the sample skinconf.xml</link> as a guide.
+        You will need to update the internal DTD and add several new elements.
+      </p>
+    </section>
+
+    <section>
+      <title>Upgrading forrest.properties</title>
+      <p>Look at the <link
+        href="http://cvs.apache.org/viewcvs/xml-forrest/src/resources/fresh-site/forrest.properties.diff?r1=1.20%3AFORREST_04&#38;tr1=1.1&#38;r2=1.32%3AFORREST_05_RC&#38;tr2=1.32&#38;diff_format=h">differences
+        for the sample forrest.properties</link> as a guide. Note that
+        project.sitemap has changed to project.sitemap-dir and note that
+        cli.xconf now controls some settings that were previously controlled
+        by forrest.properties, such as project.start-uri
+      </p>
+    </section>
+
+    <section>
+      <title>Run a clean target after upgrade</title>
+      <p>To avoid any issue with old classes being loaded, run a
+       '<code>forrest clean</code>' just after you upgraded to this version.</p>
+    </section>
+
     <section>
       <title>SVGs should omit DOCTYPE declarations</title>
+<fixme author="forrest-dev">Is this note still relevant?</fixme>
       <p>In Forrest 0.5, sites that render SVGs may encounter ClassCastExceptions:</p>
       <source>
 javax.xml.transform.TransformerException: java.lang.ClassCastException
@@ -87,18 +203,7 @@ javax.xml.transform.TransformerException: java.lang.ClassCastException
         resolved.  The workaround is to edit your <code>src/documentation/resources/images/*.svg</code> files, and
         comment out the <strong>&lt;!DOCTYPE ... &gt;</strong> declaration.</p>
     </section>
-    <section>
-      <title>Skin invocation changes</title>
-      <p>Users with custom skins <em>may</em> need to update them, depending on what use they make of passed-in XSLT
-        parameters.  If your custom skin does not appear to work with 0.5, look in Forrest's <code>sitemap.xmap</code>
-        for occurrences of <code>{forrest:skin}</code>, and check that the callee (your XSLT) is expecting what the
-        caller (the sitemap) is passing it.  Forrest skins can be used as a reference.</p>
-    </section>
-    <section>
-      <title>run a clean target after upgrade</title>
-      <p>To avoid any issue with old classes being loaded run a <code>forrest
-       clean</code>just after you upgraded to this version.</p>
-    </section>
+
     <section>
       <title>To be continued...</title>
       <p>..as more issues are discovered/remembered :)  Please send feedback to the <link
