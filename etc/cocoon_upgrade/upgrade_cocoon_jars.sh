@@ -64,21 +64,12 @@ function copy()
 {
   pushd . 
   cd $FLIB
-  case $UPGRADE_TYPE in
-    "testing")
-    rm $1*
-    ;;
-    "real")
-    echo "CVS removing `echo $1*`"
-    [ ! -z "`echo $1*`" ] && cvsdo remove -f $1*
-    ;;
-  esac
+  rm $1*
 
   cp $CLIB/$1* .
 
   if [ "$UPGRADE_TYPE" = "real" ]; then
-    echo "CVS adding `echo $1*`"
-    cvs add -kb $1* &
+    echo "cvs add -kb `echo $1*`"
   fi
   popd
 }
@@ -87,21 +78,12 @@ function bzcopy()
 {
   pushd . 
   cd $FLIB
-  case $UPGRADE_TYPE in
-    "testing")
-    rm cocoon-$1-block-*.jar
-    ;;
-    "real")
-    echo "CVS removing $1*"
-    cvsdo remove -f cocoon-$1-block-*.jar
-    ;;
-  esac
+  rm cocoon-$1-block-*.jar
 
   cp $CBLOCKS/$1-block.jar cocoon-$1-block-$JARSUFFIX.jar
 
   if [ "$UPGRADE_TYPE" = "real" ]; then
     echo "CVS adding `echo cocoon-$1-block-*.jar`"
-    cvs add -kb cocoon-$1-block-*.jar &
   fi
 
   popd
@@ -117,20 +99,13 @@ function upgrade_neko()
 {
   pushd . 
   cd $FLIB
-  case $UPGRADE_TYPE in
-    "testing")
-    rm neko{dtd,pull}*
-    ;;
-    "real")
-    cvsdo remove -f neko{dtd,pull}*
-    ;;
-  esac
+  rm neko{dtd,pull}*
 
   cp $NEKODTD_HOME/nekodtd.jar nekodtd-$NEKODTD_VERSION.jar
   cp $NEKOPULL_HOME/nekopull.jar nekopull-$NEKOPULL_VERSION.jar
 
   if [ "$UPGRADE_TYPE" = "real" ]; then
-    cvs add -kb neko{dtd,pull}-* &
+    echo "cvs add -kb `echo neko{dtd,pull}-*`"
   fi
   popd
 
@@ -140,20 +115,12 @@ function upgrade_endorsed()
 {
   pushd . 
   cd $FLIB_ENDORSED
-  case $UPGRADE_TYPE in
-    "testing")
-    rm xalan* xerces* xml-apis*
-    ;;
-    "real")
-    cvsdo remove -f xalan* xerces* xml-apis*
-    rm xalan* xerces* xml-apis*
-    ;;
-  esac
+  rm xalan* xerces* xml-apis*
 
   cp $CLIB/{xalan,xerces,xml-apis}* .
 
   if [ "$UPGRADE_TYPE" = "real" ]; then
-    cvs add -kb {xalan,xerces,xml-apis}* &
+    echo "cvs add -kb `echo {xalan,xerces,xml-apis}*`"
   fi
   popd
 
