@@ -40,11 +40,6 @@
   
   <property name="build.dir"                  location="build"/>
   <property name="build.classes"              location="${build.dir}/classes"/>
-  <property name="build.docs"                 location="${build.dir}/site"/>
-  
-  <property name="java.dir"                    location="${plugin.src.dir}/java"/>
-  <property name="mocks.dir"                   location="${plugin.src.dir}/mocks"/>
-  <property name="lib.dir"                     location="lib"/>
     
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
@@ -103,7 +98,6 @@
     </path>
   	
   	<available file="${java.dir}" property="java_exists" type="dir"/>
-  	<available file="${mocks.dir}" property="mocks_exists" type="dir"/>
     
   </target>
   
@@ -121,17 +115,12 @@
     
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
       <fileset dir="${plugins.dir}/${plugin-name}">
-        <exclude name="lib/**"/>
         <exclude name="build/**"/>
       </fileset>
     </copy>
   	<copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
   	      file="${build.dir}/${plugin-name}.jar"
   	      failonerror="false"/>
-  	<copy toDir="${plugins.localDeploy-dir}/lib"
-      failonerror="false">
-  	    <fileset dir="lib"/>
-    </copy>
     <antcall target="build"/>
   </target>
   
@@ -161,15 +150,6 @@
     <copy todir="${deploy.svn.svn-dir}" 
           overwrite="true" 
           file="${plugins.dist-dir}/${plugin-name}.zip"/>
-  	<!-- Copy docs into sandbox
-  	<copy todir="${deploy.svn.svn-dir}/docs/${plugin-name}" 
-  	      overwrite="true">
-  		<fileset dir="${build.docs}"/>
-  	</copy>
-  	<fixcrlf srcdir="${build.docs}" 
-  		     eol="lf"
-  	         includes="**/*.xml **/*.html **/*.rss **/*.css **/*.js **/*.txt"/>
-  	 -->
      
     <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
@@ -254,7 +234,7 @@
   <!-- =================================================================== -->
   <!-- Compile java classes                                         -->
   <!-- =================================================================== -->
-  <target name="compile" depends="init, compile-mocks" if="java_exists">
+  <target name="compile" depends="init" if="java_exists">
     <mkdir dir="${build.classes}"/>
     <javac srcdir=   "${java.dir}"
       destdir=       "${build.classes}"
@@ -270,21 +250,6 @@
   			<exclude name="**/*.java"/>
 		</fileset>
   	</copy>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Compile any mock classes required to compile the main classes       -->
-  <!-- =================================================================== -->
-  <target name="compile-mocks" depends="init" if="mocks_exists">
-    <mkdir dir="${build.classes}"/>
-    <javac srcdir=   "${mocks.dir}"
-      destdir=       "${build.classes}"
-      debug=         "${build.compiler.debug}"
-      optimize=      "${build.compiler.optimize}"
-      deprecation=   "${build.compiler.deprecation}"
-      nowarn=        "${build.compiler.nowarn}"
-      classpathref=  "classpath">
-    </javac>
   </target>
 
   <!-- =================================================================== -->
