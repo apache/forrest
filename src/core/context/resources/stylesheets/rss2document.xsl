@@ -19,7 +19,7 @@
 <xsl:template match="rss">
   <document>
     <header>
-      <title>Example: RSS feed to document</title>
+      <title><xsl:value-of select="channel/title"/></title>
     </header>
     <body>
       <xsl:apply-templates select="channel/item"/>
