@@ -35,12 +35,6 @@ import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceResolver;
 
 /**
- * @author barozzink 23-apr-2004
- **/
-/**
- * @author barozzink 23-apr-2004
- **/
-/**
  * Input module for accessing the base properties used in Forrest. The main
  * values are the locations of the <b>source </b> directories and of the
  * <b>forrest </b> directories. The values are gotten from the
@@ -102,8 +96,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         return attributeValues;
     }
 
-    private final String getSystemProperty(String propertyName)
-                    throws MalformedURLException, IOException {
+    private final String getSystemProperty(String propertyName){
 
         //if the property is not set, default to the webapp context
         String propertyValue = System.getProperty(propertyName, "context:/");
@@ -210,4 +203,3 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
    }
     
 }
-
