@@ -64,7 +64,7 @@
 
   <map:pipelines>
   
-    <map:pipeline internal-only="true">
+   <map:pipeline internal-only="true">
 
    <!-- IMPORTANT! This pipeline sould be cachable -->
    <map:match pattern="*.grm">
@@ -120,25 +120,16 @@
     -->
     <map:match pattern="put">
       <map:generate type="request"/>
-
-
       <map:transform src="editor/stylesheets/editor2writer.xsl">
-        <map:parameter name="base" value="content/xdocs"/>
+        <map:parameter name="base" value="content/xdocs/"/>
       </map:transform>
-
-      <map:transform type="textparser">
-        <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
-      </map:transform>    
-
-      <map:transform src="chaperon/stylesheets/wiki2document.xsl"/>
-
-      <map:transform type="write-source"/>
-
+      <map:transform type="write-source">
+          <map:parameter name="serializer" value="text"/>   
+      </map:transform>          
       <map:transform src="editor/stylesheets/writeresult2skin.xsl"/>
-
       <map:transform src="editor/stylesheets/skin.xsl"/>                        
-
       <map:serialize type="html"/>
+
     </map:match>
 
     <!-- 
@@ -149,20 +140,14 @@
     -->
     <map:match pattern="pre(bravo)">
       <map:generate type="request"/>
-
       <map:transform src="editor/stylesheets/request2editor.xsl"/>
-
       <map:transform type="textparser">
         <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
-      </map:transform>    
-
-      <map:transform src="chaperon/stylesheets/wiki2html.xsl"/>
-
+      </map:transform>  
+      <map:transform src="library/xslt/wiki2html.xsl"/>
       <map:transform src="editor/stylesheets/skin.xsl"/>
-
       <map:serialize type="html"/>
     </map:match>
-
 
 
     <map:match pattern="see(bravo)**.xml">
@@ -171,17 +156,14 @@
 
 
     <map:match pattern="get(bravo)/**">
-
       <map:generate src="content/xdocs/{1}"/>
       <map:transform src="editor/stylesheets/file2editor.xsl"/>
       <map:transform src="editor/stylesheets/skin.xsl"/>
       <map:serialize type="html"/>                
-
-
     </map:match>
 
-
   </map:pipeline>
+
 
   <map:pipeline>  
 
