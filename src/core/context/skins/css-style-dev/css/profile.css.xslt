@@ -102,11 +102,9 @@
     background-color: <xsl:value-of select="@value"/>;
 }   
 </xsl:template> 
-<xsl:template match="color[@name='searchbox']"> 
-#top .searchbox { 
-background: <xsl:value-of select="@value"/> url("images/tab-right.gif") no-repeat right top;
-color: <xsl:value-of select="@font"/>;
-} 
+<xsl:template match="color[@name='searchbox']"> #top .searchbox { 
+    background-color: <xsl:value-of select="@value"/> ;
+    color: <xsl:value-of select="@font"/>; } 
 </xsl:template>
 
 <!--xsl:template match="color[@name='body']">
