@@ -5,7 +5,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.29 $</version>
+    <version>$Revision: 1.30 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -91,7 +91,7 @@ Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.bui
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/08/13 10:34:55 $              |
+    |             $Date: 2003/09/07 04:58:15 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -156,10 +156,12 @@ Here is an outline of the generated files:
 /forrest.properties      # Optional file describing your site layout
 /src/documentation/      # Doc-specific files
 /src/documentation/skinconf.xml    # Info about your project used by the skin
+/src/documentation/content/        # Site content.
 /src/documentation/content/xdocs   # XML content.
 /src/documentation/content/xdocs/index.xml # Home page
 /src/documentation/content/xdocs/site.xml  # Navigation file for site structure
 /src/documentation/content/xdocs/tabs.xml  # Skin-specific 'tabs' file.
+/src/documentation/content/*.html,pdf      # Static content files
 /src/documentation/resources/images        # Project images (logos, etc)
 
 
@@ -169,8 +171,6 @@ What to do now?
   HTML in a browser to make sure everything works.
 - Edit status.xml and src/documentation/skinconf.xml and customize for your
   project.
-- Replace src/documentation/resources/images/project-logo.gif with your project
-  logo.
 - Start adding content in xdocs/, remembering to add new files to site.xml
 - Provide any feedback to forrest-dev@xml.apache.org
 
@@ -179,7 +179,7 @@ Thanks for using Apache Forrest
     
 
 BUILD SUCCESSFUL
-Total time: 2 seconds
+Total time: 8 seconds
       </source>
       <note>
         As you've probably begun to notice, we like to document things right in the
@@ -191,23 +191,38 @@ Total time: 2 seconds
       <source>
 jeff@expresso:~/apache/xml-mysite$ tree
 .
+|-- forrest-targets.ent
 |-- forrest.properties
 |-- src
 |   `-- documentation
 |       |-- README.txt
 |       |-- content
+|       |   |-- hello.pdf
+|       |   |-- test1.html
+|       |   |-- test2.html
 |       |   `-- xdocs
-|       |       |-- site.xml
 |       |       |-- index.xml
-|       |       |-- sample.xml
-|       |       |-- subdir
-|       |       |   `-- index.xml
+|       |       |-- samples
+|       |       |   |-- ehtml-sample.ehtml
+|       |       |   |-- faq.xml
+|       |       |   |-- ihtml-sample.ihtml
+|       |       |   |-- index.xml
+|       |       |   |-- sample.xml
+|       |       |   |-- sample2.xml
+|       |       |   |-- sdocbook.xml
+|       |       |   |-- subdir
+|       |       |   |   |-- book-sample.xml
+|       |       |   |   `-- index.xml
+|       |       |   `-- wiki-sample.cwiki
+|       |       |-- site.xml
 |       |       `-- tabs.xml
 |       |-- resources
 |       |   `-- images
 |       |       |-- group-logo.gif
+|       |       |-- group.svg
 |       |       |-- icon.png
-|       |       `-- project-logo.gif
+|       |       |-- project-logo.gif
+|       |       `-- project.svg
 |       `-- skinconf.xml
 `-- status.xml
       </source>
@@ -250,18 +265,11 @@ jeff@expresso:~/apache/xml-mysite$ tree
           like this:
         </p>
 <source><![CDATA[
-<?xml version="1.0"?>
-
-<!--
-Skin configuration file. This file contains details of your project,
-which will be used to configure the chosen Forrest skin.
--->
-
 <skinconfig>
   <!-- Do we want to disable the Google search box? -->
   <disable-search>false</disable-search>
-  <!-- Do we want to disable the print link? -->
-  <disable-print-link>false</disable-print-link>
+  <!-- Do we want to disable the print link? If enabled, valid HTML 4.0.1 -->
+  <disable-print-link>true</disable-print-link>  
   <!-- Do we want to disable the PDF link? -->
   <disable-pdf-link>false</disable-pdf-link>
   <!-- Do we want to disable the xml source link? -->
@@ -269,12 +277,13 @@ which will be used to configure the chosen Forrest skin.
   <!-- Do we want to disable w3c compliance links? -->
   <disable-compliance-links>false</disable-compliance-links>
 
-  <searchsite-domain>mydomain</searchsite-domain>
-  <searchsite-name>MyProject</searchsite-name>
+  <searchsite-domain>mydomain</searchsite-domain>  
+  <searchsite-name>MyProject</searchsite-name>  
 
   <!-- mandatory project logo
        skin: forrest-site renders it at the top -->
   <project-name>MyProject</project-name>
+  <project-description>MyProject Description</project-description>
   <project-url>http://myproj.mygroup.org/</project-url>
   <project-logo>images/project.png</project-logo>
   <!-- Alternative static image:
@@ -283,6 +292,7 @@ which will be used to configure the chosen Forrest skin.
   <!-- optional group logo
        skin: forrest-site renders it at the top-left corner -->
   <group-name>MyGroup</group-name>
+  <group-description>MyGroup Description</group-description>
   <group-url>http://mygroup.org</group-url>
   <group-logo>images/group.png</group-logo>
   <!-- Alternative static image:
@@ -305,6 +315,13 @@ which will be used to configure the chosen Forrest skin.
     <link2 name="myProject" href="http://xml.apache.org/"/>
     <link3 name="" href=""/>
   </trail>
+
+  <!-- Configure how many "section" levels need to be included in the
+  generated Table of Contents (TOC). By default, if no toc element is provided
+  below, then 2 levels are included. Level 0 does not generate any TOC at all.
+  -->
+  <toc level="2"/>
+
   <!-- Credits are typically rendered as a set of small clickable images in the
   page footer -->
   <credits>
@@ -472,6 +489,10 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <li>Read content from exotic sources like <link
             href="http://www.rpbourret.com/xml/XMLDBLinks.htm">XML
             databases</link></li>
+        <li>Integrate any of <link href="ext:cocoon">Cocoon's</link> vast array
+          of capabilities.  The possibilities are best appreciated by
+          downloading the latest Cocoon distribution and playing with the
+          samples.</li>
       </ul>
       <p>
         If your site defines its own sitemap, it must perform all the operations of
@@ -482,11 +503,11 @@ project.skinconf=${project.content-dir}/skinconf.xml
       </p>
       <p>
         The sitemap syntax is described in the <link
-          href="ext:cocoon/sitemap">Cocoon
-          sitemap docs</link>.  The Forrest sitemap is broken into multiple files. The
-        main one is <strong>sitemap.xmap</strong>, which delegates to others.
-        See the <link href="site:sitemap-ref">Sitemap Reference</link> for a
-        tour of the default sitemap.
+          href="ext:cocoon/sitemap">Cocoon sitemap docs</link>.  The Forrest
+        sitemap is broken into multiple files. The main one is
+        <strong>sitemap.xmap</strong>, which delegates to others.  See the <link
+          href="site:sitemap-ref">Sitemap Reference</link> for a tour of the
+        default sitemap.
       </p>
       <section id="adding_new_content_type">
         <title>Example: Adding a new content type</title>
@@ -692,10 +713,12 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <source>
 project.skin=forrest-site
         </source>
+        <!--
         <note>
           The mechanism for defining which skin to use will change in the future from
           Ant @token@ values to Cocoon input module values.
         </note>
+        -->
         <section id="new_skin">
           <title>Defining a new skin</title>
           <p>
@@ -704,7 +727,7 @@ project.skin=forrest-site
             <code>${project.skins-dir}</code> points). The default sitemap assumes a
             certain skin layout, so the easiest way to create a new skin is by
             copying an existing Forrest skin.  For example, copy
-            <code>xml-forrest/src/resources/skins/forrest-site</code> to
+            <code>xml-forrest/src/resources/skins/template</code> to
             <code>src/documentation/skins/myskin</code>, and add
             <code>project.skin=myskin</code> to forrest.properties.
           </p>
@@ -731,6 +754,21 @@ project.skin=forrest-site
               layout, and adds the header and footer.
             </dd>
           </dl>
+          <p>
+            Typically there is a lot of commonality between skins.  XSLT
+            provides an 'import' mechanism whereby one XSLT can extend another.
+            Forrest XSLTs typically 'import' from a common base:
+          </p>
+          <source><![CDATA[
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
+
+  ]]><strong>... overrides of default templates ...</strong><![CDATA[ 
+</xsl:stylesheet>]]></source>
+          <p>This is particularly relevant for menu rendering (book2menu.xsl),
+            where the common stylesheet does the 'logic' of which item is
+            selected, and overriding stylesheets define the presentation.</p>
         </section>
       </section>
 
