@@ -15,7 +15,8 @@
   limitations under the License.
 -->
 <!--
-Stylesheet to recursively append all @href's in a tree. Eg, given as input:
+Stylesheet to recursively append all @href's in a tree,
+e.g. given as input:
 
 <site href="">
   <community href="community/">
@@ -58,9 +59,18 @@ This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
 
   <xsl:template match="@href">
     <xsl:attribute name="href">
-      <xsl:call-template name="absolutize">
-        <xsl:with-param name="node" select=".."/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="starts-with(., '/')">
+          <!-- already is an absolute path, strip the leading slash -->
+          <xsl:value-of select="substring-after(., '/')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- the path needs to be absolutized -->
+          <xsl:call-template name="absolutize">
+            <xsl:with-param name="node" select=".."/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:attribute>
   </xsl:template>
 
