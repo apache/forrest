@@ -38,7 +38,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 </xsl:comment>
-<xsl:comment>File created by upgrade-skinconf.xsl</xsl:comment>
+<xsl:comment>
+=======================================================================
+File created by etc/cocoon_upgrade/upgrade-skinconf.xsl
+Please do not Edit!!!!!
+========================================================================
+</xsl:comment>
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -82,7 +87,7 @@
   </xsl:template>
 
   <xsl:template match="input-modules">
-    <xsl:comment>======= Input Modules =========</xsl:comment>
+    <xsl:comment>======= Input Modules needed by forrest input module =========</xsl:comment>
     <xsl:element name="input-modules">
     <xsl:apply-templates select="component-instance[@name='request']"/>
     <xsl:apply-templates select="component-instance[@name='request-param']"/>
@@ -94,6 +99,7 @@
   </xsl:template>
 
   <xsl:template name="forrest-input">
+    <xsl:comment>======= Forrest Input =========</xsl:comment>
    
     <xsl:element name="component-instance">
       <xsl:copy-of select="component-instance[@name='chain']/@logger"/>
@@ -105,6 +111,7 @@
       <input-module name="defaults"/>
     </xsl:element>
 
+    <xsl:comment>======= Defaults Model is replaced by ant using tokens =========</xsl:comment>
     <xsl:element name="component-instance">
       <xsl:copy-of select="component-instance[@name='defaults']/@logger"/>
       <xsl:attribute name="name">defaults</xsl:attribute>
@@ -120,6 +127,7 @@
       </xsl:element>
     </xsl:element>
 
+    <xsl:comment>======= "Project" Defaults Model is replaced by ant using tokens =========</xsl:comment>
     <xsl:element name="component-instance">
       <xsl:copy-of select="component-instance[@name='defaults']/@logger"/>
       <xsl:attribute name="name">project</xsl:attribute>
@@ -137,6 +145,7 @@
       </xsl:element>
     </xsl:element>
 
+    <xsl:comment>======= Skinconf Defaults Model is replaced by values on the skinconf.xml file =========</xsl:comment>
     <xsl:element name="component-instance">
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
       <xsl:attribute name="name">conf</xsl:attribute>
@@ -173,6 +182,7 @@
   </xsl:template>
 
   <xsl:template match="source-factories">
+    <xsl:comment>======= This is needed by the Open Office Support =========</xsl:comment>
     <xsl:element name="source-factories">
       <!-- Needed for the OO source -->
       <component-instance class="org.apache.cocoon.components.source.impl.ZipSourceFactory" name="zip"/>
@@ -181,6 +191,7 @@
   </xsl:template>
 
   <xsl:template match="entity-resolver">
+    <xsl:comment>======= Entity Resolution built-in =========</xsl:comment>
     <xsl:element name="entity-resolver">
       <xsl:copy-of select="@logger"/>
       <parameter name="catalog" value="@forrest.home@/context/resources/schema/catalog.xcat"/>
