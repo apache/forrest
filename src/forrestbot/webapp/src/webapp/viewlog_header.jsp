@@ -18,6 +18,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean-el" prefix="bean-el" %>
 <html:html locale="true">
     <head>
+        <meta name="robots" content="index,nofollow">
     </head>
     <body bgcolor="#FFFFFF"/>
     <table border="0" width="100%" cellpadding="0" cellspacing="0">

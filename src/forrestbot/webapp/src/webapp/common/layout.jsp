@@ -17,6 +17,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <html:html locale="true">
     <head>
+        <meta name="robots" content="index,nofollow">
         <title><tiles:insert attribute="title"/></title>
     </head>
     <body bgcolor="#FFFFFF"/>

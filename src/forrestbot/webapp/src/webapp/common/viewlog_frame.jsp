@@ -18,6 +18,7 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <html:html locale="true">
     <head>
+        <meta name="robots" content="index,nofollow">
         <title><tiles:insert attribute="title"/> - <c:out value="${project}"/></title>
     </head>
     <frameset rows="40,*">
