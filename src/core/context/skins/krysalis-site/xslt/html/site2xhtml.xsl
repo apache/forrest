@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.9 2004/01/09 14:33:32 brondsem Exp $
+$Id: site2xhtml.xsl,v 1.10 2004/01/11 10:36:29 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -179,7 +179,7 @@ $Id: site2xhtml.xsl,v 1.9 2004/01/09 14:33:32 brondsem Exp $
     <table cellspacing="0" cellpadding="0" border="0" width="100%">
       <tr>
         <!-- ( =================  Menu  ================== ) -->
-        <td valign="top" >
+        <td valign="top">
           <!-- If we have any menu items, draw a menu -->
           <xsl:if test="div[@class='menu']/ul/li">
             <xsl:call-template name="menu"/>
@@ -194,10 +194,10 @@ $Id: site2xhtml.xsl,v 1.9 2004/01/09 14:33:32 brondsem Exp $
   </xsl:template>
 
   <xsl:template name="menu">
-    <table cellpadding="0" cellspacing="0">
+    <table cellpadding="0" cellspacing="0" class="menuarea">
       <tr>
         <!-- ( ================= start left top NavBar ================== ) -->
-        <td valign = "top">
+        <td valign = "top" width="6px">
           <table class="leftpagemargin" cellspacing="0" cellpadding="0" border="0">
             <tr><td class="subborder trail">&#160;</td></tr>
           </table>
