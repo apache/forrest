@@ -60,14 +60,11 @@ import org.apache.avalon.framework.component.DefaultComponentManager;
 import org.apache.avalon.framework.component.DefaultComponentSelector;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
-import org.apache.cocoon.matching.WildcardURIMatcher;
-import org.apache.cocoon.selection.ResourceExistsSelector;
 import org.apache.cocoon.selection.Selector;
 
 /**
@@ -133,15 +130,6 @@ public final class LocationMap extends AbstractLogEnabled {
      */
     public static final String HINT_PARAM = "#" + ANCHOR_NAME + ":" + HINT_KEY;
     
-    private static final String DEFAULT_MATCHER  = "wildcard";
-    private static final String DEFAULT_MATCHER_TYPE = WildcardURIMatcher.class.getName();
-    private static final Configuration DEFAULT_MATCHER_CONFIGURATION = 
-        new DefaultConfiguration("matcher");
-    private static final String DEFAULT_SELECTOR = "exists";
-    private static final String DEFAULT_SELECTOR_TYPE = ResourceExistsSelector.class.getName();
-    private static final Configuration DEFAULT_SELECTOR_CONFIGURATION = 
-        new DefaultConfiguration("selector");
-    
     
     private LocationMapComponentManager m_manager;
     
@@ -161,36 +149,29 @@ public final class LocationMap extends AbstractLogEnabled {
     public void build(final Configuration configuration) throws ConfigurationException {
         
         // components
-        final Configuration components = configuration.getChild("components",true);
+        final Configuration components = configuration.getChild("components");
         
         // matchers
         final DefaultComponentSelector matcherSelector = new DefaultComponentSelector();
         Configuration child = components.getChild("matchers",true);
-        m_defaultMatcher = child.getAttribute("default",DEFAULT_MATCHER);
-        if (m_defaultMatcher.equals(DEFAULT_MATCHER)) {
-            Matcher defaultMatcher = (Matcher) createComponent(
-                DEFAULT_MATCHER_TYPE,DEFAULT_MATCHER_CONFIGURATION);
-            matcherSelector.put(m_defaultMatcher,defaultMatcher);
-        }
+        m_defaultMatcher = child.getAttribute("default");
         final Configuration[] matchers = child.getChildren("matcher");
         for (int i = 0; i < matchers.length; i++) {
             String name = matchers[i].getAttribute("name");
             String src  = matchers[i].getAttribute("src");
-            Matcher matcher = (Matcher) createComponent(src, matchers[i]);
+            Matcher matcher = (Matcher) createComponent(src,matchers[i]);
             matcherSelector.put(name,matcher);
         }
         matcherSelector.makeReadOnly();
+        if (!matcherSelector.hasComponent(m_defaultMatcher)) {
+            throw new ConfigurationException("Default matcher is not defined.");
+        }
         m_manager.put(Matcher.ROLE+"Selector",matcherSelector);
         
         // selectors
         final DefaultComponentSelector selectorSelector = new DefaultComponentSelector();
-        child = configuration.getChild("selectors",true);
-        m_defaultSelector = child.getAttribute("default",DEFAULT_SELECTOR);
-        if (m_defaultSelector.equals(DEFAULT_SELECTOR)) {
-            Selector defaultSelector = (Selector) createComponent(
-                DEFAULT_SELECTOR_TYPE,DEFAULT_SELECTOR_CONFIGURATION);
-            selectorSelector.put(m_defaultSelector,defaultSelector);
-        }
+        child = components.getChild("selectors");
+        m_defaultSelector = child.getAttribute("default");
         final Configuration[] selectors = child.getChildren("selector");
         for (int i = 0; i < selectors.length; i++) {
             String name = selectors[i].getAttribute("name");
@@ -199,6 +180,9 @@ public final class LocationMap extends AbstractLogEnabled {
             selectorSelector.put(name,selector);
         }
         selectorSelector.makeReadOnly();
+        if (!selectorSelector.hasComponent(m_defaultSelector)) {
+            throw new ConfigurationException("Default selector is not defined.");
+        }
         m_manager.put(Selector.ROLE+"Selector",selectorSelector);
         m_manager.makeReadOnly();
         
