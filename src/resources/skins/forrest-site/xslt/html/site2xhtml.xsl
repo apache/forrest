@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.23 2003/09/12 19:07:31 cheche Exp $
+$Id: site2xhtml.xsl,v 1.24 2003/09/20 06:49:46 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -83,59 +83,10 @@ $Id: site2xhtml.xsl,v 1.23 2003/09/12 19:07:31 cheche Exp $
         <xsl:comment>================= end Project Logo ==================</xsl:comment>
 
         <xsl:comment>================= start Search ==================</xsl:comment>
-	<!-- Display search box if lucene-search or google-search enabled -->
-	<!-- Lucene has precedence over Google (if lucene set, don't use Google) -->
-	<xsl:variable name="lucene">
-	  <xsl:choose>
-	    <xsl:when test="(not($config/disable-lucene) or
-            $config/disable-lucene='false')">true</xsl:when>
-	    <xsl:otherwise>false</xsl:otherwise>
-	  </xsl:choose>
-	</xsl:variable>
-	<xsl:variable name="google">
-	  <xsl:choose>
-	    <xsl:when test="$lucene='true'">false</xsl:when>
-	    <xsl:when test="not($config/disable-search) or $config/disable-search='false'
-	    and $config/searchsite-domain and $config/searchsite-name">true</xsl:when>
-	    <xsl:otherwise>false</xsl:otherwise>
-	  </xsl:choose>
-	</xsl:variable>	
-
         <td bgcolor="{$header-color}" rowspan="2" valign="top">
-          <xsl:if test="$lucene='true'">
-	    <xsl:variable name="search-url" select="concat(string($root), 'search.cmd')"/>
-	     <form method="get" action="{$search-url}">
-              <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
-                <tr>
-                  <td colspan="3"><img class="spacer" src="{$spacer}" alt="" width="1" height="10" /></td>
-                </tr>
-                <tr>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                  <td nowrap="nowrap">
-                    <input type="text" id="query" name="query" size="15"/>
-                    <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
-		    <input type="submit" value="Search" name="Search"/> <br />
-		    <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-		    <xsl:text>Powered by Apache Lucene</xsl:text></font>
-
-	            <!-- setting search options off for the moment -->
-		    <!--
-		    <input type="radio" name="web" value="web"/>web site&#160;&#160;
-		    <input type="radio" name="mail" value="mail"/>mail lists
-		    -->
-                  </td>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                </tr>
-                <tr>
-                  <td><img src="{$skin-img-dir}/search-left.gif" width="9" height="10" border="0" alt="" /></td>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                  <td><img src="{$skin-img-dir}/search-right.gif" width="9" height="10" border="0" alt="" /></td>
-                </tr>
-              </table>
-            </form>
-          </xsl:if>
-
-          <xsl:if test="$google='true'">
+          <xsl:if test="not($config/disable-search) or
+            $config/disable-search='false' and $config/searchsite-domain and
+            $config/searchsite-name">
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
                 <tr>
@@ -147,16 +98,15 @@ $Id: site2xhtml.xsl,v 1.23 2003/09/12 19:07:31 cheche Exp $
                     <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
                     <input type="text" id="query" name="q" size="15"/>
                     <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
-		    <input type="submit" value="Search" name="Search"/><br />
-		    <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-		    <xsl:text>the </xsl:text><xsl:value-of select="$config/searchsite-name"/><xsl:text> site</xsl:text>
-	            </font>
-
-		    <!-- setting search options off for the moment -->
-		    <!--
-		    <input type="radio" name="web" value="web"/>web site&#160;&#160;
-		    <input type="radio" name="mail" value="mail"/>mail lists
-		    -->
+                    <input type="submit" value="Search" name="Search"/>
+                    <br />
+                    <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
+                      the <xsl:value-of select="$config/searchsite-name"/> site
+                      <!-- setting search options off for the moment -->
+                      <!--
+                      <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
+                      -->
+                    </font>
                   </td>
                   <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                 </tr>
