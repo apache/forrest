@@ -139,9 +139,9 @@ function upgrade_endorsed()
   echo -n "Updating endorsed jars		"
   push
   cd $FLIB_ENDORSED
-  rm xalan* xerces* xml-apis*
+  rm xalan* xerces* xml-apis* jakarta-bcel* jakarta-regexp*
 
-  cp $CLIB/{xalan,xerces,xml-apis}* .
+  cp $CLIB/{xalan,xerces,xml-apis,jakarta-bcel,jakarta-regexp}* .
 
   pop
   echo "done"
