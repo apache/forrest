@@ -83,14 +83,23 @@ if (!abc.push) {
  * you use this script (you can leave it as an empty array if you wish)
  */
 var PREPREND_CRUMBS = new Array();
-   if(!("@skinconfig.trail.link1.name@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link1.name@", "@skinconfig.trail.link1.href@" ) );
+
+var link1 = "@skinconfig.trail.link1.name@";
+var link2 = "@skinconfig.trail.link2.name@";
+var link3 = "@skinconfig.trail.link3.name@";
+
+var href1 = "@skinconfig.trail.link1.href@";
+var href2 = "@skinconfig.trail.link2.href@";
+var href3 = "@skinconfig.trail.link3.href@";
+
+   if(!(link1=="")&&!link1.indexOf( "@" ) == 0){
+     PREPREND_CRUMBS.push( new Array( link1, href1 ) );
    }
-   if(!("@skinconfig.trail.link2.name@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link2.name@", "@skinconfig.trail.link2.href@" ) );
+   if(!(link2=="")&&!link2.indexOf( "@" ) == 0){
+     PREPREND_CRUMBS.push( new Array( link2, href2 ) );
    }
-   if(!("@skinconfig.trail.link3.name@"=="")){
-     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link3.name@", "@skinconfig.trail.link3.href@" ) );
+   if(!(link3=="")&&!link3.indexOf( "@" ) == 0){
+     PREPREND_CRUMBS.push( new Array( link3, href3 ) );
    }
 
 /**

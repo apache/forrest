@@ -1,6 +1,13 @@
 var PREPREND_CRUMBS=new Array();
-PREPREND_CRUMBS.push(new Array("Apache","http://www.apache.org/"));
-PREPREND_CRUMBS.push(new Array("Jakarta","http://jakarta.apache.org/"));
+var link1="@skinconfig.trail.link1.name@";
+var link2="@skinconfig.trail.link2.name@";
+var link3="@skinconfig.trail.link3.name@";
+if(!(link1=="")&&!link1.indexOf( "@" ) == 0){
+  PREPREND_CRUMBS.push( new Array( link1, @skinconfig.trail.link1.href@ ) ); }
+if(!(link2=="")&&!link2.indexOf( "@" ) == 0){
+  PREPREND_CRUMBS.push( new Array( link2, @skinconfig.trail.link2.href@ ) ); }
+if(!(link3=="")&&!link3.indexOf( "@" ) == 0){
+  PREPREND_CRUMBS.push( new Array( link3, @skinconfig.trail.link3.href@ ) ); }
 var DISPLAY_SEPARATOR=" &gt; ";
 var DISPLAY_PREPREND="";
 var DISPLAY_POSTPREND=":";
