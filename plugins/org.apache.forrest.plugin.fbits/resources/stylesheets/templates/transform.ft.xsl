@@ -21,29 +21,29 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"  
   xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias"
-  xmlns:saxon="http://saxon.sf.net/"
-  extension-element-prefixes="saxon"
+  xmlns:dyn="http://exslt.org/dynamic"
+  extension-element-prefixes="dyn"
   >
   
   <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
   <!--FIXME Need to make sure all variables are matched!!!-->
  	<xsl:param name="config-file"/>
   <xsl:param name="path"/>
+  <xsl:param name="request"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-  
-	<!--<xsl:include href="cocoon:/prepare.include.{$request}"/>
-  <xsl:include href="cocoon:/prepare.xhtml.{$request}"/>-->
+
+	<xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
+  <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>
 
   <xsl:template match="/">
-    <html>
+    <xhtml>
       <head>
     		<xsl:call-template name="getHead"/>
       </head>
       <body onload="init()">
-        <h1><xsl:value-of select="$request"/> </h1>
         <xsl:call-template name="getBody"/>
       </body>
-    </html>
+    </xhtml>
   </xsl:template>
 
 </xsl:stylesheet>

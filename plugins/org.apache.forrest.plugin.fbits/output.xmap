@@ -30,6 +30,28 @@
       <map:transformer name="xinclude"
         src="org.apache.cocoon.transformation.XIncludeTransformer"/>
     </map:transformers>
+    <map:serializers>
+	   <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" name="xhtml" pool-grow="2" pool-max="64" pool-min="2" src="org.apache.cocoon.serialization.XMLSerializer">
+	      <!--+
+	          | You can choose from Strict, Transitional, or Frameset XHTML.
+	          | For Strict XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	          | For Transitional XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Transitional//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</doctype-system>
+	          | For Frameset XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Frameset//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd</doctype-system>
+	          |
+	          | Default XHTML doctype in Cocoon is XHTML Strict. If you want to use more than one
+	          | XHTML DTD simultaneously, you can define several XHTML serializers.
+	          +-->
+	      <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	      <encoding>UTF-8</encoding>
+	    </map:serializer>
+    </map:serializers>
   </map:components>
 
 <map:pipelines>
@@ -124,24 +146,21 @@
         <map:part src="cocoon:/prepare.view.{1}" />
         <map:part src="cocoon:/prepare.meta.{1}" /> 
       </map:aggregate>
-      <map:transform src="resources/stylesheets/templates/prepare.include.xhtml.xsl" >
-        <map:parameter name="request" value="{1}"/>
-      </map:transform>
-     	<map:serialize type="xml"/>
       <map:transform src="resources/stylesheets/templates/transform.ft.xsl" >
         <map:parameter name="path" value="{path}"/>
+        <map:parameter name="request" value="{1}"/>
         <map:parameter name="config-file" value="{project:skinconf}"/>
       </map:transform>
-     	<map:serialize type="html"/>
+     	<map:serialize type="xhtml"/>
     </map:match>
     
   </map:pipeline>
-  
-  <!--Old stuff-->
-<!--
+ <!-- 
+  <!-#-Old stuff-#->
+<!-#-
   [poc] - Proof of concept pipeline
   you can transform xsl 
-  -->
+  -#->
 	<map:pipeline>
     <map:match pattern="x">
       <map:generate src="cocoon:/x-src"/>
@@ -149,48 +168,48 @@
       <map:serialize type="xml" />
     </map:match>
   </map:pipeline>
-<!--
+<!-#-
   [poc] - Proof of concept pipeline src
   you can transform xsl input xsl
-  -->
+  -#->
 	<map:pipeline>
     <map:match pattern="x-src">
       <map:generate src="resources/stylesheets/test.xsl"/>
       <map:serialize type="xml" />
     </map:match>
   </map:pipeline>
-<!--
+<!-#-
   contract-transformer 
-  -->
+  -#->
   <map:pipeline>
    <map:match pattern="get.fbits.*">
      <map:generate type="jx" src="fbits-xsl/c-{1}-fct.xsl"/>
-     <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
+     <!-#-<map:transform src="resources/stylesheets/contract.xsl"/>-#->
      <map:serialize type="xml"/>
    </map:match>
   </map:pipeline>
-<!-- 
+<!-#- 
   
 1. check all aviable fct -> ls.fbits
 2. check which fct are needed -> is be controlled by the forrest:templates
 3. check where to place them
 4. output the xhtml
--->
+-#->
 
-<!-- ls.fbits 
-  list the default fbits-->
+<!-#- ls.fbits 
+  list the default fbits-#->
   <map:pipeline>
     <map:match pattern="ls.fbits">
 		  <map:generate type="directory" src="fbits-xsl">
         <map:parameter name="depth" value="1"/>
-        <!-- sorted alphabetically -->
+        <!-#- sorted alphabetically -#->
       	<map:parameter name="reverse" value="false"/>
       </map:generate>
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
 
-<!--ls.fbits.l
+<!-#-ls.fbits.l
 transform this dir-list and add more information 
 
 output e.g.
@@ -202,7 +221,7 @@ output e.g.
     <realpath>/home/thorsten/apache/cocoon-2.1.5.1/build/webapp/leather/fct-bits/c-fontsize-fct.xml</realpath>
   </contract>
 </contracts>
--->
+-#->
   <map:pipeline>
     <map:match pattern="ls.fbits.l">
 		  <map:generate src="cocoon:/ls.fbits"/>
@@ -213,9 +232,9 @@ output e.g.
     </map:match>
   </map:pipeline>
 
-<!--
+<!-#-
   load main forrest:view
-  -->
+  -#->
 	<map:pipeline>
     <map:match pattern="view">
       <map:generate src="src/documentation/leather.ft"/>
@@ -223,9 +242,9 @@ output e.g.
     </map:match>
   </map:pipeline>
   
- <!-- XSL
+ <!-#- XSL
 2. check which fct are needed and include them in the output
--->
+-#->
 
   <map:pipeline>
     <map:match pattern="view.fbits">
@@ -235,11 +254,11 @@ output e.g.
       </map:aggregate>
       <map:transform src="resources/stylesheets/view.filter.xsl"/>
       <map:transform type="xinclude"/>
-      <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
+      <!-#-<map:transform src="resources/stylesheets/contract.xsl"/>-#->
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-<!--POINTER-->
+<!-#-POINTER-#->
   <map:pipeline>
     <map:match pattern="ft.get">
       <map:aggregate element="filter">
@@ -248,7 +267,7 @@ output e.g.
       </map:aggregate>
       <map:transform src="resources/stylesheets/ft-filter.xsl"/>
       <map:transform type="xinclude"/>
-      <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
+      <!-#-<map:transform src="resources/stylesheets/contract.xsl"/>-#->
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
@@ -260,22 +279,22 @@ output e.g.
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-<!--old "training" pipes-->
+<!-#-old "training" pipes-#->
 
-<!-- XML
+<!-#- XML
 1. check all aviable fct 
--->
+-#->
   <map:pipeline>
     <map:match pattern="contracts-dir-fbits.get">
 		  <map:generate type="directory" src="fbits">
         <map:parameter name="depth" value="1"/>
-        <!-- sorted alphabetically -->
+        <!-#- sorted alphabetically -#->
       	<map:parameter name="reverse" value="false"/>
       </map:generate>
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>  
-<!--
+<!-#-
 transform this dir-list 
 output e.g.
 <contracts>
@@ -286,7 +305,7 @@ output e.g.
     <realpath>/home/thorsten/apache/cocoon-2.1.5.1/build/webapp/leather/fct-bits/c-fontsize-fct.xml</realpath>
   </contract>
 </contracts>
--->
+-#->
   <map:pipeline>
     <map:match pattern="contracts.get">
 		  <map:generate src="cocoon:/contracts-dir-fbits.get"/>
@@ -297,9 +316,9 @@ output e.g.
     </map:match>
   </map:pipeline>
 
-<!-- XML
+<!-#- XML
 2. check which fct are needed
--->
+-#->
   <map:pipeline>
     <map:match pattern="filter.get">
       <map:aggregate element="filter">
@@ -308,13 +327,13 @@ output e.g.
       </map:aggregate>
       <map:transform src="resources/stylesheets/filter.xsl"/>
       <map:transform type="xinclude"/> 
-      <!--<map:transform src="resources/stylesheets/contract.xsl"/>-->
+      <!-#-<map:transform src="resources/stylesheets/contract.xsl"/>-#->
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
 
   
-<!--f:t directly transformed to div id="@name"-->
+<!-#-f:t directly transformed to div id="@name"-#->
   <map:pipeline>
     <map:match pattern="ft.div.get">
 		   <map:generate src="src/documentation/ft-leather.xml"/>
@@ -325,17 +344,17 @@ output e.g.
     </map:match>
   </map:pipeline>
   
-  <!--just brainstroming pipe-->
+  <!-#-just brainstroming pipe-#->
   <map:pipeline>
     <map:match pattern="contracts-dir-nuggets.get">
 		  <map:generate type="directory" src="nuggets">
         <map:parameter name="depth" value="1"/>
-        <!-- sorted alphabetically -->
+        <!-#- sorted alphabetically -#->
       	<map:parameter name="reverse" value="false"/>
       </map:generate>
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-  
+  -->
  </map:pipelines>
 </map:sitemap>
