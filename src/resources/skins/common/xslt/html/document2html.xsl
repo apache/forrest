@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.9.2.1 2003/02/08 06:35:18 jefft Exp $
+$Id: document2html.xsl,v 1.9.2.2 2003/02/09 05:38:53 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -266,6 +266,12 @@ $Id: document2html.xsl,v 1.9.2.1 2003/02/08 06:35:18 jefft Exp $
       <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
       <xsl:apply-templates/>
     </table>
+  </xsl:template>
+
+  <xsl:template match="acronym/@title">
+    <xsl:attribute name="title">
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template name="toclink">
