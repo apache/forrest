@@ -454,7 +454,10 @@ FORREST SITE BUILDER
        param: location to clean ${project.site-dir}
        =============================================================== -->
   <target name="clean-site">
-    <delete dir="${project.site-dir}"/>
+    <!-- <delete dir="${project.site-dir}"/> -->
+    <delete includeEmptyDirs="false">
+      <fileset dir="${project.site-dir}"/>
+    </delete>     
   </target>
 
   <!-- ===============================================================
@@ -717,5 +720,46 @@ Thanks for using Apache Forrest
     </jing>
     <echo message="...validated skin stylesheets"/>
   </target>
+  
+  
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **              LOCAL SERVER RUN ACTION                        ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+  <target name="run" 
+   description="Run Jetty with configuration set by the jetty.run property"
+   depends="webapp">
+          
+    <java classname="org.mortbay.jetty.Server"
+          dir="./build/webapp"
+          fork="yes"
+          failonerror="yes">
+       <classpath>
+         <pathelement path="${env.CLASSPATH}" />
+         <fileset dir="${forrest.home}/lib/endorsed">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>         
+         <fileset dir="${forrest.home}/lib/optional">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>
+       </classpath>
+      <jvmarg
+        value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+       <arg line="jettyconf.xml" />
+    </java>
+  </target>  
 
 </project>
