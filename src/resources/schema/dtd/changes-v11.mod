@@ -41,7 +41,7 @@ CHANGE HISTORY:
   20011212 Used public identifiers for external entities (SM)
 
 COPYRIGHT:
-  Copyright (c) @year@ The Apache Software Foundation.
+  Copyright (c) 2002 The Apache Software Foundation.
 
   Permission to copy in any form is granted provided this notice is
   included in all copies. Permission to redistribute is granted

@@ -126,7 +126,7 @@ a.menu {
   <tr>
     <td align="center">
       <font color="#0086b2" face="arial,helvetica,sanserif" size="-1">
-        <i>Copyright &#169; @year@ @vendor@. All Rights Reserved.</i>
+        <i>Copyright &#169; 2002 @vendor@. All Rights Reserved.</i>
       </font>
     </td>
   </tr>

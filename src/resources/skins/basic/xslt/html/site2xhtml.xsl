@@ -25,7 +25,7 @@
   <hr/>
   <xsl:apply-templates select="div[@class='content']"/>
   <hr/>
-  <p><i>Copyright &#x00A9; @year@ @vendor@. All Rights Reserved.</i></p>
+  <p><i>Copyright &#x00A9; 2002 @vendor@. All Rights Reserved.</i></p>
   <hr/>
  </body>
 </html>

@@ -69,7 +69,7 @@
         </tr>
         <tr>
           <td align="center">
-            <i>Copyright &#x00A9; @year@ @vendor@. All Rights Reserved.</i>
+            <i>Copyright &#x00A9; 2002 @vendor@. All Rights Reserved.</i>
           </td>
         </tr>
         <tr>
