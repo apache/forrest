@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.6 2003/01/27 18:06:22 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -35,7 +35,7 @@ $Id: site2xhtml.xsl,v 1.6 2003/01/27 18:06:22 nicolaken Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
       </head>
-      <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+      <body bgcolor="#FFFFFF" text="#000000">
       
     <!-- ================================= top bar with logo's and search box ===================================  -->
 
@@ -306,9 +306,7 @@ $Id: site2xhtml.xsl,v 1.6 2003/01/27 18:06:22 nicolaken Exp $
         </td>
       <td class="logos" bgcolor="{$header-color2}" align="right" nowrap="nowrap">
 
-          <!-- This skin is NOT HTML4 compliant yet
-          <xsl:call-template name="compliancy-logos"/>
-          -->
+        <xsl:call-template name="compliancy-logos"/>
 
         <xsl:if test="$filename = 'index.html' and $config/credits">
           <xsl:for-each select="$config/credits/credit">

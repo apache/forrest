@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
+$Id: tab2menu.xsl,v 1.2 2003/01/27 18:35:00 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -51,11 +51,11 @@ $Id: tab2menu.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
 
   <xsl:template name="selected">
     <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0" height="22" summary="selected tab">
+      <table cellspacing="0" cellpadding="0" border="0" summary="selected tab">
         <tr>
-          <td class="top-left"></td>
+          <td class="top-left" height="22"></td>
           
-          <td bgcolor="#a5b6c6" valign="middle">
+          <td bgcolor="#a5b6c6" valign="middle" height="22">
             <span class="tab">
               <b>
                 <xsl:call-template name="base-selected"/>
@@ -63,7 +63,7 @@ $Id: tab2menu.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
              </span>
            </td>
           
-          <td class="top-right"></td>
+          <td class="top-right" height="22"></td>
         </tr>
       </table>
     </td>
@@ -71,18 +71,18 @@ $Id: tab2menu.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
 
   <xsl:template name="not-selected">
     <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0" height="18" summary="non selected tab">
+      <table cellspacing="0" cellpadding="0" border="0" summary="non selected tab">
         <tr>
         
-          <td class="top-left-tab"></td>
+          <td class="top-left-tab" height="18"></td>
           
-          <td bgcolor="#cedfef" valign="middle">
+          <td bgcolor="#cedfef" valign="middle" height="18">
             <span class="tab">
               <xsl:call-template name="base-not-selected"/>
             </span>              
           </td>
 
-          <td class="top-right-tab"></td>
+          <td class="top-right-tab" height="18"></td>
 
         </tr>
       </table>
