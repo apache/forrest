@@ -95,6 +95,14 @@
         <append>false</append>
       </cocoon>
     </priority-filter>
+
+      <cocoon id="debug" >
+        <filename>${context-root}/WEB-INF/logs/debug.log</filename>
+        <format type="cocoon">
+          %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+        </format>
+        <append>false</append>
+      </cocoon>
   </targets>
 
   <categories>
@@ -174,6 +182,10 @@
       <log-target id-ref="sitemap"/>
       <log-target id-ref="error"/>
     </category>
-
+    
+    <category name="debug" log-level="DEBUG">
+        <log-target id-ref="debug"/>
+    </category>
+      
   </categories>
 </logkit>
