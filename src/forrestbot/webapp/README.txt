@@ -24,6 +24,15 @@ Installation
 * Deploy the war file in Tomcat or some other servlet container
 
 
+TODO Wishlist
+-------------
+* seperate authorization of 'build' and 'deploy'
+* log everything, not just the build
+* view old log files
+* ability to reload all config files on the fly
+* put date at top of viewlog_body page
+
+
 FAQ
 ---------------
 1. The build and/or deploy commands don't seem to work
