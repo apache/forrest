@@ -14,8 +14,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd" [
-
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd"
+[
+ <!ENTITY % ISOnum PUBLIC
+   "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+   "ISOnum.pen">
+ %ISOnum;
 ]>
 
 <document>
@@ -116,11 +120,11 @@
     <section>
       <title>Validating new XML types</title>
       <p>
-        Forrest provides a <link href="ext:catalog_spec">SGML Catalog</link>
-        [<link href="ext:catalog_intro">tutorial</link>],
-        <code>xml-forrest/src/resources/schema/catalog.xcat</code>, as a means of
-        associating public identifiers (<code>-//APACHE//DTD Documentation
-          V1.1//EN</code> above) with DTDs.
+        Forrest provides an <link href="ext:catalog_spec">OASIS Catalog</link>
+        [see <link href="ext:catalog_intro">tutorial</link>]
+        <code>forrest/src/core/context/resources/schema/catalog.xcat</code>
+        as a means of associating public identifiers
+        (e.g. <code>-//APACHE//DTD Documentation V1.1//EN</code> above) with DTDs.
         If you <link href="site:new_content_type">add a new content type</link>, you
         should add the DTD to <code>${project.schema-dir}/dtd/</code> and add
         an entry to the <code>${project.schema-dir}/catalog.xcat</code> file.  This
@@ -153,10 +157,10 @@ name CDATA #REQUIRED
 size CDATA #IMPLIED&gt;
         </source>
         <p>
-          The documentv11 entities are defined in a reusable 'module':
-          <code>xml-forrest/src/resources/schema/dtd/document-v11.mod</code>
+          The document-v11 entities are defined in a reusable 'module':
+          <code>forrest/src/core/context/resources/schema/dtd/document-v11.mod</code>
           The
-          <code>xml-forrest/src/resources/schema/dtd/document-v11.dtd</code>
+          <code>forrest/src/core/context/resources/schema/dtd/document-v11.dtd</code>
           file provides a full description and basic example of how to pull in
           modules.  In our example, our DTD reuses modules
           <code>common-charents-v10.mod</code> and
@@ -269,6 +273,7 @@ size CDATA #IMPLIED&gt;
           customizing a DTD.
         </note>
       </section>
+
       <section>
         <title>Associating DTDs with document types</title>
 
@@ -294,7 +299,8 @@ size CDATA #IMPLIED&gt;
         </note>
         <p>
           Forrest provides a standard catalog file at
-          <code>xml-forrest/src/resources/schema/catalog.xcat</code> for the document
+          <code>forrest/src/core/context/resources/schema/catalog.xcat</code>
+          for the document
           types that Forrest provides.  Projects can augment this with their
           own catalog file located in
           <code>${project.schema-dir}/catalog.xcat</code>.
@@ -303,8 +309,9 @@ size CDATA #IMPLIED&gt;
           level if you suspect problems with your catalog.
         </p>
         <p>
-          Forrest uses the XML Catalog syntax by default, although the OASIS
-          format can also be used.  Here is what the XML format looks like:
+          Forrest uses the XML Catalog syntax by default, although the SGML
+          format can also be used.  Here is what the XML Catalog format looks
+          like:
         </p>
         <source><![CDATA[<?xml version="1.0"?>
 <!-- OASIS XML Catalog for Forrest -->
@@ -314,58 +321,52 @@ size CDATA #IMPLIED&gt;
 </catalog>]]></source>
         <p>
           The format is described in <link href="ext:catalog_spec">the
-            spec</link>, and is fairly simple.  <code>public</code> elements map
+          spec</link>, and is fairly simple and very powerful.
+          The "<code>public</code>" elements map
           a public identifier to a DTD (relative to the catalog file).
         </p>
         <p>
           We now have a custom DTD and a catalog mapping which lets Forrest
-          locate the DTD.  Now if we were to run '<code>forrest validate</code>'
+          locate the DTD.  Now if we were to run <code>'forrest validate'</code>
           our download file would validate along with all the others.  If
-          something goes wrong, try running <code>forrest -v validate</code> to
-          see the error in more detail.
+          something goes wrong, try running <code>'forrest -v validate'</code> to
+          see the error in more detail. Remember to raise the "verbosity"
+          level in <code>forrest.properties</code> if you suspect problems
+          with your catalog.
         </p>
       </section>
     </section>
+
+    <section id="entities">
+      <title>Referring to entities</title>
+      <p>
+        Look at the source of this document
+        (<code>xdocs/validation.xml</code>) and see how the entity set
+        <code>"Numeric and Special Graphic"</code> is declared in the
+        document type declaration.
+      </p>
+      <table>
+        <tr>
+          <td>ISOnum.pen</td> 
+          <td>&amp;half;</td> 
+          <td>&half;</td> 
+        </tr>
+      </table>
+    </section>
+
     <section>
-      <title>Validating in an editor</title>
+      <title>Validating in an XML editor</title>
       <p>
         If you have an XML editor that understands SGML or XML catalogs, let
         it know where the Forrest catalog file is, and you will be able to
         validate any Forrest XML file, regardless of location, as you edit
-        your files.
+        your files. See the 
+        <link href="catalog.html">configuration notes</link> your favourite
+        editor.
       </p>
-      <section>
-        <title>Case study: setting up xmllint</title>
-        <p>
-          On *nix systems, one of the best XML validation tools is
-          <code>xmllint</code>, that comes as part of the libxml2 package. It is
-          very fast, can validate whole directories of files at once, and can
-          configured to use Forrest's catalog file for validation.
-        </p>
-        <p>
-          To tell xmllint where the Forrest catalog is, add the path to the catalog
-          file to the <code>SGML_CATALOG_FILES</code> variable. For example:
-        </p>
-        <source>export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
-          /home/jeff/apache/xml/xml-forrest/src/resources/schema/catalog
-        </source>
-        <p>
-          Then Forrest XML files can be validated as follows:
-        </p>
-        <source>            xmllint --valid --noout --catalogs *.xml
-        </source>
-        <p>
-          For users of the vim editor, the following .vimrc entries are useful:
-        </p>
-        <source>
-          au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
-          au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
-        </source>
-      </section>
     </section>
 
-    <anchor id="relaxng"/>
-    <section>
+    <section id="relaxng">
       <title>Validation using RELAX NG</title>
       <p>
         Other validation is also conducted during build-time using RELAX NG.
@@ -375,10 +376,11 @@ size CDATA #IMPLIED&gt;
       </p>
       <p>
         The RNG grammars to do this are located in the
-        <code>src/resources/schema/relaxng</code> directory. If you want to
+        <code>src/core/context/resources/schema/relaxng</code> directory.
+        If you want to
         know more about this, and perhaps extend it for your own use, then
-        see <code>src/resources/schema/relaxng/README.txt</code> and the Ant
-        targets in the various build.xml files.
+        see <code>src/core/context/resources/schema/relaxng/README.txt</code>
+        and the Ant targets in the various build.xml files.
       </p>
     </section>
   </body>
