@@ -64,7 +64,7 @@ public final class ExecuteAction extends BaseAction {
 			return mapping.findForward(Constants.FORWARD_NAME_SUCCESS);
 		}
 
-		if (build != null) {
+		if (build != null && !build.equals("")) {
 			if (p.asDTO().isBuildable()) {
 				try {
 					Executor.build(project);
@@ -75,7 +75,7 @@ public final class ExecuteAction extends BaseAction {
 			} else {
 				errors.add("execute", new ActionError("error.authorization"));
 			}
-		} else if (deploy != null) {
+		} else if (deploy != null && !deploy.equals("")) {
 			if (p.asDTO().isDeployable()) {
 				try {
 					Executor.deploy(project);
