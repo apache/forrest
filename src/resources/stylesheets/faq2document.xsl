@@ -53,7 +53,12 @@
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
         </xsl:attribute>
-        <xsl:value-of select="question"/>
+		<!--
+		  IMHO adding this makes the tightly-packed menu less legible for
+		  little benefit (JT)
+	    <xsl:number level="multiple" count="faq|part" format="1.1. "/>
+		-->
+        <xsl:apply-templates select="question"/>
       </link>
     </li>
   </xsl:template>
@@ -79,10 +84,10 @@
     <section id="{$id}">
       <title>
         <xsl:number level="multiple" count="faq|part" format="1.1. "/>
-        <xsl:value-of select="question"/>
+        <xsl:apply-templates select="question"/>
       </title>
       <link href="#{$id}-menu">^</link>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="answer"/>
     </section>
   </xsl:template>
 
@@ -98,7 +103,7 @@
   </xsl:template>
 
   <xsl:template match="question">
-    <!-- ignored since already used -->
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="answer">
