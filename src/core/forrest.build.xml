@@ -23,7 +23,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        ${version}                        |
-    |             $Date: 2004/01/29 23:33:48 $              |
+    |             $Date: 2004/02/03 15:50:41 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -479,12 +479,19 @@ Use the 'seed' target to create a template project structure.
   <!-- public targets -->     
      
     <target name="available-skins"
-          depends="init-props, skin-unavailable, fetch-skins-descriptor"
+          depends="init-props, skin-unavailable, fetch-skins-descriptors"
           description="What skins are available?">
-    <xslt in="${forrest.skins-dir}/skins.xml" 
+    <for param="skin-descriptor-file">
+      <path>
+        <fileset dir="${forrest.skins-dir}" includes="skins-*.xml"/>
+      </path>
+      <sequential>
+        <xslt in="@{skin-descriptor-file}" 
           out="${project.temp-dir}/skinlist2echobuild.xml"
           style="${forrest.home}/var/skinlist2echo.xsl"/>  
     <ant antfile="${project.temp-dir}/skinlist2echobuild.xml"/>
+      </sequential>
+    </for>
   </target>  
   
   <target name="package-skin" description="Make a package of an existing skin" depends="init-props">
@@ -537,17 +544,32 @@ Use the 'seed' target to create a template project structure.
      </delete>
   </target>  
 
-  <target name="fetch-skins-descriptor"
-          if = "skin.unavailable">
-      <get src="http://xml.apache.org/forrest/skins/skins.xml" 
-           dest="${forrest.skins-dir}/skins.xml"
-           verbose="true" usetimestamp="true" ignoreerrors="false"/>
+  <target name="fetch-skins-descriptors">
+    <delete>
+      <fileset dir="${forrest.skins-dir}" includes="skins-*.xml"/>
+    </delete>
+  
+    <var name="skin-counter" value="1"/>
+    <for list="${forrest.skins.descriptors}" param="url">
+      <sequential>
+        <echo>fetching descriptor: @{url}</echo>
+        <get src="@{url}" 
+           dest="${forrest.skins-dir}/skins-${skin-counter}.xml"
+           verbose="true" usetimestamp="true" ignoreerrors="true"/>
+        <math result="skin-counter" operand1="${skin-counter}" operation="+" operand2="1" datatype="int"/>
+      </sequential>
+    </for>
   </target>  
   
   <target name="fetch-skin" 
           if = "skin.unavailable"
-          depends="init-props, fetch-skins-descriptor">
-    <xslt in="${forrest.skins-dir}/skins.xml" 
+          depends="init-props, fetch-skins-descriptors">
+    <for param="skin-descriptor-file">
+      <path>
+        <fileset dir="${forrest.skins-dir}" includes="skins-*.xml"/>
+      </path>
+      <sequential>
+        <xslt in="@{skin-descriptor-file}" 
           out="${project.temp-dir}/skinlist2fetchbuild.xml"
           style="${forrest.home}/var/skinlist2fetch.xsl"
           force="true">
@@ -555,6 +577,8 @@ Use the 'seed' target to create a template project structure.
       <param name="forrest-version" expression="${version}"/>   
     </xslt>  
     <ant antfile="${project.temp-dir}/skinlist2fetchbuild.xml"/>
+      </sequential>
+    </for>
   </target>    
   
   
