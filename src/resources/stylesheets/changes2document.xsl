@@ -4,16 +4,16 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
 
- <xsl:import href="copyover.xsl"/>
-
- <xsl:param name="name"/>
-
  <xsl:variable name="bugzilla">http://nagoya.apache.org/bugzilla/show_bug.cgi?id=</xsl:variable>
 
+ <xsl:template match="/">
+  <xsl:apply-templates select="//changes"/>
+ </xsl:template>
+ 
  <xsl:template match="changes">
   <document>
    <header>
-    <title><xsl:value-of select="@title"/></title>
+    <title>History of Changes</title>
    </header>
    <body>
     <xsl:apply-templates/>
@@ -22,11 +22,11 @@
  </xsl:template>
 
  <xsl:template match="release">
-  <s2 title="{$name} {@version} ({@date})">
-   <sl>
+  <section title="Version {@version} ({@date})">
+   <ul>
     <xsl:apply-templates/>
-   </sl>
-  </s2>
+   </ul>
+  </section>
  </xsl:template>
 
  <xsl:template match="action">
@@ -49,10 +49,6 @@
     <xsl:text>.</xsl:text>
    </xsl:if>
   </li>
- </xsl:template>
-
- <xsl:template match="devs">
-  <!-- remove -->
  </xsl:template>
 
 </xsl:stylesheet>
