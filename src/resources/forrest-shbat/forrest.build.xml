@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/03 10:31:29 $              |
+    |             $Date: 2003/10/05 10:12:09 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -54,6 +54,7 @@ FORREST SITE BUILDER
     <property name="/" value="${file.separator}"/>
     <echo message="Loading project specific properties from ${project.home}${/}forrest.properties" />
     <property file="${project.home}/forrest.properties" />
+    <property file="${forrest.home}/default-forrest.properties" />
 
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
@@ -79,7 +80,7 @@ FORREST SITE BUILDER
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
     <property name="project.menu-scheme" value="tab_attributes" />
-    <property name="project.status"      location="${project.home}/status.xml" />
+    <property name="status"      location="${project.home}/${project.status}" />
     <property name="project.bugtracking-url" value="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=" />
 
     <!-- Files we don't want copied from build/* to src/* by the backcopy
@@ -87,27 +88,27 @@ FORREST SITE BUILDER
     <property name="forrest.backcopy.excludes" value="**/breadcrumbs.js,WEB-INF/**,status.xml"/>
 
     <!-- FIXME: rename project.content-dir to project.documentation-dir -->
-    <property name="project.content-dir" location="${project.home}/src/documentation" />
+    <property name="content-dir" location="${project.home}/${project.content-dir}" />
     <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
     will go away soon -->
-    <property name="project.real-content-dir" location="${project.content-dir}/content" />
-    <property name="project.sitemap-dir"     location="${project.content-dir}" />
-    <property name="project.xdocs-dir"   location="${project.content-dir}/content/xdocs" />
-    <property name="project.resources-dir"   location="${project.content-dir}/resources"/>
-    <property name="project.stylesheets-dir" location="${project.resources-dir}/stylesheets" />
-    <property name="project.images-dir"  location="${project.resources-dir}/images" />
-    <property name="project.schema-dir"  location="${project.resources-dir}/schema" />
-    <property name="project.grammars-dir" location="${project.resources-dir}/grammars" />
-    <property name="project.catalog"     location="${project.schema-dir}/catalog.xcat" />
+    <property name="real-content-dir" location="${project.home}/${project.content-dir}/content" />
+    <property name="sitemap-dir"     location="${project.home}/${project.sitemap-dir}" />
+    <property name="xdocs-dir"   location="${project.home}/${project.xdocs-dir}" />
+    <property name="resources-dir"   location="${project.home}/${project.resources-dir}"/>
+    <property name="stylesheets-dir" location="${project.home}/${project.stylesheets-dir}" />
+    <property name="images-dir"  location="${project.home}/${project.images-dir}" />
+    <property name="schema-dir"  location="${project.home}/${project.schema-dir}" />
+    <property name="grammars-dir" location="${project.home}/${project.grammars-dir}" />
+    <property name="catalog"     location="${project.home}/${project.catalog}" />
     <property name="forrest.catalog.verbosity" value="1" />
     <property name="forrest.maxmemory" value="64m" />
     <property name="forrest.jvmargs" value="" />
-    <property name="project.skins-dir"   location="${project.content-dir}/skins" />
-    <property name="project.skinconf"    location="${project.content-dir}/skinconf.xml" />
-    <property name="project.conf-dir"    location="${project.content-dir}/conf" />
-    <property name="project.lib-dir"     location="${project.content-dir}/lib" />
-    <property name="project.classes-dir" location="${project.content-dir}/classes" />
-    <property name="project.translations-dir" location="${project.content-dir}/translations" />
+    <property name="skins-dir"   location="${project.home}/${project.skins-dir}" />
+    <property name="skinconf"    location="${project.home}/${project.skinconf}" />
+    <property name="conf-dir"    location="${project.home}/${project.conf-dir}" />
+    <property name="lib-dir"     location="${project.home}/${project.lib-dir}" />
+    <property name="classes-dir" location="${project.home}/${project.classes-dir}" />
+    <property name="translations-dir" location="${project.home}/${project.translations-dir}" />
 
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
@@ -118,21 +119,21 @@ FORREST SITE BUILDER
   </target>
 
   <target name="examine-proj" depends="init-props">
-    <available property="conf.present" file="${project.conf-dir}" type="dir"/>
-    <available property="real-content.present" file="${project.real-content-dir}" type="dir"/>
-    <available property="sitemap.present" file="${project.sitemap-dir}" type="dir"/>
-    <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
-    <available property="resources.present" file="${project.resources-dir}" type="dir"/>
-    <available property="images.present" file="${project.images-dir}" type="dir"/>
-    <available property="grammars.present" file="${project.grammars-dir}" type="dir"/>
-    <available property="schema.present" file="${project.schema-dir}" type="dir"/>
-    <available property="stylesheets.present" file="${project.stylesheets-dir}" type="dir"/>
-    <available property="lib.present" file="${project.lib-dir}" type="dir"/>
-    <available property="classes.present" file="${project.classes-dir}" type="dir"/>
-    <available property="skins.present" file="${project.skins-dir}" type="dir"/>
-    <available property="skinconf.present" file="${project.skinconf}"/>
-    <available property="status.present" file="${project.status}"/>
-    <available property="translations.present" file="${project.translations-dir}" type="dir" />
+    <available property="conf.present" file="${conf-dir}" type="dir"/>
+    <available property="real-content.present" file="${real-content-dir}" type="dir"/>
+    <available property="sitemap.present" file="${sitemap-dir}" type="dir"/>
+    <available property="xdocs.present" file="${xdocs-dir}" type="dir"/>
+    <available property="resources.present" file="${resources-dir}" type="dir"/>
+    <available property="images.present" file="${images-dir}" type="dir"/>
+    <available property="grammars.present" file="${grammars-dir}" type="dir"/>
+    <available property="schema.present" file="${schema-dir}" type="dir"/>
+    <available property="stylesheets.present" file="${stylesheets-dir}" type="dir"/>
+    <available property="lib.present" file="${lib-dir}" type="dir"/>
+    <available property="classes.present" file="${classes-dir}" type="dir"/>
+    <available property="skins.present" file="${skins-dir}" type="dir"/>
+    <available property="skinconf.present" file="${skinconf}"/>
+    <available property="status.present" file="${status}"/>
+    <available property="translations.present" file="${translations-dir}" type="dir" />
   </target>
 
   <target name="validation-props" depends="examine-proj">
@@ -165,7 +166,7 @@ FORREST SITE BUILDER
         <isset property="skinconf.present"/>
       </and>
     </condition>
-    <basename file="${project.skinconf}" property="skinconf-file"/>
+    <basename file="${skinconf}" property="skinconf-file"/>
     <property name="forrest.validate.skinconf.includes" value="${skinconf-file}"/>
     <property name="forrest.validate.skinconf.excludes" value=""/>
     <property name="forrest.validate.skinconf.failonerror"
@@ -224,7 +225,7 @@ FORREST SITE BUILDER
 
   <!-- Load properties from user's skinconf.xml, if it is defined -->
   <target name="load-project-props" depends="validation-props, validate-skinconf" if="skinconf.present">
-    <xmlproperty file="${project.skinconf}" collapseattributes="true"
+    <xmlproperty file="${skinconf}" collapseattributes="true"
       validate="${validate.skinconf}"/>
   </target>
 
@@ -283,7 +284,7 @@ FORREST SITE BUILDER
       | //which skin to apply
       | project.skin        = ${project.skin} 
       | //where your documentation xml is
-      | project.content-dir = ${project.content-dir} 
+      | project.content-dir = ${content-dir} 
       ------------------------------------------------
     </echo>
   </target>
@@ -330,7 +331,7 @@ FORREST SITE BUILDER
     <filter token="skin"              value="${project.skin}" />
     <filter token="menu-scheme"       value="${project.menu-scheme}" />
     <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
-    <filter token="local-catalog"     value="${project.catalog}" />
+    <filter token="local-catalog"     value="${catalog}" />
     <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
     <filter token="i18n"              value="${project.i18n}" />
 
@@ -394,9 +395,9 @@ FORREST SITE BUILDER
   <!-- ===============================================================
        Fills the Cocoon context dir to work in 
        with the project-content-parts 
-         (now: copy stuff from param ${project.content-dir}
+         (now: copy stuff from param ${content-dir}
           with siteplan: based on that plan; should allow more different parts)
-       param: location to find the content ${project.content-dir}(now)
+       param: location to find the content ${content-dir}(now)
        param: location to find project descriptors == ${project.home} 
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
@@ -408,13 +409,13 @@ FORREST SITE BUILDER
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
       overwrite="true" failonerror="false">
-      <fileset dir="${project.conf-dir}">
+      <fileset dir="${conf-dir}">
         <exclude name="*-${version}.xconf"/>
       </fileset>
     </copy>
     <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true"
       failonerror="false">
-      <fileset dir="${project.conf-dir}">
+      <fileset dir="${conf-dir}">
         <include name="*-${version}.*"/>
       </fileset>
       <mapper type="glob" from="*-${version}.xconf" to="*.xconf"/>
@@ -423,14 +424,14 @@ FORREST SITE BUILDER
 
   <target name="copy-sitemap" if="sitemap.present">
     <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true" failonerror="false">
-      <fileset dir="${project.sitemap-dir}">
+      <fileset dir="${sitemap-dir}">
         <exclude name="*-${version}.xmap"/>
         <include name="*.xmap"/>
         <include name="jtidy.properties"/>
       </fileset>
     </copy>
     <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true">
-      <fileset dir="${project.sitemap-dir}">
+      <fileset dir="${sitemap-dir}">
         <include name="*-${version}.xmap"/>
       </fileset>
       <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
@@ -439,13 +440,13 @@ FORREST SITE BUILDER
 
   <target name="copy-xdocs" if="xdocs.present">
     <sync toDir="${project.ctxt-dir}/content/xdocs">
-      <fileset dir="${project.xdocs-dir}"/>
+      <fileset dir="${xdocs-dir}"/>
     </sync>
   </target>
 
   <target name="copy-resources" if="resources.present">
     <copy toDir="${project.ctxt-dir}/resources" failonerror="false">
-      <fileset dir="${project.resources-dir}">
+      <fileset dir="${resources-dir}">
         <exclude name="stylesheets"/>
         <exclude name="images"/>
         <exclude name="grammars"/>
@@ -456,21 +457,21 @@ FORREST SITE BUILDER
   <target name="copy-stylesheets" if="stylesheets.present">
     <copy toDir="${project.ctxt-dir}/resources/stylesheets" 
       overwrite="true" failonerror="false">
-      <fileset dir="${project.stylesheets-dir}"/>
+      <fileset dir="${stylesheets-dir}"/>
     </copy>
   </target>
 
   <target name="copy-images" if="images.present">
     <copy toDir="${project.ctxt-dir}/resources/images" 
       overwrite="true" failonerror="false">
-      <fileset dir="${project.images-dir}"/>
+      <fileset dir="${images-dir}"/>
     </copy>
   </target>
 
   <target name="copy-grammars" if="grammars.present">
     <copy toDir="${project.ctxt-dir}/resources/grammars" 
       overwrite="true" failonerror="false">
-      <fileset dir="${project.grammars-dir}"/>
+      <fileset dir="${grammars-dir}"/>
     </copy>
   </target>
 
@@ -478,7 +479,7 @@ FORREST SITE BUILDER
   <target name="copy-content" if="real-content.present">
     <copy toDir="${project.ctxt-dir}/content" 
       overwrite="false" failonerror="false">
-      <fileset dir="${project.real-content-dir}">
+      <fileset dir="${real-content-dir}">
         <exclude name="xdocs/**"/>
       </fileset>
     </copy>
@@ -487,43 +488,43 @@ FORREST SITE BUILDER
   <target name="copy-lib" if="lib.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF/lib" 
       overwrite="true" failonerror="false">
-      <fileset dir="${project.lib-dir}"/>
+      <fileset dir="${lib-dir}"/>
     </copy>
   </target>
 
   <target name="copy-classes" if="classes.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF/classes" 
       overwrite="true" failonerror="false">
-      <fileset dir="${project.classes-dir}"/>
+      <fileset dir="${classes-dir}"/>
     </copy>
   </target>
 
   <target name="copy-skins" if="skins.present">
     <copy toDir="${project.ctxt-dir}/skins" overwrite="true" failonerror="false">
-       <fileset dir="${project.skins-dir}" >
+       <fileset dir="${skins-dir}" >
         <include name="**/images/**" />
       </fileset>
     </copy>
     <copy toDir="${project.ctxt-dir}/skins" filtering="true" overwrite="true" failonerror="false">
-      <fileset dir="${project.skins-dir}" >
+      <fileset dir="${skins-dir}" >
         <exclude name="**/images/**" />
       </fileset>
     </copy>
   </target>
 
   <target name="copy-skinconf" if="skinconf.present">
-    <copy file="${project.skinconf}"
+    <copy file="${skinconf}"
       toDir="${project.ctxt-dir}" 
       overwrite="true" failonerror="false"/>
   </target>
 
   <target name="copy-status" if="status.present">
-    <copy file="${project.status}" todir="${project.ctxt-dir}" />
+    <copy file="${status}" todir="${project.ctxt-dir}" />
   </target>
 
   <target name="copy-translations" if="translations.present" >
     <copy todir="${project.ctxt-dir}/translations">
-    <fileset dir="${project.translations-dir}"/>
+    <fileset dir="${translations-dir}"/>
     </copy>
   </target>
 
@@ -539,7 +540,7 @@ FORREST SITE BUILDER
            (now: no need, waiting on siteplan future)
             with siteplan: e.g. sitemap and catalog)
        param: name of the skin to use ${project.skin} (now)
-       param: location to find the content ${project.content-dir}(now)
+       param: location to find the content ${content-dir}(now)
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
   <target name="prepare-context" depends="init, bare-context, project-context" />
@@ -562,7 +563,7 @@ FORREST SITE BUILDER
        the 'project.empty' property if no docs are found.
        =============================================================== -->
   <target name="check-contentdir" depends="init-props">
-    <available property="project.content.present" file="${project.content-dir}"
+    <available property="project.content.present" file="${content-dir}"
       type="dir"/>
   </target>
 
@@ -570,7 +571,7 @@ FORREST SITE BUILDER
     if="project.content.present" unless="skip.contentcheck">
     <fail>
 ------------------------------------------------
-This project already has content in ${project.content-dir}.
+This project already has content in ${content-dir}.
 
 Run with '-Dskip.contentcheck=yes' to ignore existing content.
 ------------------------------------------------
@@ -581,7 +582,7 @@ Run with '-Dskip.contentcheck=yes' to ignore existing content.
     unless="project.content.present">
     <fail>
 ------------------------------------------------
-This project has no content in ${project.content-dir}.
+This project has no content in ${content-dir}.
 Use the 'seed' target to create a template project structure.
 ------------------------------------------------
     </fail>
@@ -590,9 +591,9 @@ Use the 'seed' target to create a template project structure.
   <!-- ===============================================================
        Makes the site.
        param: name of the skin to use ${project.skin} (now)
-       param: location to find the content ${project.content-dir}(now)
+       param: location to find the content ${content-dir}(now)
        param: location to make temporary context-dir ${project.ctxt-dir} 
-       param: location to make temporary work-dir ${project.content-dir}
+       param: location to make temporary work-dir ${content-dir}
        param: debuglevel for logging ${project.debuglevel}
        param: location of log-file ${project.logkitfile}
        ===============================================================
@@ -706,7 +707,7 @@ for any broken links in the generated site.
       <jvmarg line="${forrest.jvmargs}"/>
       <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
       <arg line="-index ${project.index-dir}"/>
-      <arg value="${project.xdocs-dir}"/>
+      <arg value="${xdocs-dir}"/>
       <classpath>
         <path refid="forrest.cp"/>
       </classpath>
@@ -867,7 +868,7 @@ Thanks for using Apache Forrest
     <fail if="forrest.validate.skinconf.disable-xml-link">
 ---------------------------------------     
 ${skinconfig.project-name} have disable-xml-link
-please change it on ${project.skinconf} 
+please change it on ${skinconf} 
 to validate this site.
 ---------------------------------------     
     </fail>
@@ -876,7 +877,7 @@ to validate this site.
         <catalogpath>
           <pathelement
             location="${forrest.home}/context/resources/schema/catalog.xcat"/>
-          <pathelement location="${project.catalog}"/>
+          <pathelement location="${catalog}"/>
         </catalogpath>
       </xmlcatalog>
       <fileset dir="${project.site-dir}"
@@ -892,10 +893,10 @@ to validate this site.
         <catalogpath>
           <pathelement
             location="${forrest.home}/context/resources/schema/catalog.xcat"/>
-          <pathelement location="${project.catalog}"/>
+          <pathelement location="${catalog}"/>
         </catalogpath>
       </xmlcatalog>
-      <fileset dir="${project.xdocs-dir}"
+      <fileset dir="${xdocs-dir}"
         includes="${forrest.validate.xdocs.includes}"
         excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
@@ -907,7 +908,7 @@ to validate this site.
     <!--
     <jing compactSyntax="true"
       rngfile="${forrest.home}/context/resources/schema/relaxng/skinconf.rnc">
-      <fileset dir="${project.content-dir}"
+      <fileset dir="${content-dir}"
         includes="${forrest.validate.skinconf.includes}"
         excludes="${forrest.validate.skinconf.excludes}"/>
     </jing>
@@ -917,23 +918,23 @@ to validate this site.
 
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap">
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/forrest-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/aggregate-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/dtd-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/faq-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/forrest-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/issues-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/linkmap-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/menu-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/profiler-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/raw-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/resources-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/revisions-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/sitemap-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${project.sitemap-dir}/status-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/forrest-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/aggregate-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/dtd-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/faq-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/forrest-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/issues-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/linkmap-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/menu-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/profiler-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/raw-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/resources-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/revisions-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/sitemap-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${sitemap-dir}/status-${version}.xmap" type="file"/>
 
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v06.rng">
-      <fileset dir="${project.content-dir}"
+      <fileset dir="${content-dir}"
         includes="${forrest.validate.sitemap.includes}"
         excludes="${forrest.validate.sitemap.excludes}">
         <include name="*.xmap" unless="version-specific-sitemap"/>
@@ -946,7 +947,7 @@ to validate this site.
   <target name="validate-stylesheets" depends="validation-props"
     if="validate.stylesheets">
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
-      <fileset dir="${project.stylesheets-dir}"
+      <fileset dir="${stylesheets-dir}"
         includes="${forrest.validate.stylesheets.includes}"
         excludes="${forrest.validate.stylesheets.excludes}" />
     </jing>
@@ -958,7 +959,7 @@ to validate this site.
   <target name="validate-skins-stylesheets" depends="validation-props"
     if="validate.skins.stylesheets">
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
-      <fileset dir="${project.skins-dir}"
+      <fileset dir="${skins-dir}"
         includes="${forrest.validate.skins.stylesheets.includes}"
         excludes="${forrest.validate.skins.stylesheets.excludes}"/>
     </jing>
@@ -969,7 +970,7 @@ to validate this site.
   <target name="validate-skinchoice">
     <condition property="project.skin.present">
       <available file="${project.skin}" type="dir">
-        <filepath path="${project.skins-dir}"/>
+        <filepath path="${skins-dir}"/>
         <filepath path="${forrest.home}/context/skins"/>
       </available>
     </condition>
@@ -978,13 +979,13 @@ to validate this site.
 ------------------------------------------------
 Error: The skin '${project.skin}' could not be found in:
 
-${project.skins-dir}
+${skins-dir}
 
 And is not provided by Forrest in
 
 ${forrest.home}/context/skins
 
-Please check the $${project.skins-dir} and $${project.skin} properties in
+Please check the $${skins-dir} and $${project.skin} properties in
 forrest.properties.
 ------------------------------------------------
     </fail>
@@ -1059,7 +1060,7 @@ forrest.properties.
     This translates to: copy all docs that are not in the Forrest context
     directory, or that are, but are different.
     -->
-    <copy toDir="${project.content-dir}" overwrite="false">
+    <copy toDir="${content-dir}" overwrite="false">
       <fileset dir="${project.webapp}" excludes="${forrest.backcopy.excludes}">
         <or>
           <not>
@@ -1078,11 +1079,11 @@ forrest.properties.
 
   <target name="overrides" depends="init-props"
     description="Prints a summary of which files a project is overriding">
-    <fileset dir="${project.content-dir}" id="overridden-files">
+    <fileset dir="${content-dir}" id="overridden-files">
       <present targetdir="${forrest.home}/context"/>
       <different targetdir="${forrest.home}/context"/>
     </fileset>
-    <fileset dir="${project.content-dir}" id="overridden-files-unmodified">
+    <fileset dir="${content-dir}" id="overridden-files-unmodified">
       <present targetdir="${forrest.home}/context"/>
       <not>
         <different targetdir="${forrest.home}/context"/>
@@ -1154,7 +1155,7 @@ forrest.properties.
           <available type="file" file="${forrest.home}/context/skins/${project.skin}.zip"/>
         </not>
         <not>
-          <available type="dir" file="${project.skins-dir}/${project.skin}"/>
+          <available type="dir" file="${skins-dir}/${project.skin}"/>
         </not>        
       </and>
     </condition>
