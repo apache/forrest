@@ -81,10 +81,12 @@ Building the distribution
    See http://svn.apache.org/repos/asf/forrest/branches/
 
  - Test the actual distribution on various platforms.
+   - Upload the release candidates and signatures to a committer's webspace.
    - Ask all developers to test (command-line, run, and webapp).
-   - Each developer can do 'build dist' and test locally. Coordinate to ensure
-     that each is using the same SVN revision and that the MD5 sums match.
-   - Follow the actual user instructions.
+   - Each developer can do 'build release- dist' and test locally.
+     Coordinate to ensure that each is using the same SVN revision
+     and that the MD5 sums match.
+   - Follow the actual user instructions in README.txt and index.html
    - Use it to build some difficult sites.
    - Ensure that the compressed archives will unpack correctly.
 
@@ -103,20 +105,24 @@ Upload and announcement
    to www.apache.org at /www/www.apache.org/ dist/forrest/
    Each PMC member has a server account and belongs to the forrest group.
    The process is documented at http://cvs.apache.org/~bodewig/mirror.html
+   Ensure correct file permissions: chgrp forrest; chmod 664
+   Leave the previous dist there as well, until after the announcement.
 
 FIXME: on server do 'svn co' in /www/www.apache.org/dist/forrest/
 HEAD.html README.html LICENSE.txt KEYS
-   For the meantime, it is a manual scp.
+   For the meantime, it is a manual scp from the "forrest/dist" SVN repo.
 
  - Arrange stuff at the Archives site http://archive.apache.org/dist/forrest/
+   This is automatically copied from the main /dist/forrest/
+
+ - Wait for the various mirrors to pick up the new files.
+   For some mirrors, this takes only a few hours. However others are slow.
+   How long to wait is a tradeoff.
+   See "Status of mirrors" http://www.apache.org/mirrors/
 
  - Edit the forrest/src/documentation/content/xdocs/mirrors.ihtml
  - Edit the Forrest home page in the "News and events" section.
  - Rebuild and publish the Forrest website as normal.
-
- - Wait for the various mirrors to pick up the new files.
-   This has been known to take up to 10 hours. Test it via 
-   http://forrest.apache.org/mirrors.cgi
 
  - Edit xml-site/src/documentation/content/xdocs/news.xml and record the
    announcement, and then commit the new HTML to xml-site/targets/forrest
@@ -137,6 +143,7 @@ See previous announcements:
 0.4   http://marc.theaimsgroup.com/?l=jakarta-announce&m=104510734501302
 0.5   http://marc.theaimsgroup.com/?l=xml-apache-announce&m=106352706005681
 0.5.1 http://marc.theaimsgroup.com/?l=xml-apache-announce&m=106541447606765
+0.6   http://marc.theaimsgroup.com/?l=xml-apache-announce&m=109784461425740 
 
  - Ask Jeff Turner to do the freshmeat announcement, or add you as an admin.
    http://freshmeat.net/projects/forrest/
@@ -158,6 +165,11 @@ Cleanups
     |                 Forrest Site Builder                  |
     |                        0.8-dev                        |
 
+ - Remove the old dist files from the dist/forrest/ directory.
+   It has already been archived at archives.apache.org
+
+ - Tweak the "release" versions via "admin" interface at our Jira.
+ - Review the Issues for the old version and move any Incomplete ones up.
 
 
 All done!
