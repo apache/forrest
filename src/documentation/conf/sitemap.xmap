@@ -8,7 +8,8 @@
 
   <map:generators default="file">
    <map:generator  name="file"        src="org.apache.cocoon.generation.FileGenerator" label="content"/>
-   <map:generator  name="directory"        src="org.apache.cocoon.generation.DirectoryGenerator" label="content"/>
+   <map:generator  name="directory"   src="org.apache.cocoon.generation.DirectoryGenerator" label="content"/>
+   <map:generator  name="html"        src="org.apache.cocoon.generation.HTMLGenerator" label="content"/>
    <!-- FIXME: Change this once better view handling is implemented -->
    <map:generator  name="file-nolabel" src="org.apache.cocoon.generation.FileGenerator"/>
   </map:generators>
@@ -124,7 +125,15 @@
      <map:serialize/>
    </map:match>
 -->
-   
+   <map:match pattern="apachestats">
+     <map:generate type="html"
+                   src="http://www.apache.org/~rubys/stats/xml.apache.org/">
+       <map:parameter name="xpath"
+                      value="/html/body//a[contains(@href,'.xml')]"/>
+     </map:generate>
+     <map:serialize type="xml"/>
+   </map:match>
+
    <map:match pattern="**book-**.xml">
      <map:generate src="content/xdocs/{1}book.xml"/>
      <map:call resource="skinit">
