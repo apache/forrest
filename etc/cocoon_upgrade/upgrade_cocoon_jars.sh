@@ -185,7 +185,7 @@ bzcopy fop
 #cocoon-html-block-20030311.jar
 bzcopy html
 #cocoon-jfor-block-20030311.jar
-bzcopy jfor
+#bzcopy jfor
 #cocoon-linkrewriter-block-20030311.jar
 bzcopy linkrewriter
 #cocoon-lucene-block-20030311.jar
@@ -199,12 +199,11 @@ copy commons-jxpath
 #commons-lang-1.0.1.jar
 #excalibur-cli-1.0.jar
 copy commons-cli
-#excalibur-collections-20020820.jar
-copy excalibur-collections
 #excalibur-component-20020916.jar
 copy excalibur-component
 #excalibur-concurrent-20020820.jar
-copy excalibur-concurrent
+#copy excalibur-concurrent
+copy util.concurrent
 #excalibur-datasource-vm12-20021121.jar
 #excalibur-i18n-1.0.jar
 copy excalibur-i18n
@@ -239,7 +238,7 @@ copy jakarta-regexp
 #jisp-2.0.1.jar
 copy jisp
 #jtidy-04aug2000r7-dev.jar
-bcopy jtidy
+copy jtidy
 #logkit-1.1.jar
 copy logkit
 #lucene-1.2.jar
