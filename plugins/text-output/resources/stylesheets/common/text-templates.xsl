@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- A single carriage return -->
+  <xsl:template name="cr">
+    <xsl:text>
+</xsl:text>
+  </xsl:template>
+
+  <!-- A blank line -->
+  <xsl:template name="newLine">
+    <xsl:call-template name="cr"/>
+    <xsl:call-template name="cr"/>
+  </xsl:template>
+
+  <xsl:template name="justify-text">
+    <xsl:param name="text"/>
+    <xsl:param name="width" select="'76'"/>
+    <xsl:param name="align" select="'center'"/>
+
+    <xsl:variable name="leader">
+      <xsl:choose>
+        <xsl:when test="$align='center'">
+          <xsl:call-template name="lineOf">
+            <xsl:with-param name="chars" select="' '"/>
+            <xsl:with-param name="size"
+              select="floor(($width - string-length($text)) div 2)"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>*** </xsl:text>
+          <xsl:value-of select="$align"/>
+          <xsl:text> alignment is not implemented</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:value-of select="concat($leader, $text)"/>
+  </xsl:template>
+
+  <xsl:template name="substring-before-last">
+    <xsl:param name="input" />
+    <xsl:param name="substr" />
+    <xsl:if test="$substr and contains($input, $substr)">
+      <xsl:variable name="temp" select="substring-after($input, $substr)" />
+      <xsl:value-of select="substring-before($input, $substr)" />
+      <xsl:if test="contains($temp, $substr)">
+        <xsl:value-of select="$substr" />
+        <xsl:call-template name="substring-before-last">
+          <xsl:with-param name="input" select="$temp" />
+          <xsl:with-param name="substr" select="$substr" />
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+   
+  <xsl:template name="substring-after-last">
+    <xsl:param name="input"/>
+    <xsl:param name="substr"/>
+     
+    <!-- Extract the string which comes after the first occurence -->
+    <xsl:variable name="temp" select="substring-after($input,$substr)"/>
+    <xsl:choose>
+      <!-- If it still contains the search string the recursively process -->
+      <xsl:when test="$substr and contains($temp,$substr)">
+        <xsl:call-template name="substring-after-last">
+          <xsl:with-param name="input" select="$temp"/>
+          <xsl:with-param name="substr" select="$substr"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$temp"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="lineOf">
+    <xsl:param name="chars" select="' '"/>
+    <xsl:param name="size" select="80"/>
+
+    <xsl:choose>
+      <xsl:when test="$size &lt; 1"/>
+      <xsl:when test="string-length($chars) &lt; $size">
+        <xsl:call-template name="lineOf">
+          <xsl:with-param name="chars" select="concat($chars,$chars)"/>
+          <xsl:with-param name="size" select="$size"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="substring($chars, 1, $size)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="emit">
+    <xsl:param name="text"/>
+    <xsl:param name="indent"/>
+    <xsl:param name="width" select="'76'"/>
+
+    <xsl:variable name="trailing-space">
+      <xsl:if test="substring($text, string-length($text))=' '">
+        <xsl:text> </xsl:text>
+      </xsl:if>
+    </xsl:variable>
+      
+    <xsl:variable name="tmp">
+      <xsl:value-of select="normalize-space($text)"/>
+    </xsl:variable>
+
+    <xsl:if test="$tmp!=''">
+      <xsl:call-template name="lineOf">
+        <xsl:with-param name="size" select="$indent"/>
+      </xsl:call-template>
+      <xsl:value-of select="concat($tmp, $trailing-space)"/>
+    </xsl:if>
+  </xsl:template>
+
+</xsl:stylesheet>

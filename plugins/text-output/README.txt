@@ -11,7 +11,7 @@ Line wrapping, table handling, lists, formatting.
 INSTALLATION
 ------------
 
-cd plugins/text-output
+cd plugins/
 ../main/build.sh local-deploy
 
 The "text-output" plugin name must also be added to the
