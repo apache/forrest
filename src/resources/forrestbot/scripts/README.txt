@@ -1,11 +1,11 @@
                                Forrestbot Scripts
 
                                 jefft@apache.org
-                 $Revision: 1.1 $ $Date: 2002/12/07 09:21:59 $
+                 $Revision: 1.2 $ $Date: 2002/12/07 10:44:16 $
                             ------------------------
 
-This directory contains shell scripts for using the Forrestbot to generate
-multiple sites.  Contents are as follows:
+This directory contains shell scripts for using the Forrestbot from a webapp or
+cron job to generate multiple sites.  Contents are as follows:
 
 overseer                 # A driver script which is used with the webapp. Invokes 'refresh' and 'update_livesite'
 refresh                  # Main driver script. Refreshes a single site via a forrestbot script
@@ -22,7 +22,6 @@ In summary, if you obtain this from CVS and wish to use it locally, you must:
 
 In addition, to run the 'update_livesite' scripts you need to install the
 cvsutils scripts (http://www.red-bean.com/cvsutils/) and have them in your
-PATH.  This _may_ also be a requirement for the other scripts: check for
-'cvsco' usage in 'common-scripts'.
+PATH.
 
 --Jeff
