@@ -19,7 +19,7 @@
 
   <target name="validate" depends="validation-props, validate-xdocs,
     validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
-    validate-stylesheets"  description="Validates XML doc files in the project"/>
+    validate-stylesheets"  description="Conduct various validations: xdocs, skins, sitemap"/>
     
   <target name="validation-props" depends="examine-proj">
     <!-- Validation flags -->
@@ -137,7 +137,8 @@ to validate this site.
     <echo message="...validated site"/>
   </target>
 
-  <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
+  <target name="validate-xdocs" depends="validation-props" if="validate.xdocs"
+      description="Validate the project xdocs">
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
       <xmlcatalog refid="fcatalog" />
@@ -161,7 +162,7 @@ to validate this site.
   </target>
 
   <target name="validate-sitemap" depends="validation-props"
-    if="validate.sitemap" description="Validate project sitemaps">
+    if="validate.sitemap" description="Validate the project sitemaps">
     <available property="version-specific-sitemap" file="${sitemap-dir}/forrest-${version}.xmap" type="file"/>
     <available property="version-specific-sitemap" file="${sitemap-dir}/aggregate-${version}.xmap" type="file"/>
     <available property="version-specific-sitemap" file="${sitemap-dir}/dtd-${version}.xmap" type="file"/>
