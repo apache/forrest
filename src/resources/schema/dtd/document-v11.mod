@@ -176,7 +176,7 @@
     <!ATTLIST jump %common.att;
                    %link.att;>
 
-    <!-- window-forking link (equivalent of <a ... target="_new">) -->
+    <!-- window-forking link (equivalent of <a ... target="_blank">) -->
     <!ELEMENT fork (%link-content.mix;)*>
     <!ATTLIST fork %common.att;
                    %link.att;>
