@@ -259,6 +259,25 @@ $Revision: 1.8 $
           <map:transform type="idgen" />
           <map:serialize type="xml-document"/>
         </map:when>
+        <map:when test="{project:content.xdocs}{uri}.html">
+          <map:generate src="{project:content.xdocs}{uri}.html" type="html" />
+          <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+          <map:transform type="idgen" />
+          <map:serialize type="xml-document"/>
+        </map:when>        
+        <map:when test="{project:content.xdocs}{uri}.jspwiki">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.jspwiki" />
+            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+            <map:transform type="xsltc" 
+              src="{forrest:context}/resources/chaperon/stylesheets/wiki2xdoc.xsl">
+              <map:parameter name="name" value="{2}" />
+              <map:parameter name="spaceless-filenames" value="true"/>
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
         <map:when test="{project:content.xdocs}{uri}.cwiki">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
@@ -271,7 +290,7 @@ $Revision: 1.8 $
             </map:transform>
             <map:serialize type="xml-document"/>
           </map:match>
-        </map:when>
+        </map:when>        
         <map:when test="{project:content.xdocs}{uri}.txt">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
