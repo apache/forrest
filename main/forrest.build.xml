@@ -93,11 +93,11 @@ FORREST SITE BUILDER
     <property file="${project.home}/forrest.properties" />
     <echo message="Loading user specific properties from ${user.home}${/}forrest.properties" />
     <property file="${user.home}/forrest.properties" />
-    <echo message="Loading default properties from ${forrest.home}${/}context${/}default-forrest.properties" />
-    <property file="${forrest.home}/context/default-forrest.properties" />
+    <echo message="Loading default properties from ${forrest.home}${/}webapp${/}default-forrest.properties" />
+    <property file="${forrest.home}/webapp/default-forrest.properties" />
 
     <!-- people should use forrest.properties to override following defaults  -->
-    <property name="forrest.skins-dir"   location="${forrest.home}/context/skins"/>  
+    <property name="forrest.skins-dir"   location="${forrest.home}/webapp/skins"/>  
     <property name="forrest.plugins-dir"   location="${forrest.root-dir}/build/plugins"/>   
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
@@ -106,8 +106,8 @@ FORREST SITE BUILDER
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
     
     <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
-    <property name="project.configfile"     value="${forrest.home}/context/WEB-INF/cli.xconf" />
-    <property name="project.logkitfile"     value="${forrest.home}/context/WEB-INF/logkit.xconf" />
+    <property name="project.configfile"     value="${forrest.home}/webapp/WEB-INF/cli.xconf" />
+    <property name="project.logkitfile"     value="${forrest.home}/webapp/WEB-INF/logkit.xconf" />
     <property name="project.logger"         value="debug" />
 
     <property name="status"      location="${project.home}/${project.status}" />
@@ -261,7 +261,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="load-project-props" depends="validation-props, prepare-context" if="skinconf.present">
     <xslt in="${skinconf}" 
           out="${project.temp-dir}/no-doctype-project-skinconf.xml" 
-          style="${forrest.home}/context/resources/stylesheets/strip-doctype.xsl">
+          style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
     </xslt>              
 
@@ -271,9 +271,9 @@ The skin that most likely resembles these ones is called 'pelt'.
 
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
   <target name="load-forrest-props" unless="skinconf.present">
-     <xslt in="${forrest.home}/context/skinconf.xml" 
+     <xslt in="${forrest.home}/webapp/skinconf.xml" 
            out="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
-           style="${forrest.home}/context/resources/stylesheets/strip-doctype.xsl">
+           style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
     </xslt> 
 
@@ -319,7 +319,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="-prepare-classpath">
     <path id="forrest.cp">
          <pathelement path="${env.CLASSPATH}" />
-         <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
+         <pathelement location="${forrest.home}/webapp/WEB-INF/classes"/>
          <pathelement location="${forrest.build.lib-dir}/xml-forrest.jar"/>
          <pathelement location="${project.classes-dir}"/>
          <fileset dir="${forrest.jetty.lib-dir}">
@@ -426,7 +426,7 @@ The skin that most likely resembles these ones is called 'pelt'.
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/context"
+          dir="${forrest.home}/webapp"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
@@ -447,7 +447,7 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/context"
+          dir="${forrest.home}/webapp"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
@@ -457,7 +457,7 @@ The skin that most likely resembles these ones is called 'pelt'.
        <jvmarg line="${forrest.jvmargs}"/>
        <jvmarg
          value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.endorsed.lib-dir}"/>
-       <arg line="${forrest.home}/context/jettyconf.xml" />
+       <arg line="${forrest.home}/webapp/jettyconf.xml" />
        <syspropertyset>
          <propertyref prefix="forrest."/>
          <propertyref prefix="project."/>

@@ -84,7 +84,7 @@ public class ForrestConfUtils
         if (forrestHome.equals(defaultHome)) {
             contextHome = defaultHome;
         } else {
-            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/context";
+            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/webapp";
         }
         return contextHome;
     }

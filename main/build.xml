@@ -96,7 +96,7 @@
     <delete dir="${forrestbot.dir}/sites"/>
     <delete dir="${forrestbot.dir}/webapp/target"/>
     <delete dir="${forrestbot.dir}/webapp/maven.log"/>
-    <delete dir="src/core/context/WEB-INF/logs"/>
+    <delete dir="webapp/WEB-INF/logs"/>
   </target>
 
   <target name="dist-clean" depends="init, clean"
@@ -163,7 +163,7 @@
       <xmlcatalog id="xcat">
         <catalogpath>
           <pathelement
-            location="./src/core/context/resources/schema/catalog.xcat"/>
+            location="./webapp/resources/schema/catalog.xcat"/>
         </catalogpath>
       </xmlcatalog>
       <fileset dir="./src/core"
@@ -171,14 +171,14 @@
     </xmlvalidate>
     <!-- All stylesheets **/*.xsl -->
     <echo message="validating stylesheets **/*.xsl ..."/>
-    <jing rngfile="./src/core/context/resources/schema/relaxng/xslt.rng">
+    <jing rngfile="./webapp/resources/schema/relaxng/xslt.rng">
       <fileset dir="./src/core" includes="**/*.xsl"/>
       <fileset dir="${tools.dir}" includes="**/*.xsl"/>
     </jing>
     <!-- sitemap.xmap -->
     <echo message="validating **/sitemap.xmap ..."/>
-    <jing rngfile="./src/core/context/resources/schema/relaxng/sitemap-v06.rng">
-      <fileset dir="./src/core/context/" includes="*.xmap"/>
+    <jing rngfile="./webapp/resources/schema/relaxng/sitemap-v06.rng">
+      <fileset dir="./webapp/" includes="*.xmap"/>
     </jing>
     <!-- book.xml -->
     <!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
@@ -327,7 +327,7 @@
 	<mkdir dir="${dtdx.dir}"/>
 	<!-- Generate an intermediate XML representation of each DTD -->
 	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" preserveDirs="yes" extension=".dtdx">
-		<fileset dir="./src/core/context/resources/schema/dtd">
+		<fileset dir="./webapp/resources/schema/dtd">
 			<include name="changes-v12.dtd"/>
 			<include name="changes-v13.dtd"/>
 			<include name="document-v11.dtd"/>
@@ -352,7 +352,7 @@
 	<!-- Now transform the intermediate format back to the regular DTD format -->
 	<!-- Note that we could also transform to XSD or RNG -->
 	<xslt basedir="${dtdx.dir}"
-		destdir="${dist-shbat.dir}/context/resources/schema/dtd"
+		destdir="${dist-shbat.dir}/webapp/resources/schema/dtd"
 		extension="-full.dtd"
     style="tools/dtdconverters/dtdx2dtd.xsl">
     <include name="*.dtdx"/>
