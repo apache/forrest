@@ -103,10 +103,10 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			return;
 		}
 
-		dialog.setText("Burrokeet Application");
+		dialog.setText("Forrest Server");
 		dialog.setSize(500, 250);
 		Label statusMsg = new Label(dialog, SWT.NONE);
-		StringBuffer sb = new StringBuffer("Forrest application is starting.\n");
+		StringBuffer sb = new StringBuffer("Forrest server is starting.\n");
 		sb.append("\n\nPlease wait...");
 		statusMsg.setText(sb.toString());
 		statusMsg.setLocation(30, 25);

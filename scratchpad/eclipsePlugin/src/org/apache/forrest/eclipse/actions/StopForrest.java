@@ -56,8 +56,8 @@ public class StopForrest implements IWorkbenchWindowActionDelegate,
 			e.printStackTrace();
 		}
 
-		MessageDialog.openInformation(window.getShell(), "Burrokeet",
-				"Burrokeet Application Stopped");
+		MessageDialog.openInformation(window.getShell(), "Forrest",
+				"Forrest server stopped");
 	}
 
 	/**
