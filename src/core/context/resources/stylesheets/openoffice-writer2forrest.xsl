@@ -214,6 +214,15 @@
       <xsl:apply-templates select="text:p" mode="in-element"/>
     </td>
   </xsl:template>
+  <xsl:template match="table:table-cell[@table:number-columns-spanned]">
+    <td>
+        <xsl:attribute name="colspan">
+          <xsl:value-of select="@table:number-columns-spanned"/>
+        </xsl:attribute>
+      <xsl:apply-templates select="text:p" mode="in-element"/>
+    </td>
+  </xsl:template>
+
   <!--+
       | Images
       +-->
