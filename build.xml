@@ -51,11 +51,6 @@
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
     
-    <property name="fresh-site.zip" value="${dist-shbat.dir}/fresh-site.zip" />
-    <property name="bare-context.dir" value="${dist-shbat.dir}/context" />
-    <property name="webapp.webinf.dir" value="${bare-context.dir}/WEB-INF" />
-    <property name="webapp.webinf.lib.dir" value="${webapp.webinf.dir}/lib" />
-    
     <mkdir dir="${build.dir}"/>
     
     <path id="classpath">
@@ -192,100 +187,11 @@
 
 
   <!-- =================================================================== -->
-  <!-- Make the zip that holds what a fresh site should look like          -->
-  <!-- =================================================================== -->
-  <target name="fresh-site-zip" depends="init">
-    <zip destfile="${fresh-site.zip}" basedir="${resource.dir}/fresh-site" />
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
-  <!-- Note that @tokens@ in config files will be unexpanded.              -->
-  <!-- =================================================================== -->
-  <target name="webapp-webinf" depends="init, jar" >
-    <copy todir="${webapp.webinf.dir}" >
-      <fileset dir="${resource.dir}/conf" >
-        <exclude name="*.xmap" />
-        <exclude name="skinconf.xml" />
-      </fileset>
-    </copy>
-
-    <mkdir dir="${webapp.webinf.dir}/classes" />
-    <copy todir="${webapp.webinf.dir}/classes" >
-      <fileset dir="${resource.dir}/schema">
-        <include name="CatalogManager.properties"/>
-      </fileset>
-    </copy>
-
-    <!-- Temporary hack to stop Cocoon rewriting extensions -->
-    <mkdir dir="${webapp.webinf.dir}/classes/org/apache/cocoon/util"/>
-    <touch file="${webapp.webinf.dir}/classes/org/apache/cocoon/util/mime.types"/>
-
-
-    <!-- TODO: reduce jar copying -->
-    <copy todir="${dist-shbat.dir}/lib/endorsed">
-      <fileset dir="./lib/endorsed"    />
-    </copy>
-
-    <copy todir="${dist-shbat.dir}/lib/optional">
-      <fileset dir="./lib/optional"/>
-    </copy>
-    
-    <copy todir="${webapp.webinf.lib.dir}">
-      <fileset dir="./lib/endorsed"    />
-      <fileset dir="./lib/optional"/>
-      <fileset dir="./lib/core"/>
-    </copy>
-        
-    
-  </target>
-
-
-  <!-- =================================================================== -->
-  <!-- Make the bare context directory like cocoon (CLI or webapp) needs it-->
-  <!-- =================================================================== -->
-  <target name="bare-context-dir" depends="init" >
-    
-    <!-- Copy entity catalog, entities and class files -->
-    <copy todir="${bare-context.dir}/resources/schema" >
-      <fileset dir="${resource.dir}/schema"/>
-    </copy>
-
-    <!-- Copy Chaperon grammars -->
-    <copy todir="${bare-context.dir}/resources/grammars" >
-      <fileset dir="${resource.dir}/grammars"/>
-    </copy>
-
-    <!-- Copy Cocoon configuration and sitemap -->
-    <copy todir="${bare-context.dir}">
-      <fileset dir="${resource.dir}/conf">
-        <include name="*.xmap"/>
-        <include name="skinconf.xml"/>
-        <include name="jettyconf.xml"/>
-        <include name="jtidy.properties"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy stylesheets -->
-    <copy todir="${bare-context.dir}/resources/stylesheets" >
-      <fileset dir="${resource.dir}/stylesheets" />
-    </copy>
-
-    <!-- Copy skins -->
-    <copy todir="${bare-context.dir}/skins/" >
-      <fileset dir="${resource.dir}/skins" />
-    </copy>
-
-  </target>
-
-  <!-- =================================================================== -->
   <!-- Validate the important core configuration files                     -->
   <!-- =================================================================== -->
   <target name="validate-config" depends="init"
     description="Validate the important core configuration files">
-    <!-- FIXME allow switch
-    if="validate.config">
-    -->
+    <!-- FIXME allow switch if="validate.config"  -->
     <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
       <classpath>
         <fileset dir="./lib/core" includes="*.jar" />
@@ -293,19 +199,19 @@
     </taskdef>
     <!-- skinconf.xml -->
     <echo message="validating **/skinconf.xml ..."/>
-    <jing compactSyntax="true" rngfile="./src/resources/schema/relaxng/skinconf.rnc">
+    <jing compactSyntax="true" rngfile="./src/core/context/resources/schema/relaxng/skinconf.rnc">
       <fileset dir="./src/resources" includes="**/skinconf.xml"/>
     </jing>
     <!-- All stylesheets **/*.xsl -->
     <echo message="validating stylesheets **/*.xsl ..."/>
-    <jing rngfile="./src/resources/schema/relaxng/xslt.rng">
+    <jing rngfile="./src/core/context/resources/schema/relaxng/xslt.rng">
       <fileset dir="./src/resources" includes="**/*.xsl"/>
       <fileset dir="./tools" includes="**/*.xsl"/>
     </jing>
     <!-- sitemap.xmap -->
     <echo message="validating **/sitemap.xmap ..."/>
-    <jing rngfile="./src/resources/schema/relaxng/sitemap-v06.rng">
-      <fileset dir="./src/resources/conf" includes="*.xmap"/>
+    <jing rngfile="./src/core/context/resources/schema/relaxng/sitemap-v06.rng">
+      <fileset dir="./src/core/context/" includes="*.xmap"/>
     </jing>
     <!-- book.xml -->
     <!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
@@ -315,27 +221,17 @@
     </jing>
     -->
   </target>
+ 
+  <target name="dist-shbat" 
+    depends="init, jar, validate-config" >
 
-
-  <!-- =================================================================== -->
-  <!-- Make the shell-bat distribution                                     -->
-  <!-- =================================================================== -->
-  <target name="dist-shbat-init">
     <!-- fresh drop-off location for the distribution -->
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
-    <mkdir dir="${dist-shbat.dir}"/>
-    <mkdir dir="${bare-context.dir}" />
-    <mkdir dir="${webapp.webinf.dir}" />
-    <mkdir dir="${webapp.webinf.lib.dir}" />
-  </target>
-  
-  <target name="dist-shbat" 
-    depends="init, dist-shbat-init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
-
+    
     <!-- copy the prepared and wrapper stuff for the distribution -->
     <copy todir="${dist-shbat.dir}">
-      <fileset dir="./src/resources/forrest-shbat" />
+      <fileset dir="./src/core" />
     </copy>
 
     <!-- copy licenses -->
@@ -343,6 +239,21 @@
       <fileset dir="./legal" />
     </copy>
 
+    <!-- Copy Forrest jars -->
+    <!-- @TODO REDUCE COPYING -->
+    <mkdir dir="${dist-shbat.dir}/context/WEB-INF/lib" />
+    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
+      <fileset dir="${build.dir}" includes="*.jar"/>
+    </copy>
+    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
+      <fileset dir="./lib/core" includes="*.jar"/>
+      <fileset dir="./lib/endorsed" includes="*.jar"/>
+    </copy>
+    <mkdir dir="${dist-shbat.dir}/lib" />
+    <copy todir="${dist-shbat.dir}/lib">
+      <fileset dir="./lib" includes="*/*.jar"/>
+    </copy>
+    
     <!-- Copy Ant jars, so the shbat distribution is self-contained -->
     <mkdir dir="${dist-shbat.dir}/ant" />
     <copy todir="${dist-shbat.dir}/ant">
@@ -350,17 +261,6 @@
     </copy>
     <copy todir="${dist-shbat.dir}/ant/lib">
       <fileset dir="lib/core" includes="resolver*.jar"/>
-    </copy>
-
-    <!-- Copy forrestbot -->
-    <mkdir dir="${dist-shbat.dir}/forrestbot" />
-    <copy todir="${dist-shbat.dir}/forrestbot">
-      <fileset dir="src/resources/forrestbot">
-        <exclude name="bin/**"/>
-      </fileset>
-    </copy>
-    <copy todir="${dist-shbat.dir}/bin">
-      <fileset dir="src/resources/forrestbot/bin"/>
     </copy>
 
     <!-- Fix bin/ permissions -->
@@ -482,7 +382,7 @@
   <!-- Jar Cocoon classes                                                  -->
   <!-- =================================================================== -->
   <target name="jar" depends="init, compile">
-    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-${version}.jar"
+    <jar destfile="${build.dir}/xml-forrest.jar"
       basedir="${build.classes}"/>
   </target>
 
