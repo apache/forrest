@@ -64,11 +64,20 @@ Jeff Turner <jefft@apache.org>
         <xsl:when test="starts-with(., 'http:') or starts-with(., 'https:')">
           <xsl:value-of select="."/>
         </xsl:when>
+        <xsl:when test="contains(., '.png') or
+          contains(., '.jpeg') or
+          contains(., '.jpg') or
+          contains(., '.tif')">
+          <!-- Image links are always relative -->
+          <xsl:value-of select="$root"/><xsl:value-of select="."/>
+        </xsl:when>
 
         <xsl:when test="$tab='' or ../@tab=$tab">
           <xsl:value-of select="concat('#', .)"/>
         </xsl:when>
 
+        <!-- PDFs can handle inline images, but everything else must become an
+        external link -->
         <xsl:when test="contains($path, '.pdf')">
 
           <!-- Links to outside a PDF are all absolute -->
