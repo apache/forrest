@@ -376,18 +376,7 @@ $Revision: 1.12 $
            <map:serialize type="xml"/>
          </map:match>
        </map:pipeline>
-    
-      <map:pipeline internal-only="false">
-           <map:select type="exists">
-             <map:when test="{forrest:plugins}/sitemap.xmap">
-               <map:mount uri-prefix="" 
-                          src="{forrest:plugins}/sitemap.xmap" 
-                          check-reload="yes" 
-                          pass-through="true"/>
-            </map:when>  
-          </map:select>
-      </map:pipeline>
-
+       
     <map:pipeline internal-only="false">
       <!-- ============================================================ -->
       <!-- SOURCE FORMATS                                               -->
@@ -442,6 +431,15 @@ $Revision: 1.12 $
         <map:match pattern="lucene-*.xml">
           <map:mount uri-prefix="" src="search.xmap" check-reload="yes"/>
         </map:match>
+        
+         <map:select type="exists">
+           <map:when test="{forrest:plugins}/sitemap.xmap">
+             <map:mount uri-prefix="" 
+                        src="{forrest:plugins}/sitemap.xmap" 
+                        check-reload="yes" 
+                        pass-through="true"/>
+          </map:when>  
+        </map:select>
 
         <!-- Default source types -->
         <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
