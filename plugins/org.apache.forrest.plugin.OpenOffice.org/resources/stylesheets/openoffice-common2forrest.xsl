@@ -256,14 +256,9 @@
   <!-- ==================================================================== -->
   
   <xsl:template match="@text:style-name">
-    <!-- class attributes on source document elements will be
-    available when Forrest's source document format is changed to
-    XHTML. -->
-    <!--
     <xsl:attribute name="class">
       <xsl:value-of select="."/>
     </xsl:attribute>
-    -->
   </xsl:template>
   
   <xsl:template name="style">
