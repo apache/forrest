@@ -614,6 +614,14 @@ for any broken links in the generated site.
       </fileset>
     </copy>
 
+    <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
+    <available property="jdk1.4+" classname="java.lang.CharSequence"/>
+    <copy todir="${project.webapp}/WEB-INF/lib">
+      <fileset dir="${forrest.home}/lib">
+        <include name="endorsed/*jar" unless="jdk1.4+"/>
+      </fileset>
+    </copy>
+
     <echo>
 ---------------------------------
 Webapp generated in ${project.webapp}
