@@ -325,7 +325,7 @@ document.write("Last Published: " + document.lastModified);
 <xsl:template match="div[@class = 'skinconf-heading-1']">
     <xsl:choose>
       <xsl:when test="//skinconfig/headings/@type='underlined'">
-      	<h3 class="underlined"><xsl:value-of select="h1"/></h3>
+      	<h3 class="underlined_10"><xsl:value-of select="h1"/></h3>
       </xsl:when>
       <xsl:when test="//skinconfig/headings/@type='boxed'">
 	       <h3 class="boxed"><xsl:value-of select="h1"/></h3>
@@ -339,7 +339,7 @@ document.write("Last Published: " + document.lastModified);
   <xsl:template match="div[@class = 'skinconf-heading-2']">
     <xsl:choose>
       <xsl:when test="//skinconfig/headings/@type='underlined'">
-        <h4 class="underlined"><xsl:value-of select="h1"/></h4>
+        <h4 class="underlined_5"><xsl:value-of select="h1"/></h4>
       </xsl:when>
       <xsl:when test="//skinconfig/headings/@type='boxed'">
        	<h4 class="boxed"><xsl:value-of select="h1"/></h4>
@@ -361,7 +361,28 @@ document.write("Last Published: " + document.lastModified);
           alt="Valid CSS!" style="height: 31px; width: 88px;"/></a>
     </xsl:if>
   </xsl:template>
-
+ <!-- handle all obfuscating mail links and disabling external link images -->
+  <xsl:template match="a">
+    <xsl:choose>
+      <xsl:when test="$obfuscate-mail-links='true' and starts-with(@href, 'mailto:') and contains(@href, '@')">
+        <xsl:variable name="mailto-1" select="substring-before(@href,'@')"/>
+        <xsl:variable name="mailto-2" select="substring-after(@href,'@')"/>
+          <a href="{$mailto-1}.at.{$mailto-2}">
+            <xsl:apply-templates/>
+          </a>
+       </xsl:when>
+       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, //skinconfig/group-url)) and not(contains(@href, //skinconfig/project-url))">
+          <a href="{@href}" class="external">
+            <xsl:apply-templates/>
+          </a>
+       </xsl:when>       
+       <xsl:otherwise>
+        <!-- xsl:copy-of makes sure we copy <a href> as well as <a name>
+             or any other <a ...> forms -->
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   <xsl:template name="menu">
 <xsl:comment>+
     |start Menu
