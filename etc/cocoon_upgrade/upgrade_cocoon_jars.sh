@@ -39,7 +39,7 @@ if [ "$UPGRADE_TYPE" = "real" ]; then
   FLIB_ENDORSED=$FORREST/lib/endorsed
 elif [ "$UPGRADE_TYPE" = "testing" ]; then
   FLIB=$FDIST/WEB-INF/lib
-  FLIB_ENDORSED=$FDIST/WEB-INF/lib/endorsed
+  FLIB_ENDORSED=$FDIST/lib/endorsed
 fi
 
 function checkdir()
@@ -116,6 +116,29 @@ function upgrade_neko()
 
 }
 
+function upgrade_endorsed()
+{
+  pushd . 
+  cd $FLIB_ENDORSED
+  case $UPGRADE_TYPE in
+    "testing")
+    rm xalan* xerces* xml-apis*
+    ;;
+    "real")
+    cvsdo remove -f xalan* xerces* xml-apis*
+    rm xalan* xerces* xml-apis*
+    ;;
+  esac
+
+  cp $CLIB/{xalan,xerces,xml-apis}* .
+
+  if [ "$UPGRADE_TYPE" = "real" ]; then
+    cvs add -kb {xalan,xerces,xml-apis}* &
+  fi
+  popd
+
+}
+
 
 echo "Performing $UPGRADE_TYPE upgrade. New jars copied to:"
 echo "  $FLIB"
@@ -126,6 +149,8 @@ set -vx
 sanity_check
 
 upgrade_neko
+upgrade_endorsed
+exit
 
 #set -vx
 #avalon-framework-4.1.3.jar
