@@ -6,7 +6,7 @@
     <html>
       <head>
         <title>
-          <xsl:value-of select="td/table/tr/td/h2"/>
+          <xsl:value-of select="td[@class='content']/h2"/>
         </title>
         <link rel="stylesheet" href="skin/page.css" type="text/css"/>
       </head>

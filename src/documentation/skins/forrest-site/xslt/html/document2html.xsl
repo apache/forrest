@@ -72,9 +72,19 @@
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
+  
+  <!--  section handling
+        - <a name/> anchors are added if the id attribute is specified
+        - generated anchors are still included for the TOC - what should we do about this?
+        - FIXME: provide a generic facility to process section irrelevant to their 
+          nesting depth
+  -->
 
   <xsl:template match="section">
     <a name="{generate-id()}"/>
+    <xsl:if test="normalize-space(@id)!=''">
+      <a name="{@id}"/>
+    </xsl:if>
     <h3>
       <xsl:value-of select="@title"/>
     </h3>
@@ -83,6 +93,9 @@
 
   <xsl:template match="section/section">
     <a name="{generate-id()}"/>
+    <xsl:if test="normalize-space(@id)!=''">
+      <a name="{@id}"/>
+    </xsl:if>
     <h4>
       <xsl:value-of select="@title"/>
     </h4>
