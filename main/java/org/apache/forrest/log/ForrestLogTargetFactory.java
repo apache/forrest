@@ -38,7 +38,8 @@ public class ForrestLogTargetFactory
         
         try {
             String projectHome = ForrestConfUtils.getProjectHome();
-            if(!projectHome.equals(ForrestConfUtils.defaultHome)){
+
+            if(!projectHome.startsWith(ForrestConfUtils.defaultHome)){
                 DefaultContext newContext = new DefaultContext(context);
                 newContext.put("context-root",projectHome + "/build/webapp");
                 currentContext = newContext;
