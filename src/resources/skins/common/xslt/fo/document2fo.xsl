@@ -84,14 +84,15 @@
       </fo:layout-master-set>
 
       <xsl:apply-templates select="/document" mode="outline"/>
-      
+
       <fo:page-sequence master-reference="book">
+        <fo:title><xsl:value-of select="document/header/title"/></fo:title>
         <xsl:apply-templates/>
       </fo:page-sequence>
       
     </fo:root>
   </xsl:template>
-  
+
   <xsl:template match="document">
     <fo:title><xsl:value-of select="header/title"/></fo:title>
     
@@ -198,6 +199,11 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="anchor">
+    <fo:block id="{@id}"/>
+    <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="section">
     
     <xsl:param name="level">0</xsl:param>
@@ -213,6 +219,11 @@
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="title"/>
+
+      <xsl:if test="normalize-space(@id)!=''">
+        <fo:block id="{@id}"/>
+      </xsl:if>
+
     </fo:block>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
@@ -240,8 +251,9 @@
       space-before="20pt"
       font-weight="bold"
       font-size="9pt">
+      by
       <xsl:for-each select="person">
-        <xsl:value-of select="@name"/>, <xsl:value-of select="@email"/>
+        <xsl:value-of select="@name"/>
         <xsl:if test="not(position() = last())">, </xsl:if>
       </xsl:for-each>
     </fo:block>
@@ -263,6 +275,9 @@
       font-size="10pt"
       background-color="#f0f0f0"
       white-space-collapse="false"
+      linefeed-treatment="preserve"
+      white-space-treatment="preserve"
+      wrap-option="no-wrap"
       text-align="start">
       <xsl:apply-templates/>
     </fo:block>
@@ -464,13 +479,37 @@
   </xsl:template>
 
   <xsl:template match="link">
+    <xsl:choose>
+      <xsl:when test="starts-with(@href, '#')">
+    <fo:basic-link color="blue" text-decoration="underline" internal-destination="{substring(@href,2)}">
+      <xsl:apply-templates/>
+    </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
     <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="figure">
-    <!-- FIXME: Images are not found at the moment -->
-    <fo:external-graphic src="{@src}"/>
-    <!-- alt text and credits need inserting -->
+    <fo:block text-align="center">
+      <xsl:if test="normalize-space(@id)!=''">
+          <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+      </xsl:if>
+      <fo:external-graphic src="{@src}" content-width="scale-to-fit"
+                           content-height="scale-to-fit" max-width="100%">
+        <xsl:if test="@height">
+          <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@width">
+          <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+        </xsl:if>
+      </fo:external-graphic>
+      <!-- alt text -->
+      <xsl:if test="normalize-space(@alt)!=''">
+          <fo:block><xsl:value-of select="@alt"/></fo:block>
+      </xsl:if>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="table">
