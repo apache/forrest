@@ -92,12 +92,21 @@
       <fileset dir="${classes-dir}"/>
     </copy>
   
-    <copy todir="${project.webapp}/WEB-INF">
+    <copy todir="${project.webapp}/WEB-INF/lib">
     <!-- Note: no overwriting, so user's libs and classes get preference -->
-      <fileset dir="${forrest.home}/context/WEB-INF">
-        <include name="lib/**"/>
-        <include name="classes/**"/>
+      <fileset dir="${forrest.home}/lib/core">
+        <include name="**.jar"/>
       </fileset>
+      <fileset dir="${forrest.home}/lib/optional">
+        <include name="**.jar"/>
+      </fileset>
+      <fileset dir="${forrest.home}/lib/endorsed">
+        <include name="**.jar"/>
+      </fileset>
+    </copy>
+    
+    <copy toDir="${project.webapp}/WEB-INF/classes">
+      <fileset dir="${forrest.home}/context/WEB-INF/classes"/>
     </copy>
 
     <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
@@ -225,12 +234,6 @@
       </fileset>
     </copy>
     
-    <!-- copy skinconf -->
-    <copy toDir="${project.webapp}" 
-      overwrite="true"
-      failonerror="false"
-      file="${skinconf}"/>
-    
     <!-- copy Schemas -->
     <copy toDir="${project.webapp}/resources"
       overwrite="true"
@@ -254,10 +257,10 @@
     <filter token="project.images-dir" value="resources/images"/>
     <filter token="local-catalog" value="resources/schema/catalog.xcat"/>
       
-    <copy tofile="${project.webapp}/WEB-INF/cocoon.xconf" 
+    <!--copy tofile="${project.webapp}/WEB-INF/cocoon.xconf" 
       filtering="true" 
       overwrite="true"
-      file="${forrest.home}/context/WEB-INF/cocoon-live.xconf" />
+      file="${forrest.home}/context/WEB-INF/cocoon-live.xconf" -->
     
     <loadfile  property="webapp-generated-message" 
       srcFile="${forrest.home}/var/webapp-generated-message.txt">
