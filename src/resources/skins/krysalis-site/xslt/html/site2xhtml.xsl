@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
+$Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -34,8 +34,9 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
       <head>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
+        <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
       </head>
-      <body bgcolor="#FFFFFF" text="#000000">
+      <body bgcolor="#FFFFFF" text="#000000" onload="init()">
 
         <!-- ================================= top bar with logo's and search box ===================================  -->
 
@@ -125,7 +126,12 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
             <td bgcolor="{$header-color}"><img src="{$spacer}" height="1" width="1" alt="" /></td>
           </tr>
           <tr>
-            <td colspan="4" bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="10" width="1" /></td>
+            <td colspan="4" bgcolor="{$header-color2}" align="right">
+               <img src="{$spacer}" alt="" height="10" width="1" />
+               <span class="datenote"><script language="JavaScript" type="text/javascript"><![CDATA[<!--
+                  document.write("Published: " + document.lastModified);
+                  //  -->]]></script></span>
+            </td>
           </tr>
         </table>
         <xsl:comment>================= end Banner ==================</xsl:comment>
@@ -174,6 +180,40 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
                 <tr>
                   <td bgcolor="{$header-color2}" height="1"><img src="{$spacer}" alt="" height="1" width="1" /></td>
                 </tr>
+                <tr>
+                  <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
+                </tr>                
+        
+                
+              <xsl:if test="$filename = 'index.html' and $config/credits">
+                <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+                  <xsl:variable name="name" select="name"/>
+                  <xsl:variable name="url" select="url"/>
+                  <xsl:variable name="image" select="image"/>
+                  <xsl:variable name="width" select="width"/>
+                  <xsl:variable name="height" select="height"/>
+                  <tr>
+                    <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
+                  </tr> 
+                  <tr> 
+                  <td><img src="{$spacer}" alt="" height="1" width="1" /></td>
+                  <td colspan="4" height="5">
+                  <a href="{$url}">
+                    <img alt="{$name} logo" border="0">
+                      <xsl:attribute name="src">
+                        <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+                        <xsl:value-of select="$image"/>
+                      </xsl:attribute>
+                      <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
+                      <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
+                    </img>
+                    <img src="{$spacer}" border="0" alt="" width="5" height="1" />
+                  </a>
+                  </td>
+                  </tr> 
+                </xsl:for-each>
+              </xsl:if>
+              
               </table>
             </td>
 
@@ -181,9 +221,12 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
               <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="content">
 
                 <xsl:comment>================= start middle NavBar ==================</xsl:comment>
-                <tr><td bgcolor="{$header-color2}" colspan="4"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+                <tr><td bgcolor="{$header-color2}" colspan="3"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
                 <tr>
                   <td bgcolor="{$background-bars}" width="10" align="left"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+                  <td width="100%" bgcolor="{$background-bars}">
+                  <table cellspacing="0" cellpadding="0" border="0" width="100%" >
+                  <tr>
                   <td bgcolor="{$background-bars}" width="50%" align="left">
                     <!-- ============ Page number =========== -->
                     <span class="trail">
@@ -195,13 +238,20 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
                   </td>
                   <td bgcolor="{$background-bars}" width="50%" align="right">
                     <!-- ============ Page navigation =========== -->
-                    <font face="Arial, Helvetica, Sans-serif" size="3" color="{$menu-border}">
-                      &#160;
-                      <!-- <b>&#171; prev&#160;&#160;<font size="4">[3]</font>&#160;&#160;next &#187;</b> -->
-                    </font>
+                      <span class="trail">Font size: 
+                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="ui">&#8211;</a>
+                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="ui">+</a>
+                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="ui">R</a>
+                      
+                    </span>
                     <img src="{$spacer}" alt="" height="8" width="10" />
                   </td>
-                  <td bgcolor="#CFDCED" width="10"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+                  </tr>
+                  </table>
+                  </td>
+                  <td bgcolor="#CFDCED" width="10">
+                    <font face="Arial, Helvetica, Sans-serif" size="4" color="{$menu-border}">&#160;</font>
+                    <img src="{$spacer}" alt="" height="1" width="10" /></td>
                 </tr>
                 <tr><td bgcolor="{$header-color2}" colspan="4"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
                 <xsl:comment>================= end middle NavBar ==================</xsl:comment>
@@ -258,7 +308,8 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
             <td class="logos" bgcolor="{$header-color2}" align="right" nowrap="nowrap">
 
               <xsl:call-template name="compliancy-logos"/>
-
+              <!-- old place where to put credits icons-->
+              <!--
               <xsl:if test="$filename = 'index.html' and $config/credits">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
@@ -279,6 +330,7 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
                   </a>
                 </xsl:for-each>
               </xsl:if>
+              -->
             </td>
           </tr>
         </table>
@@ -300,7 +352,7 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
             <xsl:when test="span/@class='sel'">
               <li>
                 <span class="sel"><xsl:value-of select="span" /></span>
-                <xsl:if test="//toc/tocc"> <i>
+                <xsl:if test="//toc/tocc"> <div class="page">
                     <ul>
                       <xsl:for-each select = "//toc/tocc">
                         <li>
@@ -314,6 +366,8 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
                           </xsl:choose>
 
                           <xsl:if test="toc2/tocc">
+                          <!-- nicolaken: this enables double-nested page links-->
+                          <!--
                             <ul>
                               <xsl:for-each select = "toc2/tocc">
 
@@ -327,11 +381,12 @@ $Id: site2xhtml.xsl,v 1.10 2003/02/11 14:19:06 jefft Exp $
                                 </xsl:choose>
 
                               </xsl:for-each>
-                            </ul>
+                            </ul> 
+                            -->
                           </xsl:if>
                         </li>
                       </xsl:for-each>
-                  </ul></i>
+                  </ul></div>
                 </xsl:if>
               </li>
             </xsl:when>

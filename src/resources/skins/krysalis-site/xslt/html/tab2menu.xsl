@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.3 2003/02/11 14:19:06 jefft Exp $
+$Id: tab2menu.xsl,v 1.4 2003/03/24 17:58:56 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -54,7 +54,6 @@ $Id: tab2menu.xsl,v 1.3 2003/02/11 14:19:06 jefft Exp $
       <table cellspacing="0" cellpadding="0" border="0" summary="selected tab">
         <tr>
           <td class="top-left" height="22"></td>
-
           <td bgcolor="#a5b6c6" valign="middle" height="22">
             <span class="tab">
               <b>
@@ -62,7 +61,6 @@ $Id: tab2menu.xsl,v 1.3 2003/02/11 14:19:06 jefft Exp $
               </b>
             </span>
           </td>
-
           <td class="top-right" height="22"></td>
         </tr>
       </table>
@@ -73,18 +71,18 @@ $Id: tab2menu.xsl,v 1.3 2003/02/11 14:19:06 jefft Exp $
     <td valign="bottom">
       <table cellspacing="0" cellpadding="0" border="0" summary="non selected tab">
         <tr>
-
           <td class="top-left-tab" height="18"></td>
-
           <td bgcolor="#cedfef" valign="middle" height="18">
             <span class="tab">
               <xsl:call-template name="base-not-selected"/>
             </span>              
           </td>
-
           <td class="top-right-tab" height="18"></td>
-
         </tr>
+        <tr>
+          <td height="1" colspan="3">
+          </td>
+        </tr>     
       </table>
     </td>
   </xsl:template>
