@@ -115,7 +115,34 @@
      <map:transform src="resources/stylesheets/contract.property.xsl"/>
      <map:serialize type="xml"/>
    </map:match>
-   
+<!-- ls.fbits 
+  list the default fbits-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts">
+		  <map:generate type="directory" src="resources/templates">
+        <map:parameter name="depth" value="1"/>
+        <!-- sorted alphabetically -->
+      	<map:parameter name="reverse" value="false"/>
+      </map:generate>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+
+<!--ls.fbits.l
+transform this dir-list and add more information 
+-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.l">
+		  <map:generate src="cocoon:/ls.contracts"/>
+      <map:transform src="resources/stylesheets/ls.contracts.xsl">
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.views"/>
+      </map:transform>
+      <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
+      <map:serialize type="xhtml"/>
+    </map:match>
+  </map:pipeline>
+
+
    <!--
     Get some util-templates from the common skin.
     -->
