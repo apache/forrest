@@ -30,21 +30,23 @@
     </prerequisites>
     <steps title="Steps">
         <p>How to proceed.</p>
-        <section title="Terms">
+        <section>
+            <title>Terms</title>
             <dl>
-		    <dt>SSH</dt>
-		    <dd>Secure Shell. See <link href="http://www.openssh.org">OpenSSH</link></dd>
-		    <dt>CVS</dt>
-		    <dd>Concurrent Version System See <link href="http://www.cvshome.org" >CVS Home Page</link></dd>
-	       </dl>		       					
+        <dt>SSH</dt>
+        <dd>Secure Shell. See <link href="http://www.openssh.org">OpenSSH</link></dd>
+        <dt>CVS</dt>
+        <dd>Concurrent Version System See <link href="http://www.cvshome.org" >CVS Home Page</link></dd>
+         </dl>                    
         </section>
         <note><strong>$</strong> represents local, <strong>%</strong> remote machine.</note>                
-        <section title="Setting up domain users">
+        <section>
+            <title>Setting up domain users</title>
             <note>This step is necessary only for Windows users. Linux users can happily skip this section and pass to <link href="#ssh_access">Setting up SSH access</link> section</note>
             <p>If you are a domain user then you should be added to Cygwin users list (See <code>[cygwin-dir]/etc/passwd</code>). 
             </p>
             <ul>
-            	<li>Start Cygwin, then enter following commands:</li>
+              <li>Start Cygwin, then enter following commands:</li>
             </ul>
             <source>
 $ whoami
@@ -52,37 +54,39 @@ administrator
 $ mkgroup -d > /etc/group
 $ mkpasswd -d | grep 'userxxx' >> /etc/passwd
 $ exit
-		</source>
- 	     <note>Replace 'userxxx' by your account name</note>		
-		<ul>
-			<li>Start Cygwin/shell again and check that everything's Ok:</li>
-		</ul>
-		<source>
+    </source>
+       <note>Replace 'userxxx' by your account name</note>    
+    <ul>
+      <li>Start Cygwin/shell again and check that everything's Ok:</li>
+    </ul>
+    <source>
 $ whoami
 userxxx
             </source>
         </section>
-        <section title="Setting up SSH access" id="ssh_access">
+        <section id="ssh_access">
+            <title>Setting up SSH access</title>
             <p>Start Cygwin/shell, then enter:</p>
             <source>
 $ ssh-user-config
-	Shall I create an SSH1 RSA identity file for you? (yes/no) no
-	Shall I create an SSH2 RSA identity file for you? (yes/no)  (yes/no) no
-	Shall I create an SSH2 DSA identity file for you? (yes/no)  (yes/no) yes
-	Generating /home/userxxx/.ssh/id_dsa
-	Enter passphrase (empty for no passphrase):
-	Enter same passphrase again:
-	Do you want to use this identity to login to this machine? (yes/no) yes
-	Adding to /home/userxxx/.ssh/authorized_keys2
-	
-	Configuration finished. Have fun!
-		</source>
-		<p>
-			Now you have configured SSH on your machine. Next you have to setup access to the CVS machine.
-		</p>
-		<warning>Having an empty passphrase isn't recommended for security reasons. See <code>ssh-agent</code> documentation on how to configure automatic passphrase retaining.</warning>
+  Shall I create an SSH1 RSA identity file for you? (yes/no) no
+  Shall I create an SSH2 RSA identity file for you? (yes/no)  (yes/no) no
+  Shall I create an SSH2 DSA identity file for you? (yes/no)  (yes/no) yes
+  Generating /home/userxxx/.ssh/id_dsa
+  Enter passphrase (empty for no passphrase):
+  Enter same passphrase again:
+  Do you want to use this identity to login to this machine? (yes/no) yes
+  Adding to /home/userxxx/.ssh/authorized_keys2
+  
+  Configuration finished. Have fun!
+    </source>
+    <p>
+      Now you have configured SSH on your machine. Next you have to setup access to the CVS machine.
+    </p>
+    <warning>Having an empty passphrase isn't recommended for security reasons. See <code>ssh-agent</code> documentation on how to configure automatic passphrase retaining.</warning>
         </section>
-        <section title="Setting up passphrase access">
+        <section>
+            <title>Setting up passphrase access</title>
             <p>Perform the following:</p>
             <source>
 $ scp ~/.ssh/id_dsa.pub userxxx@cvs.apache.org:.
@@ -105,15 +109,17 @@ $ ssh userxxx@cvs.apache.org
             If now you are logged in to the to the CVS machine without entering the password then everything's Ok.
             </p>           
         </section>
-        <section title="Getting the project from CVS">
-        	  <p>Now you are ready to get a project from CVS using SSH connection.</p>
-        	  <p>E.g. how it is done using Cygwin/shell</p>
+        <section>
+            <title>Getting the project from CVS</title>
+            <p>Now you are ready to get a project from CVS using SSH connection.</p>
+            <p>E.g. how it is done using Cygwin/shell</p>
             <source>
 $ export CVS_RSH=/bin/ssh
 $ cvs -d :ext:userxxx@cvs.apache.org:/home/cvs co xml-cocoon2            
             </source>
         </section>
-        <section title="How to setup WinCVS">
+        <section>
+            <title>How to setup WinCVS</title>
             <ul>
                 <li>Add ssh.exe directory to your system PATH environment variable. Say: <br/>
                 <code>C:\>set PATH=%PATH%;C:\cygwin\bin</code></li>
@@ -131,7 +137,8 @@ $ cvs -d :ext:userxxx@cvs.apache.org:/home/cvs co xml-cocoon2
                 <li>Click Ok</li>
             </ul>
         </section>
-        <section title="References">
+        <section>
+            <title>References</title>
             <p>
                 You can find more on CVS, SSH and WinCVS here:
             </p>
