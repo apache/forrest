@@ -86,6 +86,14 @@
    <map:serialize/>
   </map:resource>
 
+  <map:resource name="book">
+    <map:generate src="content/xdocs/{../1}book.xml"/>
+    <map:call resource="skinit">
+      <map:parameter name="type" value="book2menu"/>
+      <map:parameter name="resource" value="{resource}.html"/>
+    </map:call>
+  </map:resource>
+
   <map:resource name="skin-read">
     <map:read src="skins/@skin@/{path}" mime-type="{mime-type}"/>
   </map:resource>
@@ -102,32 +110,36 @@
     <map:redirect-to uri="index.html"/>
    </map:match>
 
-   <map:match pattern="apachestats">
-     <map:generate type="html"
-                   src="http://www.apache.org/~rubys/stats/xml.apache.org/">
-       <map:parameter name="xpath"
-                      value="/html/body//a[contains(@href,'.xml')]"/>
-     </map:generate>
-     <map:serialize type="xml"/>
-   </map:match>
+  <map:match pattern="apachestats">
+    <map:generate type="html"
+                  src="http://www.apache.org/~rubys/stats/xml.apache.org/">
+      <map:parameter name="xpath"
+                     value="/html/body//a[contains(@href,'.xml')]"/>
+    </map:generate>
+    <map:serialize type="xml"/>
+  </map:match>
 
-   <map:match pattern="**tab-**.xml">
-     <map:generate src="content/xdocs/tabs.xml"/>
-     <map:call resource="skinit">
-      <map:parameter name="type" value="tab2menu"/>
-      <map:parameter name="resource" value="{1}"/>
-     </map:call>
-   </map:match>
+  <map:match pattern="**tab-**.xml">
+    <map:generate src="content/xdocs/tabs.xml"/>
+    <map:call resource="skinit">
+     <map:parameter name="type" value="tab2menu"/>
+     <map:parameter name="resource" value="{1}"/>
+    </map:call>
+  </map:match>
 
-   <map:match pattern="**book-**.xml">
-     <map:generate src="content/xdocs/{1}book.xml"/>
-     <map:call resource="skinit">
-      <map:parameter name="type" value="book2menu"/>
+  <map:match pattern="**book-**/*.xml">
+    <map:call resource="book">
+      <map:parameter name="resource" value="{3}"/>
+    </map:call>
+  </map:match>
+
+  <map:match pattern="**book-**.xml">
+    <map:call resource="book">
       <map:parameter name="resource" value="{2}"/>
-     </map:call>
-   </map:match>
+    </map:call>
+  </map:match>
 
-   <map:match pattern="body-todo.xml">
+  <map:match pattern="body-todo.xml">
      <map:generate type="file-nolabel" src="forrest.xgump"/>
      <map:transform src="library/xslt/todo2document.xsl" label="content"/>
      <map:call resource="skinit">
