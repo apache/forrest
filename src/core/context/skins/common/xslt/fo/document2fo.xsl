@@ -587,7 +587,7 @@
       color="#ffffff">
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
-        <xsl:otherwise>Note: </xsl:otherwise>
+        <xsl:otherwise>Warning: </xsl:otherwise>
       </xsl:choose><xsl:value-of select="title"/>       
     </fo:block>
     <fo:block
