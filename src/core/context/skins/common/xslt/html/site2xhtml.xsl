@@ -69,13 +69,16 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
   <!-- Path of Lucene search results page (relative to $root) -->
   <xsl:param name="lucene-search" select="'lucene-search.html'"/>
 
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
 
-
-
-
-
-
-
+  <!-- Whether to obfuscate email links -->
+  <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
+  <!-- If true, an the images on all external links will not be added -->
+  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>  
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
 
