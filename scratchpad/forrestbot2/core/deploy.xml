@@ -41,10 +41,16 @@
   <property name="deploy.cvs.root" value="/home/cvs"/>
   <property name="deploy.cvs.host" value="cvs.apache.org"/>
   <property name="deploy.cvs.module" value="${ant.project.name}"/>
+  <property name="deploy.cvs.commit-message" value="Automatic publish from forrestbot"/>
   
   <property name="deploy.cvsmodule-dir" value="work/cvsmodules-deploy/${ant.project.name}"/>
   
   <target name="deploy.cvs">
+    <condition property="isUnix">
+        <os family="unix"/>
+    </condition>
+    <fail unless="isUnix" message="deploy.cvs only supported for unix-like operating systems."/>
+    
     <property name="deploy.cvs.fullroot" value=":ext:${deploy.cvs.user}@${deploy.cvs.host}:${deploy.cvs.root}"/>
     <!-- log in -->
     <cvspass cvsroot="${deploy.cvs.fullroot}" password="${deploy.cvs.password}"/>
@@ -60,12 +66,12 @@
       <fileset dir="${build.site-dir}"/>
     </copy>
     <!-- add new files to CVS -->
+    <exec executable="${bot.home}/core/cvs_add.sh" dir="${deploy.cvsmodule-dir}/${deploy.cvs.module}" failonerror="true"/>
     <!-- check in to CVS -->
-    <cvs command="commit" cvsRoot="${deploy.cvs.fullroot}"
-      dest="${deploy.cvsmodule-dir}/${deploy.cvs.module}"
-      failonerror="true"
-      noexec="true"
-      />
+    <exec executable="cvs" dir="${deploy.cvsmodule-dir}/${deploy.cvs.module}" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m '${deploy.cvs.commit-message}'"/>
+    </exec>
   </target>
 
 </project>
