@@ -1,0 +1,39 @@
+
+To publish from site-author and/or docs-author:
+
+Do once:
+# create $FORREST_HOME/deploy.svn.settings which looks like:
+<?xml version="1.0"?>
+<project>
+  <property name="deploy.svn.user" value="myApacheUsername"/>
+  <property name="deploy.svn.user" value="myPassword"/>
+</project>
+
+
+# Make changes to source & commit.
+# forrest -f publish.xml build
+# verify files in build/forrest-[docs|site]
+# forrest -f publish.xml deploy -Ddeploy.svn.commit-message="my commit message"
+
+Now the files are in SVN at forrest/site
+Periodically the real website files are updated from there.
+You do not have to do anything else.
+
+-----------------------
+
+To publish documentation from a non-trunk branch:
+
+# check out the branch (e.g. svn co https://svn.apache.org/repos/asf/forrest/branches/forrest_07_branch)
+# make sure $FORREST_HOME is set (it uses this to find deploy.svn.settings)
+# Do the steps above within this branch
+
+-----------------------
+
+To publish documentation from the 0.6 branch:
+
+(this is unique because it does not have split docs/site, but currently we still need to publish it)
+
+# cd forrest_06_branch
+# forrest -f publish_docs.xml build
+# forrest -f publish_docs.xml deploy -Ddeploy.svn.commit-message="my commit message"
+
