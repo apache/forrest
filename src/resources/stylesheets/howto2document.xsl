@@ -37,7 +37,9 @@
   <xsl:template match="howto/header/abstract">
     <section id="Overview">
      <title>Overview</title>
+     <p>
       <xsl:apply-templates/>
+     </p>
     </section>
   </xsl:template>
   
@@ -78,16 +80,18 @@
   <xsl:template match="revisions">
     <section id="revisions">
      <title>Revisions</title>
-    <p>Find a problem with this document? Consider contacting the author or submitting your own revision. For instructions, read the How To Submit a Revision.</p>
-      <ul>
-       <xsl:apply-templates select="revision"/>
-      </ul>
+    <p>Find a problem with this document? Consider contacting the mailing lists or submitting your own revision. For instructions, read the How To Submit a Revision.</p>
+      <xsl:if test="revision">
+        <ul>
+         <xsl:apply-templates select="revision"/>
+        </ul>
+      </xsl:if>
     </section>
   </xsl:template>
   
   <xsl:template match="revision">
   <xsl:variable name="href"><xsl:value-of select="concat(substring-before(@name,'.xml'),'.html')" /></xsl:variable>
-   <li>Revision, <a href="{ $href}"><xsl:value-of select="@date"/></a></li>
+   <li>Revision, <link href="{ $href}"><xsl:value-of select="@date"/></link></li>
   </xsl:template>
   
 </xsl:stylesheet>
