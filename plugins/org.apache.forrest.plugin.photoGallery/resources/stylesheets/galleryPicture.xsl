@@ -31,6 +31,26 @@ Author Jörg Werner
 	<body>
 	  <table>
 	    <tr align="center" valign="middle">
+        <td colspan="3">
+          <xsl:variable name="indexRoundedNum"><xsl:value-of select="round($pos div 20)"/></xsl:variable>
+          <xsl:variable name="indexModNum"><xsl:value-of select="$pos mod 20"/></xsl:variable>
+          <xsl:variable name="indexNum">
+            <xsl:choose>
+              <xsl:when test="$indexModNum = 0 or $indexModNum >= 10">
+                <xsl:value-of select="$indexRoundedNum"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$indexRoundedNum + 1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <a>
+            <xsl:attribute name="href">index_<xsl:value-of select="$indexNum"/>.html</xsl:attribute>
+            Index Page
+          </a>
+        </td>
+      </tr>
+	    <tr align="center" valign="middle">
 	      <td>
 		<xsl:if test="$pos &gt; 1">
 		  <a>
@@ -42,7 +62,8 @@ Author Jörg Werner
             <xsl:attribute name="href">fullPic_<xsl:value-of select="$pos - 1"/>.html</xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-		    <img src="images/leftarrow.png"/>
+		    <img src="images/leftarrow.png"/><br/>
+        Previous Picture
 		  </a> 
 		</xsl:if>
 	      </td>
@@ -51,13 +72,15 @@ Author Jörg Werner
 		  <xsl:when test="$big = 0">
 		    <a>
           <xsl:attribute name="href">fullPic_<xsl:value-of select="$pos"/>.html</xsl:attribute>
-		      <img src="small/{@name}" />
+		      <img src="small/{@name}" /><br/>
+          Click to View Largest Picture
 		    </a>
 		  </xsl:when>
 		  <xsl:otherwise>
 		    <a>
           <xsl:attribute name="href">pic_<xsl:value-of select="$pos"/>.html</xsl:attribute>
-		      <img src="big/{@name}" />
+		      <img src="big/{@name}" /><br/>
+          Click to View Smaller Picture
 		    </a>
 		  </xsl:otherwise>
 		</xsl:choose> 
@@ -73,7 +96,8 @@ Author Jörg Werner
             <xsl:attribute name="href">fullPic_<xsl:value-of select="$pos + 1"/>.html</xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-        <img src="images/rightarrow.png"/>
+        <img src="images/rightarrow.png"/><br/>
+        Next Picture
       </a>
 		</xsl:if>
 	      </td>
