@@ -49,7 +49,7 @@
       <p>Forrest is a framework that supports the cross-project generation and
         management of development project websites using Cocoon as its XML publishing
         framework. It not only provides access to project documentation, but also to
-        other types of information open source developers daily depend upon: source
+        other types of information that open source developers depend upon daily: source
         code repositories, mailing lists, contact info and the like. It aggregates all
         these resources and publishes them on a regular basis to a website, ensuring a
         consistent look and feel using skins implemented with XSLT stylesheets. While
@@ -62,12 +62,12 @@
       system called <link href="http://www.krysalis.org/centipede/">Centipede</link>
       that drives a <link href="http://xml.apache.org/cocoon/">Cocoon</link>-based
       document publication system. It contains a set of standard XML document type
-      declarations (DTD's) for project documentation, and different 'skins'
+      declarations (DTDs) for project documentation, and different 'skins'
       consisting of XSLT stylesheets that produce HTML renditions of XML documents
-      using these DTD's.</p>
+      using these DTDs.</p>
       <p>The primary mode of operations for Forrest will be as follows:</p>
-      <note>This process isn't quite ready for prime time yet, but it gives you
-        an idea where we are heading at. Website generation with skins currently works,
+      <note>This process is not quite ready for prime time yet, but it gives you
+        an idea where we are heading to. Website generation with skins currently works,
         try using the <code>docs</code> target when invoking the <code>build</code>
         script. Add a <code>use.skin</code> property when invoking the build script to
         experience Forrest skins: <code>build{.bat|.sh}
@@ -83,10 +83,10 @@
           website, configured by a generic sitemap. This process will be static, the
           result of a Forrest run is a collection of HTML documents and related images or
           stylesheets comprising the project's website. The impact Forrest has on the
-          participating projects should be minimal, i.e. one should simply author XML
+          participating projects should be minimal, i.e. one should simply author reliable XML
           documents, put them in a well-specified filesystem hierarchy, and Forrest will
           do its work.</li>
-        <li>Forrest will enrich the provided documentation source files with
+        <li>Forrest will enrich the documentation source files with
           common information: a cross-project navigation structure (and rendition, of
           course), and useful 'community indicators' such as download statistics, number
           of contributors with commit access, ...</li>
@@ -105,7 +105,7 @@
           project because it uses Forrest to manage its documentation.</li>
         <li><strong>Adaptor</strong> you want to adapt Forrest to support your
           individual project needs, presumably outside the XML Apache context, building
-          your own skins or DTD's and the like.</li>
+          your own skins or DTDs and the like.</li>
         <li><strong>Contributor</strong> you are a fledgling Forresteer and
           want to contribute to the further development of it. If your contributions are
           valuable and in true community spirit, you can possibly gain commit access to
@@ -120,7 +120,7 @@
         </tr>
         <tr>
           <td>User</td>
-          <td>Forrest DTD's and documentation filesystem hierarchy (Cocoon
+          <td>Forrest DTDs and documentation filesystem hierarchy (Cocoon
             sitemap)</td>
         </tr>
         <tr>
@@ -133,7 +133,7 @@
         </tr>
       </table>
     </section>
-    <section title="Getting hold of Forrest through CVS" id="cvs">
+    <section title="Getting your local copy of Forrest through CVS" id="cvs">
       <section title="System requirements">
         <p>Forrest requires the following systems to be already installed on
           your system:</p>
@@ -143,9 +143,9 @@
         </ul>
       </section>
       <section title="Getting Forrest">
-        <p>You have to retrieve Forrest from its CVS repository - there are no
-          binary, nor source, nor snapshot distributions yet. Some help, courtesy our
-          friends of the Cocoon project:</p>
+        <p>You need to retrieve Forrest from its CVS repository - there are no
+          binary, nor source, nor snapshot distributions yet. Some help with
+          CVS follows (courtesy of our friends of the Cocoon project).</p>
       </section>
       <section title="Step-by-step cvs instructions for Windows">
         <ol>
@@ -195,7 +195,7 @@
       </section>
     </section>
     <section title="Forrest distribution">
-      <p>Once you retrieved Forrest from its CVS repository, you'll end up with
+      <p>Once you retrieved Forrest from its CVS repository, you will end up with
         a filesystem hierarchy similar to this inside the <code>xml-forrest</code> home
         directory:</p>
       <warning>This is highly volatile information!</warning>
@@ -229,7 +229,7 @@
 |   |   |   +---resources
 |   |   |   +---xml.apache.org
 |   |   |       +---images
-|   |   +---schema                    Forrest DTD's
+|   |   +---schema                    Forrest DTDs
 |   |       +---dtd
 |   |       +---entity
 |   +---scratchpad                    unused
@@ -240,7 +240,7 @@
     +---centipede]]></source>
       <p>The <code>xml-forrest</code> home directory consists of the main Ant
         build script (<code>build.xml</code>) and platform-specific batch files/shell
-        scripts to invoke it. Forrest comes with Ant included, so you don't need to
+        scripts to invoke it. Forrest comes with Ant included, so you do not need to
         install Ant separately.</p>
       <p>Running Forrest is a batch operation you can start using the provided
         <code>build.{sh|bat} &lt;targetname&gt;</code>. The current main targets
@@ -250,21 +250,22 @@
           the Forrest website using the default <code>forrest-site</code> skin</li>
         <li><strong><code>clean</code></strong> - cleans out the
           <code>build</code> directory</li>
-        <li><strong><code>webapp</code></strong> - for those who can't resist
+        <li><strong><code>webapp</code></strong> - for those who cannot resist
           running Forrest live instead of its commandline invocation, this target builds
           a WAR file you can deploy in your servlet container (currently only tested for
           Tomcat 4.0.1). Mount-point of the web application will be
           <code>xml-forrest</code>.</li>
       </ul>
       <p>After a build run, Forrest creates a <code>build</code> directory. You
-        can find the generated website in <code>build/xml-forrest/docs/</code>. Forrest
+        can find the generated website in the
+        <code>build/xml-forrest/docs/</code> directory. Forrest
         also creates a <code>tools/tmp/anttasks/</code> upon its first invocation.
         These are Centipede-specific compiled Ant tasks.</p>
     </section>
-    <section title="The Forrest DTD's">
+    <section title="The Forrest DTDs">
       <p>Forrest is the reference repository for the XML Apache documentation
-        DTD's. Special care is taken to provide a set of modular, extensible and
-        well-maintained DTD's for project documentation purposes. This modularity is
+        DTDs. Special care is taken to provide a set of modular, extensible and
+        well-maintained DTDs for project documentation purposes. This modularity is
         ensured using the <link
       href="http://www.oasis-open.org/committees/entity/">OASIS catalog</link>
       mechanism, extensive use of external parameter entities and an entity resolver
@@ -275,7 +276,7 @@
       <p>We have currently identified the following document types:</p>
       <ul>
         <li>General documents (<code>document-v11.dtd</code>),</li>
-        <li>How-To's (<code>howto-v10.dtd</code>),</li>
+        <li>How-Tos (<code>howto-v10.dtd</code>),</li>
         <li>Collections of FAQs (<code>faq-v11.dtd)</code>.</li>
       </ul>
       <p>Some work is also under its way for other document types, in close
@@ -283,12 +284,12 @@
         types such as <code>changes</code>, <code>javadoc</code>,
         <code>specification</code> and <code>todo</code>, which are currently under
         consideration for automatic generation and maintenance using Gump or Centipede
-        descriptors and the like. DTD's will be subject of serious version management
+        descriptors and the like. DTDs will be subject of serious version management
         as soon as Forrest has a 1.0 release: they are made to depend upon.</p>
-      <p>The DTD's are located in <code>src/resources/schema/dtd</code>, and
-        also refer to some character entity collections stored in
-        <code>src/resources/schema/entity</code>. You should read these together with
-        the declarations as found in the <code>src/resources/schema/catalog</code>
+      <p>The DTDs are located in <code>src/resources/schema/dtd</code> and
+        also refer to some character entity collections stored in the
+        <code>src/resources/schema/entity</code> directory. These are referred
+        to by the declarations found in the <code>src/resources/schema/catalog</code> OASIS Catalog
         file. Take special care using the correct <code>PUBLIC</code> identifiers in
         the DTD declaration of your instances:</p>
       <source><![CDATA[<?xml version="1.0"?>
@@ -296,10 +297,10 @@
 <document>
   ...
 ]]></source>
-      <p>The exact location of the DTD for validation purposes is obtained by
+      <p>The exact local location of the DTD for validation purposes is obtained by
         the entity resolver evaluating the mapping scheme as defined in the
         <code>catalog</code> file. This makes sure that you can move and re-arrange
-        your document instances apart from your DTD files. Later on, the DTD's will be
+        your document instances apart from your DTD files. Later on, the DTDs will be
         web-accessible from the Forrest website for your perusal.</p>
     </section>
     <section title="Forrest site generation using Cocoon">
@@ -310,7 +311,7 @@
         <link href="http://xml.apache.org/cocoon/">documentation</link> to fully
       understand the power of Cocoon.</p>
       <p>Cocoon's site rendition behaviour is configured in a so-called
-        <em>sitemap</em>, a switchboard that binds URL's to an XML processing pipeline.
+        <em>sitemap</em>, a switchboard that binds URLs to an XML processing pipeline.
         This pipeline typically consists of a Generator, one or more Transformers and a
         Serializer. Forrest also makes use of Cocoon's aggregation capabilities that
         merge multiple pipelines into one resulting output document.</p>
@@ -319,7 +320,7 @@
        alt="Pages areas"/>
       <p>As you might see, this page is currently composed of two XML sources
         which are transformed by a different XSLT stylesheet, aggregated by Cocoon with
-        a post-aggregation stylesheet adding the overall page grid and look&amp;feel.
+        a post-aggregation stylesheet adding the overall page grid and look-and-feel.
         This simple example is handled by the following <em>sitemap</em> snippets
         (<code>src/documentation/conf/sitemap.xmap</code>):</p>
       <source><![CDATA[<map:match pattern="*.html">
@@ -370,7 +371,7 @@
         <code>src/documentation/skins/&lt;nameoftheskin&gt;/xslt/html</code>, so if you
         want to add your own skin, this is the place to be. Apart from these, there
         exist a number of other stylesheets located in
-        <code>src\documentation\library\xslt</code>, more importantly:</p>
+        <code>src/documentation/library/xslt</code> and more importantly:</p>
       <ul>
         <li><code>faq2document</code>: transforms documents following the
           <code>faq-v11</code> DTD to <code>document-v11</code> grammar</li>
@@ -384,12 +385,12 @@
         <code>book2menu</code>, <code>document2html</code> and
         <code>site2xhtml</code>.</p>
     </section>
-    <section title="Where we are heading at">
+    <section title="Where we are heading to">
       <p>We have been explaining so far where we are now and what already
         works. The purpose of this document however is to attract newcomers and entice
         them to start contributing to Forrest. We have a decent generation system for
         static project documentation, a nice set of skins and some simple but effective
-        DTD's. Our goals however are much more ambitious: we have compiled a
+        DTDs. Our goals however are much more ambitious: we have compiled a
         <link href="dreams.html">dream list</link> that lists most of them.</p>
       <ul>
         <li>Our first ambition is to support the project site generation and
@@ -405,11 +406,11 @@
         <tr>
           <th>URI Namespace Management</th>
           <td>Forrest will offer access to a broad set of information resources
-            using durable URI's: please review
+            using durable URIs: please review
             <link href="http://www.w3.org/Provider/Style/URI.html">Tim Berners-Lee</link>'s
       and <link href="http://www.useit.com/alertbox/990321.html">Jakob
       Nielsen</link>'s opinion on this. We need a unified URI Namespace management
-      approach, bearing in mind mirroring and 'hackable' URI's.</td>
+      approach, bearing in mind mirroring and 'hackable' URIs.</td>
       </tr>
       <tr>
         <th>Skins</th>
@@ -433,8 +434,8 @@
       </tr>
       <tr>
         <th>Document Types</th>
-        <td>Expanding the collection of DTD's, documenting them using formal
-          How-To's and example documents.</td>
+        <td>Expanding the collection of DTDs, documenting them using formal
+          How-Tos and example documents.</td>
       </tr>
       <tr>
         <th>xml.apache.org</th>
@@ -474,11 +475,11 @@
       <p>By now, you should have a better understanding of Forrest (if that is
         not the case, consider contributing to this document to start with) <img
         src="images/wink_smile.png" height="19" width="19"
-        alt=";-) (c) MSN Messenger"/>. We need more people to get the
-        job done. Forrest is a fun project to work on, and there's something in it for
+        alt=";-) (c) MSN Messenger"/> We need more people to get the
+        job done. Forrest is a fun project to work on, and there is something in it for
         all of us:</p>
       <ul>
-        <li>XML docheads with skills for document analysis and DTD's
+        <li>XML docheads with skills for document analysis and DTDs
           development</li>
         <li>Cocoon developers creating custom Cocoon components connecting
           Forrest with external resources</li>
@@ -492,7 +493,7 @@
       <p>Just drop us a line at <link
       href="mailto:forrest-dev@xml.apache.org">forrest-dev@xml.apache.org</link>.</p>
     </section>
-    <p>That's all, folks.</p>
+    <p>That is all, folks.</p>
     <table>
       <tr>
         <th>Revision history</th>
