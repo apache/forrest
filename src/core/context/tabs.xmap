@@ -65,22 +65,6 @@
   </map:resources>
 
   <map:pipelines>
-    
-    <!-- 
-       This is the user pipeline, that can answer requests instead
-       of the Forrest one, or let requests pass through.
-    -->
-    <map:pipeline internal-only="false">
-         <map:select type="exists">
-           <map:when test="{project:tabsxmap}">
-             <map:mount uri-prefix="" 
-                        src="{project:tabsxmap}" 
-                        check-reload="yes" 
-                        pass-through="true"/>
-           </map:when>  
-         </map:select>
-    </map:pipeline>
-      
     <map:pipeline >
       <map:match pattern="**tab-*.html">
         <map:generate src="{project:content.xdocs}tabs.xml"/>
