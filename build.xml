@@ -248,7 +248,9 @@
     </copy>
     <mkdir dir="${dist-shbat.dir}/lib" />
     <copy todir="${dist-shbat.dir}/lib">
-      <fileset dir="./lib" includes="*/*.jar"/>
+      <!-- copy everything so that also dirs with no jars are there, as
+           the forrest build expects these dirs to be present. -->
+      <fileset dir="./lib" includes="*/*.*"/>
     </copy>
     
     <!-- Copy Ant jars, so the shbat distribution is self-contained -->
