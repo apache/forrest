@@ -12,7 +12,7 @@ FORREST=../..
 ######################################################################
 
 CLIB=$COCOON/lib/*
-CBUILD=$COCOON/build/cocoon-2.1-M2-dev
+CBUILD=$COCOON/build/cocoon-2.1*
 CBLOCKS=$CBUILD/blocks
 
 FDIST=$FORREST/build/dist/shbat
