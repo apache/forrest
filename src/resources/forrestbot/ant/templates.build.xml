@@ -217,11 +217,15 @@
       ############################
       # Target: generate
       # Calling ${forrest.home}/forrest.build.xml#-site
-      # In dir ${get-src.local-copy.project-dir}
+      # In dir ${project.ctxt-dir}
       ############################
     </echo>
-    <ant dir="${project.ctxt-dir}"
-      antfile="${forrest.home}/forrest.build.xml" target="-site">
+    <!--# In dir ${get-src.local-copy.project-dir}-->
+    <!--<ant dir="${project.ctxt-dir}"-->
+      <ant dir="${project.ctxt-dir}"
+        antfile="${forrest.home}/forrest.build.xml" target="-site">
+        <property name="project.content.present"
+          value="HACK"/>
     </ant>
   </target>
 
@@ -313,7 +317,8 @@ The mail will hold the attachment(s) ${mail.attachments}
 	</echo>
   </target>
 
-  <target name="template.mail" if="mail.send" depends="echo.mail">
+  <!--<target name="template.mail" if="mail.send" depends="echo.mail">-->
+  <target name="template.mail" depends="echo.mail">
     <property name="mail.host" value="localhost" />
     <mail from="forrest-bot@xml.apache.org"
           mailhost="${mail.host}"
