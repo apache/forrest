@@ -120,6 +120,7 @@
       # Target: prepare
       # Calling ${forrest.home}/forrest.build.xml#bare-context
       # In dir ${basedir}
+      # Skin="${prepare.skin}"
       ############################
     </echo>
     <ant dir="${basedir}" antfile="${forrest.home}/forrest.build.xml" target="bare-context">
@@ -134,7 +135,8 @@
     <echo message="get-src workstage of type CVS for project ${project.name}"/>
     <echo message="cvs login: usr= ${get-src.cvs.user} / pwd= ${get-src.cvs.passwd}"/>
     <echo message="cvs update from host: ${get-src.cvs.host} with root: ${get-src.cvs.root}"/>
-    <echo message="cvs update  for module: ${get-src.cvs.module} to dir: ${get-src.cvs.dir}"/>
+    <echo message="cvs update  for module: ${get-src.cvs.module} to dir:
+      ${get-src.cvs.content-dir}"/>
   </target>
 
   <target name="template.get-src.cvs" depends="shared.set-props, echo.get-src.cvs">
@@ -144,7 +146,7 @@
     <mkdir dir="${project.cvsmodule.dir}" />
     <!-- get from cvs only the directory that is holding the xdoc content -->
     <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
-         package="${get-src.cvs.module}/${get-src.cvs.dir}"
+         package="${get-src.cvs.module}/${get-src.cvs.content-dir}"
          dest="${project.cvsmodule.dir}"
          quiet="true"
          />
@@ -161,12 +163,17 @@
       ############################
       # Target: get-src.cvs
       # Calling ${forrest.home}/forrest.build.xml#project-context-bot
-      # In dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"
+      # In dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.project-dir}"
+      # Content dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.content-dir}"
+      # Skin="${prepare.skin}"
       ############################
     </echo>
+    <!--
+    dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"-->
     <ant
-      dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"
+      dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.project-dir}"
       antfile="${forrest.home}/forrest.build.xml" target="project-context-bot">
+      <property name="project.skin" value="${prepare.skin}"/>
       <property name="forrest.echo" value="true"/>
     </ant>
 
