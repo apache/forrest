@@ -386,30 +386,30 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
             <xsl:when test="span/@class='sel'">
               <div class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="span" /></div>
-                <xsl:if test="//toc/tocc"> 
+                <xsl:if test="//tocitems/tocitem"> 
                   <div class="menupageitemgroup">
-                      <xsl:for-each select = "//toc/tocc">
+                      <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
                           <xsl:choose>
-                            <xsl:when test="string-length(toca)>15">
-                              <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a>
+                            <xsl:when test="string-length(@title)>15">
+                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
                             </xsl:when>
                             <xsl:otherwise>
-                              <a href="{toca/@href}"><xsl:value-of select="toca" /></a>
+                              <a href="{@href}"><xsl:value-of select="@title" /></a>
                             </xsl:otherwise>
                           </xsl:choose>
 
-                          <xsl:if test="toc2/tocc">
+                          <xsl:if test="tocitem">
                           <!-- nicolaken: this enables double-nested page links-->
                             <ul>
-                              <xsl:for-each select = "toc2/tocc">
+                              <xsl:for-each select = "tocitem">
 
                                 <xsl:choose>
-                                  <xsl:when test="string-length(toca)>15">
-                                    <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a></li>
+                                  <xsl:when test="string-length(@title)>15">
+                                    <li><a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a></li>
                                   </xsl:when>
                                   <xsl:otherwise>
-                                    <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>
+                                    <li><a href="{@href}"><xsl:value-of select="@title" /></a></li>
                                   </xsl:otherwise>
                                 </xsl:choose>
 
@@ -434,9 +434,6 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
       </div>
   </xsl:template>
 
-  <xsl:template match="toc|toc2|tocc|toca">
-  </xsl:template>
-  
   <xsl:template name="mainarea">
 	  <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	    <!-- ( ================= middle NavBar ================== ) -->
@@ -463,6 +460,98 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
 	  </table>
   </xsl:template>
   
+  <xsl:template match="div[@class = 'skinconf-heading-1']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+      
+        <table class="h3" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td width="9" height="10"></td>
+              <td><h3><xsl:value-of select="h1"/></h3></td>
+              <td></td>
+            </tr>
+            <tr class="heading ">
+              <td class="bottom-left"></td>
+              <td class="bottomborder"></td>
+              <td class="bottom-right"></td>
+            </tr>
+ 
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <table class="h3 heading" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+            <td class="top-left"></td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><h3><xsl:value-of select="h1"/></h3></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class=" bottom-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <h3 class="h3"><xsl:value-of select="h1"/></h3>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="div[@class = 'skinconf-heading-2']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+        <table class="h4" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td width="9" height="10"></td>
+              <td><h4><xsl:value-of select="h1"/></h4></td>
+              <td></td>
+            </tr>
+            <tr class="subheading">
+              <td class="bottom-left"></td>
+              <td></td>
+              <td class="bottom-right"></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <table class="h4 subheading" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td class="top-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><h4><xsl:value-of select="h1"/></h4></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class=" bottom-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <h4 class="h4"><xsl:value-of select="h1"/></h4>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="bottomstrip">
     <!-- ( ================= start Footer ================== ) -->
     <table>
@@ -526,13 +615,6 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         </xsl:for-each>
       </xsl:if>
       -->
-  </xsl:template>
-  
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -34,7 +34,7 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   <xsl:template match="document">
 
     <div class="content">
-      <xsl:call-template name="pdflink"/>
+      <div id="skinconf-pdflink"/>
       <xsl:if test="normalize-space(header/title)!=''">
               <h1><xsl:value-of select="header/title"/></h1>
       </xsl:if>
@@ -63,57 +63,8 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   </xsl:template>
 
   <xsl:template match="body">
-    <xsl:if test="//skinconfig/toc/@max-depth&gt;0 and not($notoc='true')" >
-      <xsl:call-template name="minitoc">
-        <xsl:with-param name="tocroot" select="."/>
-        <xsl:with-param name="depth">1</xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
+    <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template name="toclink">
-    <xsl:variable name="tocitem" select="normalize-space(title)"/>
-    <xsl:if test="string-length($tocitem)>0">
-      <li>
-      <a>
-        <xsl:attribute name="href">
-          <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-        </xsl:attribute>
-        <xsl:value-of select="$tocitem"/>
-      </a>
-      </li>
-    </xsl:if>
-  </xsl:template>
-  
-
-
-  <xsl:template name="minitoc">  
-    <xsl:param name="tocroot"/>
-    <xsl:param name="depth"/>     
-    <ul>
-      <xsl:for-each select="$tocroot/section">
-        <xsl:call-template name="toclink"/>
-        <xsl:if test="$depth&lt;//skinconfig/toc/@max-depth">
-          <xsl:call-template name="minitoc">
-            <xsl:with-param name="tocroot" select="."/>
-            <xsl:with-param name="depth" select="$depth + 1"/>          
-          </xsl:call-template>
-        </xsl:if>      
-      </xsl:for-each>
-    </ul>
-  </xsl:template>
-
-
-  <xsl:template name="generate-id">
-    <xsl:choose>
-      <xsl:when test="@id">
-        <xsl:value-of select="@id"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="generate-id(.)"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="@id">
@@ -219,11 +170,4 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
     <!-- do not show title elements, they are already in other places-->
   </xsl:template>
   
-  <!-- Generates the PDF link -->
-  <xsl:template name="pdflink">
-  	<a href="{$filename-noext}.pdf" id="printable"><img src="{$skin-img-dir}/pdfdoc.gif"
-      alt="PDF"/>PDF version</a>
-  </xsl:template>
-  
-
 </xsl:stylesheet>

@@ -44,6 +44,25 @@
 
   <changes>
     <release version="0.6-dev" date="unreleased">
+      <action dev="DC" type="fix" context="core"
+        due-to="Rick Tessner" fixes-bug="FOR-146">
+        Moved all references to //skinconfig out of the document2html.xsl
+        into the site2xhtml.xsl file.
+        * Rationalized the Table of Contents stuff by creating a "toc"
+        mode in the common/xslt/html/document2html.xsl. That is then
+        used to generate the per-page ToC and the ToC attached to the menu.
+        * Removed extraneous default xsl matchers on the non-common
+        document2html and site2xhtml XSLs. This allows matches
+        defined in the imported transformation sheets to match
+        (imported sheets have lower precedence).
+        * Defined a couple of <code>&lt;div id="..."&gt;</code> place holder
+        tags used by the document2html. Those are then skinned by the
+        site2xhtml sheets.
+        * Note: If you have your own skins that were referencing "$config" or
+        "//skinconfig" in the document2html.xsl then you need to make similar
+        changes.
+        * For more information see the FOR-146 issue report.
+      </action>
       <action dev="JJP" type="fix" context="core" >
         Replace document() function to get skinconf values and use "//skinconfig".
         Fix order so it can validate skinconf.

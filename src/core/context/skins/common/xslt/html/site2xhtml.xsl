@@ -37,6 +37,14 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:variable name="config" select="//skinconfig"/>
+  <!-- If true, a PDF link for this page will not be generated -->
+  <xsl:variable name="disable-pdf-link" select="//skinconfig/disable-pdf-link"/>
+  <!-- If true, a "print" link for this page will not be generated -->
+  <xsl:variable name="disable-print-link" select="//skinconfig/disable-print-link"/>
+  <!-- If true, an XML link for this page will not be generated -->
+  <xsl:variable name="disable-xml-link" select="//skinconfig/disable-xml-link"/>
+  <!-- Get the location where to generate the minitoc -->
+  <xsl:variable name="minitoc-location" select="//skinconfig/toc/@location"/>
 
   <xsl:param name="path"/>
 
@@ -58,6 +66,16 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- Whether to obfuscate email links -->
+  <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
+  <!-- If true, an the images on all external links will not be added -->
+  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>  
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
 
@@ -155,6 +173,110 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
     </xsl:if>
   </xsl:template>
 
+  <!-- Generates the PDF link -->
+  <xsl:template match="div[@id='skinconf-pdflink']">
+    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
+        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
+        PDF</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Generates the XML link -->
+  <xsl:template match="div[@id='skinconf-xmllink']">
+    <xsl:if test="$disable-xml-link = 'false'">
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
+        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
+        xml</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Generates the "printer friendly version" link -->
+  <xsl:template match="div[@id='skinconf-printlink']">
+    <xsl:if test="$disable-print-link = 'false'"> 
+<script type="text/javascript" language="Javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '&lt;OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2">&lt;/OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script>
+
+<script type="text/javascript" language="Javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('<td align="center" width="40" nowrap="nowrap">');
+    document.write('  <a href="javascript:printit()" class="dida">');
+    document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br />');
+    document.write('  print</a>');
+    document.write('</td>');
+}
+</script>
+
+    </xsl:if>
+  </xsl:template>
+
+  <!-- handle all obfuscating mail links and disabling external link images -->
+  <xsl:template match="a">
+    <xsl:choose>
+      <xsl:when test="$obfuscate-mail-links='true' and starts-with(@href, 'mailto:') and contains(@href, '@')">
+        <xsl:variable name="mailto-1" select="substring-before(@href,'@')"/>
+        <xsl:variable name="mailto-2" select="substring-after(@href,'@')"/>
+          <a href="{$mailto-1}.at.{$mailto-2}">
+            <xsl:apply-templates/>
+          </a>
+       </xsl:when>
+       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, //skinconfig/group-url)) and not(contains(@href, //skinconfig/project-url))">
+          <a href="{@href}" class="external">
+            <xsl:apply-templates/>
+          </a>
+       </xsl:when>       
+       <xsl:otherwise>
+        <!-- xsl:copy-of makes sure we copy <a href> as well as <a name>
+             or any other <a ...> forms -->
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="div[@id='skinconf-toc-page']">
+    <xsl:if test="$config/toc">
+      <xsl:if test="contains($minitoc-location,'page')">
+        <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="//tocitems"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="minitoc">  
+    <xsl:param name="tocroot"/>
+    <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
+      <ul class="minitoc">
+        <xsl:for-each select="$tocroot/tocitem">
+          <li>
+            <a href="{@href}">
+              <xsl:value-of select="@title"/>
+            </a>
+            <xsl:if test="@level&lt;//skinconfig/toc/@max-depth+1">
+              <xsl:call-template name="minitoc">
+                <xsl:with-param name="tocroot" select="."/>
+              </xsl:call-template>
+            </xsl:if>
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>

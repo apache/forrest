@@ -260,12 +260,10 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
     </a>
   </xsl:template>
   
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
+  <!-- Generates the PDF link -->
+  <xsl:template match="div[@id='skinconf-pdflink']">
+  	<a href="{$filename-noext}.pdf" id="printable"><img src="{$skin-img-dir}/pdfdoc.gif"
+      alt="PDF"/>PDF version</a>
   </xsl:template>
-   
-
+  
 </xsl:stylesheet>

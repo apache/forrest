@@ -182,6 +182,48 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
     <xsl:call-template name="breadcrumbs"/>
   </xsl:template>
   
+  <!-- Generates the PDF link -->
+  <xsl:template match="div[@id='skinconf-pdflink']">
+    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+      <a href="{$filename-noext}.pdf"><img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/> PDF</a>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Generates the XML link -->
+  <xsl:template match="div[@id='skinconf-xmllink']">
+    <xsl:if test="$disable-xml-link = 'false'">
+      <a href="{$filename-noext}.xml"><img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/> xml</a>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Generates the "printer friendly version" link -->
+  <xsl:template match="div[@id='skinconf-printlink']">
+    <xsl:if test="$disable-print-link = 'false'"> 
+<script type="text/javascript" language="Javascript">
+function printit() {  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '&lt;OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2">&lt;/OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script>
+
+<script type="text/javascript" language="Javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('  <a href="javascript:printit()">');
+    document.write('    <img border="0"  src="{$skin-img-dir}/printer.gif" alt="Print this Page"/>');
+    document.write('  print</a>');
+}
+</script>
+
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template name="centerstrip" >
    <!--
      +=========+======================+
@@ -230,27 +272,30 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
       </div>
       <xsl:apply-templates select="div[@class='menu']"/>
       
-      <xsl:if test="//toc/tocc">
-        <div class="label">
-           <strong>Page</strong>
-        </div>
-        <div class="body">
-          <xsl:for-each select = "//toc/tocc">
-            <div>
-              <xsl:choose>
-                <xsl:when test="string-length(toca)>15">
-                  <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="{toca/@href}"><xsl:value-of select="toca" /></a>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:if test="toc2/tocc"><!-- discard second level --></xsl:if>
-            </div>
-          </xsl:for-each>
-        </div>     
+      <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
+        <xsl:if test="//tocitems/tocitem">
+          <div class="label">
+             <strong>Page</strong>
+          </div>
+          <div class="body">
+            <!-- Only show first level sections here -->
+            <xsl:for-each select = "//tocitems/tocitem[@level=1]">
+              <div>
+                <xsl:choose>
+                  <xsl:when test="string-length(@title)>15">
+                    <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="{@href}"><xsl:value-of select="@title" /></a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </div>
+            </xsl:for-each>
+          </div>     
+        </xsl:if>
       </xsl:if>
     </div>
+
     <!-- ( ================= end Menu items ================== ) -->
 
     <!-- ( =================  Search ================== ) -->       
@@ -316,9 +361,6 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
 
   </xsl:template>
  
-  <xsl:template match="toc|toc2|tocc|toca">
-  </xsl:template>
-  
   <xsl:template name="mainarea">
       <xsl:apply-templates select="div[@class='content']"/>
   </xsl:template>
@@ -377,13 +419,6 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
         </xsl:for-each>
       </xsl:if>
       -->
-  </xsl:template>
-  
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>
