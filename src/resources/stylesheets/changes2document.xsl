@@ -41,9 +41,18 @@
    <xsl:apply-templates/>
    <xsl:text>(</xsl:text><xsl:value-of select="@dev"/><xsl:text>)</xsl:text>
 
-   <xsl:if test="@due-to">
+   <xsl:if test="@due-to and @due-to!=''">
     <xsl:text> Thanks to </xsl:text>
-    <link href="mailto:{@due-to-email}"><xsl:value-of select="@due-to"/></link>
+    <xsl:choose>
+     <xsl:when test="@due-to-email and @due-to-email!=''">
+      <link href="mailto:{@due-to-email}">
+       <xsl:value-of select="@due-to"/>
+      </link>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:value-of select="@due-to"/>
+     </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>.</xsl:text>
    </xsl:if>
 
