@@ -3,6 +3,7 @@
 
 This directory contains files to help upgrade Cocoon to whatever is the latest
 version of Cocoon.
+See also http://issues.apache.org/wiki/apachewiki.cgi?ForrestUpgradeLibs
 
 Instructions for use:
 
@@ -23,5 +24,4 @@ decide what 'type' of upgrade you wish to perform:
 3) Run build.sh to build a regular Forrest distribution
 
 -- 
-jefft@apache.org
 $Revision: 1.5 $ $Date: 2003/05/29 09:01:55 $
