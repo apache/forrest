@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!--
-A prototype Docbook-to-Forrest stylesheet.  Support for the range of Docbook
-tags is very patchy; if you need real Docbook support, use Norm Walsh's
-stylesheets.  Volunteers are needed to improve this!
+A prototype Docbook-to-Forrest stylesheet.
+Volunteers are needed to improve this!
+
+Support for the range of Docbook tags is very patchy. If you need real
+Docbook support, then use Norm Walsh's stylesheets - see Forrest FAQ.
 
 Credit: original from the jakarta-avalon project
 Revision:
@@ -68,6 +70,7 @@ Revision:
                          </authors>
                    </header>
                    <body>
+                         <xsl:call-template name="extract-articleinfo"/>
                          <xsl:apply-templates select="node()[
                                local-name() != 'title' and
                                local-name() != 'subtitle' and
@@ -77,6 +80,20 @@ Revision:
                    </body>
              </document>
        </xsl:template>
+
+      <xsl:template name="extract-articleinfo">
+          <xsl:if test="articleinfo/copyright">
+              <section id="pubinfo">
+                  <title>Publication Information</title>
+                  <xsl:if test="articleinfo/pubdate">
+                      <p>Date published:
+                          <xsl:value-of select="articleinfo/pubdate"/>
+                      </p>
+                  </xsl:if>
+                  <xsl:apply-templates select="articleinfo/copyright"/>
+              </section>
+          </xsl:if>
+      </xsl:template>
 
       <xsl:template name="apply-footnotes">
             <xsl:if test="//footnote">
@@ -93,6 +110,18 @@ Revision:
                         <xsl:if test="honorific"><xsl:value-of select="honorific"/>. </xsl:if>
                         <xsl:if test="firstname"><xsl:value-of select="firstname"/></xsl:if>
                         <xsl:text> </xsl:text><xsl:value-of select="surname"/>
+                        <xsl:if test="affiliation">
+                            <xsl:text> (</xsl:text>
+<!-- FIXME: horrid hack - there can be zero-or-more jobtitle -->
+                            <xsl:if test="affiliation/jobtitle">
+                                <xsl:value-of select="affiliation/jobtitle"/>
+                                <xsl:text>, </xsl:text>
+                            </xsl:if>
+                            <xsl:if test="affiliation/orgname">
+                                <xsl:value-of select="affiliation/orgname"/>
+                            </xsl:if>
+                            <xsl:text>)</xsl:text>
+                        </xsl:if>
                   </xsl:attribute>
                   <xsl:attribute name="email"><xsl:value-of select="address/email"/></xsl:attribute>
             </xsl:element>
@@ -301,8 +330,9 @@ Revision:
       </xsl:template>
       <xsl:template match="edition|pubdate|year|holder"/>
       <xsl:template match="copyright">
-            <p>Copyright &#x00A9;<xsl:value-of select="year"/> by <xsl:value-of select="holder"/>.<br/>
-                  <i>All rights reserved.</i>
+            <p>Copyright &#x00A9;<xsl:value-of select="year"/> by <xsl:value-of select="holder"/>
+                <xsl:text> </xsl:text>
+                <i>All rights reserved.</i>
             </p>
       </xsl:template>
       <xsl:template match="legalnotice">
