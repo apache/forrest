@@ -1,0 +1,1030 @@
+<?xml version="1.0"?>
+
+<!--
+FORREST SITE BUILDER
+
+ - The runtime part of Forrest
+ - Contains actions Forrest can peform on any Forrest-using project.
+ - This is typically called by forrest.bat or forrest
+-->
+
+
+<project default="site" basedir="." name="Forrest template targets">
+
+  <description>
+    *=======================================================*
+    |                Forrest Site Builder                   |
+    *=======================================================*
+                              by
+                  Marc Portier (mpo@apache.org)
+                  Jeff Turner (jefft@apache.org)
+  
+             Call this through the 'forrest' command
+  </description>
+  
+  <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
+    <classpath>
+      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+    </classpath>
+  </taskdef>
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **                    COMMON SETTINGS                          ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+  <!-- ===============================================================
+       Loads user defined settings.
+       Steps back to defaults when they are not set.
+       Echo's the settings if requested.
+       =============================================================== -->
+  <target name="init-props">
+  
+    <!-- setting defaults for parameters -->
+    <!-- people should use -D switch, or <ant><property>s to override these   -->
+
+    <property name="project.home" location="." />
+
+    <echo message="Loading project specific properties from ${project.home}/forrest.properties" />
+    <property file="${project.home}/forrest.properties" />
+
+    <!-- people should use forrest.properties to override following defaults  -->
+    <property name="forrest.home"        location="." />
+    <property name="project.name"        value="my-project"    />
+    <property name="project.build-dir"    value="${project.home}/build"    />
+    <property name="project.site-dir"    value="${project.build-dir}/site"    />
+    <property name="project.war"   location="${project.build-dir}/${project.name}.war" />
+    <property name="project.webapp"      location="${project.build-dir}/webapp" />
+
+    <property name="project.temp-dir"    value="${project.build-dir}/tmp"     />
+    <property name="project.work-dir"    value="${project.temp-dir}/work"      />
+    <property name="project.ctxt-dir"    value="${project.temp-dir}/context"   />
+
+    <property name="project.brokenlinkfile" value="${project.temp-dir}/brokenlinks.txt"/>
+    <property name="project.debuglevel"  value="ERROR"                         />
+    <property name="project.start-uri"   value="index.html"                    />
+
+    <!-- use of these property should be removed when the siteplan becomes active -->
+    <property name="project.skin"        value="forrest-site" />
+    <property name="project.status"      value="${project.home}/status.xml" />
+    <property name="project.status-docs"      value="${project.home}/status-docs.xml" />
+    <!-- FIXME: rename project.content-dir to project.documentation-dir -->
+    <property name="project.content-dir" value="${project.home}/src/documentation" />
+    <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
+    will go away soon -->
+    <property name="project.real-content-dir" value="${project.content-dir}/content" />
+    <property name="project.sitemap"     value="${project.content-dir}/sitemap.xmap" />
+    <property name="project.xdocs-dir"   value="${project.content-dir}/content/xdocs" />
+    <property name="project.stylesheets-dir" value="${project.content-dir}/resources/stylesheets" />
+    <property name="project.images-dir"  value="${project.content-dir}/resources/images" />
+    <property name="project.schema-dir" value="${project.content-dir}/resources/schema" />
+    <property name="project.skins-dir"   value="${project.content-dir}/skins" />
+    <property name="project.skinconf"    value="${project.content-dir}/skinconf.xml" />
+    <property name="project.conf-dir"     value="${project.content-dir}/conf" />
+    <property name="project.lib-dir"     value="${project.content-dir}/lib" />
+    <property name="project.classes-dir" value="${project.content-dir}/classes" />
+
+    <!-- checks for presence of required classes and/or resources -->
+    <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
+    <available file="${tools.jar}"       property="tools.jar.present"/>
+
+    <!-- echo settings in -Dforrest.echo=true mode -->
+    <antcall target="echo-settings" />
+  </target>
+
+  <target name="examine-proj" depends="init-props">
+    <available property="conf.present" file="${project.conf-dir}" type="dir"/>
+    <available property="real-content.present" file="${project.real-content-dir}" type="dir"/>
+    <available property="sitemap.present" file="${project.sitemap}"/>
+    <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
+    <available property="images.present" file="${project.images-dir}" type="dir"/>
+    <available property="schema.present" file="${project.schema-dir}" type="dir"/>
+    <available property="stylesheets.present" file="${project.stylesheets-dir}" type="dir"/>
+    <available property="lib.present" file="${project.lib-dir}" type="dir"/>
+    <available property="classes.present" file="${project.classes-dir}" type="dir"/>
+    <available property="skins.present" file="${project.skins-dir}" type="dir"/>
+    <available property="skinconf.present" file="${project.skinconf}"/>
+    <available property="status.present" file="${project.status}"/>
+    <available property="status-docs.present" file="${project.status-docs}"/>
+
+  </target>
+
+  <target name="validation-props" depends="examine-proj">
+    <!-- Validation flags -->
+
+    <property name="forrest.validate" value="true" />
+    <condition property="validate">
+      <istrue value="${forrest.validate}"/>
+    </condition>
+    <property name="forrest.validate.failonerror" value="true" />
+    <property name="forrest.validate.includes" value="**/*"/>
+    <property name="forrest.validate.excludes" value=""/>
+
+    <property name="forrest.validate.xdocs" value="${forrest.validate}"/>
+    <condition property="validate.xdocs">
+      <and>
+        <istrue value="${forrest.validate.xdocs}"/>
+        <isset property="xdocs.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.xdocs.includes" value="**/*.x*"/>
+    <property name="forrest.validate.xdocs.excludes" value=""/>
+    <property name="forrest.validate.xdocs.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skinconf" value="${forrest.validate}"/>
+    <condition property="validate.skinconf">
+      <and>
+        <istrue value="${forrest.validate.skinconf}"/>
+        <isset property="skinconf.present"/>
+      </and>
+    </condition>
+    <basename file="${project.skinconf}" property="skinconf-file"/>
+    <property name="forrest.validate.skinconf.includes" value="${skinconf-file}"/>
+    <property name="forrest.validate.skinconf.excludes" value=""/>
+    <property name="forrest.validate.skinconf.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.sitemap" value="${forrest.validate}"/>
+    <condition property="validate.sitemap">
+      <and>
+        <istrue value="${forrest.validate.sitemap}"/>
+        <isset property="sitemap.present"/>
+      </and>
+    </condition>
+    <basename file="${project.sitemap}" property="sitemap-file"/>
+    <property name="forrest.validate.sitemap.includes" value="${sitemap-file}"/>
+    <property name="forrest.validate.sitemap.excludes" value=""/>
+    <property name="forrest.validate.sitemap.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.stylesheets" value="${forrest.validate}"/>
+    <condition property="validate.stylesheets">
+      <and>
+        <istrue value="${forrest.validate.stylesheets}"/>
+        <isset property="stylesheets.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.stylesheets.excludes" value=""/>
+    <property name="forrest.validate.stylesheets.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skins" value="${forrest.validate}"/>
+    <condition property="validate.skins">
+      <and>
+        <istrue value="${forrest.validate.skins}"/>
+        <isset property="skins.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.skins.includes" value="**/*"/>
+    <property name="forrest.validate.skins.excludes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skins.stylesheets" value="${forrest.validate.skins}"/>
+    <condition property="validate.skins.stylesheets">
+      <and>
+        <istrue value="${forrest.validate.skins.stylesheets}"/>
+        <isset property="skins.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.skins.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.stylesheets.excludes" value=""/>
+    <property name="forrest.validate.skins.stylesheets.failonerror"
+      value="${forrest.validate.skins.failonerror}" />
+  </target>
+
+
+  <!-- Load properties from user's skinconf.xml, if it is defined -->
+  <target name="load-project-props" depends="validation-props, validate-skinconf" if="skinconf.present">
+    <xmlproperty file="${project.skinconf}" collapseattributes="true"
+      validate="${validate.skinconf}"/>
+  </target>
+
+  <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
+  <target name="load-forrest-props" unless="skinconf.present">
+    <xmlproperty file="${forrest.home}/context/skinconf.xml"
+      collapseattributes="true" validate="true"/>
+    <!-- Forrest skinconf should have been previously validated in buld.xml -->
+  </target>
+
+  <!-- Define filters equating to elements in the skinconf.xml file. Skins can
+  include tokens corresponding to skinconf.xml elements, and have them replaced
+  at runtime.-->
+  <target name="init-skinprops" depends="load-project-props, load-forrest-props">
+    <mkdir dir="${project.temp-dir}"/>
+    <property name="skinfilters" value="${project.temp-dir}/skinfilters.properties"/>
+    <echoproperties prefix="skinconfig" destfile="${skinfilters}"/>
+    <filter filtersfile="${skinfilters}"/>
+  </target>
+
+  <!-- Sets up properties and filters -->
+  <target name="init" depends="init-props, init-skinprops"/>
+
+  <!-- ===============================================================
+       Echo's the settings if requested. [-Dforrest.echo=true]
+       =============================================================== -->
+  <target name="echo-settings" if="forrest.echo">
+    <echo>
+      ------------------------------------------------
+      | Forrest template run.
+      | Running from $${forrest.home} = ${forrest.home}
+      | Working on   $${project.home} = ${project.home}
+      ------------------------------------------------
+      | //where to put the result
+      | project.site-dir    = ${project.site-dir} 
+      | //uri to start crawling/generation process
+      | project.start-uri   = ${project.start-uri}
+      | //cocoon.xconf location
+      | project.configfile  = ${project.configfile}
+      | //logkit.xconf location
+      | project.logkitfile  = ${project.logkitfile}
+      | //temp dir to throw stuff in (i.e. work and ctxt)
+      | project.temp-dir    = ${project.temp-dir} 
+      | //temp working directory for generation process
+      | project.work-dir    = ${project.work-dir} 
+      | //temp context directory for generation process
+      | project.ctxt-dir    = ${project.ctxt-dir} 
+      | //debuglevel for logging (INFO, DEBUG, WARN, ERROR, FAIL)
+      | project.debuglevel  = ${project.debuglevel}
+      | //file for list of broken links
+      | project.brokenlinkfile = ${project.brokenlinkfile}
+      | //check if you have tools.jar installed
+      | tools.jar.present   = ${tools.jar.present} 
+      ------------------------------------------------
+      | The following properties could be removed from future builds:
+      | //which skin to apply
+      | project.skin        = ${project.skin} 
+      | //where your documentation xml is
+      | project.content-dir = ${project.content-dir} 
+      ------------------------------------------------
+    </echo>
+  </target>
+
+
+  <!-- ===============================================================
+       Set class-path.
+       =============================================================== -->
+  <target name="prepare-classpath" depends="prepare-context, -prepare-classpath"/>
+  <target name="-prepare-classpath">
+    <path id="forrest.cp">
+      <pathelement location="${project.ctxt-dir}/WEB-INF/classes"/>
+      <fileset dir="${project.ctxt-dir}/WEB-INF/lib" includes="*.jar"/>
+      <pathelement location="${forrest.home}/WEB-INF/classes"/>
+      <fileset dir="${forrest.home}/lib/endorsed" includes="*.jar"/>
+      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+      <pathelement location="${tools.jar}"/>
+    </path>
+  </target>
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **                  SITE BUILDING ACTIONS                      ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+  <!-- ===============================================================
+       Fills the Cocoon context dir to work in 
+       with the forrest-predefines.
+       param: name of the skin to use ${project.skin} (now)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       =============================================================== -->
+  <target name="bare-context" depends="init" >
+    <filter token="skin"              value="${project.skin}" />
+
+    <!--
+    These filters defined for backwards-compatibility with old skins.
+    New skins should use the skinconfig.* filters, or actively parse the
+    skinconf.xml file themselves. (JT)
+    -->
+    <filter token="link1"      value="${skinconfig.trail.link1.name}"/>
+    <filter token="link1.href" value="${skinconfig.trail.link1.href}"/>
+    <filter token="link2"      value="${skinconfig.trail.link2.name}"/>
+    <filter token="link2.href" value="${skinconfig.trail.link2.href}"/>
+    <filter token="link3"      value="${skinconfig.trail.link3.name}"/>
+    <filter token="link3.href" value="${skinconfig.trail.link3.href}"/>
+    <filter token="year"       value="${skinconfig.year}"/>
+    <filter token="vendor"     value="${skinconfig.vendor}"/>
+    <filter token="group-logo.src"  value="${skinconfig.group-logo}"/>
+    <filter token="group-logo.href" value="${skinconfig.group-url}"/>
+    <filter token="group-logo.alt"  value="${skinconfig.group-name} logo"/>
+    <filter token="project-logo.src"  value="${skinconfig.project-logo}"/>
+    <filter token="project-logo.href" value="${skinconfig.project-url}"/>
+    <filter token="project-logo.alt"  value="${skinconfig.project-name} logo"/>
+
+    <copy todir="${project.ctxt-dir}/" filtering="off">
+      <fileset dir="${forrest.home}/context" >
+        <exclude name="sitemap.xmap" />
+        <exclude name="skins/**" />
+      </fileset>
+      <fileset dir="${forrest.home}/context" >
+        <include name="skins/**/images/**" />
+      </fileset>
+    </copy>
+
+    <copy todir="${project.ctxt-dir}/" filtering="on" overwrite="true">
+    <!-- everything in the skins, except the images , and the sitemap -->
+      <fileset dir="${forrest.home}/context" >
+        <include name="sitemap.xmap" />
+        <include name="skins/**" />
+        <exclude name="skins/**/images/**" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${project.ctxt-dir}/WEB-INF"/>
+
+    <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true">
+      <fileset dir="${forrest.home}/WEB-INF">
+        <include name="*.xconf" />
+      </fileset>
+    </copy>
+
+    <!--Hack to stop the classpath definition breaking. If the project has any
+    custom jars or classes, they will be added to these dirs -->
+    <mkdir dir="${project.ctxt-dir}/WEB-INF/lib"/>
+    <mkdir dir="${project.ctxt-dir}/WEB-INF/classes"/>
+  </target>
+
+
+  <!-- ===============================================================
+       Fills the Cocoon context dir to work in 
+       with the project-content-parts 
+         (now: copy stuff from param ${project.content-dir}
+          with siteplan: based on that plan; should allow more different parts)
+       param: location to find the content ${project.content-dir}(now)
+       param: location to find project descriptors == ${project.home} 
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       =============================================================== -->
+  <target name="project-context-bot" depends="init, examine-proj, copy-conf, copy-sitemap,
+    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
+    copy-classes, copy-skins, copy-skinconf, copy-status"/>
+
+  <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-conf, copy-sitemap,
+    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-content, copy-lib, 
+    copy-classes, copy-skins, copy-skinconf, copy-status"/>
+
+  <target name="copy-conf" if="conf.present">
+    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.conf-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-sitemap" if="sitemap.present">
+    <copy file="${project.sitemap}" toDir="${project.ctxt-dir}" filtering="true"
+      overwrite="true" failonerror="false"/>
+  </target>
+
+  <target name="copy-xdocs" if="xdocs.present">
+    <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false"
+      overwrite="true">
+      <fileset dir="${project.xdocs-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-resources" if="resources.present">
+    <copy toDir="${project.ctxt-dir}/resources" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.resources-dir}">
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="copy-stylesheets" if="stylesheets.present">
+    <copy toDir="${project.ctxt-dir}/resources/stylesheets" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.stylesheets-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-images" if="images.present">
+    <copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.images-dir}"/>
+    </copy>
+  </target>
+
+  <!-- Copy all non-xdocs content -->
+  <target name="copy-content" if="real-content.present">
+    <copy toDir="${project.ctxt-dir}/content" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.real-content-dir}">
+        <exclude name="xdocs/**"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="copy-schema" if="schema.present">
+    <copy toDir="${project.ctxt-dir}/resources/schema" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.schema-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-lib" if="lib.present">
+    <copy toDir="${project.ctxt-dir}/WEB-INF/lib" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.lib-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-classes" if="classes.present">
+    <copy toDir="${project.ctxt-dir}/WEB-INF/classes" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.classes-dir}"/>
+    </copy>
+  </target>
+
+  <target name="copy-skins" if="skins.present">
+    <copy toDir="${project.ctxt-dir}/skins" filtering="off" overwrite="true" failonerror="false">
+       <fileset dir="${project.skins-dir}" >
+        <include name="**/images/**" />
+      </fileset>
+    </copy>
+    <copy toDir="${project.ctxt-dir}/skins" filtering="on" overwrite="true" failonerror="false">
+      <fileset dir="${project.skins-dir}" >
+        <exclude name="**/images/**" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="copy-skinconf" if="skinconf.present">
+    <copy file="${project.skinconf}"
+      toDir="${project.ctxt-dir}" filtering="false"
+      overwrite="true" failonerror="false"/>
+  </target>
+
+  <target name="copy-status" if="status.present">
+    <copy file="${project.status}" todir="${project.ctxt-dir}" filtering="false"/>
+<!-- FIXME: perhaps a separate target not conditional on status.present? -->
+    <copy file="${project.status-docs}" todir="${project.ctxt-dir}" filtering="false"/>
+  </target>
+
+
+  <!-- ===============================================================
+       Makes the Cocoon context dir to work in and fills it completely.
+       That is by depending on:
+         bare-context     // for forrest predefines.  
+         project-context  // for project's actual content
+           (now: copy stuff from extra param defining the content dir
+            with siteplan: based on that)
+         control-context  // for derivatives from siteplan 
+           (now: no need, waiting on siteplan future)
+            with siteplan: e.g. sitemap and catalog)
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${project.content-dir}(now)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       =============================================================== -->
+  <target name="prepare-context" depends="init, bare-context, project-context" />
+
+
+  <!-- ===============================================================
+       Cleans the site.  (typically before generating the new version)
+       param: location to clean ${project.site-dir}
+       =============================================================== -->
+  <target name="clean-site">
+    <!-- <delete dir="${project.site-dir}"/> -->
+    <mkdir dir="${project.site-dir}"/>     
+    <delete includeEmptyDirs="false">
+      <fileset dir="${project.site-dir}"/>
+    </delete>     
+  </target>
+  
+  <!-- ===============================================================
+       Checks if the current project contains Forrest docs, and sets
+       the 'project.empty' property if no docs are found.
+       =============================================================== -->
+  <target name="check-contentdir" depends="init-props">
+    <available property="project.content.present" file="${project.content-dir}"
+      type="dir"/>
+  </target>
+
+  <target name="ensure-nocontent" depends="check-contentdir"
+    if="project.content.present">
+    <fail>
+------------------------------------------------
+This project already has content in ${project.xdocs-dir}.
+------------------------------------------------
+    </fail>
+  </target>
+
+  <target name="ensure-content" depends="check-contentdir"
+    unless="project.content.present">
+    <fail>
+------------------------------------------------
+This project has no content in ${project.xdocs-dir}.
+Use the 'seed' target to create a template project structure.
+------------------------------------------------
+    </fail>
+  </target>
+
+  <!-- ===============================================================
+       Makes the site.
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${project.content-dir}(now)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       param: location to make temporary work-dir ${project.content-dir}
+       param: debuglevel for logging ${project.debuglevel}
+       param: location of log-file ${project.logkitfile}
+       ===============================================================
+   -->
+
+   <target name="site" depends="prepare-context, -site"
+     description="Generates a static HTML website for this project"/>
+
+   <target name="-site" depends="init, -prepare-classpath"
+     if="project.content.present">
+    <!-- clean out the temp space, if we don't cocoon fails on this
+         actually clears the cache, not yet clear why it is really needed? -->
+    <delete dir="${project.work-dir}"/>
+    <mkdir dir="${project.work-dir}"/>
+
+    <java classname="org.apache.cocoon.Main"
+      fork="true"
+      dir="."
+      failonerror="true"
+      classpathref="forrest.cp">
+      <jvmarg
+        value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+      <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
+      <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
+      <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
+      <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+      <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
+      <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
+      <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
+      <arg value="${project.start-uri}"/>              <!-- starting page -->
+      <arg value="-V" />                          <!-- be verbose -->
+    </java>
+    <echo>
+------------------------------
+Static site generated at:
+  ${project.site-dir}
+
+Please check the file
+${project.brokenlinkfile}
+for any broken links in the generated site.
+------------------------------
+    </echo>
+  </target>
+
+
+  <target name="project.webapp.defined" unless="project.webapp">
+    <fail>
+      ------------------------------------------------
+      Error: $${project.webapp} variable has not been set. This is where the
+      webapp will be assembled. Please define it in the calling script.
+      ------------------------------------------------
+    </fail>
+  </target>
+
+  <!-- ===============================================================
+       Builds a cocoon webapp for your project.
+       param: location to put generated webapp ${project.webapp}
+       =============================================================== -->
+  <target name="webapp" depends="init, validate, project.webapp.defined, prepare-context,
+         load-project-props"
+   description="Generates a dynamic servlet-based website (an unpackaged webapp)">
+    <!-- this will need revisions in the case of the siteplan
+    extra project-custom classes then will need to be warred in as well. -->
+    <mkdir dir="${project.webapp}/WEB-INF"/>
+    <copy file="${forrest.home}/WEB-INF/web.xml" todir="${project.webapp}/WEB-INF"/>
+    <copy todir="${project.webapp}">
+      <fileset dir="${project.ctxt-dir}" >
+        <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
+      </fileset>
+    </copy>
+
+    <copy todir="${project.webapp}/WEB-INF">
+      <!-- Note: no overwriting, so user's libs and classes get preference -->
+      <fileset dir="${forrest.home}/WEB-INF">
+        <include name="lib/**"/>
+        <include name="classes/**"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
+    <available property="jdk1.4+" classname="java.lang.CharSequence"/>
+    <copy todir="${project.webapp}/WEB-INF/lib">
+      <fileset dir="${forrest.home}/lib">
+        <include name="endorsed/*jar" unless="jdk1.4+"/>
+      </fileset>
+    </copy>
+
+    <echo>
+---------------------------------
+Webapp generated in ${project.webapp}
+
+To run in Tomcat, add this to the config file (usu. server.xml):
+
+&lt;Context path='/${skinconfig.project-name}'
+            docBase='${project.webapp}'
+            reloadable='true'/&gt;
+
+If using JDK 1.4 or above, make sure to set the Java environment variable
+-Djava.endorsed.dirs=${forrest.home}/lib/endorsed
+Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
+---------------------------------
+    </echo>
+  </target>
+
+  <!-- ===============================================================
+       Builds a cocoon .war for your project based on the siteplan.
+       param: location to put generated war ${project.war}
+       =============================================================== -->
+ <target name="war" depends="webapp"
+   description="Generates a dynamic servlet-based website (an packaged .war file)">
+
+   <jar destfile="${project.war}" basedir="${project.webapp}"/>
+   <echo>
+---------------------------------
+Webapp .war file generated:
+${project.war}
+---------------------------------
+   </echo>
+  </target>
+
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **          PROJECT-TEMPLATE BUILDING ACTIONS                  ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+
+  <!-- ===============================================================
+        Copies a template structure over to your project dir.
+       =============================================================== -->
+  <target name="seed" depends="ensure-nocontent"
+    description="Seeds a directory with a template project doc structure">
+    <unzip src="${forrest.home}/fresh-site.zip" 
+      dest="${project.home}"
+      overwrite="false"/>
+    <echo>
+-------------------------------
+~~ Template project created! ~~
+
+Here is an outline of the generated files:
+
+/                        # ${basedir}
+/status.xml              # List of project developers, todo list and change log
+/forrest.properties      # Optional file describing your site layout
+/src/documentation/      # Doc-specific files
+/src/documentation/skinconf.xml    # Info about your project used by the skin
+/src/documentation/content/xdocs   # XML content.
+/src/documentation/content/xdocs/index.xml # Home page
+/src/documentation/content/xdocs/book.xml  # Navigation file for site structure
+/src/documentation/content/xdocs/tabs.xml  # Skin-specific 'tabs' file.
+/src/documentation/resources/images        # Project images (logos, etc)
+
+
+What to do now?
+
+- Try rendering this template to HTML by typing 'forrest'. View the generated
+  HTML in a browser to make sure everything works.
+- Edit status.xml and src/documentation/skinconf.xml and customize for your
+  project.
+- Replace src/documentation/resources/images/project-logo.gif with your project
+  logo.
+- Start adding content in xdocs/, remembering to add new files to book.xml
+- Provide any feedback to forrest-dev@xml.apache.org
+
+Thanks for using Apache Forrest
+-------------------------------
+    </echo>
+  </target>
+
+
+
+
+  <target name="validate" depends="validation-props, validate-xdocs,
+    validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
+    validate-stylesheets"  description="Validates XML doc files in the project"/>
+
+  <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
+    <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
+      <xmlcatalog>
+        <catalogfiles dir="${project.schema-dir}">
+          <include name="catalog*"/>
+        </catalogfiles>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+      <fileset dir="${project.xdocs-dir}"
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="${forrest.validate.xdocs.excludes}"/>
+    </xmlvalidate>
+    <echo message="...validated xdocs"/>
+  </target>
+
+  <target name="validate-skinconf" depends="validation-props"
+    if="validate.skinconf">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/skinconf-v10.rng">
+      <fileset dir="${project.content-dir}"
+        includes="${forrest.validate.skinconf.includes}"
+        excludes="${forrest.validate.skinconf.excludes}"/>
+    </jing>
+    <echo message="...validated skinconf"/>
+  </target>
+
+  <target name="validate-sitemap" depends="validation-props"
+    if="validate.sitemap">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v05.rng">
+      <fileset dir="${project.content-dir}"
+        includes="${forrest.validate.sitemap.includes}"
+        excludes="${forrest.validate.sitemap.excludes}"/>
+    </jing>
+    <echo message="...validated sitemap"/>
+  </target>
+
+  <target name="validate-stylesheets" depends="validation-props"
+    if="validate.stylesheets">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
+      <fileset dir="${project.stylesheets-dir}"
+        includes="${forrest.validate.stylesheets.includes}"
+        excludes="${forrest.validate.stylesheets.excludes}" />
+    </jing>
+    <echo message="...validated stylesheets"/>
+  </target>
+
+  <target name="validate-skins" depends="validate-skins-stylesheets"/>
+
+  <target name="validate-skins-stylesheets" depends="validation-props"
+    if="validate.skins.stylesheets">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
+      <fileset dir="${project.skins-dir}"
+        includes="${forrest.validate.skins.stylesheets.includes}"
+        excludes="${forrest.validate.skins.stylesheets.excludes}"/>
+    </jing>
+    <echo message="...validated skin stylesheets"/>
+  </target>
+
+  <!-- Check that ${project.skin} points to an existing skin. -->
+  <target name="validate-skinchoice">
+    <condition property="project.skin.present">
+      <available file="${project.skin}" type="dir">
+        <filepath path="${project.skins-dir}"/>
+        <filepath path="${forrest.home}/context/skins"/>
+      </available>
+    </condition>
+
+    <fail unless="project.skin.present">
+------------------------------------------------
+Error: The skin '${project.skin}' could not be found in:
+
+${project.skins-dir}
+
+And is not provided by Forrest in
+
+${forrest.home}/context/skins
+
+Please check the $${project.skins-dir} and $${project.skin} properties in
+forrest.properties.
+------------------------------------------------
+    </fail>
+    <echo message="...validated existence of skin '${project.skin}'"/>
+  </target>
+  
+  
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **              LOCAL SERVER RUN ACTION                        ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+  <target name="run" 
+   description="Run Jetty with configuration set by the jetty.run property"
+   depends="webapp">
+          
+    <java classname="org.mortbay.jetty.Server"
+          dir="./build/webapp"
+          fork="yes"
+          failonerror="yes">
+       <classpath>
+         <pathelement path="${env.CLASSPATH}" />
+         <fileset dir="${forrest.home}/lib/endorsed">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>         
+         <fileset dir="${forrest.home}/lib/optional">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>
+       </classpath>
+      <jvmarg
+        value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+       <arg line="jettyconf.xml" />
+    </java>
+  </target>  
+
+
+<!-- ***************************************************************** -->
+<!-- **                    COCOON TRIAL RUN                         ** -->
+<!-- ***************************************************************** -->
+
+
+  <target name="trial-run" depends="validation-props, copy-config-files, validate-v10-docs, transform2v11">
+    <echo>
+  *---------------------------------------------------------------*
+  | Forrest Transition Trial Set Up Successfully                  |
+  |                                                               |
+  | Please type:                                                  |                 
+  |                                                               |
+  |    ./build.[sh|bat] site-F       to build the static site     |
+  |    ./build.[sh|bat] webapp-F     to build the webapp          |
+  |    ./build.[sh|bat] war-F        to build a war               |
+  |    ./build.[sh|bat] validate-F  to validate files             | 
+  *---------------------------------------------------------------*
+
+    </echo>
+
+  </target>
+
+
+  <target name="validate-v10-docs" depends="validation-props">
+    <echo>
+  *---------------------------------------------------------------*
+  | Validating document-v10 files                                 |
+  *---------------------------------------------------------------*
+
+    </echo>
+    <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
+      <xmlcatalog>
+        <catalogfiles dir="${project.schema-dir}">
+          <include name="catalog*"/>
+        </catalogfiles>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+      <fileset dir="${project.home}/src/documentation/xdocs"
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="drafts/**, ctwig/**, dictionary.xml"/>
+    </xmlvalidate>
+  </target>
+
+
+<target name="transform2v11"
+        depends="validate-v10-docs">
+
+  <property name="src.dir" value="${project.home}/src/documentation/xdocs"/>
+  <property name="dest.dir" value="${project.home}/build/forrest-trial-run"/>
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Transforming document-v10 files                               |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+  <xslt basedir="${src.dir}"
+    destdir="${dest.dir}/v11-docs"
+    extension=".xml"
+    style="${forrest.home}/context/library/xslt/docv10todocv11.xsl"
+    includes="**/*.xml"
+    excludes="css/**, drafts/**, faq/faq**.xml, book.xml, **/book.xml, plan/changes-doc.xml, plan/todo-doc.xml, ctwig/**, dictionary.xml"
+  >
+      <xmlcatalog>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+  </xslt> 
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Transforming faq files                                        |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+  <xslt basedir="${src.dir}/faq"
+    destdir="${dest.dir}/v11-docs/faq"
+    extension=".xml" 
+    style="${forrest.home}/context/library/xslt/faqv10tofaqv11.xsl"
+    includes="*.xml"
+    excludes="book.xml, index.xml"
+  >
+      <xmlcatalog>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+
+  </xslt> 
+		   
+    <echo>
+  *---------------------------------------------------------------*
+  | Transforming book.xml files                                   |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+  <xslt basedir="${src.dir}"
+    destdir="${dest.dir}/v11-docs"
+    extension=".xml" 
+    style="${forrest.home}/context/library/xslt/bookv10.xsl"
+    includes="book.xml, **/book.xml"
+  >
+      <xmlcatalog>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+  </xslt> 
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Copying text files unchanged                                  |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+    <copy todir="${dest.dir}/v11-docs/">
+      <fileset dir="${src.dir}/" >
+        <include name="**/*.txt" />
+      </fileset>
+    </copy>
+    
+</target>
+
+<target name="copy-config-files">
+
+  <delete dir="${project.home}/build/forrest-trial-run/"/>
+
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Copying latest in-process tabs.xml                            |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+    <copy todir="${project.home}/build/forrest-trial-run/v11-docs/" filtering="off">
+      <fileset dir="${forrest.home}../../../../src/resources/convert/cocoon/" >
+        <include name="tabs.xml" />
+      </fileset>
+    </copy>
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Copying latest in-process skinconf.xml                        |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+    <copy todir="${project.home}/build/forrest-trial-run/" filtering="off">
+      <fileset dir="${forrest.home}../../../../src/resources/convert/cocoon/" >
+        <include name="skinconf.xml" />
+      </fileset>
+    </copy>
+
+    <echo>
+  *---------------------------------------------------------------*
+  | Copying latest in-process sitemap.xmap                        |
+  *---------------------------------------------------------------*
+
+    </echo>
+
+    <copy todir="${project.home}/build/forrest-trial-run/" filtering="off">
+      <fileset dir="${forrest.home}../../../../src/resources/convert/cocoon/" >
+        <include name="sitemap.xmap" />
+      </fileset>
+    </copy>
+
+    
+</target>
+
+
+
+
+</project>
