@@ -67,6 +67,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 media="print" />-->
             <link rel="stylesheet" href="{$root}skin/navigation.css" 
                 type="text/css" /> 
+            <link rel="stylesheet" href="{$root}skin/branding.css" 
+                type="text/css" /> 
             <link rel="stylesheet" href="{$root}skin/xnc-base.css" 
                 type="text/css" />
             <link rel="stylesheet" href="{$root}skin/xnc.css" 
@@ -232,11 +234,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 	<!--+
   |centerstrip with menu and mainarea
   +-->
-    <div id="main">
+
        
 
 <xsl:comment>+
-    |start Menu, mainarea
+    |start menu
     +</xsl:comment>
     <xsl:if test="div[@id='menu']/ul/li">
       <xsl:call-template name="menu"/>
@@ -244,17 +246,15 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |start content
     +</xsl:comment>
-    <xsl:apply-templates select="div[@id='content']"/>
+    <xsl:apply-templates select="div[@id='content-main']"/>
 <xsl:comment>+
     |end content
     +</xsl:comment>    
-    <div class="clearboth">&#160;</div>
 
-  </div>
 <!--+
   |bottomstrip with footer
   +-->
-    <div id="footer">
+    <div id="nav-supp">
 <xsl:comment>+
     |start bottomstrip
     +</xsl:comment>
@@ -262,7 +262,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 document.write("Last Published: " + document.lastModified);
 //  -->]]></script></div>
 
-          <div class="copyright">
+          <div class="siteinfo-legal">
  Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
           </div>
           
@@ -377,7 +377,7 @@ document.write("Last Published: " + document.lastModified);
 			<xsl:apply-templates select="div[@id='menu']/*" />
 		-->
 <!--credits-->
-	<div id="credit">
+	<div id="siteinfo-credits">
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
@@ -476,7 +476,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div class="pdflink"><a href="{$filename-noext}.pdf" class="dida">
+      <div id="content-pdf"><a href="{$filename-noext}.pdf" class="dida">
         <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
         PDF</a>
       </div>

@@ -24,7 +24,7 @@ imported document2html.xsl for details.
   <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
 
   <xsl:template match="document">
-    <div id="content">
+    <div id="content-main">
 
       <div id="skinconf-pdflink"/>
 
