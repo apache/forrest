@@ -174,10 +174,22 @@ public class IdGeneratorTransformer
                     throw new SAXException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e, e);
                 }
                 getLogger().info("## Got id "+id);
-                //FIXME: + produces an error on document schema
-                String newId = URLEncoder.encode(id);
-                newId = avoidConflicts(doc, sect, this.idAttr, newId);
-
+                // Use of the new version of encode method to avoid to generate URI such as :
+                //	- <a href="#Quelques+r%E8gles...">Quelques règles...</a>
+                // Which is not, curiously, well decoded...
+                // The new methode - which allow to specify "UTF-8" gives :
+                //	- <a href="#Quelques+r%C3%A8gles...">Quelques règles...</a>
+                // And it works OK,
+                String newId;
+                try {
+                  newId = URLEncoder.encode(id, "UTF-8");
+                }
+                catch( java.io.UnsupportedEncodingException e )
+                { 
+                  getLogger().error("cannot encode Id, using generate-id instead...", e);
+                  newId = processor.evaluateAsString(sect, "generate-id()");
+		}
+       	        newId = avoidConflicts(doc, sect, this.idAttr, newId);
                 // Upgrade to DOM 2 support
                 //sect.setAttribute(this.idAttr, newId);
                 sect.setAttributeNS(sect.getNamespaceURI(), this.idAttr, newId);
