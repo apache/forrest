@@ -30,16 +30,27 @@
       plugins. This document serves as an introduction to the Forrest
       plugin mechanism.</p>
   
-        <section>
-          <title>What plugins are available?</title>
-          <p>You can run the command <code>forrest available-plugins</code> to get
-          a list of the known plugins for Forrest.</p>
+      <section>
+        <title>What plugins are available?</title>
+        <p>You can run the command <code>forrest available-plugins</code> to get
+        a list of the known plugins for Forrest.</p>
+        
+        <p>If you would like to have your own plugin added to this list then
+        contact the <a href="site:mail-lists">developer mailing list</a>.</p>
+      </section>
+        
+        
+      <section>
+        <title>How is a Plugin Installed?</title>
+    
+        <p>If a site requires a plugin then it will be named in the 
+        <code>project.required.plugins</code> property in the projects
+        <code>forrest.properties</code> file. When Forrest builds the site
+        it will automatically discover the plugin and install it. In otherwords,
+        the user need do nothing.</p>
           
-          <p>If you would like to have your own plugin added to this list then
-          contact the <a href="site:mail-lists">developer mailing list</a>.</p>
-        </section>
-      
     </section>
+  </section>
     
     <section>
       <title>What is a Forrest Plugin?</title>
@@ -166,41 +177,39 @@ IMSManifest
   </section>
 
   <section>
-    <title>How is a Plugin Installed?</title>
-
-    <p>To install a plugin the user will run the command 
-    <code>forrest install-plugin'</code>. This will ask the user for the name of
-    the plugin they wish to install and search known plugin repositories for the 
-    plugin package. If found the plugin package will be downloaded and 
-    extracted into the plugins directory of Forrest and an entry will be made 
+    <title>How does Installation work?</title>
+    <p>When Forrest installs a plugin it downloads a zip of the plugin code and 
+    extracts it into the <code>plugins</code> directory of Forrest and an entry is made 
     in <code>src/plugins/stitemap.xmap</code>. For example, installing the 
     IMSManifest plugin described above will result in the following entry 
     being added to the plugin sitemap:</p>
 
-<source><![CDATA[
-    <map:pipeline internal-only="false">
-       <map:mount uri-prefix=""
-                  src="{forrest:plugins}/IMSManifest/sitemap.xmap"
-                  check-reload="yes"
-                  pass-through="true"/>
-    </map:pipeline>
-]]></source>
-
-    <p>Installed plugins are managed by the file 
-    FORREST_INSTALL_DIR/plugings/sitemap.xmap. This file is mounted by main 
-    Forrest sitemap with the following code:</p>
-
-<source><![CDATA[
-      <map:pipeline internal-only="false">
-         <map:mount uri-prefix=""
-                    src="{forrest:plugins}/sitemap.xmap"
-                    check-reload="yes"
-                    pass-through="true"/>
-      </map:pipeline>
-]]></source>
-    
-    <note>The plugin sitemap.xmap file is automatically managed by Forrest, the 
-    end user need never edit this file.</note>
-  </section>
+  <source><![CDATA[
+<map:select type="exists">
+  <map:when test="{forrest:plugins}/IMSManifest/sitemap.xmap">
+    <map:mount uri-prefix="" 
+      src="{forrest:plugins}/IMSManifest/sitemap.xmap" 
+      check-reload="yes" 
+      pass-through="true"/>
+  </map:when>
+</map:select>
+  ]]></source>
+  
+      <p>Installed plugins are managed by the file 
+      FORREST_INSTALL_DIR/plugings/sitemap.xmap. This file is mounted by main 
+      Forrest sitemap with the following code:</p>
+  
+  <source><![CDATA[
+        <map:pipeline internal-only="false">
+           <map:mount uri-prefix=""
+                      src="{forrest:plugins}/sitemap.xmap"
+                      check-reload="yes"
+                      pass-through="true"/>
+        </map:pipeline>
+  ]]></source>
+      
+      <note>The plugin sitemap.xmap file is automatically managed by Forrest, the 
+      end user need never edit this file.</note>
+    </section>
   </body>
 </document>
