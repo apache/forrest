@@ -18,15 +18,36 @@
 
   <!-- default values -->
   <property name="notify.administrator"  value=""/>
+  <property name="notify.on.failure" value="true"/>
+  <property name="notify.on.success" value="true"/>
 
   <!-- set property defaults after other workstages have been run -->
   <target name="notify.init">
     <property name="notify.log" value="${build.logfile-stored}"/>
     <property name="notify.deploy-location" value="- workstage should have set this -"/>
     <property name="notify.completion-status" value="- workstage should have set this -"/>
+    <if>
+        <isset property="build.failed"/>
+        <then>
+            <if>
+                <istrue value="${notify.on.failure}"/>
+                <then>
+                    <property name="notify.do" value="true"/>
+                </then>
+            </if>
+        </then>
+        <else>
+            <if>
+                <istrue value="${notify.on.success}"/>
+                <then>
+                    <property name="notify.do" value="true"/>
+                </then>
+            </if>
+        </else>
+    </if>
   </target>
 
-  <target name="notify.local" depends="notify.init, build" description="FB: Notify to the console">
+  <target name="notify.local" depends="notify.init, build" if="notify.do" description="FB: Notify to the console">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
@@ -47,7 +68,7 @@
   <property name="notify.email.host" value="localhost"/>
   <property name="notify.email.to"   value="${user.name}@localhost"/>
   
-  <target name="notify.email" depends="notify.init, build" if="build.failed" description="FB: Notify by email">
+  <target name="notify.email" depends="notify.init, build" if="notify.do" description="FB: Notify by email">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
