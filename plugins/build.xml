@@ -19,6 +19,12 @@
   <property name="plugins.dist-dir" value="../site-author/content/plugins"/>
   <property name="plugins.localDeploy-dir" value="../build/plugins"/>
   
+  <property name="plugin.src.dir" value="src"/>
+  <property name="plugin.resources.dir" value="resources"/>
+  <property name="plugin.stylesheets.dir" value="${plugin.resources.dir}/stylesheets"/>
+  
+  <property name="plugin.template.dir" value="pluginTemplate"/>
+  
   <target name="init">
     <mkdir dir="${plugins.dist-dir}"/>  
   </target>
@@ -27,7 +33,7 @@
   <target name="local-deploy"
           description="Deploy a plugin locally"
           depends="init">
-    <input message="Which plugin do you want to package?"
+    <input message="Which plugin do you want to deploy?"
            addproperty="plugin-name"/>
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
       <fileset dir="${plugin-name}">
@@ -46,6 +52,30 @@
        basedir="./"
        includes="${plugin-name}/**"
        excludes="**/build/**"/>
+  </target>
+  
+  <target name="seedPlugin"
+    description="Create a new plugin directory in the current working directory and seed it with initial set of files"
+    depends="init">
+    <input message="What is the name of your new plugin?"
+           addproperty="plugin-name"/>
+    <mkdir dir="${plugin-name}"/>
+    <mkdir dir="${plugin-name}/${plugin.src.dir}"/>
+    <mkdir dir="${plugin-name}/${plugin.resources.dir}"/>
+    <mkdir dir="${plugin-name}/${plugin.stylesheets.dir}"/>
+    <copy todir="${plugin-name}"
+          filtering="true">
+      <fileset dir="${plugin.template.dir}"/>
+      <filterset>
+        <filter token="plugin-name" value="${plugin-name}"/>
+      </filterset>
+    </copy>
+    
+    <input message="What type of plugin do you wish to create (input, output, internal)?"
+           validargs="input, output, internal"
+           addproperty="plugin-type"/>
+    <move file="${plugin-name}/sitemap.xmap"
+          tofile="${plugin-name}/${plugin-type}.xmap"/>
   </target>
 </project>
   
