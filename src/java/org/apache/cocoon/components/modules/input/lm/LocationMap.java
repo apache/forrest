@@ -215,7 +215,10 @@ public final class LocationMap extends AbstractLogEnabled {
         final InvokeContext context = new InvokeContext();
         final Logger contextLogger = getLogger().getChildLogger("ctx");
         context.enableLogging(contextLogger);
-        context.compose(m_manager);
+        //TODO nicolaken: temp hack to get it compiling with 2.2
+        throw new RuntimeException("Cannot use LocationMap intended for 2.1 with 2.2; please reconvert to Serviceable.");
+        /* uncomment
+        context.compose(m_manager);       
         
         final Map anchorMap = new HashMap(2);
         anchorMap.put(HINT_KEY,hint);
@@ -235,6 +238,7 @@ public final class LocationMap extends AbstractLogEnabled {
         }
         
         return location;
+        */
     }
     
     /**
