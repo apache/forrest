@@ -122,15 +122,17 @@
    <map:serialize type="xml"/>
   </map:view>
 
-  <map:view name="links" from-position="last">
-   <map:transform src="library/xslt/filterlinks.xsl"/>
+  <map:view name="links" from-label="links">
+   <map:transform src="library/xslt/filterlinks.xsl">
+    <map:parameter name="linkdir" value="{system-property:java.io.tmpdir}"/>
+   </map:transform>
    <map:serialize type="links"/>
   </map:view>
  </map:views>
 
  <map:resources>
   <map:resource name="skinit">
-   <map:transform src="skins/{forrest:skin}/xslt/html/{type}.xsl">
+    <map:transform src="skins/{forrest:skin}/xslt/html/{type}.xsl" label="links">
      <map:parameter name="isfaq" value="{isfaq}"/>
      <map:parameter name="nopdf" value="{nopdf}"/>
      <map:parameter name="path" value="{path}"/>
@@ -138,6 +140,7 @@
      <map:parameter name="config-file" value="../../../../skinconf.xml"/>
      -->
    </map:transform>
+   <map:transform src="library/xslt/filterlinks-html.xsl"/>
    <map:serialize/>
   </map:resource>
 

@@ -66,6 +66,7 @@
     <path id="classpath">
       <fileset dir="src/scratchpad/lib" includes="**/*.jar"/>
       <fileset dir="lib" includes="**/*.jar"/>
+      <fileset dir="tools/ant/lib" includes="*.jar"/>
       <pathelement location="${tools.jar}"/>
     </path>
 
@@ -330,8 +331,27 @@
   <!-- =================================================================== -->
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
+
+  <target name="compile-shbat" depends="init">
+    <mkdir dir="${build.dir}/shbat/tasks-classes"/>
+    <javac srcdir=   "src/resources/forrest-shbat/tasks"
+      destdir=       "${build.dir}/shbat/tasks-classes"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
+  </target>
+
+  <target name="jar-shbat" depends="compile-shbat">
+    <jar destfile="${build.dir}/shbat/forrest-shbat-tasks.jar"
+      basedir="${build.dir}/shbat/tasks-classes"/>
+  </target>
+ 
+
   <target name="dist-shbat" 
-    depends="init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
+    depends="init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir, jar-shbat" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
 
     <!-- fresh drop-off location for the distribution -->
@@ -345,8 +365,11 @@
 
     <!-- copy the prepared and wrapper stuff for the distribution -->
     <copy todir="${dist-shbat.dir}">
-      <fileset dir="./src/resources/forrest-shbat" />
+      <fileset dir="./src/resources/forrest-shbat">
+        <exclude name="tasks/**"/>
+      </fileset>
     </copy>
+    <copy file="${build.dir}/shbat/forrest-shbat-tasks.jar" todir="${dist-shbat.dir}/WEB-INF/lib" />
 
     <!-- copy licenses -->
     <copy todir="${dist-shbat.dir}/legal">

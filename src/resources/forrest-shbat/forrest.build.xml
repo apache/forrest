@@ -564,6 +564,7 @@ Use the 'seed' target to create a template project structure.
       <arg value="${project.start-uri}"/>              <!-- starting page -->
       <arg value="-V" />                          <!-- be verbose -->
     </java>
+    <antcall target="copy-files"/>
     <echo>
 ------------------------------
 Static site generated at:
@@ -576,6 +577,27 @@ for any broken links in the generated site.
     </echo>
   </target>
 
+  <target name="check-uncopied-files">
+    <available property="uncopied-files" type="file" file="${java.io.tmpdir}/unprocessed-files.txt"/>
+  </target>
+
+  <!-- ===============================================================
+       Copies any files that Cocoon didn't crawl. These are written by a
+       stylesheet to /tmp/unprocessed-files.txt during the Cocoon run, and must
+       now be copied
+       =============================================================== -->
+  <target name="copy-files" if="uncopied-files" depends="check-uncopied-files, -prepare-classpath">
+    <echo>Copying files not handled by Cocoon..</echo>
+    <copy todir="${project.site-dir}">
+      <fileset dir="${project.ctxt-dir}/content" includes="**/*">
+        <custom classname="org.apache.forrest.UncopiedFileSelector"
+          classpathref="forrest.cp">
+          <param name="config" value="${java.io.tmpdir}/unprocessed-files.txt"/>
+        </custom>
+      </fileset>
+    </copy>
+    <delete file="${java.io.tmpdir}/unprocessed-files.txt"/>
+  </target>
 
   <target name="project.webapp.defined" unless="project.webapp">
     <fail>
@@ -585,6 +607,8 @@ for any broken links in the generated site.
       ------------------------------------------------
     </fail>
   </target>
+
+
 
   <!-- ===============================================================
        Builds a cocoon webapp for your project.
