@@ -61,7 +61,7 @@ public class ForrestManager {
 	private static final ForrestManager INSTANCE = new ForrestManager();
 
 	// FIXME: dir configuration should be in preferences and should be set by
-	// reading forrest.properties
+	// reading forrest.properties and forrest.build.xml (where some defaults are set)
 
 	public static final String FORREST_HOME = ForrestPlugin.getDefault()
 			.getPluginPreferences().getString(ForrestPreferences.FORREST_HOME);
@@ -98,6 +98,9 @@ public class ForrestManager {
 	
 	public static final String FORREST_ANTTASK_CLASSES = FORREST_HOME
 			+ File.separator + "tools" + File.separator + "anttasks" + File.separator;
+	
+	public static final String FORREST_PLUGINS = FORREST_HOME
+			+ File.separator + "build" + File.separator + "plugins" + File.separator;
 
 	private static final String FORREST_DEFAULT_PROPERTIES_FILE = FORREST_CORE_WEBAPP
 	+ File.separatorChar + "default-forrest.properties";
@@ -135,6 +138,9 @@ public class ForrestManager {
 		
 		props.setSrcFile(new File(FORREST_DEFAULT_PROPERTIES_FILE));
 		props.execute();
+		
+		project.setProperty("forrest.home", FORREST_HOME);
+		project.setProperty("forrest.plugins", FORREST_PLUGINS);
 		
 		return project.getProperties();
 	}
@@ -187,8 +193,6 @@ public class ForrestManager {
 			vctFiles.addAll(getLibFiles(FORREST_ENDORSED_LIB));
 			//			 add optional libs
 			vctFiles.addAll(getLibFiles(FORREST_OPTIONAL_LIB));
-			//			 add jetty libs
-			vctFiles.addAll(getLibFiles(JETTY_LIB));
 		} catch (FileNotFoundException e) {
 			logger.error("getClasspathFiles()", e);
 

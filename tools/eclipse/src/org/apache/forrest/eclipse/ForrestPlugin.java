@@ -86,13 +86,14 @@ public class ForrestPlugin extends AbstractUIPlugin {
 	public ResourceBundle getResourceBundle() {
 		return resourceBundle;
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#initializeDefaultPreferences(org.eclipse.jface.preference.IPreferenceStore)
 	 */
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		super.initializeDefaultPreferences(store);
 		
-		HashMap envVariables = new HashMap();
+	   HashMap envVariables = new HashMap();
 	   BufferedReader reader = null;
 
 	   //"env" works on Linux & Unix Variants but if we're on Windows,
@@ -130,5 +131,13 @@ public class ForrestPlugin extends AbstractUIPlugin {
 		if (envVariables.containsKey(ForrestPreferences.FORREST_HOME)) {
 			store.setDefault(ForrestPreferences.FORREST_HOME, (String)envVariables.get(ForrestPreferences.FORREST_HOME));
 		}
+	}
+	/**
+	 * Set the preference value for Forrest Home.
+	 * @param forrestHome
+	 */
+	public void setForrestHome(String forrestHome) {
+		IPreferenceStore store = getPreferenceStore();
+		store.setDefault(ForrestPreferences.FORREST_HOME, forrestHome);
 	}
 }
