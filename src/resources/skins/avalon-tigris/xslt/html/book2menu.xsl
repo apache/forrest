@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:param name="path"/> <!-- filename, eg 'index.html' -->
+  <xsl:param name="path"/>
 
   <xsl:include href="pathutils.xsl"/>
-  <xsl:variable name="filename">
-    <xsl:call-template name="filename">
+
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
@@ -25,7 +26,7 @@
   <xsl:template match="menu-item">
     <div class="menuItem">
        <xsl:choose>
-        <xsl:when test="starts-with(@href, $filename)">
+        <xsl:when test="starts-with(@href, $filename-noext)">
           <span class="menuSelected"><xsl:value-of select="@label"/></span>
         </xsl:when>
         <xsl:otherwise>
@@ -38,7 +39,7 @@
   <xsl:template match="external">
     <li>
        <xsl:choose>
-        <xsl:when test="starts-with(@href, $filename)">
+        <xsl:when test="starts-with(@href, $filename-noext)">
          <span class="externalSelected"><xsl:value-of select="@label"/></span>
         </xsl:when>
         <xsl:otherwise>
