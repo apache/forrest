@@ -42,6 +42,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <xsl:variable name="disable-print-link" select="//skinconfig/disable-print-link"/>
   <!-- If true, an XML link for this page will not be generated -->
   <xsl:variable name="disable-xml-link" select="//skinconfig/disable-xml-link"/>
+  <!-- If true, a POD link for this page will not be generated -->
+  <xsl:variable name="disable-pod-link" select="//skinconfig/disable-pod-link"/>
   <!-- Get the location where to generate the minitoc -->
   <xsl:variable name="minitoc-location" select="//skinconfig/toc/@location"/>
 
@@ -201,6 +203,16 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
+  <!-- Generates the POD link -->
+  <xsl:template match="div[@id='skinconf-podlink']">
+    <xsl:if test="$disable-pod-link = 'false'">
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pod" class="dida">
+        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD"/><br/>
+        POD</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+  
   <!-- Generates the XML link -->
   <xsl:template match="div[@id='skinconf-xmllink']">
     <xsl:if test="$disable-xml-link = 'false'">

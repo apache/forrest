@@ -51,6 +51,8 @@ and tabs (tab2menu.xsl) to generate the final HTML.
         <div align="right">
           <div id="skinconf-printlink"/>
           <xsl:if test="$dynamic-page='false'">
+            <div id="skinconf-podlink"/>
+            <div id="skinconf-txtlink"/>
             <div id="skinconf-pdflink"/>
             <div id="skinconf-xmllink"/>
           </xsl:if>

@@ -21,27 +21,6 @@
 
   <xsl:param name="docname">docname parameter from sitemap</xsl:param>
 
-  <!-- <xsl:import href="../../../common/xslt/fo/document2fo.xsl"/> -->
-
-  <!-- The Group logo -->
-  <xsl:variable name="group-logo"
-                select="string(//skinconfig/group-logo)"/>
-
-  <!-- The Project Name -->
-  <xsl:variable name="project-name"
-                select="string(//skinconfig/project-name)"/>
-
-  <!-- The Project Name -->
-  <xsl:variable name="project-desc"
-                select="string(//skinconfig/project-description)"/>
-
-  <xsl:param name="numbersections" select="'true'"/>
-
-  <!-- Section depth at which we stop numbering and just indent -->
-  <xsl:param name="numbering-max-depth" select="'3'"/>
-  <xsl:param name="imagesdir" select="."/>
-  <xsl:param name="xmlbasedir"/>
-
   <xsl:template match="/">
     <xsl:apply-templates select="//document"/>
   </xsl:template>
@@ -56,7 +35,7 @@
       <xsl:value-of select="//document/header/title"/>
     </xsl:if>
     <xsl:call-template name="line-blank"/>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="body"/>
   </xsl:template>
 
   <xsl:template match="body">
@@ -68,12 +47,6 @@
     <xsl:call-template name="line-blank"/>
   </xsl:template>
 
-  <xsl:template match="p[@class='quote']">
-    <xsl:text>
- </xsl:text><xsl:apply-templates/>
-    <xsl:call-template name="line-blank"/>
-  </xsl:template>
-  
   <xsl:template match="source">
     <xsl:call-template name="emit-verbatim">
       <xsl:with-param name="text" select="."/>
@@ -179,6 +152,13 @@
 
   <xsl:template match="authors"/>
 
+  <xsl:template match="p[@class='quote']">
+    <xsl:text>"</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>"</xsl:text>
+    <xsl:call-template name="line-blank"/>
+  </xsl:template>
+  
   <xsl:template match="p">
     <xsl:apply-templates/>
     <xsl:call-template name="line-blank"/>
@@ -189,8 +169,63 @@
     <xsl:call-template name="line-blank"/>
   </xsl:template>
 
-  <xsl:template match="note">
+  <xsl:template match="note|warning|fixme">
+    <!-- Set up the proper label -->
+    <xsl:variable name="label">
+      <xsl:choose>
+        <xsl:when test="@label!=''">
+          <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="local-name()='note'">
+              <xsl:text>Note:</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name()='warning'">
+              <xsl:text>Warning:</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name()='fixme'">
+              <xsl:text>Fixme</xsl:text>
+              <xsl:if test="@author">
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="@author"/>
+                <xsl:text>)</xsl:text>
+              </xsl:if>
+              <xsl:text>:</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="local-name()"/>
+              <xsl:text>:</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="dashes">
+      <xsl:call-template name="line-dashed"/>
+    </xsl:variable>
+
+    <xsl:variable name="separator">
+      <xsl:value-of select="concat( ' ', substring( $dashes, 1, 60 ) )"/>
+    </xsl:variable>
+
+    <xsl:text>B&lt;</xsl:text>
+    <xsl:value-of select="$label"/>
+    <xsl:text>&gt;</xsl:text>
+
+    <xsl:call-template name="line-blank"/>
+    <xsl:value-of select="$separator"/>
+    <xsl:call-template name="line-blank"/>
+    <xsl:text>
+=over 4</xsl:text>
+    <xsl:call-template name="line-blank"/>
     <xsl:apply-templates/>
+    <xsl:call-template name="line-blank"/>
+    <xsl:text>
+=back</xsl:text>
+    <xsl:call-template name="line-blank"/>
+    <xsl:value-of select="$separator"/>
     <xsl:call-template name="line-blank"/>
   </xsl:template>
 
@@ -246,15 +281,26 @@
   </xsl:template>
 
   <xsl:template match="dl">
+    <xsl:call-template name="line-blank"/>
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="dt">
+    <xsl:text>B&lt;</xsl:text>
     <xsl:apply-templates/>
+    <xsl:text>&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="dd">
-    <xsl:text> </xsl:text><xsl:apply-templates/>
+    <xsl:call-template name="line-blank"/>
+    <xsl:text>
+=over 4</xsl:text>
+    <xsl:call-template name="line-blank"/>
+    <xsl:apply-templates/>
+    <xsl:call-template name="line-blank"/>
+    <xsl:text>
+=back</xsl:text>
+    <xsl:call-template name="line-blank"/>
   </xsl:template>
 
   <xsl:template match="strong">
@@ -279,9 +325,16 @@
     <xsl:apply-templates mode="in-table"/>
   </xsl:template>
 
-  <xsl:template match="code">
+  <xsl:template match="code[@class='filename']">
     <xsl:variable name="tmp">
       <xsl:text>F&lt;</xsl:text><xsl:apply-templates/><xsl:text>&gt;</xsl:text>
+    </xsl:variable>
+    <xsl:value-of select="concat( normalize-space( $tmp ), ' ' )"/>
+  </xsl:template>
+
+  <xsl:template match="code">
+    <xsl:variable name="tmp">
+      <xsl:text>C&lt;</xsl:text><xsl:apply-templates/><xsl:text>&gt;</xsl:text>
     </xsl:variable>
     <xsl:value-of select="concat( normalize-space( $tmp ), ' ' )"/>
   </xsl:template>
@@ -291,16 +344,58 @@
   </xsl:template>
 
   <xsl:template match="link|jump|fork">
+
     <!-- rewrite the rewritten link to make it palatable for POD -->
+    <xsl:variable name="podlink-text">
+      <xsl:value-of select="."/>
+      <xsl:if test=".!=''">
+        <xsl:text>|</xsl:text>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:variable name="podlink-tmp">
+      <xsl:choose>
+        <xsl:when test="contains( @href, '#' )">
+          <xsl:value-of select="substring-before( @href, '#' )"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@href"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="podlink-link">
+      <!-- Remove the '.html' suffix if we are a local URL -->
+      <xsl:choose>
+        <xsl:when test="starts-with( $podlink-tmp, 'http:' )">
+          <xsl:value-of select="$podlink-tmp"/>
+        </xsl:when>
+        <xsl:when test="starts-with( $podlink-tmp, 'https:' )">
+          <xsl:value-of select="$podlink-tmp"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="contains( $podlink-tmp, '.html' )">
+              <xsl:value-of select="substring-before( $podlink-tmp, '.html' )"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$podlink-tmp"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="podlink-anchor">
+      <xsl:if test="substring-after( @href, '#' )!=''">
+        <xsl:text>/"</xsl:text>
+        <xsl:value-of select="substring-after( @href, '#' )"/>
+        <xsl:text>"</xsl:text>
+      </xsl:if>
+    </xsl:variable>
+
     <xsl:text>L&lt;</xsl:text>
-    <xsl:choose>
-      <xsl:when test="contains( @href, '.html' )">
-        <xsl:value-of select="substring-before( @href, '.html' )"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="@href"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="concat( $podlink-text, $podlink-link, $podlink-anchor )"/>
     <xsl:text>&gt; </xsl:text>
   </xsl:template>
 
@@ -313,6 +408,22 @@
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="figure|img|icon">
+    <xsl:variable name="as-text">
+      <xsl:choose>
+        <xsl:when test="@alt">
+          <xsl:value-of select="concat( '[', local-name(), ': ', @alt, '] ' )"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat( '[', local-name(), ': ', @src, '] ' )"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:value-of select="$as-text"/>
+
   </xsl:template>
 
   <!-- ==================================================================== -->
@@ -356,13 +467,29 @@
       </xsl:choose>
     </xsl:variable>
 
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="caption" mode="in-table"/>
+    <xsl:call-template name="cr"/>
     <xsl:apply-templates select="tr" mode="in-table">
       <xsl:with-param name="colwidth" select="$colwidth"/>
       <xsl:with-param name="cols" select="$cols"/>
     </xsl:apply-templates>
 
+    <xsl:call-template name="line-blank"/>
+
   </xsl:template>
 
+  <xsl:template match="table" mode="in-table">
+    <!-- We can't handle nested tables correctly yet.  As a very
+         simplistic interim measure, just emit the value of the
+         entire table node. -->
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="caption" mode="in-table">
+    <xsl:apply-templates/>
+  </xsl:template>
+    
   <xsl:template match="tr" mode="in-table">
     <xsl:param name="colwidth"/>
     <xsl:param name="cols"/>
@@ -846,7 +973,9 @@
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
-  <xsl:template match="*"/>
+  <xsl:template match="*">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <!-- Named templates -->
 

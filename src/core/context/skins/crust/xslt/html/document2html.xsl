@@ -45,6 +45,8 @@ and tabs (tab2menu.xsl) to generate the final HTML.
             <xsl:call-template name="printerfriendlylink"/>
             <xsl:call-template name="xmllink"/>
             -->
+            <div id="skinconf-podlink"/>
+            <div id="skinconf-txtlink"/>
             <div id="skinconf-pdflink"/>
           </tr>
         </table>

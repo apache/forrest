@@ -26,6 +26,8 @@ imported document2html.xsl for details.
   <xsl:template match="document">
     <div id="content">
 
+      <div id="skinconf-podlink"/>
+      <div id="skinconf-txtlink"/>
       <div id="skinconf-pdflink"/>
 
       <xsl:if test="normalize-space(header/title)!=''">
