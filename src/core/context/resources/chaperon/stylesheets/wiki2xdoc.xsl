@@ -94,8 +94,8 @@
      </header>  
     <body>
   <xsl:apply-templates select="st:document/st:paragraphs/st:paragraph/*" mode="paragraph"/>  
-  <xsl:apply-templates select="st:document/st:subsubsections/st:subsubsection"/>
-  <xsl:apply-templates select="st:document/st:subsections/st:subsection"/>
+     <xsl:apply-templates select="st:document/st:subsubsections/st:subsubsection" mode="paragraph"/>
+     <xsl:apply-templates select="st:document/st:subsections/st:subsection" mode="paragraph"/>
   <xsl:apply-templates select="st:document/st:sections/st:section"/>
     </body>  
    </document>
