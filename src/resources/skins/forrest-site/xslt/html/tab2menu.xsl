@@ -12,7 +12,7 @@ See the imported tab2menu.xsl for details.
     <div class="tab">
       <table cellspacing="0" cellpadding="0" border="0" summary="tab bar">
         <tr>
-          <xsl:apply-imports/>
+          <xsl:call-template name="base-tabs"/>
         </tr>
       </table>
     </div>

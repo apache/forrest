@@ -8,12 +8,6 @@ See the imported tab2menu.xsl for details.
 
   <xsl:import href="../../../common/xslt/html/tab2menu.xsl"/>
 
-  <xsl:template match="tabs">
-    <div class="tab">
-      <xsl:apply-imports/>
-    </div>
-  </xsl:template>
-
   <xsl:template name="pre-separator">
   </xsl:template>
 

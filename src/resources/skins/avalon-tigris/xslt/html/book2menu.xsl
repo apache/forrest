@@ -17,7 +17,7 @@ details.
   <xsl:template match="menu">
     <div class="menu">
       <span class="menuLabel"><xsl:value-of select="@label"/></span>
-      <xsl:apply-templates/>
+      <xsl:call-template name="base-menu"/>
     </div>
   </xsl:template>
 
