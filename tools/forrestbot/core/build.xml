@@ -42,8 +42,11 @@
     <trycatch property="errmsg" reference="exception">
       <try>
         <record name="${build.logfile}" action="start"/>
+        <tstamp>
+          <format property="time.start" pattern="yyyy-MM-dd hh:mm:ss"/>
+        </tstamp>
         <echo>
-          ....... Forrest render START
+          ....... Forrest render START ${time.start}
           ... Rendering docs in ${build.work-dir}
         </echo>
         <antcall target="site" inheritAll="false">
