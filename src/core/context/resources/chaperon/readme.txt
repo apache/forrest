@@ -6,4 +6,4 @@ Please try to keep it in synch.
 sitemap.xmap is not used directly but kept here as a reference.
 
 When there will be real blocks, all this will not be needed and 
-we will simply use the reources in the chaperon block.
+we will simply use the resources in the chaperon block.
