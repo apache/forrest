@@ -4,37 +4,50 @@
 # A dubious script which commits generated website
 # contents to xml-site/targets/$MODULE 
 ###################################################
+. `dirname $0`/local-vars
+
 MODULE=${1:-xml-forrest}
 case $MODULE in
 	xml-forrest) TARGET="forrest" ;;
         xml-forrest-template) TARGET="forrest-sample" ;;
+        xml-site) TARGET="/" ;;
 esac
+
+SRC_DIR=$WEBAPP/sites/$MODULE
+LIVECVS=$XML_SITE/targets/$TARGET
+
+function sanity_checks()
+{
 [ -z "$TARGET" ] && echo "Unknown module: $MODULE" && exit;
 
-. `dirname $0`/local-vars
 if [ -z "$XML_SITE" ]; then
 	echo "Please set the XML_SITE var in local-vars-`uname -n`"
 	exit
 fi	
-SRC_DIR=$WEBAPP/sites/$MODULE
 if [ ! -d "$SRC_DIR" ]; then
   echo "Expected website contents in $SRC_DIR"
   exit
 fi
-LIVECVS=$XML_SITE/targets/$TARGET
 if [ ! -d "$LIVECVS" ]; then
   echo "Expected checked-out xml-site/ HTML in non-existent directory $LIVECVS"
   exit
 fi
+}
+
+function copy_contents()
+{
 echo "Updating $LIVECVS from $SRC_DIR"
 pushd .
 cd $LIVECVS
 cvsco
-echo cvs up -dP
+cvs up -dP
 echo "Copying generated docs to xml-site.."
 echo "  src  : $SRC_DIR/*"
 echo "  dest : $PWD" 
 cp -r -p $SRC_DIR/* .
+}
+
+
 function addfiles()
 {
   echo "addfiles '$@'"
@@ -76,10 +89,15 @@ local DIRS
   fi
   unset TXTFILES BINFILES DIRS
 }
+
+sanity_checks
+copy_contents
+
+
 echo "Generating list of new-to-CVS files.."
 NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
-#echo "Adding new files to CVS: $NEW_FILES"
-addfiles $NEW_FILES
+echo "Adding new files to CVS: $NEW_FILES"
+[ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
 
 cvs up > /tmp/cvslist 2>&1
 echo "Now committing to CVS"
