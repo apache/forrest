@@ -20,5 +20,5 @@ steps:
 
 - copy the "rtf-output" plugin directory to forrest/build/plugins
 - copy the WEB-INF directory to forrest/main/webapp
-- add "rtf-output" (without quotes) to your projects "project.required.plgins"
+- add "rtf-output" (without quotes) to your projects "project.required.plugins"
   property
