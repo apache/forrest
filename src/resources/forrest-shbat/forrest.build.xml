@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/26 07:12:32 $              |
+    |             $Date: 2003/05/26 12:15:35 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -708,23 +708,7 @@ Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
     </echo>
   </target>
 
-  <!--
-  If you've been editing docs, images etc in build/webapp/*, this target copies
-  them back to src/documentation/*.  As 'overwrite' is false, this will not
-  clobber docs legitimately edited in src/documentation/*
-  -->
-  <target name="backcopy" depends="init-props" description="If anything has been edited in build/webapps, copies them
-    back to src/documentation">
-    <copy toDir="${project.content-dir}" filtering="false" overwrite="false">
-      <fileset dir="${project.webapp}">
-        <present targetdir="${project.content-dir}"/>
-      </fileset>
-    </copy>
-    <!-- Copy new xdocs -->
-    <copy toDir="${project.xdocs-dir}" filtering="false" overwrite="false">
-      <fileset dir="${project.webapp}/content/xdocs"/>
-    </copy>
-  </target>
+
 
   <!-- ===============================================================
        Builds a cocoon .war for your project based on the siteplan.
@@ -935,5 +919,69 @@ forrest.properties.
        <arg line="jettyconf.xml" />
     </java>
   </target>  
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **              BACKCOPY                                       ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+  <!--
+  If you've been editing docs, images etc in build/webapp/*, this target copies
+  them back to src/documentation/*.  As 'overwrite' is false, this will not
+  clobber docs legitimately edited in src/documentation/*
+  -->
+  <target name="backcopy" depends="init-props"
+    description="If anything has been edited in build/webapps, copies them back to src/documentation">
+    <!--
+    Copy files to src/* if they already exist there, or exist in the Forrest
+    distribution and have been locally modified
+    -->
+    <copy toDir="${project.content-dir}" filtering="false" overwrite="false">
+      <fileset dir="${project.webapp}">
+        <!-- Bah. Pesky @tokens@, ruining this nice elegant backcopy.. -->
+        <exclude name="**/breadcrumbs.js"/>
+        <or>
+          <present targetdir="${project.content-dir}"/>
+          <and>
+            <present targetdir="${forrest.home}/context"/>
+            <different targetdir="${forrest.home}/context"/>
+            <type type="file"/>
+          </and>
+        </or>
+      </fileset>
+    </copy>
+    <antcall target="overrides"/>
+  </target>
+
+  <target name="overrides" depends="init-props"
+    description="Prints a summary of which files a project is overriding">
+    <fileset dir="${project.content-dir}" id="overridden-files">
+      <present targetdir="${forrest.home}/context"/>
+      <different targetdir="${forrest.home}/context"/>
+    </fileset>
+    <fileset dir="${project.content-dir}" id="overridden-files-unmodified">
+      <present targetdir="${forrest.home}/context"/>
+      <not>
+        <different targetdir="${forrest.home}/context"/>
+      </not>
+    </fileset>
+    <property name="overridden" refid="overridden-files"/>
+    <property name="overridden-unmodified" refid="overridden-files-unmodified"/>
+    <echo>
+      +----------------------------+
+      | Forrest Overrides report   |
+      +----------------------------+
+
+      Overridden, modified   : ${overridden}
+      Overridden, unmodified : ${overridden-unmodified}
+    </echo>
+  </target>
 
 </project>
