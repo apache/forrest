@@ -1,0 +1,208 @@
+? lib/core/avalon-framework-4.1.4.jar
+? lib/core/cocoon-20030329.jar
+? lib/core/cocoon-batik-block-20030329.jar
+? lib/core/cocoon-chaperon-block-20030329.jar
+? lib/core/cocoon-deprecated-20030329.jar
+? lib/core/cocoon-fop-block-20030329.jar
+? lib/core/cocoon-html-block-20030329.jar
+? lib/core/cocoon-jfor-block-20030329.jar
+? lib/core/cocoon-linkrewriter-block-20030329.jar
+? lib/core/cocoon-lucene-block-20030329.jar
+? lib/core/cocoon-profiler-block-20030329.jar
+? lib/core/commons-cli-1.0.jar
+? lib/core/commons-jxpath-1.1.jar
+? lib/core/excalibur-component-complete-1.1.jar
+? lib/core/excalibur-event-1.0.2.jar
+? lib/core/excalibur-logger-1.0.1.jar
+? lib/core/excalibur-pool-1.2.jar
+? lib/core/excalibur-sourceresolve-20030319.jar
+? lib/core/excalibur-store-20030317.jar
+? lib/core/excalibur-xmlutil-20030317.jar
+? lib/core/logkit-1.2.jar
+? lib/core/util.concurrent-1.3.1.jar
+Index: src/java/components/org/apache/cocoon/transformation/IdGeneratorTransformer.java
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/java/components/org/apache/cocoon/transformation/IdGeneratorTransformer.java,v
+retrieving revision 1.3
+diff -u -r1.3 IdGeneratorTransformer.java
+--- src/java/components/org/apache/cocoon/transformation/IdGeneratorTransformer.java	15 Mar 2003 11:02:52 -0000	1.3
++++ src/java/components/org/apache/cocoon/transformation/IdGeneratorTransformer.java	29 Mar 2003 13:36:10 -0000
+@@ -252,7 +252,7 @@
+      * @return A hash of the element and id parameters, thus uniquely
+      * identifying this IdGenerator amongst it's peers.
+      */
+-    public Serializable generateKey() {
++    public Serializable getKey() {
+         return ""+HashUtil.hash(this.elementXPath+this.idXPath);
+     }
+ 
+@@ -263,7 +263,7 @@
+      * @return An "always valid" SourceValidity object. This transformer has no
+      * inputs other than the incoming SAX events.
+      */
+-    public SourceValidity generateValidity() {
++    public SourceValidity getValidity() {
+         return new NOPValidity();
+     }
+ 
+Index: src/java/components/org/apache/cocoon/transformation/XPathTransformer.java
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/java/components/org/apache/cocoon/transformation/XPathTransformer.java,v
+retrieving revision 1.5
+diff -u -r1.5 XPathTransformer.java
+--- src/java/components/org/apache/cocoon/transformation/XPathTransformer.java	17 Mar 2003 07:39:33 -0000	1.5
++++ src/java/components/org/apache/cocoon/transformation/XPathTransformer.java	29 Mar 2003 13:36:12 -0000
+@@ -406,7 +406,7 @@
+      * @return A hash of the include and exclude parameters, thus uniquely
+      * identifying this XPathTransformer amongst it's peers.
+      */
+-    public Serializable generateKey() {
++    public Serializable getKey() {
+         return ""+HashUtil.hash(this.include+this.exclude);
+     }
+ 
+@@ -416,7 +416,7 @@
+      * @return An "always valid" SourceValidity object. This transformer has no
+      * inputs other than the incoming SAX events.
+      */
+-    public SourceValidity generateValidity() {
++    public SourceValidity getValidity() {
+         return new NOPValidity();
+     }
+ 
+Index: src/resources/forrest-shbat/forrest.build.xml
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/forrest-shbat/forrest.build.xml,v
+retrieving revision 1.59
+diff -u -r1.59 forrest.build.xml
+--- src/resources/forrest-shbat/forrest.build.xml	24 Mar 2003 21:20:17 -0000	1.59
++++ src/resources/forrest-shbat/forrest.build.xml	29 Mar 2003 13:36:18 -0000
+@@ -554,23 +554,38 @@
+ 
+     <parallel>
+ 
++
++      <java classname="org.apache.cocoon.Main" fork="true"
++        dir="${project.ctxt-dir}" failonerror="true" maxmemory="128m">
++        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
++        <arg value="-u${project.debuglevel}"/>
++        <arg value="-xWEB-INF/cli.xconf"/>
++        <arg value="index.html"/>
++        <classpath>
++          <path refid="forrest.cp"/>
++        </classpath>
++      </java>
++
++
++      <!--
+       <java classname="org.apache.cocoon.Main"
+         fork="true"
+         dir="."
+         failonerror="true"
+         classpathref="forrest.cp">
+-        <jvmarg
+-          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+-        <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
+-        <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
+-        <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
+-        <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+-        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
+-        <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
+-        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
+-        <arg value="${project.start-uri}"/>              <!-- starting page -->
+-        <arg value="-V" />                          <!-- be verbose -->
++        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
++        <arg value="-c${project.ctxt-dir}"/>   <!- input to the process ->
++        <arg value="-d${project.site-dir}"/>   <!- output to be put ->
++        <arg value="-w${project.work-dir}"/>   <!- temp dir to use for e.g. cache ->
++        <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
++        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
++        <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
++        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
++        <arg value="${project.start-uri}"/>              <!- starting page ->
++        <arg value="-V" />                          <!- be verbose ->
+       </java>
++      -->
++
+       <sequential>
+         <!-- 
+         | Copy all non-xdocs content across, as we cannot rely on crawling to
+Index: src/scratchpad/src/java/org/apache/forrest/components/generator/XNIConfigurableFileGenerator.java
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/scratchpad/src/java/org/apache/forrest/components/generator/XNIConfigurableFileGenerator.java,v
+retrieving revision 1.6
+diff -u -r1.6 XNIConfigurableFileGenerator.java
+--- src/scratchpad/src/java/org/apache/forrest/components/generator/XNIConfigurableFileGenerator.java	15 Mar 2003 06:18:29 -0000	1.6
++++ src/scratchpad/src/java/org/apache/forrest/components/generator/XNIConfigurableFileGenerator.java	29 Mar 2003 13:36:28 -0000
+@@ -175,7 +175,7 @@
+    * @return The generated key or <code>0</code> if the component
+    *              is currently not cacheable.
+    */
+-  public java.io.Serializable generateKey() {
++  public java.io.Serializable getKey() {
+     return this.inputSource.getURI();
+   }
+ 
+@@ -187,7 +187,7 @@
+    * @return The generated validity object or <code>null</code> if the
+    *         component is currently not cacheable.
+    */
+-  public SourceValidity generateValidity() {
++  public SourceValidity getValidity() {
+     if (this.inputSource.getLastModified() != 0) {
+       this.inputSource.getValidity();
+     }
+Index: src/scratchpad/src/java/org/apache/forrest/yer/use/cocoon/HierarchyGenerator.java
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/scratchpad/src/java/org/apache/forrest/yer/use/cocoon/HierarchyGenerator.java,v
+retrieving revision 1.6
+diff -u -r1.6 HierarchyGenerator.java
+--- src/scratchpad/src/java/org/apache/forrest/yer/use/cocoon/HierarchyGenerator.java	15 Mar 2003 06:18:29 -0000	1.6
++++ src/scratchpad/src/java/org/apache/forrest/yer/use/cocoon/HierarchyGenerator.java	29 Mar 2003 13:36:28 -0000
+@@ -133,7 +133,7 @@
+    * @return The generated key or <code>null</code> if the component
+    *              is currently not cacheable.
+    */
+-  public java.io.Serializable generateKey() {
++  public java.io.Serializable getKey() {
+     //TODO: think about making it cacheable!
+     return null;
+   }
+@@ -146,7 +146,7 @@
+    * @return The generated validity object or <code>null</code> if the
+    *         component is currently not cacheable.
+    */
+-  public SourceValidity generateValidity() {
++  public SourceValidity getValidity() {
+     /*
+     if (this.inputSource.getLastModified() != 0) {
+       return new TimeStampCacheValidity(this.inputSource.getLastModified());
+Index: src/resources/conf/cli.xconf
+===================================================================
+RCS file: src/resources/conf/cli.xconf
+diff -N src/resources/conf/cli.xconf
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ src/resources/conf/cli.xconf	29 Mar 2003 13:38:15 -0000
+@@ -0,0 +1,22 @@
++<?xml version="1.0"?>
++<!-- all links here are relative to the build context dir, that
++     in the build.xml file is set to ${build.context} -->
++<cocoon verbose="true"  
++        follow-links="true" 
++        precompile-only="false" 
++        confirm-extensions="false">
++
++   <broken-link-file>../brokenlinks.txt</broken-link-file>
++<!--<load-class>org.firebirdsql.jdbc.Driver</load-class>-->
++   <logging log-kit="./logkit.xconf" logger="cli" level="ERROR" />
++   <context-dir>.</context-dir>
++   <config-file>cocoon.xconf</config-file>
++   <dest-dir>../docs</dest-dir>
++   <work-dir>../temp/docs</work-dir>
++<!--<user-agent>xxx</user-agent>-->
++   <accept>*/*</accept>
++   <uri>favicon.ico</uri>
++<!--<uri-file></uri-file>-->
++   
++</cocoon>
++
