@@ -56,7 +56,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
-import org.apache.avalon.excalibur.xml.xpath.XPathProcessor;
+import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.caching.Cacheable;
 import org.apache.cocoon.caching.CacheValidity;
@@ -217,7 +217,10 @@ public class IdGeneratorTransformer
             if (!sect.hasAttribute(this.idAttr)) {
                 String newId = URLEncoder.encode(id);
                 newId = avoidConflicts(doc, sect, this.idAttr, newId);
-                sect.setAttribute(this.idAttr, newId);
+
+                // Upgrade to DOM 2 support
+                //sect.setAttribute(this.idAttr, newId);
+                sect.setAttributeNS(sect.getNamespaceURI(), this.idAttr, newId);
             }
         }
         return doc;
