@@ -45,7 +45,7 @@ COPYRIGHT:
 <!ENTITY % text "#PCDATA">
 <!-- Entities referred to later on are defined up front -->
 <!ENTITY % markup "strong|em|code|sub|sup">
-<!ENTITY % special-inline "br|img|icon">
+<!ENTITY % special-inline "br|img|icon|acronym">
 <!ENTITY % links "link|jump|fork">
 <!ENTITY % paragraphs "p|source|note|warning|fixme">
 <!ENTITY % tables "table">
@@ -178,6 +178,7 @@ COPYRIGHT:
   %common.att; 
   %link.att; 
 >
+
 <!-- ==================================================== -->
 <!-- Specials -->
 <!-- ==================================================== -->
@@ -206,6 +207,13 @@ COPYRIGHT:
   width CDATA #IMPLIED
   %common.att; 
 >
+<!-- Acronym (in modern browsers, will have rollover text) -->
+<!ELEMENT acronym (%text;)*>
+<!ATTLIST acronym
+  title CDATA #REQUIRED
+  %common.att; 
+>
+
 <!-- =============================================================== -->
 <!-- Blocks definitions -->
 <!-- =============================================================== -->
