@@ -5,12 +5,13 @@
 PURPOSE:
   This DTD was developed to create a simple yet powerful document
   type for software documentation for use with the Apache projects.
+  It has now been superceded by v1.2.
 
 TYPICAL INVOCATION:
 
   <!ENTITY % document PUBLIC
-      "-//APACHE//ENTITIES Documentation Vxy//EN"
-      "document-vxy.mod">
+      "-//APACHE//ENTITIES Documentation V1.1//EN"
+      "document-v11.mod">
   %document;
 
   where
@@ -27,13 +28,6 @@ AUTHORS:
 FIXME:
 
 CHANGE HISTORY:
-[Version 1.?]
-  20030320 Make @href required for link elements. (SN)
-  20030320 Allow paragraphs (p|source|note|warning|fixme) inside li. (SN)
-  20030320 Allow paragraphs (p|source|note|warning|fixme) and lists (ol|ul|dl) inside dd. (SN)
-  20030320 Allow links (link|jump|fork) and inline elements (br|img|icon|acronym) inside title. (SN)
-
-
 [Version 1.0]
   20020608 Initial version. (SN)
 
@@ -117,7 +111,7 @@ COPYRIGHT:
 <!-- Link attributes ===================================================
         Indicates that the element requires to have hyperlink attributes.
 ==================================================================== -->
-<!ENTITY % link.att 'href      CDATA             #REQUIRED
+<!ENTITY % link.att 'href      CDATA                         #IMPLIED
          role      CDATA                         #IMPLIED
          title     CDATA                         #IMPLIED '>
 <!-- =============================================================== -->
@@ -294,7 +288,7 @@ COPYRIGHT:
 <!-- Lists -->
 <!-- ==================================================== -->
 <!-- List item -->
-<!ELEMENT li (%content.mix; | %lists; | %paragraphs; )*>
+<!ELEMENT li (%content.mix; | %lists;)*>
 <!ATTLIST li
   %common.att; 
 >
@@ -329,7 +323,7 @@ COPYRIGHT:
   %common.att; 
 >
 <!-- Definition description -->
-<!ELEMENT dd (%content.mix; | %lists; | %paragraphs; )*>
+<!ELEMENT dd (%content.mix;)*>
 <!ATTLIST dd
   %common.att; 
 >
@@ -345,7 +339,6 @@ COPYRIGHT:
   width CDATA #IMPLIED
   usemap CDATA #IMPLIED
   ismap (ismap) #IMPLIED
-  align CDATA #IMPLIED
   %common.att; 
 >
 <!-- anchor point (equivalent of <a name="...">, typically not rendered) -->
@@ -369,7 +362,7 @@ COPYRIGHT:
 <!ATTLIST header
   %common.att; 
 >
-<!ELEMENT title (%text; | %markup; | %links; | %special-inline;)*>
+<!ELEMENT title (%text; | %markup;)*>
 <!ATTLIST title
   %common.att; 
 >
