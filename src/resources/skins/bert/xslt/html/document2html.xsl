@@ -54,7 +54,7 @@
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
-<!--  section handling
+  <!--  section handling
   - <a name/> anchors are added if the id attribute is specified
   - generated anchors are still included for TOC - what should we do about this?
   - FIXME: provide a generic facility to process section irrelevant to their
@@ -129,6 +129,9 @@
         <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
       </xsl:if>
     </img>
+  </xsl:template>
+  <xsl:template match="code">
+    <span class="codefrag"><xsl:value-of select="."/></span>
   </xsl:template>
   <xsl:template match="figure">
     <div align="center">
