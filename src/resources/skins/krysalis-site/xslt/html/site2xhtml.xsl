@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.13 2003/03/26 15:35:07 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.14 2003/05/21 22:58:33 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -146,80 +146,10 @@ $Id: site2xhtml.xsl,v 1.13 2003/03/26 15:35:07 nicolaken Exp $
         <table cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#ffffff" summary="page content">
           <tr>
             <td valign="top">
-              <table cellpadding="0" cellspacing="0" border="0" summary="menu">
-                <tr>
-                  <xsl:comment>================= start left top NavBar ==================</xsl:comment>
-                  <td valign="top" rowspan="3">
-                    <table cellspacing="0" cellpadding="0" border="0" summary="blue line">
-                      <tr><td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
-                      <tr><td bgcolor="{$background-bars}"><font face="Arial, Helvetica, Sans-serif" size="4" color="{$menu-border}">&#160;</font></td></tr>
-                      <tr><td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
-                    </table>
-                  </td>
-                  <xsl:comment>================= end left top NavBar ==================</xsl:comment>
-
-                  <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-                  <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
-                  <td bgcolor="{$menu-border}" valign="top" nowrap="nowrap">
-
-                    <xsl:comment>================= start Menu items ==================</xsl:comment>
-                    <!-- original: <xsl:apply-templates select="div[@class='menu']"/>    -->
-
-                    <div class="menu">
-                        <xsl:for-each select = "div[@class='menu']/ul/li">
-                          <xsl:call-template name = "innermenuli" />
-                        </xsl:for-each>
-                    </div>
-
-                    <xsl:comment>================= end Menu items ==================</xsl:comment>
-                  </td>
-                  <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
-                  <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-                </tr>
-
-                <tr>
-                  <td class="bottom-left-thick" rowspan="2" colspan="2"></td>
-                  <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" border="0" width="10" height="10" /></td>
-                  <td class="bottom-right-thick" rowspan="2" colspan="2"></td>
-                </tr>
-                <tr>
-                  <td bgcolor="{$header-color2}" height="1"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-                </tr>
-                <tr>
-                  <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
-                </tr>                
-        
-                
-              <xsl:if test="$filename = 'index.html' and $config/credits">
-                <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
-                  <xsl:variable name="name" select="name"/>
-                  <xsl:variable name="url" select="url"/>
-                  <xsl:variable name="image" select="image"/>
-                  <xsl:variable name="width" select="width"/>
-                  <xsl:variable name="height" select="height"/>
-                  <tr>
-                    <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
-                  </tr> 
-                  <tr> 
-                  <td><img src="{$spacer}" alt="" height="1" width="1" /></td>
-                  <td colspan="4" height="5" class="logos">
-                  <a href="{$url}">
-                    <img alt="{$name} logo" border="0">
-                      <xsl:attribute name="src">
-                        <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
-                        <xsl:value-of select="$image"/>
-                      </xsl:attribute>
-                      <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
-                      <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
-                    </img>
-                    <img src="{$spacer}" border="0" alt="" width="5" height="1" />
-                  </a>
-                  </td>
-                  </tr> 
-                </xsl:for-each>
+              <!-- If we have any menu items, draw a menu -->
+              <xsl:if test="div[@class='menu']/ul/li">
+                <xsl:call-template name="menu"/>
               </xsl:if>
-              
-              </table>
             </td>
 
             <td width="100%" valign="top">
@@ -346,6 +276,83 @@ $Id: site2xhtml.xsl,v 1.13 2003/03/26 15:35:07 nicolaken Exp $
         <xsl:comment>================= end Footer ==================</xsl:comment>
       </body>
     </html>
+  </xsl:template>
+
+
+  <xsl:template name="menu">
+    <table cellpadding="0" cellspacing="0" border="0" summary="menu">
+      <tr>
+        <xsl:comment>================= start left top NavBar ==================</xsl:comment>
+        <td valign="top" rowspan="3">
+          <table cellspacing="0" cellpadding="0" border="0" summary="blue line">
+            <tr><td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+            <tr><td bgcolor="{$background-bars}"><font face="Arial, Helvetica, Sans-serif" size="4" color="{$menu-border}">&#160;</font></td></tr>
+            <tr><td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+          </table>
+        </td>
+        <xsl:comment>================= end left top NavBar ==================</xsl:comment>
+
+        <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
+        <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
+        <td bgcolor="{$menu-border}" valign="top" nowrap="nowrap">
+
+          <xsl:comment>================= start Menu items ==================</xsl:comment>
+
+          <div class="menu">
+            <xsl:for-each select = "div[@class='menu']/ul/li">
+              <xsl:call-template name = "innermenuli" />
+            </xsl:for-each>
+          </div>
+
+          <xsl:comment>================= end Menu items ==================</xsl:comment>
+        </td>
+        <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
+        <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
+      </tr>
+
+      <tr>
+        <td class="bottom-left-thick" rowspan="2" colspan="2"></td>
+        <td bgcolor="{$header-color2}"><img src="{$spacer}" alt="" border="0" width="10" height="10" /></td>
+        <td class="bottom-right-thick" rowspan="2" colspan="2"></td>
+      </tr>
+      <tr>
+        <td bgcolor="{$header-color2}" height="1"><img src="{$spacer}" alt="" height="1" width="1" /></td>
+      </tr>
+      <tr>
+        <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
+      </tr>                
+
+
+      <xsl:if test="$filename = 'index.html' and $config/credits">
+        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+          <xsl:variable name="name" select="name"/>
+          <xsl:variable name="url" select="url"/>
+          <xsl:variable name="image" select="image"/>
+          <xsl:variable name="width" select="width"/>
+          <xsl:variable name="height" select="height"/>
+          <tr>
+            <td height="5"><img src="{$spacer}" alt="" height="5" width="1" /></td>
+          </tr> 
+          <tr> 
+            <td><img src="{$spacer}" alt="" height="1" width="1" /></td>
+            <td colspan="4" height="5" class="logos">
+              <a href="{$url}">
+                <img alt="{$name} logo" border="0">
+                  <xsl:attribute name="src">
+                    <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+                    <xsl:value-of select="$image"/>
+                  </xsl:attribute>
+                  <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
+                  <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
+                </img>
+                <img src="{$spacer}" border="0" alt="" width="5" height="1" />
+              </a>
+            </td>
+          </tr> 
+        </xsl:for-each>
+      </xsl:if>
+
+    </table>
   </xsl:template>
 
 
