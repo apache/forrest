@@ -55,6 +55,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
@@ -79,7 +80,7 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public class LocationMapModule extends AbstractLogEnabled 
-    implements InputModule, Composable, Configurable, ThreadSafe {
+    implements InputModule, Composable, Configurable, Disposable, ThreadSafe {
     
     private static final Iterator ATTNAMES = Collections.EMPTY_LIST.iterator();
     
@@ -96,6 +97,10 @@ public class LocationMapModule extends AbstractLogEnabled
     
     public void configure(Configuration configuration) throws ConfigurationException {
         m_src = configuration.getChild("file").getAttribute("src");
+    }
+    
+    public void dispose() {
+        m_lm.dispose();
     }
     
     private LocationMap getLocationMap() throws Exception {
@@ -124,6 +129,7 @@ public class LocationMapModule extends AbstractLogEnabled
                                 getLogger().debug("reloading location map at " + m_src);
                             }
                             m_srcVal = valid;
+                            m_lm.dispose();
                             m_lm = new LocationMap(m_manager);
                             m_lm.enableLogging(getLogger());
                             m_lm.build(loadConfiguration(source));
@@ -206,5 +212,5 @@ public class LocationMapModule extends AbstractLogEnabled
         
         return new Object[] {getAttribute(name,modeConf,objectModel)};
     }
-    
+
 }
