@@ -27,7 +27,7 @@
     </td><td align="center">
         <bean-el:message key="log.refresh" arg0="${refreshrate}"/>
     </td><td align="right">
-        <html:link target="body" page="/viewlog_body.do" paramid="project" paramname="project"><bean:message key="log.force.refresh"/></html:link>
+        <html:link target="body" page="/viewlog_body.do" paramId="project" paramName="project"><bean:message key="log.force.refresh"/></html:link>
     </td></tr>
     </table>
     </body>

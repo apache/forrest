@@ -22,11 +22,11 @@
         <title><tiles:insert attribute="title"/> - <c:out value="${project}"/></title>
     </head>
     <frameset rows="40,*">
-        <html:frame framename="header" page="/viewlog_header.do" paramid="project" paramname="project"/>
-        <html:frame framename="body" page="/viewlog_body.do" paramid="project" paramname="project"/>
+        <html:frame frameName="header" page="/viewlog_header.do" paramId="project" paramName="project"/>
+        <html:frame frameName="body" page="/viewlog_body.do" paramId="project" paramName="project"/>
     </frameset>
     <noframes>
-      <html:link page="/viewlog_header.do" paramid="project" paramname="project">header</html:link>
-      <html:link page="/viewlog_body.do" paramid="project" paramname="project">body</html:link>
+      <html:link page="/viewlog_header.do" paramId="project" paramName="project">header</html:link>
+      <html:link page="/viewlog_body.do" paramId="project" paramName="project">body</html:link>
     </noframes>
   </html:html>

@@ -62,7 +62,7 @@
 		</c:choose>
 		<td>
 			<c:if test="${project.logged}">
-				<html:link page="/viewlog.do" paramid="project" paramname="project" paramproperty="name"><bean:message key="summary.log"/></html:link>
+				<html:link page="/viewlog.do" paramId="project" paramName="project" paramProperty="name"><bean:message key="summary.log"/></html:link>
 			</c:if>
 		</td>
 		<td>

@@ -26,4 +26,4 @@
 <br/>
 <html:link page="/summary.do"><bean:message key="back.to.main"/></html:link>
 <br/>
-<html:link page="/viewlog.do" paramid="project" paramname="project"><bean-el:message key="view.log" arg0="${project}"/></html:link>
+<html:link page="/viewlog.do" paramId="project" paramName="project"><bean-el:message key="view.log" arg0="${project}"/></html:link>
