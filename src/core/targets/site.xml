@@ -28,7 +28,7 @@
        ===============================================================
    -->
 
-   <target name="site" depends="init, prepare-context, -prepare-classpath, check-contentdir" 
+   <target name="site" depends="init, -prepare-classpath, check-contentdir" 
                        if="project.content.present"
                        description="* Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this.
@@ -52,7 +52,7 @@ for any broken links in the generated site.
     <parallel>
       <java classname="org.apache.cocoon.Main"
         fork="true"
-        dir="${project.webapp}"  
+        dir="${forrest.home}/context"  
         failonerror="true"
         maxmemory="${forrest.maxmemory}">
         <jvmarg line="${forrest.jvmargs}"/>
