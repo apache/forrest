@@ -6,7 +6,7 @@ book2menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
   </div>
 which is then merged with other HTML by site2xhtml.xsl
 
-$Id: book2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
+$Id: book2menu.xsl,v 1.4 2002/11/22 11:16:09 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -46,8 +46,16 @@ $Id: book2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
 
   <xsl:template match="menu-item">
     <!-- Use apply-imports when overriding -->
+
+    <xsl:variable name="href-noext">
+      <xsl:call-template name="filename-noext">
+        <xsl:with-param name="path" select="@href"/>
+      </xsl:call-template>
+    </xsl:variable>
+
     <xsl:choose>
-      <xsl:when test="starts-with(@href, $filename-noext)">
+      <!-- Compare with extensions stripped -->
+      <xsl:when test="$href-noext = $filename-noext">
         <xsl:call-template name="selected"/>
       </xsl:when>
       <xsl:otherwise>
