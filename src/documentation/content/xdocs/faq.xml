@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE faqs PUBLIC "-//APACHE//DTD FAQ V1.1//EN" "dtd/faq-v11.dtd">
+<!DOCTYPE faqs PUBLIC "-//APACHE//DTD FAQ V1.1//EN" "dtd/faq-v11.dtd" [
+<!ENTITY s '<code>site.xml</code>'>
+]>
 
 <faqs title="Frequently Asked Questions">
 
   <part id="getting_started">
-    <title>Getting Started</title>
+    <title>Building Forrest</title>
     <faq id="checked_out_now_what">
       <question>
         I have checked out a working copy of <code>xml-forrest</code> CVS, now what?
@@ -59,14 +61,14 @@
         <p>
           You are probably trying to build the project with an old version of
           Forrest (built before 2003-01-08) that is incorrectly trying to validate
-          the <code>site.xml</code> file.  If so, please update your Forrest
+          the &s; file.  If so, please update your Forrest
           installation.
         </p>
         <p>
           Alternatively, you may be building with an up-to-date Forrest, but have
           overridden <code>forrest.validate.xdocs.excludes</code> in
           <code>forrest.properties</code>.  With the introduction of
-          <code>site.xml</code>, the above property must have <code>site.xml</code>
+          &s;, the above property must have &s;
           listed to prevent an attempt at DTD-based validation.
         </p>
       </answer>
@@ -102,23 +104,41 @@
   <part id="general">
     <title>General</title>
 
-    <faq id="own_website">
-      <question>
-        I gather that I will be able to use the Forrest infrastructure to build
-        my own website.
+    <faq id="generating_menus">
+      <question>What is the relation between &s; and
+        <code>book.xml</code>?
       </question>
       <answer>
         <p>
-          That is correct. Many of us want to do that, and that is partially why we
-          are working here. Forrest is designed to not only build websites for
-          the various Apache projects, but also so that you can apply your own skins
-          to your own content. Try this ...
-          &quot;<code>./build.sh clean docs -Duse.skin=basic</code>&quot;
-          then copy the basic skin to make your own.
+          One &s; file in your project root can replace all the book.xml files
+          (one per directory) in your site.  Internally, Forrest uses &s; to
+          dynamically generate book.xml files.  However, Forrest first checks
+          for the existence of a book.xml file, so backwards-compatibility is
+          preserved.  If a directory has a book.xml file, the book.xml will be
+          used to generate the menu.  This is useful in situations where
+          &s;-generated menus aren't appropriate.
+      </p>
+      </answer>
+    </faq>
+
+    <faq id="site_xml_format">
+      <question>What's with this awful site.xml format?</question>
+      <answer>
+        <p>
+          The <link href="site:linking">site.xml</link> format was designed for
+          humans, not computers.  The goals were for &s; to be exceedingly
+          simple, compact, easy to type and easy to read.  The reuse of element
+          names as ids means that &s; has very few wasted characters.  This odd
+          merging of <em>content</em> and <em>markup</em> has a few
+          disadvantages (DTD validation is out), but nothing that outweighs the
+          readability advantage.
         </p>
         <p>
-          The <link href="site:forrestbot">forrestbot</link> is under-development to
-          automate the production of your documentation.
+          That said, pretty much any XML format may be used, simply by tweaking
+          the XPath template in the sitemap.  In the future, &s; may be replaced
+          with some more standardized format, perhaps RDF or <link
+            href="www.topicmaps.org/xtm/1.0/">XTM (topic maps)</link>.
+          Volunteers for implementing alternative formats are welcome.
         </p>
       </answer>
     </faq>
