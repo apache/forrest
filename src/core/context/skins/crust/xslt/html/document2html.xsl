@@ -54,6 +54,11 @@ and tabs (tab2menu.xsl) to generate the final HTML.
           <xsl:value-of select="header/subtitle"/>
         </h3>
       </xsl:if>
+      <xsl:if test="header/abstract">
+        <div class="abstract">
+          <xsl:value-of select="header/abstract"/>
+        </div>
+      </xsl:if>
 
       <xsl:apply-templates select="body"/>
 
