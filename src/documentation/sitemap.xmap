@@ -79,16 +79,16 @@
 
  <map:resources>
   <map:resource name="skinit">
-   <map:transform src="skins/xml-apache-site/xslt/html/{type}.xsl"/>
+   <map:transform src="skins/forrest-site/xslt/html/{type}.xsl"/>
    <map:serialize/>
   </map:resource>
   
   <map:resource name="skin-style">
-    <map:read src="skins/xml-apache-site/{path}" mime-type="{mime-type}"/>
+    <map:read src="skins/forrest-site/{path}" mime-type="{mime-type}"/>
   </map:resource>
 
   <map:resource name="skin-res">
-    <map:read src="skins/xml-apache-site/{path}" mime-type="{mime-type}"/>
+    <map:read src="skins/forrest-site/{path}" mime-type="{mime-type}"/>
   </map:resource>
  </map:resources>
  
@@ -147,6 +147,7 @@
      </map:call>    
    </map:match>
 
+   <!--
    <map:match pattern="body-faq.xml">
      <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
@@ -154,6 +155,7 @@
       <map:parameter name="type" value="document2html"/>
      </map:call>    
    </map:match>
+   -->
 
    <!-- Generate the "doclist" - list of all documentation
      The first match generates each book.xml and adds a new attribute "uri".
@@ -189,9 +191,10 @@
      <map:part src="cocoon:/book-{1}.xml"/>
      <map:part src="cocoon:/body-{1}.xml" label="content"/>
     </map:aggregate>
-     <map:call resource="skinit">
+    <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
-     </map:call>    
+    </map:call>
+     <map:serialize/>
    </map:match>
 
    <map:match pattern="**/*.html">
@@ -201,7 +204,7 @@
     </map:aggregate>
      <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
-     </map:call>    
+     </map:call>
    </map:match>
 
    <!-- ================  Static  =========================== -->
