@@ -2,12 +2,13 @@
 ######################################################################
 # A script for upgrading Forrest's jars with those from Cocoon.  Use at own
 # risk!  Make sure you build Cocoon before running this.  If your cocoon-2.1
-# directory is not on the same level as xml-forrest/, set the COCOON variable
+# directory is not on the same level as xml-forrest/, set the COCOON_HOME variable
 # below.
 #
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON=$BASE/../../../cocoon-2.1
+COCOON_VERSION=2.1.1
+COCOON_HOME=$BASE/../../../cocoon-2.1
 FORREST=$BASE/../..
 NEKODTD_VERSION=0.1.6
 NEKODTD_HOME=$BASE/../../../nekodtd-$NEKODTD_VERSION
@@ -35,8 +36,8 @@ UPGRADE_TYPE=testing
 #
 ######################################################################
 
-CLIB=$COCOON/lib/*
-CBUILD=$COCOON/build/cocoon-2.1*
+CLIB=$COCOON_HOME/lib/*
+CBUILD=$COCOON_HOME/build/cocoon-$COCOON_VERSION
 CBLOCKS=$CBUILD/blocks
 
 FDIST=$FORREST/build/dist/shbat
@@ -64,7 +65,7 @@ function checkdir()
 function sanity_check()
 {
   checkdir "$FORREST" FORREST
-  checkdir "$COCOON" COCOON
+  checkdir "$COCOON_HOME" COCOON_HOME
   checkdir "$FLIB" FLIB
   checkdir "$NEKODTD_HOME" NEKODTD_HOME
   checkdir "$NEKOPULL_HOME" NEKOPULL_HOME
@@ -100,7 +101,7 @@ function bcopy()
 {
   echo -n "Copying block dep:	$1			"
   rm $FLIB/$1*
-  cp $COCOON/src/blocks/*/lib/$1* $FLIB/
+  cp $COCOON_HOME/src/blocks/*/lib/$1* $FLIB/
   echo "done"
 }
 
@@ -132,9 +133,9 @@ function upgrade_endorsed()
 
 function copy_local_blocks_properties()
 {
-  echo -n "Copy local.blocks.properties to $COCOON 		"
+  echo -n "Copy local.blocks.properties to $COCOON_HOME 		"
   push
-  cp -bu local.blocks.properties $COCOON
+  cp -bu local.blocks.properties $COCOON_HOME
   pop
   echo "done"
 }
@@ -143,9 +144,9 @@ function build_cocoon()
 {
   echo -n "Builing Cocoon 		"
   push
-  cd $COCOON
-  $COCOON/build.sh clean
-  $COCOON/build.sh
+  cd $COCOON_HOME
+  $COCOON_HOME/build.sh clean
+  $COCOON_HOME/build.sh
   pop
   echo "done"
 }
