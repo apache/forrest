@@ -55,8 +55,7 @@
    <!--
     <property name="build.javadocs"        value="build/docs/javadocs"/>
     -->
-    <property name="build.components.dir"  location="build/components"/>
-    <property name="build.components.classes" location="build/components/classes"/>
+    <property name="classes.dir" location="build/classes"/>
 
     <property name="dist.dir"              location="build/dist" />
     <property name="dist-shbat.dir"        location="${dist.dir}/shbat" />
@@ -216,7 +215,7 @@
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- Note that @tokens@ in config files will be unexpanded.              -->
   <!-- =================================================================== -->
-  <target name="webapp-webinf" depends="init, components.jar" >
+  <target name="webapp-webinf" depends="init, jar" >
     <copy todir="${webapp.webinf.dir}" >
       <fileset dir="${resource.dir}/conf" >
         <exclude name="*.xmap" />
@@ -501,9 +500,9 @@
   <!-- =================================================================== -->
   <!-- Jar Cocoon components                                               -->
   <!-- =================================================================== -->
-  <target name="components.jar" depends="components.compile">
+  <target name="jar" depends="compile">
     <mkdir dir="${build.components.dir}"/>
-    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-components-${version}.jar"
+    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-${version}.jar"
       basedir="${build.components.classes}"/>
   </target>
 
