@@ -28,34 +28,34 @@ FORREST SITE BUILDER
 
   <property name="forrest.version" value="0.7-dev"/>
   <property name="forrest.home"        		  location="${basedir}" />
-  <property name="forrest.root-dir"           location="${forrest.home}/.."/>     
-  
-  <property name="forrest.lib-dir"            location="${forrest.root-dir}/lib"/>   
-  <property name="forrest.core.lib-dir"       location="${forrest.lib-dir}/core"/>   
-  <property name="forrest.endorsed.lib-dir"   location="${forrest.lib-dir}/endorsed"/>   
-  <property name="forrest.optional.lib-dir"   location="${forrest.lib-dir}/optional"/>   
+  <property name="forrest.root-dir"           location="${forrest.home}/.."/>
 
-  <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
-  <property name="forrest.jetty.lib-dir"      location="${forrest.root-dir}/tools/jetty"/>     
-    
-  <property name="forrest.build.lib-dir"      location="${forrest.root-dir}/build"/>     
-      
+  <property name="forrest.lib-dir"            location="${forrest.root-dir}/lib"/>
+  <property name="forrest.core.lib-dir"       location="${forrest.lib-dir}/core"/>
+  <property name="forrest.endorsed.lib-dir"   location="${forrest.lib-dir}/endorsed"/>
+  <property name="forrest.optional.lib-dir"   location="${forrest.lib-dir}/optional"/>
+
+  <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>
+  <property name="forrest.jetty.lib-dir"      location="${forrest.root-dir}/tools/jetty"/>
+
+  <property name="forrest.build.lib-dir"      location="${forrest.root-dir}/build"/>
+
   <import file="targets/validate.xml"/>
   <import file="targets/webapp.xml"/>
   <import file="targets/site.xml"/>
   <import file="targets/skins.xml"/>
   <import file="targets/plugins.xml"/>
   <import file="targets/context.xml"/>
- 
+
   <description>
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.7-dev                        |
     *=======================================================*
-  
+
              Call this through the 'forrest' command
   </description>
-  
+
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
       <fileset dir="${forrest.core.lib-dir}" includes="jing*.jar" />
@@ -83,10 +83,10 @@ FORREST SITE BUILDER
        Echo's the settings if requested.
        =============================================================== -->
   <target name="init-props">
-  
+
     <!-- setting defaults for parameters -->
     <!-- people should use -D switch, or <ant><property>s to override these   -->
- 
+
     <property name="project.home" location="." />
     <property name="/" value="${file.separator}"/>
     <echo message="Loading project specific properties from ${project.home}${/}forrest.properties" />
@@ -97,14 +97,14 @@ FORREST SITE BUILDER
     <property file="${forrest.home}/webapp/default-forrest.properties" />
 
     <!-- people should use forrest.properties to override following defaults  -->
-    <property name="forrest.skins-dir"   location="${forrest.home}/webapp/skins"/>  
-    <property name="forrest.plugins-dir"   location="${forrest.root-dir}/build/plugins"/>   
+    <property name="forrest.skins-dir"   location="${forrest.home}/webapp/skins"/>
+    <property name="forrest.plugins-dir"   location="${forrest.root-dir}/build/plugins"/>
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
     <property name="project.webapp"      location="${project.build-dir}/webapp" />
 
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
-    
+
     <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
     <property name="project.configfile"     value="${forrest.home}/webapp/WEB-INF/cli.xconf" />
     <property name="project.logkitfile"     value="${forrest.home}/webapp/WEB-INF/logkit.xconf" />
@@ -137,10 +137,10 @@ FORREST SITE BUILDER
     <filter token="forrest.home" value="${forrest.home}"/>
     <filter token="project.home" value="${project.home}"/>
 
-    <available file="${content-dir}/jettyconf.xml" 
+    <available file="${content-dir}/jettyconf.xml"
       property="custom_jetty_config"/>
 
-    <!-- 
+    <!--
     Skin aliasing for backwards compatability
         0.5 => 0.6
         krysalis-site => ... warn about future removal
@@ -149,7 +149,7 @@ FORREST SITE BUILDER
         forrest-css => pelt
         avalon-tigris => tigris
         tigris-style => tigris
-        
+
     This must be kept in sync with ForrestConfModule.java/aliasSkinProperties()
     -->
     <if>
@@ -190,18 +190,18 @@ FORREST SITE BUILDER
                 <property name="project.new-skin-name" value="crust"/>
             </then>
         </elseif>
-        -->        
+        -->
     </if>
     <if>
         <isset property="project.new-skin-name"/>
         <then>
 <echo>
 -- Warning --
-skin "${project.skin}" no longer exists, the skin named 
-"${project.new-skin-name}" will be automatically used instead.  
+skin "${project.skin}" no longer exists, the skin named
+"${project.new-skin-name}" will be automatically used instead.
 
 If this is the first time you see this, it means that you have
-to regenerate and publish the *whole* site, so that all pages 
+to regenerate and publish the *whole* site, so that all pages
 are rendered with the "${project.new-skin-name}" skin.
 
 If you fail to do so it is almost certain that the site will not
@@ -240,7 +240,7 @@ The skin that most likely resembles these ones is called 'pelt'.
 &lt;/info>
     </echo>
   </target>
-  
+
   <target name="examine-proj" depends="init-props">
     <available property="conf.present" file="${conf-dir}" type="dir"/>
     <available property="raw-content.present" file="${raw-content-dir}" type="dir"/>
@@ -259,27 +259,27 @@ The skin that most likely resembles these ones is called 'pelt'.
 
   <!-- Load properties from user's skinconf.xml, if it is defined -->
   <target name="load-project-props" depends="validation-props, prepare-context" if="skinconf.present">
-    <xslt in="${skinconf}" 
-          out="${project.temp-dir}/no-doctype-project-skinconf.xml" 
+    <xslt in="${skinconf}"
+          out="${project.temp-dir}/no-doctype-project-skinconf.xml"
           style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
-    </xslt>              
+    </xslt>
 
-    <xmlproperty file="${project.temp-dir}/no-doctype-project-skinconf.xml" 
+    <xmlproperty file="${project.temp-dir}/no-doctype-project-skinconf.xml"
                  collapseattributes="true"/>
   </target>
 
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
   <target name="load-forrest-props" unless="skinconf.present">
-     <xslt in="${forrest.home}/webapp/skinconf.xml" 
-           out="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
+     <xslt in="${forrest.home}/webapp/skinconf.xml"
+           out="${project.temp-dir}/no-doctype-forrest-skinconf.xml"
            style="${forrest.home}/webapp/resources/stylesheets/strip-doctype.xsl">
         <xmlcatalog refid="fcatalog"/>
-    </xslt> 
+    </xslt>
 
     <!-- Forrest skinconf should have been previously validated in build.xml -->
-    <xmlproperty file="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
-                 collapseattributes="true"/> 
+    <xmlproperty file="${project.temp-dir}/no-doctype-forrest-skinconf.xml"
+                 collapseattributes="true"/>
   </target>
 
   <!-- Define filters equating to elements in the skinconf.xml file. Skins can
@@ -336,29 +336,21 @@ The skin that most likely resembles these ones is called 'pelt'.
          <pathelement location="${forrest.home}/webapp/WEB-INF/classes"/>
          <pathelement location="${forrest.build.lib-dir}/xml-forrest.jar"/>
          <pathelement location="${project.classes-dir}"/>
-         <fileset dir="${forrest.jetty.lib-dir}">
+         <fileset dir="${forrest.jetty.lib-dir}" casesensitive="no">
            <include name="*.jar"/>
-           <include name="*.JAR"/>
            <include name="*.zip"/>
-           <include name="*.ZIP"/>
          </fileset>
-         <fileset dir="${forrest.endorsed.lib-dir}">
+         <fileset dir="${forrest.endorsed.lib-dir}"  casesensitive="no">
            <include name="*.jar"/>
-           <include name="*.JAR"/>
            <include name="*.zip"/>
-           <include name="*.ZIP"/>
-         </fileset>         
-         <fileset dir="${forrest.core.lib-dir}">
+         </fileset>
+         <fileset dir="${forrest.core.lib-dir}"  casesensitive="no">
            <include name="*.jar"/>
-           <include name="*.JAR"/>
            <include name="*.zip"/>
-           <include name="*.ZIP"/>
-         </fileset>       
-         <fileset dir="${forrest.optional.lib-dir}">
+         </fileset>
+         <fileset dir="${forrest.optional.lib-dir}"  casesensitive="no">
            <include name="*.jar"/>
-           <include name="*.JAR"/>
            <include name="*.zip"/>
-           <include name="*.ZIP"/>
          </fileset>
          <pathelement location="${tools.jar}"/>
     </path>
@@ -390,7 +382,7 @@ The skin that most likely resembles these ones is called 'pelt'.
     <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
   <target name="clean-site" depends="clean"/>
-  
+
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
@@ -401,7 +393,6 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- **                                                             ** -->
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
-
 
 
   <!-- ===============================================================
@@ -419,8 +410,6 @@ The skin that most likely resembles these ones is called 'pelt'.
   </target>
 
 
-
-  
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
 <!-- **                                                             ** -->
@@ -432,10 +421,10 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- ***************************************************************** -->
 
 
-  <target name="run" 
+  <target name="run"
    depends="init, run_custom_jetty, run_default_jetty"
    description="* Run Jetty (instant live webapp)"/>
- 
+
   <target name="run_custom_jetty"
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
@@ -457,7 +446,7 @@ The skin that most likely resembles these ones is called 'pelt'.
        </syspropertyset>
     </java>
   </target>
-  
+
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
@@ -477,7 +466,7 @@ The skin that most likely resembles these ones is called 'pelt'.
          <propertyref prefix="project."/>
        </syspropertyset>
     </java>
-  </target>  
+  </target>
 
 
 </project>
