@@ -34,9 +34,17 @@
 
     <cocoon id="sitemap">
       <filename>${context-root}/WEB-INF/logs/sitemap.log</filename>
-     
+
       <format type="cocoon">
         %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
+    <cocoon id="linkrewriter">
+      <filename>${context-root}/WEB-INF/logs/linkrewriter.log</filename>
+      <format type="cocoon">
+        %7.7{priority} [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -48,10 +56,19 @@
       </format>
       <append>false</append>
     </cocoon>
-   
+
     <!-- The logger for the flow layer -->
     <cocoon id="flow">
       <filename>${context-root}/WEB-INF/logs/flow.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
+    <!-- The logger for the xmlform components -->
+    <cocoon id="xmlform">
+      <filename>${context-root}/WEB-INF/logs/xmlform.log</filename>
       <format type="cocoon">
         %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
       </format>
@@ -83,32 +100,51 @@
       When defining subcategory manually, it is required to specify log
       targets, because they are not inherited in this case.
     -->
-    <category name="core" log-level="ERROR">
+    <category name="core" log-level="WARN">
       <!-- Startup component manager logger -->
-      <category name="startup" log-level="DEBUG">
+      <category name="startup" log-level="WARN">
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
 
-      <category name="roles" log-level="ERROR">
+      <category name="roles" log-level="WARN">
+        <log-target id-ref="core"/>
+        <log-target id-ref="error"/>
+      </category>
+
+      <category name="instrument" log-level="WARN">
+        <category name="values" log-level="WARN">
+          <log-target id-ref="core"/>
+          <log-target id-ref="error"/>
+        </category>
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
 
       <!-- Cocoon component manager logger -->
-      <category name="manager" log-level="ERROR">
+      <category name="manager" log-level="WARN">
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
 
       <!-- Cocoon cache and stores logger -->
-      <category name="store" log-level="ERROR">
+      <category name="store" log-level="WARN">
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
 
       <!-- Cocoon source repository logger -->
-      <category name="repositories" log-level="ERROR">
+      <category name="repositories" log-level="WARN">
+        <log-target id-ref="core"/>
+        <log-target id-ref="error"/>
+      </category>
+
+      <!-- Cocoon store logger -->
+      <category name="store" log-level="WARN">
+        <category name="janitor" log-level="INFO">
+          <log-target id-ref="core"/>
+          <log-target id-ref="error"/>
+        </category>
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
@@ -117,19 +153,30 @@
       <log-target id-ref="error"/>
     </category>
 
-    <category name="sitemap" log-level="ERROR">
-      <log-target id-ref="sitemap"/>
+    <category name="sitemap" log-level="WARN">
+      <category name="linkrewriter" log-level="INFO">
+        <log-target id-ref="linkrewriter"/>
+        <log-target id-ref="sitemap"/>
+        <log-target id-ref="error"/>
+      </category>
+       <log-target id-ref="sitemap"/>
       <log-target id-ref="error"/>
     </category>
 
-    <category name="access" log-level="ERROR">
+    <category name="access" log-level="WARN">
       <log-target id-ref="access"/>
       <log-target id-ref="error"/>
-    </category> 
+    </category>
 
-    <category name="flow" log-level="ERROR">
+    <category name="flow" log-level="WARN">
       <log-target id-ref="flow"/>
       <log-target id-ref="error"/>
     </category>
+
+    <category name="xmlform" log-level="WARN">
+      <log-target id-ref="xmlform"/>
+      <log-target id-ref="error"/>
+    </category>
+
   </categories>
 </logkit>

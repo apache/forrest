@@ -9,6 +9,7 @@
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" label="content" />
       <map:generator name="libre" src="org.apache.forrest.yer.use.cocoon.HierarchyGenerator" label="content" />
       <map:generator name="textparser" src="org.apache.cocoon.generation.TextParserGenerator" label="content" />
+      <map:generator name="profiler" src="org.apache.cocoon.generation.ProfilerGenerator"/>
       -->
     </map:generators>
 
@@ -18,14 +19,10 @@
         <id>title/text()</id>
       </map:transformer>
 
-      <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
-        <input-module name="linkmap">
-          <file src="{src}" reloadable="false" />
-        </input-module>
+      <map:transformer name="linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
+        <input-module name="linkmap" src="{src}" reloadable="true" />
         <input-module name="site">
-          <input-module name="linkmap">
-            <file src="{src}" reloadable="false" />
-          </input-module>
+          <input-module name="linkmap" src="{src}" reloadable="true" />
           <prefix>/site//</prefix>
           <suffix>/@href</suffix>
         </input-module>
@@ -63,6 +60,12 @@
         <encoding>ISO-8859-1</encoding>
       </map:serializer>
 
+      <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
+        <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
+        <encoding>ISO-8859-1</encoding>
+      </map:serializer>
+
       <map:serializer name="fo2pdf" src="org.apache.cocoon.serialization.FOPSerializer" mime-type="application/pdf" />
 
       <map:serializer name="links" src="org.apache.cocoon.serialization.LinkSerializer">
@@ -74,10 +77,10 @@
       </map:serializer>
 
       <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer"/>
-      <!--
       <map:serializer mime-type="application/x-shockwave-flash" name="swf" src="org.apache.cocoon.serialization.SWFSerializer"/>
       <map:serializer mime-type="application/msword" name="fo2rtf" src="org.apache.cocoon.serialization.RTFSerializer"/>
-      -->
+      <map:serializer mime-type="application/pdf" name="itext2pdf" src="org.apache.cocoon.serialization.iTextSerializer"/>
+      <map:serializer mime-type="application/vnd.ms-excel" name="xls" src="org.apache.cocoon.serialization.HSSFSerializer"/>
     </map:serializers>
 
     <map:matchers default="wildcard">
@@ -100,6 +103,11 @@
       <map:pipe name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
       <map:pipe name="profile-caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
       <map:pipe name="profile-noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
+
+      <!-- The following two can be used for profiling:
+      <map:pipe name="profile-caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
+      <map:pipe name="profile-noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
+      -->
     </map:pipes>
   </map:components>
 
@@ -149,13 +157,13 @@
       </map:match>
       -->
 
-      <map:match pattern="test">
-        <map:generate src="content/xdocs/tabs.xml"/>
-        <map:transform type="linkrewriter" src="cocoon:/community/linkmap">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+
+      <!--
+      <map:match pattern="profiler">
+        <map:generate type="profiler"/>
         <map:serialize type="xml"/>
       </map:match>
+      -->
 
       <map:match pattern="*.html">
         <map:aggregate element="site">
@@ -199,7 +207,7 @@
     <!-- INTERMEDIATE FORMATS                                         -->
     <!-- ============================================================ -->
     <map:pipeline internal-only="false">
-  
+
       <map:match pattern="**body-*.xml">
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="xinclude"/>
@@ -215,9 +223,7 @@
 
       <map:match pattern="**menu-*.xml">
         <map:generate src="cocoon:/{1}book.xml"/>
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap" />
         <map:call resource="skinit">
           <map:parameter name="type" value="book2menu"/>
           <map:parameter name="path" value="/{1}{2}.xml"/>
@@ -227,9 +233,7 @@
 
       <map:match pattern="**tab-*.xml">
         <map:generate src="cocoon:/{1}tab.xml" />
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap" />
         <map:call resource="skinit">
           <map:parameter name="type" value="tab2menu"/>
           <map:parameter name="path" value="{1}{2}"/>
@@ -249,14 +253,10 @@
         <map:mount uri-prefix="" src="navigation.xmap" check-reload="yes" />
       </map:match>
 
+
       <map:match pattern="**changes.xml">
         <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
       </map:match>
-
-      <map:match pattern="**changes.rss">
-        <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
-      </map:match>
-
       <map:match pattern="**todo.xml">
         <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
       </map:match>
@@ -285,10 +285,6 @@
         <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
       </map:match>
 
-      <map:match pattern="profiler">
-        <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
-      </map:match>
-
       <map:match pattern="**.js">
         <map:mount uri-prefix="" src="static.xmap" check-reload="yes" />
       </map:match>
@@ -298,10 +294,6 @@
       </map:match>
 
       <map:match pattern="**images**">
-        <map:mount uri-prefix="" src="static.xmap" check-reload="yes" />
-      </map:match>
-
-      <map:match pattern="**favicon.ico">
         <map:mount uri-prefix="" src="static.xmap" check-reload="yes" />
       </map:match>
 
