@@ -507,22 +507,21 @@ $Revision: 1.12 $
 
     </map:pipeline>
 
+    <!-- ============================================================ -->
+    <!-- OUTPUT FORMATS                                               -->
+    <!--                  Serves content directly to the user         -->
+    <!-- +==========================================================+ -->
+    <!-- http://forrest.apache.org/docs/sitemap-ref.html#output_pipelines -->
 
     <map:pipeline internal-only="false">
+      <map:select type="exists">
+        <map:when test="{project:temp-dir}/output.xmap">
+          <map:mount uri-prefix="" src="{project:temp-dir}/output.xmap" check-reload="yes" pass-through="true"/>
+        </map:when>
+      </map:select>
+    </map:pipeline>
 
-      <!-- ============================================================ -->
-      <!-- OUTPUT FORMATS                                               -->
-      <!--                  Serves content directly to the user         -->
-      <!-- +==========================================================+ -->
-      <!-- http://forrest.apache.org/docs/sitemap-ref.html#output_pipelines -->
-
-      <map:pipeline internal-only="false">
-        <map:select type="exists">
-          <map:when test="{project:temp-dir}/output.xmap">
-            <map:mount uri-prefix="" src="{project:temp-dir}/output.xmap" check-reload="yes" pass-through="true"/>
-          </map:when>
-        </map:select>
-      </map:pipeline>
+    <map:pipeline internal-only="false">
 
       <map:match pattern="*.html">
         <map:aggregate element="site">
