@@ -1,19 +1,19 @@
 STATUS
 ------
 
-This plugin is pre-alpha and may well change considerably without warning.
+This plugin is released.
 
 KNOWN PROBLEMS
 --------------
 
-Line wrapping, table handling, lists, formatting.
+See the plugin document, index.xml, for details.
 
 INSTALLATION
 ------------
 
-cd plugins/
-../main/build.sh local-deploy
+cd $FORREST_HOME/plugins/
+$FORREST_HOME/tools/ant/bin/ant local-deploy
 
-The "text-output" plugin name must also be added to the
-project.required.plugins property in your project's forrest.properties file.
-
+The "org.apache.forrest.plugin.text-output" plugin name must also be added to
+the project.required.plugins property in your project's forrest.properties
+file.
