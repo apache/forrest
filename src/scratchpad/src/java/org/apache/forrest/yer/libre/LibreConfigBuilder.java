@@ -69,8 +69,8 @@ import org.apache.forrest.yer.hierarchy.HierarchyConfig;
  *  for which it will instantiate a JAXP SAXParser that will generate the SAXEvents
  *  to this class instance.
  *
- * @author $Author: jefft $
- * @version CVS $Id: LibreConfigBuilder.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: LibreConfigBuilder.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class LibreConfigBuilder extends DefaultHandler
 {
@@ -118,7 +118,7 @@ public class LibreConfigBuilder extends DefaultHandler
    */
   public LibreConfig getLibreConfig() {
     if (this.libre == null) {
-      this.libre = this.helper.DEFAULT_LIBRE_CONFIG;
+      this.libre = LibreConfigHelper.DEFAULT_LIBRE_CONFIG;
     }
     return this.libre;
   }

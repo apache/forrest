@@ -63,22 +63,17 @@ import org.apache.forrest.sax.SAXConvenience;
 
 import org.xml.sax.ContentHandler;
 
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
 import java.io.OutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.FilterOutputStream;
 
 /** Class <code>org.apache.forrest.yer.use.cli.HierarchyDump</code> ...
  * 
- * @author $Author: jefft $
- * @version CVS $Id: HierarchyDump.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: HierarchyDump.java,v 1.4 2003/01/09 00:06:46 mpo Exp $
  */
 public class HierarchyDump
 {

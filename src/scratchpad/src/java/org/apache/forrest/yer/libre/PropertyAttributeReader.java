@@ -61,7 +61,6 @@ import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Perl5Substitution;
@@ -73,8 +72,8 @@ import java.lang.reflect.InvocationTargetException;
 
 /** Class <code>org.apache.forrest.yer.libre.PropertyAttributeReader</code> ...
  *
- * @author $Author: jefft $
- * @version CVS $Id: PropertyAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: PropertyAttributeReader.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class PropertyAttributeReader  implements LibreAttributeReader
 {

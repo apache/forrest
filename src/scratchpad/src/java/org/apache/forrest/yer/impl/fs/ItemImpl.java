@@ -56,8 +56,6 @@
  */
 package org.apache.forrest.yer.impl.fs;
 
-import org.apache.forrest.yer.hierarchy.Entry;
-import org.apache.forrest.yer.hierarchy.SimpleEntryList;
 import org.apache.forrest.yer.hierarchy.EntryList;
 
 import java.io.File;
@@ -68,8 +66,8 @@ import java.io.FileInputStream;
 /** Class <code>org.apache.forrest.yer.impl.fs.ItemImpl</code> represents a simple
  *  FileEntryImpl that wraps a single file from a file system.
  *
- * @author $Author: jefft $
- * @version CVS $Id: ItemImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: ItemImpl.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class ItemImpl extends FileEntryImpl
 {

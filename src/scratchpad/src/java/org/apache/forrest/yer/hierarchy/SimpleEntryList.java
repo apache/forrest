@@ -58,7 +58,6 @@ package org.apache.forrest.yer.hierarchy;
 
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.ArrayList;
 
@@ -68,8 +67,8 @@ import java.util.ArrayList;
  *  visitor mechanism so user of the list don't need to write their own
  *  iteration logic for visiting all the elements in the SimpleEntryList.
  *
- * @author $Author: jefft $
- * @version CVS $Id: SimpleEntryList.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: SimpleEntryList.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class SimpleEntryList implements EntryList
 {

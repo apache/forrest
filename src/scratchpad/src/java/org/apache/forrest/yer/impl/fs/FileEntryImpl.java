@@ -57,12 +57,8 @@
 package org.apache.forrest.yer.impl.fs;
 
 import org.apache.forrest.yer.hierarchy.Entry;
-import org.apache.forrest.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.yer.libre.LibreConfig;
-import org.apache.forrest.yer.hierarchy.AttributeReader;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Properties;
 
 /** Class <code>org.apache.forrest.yer.impl.fs.FileEntryImpl</code> is a base class
@@ -73,8 +69,8 @@ import java.util.Properties;
  *  mechanism to add some artificial yet semi-automatic sequence information
  *  to the file system.
  *
- * @author $Author: jefft $
- * @version CVS $Id: FileEntryImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: FileEntryImpl.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public abstract class FileEntryImpl implements Entry
 {

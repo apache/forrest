@@ -60,11 +60,9 @@ import org.apache.forrest.yer.hierarchy.Entry;
 import org.apache.forrest.yer.hierarchy.SimpleEntryList;
 import org.apache.forrest.yer.libre.LibreConfig;
 import org.apache.forrest.yer.libre.LibreConfigHelper;
-import org.apache.forrest.yer.hierarchy.AttributeReader;
 import org.apache.forrest.yer.hierarchy.Collection;
 import org.apache.forrest.yer.hierarchy.HierarchyConfig;
 import org.apache.forrest.yer.hierarchy.EntryList;
-import org.apache.avalon.framework.component.ComponentManager;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -83,8 +81,8 @@ import java.io.FileInputStream;
  *  filtering, sorting and manual organization which is typically not available
  *  in the file system by itself.
  *
- * @author $Author: jefft $
- * @version CVS $Id: CollectionImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: CollectionImpl.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class CollectionImpl extends FileEntryImpl implements Collection
 {

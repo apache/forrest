@@ -56,13 +56,12 @@
  */
 package org.apache.forrest.yer.libre;
 
-import org.apache.forrest.yer.hierarchy.SimpleEntryList;
 import org.apache.forrest.yer.hierarchy.EntryList;
 
 /** Interface <code>org.apache.forrest.yer.libre.EntrySorter</code> ...
  * 
- * @author $Author: jefft $
- * @version CVS $Id: EntrySorter.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: EntrySorter.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public interface EntrySorter
 {

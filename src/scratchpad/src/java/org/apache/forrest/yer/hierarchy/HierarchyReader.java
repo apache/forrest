@@ -59,7 +59,6 @@ package org.apache.forrest.yer.hierarchy;
 //sax
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 import org.apache.forrest.sax.SAXConvenience;
 
@@ -91,8 +90,8 @@ import org.apache.forrest.sax.SAXConvenience;
  *
  * [FIXME: consider implementing org.apache.avalon.excalibur.xml in some
  *  sister class of this or something... more catchup on avalon needed.]
- * @author $Author: jefft $
- * @version CVS $Id: HierarchyReader.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+ * @author $Author: mpo $
+ * @version CVS $Id: HierarchyReader.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
  */
 public class HierarchyReader
 {
