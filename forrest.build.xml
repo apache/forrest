@@ -59,8 +59,13 @@ That should be passed to here with -Dproject.home
     <property name="project.ctxt-dir"    value="${project.temp-dir}/context"   />
 
     <property name="project.logfile"     value="${project.temp-dir}/forrest.log"/>
+    <property name="project.brokenlinkfile" value="${project.temp-dir}/brokenlinks.txt"/>
     <property name="project.debuglevel"  value="ERROR"                         />
     <property name="project.start-uri"   value="index.html"                    />
+
+    <!-- odd one in the list: forrest provides this, 
+         project now has a means to override it? -->
+    <property name="project.configfile"  value="${forrest.home}/WEB-INF/cocoon.xconf"/>
 
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
@@ -91,6 +96,8 @@ That should be passed to here with -Dproject.home
       | project.start-uri   = ${project.start-uri}
       | //masterplan for building site (dreamware)
       | project.siteplan    = ${project.siteplan} 
+      | //cocoon.xconf location
+      | project.configfile  = ${project.configfile}
       | //temp dir to throw stuf in (i.e. work and ctxt)
       | project.temp-dir    = ${project.temp-dir} 
       | //temp working directory for generation process
@@ -101,6 +108,8 @@ That should be passed to here with -Dproject.home
       | project.debuglevel  = ${project.debuglevel}
       | //logfile location
       | project.logfile     = ${project.logfile}
+      | //list of broken links put in:
+      | project.brokenlinkfile = ${project.brokenlinkfile}
       | //check if you have tools.jar installed.
       | tools.jar.present   = ${tools.jar.present} 
       ------------------------------------------------
@@ -307,8 +316,14 @@ That should be passed to here with -Dproject.home
       <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
       <arg value="-l${project.logfile}"/>    <!-- log of processing -->
       <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+      <arg value="-C${project.configfile}"/>      <!-- cocoon.xconf file to use -->
+      <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
       <arg value="${project.start-uri}"/>              <!-- starting page -->
+      <arg value="-V" />                          <!-- be verbose -->
     </java>
+    <echo>
+Generation just finished. Please check the file ${project.brokenlinkfile} for any broken links in the generated site.
+    </echo>
   </target>
 
 
