@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.33 2003/09/12 19:07:31 cheche Exp $
+$Id: document2html.xsl,v 1.34 2003/09/22 13:07:48 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -31,6 +31,9 @@ $Id: document2html.xsl,v 1.33 2003/09/12 19:07:31 cheche Exp $
   <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="config-max-depth" select="$config/toc/@level"/>
+  <!-- Whether to obfuscate email links -->
+  <xsl:variable name="obfuscate-mail-links" select="$config/obfuscate-mail-links"/>
+
   <xsl:variable name="max-depth">
     <xsl:choose>
       <xsl:when test="string-length($config-max-depth)&gt;0">
@@ -43,7 +46,6 @@ $Id: document2html.xsl,v 1.33 2003/09/12 19:07:31 cheche Exp $
   <xsl:param name="dynamic-page" select="'false'"/>  
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
-  <xsl:param name="obfuscate-mail-links" select="'false'"/>
   <!-- <xsl:include href="split.xsl"/> -->
   <xsl:include href="dotdots.xsl"/>
   <xsl:include href="pathutils.xsl"/>
