@@ -27,6 +27,10 @@ $Revision: 1.12 $
   <map:components>
     <map:generators default="file">
       <map:generator name="file"      src="org.apache.cocoon.generation.FileGenerator" />
+      <map:generator name="html"      
+                     src="org.apache.cocoon.generation.HTMLGenerator">
+        <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
+      </map:generator>
       <map:generator name="exception"
                   src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
       <!--
@@ -345,17 +349,6 @@ $Revision: 1.12 $
              </map:when>  
            </map:select>
       </map:pipeline>
-    
-      <map:pipeline internal-only="false">
-           <map:select type="exists">
-             <map:when test="{forrest:plugins}/sitemap.xmap">
-               <map:mount uri-prefix="" 
-                          src="{forrest:plugins}/sitemap.xmap" 
-                          check-reload="yes" 
-                          pass-through="true"/>
-            </map:when>  
-          </map:select>
-      </map:pipeline>
        
       <map:pipeline internal-only="false">
          <map:match pattern="skinconf.xml">
@@ -383,6 +376,17 @@ $Revision: 1.12 $
            <map:serialize type="xml"/>
          </map:match>
        </map:pipeline>
+    
+      <map:pipeline internal-only="false">
+           <map:select type="exists">
+             <map:when test="{forrest:plugins}/sitemap.xmap">
+               <map:mount uri-prefix="" 
+                          src="{forrest:plugins}/sitemap.xmap" 
+                          check-reload="yes" 
+                          pass-through="true"/>
+            </map:when>  
+          </map:select>
+      </map:pipeline>
 
     <map:pipeline internal-only="false">
       <!-- ============================================================ -->
