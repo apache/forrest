@@ -14,7 +14,7 @@ Revision:
       <xsl:output method="xml" indent="yes" doctype-system="http://localhost/forrest/dtd/document-v11.dtd" doctype-public="-//APACHE//DTD Documentation V1.1//EN" encoding="UTF-8"/>
 
       <xsl:template match="/">
-            <xsl:apply-templates select="book|chapter|revhistory"/>
+            <xsl:apply-templates select="book|chapter|revhistory|article"/>
       </xsl:template>
 
       <xsl:template match="/book">
@@ -56,6 +56,27 @@ Revision:
                   </body>
             </document>
       </xsl:template>
+
+       <xsl:template match="/article">
+             <document>
+                   <header>
+                         <xsl:apply-templates select="articleinfo/title"/>
+                         <xsl:apply-templates select="articleinfo/subtitle"/>
+                         <authors>
+                               <xsl:apply-templates select="articleinfo/author"/>
+                               <xsl:apply-templates select="articleinfo/corpauthor"/>
+                         </authors>
+                   </header>
+                   <body>
+                         <xsl:apply-templates select="node()[
+                               local-name() != 'title' and
+                               local-name() != 'subtitle' and
+                               local-name() != 'articleinfo'
+                               ]"/>
+                         <xsl:call-template name="apply-footnotes"/>
+                   </body>
+             </document>
+       </xsl:template>
 
       <xsl:template name="apply-footnotes">
             <xsl:if test="//footnote">
