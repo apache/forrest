@@ -6,8 +6,8 @@
 
  <xsl:import href="copyover.xsl"/>
 
+ <xsl:variable name="bugtracking-url" select="document('../../WEB-INF/cocoon.xconf')/cocoon/input-modules/component-instance/values/bugtracking-url"/>
  <xsl:variable name="bugzilla" select="'http://nagoya.apache.org/bugzilla/'"/>
- <xsl:variable name="singleBug" select="concat($bugzilla, 'show_bug.cgi?id=')"/>
  <xsl:variable name="buglist" select="concat($bugzilla, 'buglist.cgi?bug_id=')"/>
 
  <xsl:template match="/">
@@ -65,7 +65,7 @@
       </link>
      </xsl:when>
      <xsl:otherwise>
-      <link href="{$singleBug}{@fixes-bug}">
+      <link href="{$bugtracking-url}{@fixes-bug}">
        <xsl:text>bug </xsl:text><xsl:value-of select="@fixes-bug"/>
       </link>
      </xsl:otherwise>
