@@ -1,7 +1,7 @@
 <%@page import="java.io.*,java.util.*,java.text.*"%>
 
 <%!
-String[] sites = new String[]{"xml-forrest", "xml-forrest-krysalis", "xml-forrest-template", "xml-site", "incubator-site", "xml-xindice", "xml-fop", "avalon-site", "ws-site", "krysalis-centipede"};
+String[] sites = new String[]{"xml-forrest", "xml-forrest-krysalis", "xml-forrest-template", "xml-site", "incubator-site", "xml-xindice", "xml-fop", "avalon-site", "avalon-phoenix", "ws-site", "krysalis-centipede"};
 %>
 <%@include file="WEB-INF/logic.jsp"%>
 
