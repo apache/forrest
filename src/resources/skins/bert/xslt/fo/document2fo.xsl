@@ -567,6 +567,10 @@
     </fo:table-cell>
   </xsl:template>
 
+  <xsl:template match="br">
+    <fo:block></fo:block>
+  </xsl:template>
+
   <xsl:template match="legal">
     <fo:inline
       font-size="8pt">
