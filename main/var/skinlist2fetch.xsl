@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@
             <fail unless="skin.present">
               Unable to download the 
               "<xsl:value-of select="$skin-name" />" skin from 
-              <xsl:value-of select="skin[@name=$skin-name]/@url" />. 
+              <xsl:value-of select="skin[@name=$skin-name]/@url" />
               In case the reason is the network connection, you can try 
               installing the package manually by placing the file in the 
               skins directory.</fail>
