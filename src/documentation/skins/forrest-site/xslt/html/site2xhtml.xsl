@@ -23,7 +23,7 @@
               <img src="images/biglogo.gif"/>
             </td>
             <td valign="middle" align="center" width="100%">
-              <img src="images/project-logo.gif"/>
+              <img src="images/project-logo.png"/>
             </td>
             <td valign="top" height="69" nowrap="nowrap">
               <div class="search">
