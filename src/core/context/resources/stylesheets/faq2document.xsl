@@ -29,12 +29,6 @@
     <body>
       <section>
        <title>Questions</title>
-       <ol>
-        <xsl:apply-templates select="faq|part" mode="index"/>
-       </ol>
-      </section>
-      <section>
-       <title>Answers</title>
         <xsl:apply-templates select="faq|part"/>
       </section>
     </body>
