@@ -42,23 +42,25 @@
    
     <property name="name" value="apache-forrest"/>
     <property name="forrest.version" value="0.7-dev"/>
+    <property name="forrest.home" location=".."/>
+    <property name="forrest.core" location="."/>
 
     <property name="java.dir"              location="java"/>
-    <property name="plugins.dir"           location="../plugins"/>
-    <property name="build.dir"             location="../build"/>
+    <property name="plugins.dir"           location="${forrest.home}/plugins"/>
+    <property name="build.dir"             location="${forrest.home}/build"/>
     <property name="build.docs"            location="${build.dir}/docs"/>
     <property name="build.classes"         location="${build.dir}/classes"/>
 
     <property name="dist.dir"              location="${build.dir}/dist" />
     <property name="dist-shbat.dir"        location="${dist.dir}/shbat" />
 
-    <property name="tools.dir"             location="../tools"/>
+    <property name="tools.dir"             location="${forrest.home}/tools"/>
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
     
     <property name="src-fresh-site"         location="main/fresh-site"/>
     
-    <property name="forrestbot.dir"         location="../tools/forrestbot"/>
+    <property name="forrestbot.dir"         location="${forrest.home}/tools/forrestbot"/>
 
     <mkdir dir="${build.dir}"/>
     
@@ -80,7 +82,7 @@
     </echo>
     
     <path id="classpath">
-      <fileset dir="../lib" includes="**/*.jar"/>
+      <fileset dir="${forrest.home}/lib" includes="**/*.jar"/>
       <fileset dir="${tools.dir}/jetty" includes="servlet*.jar"/>
       <pathelement location="${tools.jar}"/>
     </path>
@@ -153,7 +155,7 @@
     <!-- FIXME allow switch if="validate.config"  -->
     <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
       <classpath>
-        <fileset dir="../lib/core" includes="*.jar" />
+        <fileset dir="${forrest.home}/lib/core" includes="*.jar" />
       </classpath>
     </taskdef>
     <!-- skinconf.xml -->
@@ -163,28 +165,28 @@
       <xmlcatalog id="xcat">
         <catalogpath>
           <pathelement
-            location="./webapp/resources/schema/catalog.xcat"/>
+            location="${forrest.core}/webapp/resources/schema/catalog.xcat"/>
         </catalogpath>
       </xmlcatalog>
-      <fileset dir="./fresh-site"
+      <fileset dir="${forrest.core}/fresh-site"
         includes="**/skinconf.xml" />
     </xmlvalidate>
     <!-- All stylesheets **/*.xsl -->
     <echo message="validating stylesheets **/*.xsl ..."/>
-    <jing rngfile="./webapp/resources/schema/relaxng/xslt.rng">
-      <fileset dir="." includes="**/*.xsl"/>
+    <jing rngfile="${forrest.core}/webapp/resources/schema/relaxng/xslt.rng">
+      <fileset dir="${forrest.core}" includes="**/*.xsl"/>
       <fileset dir="${tools.dir}" includes="**/*.xsl"/>
     </jing>
     <!-- sitemap.xmap -->
     <echo message="validating **/sitemap.xmap ..."/>
-    <jing rngfile="./webapp/resources/schema/relaxng/sitemap-v06.rng">
-      <fileset dir="./webapp/" includes="*.xmap"/>
+    <jing rngfile="${forrest.core}/webapp/resources/schema/relaxng/sitemap-v06.rng">
+      <fileset dir="${forrest.core}/webapp/" includes="*.xmap"/>
     </jing>
     <!-- book.xml -->
     <!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
     <echo message="validating **/book.xml ..."/>
-    <jing rngfile="./src/resources/schema/relaxng/book-v01.rng">
-      <fileset dir="./src" includes="**/book.xml"/>
+    <jing rngfile="${forrest.core}/resources/schema/relaxng/book-v01.rng">
+      <fileset dir="${forrest.core}" includes="**/book.xml"/>
     </jing>
     -->
   </target>
@@ -198,12 +200,13 @@
     
     <!-- copy all Forrest -->
     <copy todir="${dist-shbat.dir}">
-      <fileset dir="." >
+      <fileset dir="${forrest.home}" >
         <exclude name="build/**"/>
+        <exclude name="whiteboard/**"/>
       </fileset>
     </copy>
      <copy todir="${dist-shbat.dir}">
-       <fileset dir="." >
+       <fileset dir="${forrest.home}" >
         <include name="build/xml-forrest.jar"/>
       </fileset>
     </copy>
@@ -245,8 +248,7 @@
   <target name="docs" depends="site"/>
   <target name="site" depends="dist-shbat"
     description="Generates static HTML documentation">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site"/>
   </target>
 
   <!-- ================================== -->
@@ -260,19 +262,17 @@
           depends="cleanPlugins"
           description="test each of the plugins">
     <!-- FIXME: need to iterate over all plugins when testing -->
-    <ant antfile="../plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
-      <property name="basedir" location="../plugins/org.apache.forrest.plugin.pdf-output"/>
+    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+      <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output"/>
     </ant>
   </target>
   
   <target name="cleanPlugins"
           description="Remove installed plugins before testing to ensure they are correctly installed when run">
-    <delete dir="../build/plugins"/>
+    <delete dir="${forrest.home}/build/plugins"/>
   </target>
 
   <target name="testseed" depends="init">
-    <property name="forrest.home" location=".." />
-    <property name="forrest.core" location="${forrest.home}/main" />    
     <property name="test.dir" value="${build.dir}/test"/>
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
@@ -341,7 +341,7 @@
 	<mkdir dir="${dtdx.dir}"/>
 	<!-- Generate an intermediate XML representation of each DTD -->
 	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" preserveDirs="yes" extension=".dtdx">
-		<fileset dir="./webapp/resources/schema/dtd">
+		<fileset dir="${forrest.core}/webapp/resources/schema/dtd">
 			<include name="changes-v12.dtd"/>
 			<include name="changes-v13.dtd"/>
 			<include name="document-v11.dtd"/>
@@ -366,7 +366,7 @@
 	<xslt basedir="${dtdx.dir}"
 		destdir="${dist-shbat.dir}/webapp/resources/schema/dtd"
 		extension="-full.dtd"
-    style="../tools/dtdconverters/dtdx2dtd.xsl">
+    style="${forrest.home}/tools/dtdconverters/dtdx2dtd.xsl">
     <include name="*.dtdx"/>
     <include name="v20a/*.dtdx"/>
   </xslt>
@@ -382,7 +382,7 @@
      It makes a messy patch when they have other pending changes.
         description="Create a patch from your working copy, ready for contribution">
 -->
-      <ant antfile="../tools/targets/patch.xml" target="patchpackage"/>
+      <ant antfile="${forrest.home}/tools/targets/patch.xml" target="patchpackage"/>
     </target>
 
 
