@@ -10,7 +10,7 @@
   </xsl:template>
   <xsl:template match="menu">
     <li>
-      <font color="white"><xsl:value-of select="@label"/></font>
+      <font color="#CFDCED"><xsl:value-of select="@label"/></font>
       <ul>
         <xsl:apply-templates/>
       </ul>
