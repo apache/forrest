@@ -306,6 +306,14 @@ $Revision: 1.8 $
       <!-- ============================================================ -->
 
       <map:match type="wildcard" pattern="**.xml">
+       <map:select type="exists">
+         <map:when test="{project:temp-dir}/input.xmap">
+             <map:mount uri-prefix=""
+                        src="{project:temp-dir}/input.xmap"
+                        check-reload="yes"
+                        pass-through="true"/>
+         </map:when> 
+       </map:select>
        <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.xml">
           <map:generate src="{source}" />
           <map:call resource="transform-to-document">
@@ -339,14 +347,6 @@ $Revision: 1.8 $
           </map:call>
           <map:serialize type="xml-document"/>
        </map:match>
-       <map:select type="exists">
-         <map:when test="{project:temp-dir}/input.xmap">
-             <map:mount uri-prefix=""
-                        src="{project:temp-dir}/input.xmap"
-                        check-reload="yes"
-                        pass-through="true"/>
-         </map:when> 
-       </map:select>
      </map:match>
       
   </map:pipeline>
