@@ -20,6 +20,8 @@ Input is expected to be in standard book.xml format. @hrefs should be normalized
 handled by uncommenting the relevant section.
 
 jefft@apache.org
+
+See http://127.0.0.1:8888/book-site.html to see what the book xml looks like
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cinclude="http://apache.org/cocoon/include/1.0">
@@ -39,7 +41,8 @@ jefft@apache.org
   </xsl:template>
 
 
-  <xsl:template match="menu">
+  <xsl:template match="menu[contains(@href, ':')]"/>  <!-- Ignore all non-local links -->
+  <xsl:template match="menu[not(contains(@href, '.'))]">
     <section>
       <title><xsl:value-of select="@label"/></title>
       <xsl:apply-templates/>
@@ -65,7 +68,12 @@ jefft@apache.org
     <xsl:value-of select="$node/@href"/>
   </xsl:template>
 
-  <xsl:template match="menu-item">
+  <!-- normally directories are menus and files are menu-items,
+      but if 'menu' contained a '.' (then it didn't match the main 'menu' template above),
+      and it's probably a file (because the children menu-items are #fragments)
+      so we match now like a menu-item
+  -->
+  <xsl:template match="menu-item|menu">
     <section class="page">
       <xsl:attribute name="id">
         <xsl:text></xsl:text><xsl:value-of select="@href"/>
