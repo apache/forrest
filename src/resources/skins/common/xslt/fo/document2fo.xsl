@@ -316,7 +316,22 @@
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-  
+
+  <!-- Emulate browser handling of these invalid combinations that our DTD
+  unfortunately allows -->
+  <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol">
+    <fo:list-item>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block></fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block font-family="serif">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+
   <xsl:template match="ul/li">
     <fo:list-item>
       <fo:list-item-label end-indent="label-end()">
