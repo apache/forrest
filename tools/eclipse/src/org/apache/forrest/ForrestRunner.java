@@ -90,7 +90,7 @@ public class ForrestRunner implements Runnable {
 					status = STARTING;
 				} else if (str.indexOf("EVENT  Started org.mortbay.jetty.Server") != -1) {
 					status = RUNNING;
-				} else if (str.indexOf("FIXME: what is the message that indicates server has stoping") != -1) {
+				} else if (str.indexOf("FIXME: what is the message that indicates server is stopping") != -1) {
 					status = STOPPING;
 				} else if (str.indexOf("FIXME: what is the message that indicates server has stopped") != -1) {
 					status = STOPPED;
@@ -117,7 +117,7 @@ public class ForrestRunner implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		forrestOutput = new BufferedReader(
 				new InputStreamReader(forrestProcess.getInputStream()));
 		forrestThread.start();
