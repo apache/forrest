@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="docs" basedir="." name="Forrest plugin build file">
+
+  <property name="forrest.root-dir" location="../.."/>   
+  <property name="forrest.home" location="../../main" />  
+  <property name="build.dir" location="build"/>
+  <property name="plugin-name" value="OpenOffice.org"/>
+
+  <target name="local-deploy">
+    <echo>Locally deploying ${plugin-name}</echo>
+    <ant antfile="../build.xml" target="local-deploy">  
+      <property name="plugin.dir" value="../${plugin-name}"/>
+    </ant>
+  </target>
+   
+  <target name="docs" depends="local-deploy">
+    <echo>Building Docs for ${plugin-name}</echo>
+    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
+      <property name="forrest.home" value="${forrest.home}"/>  
+      <property name="project.home" value="${basedir}"/>
+    </ant>
+    
+  </target>
+  
+  <target name="test" depends="docs"/>
+</project>
+  
+  
