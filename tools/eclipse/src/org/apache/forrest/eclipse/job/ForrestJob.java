@@ -27,13 +27,19 @@ import org.eclipse.core.runtime.jobs.Job;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class ForrestJob extends Job {
+	private static final String CONCURRENT_ANT_BUILDS = "Concurrent Ant builds are possible if you specify to build in a separate JRE.";
+	private static final String VALIDATION_ERROR_MESSAGE = "Could not validate document";
 	/**
 	 * Logger for this class
 	 */
 	protected static final Logger logger = Logger.getLogger(ForrestJob.class);
 
 	public static final int EXCEPTION_UNIDENTIFIED = 1001;
+	public static final int EXCEPTION_VALIDATION = 1010;
+	public static final int EXCEPTION_ANT_RUNNING = 1020;
 
+	protected String workingDir;
+	
 	/**
 	 * @param name
 	 */
@@ -46,33 +52,45 @@ public abstract class ForrestJob extends Job {
 		DOMConfigurator.configure(strLog4jConf);
 	}
 
-	protected String workingDir;
-
 	/**
-	 * @param monitor
-	 * @param cmdString
-	 * @return
+	 * Run ant as a normal executable, that is wait for completion and
+	 * retuen a status.
+	 * @param monitor - the monitor to report execution progress
+	 * @param cmdString  - the command string to pass to ant
+	 * @return Status of the execution.
 	 */
 	protected IStatus runAnt(IProgressMonitor monitor, String cmdString) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("runAnt(IProgressMonitor, String) - start");
 		}
-	
+		
 		IStatus status = Status.OK_STATUS;
 		
 		if (cmdString != null) {
 			String fhome = ForrestPlugin.getDefault().getPluginPreferences()
 			  .getString(ForrestPreferences.FORREST_HOME);
-			AntRunner runner = new AntRunner();
 			String antFile = fhome + File.separatorChar + "main" + File.separatorChar + "forrest.build.xml";
+			AntRunner runner = new AntRunner();
 			try {
 				runner.setBuildFileLocation(antFile);
 				runner.setArguments(cmdString);
 				logger.info("Running ANT with command string = " + cmdString);
 				runner.run(monitor);
 			} catch (CoreException e) {
-				logger.error("run(IProgressMonitor)", e);
-				status = new Status(Status.ERROR, null, ForrestRunner.EXCEPTION_UNIDENTIFIED, "Forrest Server Exception", null);
+				String userMsg;
+				String errMsg = e.getMessage();
+				if (errMsg.indexOf(VALIDATION_ERROR_MESSAGE) > 0) {
+					String file = errMsg.substring(errMsg.indexOf(VALIDATION_ERROR_MESSAGE));
+					userMsg = "Invalid XML Document: " + file;
+					status = new Status(Status.ERROR, ForrestPlugin.ID, ForrestRunner.EXCEPTION_VALIDATION, userMsg, e);
+				} else if (errMsg.endsWith(CONCURRENT_ANT_BUILDS)) {
+					userMsg = "Can only run one Site operation at a time";
+					status = new Status(Status.ERROR, ForrestPlugin.ID, EXCEPTION_ANT_RUNNING, userMsg, e);
+				} else {
+					userMsg = "Forrest Server Exception";
+					status = new Status(Status.ERROR, ForrestPlugin.ID, ForrestRunner.EXCEPTION_UNIDENTIFIED, userMsg, e);
+				}
+				logger.error("run(IProgressMonitor) - " + userMsg, e);
 			}
 		}
 	
