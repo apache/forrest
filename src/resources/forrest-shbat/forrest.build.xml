@@ -547,23 +547,35 @@ Use the 'seed' target to create a template project structure.
     <delete dir="${project.work-dir}"/>
     <mkdir dir="${project.work-dir}"/>
 
-    <java classname="org.apache.cocoon.Main"
-      fork="true"
-      dir="."
-      failonerror="true"
-      classpathref="forrest.cp">
-      <jvmarg
-        value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-      <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
-      <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
-      <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
-      <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
-      <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
-      <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
-      <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
-      <arg value="${project.start-uri}"/>              <!-- starting page -->
-      <arg value="-V" />                          <!-- be verbose -->
-    </java>
+    <parallel>
+      <java classname="org.apache.cocoon.Main"
+        fork="true"
+        dir="."
+        failonerror="true"
+        classpathref="forrest.cp">
+        <jvmarg
+          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
+        <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
+        <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
+        <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
+        <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
+        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
+        <arg value="${project.start-uri}"/>              <!-- starting page -->
+        <arg value="-V" />                          <!-- be verbose -->
+      </java>
+
+      <!-- Copy all non-xdocs content across, as we cannot rely on crawling to
+      discover the whole URI space -->
+      <copy toDir="${project.site-dir}" filtering="false"
+        overwrite="true" failonerror="false">
+        <fileset dir="${project.ctxt-dir}/content">
+          <exclude name="xdocs/**"/>
+        </fileset>
+        <fileset dir="${project.ctxt-dir}/resources" includes="images"/>
+      </copy>
+    </parallel>
     <echo>
 ------------------------------
 Static site generated at:
@@ -575,6 +587,7 @@ for any broken links in the generated site.
 ------------------------------
     </echo>
   </target>
+
 
 
   <target name="project.webapp.defined" unless="project.webapp">

@@ -24,7 +24,24 @@
 
   <changes>
     <release version="0.3-dev" date="unreleased">
-      <action dev="DC" type="update" context="forrestbot">
+      <action dev="JT" type="fix" context="shbat">
+        Now all files in <code>src/documentation/content</code> (except xdocs)
+        and <code>src/documentation/resources/images</code> are copied across
+        when Forrest generates a static site.  This fixes the problem when an
+        unparseable file links to another, and Cocoon can't crawl (and hence
+        copy) the linked-to file.  An example of this are CSS
+        <code>url('foo.png')</code> image refs (so krysalis-site will now work
+        properly).  Also, large batches of pregenerated files like Javadocs will
+        now be copied across instead of individually traversed.
+      </action>
+      <action dev="JT" type="add" context="core">
+        New <code>site.xml</code> file in content/xdocs.  This is used to
+        implement &lt;link href="site:internalURI"&gt; 'semantic' links,
+        &lt;link href="ext:externalURI"&gt; aliases to external links, and
+        renders <code>book.xml</code> files obsolete.  See <link
+          href="site:linking">Menus and Linking</link> for more info.
+      </action> 
+       <action dev="DC" type="update" context="forrestbot">
        Updated some documentation, especially
        <link href="forrestbot-intro.html">Forrestbot Introduction</link>
       </action> 
