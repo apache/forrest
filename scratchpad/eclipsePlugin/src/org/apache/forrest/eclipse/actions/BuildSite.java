@@ -66,7 +66,8 @@ public class BuildSite implements IWorkbenchWindowActionDelegate,
 		String fhome = ForrestPlugin.getDefault().getPluginPreferences()
 				.getString(ForrestPreferences.FORREST_HOME);
 
-		// TODO: Working diretory should not be a property it should be whatever project directory Eclipse is currently working with
+		// TODO: Working directory should not be a property it should be whatever project directory Eclipse is currently working with
+		// IPath path = {IProject}.getLocation();
 		String wdir = ForrestPlugin.getDefault().getPluginPreferences()
 				.getString(ForrestPreferences.WORKING_DIR);
 		
@@ -99,15 +100,12 @@ public class BuildSite implements IWorkbenchWindowActionDelegate,
 		if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
 			cmdString = "forrest -Dbasedir=" + workingDirectory
 					+ " site";
-			Utilities.RunExtCommand(cmdString);
-		}
-
-		if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+		} else if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
 			cmdString = "cmd /c forrest -Dbasedir=" + workingDirectory
 					+ " site";
-			Utilities.RunExtCommand(cmdString);
 		}		
-		
+		Utilities.RunExtCommand(cmdString);
+
 		dialog.close();
 	}
 
