@@ -25,6 +25,23 @@
 
   <changes>
     <release version="0.6-dev" date="unreleased">
+      <action dev="NKB" type="add" context="core">
+          Now images are generated from the xdocs content dir as if they
+          were in the resources/images dir. The latter will be phased out.
+      </action>
+      <action dev="NKB" type="fix" context="core">
+          Fixed tha handling of images and resources in the resources.xmap
+          pipeline, to cater for the new system that does not copy docs prior
+          to rendering.
+      </action>
+      <action dev="NKB" type="add" context="shbat">
+          Added a new property to forrest.properties
+           (project.raw-content-dir=${project.content-dir}/content)
+           to define where raw files are to be served from.
+           Also removed the internal property real-content.dir that was
+           used internally for this and replaced it with a raw-content.dir
+           property.
+      </action>
       <action dev="NKB" type="update" context="skins" >
           Major update to inner working of the krysalis-site skin: 
           - removed all use of the spacer.gif image
@@ -165,7 +182,7 @@
       <action dev="JT" type="update" context="skins">
         In the forrest-site skin and derivatives, display the author and version at the
         bottom of the page, as krysalis-site does.  Also added parsing for CVS Revision
-        tags, so <code>&lt;version>$Revision: 1.242 $&lt;/version></code> can be used.
+        tags, so <code>&lt;version>$Revision: 1.243 $&lt;/version></code> can be used.
       </action>
       <action dev="JT" type="add" context="core">
         Added ability to have version-specific overridden sitemaps.  For
@@ -1303,6 +1320,7 @@
   </issues>
 
 </status>
+
 
 
 

@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/12 12:51:32 $              |
+    |             $Date: 2003/10/16 15:16:09 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -89,9 +89,7 @@ FORREST SITE BUILDER
 
     <!-- FIXME: rename project.content-dir to project.documentation-dir -->
     <property name="content-dir" location="${project.home}/${project.content-dir}" />
-    <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
-    will go away soon -->
-    <property name="real-content-dir" location="${project.home}/${project.content-dir}/content" />
+    <property name="raw-content-dir" location="${project.home}/${project.content-dir}/content" />
     <property name="sitemap-dir"     location="${project.home}/${project.sitemap-dir}" />
     <property name="xdocs-dir"   location="${project.home}/${project.xdocs-dir}" />
     <property name="resources-dir"   location="${project.home}/${project.resources-dir}"/>
@@ -128,7 +126,7 @@ FORREST SITE BUILDER
 
   <target name="examine-proj" depends="init-props">
     <available property="conf.present" file="${conf-dir}" type="dir"/>
-    <available property="real-content.present" file="${real-content-dir}" type="dir"/>
+    <available property="raw-content.present" file="${raw-content-dir}" type="dir"/>
     <available property="sitemap.present" file="${sitemap-dir}" type="dir"/>
     <available property="xdocs.present" file="${xdocs-dir}" type="dir"/>
     <available property="resources.present" file="${resources-dir}" type="dir"/>
@@ -484,11 +482,11 @@ FORREST SITE BUILDER
   </target>
 
   <!-- Copy all non-xdocs content -->
-  <target name="copy-content" if="real-content.present">
+  <target name="copy-content" if="raw-content.present">
     <copy toDir="${project.ctxt-dir}/content" 
       overwrite="false" failonerror="false">
-      <fileset dir="${real-content-dir}">
-        <exclude name="xdocs/**"/>
+      <fileset dir="${raw-content-dir}">
+        <exclude name="${xdocs-dir}/**"/>
       </fileset>
     </copy>
   </target>

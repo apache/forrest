@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.5 $
+$Revision: 1.6 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -84,25 +84,47 @@ $Revision: 1.5 $
         <map:read src="{project:content.xdocs}{1}my-images/{2}.{3}" mime-type="image/{3}" />
       </map:match>
 
-      <map:match pattern="images/**.png">
+      <map:match pattern="**.png">
         <map:select type="exists">
-          <map:when test="resources/images/{1}.svg">
-            <map:generate src="resources/images/{1}.svg" />
-	    <map:transform src="resources/stylesheets/project2text.xsl" />
+          <map:when test="{project:content.xdocs}/{1}.svg">
+            <map:generate src="{project:content.xdocs}/{1}.svg" />
+	        <map:transform src="resources/stylesheets/project2text.xsl" />
             <map:serialize type="svg2png" />
           </map:when>
+          <map:when test="resources/images/{1}.svg">
+            <map:generate src="{project:resources.images}/{1}.svg" />
+	        <map:transform src="resources/stylesheets/project2text.xsl" />
+            <map:serialize type="svg2png" />
+          </map:when>
+          <map:when test="{project:content.xdocs}/{1}.png">
+            <map:read src="{project:content.xdocs}/{1}.png" mime-type="image/png" />
+          </map:when>
           <map:otherwise>
-            <map:read src="resources/images/{1}.png" mime-type="image/png" />
+            <map:read src="{project:resources.images}/{1}.png" mime-type="image/png" />
           </map:otherwise>
         </map:select>
       </map:match>
 
       <map:match pattern="images/**.*">
-        <map:read src="resources/images/{1}.{2}" mime-type="image/{2}" />
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}/images/{1}.{2}">
+            <map:read src="{project:content.xdocs}/images/{1}.{2}" mime-type="image/{2}" />
+          </map:when>
+          <map:otherwise>
+            <map:read src="{project:resources.images}/{1}.{2}" mime-type="image/{2}" />
+          </map:otherwise>
+        </map:select>
       </map:match>
 
       <map:match pattern="**/images/**.*">
-        <map:read src="resources/images/{2}.{3}" mime-type="image/{3}" />
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}/{1}/images/{2}.{3}">
+            <map:read src="{project:content.xdocs}/{1}/images/{2}.{3}" mime-type="image/{3}" />
+          </map:when>
+          <map:otherwise>
+           <map:read src="{project:resources.images}/{2}.{3}" mime-type="image/{3}" />
+          </map:otherwise>
+        </map:select>
       </map:match>
 
       <map:match pattern="**favicon.ico">
