@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.32 $
+$Revision: 1.30.2.1 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -82,6 +82,9 @@ $Revision: 1.32 $
         <sourcetype name="docbook-v4.2">
           <document-declaration public-id="-//OASIS//DTD DocBook XML V4.2//EN" />
         </sourcetype>
+        <sourcetype name="docbook-v4.1.2">
+          <document-declaration public-id="-//OASIS//DTD DocBook XML V4.1.2//EN" />
+        </sourcetype>
         <sourcetype name="sdocbook-v1.0">
           <document-declaration public-id="-//OASIS//DTD Simplified DocBook XML V1.0//EN" />
         </sourcetype>
@@ -143,6 +146,10 @@ $Revision: 1.32 $
             <map:transform src="resources/stylesheets/changes2document.xsl" />
           </map:when>
 
+          <map:when test="docbook-v4.1.2">
+            <map:transform src="resources/stylesheets/docbook2document.xsl" />
+          </map:when>
+          
           <map:when test="docbook-v4.2">
             <map:transform src="resources/stylesheets/docbook2document.xsl" />
           </map:when>
@@ -215,16 +222,7 @@ $Revision: 1.32 $
               <map:serialize type="xml-document"/>
             </map:match>
           </map:when>
-          
-<!--
-	  <map:when test="content/xdocs/{1}.xsp">
-            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="serverpages" src="content/xdocs/{1}{2}.xsp" />
-              <map:transform src="resources/stylesheets/page2document.xsl" />
-              <map:serialize type="xml-document"/>
-            </map:match>
-          </map:when>
--->
+
           <map:otherwise>
             <map:generate src="content/xdocs/{1}.xml" />
             <map:call resource="transform-to-document">
