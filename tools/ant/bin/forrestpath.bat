@@ -14,4 +14,5 @@ rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
 If %OS%'==Windows_NT' Set NTSwitch=/F "Tokens=*"
+If %OS%'==WINNT' Set NTSwitch=/F "Tokens=*"
 For %NTSwitch% %%V In (%1) Do set LOCALCLASSPATH=%LOCALCLASSPATH%;%%V

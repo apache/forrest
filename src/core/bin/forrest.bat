@@ -14,15 +14,18 @@ rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
 if "%OS%"=="Windows_NT" @setlocal
+if "%OS%"=="WINNT" @setlocal
 
 rem ----- use the location of this script to infer $FORREST_HOME -------
-if "%OS%"=="Windows_NT" set DEFAULT_FORREST_HOME=%~dp0\..
 if NOT "%OS%"=="Windows_NT" set DEFAULT_FORREST_HOME=..
+if "%OS%"=="Windows_NT" set DEFAULT_FORREST_HOME=%~dp0\..
+if "%OS%"=="WINNT" set DEFAULT_FORREST_HOME=%~dp0\..
 if "%FORREST_HOME%"=="" set FORREST_HOME=%DEFAULT_FORREST_HOME%
 
 rem ----- set the current working dir as the PROJECT_HOME variable  ----
-if "%OS%"=="Windows_NT" call "%FORREST_HOME%\bin\setpwdvar.bat"
 if NOT "%OS%"=="Windows_NT" call "%FORREST_HOME%\bin\setpwdvar98.bat"
+if "%OS%"=="Windows_NT" call "%FORREST_HOME%\bin\setpwdvar.bat"
+if "%OS%"=="WINNT" call "%FORREST_HOME%\bin\setpwdvar.bat"
 set PROJECT_HOME=%PWD%
 
 rem ----- set the ant file to use --------------------------------------
