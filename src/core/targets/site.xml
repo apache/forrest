@@ -35,20 +35,6 @@
          actually clears the cache, not yet sure why it is really needed? -->
     <delete dir="${project.cocoon-work-dir}"/>
     <mkdir dir="${project.cocoon-work-dir}"/>
-
-    <echo>
-Static site will be generated at:
-${project.site-dir}
-
-Note that there are various reasons for "build failed" messages.
-* Cocoon will report the status of each document:
-  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
-* Even if only one link is broken, you will still get "failed".
-* Your site would still be generated, but some pages would be broken.
-* Please check the file:
-${project.brokenlinkfile}
-for any broken links in the generated site.
-    </echo>
     <parallel>
       <java classname="org.apache.cocoon.Main"
         fork="true"
@@ -72,11 +58,16 @@ for any broken links in the generated site.
       </java> 
 
       <sequential>
+        <echo>
+Copying the various non-generated resources to site.
+Warnings will be issued if the optional project resources are not found.
+This is often the case, because they are optional and so may not be available.</echo>
         <!-- 
         | Copy all non-xdocs content across, as we cannot rely on crawling to
         | discover the whole URI space.  Note: we are emulating the sitemap here;
         | please ensure they keep in synch.
         -->
+        <echo message="Copying project resources and images to site ..."/>
         <copy toDir="${project.site-dir}" 
           overwrite="true" failonerror="false">
             <fileset dir="${content-dir}/content"> <!-- FIXME: what about raw-content-dir? -->
@@ -86,6 +77,7 @@ for any broken links in the generated site.
         </copy>
 
         <!-- Copy skin images -->
+        <echo message="Copying main skin images to site ..."/>
         <mkdir dir="${project.site-dir}/skin/images"/>
          <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
          <!-- Copy forrest skin images -->
@@ -101,6 +93,7 @@ for any broken links in the generated site.
 
         <!-- Copy project skin images -->
         <!-- Do the common ones first followed by those for the skin. -->
+        <echo message="Copying project skin images to site ..."/>
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
           <fileset dir="${project.skins-dir}/common/images"/>
@@ -112,6 +105,7 @@ for any broken links in the generated site.
 
         <!-- Copy all other non-resource files -->
         <!-- Do the common ones first followed by those for the skin. -->
+        <echo message="Copying main skin css and js files to site ..."/>
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -134,6 +128,7 @@ for any broken links in the generated site.
         
         <!-- Copy all other non-resource files from project skins-->
         <!-- Do the common ones first followed by those for the skin. -->
+        <echo message="Copying project skin css and js files to site ..."/>
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -152,6 +147,21 @@ for any broken links in the generated site.
             <exclude name="xslt/**"/>
           </fileset>
         </copy>
+        <echo>Finished copying the non-generated resources.
+Now Cocoon will generate the rest ...</echo>
+
+        <echo>
+Static site will be generated at:
+${project.site-dir}
+
+Note that there are various reasons for "build failed" messages.
+* Cocoon will report the status of each document:
+  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
+* Even if only one link is broken, you will still get "failed".
+* Your site would still be generated, but some pages would be broken.
+* Please check the file:
+${project.brokenlinkfile}
+for any broken links in the generated site.</echo>
       </sequential>
     </parallel>
     <echo>------------------------------
