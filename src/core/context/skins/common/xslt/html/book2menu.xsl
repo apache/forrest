@@ -139,12 +139,6 @@ which is then merged with other HTML by site2xhtml.xsl
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="path-nofrag">
-    <xsl:call-template name="path-nofrag">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:call-template>
-  </xsl:variable>
-
   <xsl:variable name="dirname">
     <xsl:call-template name="dirname">
       <xsl:with-param name="path" select="$path"/>
