@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2003/12/29 10:04:41 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -32,6 +32,13 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/29 10:04:41 nicolaken Exp $
       <head>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
+        <xsl:if test="$config/favicon-url">
+          <link rel="shortcut icon">
+            <xsl:attribute name="href">
+              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+            </xsl:attribute>
+          </link>
+        </xsl:if>
       </head>
       <body bgcolor="#FFFFFF" text="#000000">
     <xsl:comment>================= start Navigation Path ==================</xsl:comment>
@@ -201,7 +208,6 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/29 10:04:41 nicolaken Exp $
           <a href="{$skin-img-dir}/chapter.gif"/>
           <a href="{$skin-img-dir}/chapter_open.gif"/>
           <a href="{$skin-img-dir}/current.gif"/>
-          <a href="/favicon.ico"/>
         </td>
       </tr>
       <tr>

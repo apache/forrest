@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.3 2003/11/26 09:15:32 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -35,7 +35,13 @@ $Id: site2xhtml.xsl,v 1.3 2003/11/26 09:15:32 nicolaken Exp $
         <title><xsl:value-of select="div[@class='content']/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="alternate stylesheet" title="Krysalis" href="{$root}skin/krysalis.css" type="text/css"/>
-		 <link rel="shortcut icon" href="{$root}favicon.ico" />		 
+        <xsl:if test="$config/favicon-url">
+          <link rel="shortcut icon">
+            <xsl:attribute name="href">
+              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+            </xsl:attribute>
+          </link>
+        </xsl:if>
       </head>
       <body>
       	<div id="toplinks">
@@ -121,7 +127,6 @@ $Id: site2xhtml.xsl,v 1.3 2003/11/26 09:15:32 nicolaken Exp $
 			<a href="{$skin-img-dir}/chapter.gif"/>
 			<a href="{$skin-img-dir}/chapter_open.gif"/>
 			<a href="{$skin-img-dir}/current.gif"/>
-			<a href="/favicon.ico"/>
 	
 			<span id="copyright">Copyright &#169;
 				<xsl:value-of select="$config/year"/>&#160;<xsl:value-of

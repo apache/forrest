@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.12 2004/01/11 23:20:50 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,7 +29,13 @@ $Id: site2xhtml.xsl,v 1.12 2004/01/11 23:20:50 nicolaken Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
-		<link rel="shortcut icon" href="{$root}favicon.ico" />		
+        <xsl:if test="$config/favicon-url">
+          <link rel="shortcut icon">
+            <xsl:attribute name="href">
+              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+            </xsl:attribute>
+          </link>
+        </xsl:if>
         <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
       </head>
