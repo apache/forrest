@@ -44,6 +44,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <xsl:template match="site">
     <html>
       <head>
+        <xsl:call-template name="html-meta"/>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <xsl:if test="//skinconfig/favicon-url">
