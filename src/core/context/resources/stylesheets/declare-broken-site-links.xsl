@@ -16,12 +16,19 @@
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
+        <!-- Change the site: and ext: links in the output so that Forrest
+             understands that they are broken -->
+             
+<!-- nicolaken: commenting out because it breaks the linkmap stuff.
+                Just including even the same link at this point makes
+                Cocoon use that link as a relative link.
+                For example, if in xdocs/samples I have ext:dtd-docs, the below
+                template with concat('', .) will make Cocoon search for
+                samples/ext:dtd-docs, which of course does not exist.
+                
   <xsl:template match="@*">
     <xsl:attribute name="{name(.)}">
       <xsl:choose>
-        <!-- Change the site: and ext: links in the output so that Forrest
-             understands that they are broken -->
         <xsl:when test="contains(., 'site:') or contains(., 'ext:')">
           <xsl:value-of select="concat('error:', .)"/>
         </xsl:when>
@@ -31,7 +38,7 @@
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-
+-->
 	<!-- Identity transformation template -->			
 	<xsl:template match="/ | * | comment() | processing-instruction() | text()"> 
 		<xsl:copy> 
