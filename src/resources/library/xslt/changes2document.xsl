@@ -43,9 +43,7 @@
 
    <xsl:if test="@due-to">
     <xsl:text> Thanks to </xsl:text>
-    <xsl:variable name="email-name" select="substring-before(@due-to-email, '@')"/>
-    <xsl:variable name="email-domain" select="substring-after(@due-to-email, '@')"/>
-    <link href="mailto:{$email-name}.at.{$email-domain}"><xsl:value-of select="@due-to"/></link>
+    <link href="mailto:{@due-to-email}"><xsl:value-of select="@due-to"/></link>
     <xsl:text>.</xsl:text>
    </xsl:if>
 
