@@ -19,7 +19,7 @@
 <howto>
  <header>
   <title>How to create a PDF document for each tab</title>
-  <version>0.1</version>
+  <version>0.2</version>
   <abstract>This How-To describes the generation of a PDF document for each
     group of documents that is defined by a tab. 
   </abstract>
@@ -47,23 +47,16 @@
     <ul>
       <li>Understand how to create project-specific sitemaps by following the
       <link href="site-your-project">Using Forrest</link> document.</li>
+      <li>Create a new forrest project (<code>forrest seed</code>) 
+		   in a new dir (<code>mkdir newdir</code>).</li>
     </ul>
   </prerequisites>
 
   <steps title="Steps">
-
-<fixme author="open">
-It would be better to relate this document to the "seed site". In that way
-people can do 'forrest seed' to create an example site, then follow this
-document to create a real-life situation. In other words, please replace the
-"foo" stuff below with real stuff.
-</fixme>
-
     <p>The procedure outlined below will define a project
       <code>sitemap.xmap</code> and create a new
       <code>pdf-tab.xmap</code> based on the <code>aggregate.xmap</code>
     </p>
-
   <section>
     <title>Create your project's main sitemap.xmap</title>
     <p>
@@ -113,7 +106,7 @@ document to create a real-life situation. In other words, please replace the
     </p>
     <source><![CDATA[
 ...
-<map:match pattern="foo.xml">
+<map:match pattern="pdf-tab.xml">
    <map:mount uri-prefix="" src="pdf-tab.xmap" check-reload="yes" />
 </map:match>
 ...]]>
@@ -130,7 +123,7 @@ document to create a real-life situation. In other words, please replace the
 <map:match pattern="*.xml">
   <map:generate src="cocoon://abs-linkmap"/>
   <map:transform type="xpath">
-	<map:parameter name="include" value="//*[name()='MyFooSite']"/>
+	<map:parameter name="include" value="//*[@wholesite='true']"/>
   </map:transform>
   <map:transform src="resources/stylesheets/site2book.xsl" />
   <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
@@ -144,32 +137,55 @@ document to create a real-life situation. In other words, please replace the
 </map:match>]]>
     </source>
   </section>
-
+<section>
+<title>Edit your site.xml</title>
+<p> Add in your site.xml in the about element <code><![CDATA[<whole_foosite href="pdf-tab.html" label="sub site" />]]></code>
+Your site.xml should look like the following.
+</p>
+<source><![CDATA[... 
+<about label="About">
+  <index label="Index" href="index.html" description="Welcome to MyProj"/>
+  <changes label="Changes" href="changes.html" description="History of Changes" />
+  <todo label="Todo" href="todo.html" description="Todo List" />
+  <whole_foosite href="pdf-tab.html" label="pdf-tab" />
+</about>
+...]]>
+</source>
+    <p>
+      This allows you to link to it via a
+      <code><![CDATA[<link href="site:whole_foosite">]]></code>
+      reference. 
+    </p>
+	<p>Add to every element that should be included in the pdf-tab.pdf the attribute <code>wholesite="true"</code>. Like the following.</p>
+	<source><![CDATA[ 
+<sample-wiki label="Wiki page" href="wiki-sample.html" description="wiki-sample" wholesite="true"/>]]>
+	</source>
+	<note>This attribute will be inherit by all chrildren of the element. 
+	 Do not use it in the father element that contains the 
+	 <code><![CDATA[<whole_foosite href="pdf-tab.html" label="pdf-tab" />]]></code> 
+	 as child (will cause a <code>stack overflow</code> when you do)!!!
+	</note>
+  </section>
   <section>
     <title>Explanation of the operation</title>
     <p>
       Line 4 of our example
       <br/>
-      <code><![CDATA[<map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/>]]></code>
-     looks at your site.xml and finds something like:
+      <code><![CDATA[<map:parameter name="include" value="//*[@wholesite='true']"/>]]></code>
+     looks at your site.xml and will match every element containing the <code>wholesite="true"</code> attribute. Imaging you want the samples tab exported:
     </p>
     <source><![CDATA[
 ...
-<MyFooSite label="Your foo site">
-  <firstchapter label="Introduction" href="first.html"/>
-  <sec_chapter label="Conclusion" href="second.html"/>
-</MyFooSite>
+<samples label="Samples" href="samples/" tab="samples" wholesite="true">
+...
+</samples>
 ...]]>
     </source>
     <p>
-      So it takes all the elements of <code><![CDATA[<MyFooSite>]]></code>
-      - that means <code><![CDATA[<MyFootSite>]]></code>
+      It matches <strong>all</strong> the elements that contains <code>wholesite="true"</code>
+      - in our example <code><![CDATA[<samples>]]></code>
       and its "children" - for the content of the pdf file to be generated.
     </p>
-<fixme author="open">
-Some of this information needs to move higher up in this howto to be other
-Steps, rather than be Explanation.
-</fixme>
     <p>
       Line 8 defines the title of the pdf file by taking the content
       of the project-name variable in
@@ -189,22 +205,6 @@ Steps, rather than be Explanation.
       one pdf-file for the whole project (this is what
       <code>aggregate.xmap</code> usually does).
     </note>
-    <p>
-      In site.xml, add something like
-    </p>
-    <source><![CDATA[
-<all label="Your foo site" >
-  <whole_foosite href="foo.html" label="sub site" />
-</all>
-]]>
-    </source>
-    <p>
-      This allows you to link to it via a
-      <code><![CDATA[<link href="site:whole_foosite">]]></code>
-      reference. If you need it in the menu entries add the label
-      attribute to the <code><![CDATA[<whole_foosite>]]></code> element:
-      <code><![CDATA[<whole_foosite label="My first PDF-file" href="foo.pdf"/>]]></code>
-    </p>
   </section>
 
   </steps>
