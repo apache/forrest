@@ -1,32 +1,13 @@
 <?xml version="1.0"?>
 <!--
-A prototype Docbook-to-Forrest stylesheet.  Volunteers are needed to improve
-this!
-
-      This xsl should enable an easier conversion from docbook to forrest xdoc
-      content model.  Templates that match on elements not yet seen by the
-      developer have been left alone, as coded by the developers in the avalon
-      project.
-      NOTE:  html tags are probably better removed in favor of any _available_
-      content model elements in the forrest document.dtd.
-
-Further comments from the author:
-
->Is there any reason the stylesheet couldn't be used on the fly in a Cocoon
->pipeline, so pages can be authored in Docbook?
-
-It could, it'll just need some continuous work until it is finally right.
-There will also be some validity issues, i.e. text not allowed inside a section
-without a <p>.  I'm sure you can setup the declarative stylesheet to handle
-this, maybe with the use of the preceding:: axis on a match for a text() node.
-I just didn't do it because I had only a few manageable issues after
-transformation.  So, yes, I think it can be done with a little more work (and
-it will need to continuously evolve for a while).
+A prototype Docbook-to-Forrest stylesheet.  Support for the range of Docbook
+tags is very patchy; if you need real Docbook support, use Norm Walsh's
+stylesheets.  Volunteers are needed to improve this!
 
 Credit: original from the jakarta-avalon project
 Revision:
-Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest document...not yet complete.
-jefft@apache.org - Lots of fixups, notably the title now works, and footnotes work.
+ - Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest document...not yet complete.
+ - jefft@apache.org - Lots of fixups, notably the title now works, and footnotes work.
 
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -139,12 +120,12 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
                   </title>
             </section>
       </xsl:template>
-      <xsl:template match="sect1">
+      <xsl:template match="sect1|sect2|sect3|sect4|sect5">
             <section>
                   <xsl:apply-templates/>
             </section>
       </xsl:template>
-      <xsl:template match="example">
+       <xsl:template match="example">
             <section>
                   <xsl:apply-templates/>
             </section>
@@ -238,12 +219,19 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
                   </body>
             </document>
       </xsl:template>
+
       <xsl:template match="para">
             <p><xsl:apply-templates/></p>
       </xsl:template>
+
       <xsl:template match="emphasis">
             <em><xsl:apply-templates/></em>
       </xsl:template>
+
+      <xsl:template match="firstterm">
+            <em><xsl:apply-templates/></em>
+      </xsl:template>
+
       <xsl:template match="revision">
             <li>
                   <xsl:choose>
@@ -345,6 +333,18 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
                   <xsl:value-of select="."/>
             </code>
       </xsl:template>
+      <xsl:template match="literal">
+            <code><xsl:value-of select="."/></code>
+      </xsl:template>
+      <xsl:template match="option">
+            <code><xsl:value-of select="."/></code>
+      </xsl:template>
+       <xsl:template match="constant">
+            <code><xsl:value-of select="."/></code>
+      </xsl:template>
+      <xsl:template match="trademark">
+            <xsl:apply-templates/>&#x2122;
+      </xsl:template>
       <xsl:template match="filename">
             <code>
                   <xsl:value-of select="."/>
@@ -358,6 +358,10 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
                   </xsl:if>
             </code>
       </xsl:template>
+      <xsl:template match="quote">
+            <xsl:text>"</xsl:text><xsl:apply-templates/><xsl:text>"</xsl:text>
+      </xsl:template>
+
       <xsl:template match="blockquote">
             <table>
                   <xsl:if test="title">
@@ -485,6 +489,87 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
             <xsl:apply-templates/>
             <sup>TM</sup>
       </xsl:template>
+
+      <!-- Filched from Norm Walsh's inline.xsl -->
+      <xsl:template match="sgmltag">
+            <xsl:call-template name="format.sgmltag"/>
+      </xsl:template>
+
+      <xsl:template name="format.sgmltag">
+            <xsl:param name="class">
+                  <xsl:choose>
+                        <xsl:when test="@class">
+                              <xsl:value-of select="@class"/>
+                        </xsl:when>
+                        <xsl:otherwise>element</xsl:otherwise>
+                  </xsl:choose>
+            </xsl:param>
+
+            <tt class="sgmltag-{$class}">
+                  <xsl:choose>
+                        <xsl:when test="$class='attribute'">
+                              <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="$class='attvalue'">
+                              <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="$class='element'">
+                              <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="$class='endtag'">
+                              <xsl:text>&lt;/</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='genentity'">
+                              <xsl:text>&amp;</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='numcharref'">
+                              <xsl:text>&amp;#</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='paramentity'">
+                              <xsl:text>%</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='pi'">
+                              <xsl:text>&lt;?</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='xmlpi'">
+                              <xsl:text>&lt;?</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>?&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='starttag'">
+                              <xsl:text>&lt;</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='emptytag'">
+                              <xsl:text>&lt;</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>/&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$class='sgmlcomment'">
+                              <xsl:text>&lt;!--</xsl:text>
+                              <xsl:apply-templates/>
+                              <xsl:text>--&gt;</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                              <xsl:apply-templates/>
+                        </xsl:otherwise>
+                  </xsl:choose>
+            </tt>
+      </xsl:template>
+
+
+
       <xsl:template match="node()|@*" priority="-1">
             <xsl:copy>
                   <xsl:apply-templates select="node()|@*"/>
