@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2003/01/27 11:39:55 jefft Exp $
+$Id: site2xhtml.xsl,v 1.5 2003/01/27 11:57:48 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -267,7 +267,7 @@ $Id: site2xhtml.xsl,v 1.4 2003/01/27 11:39:55 jefft Exp $
     <xsl:comment>================= end Menu, NavBar, Content ==================</xsl:comment>
 
     <xsl:comment>================= start Footer ==================</xsl:comment>
-    <table border="0" height="20" width="100%" cellpadding="0" cellspacing="0" summary="footer">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" summary="footer">
       <tr>
         <td bgcolor="{$menu-border}" height="1" colspan="2">
           <img src="{$spacer}" alt="" width="1" height="1" />
@@ -300,6 +300,11 @@ $Id: site2xhtml.xsl,v 1.4 2003/01/27 11:39:55 jefft Exp $
             //  -->]]></script></span>
         </td>
       <td class="logos" bgcolor="{$header-color2}" align="right" nowrap="nowrap">
+
+          <!-- This skin is NOT HTML4 compliant yet
+          <xsl:call-template name="compliancy-logos"/>
+          -->
+
         <xsl:if test="$filename = 'index.html' and $config/credits">
           <xsl:for-each select="$config/credits/credit">
             <xsl:variable name="name" select="name"/>
