@@ -117,7 +117,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         </td>
         <!-- ( =================  Search ================== ) -->
         <td class="search" align="right" rowspan="2" valign="top">
-          <xsl:if test="$config/search">
+          <xsl:if test="$config/search and not($config/search/@box-location) = 'alt'">
 	    <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
                 <!-- Lucene search -->
@@ -292,7 +292,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <td height="10" colspan="2"></td>
       </tr>
       
-      <xsl:if test="$config/search">
+      <xsl:if test="$config/search and $config/search/@box-location = 'alt'">
       <tr>
         <td></td>
         <td class="search">
