@@ -11,6 +11,7 @@
    <map:generator  name="directory"   src="org.apache.cocoon.generation.DirectoryGenerator" label="content"/>
    <map:generator  name="html"        src="org.apache.cocoon.generation.HTMLGenerator" label="content"/>
    <map:generator  name="libre"       src="org.outerj.yer.use.cocoon.HierarchyGenerator" label="content"/>
+   <map:generator  name="nekodtd"     src="org.apache.forrest.components.generator.XNIConfigurableFileGenerator" label="content"/>
    <!-- FIXME: Change this once better view handling is implemented -->
    <map:generator  name="file-nolabel" src="org.apache.cocoon.generation.FileGenerator"/>
   </map:generators>
@@ -222,6 +223,20 @@
      <map:transform src="library/xslt/doclist2document.xsl"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
+     </map:call>
+   </map:match>
+
+   <!-- HTML DTD Documentation generation pipeline, makes use of NekoDTD tool -->
+
+   <map:match pattern="body-**.dtdx.xml">
+     <map:generate type="nekodtd" src="resources/schema/dtd/{1}.dtd">
+       <map:parameter name="config-class" value="org.cyberneko.dtd.DTDConfiguration" />
+     </map:generate>
+     <map:transform src="library/xslt/dtdx2flat.xsl"/>
+     <map:transform src="library/xslt/flat2document.xsl"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="isfaq" value="true"/>
      </map:call>
    </map:match>
 
