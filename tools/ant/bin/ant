@@ -4,8 +4,8 @@
 #   reserved.
 
 # load system-wide ant configuration
-if [ -f "/etc/forrest.conf" ] ; then 
-  . /etc/forrest.conf
+if [ -f "/etc/ant.conf" ] ; then
+  . /etc/ant.conf
 fi
 
 # provide default values for people who don't use RPMs
@@ -18,8 +18,8 @@ if [ -z "$usejikes" ] ; then
 fi
 
 # load user ant configuration
-if [ -f "$HOME/.forrestrc" ] ; then 
-  . "$HOME/.forrestrc"
+if [ -f "$HOME/.antrc" ] ; then
+  . "$HOME/.antrc"
 fi
 
 # OS specific support.  $var _must_ be set to either true or false.
@@ -34,7 +34,7 @@ case "`uname`" in
            ;;
 esac
 
-if [ -z "$ANT_HOME" ] ; then
+if [ -z "$ANT_HOME" -o ! -d "$ANT_HOME" ] ; then
   # try to find ANT
   if [ -d /opt/ant ] ; then
     ANT_HOME=/opt/ant
