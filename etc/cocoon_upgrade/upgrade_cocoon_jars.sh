@@ -23,7 +23,7 @@
 cd $PWD/../../../../
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.5-dev
+COCOON_VERSION=2.1.5
 COCOON_HOME=$BASE/cocoon-2.1
 FORREST=$BASE/forrest/trunk
 NEKODTD_VERSION=0.1.10
@@ -39,34 +39,13 @@ JARSUFFIX=$COCOON_VERSION
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
 COCOONJAR_SUFFIX="[0-9]*"
 
-## Decide what kind of update to perform.
-### - 'testing' copies them to the distribution in
-##   build/dist/shbat/*
-## - 'real' copies upgraded jars to lib/core/
-## - 'real_with_cvs' copies to lib/core/, and marks jars for removal/addition
-##   in CVS.  Should only be performed by Forrest committers
-#
-UPGRADE_TYPE=testing
-#UPGRADE_TYPE=real
-#UPGRADE_TYPE=real_with_cvs
-#
-######################################################################
-
 CLIB=$COCOON_HOME/lib/*
 CBUILD=$COCOON_HOME/build/cocoon-$COCOON_VERSION
 CBLOCKS=$CBUILD/blocks
 
-FDIST=$FORREST/build/dist/shbat
-
-## Determines where to copy new jars to:
-
-if [ "$UPGRADE_TYPE" = "real" -o "$UPGRADE_TYPE" = "real_with_cvs" ]; then
-  FLIB=$FORREST/lib/core
-  FLIB_ENDORSED=$FORREST/lib/endorsed
-elif [ "$UPGRADE_TYPE" = "testing" ]; then
-  FLIB=$FDIST/lib/core
-  FLIB_ENDORSED=$FDIST/lib/endorsed
-fi
+FDIST=$FORREST/src/core
+FLIB=$FORREST/lib/core
+FLIB_ENDORSED=$FORREST/lib/endorsed
 
 alias push="pushd . > /dev/null"
 alias pop="popd > /dev/null"
@@ -256,8 +235,10 @@ copy excalibur-xmlutil
 copy jakarta-regexp
 # We'll keep our own jing thankyou
 #copy jing
-#jisp-2.0.1.jar
-copy jisp
+# jcs-1.0-dev-20040516.jar
+copy jcs
+#commons-logging-1.0.3.jar needed by jcs
+copy commons-logging
 #jtidy-04aug2000r7-dev.jar
 bcopy jtidy
 #logkit-1.1.jar
