@@ -59,8 +59,8 @@
 
         <table cellspacing="0" cellpadding="0" summary="content pane">
           <tr>
-            <td width="5" class="navbar">&#160;</td>
-            <td rowspan="2" valign="top" nowrap="nowrap">
+            <td width="10px" class="navbar">&#160;</td>
+            <td rowspan="2" valign="top" nowrap="nowrap" width="160px">
               <xsl:apply-templates select="div[@class='menu']"/>
             </td>
             <!-- <td valign="top" class="navbar" align="left">no chunking yet</td> -->
