@@ -134,6 +134,19 @@ A minimal build.xml would thus be:
   </target>
 
   <target name="forrest.home.defined" depends="forrest.sethome" unless="forrest.home.present">
+    <property name="path" value="${user.home}/xml-forrest/build/dist/shbat"/>
+    <pathconvert targetos="windows" property="winpath">
+      <path>
+        <pathelement location="${path}"/>
+      </path>
+    </pathconvert>
+    <pathconvert targetos="unix" property="unixpath">
+      <path>
+        <pathelement
+          location="${path}"/>
+      </path>
+    </pathconvert>
+
     <echo>
       ----------------------------------------------
       To run this target, you need Forrest installed.
@@ -145,11 +158,16 @@ A minimal build.xml would thus be:
       build      (Windows)
       ./build.sh (Unix)
 
-      Then create build.properties, containing this line:
+      Then either:
 
-      forrest.home=${user.home}/xml-forrest/build/dist/shbat
+      - Set FORREST_HOME as the Forrest build instructions describe
+      - Create a build.properties, with the forrest.home property pointing to
+        the forrest shbat directory, eg:
 
-      (adjusting the path according to where your xml-forrest is)
+        forrest.home=${winpath}  (Windows)
+        forrest.home=${unixpath}  (Unix)
+
+        (adjusting the path according to where your xml-forrest is)
       ----------------------------------------------
     </echo>
     <fail message="Need to define $${forrest.home}"/>
