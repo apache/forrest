@@ -454,6 +454,10 @@ Revision:
             <xsl:apply-templates/>
       </xsl:template>
 
+      <xsl:template match="inlinegraphic">
+            <img alt="{@srccredit}" src="{@fileref}"/>
+      </xsl:template>
+
       <xsl:template match="graphic|imagedata">
             <tr>
                   <td>
