@@ -12,12 +12,14 @@
      <title><xsl:value-of select="@title"/></title>
     </header>
     <body>
-      <section title="Questions">
+      <section>
+       <title>Questions</title>
        <ul>
         <xsl:apply-templates select="faq" mode="index"/>
        </ul>
       </section>
-      <section title="Answers">
+      <section>
+       <title>Answers</title>
         <xsl:apply-templates select="faq"/>
       </section>
     </body>
@@ -34,7 +36,10 @@
 
   <xsl:template match="faq">
     <anchor id="faq-{position()}"/>
-    <section title="{question}">
+    <section>
+     <title>
+      <xsl:value-of select="question"/>
+     </title>
       <xsl:apply-templates/>
     </section>
   </xsl:template>

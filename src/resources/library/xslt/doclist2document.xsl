@@ -10,7 +10,8 @@
     <title>List of all documentation</title>
    </header>
    <body>
-    <section title="Documentation List">
+    <section>
+     <title>Documentation List</title>
      <p>
       This complete list shows, at a glance, how all of the documentation
       fits together within the hierarchy of sections.
@@ -29,7 +30,10 @@
  </xsl:template>
 
  <xsl:template match="book">
-  <section title="{@title}">
+  <section>
+   <title>
+    <xsl:value-of select="@title"/>
+   </title>
    <xsl:if test="position()=1">
     <p>This first section is a list of the top-level documentation
      (and is a replica of this page's side-panel).</p>
