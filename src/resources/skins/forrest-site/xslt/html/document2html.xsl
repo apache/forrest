@@ -78,11 +78,9 @@
          <a name="{@id}" />
       </xsl:if>
 
-      <h3>
-         <xsl:value-of select="title" />
-      </h3>
+      <h3><xsl:value-of select="title"/></h3>
 
-      <xsl:apply-templates />
+      <xsl:apply-templates select="*[not(self::title)]"/>
    </xsl:template>
 
    <xsl:template match="section/section">
@@ -96,7 +94,7 @@
          <xsl:value-of select="title" />
       </h4>
 
-      <xsl:apply-templates />
+      <xsl:apply-templates select="*[not(self::title)]"/>
    </xsl:template>
 
    <xsl:template match="note | warning | fixme">

@@ -68,7 +68,7 @@
     <h3>
       <xsl:value-of select="title"/>
     </h3>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[not(self::title)]"/>
   </xsl:template>
   <xsl:template match="section/section">
     <a name="{generate-id()}"/>
@@ -78,7 +78,7 @@
     <h4>
       <xsl:value-of select="title"/>
     </h4>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[not(self::title)]"/>
   </xsl:template>
   <xsl:template match="note | warning | fixme">
     <div class="frame {local-name()}">
