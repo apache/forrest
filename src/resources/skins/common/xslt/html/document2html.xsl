@@ -13,14 +13,14 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.14 2003/02/17 00:10:44 nicolaken Exp $
+$Id: document2html.xsl,v 1.15 2003/03/17 17:03:56 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- If non-blank, a PDF link for this page will not be generated -->
   <xsl:param name="nopdf"/>
-  <!-- If non-blank, a "printer-friendly" link for this page will not be generated -->
-  <xsl:param name="noprinterfriendly"/>
+  <!-- If non-blank, a "print" link for this page will not be generated -->
+  <xsl:param name="noprint"/>
   <!-- If non-blank, an XML link for this page will not be generated -->
   <xsl:param name="noxml"/>  
   <xsl:param name="notoc"/>
@@ -54,13 +54,9 @@ $Id: document2html.xsl,v 1.14 2003/02/17 00:10:44 nicolaken Exp $
                 <xsl:value-of select="header/title"/>
               </h1>
             </td>
-            <!-- NKB disabling till it's more tested -->
-            <!--     anyone, feel free to work on it  -->
-            <!-- <xsl:call-template name="printerfriendlylink"/> -->
+            <xsl:call-template name="printlink"/> 
             <xsl:call-template name="pdflink"/>
-            <!-- NKB disabling till it's more tested -->
-            <!--     anyone, feel free to work on it  -->
-            <!-- <xsl:call-template name="xmllink"/> -->
+            <xsl:call-template name="xmllink"/>
           </tr>
         </table>
       </xsl:if>
@@ -87,13 +83,35 @@ $Id: document2html.xsl,v 1.14 2003/02/17 00:10:44 nicolaken Exp $
   </xsl:template>
 
   <!-- Generates the "printer friendly version" link -->
-  <xsl:template name="printerfriendlylink">
-    <xsl:if test="$noprinterfriendly = ''"> <!-- noprinterfriendly flag unset -->
-      <td align="center" width="40" nowrap="nowrap"><a href="printer-friendly/{$filename-noext}.html" class="dida">
-          <img border="0" src="{$skin-img-dir}/printer.gif" alt="printer friendly"/><br/>
-          printer<br/>
-          friendly</a>
-      </td>
+  <xsl:template name="printlink">
+    <xsl:if test="$noprint = ''"> <!-- noprint flag unset -->
+    
+<script Language="Javascript">
+
+function printit(){  
+if (window.print) {
+    window.print() ;  
+} else {
+    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
+}
+}
+</script>
+            
+
+<script Language="Javascript">  
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+    document.write('<td align="center" width="40" nowrap="nowrap">');     
+    document.write('  <a href="javascript:printit()" class="dida">');        
+    document.write('    <img border="0" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br/>');   
+    document.write('  print</a>');   
+    document.write('</td>');           
+}
+</script>
+
     </xsl:if>
   </xsl:template>
 
@@ -111,7 +129,7 @@ $Id: document2html.xsl,v 1.14 2003/02/17 00:10:44 nicolaken Exp $
   <!-- Generates the XML link -->
   <xsl:template name="xmllink">
     <xsl:if test="$noxml = ''"> <!-- noxml flag unset -->
-      <td align="center" width="40" nowrap="nowrap"><a href="doc-source/{$filename-noext}.html" class="dida">
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
           <img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
           xml</a>
       </td>
