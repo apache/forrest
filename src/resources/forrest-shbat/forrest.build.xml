@@ -89,9 +89,21 @@ FORREST SITE BUILDER
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"       property="tools.jar.present"/>
 
+    <!-- validation of certain key files using RELAX NG -->
+ <!-- FIXME: Still testing -->
+    <echo message=" "/>
+    <echo message="Conducting RELAX NG validation of skinconf.xml"/>
+    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
+     <classpath>
+      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+     </classpath>
+    </taskdef>
+    <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
+     <fileset dir="${project.content-dir}" includes="**/skinconf.xml"/>
+    </jing>
+
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
-
   </target>
 
   <!-- Load properties from user's skinconf.xml, if it is defined -->
