@@ -2,7 +2,7 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Using Catalog Entity Resolver for local DTDs</title>
+<title>Forrestbot Web Interface</title>
 <link type="text/css" href="../skin/page.css" rel="stylesheet">
 <link rel="shortcut icon" href="../favicon.ico">
 </head>
@@ -158,7 +158,7 @@
 <ul>
       
 <li>
-<span class="sel"><font color="#ffcc00">Using DTD Catalogs</font></span>
+<a href="../docs/catalog.html">Using DTD Catalogs</a>
 </li>
       
 <li>
@@ -203,7 +203,7 @@
 </li>
     
 <li>
-<a href="../docs/forrestbot-web-interface.html">Forrestbot Webapp</a>
+<span class="sel"><font color="#ffcc00">Forrestbot Webapp</font></span>
 </li>
   
 </ul>
@@ -305,274 +305,168 @@
 <table class="title" summary="">
 <tr>
 <td valign="middle">
-<h1>Using Catalog Entity Resolver for local DTDs</h1>
-</td><td nowrap="nowrap" width="40" align="center"><a class="dida" href="catalog.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
+<h1>Forrestbot Web Interface</h1>
+</td><td nowrap="nowrap" width="40" align="center"><a class="dida" href="forrestbot-web-interface.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a></td>
 </tr>
 </table>
 <ul class="minitoc">
 <li>
-<a href="#overview">Overview</a>
+<a href="#Build">Build</a>
 </li>
 <li>
-<a href="#config">General configuration notes</a>
+<a href="#Installation">Installation</a>
 </li>
 <li>
-<a href="#tools">Configuring specific tools</a>
+<a href="#TODO+Wishlist">TODO Wishlist</a>
+</li>
+<li>
+<a href="#FAQ">FAQ</a>
 <ul class="minitoc">
 <li>
-<a href="#system">Operating system catalog</a>
+<a href="#The+build+and%2For+deploy+commands+don%27t+seem+to+work">The build and/or deploy commands don't seem to work</a>
 </li>
 <li>
-<a href="#xmllint">xmllint validating parser</a>
-</li>
-<li>
-<a href="#vim">Vim</a>
-</li>
-<li>
-<a href="#onsgmls">onsgmls validating parser</a>
-</li>
-<li>
-<a href="#jedit">jEdit - Open Source programmer's text editor</a>
-</li>
-<li>
-<a href="#oxygenxml">oXygen XML Editor</a>
-</li>
-<li>
-<a href="#xmlspy">xmlspy</a>
-</li>
-<li>
-<a href="#xxe">XMLmind XML Editor</a>
-<ul class="minitoc">
-<li>
-<a href="#XXE+v2.5p2+or+prior">XXE v2.5p2 or prior</a>
-</li>
-<li>
-<a href="#XXE+v2.5p3%2B">XXE v2.5p3+</a>
+<a href="#Can+I+do+anything+with+this+besides+just+running+the%0A++++++++forrestbot%3F">Can I do anything with this besides just running the
+        forrestbot?</a>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#info">Further information and resources</a>
 </li>
 </ul>
     
-<a name="N1000D"></a><a name="overview"></a>
-<h3>Overview</h3>
+<p>This webapp implements a website staging application for sites built
+    with Apache Forrest. The webapp hosts HTML for a number of managed
+    websites. The user can regenerate these sites at will. Once the user is
+    satisfied with the site, they may 'deploy' the site, making it live.</p>
+
+    
+<p>The forrestbot web interface requires a servlet container such as <a class="external" href="http://jakarta.apache.org/tomcat/">Apache Tomcat</a>.</p>
+
+    
+<a name="N10017"></a><a name="Build"></a>
+<h3>Build</h3>
 <div style="margin-left: 0 ; border: 2px">
-<p>
-        This is a collection of notes for configuring the Catalog Entity
-        Resolver with your favourite XML tools (validating parsers and
-        editors).
-      </p>
-<p>
-        All XML documents declare their ruleset - the Document Type Definition
-        (DTD). When Forrest processes the documents, it uses the Resolver to
-        find Forrest's local copies of the DTDs, rather than trundling out
-        onto the network.
-      </p>
-<p>
-        Many Java-based XML tools already have an entity resolver, probably
-        the same one that Forrest uses. Many non-Java tools also have an
-        entity resolver. To use these tools with documents based on the
-        Forrest DTDs, you need to configure the tools.
-      </p>
+<p>To build the webapp from source, you need <a class="external" href="http://maven.apache.org/">Apache Maven</a> installed. From a
+      command prompt, go to the <span class="codefrag">forrest/src/forrestbot/webapp</span>
+      directory and execute "<span class="codefrag">maven war</span>".</p>
+</div>
+
+    
+<a name="N1002B"></a><a name="Installation"></a>
+<h3>Installation</h3>
+<div style="margin-left: 0 ; border: 2px">
 <div class="frame note">
 <div class="label">Note</div>
-<div class="content">
-        The information provided here is not intended to endorse any
-        particular tool.
-      </div>
+<div class="content">Most of this configuration is related to the <a class="external" href="http://www.opensymphony.com/osuser/">OpenSymphony OSUser</a>
+      authentication layer.</div>
 </div>
-<p>
-        If you have any other configuration tips for a particular tool, then
-        please send them to the forrest-dev mailing list.
-      </p>
-</div>
+<ol>
+        
+<li>Extract the war to a temporary directory</li>
 
-    
-<a name="N10023"></a><a name="config"></a>
-<h3>General configuration notes</h3>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-        The Forrest DTDs and supporting resources are in the Forrest
-        distribution at <span class="codefrag">src/core/context/resources/schema/</span>
+        
+<li>Modify welcome.local.html</li>
+
+        
+<li>Modify osuser.xml if you want to use an authenticator other than
+        XML files</li>
+
+        
+<li>Modify projects.xml, groups.xml, and users.xml according to your
+        needs</li>
+
+        
+<li>Modify settings.properties according to the server's specific
+        setup</li>
+
+        
+<li>Repackage the war file</li>
+
+        
+<li>Deploy the war file in Tomcat or some other servlet container</li>
       
-</p>
-<p>
-        Usually all that is required is to direct your tool to the "catalog"
-        supplied by Forrest at either:
-        <span class="codefrag">$FORREST/src/core/context/resources/schema/catalog.xcat</span>
-        (for XML Catalog) or
-        <span class="codefrag">$FORREST/src/core/context/resources/schema/catalog</span>
-        (for TR 9401 Catalog).
-      </p>
+</ol>
 </div>
 
     
-<a name="N10039"></a><a name="tools"></a>
-<h3>Configuring specific tools</h3>
+<a name="N10051"></a><a name="TODO+Wishlist"></a>
+<h3>TODO Wishlist</h3>
 <div style="margin-left: 0 ; border: 2px">
-<a name="N1003F"></a><a name="system"></a>
-<h4>Operating system catalog</h4>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-          Some operating systems already provide a system-wide catalog that
-          is used by many tools. This is usually located at
-          <span class="codefrag">/etc/xml/catalog</span> or at
-          <span class="codefrag">/usr/share/sgml/catalog</span> files.
-        </p>
-<p>
-          For an XML Catalog, add this line:
-        </p>
-<pre class="code">
-&lt;nextCatalog
-catalog="/usr/local/svn/forrest/src/core/context/resources/schema/catalog.xcat"/&gt;
-        </pre>
-<p>
-          For a TR 9401 Catalog, add this line:
-        </p>
-<pre class="code">
-CATALOG \
-"/usr/local/svn/forrest/src/core/context/resources/schema/catalog"
-        </pre>
-<p>
-          Actually you probably do not want to touch that system catalog,
-          so rather create your own catalog file in your home directory
-          which refers to both the Forrest catalog and your system catalog.
-        </p>
-</div>
-<a name="N10060"></a><a name="xmllint"></a>
-<h4>xmllint validating parser</h4>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-          "xmllint" is part of the "libxml2" package.
-          It is very fast and powerful, with are many facilities. It can
-          validate whole directories of files at once.
-          Set the SGML_CATALOG_FILES environment variable.
-        </p>
-<pre class="code">
-export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
-$FORREST/src/core/context/resources/schema/catalog
-xmllint --valid --catalogs --noout mydoc.xml
-        </pre>
-</div>
-<a name="N1006E"></a><a name="vim"></a>
-<h4>Vim</h4>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-            The following .vimrc entries are useful:
-          </p>
-<pre class="code">
-au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
-au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
-        </pre>
-</div>
-<a name="N1007C"></a><a name="onsgmls"></a>
-<h4>onsgmls validating parser</h4>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-          "onsgmls" is part of the "Open SP" package.
-          You need to also tell it where to find an "SGML declaration".
-          The easiest way is to create your own little "my-catalog" file,
-          containing this:
-        </p>
-<pre class="code">
-SGMLDECL "/usr/share/sgml/xml.dcl"
-CATALOG \
-"/usr/local/svn/forrest/src/core/context/resources/schema/catalog"
-        </pre>
-<p>
-          Then point the parser at it:
-        </p>
-<pre class="code">
-onsgmls -c path/to/my-catalog -wall -wxml -s mydoc.xml
-        </pre>
-</div>
-<a name="N10091"></a><a name="jedit"></a>
-<h4>jEdit - Open Source programmer's text editor</h4>
-<div style="margin-left: 0 ; border: 2px">
-<pre class="code">
-Select the menu:
-Utilities &gt; Global Options &gt; Plugins:XML &gt; Catalogs
-Select the "+" button, and use the "File System Browser"
-to specify the TR9401 Catalog file:
-"forrest/src/core/context/resources/schema/catalog"
-        </pre>
-</div>
-<a name="N1009C"></a><a name="oxygenxml"></a>
-<h4>oXygen XML Editor</h4>
-<div style="margin-left: 0 ; border: 2px">
-<pre class="code">
-Select the menu:
-External Tools &gt; Preferences &gt; XML Catalog
-Specify the XML Catalog file:
-"forrest/src/core/context/resources/schema/catalog.xcat"
-        </pre>
-</div>
-<a name="N100A7"></a><a name="xmlspy"></a>
-<h4>xmlspy</h4>
-<div style="margin-left: 0 ; border: 2px">
-<pre class="code">
-Add the following entry to the file CustomCatalog.xml
-(located in XMLSpy install directory):
+<ul>
+        
+<li>seperate authorization of 'build' and 'deploy'</li>
 
-&lt;nextCatalog
-catalog="file://localhost/C:/apache/forrest/src/core/
-context/resources/schema/catalog.xcat"/&gt;
-        </pre>
-</div>
-<a name="N100B2"></a><a name="xxe"></a>
-<h4>XMLmind XML Editor</h4>
-<div style="margin-left: 0 ; border: 2px">
-<a name="N100B8"></a><a name="XXE+v2.5p2+or+prior"></a>
-<h5>XXE v2.5p2 or prior</h5>
-<div style="margin-left: 0 ; border: 2px">
-<pre class="code">
-Select the menu:
-Options &gt; Options &gt; Schema &gt; Add File
-Specify the XML Catalog file:
-"forrest/src/core/context/resources/schema/catalog.xcat"
-        </pre>
-</div>
-<a name="N100C3"></a><a name="XXE+v2.5p3%2B"></a>
-<h5>XXE v2.5p3+</h5>
-<div style="margin-left: 0 ; border: 2px">
-<p>XXE only supports catalogs automatically detected via configuration files.  
-            Download the <a class="external" href="http://www.splike.com/howtos/xxe_forrest.html">XXE 
-            Forrest Config</a> files from splike.com; this also add support for WYSIWYG 
-            editing of forrest documents.</p>
-</div>
-</div>
-</div>
+        
+<li>log everything, not just the build</li>
 
-    
-<a name="N100D3"></a><a name="info"></a>
-<h3>Further information and resources</h3>
-<div style="margin-left: 0 ; border: 2px">
-<p>
-        Forrest and Cocoon use the
-        <a class="external" href="http://xml.apache.org/commons/components/resolver/">Catalog
-        Entity Resolver</a>
-        that is provided by the
-        <a class="external" href="http://xml.apache.org/commons/">Apache XML Commons</a>
-        project. The resolver is packaged with the Forrest distribution at
-        <span class="codefrag">lib/core/xml-commons-resolver-x.y.jar</span>
+        
+<li>view old log files</li>
+
+        
+<li>ability to reload all config files on the fly</li>
+
+        
+<li>put date at top of viewlog_body page</li>
       
-</p>
-<p>
-        Other Forrest documentation has some notes about configuring the
-        entity resolver for your own DTDs. See
-        <a href="../docs/validation.html">XML Validation</a>.
-      </p>
-<p>
-        Cocoon has extensive documentation about the entity resolver. See
-        <a class="external" href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
-      </p>
+</ul>
 </div>
 
+    
+<a name="N1006A"></a><a name="FAQ"></a>
+<h3>FAQ</h3>
+<div style="margin-left: 0 ; border: 2px">
+<a name="N10070"></a><a name="The+build+and%2For+deploy+commands+don%27t+seem+to+work"></a>
+<h4>The build and/or deploy commands don't seem to work</h4>
+<div style="margin-left: 0 ; border: 2px">
+<p>Currently forrestbot only logs the forrest part of it's execution,
+        not the whole thing. And the web interface starts a forrestbot process
+        and doesn't watch it's progress directly. So look at the debugging
+        output for the command executed and the working directory used. Log
+        into the server using the login of the Tomcat server and cd to the
+        working directory and then execute the command. This will fairly
+        accurately simulate what the web interface does.</p>
+<p>Also, set debug-exec=true in settings.properties and make sure
+        log4j.properties logs DEBUG. This will log all the thread output.</p>
+</div>
+<a name="N1007D"></a><a name="Can+I+do+anything+with+this+besides+just+running+the%0A++++++++forrestbot%3F"></a>
+<h4>Can I do anything with this besides just running the
+        forrestbot?</h4>
+<div style="margin-left: 0 ; border: 2px">
+<p>Sure. Create a wrapper script and specify it as forrest-exec in
+        settings.properties. Here's an example:</p>
+<pre class="code">#!/bin/bash
+
+# remove env values set from container 
+PATH=/usr/bin
+CLASSPATH=
+# get env vars
+. /home/user/.profile
+
+# group writable for easier sharing of files with others who run forrestbot
+umask g+w
+
+# you can preprocess something
+xmlfile=$2
+if [ "${xmlfile##*.}" = "xml" ]                # everything after last .
+then
+    target=$3
+    if [ "$target" != "deploy" ]                # don't run preprocess task on a deploy
+    then
+        projectTarget=${xmlfile%.*}               # everything before last .
+        # do something special for $projectTarget here
+    fi
+else
+        echo "Syntax: forrest_wrapper.sh -f myapp.xml [build|deploy|...]"
+        exit
+fi
+
+# run forrest(bot) with all the parameters
+forrest $*
+
+# you can postprocess something here</pre>
+</div>
+</div>
+  
 <div class="attribution"></div>
 </div>
 </td><td width="10"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
