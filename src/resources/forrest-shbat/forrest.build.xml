@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.3-dev                        |
-    |             $Date: 2003/01/24 01:21:05 $              |
+    |             $Date: 2003/01/27 02:22:54 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -576,6 +576,11 @@ Use the 'seed' target to create a template project structure.
           <exclude name="xdocs/**"/>
         </fileset>
         <fileset dir="${project.ctxt-dir}/resources" includes="images"/>
+      </copy>
+      <!-- Copy non-resource skin files across -->
+      <copy toDir="${project.site-dir}/skin" filtering="false" overwrite="true"
+        failonerror="false">
+        <fileset dir="${project.ctxt-dir}/skins/${project.skin}" excludes="xslt/**"/>
       </copy>
     </parallel>
     <echo>
