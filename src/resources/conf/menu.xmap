@@ -9,7 +9,7 @@ Example URL:  http://localhost:8888/community/book-index.html (menu for communit
 Used by    :  **/menu-*.html in sitemap.xmap, 
 Uses       :  content/xdocs/site.xml, or book.xml file if present.
 
-$Revision: 1.4 $
+$Revision: 1.5 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -32,6 +32,13 @@ $Revision: 1.4 $
     <!-- ============================================================ -->
 
     <map:pipeline internal-only="false">
+
+      <map:match pattern="abs-menulinks">
+        <map:generate src="content/xdocs/site.xml" />
+        <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
+        <map:transform src="resources/stylesheets/site2site-normalizetabs.xsl" />
+        <map:serialize type="xml"/>
+      </map:match>
 
       <map:match pattern="**menulinks-*">
         <map:generate src="content/xdocs/site.xml" />
