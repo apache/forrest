@@ -6,12 +6,12 @@ This allows the inclusion of binary content (*.doc, *.pdf etc) in Forrest sites.
 This pipeline *relies* on the caller checking if the {project:content}/ actually exists!
 If the caller doesn't do this, this sitemap's '**' pipeline will match everything.
 
-Generates  :  Exact bytes read from {project:content}//**
+Generates  :  Exact bytes read from {project:content}/**
 Example URL:  http://localhost:8888/blah.doc
 Used by    :  sitemap.xmap
-Uses       :  {project:content}//**
+Uses       :  {project:content}/**
 
-$Revision: 1.11 $
+$Revision: 1.12 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -36,55 +36,55 @@ $Revision: 1.11 $
         <map:match pattern="**.html">
           <!--
           Use this instead if you want JTidy to clean up your HTML
-          <map:generate type="html" src="{project:content}//{0}" />
+          <map:generate type="html" src="{project:content}/{0}" />
           <map:serialize type="html"/>
           -->
-          <map:read src="{project:content}//{0}" mime-type="text/html"/>
+          <map:read src="{project:content}/{0}" mime-type="text/html"/>
         </map:match>
 
         <map:match pattern="**.xml">
-          <map:generate type="file" src="{project:content}//{0}" />
+          <map:generate type="file" src="{project:content}/{0}" />
           <map:serialize type="xml" />
         </map:match>
 
         <map:match pattern="skin/**.css">
-          <map:read src="{project:content}//{1}.css" mime-type="text/css" />
+          <map:read src="{project:content}/{1}.css" mime-type="text/css" />
         </map:match>
 
         <map:match pattern="**.js">
-          <map:read src="{project:content}//{0}" mime-type="application/javascript" />
+          <map:read src="{project:content}/{0}" mime-type="application/javascript" />
         </map:match>
 
         <map:match pattern="**.gif">
-          <map:read src="{project:content}//{0}" mime-type="image/gif" />
+          <map:read src="{project:content}/{0}" mime-type="image/gif" />
         </map:match>
 
         <map:match pattern="**.png">
-          <map:read src="{project:content}//{0}" mime-type="image/png" />
+          <map:read src="{project:content}/{0}" mime-type="image/png" />
         </map:match>
 
         <map:match pattern="**.jpg">
-          <map:read src="{project:content}//{0}" mime-type="image/jpeg" />
+          <map:read src="{project:content}/{0}" mime-type="image/jpeg" />
         </map:match>
 
         <map:match pattern="**.jpeg">
-          <map:read src="{project:content}//{0}" mime-type="image/jpeg" />
+          <map:read src="{project:content}/{0}" mime-type="image/jpeg" />
         </map:match>
 
         <map:match pattern="**.pdf">
-          <map:read src="{project:content}//{0}" mime-type="application/pdf" />
+          <map:read src="{project:content}/{0}" mime-type="application/pdf" />
         </map:match>
 
         <map:match pattern="**.swf">
-          <map:read src="{project:content}//{0}" mime-type="application/x-shockwave-flash" />
+          <map:read src="{project:content}/{0}" mime-type="application/x-shockwave-flash" />
         </map:match>
 
         <map:match pattern="**.txt">
-          <map:read src="{project:content}//{0}" mime-type="text/plain" />
+          <map:read src="{project:content}/{0}" mime-type="text/plain" />
         </map:match>
 
         <map:match pattern="**">
-          <map:read src="{project:content}//{1}"/>
+          <map:read src="{project:content}/{1}"/>
         </map:match>
 
       </map:match>
