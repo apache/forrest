@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -158,7 +159,7 @@ public class Project {
 	public static Collection getAllProjects() {
 
 		/* based on config files */
-		Collection sites = new ArrayList();
+		ArrayList sites = new ArrayList();
 		File f = new File(Config.getProperty("config-dir"));
 		File[] possibleSites = f.listFiles();
 		for (int i = 0; i < possibleSites.length; i++) {
@@ -172,6 +173,7 @@ public class Project {
 				}
 			}
 		}
+		Collections.sort(sites);
 		return sites;
 	}
 

@@ -20,7 +20,7 @@ package org.apache.forrest.forrestbot.webapp.dto;
 
 import java.util.Date;
 
-public class ProjectDTO {
+public class ProjectDTO implements Comparable {
 	String name;
 	int status;
 	Date lastBuilt;
@@ -140,6 +140,16 @@ public class ProjectDTO {
 	 */
 	public void setDeployable(boolean b) {
 		deployable = b;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		if (arg0 instanceof ProjectDTO)
+			return getName().compareTo(((ProjectDTO)arg0).getName());
+		return 0;
 	}
 
 }
