@@ -638,16 +638,16 @@ project.skinconf=${project.content-dir}/skinconf.xml
         sitemaps - obviously extremely powerful. The capability is described
         in 
         "<link href="site:project-sitemap">Using project sitemaps</link>"
-        and a worked example is shown in the next section below.
+        and some worked examples are shown in the following sections here.
       </p>
-      <p>
+      <note>
         The sitemap syntax is described in the 
         <link href="ext:cocoon/sitemap">Cocoon sitemap docs</link>.  The Forrest
         sitemap is broken into multiple files. The main one is
         <strong>sitemap.xmap</strong> which delegates to others.  See the
          <link href="site:sitemap-ref">Sitemap Reference</link> for a tour of the
         default sitemap.
-      </p>
+      </note>
       <section id="adding_new_content_type">
         <title>Example: Adding a new content type</title>
         <p>
@@ -909,38 +909,32 @@ project.skinconf=${project.content-dir}/skinconf.xml
 
           <section id="integrating_rss">
             <title>Example: integrating external RSS content</title>
-<warning>
-This section of the document is currently being enhanced to reflect the
-new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
-</warning>
             <p>Similar to the previous example, we can integrate RSS into our
-              site by over-riding and editing the sitemap.  As described in 
-              the "source pipelines" section of the
-              <link href="site:sitemap-ref/source_pipelines">sitemap reference</link>,
-              Forrest's <code>sitemap.xmap</code> delegates source
-              handling to various subsitemaps in a <code>**.xml</code> block.
-              We can add another *.xml matcher in this section, just before the
-              catch-all subsitemap:
+              site simply by providing a match in our project sitemap.xmap ...
             </p>
-            <source><![CDATA[<map:match pattern="wholesite.xml">
-    <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
-  </map:match>]]>
+            <source><![CDATA[<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+ <map:pipelines>
+  <map:pipeline>]]>
   <strong><![CDATA[
-<map:match pattern="weblog.xml">
-  <map:generate src="http://blogs.cocoondev.org/stevenn/index.rss"/>
-  <map:transform src="resources/stylesheets/rssissues2document.xsl"/>
-  <map:call resource="skinit">
-    <map:parameter name="type" value="document2html"/>
-    <map:parameter name="path" value="weblog.xml"/>
-  </map:call>
-</map:match>]]></strong><![CDATA[
-
-  <!-- Default source types -->
-  <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
-
-</map:match>]]></source>
-            <p>(You will want to rename and customize
-              <code>rssissues2document.xsl</code> to your needs.)</p>
+   <map:match pattern="**weblog.xml">
+    <map:generate src="http://blogs.cocoondev.org/stevenn/index.rss"/>
+    <map:transform src="{forrest:stylesheets}/rss2document.xsl"/>
+    <map:serialize type="xml"/>
+   </map:match>
+]]></strong><![CDATA[
+   <map:match pattern=".......">
+    <!-- handle other project-specific matches -->
+   </map:match>
+  </map:pipeline>
+ </map:pipelines>
+</map:sitemap>
+]]></source>
+            <p>You will probably want to copy the core Forrest 
+              <code>rss2document.xsl</code> to your project,
+              customise it to your needs, and refer to it with
+              <code>src="{project:resources.stylesheets}/rss2document.xsl"</code>
+            </p>
           </section>
       </section>
 
