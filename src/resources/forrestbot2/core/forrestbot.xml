@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<project basedir="." default="main">
+
+  <property name="forrest.home" value="${user.home}/apache/xml/xml-forrest/build/dist/shbat"/>
+  <property name="bot.home" value="${forrest.home}/forrestbot2"/>
+  <import file="${forrest.home}/forrest.build.xml"/>
+
+  <import file="${bot.home}/rebuild-forrest.xml"/>
+  <import file="${bot.home}/cvs.xml"/>
+  <import file="${bot.home}/local.xml"/>
+  <import file="${bot.home}/email.xml"/>
+
+  <property name="administrator"  value="jefft@apache.org"/>
+  <property name="build.work-dir"         value="work/${ant.project.name}"/>
+  <property name="build.deploy-dir"       value="sites/${ant.project.name}"/>
+  <mkdir dir="logs"/>
+  <tstamp>
+    <format property="logtime" pattern="yyMMdd-hhmm"/>
+  </tstamp>
+  <property name="build.logfile"          value="logs/${ant.project.name}.log"/>
+  <property name="build.logfile-stored"   value="logs/${ant.project.name}-${logtime}.log"/>
+
+  <property name="mail.host" value="localhost"/>
+  <property name="mail.to"   value="${user.name}@localhost"/>
+
+
+  <target name="getsrc" depends="local.getsrc"/>
+
+  <target name="site" depends="getsrc">
+
+    <taskdef name="trycatch" classname="net.sf.antcontrib.logic.TryCatchTask">
+      <classpath>
+        <pathelement location="${forrest.home}/forrestbot/lib/ant-contrib-0.1.jar"/>
+      </classpath>
+    </taskdef>
+
+    <trycatch>
+      <try>
+        <record name="${build.logfile}" action="start"/>
+        <antcall target="forrest.site" inheritAll="false">
+          <param name="basedir" value="${build.work-dir}"/>
+        </antcall>
+        <record name="forrest.log" action="stop"/>
+        <property name="completion-status" value="succeeded" />
+      </try>
+      <catch>
+        <record name="${build.logfile}" action="stop"/>
+        <echo>Oops, something broke</echo>
+        <property name="completion-status" value="FAILED" />
+        <property name="build-failed" value="true"/>
+      </catch>
+    </trycatch>
+    <copy file="${build.logfile}" tofile="${build.logfile-stored}"/>
+  </target>
+
+  <target name="deploy" depends="local.deploy"/>
+
+  <target name="notify" depends="email.notify"/>
+
+  <target name="main" depends="deploy, notify"/>
+
+</project>

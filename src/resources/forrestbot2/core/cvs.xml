@@ -1,0 +1,40 @@
+<project name="cvs">
+
+  <property name="user" value="anoncvs"/>
+  <property name="password" value="anoncvs"/>
+  <property name="root" value="/home/cvspublic"/>
+  <property name="host" value="cvs.apache.org"/>
+  <property name="module" value="${ant.project.name}"/>
+
+  <property name="build.cvsmodule-dir"    value="work/cvsmodules"/>
+  <property name="build.work-dir"         value="work/${ant.project.name}"/>
+
+  <property name="project.root-dir" value="."/>
+
+  <target name="getsrc">
+    <cvspass cvsroot=":pserver:${user}@${host}:${root}" password="${password}"/>
+
+    <cvs cvsRoot=":pserver:${user}@${host}:${root}"
+      package="${module}/${project.root-dir}"
+      dest="${build.cvsmodule-dir}"
+      quiet="true"
+      command="checkout -l"
+      />
+
+    <loadproperties srcFile="${build.cvsmodule-dir}/${module}/${project.root-dir}/forrest.properties"/>
+    <loadproperties srcFile="default-forrest.properties"/>
+
+    <cvs cvsRoot=":pserver:${user}@${host}:${root}"
+      package="${module}/${project.root-dir}/${project.content-dir}"
+      dest="${build.cvsmodule-dir}"
+      quiet="false"
+      />
+
+    <copy todir="${build.work-dir}">
+      <fileset dir="${build.cvsmodule-dir}/${module}/${project.root-dir}"/>
+    </copy>
+
+  </target>
+
+
+</project>

@@ -1,0 +1,17 @@
+<project name="email">
+
+  <target name="notify" depends="site" if="build-failed">
+    <tstamp>
+      <format property="NOW" pattern="dd MMMM hh:mm aa"/>
+    </tstamp>
+    <mail from="forrestbot@xml.apache.org"
+      mailhost="${mail.host}"
+      tolist="${mail.to}"
+      subject="ForrestBot build for ${ant.project.name} ${completion-status}"
+      failonerror="false"
+      files="${build.logfile}"
+      messagefile="${bot.home}/emailtemplate.txt">
+    </mail>
+  </target>
+
+</project>
