@@ -20,7 +20,6 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.35 $</version>
   </header>
 
   <body>
@@ -35,55 +34,71 @@
    <section id="installing">
      <title>Installing Forrest</title>
      <p>
-       <link href="site:about/download">Download</link> the latest release of Forrest, or
-       if you want to try the development version, <link href="site:getting-involved/build">build
-       Forrest</link> from source.
+       <link href="site:about/download">Download</link> the latest release
+       of Forrest, or
+       if you want to try the development version,
+       <link href="site:getting-involved/build">build Forrest</link> from source.
      </p>
      <p>
      After downloading and extracting forrest, you need to add environment variables.
      </p>
      <p>In Unix/Linux:</p>
      <source>
-~/apache-forrest-0.5.1$ export FORREST_HOME=`pwd`
-~/apache-forrest-0.5.1$ export PATH=$PATH:$FORREST_HOME/bin
+~/apache-forrest-0.6$ export FORREST_HOME=`pwd`
+~/apache-forrest-0.6$ export PATH=$PATH:$FORREST_HOME/bin
      </source>
      <p>In Windows:</p>
      <source>
 Go to "My Computer", "Properties", "Advanced", "Environment Variables"
 and add:
-<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.5.1</code>
+<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.6</code>
 <code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
      </source>
      <p>
-       To see what the forrest command can do, type 'forrest -projecthelp'
+       To see what the 'forrest' command can do, type 'forrest -projecthelp'.
+       The build targets that are marked with * are the commonly used ones.
        </p>
      <source>
 Apache Forrest.  Run 'forrest -projecthelp' to list options
 
-ANT_OPTS is 
-Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.build.xml
+Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
 
     *=======================================================*
     |                 Forrest Site Builder                  |
-    |                        0.5-dev                        |
-    |             $Date: 2004/02/26 08:01:12 $              |
+    |                        0.6-dev                        |
     *=======================================================*
   
              Call this through the 'forrest' command
   
 Main targets:
 
- backcopy   If anything has been edited in build/webapps, copies them back to src/documentation
- overrides  Prints a summary of which files a project is overriding
- run        Run Jetty with configuration set by the jetty.run property
- seed       Seeds a directory with a template project doc structure
- site       Generates a static HTML website for this project
- validate   Validates XML doc files in the project
- war        Generates a dynamic servlet-based website (an packaged .war file)
- webapp     Generates a dynamic servlet-based website (an unpackaged webapp)
-
+ available-skins       What skins are available?
+ clean                 * Clean all directories and files generated during
+                        the build
+ install-skin          Install the needed skin from the remote repository
+ package-skin          Make a package of an existing skin
+ run                   * Run Jetty (instant live webapp)
+ run_custom_jetty      Run Jetty with configuration file found in the project
+ run_default_jetty     Run Jetty with configuration file found in Forrest
+ seed                  * Seeds a directory with a template project doc structure
+ site                  * Generates a static HTML website for this project
+ validate              Validate all: xdocs, skins, sitemap, etc
+ validate-sitemap      Validate the project sitemaps
+ validate-skinchoice   Validate skin choice
+ validate-skinconf     Validate skinconf
+ validate-skins        Validate skins
+ validate-stylesheets  Validate XSL files
+ validate-xdocs        Validate the project xdocs
+ war                   * Generates a dynamic servlet-based website
+                         (a packaged .war file)
+ webapp                Generates a dynamic servlet-based website
+                         (an unpackaged webapp).
+ webapp-local          Generates a dynamic servlet-based website
+                         (an unpackaged webapp). Note this webapp is suitable
+                         for local execution only, use the 'war' or 'webapp'
+                         target if you wish to deploy remotely.
 Default target: site
-      </source>
+     </source>
       <p>
         As 'site' is the default target, just running 'forrest' without options will
         generate a "static HTML website". For example, typing 'forrest' in the
