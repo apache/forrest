@@ -136,6 +136,13 @@
       <!-- OUTPUT FORMATS                                               -->
       <!-- ============================================================ -->
 
+      <map:match pattern="**">
+        <map:act type="resource-exists">
+          <map:parameter name="url" value="content/{0}" />
+          <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
+        </map:act>
+      </map:match>
+
       <map:match pattern="*.html">
         <map:aggregate element="site">
           <map:part src="cocoon:/tab-{1}.xml"/>
@@ -297,7 +304,7 @@
         <map:mount uri-prefix="" src="redirect.xmap" check-reload="yes" />
       </map:match>
 
-      <map:match pattern="**">
+      <map:match pattern="**.xml">
         <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
       </map:match>
 
