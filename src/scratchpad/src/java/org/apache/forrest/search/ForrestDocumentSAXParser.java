@@ -56,13 +56,23 @@
  */
 package org.apache.forrest.search;
 
-import org.apache.xerces.parsers.SAXParser;
-import java.io.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-import org.xml.sax.ext.LexicalHandler;
-import java.util.Vector;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+
 import java.util.HashMap;
+import java.util.Vector;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * <p>Parses a Forrest Document and extracts the information to use when
@@ -102,7 +112,7 @@ import java.util.HashMap;
  * <p><em>(Hope my English it's not too bad ;-)</em></p>
  *
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocumentSAXParser.java,v 1.1 2003/09/12 19:07:31 cheche Exp $
+ * @version $Id: ForrestDocumentSAXParser.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
  */
 
 public class ForrestDocumentSAXParser extends DefaultHandler {

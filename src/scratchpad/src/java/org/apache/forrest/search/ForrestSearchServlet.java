@@ -56,22 +56,22 @@
  */
 package org.apache.forrest.search;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
-import java.util.*;
-import org.apache.xalan.transformer.*;
-import org.w3c.dom.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-import javax.xml.transform.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.w3c.dom.Document;
 
 /**
  * <p>This sevlet processes all search request inside a Forrest site.</p>
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearchServlet.java,v 1.1 2003/09/12 19:07:31 cheche Exp $
+ * @version $Id: ForrestSearchServlet.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
  */
 public class ForrestSearchServlet extends HttpServlet {
 

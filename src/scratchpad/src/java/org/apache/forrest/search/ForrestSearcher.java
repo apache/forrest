@@ -57,21 +57,37 @@
 package org.apache.forrest.search;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
+import org.apache.lucene.analysis.Analyzer;
+
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+
+import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.queryParser.*;
-import org.apache.lucene.search.*;
-import org.apache.lucene.index.Term;
-import org.apache.xerces.dom.DocumentImpl;
-import org.apache.xerces.dom.DocumentTypeImpl;
-import org.w3c.dom.*;
+
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+
+import org.apache.xerces.dom.DOMImplementationImpl;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 /**
  * <p>Searches the index for a given query string.</p>
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearcher.java,v 1.1 2003/09/12 19:07:31 cheche Exp $
+ * @version $Id: ForrestSearcher.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
  */
 public class ForrestSearcher {
   public ForrestSearcher() {

@@ -57,13 +57,16 @@
 package org.apache.forrest.search;
 
 import java.io.File;
+
 import java.util.HashMap;
-import org.apache.lucene.document.*;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 
 /**
  * Utility class to make Lucene Documents from Forrest Documents
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocument.java,v 1.1 2003/09/12 19:07:31 cheche Exp $
+ * @version $Id: ForrestDocument.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
  */
 public class ForrestDocument {
 
