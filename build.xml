@@ -148,6 +148,20 @@
   </target>
 
   <!-- ================================== -->
+  <!--              jar                   -->
+  <!-- ================================== -->
+
+  <target  name="jar"   depends="-init"
+           description="Make jars">
+           
+    <antcall target="call-cent">
+      <param name="cent-name"   value="centipede"/> 
+      <param name="cent-target" value="package"/> 
+    </antcall>
+    
+  </target>     
+   
+  <!-- ================================== -->
   <!--              Scratchpad               -->
   <!-- ================================== -->
 
@@ -213,17 +227,17 @@
       <fileset dir="${resource.dir}/schema"/>
     </copy>
     <mkdir dir="${build.context}/WEB-INF/classes"/>
-    <move todir="${build.context}/WEB-INF/classes">
+    <copy todir="${build.context}/WEB-INF/classes">
       <fileset dir="${build.context}/resources/schema">
         <include name="CatalogManager.properties"/>
       </fileset>
       <fileset dir="${build.dest}">
         <include name="**/*.class"/>
       </fileset>
-      <fileset dir="${build.scratchpad.dest}">
+      <fileset dir="${build.dir}">
         <include name="**/*.class"/>
       </fileset>
-    </move>
+    </copy>
 
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
