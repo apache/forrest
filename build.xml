@@ -220,7 +220,7 @@
   </target>
  
   <target name="refresh-code" depends="jar">
-    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
+    <copy todir="${dist-shbat.dir}/lib/core">
       <fileset dir="${build.dir}" includes="*.jar"/>
     </copy>
   </target>
@@ -232,7 +232,7 @@
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
     
-    <!-- copy the prepared and wrapper stuff for the distribution -->
+    <!-- copy the Forrest core -->
     <copy todir="${dist-shbat.dir}">
       <fileset dir="./src/core" />
     </copy>
@@ -243,15 +243,8 @@
     </copy>
 
     <!-- Copy Forrest jars -->
-    <!-- @TODO REDUCE COPYING -->
-    <mkdir dir="${dist-shbat.dir}/context/WEB-INF/lib" />
-  
     <antcall target="refresh-code"/>
     
-    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
-      <fileset dir="./lib/core" includes="*.jar"/>
-      <fileset dir="./lib/endorsed" includes="*.jar"/>
-    </copy>
     <mkdir dir="${dist-shbat.dir}/lib" />
     <copy todir="${dist-shbat.dir}/lib">
       <!-- copy everything so that also dirs with no jars are there, as

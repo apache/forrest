@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2004/01/23 15:16:22 $              |
+    |             $Date: 2004/01/25 23:07:26 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -25,7 +25,7 @@ FORREST SITE BUILDER
   
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
-      <fileset dir="${forrest.home}/context/WEB-INF/lib" includes="jing*.jar" />
+      <fileset dir="${forrest.home}/lib/core" includes="jing*.jar" />
     </classpath>
   </taskdef>
 
@@ -252,13 +252,33 @@ FORREST SITE BUILDER
   <target name="prepare-classpath" depends="prepare-context, -prepare-classpath"/>
   <target name="-prepare-classpath">
     <path id="forrest.cp">
-      <pathelement location="${project.webapp}/WEB-INF/classes"/>
-      <fileset dir="${project.webapp}/WEB-INF/lib" includes="*.jar"/>
-      <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
-      <fileset dir="${forrest.home}/jetty" includes="servlet-2.3.jar"/>
-      <fileset dir="${forrest.home}/lib/endorsed" includes="*.jar"/>
-      <fileset dir="${forrest.home}/context/WEB-INF/lib" includes="*.jar" />
-      <pathelement location="${tools.jar}"/>
+         <pathelement path="${env.CLASSPATH}" />
+         <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
+         <fileset dir="${forrest.home}/jetty">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>
+         <fileset dir="${forrest.home}/lib/endorsed">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>         
+         <fileset dir="${forrest.home}/lib/core">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>       
+         <fileset dir="${forrest.home}/lib/optional">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>
+         <pathelement location="${tools.jar}"/>
     </path>
   </target>
 
@@ -324,8 +344,7 @@ FORREST SITE BUILDER
        param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
-    validate, init, bare-context, copy-sitemap, copy-conf, copy-lib, 
-    copy-classes, copy-skinconf, copy-status"/>
+    validate, init, bare-context, copy-sitemap, copy-conf, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.webapp}/WEB-INF" filtering="true"
@@ -356,20 +375,6 @@ FORREST SITE BUILDER
         <include name="*-${version}.xmap"/>
       </fileset>
       <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
-    </copy>
-  </target>
-
-  <target name="copy-lib" if="lib.present">
-    <copy toDir="${project.webapp}/WEB-INF/lib" 
-      overwrite="true" failonerror="false">
-      <fileset dir="${lib-dir}"/>
-    </copy>
-  </target>
-
-  <target name="copy-classes" if="classes.present">
-    <copy toDir="${project.webapp}/WEB-INF/classes" 
-      overwrite="true" failonerror="false">
-      <fileset dir="${classes-dir}"/>
     </copy>
   </target>
 
@@ -635,21 +640,6 @@ ${project.site-dir}
     <copy file="${forrest.home}/context/WEB-INF/web.xml" filtering="true" 
       todir="${project.webapp}/WEB-INF"/>
 
-    <copy todir="${project.webapp}/WEB-INF">
-      <!-- Note: no overwriting, so user's libs and classes get preference -->
-      <fileset dir="${forrest.home}/context/WEB-INF">
-        <include name="lib/**"/>
-        <include name="classes/**"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
-    <available property="jdk1.4+" classname="java.lang.CharSequence"/>
-    <copy todir="${project.webapp}/WEB-INF/lib">
-      <fileset dir="${forrest.home}/lib/endorsed">
-        <include name="*jar" unless="jdk1.4+"/>
-      </fileset>
-    </copy>
     <!-- Prepare the Lucene search index -->
     <!-- FIXME: There must be a better way to configure this.
          Is this really a concern of the skinconf?
@@ -678,6 +668,35 @@ ${project.site-dir}
   <target name="webapp" depends="webapp-local, copy-xdocs, copy-content"
    description="Generates a dynamic servlet-based website (an unpackaged webapp).">
    
+   <!--
+     Copy libs
+   -->
+    <copy toDir="${project.webapp}/WEB-INF/lib" 
+      overwrite="true" failonerror="false">
+      <fileset dir="${lib-dir}"/>
+    </copy>
+
+    <copy toDir="${project.webapp}/WEB-INF/classes" 
+      overwrite="true" failonerror="false">
+      <fileset dir="${classes-dir}"/>
+    </copy>
+  
+    <copy todir="${project.webapp}/WEB-INF">
+    <!-- Note: no overwriting, so user's libs and classes get preference -->
+      <fileset dir="${forrest.home}/context/WEB-INF">
+        <include name="lib/**"/>
+        <include name="classes/**"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
+    <available property="jdk1.4+" classname="java.lang.CharSequence"/>
+    <copy todir="${project.webapp}/WEB-INF/lib">
+      <fileset dir="${forrest.home}/lib/endorsed">
+        <include name="*jar" unless="jdk1.4+"/>
+      </fileset>
+    </copy>
+       
    <!-- 
     | Copy all non-xdocs content across to the webapp
    -->
@@ -1047,25 +1066,7 @@ to validate this site.
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
        <classpath>
-         <pathelement path="${env.CLASSPATH}" />
-         <fileset dir="${forrest.home}/jetty">
-           <include name="*.jar"/>
-           <include name="*.JAR"/>
-           <include name="*.zip"/>
-           <include name="*.ZIP"/>
-         </fileset>
-         <fileset dir="${forrest.home}/lib/endorsed">
-           <include name="*.jar"/>
-           <include name="*.JAR"/>
-           <include name="*.zip"/>
-           <include name="*.ZIP"/>
-         </fileset>         
-         <fileset dir="${forrest.home}/lib/optional">
-           <include name="*.jar"/>
-           <include name="*.JAR"/>
-           <include name="*.zip"/>
-           <include name="*.ZIP"/>
-         </fileset>
+         <path refid="forrest.cp"/>
        </classpath>
        <jvmarg line="${forrest.jvmargs}"/>
        <jvmarg
