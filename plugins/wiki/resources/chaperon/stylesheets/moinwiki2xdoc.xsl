@@ -286,14 +286,14 @@
        <xsl:attribute name="href">
       <xsl:choose>
        <xsl:when test="$spaceless-filenames">
-          <xsl:value-of select="concat(translate($href,' ',''),'.html')"/>
+          <xsl:value-of select="concat(translate(translate($href, '&quot;', ''),' ',''),'.html')"/>
        </xsl:when>
        <xsl:otherwise>
           <xsl:value-of select="concat('view.do?page=',$href)"/>
        </xsl:otherwise>
       </xsl:choose>
        </xsl:attribute>
-       <xsl:value-of select="$href"/>
+       <xsl:value-of select="translate($href, '&quot;','')"/>
       </link>
      </xsl:otherwise>
     </xsl:choose>
