@@ -15,6 +15,8 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,6 +45,12 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
  */
 
 public class NewProjectWizard extends Wizard implements INewWizard {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger
+			.getLogger(NewProjectWizard.class);
+
 	private WizardNewProjectCreationPage page;
 
 	/**
@@ -126,13 +134,14 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			  Process seedProc = Runtime.getRuntime().exec(cmdString);
 		      BufferedReader reader = new BufferedReader(new InputStreamReader(seedProc.getInputStream()));
 		      while((lineRead = reader.readLine()) != null) {
-		      	// FIXME: should be logged properly
-	            System.out.println(lineRead);
+				if (logger.isDebugEnabled()) {
+					logger.debug("finishPage(IProgressMonitor)" + lineRead);
+				}
               }
 			  exitValue = seedProc.exitValue();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("finishPage(IProgressMonitor)", e);
 			}
 			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
