@@ -220,18 +220,24 @@
       font-size="{$size}pt"
       font-weight="bold"
       space-before="12pt"
-      space-after="4pt"
-      id="{generate-id()}">
+      space-after="4pt">
+      <xsl:attribute name="id">
+        <xsl:choose>
+          <xsl:when test="normalize-space(@id)!=''">
+            <xsl:value-of select="@id"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="generate-id()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+
 
       <xsl:if test="$numbersections = 'true'">
         <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
         <xsl:text>. </xsl:text>
       </xsl:if>
       <xsl:value-of select="title"/>
-
-      <xsl:if test="normalize-space(@id)!=''">
-        <fo:block id="{@id}"/>
-      </xsl:if>
 
     </fo:block>
     <xsl:apply-templates>
