@@ -268,8 +268,12 @@ public class IdGeneratorTransformer
      * @return An "always valid" SourceValidity object. This transformer has no
      * inputs other than the incoming SAX events.
      */
-    public SourceValidity generateValidity() {
+    public SourceValidity getValidity() {
         return new NOPValidity();
+    }
+
+    public SourceValidity generateValidity() {
+      return getValidity();
     }
 
 
