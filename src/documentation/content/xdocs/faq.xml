@@ -53,82 +53,38 @@
       </question>
       <answer>
         <p>
-          This can be done by overriding the <code>filterlinks.xsl</code>
-          stylesheet, and modifying it to filter out links that shouldn't be
-          traversed.
+          This can be done by overriding the <code>cli.xconf</code> config file,
+          and defining patterns for URLs to exclude.
         </p>
         <p>
-          This means creating a directory
-          <code>src/documentation/resources/stylesheets</code> (or wherever
-          <code>${forrest.stylesheets-dir}</code> points) and copying
-          <code>$FORREST_HOME/context/resources/stylesheets/filterlinks.xsl</code>
-          to it.  Then edit filterlinks.xsl, and add extra conditions to the
-          <code>xsl:if</code> statement:
+          This means creating a directory <code>src/documentation/conf</code>
+          (or wherever <code>${forrest.conf-dir}</code> points) and copying
+          <code>$FORREST_HOME/WEB-INF/cli.xconf</code> to it.  Then edit
+          cli.xconf, and add any exclude sections you require at the end.  The
+          default cli.xconf ignores links containing 'apidocs' or starting with
+          'api/':
         </p>
-        <source
-          >&lt;xsl:template match="@src|@href|@background"&gt;
-          &lt;xsl:if test="not(contains(.,'apidocs')) and not(starts-with(., 'api/'))"&gt;
-          ...</source>
-        <p>
-          This default XPath expression ignores links containing 'apidocs' or
-          starting with 'api/'.  This is just an example, and you should modify
-          it appropriately for your site.
-        </p>
-        <p>
-          With the CVS version of Forrest, this is all that is required.
-          Forrest 0.4 needs one more change: a custom sitemap must be created
-          (copy <code>$FORREST_HOME/context/sitemap.xmap</code> to
-          <code>src/documentation/sitemap.xmap</code>, aka
-          <code>${project.sitemap}</code>), and change line 394 from:
-        </p>
-        <source>&lt;map:transform src="library/xslt/filterlinks.xsl" /&gt;</source>
-        <p>to:</p>
-        <source>&lt;map:transform src="resources/stylesheets/filterlinks.xsl" /&gt;</source>
-        <p>
-          A bit of background may help explain all this.  Cocoon generates a static
-          version of a website by 'crawling' through the pages&mdash;that is,
-          following links to determine what else to render.  Starting with
-          <code>index.html</code>, Cocoon will:
-        </p>
-        <ol>
-          <li>render a page, say <code>index.html</code></li>
-          <li>
-            <p>
-              request the 'links view' of that page, e.g.
-              <code>index.html?cocoon-view=links</code>.
-            </p>
-            <p>
-              The concept of 'views' is explained in <link href="ext:views">the
-                Cocoon documentation</link>; briefly, Cocoon allows different
-              representations of a page, and these are called views.  The links
-              view is a simple text listing of the page's embedded links.  The
-              links view is specified in the Forrest sitemap with:
-            </p>
-            <source><![CDATA[
-              <map:view name="links" from-position="last">
-                <map:transform
-                  src="resources/stylesheets/filterlinks.xsl"/>
-                <map:serialize type="links"/>
-              </map:view>]]>
-            </source>
-            <p>
-              The XSLT transformation just before the serializer gives us an
-              opportunity to filter out any links we don't want Cocoon to
-              process.  As the link view is a separate pipeline, the normal page
-              output will be unaffected.
-            </p>
-          </li>
-          <li>
-            For each path mentioned in the link view, add it to a queue of pages
-            to render, and recursively render each in order.
-          </li>
-        </ol>
+        <source><![CDATA[
+   ....
+   <!-- Includes and excludes can be used to limit which URLs are rendered -->
+   ]]><strong><![CDATA[
+   <exclude pattern="**apidocs**"/>
+   <exclude pattern="api/**"/>
+   ]]></strong><![CDATA[
+
+   <uri src="favicon.ico"/>
+</cocoon>]]></source>
+        <p>This is just an example, and you should modify it appropriately for
+          your site.</p>
+        <note>
+          Wildcards may be used.  Wildcards work as in Cocoon's sitemap.  <strong>foo/*</strong> would match
+          <code>foo/bar</code>, but not <code>foo/bar/baz</code> &mdash; use <strong>foo/**</strong> to match that.
+        </note>
       </answer>
     </faq>
 
     <faq id="link_raw">
-      <question>How do i link to raw files such as config.txt and
-        brochure.pdf?
+      <question>How do I link to raw files such as config.txt and brochure.pdf?
       </question>
       <answer>
         <p>
@@ -179,37 +135,95 @@
           <li>Rebuild Forrest</li>
         </ol>
         <p>Alternative you can use JAI (Java Advanced Imaging API). For more
-	   info, see <link
-	   href="http://xml.apache.org/fop/graphics.html#packages">FOP Graphics 
-	   Packages</link>
-	</p>
+          info, see <link
+            href="http://xml.apache.org/fop/graphics.html#packages">FOP Graphics 
+            Packages</link>
+        </p>
         <note>Due to Sun's licensing, we cannot redistribute Jimi or JAI with
           Forrest</note>
       </answer>
     </faq>
 
-    <faq id="validation_error:doctype_root_null">
+
+     <faq id="index.html">
       <question>
-        When building my project, I get an validation error: <code>Document root
-          element "site", must match DOCTYPE root "null".</code>.
+        The tab link in my site incorrectly assumes that 'index.html' is present in
+        the linked-to directory. How do I fix this?
       </question>
       <answer>
         <p>
-          You are probably trying to build the project with an old version of
-          Forrest (built before 2003-01-08) that is incorrectly trying to validate
-          the &s; file.  If so, please update your Forrest
-          installation.
+          In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing
+          '/'. That will leave which file to serve up to the sitemap.  For example, if
+          the 'User Manual' tab should link to <code>manual/Introduction.html</code>,
+          <code>tabs.xml</code> should contain:
         </p>
+        <source><![CDATA[
+          <tab label="User Manual" href="manual"/>
+          ]]></source>
         <p>
-          Alternatively, you may be building with an up-to-date Forrest, but have
-          overridden <code>forrest.validate.xdocs.excludes</code> in
-          <code>forrest.properties</code>.  With the introduction of
-          &s;, the above property must have &s;
-          listed to prevent an attempt at DTD-based validation.
+          and add this rule to the sitemap:
         </p>
+        <source><![CDATA[
+          <map:match pattern="manual">
+            <map:redirect-to uri="manual/Introduction.html"/>
+          </map:match>
+          ]]></source>
+     </answer>
+    </faq>
+
+    <faq id="headless_operation">
+      <question>
+        When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
+      </question>
+      <answer>
+        <p>
+          If you are using JDK 1.4.0 or newer, you can enable <em>headless</em>
+          operation by running Forrest with the <code>forrest.jvmarg</code>
+          parameter set to <code>-Djava.awt.headless=true</code>, like this:
+        </p>
+        <source>forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
       </answer>
     </faq>
 
+    <faq id="xsp">
+      <question>How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</question>
+      <answer>
+        <p>First consider whether your needs would be better met by Cocoon itself, rather than Forrest.  Forrest was
+          designed primarily with static sites in mind, and is not a general-purpose Cocoon distribution.</p>
+        <p>That said, there are valid reasons for wanting programmatically generated content, so here is how to enable
+          XSP:</p>
+        <ol>
+          <li>Download <link
+              href="http://cvs.apache.org/viewcvs.cgi/*checkout*/cocoon-2.1/lib/optional/jdtcore-2.1.0.jar?rev=1.1&amp;content-type=application/java">jdtcore-2.1.0.jar</link>,
+            and copy it to the $FORREST_HOME/WEB-INF/lib directory (or lib/core/ directory in the source
+            distribution).</li>
+          <li><p>Override sitemap.xmap in your local project (copy $FORREST_HOME/context/sitemap.xmap to
+              src/documentation/conf/), and add the following generator definition in the map:generators section:</p>
+            <source>
+              &lt;map:generator name="serverpages" pool-grow="2"
+              pool-max="32" pool-min="4" src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;
+            </source>
+          </li>
+          <li><p>Decide how you want to use XSP.  For single files, you could just define a *.xml matcher:</p>
+            <source><![CDATA[
+<map:match pattern="dynamic.xml">
+  <map:generate src="content/xdocs/dynamic.xsp" type="serverpages"/>
+  ...
+  <map:serialize type="xml"/>
+</map:match>]]></source>
+            <p>You may instead wish to override forrest.xmap to define a general mapping for XSPs.</p>
+          </li>
+
+        </ol>
+        <p>See also the <link
+            href="http://wiki.cocoondev.org/Wiki.jsp?page=AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
+      </answer>
+    </faq>
+
+  </part>
+
+  <part id="old_faqs">
+    <title>Older versions</title>
     <faq id="unresolved_project.home">
       <question>When invoking Forrest 0.4 from the
         <code>forrest.antproxy.xml</code>, the build fails because
@@ -252,44 +266,25 @@
           ]]></source>
       </answer>
     </faq>
-
-     <faq id="index.html">
+    <faq id="validation_error:doctype_root_null">
       <question>
-        The tab link in my site incorrectly assumes that 'index.html' is present in
-        the linked-to directory. How do I fix this?
+        When building my project, I get an validation error: <code>Document root
+          element "site", must match DOCTYPE root "null".</code>.
       </question>
       <answer>
         <p>
-          In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing
-          '/'. That will leave which file to serve up to the sitemap.  For example, if
-          the 'User Manual' tab should link to <code>manual/Introduction.html</code>,
-          <code>tabs.xml</code> should contain:
+          You are probably trying to build the project with an old version of
+          Forrest (built before 2003-01-08) that is incorrectly trying to validate
+          the &s; file.  If so, please update your Forrest
+          installation.
         </p>
-        <source><![CDATA[
-          <tab label="User Manual" href="manual"/>
-          ]]></source>
         <p>
-          and add this rule to the sitemap:
+          Alternatively, you may be building with an up-to-date Forrest, but have
+          overridden <code>forrest.validate.xdocs.excludes</code> in
+          <code>forrest.properties</code>.  With the introduction of
+          &s;, the above property must have &s;
+          listed to prevent an attempt at DTD-based validation.
         </p>
-        <source><![CDATA[
-          <map:match pattern="manual">
-            <map:redirect-to uri="manual/Introduction.html"/>
-          </map:match>
-          ]]></source>
-     </answer>
-    </faq>
-
-    <faq id="headless_operation">
-      <question>
-	When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
-      </question>
-      <answer>
-	<p>
-	  If you are using JDK 1.4.0 or newer, you can enable <em>headless</em>
-	  operation by running Forrest with the <code>forrest.jvmarg</code>
-	  parameter set to <code>-Djava.awt.headless=true</code>, like this:
-	</p>
-	<source>forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
       </answer>
     </faq>
 
@@ -315,31 +310,9 @@
       </answer>
     </faq>
 
-    <faq id="site_xml_format">
-      <question>What's with this awful site.xml format?</question>
-      <answer>
-        <p>
-          The <link href="site:linking">site.xml</link> format was designed for
-          humans, not computers.  The goals were for &s; to be exceedingly
-          simple, compact, easy to type and easy to read.  The reuse of element
-          names as ids means that &s; has very few wasted characters.  This odd
-          merging of <em>content</em> and <em>markup</em> has a few
-          disadvantages (DTD validation is out), but nothing that outweighs the
-          readability advantage.
-        </p>
-        <p>
-          That said, pretty much any XML format may be used, simply by tweaking
-          the XPath template in the sitemap.  In the future, &s; may be replaced
-          with some more standardized format, perhaps RDF or <link
-            href="http://www.topicmaps.org/xtm/1.0/">XTM (topic maps)</link>.
-          Volunteers for implementing alternative formats are welcome.
-        </p>
-      </answer>
-    </faq>
-
     <faq id="docbook">
       <question>
-        How do i use DocBook as the xml documentation format?
+        How do I use DocBook as the xml documentation format?
       </question>
       <answer>
         <p>
@@ -372,20 +345,6 @@
          You can also use a mixture of the two methods, some handled
          automatically by Forrest and some directly using DocBook stylesheets.
          You can also have a mixture of "document-v*" DTD and DocBook.
-        </p>
-      </answer>
-    </faq>
-
-    <faq id="obsolete_docs">
-      <question>
-        Why am I a little confused by the Forrest documentation?
-      </question>
-      <answer>
-        <p>
-          Sorry, we are working on that for the next release. Forrest development has
-          been very fast recently. Some of the documentation refers to old methods.
-          Your best bet is to start with the
-          <link href="site:your-project">Using Forrest</link> document.
         </p>
       </answer>
     </faq>
