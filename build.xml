@@ -211,9 +211,14 @@
     </taskdef>
     <!-- skinconf.xml -->
     <echo message="validating **/skinconf.xml ..."/>
-    <jing compactSyntax="true" rngfile="./src/core/context/resources/schema/relaxng/skinconf.rnc">
-      <fileset dir="./src/core" includes="**/skinconf.xml"/>
-    </jing>
+    <xmlvalidate failonerror="true" lenient="no" warn="yes">
+      <xmlcatalog >
+        <dtd publicId="-//APACHE//DTD Skin Configuration V0.6//EN"
+        location="src/core/context/resources/schema/dtd/skinconfig-v06.dtd"/>
+      </xmlcatalog>
+      <fileset dir="./src/core"
+        includes="**/skinconf.xml" />
+    </xmlvalidate>
     <!-- All stylesheets **/*.xsl -->
     <echo message="validating stylesheets **/*.xsl ..."/>
     <jing rngfile="./src/core/context/resources/schema/relaxng/xslt.rng">

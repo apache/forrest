@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="prepare-context" basedir="." name="context">
+
+  <!-- ===============================================================
+       Makes the Cocoon context dir to work in and fills it completely.
+       That is by depending on:
+         bare-context     // for forrest predefines.  
+         project-context  // for project's actual content
+           (now: copy stuff from extra param defining the content dir
+            with siteplan: based on that)
+         control-context  // for derivatives from siteplan 
+           (now: no need, waiting on siteplan future)
+            with siteplan: e.g. sitemap and catalog)
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${content-dir}(now)
+       param: location to make temporary context-dir ${project.webapp} 
+       =============================================================== -->
+  <target name="prepare-context" depends="init, bare-context, project-context" />
+
+  <!-- ===============================================================
+       Fills the Cocoon context dir for local execution 
+       with the forrest-predefines.
+       param: name of the skin to use ${project.skin} (now)
+       param: location to make temporary context-dir ${project.webapp} 
+       =============================================================== -->
+  <target name="bare-context" depends="init" >
+    <echo>____________________________________</echo>
+    <echo>Using skin ${project.skin}</echo>
+    <echo>____________________________________</echo>
+    <filter token="skin"              value="${project.skin}" />
+    <filter token="menu-scheme"       value="${project.menu-scheme}" />
+    <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
+    <filter token="local-catalog"     value="${catalog}" />
+    <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
+    <filter token="i18n"              value="${project.i18n}" />
+
+    <copy todir="${project.webapp}/" >
+      <fileset dir="${forrest.home}/context" >
+        <exclude name="*.xmap" />
+        <exclude name="skins/**" />
+        <exclude name="resources/**" />        
+        <exclude name="WEB-INF/*.xconf" />
+        <exclude name="jettyconf.xml" />
+      </fileset>
+    </copy>
+
+    <copy todir="${project.webapp}/" filtering="true" overwrite="true">
+      <fileset dir="${forrest.home}/context" >
+        <include name="*.xmap" />
+        <include name="WEB-INF/*.xconf" />
+        <exclude name="WEB-INF/cocoon-live.xconf"/>
+      </fileset>
+    </copy>
+
+    <!--Hack to stop the classpath definition breaking. If the project has any
+    custom jars or classes, they will be added to these dirs -->
+    <mkdir dir="${project.webapp}/WEB-INF/lib"/>
+    <mkdir dir="${project.webapp}/WEB-INF/classes"/>
+  </target>
+
+  <!-- ===============================================================
+       Fills the Cocoon context dir to work in 
+       with the project-content-parts 
+         (now: copy stuff from param ${content-dir}
+          with siteplan: based on that plan; should allow more different parts)
+       param: location to find the content ${content-dir}(now)
+       param: location to find project descriptors == ${project.home} 
+       param: location to make temporary context-dir ${project.webapp} 
+       =============================================================== -->
+  <target name="project-context" depends="examine-proj, ensure-content,
+    validate, init, bare-context, copy-sitemap, copy-conf, upgrade-skinconf, copy-status"/>
+
+  <target name="copy-conf" if="conf.present">
+    <copy toDir="${project.webapp}/WEB-INF" filtering="true"
+      overwrite="true" failonerror="false">
+      <fileset dir="${conf-dir}">
+        <exclude name="*-${version}.xconf"/>
+      </fileset>
+    </copy>
+    <copy toDir="${project.webapp}/WEB-INF" filtering="true" overwrite="true"
+      failonerror="false">
+      <fileset dir="${conf-dir}">
+        <include name="*-${version}.*"/>
+      </fileset>
+      <mapper type="glob" from="*-${version}.xconf" to="*.xconf"/>
+    </copy>
+   </target>
+
+  <target name="copy-sitemap" if="sitemap.present">
+    <copy toDir="${project.webapp}" filtering="true" overwrite="true" failonerror="false">
+      <fileset dir="${sitemap-dir}">
+        <exclude name="*-${version}.xmap"/>
+        <include name="*.xmap"/>
+        <include name="jtidy.properties"/>
+      </fileset>
+    </copy>
+    <copy toDir="${project.webapp}" filtering="true" overwrite="true">
+      <fileset dir="${sitemap-dir}">
+        <include name="*-${version}.xmap"/>
+      </fileset>
+      <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
+    </copy>
+  </target>
+
+  <target name="upgrade-skinconf" if="skinconf.present">
+     <!-- FIXME: hardcode values here -->
+     <xslt in="${skinconf}" out="${project.webapp}/skinconf.xml" 
+           style="${forrest.home}/context/resources/stylesheets/upgrade-skinconf.xsl">
+      <xmlcatalog refid="fcatalog"/>
+    </xslt>
+  </target>
+
+  <target name="copy-status" if="status.present">
+    <copy file="${status}" todir="${project.webapp}" />
+  </target>
+
+  <!-- ===============================================================
+       Checks if the current project contains Forrest docs, and sets
+       the 'project.empty' property if no docs are found.
+       =============================================================== -->
+  <target name="check-contentdir" depends="init-props">
+    <available property="project.content.present" file="${content-dir}"
+      type="dir"/>
+  </target>
+
+  <target name="ensure-nocontent" depends="check-contentdir"
+    if="project.content.present" unless="skip.contentcheck">
+    <fail>
+------------------------------------------------
+This project already has content in ${content-dir}.
+
+Run with '-Dskip.contentcheck=yes' to ignore existing content.
+------------------------------------------------
+    </fail>
+  </target>
+
+  <target name="ensure-content" depends="check-contentdir"
+    unless="project.content.present">
+    <fail>
+------------------------------------------------
+This project has no content in ${content-dir}.
+Use the 'seed' target to create a template project structure.
+------------------------------------------------
+    </fail>
+  </target>
+
+ 
+  <!-- ===============================================================
+       Prepares the Lucene context indexing the site. [RPR]
+       =============================================================== -->
+  <target name="lucene-index" depends="init, -prepare-classpath" if="use-lucene-indexer">
+    <java classname="org.apache.forrest.search.ForrestIndexer"
+      dir="${project.webapp}"
+      fork="true"
+      failonerror="true"
+      maxmemory="${forrest.maxmemory}">
+      <jvmarg line="${forrest.jvmargs}"/>
+      <jvmarg line="${forrest.basic.jvmargs}"/>
+      <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+      <arg line="-index ${project.index-dir}"/>
+      <arg value="${xdocs-dir}"/>
+      <classpath>
+        <path refid="forrest.cp"/>
+      </classpath>
+    </java>
+  </target>
+
+</project>

@@ -123,7 +123,7 @@ to validate this site.
     </fail>
     <xmlvalidate failonerror="${forrest.validate.site.failonerror}" lenient="no" warn="yes">
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
-      <xmlcatalog>
+      <xmlcatalog id="fcatalog" >
         <catalogpath>
           <pathelement
             location="${forrest.home}/context/resources/schema/catalog.xcat"/>
@@ -140,13 +140,7 @@ to validate this site.
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
-      <xmlcatalog>
-        <catalogpath>
-          <pathelement
-            location="${forrest.home}/context/resources/schema/catalog.xcat"/>
-          <pathelement location="${catalog}"/>
-        </catalogpath>
-      </xmlcatalog>
+      <xmlcatalog refid="fcatalog" />
       <fileset dir="${xdocs-dir}"
         includes="${forrest.validate.xdocs.includes}"
         excludes="${forrest.validate.xdocs.excludes}"/>
@@ -155,13 +149,14 @@ to validate this site.
   </target>
 
   <target name="validate-skinconf" depends="validation-props"
-    if="validate.skinconf">
-    <jing compactSyntax="true"
-      rngfile="${forrest.home}/context/resources/schema/relaxng/skinconf.rnc">
+          if="validate.skinconf">
+    <xmlvalidate failonerror="${forrest.validate.skinconf.failonerror}" 
+                 lenient="no" warn="yes">
+      <xmlcatalog refid="fcatalog" />
       <fileset dir="${content-dir}"
-        includes="${forrest.validate.skinconf.includes}"
-        excludes="${forrest.validate.skinconf.excludes}"/>
-    </jing>
+               includes="${forrest.validate.skinconf.includes}"
+               excludes="${forrest.validate.skinconf.excludes}"/>
+    </xmlvalidate>
     <echo message="...validated skinconf"/>
   </target>
 

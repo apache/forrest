@@ -20,86 +20,9 @@ Skin configuration file. This file contains details of your project, which will
 be used to configure the chosen Forrest skin.
 -->
 
-<!DOCTYPE skinconfig [
-
-  <!ENTITY % links.att 'name CDATA #REQUIRED'>
-  <!ENTITY % link.att 'name CDATA #REQUIRED href CDATA #REQUIRED'>
-  <!ELEMENT skinconfig (disable-lucene?, disable-search?, disable-print-link?, disable-pdf-link?,
-  disable-xml-link?, disable-external-link-image?, disable-compliance-links?, obfuscate-mail-links?, searchsite-domain?, searchsite-name?,
-  project-name, project-description?, project-url, project-logo, group-name?, group-description?, group-url?, group-logo?,
-  host-url?, host-logo?, favicon-url?, year?, vendor?, trail?, toc?, headings?, colors?, extra-css?, pdf?, credits?)*>
-  <!ELEMENT credits (credit*)>
-  <!ELEMENT credit (name, url, image?, width?, height?)>
-  <!-- id uniquely identifies the tool, and role indicates its function -->
-  <!ATTLIST credit id   CDATA #IMPLIED
-                   role CDATA #IMPLIED>
-  <!ELEMENT disable-lucene (#PCDATA)>
-  <!ELEMENT disable-search (#PCDATA)>
-  <!ELEMENT disable-print-link (#PCDATA)>
-  <!ELEMENT disable-pdf-link (#PCDATA)>
-  <!ELEMENT disable-xml-link (#PCDATA)>
-  <!ELEMENT disable-external-link-image (#PCDATA)>    
-  <!ELEMENT disable-compliance-links (#PCDATA)>   
-  <!ELEMENT obfuscate-mail-links (#PCDATA)>   
-  <!ELEMENT searchsite-domain (#PCDATA)>
-  <!ELEMENT searchsite-name (#PCDATA)>  
-  <!ELEMENT project-name (#PCDATA)>
-  <!ELEMENT project-description (#PCDATA)>
-  <!ELEMENT project-url (#PCDATA)>
-  <!ELEMENT project-logo (#PCDATA)>
-  <!ATTLIST project-logo width CDATA #IMPLIED 
-                         height CDATA #IMPLIED>
-  <!ELEMENT group-name (#PCDATA)>
-  <!ELEMENT group-description (#PCDATA)>
-  <!ELEMENT group-url (#PCDATA)>
-  <!ELEMENT group-logo (#PCDATA)>
-  <!ATTLIST group-logo width CDATA #IMPLIED 
-                       height CDATA #IMPLIED>
-  <!ELEMENT host-url (#PCDATA)>
-  <!ELEMENT host-logo (#PCDATA)>
-  <!ATTLIST host-logo width CDATA #IMPLIED 
-                      height CDATA #IMPLIED>
-  <!ELEMENT favicon-url (#PCDATA)>
-  <!ELEMENT year (#PCDATA)>
-  <!ELEMENT vendor (#PCDATA)>
-  <!ELEMENT trail (link1, link2, link3)>
-  <!ELEMENT link1 EMPTY>
-  <!-- Seems we can't use param entity refs until this is DTDified -->
-  <!ATTLIST link1 name CDATA #REQUIRED href CDATA #IMPLIED>
-  <!ELEMENT link2 EMPTY>
-  <!ATTLIST link2 name CDATA #REQUIRED href CDATA #IMPLIED>
-  <!ELEMENT link3 EMPTY>
-  <!ATTLIST link3 name CDATA #REQUIRED href CDATA #IMPLIED>
-  <!ELEMENT name (#PCDATA)>
-  <!ELEMENT url (#PCDATA)>
-  <!ELEMENT image (#PCDATA)>
-  <!ELEMENT width (#PCDATA)>
-  <!ELEMENT height (#PCDATA)>
-  <!ELEMENT toc EMPTY>
-  <!ATTLIST toc max-depth CDATA #IMPLIED min-sections CDATA #IMPLIED
-            location CDATA #IMPLIED>
-  <!ELEMENT headings EMPTY>
-  <!ATTLIST headings type CDATA #REQUIRED>
-  <!ELEMENT colors (color*)>
-  <!ELEMENT color EMPTY>
-  <!ATTLIST color name CDATA #REQUIRED 
-                  value CDATA #REQUIRED
-                  font CDATA #IMPLIED
-                  link CDATA #IMPLIED
-                  vlink CDATA #IMPLIED
-                  hlink CDATA #IMPLIED>
-  <!ELEMENT extra-css (#PCDATA)>
-  <!ELEMENT page EMPTY>
-  <!ATTLIST page size (a0|a1|a2|a3|a4|a5|executive|folio|legal|ledger|letter|quarto|tabloid) "letter"
-                 orientation (portrait|landscape) "portrait"> 
-  <!ELEMENT top (#PCDATA)>
-  <!ELEMENT bottom (#PCDATA)>
-  <!ELEMENT inner (#PCDATA)>
-  <!ELEMENT outer (#PCDATA)>
-  <!ELEMENT margins (top?, bottom?, inner?, outer?)>
-  <!ATTLIST margins double-sided (true | false) "false">
-  <!ELEMENT pdf (page, margins?)>
-  ]>
+ <!DOCTYPE skinconfig PUBLIC
+        "-//APACHE//DTD Skin Configuration V0.6//EN"
+        "skinconfig-v06.dtd">
 
 <skinconfig>
   <!-- Do we want to disable the Lucene search box? -->
@@ -284,19 +207,20 @@ be used to configure the chosen Forrest skin.
 -->
 
   </colors>
-  
+  <!-- FIXME: this element does not validate (JJP) 
   <extra-css>
   </extra-css>
-  
+  -->
+ 
   <!-- Settings specific to PDF output.  -->
+    <!-- FIXME: this element does not validate (JJP)
   <pdf>
-    <!--
        Supported page sizes are a0, a1, a2, a3, a4, a5, executive,
        folio, legal, ledger, letter, quarto, tabloid (default letter).
        Supported page orientations are portrait, landscape (default
        portrait).
-    -->
     <page size="letter" orientation="portrait"/>
+    -->
 
     <!--
        Margins can be specified for top, bottom, inner, and outer
@@ -305,7 +229,6 @@ be used to configure the chosen Forrest skin.
        inner edge will be left on odd pages, right on even pages,
        the outer edge vice versa.
        Specified below are the default settings.
-    -->
     <margins double-sided="false">
       <top>1in</top>
       <bottom>1in</bottom>
@@ -313,6 +236,7 @@ be used to configure the chosen Forrest skin.
       <outer>1in</outer>
     </margins>
   </pdf>
+    -->
 
   <!-- Credits are typically rendered as a set of small clickable images in the
   page footer -->
