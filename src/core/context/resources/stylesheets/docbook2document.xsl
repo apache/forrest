@@ -563,6 +563,7 @@ Revision:
       </xsl:template>
 
       <xsl:template match="graphic|imagedata">
+           <table>
             <tr>
                   <td>
                         <img alt="{@srccredit}" src="{@fileref}"/>
@@ -579,6 +580,7 @@ Revision:
                         </td>
                   </tr>
             </xsl:if>
+           </table>
       </xsl:template>
       <xsl:template match="simplelist">
             <ul>
