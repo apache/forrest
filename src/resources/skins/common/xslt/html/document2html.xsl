@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.25 2003/09/06 12:32:41 jefft Exp $
+$Id: document2html.xsl,v 1.26 2003/09/06 14:10:41 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -105,34 +105,31 @@ $Id: document2html.xsl,v 1.25 2003/09/06 12:32:41 jefft Exp $
   <!-- Generates the "printer friendly version" link -->
   <xsl:template name="printlink">
     <xsl:if test="$disable-print-link = 'false'"> 
-    
 <script type="text/javascript" language="Javascript">
-
-function printit(){  
+function printit() {  
 if (window.print) {
     window.print() ;  
 } else {
-    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+    var WebBrowser = '&lt;OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2">&lt;/OBJECT>';
 document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
     WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
 }
 }
 </script>
-            
 
-<script type="text/javascript" language="Javascript">  
+<script type="text/javascript" language="Javascript">
 var NS = (navigator.appName == "Netscape");
 var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
-    document.write('<td align="center" width="40" nowrap="nowrap">');     
-    document.write('  <a href="javascript:printit()" class="dida">');        
-    document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br/>');   
-    document.write('  print</a>');   
-    document.write('</td>');           
+    document.write('<td align="center" width="40" nowrap="nowrap">');
+    document.write('  <a href="javascript:printit()" class="dida">');
+    document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br />');
+    document.write('  print</a>');
+    document.write('</td>');
 }
 </script>
 
-    </xsl:if>
+</xsl:if>
   </xsl:template>
 
   <!-- Generates the PDF link -->
@@ -212,10 +209,7 @@ if (VERSION > 3) {
         <xsl:choose>
           <xsl:when test="local-name() = 'note'">Note</xsl:when>
           <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
-          <xsl:otherwise>Fixme (
-               <xsl:value-of select="@author"/>
-
-               )</xsl:otherwise>
+          <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
         </xsl:choose>
       </div>
       <div class="content">
@@ -341,26 +335,23 @@ if (VERSION > 3) {
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
     <xsl:param name="depth"/>     
-    <xsl:if test="count($tocroot/section) > 0">
-      <ul class="minitoc">
-        <xsl:for-each select="$tocroot/section">
-          <li>
-            <xsl:call-template name="toclink"/>
-            <xsl:if test="$depth&lt;$max-depth">
-              <xsl:call-template name="minitoc">
-                <xsl:with-param name="tocroot" select="."/>
-                <xsl:with-param name="depth" select="$depth + 1"/>          
-              </xsl:call-template>
-            </xsl:if>      
-          </li>
-        </xsl:for-each>
-      </ul>
-    </xsl:if>
+    <ul class="minitoc">
+      <xsl:for-each select="$tocroot/section">
+        <xsl:call-template name="toclink"/>
+        <xsl:if test="$depth&lt;$max-depth">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="."/>
+            <xsl:with-param name="depth" select="$depth + 1"/>          
+          </xsl:call-template>
+        </xsl:if>      
+      </xsl:for-each>
+    </ul>
   </xsl:template>
 
   <xsl:template name="toclink">
     <xsl:variable name="tocitem" select="normalize-space(title)"/>
     <xsl:if test="string-length($tocitem)>0">
+      <li>
       <a>
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text>
@@ -370,6 +361,7 @@ if (VERSION > 3) {
         </xsl:attribute>
         <xsl:value-of select="$tocitem"/>
       </a>
+      </li>
     </xsl:if>
   </xsl:template>
   
