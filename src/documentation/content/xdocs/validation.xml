@@ -11,7 +11,7 @@
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>$Revision: 1.10 $</version>
+    <version>$Revision: 1.11 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
       <person name="David Crossley" email="crossley@apache.org"/>
@@ -284,8 +284,10 @@ size CDATA #IMPLIED&gt;
           types that Forrest provides.  Projects can augment this with their
           own catalog file in <code>${project.schema-dir}/catalog</code>.
           Add the "local-catalog" parameter to your
-          <code>build/tmp/context/WEB-INF/cocoon.xconf</code> as described
-          in that file. Remember to raise the "verbosity" level in
+          <code>src/documentation/resources/conf/cocoon.xconf</code>
+          as described in that file. (Copy the default one from
+          <code>xml-forrest/src/resources/conf/cocoon.xconf</code>)
+          Remember to raise the "verbosity" level in
           <code>cocoon.xconf</code> if you suspect problems with your catalog.
         </p>
         <p>
@@ -299,13 +301,6 @@ size CDATA #IMPLIED&gt;
           -- custom doctype --
           PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "dtd/download-v11.dtd"
         </source>
-        <warning>Currently (2002-11-15) Forrest does not allow you to use a
-          <code>cocoon.xconf</code> configuration file with your project.
-          However, one is copied during the build to 
-          <code>build/tmp/context/WEB-INF/cocoon.xconf</code> so after the
-          first run of the '<code>forrest</code>' you can use that one.
-          We are working on fixing this.
-        </warning>
         <warning>Currently (2002-11-15) Forrest does not utilise your project
           OASIS catalog when doing '<code>forrest validate</code>'. This is
           because Ant does not read this additional catalog. Until this is
