@@ -23,7 +23,7 @@
     <section>
       <title>Introduction</title>
       <p> The Forrest Project is an <link href="http://www.opensource.org/">Open Source</link> volunteer project released
-      under a very open license. This means there are many ways to contribute to the
+      under a very liberal license. This means there are many ways to contribute to the
       project - either with direct participation (coding, documenting, answering
       questions, proposing ideas, reporting bugs, suggesting bug-fixes, etc..) or by
       resource donations (money, time, publicity, hardware, software, conference
@@ -43,60 +43,64 @@
         help but you're not familiar with the innermost technical details, don't worry:
         we have work for you! </p>
     </section>
-    <section>
+    <section id="wanted">
      <title>Help Wanted Here</title>
-      <p> The rest of this document is mainly about contributing new or
-        improved code and/or documentation, but we would also be glad to have extra
-        help in any of the following areas: </p>
+      <p>We would be glad to have extra help in any of the following areas:
+      </p>
       <ul>
+        <li>Assisting to improve documentation.</li>
         <li>Testing Forrest (especially its less-frequently-used features) on
           various configurations and reporting back.</li>
         <li>Debugging - producing reproduceable test cases and/or finding
           causes of bugs. Some known bugs are informally listed on To Do, and some are
           recorded as issues (see <link href="#procedure">explanation
       below</link>).</li>
-      <li>Specifying/analysing/designing new features - and beyond. (If you
-        wish to get involved with this, please join the <code>forrest-dev</code> mailing
+        <li>Providing new use-cases and requirements. If you think that
+        Forrest does not quite meet your needs then tell us about it.</li>
+      <li>Specifying/analysing/designing new features - and beyond. If you
+        wish to get further involved with this, please join the <code>forrest-dev</code> mailing
         list, install and try out Forrest and read some of the
-        <link href="site:mail-lists">mail archives</link>. You should have a strong
-      "fluency" in XML technologies, Java and a basic understanding of the Forrest
+        <link href="site:mail-lists">mail archives</link>. You should have a reasonable
+      fluency in XML technologies, some Java and Ant skills, and a basic understanding of the Forrest
       architecture - don't just say "it should have XYZ" without reading anything
-      first - because chances are, somebodies already thought of that feature!)</li>
+      first - because chances are, somebody has already thought of that feature!)</li>
       <li>Packaging easy-to-install packages (such as RPMs) for the myriad of
         possible configurations out there. (The project does not maintain anything but
         the basic <code>.zip</code> and <code>.tar.gz</code> packages, but anyone is
         welcome to build their own specific packages and announce them on the
         <code>forrest-dev</code> list)</li>
       <li>... and there is just one other thing - don't forget to tell everyone
-        who asks, how great Forrest is! ;-) The more people that know about and start
+        who asks, how great Forrest is! The more people that know about and start
         to use Forrest, the larger the pool of potential contributors there will be.
         </li>
       </ul>
-    </section> <anchor id="cvshowto"/>
-    <section>
+    </section>
+
+    <section id="cvshowto">
     <title>SVN Usage</title>
-      <p>An overview of how to use SVN to participate in Forrest development.
+      <p>An overview of how to use Subversion (SVN) to participate in Forrest development.
         Do not be afraid - you cannot accidently destroy the actual code repository,
         because you are working with a local copy as an anonymous user. Therefore, you
         do not have the system permissions to change anything. You can only update your
-        local repository and compare your revisions with the real repository. </p>
-      <p> (Further general SVN usage information is at
-        <link href="http://subversion.tigris.org/">subversion.tigris.org</link> and your local
-      <code>info svn</code> pages or <code>man svn</code> pages or user
-      documentation.) </p>
-    </section> <anchor id="ssh"/>
-    <section>
+        local repository and compare your revisions with the real repository.
+        The <link href="site:build">Building Forrest</link> document explains.
+      </p>
+    </section>
+
+    <section id="ssh">
     <title>SVN Committer with Secure Shell access</title>
       <p>After a developer has consistently provided contributions (code,
-        documentation and discussion), then the rest of the dev community may vote to
+        documentation and discussion) and demonstrated committment, then the rest of the dev community may vote to
         grant this developer commit access to the Subversion repository. </p>
       <p>You will need secure access to the repository to be able to commit
-        patches. The <link href="site:build">building page</link> should have all the instructions you need to get your machine configured to use the repository. </p>
-      <p>Commits to the SVN repository must go through https:  If you have the codebase
-        checked out via http:, the following will convert it.</p>
+        patches. Commits to the SVN repository must use the https: protocol.
+        If you already have the codebase
+        checked out via the http: protocol, then the following command will
+        convert it.</p>
       <source>svn sw https://svn.apache.org/repos/asf/xml/forrest/trunk</source>
-    </section> <anchor id="procedure"/>
-    <section>
+    </section>
+
+    <section id="procedure">
     <title>Procedure for Raising Development Issues</title>
       <p> There are two methods for discussing development and submitting
         patches. So that everyone can be productive, it is important to know which
@@ -127,8 +131,9 @@
         different times to your country and that they are in different time zones. You
         might also consider rewriting your initial posting - perhaps it was not clear
         enough and the readers eyes glazed over. </p>
-    </section> <anchor id="tips"/>
-    <section>
+    </section>
+
+    <section id="tips">
      <title>Contribution Notes and Tips</title>
       <p> This is a collection of tips for contributing to the project in a
         manner that is productive for all parties. </p>
@@ -152,14 +157,10 @@
           <code>[RT]</code> (Random Thought which quickly blossom into research topics
           :-), <code>[STATUS]</code> (development status of a certain facility). </li>
         <li> When making changes to XML documentation, or any XML document for
-          that matter, use a <link href="http://www.oasis-open.org/cover/">validating
-      parser</link> (one that is tried and true is
-      <link href="http://openjade.sourceforge.net/">OpenSP/onsgmls</link>). This
-      procedure will detect errors without having to go through the whole <code>build
-      docs</code> process to find them. Do not expect Forrest or the build system to
-      detect the validation errors for you - they can do it, but that is not their
-      purpose. (Anyway, nsgmls validation error messages are more informative.) </li>
-
+          that matter, use a validating XML editor. Here is some assistance
+          with editor 
+          <link href="catalog.html">configuration</link>.
+        </li>
       <li> Remember that most people are participating in development on a
         volunteer basis and in their "spare time". These enthusiasts will attempt to
         respond to issues. It may take a little while to get your answers. </li>
@@ -179,10 +180,12 @@
       <li> When sending a patch, you usually do not need to worry about which
         SVN branch it should be applied to. The maintainers of the repository will
         decide. </li>
-      <li> If an issue starts to get bogged down in list discussion, then it
-        may be appropriate to go into private off-list discussion with a few interested
-        other people. Spare the list from the gory details. Report a summary back to
-        the list to finalise the thread. </li>
+      <li>Keep all project-related discussion on the mailing list. It is much
+        better to utilise the wider audience, rather than to break off into
+        private discussion groups. You never know who else will have the
+        answer to your issues, and anyway other people are interested in
+        the outcome.
+      </li>
       <li> Become familiar with the mailing lists. As you browse and search,
         you will see the way other people do things. Follow the leading examples. </li>
 
