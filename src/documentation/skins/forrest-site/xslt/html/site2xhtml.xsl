@@ -1,33 +1,34 @@
 <?xml version="1.0"?>
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="site">
     <html>
-
       <head>
         <title>
           <xsl:value-of select="td/table/tr/td/h2"/>
         </title>
-        <link rel="stylesheet" href="page.css" type="text/css"/>
+        <link rel="stylesheet" href="skin/page.css" type="text/css"/>
       </head>
 
       <body>
 
         <div class="path">
-          <a href="http://xml.apache.org/">xml.apache.org</a> :: <a href="http://xml.apache.org/forrest/">forrest</a>
+          <a href="@link1.href@">@link1@</a> : <a href="@link2.href@">@link2@</a> : <a href="@link3.href@">@link3@</a>
         </div>
 
         <table class="top" cellspacing="0" cellpadding="0" summary="top bar">
           <tr>
             <td>
-              <img src="images/biglogo.gif"/>
+              <a href="@group-logo.href@"><img src="@group-logo.src@" border="0"/></a>
             </td>
             <td valign="middle" align="center" width="100%">
-              <img src="images/project-logo.png"/>
+              <a href="@project-logo.href@"><img src="@project-logo.src@" border="0"/></a>
             </td>
             <td valign="top" height="69" nowrap="nowrap">
               <div class="search">
-                <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:xml.apache.org'">
+
+               <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:xml.apache.org'">
                   <input type="hidden" name="q"/>
                   <input type="text" id="query" size="15"/>&#160;<input type="button" value="Search" name="Search"/><br/>
                   <!-- <input type="radio" name="web" value="web">web site&#160;</input>&#160;<input type="radio" name="mail" value="mail">mail lists</input> -->
@@ -55,7 +56,7 @@
         </div>
 
 
-        <div class="topline">&#160;</div>
+       <div class="topline">&#160;</div>
 
         <table cellspacing="0" cellpadding="0" summary="content pane">
           <tr>
@@ -73,15 +74,20 @@
           <tr>
             <td>&#160;</td>
             <xsl:apply-templates select="td[@class='content']"/>
-          </tr>
+         </tr>
           <tr>
             <td>&#160;</td>
-            <td>&#160;</td>
+
+           <td>&#160;</td>
           </tr>
         </table>
         <div class="copyright">
-          Copyright (c) 1999-2002 <a href="http://www.apache.org/">Apache Software Foundation</a>. All Rights Reserved.
+          Copyright &#x00A9;@year@ @vendor@. All Rights Reserved.
         </div>
+        
+        <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo" border="0"/></a> 
+        <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" alt="Krysalis Centipede Logo" border="0"/></a>         
+      
       </body>
     </html>
   </xsl:template>
