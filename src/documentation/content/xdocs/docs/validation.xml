@@ -26,7 +26,6 @@
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>$Revision: 1.19 $</version>
   </header>
 
   <body>
@@ -111,7 +110,7 @@
       <source>forrest.validate.excludes=slides.xml, manual/**</source>
       <note>
         The <code>failonerror</code> properties only work for files validated
-        with &lt;xmlvalidate&gt;, not (yet) for those validated
+        with Ant's &lt;xmlvalidate&gt; and not (yet) for those validated
         with &lt;jing&gt;, where <code>failonerror</code> defaults to
         <code>true</code>.
       </note>
@@ -139,7 +138,7 @@
           of one from Forrest.  This is what we'll demonstrate here, using our
           earlier <link href="site:new_content_type">download format</link>
           as an example.  Our download format adds a group of new elements to
-          the standard 'documentv11' format.  Our new elements are described
+          the standard 'documentv13' format.  Our new elements are described
           by the following DTD:
         </p>
         <source>
@@ -157,14 +156,14 @@ name CDATA #REQUIRED
 size CDATA #IMPLIED&gt;
         </source>
         <p>
-          The document-v11 entities are defined in a reusable 'module':
-          <code>forrest/src/core/context/resources/schema/dtd/document-v11.mod</code>
+          The document-v13 entities are defined in a reusable 'module':
+          <code>forrest/src/core/context/resources/schema/dtd/document-v13.mod</code>
           The
-          <code>forrest/src/core/context/resources/schema/dtd/document-v11.dtd</code>
+          <code>forrest/src/core/context/resources/schema/dtd/document-v13.dtd</code>
           file provides a full description and basic example of how to pull in
           modules.  In our example, our DTD reuses modules
           <code>common-charents-v10.mod</code> and
-          <code>document-v11.mod</code>.  Here is the full DTD, with
+          <code>document-v13.mod</code>.  Here is the full DTD, with
           explanation to follow.
         </p>
         <source>
@@ -179,15 +178,11 @@ to a set of downloadable files.
 TYPICAL INVOCATION:
 
 &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
-"download-v11.dtd"&gt;
-
-
-AUTHORS:
-Jeff Turner &lt;jefft@apache.org&gt;
+"download-v10.dtd"&gt;
 
 COPYRIGHT:
   Copyright 2002-2004 The Apache Software Foundation
-                                                                                                    
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
@@ -216,9 +211,8 @@ COPYRIGHT:
 &lt;!-- Document --&gt;
 &lt;!-- =============================================================== --&gt;
 
-&lt;!ENTITY % document PUBLIC
-"-//APACHE//ENTITIES Documentation V1.1//EN"
-"document-v11.mod"&gt;
+&lt;!ENTITY % document PUBLIC "-//APACHE//ENTITIES Documentation V1.3//EN"
+"document-v13.mod"&gt;
 
 &lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
 &lt;!ENTITY % local.sections "|release"&gt;
@@ -242,7 +236,8 @@ size CDATA #IMPLIED&gt;
 &lt;!-- End of DTD --&gt;
 &lt;!-- =============================================================== --&gt;
         </source>
-        <p>This custom DTD should be placed in <code>src/documentation/resources/schema/dtd/</code></p>
+        <p>This custom DTD should be placed in your project resources
+        directory at <code>src/documentation/resources/schema/dtd/</code></p>
         <p>
           The &lt;!ENTITY % ... &gt; blocks are so-called 
           <link href="http://www.xml.com/axml/target.html#dt-PERef">parameter
@@ -256,10 +251,10 @@ size CDATA #IMPLIED&gt;
           defines character symbol sets.  We then define the 'document'
           entity.  However, before the <code>%document;</code> PE reference, we
           first override the 'local.section' entity.  This is a hook into
-          document-v11.mod.  By setting its value to '|release', we declare
+          document-v13.mod.  By setting its value to '|release', we declare
           that our &lt;release&gt; element is to be allowed wherever "local
           sections" are used.  There are five or so such hooks for different
-          areas of the document; see document-v11.dtd for more details.  We then
+          areas of the document; see document-v13.dtd for more details.  We then
           import the %document; contents, and declare the rest of our DTD
           elements.
         </p>
@@ -303,12 +298,11 @@ size CDATA #IMPLIED&gt;
           for the document
           types that Forrest provides.  Projects can augment this with their
           own catalog file located in
-          <code>${project.schema-dir}/catalog.xcat</code>.
-          Use the "project.catalog" property in <code>forrest.properties</code>
-          if you need a different pathname.
+          <code>${project.schema-dir}/catalog.xcat</code>
         </p>
         <p>
-          Forrest uses the XML Catalog syntax by default, although the SGML
+          Forrest uses the XML Catalog syntax by default, although the older
+          plain-text
           format can also be used.  Here is what the XML Catalog format looks
           like:
         </p>
@@ -348,7 +342,7 @@ size CDATA #IMPLIED&gt;
       <title>Referring to entities</title>
       <p>
         Look at the source of this document
-        (<code>xdocs/validation.xml</code>) and see how the entity set
+        (<code>xdocs/docs/validation.xml</code>) and see how the entity set
         <code>"Numeric and Special Graphic"</code> is declared in the
         document type declaration.
       </p>
