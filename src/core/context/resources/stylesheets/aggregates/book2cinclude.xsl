@@ -21,7 +21,7 @@ handled by uncommenting the relevant section.
 
 jefft@apache.org
 
-See http://127.0.0.1:8888/book-site.html to see what the book xml looks like
+See http://127.0.0.1:8888/book-wholesite.html to see what the book xml looks like
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cinclude="http://apache.org/cocoon/include/1.0">
