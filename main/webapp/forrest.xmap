@@ -245,45 +245,6 @@ $Revision: 1.8 $
           <map:transform type="idgen" />
           <map:serialize type="xml-document"/>
         </map:when>        
-        <map:when test="{project:content.xdocs}{uri}.jspwiki">
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.jspwiki" />
-            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-            <map:transform type="xsltc" 
-              src="{forrest:context}/resources/chaperon/stylesheets/wiki2xdoc.xsl">
-              <map:parameter name="name" value="{2}" />
-              <map:parameter name="spaceless-filenames" value="true"/>
-            </map:transform>
-            <map:serialize type="xml-document"/>
-          </map:match>
-        </map:when>
-        <map:when test="{project:content.xdocs}{uri}.cwiki">
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
-            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-            <map:transform type="xsltc" 
-              src="{forrest:context}/resources/chaperon/stylesheets/wiki2xdoc.xsl">
-              <map:parameter name="name" value="{2}" />
-              <map:parameter name="spaceless-filenames" value="true"/>
-            </map:transform>
-            <map:serialize type="xml-document"/>
-          </map:match>
-        </map:when>
-        <map:when test="{project:content.xdocs}{uri}.moinwiki">
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.moinwiki" />
-            <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
-            <map:transform type="xsltc" 
-              src="{forrest:context}/resources/chaperon/stylesheets/moinwiki2xdoc.xsl">
-              <map:parameter name="name" value="{2}" />
-              <map:parameter name="spaceless-filenames" value="true"/>
-            </map:transform>
-            <map:serialize type="xml-document"/>
-          </map:match>
-        </map:when>
         <map:when test="{project:content.xdocs}{uri}.txt">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
@@ -354,59 +315,6 @@ $Revision: 1.8 $
       </map:match>
       
   </map:pipeline>
-
-  <map:pipeline type="caching" internal-only="true">
-
-      <map:match pattern="*.xlex">
-        <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xlex">
-            <map:read src="resources/chaperon/grammars/{1}.xlex"/>
-          </map:when>
-          <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
-    <map:serialize type="xml"/>
-          </map:otherwise>
-        </map:select>
-      </map:match>
-
-      <map:match pattern="*.xgrm">
-        <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xgrm">
-            <map:read src="resources/chaperon/grammars/{1}.xgrm"/>
-          </map:when>
-          <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xgrm.xsl"/>
-    <map:serialize type="xml"/>
-          </map:otherwise>
-        </map:select>
-      </map:match>
-
-   <map:match pattern="*.xegrm">
-        <map:select type="exists">
-          <map:when test="{forrest:context}/resources/chaperon/grammars/{1}.xegrm">
-            <map:read src="{forrest:context}/resources/chaperon/grammars/{1}.xegrm"/>
-          </map:when>
-          <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.egrm"/>
-    <map:transform type="extparser" src="{forrest:context}/resources/chaperon/grammars/egrm.xegrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/egrm2xegrm.xsl"/>
-    <map:serialize type="xml"/>
-          </map:otherwise>
-        </map:select>
-      </map:match>
-    </map:pipeline>
 
   </map:pipelines>
 </map:sitemap>
