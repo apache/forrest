@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.2 2003/11/25 14:55:54 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -206,7 +206,7 @@ $Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
           <div class="menu">
             <xsl:for-each select = "div[@class='menu']/ul/li">
               <xsl:call-template name = "innermenuli" >
-                <xsl:with-param name="id" select="concat(position(),'B')"/>
+                  <xsl:with-param name="id" select="concat('1.', position())"/>
               </xsl:call-template>
             </xsl:for-each>
           </div>
@@ -334,7 +334,7 @@ $Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name = "innermenuli">
-                <xsl:with-param name="id" select="concat(position(),'A')"/>
+                 <xsl:with-param name="id" select="concat($id, '.', position())"/>
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
