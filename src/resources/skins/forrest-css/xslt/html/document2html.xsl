@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.2 2003/07/17 11:41:18 jefft Exp $
+$Id: document2html.xsl,v 1.3 2003/08/30 05:26:48 crossley Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -48,36 +48,47 @@ $Id: document2html.xsl,v 1.2 2003/07/17 11:41:18 jefft Exp $
   </xsl:template>
 
   <xsl:template match="body">
-    <xsl:if test="section and not($notoc='true')">
-      <ul>
-        <xsl:for-each select="section">
-        	<li>
-        		<a>
-		        	<xsl:attribute name="href">
-		                <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-		            </xsl:attribute>
-		            <xsl:value-of select="title"/>
-	            </a>
-		        <xsl:if test="section">
-		        	<ul>
-		                <xsl:for-each select="section">
-		                  <li>
-			                  <a>
-			                      <xsl:attribute name="href">
-			                        <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-			                      </xsl:attribute>
-			                      <xsl:value-of select="title"/>
-			                  </a>
-		                  </li>
-		                </xsl:for-each>
-		            </ul>
-		        </xsl:if>
-          	</li>
-        </xsl:for-each>
-      </ul>
+    <xsl:if test="$max-depth&gt;0 and not($notoc='true')" >
+      <xsl:call-template name="minitoc">
+        <xsl:with-param name="tocroot" select="."/>
+        <xsl:with-param name="depth">1</xsl:with-param>
+      </xsl:call-template>
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
+
+  <xsl:template name="toclink">
+    <xsl:variable name="tocitem" select="normalize-space(title)"/>
+    <xsl:if test="string-length($tocitem)>0">
+      <li>
+      <a>
+        <xsl:attribute name="href">
+          <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
+        </xsl:attribute>
+        <xsl:value-of select="$tocitem"/>
+      </a>
+      </li>
+    </xsl:if>
+  </xsl:template>
+  
+
+
+  <xsl:template name="minitoc">  
+    <xsl:param name="tocroot"/>
+    <xsl:param name="depth"/>     
+    <ul>
+      <xsl:for-each select="$tocroot/section">
+        <xsl:call-template name="toclink"/>
+        <xsl:if test="$depth&lt;$max-depth">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="."/>
+            <xsl:with-param name="depth" select="$depth + 1"/>          
+          </xsl:call-template>
+        </xsl:if>      
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
 
   <xsl:template name="generate-id">
     <xsl:choose>

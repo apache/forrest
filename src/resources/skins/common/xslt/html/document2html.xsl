@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.21 2003/08/07 12:26:09 jefft Exp $
+$Id: document2html.xsl,v 1.22 2003/08/30 05:26:48 crossley Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -27,7 +27,16 @@ $Id: document2html.xsl,v 1.21 2003/08/07 12:26:09 jefft Exp $
   <xsl:variable name="disable-print-link" select="$config/disable-print-link"/>
   <!-- If true, an XML link for this page will not be generated -->
   <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
-
+  <!-- Get the section depth to use when generating the minitoc (default is 2) -->
+  <xsl:variable name="config-max-depth" select="$config/toc/@level"/>
+  <xsl:variable name="max-depth">
+    <xsl:choose>
+      <xsl:when test="string-length($config-max-depth)&gt;0">
+        <xsl:value-of select="$config-max-depth"/>
+      </xsl:when>
+      <xsl:otherwise>2</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
     
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
@@ -145,23 +154,11 @@ if (VERSION > 3) {
   </xsl:template>
   
   <xsl:template match="body">
-    <xsl:if test="section and not($notoc='true')">
-      <ul class="minitoc">
-        <xsl:for-each select="section">
-          <li>
-            <xsl:call-template name="toclink"/>
-            <xsl:if test="section">
-              <ul class="minitoc">
-                <xsl:for-each select="section">
-                  <li>
-                    <xsl:call-template name="toclink"/>
-                  </li>
-                </xsl:for-each>
-              </ul>
-            </xsl:if>
-          </li>
-        </xsl:for-each>
-      </ul>
+    <xsl:if test="$max-depth&gt;0 and not($notoc='true')" >
+      <xsl:call-template name="minitoc">
+        <xsl:with-param name="tocroot" select="."/>
+        <xsl:with-param name="depth">1</xsl:with-param>
+      </xsl:call-template>
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
@@ -330,16 +327,37 @@ if (VERSION > 3) {
     </xsl:attribute>
   </xsl:template>
 
+  <xsl:template name="minitoc">  
+    <xsl:param name="tocroot"/>
+    <xsl:param name="depth"/>     
+    <ul class="minitoc">
+      <xsl:for-each select="$tocroot/section">
+        <xsl:call-template name="toclink"/>
+        <xsl:if test="$depth&lt;$max-depth">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="."/>
+            <xsl:with-param name="depth" select="$depth + 1"/>          
+          </xsl:call-template>
+        </xsl:if>      
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
   <xsl:template name="toclink">
-    <a>
-      <xsl:attribute name="href">
-        <xsl:text>#</xsl:text>
-        <xsl:if test="@id">
-          <xsl:value-of select="@id"/>
-        </xsl:if>
-      </xsl:attribute>
-      <xsl:value-of select="title"/>
-    </a>
+    <xsl:variable name="tocitem" select="normalize-space(title)"/>
+    <xsl:if test="string-length($tocitem)>0">
+      <li>
+      <a>
+        <xsl:attribute name="href">
+          <xsl:text>#</xsl:text>
+          <xsl:if test="@id">
+            <xsl:value-of select="@id"/>
+          </xsl:if>
+        </xsl:attribute>
+        <xsl:value-of select="$tocitem"/>
+      </a>
+      </li>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="abstract">

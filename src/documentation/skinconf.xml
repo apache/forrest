@@ -12,7 +12,7 @@ be used to configure the chosen Forrest skin.
   <!ELEMENT skinconfig (disable-search?, disable-print-link?, disable-pdf-link?,
   disable-xml-link?, disable-compliance-links?, searchsite-domain?, searchsite-name?,
   project-name, project-url, project-logo, group-name?, group-url?, group-logo?,
-  host-url?, host-logo?, year?, vendor?, trail?, credits?)*>
+  host-url?, host-logo?, year?, vendor?, trail?, toc?, credits?)*>
   <!ELEMENT credits (credit*)>
   <!ELEMENT credit (name, url, image?, width?, height?)>
   <!-- id uniquely identifies the tool, and role indicates its function -->
@@ -48,6 +48,8 @@ be used to configure the chosen Forrest skin.
   <!ELEMENT image (#PCDATA)>
   <!ELEMENT width (#PCDATA)>
   <!ELEMENT height (#PCDATA)>
+  <!ELEMENT toc EMPTY>
+  <!ATTLIST toc level CDATA #IMPLIED>
   ]>
 
 <skinconfig>
@@ -94,6 +96,12 @@ be used to configure the chosen Forrest skin.
     <link2 name="xml.apache" href="http://xml.apache.org/"/>
     <link3 name="" href=""/>
   </trail>
+
+  <!-- Configure how many "section" levels need to be included in the
+  generated Table of Contents (TOC). By default, if no toc element is provided
+  below, then 2 levels are included. Level 0 does not generate any TOC at all.
+  -->
+  <toc level="2"/>
 
   <!-- Credits are typically rendered as a set of small clickable images in the
   page footer -->
