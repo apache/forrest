@@ -527,7 +527,8 @@ document.write("Last Published: " + document.lastModified);
         <script type="text/javascript" language="Javascript">
 function printit() {
   if (window.print) {
-    window.print() ;  
+    window.focus();
+    window.print();
   }
 }
         </script>
