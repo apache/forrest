@@ -232,8 +232,10 @@
     </copy>
 
     <mkdir dir="${webapp.webinf.dir}/lib"/>
-    <copy todir="${webapp.webinf.dir}/lib">
-      <fileset dir="./lib/endorsed"    />
+	<copy todir="${webapp.webinf.dir}/lib">
+		<!--
+		<fileset dir="./lib/endorsed"    />
+		-->
       <fileset dir="./lib/core"/>
       <fileset dir="./lib/optional"/>
       <fileset dir="./src/scratchpad/lib"/>
@@ -311,6 +313,11 @@
     <mkdir dir="${dist-shbat.dir}/WEB-INF" />
     <copy todir="${dist-shbat.dir}/WEB-INF">
       <fileset dir="${webapp.webinf.dir}" />
+    </copy>
+
+	<mkdir dir="${dist-shbat.dir}/lib/endorsed" />
+	<copy todir="${dist-shbat.dir}/lib/endorsed">
+		<fileset dir="lib/endorsed" />
     </copy>
 
     <!-- copy the bare-context dir as needed by the cocoon CLI -->
@@ -453,89 +460,5 @@
   -->
 
     &import-antipede;
-
-  <!-- ================================== -->
-  <!--    Targets for the remote builds   -->
-  <!-- ================================== -->
-
-  <target name="bot.init" depends="init">
-    <!-- initializes environment to start on bot targets -->
-    <property name="bot.build.dir"              value="${xlayout.build.bot.dir}"/>
-    <property name="bot.work.build.xml"         value="${bot.build.dir}/work.build.xml"/>
-    <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
-    <property name="bot.forrestbot.xconf"       value="forrestbot.conf.xml" />
-    <property file="ant-mail.properties" />
-    <property name="bot.templates.build.xml"    value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
-    <property name="bot.work.builder.xslt"      value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
-    <property name="bot.default.builder.xslt"   value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
-    <mkdir dir="${bot.build.dir}" />
-    <echo message="Using config file: ${bot.forrestbot.xconf}" />
-  </target>
-
-  <target name="bot.conf2build" depends="bot.init" >
-    <!-- remove previous versions to force generation again -->
-    <delete file="${bot.work.build.xml}" />
-    <delete file="${bot.default.parameters.xml}" />
-
-    <!-- builds the different xml files this process needs.  -->
-    <style in="${bot.forrestbot.xconf}"
-       out="${bot.work.build.xml}"
-       style="${bot.work.builder.xslt}"/>
-    <style in="${bot.forrestbot.xconf}"
-       out="${bot.default.parameters.xml}"
-       style="${bot.default.builder.xslt}"/>
-    <copy todir="${bot.build.dir}" file="${bot.templates.build.xml}"/>
-  </target>
-
-  <target name="bot.prepare-cp" depends="bot.init, compile" >
-    <!-- todo: question if it is good practice to share WEB-INF classes -->
-    <mkdir dir="${bot.build.dir}/WEB-INF/classes"/>
-    <copy todir="${bot.build.dir}/WEB-INF/classes">
-      <fileset dir="${resource.dir}/schema">
-        <include name="CatalogManager.properties"/>
-      </fileset>
-      <fileset dir="${build.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-      <fileset dir="${build.scratchpad.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-    </copy>
-
-    <path id="forrest.cp">
-      <path refid="classpath"/>
-      <fileset dir="${build.dir}">
-        <include name="*.jar"/>
-      </fileset>
-      <fileset dir="${tools.dir}">
-        <include name="*/lib/*.jar"/>
-      </fileset>
-      <pathelement location="${tools.jar}"/>
-      <pathelement location="${bot.build.dir}/WEB-INF/classes"/>
-    </path>
-  </target>
-
-  <target name="bot.run" depends="bot.conf2build, bot.prepare-cp" >
-    <!-- delegates to the generated XML file -->
-    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
-  </target>
-
-  <target name="bot" depends="bot.run" />
-
-  <!-- =================================================================== -->
-  <!-- Import Ant-Centipede init targets - sets up basic build stuff       -->
-  <!-- =================================================================== -->
-  <!--
-        This is the target that initializes tasks and properties used
-        commonly in every other target.
-
-        Remember to add depends="init" to every target, so that this
-        target is called before any other.
-
-        This target is internal; to make it unusable from the commandline,
-        its name starts with a hyphen.
-        To make it invisible when using -projecthelp, it lacks a description.
-  -->
-
 
 </project>
