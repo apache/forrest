@@ -514,14 +514,6 @@ $Revision: 1.12 $
       <!-- +==========================================================+ -->
       <!-- http://forrest.apache.org/docs/sitemap-ref.html#output_pipelines -->
 
-      <map:match type="regexp" pattern="^.+$">
-        <map:select type="exists">
-          <map:when test="{project:content.xdocs}/{0}">
-            <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
-          </map:when>
-        </map:select>
-      </map:match>      
-
       <map:pipeline internal-only="false">
         <map:select type="exists">
           <map:when test="{forrest:plugins}/output.xmap">
@@ -586,6 +578,14 @@ $Revision: 1.12 $
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
+
+      <map:match type="regexp" pattern="^.+$">
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}/{0}">
+            <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
+          </map:when>
+        </map:select>
+      </map:match>      
 
       <!-- generate faq.fo specially  -->
       <map:match pattern="**faq.fo">
