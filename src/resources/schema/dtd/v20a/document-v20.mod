@@ -29,7 +29,8 @@ FIXME:
 
 CHANGE HISTORY:
 [Version 2.0a]
-  20030505  Add a meta element to the header, for generic metadata (JT)
+  20030505  Add a meta element to the header, for generic metadata
+  20030505  Zap jump and fork, and rename 'link' to 'a' for better HTMLness
 
 
 COPYRIGHT:
@@ -48,7 +49,7 @@ COPYRIGHT:
 <!-- Entities referred to later on are defined up front -->
 <!ENTITY % markup "strong|em|code|sub|sup">
 <!ENTITY % special-inline "br|img|icon|acronym">
-<!ENTITY % links "link|jump|fork">
+<!ENTITY % links "a">
 <!ENTITY % paragraphs "p|source|note|warning|fixme">
 <!ENTITY % tables "table">
 <!ENTITY % lists "ol|ul|dl">
@@ -113,8 +114,7 @@ COPYRIGHT:
         Indicates that the element requires to have hyperlink attributes.
 ==================================================================== -->
 <!ENTITY % link.att 'href      CDATA             #REQUIRED
-         role      CDATA                         #IMPLIED
-         title     CDATA                         #IMPLIED '>
+                     title     CDATA             #IMPLIED'>
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
@@ -163,8 +163,9 @@ COPYRIGHT:
 <!-- Hypertextual Links -->
 <!-- ==================================================== -->
 <!-- hyperlink (equivalent of <a ...>) -->
-<!ELEMENT link (%link-content.mix;)*>
-<!ATTLIST link
+<!-- http://www.w3.org/TR/xhtml2/mod-hypertext.html#s_hypertextmodule -->
+<!ELEMENT a (%link-content.mix;)*>
+<!ATTLIST a
   %common.att; 
   %link.att; 
 >
