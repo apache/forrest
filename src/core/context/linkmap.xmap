@@ -38,8 +38,23 @@ $Revision: 1.2 $
   </map:components>
 
   <map:pipelines>
-    <map:pipeline>
+    
+    <!-- 
+       This is the user pipeline, that can answer requests instead
+       of the Forrest one, or let requests pass through.
+    -->
+    <map:pipeline internal-only="false">
+       <map:select type="exists">
+         <map:when test="{project:linkmapxmap}">
+           <map:mount uri-prefix="" 
+                      src="{project:linkmapxmap}" 
+                      check-reload="yes" 
+                      pass-through="true"/>
+         </map:when>  
+       </map:select>
+     </map:pipeline>
 
+     <map:pipeline>
       <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
         <map:generate src="{project:content.xdocs}site.xml" />
