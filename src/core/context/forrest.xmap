@@ -292,7 +292,20 @@ $Revision: 1.8 $
             </map:transform>
             <map:serialize type="xml-document"/>
           </map:match>
-        </map:when>        
+        </map:when>
+        <map:when test="{project:content.xdocs}{uri}.moinwiki">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.moinwiki" />
+            <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
+            <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
+            <map:transform type="xsltc" 
+              src="{forrest:context}/resources/chaperon/stylesheets/moinwiki2xdoc.xsl">
+              <map:parameter name="name" value="{2}" />
+              <map:parameter name="spaceless-filenames" value="true"/>
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
         <map:when test="{project:content.xdocs}{uri}.txt">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
