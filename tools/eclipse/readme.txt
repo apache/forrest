@@ -79,7 +79,8 @@ Installing Required Plugins
     - Eclipse Modelling Framework
     - EMF SDK
     - EMF Service Data Objects
-    - Graphical Editing FrameworkXSD Sxhema Infoset Model
+    - Graphical Editing Framework
+    - XSD Sxhema Infoset Model
   - click "Next"
   - accept the license aggreement (after reading it of course)
   - click "Next"

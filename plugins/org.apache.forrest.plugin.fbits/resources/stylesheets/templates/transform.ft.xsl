@@ -31,8 +31,8 @@
   <xsl:param name="path"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
   
-	<xsl:include href="cocoon:/prepare.include.main"/>
-  <xsl:include href="cocoon:/prepare.xhtml.main"/>
+	<!--<xsl:include href="cocoon:/prepare.include.{$request}"/>
+  <xsl:include href="cocoon:/prepare.xhtml.{$request}"/>-->
 
   <xsl:template match="/">
     <html>
@@ -40,6 +40,7 @@
     		<xsl:call-template name="getHead"/>
       </head>
       <body onload="init()">
+        <h1><xsl:value-of select="$request"/> </h1>
         <xsl:call-template name="getBody"/>
       </body>
     </html>
