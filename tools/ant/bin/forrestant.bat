@@ -55,8 +55,7 @@ goto end
 :checkJava
 set _JAVACMD=%JAVACMD%
 set LOCALCLASSPATH=%CLASSPATH%
-cd "%ANT_HOME%\lib\"
-for %%i in (*.jar) do call "%ANT_HOME%\bin\forrestpath.bat" "%ANT_HOME%\lib\%%i"
+for %%i in ("%ANT_HOME%\lib\*.jar") do call "%ANT_HOME%\bin\forrestpath.bat" "%%i"
 
 
 if "%JAVA_HOME%" == "" goto noJavaHome

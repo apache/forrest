@@ -19,11 +19,7 @@ set ANT_HOME=%FORREST_HOME%\ant
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-rem Change drive and directory to %FORREST_HOME%\lib\endorsed
-if "%OS%"=="Windows_NT" cd /d ""%FORREST_HOME%\lib\endorsed""
-if not "%OS%"=="Windows_NT" cd ""%FORREST_HOME%\lib\endorsed""
-
-for %%i in (*.jar) do call "%FORREST_HOME%\bin\appendcp.bat" "%FORREST_HOME%\lib\endorsed\%%i"
+for %%i in ("%FORREST_HOME%\lib\endorsed\*.jar") do call "%FORREST_HOME%\bin\appendcp.bat" "%%i"
 
 echo.
 echo Apache Forrest.  Run 'forrest -projecthelp' to list options
@@ -35,6 +31,3 @@ call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME
 rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%
 set CLASSPATH=%OLD_CLASSPATH%
-
-rem Fix FOR-47
-if not "%OS%"=="Windows_NT" cd ""%PWD%""
