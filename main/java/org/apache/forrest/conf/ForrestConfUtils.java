@@ -84,7 +84,9 @@ public class ForrestConfUtils
         if (forrestHome.equals(defaultHome)) {
             contextHome = defaultHome;
         } else {
-            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/webapp";
+            //FIXME: HARDCODE VALUE
+            //
+            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "main/webapp";
         }
         return contextHome;
     }
