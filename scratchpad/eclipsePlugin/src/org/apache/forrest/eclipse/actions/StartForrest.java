@@ -148,8 +148,8 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			// specify main type and program arguments
 			workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME,
 					"org.mortbay.jetty.Server");
-			workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS, forrestHome
-					+ "/context/jettyconf.xml");
+			workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS, workingDirectory
+					+ "/build/webapp/jettyconf.xml");
 
 			// specify classpath
 			List classpath = new ArrayList();
@@ -160,6 +160,7 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 					+ File.separator + "jetty");
 
 			try {
+				//FIXME: check that the search directory exists, if it doesn't eclipse throws an unhandled loop exception
 				List allfiles = Utilities.getFileListing(searchDir);
 				allfiles.addAll(Utilities.getFileListing(jettyDir));
 				Iterator filesListing = allfiles.iterator();
