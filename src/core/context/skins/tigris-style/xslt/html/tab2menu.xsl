@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
+$Id: tab2menu.xsl,v 1.2 2003/12/28 22:54:16 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -34,6 +34,11 @@ $Id: tab2menu.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
         </tr>
       </table>
     </div>  
+    <xsl:if test="tab[@dir=$longest-dir]/tab">
+      <div class="level2tab">
+        <xsl:call-template name="level2tabs"/>
+      </div>
+    </xsl:if>          
   </xsl:template>
 
   <xsl:template name="pre-separator">
@@ -45,6 +50,14 @@ $Id: tab2menu.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
   <xsl:template name="separator">
   </xsl:template>
 
+  <xsl:template name="level2-pre-separator">
+  </xsl:template>
+
+  <xsl:template name="level2-post-separator">
+  </xsl:template>
+
+  <xsl:template name="level2-separator">&#160;|&#160;</xsl:template>
+  
   <xsl:template name="selected">
     <th>
       <xsl:call-template name="base-selected"/>
@@ -57,4 +70,12 @@ $Id: tab2menu.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
     </td>
   </xsl:template>
 
+  <xsl:template name="level2-selected">
+     <xsl:call-template name="base-selected"/>
+  </xsl:template>
+
+  <xsl:template name="level2-not-selected">
+     <xsl:call-template name="base-not-selected"/> 
+  </xsl:template>
+  
 </xsl:stylesheet>

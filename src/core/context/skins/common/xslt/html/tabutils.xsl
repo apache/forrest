@@ -59,7 +59,7 @@ tab2menu.xsl
   </xsl:template>
  
   <!--
-    The longest path of any tab, whose path is a subset of the current URL.  Ie,
+    The longest path of any level 1 tab, whose path is a subset of the current URL.  Ie,
     the path of the 'current' tab.
   -->
   <xsl:template name="longest-dir">
@@ -73,6 +73,21 @@ tab2menu.xsl
     </xsl:for-each>
   </xsl:template>
 
+  <!--
+    The longest path of any level 2 tab, whose path is a subset of the current URL.  Ie,
+    the path of the 'current' tab.
+  -->
+  <xsl:template name="level2-longest-dir">
+    <xsl:param name="tabfile"/>
+    <xsl:for-each select="$tabfile/tabs/tab/tab[starts-with($path, @dir|@href)]">
+      <xsl:sort select="string-length(@dir|@href)"
+        data-type="number" order="descending"/>
+      <xsl:if test="position()=1">
+        <xsl:value-of select="@dir|@href"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+  
 
 </xsl:stylesheet>
 

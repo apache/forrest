@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.3 2003/12/28 22:54:16 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -26,6 +26,7 @@ $Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
   <xsl:template match="site">
     <html>
       <head>
+        <xsl:comment>*** This file is generated using Apache Forrest.  Do not edit.  ***</xsl:comment>      
         <style type="text/css">
           /* <![CDATA[ */ 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  
@@ -72,10 +73,11 @@ $Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
         || group logo |    | project logo |    +============+  |
         |+============+    +==============+                    |
         +======================================================+
-        ||tab|tab|tab|                           publish date  |
+        ||tab|tab|tab|                                         |
         +======================================================+
-    -->
-    
+        ||subtab|subtab|subtab|                  publish date  |
+        +======================================================+        
+    -->    
     <div id="banner">   
       <table border="0" cellspacing="0" cellpadding="8" width="100%">
        <tr>
@@ -139,10 +141,21 @@ $Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
       <!-- ( ================= Tabs ================== ) -->
       <xsl:apply-templates select="div[@class='tabs']"/>
 
-  <div id="breadcrumbs">
-    subtabs | go | here
-  </div>
-
+      <table id="breadcrumbs" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+          <td>
+            <xsl:apply-templates select="div[@class='level2tab']"/>
+          </td> 
+          <td>
+            <div align="right">
+              <script language="JavaScript" type="text/javascript"><![CDATA[<!--
+                 document.write("Published: " + document.lastModified);
+                 //  -->]]></script>
+            </div>
+          </td>
+        </tr>
+      </table>        
+      
   </xsl:template>
   
   <xsl:template match="td[@class='tasknav']/div[@align='left']" >
@@ -230,23 +243,17 @@ $Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
       <div id="searchbox" class="toolgroup">
        <div class="label"><strong>Search</strong></div>
        <div class="body">
-        <div>the <xsl:value-of select="$config/searchsite-name"/> site
-<!--
-        <select name="scope">
-         <option value="projectAndSubs" selected="selected">This project</option>
-         <option value="myprojects">My projects</option>
-         <option value="domain" >All projects</option>
+        <div>
+        <select name="sitesearch">
+         <option value="{$config/searchsite-domain}" selected="selected"><xsl:value-of select="$config/searchsite-name"/></option>
+         <option value="" >the web</option>
         </select>
--->
        </div>
        <div>
-        <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
-        <input type="text" id="query" name="q" size="10" /> 
-        <input type="submit" value="Search" name="Search" />
-
+        <input type="text" id="query" name="q" size="12" /> 
+        <input type="submit" value="Go" name="Go" />
        </div>
-       <!--<div><a href="#">Advanced search</a>    </div>-->
-      </div>
+      </div>   
      </div>
      </form>
     </xsl:if>    

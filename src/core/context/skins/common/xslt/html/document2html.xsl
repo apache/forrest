@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
+$Id: document2html.xsl,v 1.2 2003/12/28 22:54:16 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -34,6 +34,9 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   <xsl:variable name="minitoc-location" select="$config/toc/@location"/>
   <!-- Whether to obfuscate email links -->
   <xsl:variable name="obfuscate-mail-links" select="$config/obfuscate-mail-links"/>
+  <!-- If true, an the images on all external links will not be added -->
+  <xsl:variable name="disable-external-link-image" select="$config/disable-external-link-image"/>  
+
 
   <xsl:variable name="max-depth">
     <xsl:choose>
@@ -240,6 +243,11 @@ if (VERSION > 3) {
             <xsl:apply-templates/>
           </a>
        </xsl:when>
+       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, $config/group-url)) and not(contains(@href, $config/project-url))">
+          <a href="{@href}">
+            <xsl:apply-templates/>&#160;<img src="{$skin-img-dir}/external-link.gif" border="0" alt="links outside of this site"/>&#160;
+          </a>
+       </xsl:when>       
        <xsl:otherwise>
           <a href="{@href}">
             <xsl:apply-templates/>

@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2003/11/26 09:15:32 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.5 2003/12/28 22:54:16 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -64,8 +64,10 @@ $Id: site2xhtml.xsl,v 1.4 2003/11/26 09:15:32 nicolaken Exp $
         || group logo |    | project logo |    +============+  |
         |+============+    +==============+                    |
         +======================================================+
-        ||tab|tab|tab|                           publish date  |
+        ||tab|tab|tab|                                         |
         +======================================================+
+        ||subtab|subtab|subtab|                  publish date  |
+        +======================================================+        
     -->
     <table class="header" cellspacing="0" cellpadding="0" border="0" width="100%">
       <tr>
@@ -144,12 +146,15 @@ $Id: site2xhtml.xsl,v 1.4 2003/11/26 09:15:32 nicolaken Exp $
       </tr>
       <!-- ( ================= Tabs ================== ) -->
       <tr>
-        <td colspan="3" class="tabstrip">
+        <td colspan="4" class="tabstrip">
           <xsl:apply-templates select="table[@class='tab']"/>
         </td>
       </tr>
       <tr>
-        <td colspan="4" class="datenote border">
+        <td colspan="2" class="level2tabstrip border">
+          <xsl:apply-templates select="table[@class='level2tab']"/>
+        </td>
+        <td colspan="2" class="datenote border">
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
@@ -362,14 +367,14 @@ $Id: site2xhtml.xsl,v 1.4 2003/11/26 09:15:32 nicolaken Exp $
 	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
           </td>
-	      <td class="subborder">&#160;</td>
+          <td colspan="2" class="subborder">&#160;</td>
 	    </tr>
 	    <tr><td class="border" height="1" colspan="4"></td></tr>
 
 	    <!-- ( ================= Content================== ) -->
 	    <tr >
 	      <td width="10" align="left"></td>
-	      <td width="100%" align="left" colspan="2">
+	      <td width="100%" align="left" colspan="3">
 	        <xsl:apply-templates select="div[@class='content']"/>
 	      </td>
 	      <td width="10"></td>

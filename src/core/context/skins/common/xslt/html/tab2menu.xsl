@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
+$Id: tab2menu.xsl,v 1.2 2003/12/28 22:54:16 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,34 +29,56 @@ $Id: tab2menu.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   <!-- These templates SHOULD be overridden                             -->
   <!-- ================================================================ -->
 
-  <!-- Called before first tag -->
+  <!-- Called before first level 1 tag -->
   <xsl:template name="pre-separator">
   </xsl:template>
 
-  <!-- Called after last tag -->
+  <!-- Called after last level 1 tag -->
   <xsl:template name="post-separator">
   </xsl:template>
 
-  <!-- Called between tags -->
+  <!-- Called between level 1 tags -->
   <xsl:template name="separator">
     <xsl:text> | </xsl:text>
   </xsl:template>
+  
+  <!-- Called before first level 2 tag -->
+  <xsl:template name="level2-pre-separator">
+  </xsl:template>
+
+  <!-- Called after last level 2 tag -->
+  <xsl:template name="level2-post-separator">
+  </xsl:template>
+
+  <!-- Called between level 2 tags -->
+  <xsl:template name="level2-separator">
+    <xsl:text> | </xsl:text>
+  </xsl:template>  
 
   <!--
   Note: sub-stylesheets can't do apply-imports here, because it would choose
   the 'tags' template and infinitely recurse. Hence call-template used instead.
   -->
 
-  <!-- Display a selected tab node -->
+  <!-- Display a selected level 1 tab node -->
   <xsl:template name="selected">
     <xsl:call-template name="base-selected"/>
   </xsl:template>
 
-  <!-- Display an unselected tab node -->
+  <!-- Display an unselected level 1 tab node -->
   <xsl:template name="not-selected">
     <xsl:call-template name="base-not-selected"/>
   </xsl:template>
 
+  <!-- Display a selected second level tab node -->
+  <xsl:template name="level2-selected">
+    <xsl:call-template name="base-selected"/>
+  </xsl:template>
+
+  <!-- Display an unselected second level tab node -->
+  <xsl:template name="level2-not-selected">
+    <xsl:call-template name="base-not-selected"/>
+  </xsl:template>
 
   <!-- ================================================================ -->
   <!-- These templates CAN be overridden                             -->
@@ -88,8 +110,8 @@ $Id: tab2menu.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
 
   <!--
-    The longest path of any tab, whose path is a subset of the current URL.  Ie,
-    the path of the 'current' tab.
+    The longest path of any level 1 tab, whose path is a subset of the current URL.  Ie,
+    the path of the 'current' level 1 tab.
   -->
   <xsl:variable name="longest-dir">
     <xsl:call-template name="longest-dir">
@@ -97,26 +119,45 @@ $Id: tab2menu.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
     </xsl:call-template>
   </xsl:variable>
 
+  <!--
+    The longest path of any level 2 tab, whose path is a subset of the current URL.  Ie,
+    the path of the 'current' level 2 tab.
+  -->
+  <xsl:variable name="level2-longest-dir">
+    <xsl:call-template name="level2-longest-dir">
+      <xsl:with-param name="tabfile" select="/"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
   <xsl:variable name="matching-id">
     <xsl:call-template name="matching-id">
       <xsl:with-param name="tabfile" select="/"/>
     </xsl:call-template>
   </xsl:variable>
 
-
   <!-- Called from tabs, after it has written the outer 'div class=tabs' and
   any other HTML -->
   <xsl:template name="base-tabs">
     <xsl:call-template name="pre-separator"/>
-    <xsl:for-each select="//tab">
+    <xsl:for-each select="tab">
       <xsl:if test="position()!=1"><xsl:call-template name="separator"/></xsl:if>
-      <xsl:apply-templates select="."/>
+      <xsl:apply-templates select="." mode="level1"/>
     </xsl:for-each>
     <xsl:call-template name="post-separator"/>
   </xsl:template>
 
+  <!-- Called from tabs, after it has written the outer 'div class=tabs' and
+  any other HTML -->
+  <xsl:template name="level2tabs">
+    <xsl:call-template name="level2-pre-separator"/>
+    <xsl:for-each select="tab[@dir=$longest-dir]/tab|tab[@href=$longest-dir]/tab">
+      <xsl:if test="position()!=1"><xsl:call-template name="level2-separator"/></xsl:if>
+      <xsl:apply-templates select="." mode="level2"/>
+    </xsl:for-each>
+    <xsl:call-template name="level2-post-separator"/>
+  </xsl:template>
 
-  <xsl:template match="tab">
+  <xsl:template match="tab" mode="level1">
     <xsl:choose>
       <xsl:when test="@id and @id = $matching-id">
         <xsl:call-template name="selected"/>
@@ -126,6 +167,20 @@ $Id: tab2menu.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="not-selected"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="tab" mode="level2">
+    <xsl:choose>
+      <xsl:when test="@id and @id = $matching-id">
+        <xsl:call-template name="level2-selected"/>
+      </xsl:when>
+      <xsl:when test="@dir = $level2-longest-dir">
+        <xsl:call-template name="level2-selected"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="level2-not-selected"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
