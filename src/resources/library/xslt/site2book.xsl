@@ -25,7 +25,7 @@ isn't a major problem.
 
   <xsl:template match="*/*">
     <xsl:choose>
-      <xsl:when test="contains(@href, '#')">
+      <xsl:when test="contains(@href, '#') or not(@label)">
       </xsl:when>
 
       <xsl:when test="not(contains(@href, '#')) and count(*) = 0
