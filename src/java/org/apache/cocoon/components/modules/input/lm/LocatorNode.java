@@ -118,7 +118,7 @@ public final class LocatorNode extends AbstractNode {
     public String locate(Map om, InvokeContext context) throws Exception {
         
         // resolve the base location and put it in the anchor map
-        Map anchorMap = context.getMapByAnchor("lm");
+        Map anchorMap = context.getMapByAnchor(LocationMap.ANCHOR_NAME);
         anchorMap.put("base",m_baseLocation.resolve(context,om));
         
         for (int i = 0; i < m_nodes.length; i++) {

@@ -74,8 +74,7 @@ public abstract class AbstractNode extends AbstractLogEnabled {
     
     protected final ComponentManager m_manager;
     
-    // optional parameters defined 
-    // by the node's configuration
+    // optional parameters defined by the node's configuration
     private Map m_parameters;
     
     
@@ -140,13 +139,14 @@ public abstract class AbstractNode extends AbstractLogEnabled {
         else {
             parameters = new Parameters();
         }
-        // also pass the anchor map as parameters
-        // for use by components
-        Map anchorMap = context.getMapByAnchor("lm");
+        // also pass the anchor map as parameters directly into the components
+        Map anchorMap = context.getMapByAnchor(LocationMap.ANCHOR_NAME);
         Iterator entries = anchorMap.entrySet().iterator();
         while (entries.hasNext()) {
             Map.Entry entry = (Map.Entry) entries.next();
-            parameters.setParameter("#lm:"+entry.getKey(),entry.getValue().toString());
+            parameters.setParameter(
+                "#"+LocationMap.ANCHOR_NAME+":"+entry.getKey(),
+                entry.getValue().toString());
         }
         return parameters;
     }
