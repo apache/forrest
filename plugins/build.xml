@@ -14,14 +14,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="local-deploy" basedir="." name="Forrest build file">
+<project default="local-deploy" basedir="." name="Forrest Plugins build file">
   <property name="forrest.root-dir"           location=".."/>   
-  <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
+  <property name="forrest.ant.lib.dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
   <property name="forrest.build.dir"          location="${forrest.root-dir}/build"/>
+  <property name="forrest.plugins.dir"        location="${forrest.root-dir}/plugins"/>
   
-  <property name="plugin.dir" value="${plugin-name}"/>
-  
-  <property name="plugins.dist-dir" value="../site-author/content/plugins"/>
+  <property name="plugins.dist-dir" value="build/dist"/>
   <property name="plugins.localDeploy-dir" value="${forrest.build.dir}/plugins"/>
   
   <property name="plugin.src.dir" value="src"/>
@@ -30,13 +29,33 @@
   
   <property name="plugin.template.dir" value="pluginTemplate"/>
   
+  <property name="deploy.svn.user" value=""/>
+  <property name="deploy.svn.password" value=""/>
+  <property name="deploy.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
+  <property name="deploy.svn.commit-message" value="Automatic deployment from plugins build"/>
+  <property name="deploy.svn.svn-dir" location="${forrest.build.dir}/svn-site-deploy"/>
+  <property name="deploy.svn.svn-filestoadd" location="build/svn-deploy.toadd"/>
+  
+  
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
-      <fileset dir="${forrest.ant.lib-dir}" includes="ant-contrib-*.jar" />
+      <fileset dir="${forrest.ant.lib.dir}" includes="ant-contrib-*.jar" />
+    </classpath>
+  </taskdef>
+
+  <taskdef resource="taskdef.properties">
+    <classpath>
+      <fileset dir="${forrest.ant.lib.dir}" includes="jsvn-0.9-dev.jar"/>
     </classpath>
   </taskdef>
   
   <target name="init">
+    <input message="Which plugin you which to operate on?"
+           addproperty="plugin-name"/>
+    
+    <!-- if the plugin.dir is not yet set we must be running interactively, so the plugin.dir is the same as the plugin-name -->
+    <property name="plugin.dir" value="${plugin-name}"/>
+    
     <mkdir dir="${plugins.dist-dir}"/>  
   </target>
   
@@ -44,8 +63,7 @@
   <target name="local-deploy"
           description="Deploy a plugin locally"
           depends="init">
-    <input message="Which plugin do you want to deploy?"
-           addproperty="plugin-name"/>
+    
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
       <fileset dir="${plugin.dir}">
        <exclude name="**/build/**"/>
@@ -53,15 +71,57 @@
     </copy>
   </target>
   
+  <target name="deploy"
+          description="Deploy the plugin to SVN"
+          depends="dist">
+    <!-- get current plugins directory from SVN -->
+    <svncheckout
+        repositoryurl="${deploy.svn.url}"
+        username="${deploy.svn.user}"
+        password="${deploy.svn.password}"
+        destination="${deploy.svn.svn-dir}"
+        failonerror="true"
+    />
+    
+    <!-- copy new files into sandbox -->
+    <copy todir="${deploy.svn.svn-dir}" file="${plugins.dist-dir}/${plugin-name}.zip"/>
+    <copy todir="${deploy.svn.svn-dir}" file="${forrest.plugins.dir}/plugins.xml"/>
+    
+    <!-- add new files to SVN -->
+    <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
+      <arg value="status"/>
+    </exec>
+    <!-- the status columns make all lines invalid filenames
+      we remove the status columns for the new files so the only valid
+      filenames in the list are new files
+    -->
+    <replace file="${deploy.svn.svn-filestoadd}" token="?      " value=""/>
+    <replace file="${deploy.svn.svn-filestoadd}" token="M      " value=""/>
+    <!-- don't fail on error here because
+      1) the targets file might have 'bad' filenames but we should continue
+      2) we would've already failed if the svn executable wasn't found
+    -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}">
+      <arg value="add"/>
+      <arg value="--targets"/>
+      <arg value="${deploy.svn.svn-filestoadd}"/>
+    </exec>
+    <!-- check in to SVN -->
+    <svncommit
+        target="${deploy.svn.svn-dir}"
+        repositoryurl="${deploy.svn.url}"
+        commitmessage="Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"
+    />
+  </target>
+  
   <!-- FIXME: needs to append FOrrest version number to filename -->
   <target name="dist"
           description="Build the distribution archive for all the plugins"
           depends="init">
-    <input message="Which plugin do you want to package?"
-           addproperty="plugin-name"/>
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
-       basedir="./"
-       includes="${plugin-name}/**"
+       basedir="${plugin.dir}"
+       includes="**"
        excludes="**/build/**"/>
   </target>
   
