@@ -32,7 +32,12 @@ tab2menu.xsl
         <xsl:if test="$tab/@dir or substring($tab/@href, string-length($tab/@href),
           string-length($tab/@href)) = '/'">
           <xsl:text>/</xsl:text>
-          <xsl:value-of select="$dir_index"/>
+          <xsl:if test="$tab/@indexfile">
+            <xsl:value-of select="$tab/@indexfile"/>
+          </xsl:if>
+          <xsl:if test="not(@indexfile)">
+            <xsl:value-of select="$dir_index"/>
+          </xsl:if>
         </xsl:if>
       </xsl:variable>
 
