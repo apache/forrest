@@ -32,11 +32,7 @@
     <ant antfile="${project.temp-dir}/pluginlist2echobuild.xml"/>
       </sequential>
     </for>
-  </target>  
-          
-  <!-- private -->        
-                
-  <target name="init-plugins" depends="init-props, install-required-plugins"/>   
+  </target>   
 
   <target name="plugin-unavailable">   
     <property name="plugin.unavailable" value="true"/>
@@ -69,7 +65,7 @@
      </delete>
   </target>  
   
-  <target name="configure-plugin" if="plugin.unavailable">
+  <target name="configure-plugin">
      <!-- add the snippet to plugins/sitemap.xmap that will mount the plugin
           specific sitemap -->
      <xslt in="${forrest.plugins-dir}/sitemap.xmap"
@@ -78,8 +74,6 @@
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/sitemap.xmap" 
-       tofile="${forrest.plugins-dir}/sitemap.xmap.old"/>
      <move file="${forrest.plugins-dir}/sitemap.xmap.new" 
        tofile="${forrest.plugins-dir}/sitemap.xmap"/>
   </target>
@@ -122,13 +116,23 @@
     </for>
   </target>    
   
-  <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin, configure-plugin"/>
+  <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin"/>
   
-  <target name="install-required-plugins">
-    <for list="${project.required.plugins}" param="name">
+  <target name="init-plugins" depends="init-props"
+    description="ensure the required plugins are available locally, if any are not download them automatically">
+    
+    <mkdir dir="${forrest.plugins-dir}"/>
+    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+      tofile="${forrest.plugins-dir}/sitemap.xmap"
+      overwrite="true"/>
+    
+      <for list="${project.required.plugins}" param="name">
       <sequential>
         <echo>Installing plugin: @{name}</echo>
         <antcall target="install-plugin">
+          <param name="plugin.name" value="@{name}"/>
+        </antcall>
+        <antcall target="configure-plugin">
           <param name="plugin.name" value="@{name}"/>
         </antcall>
       </sequential>
