@@ -18,7 +18,7 @@ echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
 
 Rem ----- call ant.. ---------------------------------------------------
-call %ANT_HOME%\bin\ant -buildfile %ANTFILE% -Dproject.home=%PROJECT_HOME% -Dforrest.home=%FORREST_HOME% -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
+call %ANT_HOME%\bin\ant -buildfile %ANTFILE% -Dbasedir=%PROJECT_HOME% -Dproject.home=%PROJECT_HOME% -Dforrest.home=%FORREST_HOME% -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 goto end
 
