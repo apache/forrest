@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.24 2003/09/20 06:49:46 jefft Exp $
+$Id: site2xhtml.xsl,v 1.25 2003/09/21 11:33:26 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -177,7 +177,7 @@ $Id: site2xhtml.xsl,v 1.24 2003/09/20 06:49:46 jefft Exp $
             <xsl:comment>================= start Content==================</xsl:comment>
             <tr>
               <td width="10" align="left"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
-              <td width="100%" align="left">
+              <td width="100%" align="left" colspan="2">
                 <xsl:apply-templates select="div[@class='content']"/>
               </td>
               <td width="10"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
