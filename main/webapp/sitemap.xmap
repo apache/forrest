@@ -325,14 +325,6 @@ $Revision: 1.12 $
       </map:pipeline>
       
       <map:pipeline internal-only="false">
-        <map:select type="exists">
-          <map:when test="{forrest:plugins}/output.xmap">
-            <map:mount uri-prefix="" src="{forrest:plugins}/output.xmap" check-reload="yes" pass-through="true"/>
-          </map:when>
-        </map:select>
-      </map:pipeline>
-       
-      <map:pipeline internal-only="false">
          <map:match pattern="skinconf.xml">
            <map:generate src="{project:skinconf}" />
            <map:transform src="{forrest:stylesheets}/strip-doctype.xsl"/>
@@ -530,6 +522,14 @@ $Revision: 1.12 $
         </map:select>
       </map:match>      
 
+      <map:pipeline internal-only="false">
+        <map:select type="exists">
+          <map:when test="{forrest:plugins}/output.xmap">
+            <map:mount uri-prefix="" src="{forrest:plugins}/output.xmap" check-reload="yes" pass-through="true"/>
+          </map:when>
+        </map:select>
+      </map:pipeline>
+       
       <!-- FIXME: temporary fix to get s5 plugin working
            this mount should be managed by the plugns framework -->
       <map:pipeline internal-only="false">
