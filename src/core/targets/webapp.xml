@@ -113,7 +113,7 @@
         <include name="*jar" unless="jdk1.4+"/>
       </fileset>
     </copy>
-       
+
    <!-- 
     | Copy all non-xdocs content across to the webapp
    -->
@@ -125,7 +125,11 @@
        <include name="${project.content-dir}/**"/>
      </fileset>
    </copy>
-        
+
+    <!-- Copy the file which contains the build information -->
+    <copy toDir="${project.webapp}/project/build/tmp"
+      file="${project.temp-dir}/build-info.xml"/>
+
     <!-- copy custom xmaps -->
     <copy toDir="${project.webapp}" 
       overwrite="true"
