@@ -16,6 +16,7 @@
                    Run the build script: build.bat or build.sh
   </description>
 
+  <import file="src/forrestbar/build.xml"/>
   
   <target name="init">
     <tstamp>
@@ -455,38 +456,6 @@
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
   </target>
-
-  <!-- =================================================================== -->
-  <!-- ForrestBar for Mozilla                                              -->
-  <!-- =================================================================== -->
-  <target name="forrestbar" depends="init">
-    <mkdir dir="${build.dir}" />
-    <mkdir dir="${build.dir}/work/forrestbar" />
-    <mkdir dir="${build.dir}/work/forrestbar-jar" />
-    <copy todir="${build.dir}/work/forrestbar-jar" overwrite="true">
-      <fileset dir="src/resources/forrestbar" 
-               includes="content/**/*.xul" />
-      <filterset>
-        <filter token="EMBEDDED_NAME" value="${forrestbot.links.forrest.local-embedded.name}"/>
-        <filter token="EMBEDDED_URL" value="${forrestbot.links.forrest.local-embedded.url}"/> 
-        <filter token="WEBAPP_NAME" value="${forrestbot.links.forrest.local-webapp.name}"/>
-        <filter token="WEBAPP_URL" value="${forrestbot.links.forrest.local-webapp.url}"/> 
-      </filterset>
-    </copy>
-    <copy todir="${build.dir}/work/forrestbar-jar" overwrite="true">
-      <fileset dir="src/resources/forrestbar" 
-               excludes="content/**/*.xul" />
-    </copy>
-    <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
-      <fileset dir="${build.dir}/work/forrestbar-jar" includes="content/**/*" />
-    </jar>
-    <copy file="src/resources/forrestbar/install.js" 
-          todir="${build.dir}/work/forrestbar" overwrite="true">
-    </copy>
-    <zip zipfile="${build.dir}/forrestbar.xpi" 
-      basedir="${build.dir}/work/forrestbar" />
-  </target>
-
 
   <!-- ================================== -->
   <!--        Test targets                -->

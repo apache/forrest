@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project default="forrestbar" basedir="../.." name="forrestbar">
+
+  <description>Build script for the forrestbar</description>
+  
+  <!-- Default init values-->
+  <target name="init">
+    <property name="build.dir" location="build"/>
+    <property name="forrestbot.links.forrest.local-embedded.name" value="forrest"/>
+    <property name="forrestbot.links.forrest.local-embedded.url" value="http://xml.apache.org/forrest/"/>
+    <property name="forrestbot.links.forrest.local-webapp.name" value="forrest"/>
+    <property name="forrestbot.links.forrest.local-webapp.url" value="http://xml.apache.org/forrest/"/>
+  </target>
+    
+  <!-- =================================================================== -->
+  <!-- ForrestBar for Mozilla and MozillaFirebird                          -->
+  <!-- =================================================================== -->
+  <target name="forrestbar" depends="init">
+    <property name="xpi.dir" location="src/forrestbar/xpi"/>  
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${build.dir}/work/forrestbar" />
+    <mkdir dir="${build.dir}/work/forrestbar-jar" />
+    <copy todir="${build.dir}/work/forrestbar-jar" overwrite="true">
+      <fileset dir="${xpi.dir}" 
+               includes="content/**/*.xul" />
+      <filterset>
+        <filter token="EMBEDDED_NAME" value="${forrestbot.links.forrest.local-embedded.name}"/>
+        <filter token="EMBEDDED_URL" value="${forrestbot.links.forrest.local-embedded.url}"/> 
+        <filter token="WEBAPP_NAME" value="${forrestbot.links.forrest.local-webapp.name}"/>
+        <filter token="WEBAPP_URL" value="${forrestbot.links.forrest.local-webapp.url}"/> 
+      </filterset>
+    </copy>
+    <copy todir="${build.dir}/work/forrestbar-jar" overwrite="true">
+      <fileset dir="${xpi.dir}" 
+               excludes="content/**/*.xul" />
+    </copy>
+    <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
+      <fileset dir="${build.dir}/work/forrestbar-jar" includes="content/**/*" />
+    </jar>
+    <copy file="${xpi.dir}/install.js" 
+          todir="${build.dir}/work/forrestbar" overwrite="true">
+    </copy>
+    <zip zipfile="${build.dir}/forrestbar.xpi" 
+      basedir="${build.dir}/work/forrestbar" />
+  </target>
+
+</project>
