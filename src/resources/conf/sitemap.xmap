@@ -312,13 +312,24 @@
      </map:call>
    </map:match>
 
+   <!-- Generates body HTML for files in subdirs -->
+   <map:match pattern="body-**/*.xml">
+    <map:generate src="content/xdocs/{1}/{2}.xml"/>
+    <map:call resource="skinit">
+     <map:parameter name="type" value="document2html"/>
+     <map:parameter name="dir" value="{1}/"/>
+     <map:parameter name="resource" value="{2}"/>
+    </map:call>
+    </map:match>
+
+   <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
-     <map:generate src="content/xdocs/{1}.xml"/>
-     <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>
-      <map:parameter name="resource" value="{1}"/>
-      <map:parameter name="dir" value="{1}"/>
-     </map:call>
+    <map:generate src="content/xdocs/{1}.xml"/>
+    <map:call resource="skinit">
+     <map:parameter name="type" value="document2html"/>
+     <map:parameter name="dir" value="/"/>
+     <map:parameter name="resource" value="{1}"/>
+    </map:call>
    </map:match>
 
    <map:match pattern="*.html">
@@ -388,14 +399,15 @@
     <map:serialize type="fo2pdf"/>
    </map:match>
 
-   <map:match pattern="*.pdf">
-    <map:generate src="content/xdocs/{1}.xml"/>
+   <map:match pattern="community/howto/**.pdf">
+    <map:generate src="content/xdocs/community/howto/{1}.xml"/>
+    <map:transform src="library/xslt/howto2document.xsl" label="content"/>
     <map:transform src="skins/{defaults:skin}/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
 
-   <map:match pattern="**/*.pdf">
-    <map:generate src="{1}/{2}.xml"/>
+   <map:match pattern="**.pdf">
+    <map:generate src="content/xdocs/{1}.xml"/>
     <map:transform src="skins/{defaults:skin}/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
@@ -484,7 +496,6 @@
    <map:match pattern="**/images/**.*">
     <map:read src="resources/images/{2}.{3}" mime-type="image/{3}"/>
    </map:match>
-
 
    <map:match pattern="**favicon.ico">
     <map:call resource="skin-read">
