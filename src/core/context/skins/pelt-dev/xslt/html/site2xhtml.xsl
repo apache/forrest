@@ -444,8 +444,7 @@ document.write("Last Published: " + document.lastModified);
             <xsl:when test="div/@class='current'">
               <div class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="div" /></div>
-                <xsl:if test="//tocitems/tocitem and contains($config/toc/@location,'dd')"> 
-                <xsl:value-of select="$config/toc/@location"/>
+                <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
                   <div class="menupageitemgroup">
                       <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
@@ -457,25 +456,6 @@ document.write("Last Published: " + document.lastModified);
                               <a href="{@href}"><xsl:value-of select="@title" /></a>
                             </xsl:otherwise>
                           </xsl:choose>
-
-                          <xsl:if test="tocitem">
-                          <!-- nicolaken: this enables double-nested page links-->
-                            <ul>
-                              <xsl:for-each select = "tocitem">
-
-                                <xsl:choose>
-                                  <xsl:when test="string-length(@title)>15">
-                                    <li><a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a></li>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <li><a href="{@href}"><xsl:value-of select="@title" /></a></li>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-
-                              </xsl:for-each>
-                            </ul> 
-                          <!-- nicolaken: ...till here -->
-                          </xsl:if>
                         </div>
                       </xsl:for-each>
                   </div>

@@ -119,7 +119,14 @@
                  color: <xsl:value-of select="@hlink"/>;} 
 #menu .menupagetitle  { color: <xsl:value-of select="@hlink"/>;}     
 </xsl:template> 
-
+<xsl:template match="color[@name='dialog']"> 
+#menu .menupageitemgroup     { 
+	background-color: <xsl:value-of select="@value"/>;
+}
+#menu .menupageitem {
+	color: <xsl:value-of select="@font"/>;
+} 
+</xsl:template> 
 <!--xsl:template match="color[@name='menuheading']">
 #menu h1 {
     color: <xsl:value-of select="@font"/>;

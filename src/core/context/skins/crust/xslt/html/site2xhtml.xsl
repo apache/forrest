@@ -457,8 +457,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <xsl:when test="span/@class='sel'">
               <div class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="span" /></div>
-                <xsl:if test="//tocitems/tocitem and contains($config/toc/@location,'dd')"> 
-                <xsl:value-of select="$config/toc/@location"/>
+				<xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
                   <div class="menupageitemgroup">
                       <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
