@@ -49,6 +49,14 @@
       <append>false</append>
     </cocoon>
 
+    <cocoon id="idgen">
+      <filename>${context-root}/WEB-INF/logs/idgen.log</filename>
+      <format type="cocoon">
+        %7.7{priority} [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
     <cocoon id="access">
       <filename>${context-root}/WEB-INF/logs/access.log</filename>
       <format type="cocoon">
@@ -154,12 +162,16 @@
     </category>
 
     <category name="sitemap" log-level="WARN">
-      <category name="linkrewriter" log-level="INFO">
-        <log-target id-ref="linkrewriter"/>
-        <log-target id-ref="sitemap"/>
+      <category name="transformer.idgen" log-level="DEBUG">
+        <log-target id-ref="idgen"/>
         <log-target id-ref="error"/>
       </category>
-       <log-target id-ref="sitemap"/>
+      <category name="transformer.linkrewriter" log-level="DEBUG">
+        <log-target id-ref="linkrewriter"/>
+        <log-target id-ref="error"/>
+      </category>
+
+      <log-target id-ref="sitemap"/>
       <log-target id-ref="error"/>
     </category>
 
