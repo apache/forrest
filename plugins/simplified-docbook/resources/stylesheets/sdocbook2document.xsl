@@ -528,7 +528,7 @@ Credit: original from the jakarta-avalon project
       <xsl:template match="ulink">
             <xsl:element name="link">
                   <xsl:attribute name="href"><xsl:choose><xsl:when test="@uri"><xsl:value-of select="@uri"/></xsl:when><xsl:otherwise><xsl:value-of select="@url"/></xsl:otherwise></xsl:choose></xsl:attribute>
-                  <xsl:apply-templates/>
+                  <xsl:choose><xsl:when test="not(node()[not(self::comment())])"><xsl:choose><xsl:when test="@uri"><xsl:value-of select="@uri"/></xsl:when><xsl:otherwise><xsl:value-of select="@url"/></xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise><xsl:apply-templates/></xsl:otherwise></xsl:choose>
             </xsl:element>
       </xsl:template>
       <xsl:template match="footnote">
