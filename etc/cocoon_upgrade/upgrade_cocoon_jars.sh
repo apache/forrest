@@ -69,13 +69,15 @@ function copy()
     rm $1*
     ;;
     "real")
-    cvsdo remove -f $1*
+    echo "CVS removing `echo $1*`"
+    [ ! -z "`echo $1*`" ] && cvsdo remove -f $1*
     ;;
   esac
 
   cp $CLIB/$1* .
 
   if [ "$UPGRADE_TYPE" = "real" ]; then
+    echo "CVS adding `echo $1*`"
     cvs add -kb $1* &
   fi
   popd
@@ -83,8 +85,26 @@ function copy()
 
 function bzcopy()
 {
-  rm $FLIB/cocoon-$1-block-*.jar
-  cp $CBLOCKS/$1-block.jar $FLIB/cocoon-$1-block-$JARSUFFIX.jar
+  pushd . 
+  cd $FLIB
+  case $UPGRADE_TYPE in
+    "testing")
+    rm cocoon-$1-block-*.jar
+    ;;
+    "real")
+    echo "CVS removing $1*"
+    cvsdo remove -f cocoon-$1-block-*.jar
+    ;;
+  esac
+
+  cp $CBLOCKS/$1-block.jar cocoon-$1-block-$JARSUFFIX.jar
+
+  if [ "$UPGRADE_TYPE" = "real" ]; then
+    echo "CVS adding `echo cocoon-$1-block-*.jar`"
+    cvs add -kb cocoon-$1-block-*.jar &
+  fi
+
+  popd
 }
 
 function bcopy()
@@ -144,13 +164,11 @@ echo "Performing $UPGRADE_TYPE upgrade. New jars copied to:"
 echo "  $FLIB"
 echo "  $FLIB_ENDORSED"
 
-set -vx
 
 sanity_check
 
 upgrade_neko
 upgrade_endorsed
-exit
 
 #set -vx
 #avalon-framework-4.1.3.jar
