@@ -10,11 +10,11 @@ and menu.
   version="1.0">
 
   <xsl:import href="copyover.xsl"/>
-  <xsl:template match="/html">
-    <xsl:apply-templates select="body"/>
+  <xsl:template match="/*[local-name()='html']">
+	  <xsl:apply-templates select="*[local-name()='body']"/>
   </xsl:template>
 
-  <xsl:template match="/html/body">
+  <xsl:template match="/*[local-name()='html']/*[local-name()='body']">
     <div class="content">
       <xsl:apply-templates/>
     </div>
