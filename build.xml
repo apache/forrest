@@ -67,14 +67,20 @@
     <property name="tools.dir"             location="tools"/>
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
-
+    
+    <property name="fresh-site.zip" value="${dist-shbat.dir}/fresh-site.zip" />
+    <property name="bare-context.dir" value="${dist-shbat.dir}/context" />
+    <property name="webapp.webinf.dir" value="${bare-context.dir}/WEB-INF" />
+    <property name="webapp.webinf.lib.dir" value="${webapp.webinf.dir}/lib" />
+    
+    <mkdir dir="${build.dir}"/>
+    
     <path id="classpath">
       <fileset dir="src/scratchpad/lib" includes="**/*.jar"/>
       <fileset dir="lib" includes="**/*.jar"/>
       <pathelement location="${tools.jar}"/>
     </path>
-
-    <mkdir dir="${build.dir}"/>
+    
   </target>
 
   <target name="clean" depends="init" description="Delete all generated files">
@@ -207,21 +213,14 @@
   <!-- Make the zip that holds what a fresh site should look like          -->
   <!-- =================================================================== -->
   <target name="fresh-site-zip" depends="init">
-    <!-- TODO: decide on a better place to read/set this prop from/to -->
-    <property name="fresh-site.zip" value="./build/fresh-site.zip" />
     <zip destfile="${fresh-site.zip}" basedir="${resource.dir}/fresh-site" />
   </target>
-
 
   <!-- =================================================================== -->
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- Note that @tokens@ in config files will be unexpanded.              -->
   <!-- =================================================================== -->
   <target name="webapp-webinf" depends="init, scratchpad.jar, components.jar" >
-    <!-- TODO: decide on a better place to read/set this prop from/to -->
-    <property name="webapp.webinf.dir" value="./build/WEB-INF" />
-
-    <mkdir dir="${webapp.webinf.dir}" />
     <copy todir="${webapp.webinf.dir}" >
       <fileset dir="${resource.dir}/conf" >
         <exclude name="*.xmap" />
@@ -234,31 +233,30 @@
       <fileset dir="${resource.dir}/schema">
         <include name="CatalogManager.properties"/>
       </fileset>
-      <!--
-      <fileset dir="${build.classes}">
-        <include name="**/*.class"/>
-      </fileset>
-      <fileset dir="${build.scratchpad.classes}">
-        <include name="**/*.class"/>
-      </fileset>
-      -->
     </copy>
 
     <!-- Temporary hack to stop Cocoon rewriting extensions -->
     <mkdir dir="${webapp.webinf.dir}/classes/org/apache/cocoon/util"/>
     <touch file="${webapp.webinf.dir}/classes/org/apache/cocoon/util/mime.types"/>
 
-    <mkdir dir="${webapp.webinf.dir}/lib"/>
-    <copy todir="${webapp.webinf.dir}/lib">
-      <!--
+
+    <!-- TODO: reduce jar copying -->
+    <copy todir="${dist-shbat.dir}/lib/endorsed">
+      <fileset dir="./lib/endorsed"    />
+    </copy>
+
+    <copy todir="${dist-shbat.dir}/lib/optional">
+      <fileset dir="./lib/optional"/>
+    </copy>
+    
+    <copy todir="${webapp.webinf.lib.dir}">
       <fileset dir="./lib/endorsed"    />
       <fileset dir="./lib/optional"/>
-      -->
       <fileset dir="./lib/core"/>
       <fileset dir="./src/scratchpad/lib"/>
-      <fileset dir="${build.scratchpad.dir}" includes="*.jar"/>
-      <fileset dir="${build.components.dir}" includes="*.jar"/>
     </copy>
+        
+    
   </target>
 
 
@@ -266,9 +264,7 @@
   <!-- Make the bare context directory like cocoon (CLI or webapp) needs it-->
   <!-- =================================================================== -->
   <target name="bare-context-dir" depends="init" >
-    <!-- TODO: decide on a better place to read/set this prop from/to -->
-    <property name="bare-context.dir" value="./build/bare-context" />
-
+    
     <!-- Copy entity catalog, entities and class files -->
     <copy todir="${bare-context.dir}/resources/schema" >
       <fileset dir="${resource.dir}/schema"/>
@@ -350,18 +346,18 @@
   <!-- =================================================================== -->
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
-  <target name="dist-shbat" 
-    depends="init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
-    <!-- TODO: decide on a better place to read/set this prop from/to -->
-
+  <target name="dist-shbat-init">
     <!-- fresh drop-off location for the distribution -->
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
-
-    <!-- copy the ant script at the heart of the distribution -->
-    <!--
-    <copy todir="${dist-shbat.dir}" file="forrest.build.xml" />
-    -->
+    <mkdir dir="${dist-shbat.dir}"/>
+    <mkdir dir="${bare-context.dir}" />
+    <mkdir dir="${webapp.webinf.dir}" />
+    <mkdir dir="${webapp.webinf.lib.dir}" />
+  </target>
+  
+  <target name="dist-shbat" 
+    depends="init, dist-shbat-init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
 
     <!-- copy the prepared and wrapper stuff for the distribution -->
     <copy todir="${dist-shbat.dir}">
@@ -371,25 +367,6 @@
     <!-- copy licenses -->
     <copy todir="${dist-shbat.dir}/legal">
       <fileset dir="./legal" />
-    </copy>
-
-    <!-- copy the fresh-site.zip to clone from -->
-    <copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
-
-    <!-- copy the web-inf as needed by the cocoon CLI -->
-    <mkdir dir="${dist-shbat.dir}/WEB-INF" />
-    <copy todir="${dist-shbat.dir}/WEB-INF">
-      <fileset dir="${webapp.webinf.dir}" />
-    </copy>
-
-    <mkdir dir="${dist-shbat.dir}/lib/endorsed" />
-    <copy todir="${dist-shbat.dir}/lib/endorsed">
-      <fileset dir="lib/endorsed" />
-    </copy>
-
-    <mkdir dir="${dist-shbat.dir}/lib/optional" />
-    <copy todir="${dist-shbat.dir}/lib/optional">
-      <fileset dir="lib/optional" />
     </copy>
 
     <!-- Copy Ant jars, so the shbat distribution is self-contained -->
@@ -421,12 +398,6 @@
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/ant/bin" includes="*.bat"/>
     <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/ant/bin" excludes="*.bat"/>
     <chmod dir="${dist-shbat.dir}/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
-
-    <!-- copy the bare-context dir as needed by the cocoon CLI -->
-    <mkdir dir="${dist-shbat.dir}/context" />
-    <copy todir="${dist-shbat.dir}/context">
-      <fileset dir="${bare-context.dir}" />
-    </copy>
 
     <echo>
   *-----------------------------------------------------------------
@@ -547,7 +518,7 @@
   <!-- =================================================================== -->
   <target name="scratchpad.jar" depends="scratchpad.compile">
     <mkdir dir="${build.scratchpad.dir}"/>
-    <jar destfile="${build.scratchpad.dir}/xml-forrest-scratchpad.jar"
+    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-scratchpad-${version}.jar"
       basedir="${build.scratchpad.classes}"/>
   </target>
 
@@ -572,7 +543,7 @@
   <!-- =================================================================== -->
   <target name="components.jar" depends="components.compile">
     <mkdir dir="${build.components.dir}"/>
-    <jar destfile="${build.components.dir}/xml-forrest-components.jar"
+    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-components-${version}.jar"
       basedir="${build.components.classes}"/>
   </target>
 

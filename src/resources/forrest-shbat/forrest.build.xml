@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/02 20:28:11 $              |
+    |             $Date: 2003/10/03 10:05:23 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -25,7 +25,7 @@ FORREST SITE BUILDER
   
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
-      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+      <fileset dir="${forrest.home}/context/WEB-INF/lib" includes="*.jar" />
     </classpath>
   </taskdef>
 
@@ -297,10 +297,10 @@ FORREST SITE BUILDER
     <path id="forrest.cp">
       <pathelement location="${project.ctxt-dir}/WEB-INF/classes"/>
       <fileset dir="${project.ctxt-dir}/WEB-INF/lib" includes="*.jar"/>
-      <pathelement location="${forrest.home}/WEB-INF/classes"/>
+      <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
       <fileset dir="${forrest.home}/lib/optional" includes="servlet-2.3.jar"/>
       <fileset dir="${forrest.home}/lib/endorsed" includes="*.jar"/>
-      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+      <fileset dir="${forrest.home}/context/WEB-INF/lib" includes="*.jar" />
       <pathelement location="${tools.jar}"/>
     </path>
   </target>
@@ -379,7 +379,7 @@ FORREST SITE BUILDER
 
     <!-- Force-copy these files as they have @tokens@ that will need replacing -->
     <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true">
-      <fileset dir="${forrest.home}/WEB-INF">
+      <fileset dir="${forrest.home}/context/WEB-INF">
         <include name="*.xconf" />
       </fileset>
     </copy>
@@ -732,7 +732,7 @@ for any broken links in the generated site.
     <!-- this will need revisions in the case of the siteplan
     extra project-custom classes then will need to be warred in as well. -->
     <mkdir dir="${project.webapp}/WEB-INF"/>
-    <copy file="${forrest.home}/WEB-INF/web.xml" filtering="true" 
+    <copy file="${forrest.home}/context/WEB-INF/web.xml" filtering="true" 
       todir="${project.webapp}/WEB-INF"/>
     <copy todir="${project.webapp}" preservelastmodified="true">
       <fileset dir="${project.ctxt-dir}" >
@@ -742,7 +742,7 @@ for any broken links in the generated site.
 
     <copy todir="${project.webapp}/WEB-INF">
       <!-- Note: no overwriting, so user's libs and classes get preference -->
-      <fileset dir="${forrest.home}/WEB-INF">
+      <fileset dir="${forrest.home}/context/WEB-INF">
         <include name="lib/**"/>
         <include name="classes/**"/>
       </fileset>
@@ -814,7 +814,7 @@ ${project.war}
        =============================================================== -->
   <target name="seed" depends="ensure-nocontent"
     description="Seeds a directory with a template project doc structure">
-    <unzip src="${forrest.home}/fresh-site.zip" 
+    <unzip src="${forrest.home}/context/fresh-site.zip" 
       dest="${project.home}"
       overwrite="false"/>
     <echo>
