@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.3-dev                        |
-    |             $Date: 2003/01/17 00:29:40 $              |
+    |             $Date: 2003/01/24 01:21:05 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -508,10 +508,12 @@ FORREST SITE BUILDER
   </target>
 
   <target name="ensure-nocontent" depends="check-contentdir"
-    if="project.content.present">
+    if="project.content.present" unless="skip.contentcheck">
     <fail>
 ------------------------------------------------
-This project already has content in ${project.xdocs-dir}.
+This project already has content in ${project.content-dir}.
+
+Run with '-Dskip.contentcheck=yes' to ignore existing content.
 ------------------------------------------------
     </fail>
   </target>
@@ -520,7 +522,7 @@ This project already has content in ${project.xdocs-dir}.
     unless="project.content.present">
     <fail>
 ------------------------------------------------
-This project has no content in ${project.xdocs-dir}.
+This project has no content in ${project.content-dir}.
 Use the 'seed' target to create a template project structure.
 ------------------------------------------------
     </fail>
