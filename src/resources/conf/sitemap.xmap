@@ -23,6 +23,10 @@
     <use-browser-capabilities-db>false</use-browser-capabilities-db>
    </map:transformer>
   -->
+  <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
+    <element>/document/body//*[local-name() = 'section']</element>
+    <id>title/text()</id>
+  </map:transformer>
     <map:transformer name="linkrewriter"
       src="org.apache.cocoon.transformation.LinkRewriterTransformer">
       <input-module name="linkmap" src="{src}" reloadable="true"/>
@@ -279,6 +283,7 @@
    <map:match pattern="body-community/*/index.xml">
      <map:generate src="content/xdocs/community/{1}/index.xml"/>
      <map:transform type="linkrewriter" src="cocoon:/community/{1}/linkmap"/>
+     <map:transform type="idgen"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/index"/>
@@ -289,6 +294,7 @@
    <map:match pattern="body-community**revision-*.xml">
      <map:generate src="content/xdocs/community{1}revision-{2}.xml"/>
      <map:transform type="linkrewriter" src="cocoon:/community/{1}/linkmap"/>
+     <map:transform type="idgen"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/revision-{2}"/>
@@ -302,6 +308,7 @@
        <map:part src="cocoon:/revisions-community/{1}/{2}/{3}" />
      </map:aggregate>
      <map:transform type="linkrewriter" src="cocoon:/community/{1}/{2}/linkmap"/>
+     <map:transform type="idgen"/>
      <map:transform src="library/xslt/{1}2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -329,6 +336,7 @@
      </map:generate>
      <map:transform src="library/xslt/dtdx2flat.xsl"/>
      <map:transform src="library/xslt/flat2document.xsl"/>
+     <map:transform type="idgen"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="isfaq" value="true"/>
@@ -340,6 +348,7 @@
    <map:match pattern="body-**/*.xml">
     <map:generate src="content/xdocs/{1}/{2}.xml"/>
     <map:transform type="linkrewriter" src="cocoon:/{1}/linkmap"/>
+    <map:transform type="idgen"/>
     <map:call resource="transform-to-document">
      <map:parameter name="src" value="content/xdocs/{1}/{2}.xml"/>
     </map:call>
@@ -353,6 +362,7 @@
    <map:match pattern="body-**.xml">
     <map:generate src="content/xdocs/{1}.xml"/>
     <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
+    <map:transform type="idgen"/>
     <map:call resource="transform-to-document">
      <map:parameter name="src" value="content/xdocs/{1}.xml"/>
     </map:call>
