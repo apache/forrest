@@ -35,10 +35,11 @@ import org.eclipse.jface.viewers.*;
 public class NewXdocPage extends WizardPage {
     // FIXME: get these config settings from forrest.properties
 	public String projectXDocsDir = "/src/documentation/content/xdocs";
-	
+	public String default_filename = "new_file.xml"; 
+	public String required_file_extension = "xml"; 
 	private Text containerText;
 	private Text fileText;
-	private ISelection selection;
+	protected ISelection selection;
 
 	/**
 	 * Create the new page.
@@ -115,7 +116,7 @@ public class NewXdocPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText("new_file.xml");
+		fileText.setText(default_filename);
 	}
 	
 	/**
@@ -157,8 +158,8 @@ public class NewXdocPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("xml") == false) {
-				updateStatus("File extension must be \"xml\"");
+			if (ext.equalsIgnoreCase(required_file_extension) == false) {
+				updateStatus("File extension must be \"" + required_file_extension + "\"");
 				return;
 			}
 		}

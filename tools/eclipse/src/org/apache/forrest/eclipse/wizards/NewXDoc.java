@@ -53,8 +53,8 @@ import org.eclipse.ui.ide.IDE;
  */
 
 public class NewXDoc extends Wizard implements INewWizard {
-	private NewXdocPage page;
-	private ISelection selection;
+	protected NewXdocPage page;
+	protected ISelection selection;
 	protected String resourceAntScript = "/src/org/apache/forrest/template/template_build.xml";
 
 	/**
@@ -68,7 +68,6 @@ public class NewXDoc extends Wizard implements INewWizard {
 	/**
 	 * Adding the page to the wizard.
 	 */
-
 	public void addPages() {
 		page = new NewXdocPage(selection);
 		addPage(page);
