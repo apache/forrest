@@ -44,27 +44,39 @@
 
 <xsl:template match="contentModel">
   <section id="{@ename}">
-    <title><xsl:value-of select="@ename"/></title>
-    <section><title>Content Model</title>
-      <p>
-        <xsl:apply-templates/>
-      </p>
-    </section>
-    <xsl:if test="key('attlistbyname',@ename)">
-      <section><title>Attributes</title>
-        <xsl:apply-templates select="key('attlistbyname',@ename)"/>
-      </section>
-    </xsl:if>
-    <xsl:if test="key('contentmodelbychildren',@ename)">
-      <section><title>Used inside</title>
-        <p>
-          <xsl:for-each select="key('contentmodelbychildren',@ename)">
-            <link href="#{@ename}"><xsl:value-of select="@ename"/></link>
-            <xsl:if test="not(position() = last())">, </xsl:if>
-          </xsl:for-each>
-        </p>
-      </section>
-    </xsl:if>
+      <table class="dtdElement" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+          <td colspan="3"><span class="dtdTag"><xsl:value-of select="@ename"/></span></td>
+        </tr>
+        <tr>
+         <td valign="top" nowrap="nowrap"><b>Content model&#160;</b></td>
+         <td colspan="2" width="100%"><xsl:apply-templates/></td>
+        </tr>
+        <xsl:if test="key('attlistbyname',@ename)">
+          <tr>
+            <td colspan="3"><hr noshade="noshade" width="100%"/></td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Attributes</b></td>
+            <td colspan="2" width="100%"><xsl:apply-templates select="key('attlistbyname',@ename)"/></td>
+          </tr>
+        </xsl:if>
+      <xsl:if test="key('contentmodelbychildren',@ename)">
+        <tr>
+          <td colspan="3"><hr noshade="noshade" width="100%"/></td>
+        </tr>
+        <tr>
+          <td valign="top" nowrap="nowrap"><b>Used inside</b></td>
+          <td width="100%">
+            <xsl:for-each select="key('contentmodelbychildren',@ename)">
+              <link href="#{@ename}"><xsl:value-of select="@ename"/></link>
+              <xsl:if test="not(position() = last())"> | </xsl:if>
+            </xsl:for-each>
+          </td>
+        </tr>
+        <tr><td colspan="3">&#160;</td></tr>
+      </xsl:if>
+    </table>
   </section>
 </xsl:template>
 
@@ -93,35 +105,36 @@
 </xsl:template>
 
 <xsl:template match="attlist">
-  <dl>
+  <table cellpadding="0" cellspacing="0" border="0" class="dtdElement">
     <xsl:apply-templates/>
-  </dl>
+  </table>
 </xsl:template>
 
 <xsl:template match="attributeDecl">
-  <dt>
-    <strong><xsl:value-of select="@aname"/></strong>
-  </dt>
-  <dd>
-    <xsl:if test="not(enumeration)">
-      <em>type: </em><xsl:value-of select="@atype"/><br/>
-    </xsl:if>
-    <xsl:if test="@required">
-      required attribute<br/>
-    </xsl:if>
-    <xsl:if test="@default">
-      <em>default value: </em><xsl:value-of select="@default"/><br/>
-    </xsl:if>
-    <xsl:if test="@fixed">
-      <em>fixed value: </em><xsl:value-of select="@default"/><br/>
-    </xsl:if>
-    <xsl:if test="enumeration">
-      <em>possible values: </em><xsl:for-each select="enumeration">
-        <xsl:value-of select="@value"/><xsl:text> </xsl:text>
-      </xsl:for-each>
-      <br/>
-    </xsl:if>
-  </dd>
+  <tr>
+    <td valign="top"><xsl:if test="position() mod 2 != 0"><xsl:attribute name="bgcolor">#F1F7FF</xsl:attribute></xsl:if><xsl:value-of select="@aname"/></td>
+    <td><xsl:if test="position() mod 2 != 0"><xsl:attribute name="bgcolor">#F1F7FF</xsl:attribute></xsl:if>&#160;&#160;&#160;&#160;</td>
+    <td width="100%"><xsl:if test="position() mod 2 != 0"><xsl:attribute name="bgcolor">#F1F7FF</xsl:attribute></xsl:if>
+      <xsl:if test="not(enumeration)">
+        type: <xsl:value-of select="@atype"/><br/>
+      </xsl:if>
+      <xsl:if test="@required">
+        required attribute<br/>
+      </xsl:if>
+      <xsl:if test="@default">
+        default value: <xsl:value-of select="@default"/><br/>
+      </xsl:if>
+      <xsl:if test="@fixed">
+        fixed value: <xsl:value-of select="@default"/><br/>
+      </xsl:if>
+      <xsl:if test="enumeration">
+        possible values: <xsl:for-each select="enumeration">
+          <xsl:value-of select="@value"/><xsl:text> </xsl:text>
+        </xsl:for-each>
+        <br/>
+      </xsl:if>
+    </td>
+  </tr>
 </xsl:template>
 
 <xsl:template name="trailingfilename">
