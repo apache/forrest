@@ -46,7 +46,7 @@ public class ZipSourceFactory extends AbstractLogEnabled
     implements SourceFactory, ThreadSafe, Serviceable {
 
     protected ServiceManager manager;
-    public static String ZIP_SOURCE_SCHEME = "zip:";
+    public static final String ZIP_SOURCE_SCHEME = "zip:";
 
     public Source getSource(String location, Map parameters)
         throws IOException, MalformedURLException {
