@@ -83,14 +83,14 @@ if (!abc.push) {
  * you use this script (you can leave it as an empty array if you wish)
  */
 var PREPREND_CRUMBS = new Array();
-   if(!("apache"=="")){
-     PREPREND_CRUMBS.push( new Array( "apache", "http://www.apache.org/" ) );
+   if(!("@skinconfig.trail.link1.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link1.name@", "@skinconfig.trail.link1.href@" ) );
    }
-   if(!("xml.apache"=="")){
-     PREPREND_CRUMBS.push( new Array( "xml.apache", "http://xml.apache.org/" ) );
+   if(!("@skinconfig.trail.link2.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link2.name@", "@skinconfig.trail.link2.href@" ) );
    }
-   if(!(""=="")){
-     PREPREND_CRUMBS.push( new Array( "", "" ) );
+   if(!("@skinconfig.trail.link3.name@"=="")){
+     PREPREND_CRUMBS.push( new Array( "@skinconfig.trail.link3.name@", "@skinconfig.trail.link3.href@" ) );
    }
 
 /**
