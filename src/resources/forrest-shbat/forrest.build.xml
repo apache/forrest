@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/02/27 05:48:30 $              |
+    |             $Date: 2003/03/15 06:21:49 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -77,7 +77,7 @@ FORREST SITE BUILDER
     <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
     will go away soon -->
     <property name="project.real-content-dir" location="${project.content-dir}/content" />
-    <property name="project.sitemap"     location="${project.content-dir}/sitemap.xmap" />
+    <property name="project.sitemap-dir"     location="${project.content-dir}" />
     <property name="project.xdocs-dir"   location="${project.content-dir}/content/xdocs" />
     <property name="project.stylesheets-dir" location="${project.content-dir}/resources/stylesheets" />
     <property name="project.images-dir"  location="${project.content-dir}/resources/images" />
@@ -101,7 +101,7 @@ FORREST SITE BUILDER
   <target name="examine-proj" depends="init-props">
     <available property="conf.present" file="${project.conf-dir}" type="dir"/>
     <available property="real-content.present" file="${project.real-content-dir}" type="dir"/>
-    <available property="sitemap.present" file="${project.sitemap}"/>
+    <available property="sitemap.present" file="${project.sitemap-dir}" type="dir"/>
     <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
     <available property="images.present" file="${project.images-dir}" type="dir"/>
     <available property="schema.present" file="${project.schema-dir}" type="dir"/>
@@ -156,8 +156,7 @@ FORREST SITE BUILDER
         <isset property="sitemap.present"/>
       </and>
     </condition>
-    <basename file="${project.sitemap}" property="sitemap-file"/>
-    <property name="forrest.validate.sitemap.includes" value="${sitemap-file}"/>
+    <property name="forrest.validate.sitemap.includes" value="*.xmap"/>
     <property name="forrest.validate.sitemap.excludes" value=""/>
     <property name="forrest.validate.sitemap.failonerror"
       value="${forrest.validate.failonerror}" />
@@ -330,7 +329,7 @@ FORREST SITE BUILDER
 
     <copy todir="${project.ctxt-dir}/" filtering="off">
       <fileset dir="${forrest.home}/context" >
-        <exclude name="sitemap.xmap" />
+        <exclude name="*.xmap" />
         <exclude name="skins/**" />
       </fileset>
       <fileset dir="${forrest.home}/context" >
@@ -341,7 +340,7 @@ FORREST SITE BUILDER
     <copy todir="${project.ctxt-dir}/" filtering="on" overwrite="true">
     <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
-        <include name="sitemap.xmap" />
+        <include name="*.xmap" />
         <include name="skins/**" />
         <exclude name="skins/**/images/**" />
       </fileset>
@@ -388,9 +387,12 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-sitemap" if="sitemap.present">
-    <copy file="${project.sitemap}" toDir="${project.ctxt-dir}" filtering="true"
-      overwrite="true" failonerror="false"/>
-  </target>
+    <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true" failonerror="false">
+      <fileset dir="${project.sitemap-dir}">
+        <include name="*.xmap"/>
+      </fileset>
+    </copy>
+   </target>
 
   <target name="copy-xdocs" if="xdocs.present">
     <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false">
