@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+<document> 
+  <header> 
+    <title>The ForrestBot</title> 
+    <authors><person name="Marc Portier"
+      email="mpo@outerthought.org"/></authors> 
+    <abstract>This document explains how the Forrest project can be used to
+      centrally build the HTML documentation for different projects. It also explains
+      which pieces in the Forrest distribution come to play to achieve this
+      functionality, and how they could be extended in the future.</abstract> 
+  </header> 
+  <body> 
+    <note>Related to this document it might be useful to check the
+      <link href="forrest-contract.html">contract</link> that explains to which rules
+      your project should comply to when you want it to make use of Forrest.</note> 
+    <section> 
+      <title>Using the Forrest Bot</title> 
+      <section> 
+        <title>Setting up the centralized service</title> 
+        <p>Historically the bot has been thought of as a script that regularly
+          is executed. The goal being to publish a purely static website that
+          near-real-time-like updates to newly available content. </p> 
+        <p>Running the bot is as easy as calling the following in your shell.
+          (executed in the root dir of the distribution.)</p> 
+        <source>build bot -Dbot.forrestbot.xconf=myOwn.conf.xml -Dtemplate.echo=[true|false]</source> 
+        <p>It is quite typical to perform this from a shell script that gets
+          scheduled for execution on a regular basis.</p> 
+        <p>The actions the bot is going to take are written down in the XML
+          file pointed at with the <code>bot.forrestbot.xconf</code> System property. (if
+          not specified with <code>-Dbot.forrest.xconf</code> the default config from the
+          distribution is taken: <code>./forrestbot.conf.xml</code>) </p> 
+      </section> 
+      <section> 
+        <title>Describing your project to the bot</title> 
+        <fixme author="mpo">There is not yet a DTD for this configuration
+          file.</fixme> 
+        <p>The bot's work is written down in an XML configuration file, which
+          has one (optional) child-element for setting cross-project defaults followed by
+          a list of project-elements that hold the configuration for the various projects
+          the bot is going to work on.</p> 
+        <source><![CDATA[<?xml version="1.0"?>
+<forrest-config>
+  <defaults>
+     ...<!-- different fallback values for various workstages -->
+  </defaults>
+
+  <project name="project-name-1">
+     ...<!-- different subelements configure the various workstages -->
+  </project>
+
+  <project name="project-name-2">
+     ...<!-- different subelements configure the various workstages -->
+  </project>
+</forrest-config>
+]]></source> 
+        <p>During the bot-run, each project entry will start a parallel and
+          independent process consisting of a number of so called 'workstages'.</p> 
+        <p>These workstages are listed in the
+          <code>./src/resources/forrestbot/stages.conf.xml</code> file and their actual
+          execution is handled by the various template tasks in the
+          <code>./resources/forrestbot/ant/templates.build.xml</code> file. </p> 
+        <p>Currently the various workstages are:</p> 
+        <ul> 
+        <dl> 
+          <dt>prepare</dt> 
+          <dd> Make a clean Forrest-defined Cocoon context environment.</dd> 
+        </dl> 
+        <dl> 
+          <dt>get-src</dt> 
+          <dd>Slide in the project specific document sources in that Cocoon
+            context environment.</dd> 
+        </dl> 
+        <dl> 
+          <dt>generate</dt> 
+          <dd> Actually generate the site using Cocoon</dd> 
+        </dl> 
+        <dl> 
+          <dt>deploy</dt> 
+          <dd>Publish the newly created site</dd> 
+        </dl> 
+        <dl> 
+          <dt>cleanup</dt> 
+          <dd>&lt;No real actions yet&gt;</dd> 
+        </dl> 
+        </ul> 
+        <p>Inside the project element the configuration allows to set some
+          parameters that get consumed in the template targets. This workstage dependant
+          configuration always takes up the following layout: an element with the name of
+          one of the tasks, and an optional type-attribute with nested elements that hold
+          parameter names, with required name attribute holding the actual parameter
+          value. Example:</p> 
+        <source>&lt;project name="xml-forrest"&gt;
+    &lt;prepare&gt;
+        &lt;skin name="bert"/&gt;
+    &lt;/prepare&gt;
+
+    &lt;get-src type="cvs"&gt;
+      &lt;host name="cvs.apache.org"/&gt;
+      &lt;root name="/home/cvspublic"/&gt;
+      &lt;user name="anoncvs"/&gt;
+      &lt;passwd name="anoncvs"/&gt;
+      &lt;module name="xml-forrest"/&gt;
+      &lt;dir name="src/documentation"/&gt;
+    &lt;/get-src&gt;
+
+    &lt;generate&gt;
+      &lt;debuglevel name="ERROR" /&gt;
+    &lt;/generate&gt;  
+
+    &lt;deploy type="scp"&gt;
+      &lt;host name="krysalis.sourceforge.net"/&gt;
+      &lt;root name="/home/groups/k/kr/krysalis/htdocs"/&gt;
+      &lt;user name="forrestbot"/&gt;
+      &lt;dir name="forrest"/&gt;
+    &lt;/deploy&gt;
+  &lt;/project&gt;</source> 
+        <note>Only the workstages that need configuration settings have an
+          entry here. At all times there will be a workstage template called for each
+          stage of the stages.conf.xml (even if it is not explicitly mentioned inside the
+          &lt;project&gt; element.) </note> 
+        <p>Explained in detail, this will</p> 
+        <ul> 
+          <li>SET names properties (workstage(.@type)?.*) to appropriate values
+            (*/@name)</li> 
+        <ul> 
+        <dl> 
+          <dt>prepare.skin</dt> 
+          <dd>bert</dd> 
+        </dl> 
+        <dl> 
+          <dt>get.cvs.host</dt> 
+          <dd>cvs.apache.org</dd> 
+        </dl> 
+        <dl> 
+          <dt>get.cvs.root</dt> 
+          <dd>/home/cvspublic</dd> 
+        </dl> 
+        <dl> 
+          <dt>get.cvs.user</dt> 
+          <dd>anoncvs</dd> 
+        </dl> 
+        <dl> 
+          <dt>passwd</dt> 
+          <dd>anoncvs</dd> 
+        </dl> 
+        <dl> 
+          <dt>get.cvs.module</dt> 
+          <dd>xml-forrest</dd> 
+        </dl> 
+        <dl> 
+          <dt>get.cvs.dir</dt> 
+          <dd>src/documentation</dd> 
+        </dl> 
+        <dl> 
+          <dt>generate.debuglevel</dt> 
+          <dd>ERROR</dd> 
+        </dl> 
+        <dl> 
+          <dt>deploy.scp.host</dt> 
+          <dd>krysalis.sourceforge.net</dd> 
+        </dl> 
+        <dl> 
+          <dt>deploy.scp.root</dt> 
+          <dd>/home/groups/k/kr/krysalis/htdocs</dd> 
+        </dl> 
+        <dl> 
+          <dt>deploy.scp.user</dt> 
+          <dd>forrestbot</dd> 
+        </dl> 
+        <dl> 
+          <dt>deploy.scp.dir</dt> 
+          <dd>forrest</dd> 
+        </dl> 
+        </ul> 
+        <li>and CALL the following templates
+          (template.workstage(.@type)?):</li> 
+        <ul> 
+          <li>template.prepare</li> 
+          <li>template.get-src.cvs</li> 
+          <li>template.generate</li> 
+          <li>template.deploy.scp</li> 
+          <li>template.cleanup</li> 
+        </ul> 
+        </ul> 
+        <p>What each of these templates is going to do with the parameters can
+          be found in the templates.build.xml itself (at this stage) and is put out to
+          the console if the bot is ran with the <code>-Dtemplate.echo=true</code>
+          flag</p> 
+        <section> 
+          <title>Setting bot-wide defaults</title> 
+          <p>The <code>&lt;defaults&gt;</code> section in the
+            <code>&lt;forrest-config&gt;</code> allows for one-time setting of parameters
+            you want to reuse for different projects. The syntax (and semantic value) of
+            the nested elements is identical to the use inside the
+            <code>&lt;project&gt;</code> tags.</p> 
+        </section> 
+      </section> 
+      <note>Once you understand all of this you might decide NOT to run your
+        own centralized service but rather ask your project to be taken up in the
+        centralized service of the project team itself: just send a mail to
+        forrest-dev@apache.org listing the required parameters to be taken up in the
+        process.</note> 
+      <section> 
+        <title>Checking logs and getting them by mail</title> 
+        <p>For each distinct project the Forrest bot is maintaining a separate
+          working log of the different workstages being executed. These logs can be
+          opened and viewed in the ./build/bot directory</p> 
+        <p>In addition to the @name attribute the &lt;project&gt; tag also can
+          contain a @sendlogto attribute that must be holding a (comma separated list
+          off) email address(es) where the project specific log needs to be sent to after
+          all workstages have been completed (or as soon as building failed)</p> 
+      </section> 
+    </section> 
+    <section> 
+      <title>ForrestBot design</title> 
+      <p>Most of us will just like things to work, and will be happy enough
+        just using it, maybe even letting <link
+      href="mailto:forrest-dev@apache.org">us</link> know if we could improve this or
+      the other. Some however might be drawn to the
+      <link href="http://www.howstuffworks.com/">how stuff works</link> of things.
+      For them is this section as a start in the rest of their own pursuit.</p> 
+      <section> 
+        <title>The Ant play</title> 
+        <p>All actions and targets related to the actual execution of the bot's
+          work is separated over 3 distinct build files:</p> 
+        <ul> 
+        <dl> 
+          <dt>[main] <code>./build.xml</code></dt> 
+          <dd>the starting point where generation and preparation is initiated.
+            </dd> 
+        </dl> 
+        <dl> 
+          <dt>[generated] <code>./build/bot/work.build.xml</code></dt> 
+          <dd>the one that reflects the configured tasks in the
+            forrestbot.conf.xml</dd> 
+        </dl> 
+        <dl> 
+          <dt>[templates]
+            <code>./src/resources/forrestbot/ant/templates.build.xml</code></dt> 
+          <dd>listing the different targets that actually depict the supported
+            workstages (and types of)</dd> 
+        </dl> 
+        </ul> 
+        <p>The complete process runs as follows:</p> 
+        <ol> 
+          <li>'bot' target inside main build.xml depends on a number of targets
+            that</li> 
+        <ol> 
+          <li>'bot.init': initialize the environment</li> 
+          <li>'bot.conf2build': use XSLT stylesheets to convert the
+            forrestbot.conf.xml into the work.build.xml (and a properties file for the
+            default-section)</li> 
+          <li>'bot.run': delegates to the 'work' target of the generated
+            work.build.xml</li> 
+        </ol> 
+        <li>'work' target inside generated work.build.xml will then start in
+          parallel (so failure of the one would not influence the other) the different
+          project specific work-processes. </li> 
+        <li>each of these project runs (generated 'work.[projectname]' targets)
+          depends on the sequential execution of the different workstage actions
+          (generated '[workstage].[projectname(.[type])?]' targets) </li> 
+        <li>In those specific targets the pattern is as follows:</li> 
+        <ol> 
+          <li>set the project specific parameters for this project and
+            workstage</li> 
+          <li>load the default parameter values for the ones that aren't set
+            yet</li> 
+          <li>call the actual template.[workstage(.[type]?)]</li> 
+        </ol> 
+        </ol> 
+      </section> 
+      <section> 
+        <title>Adding features to the bot - The meta template</title> 
+        <p>Given the mechanism, the actual things the bot <strong>can</strong>
+          do boil down to the template targets it can call. So extending the bot means:
+          adding templates-targets.</p> 
+        <p>If you want to add your own tempales to
+          <code>template.build.xml</code>, take in account the following guidelines:</p> 
+        <ul> 
+          <li> in the future there will be a DTD for forrestbot.conf.xml that
+            should be updated probably after you added stuff to the
+            <code>templates.build.xml</code>. Backwards-incompatible changes need a formal
+            vote.</li> 
+          <li>build an echo target for each template target you make: </li> 
+        </ul> 
+        <source><![CDATA[
+<target name="echo.workstage-name.optional-type" if="template.echo">
+    ... here you put echo ant-tasks that somewhat tell what you will
+    ... do with all the params you expect
+</target>
+
+<target name="template.workstage-name.optional-type"
+            depends="shared.set-props, echo.workstage-name.optional-type">
+    ... here you put whatever ant-tasks that actually do it
+</target>          
+    ]]></source> 
+      </section> 
+    </section> 
+  </body>
+</document>

@@ -54,30 +54,27 @@
            <try>
              <ant antfile="${{bot.work.build.xml}}" inheritRefs="true"
                   target="work.{@name}" output="${{bot.build.dir}}/work.{@name}.log"/>
-             <property name="completion-status.{@name}" value="SUCCESS" />
+             <property name="mail.completion-status" value="SUCCESS" />
            </try>
            <catch>
              <echo message="Failed to complete workstages for project {@name}" />
-             <property name="completion-status.{@name}" value="FAIL" />
+             <property name="mail.completion-status" value="FAIL" />
            </catch>
-           <finally>
-             <xsl:if test="@sendlogto">
-               <mail from="forrest-bot@xml.apache.org"
-                     mailhost="${{mailhost}}"
-                     tolist="{@sendlogto}"
-                     subject="[DO NOT REPLY] ForrestBot site builder for '{@name}'"
-                     files="${{bot.build.dir}}/work.{@name}.log"
-                     failonerror="false">
-                 <message>
-Another hard day at the BOT factory, and quite happy to have worked for you.
-Our completion status for your project [<xsl:value-of select="@name" />] was ${completion-status.<xsl:value-of select="@name"/>}
-Please find the details in the log attached.
-
-The Forrest-Bot team. (http://xml.apache.org/forrest)
-                 </message>
-               </mail>
-             </xsl:if>
-           </finally>
+           <xsl:if test="@sendlogto">
+       <finally>
+         <property name="mail.to" value="{@sendlogto}" />
+         <property name="mail.attachments" value="${{bot.build.dir}}/work.{@name}.log" />
+         <condition property="mail.send">
+           <or>
+           <equals arg1="${{mail.completion-status}}" arg2="error" />
+                   <equals arg1="{@sendon}" arg2="always" />
+         </or>
+         </condition>
+         <ant antfile="${{bot.templates.build.xml}}" target="template.mail" inheritRefs="true">
+           <property name="project.name" value="{@name}" />
+         </ant>
+             </finally>
+           </xsl:if>
          </antipede-trycatch>
        </xsl:for-each>
      </parallel>

@@ -331,10 +331,10 @@
   <!-- [[deploy type ftp ]] -->
   <target name="echo.deploy.ftp" if="template.echo">
     <echo>
-      deploy workstage of type ftp for project ${project.name}
-      will use ftp to host: ${deploy.ftp.host}
-      impersonating user: ${deploy.ftp.user} with passwd: ${deploy.ftp.passwd}
-      to copy the stuff to relative user dir: ${deploy.ftp.destination}
+Deploy workstage of type ftp for project ${project.name}
+Will use ftp to host: ${deploy.ftp.host}
+Impersonating user: ${deploy.ftp.user} with passwd: ${deploy.ftp.passwd}
+to copy the stuff to relative user dir: ${deploy.ftp.destination}
     </echo>
   </target>
 
@@ -358,6 +358,36 @@
   </target>
   <target name="template.cleanup" depends="shared.set-props, echo.cleanup">
     <!-- todo: FIXME: not implemented yet -->
+  </target>
+
+
+
+  <!-- ________________ MAIL TEMPLATE ______________________ -->
+  <target name="echo.mail" if="template.echo">
+    <echo>
+Will send mail (${mail.send}) to ${mail.to} about the completion-status ${mail.completion-status}
+of the work the robot has done on project ${project.name}.
+The mail will hold the attachment(s) ${mail.attachments}
+[using smtp host: ${mail.host}]
+	</echo>
+  </target>
+
+  <target name="template.mail" if="mail.send" depends="echo.mail">
+    <property name="mail.host" value="localhost" />
+    <mail from="forrest-bot@xml.apache.org"
+          mailhost="${mail.host}"
+          tolist="${mail.to}"
+          subject="[DO NOT REPLY] ForrestBot site builder for '${project.name}'"
+          files="${mail.attachments}"
+          failonerror="false">
+      <message>
+Another hard day at the BOT factory, and quite happy to have worked for you.
+Our completion status for your project ${project.name} was ${mail.completion-status}
+Please find the details in the log attached.
+
+The Forrest-Bot team. (http://xml.apache.org/forrest)
+      </message>
+    </mail>
   </target>
 
 </project>
