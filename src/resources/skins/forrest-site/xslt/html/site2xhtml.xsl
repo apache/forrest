@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.16 2003/01/17 01:19:38 crossley Exp $
+$Id: site2xhtml.xsl,v 1.17 2003/01/27 08:05:50 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -33,7 +33,7 @@ $Id: site2xhtml.xsl,v 1.16 2003/01/17 01:19:38 crossley Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
       </head>
-      <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+      <body bgcolor="#FFFFFF" text="#000000">
     <xsl:comment>================= start Navigation Path ==================</xsl:comment>
     <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="navigation path">
       <tr>
@@ -227,7 +227,7 @@ $Id: site2xhtml.xsl,v 1.16 2003/01/17 01:19:38 crossley Exp $
     <xsl:comment>================= end Menu, NavBar, Content ==================</xsl:comment>
 
     <xsl:comment>================= start Footer ==================</xsl:comment>
-    <table border="0" height="20" width="100%" cellpadding="0" cellspacing="0" summary="footer">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" summary="footer">
       <tr>
         <td bgcolor="{$menu-border}" height="1" colspan="2">
           <img src="{$spacer}" alt="" width="1" height="1" />
