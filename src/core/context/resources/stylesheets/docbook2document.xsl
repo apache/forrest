@@ -330,8 +330,15 @@ Credit: original from the jakarta-avalon project
       </xsl:template>
 
       <xsl:template match="emphasis">
-            <em><xsl:apply-templates/></em>
-      </xsl:template>
+          <xsl:choose>
+              <xsl:when test="@role='bold'">
+                  <strong><xsl:apply-templates/></strong>
+              </xsl:when>
+              <xsl:otherwise>
+                  <em><xsl:apply-templates/></em>
+              </xsl:otherwise>
+          </xsl:choose>
+       </xsl:template>
 
       <xsl:template match="firstterm">
             <em><xsl:apply-templates/></em>
