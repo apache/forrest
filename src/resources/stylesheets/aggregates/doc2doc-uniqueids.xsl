@@ -23,6 +23,9 @@
     <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
+  <xsl:template match="section/document//img[starts-with(@src, 'my-images')]">
+    <!-- Zap my-images/** links, which break as they are not relative to the site root -->
+  </xsl:template>
   <xsl:include href="../copyover.xsl"/>
 
 </xsl:stylesheet>
