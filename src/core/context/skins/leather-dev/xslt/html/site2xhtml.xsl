@@ -59,8 +59,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |stylesheets
   +-->
-            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
-                />
+<!--            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
+                />-->
   <!--         <link rel="stylesheet" href="{$root}skin/screen.css" 
                 type="text/css" media="screen" />
             <link rel="stylesheet" href="{$root}skin/print.css" type="text/css" 
@@ -69,9 +69,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 type="text/css" /> 
             <link rel="stylesheet" href="{$root}skin/branding.css" 
                 type="text/css" /> 
-            <link rel="stylesheet" href="{$root}skin/xnc-base.css" 
+            <link rel="stylesheet" href="{$root}skin/base.css" 
                 type="text/css" />
-            <link rel="stylesheet" href="{$root}skin/xnc.css" 
+            <link rel="stylesheet" href="{$root}skin/profiling.css" 
                 type="text/css" />
 <!--+
   |Javascripts
@@ -209,7 +209,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |centerstrip with menu and mainarea
   +-->
         <div id="branding-tagline">
-<xsl:apply-templates select="div[@id='nav-main-level2tabs']"/>
+<xsl:apply-templates select="div[@id='nav-main-sub']"/>
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
@@ -249,7 +249,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |bottomstrip with footer
   +-->
-    <div id="nav-supp">
+    <div id="siteinfo">
 <xsl:comment>+
     |start bottomstrip
     +</xsl:comment>

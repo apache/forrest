@@ -47,7 +47,7 @@ which is then merged by site2xhtml.xsl
   		<xsl:call-template name="base-tabs"/>
   	</ul>
     <xsl:if test="tab[@dir=$longest-dir]/tab">
-      <div id="nav-main-level2tabs">
+      <div id="nav-main-sub">
         <xsl:call-template name="level2tabs"/>
       </div>
     </xsl:if>
