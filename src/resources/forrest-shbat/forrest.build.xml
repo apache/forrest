@@ -83,6 +83,8 @@ FORREST SITE BUILDER
     <property name="project.stylesheets-dir" value="${project.content-dir}/resources/stylesheets" />
     <property name="project.images-dir"  value="${project.content-dir}/resources/images" />
     <property name="project.schema-dir" value="${project.content-dir}/resources/schema" />
+    <property name="project.catalog" value="${project.schema-dir}/catalog" />
+    <property name="forrest.catalog.verbosity" value="1" />
     <property name="project.skins-dir"   value="${project.content-dir}/skins" />
     <property name="project.skinconf"    value="${project.content-dir}/skinconf.xml" />
     <property name="project.conf-dir"     value="${project.content-dir}/conf" />
@@ -301,6 +303,8 @@ FORREST SITE BUILDER
        =============================================================== -->
   <target name="bare-context" depends="init" >
     <filter token="skin"              value="${project.skin}" />
+    <filter token="local-catalog"     value="${project.catalog}" />
+    <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
 
     <!--
     These filters defined for backwards-compatibility with old skins.
@@ -366,11 +370,11 @@ FORREST SITE BUILDER
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
   <target name="project-context-bot" depends="init, examine-proj, copy-conf, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
+    copy-xdocs, copy-stylesheets, copy-images, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-conf, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-content, copy-lib, 
+    copy-xdocs, copy-stylesheets, copy-images, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
@@ -424,6 +428,9 @@ FORREST SITE BUILDER
     </copy>
   </target>
 
+<!-- FIXME: This target has been disabled because it was overwriting the
+     default Forrest catalog with the project catalog and causing major errors.
+-->
   <target name="copy-schema" if="schema.present">
     <copy toDir="${project.ctxt-dir}/resources/schema" filtering="false"
       overwrite="true" failonerror="false">
