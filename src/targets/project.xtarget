@@ -1,7 +1,6 @@
   <!-- =================================================================== -->
   <!-- Targets for this project                                            -->
   <!-- =================================================================== -->
-  
     
   <!-- =================================================================== -->
   <!-- Prepares the docs                                                   -->
@@ -172,6 +171,52 @@
     <copy todir="${site}/apidocs" filtering="off">
       <fileset dir="${build.javadocs}"/>
     </copy>
+  </target>
+
+  <target name="deploysite" depends="init">
+    <antcall target="deploy">
+      <param name="deploy.username"     value="nicolaken"/>
+      <param name="deploy.work.dir"     value="${build.dir}/work/forrest"/>
+      <param name="deploy.package-name" value="xml-forrest"/>
+      <param name="deploy.data.dir"     value="${build.dir}/docs"/>
+      <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
+      <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/forrest"/>
+    </antcall>                                
+  </target>                                  
+  
+  <target name="deploy" unless="deploy.username, deploy.work.dir, deploy.package-name
+                                    deploy.data.dir, deploy.hostname, deploy.remotedir">
+  <!--
+    deploy.username
+    deploy.work.dir
+    deploy.package-name
+    deploy.data.dir
+    deploy.hostname
+    deploy.remotedir
+   -->
+   
+    <delete dir="${deploy.work.dir}"/>
+    <mkdir dir="${deploy.work.dir}"/>
+
+    <property name="deploy.tar.fullpath" 
+              value="${deploy.work.dir}/${deploy.package-name}-deploy"/>
+              
+    <tar tarfile="${deploy.tar.fullpath}.tar" basedir="${deploy.data.dir}"/>
+    <gzip zipfile="${deploy.tar.fullpath}.tar.gz" src="${deploy.tar.fullpath}.tar"/>
+    <delete file="${deploy.tar.fullpath}.tar"/>
+
+    <exec dir="." executable="scp">
+      <arg value="-oProtocol=1"/>
+      <arg value="${deploy.tar.fullpath}.tar.gz"/>
+      <arg value="${deploy.username}@${deploy.hostname}:${deploy.remotedir}"/>
+    </exec>
+
+    <exec dir="." executable="ssh">
+      <arg line="-n ${deploy.hostname} -l ${deploy.username} 'cd ${deploy.remotedir};gunzip ${deploy.package-name}-deploy.tar.gz;tar xUvf ${deploy.package-name}-deploy.tar;chmod -R g+u *;rm ${deploy.package-name}-deploy.tar'"/>
+    </exec>
+
+    <delete file="${deploy.tar.fullpath}.tar.gz"/>
+
   </target>
 
   <!-- =================================================================== -->
