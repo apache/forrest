@@ -363,6 +363,7 @@
   &lt;map:generate src="cocoon://abs-linkmap"/&gt;
   &lt;map:transform type="xpath"&gt;
 	&lt;map:parameter name="include" value="//*[@wholesite='true']"/&gt;
+	&lt;map:parameter name="exclude" value="//*[@wholesite='false']"/&gt;
   &lt;/map:transform&gt;
   &lt;map:transform src="resources/stylesheets/site2book.xsl" /&gt;
   &lt;map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl"&gt;
@@ -444,6 +445,21 @@
       (in our example <span class="codefrag">&lt;samples&gt;</span>
       and its "children") for the content of the pdf file to be generated.
     </p>
+<pre class="code"> 
+&lt;samples label="Samples" href="samples/" tab="samples" wholesite="true"&gt;
+ &lt;sample2 label="Static content" href="sample2.html"      
+   description="More Samples" wholesite='false'/&gt;
+ &lt;sample-wiki label="Wiki page" href="wiki-sample.html"      
+   description="wiki-sample" /&gt;
+ &lt;sample-ihtml label="ihtml page" href="ihtml-sample.html"      
+   description="Test iHTML page" /&gt;
+&lt;/samples&gt;     	
+    </pre>
+<p>
+      This example shows that you can as well exclude site(s) from the aggregation 
+      by using the <span class="codefrag">wholesite="false"</span> attribute. This attribute will be as well inherited 
+      by all children of the element.
+    </p>
 <p>
       Line 8 defines the title of the pdf file by taking the content
       of the project-name variable in
@@ -474,7 +490,7 @@
 </div>
 
   
-<a name="N10117"></a><a name="Feedback and further development of this How-To"></a>
+<a name="N10121"></a><a name="Feedback and further development of this How-To"></a>
 <h3>Feedback and further development of this How-To</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -509,7 +525,7 @@
 <td colspan="2" height="1" bgcolor="#4C6C8F"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"><a href="../skin/images/label.gif"></a><a href="../skin/images/page.gif"></a><a href="../skin/images/chapter.gif"></a><a href="../skin/images/chapter_open.gif"></a><a href="../skin/images/current.gif"></a></td>
 </tr>
 <tr>
-<td colspan="2" bgcolor="#CFDCED" class="copyright" align="center"><font size="2" face="Arial, Helvetica, Sans-Serif"><a href="http://www.apache.org/licenses/LICENSE-2.0">
+<td colspan="2" bgcolor="#CFDCED" class="copyright" align="center"><font size="2" face="Arial, Helvetica, Sans-Serif"><a href="http://www.apache.org/licenses/">
               Copyright &copy; 2002-2004&nbsp;
               The Apache Software Foundation.</a>
           All rights reserved.
