@@ -19,7 +19,36 @@ FORREST_HOME=`dirname "$0"`/..
 # set the ant file to use
 ANTFILE="$FORREST_HOME/forrest.build.xml"
 
+# Save old ANT_HOME
+OLD_ANT_HOME="$ANT_HOME"
+unset ANT_HOME
+
+# ----- Set Up The Runtime Classpath ------------------------------------------
+
+if [ "$TERM" = "cygwin" ] ; then
+  S=';'
+else
+  S=':'
+fi
+
+CP="$CLASSPATH"
+export CP
+unset CLASSPATH
+
+CLASSPATH=`echo $FORREST_HOME/lib/endorsed/*.jar | tr ' ' $S`
+export CLASSPATH
+
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
-# call ant.
-ant -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_HOME" -emacs $@ 
+"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_HOME" -emacs $@ 
+
+# ---- Restore Classpath
+unset CLASSPATH
+CLASSPATH=$CP
+export CLASSPATH
+
+# ---- Restore ANT_HOME
+# Restore old ANT_HOME
+ANT_HOME="$OLD_ANT_HOME"
+export ANT_HOME
+
