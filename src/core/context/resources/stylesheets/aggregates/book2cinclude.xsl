@@ -19,8 +19,6 @@ Generates a skeleton doc-v20 file for the whole site with CInclude elements wher
 Input is expected to be in standard book.xml format. @hrefs should be normalized, although unnormalized hrefs can be
 handled by uncommenting the relevant section.
 
-jefft@apache.org
-
 See http://127.0.0.1:8888/book-wholesite.html to see what the book xml looks like
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

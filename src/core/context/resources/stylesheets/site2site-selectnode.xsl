@@ -18,7 +18,6 @@
 This stylesheet selects a set of nodes with @tab equal to that of a node whose @href matches an input parameter.  Could
 probably be done with 2 lines of XQuery.
 
-Jeff Turner <jefft@apache.org>
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:l="http://apache.org/forrest/linkmap/1.0">

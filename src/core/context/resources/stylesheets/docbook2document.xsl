@@ -22,9 +22,6 @@ Support for the range of Docbook tags is very patchy. If you need real
 Docbook support, then use Norm Walsh's stylesheets - see Forrest FAQ.
 
 Credit: original from the jakarta-avalon project
-Revision:
- - Kevin.Ross@iVerticalLeap.com - Moving towards forrest.apache.org document...not yet complete.
- - jefft@apache.org - Lots of fixups, notably the title now works, and footnotes work.
 
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">

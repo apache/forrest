@@ -37,7 +37,6 @@ Output would be:
 
 This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
 
-Jeff Turner <jefft@apache.org>
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">

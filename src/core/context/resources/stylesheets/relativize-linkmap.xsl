@@ -52,7 +52,6 @@ the result would be:
 </site>
 
 
-Jeff Turner <jefft@apache.org>
 -->
 
 

@@ -35,7 +35,6 @@ Examples:
 Cannot handle ..'s in the path, so don't expect 'dir/subdir/../index.html' to
 work.
 
-jefft@apache.org
 -->
 
 <xsl:stylesheet

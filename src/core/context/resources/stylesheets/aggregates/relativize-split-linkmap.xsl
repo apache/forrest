@@ -50,7 +50,6 @@ was 'faq.html', then the generated linkmap would be:
 Where links like '#dreams.html' are assumed to be anchors in the aggregated
 document.
 
-Jeff Turner <jefft@apache.org>
 -->
 
 
