@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.20 2003/10/13 08:45:54 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.21 2003/10/17 12:57:49 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -144,7 +144,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/10/13 08:45:54 nicolaken Exp $
       </tr>
       <!-- ( ================= Tabs ================== ) -->
       <tr>
-        <td colspan="3">
+        <td colspan="3" class="tabstrip">
           <xsl:apply-templates select="table[@class='tab']"/>
         </td>
       </tr>
