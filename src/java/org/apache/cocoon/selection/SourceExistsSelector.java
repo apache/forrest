@@ -51,7 +51,6 @@
 package org.apache.cocoon.selection;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
 
 import java.io.IOException;
@@ -59,16 +58,14 @@ import java.io.IOException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.cocoon.environment.Context;
 import org.apache.avalon.framework.component.Composable;
-import org.apache.cocoon.environment.ObjectModelHelper;
 
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
+
 /**
  * Selects the first of a set of Sources that exists in the context.
  * <p>
@@ -95,7 +92,7 @@ import org.apache.avalon.framework.component.Composable;
  * </pre>
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: SourceExistsSelector.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
+ * @version CVS $Id: SourceExistsSelector.java,v 1.2 2003/10/22 17:43:58 unico Exp $
  */
 public class SourceExistsSelector extends AbstractLogEnabled
   implements ThreadSafe, Selector, Composable {
