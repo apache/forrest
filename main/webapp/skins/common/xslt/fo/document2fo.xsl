@@ -720,7 +720,7 @@
       </xsl:when>
       <xsl:otherwise>
         <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
-        <xsl:if test="$show-external-urls and @href != string(.)">
+        <xsl:if test="$show-external-urls = 'true' and @href != string(.)">
           (<xsl:value-of select="@href"/>)
         </xsl:if>
       </xsl:otherwise>
