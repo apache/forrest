@@ -48,13 +48,13 @@ automatically generate a menu for (here wiki/):
   </xsl:template>
 
   <xsl:template match="dir:directory">
-    <menu label="{@name}">
+    <menu label="{translate(@name,'-_',' ')}">
       <xsl:apply-templates select="dir:file|dir:directory" />
     </menu>
   </xsl:template>
 
-  <xsl:template match="dir:file[not(@name=concat('book', $ext))]">
-    <menu-item label="{substring-before(@name, $ext)}">
+  <xsl:template match="dir:file">
+    <menu-item label="{translate(substring-before(@name, $ext),'-_',' ')}">
       <xsl:attribute name="href">
       <xsl:variable name="path" />
         <!-- [not (position()=last())] is to ignore the root node -->
