@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
   Copyright 2002-2004 The Apache Software Foundation
-                                                                                                    
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-                                                                                                    
+
       http://www.apache.org/licenses/LICENSE-2.0
-                                                                                                    
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +18,6 @@
 Generates a lucene:index for the whole site with CInclude elements where lucene:documents should be pulled in.
 Input is expected to be in standard book.xml format. @hrefs should be normalized, although unnormalized hrefs can be
 handled by uncommenting the relevant section.
-
-f.g.haas@gmx.net (stealing shamelessly from jefft@apache.org)
 -->
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
