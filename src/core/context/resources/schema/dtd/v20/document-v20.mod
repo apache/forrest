@@ -51,7 +51,7 @@ CHANGE HISTORY:
 <!-- Entities referred to later on are defined up front -->
 <!ENTITY % markup "strong|em|code|sub|sup">
 <!ENTITY % special-inline "br|img|icon|acronym">
-<!ENTITY % links "a|link|fork|jump">
+<!ENTITY % links "a">
 <!ENTITY % paragraphs "p|source|note|warning|fixme">
 <!ENTITY % tables "table">
 <!ENTITY % lists "ol|ul|dl">
@@ -170,18 +170,6 @@ CHANGE HISTORY:
 <!-- http://www.w3.org/TR/xhtml2/mod-hypertext.html#s_hypertextmodule -->
 <!ELEMENT a (%link-content.mix;)*>
 <!ATTLIST a
-  %common.att; 
-  %link.att; 
->
-<!-- windows-replacing link (equivalent of <a ... target="_top">) -->
-<!ELEMENT jump (%link-content.mix;)*>
-<!ATTLIST jump
-  %common.att; 
-  %link.att; 
->
-<!-- window-forking link (equivalent of <a ... target="_blank">) -->
-<!ELEMENT fork (%link-content.mix;)*>
-<!ATTLIST fork
   %common.att; 
   %link.att; 
 >
