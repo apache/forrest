@@ -1,6 +1,5 @@
                                Forrestbot Scripts
 
-                                jefft@apache.org
                  $Revision: 1.1 $ $Date: 2003/10/21 08:38:31 $
                             ------------------------
 
