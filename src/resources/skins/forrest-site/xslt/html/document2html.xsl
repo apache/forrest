@@ -4,67 +4,6 @@
 
    <xsl:template match="document">
       <td colspan="2" valign="top" class="content">
-<!-- got rid of printable page link for the time being
-
-
-      <table>
-
-
-        <tr>
-
-
-          <td valign="middle">
-
-
-            <xsl:choose>
-
-
-              <xsl:when test="normalize-space(header/title)!=''">
-
-
-                <h2>
-
-
-                  <xsl:value-of select="header/title"/>
-
-
-                </h2>
-
-
-              </xsl:when>
-
-
-              <xsl:otherwise>&#160;</xsl:otherwise>
-
-
-            </xsl:choose>
-
-
-          </td>
-
-
-          <td align="center" width="80" nowrap="nowrap">
-
-
-            <a href="#" class="dida">
-
-
-              <img src="images/printer.gif"/>
-
-
-              <br/>printer-friendly<br/>version</a>
-
-
-          </td>
-
-
-        </tr>
-
-
-      </table>
-
-
-      -->
          <xsl:if test="normalize-space(header/title)!=''">
             <h2>
                <xsl:value-of select="header/title" />
@@ -82,9 +21,8 @@
                <font size="-2">
                   <xsl:for-each select="header/authors/person">
                      <xsl:choose>
-                        <xsl:when test="position()=1">by</xsl:when>
-
-                        <xsl:otherwise>,</xsl:otherwise>
+                        <xsl:when test="position()=1">by </xsl:when>
+                        <xsl:otherwise>, </xsl:otherwise>
                      </xsl:choose>
 
                      <xsl:value-of select="@name" />
@@ -103,7 +41,7 @@
             <xsl:for-each select="section">
                <li>
                   <a href="#{generate-id()}">
-                     <xsl:value-of select="@title" />
+                     <xsl:value-of select="title" />
                   </a>
 
                   <xsl:if test="section">
@@ -111,7 +49,7 @@
                         <xsl:for-each select="section">
                            <li>
                               <a href="#{generate-id()}">
-                                 <xsl:value-of select="@title" />
+                                 <xsl:value-of select="title" />
                               </a>
                            </li>
                         </xsl:for-each>
@@ -127,18 +65,10 @@
 
 <!--  section handling
 
-
         - <a name/> anchors are added if the id attribute is specified
-
-
         - generated anchors are still included for the TOC - what should we do about this?
-
-
         - FIXME: provide a generic facility to process section irrelevant to their 
-
-
           nesting depth
-
 
   -->
    <xsl:template match="section">
@@ -149,7 +79,7 @@
       </xsl:if>
 
       <h3>
-         <xsl:value-of select="@title" />
+         <xsl:value-of select="title" />
       </h3>
 
       <xsl:apply-templates />
@@ -163,7 +93,7 @@
       </xsl:if>
 
       <h4>
-         <xsl:value-of select="@title" />
+         <xsl:value-of select="title" />
       </h4>
 
       <xsl:apply-templates />
@@ -261,7 +191,6 @@
    <xsl:template match="node()|@*" priority="-1">
       <xsl:copy>
          <xsl:apply-templates select="@*" />
-
          <xsl:apply-templates />
       </xsl:copy>
    </xsl:template>
