@@ -44,15 +44,19 @@ function addfiles()
       addfiles `find $i -type f`
       continue
     fi
+    local TXTFILES
+    local BINFILES
     MIME=`file -bi $i`
     echo "New file $i has MIME type $MIME"
     if [ `echo "$MIME" | grep -q 'text'` ]; then
       echo "Adding $i as text"
-      cvsdo add $i
+      TXTFILES="$TXTFILES $i"
     else
       echo "Adding $i as binary"
-      cvs add -kb $i
+      BINFILES="$BINFILES $i"
     fi
+    echo cvsdo add $TXTFILES
+    echo cvs add -kb $BINFILES
   done
 }
 NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
