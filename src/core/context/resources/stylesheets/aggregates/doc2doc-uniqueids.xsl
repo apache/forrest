@@ -18,7 +18,10 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cinclude="http://apache.org/cocoon/include/1.0"
+  xmlns:str="http://www.ora.com/XSLTCookbook/namespaces/strings" 
   exclude-result-prefixes="cinclude">
+  
+  <xsl:include href="../external/str.find-last.xslt"/>
 
   <xsl:key name="node-id" match="*" use="@id"/>
 
@@ -33,13 +36,24 @@
     <xsl:attribute name="href"><xsl:value-of select="concat('#', ancestor::section/@id, .)"/></xsl:attribute>
   </xsl:template>
 
-  <!-- Translate relative links like 'index.html' to '#index.html' -->
-  <xsl:template match="section/document//link/@href[contains(., '.html')]">
+  <!-- Translate relative links to '#link' -->
+  <xsl:template match="section/document//link/@href[not(starts-with(., 'http:') or starts-with(., 'https:'))]">
     <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="section/document//img[starts-with(@src, 'my-images')]">
-    <!-- Zap my-images/** links, which break as they are not relative to the site root -->
+  <xsl:template match="section/document//figure|img[starts-with(@src, 'my-images')]">
+    <!-- fix my-images/** links, which break as they are not relative to the site root -->
+    <xsl:variable name="page-root">
+      <xsl:call-template name="str:substring-before-last">
+        <xsl:with-param name="input" select="ancestor::section/@id"/>
+        <xsl:with-param name="substr" select="'/'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:copy>
+      <xsl:attribute name="src">
+        <xsl:value-of select="concat($page-root,'/',@src)"/>
+      </xsl:attribute>
+    </xsl:copy>
   </xsl:template>
   <xsl:include href="../copyover.xsl"/>
 
