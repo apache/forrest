@@ -15,9 +15,10 @@
 --%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <html:html locale="true">
     <head>
-        <title><tiles:insert attribute="title"/></title>
+        <title><tiles:insert attribute="title"/> - <c:out value="${project}"/></title>
     </head>
     <frameset rows="40,*">
         <html:frame framename="header" page="/viewlog_header.do" paramid="project" paramname="project"/>
