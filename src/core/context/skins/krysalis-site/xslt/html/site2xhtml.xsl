@@ -118,46 +118,82 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         </td>
         <!-- ( =================  Search ================== ) -->
         <td class="search" align="right" rowspan="2" valign="top">
-          <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and not($config/disable-search='alt')
-            and $config/searchsite-domain and
-            $config/searchsite-name">
-            <form method="get" action="http://www.google.com/search" target="_blank">
-              <table class="dialog" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                  <td colspan="3" class="border" height="10"></td>
-                </tr>
-                <tr>
-                  <td colspan="3" height="8"></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td nowrap="nowrap">
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
-                    <input type="text" id="query" name="q" size="15"/>
-                    &#160;
-                    <input type="submit" value="Search" name="Search"/>
-                    <br />
-                      the <xsl:value-of select="$config/searchsite-name"/> site
-                      <!-- setting search options off for the moment -->
-                      <!--
-                      <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
-                      -->
-                  </td>
-                  <td></td>
-                </tr>
-
-                <tr>
-                  <td colspan="3" height="7"></td>
-                </tr>
-
-                <tr>
-                  <td class="search border bottom-left"></td>
-                  <td class="search border bottomborder"></td>
-                  <td class="search border bottom-right"></td>
-                </tr>
-              </table>
-            </form>
+          <xsl:if test="$config/search">
+	    <xsl:choose>
+              <xsl:when test="$config/search/@provider = 'lucene'">
+                <!-- Lucene search -->
+                <form method="get" action="{$root}{$lucene-search}">
+		  <table class="dialog" cellspacing="0" cellpadding="0" border="0">
+		    <tr>
+		      <td colspan="3" class="border" height="10"></td>
+		    </tr>
+		    <tr>
+		      <td colspan="3" height="8"></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td nowrap="nowrap">
+			<input type="text" id="query" name="queryString" size="15"/>
+			&#160;
+			<input type="submit" value="Search" name="Search"/>
+			<br />
+			the <xsl:value-of select="$config/search/@name"/> site
+		      </td>
+		      <td></td>
+		    </tr>
+		    
+		    <tr>
+		      <td colspan="3" height="7"></td>
+		    </tr>
+		    
+		    <tr>
+		      <td class="search border bottom-left"></td>
+		      <td class="search border bottomborder"></td>
+		      <td class="search border bottom-right"></td>
+		    </tr>
+		  </table>
+		</form>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<!-- Google search -->
+		<form method="get" action="http://www.google.com/search" target="_blank">
+		  <table class="dialog" cellspacing="0" cellpadding="0" border="0">
+		    <tr>
+		      <td colspan="3" class="border" height="10"></td>
+		    </tr>
+		    <tr>
+		      <td colspan="3" height="8"></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td nowrap="nowrap">
+			<input type="hidden" name="as_sitesearch" value="{$config/search/@domain}"/>
+			<input type="text" id="query" name="as_q" size="15"/>
+			&#160;
+			<input type="submit" value="Search" name="Search"/>
+			<br />
+			the <xsl:value-of select="$config/search/@name"/> site
+			<!-- setting search options off for the moment -->
+			<!--
+			<input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
+			-->
+		      </td>
+		      <td></td>
+		    </tr>
+		    
+		    <tr>
+		      <td colspan="3" height="7"></td>
+		    </tr>
+		    
+		    <tr>
+		      <td class="search border bottom-left"></td>
+		      <td class="search border bottomborder"></td>
+		      <td class="search border bottom-right"></td>
+		    </tr>
+		  </table>
+		</form>
+	      </xsl:otherwise>
+	    </xsl:choose>
           </xsl:if>
         </td>
 

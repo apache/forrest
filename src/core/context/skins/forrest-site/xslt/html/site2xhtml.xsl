@@ -146,8 +146,8 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
                     <tr>
                       <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                       <td nowrap="nowrap">
-                        <input type="hidden" name="sitesearch" value="{$config/search/attribute::domain}"/>
-                        <input type="text" id="query" name="q" size="15"/>
+                        <input type="hidden" name="as_sitesearch" value="{$config/search/attribute::domain}"/>
+                        <input type="text" id="query" name="as_q" size="15"/>
                         <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
                         <input type="submit" value="Search" name="Search"/>
                         <br />

@@ -134,26 +134,38 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
           </xsl:if>        </td>
         
         <!-- ( =================  Search ================== ) -->        
-        <td align="right" valign="top">
-          <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and not($config/disable-search='alt')
-            and $config/searchsite-domain and
-            $config/searchsite-name">
-            <div id="login" align="right" class="right">
-             <form method="get" action="http://www.google.com/search" target="_blank">
-               <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
-               <select name="go">
-                 <option value="foo">Search...</option>
-     
-                 <option value="site">The <xsl:value-of select="$config/searchsite-name"/> site</option>
-                 <option value="web">The web</option>
-               </select> for 
-               <input type="text" id="query" name="q" size="15"/> 
-               <input type="submit" value="Go" name="Search"/>
-             </form>
-          </div>
-         </xsl:if>
-        </td>       
+	  <!-- FIXME (Florian Haas): I think either this or the
+	  lateral search bar should go away. Keeping both is confusing
+	  to users, and tedious to maintain. -->
+	  <td align="right" valign="top">
+	    <xsl:if test="$config/search">
+	      <div id="login" align="right" class="right">
+		<xsl:choose>
+		  <xsl:when test="$config/search/@provider = 'lucene'">
+		    <form method="get" action="{$root}{$lucene-search}">
+		      Search
+		      the <xsl:value-of select="$config/search/@name"/> site
+		      for 
+		      <input type="text" id="query" name="queryString" size="15"/> 
+		      <input type="submit" value="Go" name="Search"/>
+		    </form>
+		  </xsl:when>
+		  <xsl:otherwise>
+		    <form method="get" action="http://www.google.com/search" target="_blank">
+		      <select name="as_sitesearch">
+			<option value="">Search...</option>
+			
+			<option value="{$config/search/@domain}">The <xsl:value-of select="$config/search/@name"/> site</option>
+			<option value="">The web</option>
+		      </select> for 
+		      <input type="text" id="query" name="as_q" size="15"/> 
+		      <input type="submit" value="Go" name="Search"/>
+		    </form>
+		  </xsl:otherwise>
+		</xsl:choose>
+	      </div>
+	    </xsl:if>
+	  </td>       
        </tr>   
       </table>  
      </div>
@@ -254,28 +266,48 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
     <!-- ( ================= end Menu items ================== ) -->
 
     <!-- ( =================  Search ================== ) -->       
-        
-   <xsl:if test="not($config/disable-search) or
-                 $config/disable-search='alt' and $config/searchsite-domain and
-                 $config/searchsite-name">
-    <form action="http://www.google.com/search" method="get">
-      <div id="searchbox" class="toolgroup">
-       <div class="label"><strong>Search</strong></div>
-       <div class="body">
-        <div>
-        <select name="sitesearch">
-         <option value="{$config/searchsite-domain}" selected="selected"><xsl:value-of select="$config/searchsite-name"/></option>
-         <option value="" >the web</option>
-        </select>
-       </div>
-       <div>
-        <input type="text" id="query" name="q" size="12" /> 
-        <input type="submit" value="Go" name="Go" />
-       </div>
-      </div>   
-     </div>
-     </form>
-    </xsl:if>    
+      <xsl:if test="$config/search">
+	<xsl:choose>
+	  <!-- Lucene search -->
+	  <xsl:when test="$config/search/@provider = 'lucene'">
+	    <form action="{$root}{$lucene-search}" method="get">
+	      <div id="searchbox" class="toolgroup">
+		<div class="label"><strong>Search</strong></div>
+		<div class="body">
+		  <div>
+		    <xsl:value-of select="$config/search/@name"/>
+		  </div>
+		  <div>
+		    <input type="text" id="query" name="queryString" size="12" /> 
+		    <input type="submit" value="Go" name="Go" />
+		  </div>
+		</div>   
+	      </div>
+	    </form>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <!-- Google search -->
+	    <form action="http://www.google.com/search" method="get" target="_blank">
+	      <div id="searchbox" class="toolgroup">
+		<div class="label"><strong>Search</strong></div>
+		<div class="body">
+		  <div>
+		    <select name="as_sitesearch">
+		      <option value="{$config/search/@domain}" selected="selected"><xsl:value-of select="$config/search/@name"/></option>
+		      <option value="" >the web</option>
+		    </select>
+		  </div>
+		  <div>
+		    <input type="text" id="query" name="as_q" size="12" /> 
+		    <input type="submit" value="Go" name="Go" />
+		  </div>
+		</div>   
+	      </div>
+	    </form>
+	  </xsl:otherwise>
+	</xsl:choose>
+      </xsl:if>
+
     
  	<xsl:if test="$filename = 'index.html' and $config/credits">
       <div id="admfun" class="toolgroup">
@@ -378,7 +410,7 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/28 21:23:20 brondsem Exp $
       </xsl:if>
       -->
   </xsl:template>
-  
+
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>

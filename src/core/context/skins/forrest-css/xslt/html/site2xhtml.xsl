@@ -64,8 +64,7 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 		</div>
 		
         <!-- ================= start Banner ================== -->
-        <form method="get" action="http://www.google.com/search">
-			<div id="mainheader">
+   	    <div id="mainheader">
 	          <!-- ================= start Group Logo ================== -->
 	          <xsl:if test="$config/group-url">
 	  	      	<xsl:call-template name="renderlogo">
@@ -80,20 +79,38 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 	          <!-- ================= end Group Logo ================== -->
 	          <span class="textonly"> - </span>
 	          <!-- ================= start Search ================== -->
-	          <xsl:if test="not($config/disable-search) or
-	                $config/disable-search='false' and $config/searchsite-domain and
-	                $config/searchsite-name">
-	              <span id="search">
-		              <input type="hidden" name="as_sitesearch" value="{$config/searchsite-domain}"/>
-		              <input type="text" class="query" name="as_q"/>
-		              <input type="submit" value="Search"/>
-		              <br />
-		              <span class="searchtext">
-		                the <xsl:value-of select="$config/searchsite-name"/> site
-		              </span>
-		          </span>
+	          <xsl:if test="$config/search">
+	              <xsl:choose>
+		          <xsl:when test="$config/search/@provider = 'lucene'">
+                              <!-- Lucene search -->
+                              <form method="get" action="{$root}{$lucene-search}">
+     	                          <span id="search">
+		                      <input type="text" class="query" name="queryString"/>
+		                      <input type="submit" value="Search"/>
+		                      <br />
+		                      <span class="searchtext">
+		                          the <xsl:value-of select="$config/search/@name"/> site
+		                      </span>
+		                  </span>
+		              </form>
+		          </xsl:when>
+                          <xsl:otherwise>
+                              <!-- Google search -->
+                              <form method="get" action="http://www.google.com/search">
+	                          <span id="search">
+		                      <input type="hidden" name="as_sitesearch" value="{$config/search/@domain}"/>
+		                      <input type="text" class="query" name="as_q"/>
+		                      <input type="submit" value="Search"/>
+		                      <br />
+		                      <span class="searchtext">
+		                          the <xsl:value-of select="$config/search/@name"/> site
+		                      </span>
+		                  </span>
+		              </form>
+		          </xsl:otherwise>
+	              </xsl:choose>
 	          </xsl:if>
-			  <!-- ================= end Search ================== -->
+	          <!-- ================= end Search ================== -->
 			  <span class="textonly"> - </span>
 	          <!-- ================= start Project Logo ================== -->
 	          <xsl:if test="$config/project-url">
@@ -108,7 +125,6 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 	          </xsl:if>
 	          <!-- ================= end Project Logo ================== -->
 	        </div>    
-		</form>
 		
 		<hr class="textonly"/>
 
