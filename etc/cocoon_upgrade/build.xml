@@ -24,18 +24,17 @@
        Set properties
        =============================================================== -->
        <property name="cocoon.home"              location="../../../../cocoon-2.1"/>
-       <property name="forrest.root"             location="../../"/>
-       <property name="forrest.build"            location="../../src/core"/>
+       <property name="forrest.home"             location="../../"/>
   </target>
 
   <target name="import-cocoon-xconf" depends="init">
-     <xslt force="true" in="${cocoon.home}/src/webapp/WEB-INF/cocoon.xconf" out="${forrest.build}/context/WEB-INF/cocoon.xconf" style="./upgrade-cocoon-xconf.xsl" >
+     <xslt force="true" in="${cocoon.home}/src/webapp/WEB-INF/cocoon.xconf" out="${forrest.home}/main/webapp/WEB-INF/cocoon.xconf" style="./upgrade-cocoon-xconf.xsl" >
        <outputproperty name="indent" value="yes"/>
     </xslt>
   </target>
   <target name="fix-endorsed-libs-problem" depends="init">
-     <move todir="${forrest.build}/lib/endorsed">
-        <fileset dir="${forrest.build}/lib/core" includes="jakarta-*.jar"/>
+     <move todir="${forrest.home}/lib/endorsed">
+        <fileset dir="${forrest.home}/lib/core" includes="jakarta-*.jar"/>
      </move>
   </target>
   <target name="local-build-cocoon" depends="init">
