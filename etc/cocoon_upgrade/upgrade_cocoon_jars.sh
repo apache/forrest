@@ -23,15 +23,15 @@ JARSUFFIX=`date +%Y%m%d`
 COCOONJAR_SUFFIX="[0-9]*"
 
 ## Decide what kind of update to perform.
-## - 'testing' copies them to the distribution in
+### - 'testing' copies them to the distribution in
 ##   build/dist/shbat/*
 ## - 'real' copies upgraded jars to lib/core/
 ## - 'real_with_cvs' copies to lib/core/, and marks jars for removal/addition
 ##   in CVS.  Should only be performed by Forrest committers
 #
-UPGRADE_TYPE=testing
+#UPGRADE_TYPE=testing
 #UPGRADE_TYPE=real
-#UPGRADE_TYPE=real_with_cvs
+UPGRADE_TYPE=real_with_cvs
 #
 ######################################################################
 
