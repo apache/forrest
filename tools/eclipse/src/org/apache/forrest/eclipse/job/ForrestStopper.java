@@ -15,9 +15,12 @@
  */
 package org.apache.forrest.eclipse.job;
 
+import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugException;
 
 
 /**
@@ -28,6 +31,8 @@ public class ForrestStopper extends ForrestJob  {
 	 * Logger for this class
 	 */
 	protected static final Logger logger = Logger.getLogger(ForrestStopper.class);
+	
+	private static final int EXCEPTION_UNABLE_TO_STOP = 3010;
 	
 	/**
 	 * Create a Forrest runner that will run a JEtty server on a given directory
@@ -49,8 +54,15 @@ public class ForrestStopper extends ForrestJob  {
 		
 		IStatus status = null;
 
-		logger.warn("run() - Forrest server not stopped", null);
-	
+		try {
+			ForrestManager.stopServer(workingDir);
+			logger.info("run() - Forrest server stopped");
+			status = Status.OK_STATUS;
+		} catch (DebugException e) {
+			logger.error("run(IProgressMonitor)", e);
+			status = new Status(Status.ERROR, ForrestPlugin.ID, ForrestStopper.EXCEPTION_UNABLE_TO_STOP, "Unable to stop Forrest Server", e);
+		}
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("run(IProgressMonitor) - end");
 		}
