@@ -17,6 +17,8 @@ package org.apache.forrest.eclipse.job;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -39,6 +41,8 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.webbrowser.WebBrowser;
+import org.eclipse.webbrowser.WebBrowserEditorInput;
 
 
 /**
@@ -53,6 +57,12 @@ public class ForrestRunner extends ForrestJob implements IJavaLaunchConfiguratio
 	private static final int EXCEPTION_UNABLE_TO_START = 2010;
 	
 	private String workingDir;
+
+	private static final int CORE_EXCEPTION = 100;
+
+	private static final int IO_EXCEPTION = 101;
+
+	private static final int BROWSER_ERROR = 200;
 	
 	/**
 	 * Create a Forrest runner that will run a Jetty server on a given directory
@@ -159,14 +169,42 @@ public class ForrestRunner extends ForrestJob implements IJavaLaunchConfiguratio
 			   ForrestManager.setServerLaunch( jettyConfig.launch(ILaunchManager.RUN_MODE, monitor));
 			} catch (CoreException e) {
 				logger.error("run(IProgressMonitor)", e);
+				return new Status(Status.ERROR, ForrestPlugin.ID, CORE_EXCEPTION, "Unable to start Jetty server", e);
 			} catch (IOException e) {
 				logger.error("run(IProgressMonitor)", e);
+				return new Status(Status.ERROR,ForrestPlugin.ID, IO_EXCEPTION, "Unable to start Jetty server", e);
 			}
+		}
+		
+		if ( ! openBrowser(monitor)) {
+			status = new Status(Status.WARNING, ForrestPlugin.ID, BROWSER_ERROR, "Unable to open browser", null);
 		}
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("run(IProgressMonitor) - end");
 		}
 		return status;
+	}
+
+	/**
+	 * Open a web browser on the index page.
+	 * @param monitor - the progress monitor for this job
+	 * @return boolean - true if browser opened OK
+	 */
+	private boolean openBrowser(IProgressMonitor monitor) {
+
+		monitor.subTask("Open index page");
+		URL url;
+		try {
+			url = new URL("http://localhost:8888");
+			WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url, WebBrowserEditorInput.SHOW_ALL);
+			WebBrowser.openURL(browserInput);
+		} catch (MalformedURLException e1) {
+			// Should never be thrown
+			logger.error("openBrowser(IProgressMonitor)", e1);
+			return false;
+		}		
+		monitor.worked(3);
+		return true;
 	}
 }
