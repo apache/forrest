@@ -24,6 +24,12 @@
 
 
 <xsl:template name="listprojects">
+<taskdef name="trycatch" classname="net.sf.antcontrib.logic.TryCatchTask">
+  <classpath>
+    <pathelement location="${{forrest.home}}/forrestbot/lib/ant-contrib-0.1.jar"/>
+  </classpath>
+</taskdef>
+
 
 <!--
   per-project invocation of the chain of workstages:
@@ -32,7 +38,7 @@
 
   <target name="work">
     <parallel>
-      <antipede-trycatch>
+      <trycatch>
         <try>
           <ant antfile="[this-file]" target="work.[project-name]" .../>
         </try>
@@ -42,6 +48,7 @@
         <finally>
           <mail .../>
         </finally>
+      </trycatch>
     </parallel>
   </target>
 -->
@@ -50,10 +57,10 @@
      <parallel>
        <xsl:for-each select="project">
          <!-- todo: wrap it in try catch to make it send in case of fail as well -->
-         <antipede-trycatch>
+         <trycatch>
            <try>
              <ant antfile="${{bot.work.build.xml}}" inheritRefs="true"
-                  target="work.{@name}" output="${{bot.build.dir}}/work.{@name}.log"/>
+                  target="{@name}" output="${{bot.build.dir}}/work.{@name}.log"/>
              <property name="mail.completion-status" value="SUCCESS" />
            </try>
            <catch>
@@ -75,7 +82,7 @@
          </ant>
              </finally>
            </xsl:if>
-         </antipede-trycatch>
+         </trycatch>
        </xsl:for-each>
      </parallel>
    </target>
@@ -95,7 +102,7 @@
 
   <xsl:for-each select="project">
     <xsl:variable name="project.name" select="@name"/>
-    <target name="work.{@name}">
+    <target name="{@name}">
       <xsl:attribute name="depends">
          <xsl:for-each select="$workstages/stages/workstage">
            <xsl:value-of select="concat(@name, '.', $project.name)"/>

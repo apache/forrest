@@ -25,7 +25,7 @@
     template.get-src.local-copy            <get-src type="local-copy" >
     template.generate                      <generate>
     template.deploy.local-copy             <deploy type="local-copy" >
-    template.delpoy.scp                    <deploy type="scp" >
+    template.deploy.scp                    <deploy type="scp" >
     template.deploy.mail                   <deploy type="mail" >
 
     each template target uses its own set of parameters (properties in fact)
@@ -76,8 +76,10 @@
 
   <target name="shared.set-props" >
     <!-- where we build the cocoon context per project: -->
-    <property name="project.context.dir"
-            value="${xlayout.build.bot.projects.dir}/${project.name}/context" />
+    <!--
+    <property name="project.ctxt-dir"
+      value="${xlayout.build.bot.projects.dir}/${project.name}/context" />
+    -->
     <!-- where we will temporarily store and cache the various cvsmodules: -->
     <property name="project.cvsmodule.dir"
             value="${xlayout.build.bot.cvsmodules.dir}/${project.name}" />
@@ -86,11 +88,22 @@
 
       <!-- where cocoon can have his toy-work-environment while generating: -->
       <!-- mind: other stages can use this as a temp dir as well     -->
-      <property name="project.work.dir"
-              value="${project.context.dir}/../work" />
+      <!--
+      <property name="project.work-dir"
+        value="${project.ctxt-dir}/../work" />
+      -->
       <!-- where cocoon will spit out the generated stuff: -->
-      <property name="project.docs.dir"
-              value="${project.context.dir}/../docs" />
+      <!--
+      <property name="project.docs-dir" value="${project.ctxt-dir}/../docs" />
+      -->
+
+    <!-- These are OVERRIDES, hence 'project.*' -->
+    <property name="project.build-dir" location="${bot.build.dir}"     />
+    <property name="project.temp-dir"  location="${project.build-dir}/tmp"     />
+    <property name="project.ctxt-dir"  location="${project.build-dir}/${project.name}/context" />
+    <property name="project.work-dir"  location="${project.build-dir}/${project.name}/work" />
+    <property name="project.site-dir"  location="${project.build-dir}/${project.name}/site" />
+ 
   </target>
 
 
@@ -102,95 +115,16 @@
   </target>
 
   <target name="template.prepare" depends="shared.set-props, echo.prepare">
-    <!-- make it a clean space to work in -->
-    <delete dir="${project.context.dir}"/>
-    <delete dir="${project.docs.dir}"/>
-    <mkdir dir="${project.context.dir}"/>
-    <mkdir dir="${project.docs.dir}"/>
-
-    <!-- copy over forrest config stuf and prepare the environment -->
-    <!-- todo: get rid of the filter way of working ?
-         InputModes were mentioned -->
-    <filter token="skin"              value="${prepare.skin}"/>
-    <filter token="link1"             value="apache"/>
-    <filter token="link1.href"        value="http://www.apache.org/"/>
-    <filter token="link2"             value="xml.apache"/>
-    <filter token="link2.href"        value="http://xml.apache.org/"/>
-    <!-- the breadcrumb script already generates it,
-         so it needs to be kept blank -->
-    <filter token="link3"             value=""/>
-    <filter token="link3.href"        value=""/>
-    <filter token="group-logo.src"    value="images/group-logo.gif"/>
-    <filter token="group-logo.href"   value="http://xml.apache.org/"/>
-    <filter token="group-logo.alt"    value="Apache XML logo"/>
-    <filter token="project-logo.src"  value="images/project-logo.gif"/>
-    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>
-    <filter token="project-logo.alt"  value="Forrest logo"/>
-    <filter token="year"              value="2002"/>
-    <filter token="vendor"            value="Apache Sofware Foundation"/>
-
-    <!-- we're not dumping in the documentation source -->
-    <!-- that will come from the get-src stage -->
-
-    <!-- Copy entity catalog, entities and class files -->
-    <copy todir="${project.context.dir}/resources/schema" filtering="off">
-      <fileset dir="${resource.dir}/schema"/>
-    </copy>
-
-    <!-- decided to share this among all projects handled by bot
-         Todo: remove what is now disabled if it proves to work
-
-    <mkdir dir="${project.context.dir}/WEB-INF/classes"/>
-    <copy todir="${project.context.dir}/WEB-INF/classes">
-      <fileset dir="${project.context.dir}/resources/schema">
-        <include name="CatalogManager.properties"/>
-      </fileset>
-      <fileset dir="${build.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-      <fileset dir="${build.scratchpad.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-    </copy>
-    -->
-
-    <!-- Copy Cocoon configuration and sitemap -->
-    <copy todir="${project.context.dir}" filtering="on">
-      <fileset dir="${forrest.context.dir}/conf">
-        <include name="sitemap.xmap"/>
-        <include name="cocoon.xconf"/>
-        <include name="logkit.xconf"/>
-      </fileset>
-    </copy>
-
-    <!-- todo: check where the cocoon Main really looks for the sitemap -->
-    <copy todir="${project.context.dir}/WEB-INF/" filtering="on">
-      <fileset dir="${forrest.context.dir}/conf">
-        <exclude name="sitemap.xmap"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy libraries -->
-    <copy todir="${project.context.dir}/library/" filtering="off">
-      <fileset dir="${forrest.context.dir}/library">
-
-      </fileset>
-    </copy>
-
-    <!-- Copy skins -->
-    <copy todir="${project.context.dir}/skins/" filtering="on">
-      <fileset dir="${forrest.context.dir}/skins">
-        <exclude name="**/images/**"/>
-      </fileset>
-    </copy>
-    <copy todir="${project.context.dir}/skins/" filtering="off">
-      <fileset dir="${forrest.context.dir}/skins">
-        <include name="**/images/**"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy the project descriptors can't be done here, since that is
-         project specific: see get-src -->
+    <echo>
+      ############################
+      # Target: prepare
+      # Calling ${forrest.home}/forrest.build.xml#bare-context
+      # In dir ${basedir}
+      ############################
+    </echo>
+    <ant dir="${basedir}" antfile="${forrest.home}/forrest.build.xml" target="bare-context">
+      <property name="project.skin" value="${prepare.skin}"/>
+    </ant>
   </target>
 
 
@@ -222,17 +156,30 @@
          quiet="true"
          command="checkout -l"
          />
-    <!-- copy the xdocs content over to the context space -->
-    <copy todir="${project.context.dir}">
+
+    <echo>
+      ############################
+      # Target: get-src.cvs
+      # Calling ${forrest.home}/forrest.build.xml#project-context-bot
+      # In dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"
+      ############################
+    </echo>
+    <ant
+      dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"
+      antfile="${forrest.home}/forrest.build.xml" target="project-context-bot">
+      <property name="forrest.echo" value="true"/>
+    </ant>
+
+    <!--
+    <copy todir="${project.ctxt-dir}">
       <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}" />
     </copy>
-
-    <!-- copy the project descriptors over to the context space  -->
-    <copy todir="${project.context.dir}" >
+    <copy todir="${project.ctxt-dir}" >
       <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}">
         <include name="*.*ml"/>
       </fileset>
     </copy>
+    -->
   </target>
 
   <!-- [[get-src type local-copy ]] -->
@@ -243,18 +190,17 @@
   </target>
 
   <target name="template.get-src.local-copy" depends="shared.set-props, echo.get-src.local-copy">
-    <!-- copy the xdocs content over to the context space -->
-    <copy todir="${project.context.dir}">
-      <fileset dir="${get-src.local-copy.content-dir}" />
-    </copy>
-    <!-- copy the project descriptors over to the context space  -->
-    <copy todir="${project.context.dir}" >
-      <fileset dir="${get-src.local-copy.project-dir}">
-        <include name="*.*ml"/>
-      </fileset>
-    </copy>
+    <echo>
+      ############################
+      # Target: get-src.local-copy
+      # Calling ${forrest.home}/forrest.build.xml#project-context-bot
+      # In dir ${get-src.local-copy.project-dir}
+      ############################
+    </echo>
+    <ant dir="${get-src.local-copy.project-dir}"
+      antfile="${forrest.home}/forrest.build.xml" target="project-context-bot">
+    </ant>
   </target>
-
 
   <!-- ________________ GENERATE TEMPLATES __________________ -->
 
@@ -267,21 +213,16 @@
   </target>
 
   <target name="template.generate" depends="shared.set-props, echo.generate">
-    <!-- clean out the temp space -->
-    <delete dir="${project.work.dir}"/>
-    <mkdir dir="${project.work.dir}"/>
-
-    <java classname="org.apache.cocoon.Main" fork="true"
-          dir="${project.context.dir}" failonerror="true"
-          classpathref="forrest.cp"
-          >
-      <arg value="-c."/>
-      <arg value="-d../docs"/>
-      <arg value="-w../work"/>
-      <arg value="-l../work/cocoon.log"/>
-      <arg value="-u${generate.debuglevel}"/>
-      <arg value="index.html"/>
-    </java>
+    <echo>
+      ############################
+      # Target: generate
+      # Calling ${forrest.home}/forrest.build.xml#-site
+      # In dir ${get-src.local-copy.project-dir}
+      ############################
+    </echo>
+    <ant dir="${project.ctxt-dir}"
+      antfile="${forrest.home}/forrest.build.xml" target="-site">
+    </ant>
   </target>
 
   <!-- ________________ DEPLOY TEMPLATES __________________ -->
@@ -295,13 +236,13 @@
 
   <target name="template.deploy.scp" depends="shared.set-props, echo.deploy.scp">
     <!-- clean out the temp space -->
-    <delete dir="${project.work.dir}"/>
-    <mkdir dir="${project.work.dir}"/>
+    <delete dir="${project.work-dir}"/>
+    <mkdir dir="${project.work-dir}"/>
     <property name="tempname" value="${project.name}-deploy" />
     <property name="tempfile"
-              value="${project.work.dir}/${tempname}" />
+              value="${project.work-dir}/${tempname}" />
     <property name="remotedir" value="${deploy.scp.root}/${deploy.scp.dir}" />
-    <tar tarfile="${tempfile}.tar" basedir="${project.docs.dir}"/>
+    <tar tarfile="${tempfile}.tar" basedir="${project.site-dir}"/>
     <gzip zipfile="${tempfile}.tar.gz" src="${tempfile}.tar"/>
     <delete file="${tempfile}.tar"/>
     <exec dir="." executable="scp">
@@ -323,7 +264,7 @@
 
   <target name="template.deploy.local-copy" depends="shared.set-props, echo.deploy.local-copy">
     <copy todir="${deploy.local-copy.destination}">
-        <fileset dir="${project.docs.dir}" />
+        <fileset dir="${project.site-dir}" />
     </copy>
   </target>
 
@@ -348,7 +289,7 @@ to copy the stuff to relative user dir: ${deploy.ftp.destination}
          verbose="no"
          ignoreNoncriticalErrors="true"
     >
-      <fileset dir="${project.docs.dir}" />
+      <fileset dir="${project.site-dir}" />
     </ftp>
   </target>
 

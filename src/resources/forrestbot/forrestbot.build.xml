@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<!-- Basedir is expected to be the bot's working directory -->
+<project default="bot" basedir="." name="Forrestbot build file">
+
+  <description>
+    Generates Forrestbot Ant script for a specified forrestbot.conf.xml file.
+  </description>
+
+  <target name="init">
+    <property name="forrestbot.home"          location="${forrest.home}/forrestbot"/>
+    <property name="bot.work.builder.xslt"    location="${forrestbot.home}/xslt/config2work.xsl" />
+    <property name="bot.default.builder.xslt" location="${forrestbot.home}/xslt/config2defaults.xsl" />
+
+    <echo>Sourcing ${basedir}/forrestbot.properties</echo>
+    <echo>Sourcing ${forrestbot.home}/forrestbot.properties</echo>
+    <echo>bot.work.build.xml = ${bot.work.build.xml}</echo>
+    <property file="forrestbot.properties"/>
+    <property file="${forrestbot.home}/forrestbot.properties"/>
+
+    <echo message="Using config file: ${bot.config}" />
+  </target>
+
+  <target name="conf2build" depends="init" >
+    <!-- remove previous versions to force generation again -->
+    <delete file="${bot.work.build.xml}" />
+    <delete file="${bot.default.parameters.xml}" />
+    <mkdir dir="${bot.build.dir}" />
+    <!-- builds the different xml files this process needs.  -->
+    <style in="${bot.config}"
+      out="${bot.work.build.xml}"
+      style="${bot.work.builder.xslt}"/>
+    <style in="${bot.config}"
+      out="${bot.default.parameters.xml}"
+      style="${bot.default.builder.xslt}"/>
+    <copy todir="${bot.build.dir}" file="${bot.templates.build.xml}"/>
+  </target>
+
+  <target name="run" depends="conf2build" >
+    <!-- delegates to the generated XML file -->
+    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
+  </target>
+
+  <target name="bot" depends="run" />
+
+</project>

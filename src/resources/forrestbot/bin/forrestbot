@@ -1,0 +1,54 @@
+#!/bin/sh
+
+
+# ----- Test if ant is around ------------------------------------------------
+# and bail out if it does not with a message that it is required
+
+if [ ! `which ant` ]; then
+  echo "You must install Ant (http://jakarta.apache.org/ant)"
+  echo "and add \$ANT_HOME/bin to your PATH variable"
+  exit 1
+fi
+
+
+# use the location of this script to infer $FORREST_HOME
+FORREST_HOME=`dirname "$0"`/..
+FORRESTBOT_HOME="$FORREST_HOME/forrestbot"
+
+# set the ant file to use
+ANTFILE="$FORRESTBOT_HOME/forrestbot.build.xml"
+
+# Save old ANT_HOME
+OLD_ANT_HOME="$ANT_HOME"
+unset ANT_HOME
+
+# ----- Set Up The Runtime Classpath ------------------------------------------
+
+if [ "$TERM" = "cygwin" ] ; then
+  S=';'
+else
+  S=':'
+fi
+
+CP="$CLASSPATH"
+export CP
+unset CLASSPATH
+
+CLASSPATH=`echo $FORREST_HOME/lib/endorsed/*.jar $FORRESTBOT_HOME/lib/*.jar | tr ' ' $S`
+export CLASSPATH
+
+echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
+echo
+
+"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PWD" -Dforrest.home="$FORREST_HOME" -emacs $@
+
+# ---- Restore Classpath
+unset CLASSPATH
+CLASSPATH=$CP
+export CLASSPATH
+
+# ---- Restore ANT_HOME
+# Restore old ANT_HOME
+ANT_HOME="$OLD_ANT_HOME"
+export ANT_HOME
+
