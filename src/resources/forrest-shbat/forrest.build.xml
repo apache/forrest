@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.3-dev                        |
-    |             $Date: 2003/01/27 02:22:54 $              |
+    |             $Date: 2003/01/28 04:21:57 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -568,20 +568,38 @@ Use the 'seed' target to create a template project structure.
         <arg value="-V" />                          <!-- be verbose -->
       </java>
 
-      <!-- Copy all non-xdocs content across, as we cannot rely on crawling to
-      discover the whole URI space -->
-      <copy toDir="${project.site-dir}" filtering="false"
-        overwrite="true" failonerror="false">
-        <fileset dir="${project.ctxt-dir}/content">
-          <exclude name="xdocs/**"/>
-        </fileset>
-        <fileset dir="${project.ctxt-dir}/resources" includes="images"/>
-      </copy>
-      <!-- Copy non-resource skin files across -->
-      <copy toDir="${project.site-dir}/skin" filtering="false" overwrite="true"
-        failonerror="false">
-        <fileset dir="${project.ctxt-dir}/skins/${project.skin}" excludes="xslt/**"/>
-      </copy>
+      <sequential>
+        <!-- 
+        | Copy all non-xdocs content across, as we cannot rely on crawling to
+        | discover the whole URI space.  Note: we are emulating the sitemap here;
+        | please ensure they keep in synch.
+        -->
+        <property name="skindir" location="${project.ctxt-dir}/skins/${project.skin}"/>
+        <copy toDir="${project.site-dir}" filtering="false"
+          overwrite="true" failonerror="false">
+          <fileset dir="${project.ctxt-dir}/content">
+            <exclude name="xdocs/**"/>
+          </fileset>
+          <fileset dir="${project.ctxt-dir}/resources" includes="images"/>
+        </copy>
+
+        <!-- Copy skin images -->
+        <mkdir dir="${project.site-dir}/skin/images"/>
+        <copy toDir="${project.site-dir}/skin/images" filtering="false" overwrite="true"
+          failonerror="false">
+          <fileset dir="${skindir}/images"/>
+        </copy>
+
+        <!-- Copy CSS and JS files -->
+        <copy toDir="${project.site-dir}/skin" filtering="false"
+          overwrite="true"
+          failonerror="false">
+          <fileset dir="${skindir}/css"/>
+          <fileset
+            dir="${skindir}/scripts"/>
+        </copy>
+
+      </sequential>
     </parallel>
     <echo>
 ------------------------------
