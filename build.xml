@@ -1,189 +1,70 @@
 <?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="./tools/antipede/resources/stylesheets/build.xsl"?>
+<?xml-stylesheet type="text/xsl" href="./tools/stylesheets/build.xsl"?>
 
-<!--<!DOCTYPE project SYSTEM "./tools/antipede/build.dtd" >-->
-<!DOCTYPE project [
-  <!-- antipede -->
-  <!ENTITY import-antipede  SYSTEM "file:./tools/antipede/build.xtarget">
-
-]>
-<project default="interactive" basedir="." name="project build file">
+<project default="dist" basedir="." name="Forrest build file">
 
 <description>
-                   * ===================================== *
-                   |   Krysalis Centipede Build System     |
-                   * ===================================== *
-                                     by
+                   * ========================== *
+                   |   Forrest Build System     |
+                   * ========================== *
+                                 by
 
                    Nicola Ken Barozzi (nicolaken@apache.org)
                    Marc Johnson (mjohnson@apache.org)
+                   Jeff Turner (jefft@apache.org)
 
-
-                   For a simple interactive build, simply
-                   run the build script (build.bat or build.sh)
+                   Run the build script: build.bat or build.sh
 </description>
 
+  <target name="init">
+   <tstamp>
+     <format property="YEAR" pattern="yyyy" locale="en"/>
+   </tstamp>
 
-  <path id="classpath">
-    <fileset dir="./lib/endorsed">
-      <include name="*.jar"/>
-    </fileset>
-    <fileset dir="./lib/core">
-      <include name="*.jar"/>
-    </fileset>
-    <fileset dir="./lib/optional">
-      <include name="*.jar"/>
-    </fileset>
-  </path>
+   <buildnumber file="etc/build.number"/>
+   <echo>
+    --------------------------------------------------------------
 
+      Using ${ant.version}
+      Build file ${ant.file}
+      Build system home ${ant.home}
+      Build number ${build.number}
+      Project Name ${ant.project.name}
+      Java Version ${ant.java.version}      
+      Timestamp ${DSTAMP}${TSTAMP}
 
-  <!-- =================================================================== -->
-  <!-- Targets for this project                                            -->
-  <!-- =================================================================== -->
-  <target name="init" depends="-init">
+    --------------------------------------------------------------
+   </echo>
+ 
+    <xmlproperty file="module.xml"     prefix="xgump"    keeproot="true"  collapseAttributes="true" />
+    <xmlproperty file="status.xml"     prefix="xstatus"  keeproot="false" collapseAttributes="true" />   
+    <xmlproperty file="properties.xml"                   keeproot="false" collapseAttributes="true" />
+ 
     <property name="name"                  value="${xgump.module.project.name}"/>
     <property name="packages"              value="${xgump.module.project.packages}"/>
 
-    <property name="build.root"            value="${xlayout.build.dir}"/>
-    <property name="build.dir"             value="${xlayout.build.dir}"/>
-    <property name="resource.dir"          value="${xlayout.source.resources.dir}"/>
-    <property name="context.dir"           value="${xlayout.source.documentation.dir}"/>
-    <property name="build.docs"            value="${xlayout.build.documentation.dir}"/>
-    <property name="build.javadocs"        value="${xlayout.build.documentation.javadocs.dir}"/>
-    <property name="build.context"         value="${xlayout.build.work.dir}"/>
-    <property name="build.dest"            value="${xlayout.build.classes.dir}"/>
-    <property name="build.scratchpad.dest" value="${xlayout.build.scratchpad.classes.dir}"/>
+    <property name="resource.dir"          location="src/resources"/>
+    <property name="scratchpad.src.dir"    location="src/scratchpad/src/java"/>
+    <property name="build.dir"             location="build"/>
+    <property name="build.docs"            location="build/docs"/>
+    <!--
+    <property name="build.javadocs"        value="build/docs/javadocs"/>
+    -->
+    <property name="build.scratchpad.dir"  location="build/scratchpad"/>
+    <property name="build.scratchpad.classes" location="build/scratchpad/classes"/>
 
-    <property name="tools.dir"             value="./tools"/>
-    <property name="tools.jar"             value="${java.home}/../lib/tools.jar"/>
+    <property name="tools.dir"             location="tools"/>
+    <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
 
+    <path id="classpath">
+      <fileset dir="src/scratchpad/lib" includes="**/*.jar"/>
+      <fileset dir="lib" includes="**/*.jar"/>
+      <pathelement location="${tools.jar}"/>
+    </path>
+
+    <mkdir dir="${build.dir}"/>
   </target>
-
-
-  <!-- =================================================================== -->
-  <!-- Interactive build                                                   -->
-  <!-- =================================================================== -->
-  <target name="interactive" description="Interactive Build" depends="-init">
-    <echo>
-    --------------------------------------------------------------
-
-     ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
-
-    --------------------------------------------------------------
-     Using ${ant.version}
-     Build file ${ant.file}
-    --------------------------------------------------------------
-     These are the most common build targets.
-     You can also invoke them directly; see build.xml for more info.
-     Builds will be in /build directory, distributions in /build/dist.
-
-     forrest-typical targets:
-
-     dist ------------- build all incarnation distributions:
-     dist-shbat ------- build the forrest shell/bat incarnation (requires ant to *run*)
-
-     future targets:
-
-     dist-cent      ??? ??? future target making centipede-cent
-     dist-maven     ??? ??? future target making maven plugin
-     dist-jar       ??? ??? future target making jar that has both main as ant-task wrapper classes
-
-
-     forrest-test targets:
-
-     docs ------------- generates static Forrest website for itself as the project to run on.
-     webapp ----------- builds unpacked webapp version of Forrest website
-     war -------------- builds webapp .war file of Forrest website
-     bot.run ---------- runs the forrestbot using the configuration specified in
-                        forrestbot.conf.xml
-
-     
-     default centipede targets:
-
-     compile ---------- compiles the source code
-     test ------------- performs the jUnit tests
-     jar -------------- create the jar files
-     docs ------------- generates the html docs - clean not needed
-     javadocs --------- generates the API documentation
-     site ------------- generates the html site (docs+reports)
-     clean ------------ cleans the build directory
-     dist ------------- creates src and bin distributions
-     scratchpad ------- build-run scratchpad code
-     contrib ---------- build-run contributed code
-
-
-    </echo>
-    <property name="input.selection" value="docs"/>
-    <centipede-user-input name="input.selection">Please select a target </centipede-user-input>
-
-    <antcall target="call-cent">
-      <param name="cent-name"   value="centipede"/>
-      <param name="cent-target" value="splash"/>
-    </antcall>
-
-    <antcall target="${input.selection}"/>
-
-  </target>
-
-
-  <!-- ================================== -->
-  <!--              Compile               -->
-  <!-- ================================== -->
-  <target  name="compile"   depends="-init"
-           description="Compile java source code">
-
-    <antcall target="call-cent">
-      <param name="cent-name"   value="centipede"/>
-      <param name="cent-target" value="compile"/>
-    </antcall>
-
-  </target>
-
-
-  <!-- ================================== -->
-  <!--              jar                   -->
-  <!-- ================================== -->
-  <target  name="jar"   depends="-init"
-           description="Make jars">
-    <antcall target="call-cent">
-      <param name="cent-name"   value="centipede"/>
-      <param name="cent-target" value="package"/>
-    </antcall>
-
-  </target>
-
-
-  <!-- ================================== -->
-  <!--           Scratchpad               -->
-  <!-- ================================== -->
-  <target  name="scratchpad"   depends="-init"
-           description="Execute scratchpad targets">
-    <ant antfile="${xlayout.source.scratchpad.targets.dir}/scratchpad.xml"/>
-  </target>
-
-
-  <!-- =================================================================== -->
-  <!-- Creates the API documentation                                       -->
-  <!-- =================================================================== -->
-  <target name="javadocs"
-      description="* Generates the API documentation">
-    <mkdir dir="${build.javadocs}"/>
-    <javadoc packagenames="${packages}"
-             sourcepath="${build.src}"
-             destdir="${build.javadocs}"
-             author="true"
-             version="true"
-             use="false"
-             noindex="true"
-             windowtitle="${Name} API"
-             doctitle="${Name}"
-             bottom="Copyright &#169; ${year} ${fullname} project. All Rights Reserved."
-             stylesheetfile="${resource.dir}/javadoc.css">
-      <classpath refid="classpath"/>
-    </javadoc>
-  </target>
-
 
   <!-- =================================================================== -->
   <!-- Make all known distributions                                        -->
@@ -206,7 +87,7 @@
   <!-- =================================================================== -->
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- =================================================================== -->
-  <target name="webapp-webinf" depends="init, compile" >
+  <target name="webapp-webinf" depends="init, scratchpad.jar" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
     <property name="webapp.webinf.dir" value="./build/webapp/WEB-INF" />
 
@@ -223,22 +104,25 @@
       <fileset dir="${resource.dir}/schema">
         <include name="CatalogManager.properties"/>
       </fileset>
-      <fileset dir="${build.dest}">
+      <!--
+      <fileset dir="${build.classes}">
         <include name="**/*.class"/>
       </fileset>
-      <fileset dir="${build.scratchpad.dest}">
+      <fileset dir="${build.scratchpad.classes}">
         <include name="**/*.class"/>
       </fileset>
+      -->
     </copy>
 
     <mkdir dir="${webapp.webinf.dir}/lib"/>
-	<copy todir="${webapp.webinf.dir}/lib">
-		<!--
-		<fileset dir="./lib/endorsed"    />
-		-->
+    <copy todir="${webapp.webinf.dir}/lib">
+      <!--
+      <fileset dir="./lib/endorsed"    />
+      -->
       <fileset dir="./lib/core"/>
       <fileset dir="./lib/optional"/>
       <fileset dir="./src/scratchpad/lib"/>
+      <fileset dir="${build.scratchpad.dir}" includes="*.jar"/>
     </copy>
   </target>
 
@@ -246,7 +130,7 @@
   <!-- =================================================================== -->
   <!-- Make the bare context directory like cocoon (CLI or webapp) needs it-->
   <!-- =================================================================== -->
-  <target name="bare-context-dir" depends="init, compile" >
+  <target name="bare-context-dir" depends="init" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
     <property name="bare-context.dir" value="./build/bare-context" />
 
@@ -296,15 +180,14 @@
     <mkdir dir="${dist-shbat.dir}" />
 
     <!-- copy the ant script at the heart of the distribution -->
+    <!--
     <copy todir="${dist-shbat.dir}" file="forrest.build.xml" />
+    -->
 
     <!-- copy the prepared and wrapper stuff for the distribution -->
     <copy todir="${dist-shbat.dir}">
       <fileset dir="./src/resources/forrest-shbat" />
-    </copy>
-    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
-    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
-    <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
+  </copy>
 
     <!-- copy the fresh-site.zip to clone from -->
     <copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
@@ -319,6 +202,22 @@
 	<copy todir="${dist-shbat.dir}/lib/endorsed">
 		<fileset dir="lib/endorsed" />
     </copy>
+
+	<!-- Copy Ant jars, so the shbat distribution is self-contained -->
+	<mkdir dir="${dist-shbat.dir}/ant" />
+	<copy todir="${dist-shbat.dir}/ant">
+		<fileset dir="tools/ant" />
+	</copy>
+
+	<!-- Fix bin/ permissions -->
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
+
+	<!-- Fix ant/bin/ permissions -->
+	<fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/ant/bin" includes="*.bat"/>
+	<fixcrlf eol="lf" srcdir="${dist-shbat.dir}/ant/bin" excludes="*.bat"/>
+	<chmod dir="${dist-shbat.dir}/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <!-- copy the bare-context dir as needed by the cocoon CLI -->
     <mkdir dir="${dist-shbat.dir}/context" />
@@ -345,27 +244,6 @@
   *-----------------------------------------------------------------
     </echo>
   </target>
-
-
-  <!-- =================================================================== -->
-  <!-- Validate xml                                                        -->
-  <!-- =================================================================== -->
-  <target name="validate-docs" depends="dist-shbat" 
-        description="Checks that the xml files are valid and conform to the DTD.">
-    <!-- warning to other projects:
-       This target is using internally build productions for test.
-       This is by no means an example of how you can use it inside your project 
-      (although it will resemble it in many ways, to make the test meaningfull)
-
-       The correct way of using forrest for your project is to build one of the
-       forrest distribution-flavours and readup on how you should do that in the 
-       appropriate documentation. -->
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.build.xml" target="validate">
-      <property name="project.home"     value="."            />
-    </ant>
-  </target>
-
 
   <!-- =================================================================== -->
   <!-- Generate project-site                                               -->
@@ -418,7 +296,6 @@
     </ant>
   </target>
 
-
   <!-- =================================================================== -->
   <!-- ForrestBar for Mozilla                                              -->
   <!-- =================================================================== -->
@@ -441,24 +318,31 @@
   <target  name="gump" description="Target used by Gump">
       <antcall target="docs"/>
       <antcall target="webapp"/>
+    </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Compile scratchpad classes                                          -->
+  <!-- =================================================================== -->
+  <target name="scratchpad.compile" depends="init">
+    <mkdir dir="${build.scratchpad.classes}"/>
+    <javac srcdir=   "${scratchpad.src.dir}"
+      destdir=       "${build.scratchpad.classes}"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
   </target>
 
-
   <!-- =================================================================== -->
-  <!-- Import Ant-Centipede init targets - sets up basic build stuff       -->
+  <!-- Create scratchpad jar                                               -->
   <!-- =================================================================== -->
-  <!--
-        This is the target that initializes tasks and properties used
-        commonly in every other target.
-
-        Remember to add depends="init" to every target, so that this
-        target is called before any other.
-
-        This target is internal; to make it unusable from the commandline,
-        its name starts with a hyphen.
-        To make it invisible when using -projecthelp, it lacks a description.
-  -->
-
-    &import-antipede;
+  <target name="scratchpad.jar" depends="scratchpad.compile">
+    <mkdir dir="${build.scratchpad.dir}"/>
+    <jar destfile="${build.scratchpad.dir}/xml-forrest-scratchpad.jar"
+      basedir="${build.scratchpad.classes}"/>
+  </target>
 
 </project>
