@@ -307,16 +307,12 @@ jefft@apache.org - Lots of fixups, notably the title now works, and footnotes wo
       </xsl:template>
       <xsl:template match="programlisting">
             <source>
-                  <xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text>
                   <xsl:apply-templates/>
-                  <xsl:text disable-output-escaping="yes">]]&gt;</xsl:text>
             </source>
       </xsl:template>
       <xsl:template match="screen">
             <source>
-                  <xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text>
                   <xsl:apply-templates/>
-                  <xsl:text disable-output-escaping="yes">]]&gt;</xsl:text>
             </source>
       </xsl:template>
       <xsl:template match="orderedlist">
