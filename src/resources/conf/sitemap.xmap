@@ -124,7 +124,7 @@
   </map:resource>
 
   <map:resource name="book">
-    <map:generate src="content/xdocs/{../1}book.xml"/>
+    <map:generate src="cocoon:/source-location-{../1}book.xml"/>
     <map:call resource="skinit">
       <map:parameter name="type" value="book2menu"/>
       <map:parameter name="path" value="{path}"/>
@@ -144,9 +144,27 @@
   <!-- Pipeline that manages the internal URI space
        For the external URI space manager, see the next pipeline. -->
   <map:pipeline internal-only="true">
+  
+  <!-- translates source files requests to real source path -->
+  <map:match pattern="source-location-**">
 
+    <!-- looks in content dir -->   
+    <map:act type="resource-exists">
+     <map:parameter name="url" value="content/{1}"/>
+     <map:generate src="content/{../1}"/>
+     <map:serialize type="xml"/>
+    </map:act>  
+    
+    <!--  if not there looks for the legacy xdocs dir -->   
+    <map:generate src="content/xdocs/{1}"/>
+    <map:serialize type="xml"/>
+    
+  </map:match>
+  
+   
+  
   <map:match pattern="**tab-**.xml">
-    <map:generate src="content/xdocs/tabs.xml"/>
+    <map:generate src="cocoon:/source-location-tabs.xml"/>
     <map:call resource="skinit">
      <map:parameter name="type" value="tab2menu"/>
      <map:parameter name="path" value="{2}"/>
@@ -184,7 +202,7 @@
    </map:match>
 
    <map:match pattern="body-**/faq.xml">
-     <map:generate type="file-nolabel" src="content/xdocs/{1}/faq.xml"/>
+     <map:generate type="file-nolabel" src="cocoon:/source-location-{1}/faq.xml"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -195,7 +213,7 @@
    </map:match>
 
    <map:match pattern="body-faq.xml">
-     <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
+     <map:generate type="file-nolabel" src="cocoon:/source-location-faq.xml"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -213,7 +231,7 @@
 
    <!-- index pages for contribution categories -->
    <map:match pattern="body-community/*/index.xml">
-     <map:generate src="content/xdocs/community/{1}/index.xml"/>
+     <map:generate src="cocoon:/source-location-community/{1}/index.xml"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/index"/>
@@ -222,7 +240,7 @@
 
    <!-- no special transformation, yet, for revision pages -->
    <map:match pattern="body-community**revision-*.xml">
-     <map:generate src="content/xdocs/community{1}revision-{2}.xml"/>
+     <map:generate src="cocoon:/source-location-community{1}revision-{2}.xml"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/revision-{2}"/>
@@ -232,7 +250,7 @@
    <!-- all contribution docs -->
    <map:match pattern="body-community/*/*/**.xml">
      <map:aggregate element="all" >
-       <map:part src="content/xdocs/community/{1}/{2}/{3}.xml"/>
+       <map:part src="cocoon:/source-location-community/{1}/{2}/{3}.xml"/>
        <map:part src="cocoon:/revisions-community/{1}/{2}/{3}" />
      </map:aggregate>
      <map:transform src="library/xslt/{1}2document.xsl" label="content"/>
@@ -244,10 +262,25 @@
 
    <!-- revisions only implemented for community pages -->
   <map:match pattern="revisions-community/*/*/**">
-     <map:generate type="directory" src="content/xdocs/community/{1}/{2}">
-    <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
-   </map:generate>
+  
+    <!-- looks in content dir -->   
+    <map:act type="resource-exists">
+     <map:parameter name="url" value="content/community/{1}/{2}/book.xml"/>
+    
+     <map:generate type="directory" src="content/community/{../1}/{../2}">
+      <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
+     </map:generate>
      <map:transform src="library/xslt/directory2revisions.xsl" label="content" >
+       <map:parameter name="use-request-parameters" value="true"/>
+       <map:parameter name="page" value="{../3}"/>
+     </map:transform>
+     <map:serialize type="xml" />
+    </map:act>  
+
+    <map:generate type="directory" src="content/xdocs/community/{1}/{2}">
+     <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
+    </map:generate>
+    <map:transform src="library/xslt/directory2revisions.xsl" label="content" >
        <map:parameter name="use-request-parameters" value="true"/>
        <map:parameter name="page" value="{3}"/>
      </map:transform>
@@ -256,7 +289,7 @@
 
  <!-- Any other howto directories get transformed, without revisions -->
  <map:match pattern="body-**howto/*.xml">
-   <map:generate src="content/xdocs/{1}howto/{2}.xml"/>
+   <map:generate src="cocoon:/source-location-{1}howto/{2}.xml"/>
    <map:transform src="library/xslt/howto2document.xsl" label="content"/>
    <map:call resource="skinit">
      <map:parameter name="type" value="document2html"/>
@@ -270,8 +303,9 @@
      The second match aggregates each book.xml into a doclist and
      then converts it to a document.
    -->
+   
    <map:match pattern="doclist/content/xdocs/**book.xml">
-     <map:generate src="content/xdocs/{1}book.xml"/>
+     <map:generate src="cocoon:/source-location-{1}book.xml"/>
      <map:transform src="library/xslt/doclist.xsl">
        <map:parameter name="uri" value="{1}"/>
      </map:transform>
@@ -290,7 +324,32 @@
       <map:parameter name="nopdf" value="true"/>
      </map:call>
    </map:match>
+      
+   <!--
+   <map:match pattern="doclist/source-location-**book.xml">
+     <map:generate src="source-location-{1}book.xml"/>
+     <map:transform src="library/xslt/doclist.xsl">
+       <map:parameter name="uri" value="{1}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+    </map:match>
 
+   <map:match pattern="body-doclist.xml">
+     <map:aggregate element="doclist">
+       <map:part src="cocoon:/doclist/source-location-book.xml"/>
+       <map:part src="cocoon:/doclist/source-location-community/howto/book.xml"/>
+     </map:aggregate>
+     <map:transform src="library/xslt/doclist2document.xsl"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="path" value="doclist.xml"/>
+      <map:parameter name="nopdf" value="true"/>
+     </map:call>
+   </map:match>
+   
+  -->   
+
+  
    <!-- HTML DTD Documentation generation pipeline, makes use of NekoDTD tool -->
 
    <map:match pattern="body-**.dtdx.xml">
@@ -308,7 +367,7 @@
 
    <!-- Generates body HTML for files in subdirs -->
    <map:match pattern="body-**/*.xml">
-    <map:generate src="content/xdocs/{1}/{2}.xml"/>
+    <map:generate src="cocoon:/source-location-{1}/{2}.xml"/>
     <map:call resource="skinit">
      <map:parameter name="type" value="document2html"/>
      <map:parameter name="path" value="{1}/{2}.xml"/>
@@ -317,7 +376,7 @@
 
    <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
-    <map:generate src="content/xdocs/{1}.xml"/>
+    <map:generate src="cocoon:/source-location-{1}.xml"/>
     <map:call resource="skinit">
      <map:parameter name="type" value="document2html"/>
      <map:parameter name="path" value="{1}.xml"/>
@@ -338,7 +397,7 @@
 
 
    <map:match pattern="">
-    <map:redirect-to uri="{context:context}/index.html"/>
+    <map:redirect-to uri="/{context:context}/index.html"/>
    </map:match>
 
    <map:match pattern="**">
@@ -420,21 +479,21 @@
    </map:match>
 
    <map:match pattern="faq.pdf">
-    <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
+    <map:generate type="file-nolabel" src="cocoon:/source-location-faq.xml"/>
     <map:transform src="library/xslt/faq2document.xsl" label="content"/>
     <map:transform src="skins/forrest-site/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
 
    <map:match pattern="community/howto/**.pdf">
-    <map:generate src="content/xdocs/community/howto/{1}.xml"/>
+    <map:generate src="cocoon:/source-location-community/howto/{1}.xml"/>
     <map:transform src="library/xslt/howto2document.xsl" label="content"/>
     <map:transform src="skins/{defaults:skin}/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
 
    <map:match pattern="**.pdf">
-    <map:generate src="content/xdocs/{1}.xml"/>
+    <map:generate src="cocoon:/source-location-{1}.xml"/>
     <map:transform src="skins/{defaults:skin}/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
@@ -512,7 +571,7 @@
 
    <!-- DS: handles images local to a contributor directory -->
    <map:match pattern="**my-images/**.*">
-    <map:read src="content/xdocs/{1}my-images/{2}.{3}" mime-type="image/{3}"/>
+    <map:read src="cocoon:/source-location-{1}my-images/{2}.{3}" mime-type="image/{3}"/>
    </map:match>
 
    <map:match pattern="images/**.*">
