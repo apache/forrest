@@ -219,6 +219,10 @@ COPYRIGHT:
 <!-- =============================================================== -->
 <!ENTITY % local.blocks "">
 <!ENTITY % blocks "%paragraphs;|%tables;|%lists;|%special-blocks; %local.blocks;">
+
+<!-- Flow mixes block and inline -->
+<!ENTITY % flow "%content.mix;|%blocks;">
+
 <!-- ==================================================== -->
 <!-- Paragraphs -->
 <!-- ==================================================== -->
@@ -272,13 +276,13 @@ COPYRIGHT:
   %common.att; 
 >
 <!-- The table row header element -->
-<!ELEMENT th (%content.mix;)*>
+<!ELEMENT th (%flow;)*>
 <!ATTLIST th
   %common.att; 
   %cell.span; 
 >
 <!-- The table row description element -->
-<!ELEMENT td (%content.mix;)*>
+<!ELEMENT td (%flow;)*>
 <!ATTLIST td
   %common.att; 
   %cell.span; 
@@ -287,7 +291,7 @@ COPYRIGHT:
 <!-- Lists -->
 <!-- ==================================================== -->
 <!-- List item -->
-<!ELEMENT li (%content.mix; | %lists; | %paragraphs; )*>
+<!ELEMENT li (%flow;)*>
 <!ATTLIST li
   %common.att; 
 >
@@ -322,7 +326,7 @@ COPYRIGHT:
   %common.att; 
 >
 <!-- Definition description -->
-<!ELEMENT dd (%content.mix; | %lists; | %paragraphs; )*>
+<!ELEMENT dd (%flow; )*>
 <!ATTLIST dd
   %common.att; 
 >
