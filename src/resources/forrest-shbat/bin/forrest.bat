@@ -1,12 +1,13 @@
 @echo off
 setlocal 
 
+Rem ----- use the location of this script to infer $FORREST_HOME -------
+set DEFAULT_FORREST_HOME=%~dp0\..
+if "%FORREST_HOME%"=="" set FORREST_HOME=%DEFAULT_FORREST_HOME%
+
 Rem ----- set the current working dir as the PROJECT_HOME variable  ----
 call "%FORREST_HOME%\bin\setpwdvar.bat"
 set PROJECT_HOME="%PWD%"
-
-Rem ----- use the location of this script to infer $FORREST_HOME -------
-set FORREST_HOME=%~dp0\..
 
 Rem ----- set the ant file to use --------------------------------------
 set ANTFILE="%FORREST_HOME%\forrest.build.xml"
