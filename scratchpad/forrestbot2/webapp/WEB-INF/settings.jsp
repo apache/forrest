@@ -9,9 +9,9 @@ settings.load(
 
 //getServletConfig().getServletContext().getRealPath(xxx);
 String commands_file = settings.getProperty("commands-file");
-String sites_dir = settings.getProperty("sites-dir");
+String sites_dir = settings.getProperty("build-dir");
 String logs_dir = settings.getProperty("logs-dir");
-String sites_url = settings.getProperty("sites-url");
+String sites_url = settings.getProperty("build-url");
 String logs_url = settings.getProperty("logs-url");
 
 %>

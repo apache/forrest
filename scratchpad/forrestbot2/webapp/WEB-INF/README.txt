@@ -2,7 +2,7 @@
 
                                 jefft@apache.org
                                dave@brondsema.net
-                 $Revision: 1.1 $ $Date: 2003/11/20 20:25:13 $
+                 $Revision: 1.2 $ $Date: 2003/12/28 16:40:56 $
                             ------------------------
 
 This webapp implements a website staging application for sites built with
@@ -30,3 +30,15 @@ connection.  If you look at web.xml you will see why: a number of virtual paths
 (/site/*, /refresh/*, /logs/refresh) are used, and mod_jk does not forwards
 requests for these paths on to Tomcat.  These need to be added by hand to
 httpd.conf.  Alternatively, use a more intelligent connector like mod_webapp.
+
+FAQ
+---------------
+How do I fix: Exception: /home/dpb2/forrest/xml-forrest/scratchpad/forrestbot2/commands (Permission denied)
+
+cd /path/to/forrestbot
+chmod 777 .
+su - tomcat
+cd /path/to/forrestbot
+touch commands
+exit
+chmod 755 .
