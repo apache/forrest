@@ -576,7 +576,7 @@
 	<property name="dtdx.dir" location="build/tmp/dtdx"/>
 	<mkdir dir="${dtdx.dir}"/>
 	<!-- Generate an intermediate XML representation of each DTD -->
-	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" extension=".dtdx">
+	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" preserveDirs="yes" extension=".dtdx">
 		<fileset dir="${resource.dir}/schema/dtd">
 			<include name="changes-v12.dtd"/>
 			<include name="document-v11.dtd"/>
@@ -594,14 +594,11 @@
 	<xslt basedir="${dtdx.dir}"
 		destdir="${dist-shbat.dir}/context/resources/schema/dtd"
 		extension="-full.dtd"
-		style="tools/dtdconverters/dtdx2dtd.xsl"/>
+    style="tools/dtdconverters/dtdx2dtd.xsl">
+    <include name="*.dtdx"/>
+    <include name="v20a/*.dtdx"/>
+  </xslt>
 
-	<move todir="${dist-shbat.dir}/context/resources/schema/dtd/v20a">
-		<fileset dir="${dist-shbat.dir}/context/resources/schema/dtd">
-			<include name="document-v20-full.dtd"/>
-			<include name="faq-v20-full.dtd"/>
-		</fileset>
-	</move>
 </target>
 
 
