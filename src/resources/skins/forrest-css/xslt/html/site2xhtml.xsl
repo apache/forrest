@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.2 2003/06/03 12:35:48 jefft Exp $
+$Id: site2xhtml.xsl,v 1.3 2003/07/17 11:41:18 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -54,8 +54,6 @@ $Id: site2xhtml.xsl,v 1.2 2003/06/03 12:35:48 jefft Exp $
 		            <xsl:with-param name="root" select="$root"/>
 		            <xsl:with-param name="imgid">grouplogo</xsl:with-param>
 		            <xsl:with-param name="linkid">grouplogolink</xsl:with-param>
-		            <xsl:with-param name="height">65</xsl:with-param>
-		            <xsl:with-param name="width">220</xsl:with-param>
 		          </xsl:call-template>
 		      </xsl:if>
 	          <!-- ================= end Group Logo ================== -->
@@ -85,8 +83,6 @@ $Id: site2xhtml.xsl,v 1.2 2003/06/03 12:35:48 jefft Exp $
 	                <xsl:with-param name="root" select="$root"/>
 		            <xsl:with-param name="imgid">projectlogo</xsl:with-param>
 		            <xsl:with-param name="linkid">projectlogolink</xsl:with-param>
-		            <xsl:with-param name="height">65</xsl:with-param>
-		            <xsl:with-param name="width">220</xsl:with-param>
 	              </xsl:call-template>
 	          </xsl:if>
 	          <!-- ================= end Project Logo ================== -->
