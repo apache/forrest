@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -28,11 +28,18 @@ $Revision: 1.1 $
    <map:resources>
       <map:resource name="skin-read">
             <map:select type="exists">
-               <map:when test="skins/{forrest:skin}/{path}">
-                  <map:read src="skins/{forrest:skin}/{path}" mime-type="{mime-type}" />
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}">
+                  <map:read src="{project:skins-dir}{forrest:skin}/{path}" mime-type="{mime-type}" />
                </map:when>
                <map:otherwise>
-                  <map:read src="skins/common/{path}" mime-type="{mime-type}" />
+                <map:select type="exists">
+                  <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}">
+                    <map:read src="{forrest:home}context/skins/{forrest:skin}/{path}" mime-type="{mime-type}" />
+                  </map:when>
+                  <map:otherwise>
+                    <map:read src="{forrest:home}context/skins/common/{path}" mime-type="{mime-type}" />
+                  </map:otherwise>
+                </map:select>
                </map:otherwise>
             </map:select>
       </map:resource>

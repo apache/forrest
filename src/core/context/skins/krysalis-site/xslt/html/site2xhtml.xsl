@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.2 2003/11/25 14:55:54 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.3 2003/11/25 16:13:00 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -353,7 +353,7 @@ $Id: site2xhtml.xsl,v 1.2 2003/11/25 14:55:54 nicolaken Exp $
 	      <td></td>
 	      <!-- ============ Breadcrumbs =========== -->
           <td class="subborder trail">
-	         &#160;<script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"></script>&#160;
+	         &#160;<xsl:call-template name="breadcrumbs"/>&#160;
 	      </td>
 	      <!-- ============ Page font settings =========== -->
 	      <td class="subborder trail" align="right" nowrap="true">

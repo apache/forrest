@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.2 2003/11/25 16:13:00 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -41,7 +41,7 @@ $Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
           <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
           <xsl:comment>===== breadcrumb trail (javascript-generated) ====</xsl:comment>
           <font face="Arial, Helvetica, Sans-serif" size="2">
-              <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"/>
+             <xsl:call-template name="breadcrumbs"/>
           </font>
         </td>
       </tr>

@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.2 2003/11/25 16:12:59 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -47,6 +47,13 @@ $Id: site2xhtml.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
 
+  <xsl:template name="breadcrumbs">
+    <xsl:if test="($config/trail/link1/@name)and($config/trail/link1/@name!='')"><a href="{$config/trail/link1/@href}"><xsl:value-of select="$config/trail/link1/@name"/></a></xsl:if>
+    <xsl:if test="($config/trail/link2/@name)and($config/trail/link2/@name!='')"> &gt; <a href="{$config/trail/link2/@href}">  <xsl:value-of select="$config/trail/link2/@name"/></a> </xsl:if>
+    <xsl:if test="($config/trail/link3/@name)and($config/trail/link3/@name!='')"> &gt; <a href="{$config/trail/link3/@href}">  <xsl:value-of select="$config/trail/link3/@name"/></a> </xsl:if>
+    <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"/>
+  </xsl:template>
+  
   <xsl:template match="site">
     <html>
       <head>

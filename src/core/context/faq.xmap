@@ -12,7 +12,7 @@ Example URL:  http://localhost:8888/faq.pdf       # PDF of FAQ
 Used by    :  sitemap.xmap, which binds these generic pipelines to URLs.
 Uses       :  content/xdocs/**.xml, depending on URL binding.
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 
 
@@ -70,16 +70,30 @@ $Revision: 1.1 $
     </map:resource>
 
     <map:resource name="skinit">
-      <map:transform src="skins/{forrest:skin}/xslt/html/{type}.xsl">
-        <map:parameter name="notoc" value="{notoc}"/>
-        <!-- For backwards-compat with 0.2 - 0.4 skins -->
-        <map:parameter name="isfaq" value="{notoc}"/>
-        <map:parameter name="path" value="{path}"/>
-        <!-- Can set an alternative project skinconfig here 
-        <map:parameter name="config-file" value="../../../../skinconf.xml"/>
-        -->
-      </map:transform>
-
+        <map:select type="exists">
+          <map:when test="{project:skins-dir}{forrest:skin}/xslt/html/(type.xsl}">
+            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+              <map:parameter name="notoc" value="{notoc}"/>
+              <!-- For backwards-compat with 0.2 - 0.4 skins -->
+              <map:parameter name="isfaq" value="{notoc}"/>
+              <map:parameter name="path" value="{path}"/>
+              <!-- Can set an alternative project skinconfig here 
+              <map:parameter name="config-file" value="../../../../skinconf.xml"/>
+              -->
+            </map:transform>
+          </map:when>
+          <map:otherwise>
+            <map:transform src="{forrest:home}context/skins/{forrest:skin}/xslt/html/{type}.xsl">
+              <map:parameter name="notoc" value="{notoc}"/>
+              <!-- For backwards-compat with 0.2 - 0.4 skins -->
+              <map:parameter name="isfaq" value="{notoc}"/>
+              <map:parameter name="path" value="{path}"/>
+              <!-- Can set an alternative project skinconfig here 
+              <map:parameter name="config-file" value="../../../../skinconf.xml"/>
+              -->
+            </map:transform>
+          </map:otherwise>
+        </map:select>
       <map:serialize/>
     </map:resource>
 
@@ -97,14 +111,24 @@ $Revision: 1.1 $
       'numbersections' param into document2fo.xsl -->
       <map:match pattern="**.pdf">
         <map:generate src="cocoon:/{1}.xml"/>
-        <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-          <map:parameter name="numbersections" value="false"/>
-          <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
-          <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
-        </map:transform>
+        <map:select type="exists">
+          <map:when  test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
+            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
+              <map:parameter name="numbersections" value="false"/>
+              <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
+              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+            </map:transform>
+          </map:when>
+          <map:otherwise>
+            <map:transform src="{forrest:home}context/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
+              <map:parameter name="numbersections" value="false"/>
+              <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
+              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+            </map:transform>
+          </map:otherwise>
+        </map:select>
         <map:serialize type="fo2pdf"/>
       </map:match>
-
 
       <!-- ============================================================ -->
       <!-- INTERMEDIATE FORMATS                                         -->

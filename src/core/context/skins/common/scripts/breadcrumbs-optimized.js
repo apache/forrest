@@ -9,7 +9,7 @@ if(!(link2=="")&&!link2.indexOf( "@" ) == 0){
 if(!(link3=="")&&!link3.indexOf( "@" ) == 0){
   PREPREND_CRUMBS.push( new Array( link3, @skinconfig.trail.link3.href@ ) ); }
 var DISPLAY_SEPARATOR=" &gt; ";
-var DISPLAY_PREPREND="";
+var DISPLAY_PREPREND=" &gt; ";
 var DISPLAY_POSTPREND=":";
 var CSS_CLASS_CRUMB="breadcrumb";
 var CSS_CLASS_TRAIL="breadcrumbTrail";

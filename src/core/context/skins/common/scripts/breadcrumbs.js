@@ -109,7 +109,7 @@ var DISPLAY_SEPARATOR = " &gt; ";
 /**
  * String to include at the beginning of the trail
  */
-var DISPLAY_PREPREND = "";
+var DISPLAY_PREPREND = " &gt; ";
 /**
  * String to include at the end of the trail
  */
