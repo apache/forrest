@@ -41,7 +41,6 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:apply-templates select="header"/>
 
     <xsl:apply-templates select="body" mode="toc"/>
-    <xsl:call-template name="newLine"/>
 
     <xsl:apply-templates select="body"/>
   </xsl:template>
@@ -67,7 +66,9 @@ No navigation is provided and no rendering of graphics is attempted.
 
     <xsl:apply-templates select="type"/>
     <xsl:apply-templates select="notice"/>
+    <xsl:call-template name="cr"/>
     <xsl:apply-templates select="abstract"/>
+    <xsl:call-template name="cr"/>
 
     <xsl:apply-templates select="authors"/>
     <xsl:if test="authors and version">
@@ -87,6 +88,48 @@ No navigation is provided and no rendering of graphics is attempted.
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template match="notice">
+    <xsl:param name="level" select="'2'"/>
+
+    <xsl:call-template name="justify-text">
+      <xsl:with-param name="text" select="'NOTICE'"/>
+      <xsl:with-param name="width" select="$document-width"/>
+    </xsl:call-template>
+    <xsl:call-template name="cr"/>
+
+    <xsl:variable name="para">
+      <xsl:apply-templates>
+        <xsl:with-param name="level" select="$level"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:call-template name="emit">
+      <xsl:with-param name="text" select="$para"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="abstract">
+    <xsl:param name="level" select="'2'"/>
+
+    <xsl:call-template name="justify-text">
+      <xsl:with-param name="text" select="'ABSTRACT'"/>
+      <xsl:with-param name="width" select="$document-width"/>
+    </xsl:call-template>
+    <xsl:call-template name="cr"/>
+
+    <xsl:variable name="para">
+      <xsl:apply-templates>
+        <xsl:with-param name="level" select="$level"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:call-template name="emit">
+      <xsl:with-param name="text" select="$para"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- Handle the body bits -->
   <xsl:template match="body">
     <xsl:apply-templates>
@@ -97,11 +140,12 @@ No navigation is provided and no rendering of graphics is attempted.
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:param name="level" select="'1'"/>
     <xsl:value-of select="."/>
+    <xsl:call-template name="cr"/>
   </xsl:template>
   
   <xsl:template match="p">
     <xsl:param name="level" select="'1'"/>
-    <xsl:call-template name="newLine"/>
+    <xsl:call-template name="cr"/>
 
     <xsl:variable name="para">
       <xsl:apply-templates>
@@ -138,7 +182,6 @@ No navigation is provided and no rendering of graphics is attempted.
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
     </xsl:call-template>
-    <xsl:call-template name="cr"/>
   </xsl:template>
   
   <xsl:template match="ul/li">
@@ -155,7 +198,6 @@ No navigation is provided and no rendering of graphics is attempted.
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
     </xsl:call-template>
-    <xsl:call-template name="cr"/>
 
   </xsl:template>
   
@@ -190,14 +232,11 @@ No navigation is provided and no rendering of graphics is attempted.
   <xsl:template match="section">
     <xsl:param name="level" select="'0'"/>
 
-    <!-- count the number of section in the ancestor-or-self axis to compute
-         the title element name later on -->
-    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
     <xsl:variable name="ttl">
       <xsl:value-of select="normalize-space(title)"/>
     </xsl:variable>
     
-    <xsl:call-template name="newLine"/>
+    <xsl:call-template name="cr"/>
     <xsl:call-template name="lineOf">
       <xsl:with-param name="size" select="$level * $indent-per-level"/>
     </xsl:call-template>
@@ -209,25 +248,25 @@ No navigation is provided and no rendering of graphics is attempted.
       <xsl:with-param name="size" select="$level * $indent-per-level"/>
     </xsl:call-template>
     <xsl:choose>
-      <xsl:when test="$sectiondepth=1">
+      <xsl:when test="$level=0">
         <xsl:call-template name="lineOf">
           <xsl:with-param name="chars" select="'='"/>
           <xsl:with-param name="size" select="string-length($ttl)"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="$sectiondepth=2">
+      <xsl:when test="$level=1">
         <xsl:call-template name="lineOf">
           <xsl:with-param name="chars" select="'-'"/>
           <xsl:with-param name="size" select="string-length($ttl)"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="$sectiondepth=3">
+      <xsl:when test="$level=2">
         <xsl:call-template name="lineOf">
           <xsl:with-param name="chars" select="'.-'"/>
           <xsl:with-param name="size" select="string-length($ttl)"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="$sectiondepth=4">
+      <xsl:when test="$level=3">
         <xsl:call-template name="lineOf">
           <xsl:with-param name="chars" select="'.'"/>
           <xsl:with-param name="size" select="string-length($ttl)"/>
@@ -235,18 +274,6 @@ No navigation is provided and no rendering of graphics is attempted.
       </xsl:when>
     </xsl:choose>    
     <xsl:call-template name="cr"/>
-
-    <!-- Indent FAQ entry text 5 characters -->
-    <xsl:variable name="indent">
-      <xsl:choose>
-        <xsl:when test="$notoc='true' and $sectiondepth = 3">
-          <xsl:text>5</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>0</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
 
     <!-- FIXME display $indent spaces -->
     <xsl:apply-templates select="*[not(self::title)]">
@@ -258,49 +285,52 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:param name="level" select="'1'"/>
     <xsl:call-template name="cr"/>
 
+    <xsl:call-template name="lineOf">
+      <xsl:with-param name="size" select="$level * $indent-per-level"/>
+    </xsl:call-template>
+
     <xsl:variable name="ttl">
       <xsl:text>** </xsl:text>
       <xsl:choose>
         <xsl:when test="@label">
           <xsl:value-of select="@label"/>
         </xsl:when>
-        <xsl:when test="local-name() = 'note'">Note: </xsl:when>
-        <xsl:when test="local-name() = 'warning'">Warning: </xsl:when>
+        <xsl:when test="local-name() = 'note'">Note</xsl:when>
+        <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
         <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
       </xsl:choose>
       <xsl:text> **</xsl:text>
     </xsl:variable>
 
-    <xsl:variable name="prefix">
-      <xsl:call-template name="lineOf">
-        <xsl:with-param name="size" select="$level * $indent-per-level"/>
-      </xsl:call-template>
+    <xsl:call-template name="justify-text">
+      <xsl:with-param name="text" select="$ttl"/>
+      <xsl:with-param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+    <xsl:call-template name="cr"/>
+
+    <xsl:variable name="para">
+      <xsl:apply-templates>
+        <xsl:with-param name="level" select="$level"/>
+      </xsl:apply-templates>
     </xsl:variable>
 
-    <xsl:value-of select="concat($prefix, $ttl)"/>
-    <xsl:call-template name="cr"/>
-
-    <xsl:apply-templates>
-      <xsl:with-param name="level" select="$level"/>
-    </xsl:apply-templates>
-
-    <xsl:call-template name="cr"/>
-    <xsl:value-of select="$prefix"/>
-    <xsl:call-template name="lineOf">
-      <xsl:with-param name="size"
-            select="$document-width - string-length($ttl)"/>
-      <xsl:with-param name="chars" select="'-'"/>
+    <xsl:call-template name="emit">
+      <xsl:with-param name="text" select="$para"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
     </xsl:call-template>
 
-  </xsl:template>
+    <xsl:call-template name="lineOf">
+      <xsl:with-param name="size" select="$level * $indent-per-level"/>
+    </xsl:call-template>
 
-  <xsl:template match="notice">
-    <xsl:param name="level" select="'1'"/>
-    <xsl:text>Notice: </xsl:text>
-    <xsl:apply-templates>
-      <xsl:with-param name="level" select="$level + 1"/>
-    </xsl:apply-templates>
-    <xsl:call-template name="newLine"/>
+    <xsl:call-template name="lineOf">
+      <xsl:with-param name="size"
+            select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="chars" select="'-'"/>
+    </xsl:call-template>
+    <xsl:call-template name="cr"/>
+
   </xsl:template>
 
   <xsl:template match="link|jump|fork|a">
@@ -411,12 +441,6 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:text>Type: </xsl:text><xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
-  <xsl:template match="abstract">
-    <xsl:param name="level" select="'1'"/>
-    <xsl:call-template name="newLine"/>
-    <xsl:apply-templates/>
-  </xsl:template>
-
   <xsl:template name="email">
     <xsl:param name="level" select="'1'"/>
     <a>
@@ -431,12 +455,7 @@ No navigation is provided and no rendering of graphics is attempted.
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
 
-  <xsl:template match="document" mode="toc">
-    <xsl:apply-templates mode="toc"/>
-  </xsl:template>
-
   <xsl:template match="body" mode="toc">
-    <xsl:call-template name="cr"/>
     <xsl:text>Table Of Contents&#xa;=================</xsl:text>
     <xsl:call-template name="cr"/>
     <xsl:apply-templates select="section" mode="toc">

@@ -112,22 +112,43 @@
     <xsl:param name="indent"/>
     <xsl:param name="width" select="'76'"/>
 
-    <xsl:variable name="trailing-space">
-      <xsl:if test="substring($text, string-length($text))=' '">
-        <xsl:text> </xsl:text>
-      </xsl:if>
-    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="string-length($text) > 0">
+        <xsl:variable name="trailing-space">
+          <xsl:if test="substring($text, string-length($text))=' '">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:variable>
       
-    <xsl:variable name="tmp">
-      <xsl:value-of select="normalize-space($text)"/>
-    </xsl:variable>
+        <xsl:variable name="tmp">
+          <xsl:call-template name="lineOf">
+            <xsl:with-param name="size" select="$indent"/>
+          </xsl:call-template>
+          <xsl:value-of
+                select="concat(translate(normalize-space($text),'&#xa;',' '),$trailing-space)"/>
+        </xsl:variable>
 
-    <xsl:if test="$tmp!=''">
-      <xsl:call-template name="lineOf">
-        <xsl:with-param name="size" select="$indent"/>
-      </xsl:call-template>
-      <xsl:value-of select="concat($tmp, $trailing-space)"/>
-    </xsl:if>
+        <xsl:variable name="remaining">
+          <xsl:choose>
+            <xsl:when test="string-length($tmp) > $width">
+              <xsl:value-of select="substring($tmp, $width+1)"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </xsl:variable>
+
+        <xsl:value-of select="substring($tmp, 1, $width)"/>
+        <xsl:call-template name="cr"/>
+
+        <xsl:call-template name="emit">
+          <xsl:with-param name="text" select="$remaining"/>
+          <xsl:with-param name="indent" select="$indent"/>
+          <xsl:with-param name="width" select="$width"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+
   </xsl:template>
 
 </xsl:stylesheet>
