@@ -14,14 +14,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "http://forrest.apache.org/dtd/document-v12.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN"
+"http://forrest.apache.org/dtd/document-v12.dtd">
 <document>
   <header>
     <title>Forrestbot</title>
   </header>
 
   <body>
-
     <section>
       <title>Overview</title>
 
@@ -56,9 +56,15 @@
 	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
 	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
 	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
+	&lt;property name="deploy.scp.dest" value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
 
 	&lt;!-- here we specify to use two notification implementations --&gt;
 	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
+
+	&lt;!-- here we specify to deploy with the scp implementation --&gt;
+	&lt;target name="deploy" depends="deploy.scp"/&gt;
+
+	&lt;!-- the default implementation for getsrc is getsrc.cvs, which is what we want --&gt;
 
 	&lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
 	&lt;property environment="env"/&gt;
@@ -68,8 +74,9 @@
 </source>
 
       <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and getsrc.cvs.
-      Next, specify what implementations will be used by each workstage.</p>
+      Here, we set properties that will be used by notify.email and
+      getsrc.cvs. Next, specify what implementations will be used by each
+      workstage.</p>
 
       <table>
         <tr>
@@ -102,7 +109,8 @@
           <td>deploy</td>
 
           <td><ul>
-              <li><link href="#deploy.local">deploy.local</link> (default)</li>
+              <li><link href="#deploy.local">deploy.local</link>
+              (default)</li>
 
               <li><link href="#deploy.scp">deploy.scp</link></li>
 
@@ -114,7 +122,8 @@
           <td><link href="#notify">notify</link></td>
 
           <td><ul>
-              <li><link href="#notify.local">notify.local</link> (default)</li>
+              <li><link href="#notify.local">notify.local</link>
+              (default)</li>
 
               <li><link href="#notify.email">notify.email</link></li>
             </ul></td>
@@ -129,9 +138,9 @@
 
       <p></p>
 
-      <p>Many workstages use usernames and passwords. You may want to keep them
-      out of your project's xml file (especially if you store that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
+      <p>Many workstages use usernames and passwords. You may want to keep
+      them out of your project's xml file (especially if you store that file
+      in CVS or SVN). A nice way to do this is make a simple buildfile (e.g.
       my-settings.xml) that just sets those properties (don't include it in
       CVS/SVN!). Then in your project buildfile, have <code>&lt;import
       file="my-settings.xml"/&gt;</code>.</p>
@@ -254,8 +263,8 @@
             <tr>
               <td>getsrc.cvs.module</td>
 
-              <td>CVS module name (an alias, or full path) to the directory that
-              contains forrest.properties</td>
+              <td>CVS module name (an alias, or full path) to the directory
+              that contains forrest.properties</td>
 
               <td>${ant.project.name}</td>
 
@@ -377,9 +386,9 @@
         <section id="deploy.local">
           <title>deploy.scp</title>
 
-          <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
-          you should manually make an ssh connection to the host if you never
-          have before.</p>
+          <p>${user.home}/.ssh/known_hosts must properly recognize the host,
+          so you should manually make an ssh connection to the host if you
+          never have before.</p>
 
           <table>
             <tr>
@@ -396,11 +405,21 @@
               <td>deploy.scp.dest</td>
 
               <td>Full destination reference in the format
-              user[:password]@host:/directory/path</td>
+              user@host:/directory/path</td>
 
               <td></td>
 
               <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.scp.password</td>
+
+              <td>Password for user@host</td>
+
+              <td></td>
+
+              <td>No. You will be prompted for it if it is not set.</td>
             </tr>
           </table>
         </section>
@@ -408,7 +427,7 @@
         <section>
           <title>deploy.cvs</title>
 
-          <p>This is only available on *nix operating systems. </p>
+          <p>This is only available on *nix operating systems.</p>
 
           <table>
             <tr>
@@ -589,9 +608,9 @@
     <section>
       <title>Forrestbot design</title>
 
-      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
-      task is used to import multiple buildfiles into a single build. The
-      following is the flow of control when running forrestbot:</p>
+      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's
+      import task is used to import multiple buildfiles into a single build.
+      The following is the flow of control when running forrestbot:</p>
 
       <ul>
         <li>Your buildfile<ul>
@@ -605,8 +624,8 @@
 
       <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or other
-      post-build activities.</p>
+      other workstages buildfiles can implement reporting, deployment, or
+      other post-build activities.</p>
 
       <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
