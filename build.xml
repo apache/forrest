@@ -48,13 +48,16 @@
 
     <property name="resource.dir"          location="src/resources"/>
     <property name="scratchpad.src.dir"    location="src/scratchpad/src/java"/>
+    <property name="components.src.dir"    location="${resource.dir}/components"/>
     <property name="build.dir"             location="build"/>
     <property name="build.docs"            location="build/docs"/>
    <!--
     <property name="build.javadocs"        value="build/docs/javadocs"/>
     -->
     <property name="build.scratchpad.dir"  location="build/scratchpad"/>
+    <property name="build.components.dir"  location="build/components"/>
     <property name="build.scratchpad.classes" location="build/scratchpad/classes"/>
+    <property name="build.components.classes" location="build/components/classes"/>
 
     <property name="dist.dir"              location="build/dist" />
     <property name="dist-shbat.dir"        location="${dist.dir}/shbat" />
@@ -204,7 +207,7 @@
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- Note that @tokens@ in config files will be unexpanded.              -->
   <!-- =================================================================== -->
-  <target name="webapp-webinf" depends="init, scratchpad.jar" >
+  <target name="webapp-webinf" depends="init, scratchpad.jar, components.jar" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
     <property name="webapp.webinf.dir" value="./build/WEB-INF" />
 
@@ -240,6 +243,7 @@
       <fileset dir="./lib/core"/>
       <fileset dir="./src/scratchpad/lib"/>
       <fileset dir="${build.scratchpad.dir}" includes="*.jar"/>
+      <fileset dir="${build.components.dir}" includes="*.jar"/>
     </copy>
   </target>
 
@@ -511,6 +515,31 @@
     <mkdir dir="${build.scratchpad.dir}"/>
     <jar destfile="${build.scratchpad.dir}/xml-forrest-scratchpad.jar"
       basedir="${build.scratchpad.classes}"/>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Compile Cocoon components                                           -->
+  <!-- =================================================================== -->
+  <target name="components.compile" depends="init">
+    <mkdir dir="${build.components.classes}"/>
+    <javac srcdir=   "${components.src.dir}"
+      destdir=       "${build.components.classes}"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Jar Cocoon components                                               -->
+  <!-- =================================================================== -->
+  <target name="components.jar" depends="components.compile">
+    <mkdir dir="${build.components.dir}"/>
+    <jar destfile="${build.components.dir}/xml-forrest-components.jar"
+      basedir="${build.components.classes}"/>
   </target>
 
 </project>
