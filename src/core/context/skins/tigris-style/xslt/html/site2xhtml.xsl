@@ -306,7 +306,7 @@ if (VERSION > 3) {
     <!-- ( ================= end Menu items ================== ) -->
 
     <!-- ( =================  Search ================== ) -->       
-      <xsl:if test="$config/search and $config/search/@box-location = 'alt'">
+      <xsl:if test="$config/search and ($config/search/@box-location = 'alt' or $config/search/@box-location = 'all')">
 	<xsl:choose>
 	  <!-- Lucene search -->
 	  <xsl:when test="$config/search/@provider = 'lucene'">
