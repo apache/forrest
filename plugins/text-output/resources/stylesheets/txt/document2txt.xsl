@@ -424,10 +424,33 @@ No navigation is provided and no rendering of graphics is attempted.
     </xsl:variable>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width - string-length($marker)"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width"
+                select="$width - string-length($marker)"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width"
+                  select="$width - string-length($marker)"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:call-template name="emit-with-indent">
@@ -448,10 +471,33 @@ No navigation is provided and no rendering of graphics is attempted.
     </xsl:variable>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width - string-length($marker)"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width"
+                select="$width - string-length($marker)"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width"
+                  select="$width - string-length($marker)"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:call-template name="emit-with-indent">
@@ -467,10 +513,31 @@ No navigation is provided and no rendering of graphics is attempted.
             select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width - 2"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width" select="$width - 2"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width" select="$width - 2"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:call-template name="emit-with-indent">
@@ -487,10 +554,31 @@ No navigation is provided and no rendering of graphics is attempted.
             select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width - 2"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width" select="$width - 2"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width" select="$width - 2"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:call-template name="emit-with-indent">
@@ -507,11 +595,33 @@ No navigation is provided and no rendering of graphics is attempted.
             select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width" select="$width - 3"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width" select="$width - 3"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
+
     <xsl:call-template name="emit-with-indent">
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
@@ -525,11 +635,33 @@ No navigation is provided and no rendering of graphics is attempted.
             select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
-      <xsl:apply-templates mode="in-list">
-        <xsl:with-param name="level" select="'0'"/>
-        <xsl:with-param name="width" select="$width"/>
-      </xsl:apply-templates>
+      <!-- If we have no surrounding "p" elements in which word wrapping
+      can take place, we need to see if we can word-wrap everything
+      we have.  We can do this if we have no "p" elements and no
+      nested lists or tables. -->
+      <xsl:choose>
+        <xsl:when test="p|ol|ul|dl">
+          <xsl:apply-templates mode="in-list">
+            <xsl:with-param name="level" select="'0'"/>
+            <xsl:with-param name="width" select="$width - 3"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="tmp">
+            <xsl:apply-templates mode="in-list">
+              <xsl:with-param name="level" select="'0'"/>
+              <xsl:with-param name="width" select="$width - 3"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:call-template name="wrap-text">
+            <xsl:with-param name="text" select="$tmp"/>
+            <xsl:with-param name="indent" select="'0'"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
+
     <xsl:call-template name="emit-with-indent">
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
