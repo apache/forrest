@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.8 2003/02/09 18:55:30 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -156,56 +156,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
                 
                  <div class="menu"><ul>                
                   <xsl:for-each select = "div[@class='menu']/ul/li">
-                  	 <li><font color="#000000"><xsl:value-of select="font"/></font>
-                       <ul>
-                  	    <xsl:for-each select = "ul/li">
-                  	    
-						<xsl:choose>
-							<xsl:when test="a">
-							  <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
-							</xsl:when>
-							<xsl:otherwise>
-							 <li>
-							   <span class="sel"><xsl:value-of select="span" /></span>
-	        	                <xsl:if test="//toc/tocc"> 
-						        <ul> 
-						        <xsl:for-each select = "//toc/tocc">
-						         <li>
-						         <xsl:choose>
-						         	<xsl:when test="string-length(toca)>15">
-						         	  <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,15)" />...</a>
-						         	</xsl:when>
-						         	<xsl:otherwise>
-						              <a href="{toca/@href}"><xsl:value-of select="toca" /></a>						         	 		                                     </xsl:otherwise>
-						         </xsl:choose>
-						         	
-						        <xsl:if test="toc2/tocc"> 
-						        	<ul>
-						              <xsl:for-each select = "toc2/tocc">	
-						              
-								          <xsl:choose>
-								         	<xsl:when test="string-length(toca)>15">
-								         	  <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,15)" />...</a></li>
-								         	</xsl:when>
-								         	<xsl:otherwise>
-								              <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>						         	 
-								         	</xsl:otherwise>
-								         </xsl:choose>
-						         
-						              </xsl:for-each>   
-						             </ul>
-						            </xsl:if>
-                                  </li> 
-						         </xsl:for-each>   
-                                </ul>
-						       </xsl:if>      
-                              </li>
-							</xsl:otherwise>
-						</xsl:choose>
-                  	                
-                       </xsl:for-each>
-                      </ul>                      
-                    </li>
+                  	<xsl:call-template name = "innermenuli" />
                   </xsl:for-each>
                  </ul></div>
                  
@@ -337,6 +288,63 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/27 18:35:00 nicolaken Exp $
     </xsl:template>
     
     
+   <xsl:template name="innermenuli">
+      <li><font color="#000000"><xsl:value-of select="font"/></font>
+         <ul>
+           <xsl:for-each select= "ul/li">
+                  	    
+						<xsl:choose>
+							<xsl:when test="a">
+							  <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
+							</xsl:when>
+							<xsl:when test="span/@class='sel'">
+							 <li>
+							   <span class="sel"><xsl:value-of select="span" /></span>
+	        	                <xsl:if test="//toc/tocc"> <i>
+						        <ul> 
+						        <xsl:for-each select = "//toc/tocc">
+						         <li>
+						         <xsl:choose>
+						         	<xsl:when test="string-length(toca)>15">
+						         	  <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a>
+						         	</xsl:when>
+						         	<xsl:otherwise>
+						              <a href="{toca/@href}"><xsl:value-of select="toca" /></a>						         	 		                                     </xsl:otherwise>
+						         </xsl:choose>
+						         	
+						        <xsl:if test="toc2/tocc"> 
+						        	<ul>
+						              <xsl:for-each select = "toc2/tocc">	
+						              
+								          <xsl:choose>
+								         	<xsl:when test="string-length(toca)>15">
+								         	  <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a></li>
+								         	</xsl:when>
+								         	<xsl:otherwise>
+								              <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>						         	 
+								         	</xsl:otherwise>
+								         </xsl:choose>
+						         
+						              </xsl:for-each>   
+						             </ul>
+						            </xsl:if>
+                                  </li> 
+						         </xsl:for-each>   
+                                </ul></i>
+						       </xsl:if>      
+                              </li>
+							</xsl:when>
+			  				<xsl:otherwise>
+                  	            <xsl:call-template name = "innermenuli" />
+							</xsl:otherwise>
+						</xsl:choose>
+                  	                
+                       </xsl:for-each>
+                      </ul>                      
+                    </li>
+   </xsl:template>
+   
+       
    <xsl:template match="toc|toc2|tocc|toca">
    </xsl:template>
   
