@@ -110,7 +110,7 @@ COPYRIGHT:
 <!-- Link attributes ===================================================
         Indicates that the element requires to have hyperlink attributes.
 ==================================================================== -->
-<!ENTITY % link.att 'href      CDATA                         #IMPLIED
+<!ENTITY % link.att 'href      CDATA             #REQUIRED
          role      CDATA                         #IMPLIED
          title     CDATA                         #IMPLIED '>
 <!-- =============================================================== -->
@@ -287,7 +287,7 @@ COPYRIGHT:
 <!-- Lists -->
 <!-- ==================================================== -->
 <!-- List item -->
-<!ELEMENT li (%content.mix; | %lists;)*>
+<!ELEMENT li (%content.mix; | %lists; | %paragraphs; )*>
 <!ATTLIST li
   %common.att; 
 >
@@ -322,7 +322,7 @@ COPYRIGHT:
   %common.att; 
 >
 <!-- Definition description -->
-<!ELEMENT dd (%content.mix;)*>
+<!ELEMENT dd (%content.mix; | %lists; | %paragraphs; )*>
 <!ATTLIST dd
   %common.att; 
 >
@@ -338,6 +338,7 @@ COPYRIGHT:
   width CDATA #IMPLIED
   usemap CDATA #IMPLIED
   ismap (ismap) #IMPLIED
+  align CDATA #IMPLIED
   %common.att; 
 >
 <!-- anchor point (equivalent of <a name="...">, typically not rendered) -->
@@ -361,7 +362,7 @@ COPYRIGHT:
 <!ATTLIST header
   %common.att; 
 >
-<!ELEMENT title (%text; | %markup;)*>
+<!ELEMENT title (%text; | %markup; | %links; | %special-inline;)*>
 <!ATTLIST title
   %common.att; 
 >
