@@ -99,10 +99,22 @@
         </section>
     </xsl:template>
     
+    <!-- convert a to link -->
     <xsl:template match="a">
-        <link href="{@href}"><xsl:value-of select="." /></link>
+      <xsl:if test="@name">
+        <!-- Attach an id to the current node -->
+        <xsl:attribute name="id"><xsl:value-of select="translate(@name, ' $', '__')"/></xsl:attribute>
+        <xsl:apply-templates/>
+      </xsl:if>
+      <xsl:if test="@href">
+        <link href="{@href}">
+          <xsl:apply-templates/>
+        </link>
+      </xsl:if>
     </xsl:template>
     
+    <xsl:template match="@valign | @align"/>
+        
     <xsl:template match="center">
       <xsl:choose>
     	<xsl:when test="name(..)='p'">
@@ -162,11 +174,17 @@
         <xsl:apply-templates/>
       </em>
     </xsl:template>
-        
+
+    <!-- Strip fonts -->
+    <xsl:template match="font">
+      <xsl:apply-templates/>
+    </xsl:template>
+            
     <xsl:template match="node()|@*" priority="-1">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
+
 
 </xsl:stylesheet>
