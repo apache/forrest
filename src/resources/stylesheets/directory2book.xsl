@@ -20,8 +20,6 @@ automatically generate a menu for (here wiki/):
   <map:transform src="resources/stylesheets/directory2book.xsl" />
   <map:serialize type="xml"/>
 </map:match>
-
-
 -->
 
 <xsl:stylesheet version="1.0"
@@ -31,7 +29,7 @@ automatically generate a menu for (here wiki/):
   <xsl:output doctype-system="book-cocoon-v10.dtd" doctype-public="-//APACHE//DTD Cocoon Documentation Book V1.0//EN"/>
 
   <xsl:param name="expected-extension" select="'xml'"/>
-  <xsl:param name="served-extension" select="html"/>
+  <xsl:param name="served-extension" select="'html'"/>
 
   <xsl:variable name="ext" select="concat('.', $expected-extension)"/>
   <xsl:variable name="sext" select="concat('.', $served-extension)"/>
