@@ -65,8 +65,8 @@ String[] sites = new String[]{"xml-forrest", "xml-forrest-template", "xml-site",
       <% if (hasPriv(privs, "refresh")) { %>
         <input type="submit" name="action" value="refresh">
       <% } %>
-      <% if (hasPriv(privs, "upload")) { %>
-        <input type="submit" name="action" value="upload"/>
+      <% if (hasPriv(privs, "publish")) { %>
+        <input type="submit" name="action" value="publish"/>
       <% } %>
       <% } else { %>
         <input type="submit" value="login">

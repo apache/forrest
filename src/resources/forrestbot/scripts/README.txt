@@ -1,19 +1,19 @@
                                Forrestbot Scripts
 
                                 jefft@apache.org
-                 $Revision: 1.3 $ $Date: 2002/12/07 12:54:02 $
+                 $Revision: 1.4 $ $Date: 2003/01/19 05:22:42 $
                             ------------------------
 
 This directory contains shell scripts for using the Forrestbot from a webapp or
 cron job to generate multiple sites.  Contents are as follows:
 
 launch-overseer          # Convenience script for running 'overseer'.
-overseer                 # A driver script which is used with the webapp. Invokes 'refresh' and 'update_livesite'
+overseer                 # A driver script which is used with the webapp.  Invokes 'refresh' and 'publish_livesite'
 refresh                  # Main driver script. Refreshes a single site via a forrestbot script
 refresh_all              # Convenience wrapper for 'refresh' which regens all sites. Suitable for cron use
 local-vars               # Script defining local variables, with defaults. Frontend to local-vars-`uname -n`
 local-vars-`uname -n`    # Script containing local variable definitions. MUST BE DEFINED FOR YOUR SITE
-update_livesite          # WIP script to commit files to the Apache xml-site/targets/forrest module
+publish_livesite         # WIP script to commit files to the Apache xml-site/targets/forrest module
 work/                    # Runtime-generated directory containing forrestbot files
 
 Prerequisites
