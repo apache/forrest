@@ -38,7 +38,6 @@
     <property name="version"
       value="${xgump.module.project.version.major}.${xgump.module.project.version.minor}${xgump.module.project.version.tag}"/>
 
-    <property name="resource.dir"          location="src/resources"/>
     <property name="java.dir"              location="src/java"/>
     <property name="build.dir"             location="build"/>
     <property name="build.docs"            location="${build.dir}/docs"/>
@@ -100,7 +99,6 @@
     <fixcrlf eol="lf" srcdir="${tmp-scripts}" excludes="**/*.bat"/>
     <chmod dir="${tmp-scripts}" perm="ugo+rx" excludes="**/*.bat"/> 
     <property name="tmp-fresh-site" location="${build.dir}/tmp/fresh-site"/>
-    <property name="src-fresh-site" location="${resource.dir}/fresh-site"/>
     <copy todir="${tmp-fresh-site}">
       <fileset dir="${src-fresh-site}" />
     </copy>
@@ -111,12 +109,10 @@
       file="${dist.dir}/${release-name-src}.zip" >
       <zipfileset dir="." prefix="${release-name-src}">
         <exclude name="build/**"/>
-        <exclude name="${resource.dir}/fresh-site/**" />
         <patternset refid="noscripts"/>
       </zipfileset>
       <zipfileset prefix="${release-name-src}" dir="${tmp-scripts}"/>
       <zipfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
-      <zipfileset prefix="${release-name-src}/${resource.dir}/fresh-site" dir="${tmp-fresh-site}"/>
     </zip>
 
     <tar longfile="gnu"
@@ -200,12 +196,12 @@
     <!-- skinconf.xml -->
     <echo message="validating **/skinconf.xml ..."/>
     <jing compactSyntax="true" rngfile="./src/core/context/resources/schema/relaxng/skinconf.rnc">
-      <fileset dir="./src/resources" includes="**/skinconf.xml"/>
+      <fileset dir="./src/core" includes="**/skinconf.xml"/>
     </jing>
     <!-- All stylesheets **/*.xsl -->
     <echo message="validating stylesheets **/*.xsl ..."/>
     <jing rngfile="./src/core/context/resources/schema/relaxng/xslt.rng">
-      <fileset dir="./src/resources" includes="**/*.xsl"/>
+      <fileset dir="./src/core" includes="**/*.xsl"/>
       <fileset dir="./tools" includes="**/*.xsl"/>
     </jing>
     <!-- sitemap.xmap -->
@@ -398,7 +394,7 @@
 	<mkdir dir="${dtdx.dir}"/>
 	<!-- Generate an intermediate XML representation of each DTD -->
 	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" preserveDirs="yes" extension=".dtdx">
-		<fileset dir="${resource.dir}/schema/dtd">
+		<fileset dir="./src/core/context/resources/schema/dtd">
 			<include name="changes-v12.dtd"/>
 			<include name="document-v11.dtd"/>
 			<include name="document-v12.dtd"/>
