@@ -5,7 +5,7 @@
                 version="1.0">
 
   <xsl:output method="xml"/>
- 
+  <xsl:param name="basedir" select="'file:'"/>
   <xsl:include href="pdfoutline.xsl"/>
   <xsl:include href="footerinfo.xsl"/>
 
@@ -501,7 +501,10 @@
       <xsl:if test="normalize-space(@id)!=''">
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
       </xsl:if>
-      <fo:external-graphic src="{@src}" content-width="scale-to-fit"
+
+      <!-- Make relative paths absolute -->
+      <xsl:variable name="imgpath" select="concat($basedir, @src)"/>
+      <fo:external-graphic src="{$imgpath}" content-width="scale-to-fit"
                            content-height="scale-to-fit" max-width="100%">
         <xsl:if test="@height">
           <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
