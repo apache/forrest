@@ -93,14 +93,17 @@ public class LocationNode extends AbstractNode {
         
         String src = m_src.resolve(context,om);
         
-        // absolute, don't prefix
-        if (src.charAt(0) == '/' || SourceUtil.indexOfSchemeColon(src) != -1) {
-            return src;
+        // relative, prefix with locator base
+        if (src.charAt(0) != '/' && SourceUtil.indexOfSchemeColon(src) == -1) {
+            String base = (String) context.getMapByAnchor(LocationMap.ANCHOR_NAME).get("base");
+            src =  base + (base.charAt(base.length()-1) == '/' ? "" : "/") + src;
         }
-        else {
-            String base = (String) context.getMapByAnchor("lm").get("base");
-            return base + (base.charAt(base.length()-1) == '/' ? "" : "/") + src;
+        
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug("location: " + src);
         }
+        
+        return src;
         
     }
 
