@@ -20,69 +20,53 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.4 2003/03/24 17:58:56 nicolaken Exp $
+$Id: tab2menu.xsl,v 1.5 2003/10/13 08:45:54 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/tab2menu.xsl"/>
-
+  
   <xsl:template match="tabs">
-    <div class="tab">
-      <table cellspacing="0" cellpadding="0" border="0" summary="tab bar">
+      <table class="tab" cellspacing="0" cellpadding="0" border="0"> 
         <tr>
           <xsl:call-template name="base-tabs"/>
         </tr>
       </table>
-    </div>
   </xsl:template>
 
   <xsl:template name="pre-separator">
-    <xsl:call-template name="separator"/>
+     <td class="tab pre-separator"></td>
   </xsl:template>
 
   <xsl:template name="post-separator">
+  
   </xsl:template>
 
   <xsl:template name="separator">
-    <td width="8">
-      <img src="{$root}skin/images/spacer.gif" width="8" height="8" alt=""/>
-    </td>
+     <td class="tab separator"></td>
   </xsl:template>
 
   <xsl:template name="selected">
-    <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0" summary="selected tab">
-        <tr>
-          <td class="top-left" height="22"></td>
-          <td bgcolor="#a5b6c6" valign="middle" height="22">
-            <span class="tab">
-              <b>
-                <xsl:call-template name="base-selected"/>
-              </b>
-            </span>
+          <td class="tab selected top-left"></td>
+          <td class="tab selected">
+             <xsl:call-template name="base-selected"/>
           </td>
-          <td class="top-right" height="22"></td>
-        </tr>
-      </table>
-    </td>
+          <td class="tab selected top-right"></td>
   </xsl:template>
 
   <xsl:template name="not-selected">
-    <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0" summary="non selected tab">
+    <td>
+      <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-          <td class="top-left-tab" height="18"></td>
-          <td bgcolor="#cedfef" valign="middle" height="18">
-            <span class="tab">
-              <xsl:call-template name="base-not-selected"/>
-            </span>              
+         <td class="tab unselected top-left"></td>
+          <td class="tab unselected">
+             <xsl:call-template name="base-not-selected"/>
           </td>
-          <td class="top-right-tab" height="18"></td>
+          <td class="tab unselected top-right"></td>
+        </tr> 
+        <tr>
+          <td colspan="3" class="spacer"/>
         </tr>
-        <tr>
-          <td height="1" colspan="3">
-          </td>
-        </tr>     
       </table>
     </td>
   </xsl:template>
