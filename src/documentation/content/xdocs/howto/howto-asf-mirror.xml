@@ -85,11 +85,9 @@
       </p>
       <p>
         Add the file as <code>src/documentation/xdocs/mirrors.html</code>
-      </p>
-      <p>
-        Use the Forrest project's
+        (Use the Forrest project's
         <link href="http://svn.apache.org/repos/asf/forrest/trunk/src/documentation/content/xdocs/mirrors.ihtml">mirrors.html</link>
-        as a template and edit it to suit.
+        as a template and edit it to suit.)
       </p>
     </section>
 
@@ -106,22 +104,24 @@
     </section>
 
     <section id="link">
-      <title>Add a link to cause the mirrors.ithml to be processed</title>
+      <title>Cause the mirrors.ithml to be processed as an extra file</title>
       <p>Forrest gathers the links that are to be crawled, by reading site.xml
-       and by finding any other internal links in the actual documents.
-       There is no link to mirrors.html because it is an extra file that needs
-       to be generated and skinned, but not linked in any way.
+        and by finding any other internal links in the actual documents.
+        There is no link to mirrors.html because it is an extra file that needs
+        to be generated and skinned, but not linked in any way.
       </p>
-      <p>To enable this, use the trick of an invisible link in one of your
-        xdocs, e.g.
-      <code><![CDATA[<link href="site:mirrors"/>]]></code>
+      <p>The Cocoon command-line interface
+        (<link href="http://cocoon.apache.org/2.1/userdocs/offline/">CLI</link>)
+        to the rescue. Add an entry to your project's cli.xconf by copying the
+        default one from
+        <code>$FORREST_HOME/context/WEB-INF/cli.xconf</code> to your
+        <code>src/documentation/conf/</code> directory (or wherever
+        ${forrest.conf-dir} points). Add the following entry ...
       </p>
-      <fixme author="open">
-        There must be a better way to process extra documents, probably using
-        the Cocoon cli.xconf file. The invisible link trick is not a good
-        workaround because the link is rendered into the final output and
-        can be crawled by robots.
-      </fixme>
+      <source><![CDATA[
+<uris name="mirrors" follow-links="false">
+  <uri type="append" src="mirrors.html"/>
+</uris>]]></source>
     </section>
 
     <section id="forrest">
