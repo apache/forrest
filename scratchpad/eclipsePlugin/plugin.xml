@@ -41,47 +41,6 @@
 
 
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            label="Forrest Action Set"
-            visible="true"
-            id="org.apache.forrest.actionSet.eclipse">
-         <menu
-               label="Forrest"
-               id="forrestMenu">
-            <separator
-                  name="forrestGroup">
-            </separator>
-         </menu>
-          <action
-                toolbarPath="forrestGroup"
-                label="Stop Forrest"
-                icon="icons/stop.png"
-                tooltip="Stop Forrest"
-                class="org.apache.forrest.eclipse.actions.StopForrest"
-                menubarPath="forrestMenu/forrestGroup"
-                id="org.apache.forrest.eclipse.actions.StopForrest">
-         </action>
-          <action
-                toolbarPath="forrestGroup"
-                label="Start Forrest"
-                class="org.apache.forrest.eclipse.actions.StartForrest"
-                tooltip="Start Forrest"
-                icon="icons/start.png"
-                menubarPath="forrestMenu/forrestGroup"
-                id="org.apache.forrest.eclipse.actions.StartForrest">
-         </action>
-          <action
-                toolbarPath="forrestGroup"
-                label="Build Site"
-                class="org.apache.forrest.eclipse.actions.BuildSite"
-                tooltip="Build Forrest site"
-                icon="icons/build.png"
-                menubarPath="forrestMenu/forrestGroup"
-                id="org.apache.forrest.eclipse.Build"/>
-      </actionSet>
-   </extension>
-   <extension
       point="org.eclipse.ui.preferencePages">
       <page
             class="org.apache.forrest.eclipse.preference.ForrestPreferences"
@@ -104,6 +63,41 @@
             category="org.apache.forrest.eclipse"
             name="XDoc File"
             id="org.apache.forrest.eclipse.wizards.NewXDoc"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IProject"
+            id="org.apache.forrest.eclipse.siteContrirubtion">
+         <menu
+               label="Site"
+               path="projStart"
+               id="org.apache.forrest.eclipse.siteMenu">
+            <separator name="Server"/>
+            <separator name="Static"/>
+         </menu>
+         <action
+               enablesFor="1"
+               label="Start Test Server"
+               icon="icons/start.png"
+               class="org.apache.forrest.eclipse.popup.actions.StartForrest"
+               menubarPath="org.apache.forrest.eclipse.siteMenu/Server"
+               id="org.apache.forrest.eclipse.StartForrest"/>
+         <action
+               enablesFor="1"
+               label="Stop Test Server"
+               icon="icons/stop.png"
+               class="org.apache.forrest.eclipse.popup.actions.StopForrest"
+               menubarPath="org.apache.forrest.eclipse.siteMenu/Server"
+               id="org.apache.forrest.eclipse.StopServer"/>
+         <action
+               enablesFor="1"
+               label="Build Site"
+               icon="icons/build.png"
+               class="org.apache.forrest.eclipse.popup.actions.BuildSite"
+               menubarPath="org.apache.forrest.eclipse.siteMenu/Static"
+               id="org.apache.forrest.eclipse.BuildServer"/>
+      </objectContribution>
    </extension>
 
 </plugin>
