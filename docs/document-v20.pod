@@ -1,0 +1,523 @@
+
+=head1 NAME
+
+document-v20 - The Apache Forrest xdocs document-v2.0 DTD
+
+
+=head1 DESCRIPTION
+
+B<Note:>
+
+ ------------------------------------------------------------
+
+
+=over 4
+
+This is a demonstration document using all possible elements in the current Apache Forrest xdocs C<document-v20.dtd > (See the L<DTD changes|/"changes"> section at the bottom.) 
+
+
+=back
+
+ ------------------------------------------------------------
+
+
+
+=head2 Sample Content
+
+B<Hint: > See the xml source to see how the various elements are used and see the L<DTD reference documentation|../docs/dtd-docs> . 
+
+
+
+=head3 Block and inline elements
+
+This is a simple paragraph. Most documents contain a fair amount of paragraphs. Paragraphs are called C<<p> > . 
+
+With the C<<p xml:space="preserve"> > attribute, you can declare that whitespace should be preserved, without implying it is in any other way special. 
+
+This next paragraph has a class attribute of 'quote'. CSS can be used to present this C<<p class='quote'> > in a different style than the other paragraphs. The handling of this quoted paragraph is defined in the <extra-css> element in the skinconf.xml. 
+
+"Anyway, like I was sayin', shrimp is the fruit of the sea. You can barbecue it, boil it, broil it, bake it, sautee it. Dey's uh, shrimp-kabobs, shrimp creole, shrimp gumbo. Pan fried, deep fried, stir-fried. There's pineapple shrimp, lemon shrimp, coconut shrimp, pepper shrimp, shrimp soup, shrimp stew, shrimp salad, shrimp and potatoes, shrimp burger, shrimp sandwich. That- that's about it. "
+
+A number of in-line elements are available in the DTD, we will show them inside an unordered list ( C<<ul> > ): 
+
+
+
+
+=over 4
+
+
+
+=item *
+
+
+Here is a simple list item ( C<<li> > ). 
+
+
+=item *
+
+
+Have you seen the use of the C<<code> > element in the previous item? 
+
+
+=item *
+
+
+Also, we have C<<sub> > and C<<sup> > elements to show content above or below the text baseline. 
+
+
+=item *
+
+
+There is a facility to I<emphasize > certain words using the C<<em> > B<C<<strong> > > elements. 
+
+
+=item *
+
+
+We can use [icon: feather] C<<icon> > s too. 
+
+
+=item *
+
+
+Another possibility is the C<<img> > element: [img: another feather] , which offers the ability to refer to an image map. 
+
+
+=item *
+
+
+We have elements for hyperlinking: 
+
+B<C<<a href="../faq.html"> > >
+
+
+=over 4
+
+Use this to L<link|../faq> to another document. As per normal, this will open the new document in the same browser window. 
+
+
+=back
+
+B<C<<a href="#section"> > >
+
+
+=over 4
+
+Use this to L<link|/"section"> to the named anchor in the current document. 
+
+
+=back
+
+B<C<<a href="../faq.html#overview"> > >
+
+
+=over 4
+
+Use this to L<link|../faq/"overview"> to another document and go to the named anchor. This will open the new document in the same browser window. 
+
+
+=back
+
+B<Targetted window control with jump and fork. >
+
+
+=over 4
+
+See demonstration L<using class attribute on links|/"link-class"> . 
+
+
+=back
+
+
+
+
+=item *
+
+
+Oh, by the way, a definition list C<<dl> > was used inside the previous list item. We could put another 
+
+
+=over 4
+
+
+
+=item *
+
+
+unordered list 
+
+
+=item *
+
+
+inside the list item 
+
+
+=back
+
+
+ A sample nested table 
+ +---------------------------------+---------------------------------+
+ | Or even tables..                | inside tables..                 |
+ +---------------------------------+---------------------------------+
+ | or inside lists, but I believe  |                                 |
+ | this liberty gets quickly quite |                                 |
+ |  hairy as you see.              |                                 |
+ +---------------------------------+---------------------------------+
+
+
+
+
+
+=back
+
+
+So far for the in-line elements, let's look at some paragraph-level elements. 
+
+B<Fixme (SN):>
+
+ ------------------------------------------------------------
+
+
+=over 4
+
+The C<<fixme> > element is used for stuff which still needs work. Mind the C<author > attribute! 
+
+
+=back
+
+ ------------------------------------------------------------
+
+B<Note:>
+
+ ------------------------------------------------------------
+
+
+=over 4
+
+Use the C<<note> > element to draw attention to something, e.g. ...The C<<code> > element is used when the author can't express himself clearly using normal sentences ;-) 
+
+
+=back
+
+ ------------------------------------------------------------
+
+B<Warning:>
+
+ ------------------------------------------------------------
+
+
+=over 4
+
+Sleep deprivation can be the result of being involved in an open source project. (a.k.a. the C<<warning> > element). 
+
+
+=back
+
+ ------------------------------------------------------------
+
+B<Important>
+
+ ------------------------------------------------------------
+
+
+=over 4
+
+If you want your own labels for notes and warnings, specify them using the C<label > attribute. 
+
+
+=back
+
+ ------------------------------------------------------------
+
+Apart from unordered lists, we have ordered lists too, of course. 
+
+
+
+
+=over 4
+
+
+
+=item 1.
+
+Item 1 
+
+
+=item 2.
+
+Item 2 
+
+
+=item 3.
+
+This should be 3 if my math is still OK. 
+
+
+=back
+
+
+
+
+
+
+=head3 Various presentation formats
+
+This sample document, written in document-v20 XML can be presented via Forrest in a number of different formats. The links in the following list show this document in each of the currently available formats. 
+
+Each of the formats can be made available as a link near the top of the page. Actual placement of those links depends on the skin currently in use. Those links are enabled in the skinconf.xml via the <disable-XXX-link> elements in the skinconf.xml 
+
+ 
+ +---------------------+---------------------+---------------------+
+ | Presentation Format | Description         | skinconf.xml Elemen |
+ |                     |                     | t                   |
+ +---------------------+---------------------+---------------------+
+ | document-v20        | This document in HT | Always generated by |
+ |                     | ML format.          |  default. Cannot be |
+ |                     |                     |  turned off.        |
+ +---------------------+---------------------+---------------------+
+ | document-v20.xml    | This document in it | <disable-xml-link>. |
+ |                     | s raw XML format.   |  By default, set to |
+ |                     |                     |  true, meaning that |
+ |                     |                     |  this link will not |
+ |                     |                     |  be shown.          |
+ +---------------------+---------------------+---------------------+
+ | document-v20.pdf    | This document as Ad | <disable-pdf-link>. |
+ |                     | obe PDF             |  By default, set to |
+ |                     |                     |  false, meaning tha |
+ |                     |                     | t this link will be |
+ |                     |                     |  shown.             |
+ +---------------------+---------------------+---------------------+
+ | Text                | This document as st | <disable-txt-link>. |
+ |                     | raight text.        |  By default, set to |
+ |                     |                     |  true, meaning that |
+ |                     |                     |  this link will not |
+ |                     |                     |  be shown. NOT YET  |
+ |                     |                     | IMPLEMENTED.        |
+ +---------------------+---------------------+---------------------+
+ | document-v20.pod    | This document as Pe | <disable-pod-link>. |
+ |                     | rl POD (Plain Old D |  By default, set to |
+ |                     | ocumentation). Text |  true, meaning that |
+ |                     |  with minimal forma |  this link will not |
+ |                     | tting directives. I |  be shown.          |
+ |                     | f on a *nix system  |                     |
+ |                     | with perl installed |                     |
+ |                     | , see "man perlpod" |                     |
+ |                     | .                   |                     |
+ +---------------------+---------------------+---------------------+
+
+
+
+
+
+
+=head3 Using sections
+
+You can use sections to put some structure in your document. For some strange historical reason, the section title is an attribute of the C<<section> > element. 
+
+
+
+
+
+=head3 Sections, the sequel
+
+Just some second section. 
+
+
+
+=head4 Section 2.1
+
+Which contains a subsection (2.1). 
+
+
+
+
+
+
+
+=head3 Showing preformatted source code
+
+Enough about these sections. Let's have a look at more interesting elements, C<<source> > for instance: 
+
+ 
+ // This example is from the book _Java in a Nutshell_ by David Flanagan.
+ // Written by David Flanagan.  Copyright (c) 1996 O'Reilly & Associates.
+ // You may study, use, modify, and distribute this example for any purpose.
+ // This example is provided WITHOUT WARRANTY either expressed or implied.
+ 
+ import java.applet.*;    // Don't forget these import statements!
+ import java.awt.*;
+ 
+ public class FirstApplet extends Applet {
+     // This method displays the applet.
+     // The Graphics class is how you do all drawing in Java.
+     public void paint(Graphics g) {
+         g.drawString("Hello World", 25, 50);
+     }
+ }
+
+
+CDATA sections are used within C<<source> > elements so that you can write pointy brackets without needing to escape them with messy C<&lt; > entities ... 
+
+ 
+ <pointy>
+   easy
+ </pointy>
+ 
+
+
+Please take care to still use a sensible line-length within your source elements. 
+
+
+
+
+
+=head3 Using tables
+
+And now for a table: 
+
+ Table caption 
+ +---------------------+---------------------+---------------------+
+ | heading cell 1      | heading cell 2      | heading cell 3      |
+ +---------------------+---------------------+---------------------+
+ | data cell           | this data cell span |                     |
+ |                     | s two columns       |                     |
+ +---------------------+---------------------+---------------------+
+ | Tables can be neste |                     | and can include mos |
+ | d:                  |                     | t other elements    |
+ |                     |                   c |                     |
+ |                     | olumn 1             | such as lists       |
+ |                     |                   c |                     |
+ |                     | olumn 2             |                     |
+ |                     |                     |                     |
+ |                     |                     |                     |
+ |                     |                   c |                     |
+ |                     | ell A               |                     |
+ |                     |                   c |                     |
+ |                     | ell B               |                     |
+ |                     |                     |                     |
+ |                     |                     |                     |
+ +---------------------+---------------------+---------------------+
+
+
+
+
+
+
+=head3 Using figures
+
+And a C<<figure> > to end all of this. Note that this can also be implemented with an C<<img> > element. 
+
+[figure: The fine Forrest logo] 
+
+
+
+=head3 Using class attribute on links
+
+The document-v13 had elements <fork> and <jump>. In document-v20, those elements no longer exist but the functionality can be duplicated by using the @class attribute. Even though the opening of separate windows should be under the control of the user, these techniques can still be employed. 
+
+ 
+ +---------------------------------+---------------------------------+
+ | Document V1.3                   | Document V2.0                   |
+ |                                 |                                 |
+ +---------------------------------+---------------------------------+
+ | <fork href="../faq.html">       | ../faq                          |
+ |                                 |                                 |
+ +---------------------------------+---------------------------------+
+ | <jump href="../faq.html">       | ../faq                          |
+ |                                 |                                 |
+ +---------------------------------+---------------------------------+
+
+
+
+
+
+
+
+
+=head2 DTD changes
+
+See the generated L<DTD reference documentation|../docs/dtd-docs> . 
+
+
+
+=head3 Changes between document-v13 and document-v20
+
+
+
+
+=over 4
+
+
+
+=item *
+
+
+Renamed B<<link> > to B<<a> > 
+
+
+=item *
+
+
+Removed B<<fork> > and B<<jump> > in favour of the B<<a> > element. See demonstration L<using class attribute on links|/"link-class"> . 
+
+
+=back
+
+
+
+
+
+
+=head3 Changes between document-v12 and document-v13
+
+All v1.2 docs will work fine as v1.3 DTD. The main change is the addition of a @class attribute to every element, which enables the "extra-css" section in the skinconf to be put to good use. 
+
+
+
+
+
+=head3 Changes between document-v11 and document-v12
+
+doc-v12 enhances doc-v11 by relaxing various restrictions that were found to be unnecessary. 
+
+
+
+
+=over 4
+
+
+
+=item *
+
+
+Links ((link|jump|fork) and inline elements (br|img|icon|acronym) are allowed inside title. 
+
+
+=item *
+
+
+Paragraphs (p|source|note|warning|fixme), table and figure|anchor are allowed inside li. 
+
+
+=item *
+
+
+Paragraphs (p|source|note|warning|fixme), lists (ol|ul|dl), table, figure|anchor are allowed inside definition lists (dd) and tables (td and dh). 
+
+
+=item *
+
+
+Inline content (strong|em|code|sub|sup|br|img|icon|acronym|link|jump|fork) is allowed in strong and em. 
+
+
+=back
+
+
+
+
+
+
+
+

@@ -282,7 +282,22 @@ X [0]                       brokenlink.html     BROKEN: reason
         and see more discussion at
         <link href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</link>.
         </p>
-      </section><section id="xsp"><title>2.13. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+      </section><section id="skin"><title>2.13. 
+        How to make the site look better and change its skin?
+      </title>
+        <p>
+        There are <link href="site:skins">default skins</link> provided,
+        which are configurable and so should meet the needs of most projects.
+        The aim is to provide many capabilities so that extra skins are not
+        needed.
+        </p>
+        <p>
+        See notes about
+        <link href="site:your-project/skins">configuration</link> of the skins.
+        Some projects may have special needs and can define their
+        <link href="site:your-project/new-skin">own skin</link>.
+        </p>
+      </section><section id="xsp"><title>2.14. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
         <p>First consider whether your needs would be better met by Cocoon itself, rather than Forrest.
         </p>
         <p>That said, there are valid reasons for wanting programmatically generated content, so here is how to enable
@@ -312,7 +327,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         </ol>
         <p>See also the 
         <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
-      </section><section id="breadcrumbs"><title>2.14. How do breadcrumbs work?  Why don't they work locally?</title>
+      </section><section id="breadcrumbs"><title>2.15. How do breadcrumbs work?  Why don't they work locally?</title>
       <p>Breadcrumbs begin with up to three URLs specified in
       <code>skinconf.xml</code>.  Here is what the Forrest site uses:</p>
       <source xml:space="preserve">
@@ -427,15 +442,19 @@ X [0]                       brokenlink.html     BROKEN: reason
          DocBook documents are matched. The rest of the documents will be
          handled by Forrest core. Powerful regex capabilities are available.
         </p>
-        <source xml:space="preserve">
-...
-  &lt;map:match pattern="**/resolver-*.html"&gt;
-    &lt;map:generate src="content/xdocs/{1}/resolver-{2}.xml"/&gt;
-    &lt;map:transform
-      src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/&gt;
-    &lt;map:serialize/&gt;
-  &lt;/map:match&gt;
-...
+        <source xml:space="preserve">&lt;?xml version="1.0"?&gt;
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+ &lt;map:pipelines&gt;
+  &lt;map:pipeline&gt;
+    &lt;map:match pattern="**/resolver-*.html"&gt;
+      &lt;map:generate src="{project:content.xdocs}{1}/resolver-{2}.xml"/&gt;
+      &lt;map:transform
+          src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/&gt;
+      &lt;map:serialize/&gt;
+   &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+ &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;
         </source>
         <p>
          You can also use a mixture of the two methods, some handled
