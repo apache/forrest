@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.11 2004/01/11 23:12:20 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.12 2004/01/11 23:20:50 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -98,7 +98,8 @@ $Id: site2xhtml.xsl,v 1.11 2004/01/11 23:12:20 nicolaken Exp $
         <!-- ( =================  Search ================== ) -->
         <td class="search" align="right" rowspan="2" valign="top">
           <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and $config/searchsite-domain and
+            $config/disable-search='false' and not($config/disable-search='alt')
+            and $config/searchsite-domain and
             $config/searchsite-name">
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table class="dialog" cellspacing="0" cellpadding="0" border="0">
@@ -236,7 +237,7 @@ $Id: site2xhtml.xsl,v 1.11 2004/01/11 23:12:20 nicolaken Exp $
       </tr>
       
       <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and $config/searchsite-domain and
+            $config/disable-search='alt' and $config/searchsite-domain and
             $config/searchsite-name">
       <tr>
         <td ></td>
