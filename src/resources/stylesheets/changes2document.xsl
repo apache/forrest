@@ -19,7 +19,7 @@
  <xsl:template match="changes">
   <document>
    <header>
-    <title>History of Changes</title>
+    <title><xsl:text>History of Changes</xsl:text></title>
    </header>
    <body>
     <p><link href="changes.rss"><img src="images/rss.png" alt="RSS"/></link></p>    
@@ -29,10 +29,14 @@
  </xsl:template>
 
  <xsl:template match="release">
-  <section id="{@version}">
-   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
+  <section id="version_{@version}">
+   <title><xsl:text>Version </xsl:text><xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
    <ul>
-    <xsl:apply-templates/>
+     <!-- To sort types by add,remove,update,fix. Look nicer -->
+     <xsl:apply-templates select="action[@type='add']"/>
+     <xsl:apply-templates select="action[@type='remove']"/>
+     <xsl:apply-templates select="action[@type='update']"/>
+     <xsl:apply-templates select="action[@type='fix']"/>
    </ul>
   </section>
  </xsl:template>
