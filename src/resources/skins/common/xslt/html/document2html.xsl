@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.17 2003/05/22 02:33:32 jefft Exp $
+$Id: document2html.xsl,v 1.18 2003/06/09 10:27:40 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -52,20 +52,20 @@ $Id: document2html.xsl,v 1.17 2003/05/22 02:33:32 jefft Exp $
 
   <xsl:template match="document">
     <div class="content">
-      <xsl:if test="normalize-space(header/title)!=''">
-        <table summary="" class="title">
-          <tr> 
-            <td valign="middle"> 
+      <table summary="" class="title">
+        <tr> 
+          <td valign="middle"> 
+            <xsl:if test="normalize-space(header/title)!=''">
               <h1>
                 <xsl:value-of select="header/title"/>
               </h1>
-            </td>
-            <xsl:call-template name="printlink"/> 
-            <xsl:call-template name="pdflink"/>
-            <xsl:call-template name="xmllink"/>
-          </tr>
-        </table>
-      </xsl:if>
+            </xsl:if>
+          </td>
+          <xsl:call-template name="printlink"/> 
+          <xsl:call-template name="pdflink"/>
+          <xsl:call-template name="xmllink"/>
+        </tr>
+      </table>
       <xsl:if test="normalize-space(header/subtitle)!=''">
         <h3>
           <xsl:value-of select="header/subtitle"/>

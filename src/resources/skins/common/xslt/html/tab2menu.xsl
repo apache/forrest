@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.7 2003/06/03 22:31:10 jefft Exp $
+$Id: tab2menu.xsl,v 1.8 2003/06/09 10:27:40 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -108,7 +108,7 @@ $Id: tab2menu.xsl,v 1.7 2003/06/03 22:31:10 jefft Exp $
   any other HTML -->
   <xsl:template name="base-tabs">
     <xsl:call-template name="pre-separator"/>
-    <xsl:for-each select="tab">
+    <xsl:for-each select="//tab">
       <xsl:if test="position()!=1"><xsl:call-template name="separator"/></xsl:if>
       <xsl:apply-templates select="."/>
     </xsl:for-each>
@@ -120,7 +120,7 @@ $Id: tab2menu.xsl,v 1.7 2003/06/03 22:31:10 jefft Exp $
     <xsl:choose>
       <xsl:when test="@id and @id = $matching-id">
         <xsl:call-template name="selected"/>
-	  </xsl:when>
+      </xsl:when>
       <xsl:when test="not(@id) and @dir = $longest-dir or @href = $longest-dir">
         <xsl:call-template name="selected"/>
       </xsl:when>

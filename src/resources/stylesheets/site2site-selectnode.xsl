@@ -17,7 +17,7 @@ Jeff Turner <jefft@apache.org>
   </xsl:variable>
 
   <xsl:template match="/*">
-    <!--
+  <!--
     <xsl:message>## path is <xsl:value-of select="$path"/></xsl:message>
     <xsl:message>## tab is <xsl:value-of select="$tab"/></xsl:message>
     -->
@@ -25,6 +25,10 @@ Jeff Turner <jefft@apache.org>
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
+
+  <!-- Ignore external references, as they are only useful for link mapping, not
+  creating menus -->
+  <xsl:template match="l:external-refs"/>
 
   <xsl:template match="*">
     <xsl:choose>

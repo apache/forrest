@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <!--
-Stylesheet which adds ..'s to @href attributes, to make the URIs relative to
-some root.  Eg, given an 'absolutized' file (from absolutize-linkmap.xsl):
+Stylesheet which makes site.xml links relative to the site root.
+
+If the current path ($path) is HTML, links with have ..'s added, to make the
+URIs relative to some root.  Eg, given an 'absolutized' file (from
+absolutize-linkmap.xsl):
 
 <site href="">
   <community href="community/">
@@ -15,8 +18,20 @@ if $path was 'community/', then '../' would be added to each href:
 
 <site href="../">
   <community href="../community/">
-    <faq href="../community/">
+    <faq href="../community/faq.html">
       <how_can_I_help href="../community/faq.html#help"/>
+    </faq>
+  </community>
+</site>
+
+If the current path is PDF, then an absolute URL to a site root ($site-root) is
+prepended.  In our example above, if $site-root were http://www.mysite.com/,
+the result would be:
+
+<site href="http://www.mysite.com/">
+  <community href="http://www.mysite.com/community/">
+    <faq href="http://www.mysite.com/community/faq.html">
+      <how_can_I_help href="http://www.mysite.com/community/faq.html#help"/>
     </faq>
   </community>
 </site>
@@ -29,6 +44,7 @@ Jeff Turner <jefft@apache.org>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:param name="path"/>
+  <xsl:param name="site-root" select="'http://localhost:8787/forrest/'"/>
 
   <xsl:include href="dotdots.xsl"/>
 
@@ -40,21 +56,29 @@ Jeff Turner <jefft@apache.org>
   </xsl:variable>
 
   <xsl:template match="@href">
+
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="starts-with(., 'http:') or starts-with(., 'https:')">
           <xsl:value-of select="."/>
         </xsl:when>
+
+        <xsl:when test="contains($path, '.pdf')">
+
+          <!-- Links to outside a PDF are all absolute -->
+          <xsl:value-of select="concat($site-root, .)"/>
+
+        </xsl:when>
         <xsl:otherwise>
+
+          <!-- Links outside a HTML are relative -->
           <xsl:value-of select="$root"/><xsl:value-of select="."/>
+
         </xsl:otherwise>
       </xsl:choose>
-      </xsl:attribute>
+    </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="@*|node()" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:copy>
-  </xsl:template>
+  <xsl:include href="copyover.xsl"/>
+
 </xsl:stylesheet>
