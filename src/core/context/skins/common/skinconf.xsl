@@ -36,6 +36,9 @@
      <xsl:if test="not(obfuscate-mail-links)">     
        <obfuscate-mail-links>true</obfuscate-mail-links>
      </xsl:if>
+     <xsl:if test="not(obfuscate-mail-value)">     
+       <obfuscate-mail-value>.at.</obfuscate-mail-value>
+     </xsl:if>
      <xsl:if test="not(disable-font-script)">     
        <disable-font-script>true</disable-font-script>
      </xsl:if>

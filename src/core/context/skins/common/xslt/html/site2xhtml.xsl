@@ -259,7 +259,8 @@ if (VERSION > 3) {
       <xsl:when test="$obfuscate-mail-links='true' and starts-with(@href, 'mailto:') and contains(@href, '@')">
         <xsl:variable name="mailto-1" select="substring-before(@href,'@')"/>
         <xsl:variable name="mailto-2" select="substring-after(@href,'@')"/>
-          <a href="{$mailto-1}.at.{$mailto-2}">
+        <xsl:variable name="obfuscation" select="normalize-space(//skinconfig/obfuscate-mail-value)"/>
+          <a href="{$mailto-1}{$obfuscation}{$mailto-2}">
             <xsl:apply-templates/>
           </a>
        </xsl:when>
