@@ -14,8 +14,8 @@
 * limitations under the License.
 */
 /**
- * This script, when included in a html file, will set the value of a form text to ""
- * if the text value is the standard value. Besides that is has to be called from the text field
+ * This script, when included in a html file and called from a form text field, will set the value of this field to ""
+ * if the text value is still the standard value.
  *
  * Typical usage:
  * <script type="text/javascript" language="JavaScript" src="getBlank.js"></script>
