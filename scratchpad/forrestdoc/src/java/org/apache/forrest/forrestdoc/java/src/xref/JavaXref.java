@@ -69,7 +69,7 @@ public class JavaXref extends antlr.LLkParser
                 f.getName().substring(f.getName().length()-5).equals(".java")) {
 	    listener.notify(f.getAbsolutePath());
             symbolTable.setFile(f);
-            System.err.println("   "+f.getAbsolutePath());
+            //System.err.println("   "+f.getAbsolutePath());
             parseFile(new SkipCRInputStream(new FileInputStream(f)),
 		      symbolTable);
         }
