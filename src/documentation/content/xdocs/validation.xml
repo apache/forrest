@@ -29,13 +29,13 @@
       <p>
         For an XML file to be valid, it <em>must</em> have a DOCTYPE
         declaration at the top, indicating its content type.  Hence by
-        default, all Forrest-processed XML files must have a DOCTYPE
-        declaration, or the build will break.
+        default, any Forrest-processed XML file that lacks a DOCTYPE
+        declaration will cause the build to break.
       </p>
       <p>
         Despite the strict default behavior, Forrest is quite flexible about
-        validation.  It is also possible to projects to specify exactly what
-        files they want (and don't want) validated, through the
+        validation.  It is possible for projects to specify exactly what files
+        they want (and don't want) validated, through the
         <code>forrest.validate.excludes</code> and
         <code>forrest.validate.includes</code> properties, set in
         <code>forrest.properties</code>.  Each specifies a comma-separated
@@ -181,13 +181,13 @@
         <p>
           In our DTD, we first pull in the 'common-charents' entity, which
           defines character symbol sets.  We then define the 'document'
-          entity.  However, before <code>%document;</code> PE reference, we
+          entity.  However, before the <code>%document;</code> PE reference, we
           first override the 'local.section' entity.  This is a hook into
           document-v11.mod.  By setting its value to '|release', we declare
           that our &lt;release&gt; element is to be allowed wherever "local
-          sections" are used.  There are 5 or so such hooks for different
-          areas of the document; see document-v11.dtd for more details.  We
-          then import the %document; contents, and declare the rest of our DTD
+          sections" are used.  There are five or so such hooks for different
+          areas of the document; see document-v11.dtd for more details.  We then
+          import the %document; contents, and declare the rest of our DTD
           elements.
         </p>
         <p>
@@ -200,7 +200,7 @@
           Recall that our DOCTYPE declaration for our download document type
           is:
         </p>
-        <source>            &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+        <source>&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
           "download-v11.dtd"&gt;
         </source>
         <p>
@@ -222,7 +222,8 @@
           file in <code>${project.schema-dir}/catalog</code>.  Here is what ours
           should look like:
         </p>
-        <source>            -- OASIS TR 9401 Catalog for our project --
+        <source>
+          -- OASIS TR 9401 Catalog for our project --
 
           OVERRIDE YES
 
@@ -230,15 +231,15 @@
           PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "dtd/download-v11.dtd"
         </source>
         <p>
-          The format is described in <link href="http://www.oasis-open.org/committees/entity/background/9401.html">the
-            spec</link>, but is fairly simple.  In particular, lines beginning
-          with PUBLIC map a public identifier to a DTD (relative to the catalog
-          file).
+          The format is described in <link href="&catalog_spec;">the
+            spec</link>, and is fairly simple.  Lines beginning with
+          <code>PUBLIC</code> map a public identifier to a DTD (relative to the
+          catalog file).
         </p>
         <p>
           We now have a custom DTD and a catalog mapping which lets Forrest
-          locate the DTD.  Now if we were to run 'forrest validate', our
-          download file would validate along with all the others.
+          locate the DTD.  Now if we were to run <code>forrest validate</code>,
+          our download file would validate along with all the others.
         </p>
       </section>
     </section>
