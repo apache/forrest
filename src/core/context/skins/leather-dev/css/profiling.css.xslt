@@ -157,23 +157,25 @@ color: <xsl:value-of select="@hlink"/>;
 } 
 </xsl:template>
 
-<!--xsl:template match="color[@name='body']">
+<xsl:template match="color[@name='body']">
 body         { background-color: <xsl:value-of select="@value"/>;
                color: <xsl:value-of select="@font"/>;} 
 a:link { color:<xsl:value-of select="@link"/>} 
 a:visited { color:<xsl:value-of select="@vlink"/>} 
 a:hover { color:<xsl:value-of select="@hlink"/>} 
+/*
 .menupage a:link { background-color: <xsl:value-of select="@value"/>;
                                 color:<xsl:value-of select="@link"/>} 
 .menupage a:visited { background-color: <xsl:value-of select="@value"/>;
                                 color:<xsl:value-of select="@vlink"/>} 
 .menupage a:hover { background-color: <xsl:value-of select="@value"/>;
                                 color:<xsl:value-of select="@hlink"/>} 
-</xsl:template-->
+*/
+</xsl:template>
 
-<!--xsl:template match="color[@name='footer']"> 
+<xsl:template match="color[@name='footer']"> 
 #footer       { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template--> 
+</xsl:template> 
 
 
 <!-- ==================== other colors ============================ -->

@@ -171,8 +171,34 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |end Project Logo
     +</xsl:comment> 
+	<!--+
+  |centerstrip with menu and mainarea
+  +-->
+        <div id="branding-tagline">
+           <script language="JavaScript" type="text/javascript"><![CDATA[<!--
+              document.write("Published: " + document.lastModified);
+              //  -->]]></script>
+        </div>
 
 
+<xsl:comment>+
+    |breadtrail
+    +</xsl:comment>
+              <div id="branding-trail-a1">
+ <xsl:choose>
+        <xsl:when test="$config/trail/@location='alt'">
+            <!--breadtrail location='alt'-->
+            <xsl:call-template name="breadcrumbs"/>             
+        </xsl:when>
+        <xsl:otherwise>
+            <!--*NO* breadtrail-->
+            &#160;
+        </xsl:otherwise>
+</xsl:choose>
+</div>  
+
+      </div>
+<div id="search">
         <xsl:if 
             test="$config/search and not($config/search/@box-location = 'alt')">
 <xsl:comment>+
@@ -201,6 +227,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |end search
     +</xsl:comment> 
         </xsl:if>
+</div>
 <div id="nav">
 <xsl:comment>+
     |start Tabs
@@ -209,41 +236,17 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |end Tabs
     +</xsl:comment>
-</div>
-      </div>
-	<!--+
-  |centerstrip with menu and mainarea
-  +-->
-        <div id="branding-tagline">
 <xsl:apply-templates select="div[@id='nav-main-sub']"/>
-           <script language="JavaScript" type="text/javascript"><![CDATA[<!--
-              document.write("Published: " + document.lastModified);
-              //  -->]]></script>
-        </div>
-<xsl:comment>+
-    |breadtrail
-    +</xsl:comment>
-              <div id="branding-trail-a1">
- <xsl:choose>
-        <xsl:when test="$config/trail/@location='alt'">
-            <!--breadtrail location='alt'-->
-            <xsl:call-template name="breadcrumbs"/>             
-        </xsl:when>
-        <xsl:otherwise>
-            <!--*NO* breadtrail-->
-            &#160;
-        </xsl:otherwise>
-</xsl:choose>
-</div>  
-
-       
-
 <xsl:comment>+
     |start menu
     +</xsl:comment>
     <xsl:if test="div[@id='menu']/ul/li">
       <xsl:call-template name="menu"/>
     </xsl:if>
+</div>
+       
+
+
 <xsl:comment>+
     |start content
     +</xsl:comment>
