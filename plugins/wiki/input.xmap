@@ -16,7 +16,7 @@
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
-    <map:transformers>
+    <map:transformers default="xslt">
       <map:transformer name="lexer" 
 	                     src="org.apache.cocoon.transformation.LexicalTransformer" 
 	                     logger="sitemap.transformer.lexer">
@@ -81,14 +81,12 @@
   <map:pipelines>
     <map:pipeline internal="true">
       <map:match pattern="**.xml">
-        <map:call resource="transform-to-document">
-          <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
+        <map:call resource="file-resolver">
+              <map:parameter name="uri" value="{1}"/>
         </map:call>
       </map:match>
     </map:pipeline>
-  </map:pipelines>
     
-  <map:pipelines>
     <map:pipeline type="caching" internal-only="true">
 
       <map:match pattern="*.xlex">
