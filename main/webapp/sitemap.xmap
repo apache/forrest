@@ -46,11 +46,10 @@ $Revision: 1.12 $
        <parameter name="localizable" value="true"/>
       </map:generator>        
 
-                
     </map:generators>
 
     <map:transformers default="xslt">
-	   
+
       <!-- Add values to skinconf that need extra processing like the color shades -->
       <map:transformer name="skinconf" src="org.apache.forrest.conf.SkinconfTransformer"/>
               
@@ -179,7 +178,7 @@ $Revision: 1.12 $
                  src="org.apache.cocoon.selection.ExceptionSelector">
      <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
      <exception class="java.lang.Throwable" unroll="true"/>
-   </map:selector>	 	
+   </map:selector>
     </map:selectors>
 
     <map:pipes default="caching">
@@ -602,7 +601,11 @@ $Revision: 1.12 $
       <map:match pattern="profiler">
         <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
       </map:match>
-        
+
+      <map:match pattern="**.lucene">
+        <map:mount uri-prefix="" src="search.xmap" check-reload="yes" />
+      </map:match> 
+
       <map:select type="exists">
          <map:when test="{project:temp-dir}/resources.xmap">
            <map:mount uri-prefix="" 
@@ -626,9 +629,6 @@ $Revision: 1.12 $
       </map:match>
      <map:match pattern="**.ico">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match> 
-      <map:match pattern="**.lucene">
-        <map:mount uri-prefix="" src="search.xmap" check-reload="yes" />
       </map:match> 
     </map:pipeline>
 
