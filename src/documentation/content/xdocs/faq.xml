@@ -26,6 +26,32 @@
 </faq>
 
 <faq>
+  <question>
+    The tab link in my site incorrectly assumes that 'index.html' is present in
+    the linked-to directory. How do I fix this?
+  </question>
+  <answer>
+    <p>
+      In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing
+      '/'. That will leave which file to serve up to the sitemap.  For example, if
+      the 'User Manual' tab should link to <code>manual/Introduction.html</code>,
+      <code>tabs.xml</code> should contain:
+    </p>
+    <source><![CDATA[
+      <tab label="User Manual" href="manual"/>
+      ]]></source>
+    <p>
+      and add this rule to the sitemap:
+    </p>
+    <source><![CDATA[
+      <map:match pattern="manual">
+        <map:redirect-to uri="manual/Introduction.html"/>
+      </map:match>
+      ]]></source>
+  </answer>
+</faq>
+
+<faq>
  <question>
   Why do the generated documents look a little strange?
  </question>
