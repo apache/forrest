@@ -63,7 +63,16 @@
 <xsl:template match="color[@name='subheading']">
 .subheading { background-color: <xsl:value-of select="@value"/>;} 
 </xsl:template--> 
-
+<xsl:template match="color[@name='feedback']">    
+#feedback {
+	color: <xsl:value-of select="@font"/>;
+	background: <xsl:value-of select="@value"/>;
+	text-align: <xsl:value-of select="@align"/>;
+}
+#feedback #feedbackto {
+	color: <xsl:value-of select="@font"/>;
+}   
+</xsl:template>
 <xsl:template match="color[@name='published']">
 #published { 
     color: <xsl:value-of select="@font"/>;

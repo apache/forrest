@@ -260,7 +260,17 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           <div class="copyright">
  			Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
           </div>
-          
+          <div id="feedback">
+          	<xsl:value-of select="$config/feedback"/>
+          	<a id="feedbackto">
+          		<xsl:attribute name="href">
+    			    <xsl:value-of select="$config/feedback/@href"/>
+       				<xsl:value-of select="$path"/>
+          		</xsl:attribute>
+	          	<xsl:value-of select="$config/feedback/@to"/>
+          	</a>
+          	
+          </div>
           <xsl:if test="$filename = 'index.html'">
             <div class="logos">
               <!-- W3C logos -->
@@ -286,27 +296,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                   </a>
                 </xsl:for-each>
               </xsl:if>
-              <xsl:if test="$config/credits and not ($config/credits/credit/@box-location = 'alt')">
-                <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
-                  <xsl:variable name="name" select="name"/>
-                  <xsl:variable name="url" select="url"/>
-                  <xsl:variable name="image" select="image"/>
-                  <xsl:variable name="width" select="width"/>
-                  <xsl:variable name="height" select="height"/>
-                  <a href="{$url}">
-                    <img alt="{$name} logo" border="0">
-                      <xsl:attribute name="src">
-                        <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
-                        <xsl:value-of select="$image"/>
-                      </xsl:attribute>
-                      <xsl:attribute name="style">
-                        <xsl:if test="$width">width: <xsl:value-of select="$width"/>px;</xsl:if>
-                        <xsl:if test="$height">height: <xsl:value-of select="$height"/>px;</xsl:if>
-                      </xsl:attribute>
-                    </img>
-                  </a>
-                </xsl:for-each>
-              </xsl:if>
+             
             </div>
           </xsl:if>
           <xsl:if test="$config/host-logo and not($config/host-logo = '')">
