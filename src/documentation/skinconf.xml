@@ -69,7 +69,8 @@ be used to configure the chosen Forrest skin.
   <!ELEMENT width (#PCDATA)>
   <!ELEMENT height (#PCDATA)>
   <!ELEMENT toc EMPTY>
-  <!ATTLIST toc level CDATA #IMPLIED location CDATA #IMPLIED>
+  <!ATTLIST toc max-depth CDATA #IMPLIED min-sections CDATA #IMPLIED
+            location CDATA #IMPLIED>
   ]>
 
 <skinconfig>
@@ -124,11 +125,16 @@ be used to configure the chosen Forrest skin.
     <link3 name="" href=""/>
   </trail>
 
-  <!-- Configure how many "section" levels need to be included in the
-  generated Table of Contents (TOC). By default, if no toc element is provided
-  below, then 2 levels are included. Level 0 does not generate any TOC at all.
+  <!-- Configure the TOC, ie the Table of Contents.
+  @max-depth
+  how many "section" levels need to be included in the
+  generated Table of Contents (TOC). 
+  @min-sections
+  Minimum required to create a TOC.
+  @location ("page","menu","page,menu")
+  Where to show the TOC.
   -->
-  <toc level="2" location="page"/>
+  <toc max-depth="2" min-sections="1" location="page"/>
 
   <!-- Credits are typically rendered as a set of small clickable images in the
   page footer -->
