@@ -15,19 +15,32 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.forrest.eclipse.ForrestPlugin;
+import org.eclipse.ant.core.AntRunner;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.core.runtime.*;
-import org.eclipse.jface.operation.*;
-import java.lang.reflect.InvocationTargetException;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.CoreException;
-import java.io.*;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
@@ -42,6 +55,7 @@ import org.eclipse.ui.ide.IDE;
 public class NewXDoc extends Wizard implements INewWizard {
 	private NewXdocPage page;
 	private ISelection selection;
+	protected String resourceAntScript = "/src/org/apache/forrest/template/template_build.xml";
 
 	/**
 	 * Constructor for NewXDoc.
@@ -109,18 +123,30 @@ public class NewXDoc extends Wizard implements INewWizard {
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist.");
 		}
-		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
-		try {
-			InputStream stream = openContentStream();
-			if (file.exists()) {
-				// FIXME: Inform the user the file exists
-			} else {
-				file.create(stream, true, monitor);
-			}
-			stream.close();
-		} catch (IOException e) {
+		
+        // create the file
+		AntRunner runner = new AntRunner();
+		ForrestPlugin plugin = ForrestPlugin.getDefault();
+		String strPluginDir = plugin.getBundle().getLocation();
+		if (strPluginDir.startsWith("update@")) {
+			strPluginDir = strPluginDir.substring(8);
 		}
+		runner.setBuildFileLocation(strPluginDir + resourceAntScript);
+		String strPath = resource.getLocation().toOSString();
+		StringBuffer sb = new StringBuffer("-Dresource.dir=");
+		sb.append(strPath);
+		sb.append(" ");
+		sb.append("-Dresource.name=");
+		sb.append(fileName);
+		sb.append(" ");
+		sb.append("-verbose");
+		runner.setArguments(sb.toString());
+		runner.run(monitor);
+	    resource.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+	    
+	    IContainer container = (IContainer) resource;
+	    final IFile file = container.getFile(new Path(fileName));
+		
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");
 		getShell().getDisplay().asyncExec(new Runnable() {
@@ -134,14 +160,6 @@ public class NewXDoc extends Wizard implements INewWizard {
 			}
 		});
 		monitor.worked(1);
-	}
-	
-	/**
-	 * We will initialize file contents with a sample text.
-	 * This sample text is located in org/apache/forrest/template/new_xdoc.xml.
-	 */
-	private InputStream openContentStream() {
-		return this.getClass().getResourceAsStream("/org/apache/forrest/template/new_xdoc.xml");
 	}
 
 	private void throwCoreException(String message) throws CoreException {
