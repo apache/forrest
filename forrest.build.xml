@@ -43,8 +43,8 @@ That should be passed to here with -Dproject.home
   
     <!-- setting defaults for parameters -->
     <!-- people should use -D switch, or <ant><property>s to override these   -->
-    <property name="forrest.home" value="." />
-    <property name="project.home" value="." />
+    <property name="forrest.home" location="." />
+    <property name="project.home" location="." />
 
     <!-- people should use forrest.properties to override following defaults  -->
     <echo message="Loading project specific properties from ${project.home}/forrest.properties" />
@@ -52,6 +52,7 @@ That should be passed to here with -Dproject.home
 
     <property name="project.site-dir"    value="${project.home}/build/site"    />
     <property name="project.war"         value="${project.home}/build/my-project.war" />
+    <property name="project.webapp"      value="${project.home}/build/webapp" />
     <property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
 
     <property name="project.temp-dir"    value="${project.home}/build/tmp"     />
@@ -327,12 +328,45 @@ Generation just finished. Please check the file ${project.brokenlinkfile} for an
   </target>
 
 
+  <target name="project.webapp.defined" unless="project.webapp">
+    <echo>
+      ------------------------------------------------
+      Error: $${project.webapp} variable has not been set. This is where the
+      webapp will be assembled. Please define it in the calling script.
+      ------------------------------------------------
+    </echo>
+    <fail message="project.webapp variable not set"/>
+  </target>
+
+  <!-- ===============================================================
+       Builds a cocoon webapp for your project based on the siteplan.
+       param: location to put generated webapp ${project.webapp}
+       =============================================================== -->
+  <target name="webapp" depends="init, project.webapp.defined, prepare-context">
+    <!-- this will need revisions in the case of the siteplan
+    extra project-custom classes then will need to be warred in as well. -->
+    <mkdir dir="${project.webapp}/WEB-INF"/>
+    <copy file="${forrest.home}/WEB-INF/web.xml" todir="${project.webapp}/WEB-INF"/>
+    <copy todir="${project.webapp}">
+      <fileset dir="${project.ctxt-dir}" >
+        <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
+      </fileset>
+    </copy>
+    <copy todir="${project.webapp}/WEB-INF">
+      <fileset dir="${forrest.home}/WEB-INF">
+        <include name="*.xconf" />
+        <include name="lib/**"/>
+        <include name="classes/**"/>
+      </fileset>
+    </copy>
+  </target>
+
   <!-- ===============================================================
        Builds a cocoon webapp for your project based on the siteplan.
        param: location of siteplan ${project.siteplan}
        param: location to put generated war ${project.war}
        =============================================================== -->
-  <target name="webapp" depends="init, prepare-context">
+  <target name="war" depends="init, prepare-context">
     <!-- this will need revisions in the case of the siteplan
          extra project-custom classes then will need to be warred in as well. -->
     <war warfile="${project.war}"

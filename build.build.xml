@@ -391,7 +391,18 @@
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.build.xml" target="webapp">
       <property name="project.home"     value="."            />
-      <property name="project.war" value="./build/forrest.war" />
+      <property name="project.webapp" value="./build/webapp" />
+    </ant>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Generate a .war files of the project-site                           -->
+  <!-- =================================================================== -->
+  <target name="war" depends="dist-shbat">
+    <property name="forrest.home" value="${dist-shbat.dir}" />
+    <ant antfile="${forrest.home}/forrest.build.xml" target="war">
+      <property name="project.home"     value="."            />
+      <property name="project.war" value="./build/${name}.war" />
     </ant>
   </target>
 
