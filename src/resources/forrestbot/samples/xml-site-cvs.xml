@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!--
-Forrestbot sample config file.
-Fetches the xml.apache.org site from CVS and builds it.
 
-jefft@apache.org
--->
+<!DOCTYPE forrest-config [
+<!ENTITY email "jeff@localhost">
+<!ENTITY xml-site SYSTEM "file:entities/xml-site.ent">
+]>
+
 <forrest-config>
   <defaults>
     <get-src type="cvs">
@@ -22,24 +22,6 @@ jefft@apache.org
     -->
   </defaults>
 
-  <project name="forrest-template">
-    <prepare>
-      <skin name="forrest-site"/>
-    </prepare>
-
-    <get-src type="cvs">
-      <module name="xml-forrest"/>
-      <dir name="src/documentation"/>
-    </get-src>
-    <deploy type="local-copy">
-      <destination name="build/xml-site"/>
-    </deploy>
-    <!--
-    <deploy type="scp">
-      <dir name="public_html/forrest-site"/>
-    </deploy>
-    -->
-
-  </project>
+  &xml-site;
 
 </forrest-config>
