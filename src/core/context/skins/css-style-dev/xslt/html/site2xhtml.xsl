@@ -314,7 +314,7 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
         <xsl:apply-templates select="div[@id='menu']/*"/>
         <div id="roundbottom">
             <img 
-                src="{$skin-img-dir}/rc-b-l-15-1header-2tab-selected-3tab-selected.png" 
+                src="{$skin-img-dir}/rc-b-l-15-1body-2menu-3menu.png" 
                 alt="" width="15" height="15" class="corner" 
                 style="display: none" />
         </div>
