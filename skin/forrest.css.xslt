@@ -69,7 +69,7 @@ a.external  {
 	display:inline; display:inline-block;
         background-repeat: no-repeat;
 	background-position: center right;
-	background-image: url(/skin/images/external-link.gif);
+	background-image: url(images/external-link.gif);
 }
   </xsl:template>
   
