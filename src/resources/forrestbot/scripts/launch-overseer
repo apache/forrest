@@ -10,10 +10,32 @@
 NAMEDPIPE=$WEBAPP/WEB-INF/commands
 
 if [ ! -p "$NAMEDPIPE" -a -e "$NAMEDPIPE" ]; then
-  echo "$NAMEDPIPE exists and is not a named pipe. Please delete it and try again"
+  echo "----------------------------------"
+  echo "ERROR: The file:"
+  echo "  $NAMEDPIPE"
+  echo "exists and is not a named pipe. Please delete it and try again"
+  echo "----------------------------------"
   exit
 fi
 [ ! -e "$NAMEDPIPE" ] && mkfifo $NAMEDPIPE
-nohup ./overseer < $NAMEDPIPE > overseer.log &
-echo overseer pid: $!
-tail -f $WEBAPP/WEB-INF/refresh_log.txt overseer.log
+
+OVERSEER_LOG=overseer.log
+
+nohup ./overseer < $NAMEDPIPE > $OVERSEER_LOG &
+
+# Touch the two log files to stop the tail breaking
+>> $OVERSEER_LOG
+>> $REFRESH_LOG
+
+PID=$!
+echo "------------------------------------"
+echo "Forrestbot 'overseer' server running"
+echo
+echo "pid               : $PID"
+echo "command read from : $NAMEDPIPE"
+echo "logs written to   : $REFRESH_LOG"
+echo "------------------------------------"
+echo
+echo "Now tailing logs... press ctrl-c to exit"
+
+tail -f $REFRESH_LOG $OVERSEER_LOG
