@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<project default="site" basedir="." name="site">
+  
+   <!-- ===============================================================
+       Makes the site.
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${content-dir}(now)
+       param: location to make temporary context-dir ${project.webapp} 
+       param: location to make temporary cocoon-work-dir ${content-dir}
+       param: debuglevel for logging ${project.debuglevel}
+       param: location of log-file ${project.logkitfile}
+       ===============================================================
+   -->
+
+   <target name="site" depends="init, webapp-local, -prepare-classpath" if="project.content.present"
+     description="Generates a static HTML website for this project">
+    <!-- clean out the temp space, if we don't cocoon fails on this.
+         actually clears the cache, not yet sure why it is really needed? -->
+    <delete dir="${project.cocoon-work-dir}"/>
+    <mkdir dir="${project.cocoon-work-dir}"/>
+
+    <parallel>
+      <!--
+      <java classname="org.apache.cocoon.Main"
+        fork="true"
+        maxmemory="${forrest.maxmemory}"
+        dir="."
+        failonerror="true"
+        classpathref="forrest.cp">
+        <jvmarg line="${forrest.jvmargs}"/>
+        <jvmarg line="${forrest.basic.jvmargs}"/>
+        <jvmarg
+          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <arg value="-c${project.webapp}"/>   <!- input to the process ->
+        <arg value="-d${project.site-dir}"/>   <!- output to be put ->
+        <arg value="-w${project.cocoon-work-dir}"/>   <!- temp dir to use for e.g. cache ->
+        <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
+        <arg value="-C${project.webapp}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
+        <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
+        <arg value="-k${project.webapp}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
+        <arg value="${project.start-uri}"/>              <!- starting page ->
+        <arg value="-V" />                          <!- be verbose ->
+      </java>
+      -->
+
+      <java classname="org.apache.cocoon.Main"
+        fork="true"
+        dir="${project.webapp}"
+        failonerror="true"
+        maxmemory="${forrest.maxmemory}">
+        <jvmarg line="${forrest.jvmargs}"/>
+        <jvmarg line="${forrest.basic.jvmargs}"/>
+        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <arg value="--logLevel=${project.debuglevel}"/>
+        <arg value="--Logger=${project.logger}"/>
+        <arg value="--logKitconfig=${project.logkitfile}"/>
+        <arg value="--destDir=${project.site-dir}"/>
+        <arg value="--xconf=${project.configfile}"/>
+        <arg value="${project.start-uri}"/>
+        <classpath>
+          <path refid="forrest.cp"/>
+        </classpath>
+      </java> 
+
+
+      <sequential>
+        <!-- 
+        | Copy all non-xdocs content across, as we cannot rely on crawling to
+        | discover the whole URI space.  Note: we are emulating the sitemap here;
+        | please ensure they keep in synch.
+        -->
+        <copy toDir="${project.site-dir}" 
+          overwrite="true" failonerror="false">
+            <fileset dir="${content-dir}/content"> <!-- FIXME: what about raw-content-dir? -->
+              <exclude name="xdocs/**"/> <!-- FIXME: should use properties since they can be overridden in forrest.properties -->
+            </fileset>
+          <fileset dir="${project.webapp}/resources" includes="images"/>
+        </copy>
+
+        <!-- Copy skin images -->
+        <mkdir dir="${project.site-dir}/skin/images"/>
+         <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
+         <!-- Copy forrest skin images -->
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
+           <fileset dir="${forrest.skins-dir}/common/images"/>
+           <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
+        </copy>
+        <!-- Copy project skin images -->
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
+          <fileset dir="${project.skins-dir}/common/images"/>
+          <fileset dir="${project.skins-dir}/${project.skin}/images"/>
+        </copy>
+ 
+
+        <!-- Copy all other non-resource files -->
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
+          <fileset dir="${forrest.skins-dir}/common">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+          <fileset dir="${forrest.skins-dir}/${project.skin}">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+        </copy>
+        
+        <!-- Copy all other non-resource files from project skins-->
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
+          <fileset dir="${project.skins-dir}/common">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+          <fileset dir="${project.skins-dir}/${project.skin}">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+        </copy>
+        <!-- This place is our last chance to give them help messages.
+             Hopefully Cocoon won't issue messages until these tasks are done.
+         -->
+        <echo>
+Static site will be generated at:
+${project.site-dir}
+
+Note that there are various reasons for "build failed" messages.
+* Cocoon will report the status of each document:
+  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
+* Even if only one link is broken, you will still get "failed".
+* Your site would still be generated, but some pages would be broken.
+* Please check the file:
+${project.brokenlinkfile}
+for any broken links in the generated site.
+        </echo>
+      </sequential>
+    </parallel>
+    <echo>------------------------------
+Static site was successfully generated at:
+${project.site-dir}
+------------------------------
+    </echo>
+  </target>
+  
+
+</project>
