@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.2 2003/01/10 13:51:56 jefft Exp $
+$Id: site2xhtml.xsl,v 1.3 2003/01/27 12:50:26 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -105,9 +105,22 @@ $Id: site2xhtml.xsl,v 1.2 2003/01/10 13:51:56 jefft Exp $
             </xsl:call-template>
           </xsl:for-each>
         </xsl:if>
+        <a href="http://validator.w3.org/check/referer"><img border="0"
+            src="http://www.w3.org/Icons/valid-html401"
+            alt="Valid HTML 4.01!" height="31" width="88"/></a>
       </body>
     </html>
   </xsl:template>
+
+  <!-- Add links to any standards-compliance logos -->
+  <xsl:template name="compliancy-logos">
+    <xsl:if test="$config/disable-compliance-links = 'false'">
+      <a href="http://validator.w3.org/check/referer"><img border="0" class="logoImage" 
+          src="http://www.w3.org/Icons/valid-html401"
+          alt="Valid HTML 4.01!" height="31" width="88"/></a>
+    </xsl:if>
+  </xsl:template>
+
 
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>

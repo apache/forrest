@@ -16,13 +16,13 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.18 2003/01/27 08:18:16 jefft Exp $
+$Id: site2xhtml.xsl,v 1.19 2003/01/27 12:50:26 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
-
+ 
   <xsl:variable name="header-color" select="'#294563'"/>
   <xsl:variable name="menu-border" select="'#4C6C8F'"/>
   <xsl:variable name="background-bars" select="'#CFDCED'"/>
@@ -249,30 +249,35 @@ $Id: site2xhtml.xsl,v 1.18 2003/01/27 08:18:16 jefft Exp $
         </td>
       </tr>
       <tr>
-      <td class="logos" bgcolor="{$background-bars}" align="left" colspan="2">
-        <xsl:if test="$filename = 'index.html' and $config/credits">
-          <div>
-            <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
-          <xsl:for-each select="$config/credits/credit">
-            <xsl:variable name="name" select="name"/>
-            <xsl:variable name="url" select="url"/>
-            <xsl:variable name="image" select="image"/>
-            <xsl:variable name="width" select="width"/>
-            <xsl:variable name="height" select="height"/>
-            <a href="{$url}">
-            <img alt="{$name} logo" border="0">
-              <xsl:attribute name="src">
-                <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
-                <xsl:value-of select="$image"/>
-              </xsl:attribute>
-              <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
-              <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
-            </img>
-            <img src="{$spacer}" border="0" alt="" width="5" height="1" />
-            </a>
-          </xsl:for-each>
-          </div>
-        </xsl:if>
+        <td class="logos" bgcolor="{$background-bars}" align="left" colspan="2">
+          <xsl:if test="$filename = 'index.html'">
+            <div>
+              <!-- W3C logos -->
+              <xsl:call-template name="compliancy-logos"/>
+
+              <xsl:if test="$config/credits">
+                <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
+                <xsl:for-each select="$config/credits/credit">
+                  <xsl:variable name="name" select="name"/>
+                  <xsl:variable name="url" select="url"/>
+                  <xsl:variable name="image" select="image"/>
+                  <xsl:variable name="width" select="width"/>
+                  <xsl:variable name="height" select="height"/>
+                  <a href="{$url}">
+                    <img alt="{$name} logo" border="0">
+                      <xsl:attribute name="src">
+                        <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+                        <xsl:value-of select="$image"/>
+                      </xsl:attribute>
+                      <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
+                      <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
+                    </img>
+                    <img src="{$spacer}" border="0" alt="" width="5" height="1" />
+                  </a>
+                </xsl:for-each>
+              </xsl:if>
+            </div>
+          </xsl:if>
         <xsl:if test="$config/host-logo and not($config/host-logo = '')">
           <div class="host">
             <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
