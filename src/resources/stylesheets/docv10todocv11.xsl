@@ -60,9 +60,13 @@
   <!-- fixes sections -->
   <xsl:template match="s1 | s2 | s3 | s4">
     <section>
-      <xsl:apply-templates select="@*|node()"/>
+      <xsl:apply-templates select="@*[name()!='title']"/>
+      <xsl:apply-templates select="@*[name()='title']"/>
+	  <!-- apply title rule last. See http://sourceforge.net/forum/forum.php?thread_id=729070&forum_id=94027 -->
+      <xsl:apply-templates select="node()"/>
     </section>
   </xsl:template>
+
   <xsl:template match="s1/@title | s2/@title | s3/@title | s4/@title">
     <title><xsl:value-of select="."/></title>
   </xsl:template>
