@@ -157,6 +157,19 @@
         </map:call>
       </map:match>
 
+
+      <!-- Special matcher for FAQ PDFs, so we can pass an extra
+      'numbersections' param into document2fo.xsl -->
+      <map:match pattern="**faq.pdf">
+        <map:generate src="cocoon:/{1}faq.xml"/>
+        <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl">
+          <map:parameter name="numbersections" value="false"/>
+          <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
+          <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
+        </map:transform>
+        <map:serialize type="fo2pdf"/>
+      </map:match>
+
       <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl">

@@ -5,6 +5,7 @@
                 version="1.0">
 
   <xsl:output method="xml"/>
+  <xsl:param name="numbersections" select="'true'"/>
   <xsl:param name="ctxbasedir" select="."/>
   <xsl:param name="xmlbasedir"/>
   <xsl:include href="pdfoutline.xsl"/>
@@ -222,8 +223,10 @@
       space-after="4pt"
       id="{generate-id()}">
 
-      <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
-      <xsl:text>. </xsl:text>
+      <xsl:if test="$numbersections = 'true'">
+        <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
+        <xsl:text>. </xsl:text>
+      </xsl:if>
       <xsl:value-of select="title"/>
 
       <xsl:if test="normalize-space(@id)!=''">
