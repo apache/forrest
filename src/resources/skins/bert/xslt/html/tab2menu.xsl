@@ -14,7 +14,7 @@
           <tr>
             <td bgcolor="#B2C4E0" width="5" valign="top"><img src="skin/images/tab-left.gif" alt="" width="5" height="5" /></td>
             <td bgcolor="#B2C4E0" valign="middle">
-              <a href="/xml-forrest/{@dir}"><font face="Arial, Helvetica, Sans-serif" size="2"><xsl:value-of select="@label"/></font></a>
+              <a href="/forrest/{@dir}"><font face="Arial, Helvetica, Sans-serif" size="2"><xsl:value-of select="@label"/></font></a>
             </td>
             <td bgcolor="#B2C4E0" width="5" valign="top"><img src="skin/images/tab-right.gif" alt="" width="5" height="5" />
             </td>
