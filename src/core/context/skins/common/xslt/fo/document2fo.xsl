@@ -26,11 +26,11 @@
   <xsl:variable name="toc-max-depth" select="number($config/toc/@max-depth)"/>
 
   <!-- The page size to be used -->
-  <xsl:variable name="pagesize" 
+  <xsl:variable name="pagesize"
                 select="string($config/pdf/page/@size)"/>
 
   <!-- The page orientation ("portrait" or "landscape") -->
-  <xsl:variable name="pageorientation" 
+  <xsl:variable name="pageorientation"
                 select="string($config/pdf/page/@orientation)"/>
 
   <!-- Double-sided printing toggle -->
@@ -56,7 +56,7 @@
   it's on)-->
   <xsl:variable name="outermargin"
                 select="string($config/pdf/margins/outer)"/>
-  
+
 
   <xsl:param name="numbersections" select="'true'"/>
 
@@ -158,25 +158,25 @@
       <fo:layout-master-set>
 
         <fo:simple-page-master master-name="first-page"
-          page-height="{$pageheight}" 
+          page-height="{$pageheight}"
           page-width="{$pagewidth}"
-          margin-top="{$topmargin}" 
-          margin-bottom="{$bottommargin}" 
-          margin-left="{$innermargin}" 
+          margin-top="{$topmargin}"
+          margin-bottom="{$bottommargin}"
+          margin-left="{$innermargin}"
           margin-right="{$outermargin}">
           <fo:region-body
             margin-top="0.5in"
             margin-bottom=".5in"/>
-          <fo:region-after 
+          <fo:region-after
             region-name="first-footer"
             extent=".5in"
             display-align="before"/>
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="even-page"
-          page-height="{$pageheight}" 
+          page-height="{$pageheight}"
           page-width="{$pagewidth}"
-          margin-top="{$topmargin}" 
+          margin-top="{$topmargin}"
           margin-bottom="{$bottommargin}">
           <xsl:choose>
             <xsl:when test="$doublesided = 'true'">
@@ -203,18 +203,18 @@
           <fo:region-body
             margin-top="0.5in"
             margin-bottom=".5in"/>
-          <fo:region-after 
+          <fo:region-after
             region-name="even-footer"
             extent=".5in"
             display-align="before"/>
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="odd-page"
-          page-height="{$pageheight}" 
+          page-height="{$pageheight}"
           page-width="{$pagewidth}"
-          margin-top="{$topmargin}" 
-          margin-bottom="{$bottommargin}" 
-          margin-left="{$innermargin}" 
+          margin-top="{$topmargin}"
+          margin-bottom="{$bottommargin}"
+          margin-left="{$innermargin}"
           margin-right="{$outermargin}">
           <fo:region-before
             region-name="odd-header"
@@ -223,7 +223,7 @@
           <fo:region-body
             margin-top="0.5in"
             margin-bottom=".5in"/>
-          <fo:region-after 
+          <fo:region-after
             region-name="odd-footer"
             extent=".5in"
             display-align="before"/>
@@ -250,13 +250,13 @@
         <fo:title><xsl:value-of select="document/header/title"/></fo:title>
         <xsl:apply-templates/>
       </fo:page-sequence>
-      
+
     </fo:root>
   </xsl:template>
 
   <xsl:template match="document">
     <fo:title><xsl:value-of select="header/title"/></fo:title>
-    
+
     <fo:static-content flow-name="first-footer">
       <fo:block
         border-top="0.25pt solid"
@@ -300,7 +300,7 @@
         <xsl:value-of select="header/title"/>
       </fo:block>
     </fo:static-content>
-    
+
     <fo:static-content flow-name="odd-footer">
       <fo:block
         border-top="0.25pt solid"
@@ -325,7 +325,7 @@
 
         <xsl:value-of select="header/title"/>
       </fo:block>
-      
+
       <fo:block
         text-align="justify"
         padding-before="18pt"
@@ -334,7 +334,7 @@
       </fo:block>
     </fo:flow>
   </xsl:template>
-  
+
   <xsl:template match="abstract">
     <fo:block
       font-size="12pt"
@@ -347,7 +347,7 @@
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="notice">
     <fo:block
       font-size="10pt"
@@ -369,14 +369,14 @@
   </xsl:template>
 
   <xsl:template match="section">
-    
+
     <xsl:param name="level">0</xsl:param>
 
     <xsl:variable name="size">
       <!-- 14pt for level 1 12pt for level 2 -->
       <xsl:value-of select="14-number($level)"/>
     </xsl:variable>
-    
+
     <fo:block
       font-family="serif"
       font-size="{$size}pt"
@@ -412,13 +412,13 @@
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
-    
+
   </xsl:template>
-  
+
   <xsl:template match="title">
     <!-- do nothing as titles are handled in their parent templates -->
   </xsl:template>
-  
+
   <xsl:template match="subtitle">
     <xsl:param name="level">0</xsl:param>
     <xsl:variable name="size" select="16-(number($level)*1.5)"/>
@@ -451,7 +451,7 @@
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-  
+
 
   <xsl:template match="source">
     <fo:block
@@ -461,31 +461,31 @@
       white-space-collapse="false"
       linefeed-treatment="preserve"
       white-space-treatment="preserve"
-      wrap-option="no-wrap"
+      wrap-option="wrap"
       text-align="start">
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-  
-  
+
+
   <xsl:template match="ol|ul">
-    <fo:list-block 
+    <fo:list-block
       provisional-distance-between-starts="18pt"
       provisional-label-separation="3pt"
       text-align="start">
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
-  
+
   <xsl:template match="ol/li">
     <fo:list-item>
-      <fo:list-item-label 
+      <fo:list-item-label
         end-indent="label-end()">
         <fo:block>
           <xsl:number format="1."/>
         </fo:block>
       </fo:list-item-label>
-      <fo:list-item-body 
+      <fo:list-item-body
         start-indent="body-start()">
         <fo:block
           font-family="serif">
@@ -523,7 +523,7 @@
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-  
+
   <xsl:template match="dl">
     <fo:list-block
       provisional-distance-between-starts="18pt"
@@ -532,7 +532,7 @@
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
-  
+
   <xsl:template match="dt">
     <fo:list-item>
       <fo:list-item-label end-indent="label-end()">
@@ -546,7 +546,7 @@
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-  
+
   <xsl:template match="dd">
     <fo:list-item>
       <fo:list-item-label end-indent="label-end()">
@@ -559,11 +559,11 @@
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-  
+
   <xsl:template match="strong">
     <fo:inline font-weight="bold"><xsl:apply-templates/></fo:inline>
   </xsl:template>
-  
+
   <xsl:template match="em">
     <fo:inline font-style="italic"><xsl:apply-templates/></fo:inline>
   </xsl:template>
@@ -589,7 +589,7 @@
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
         <xsl:otherwise>Warning: </xsl:otherwise>
-      </xsl:choose><xsl:value-of select="title"/>       
+      </xsl:choose><xsl:value-of select="title"/>
     </fo:block>
     <fo:block
       margin-left="0.25in"
@@ -734,7 +734,7 @@
 
   <xsl:template match="table">
     <!-- FIXME: Apache FOP must have column widths specified at present,
-         this section can be removed when this limitation is removed from Fop. 
+         this section can be removed when this limitation is removed from Fop.
          Unfortunately, this means that each column is a fixed width,
          but at least the table displays! -->
 
@@ -753,7 +753,7 @@
     </xsl:variable>
 
     <fo:table>
-                  
+
       <fo:table-column>
         <xsl:attribute name="column-width">
           <xsl:value-of select="$column-width"/>
@@ -764,7 +764,7 @@
         </xsl:attribute>
       </fo:table-column>
 
-      <!-- End of hack for Fop support (if removing this hack, remember 
+      <!-- End of hack for Fop support (if removing this hack, remember
            you need the <fo:table> element) -->
 
       <fo:table-body
@@ -847,12 +847,12 @@
 
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$toc-max-depth > 0">
-      <fo:block font-family="serif" font-size="14pt" font-weight="bold" 
-      space-after="5pt" space-before="5pt" text-align="justify" width="7.5in"> 
+      <fo:block font-family="serif" font-size="14pt" font-weight="bold"
+      space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
       </fo:block>
-      <fo:block font-family="sans" font-size="12pt" space-after="5pt" 
+      <fo:block font-family="sans" font-size="12pt" space-after="5pt"
       space-before="0pt" text-align="justify" width="7.5in">
           <xsl:apply-templates select="section" mode="toc" />
       </fo:block>
@@ -872,7 +872,7 @@
         </fo:basic-link>
       </fo:inline>
         <xsl:if test="$toc-max-depth > 1">
-          <xsl:apply-templates select="section" mode="toc2" /> 
+          <xsl:apply-templates select="section" mode="toc2" />
         </xsl:if>
     </fo:block>
   </xsl:template>
