@@ -425,7 +425,7 @@ document.write("Last Published: " + document.lastModified);
     </xsl:variable>
     <xsl:variable name="whichGroup">
       <xsl:choose>
-        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">selectedmenuitemgroup</xsl:when>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">currentmenuitemgroup</xsl:when>
         <xsl:otherwise>menuitemgroup</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
