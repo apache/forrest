@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
       <p>
       This page describes changes to Apache Forrest that affect people who are
       upgrading to the 0.6 version.
-      Please post your upgrade experiences to either the
+      If you have other issues, then please discuss on either the
       <link href="site:mail-lists/forrest-dev">dev</link> or
       <link href="site:mail-lists/forrest-user">user</link>
       mailing lists.
@@ -66,11 +67,15 @@
     <section id="sync">
       <title>General upgrade tips</title>
       <p>
-      Take advantage of the separation of concerns. Create a fresh
+      Synchronise your project's skinconf.xml and forrest.properties files.
+      </p>
+      <p>
+      Take advantage of the separation of concerns. In a new workspace,
+      create a fresh
       '<code>forrest seed</code>' site, then tweak its forrest.properties
       and skinconf.xml until it reflects your old site.
-      When it is ready, replace your project's skinconf.xml forrest.properties
-      files.
+      When it is ready, replace your project's skinconf.xml and
+      forrest.properties files.
       Any remaining issues would concern other aspects of your configuration,
       such as site.xml and your actual content.
       </p>
@@ -81,8 +86,8 @@
       <p>
       To use the new Forrest, run 'build.sh' or 'build.bat' as normal,
       then change the FORREST_HOME environment variable to point to
-      forrest/src/core instead of 
-      .../build/dist/shbat. Also make sure PATH gets updated to use the new 
+      forrest/src/core instead of the old forrest-0.5 location
+      (.../build/dist/shbat). Also make sure PATH gets updated to use the new 
       $FORREST_HOME/bin
       </p>
     </section>
@@ -102,7 +107,13 @@
     </section>
 
     <section id="sitemap">
-      <title>Sitemap</title>
+      <title>Project sitemaps take precedence.</title>
+
+      <p>With Forrest 0.6 it is now possible for projects to "plugin" 
+      to our sitemaps, without needing to copy the main sitemaps and keep
+      them synchonised. This will enable hassle-free update to
+      future Forrest versions.</p>
+
       <p>
         If your old project did not use any customised <code>*.xmap</code> 
         files, then your upgrade process will be easy (you can safely skip this
@@ -113,10 +124,11 @@
         were handling) then you will need to be prepared to make some changes. 
         Hopefully with the new functionality of Forrest, you can do away with 
         your customisations altogether and just use the Forrest default 
-        sitemaps, if not read on...</p>
+        sitemaps. Try that first. If not, then read on...</p>
         
       <p>Prior to 0.6 it was possible to replace *any* of the xmaps by placing 
       your own versions in your project directory, these were then copied over 
+      to replace
       the Forrest ones at build time. However, with the move to 
       <link href="#copyless">copyless</link> this no longer happens, instead 
       there is now an extension mechanism for the sitemap (as opposed to 
@@ -131,9 +143,9 @@
       in your project.</p>
       
       <p>The good news is that this process makes upgrading to future versions
-      of Forrest much simpler since your project <code>*.xmap</code> files will 
-      only contain your customisations. As a result there will no longer be a
-      need to merge your custom xmaps with the updated ones in new versions of 
+      of Forrest much simpler, because your project <code>*.xmap</code> files will 
+      contain only your customisations. As a result there will no longer be a
+      need to merge your custom xmaps with the updated ones in upcoming versions of 
       Forrest.</p>
       
       <p>See <link href="site:project-sitemap">Using project 
@@ -173,12 +185,12 @@
     <section id="antproxy">
       <title>forrest.antproxy.xml is obsolete in favor of Ant's &lt;import&gt; task</title>
       <p>
-      Projects that use <code>forrest.antproxy.xml</code> via and Ant build
+      Projects that use <code>forrest.antproxy.xml</code> via an Ant build
       task to invoke Forrest, will receive
       an error message directing them to this document.
       Please see the <link href="site:your-project/invoking_from_ant">Invoking
       Forrest from Ant</link> documentation for instructions on how to use
-      the &lt;import&gt; task.
+      the &lt;import&gt; task to integrate Forrest with your build system.
       </p>
     </section>
 
@@ -295,11 +307,12 @@ todo          - Same changes as in document between 1.3 and 2.0
       <title>Projects can use a local CatalogManager.properties</title>
       <p>
       You can add a local CatalogManager.properties to your 
-      project.classes-dir to define your additional catalogs for DTDs
-      and other entities.
+      project.classes-dir (usually src/documentation/classes/)
+      to define your additional catalogs for DTDs and other entities.
+      Copy a default file from a fresh 'forrest seed site'.
       </p>
       <p>
-      If you do not add such a configuration file then there will be a
+      If you do not add such a configuration file, then there will be a
       harmless message on startup "CatalogManager.properties not found".
       </p>
     </section>
