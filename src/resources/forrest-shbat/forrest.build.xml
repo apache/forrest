@@ -11,11 +11,13 @@ FORREST SITE BUILDER
 
 <project default="site" basedir="." name="Forrest template targets">
 
+  <property name="version" value="0.5"/>
+
   <description>
     *=======================================================*
     |                 Forrest Site Builder                  |
-    |                        0.5-dev                        |
-    |             $Date: 2003/09/03 23:14:44 $              |
+    |                        ${version}-dev                        |
+    |             $Date: 2003/09/04 13:12:04 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -393,25 +395,42 @@ FORREST SITE BUILDER
     copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
-  <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-sitemap, copy-conf,
+  <target name="project-context" depends="examine-proj, ensure-content,
+    validate, init, bare-context, copy-sitemap, copy-conf,
     copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
       overwrite="true" failonerror="false">
-      <fileset dir="${project.conf-dir}"/>
+      <fileset dir="${project.conf-dir}">
+        <exclude name="*-${version}.xconf"/>
+      </fileset>
     </copy>
-  </target>
+    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true"
+      failonerror="false">
+      <fileset dir="${project.conf-dir}">
+        <include name="*-${version}.*"/>
+      </fileset>
+      <mapper type="glob" from="*-${version}.xconf" to="*.xconf"/>
+    </copy>
+   </target>
 
   <target name="copy-sitemap" if="sitemap.present">
     <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true" failonerror="false">
       <fileset dir="${project.sitemap-dir}">
+        <exclude name="*-${version}.xmap"/>
         <include name="*.xmap"/>
         <include name="jtidy.properties"/>
       </fileset>
     </copy>
-   </target>
+    <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true">
+      <fileset dir="${project.sitemap-dir}">
+        <include name="*-${version}.xmap"/>
+      </fileset>
+      <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
+    </copy>
+  </target>
 
   <target name="copy-xdocs" if="xdocs.present">
     <sync toDir="${project.ctxt-dir}/content/xdocs">
@@ -854,6 +873,7 @@ Thanks for using Apache Forrest
 
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap">
+
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${project.content-dir}"
         includes="${forrest.validate.sitemap.includes}"
