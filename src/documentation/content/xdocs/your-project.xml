@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN"
+"document-v11.dtd">
 
 <document>
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>0.9</version>
+    <version>1.0</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -94,14 +95,15 @@ Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.bui
                   Marc Portier (mpo@apache.org)
                   Jeff Turner (jefft@apache.org)
   
-        Call this through the /bin/forrest command
+        Call this through the 'forrest' command
   
 Main targets:
 
- seed    Seeds a directory with a template project doc structure
- site    Generates a static HTML website for this project
- war     Generates a dynamic servlet-based website (an packaged .war file)
- webapp  Generates a dynamic servlet-based website (an unpackaged webapp)
+ seed      Seeds a directory with a template project doc structure
+ site      Generates a static HTML website for this project
+ validate  Validates XML doc files in the project
+ war       Generates a dynamic servlet-based website (an packaged .war file)
+ webapp    Generates a dynamic servlet-based website (an unpackaged webapp)
 
 Default target: site
       </source>
@@ -191,10 +193,14 @@ jeff@expresso:~/apache/xml-mysite$ tree
 |       |       |-- book.xml
 |       |       |-- index.xml
 |       |       |-- sample.xml
+|       |       |-- subdir
+|       |       |   |-- book.xml
+|       |       |   `-- index.xml
 |       |       `-- tabs.xml
 |       |-- resources
 |       |   `-- images
 |       |       |-- group-logo.gif
+|       |       |-- icon.png
 |       |       `-- project-logo.gif
 |       `-- skinconf.xml
 `-- status.xml
@@ -215,7 +221,7 @@ jeff@expresso:~/apache/xml-mysite$ tree
       </p>
       <p>
         If your project already has XML documentation, it may be easier to tell
-        Forrest where it lives, rather than rearrange your project directories to
+        Forrest where the XML lives, rather than rearrange your project directories to
         accommodate Forrest. This can be done by editing forrest.properties. Consult
         the <link href="#Changing_the_layout">Changing the layout</link> section for
         more details.
@@ -246,6 +252,8 @@ jeff@expresso:~/apache/xml-mysite$ tree
           <skinconfig>
             <!-- Do we want the Google search box? -->
             <disable-search>false</disable-search>
+            <searchsite-domain>myproj.mygroup.org</searchsite-domain>
+            <searchsite-name>MyProject</searchsite-name>
 
             <project-name>MyProject</project-name>
             <project-url>http://myproj.mygroup.org/</project-url>
@@ -452,7 +460,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
       </p>
       <section id="adding_new_content_type">
         <title>Example: Adding a new content type</title>
-        <note>This section will shortly be made obsolete by <link
+        <note>This section will eventually be simplified by <link
             href="cap.html">Content Aware Pipelines (CAPs)</link>.</note>
         <p>
           Say that download.xml lists downloads for a certain package. It would be
@@ -588,6 +596,32 @@ project.skinconf=${project.content-dir}/skinconf.xml
               By declaring a custom 'body-download.xml' rule <em>before</em> this
               rule, we intercept the request, and can apply our stylesheet.
             </p>
+            <section>
+              <title>Registering a new DTD</title>
+              <p>
+                 By default, Forrest requires that all XML files be valid: ie
+                 they must have a DOCTYPE declaration and associated DTD, and
+                 validate against it.  Our new 'downloads' document type is no
+                 exception.  The <link href="validation.html">XML
+                   Validation</link> section continues this example, showing how
+                 to register a new document type.  Briefly, this involves:
+               </p>
+               <ul>
+                 <li>Creating a new DTD or (in our case) extending an existing
+                   one</li>
+                 <li>Putting the new DTD in
+                   <code>${project.schema-dir}/dtd</code></li>
+                 <li>Adding a mapping from the DOCTYPE public id to the DTD
+                   location, in the catalog file,
+                   <code>${project.schema-dir}/catalog</code>.  Eg:
+                   <code>PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+                     "dtd/download-v11.dtd"</code></li>
+               </ul>
+               <p>
+                 Please read <link href="validation.html">XML Validation</link>
+                 for the full story.
+               </p>
+            </section>
           </section>
           <section>
             <title>Example: integrating external RSS content</title>
@@ -804,7 +838,7 @@ To run in Tomcat, add this to the config file (usu. server.xml):
             in the browser.
           </p>
           <p>
-            To get the edited content back to it's home directory, either copy it
+            To get the edited content back to its home directory, either copy it
             once you've finished editing, or symlink the
             <code>src/documentation/content/xdocs</code> directory to
             <code>build/webapp/content/xdocs</code>.
@@ -820,86 +854,5 @@ To run in Tomcat, add this to the config file (usu. server.xml):
           </note>
         </section>
      </section>
-      <section>
-        <title>XML validation</title>
-        <p>
-          By default, Forrest will try to validate your XML before generating
-          HTML or a webapp from it, and fail if any errors are detected.
-          Validation can be performed manually by typing 'forrest validate' in
-          the project root.
-        </p>
-        <p>
-          Validation errors can be made non-fatal by setting the following in
-          <code>forrest.properties</code>:
-        </p>
-        <source>forrest.validation.failonerror=false</source>
-
-        <warning>
-          Each XML file <em>must</em> have a DOCTYPE declaration at the top,
-          indicating its content type. The DOCTYPE declaration is
-          <em>required</em> if the XML is to be considered valid.  If, during
-          development, you wish to experiment with DTD-less XML files, make
-          validation non-fatal as described above.
-        </warning>
-
-          <p>
-            Most files will have the following DOCTYPE declaration:
-        </p>
-        <source><![CDATA[
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
-]]></source>
-
-        <section>
-          <title>Validating new XML types</title>
-          <p>
-            Forrest provides an SGML Catalog,
-            <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
-            associating public identifiers (<code>-//APACHE//DTD Documentation
-              V1.1//EN</code> above) with DTDs.  If you add a new content type,
-            you should add the DTD to
-            <code>src/documentation/resources/schema/dtd</code>, and add an entry
-            to the <code>src/documentation/resources/schema/catalog</code> file.
-            This process is described the <link
-              href="#adding_new_content_type">Adding a new content type</link>
-            example.  If done properly, files of the new content type will be
-            validated along with the others.
-          </p>
-        </section>
-        <p>
-          If you have an XML editor that
-          understands SGML or XML catalogs, let it know where this catalog file is,
-          and you will be able to validate any Forrest XML file, regardless of
-          location.
-        </p>
-        <section>
-          <title>Case study: setting up xmllint</title>
-          <p>
-            On *nix systems, one of the best XML validation tools is
-            <code>xmllint</code>, that comes as part of the libxml2 package. It is
-            very fast, can validate whole directories of files at once, and can
-            configured to use Forrest's catalog file for validation.
-          </p>
-          <p>
-            To tell xmllint where the Forrest catalog is, add the path to the catalog
-            file to the <code>SGML_CATALOG_FILES</code> variable. For example:
-          </p>
-          <source>export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
-            /home/jeff/apache/xml/xml-forrest/src/resources/schema/catalog
-          </source>
-          <p>
-            Then Forrest XML files can be validated as follows:
-          </p>
-          <source>
-            xmllint --valid --noout --catalogs *.xml
-          </source>
-          <p>
-            For users of the vim editor, the following .vimrc entries are useful:
-          </p>
-          <source>
-            au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
-            au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
-          </source>
-        </section>
-      </section>
-   </body>
+</body>
 </document>
