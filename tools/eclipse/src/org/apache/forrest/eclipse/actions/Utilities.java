@@ -25,17 +25,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.debug.core.ILaunch;
-
 /**
  * 
  * Some handy utilities for working with plugins.
  */
 public class Utilities {
-	/**
-	 * Comment for <code>jetty</code>
-	 */
-	public static ILaunch jetty;
 
 	/**
 	 * @param directory
