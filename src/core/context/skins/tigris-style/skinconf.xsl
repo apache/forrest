@@ -8,28 +8,28 @@
   <!-- Collabnet --> 
     <color name="header"    value="#ffffff"/><!-- 003366 -->
 
-    <color name="tab-selected" value="#dddddd"/>
-    <color name="tab-unselected" value="#999999"/>
-    <color name="subtab-selected" value="#cccccc"/>
-    <color name="subtab-unselected" value="#cccccc"/>
+    <color name="tab-selected" value="#dddddd" link="#555555" vlink="#555555" hlink="#555555"/>
+    <color name="tab-unselected" value="#999999" link="#ffffff" vlink="#ffffff" hlink="#ffffff"/>
+    <color name="subtab-selected" value="#cccccc" link="#000000" vlink="#000000" hlink="#000000"/>
+    <color name="subtab-unselected" value="#cccccc" link="#555555" vlink="#555555" hlink="#555555"/>
 
     <color name="heading" value="#003366"/>
     <color name="subheading" value="#888888"/>
     
-    <color name="navstrip" value="#dddddd"/>
-    <color name="toolbox" value="#dddddd"/>
+    <color name="navstrip" value="#dddddd" font="#555555"/>
+    <color name="toolbox" value="#dddddd" font="#555555"/>
     <color name="border" value="#999999"/>
     
     <color name="menu" value="#ffffff"/>    
     <color name="dialog" value="#eeeeee"/>
             
-    <color name="body"      value="#ffffff"/>
+    <color name="body"  value="#ffffff"/>
     
     <color name="table" value="#ccc"/>    
     <color name="table-cell" value="#ffffff"/>   
     <color name="highlight" value="#ffff00"/>
-    <color name="fixme" value="#cc6060"/>
-    <color name="note" value="#006609"/>
+    <color name="fixme" value="#cc6600"/>
+    <color name="note" value="#006699"/>
     <color name="warning" value="#990000"/>
     <color name="code" value="#003366"/>
         
@@ -55,16 +55,16 @@
        <color name="header" value="#ffffff"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-selected'])">
-      <color name="tab-selected" value="#dddddd"/>
+      <color name="tab-selected" value="#dddddd" link="#555555" vlink="#555555" hlink="#555555"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-unselected'])">
-      <color name="tab-unselected" value="#999999"/>
+      <color name="tab-unselected" value="#999999" link="#ffffff" vlink="#ffffff" hlink="#ffffff"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='subtab-selected'])">
-      <color name="subtab-selected" value="#cccccc"/>
+      <color name="subtab-selected" value="#cccccc" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='subtab-unselected'])">
-      <color name="subtab-unselected" value="#cccccc"/>
+      <color name="subtab-unselected" value="#cccccc" link="#555555" vlink="#555555" hlink="#555555"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='heading'])">
       <color name="heading" value="#003366"/>
@@ -73,10 +73,10 @@
       <color name="subheading" value="#888888"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='navstrip'])">
-      <color name="navstrip" value="#dddddd"/>
+      <color name="navstrip" value="#dddddd" font="#555555"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='toolbox'])">
-       <color name="toolbox" value="#dddddd"/>
+      <color name="toolbox" value="#dddddd" font="#555555"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='border'])">
        <color name="border" value="#999999"/>
