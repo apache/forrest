@@ -76,7 +76,6 @@
   </xsl:template>
 
   <xsl:template name="generate-id">
-    <xsl:message>## Got node <xsl:value-of select="local-name(.)"/></xsl:message>
     <xsl:choose>
       <xsl:when test="@id">
         <xsl:value-of select="@id"/>
