@@ -1,9 +1,3 @@
-/*
- * Created on 13-Dec-2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package org.apache.forrest.eclipse.job;
 
 import java.io.File;
@@ -20,19 +14,19 @@ import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.tools.ant.Project;
 import org.eclipse.ant.core.AntRunner;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.osgi.framework.Bundle;
 
 /**
- * @author Ross Gardler
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ * An abstract Forrest job that provides utility methods for handling Eclipse based Forrest Jobs. 
  */
 public abstract class ForrestJob extends Job {
 	private static final String CONCURRENT_ANT_BUILDS = "Concurrent Ant builds are possible if you specify to build in a separate JRE.";
@@ -49,20 +43,21 @@ public abstract class ForrestJob extends Job {
 	public static final int EXCEPTION_VALIDATION = 1010;
 
 	public static final int EXCEPTION_ANT_RUNNING = 1020;
-
+	
 	protected String workingDir;
 
 	/**
-	 * @param name
+	 * Create a new Forrest Job.
+	 * @param name of the job
 	 */
 	public ForrestJob(String name) {
 		super(name);
 
 		ForrestPlugin plugin = ForrestPlugin.getDefault();
 		URL urlPluginDir = plugin.getBundle().getEntry("/");
-		// FIXME: Make this path relative to the project 
-		String strLog4jConf = "D:\\projects\\burrokeet\\forrestplugin\\conf\\log4j.xml";
-		DOMConfigurator.configure(strLog4jConf);
+		Bundle bundle = Platform.getBundle(ForrestPlugin.ID);
+		URL log4jConf = Platform.find(bundle, new Path("conf/log4j.xml"));
+		DOMConfigurator.configure(log4jConf);
 	}
 
 	/**
@@ -90,6 +85,7 @@ public abstract class ForrestJob extends Job {
 			AntRunner runner = new AntRunner();
 			runner.setCustomClasspath(getAntClasspath());
 			runner.addBuildListener(AntBuildListener.class.getName());
+			runner.setMessageOutputLevel(Project.MSG_INFO);
 			try {
 				runner.setBuildFileLocation(antFile);
 				runner.setArguments(cmdString);
