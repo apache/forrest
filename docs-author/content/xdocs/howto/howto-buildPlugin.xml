@@ -70,25 +70,98 @@
       <a href="site:documentation/developers/pluginInfrastructure">type of plugin</a>
       you need to build.</p>
       
-      
     </section>
     
     <section>
-      <title>Create Plugin Directory Structure</title>
+      <title>Seed a New Plugin</title>
       <p>Regardless of the type of plugin you are building, the directory
-      structure is almost identical. See 
+      structure is almost identical, as are most of the requried
+      configuration files. In this How-To we will assume that you are creating a 
+      plugin in the Forrest source tree. All plugins are developed in the
+      <code>forrest/plugins</code> directory.</p>
+      
+      <p class="instruction">Run the following set of commands:</p>
+      
+      <source>
+      cd [path_to_forrest]/plugins
+      ant seedPlugin
+      </source>      
+      
+      <p>The above ant target will ask you the name of the plugin and will
+      build a minimal plugin directory structure and configuration. You will 
+      need to customise these files to buyild your plugin.</p>
+      
+      <note>If you plan on building your plugin elsewhere you can copy the
+      <code>build.xml</code> build file to your own plugin work directory and 
+      use it there.</note>
+      
+      <p>See 
       <a href="site:documentation/developers/pluginInfrastructure">What Does 
-      a Forrest Plugin Look Like?</a></p>
+      a Forrest Plugin Look Like?</a> for more information on the plugin
+      directory structure and configuration files.</p>
+    
+      <section>
+        <title>Edit the Plugin Tempalte</title>
+        <p>You now have a skeleton plugin project. However, it doesn't do 
+        anything useful yet. Now is a good time to edit some of the files
+        provided. For example:</p>
+        
+        <section>
+          <title>status.xml</title>
+          <p>This file is used to track changes to the plugin
+          project and to manage lists of things that still need to be done.
+          At this stage you should correct the <code>person</code> entry
+          near the top of the file. It is also a good idea to add a few key
+          milestones in the task list towards the bottom of the file.</p>
+          
+          <p>As you work on the plugin you should record all major changes in
+          this file so that it can then be used as a changelog for your
+          plugin.</p>
+        </section>
+        
+        <section>
+          <title>forrest.properties</title>
+          
+          <p>This file defines many configuration parameters for Forrest. It
+          does not need to be customised in most cases. However, see
+          for more details.</p>
+        </section>
+        
+        <section>
+          <title>src/documentation/skinconf.xml</title>
+          <p>This configures the skin for your plugins documentation. There
+          are some items that need to be configured in here, for example, the
+          copyright information. The file is heavily commented so probably
+          best to read through it, changing what you need to.</p>
+        </section>
+        
+        <section>
+          <title>Documentation</title>
+          <p>It is also a good idea to start writing the documentation at this
+          stage. The above process created a very simple plugin documentation
+          site for you. All you have to do is add the content.</p>
+        </section>
+      </section>
     </section>
     
     <section>
-      <title>Create the Plugin XMap file</title>
+      <title>Edit the Plugin XMap file</title>
       <p>The plugin <code>xmap</code> file is a Cocoon sitemap that is mounted
       at a strategic place in the Forrest pipeline. It is in this file
       that you will instruct Forrest how to operate. An input plugin
       must provide a <code>input.xmap</code> file, an ouput plugin
       must provide a <code>output.xmap</code> file, whilst an internal
-      plugin provides a <code>sitemap.xmap</code> file.</p>
+      plugin provides a <code>internal.xmap</code> file.</p>
+      
+      <p>It is beyond the scope of this How-To to give details about how to 
+      build your plugins XMap. See the 
+      <a href="site:documentation/developers/sitemap-ref">Sitemap Reference</a> for general
+      information. See also 
+      <a href="site:documentation/developers/pluginInfrastructure">Plugin Infrastructure</a>
+      for some hints and tips on creating plugin sitemaps. In addition, as with
+      all development work on Forrest, you will find
+      the <a href="ext:forrest/mail-lists/forrest-dev">developer mailing list</a>
+      a very doog resource (check the archives before posting, please).</p>
     </section>
     
     <section>
@@ -97,10 +170,16 @@
     </section>
     
     <section>
-      <title>Create the Documentation</title>
-      <fixme author="rdg">Plugin documentation should provide (as a minimum) an
+      <title>Create Samples in the Documentation</title>
+      <p>Plugin documentation should provide (as a minimum) an
       index page that provides an overview and a set of samples that demonstrate
-      the functionlaity of the plugin.</fixme>
+      the functionlaity of the plugin. Typically these samples will be
+      provided in a <code>samples</code> subdirectory in the plugin 
+      documentation and will be referenced from both <code>site.xml</code>
+      and <code>tabs.xml</code>.</p>
+      
+      <p>Try to provide a sample for all the major functions of your plugin
+      and document any configuration that is available.</p>
     </section>
     
     <section>
@@ -129,9 +208,11 @@
       your documentation (point your prowser at 
       <a href="localhost:8888">localhost:8888</a>).</note>
       
-      <fixme author="rdg">Encourage users to build propoer tests for their 
-      plugins using, for example, 
-      <a href="http://webtest.canoo.com/">WebTest</a>.</fixme>
+      <p>It is also a really good idea to build proper tests for your 
+      plugins using a suitable testing framework, for example, 
+      <a href="http://webtest.canoo.com/">WebTest</a>. We recomend that you
+      use the samples in your documentation for your tests, this way you are
+      documenting your plugin at the same time as writing your tests.</p>
     </section>
     
     <section>
