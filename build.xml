@@ -212,13 +212,11 @@
     <!-- skinconf.xml -->
     <echo message="validating **/skinconf.xml ..."/>
     <xmlvalidate failonerror="true" lenient="no" warn="yes">
-      <xmlcatalog >
-      <!-- can't use a catalogpath to reference catalog.xcat
-      because xml-commons isn't in the classpath yet -->
-        <dtd publicId="-//APACHE//DTD Skin Configuration V0.6//EN"
-        location="src/core/context/resources/schema/dtd/skinconfig-v06.dtd"/>
-        <dtd publicId="-//APACHE//DTD Skin Configuration V0.6-1//EN"
-        location="src/core/context/resources/schema/dtd/skinconfig-v06-1.dtd"/>
+      <xmlcatalog id="xcat">
+        <catalogpath>
+          <pathelement
+            location="./src/core/context/resources/schema/catalog.xcat"/>
+        </catalogpath>
       </xmlcatalog>
       <fileset dir="./src/core"
         includes="**/skinconf.xml" />
