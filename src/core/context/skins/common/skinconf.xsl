@@ -7,13 +7,13 @@
        <disable-lucene>true</disable-lucene>
      </xsl:if>
      <xsl:if test="not(disable-search)">     
-       <disable-search>false</disable-search>
+       <disable-search>true</disable-search>
      </xsl:if>
      <xsl:if test="not(disable-print-link)">     
        <disable-print-link>true</disable-print-link>
      </xsl:if>
      <xsl:if test="not(disable-pdf-link)">     
-       <disable-pdf-link>false</disable-pdf-link>
+       <disable-pdf-link>true</disable-pdf-link>
      </xsl:if>
      <xsl:if test="not(disable-xml-link)">     
        <disable-xml-link>true</disable-xml-link>
@@ -83,7 +83,8 @@
      <xsl:if test="not(trail)">
         <toc level="2" location="page"/>
      </xsl:if>
-     
+
+<!--
   <xsl:if test="not(colors)">
   <colors>
     <color name="header" value="#294563"/>
@@ -106,7 +107,7 @@
     
     <color name="table" value="#7099C5"/>    
     <color name="table-cell" value="#f0f0ff"/>    
-    <color name="highlight" value="#yellow"/>
+    <color name="highlight" value="#ffff00"/>
     <color name="fixme" value="#c60"/>
     <color name="note" value="#069"/>
 
@@ -116,6 +117,7 @@
     <color name="footer" value="#cedfef"/>
   </colors>
   </xsl:if>
+-->
 
   <xsl:if test="not(extra-css)">
     <extra-css>
@@ -137,15 +139,17 @@
 
      <xsl:copy>
       <xsl:copy-of select="@*"/>
+      <xsl:copy-of select="node()"/>     
+      <!--
       <xsl:copy-of select="node()[not(name(.)='colors')]"/>     
-      <xsl:apply-templates select="colors"/>
+      <xsl:apply-templates select="colors"/>-->
      </xsl:copy> 
 
     </xsl:template>
-
+<!--
     <xsl:template match="colors">
     <colors>
-     <xsl:if test="not(color[@name=''])">
+     <xsl:if test="not(color[@name='header'])">
        <color name="header" value="#294563"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-selected'])">
@@ -213,5 +217,5 @@
 
       </colors> 
     </xsl:template>
-    
+-->    
 </xsl:stylesheet>
