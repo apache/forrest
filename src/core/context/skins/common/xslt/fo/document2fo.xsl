@@ -19,43 +19,40 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
-  <!-- the skinconf file -->
-  <xsl:param name="config-file"/>
-  <xsl:variable name="config" select="document('$config-file')/skinconfig"/>
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
-  <xsl:variable name="toc-max-depth" select="number($config/toc/@max-depth)"/>
+  <xsl:variable name="toc-max-depth" select="number(//skinconfig/toc/@max-depth)"/>
 
   <!-- The page size to be used -->
   <xsl:variable name="pagesize"
-                select="string($config/pdf/page/@size)"/>
+                select="string(//skinconfig/pdf/page/@size)"/>
 
   <!-- The page orientation ("portrait" or "landscape") -->
   <xsl:variable name="pageorientation"
-                select="string($config/pdf/page/@orientation)"/>
+                select="string(//skinconfig/pdf/page/@orientation)"/>
 
   <!-- Double-sided printing toggle -->
   <xsl:variable name="doublesided"
-                select="string($config/pdf/margins/@double-sided)"/>
+                select="string(//skinconfig/pdf/margins/@double-sided)"/>
 
   <!-- The top page margin -->
   <xsl:variable name="topmargin"
-                select="string($config/pdf/margins/top)"/>
+                select="string(//skinconfig/pdf/margins/top)"/>
 
   <!-- The bottom page margin -->
   <xsl:variable name="bottommargin"
-                select="string($config/pdf/margins/bottom)"/>
+                select="string(//skinconfig/pdf/margins/bottom)"/>
 
   <!-- The inner page margin (always the left margin if
   double-sided printing is off, alternating between left and right if
   it's on) -->
   <xsl:variable name="innermargin"
-                select="string($config/pdf/margins/inner)"/>
+                select="string(//skinconfig/pdf/margins/inner)"/>
 
   <!-- The outer page margin (always the right margin if
   double-sided printing is off, alternating between right and left if
   it's on)-->
   <xsl:variable name="outermargin"
-                select="string($config/pdf/margins/outer)"/>
+                select="string(//skinconfig/pdf/margins/outer)"/>
 
 
   <xsl:param name="numbersections" select="'true'"/>
@@ -244,11 +241,10 @@
         </fo:page-sequence-master>
       </fo:layout-master-set>
 
-      <xsl:apply-templates select="/document" mode="outline"/>
+      <xsl:apply-templates select="/site/document" mode="outline"/>
 
       <fo:page-sequence master-reference="book">
-        <fo:title><xsl:value-of select="document/header/title"/></fo:title>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="/site/document"/>
       </fo:page-sequence>
 
     </fo:root>

@@ -28,19 +28,15 @@ with @role='pdf' is present, that is used instead.  Eg:
   <url>http://xml.apache.org/fop/dev/</url>
 </credit>
 -->
-
-  <xsl:param name="config-file"/>
-  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-
   <xsl:template name="info">
-    <xsl:variable name="pdfcredit" select="$config/credits/credit[@role = 'pdf']"/>
+    <xsl:variable name="pdfcredit" select="//skinconfig/credits/credit[@role = 'pdf']"/>
     <xsl:variable name="text">
       <xsl:if test="$pdfcredit">
         <xsl:value-of select="$pdfcredit/name"/>
       </xsl:if>
       <xsl:if test="not($pdfcredit)">
-        <xsl:text>Copyright &#169; </xsl:text><xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-          select="$config/vendor"/><xsl:text> All rights reserved.</xsl:text>
+        <xsl:text>Copyright &#169; </xsl:text><xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
+          select="//skinconfig/vendor"/><xsl:text> All rights reserved.</xsl:text>
       </xsl:if>
     </xsl:variable>
     <xsl:variable name="url" select="$pdfcredit/url"/>
