@@ -46,10 +46,10 @@
         by copying them into the project's src/documentation/ directory.
       </p>
       <p>
-        The best way to experiment with the sitemap is to run '<code>forrest
+        The best way to experiment with the sitemap is to do '<code>forrest
           run</code>' on a Forrest-using site.  Changes to the
-        <code>build/webapp/*.xmap</code> files will now be immediately visible
-        at <link href="http://localhost:8888/">http://localhost:8888/</link>
+        <code>*.xmap</code> files will now be immediately visible
+        at <code>>http://localhost:8888/</code>
       </p>
     </section>
 
@@ -58,8 +58,8 @@
       <title>Sitemap Overview</title>
       <p>
         Forrest's sitemap is divided both physically and logically.  The most
-        obvious is the physical separation.  There are no less than thirteen
-        *.xmap files, each defining pipelines in a functional area.  Each *.xmap
+        obvious is the physical separation.  There are a number of separate
+        *.xmap files, each defining pipelines for a functional area.  Each *.xmap
         file has its purpose documented in comments at the top.  Here is a brief
         overview of the files, in order of importance.
       </p>
@@ -68,7 +68,7 @@
           <th><strong>sitemap.xmap</strong></th>
           <td>Primary sitemap file, which delegates responsibility for serving
             certain URIs to the others (technically called sub-sitemaps).  More
-            on the structure of this file later.</td>
+            about the structure of this file later.</td>
         </tr>
         <tr>
           <th>forrest.xmap</th>
@@ -188,9 +188,9 @@
                                  |
 --------+------------------------^------------------------------------------
         |          STANDARD FORREST FORMAT (current document-v13)
-        +-----^-------^-------^-------------^------^-----^----^------^-----
-SOURCE        |       |       |             |      |     |    |      |
-FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
+        +-----^-------^--------^------------^------^-----^-----^------^-----
+SOURCE        |       |        |            |      |     |     |      |
+FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 (*.xml)
                         (in forrest.xmap, faq.xmap, etc)
       </source>
@@ -198,7 +198,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         <title>forrest.xmap</title>
         <p>
           Most of the usual Source pipelines are defined in
-          <code>forrest.xmap</code>, which is the default (fallback) handler for
+          <code>forrest.xmap</code> which is the default (fallback) handler for
           <code>**.xml</code> pages. The forrest.xmap uses the 
           <link href="site:cap">SourceTypeAction</link> to determine the type of XML
           it is processing, and converts it to document-v13 if necessary.
@@ -208,7 +208,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           declaration:</p>
         <source>
 &lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.3//EN"
-  "http://forrest.apache.org/dtd/howto-v12.dtd"></source>
+  "http://forrest.apache.org/dtd/howto-v13.dtd"></source>
         <p>The SourceTypeAction sees this, and applies this transform to get it
           to document-v13:</p>
         <source><![CDATA[
@@ -477,10 +477,10 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
         </map:match>
         ]]></source>
-      <p>Meaning that it is defined in <code>menu.xmap</code>.  In there we find
+      <p>Meaning that it is defined in the <code>menu.xmap</code> file.  In there we find
         the real definition, which is quite complicated, because there are three
         supported menu systems (see <link href="site:linking">menus and
-          linking</link>).  We will not do through the sitemap itself
+          linking</link>).  We will not go through the sitemap itself
         (menu.xmap), but will instead describe the logical steps involved:</p>
       <ol>
         <li>Take site.xml and expand hrefs so that they are all
@@ -501,8 +501,8 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                 For example, say our current page's path is
                 <code>community/howto/index.html</code>.  In
                 <code>site.xml</code> we look for the node with this
-                <code>href</code>, and discover its <code>tab</code> attribute
-                value is <code>howtos</code>.  We then prune the
+                "<code>href</code>" and discover its "<code>tab</code>" attribute
+                value is "<code>howtos</code>".  We then prune the
                 <code>site.xml</code>-derived content to contain only nodes with
                 <code>tab="howtos"</code>.
               </p>
@@ -527,9 +527,9 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 </map:transform>
                 ]]></source>
               <p>
-                Here, <code>{1}</code> is the directory part of the current
+                Here, the "<code>{1}</code>" is the directory part of the current
                 page.  So if our current page is
-                <code>community/howto/index.html</code> then <code>{1}</code> will
+                <code>community/howto/index.html</code> then "<code>{1}</code>" will
                 be <code>community/howto/</code> and the transformer will
                 include all nodes in that directory.
               </p>
@@ -538,11 +538,11 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           <p>We now have a <code>site.xml</code> subset relevant to our current
             page.</p>
         </li>
-        <li>The <code>href</code> nodes in this are then made relative to the
+        <li>The "<code>href</code>" nodes in this are then made relative to the
           current page.</li>
         <li>The XML is then transformed into a legacy "<code>book.xml</code>"
           format, for compatibility with existing stylesheets, and this XML
-          format is returned (hence the name of the matcher;
+          format is returned (hence the name of the matcher:
           <code>**book-*.html</code>).</li>
       </ol>
     </section>
@@ -589,7 +589,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </section>
 
       <section id="implement_rewriting">
-        <title>Implementing <code>site:</code>-rewriting</title>
+        <title>Implementing "<code>site:</code>" rewriting</title>
         <p>
           Using the above components, "<code>site:</code>" URI rewriting is
           accomplished as follows.
@@ -616,7 +616,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           <ul>
             <li><strong>linkmap</strong> will provide access to the contents of
               &s;; for example, <code>linkmap:/site/about/index/@href</code>
-              should return the value "index.html".</li>
+              would return the value "index.html".</li>
             <li><strong>site</strong> provides a "mask" over
               <strong>linkmap</strong> such that <code>site:index</code> expands
               to <code>linkmap:/site//index/@href</code>
@@ -635,7 +635,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           <title>sitemap.xmap</title>
           <p>
             Now in the sitemap, we define the LinkRewriterTransformer, and
-            insert it into any pipelines dealing with user-editable XML
+            insert it into any pipelines which deal with user-editable XML
             content:
           </p>
           <source><![CDATA[
@@ -682,7 +682,7 @@ FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                 <input-module name="linkmap">
                   <file src="{src}" reloadable="false" />
               </input-module>]]></source>
-              <p>The <code>{src}</code> text is expanded to the value of the
+              <p>The "<code>{src}</code>" text is expanded to the value of the
                 "<code>src</code>" attribute in the "<code>linkrewriter</code>"
                 instance, namely "<code>cocoon:/{1}linkmap-{2}.html</code>"
                 Thus the <code>linkmap</code> module reads dynamically
