@@ -148,6 +148,31 @@
         <get src="@{url}" 
            dest="${project.temp-dir}/plugins-${plugin-counter}.xml"
            verbose="true" usetimestamp="true" ignoreerrors="true"/>
+        <available property="plugin.list-${plugin-counter}.present"
+                 file="${project.temp-dir}/plugins-${plugin-counter}.xml"/>
+        <math result="plugin-counter" operand1="${plugin-counter}" operation="+" operand2="1" datatype="int"/>
+      </sequential>
+    </for>
+    
+    <var name="plugin-counter" value="1"/>
+    <for list="${forrest.plugins.descriptors}" param="url">
+      <sequential>
+        <if>
+          <available file="${project.temp-dir}/plugins-${plugin-counter}.xml"/>
+          <then>
+            <echo>Plugin list loaded.</echo>
+          </then>
+          <else>
+            <echo>
+            WARNING
+            =======
+            
+            Unable to load plugin list number ${plugin-counter}. 
+            Any plugins identified in this plugin list cannot be installed 
+            automatially, you will need to install these manually, see 
+            further errors below.</echo>
+          </else>
+        </if>
         <math result="plugin-counter" operand1="${plugin-counter}" operation="+" operand2="1" datatype="int"/>
       </sequential>
     </for>
