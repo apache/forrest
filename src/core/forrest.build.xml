@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/21 17:20:46 $              |
+    |             $Date: 2003/10/23 10:46:37 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -254,40 +254,10 @@ FORREST SITE BUILDER
        Echo's the settings if requested. [-Dforrest.echo=true]
        =============================================================== -->
   <target name="echo-settings" if="forrest.echo">
-    <echo>
-      ------------------------------------------------
-      | Forrest template run.
-      | Running from $${forrest.home} = ${forrest.home}
-      | Working on   $${project.home} = ${project.home}
-      ------------------------------------------------
-      | //where to put the result
-      | project.site-dir    = ${project.site-dir} 
-      | //uri to start crawling/generation process
-      | project.start-uri   = ${project.start-uri}
-      | //cocoon.xconf location
-      | project.configfile  = ${project.configfile}
-      | //logkit.xconf location
-      | project.logkitfile  = ${project.logkitfile}
-      | //temp dir to throw stuff in (i.e. work and ctxt)
-      | project.temp-dir    = ${project.temp-dir} 
-      | //temp working directory for generation process
-      | project.cocoon-work-dir    = ${project.cocoon-work-dir} 
-      | //temp context directory for generation process
-      | project.webapp    = ${project.webapp} 
-      | //debuglevel for logging (DEBUG, INFO, WARN, ERROR, FATAL_ERROR)
-      | project.debuglevel  = ${project.debuglevel}
-      | //file for list of broken links
-      | project.brokenlinkfile = ${project.brokenlinkfile}
-      | //check if you have tools.jar installed
-      | tools.jar.present   = ${tools.jar.present} 
-      ------------------------------------------------
-      | The following properties could be removed from future builds:
-      | //which skin to apply
-      | project.skin        = ${project.skin} 
-      | //where your documentation xml is
-      | project.content-dir = ${content-dir} 
-      ------------------------------------------------
-    </echo>
+    <loadfile property="echo-settings-message" srcFile="${forrest.home}/var/echo-settings-message.txt">
+       <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${echo-settings-message}</echo>
   </target>
 
 
@@ -336,30 +306,11 @@ FORREST SITE BUILDER
     <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
     <filter token="i18n"              value="${project.i18n}" />
 
-    <!--
-    These filters defined for backwards-compatibility with old skins.
-    New skins should use the skinconfig.* filters, or actively parse the
-    skinconf.xml file themselves. (JT)
-    -->
-    <filter token="link1"      value="${skinconfig.trail.link1.name}"/>
-    <filter token="link1.href" value="${skinconfig.trail.link1.href}"/>
-    <filter token="link2"      value="${skinconfig.trail.link2.name}"/>
-    <filter token="link2.href" value="${skinconfig.trail.link2.href}"/>
-    <filter token="link3"      value="${skinconfig.trail.link3.name}"/>
-    <filter token="link3.href" value="${skinconfig.trail.link3.href}"/>
-    <filter token="year"       value="${skinconfig.year}"/>
-    <filter token="vendor"     value="${skinconfig.vendor}"/>
-    <filter token="group-logo.src"  value="${skinconfig.group-logo}"/>
-    <filter token="group-logo.href" value="${skinconfig.group-url}"/>
-    <filter token="group-logo.alt"  value="${skinconfig.group-name} logo"/>
-    <filter token="project-logo.src"  value="${skinconfig.project-logo}"/>
-    <filter token="project-logo.href" value="${skinconfig.project-url}"/>
-    <filter token="project-logo.alt"  value="${skinconfig.project-name} logo"/>
-
     <copy todir="${project.webapp}/" >
       <fileset dir="${forrest.home}/context" >
         <exclude name="*.xmap" />
         <exclude name="skins/**" />
+        <exclude name="WEB-INF/*.xconf" />
       </fileset>
       <fileset dir="${forrest.home}/context" >
         <include name="skins/${project.skin}/images/**" />
@@ -373,16 +324,8 @@ FORREST SITE BUILDER
         <include name="*.xmap" />
         <include name="skins/${project.skin}/**" />
         <include name="skins/common/**" />
+        <include name="WEB-INF/*.xconf" />
         <exclude name="skins/**/images/**" />
-      </fileset>
-    </copy>
-
-    <mkdir dir="${project.webapp}/WEB-INF"/>
-
-    <!-- Force-copy these files as they have @tokens@ that will need replacing -->
-    <copy todir="${project.webapp}/WEB-INF" filtering="true" overwrite="true">
-      <fileset dir="${forrest.home}/context/WEB-INF">
-        <include name="*.xconf" />
       </fileset>
     </copy>
 
@@ -404,7 +347,7 @@ FORREST SITE BUILDER
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
-    copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
+    copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status, copy-translations"/>
 
   <target name="copy-conf" if="conf.present">
@@ -439,12 +382,6 @@ FORREST SITE BUILDER
     </copy>
   </target>
 
-  <target name="copy-xdocs" if="xdocs.present">
-    <sync toDir="${project.webapp}/content/xdocs">
-      <fileset dir="${xdocs-dir}"/>
-    </sync>
-  </target>
-
   <target name="copy-resources" if="resources.present">
     <copy toDir="${project.webapp}/resources" failonerror="false">
       <fileset dir="${resources-dir}">
@@ -473,16 +410,6 @@ FORREST SITE BUILDER
     <copy toDir="${project.webapp}/resources/grammars" 
       overwrite="true" failonerror="false">
       <fileset dir="${grammars-dir}"/>
-    </copy>
-  </target>
-
-  <!-- Copy all non-xdocs content -->
-  <target name="copy-content" if="raw-content.present">
-    <copy toDir="${project.webapp}/content" 
-      overwrite="false" failonerror="false">
-      <fileset dir="${raw-content-dir}">
-        <exclude name="${xdocs-dir}/**"/>
-      </fileset>
     </copy>
   </target>
 
@@ -757,24 +684,12 @@ for any broken links in the generated site.
       <istrue value="${skinconfig.disable-lucene}"/>
     </condition>
     <antcall target="lucene-index"/>
-    <echo>
----------------------------------
-Webapp generated in ${project.webapp}
 
-To run in Tomcat, add this to the config file (usu. server.xml):
-
-&lt;Context path='/${skinconfig.project-name}'
-            docBase='${project.webapp}'
-            reloadable='true'/&gt;
-
-If using JDK 1.4 or above, make sure to set the Java environment variable
--Djava.endorsed.dirs=${forrest.home}${/}lib${/}endorsed
-Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
----------------------------------
-    </echo>
+    <loadfile  property="webapp-generated-message" srcFile="${forrest.home}/var/webapp-generated-message.txt">
+        <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${webapp-generated-message}</echo>
   </target>
-
-
 
   <!-- ===============================================================
        Builds a cocoon .war for your project based on the siteplan.
@@ -814,41 +729,11 @@ ${project.war}
      <copy todir="${project.home}" overwrite="false">
         <fileset dir="${forrest.home}/fresh-site"/>
      </copy>
-    <echo>
--------------------------------
-~~ Template project created! ~~
-
-Here is an outline of the generated files:
-
-/                        # ${basedir}
-/status.xml              # List of project developers, todo list and change log
-/forrest.properties      # Optional file describing your site layout
-/src/documentation/      # Doc-specific files
-/src/documentation/skinconf.xml    # Info about your project used by the skin
-/src/documentation/content/        # Site content.
-/src/documentation/content/xdocs   # XML content.
-/src/documentation/content/xdocs/index.xml # Home page
-/src/documentation/content/xdocs/site.xml  # Navigation file for site structure
-/src/documentation/content/xdocs/tabs.xml  # Skin-specific 'tabs' file.
-/src/documentation/content/*.html,pdf      # Static content files
-/src/documentation/resources/images        # Project images (logos, etc)
-
-
-What to do now?
-
-- Try rendering this template to HTML by typing 'forrest'. View the generated
-  HTML in a browser to make sure everything works.
-- Edit status.xml and src/documentation/skinconf.xml and customize for your
-  project.
-- Start adding content in xdocs/, remembering to add new files to site.xml
-- Provide any feedback to forrest-dev@xml.apache.org
-
-Thanks for using Apache Forrest
--------------------------------
-    </echo>
+     <loadfile  property="template-project-created-message" srcFile="${forrest.home}/var/template-project-created-message.txt">
+        <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${template-project-created-message}</echo>
   </target>
-
-
 
 
   <target name="validate" depends="validation-props, validate-xdocs,
@@ -971,19 +856,12 @@ to validate this site.
       </available>
     </condition>
 
+    <loadfile property="skin-not-found-message" srcFile="${forrest.home}/var/skin-not-found-message.txt">
+      <filterchain><expandproperties/></filterchain>
+    </loadfile>
+      
     <fail unless="project.skin.present">
-------------------------------------------------
-Error: The skin '${project.skin}' could not be found in:
-
-${skins-dir}
-
-And is not provided by Forrest in
-
-${forrest.home}/context/skins
-
-Please check the $${skins-dir} and $${project.skin} properties in
-forrest.properties.
-------------------------------------------------
+      ${skin-not-found-message}
     </fail>
     <echo message="...validated existence of skin '${project.skin}'"/>
   </target>

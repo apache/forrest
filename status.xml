@@ -25,6 +25,10 @@
 
   <changes>
     <release version="0.6-dev" date="unreleased">
+      <action dev="NKB" type="update" context="skins">
+        Removed the deprecated Ant @tag@ substitution method for skins to 
+        reduce copying further.
+      </action>
       <action dev="JJP" type="fix" context="core">
       Wrong default value for translations directory.
       </action>
@@ -196,7 +200,7 @@
       <action dev="JT" type="update" context="skins">
         In the forrest-site skin and derivatives, display the author and version at the
         bottom of the page, as krysalis-site does.  Also added parsing for CVS Revision
-        tags, so <code>&lt;version>$Revision: 1.247 $&lt;/version></code> can be used.
+        tags, so <code>&lt;version>$Revision: 1.248 $&lt;/version></code> can be used.
       </action>
       <action dev="JT" type="add" context="core">
         Added ability to have version-specific overridden sitemaps.  For
@@ -1238,6 +1242,29 @@
     </resolved>
 
     <compatibility-breaks>
+      <issue id="skin_properties_substitution_removed" date="2003-10-23">
+        <synopsis>
+          Skins using the old deprecated Ant @tag@ substitution method will
+          no longer work.
+        </synopsis>
+        <affected date="2002-11-05">
+          All users of this skins that use the depracated Ant @tag@ substitution method.
+          All Forrest skins are not affected.
+        </affected>
+        <description>
+          <p>
+            The deprecated way of using skinconf.xml values in the skins is
+            removed, as we are moving to a build system that copies as little
+            files as possible. Since the new method does not involve copying, 
+            since the old one did, and since it has been already deprecated for
+            at least a release, it has been removed.
+          </p>
+        </description>
+        <fix>
+          Use skinconf.xml with the document() function in the XSL. See the 
+          Forrest-provided skins for guidance.
+        </fix>
+      </issue>
       <issue id="skin_krysalis_minitoc" date="2003-10-14">
         <synopsis>
           Sites using the krysalis-site skin will not render the menu minitoc 
@@ -1334,6 +1361,8 @@
   </issues>
 
 </status>
+
+
 
 
 
