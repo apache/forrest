@@ -196,6 +196,7 @@ FORREST SITE BUILDER
   <target name="load-forrest-props" unless="skinconf.present">
     <xmlproperty file="${forrest.home}/context/skinconf.xml"
       collapseattributes="true" validate="true"/> <!-- Assume Forrest skinconf is valid -->
+<!-- FIXME: remove wild assumption -->
   </target>
 
   <!-- Define filters equating to elements in the skinconf.xml file. Skins can
@@ -715,7 +716,7 @@ Thanks for using Apache Forrest
 
   <target name="validate-skinconf" depends="validation-props"
     if="validate.skinconf">
-    <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/skinconf-v10.rng">
       <fileset dir="${project.content-dir}"
         includes="${forrest.validate.skinconf.includes}"
         excludes="${forrest.validate.skinconf.excludes}"/>
@@ -725,7 +726,7 @@ Thanks for using Apache Forrest
 
   <target name="validate-stylesheets" depends="validation-props"
     if="validate.stylesheets">
-    <jing rngfile="${forrest.home}/context/resources/schema/relax/xslt.rng">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
       <fileset dir="${project.stylesheets-dir}"
         includes="${forrest.validate.stylesheets.includes}"
         excludes="${forrest.validate.stylesheets.excludes}" />
@@ -737,7 +738,7 @@ Thanks for using Apache Forrest
 
   <target name="validate-skins-stylesheets" depends="validation-props"
     if="validate.skins.stylesheets">
-    <jing rngfile="${forrest.home}/context/resources/schema/relax/xslt.rng">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
       <fileset dir="${project.skins-dir}"
         includes="${forrest.validate.skins.stylesheets.includes}"
         excludes="${forrest.validate.skins.stylesheets.excludes}"/>

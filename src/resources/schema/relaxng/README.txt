@@ -29,4 +29,4 @@ $FORREST_HOME/lib/endorsed/*.jar to your classpath first.
 
 -- 
 jefft@apache.org
-$Id: README.txt,v 1.1 2002/11/03 15:49:00 jefft Exp $
+$Id: README.txt,v 1.1 2002/11/07 06:37:02 crossley Exp $
