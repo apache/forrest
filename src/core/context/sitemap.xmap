@@ -36,10 +36,54 @@ $Revision: 1.12 $
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
       -->
       <map:generator name="notifier" src="org.apache.cocoon.sitemap.NotifyingGenerator" />
-                  
+      
+      <!--
+        FIXME: there is a bug in the Cocoon 2.2 resolving that can make cocoon:/ 
+               calls call the base sitemap; remove the following when it's fixed.
+        
+      -->
+      <map:generator name="text2xml" logger="sitemap.generator.textgenerator"
+                     src="org.apache.cocoon.generation.TextGenerator">
+       <parameter name="localizable" value="true"/>
+      </map:generator>        
+     <!--
+        FIXME-END 
+      -->
+                
     </map:generators>
 
     <map:transformers default="xslt">
+      <!--
+        FIXME: there is a bug in the Cocoon 2.2 resolving that can make cocoon:/ 
+               calls call the base sitemap; remove the following when it's fixed.
+        
+      -->
+	   <map:transformer name="pattern" 
+	                    src="org.apache.cocoon.transformation.PatternTransformer" 
+	                    logger="sitemap.transformer.pattern">
+	    <parameter name="groups" value="true"/>
+	   </map:transformer>
+	   <map:transformer name="lexer" 
+	                    src="org.apache.cocoon.transformation.LexicalTransformer" 
+	                    logger="sitemap.transformer.lexer">
+	    <parameter name="localizable" value="true"/>
+	   </map:transformer>
+	   <map:transformer name="parser" 
+	                    src="org.apache.cocoon.transformation.ParserTransformer" 
+	                    logger="sitemap.transformer.parser">
+	    <parameter name="flatten" value="true"/>
+	    <parameter name="recovery" value="true"/>
+	    <parameter name="localizable" value="true"/>
+	   </map:transformer>
+	
+	   <map:transformer name="extparser"
+	                    src="org.apache.cocoon.transformation.ExtendedParserTransformer"
+	                    logger="sitemap.transformer.extendedparser">
+	   </map:transformer>
+	 <!--
+        FIXME-END 
+      -->
+	   
       <!-- Add values to skinconf that need extra processing like the color shades -->
       <map:transformer name="skinconf" src="org.apache.forrest.conf.SkinconfTransformer"/>
               
@@ -225,6 +269,64 @@ $Revision: 1.12 $
   <!-- =========================== Pipelines ================================= -->
   <map:pipelines>
 
+  <map:pipeline type="caching" internal-only="true">
+ 
+      <!--
+        FIXME: there is a bug in the Cocoon 2.2 resolving that can make cocoon:/ 
+               calls call the base sitemap; remove the following when it's fixed.
+        
+      -->
+      <map:match pattern="*.xlex">
+        <map:select type="exists">
+          <map:when test="resources/chaperon/grammars/{1}.xlex">
+            <map:read src="resources/chaperon/grammars/{1}.xlex"/>
+          </map:when>
+          <map:otherwise>
+    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
+    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
+    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
+    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
+    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
+    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
+    <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
+      </map:match>
+
+      <map:match pattern="*.xgrm">
+        <map:select type="exists">
+          <map:when test="resources/chaperon/grammars/{1}.xgrm">
+            <map:read src="resources/chaperon/grammars/{1}.xgrm"/>
+          </map:when>
+          <map:otherwise>
+    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
+    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
+    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
+    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
+    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
+    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xgrm.xsl"/>
+    <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
+      </map:match>
+
+   <map:match pattern="*.xegrm">
+        <map:select type="exists">
+          <map:when test="{forrest:context}/resources/chaperon/grammars/{1}.xegrm">
+            <map:read src="{forrest:context}/resources/chaperon/grammars/{1}.xegrm"/>
+          </map:when>
+          <map:otherwise>
+    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.egrm"/>
+    <map:transform type="extparser" src="{forrest:context}/resources/chaperon/grammars/egrm.xegrm"/>
+    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/egrm2xegrm.xsl"/>
+    <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
+      </map:match>
+    </map:pipeline>
+    
       <!-- 
          This is the user pipeline, that can answer requests instead
          of the Forrest one, or let requests pass through.
