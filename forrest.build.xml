@@ -54,19 +54,20 @@ That should be passed to here with -Dproject.home
     <property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
 
     <property name="project.temp-dir"    value="${project.home}/build/tmp"     />
-    <property name="project.work-dir"    value="${project.temp-dir}/work"       />
-    <property name="project.ctxt-dir"    value="${project.temp-dir}/context"    />
+    <property name="project.work-dir"    value="${project.temp-dir}/work"      />
+    <property name="project.ctxt-dir"    value="${project.temp-dir}/context"   />
 
+    <property name="project.logfile"     value="${project.temp-dir}/forrest.log"/>
+    <property name="project.debuglevel"  value="ERROR"                         />
+    <property name="project.start-uri"   value="index.html"                    />
 
-    <!-- use of this property should be removed when the siteplan becomes active -->
-    <property name="project.skin" value="forrest-skin" />
-
-
+    <!-- use of these property should be removed when the siteplan becomes active -->
+    <property name="project.skin"        value="forrest-site" />
+    <property name="project.content-dir" value="${project.home}/src/documentation" />
 
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
-    
     
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
@@ -83,12 +84,30 @@ That should be passed to here with -Dproject.home
       | Running from $${forrest.home} = ${forrest.home}
       | Working on   $${project.home} = ${project.home}
       ------------------------------------------------
-      | project.site-dir = ${project.site-dir}
-      | project.siteplan = ${project.siteplan}
-      | project.temp-dir = ${project.temp-dir}
-      | project.work-dir = ${project.work-dir}
-      | project.ctxt-dir = ${project.ctxt-dir}
-      | tools.jar.present= ${tools.jar.present}
+      | //where to put the result
+      | project.site-dir    = ${project.site-dir} 
+      | //uri to start crawling/generation process
+      | project.start-uri   = ${project.start-uri}
+      | //masterplan for building site (dreamware)
+      | project.siteplan    = ${project.siteplan} 
+      | //temp dir to throw stuf in (i.e. work and ctxt)
+      | project.temp-dir    = ${project.temp-dir} 
+      | //temp working directory for generation process
+      | project.work-dir    = ${project.work-dir} 
+      | //temp context directory for generation process
+      | project.ctxt-dir    = ${project.ctxt-dir} 
+      | //debuglevel for logging (INFO, DEBUG, WARN, ERROR, FAIL)
+      | project.debuglevel  = ${project.debuglevel}
+      | //logfile location
+      | project.logfile     = ${project.logfile}
+      | //check if you have tools.jar installed.
+      | tools.jar.present   = ${tools.jar.present} 
+      ------------------------------------------------
+      | Following could be removed from future builds
+      | //which skin to apply
+      | project.skin        = ${project.skin} 
+      | //where your documentation xml is
+      | project.content-dir = ${project.content-dir} 
       ------------------------------------------------
     </echo>
   </target>
@@ -101,7 +120,7 @@ That should be passed to here with -Dproject.home
     <path id="forrest.cp">
       <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
       <pathelement location="${tools.jar}"/>
-      <pathelement location="${bot.build.dir}/WEB-INF/classes"/>
+      <pathelement location="${forrest.home}/WEB-INF/classes"/>
     </path>
   </target>
 
@@ -110,15 +129,43 @@ That should be passed to here with -Dproject.home
        Display the usage of this script. 
        =============================================================== -->
   <target name="usage" depends="init">
-    <echo>
+    <echo><![CDATA[
+    Usage: This ant file holds the targets for letting the forrest 
+    project work for your project.
+
+    It is recommended that you have a FORREST_HOME environment variable
+    that points to where this ant script (and the required directories) 
+    is located.
+
+    You can call these from your project ant file like this:
+    <property environment="ENV" />
+
+    <ant antfile="($forrest.home)/forrest.build.xml" 
+         target="(your-target-of-choice)" >
+      <property name="project.home" value="."/>
+      <property name="forrest.home" value="${ENV.FORREST_HOME}"/>
+    </ant>
+    
+    Relative to project.home there will be a number of default
+    paths forrest will use to do the requested work.
+    To see these (and there use), use the nested property:
+      <property name="forrest.echo" value="true" />
+
+    To override these you could do one of:
+    - write them down in a file ${project.home}/forrest.properties
+      (using Java Property file syntax)
+    - set them as nested properties to the <ant> task.
+
+    Targets to call:
+    [site building targets]
+    site ----------  Build your static project site.
+    webapp --------  Bundle your documents in a dynamic cocoon-based webapp to deploy.
+    `
+    [project seeding targets]
+
+    
     TODO... COMPLETE THIS:
-      should explain the usage. 
-        part of it being: refering to the shell or bat use
-        part of it being: &lt;ant antfile=...&gt;
-      setting FORREST_HOME and the like.
-      description of the targets.
-      starting with fresh-project and looking at the siteplan that comes out of it.
-    </echo>
+    ]]></echo>
   </target>
 
 
@@ -136,8 +183,8 @@ That should be passed to here with -Dproject.home
   <!-- ===============================================================
        Fills the Cocoon context dir to work in 
        with the forrest-predefines.
-       param: location to make context-dir? 
-              (we could just make up a temp one, and clean when done)
+       param: name of the skin to use ${project.skin} (now)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
   <target name="bare-context" depends="init" >
     <!-- TODO get rid of this hackerism -->
@@ -168,6 +215,8 @@ That should be passed to here with -Dproject.home
       <fileset dir="${forrest.home}/context" >
         <exclude name="sitemap.xmap" />
         <exclude name="skins/**" />
+      </fileset>
+      <fileset dir="${forrest.home}/context" >
         <include name="skins/**/images/**" />
       </fileset>
     </copy>
@@ -176,46 +225,51 @@ That should be passed to here with -Dproject.home
     <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
         <include name="sitemap.xmap" />
-        <exclude name="skins/**/images/**" />
         <include name="skins/**" />
+        <exclude name="skins/**/images/**" />
       </fileset>
     </copy>
   </target>
 
-  <!-- ===============================================================
-       Makes the Cocoon context dir to work in. 
-       Fills it with 
-         forrest predefines.  
-         site-content-parts
-         derivatives from siteplan
-       param: location of siteplan $project.siteplan
-       param: location to make context-dir? 
-              (we could just make up a temp one, and clean when done)
-       =============================================================== -->
-  <target name="prepare-context" depends="init, bare-context" >
-
-    <echo>
-      TODO... COMPLETE THIS:
-      ... some style and copy tasks?
-    </echo>
-
-  </target>
-
 
   <!-- ===============================================================
-       Makes the site   
-       param: location of siteplan ${project.siteplan}
-       param: location to put generated site ${project.site-dir}
+       Fills the Cocoon context dir to work in 
+       with the project-content-parts 
+         (now: copy stuff from param ${project.content-dir}
+          with siteplan: based on that plan; should allow more different parts)
+       param: location to find the content ${project.content-dir}(now)
+       param: location of siteplan ${project.siteplan} (future)
+       param: location to find project descriptors == ${project.home} 
+       param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
-  <target name="site" depends="init, prepare-context, clean-site, prepare-classpath">
-
-
-    <echo>
-      TODO... COMPLETE THIS:
-      ... should call cocoon CLI on set forrest.cococontxt.dir
-    </echo>
-
+  <target name="project-context" depends="init, bare-context" >
+    <copy toDir="${project.ctxt-dir}/" >
+      <fileset dir="${project.content-dir}" />
+    </copy>
+    <copy todir="${project.ctxt-dir}" >
+      <fileset dir="${project.home}">
+        <include name="*.*ml"/>
+      </fileset>
+    </copy>
   </target>
+  
+
+  <!-- ===============================================================
+       Makes the Cocoon context dir to work in and fills it completely.
+       That is by depending on:
+         bare-context     // for forrest predefines.  
+         project-context  // for project's actual content
+           (now: copy stuff from extra param defining the content dir
+            with siteplan: based on that)
+         control-context  // for derivatives from siteplan 
+           (now: no need, waiting on siteplan future)
+            with siteplan: e.g. sitemap and catalog)
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${project.content-dir}(now)
+       param: location of siteplan ${project.siteplan} (future)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       =============================================================== -->
+  <target name="prepare-context" depends="init, bare-context, project-context" />
 
 
   <!-- ===============================================================
@@ -224,6 +278,35 @@ That should be passed to here with -Dproject.home
        =============================================================== -->
   <target name="clean-site">
     <delete dir="${project.site-dir}"/>
+  </target>
+
+
+  <!-- ===============================================================
+       Makes the site.
+       param: name of the skin to use ${project.skin} (now)
+       param: location to find the content ${project.content-dir}(now)
+       param: location of siteplan ${project.siteplan} (future)
+       param: location to make temporary context-dir ${project.ctxt-dir} 
+       param: location to make temporary work-dir ${project.content-dir}
+       param: debuglevel for logging ${project.debuglevel}
+       param: location of log-file ${project.logfile}
+       =============================================================== -->
+  <target name="site" depends="init, prepare-context, clean-site, prepare-classpath">
+    <!-- clean out the temp space, if we don't cocoon fails on this
+         actually clears the cache, not yet clear why it is really needed? -->
+    <delete dir="${project.work-dir}"/>
+    <mkdir dir="${project.work-dir}"/>
+    <java classname="org.apache.cocoon.Main" fork="true"
+          dir="." failonerror="true"
+          classpathref="forrest.cp"
+          >
+      <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
+      <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
+      <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
+      <arg value="-l${project.logfile}"/>    <!-- log of processing -->
+      <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+      <arg value="${project.start-uri}"/>              <!-- starting page -->
+    </java>
   </target>
 
 
@@ -248,7 +331,7 @@ That should be passed to here with -Dproject.home
   <target name="validate-docs" depends="init, prepare-context">
     <echo>
       TODO... COMPLETE THIS:
-      ... this should just war up the prepared context dir.
+      ... this should validate the project-content-dir.
     </echo>
   </target>
 
