@@ -146,9 +146,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 		    </tr>
 		    
 		    <tr>
-		      <td class="search border bottom-left"></td>
+		      <td class="search border bottom-left SBBL"></td>
 		      <td class="search border bottomborder"></td>
-		      <td class="search border bottom-right"></td>
+		      <td class="search border bottom-right SBBR"></td>
 		    </tr>
 		  </table>
 		</form>
@@ -185,9 +185,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 		    </tr>
 		    
 		    <tr>
-		      <td class="search border bottom-left"></td>
+		      <td class="search border bottom-left SBBL"></td>
 		      <td class="search border bottomborder"></td>
-		      <td class="search border bottom-right"></td>
+		      <td class="search border bottom-right SBBR"></td>
 		    </tr>
 		  </table>
 		</form>
@@ -381,7 +381,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
        <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
 	     <tr>
            <td></td>
- 	       <td colspan="2">
+ 	       <td>
 	        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
 	          <xsl:variable name="name" select="name"/>
 	          <xsl:variable name="url" select="url"/>

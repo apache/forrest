@@ -85,22 +85,22 @@ which is then merged by site2xhtml.xsl
   </xsl:template>
 
   <xsl:template name="selected">
-        <td class="tab selected top-left"></td>
+        <td class="tab selected top-left TSTL"></td>
         <td class="tab selected">
            <xsl:call-template name="base-selected"/>
         </td>
-        <td class="tab selected top-right"></td>
+        <td class="tab selected top-right TSTR"></td>
   </xsl:template>
 
   <xsl:template name="not-selected">
     <td>
       <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-         <td class="tab unselected top-left"></td>
-          <td class="tab unselected">
+         <td class="tab unselected top-left TUTL"></td>
+          <td class="tab unselected corner">
              <xsl:call-template name="base-not-selected"/>
           </td>
-          <td class="tab unselected top-right"></td>
+          <td class="tab unselected top-right TUTR"></td>
         </tr> 
         <tr>
           <td colspan="3" class="spacer"/>
