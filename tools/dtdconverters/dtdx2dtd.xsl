@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!-- $Id: dtdx2dtd.xsl,v 1.2 2003/12/11 05:14:52 crossley Exp $ -->
 <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>
 
