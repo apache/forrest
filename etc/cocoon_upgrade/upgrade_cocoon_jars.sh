@@ -7,7 +7,7 @@
 #
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.1
+COCOON_VERSION=2.1.2-dev
 COCOON_HOME=$BASE/../../../cocoon-2.1
 FORREST=$BASE/../..
 NEKODTD_VERSION=0.1.6
@@ -16,8 +16,8 @@ NEKOPULL_VERSION=0.2.3
 NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
-#JARSUFFIX=`date +%Y%m%d`
-JARSUFFIX=2.1.1
+JARSUFFIX=`date +%Y%m%d`
+#JARSUFFIX=2.1.1
 
 ## We need to identify the old Cocoon jar amongst all the others.  This pattern
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
