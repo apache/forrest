@@ -37,7 +37,7 @@
       <ol>
         <li><code>cd $FORREST_HOME/plugin/</code></li>
 
-        <li><code>../main/build.sh local-deploy</code></li>
+        <li><code>ant local-deploy</code></li>
 
         <li>At this point, you'll be asked the name of the plugin to deploy.
         The name of this plugin is <strong>text-output</strong></li>
@@ -46,6 +46,226 @@
       <p>Once you have the text plugin installed, it is simply a case of
       requesting a file with an txt extension. For example, <a
       href="index.txt">this page as text</a>.</p>
+    </section>
+
+    <section>
+      <title>Features</title>
+
+      <p>Overall, each section and subsection are indented by two spaces.
+      First level sections are underlined with equal signs, '='. Second level
+      sections with dashes, '-'. Third level sections are underlined with '-.'
+      and fourth level sections with dots, '.'.</p>
+
+      <section>
+        <title>Second Level Section</title>
+
+        <section>
+          <title>Third Level Section</title>
+
+          <section>
+            <title>Fourth Level Section</title>
+          </section>
+        </section>
+      </section>
+
+      <section>
+        <title>Lists</title>
+
+        <ul>
+          <li>This is an unordered list. Notice that each list item is text
+          wrapped and hangining indents are also implmented.</li>
+
+          <li>This is the second item in this unordered list. Notice also how
+          the indents of the current section are also applied to the lists
+          themselves.</li>
+        </ul>
+
+        <ol>
+          <li>This is an ordered list, meaning that the each list item is
+          numbered.</li>
+
+          <li><p>Again, the indentation of the current section is applied as
+          well as a hanging indent for text that wraps around.</p><p>Also
+          notice that each list item can have multiple paragraphs by making
+          sure that the text is enclosed in paragraph, <code>&lt;p&gt;</code>,
+          elements.</p></li>
+
+          <li>The final element in this ordered list.</li>
+        </ol>
+
+        <dl>
+          <dt>Definition Lists</dt>
+
+          <dd>Lists that have a definition term followed by text that defines
+          the term. Again, notice the hanging indents.</dd>
+        </dl>
+      </section>
+
+      <section>
+        <title>Tables</title>
+
+        <table>
+          <tr>
+            <th>First Column</th>
+
+            <th>Second Column</th>
+          </tr>
+
+          <tr>
+            <td>Just some text to show that text within tables cells is also
+            wrapped.</td>
+
+            <td><p>In order to use multiple paragraphs in a table cell, wrap
+            each paragraph in &lt;p&gt; elements.</p><p>Just like in this
+            cell.</p></td>
+          </tr>
+        </table>
+      </section>
+
+      <section>
+        <title>Nesting Lists, Tables</title>
+
+        <table>
+          <tr>
+            <th>Lists</th>
+
+            <th>Tables</th>
+          </tr>
+
+          <tr>
+            <td><ol>
+                <li><p>We can even have lists within tables.</p></li>
+
+                <li><p>Again, these are handled pretty well.</p></li>
+              </ol></td>
+
+            <td><table>
+                <tr>
+                  <td>Nested Tables</td>
+
+                  <td>With Lists</td>
+                </tr>
+
+                <tr>
+                  <td>There is a limit tho.</td>
+
+                  <td><ul>
+                      <li><p>First item</p></li>
+
+                      <li><p>Second Item</p></li>
+                    </ul></td>
+                </tr>
+              </table></td>
+          </tr>
+
+          <tr>
+            <td><ul>
+                <li>Bulletted items work in here as well.</li>
+
+                <li>This is the second item.</li>
+              </ul></td>
+
+            <td>This cell intentionally left blank.</td>
+          </tr>
+        </table>
+      </section>
+    </section>
+
+    <section>
+      <title>Limitations</title>
+
+      <section>
+        <title>Use the &lt;p&gt; element</title>
+
+        <p>Generally, text wrapping in list items and in table cells will work
+        better if the text in those item is enclosed in &lt;p&gt; elements.
+        For example, we'll take the table above and remove the &lt;p&gt;
+        elements from the list items, the &lt;li&gt; elements.</p>
+
+        <table>
+          <tr>
+            <th>Lists</th>
+
+            <th>Tables</th>
+          </tr>
+
+          <tr>
+            <td><ol>
+                <li>We can even have lists within tables.</li>
+
+                <li>Again, these are handled pretty well.</li>
+              </ol></td>
+
+            <td><table>
+                <tr>
+                  <td>Nested Tables</td>
+
+                  <td>With Lists</td>
+                </tr>
+
+                <tr>
+                  <td>There is a limit tho.</td>
+
+                  <td><ul>
+                      <li>First item</li>
+
+                      <li>Second Item</li>
+                    </ul></td>
+                </tr>
+              </table></td>
+          </tr>
+
+          <tr>
+            <td><ul>
+                <li>Bulletted items work in here as well.</li>
+
+                <li>This is the second item.</li>
+              </ul></td>
+
+            <td>This cell intentionally left blank.</td>
+          </tr>
+        </table>
+
+        <p>You can see that some of the text wrapping gets messed up.</p>
+      </section>
+
+      <section>
+        <title>Table Cell Minimum Width </title>
+
+        <p>Table cells, even when nested, have a minimum width of 10 defined.
+        This means that when nesting tables, that minimum width will be
+        quickly hit and the formatting will get, for lack of a better word,
+        gibbled. An example will help illustrate the point.</p>
+
+        <table>
+          <tr>
+            <td>First of Three Columns</td>
+
+            <td>Second of Three Columns</td>
+
+            <td>Third of Three Columns</td>
+          </tr>
+
+          <tr>
+            <td><table>
+                <tr>
+                  <td>Nested</td>
+
+                  <td>Four</td>
+
+                  <td>Column</td>
+
+                  <td>Table</td>
+                </tr>
+              </table></td>
+
+            <td>You can see how the first column is gibbled</td>
+
+            <td>That is simply due to the minimum column width
+            requirement.</td>
+          </tr>
+        </table>
+      </section>
     </section>
   </body>
 </document>
