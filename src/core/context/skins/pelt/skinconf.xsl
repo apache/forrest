@@ -25,7 +25,7 @@
 
     <color name="tab-selected" value="#4C6C8F" link="#ffffff" vlink="#ffffff" hlink="#ffffff"/>
     <color name="tab-unselected" value="#E5E4D9" link="#000000" vlink="#000000" hlink="#000000"/>
-    <color name="subtab-selected" value="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
+    <color name="subtab-selected" value="#4C6C8F" link="#ffffff" vlink="#ffffff" hlink="#ffffff"/>
     <color name="subtab-unselected" value="#E5E4D9" link="#000000" vlink="#000000" hlink="#000000"/>
 
     <color name="heading" value="#E5E4D9"/>
@@ -79,7 +79,7 @@
       <color name="tab-unselected" value="#E5E4D9" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>
      <xsl:if test="not(color[@name='subtab-selected'])">
-      <color name="subtab-selected" value="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
+      <color name="subtab-selected" value="#4C6C8F" link="#ffffff" vlink="#ffffff" hlink="#ffffff"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='subtab-unselected'])">
       <color name="subtab-unselected" value="#E5E4D9" link="#000000" vlink="#000000" hlink="#000000"/>
@@ -115,7 +115,7 @@
 	 	<color name="searchbox" value="#E5E4D9" font="#000000"/>
      </xsl:if> 
      <xsl:if test="not(color[@name='dialog'])">
-      <color name="dialog" value="#E5E4D9" font="#000000"/>
+      <color name="dialog" value="#E5E4D9" font="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='body'])">
       <color name="body" value="#ffffff" /> 

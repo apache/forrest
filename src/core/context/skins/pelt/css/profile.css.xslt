@@ -129,15 +129,21 @@ background: <xsl:value-of select="@value"/>;
 #menu a:hover {  
 background-color: <xsl:value-of select="@value"/>;
 color: <xsl:value-of select="@hlink"/>;} 
-#menu .menupagetitle  { color: <xsl:value-of select="@hlink"/>;}     
 </xsl:template> 
 <xsl:template match="color[@name='dialog']"> 
+#menu .menupagetitle  { color: <xsl:value-of select="@font"/>;}    
 #menu .menupageitemgroup     { 
 background-color: <xsl:value-of select="@value"/>;
 }
 #menu .menupageitem {
 color: <xsl:value-of select="@font"/>;
 } 
+#menu .menupageitem a:link {  color: <xsl:value-of select="@link"/>;} 
+#menu .menupageitem a:visited {  color: <xsl:value-of select="@vlink"/>;} 
+#menu .menupageitem a:hover {  
+background-color: <xsl:value-of select="@value"/>;
+color: <xsl:value-of select="@hlink"/>;
+}
 </xsl:template> 
 <xsl:template match="color[@name='menuheading']">
 #menu h1 {
