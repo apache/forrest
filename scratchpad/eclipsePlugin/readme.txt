@@ -5,6 +5,7 @@ Currently implemented features include:
 - Start and Stop Forrest
 - Build a Forrest site
 - Seed a new Project
+- Add a new XDoc to the project
 
 ============
 Installation
@@ -47,6 +48,13 @@ build and deploy the plugin:
 
 - Select Deployable Plugins and Fragments and follow the wizard (easiest 
 to create directory structure directly in the eclipse installation 
-directory).
+directory otherwise you will need to manually install the generated
+files as a plugin for eclipse).
 
 - Restart Eclipse
+
+============
+Known Issues
+============
+
+- If a project name has a space in it then the seeding of the project fails (problem with Forrest core?)
