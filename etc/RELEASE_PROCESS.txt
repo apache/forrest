@@ -30,7 +30,7 @@ Preparations
     <release version="0.4" date="2002-02-13">
       ...
 
- - Edit src/core/forrest.build.xml, and update the version tag which is
+ - Edit src/core/forrest.build.xml to update the version tag which is
    embedded in the Ant script:
 
     |                 Forrest Site Builder                  |
@@ -48,11 +48,18 @@ Preparations
    especially those that might be hidden by svn:ignore settings.
 
  - Run 'build release-dist' to generate the distributions.
+   - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
+
+ - Repeat that on a Windows machine.
+   - Use the .tar.gz from the UNIX machine and .zip from the Windows machine.
+   - In that way, SVN will ensure correct line-endings on all text files.
 
  - Test the actual distribution on various platforms.
    - Put the tar.gz and the zip file at a committers' Apache website.
    - Ask all developers to download and test (command-line, run, and webapp).
+   - Follow the actual user instructions.
    - Use it to build some difficult sites.
+   - Ensure that the compressed archives will unpack correctly.
 
  - Understand how to sign releases and generate MD5 and PGP.
    http://wiki.apache.org/old/SigningReleases
@@ -73,7 +80,8 @@ FIXME: update for SVN.
 Upload and announcement
 -----------------------
 
- - Upload the binaries, the source archives, **and the RELEASE-NOTES**
+ - Upload the binaries, the source archives, the *.asc and *.md5 files,
+   **and the RELEASE-NOTES**
    to www.apache.org at /www/www.apache.org/ dist/forrest/
    Each PMC member has a server account and belongs to the forrest group.
    The process is documented at http://cvs.apache.org/~bodewig/mirror.html
@@ -93,7 +101,7 @@ Upload and announcement
  - Send announcement email.  Typically this is sent as:
    To: dev@forrest.apache.org, user@forrest.apache.org, announce@apache.org,
        announcements@xml.apache.org
-   Subject: [Announce] Apache Forrest X.Y.Z released
+   Subject: [Announce] Apache Forrest X.Y.Z
      !! Always refer them to the mirror facility
      !! Never mention the URL www.apache.org/ dist/ in email.
    Use the template at /etc/announcement.txt
