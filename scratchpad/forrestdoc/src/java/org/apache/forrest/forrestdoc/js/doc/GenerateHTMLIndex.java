@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLIndex.java,v 1.1 2004/02/09 11:09:18 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:18 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLIndex.java,v 1.2 2004/02/11 19:13:59 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/11 19:13:59 $
  *
  * ====================================================================
  *
@@ -81,7 +81,6 @@ import java.util.Vector;
 public class GenerateHTMLIndex {
 
     private static File file, file2 = null;
-    private static File[] fileList = null;
     private static FileInputStream fis;
     private static FileOutputStream fos;
     private static BufferedReader br;
@@ -106,14 +105,13 @@ public class GenerateHTMLIndex {
         }
 
         file = new File(jSDir);
-        fileList = file.listFiles();
-
-        for (int i = 0; i < fileList.length; i++) {
-            if (fileList[i].getName().indexOf(".js") != -1) {
-                v.addElement(fileList[i]);
-            }
+        
+        if (!file.isDirectory()) {
+            throw new BuildException("destDir has to be a directory");
         }
-
+        
+        collectFiles(file, v);
+        
         try {
             fos = new FileOutputStream(destDir + "index.htm");
 
@@ -136,20 +134,20 @@ public class GenerateHTMLIndex {
             fos.write(("<title>JavaScript Code Documentation</title>" + LINE_SEPARATOR).getBytes());
             fos.write(("</head>" + LINE_SEPARATOR).getBytes());
             fos.write(("<body>" + LINE_SEPARATOR).getBytes());
-            fos.write(("<H2>Índice de files</H2>" + LINE_SEPARATOR).getBytes());
+            fos.write(("<H2>Index</H2>" + LINE_SEPARATOR).getBytes());
             fos.write(("<br>" + LINE_SEPARATOR).getBytes());
             fos.write(("<br>" + LINE_SEPARATOR).getBytes());
             fos.write(("<TABLE BORDER='1' CELLPADDING='3' CELLSPACING='0' WIDTH='100%'>" + LINE_SEPARATOR).getBytes());
             fos.write(("<TR CLASS='TableHeadingColor'>" + LINE_SEPARATOR).getBytes());
             fos.write(("<TD ALIGN='left'><FONT SIZE='+2' WIDTH='30%'>" + LINE_SEPARATOR).getBytes());
-            fos.write(("<B>Nome do file</B></FONT></TD>" + LINE_SEPARATOR).getBytes());
+            fos.write(("<B>Filename</B></FONT></TD>" + LINE_SEPARATOR).getBytes());
             fos.write(("<TD ALIGN='left'><FONT SIZE='+2' WIDTH='70%'>" + LINE_SEPARATOR).getBytes());
-            fos.write(("<B>Resumo do conteúdo</B></FONT></TD>" + LINE_SEPARATOR).getBytes());
+            fos.write(("<B>Summary</B></FONT></TD>" + LINE_SEPARATOR).getBytes());
             fos.write(("</TR>" + LINE_SEPARATOR).getBytes());
 
             for (int i = 0; i < v.size(); i++) {
                 file = (File) v.get(i);
-                docGenerator = new GenerateHTMLDoc(jSDir, destDir, file.getName());
+                docGenerator = new GenerateHTMLDoc(file, destDir);
             }
             System.out.println("Número de files .js: " + v.size());
             for (int i = 0; i < v.size(); i++) {
@@ -161,7 +159,7 @@ public class GenerateHTMLIndex {
                 fos.write(("<TD WIDTH='70%'>" + LINE_SEPARATOR).getBytes());
 
                 try {
-                    fis = new FileInputStream(jSDir + file.getName());
+                    fis = new FileInputStream(file);
                     br = new BufferedReader(new InputStreamReader(fis));
 
                     while (br.ready()) {
@@ -198,11 +196,21 @@ public class GenerateHTMLIndex {
         }
 
     }
-
+    
+    private void collectFiles(File baseDir, Vector fileVector) {
+        File[] fileList = baseDir.listFiles();
+        for (int i = 0; i < fileList.length; i++) {
+            if (fileList[i].isDirectory()){
+                collectFiles(fileList[i], fileVector);
+            }    
+            else if (fileList[i].getName().indexOf(".js") != -1) {
+                v.addElement(fileList[i]);
+            }
+        }
+    }    
+            
     public static void main(String[] args) {
-
         GenerateHTMLIndex index = new GenerateHTMLIndex(args[0], args[1]);
-
     }
 }
 

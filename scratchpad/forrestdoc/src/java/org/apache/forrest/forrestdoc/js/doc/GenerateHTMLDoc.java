@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLDoc.java,v 1.1 2004/02/09 11:09:18 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:18 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLDoc.java,v 1.2 2004/02/11 19:13:59 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/11 19:13:59 $
  *
  * ====================================================================
  *
@@ -61,7 +61,9 @@
 
 package org.apache.forrest.forrestdoc.js.doc;
 
+import java.io.File;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -88,11 +90,11 @@ public class GenerateHTMLDoc {
     private boolean summary = true;
     private boolean description = true;
 
-    public GenerateHTMLDoc(String jSDir, String destDir, String nomeArquivo) {
+    public GenerateHTMLDoc(File fis, String destDir) {
+        String nomeArquivo = fis.getName();
         try {
-            fis = new FileInputStream(jSDir + nomeArquivo);
             fos = new FileOutputStream(destDir + nomeArquivo.substring(0, nomeArquivo.indexOf(".")) + ".htm");
-            br = new BufferedReader(new InputStreamReader(fis));
+            br = new BufferedReader(new FileReader(fis));
 
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
@@ -109,7 +111,7 @@ public class GenerateHTMLDoc {
             fos.write(("<title>Javascript code documentation</title>" + LINE_SEPARATOR).getBytes());
             fos.write(("</head>" + LINE_SEPARATOR).getBytes());
             fos.write(("<body>" + LINE_SEPARATOR).getBytes());
-            fos.write(("<H2>Arquivo: " + nomeArquivo + "</H2>" + LINE_SEPARATOR).getBytes());
+            fos.write(("<H2>Filename: " + nomeArquivo + "</H2>" + LINE_SEPARATOR).getBytes());
             fos.write(("<br>" + LINE_SEPARATOR).getBytes());
             fos.write(("<br>" + LINE_SEPARATOR).getBytes());
             fos.write(("<TABLE BORDER='1' CELLPADDING='3' CELLSPACING='0' WIDTH='100%'>" + LINE_SEPARATOR).getBytes());
@@ -200,9 +202,9 @@ public class GenerateHTMLDoc {
 
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception{
 
-        GenerateHTMLDoc main1 = new GenerateHTMLDoc(args[0], args[1], args[2]);
+        GenerateHTMLDoc main1 = new GenerateHTMLDoc(new File(args[0]), args[1]);
 
     }
 }
