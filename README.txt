@@ -23,6 +23,6 @@ Licensing and legal issues and credits
 Forrest is licensed under the Apache Software License, version 2.0
 See the files in the top-level of the Forrest distribution called
 LICENSE.txt and NOTICE.txt and see licenses for accompanying products
-in the "legal" directory.
+in the "lib" directory.
 
 Thanks for using Apache Forrest ... http://forrest.apache.org/
