@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.12 2003/10/13 08:45:54 nicolaken Exp $
+$Id: document2html.xsl,v 1.13 2003/10/14 21:31:16 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -62,7 +62,7 @@ $Id: document2html.xsl,v 1.12 2003/10/13 08:45:54 nicolaken Exp $
 
   <xsl:template match="body">
 
-    <xsl:if test="section and not($notoc='true')">
+    <xsl:if test="section and $max-depth&gt;0 and not($notoc='true') and ($minitoc-location='menu' or $minitoc-location='both')">
       <toc>
         <xsl:for-each select="section">
           <tocc>
@@ -90,6 +90,15 @@ $Id: document2html.xsl,v 1.12 2003/10/13 08:45:54 nicolaken Exp $
         </xsl:for-each>
       </toc>
     </xsl:if>
+    
+   <xsl:if test="$max-depth&gt;0 and not($notoc='true') and ($minitoc-location='page' or $minitoc-location='both')" >
+      <xsl:call-template name="minitoc">
+        <xsl:with-param name="tocroot" select="."/>
+        <xsl:with-param name="depth">1</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:apply-templates/>
+    
     <xsl:apply-templates/>
   </xsl:template>
 

@@ -38,6 +38,7 @@
           - refactored css to have a single small place where to define the skin colors
           - changed icons to original icons (made by me and not gotten from elsewhere)
           - removed unused icons.
+          - made location of minitoc configurable as "page", "menu", or "both"
       </action>
       <action dev="NKB" type="update" context="shbat">
           Removed duplicated copying of files during the creation of the shbat
@@ -164,7 +165,7 @@
       <action dev="JT" type="update" context="skins">
         In the forrest-site skin and derivatives, display the author and version at the
         bottom of the page, as krysalis-site does.  Also added parsing for CVS Revision
-        tags, so <code>&lt;version>$Revision: 1.241 $&lt;/version></code> can be used.
+        tags, so <code>&lt;version>$Revision: 1.242 $&lt;/version></code> can be used.
       </action>
       <action dev="JT" type="add" context="core">
         Added ability to have version-specific overridden sitemaps.  For
@@ -1206,6 +1207,23 @@
     </resolved>
 
     <compatibility-breaks>
+      <issue id="skin_krysalis_minitoc" date="2003-10-14">
+        <synopsis>
+          Sites using the krysalis-site skin will not render the menu minitoc 
+          by default.
+        </synopsis>
+        <affected date="2002-11-05">
+          All users of this skin.
+        </affected>
+        <description>
+          <p>
+            Made location of minitoc configurable as "page", "menu", or "both".
+          </p>
+        </description>
+        <fix>
+          Add &lt;toc location="menu"&gt; to restore previous behaviour.
+        </fix>
+      </issue>
       <issue id="skin_images" date="2002-11-17">
         <synopsis>
           Images removed from default Forrest <code>forrest-site</code>

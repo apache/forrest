@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.35 2003/09/27 14:40:25 jefft Exp $
+$Id: document2html.xsl,v 1.36 2003/10/14 21:31:16 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -30,6 +30,8 @@ $Id: document2html.xsl,v 1.35 2003/09/27 14:40:25 jefft Exp $
   <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="config-max-depth" select="$config/toc/@level"/>
+  <!-- Get the location where to generate the minitoc -->
+  <xsl:variable name="minitoc-location" select="$config/toc/@location"/>
   <!-- Whether to obfuscate email links -->
   <xsl:variable name="obfuscate-mail-links" select="$config/obfuscate-mail-links"/>
 
