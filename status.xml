@@ -52,7 +52,54 @@
        <descr>...</descr>
     </issue>
     -->
-   </resolved>
+  </resolved>
+
+  <compatibility-breaks>
+    <issue id="skin_images" date="2002-11-17">
+      <synopsis>
+        Images removed from default Forrest <code>forrest-site</code>
+        and <code>avalon-tigris</code> skins
+      </synopsis>
+      <affected>
+        Users of these skins who may use the deleted images in a
+        project-specific <code>skinconf.xml</code> file.  Many earlier users of
+        Forrest fall into this category, as these images were in the default
+        skinconf.xml in pre-0.2 versions of Forrest.
+      </affected>
+      <description>
+        <p>
+          Removed these files, as they were Forrest-site-specific and not used
+          directly in skins:
+        </p>
+        <p xml:space="preserve">
+          src/resources/skins/avalon-tigris/images/ant_logo_small.gif
+          src/resources/skins/avalon-tigris/images/built-with-cocoon.gif
+          src/resources/skins/avalon-tigris/images/centipede-logo-small.gif
+          src/resources/skins/basic/images/ant_logo_medium.gif
+          src/resources/skins/basic/images/built-with-cocoon.gif
+          src/resources/skins/basic/images/krysalis-compatible.jpg
+          src/resources/skins/forrest-site/images/built-with-cocoon.gif
+          src/resources/skins/forrest-site/images/centipede-logo-small.gif
+        </p>
+      </description>
+      <fix>
+        If your project uses <code>skin/images/built-with-cocoon.gif</code>,
+        <code>skin/images/centipede-logo-small.gif</code> or any other deleted
+        file, please:
+        <ul>
+          <li>
+            Copy the referenced images into your project's
+            <code>src/documentation/resources/images</code> directory, or
+            wherever the <code>project.images-dir</code> property points.
+          </li>
+          <li>
+            Change the skinconf.xml reference from <code>skin/images</code> to
+            <code>images</code>.
+          </li>
+        </ul>
+      </fix>
+    </issue>
+  </compatibility-breaks>
   </issues>
 
   <todo>
@@ -148,7 +195,14 @@
 
  <changes>
    
-    <release version="0.2.1" date="unreleased">
+   <release version="0.2.1" date="unreleased">
+     <action dev="JT" type="remove" context="skins" issue-ref="skin_images">
+       Removed some images (built-with-cocoon.gif, centipede-logo-small.gif)
+       from the skins, and moved them to
+       <code>src/documentation/resources/images</code>, as they are
+       Forrest-specific.
+     </action>
+
       <action dev="NKB" type="update" context="docs">
         Added enhancements to status.xml to comply with the needs for a complete status file,
         like other "STATUS" text files at Apache.
@@ -447,7 +501,7 @@
      Initial Import
     </action>
    </release>
-  </changes>
+ </changes>
 
 </status>
 
