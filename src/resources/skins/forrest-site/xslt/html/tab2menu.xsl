@@ -26,14 +26,14 @@ See the imported tab2menu.xsl for details.
   </xsl:template>
 
   <xsl:template name="separator">
-    <td width="8">
-      <img src="{$root}skin/images/spacer.gif" width="8" height="8" alt=""/>
+    <td width="6">
+      <img src="{$root}skin/images/spacer.gif" width="6" height="8" alt=""/>
     </td>
   </xsl:template>
 
   <xsl:template name="selected">
     <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0"  style="height: 1.7em" summary="selected tab">
+      <table cellspacing="0" cellpadding="0" border="0"  style="height: 1.8em" summary="selected tab">
         <tr>
           <td bgcolor="#4C6C8F" width="5" valign="top">
             <img src="{$skin-img-dir}/tabSel-left.gif" alt="" width="5" height="5" />
@@ -65,6 +65,10 @@ See the imported tab2menu.xsl for details.
           </td>
           <td bgcolor="#B2C4E0" width="5" valign="top">
             <img src="{$skin-img-dir}/tab-right.gif" alt="" width="5" height="5" />
+          </td>
+        </tr>
+        <tr>
+          <td height="1" colspan="3">
           </td>
         </tr>
       </table>
