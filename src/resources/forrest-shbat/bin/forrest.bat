@@ -14,7 +14,7 @@ set ANTFILE="%FORREST_HOME%\forrest.build.xml"
 
 Rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
-set ANT_HOME="%FORREST_HOME%\ant"
+set ANT_HOME=%FORREST_HOME%\ant
 
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
@@ -23,7 +23,7 @@ for %%i in ("%FORREST_HOME%\lib\endorsed\*.jar") do call appendcp.bat %%i
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 
 Rem ----- call ant.. ---------------------------------------------------
-call "%ANT_HOME%\bin\ant" -buildfile %ANTFILE% -Dbasedir="%PROJECT_HOME%" -Dproject.home="%PROJECT_HOME%" -Dforrest.home="%FORREST_HOME%" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
+"%ANT_HOME%\bin\ant" -buildfile %ANTFILE% -Dbasedir="%PROJECT_HOME%" -Dproject.home="%PROJECT_HOME%" -Dforrest.home="%FORREST_HOME%" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 Rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%
