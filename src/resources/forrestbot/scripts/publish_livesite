@@ -7,6 +7,7 @@
 MODULE=${1:-xml-forrest}
 case $MODULE in
 	xml-forrest) TARGET="forrest" ;;
+        xml-forrest-template) TARGET="forrest-sample" ;;
 esac
 [ -z "$TARGET" ] && echo "Unknown module: $MODULE" && exit;
 
@@ -28,41 +29,61 @@ fi
 echo "Updating $LIVECVS from $SRC_DIR"
 pushd .
 cd $LIVECVS
-echo cvsco
+cvsco
 echo cvs up -dP
-echo "Now copying $SRC_DIR/*"
+echo "Copying generated docs to xml-site.."
+echo "  src  : $SRC_DIR/*"
+echo "  dest : $PWD" 
 cp -r -p $SRC_DIR/* .
-echo "done"
-
 function addfiles()
 {
-  echo "addfiles $@"
+  echo "addfiles '$@'"
+  local TXTFILES
+  local BINFILES
+local DIRS
   for i in $@; do
-    echo "Processing $i.."
+    #echo "Processing $i.."
     if [ -d "$i" ]; then
-      cvs add `find $i -type d`
-      addfiles `find $i -type f`
+      echo "Directory: $i"
+      DIRS="$DIRS $i"
+
       continue
     fi
-    local TXTFILES
-    local BINFILES
-    MIME=`file -bi $i`
-    echo "New file $i has MIME type $MIME"
-    if [ `echo "$MIME" | grep -q 'text'` ]; then
-      echo "Adding $i as text"
+    local MIME=`file -bi $i 2>/dev/null`
+    unset istext
+    echo $MIME | grep text > /dev/null && istext="yes"
+    if [ "$istext" = "yes" ]; then
+      echo "Adding as TEXT ($MIME): $i"
       TXTFILES="$TXTFILES $i"
     else
-      echo "Adding $i as binary"
+      echo "Adding as BINARY ($MIME): $i"
       BINFILES="$BINFILES $i"
     fi
-    echo cvsdo add $TXTFILES
-    echo cvs add -kb $BINFILES
   done
+  [ ! -z "$TXTFILES" ] && cvsdo add $TXTFILES
+  [ ! -z "$BINFILES" ] && cvs add -kb $BINFILES
+  if [ ! -z "$DIRS" ]; then
+    echo "Processing dirs $DIRS"
+    for d in $DIRS; do
+      echo "Processing dir $d"
+	  unset newfiles ; newfiles=`find $d -type f -not -path "*CVS*"`
+	  unset newdirs ; newdirs=`find $d -type d -not -name "CVS" | tr '\n' ' '`
+	  echo "  dirs: '$newdirs'"
+	  echo "  files: '$files'"
+          cvs add $newdirs
+	  addfiles $newfiles
+    done
+  fi
+  unset TXTFILES BINFILES DIRS
 }
+echo "Generating list of new-to-CVS files.."
 NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
-addfiles $NEWFILES
+#echo "Adding new files to CVS: $NEW_FILES"
+addfiles $NEW_FILES
 
 cvs up > /tmp/cvslist 2>&1
+echo "Now committing to CVS"
 #cvs ci -m "Automatic publish at `date` by forrestrunner."
 #cvs ci
 popd
+echo "xml-site update complete!"

@@ -52,9 +52,11 @@ function rebuild_forrest()
   cd $FORREST
   # see www.red-bean.com/cvsutils
   if [ "$REGEN_FORREST" = "true" -a `which cvsco` ]; then
+    > /tmp/forrest-is-being-regenned
     cvsco
     cvs up -dP
   fi
+  > /tmp/forrest-being-rebuilt
   ./build.sh -Ddist-shbat.dir=$SHBAT
   popd
 }
