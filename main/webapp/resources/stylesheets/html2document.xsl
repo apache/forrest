@@ -139,6 +139,9 @@
       
     <xsl:template match="P|p">
         <p>
+          <xsl:if test="@class">
+            <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute> 
+          </xsl:if>
           <xsl:apply-templates/>
         </p>
     </xsl:template>
