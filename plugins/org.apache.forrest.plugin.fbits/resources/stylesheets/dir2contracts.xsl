@@ -36,35 +36,33 @@
   </xsl:template>
 
 <xsl:template match="dir:file[starts-with(@name,'c-')]">
-    <xsl:variable name="fct-bit-file">
-      <xsl:value-of select="$contentDir"/>
-      <xsl:text>/fbits/</xsl:text>
-      <xsl:value-of select="@name"/>
-    </xsl:variable>
-    <xsl:variable name="fct-bit-title">
-      <xsl:value-of select="document($fct-bit-file)/contract/@name"/>
-    </xsl:variable>
-    <xsl:variable name="fct-bit-nc">
-      <xsl:value-of select="document($fct-bit-file)/contract/@nc"/>
-    </xsl:variable>
-    <xsl:variable name="fct-bit-tlc">
-      <xsl:value-of select="document($fct-bit-file)/contract/@tlc"/>
-    </xsl:variable>
-    <xsl:variable name="fct-bit-description">
-      <xsl:value-of select="document($fct-bit-file)/contract/description"/>
-    </xsl:variable>
-    <content>
-      <xsl:if test="$fct-bit-tlc='content'">
-        <contract name="{$fct-bit-title}" css="{$fct-bit-nc}" file-name="{@name}">
-          <description>
-            <xsl:value-of select="$fct-bit-description"/>
-          </description>
-          <realpath>  
-            <xsl:value-of select="$fct-bit-file"/>
-          </realpath>
-        </contract>
-      </xsl:if>
-    </content>
+  <xsl:variable name="fct-bit-file">
+    <xsl:value-of select="$contentDir"/>
+    <xsl:text>/fbits/</xsl:text>
+    <xsl:value-of select="@name"/>
+  </xsl:variable>
+  <xsl:variable name="fct-bit-title">
+    <xsl:value-of select="document($fct-bit-file)/contract/@name"/>
+  </xsl:variable>
+  <xsl:variable name="fct-bit-nc">
+    <xsl:value-of select="document($fct-bit-file)/contract/@nc"/>
+  </xsl:variable>
+  <xsl:variable name="fct-bit-tlc">
+    <xsl:value-of select="document($fct-bit-file)/contract/@tlc"/>
+  </xsl:variable>
+  <xsl:variable name="fct-bit-description">
+    <xsl:value-of select="document($fct-bit-file)/contract/description"/>
+  </xsl:variable>
+  <xsl:if test="$fct-bit-tlc='content'">
+    <contract name="{$fct-bit-title}" css="{$fct-bit-nc}" file-name="{@name}">
+      <description>
+        <xsl:value-of select="$fct-bit-description"/>
+      </description>
+      <realpath>  
+        <xsl:value-of select="$fct-bit-file"/>
+      </realpath>
+    </contract>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -30,7 +30,6 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="fct-bits/fct-bits.xsl"/>
   <xsl:param name="contextPath"/>
   
   <!--+
@@ -53,5 +52,14 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       </body>
     </elements>
   </xsl:template>
-
+  
+  <xsl:template match="contract" mode="xhtml-head">
+    <xsl:comment>function name=<xsl:value-of select="@name"/> HEAD</xsl:comment>
+    <xsl:copy-of select="xhtml/head/*"/>
+  </xsl:template>
+  
+  <xsl:template match="contract" mode="xhtml-body">
+    <xsl:comment>function name=<xsl:value-of select="@name"/> BODY</xsl:comment>
+    <xsl:copy-of select="xhtml/body/*"/>
+  </xsl:template>
 </xsl:stylesheet>

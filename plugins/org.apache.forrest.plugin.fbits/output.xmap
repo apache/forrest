@@ -37,19 +37,9 @@
 3. check where to place them
 4. output the xhtml
 -->
+
 <!-- 
 1. check all aviable fct 
-output e.g.
-<contracts>
-  <content>
-    <contract file-name="c-fontsize-fct.xml" css="fontsize" name="fontsize-fct">
-      <description>
-        This functions lets you change the size of the font you are using in the site with a jscript.
-      </description>
-      <realpath>/home/thorsten/apache/cocoon-2.1.5.1/build/webapp/leather/fct-bits/c-fontsize-fct.xml</realpath>
-    </contract>
-  </content>
-</contracts>
 -->
   <map:pipeline>
     <map:match pattern="contracts-dir-fbits.get">
@@ -61,7 +51,54 @@ output e.g.
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
+
+<!--
+transform this dir-list 
+output e.g.
+<contracts>
+  <contract file-name="c-fontsize-fct.xml" css="fontsize" name="fontsize-fct">
+    <description>
+      This functions lets you change the size of the font you are using in the site with a jscript.
+    </description>
+    <realpath>/home/thorsten/apache/cocoon-2.1.5.1/build/webapp/leather/fct-bits/c-fontsize-fct.xml</realpath>
+  </contract>
+</contracts>
+-->
+  <map:pipeline>
+    <map:match pattern="contracts.get">
+		  <map:generate src="cocoon:/contracts-dir-fbits.get"/>
+      <map:transform src="resources/stylesheets/dir2contracts.xsl">
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.fbits"/>
+      </map:transform>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
   
+<!-- 
+2. check which fct are needed
+-->
+  <map:pipeline>
+    <map:match pattern="filter.get">
+      <map:aggregate element="filter">
+        <map:part src="src/documentation/ft-leather.xml" />
+        <map:part src="cocoon:/contracts.get" /> 
+      </map:aggregate>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+
+<!--f:t directly transformed to div id="@name"-->
+  <map:pipeline>
+    <map:match pattern="ft.get">
+		   <map:generate src="src/documentation/ft-leather.xml"/>
+       <map:transform src="resources/stylesheets/ft2xhtml.xsl">
+          <map:parameter name="contextPath" value="{request:contextPath}"/>
+       </map:transform>
+       <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+  
+  <!--just brainstroming pipe-->
   <map:pipeline>
     <map:match pattern="contracts-dir-nuggets.get">
 		  <map:generate type="directory" src="nuggets">
@@ -73,26 +110,5 @@ output e.g.
     </map:match>
   </map:pipeline>
   
-  <!-- transform this dir-list -->
-  <map:pipeline>
-    <map:match pattern="contracts.get">
-		  <map:generate src="cocoon:/contracts-dir-fbits.get"/>
-      <map:transform src="resources/stylesheets/dir2contracts.xsl">
-        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.fbits"/>
-      </map:transform>
-      <map:serialize type="xml"/>
-    </map:match>
-  </map:pipeline>
-  
-  
-  <map:pipeline>
-    <map:match pattern="ft.get">
-		   <map:generate src="src/documentation/ft-leather.xml"/>
-       <map:transform src="resources/stylesheets/ft2xhtml.xsl">
-          <map:parameter name="contextPath" value="{request:contextPath}"/>
-       </map:transform>
-       <map:serialize type="xml"/>
-    </map:match>
-  </map:pipeline>
  </map:pipelines>
 </map:sitemap>
