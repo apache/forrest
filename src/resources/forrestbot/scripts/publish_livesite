@@ -13,12 +13,15 @@ function log() {
 MODULE=${1:-xml-forrest}
 case $MODULE in
   xml-forrest)          REPOS="xml-site"    ; TARGET="forrest" ;;
+  xml-fop)          REPOS="xml-site"    ; TARGET="fop" ;;
   xml-forrest-template) REPOS="xml-site"    ; TARGET="forrest-sample" ;;
   xml-site)             REPOS="xml-site"    ; TARGET="/" ;;
   avalon-phoenix)       REPOS="avalon-site" ; TARGET="phoenix" ;;
+  avalon-site)       REPOS="avalon-site" ; TARGET="/" ;;
 esac
 log "MODULE is $MODULE"
 [ "$MODULE" = "xml-site" ] && ARGS=-l
+[ "$MODULE" = "avalon-site" ] && ARGS=-l
 log "ARGS is $ARGS"
 
 SRC_DIR=$WEBAPP/sites/$MODULE
@@ -102,9 +105,9 @@ function addfiles()
   unset TXTFILES BINFILES DIRS
 }
 
-function update_xmlsite()
+function update_rootfiles()
 { 
-  log "Generating list of new-to-CVS xml-site files in $PWD.."
+  log "Generating list of new-to-CVS $REPOS files in $PWD.."
   NEW_FILES=`(cvs up -l ;cvs up images skin) | grep '^\?' | cut -d\  -f 2 | tr '\n' ' '`
   log "Adding new files to CVS: '$NEW_FILES'"
   [ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
@@ -114,10 +117,11 @@ function commit()
 {
   log "Now committing to CVS"
   [ "MODULE" = "xml-site" ] && commitfiles="`(cvs up -l ;cvs up images skin) | cut -d\  -f 2 | tr '\n' ' '`"
+  [ "$MODULE" = "avalon-site" ] && commitfiles="`(cvs up -l ;cvs up components developing history pmc project seca containers whoweare) | cut -d\  -f 2 | tr '\n' ' '`"
   log Committing $commitfiles
   cvs ci -m "Automatic publish at `date` from http://forrestbot.cocoondev.org."
   popd
-  log "xml-site update of '$MODULE' complete!"
+  log "$REPOS update of '$MODULE' complete!"
 }
 
 ######################################################
@@ -131,10 +135,10 @@ sanity_checks
 # Copy generated content across to to the CVS module checkout
 copy_contents
 
-if [ "$MODULE" = "xml-site" ]; then
+if [ "$MODULE" = "xml-site" -o "$MODULE" = "avalon-site" ]; then
   # Special handling for the xml.apache.org pages, which are directly in the
   # targets/ directory
-  update_xmlsite
+  update_rootfiles
 
 else 
   log "Generating list of new-to-CVS files.."
