@@ -62,19 +62,14 @@ No navigation is provided and no rendering of graphics is attempted.
       </xsl:call-template>
       <xsl:call-template name="cr"/>
     </xsl:if>
-    <xsl:call-template name="cr"/>
 
     <xsl:apply-templates select="type"/>
     <xsl:apply-templates select="notice"/>
-    <xsl:call-template name="cr"/>
     <xsl:apply-templates select="abstract"/>
-    <xsl:call-template name="cr"/>
 
     <xsl:apply-templates select="authors"/>
-    <xsl:if test="authors and version">
-      <xsl:text>; </xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="version"/>
+    <xsl:call-template name="cr"/>
 
   </xsl:template>
 
@@ -86,11 +81,13 @@ No navigation is provided and no rendering of graphics is attempted.
       </xsl:choose>
       <xsl:value-of select="@name"/>
     </xsl:for-each>
+    <xsl:call-template name="cr"/>
   </xsl:template>
 
   <xsl:template match="notice">
     <xsl:param name="level" select="'2'"/>
 
+    <xsl:call-template name="cr"/>
     <xsl:call-template name="justify-text">
       <xsl:with-param name="text" select="'NOTICE'"/>
       <xsl:with-param name="width" select="$document-width"/>
@@ -114,6 +111,7 @@ No navigation is provided and no rendering of graphics is attempted.
   <xsl:template match="abstract">
     <xsl:param name="level" select="'2'"/>
 
+    <xsl:call-template name="cr"/>
     <xsl:call-template name="justify-text">
       <xsl:with-param name="text" select="'ABSTRACT'"/>
       <xsl:with-param name="width" select="$document-width"/>
@@ -628,20 +626,20 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="version">
     <xsl:param name="level" select="'1'"/>
-    <span class="version">
-      <xsl:apply-templates select="@major"/>
-      <xsl:apply-templates select="@minor"/>
-      <xsl:apply-templates select="@fix"/>
-      <xsl:apply-templates select="@tag"/>
-      <xsl:choose>
-        <xsl:when test="starts-with(., '$Revision: ')">
-          version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+    <xsl:apply-templates select="@major"/>
+    <xsl:apply-templates select="@minor"/>
+    <xsl:apply-templates select="@fix"/>
+    <xsl:apply-templates select="@tag"/>
+    <xsl:choose>
+      <xsl:when test="starts-with(., '$Rev')">
+        <xsl:value-of select="concat('Version ',
+          substring-before(substring-after(., ' '),' '))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="cr"/>
   </xsl:template>
 
   <xsl:template match="@major">
@@ -713,9 +711,9 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:param name="level" select="'1'"/>
 
     <xsl:call-template name="lineOf">
-      <xsl:with-param name="size" select="($level - 1) * 2"/>
+      <xsl:with-param name="size" select="($level - 1) * $indent-per-level"/>
     </xsl:call-template>
-    <xsl:value-of select="title"/>
+    <xsl:value-of select="normalize-space(title)"/>
     <xsl:call-template name="cr"/>
 
     <xsl:apply-templates mode="toc">
