@@ -183,53 +183,46 @@
     <xsl:variable name="href" select="substring-before(substring-after(.,'|'),']')"/>
     <xsl:variable name="text" select="substring-after(substring-before(.,'|'),'[')"/>
 
-    <xsl:choose>
-     <xsl:when test="string(number($href)) != 'NaN'">
-      <link href="#{$href}">
-       <xsl:value-of select="$text"/>
-      </link>
-     </xsl:when>
-     <xsl:when test="contains($href,'.png') or contains($href,'.jpg') or contains($href,'.gif')">
-      <img src="{$href}" alt="{$text}"/>
-     </xsl:when>
-     <xsl:when test="contains($href,':') or contains($href,'.')">
-      <link href="{$href}">
-       <xsl:value-of select="$text"/>
-      </link>
-     </xsl:when>
-     <xsl:otherwise>
-      <link>
-       <xsl:attribute name="href">
-      <xsl:choose>
-       <xsl:when test="$spaceless-filenames">
-          <xsl:value-of select="concat(translate($href,' ',''),'.html')"/>
-       </xsl:when>
-       <xsl:otherwise>
-          <xsl:value-of select="concat('view.do?page=',$href)"/>
-       </xsl:otherwise>
-      </xsl:choose>
-       </xsl:attribute>
-       <xsl:value-of select="$text"/>
-      </link>
-     </xsl:otherwise>
-    </xsl:choose>
+	<xsl:call-template name="convertLink">
+	  <xsl:with-param name="href0" select="$href"/>
+	  <xsl:with-param name="text" select="$text"/>
+	</xsl:call-template>
 
    </xsl:when>
    <xsl:otherwise>
     <xsl:variable name="href" select="substring(.,2,string-length(.)-2)"/>
     
+	<xsl:call-template name="convertLink">
+	  <xsl:with-param name="href0" select="$href"/>
+	  <xsl:with-param name="text" select="$href"/>
+	</xsl:call-template>
+
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
+
+
+  <xsl:template name="convertLink" >
+    <xsl:param name="href0"/>
+    <xsl:param name="text"/>
+    
+    <xsl:variable name="href">
+      <xsl:value-of
+	select="normalize-space($href0)"/>
+    </xsl:variable>
+
     <xsl:choose>
      <xsl:when test="string(number($href)) != 'NaN'">
       <link href="#{$href}">
-       [<xsl:value-of select="$href"/>]
+       <xsl:value-of select="$text"/>   <!-- $href -->
       </link>
      </xsl:when>
      <xsl:when test="contains($href,'.png') or contains($href,'.jpg') or contains($href,'.gif')">
-      <img src="{$href}" alt="{$href}"/>
+      <img src="{$href}" alt="{$text}"/> <!-- $href -->
      </xsl:when>
      <xsl:when test="contains($href,':') or contains($href,'.')">
       <link href="{$href}">
-       <xsl:value-of select="$href"/>
+       <xsl:value-of select="$text"/> <!-- $href -->
       </link>
      </xsl:when>
      <xsl:otherwise>
@@ -244,14 +237,12 @@
        </xsl:otherwise>
       </xsl:choose>
        </xsl:attribute>
-       <xsl:value-of select="$href"/>
+       <xsl:value-of select="$text"/> <!-- $href -->
       </link>
      </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
 
-   </xsl:otherwise>
-  </xsl:choose>
- </xsl:template>
 
  <xsl:template match="st:anchor" >
   <p>
