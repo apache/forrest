@@ -286,46 +286,14 @@ $Revision: 1.12 $
             <map:read src="resources/chaperon/grammars/{1}.xlex"/>
           </map:when>
           <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
-    <map:serialize type="xml"/>
-          </map:otherwise>
-        </map:select>
-      </map:match>
-
-      <map:match pattern="*.xgrm">
-        <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xgrm">
-            <map:read src="resources/chaperon/grammars/{1}.xgrm"/>
-          </map:when>
-          <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-    <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-    <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xgrm.xsl"/>
-    <map:serialize type="xml"/>
-          </map:otherwise>
-        </map:select>
-      </map:match>
-
-   <map:match pattern="*.xegrm">
-        <map:select type="exists">
-          <map:when test="{forrest:context}/resources/chaperon/grammars/{1}.xegrm">
-            <map:read src="{forrest:context}/resources/chaperon/grammars/{1}.xegrm"/>
-          </map:when>
-          <map:otherwise>
-    <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.egrm"/>
-    <map:transform type="extparser" src="{forrest:context}/resources/chaperon/grammars/egrm.xegrm"/>
-    <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/egrm2xegrm.xsl"/>
-    <map:serialize type="xml"/>
+            <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
+            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
+            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
+            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
+            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
+            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
+            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
+            <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
       </map:match>
@@ -569,8 +537,19 @@ $Revision: 1.12 $
         </map:select>
       </map:pipeline> 
 
+      <!-- FIXME: temporary fix to get htmlArea plugin working
+           this mount should be managed by the plugns framework -->
+      <map:pipeline internal-only="false">
+        <map:select type="exists">
+          <map:when test="{forrest:plugins}/htmlArea/sitemap.xmap">
+            <map:mount uri-prefix="" src="{forrest:plugins}/htmlArea/sitemap.xmap" check-reload="yes" pass-through="true"/>
+          </map:when>
+        </map:select>
+      </map:pipeline>
+
       <!-- FIXME: temporary fix to get rtf plugin working
            this mount should be managed by the plugns framework -->
+<!--
       <map:pipeline internal-only="false">
         <map:select type="exists">
           <map:when test="{forrest:plugins}/rtf/sitemap.xmap">
@@ -578,6 +557,7 @@ $Revision: 1.12 $
           </map:when>
         </map:select>
       </map:pipeline>
+-->
 
       <!-- FIXME: temporary fix to get text plugin working
            this mount should be managed by the plugns framework -->
