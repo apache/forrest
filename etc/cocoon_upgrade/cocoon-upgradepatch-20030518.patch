@@ -1,118 +1,17 @@
-? lib/core/avalon-framework-4.1.4.jar
-? lib/core/cocoon-20030329.jar
-? lib/core/cocoon-batik-block-20030329.jar
-? lib/core/cocoon-chaperon-block-20030329.jar
-? lib/core/cocoon-deprecated-20030329.jar
-? lib/core/cocoon-fop-block-20030329.jar
-? lib/core/cocoon-html-block-20030329.jar
-? lib/core/cocoon-jfor-block-20030329.jar
-? lib/core/cocoon-linkrewriter-block-20030329.jar
-? lib/core/cocoon-lucene-block-20030329.jar
-? lib/core/cocoon-profiler-block-20030329.jar
-? lib/core/commons-cli-1.0.jar
-? lib/core/commons-jxpath-1.1.jar
-? lib/core/excalibur-component-complete-1.1.jar
-? lib/core/excalibur-event-1.0.2.jar
-? lib/core/excalibur-logger-1.0.1.jar
-? lib/core/excalibur-pool-1.2.jar
-? lib/core/excalibur-sourceresolve-20030319.jar
-? lib/core/excalibur-store-20030317.jar
-? lib/core/excalibur-xmlutil-20030317.jar
-? lib/core/logkit-1.2.jar
-? lib/core/util.concurrent-1.3.1.jar
-Index: src/resources/forrest-shbat/forrest.build.xml
-===================================================================
-RCS file: /home/cvs/xml-forrest/src/resources/forrest-shbat/forrest.build.xml,v
-retrieving revision 1.59
-diff -u -r1.59 forrest.build.xml
---- src/resources/forrest-shbat/forrest.build.xml	24 Mar 2003 21:20:17 -0000	1.59
-+++ src/resources/forrest-shbat/forrest.build.xml	29 Mar 2003 13:36:18 -0000
-@@ -554,23 +554,38 @@
- 
-     <parallel>
- 
-+
-+      <java classname="org.apache.cocoon.Main" fork="true"
-+        dir="${project.ctxt-dir}" failonerror="true" maxmemory="128m">
-+        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-+        <arg value="-u${project.debuglevel}"/>
-+        <arg value="-xWEB-INF/cli.xconf"/>
-+        <arg value="index.html"/>
-+        <classpath>
-+          <path refid="forrest.cp"/>
-+        </classpath>
-+      </java>
-+
-+
-+      <!--
-       <java classname="org.apache.cocoon.Main"
-         fork="true"
-         dir="."
-         failonerror="true"
-         classpathref="forrest.cp">
--        <jvmarg
--          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
--        <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
--        <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
--        <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
--        <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
--        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
--        <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
--        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
--        <arg value="${project.start-uri}"/>              <!-- starting page -->
--        <arg value="-V" />                          <!-- be verbose -->
-+        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-+        <arg value="-c${project.ctxt-dir}"/>   <!- input to the process ->
-+        <arg value="-d${project.site-dir}"/>   <!- output to be put ->
-+        <arg value="-w${project.work-dir}"/>   <!- temp dir to use for e.g. cache ->
-+        <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
-+        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
-+        <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
-+        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
-+        <arg value="${project.start-uri}"/>              <!- starting page ->
-+        <arg value="-V" />                          <!- be verbose ->
-       </java>
-+      -->
-+
-       <sequential>
-         <!-- 
-         | Copy all non-xdocs content across, as we cannot rely on crawling to
-Index: src/resources/conf/cli.xconf
-===================================================================
-RCS file: src/resources/conf/cli.xconf
-diff -N src/resources/conf/cli.xconf
---- /dev/null	1 Jan 1970 00:00:00 -0000
-+++ src/resources/conf/cli.xconf	29 Mar 2003 13:38:15 -0000
-@@ -0,0 +1,22 @@
-+<?xml version="1.0"?>
-+<!-- all links here are relative to the build context dir, that
-+     in the build.xml file is set to ${build.context} -->
-+<cocoon verbose="true"  
-+        follow-links="true" 
-+        precompile-only="false" 
-+        confirm-extensions="false">
-+
-+   <broken-link-file>../brokenlinks.txt</broken-link-file>
-+<!--<load-class>org.firebirdsql.jdbc.Driver</load-class>-->
-+   <logging log-kit="./logkit.xconf" logger="cli" level="ERROR" />
-+   <context-dir>.</context-dir>
-+   <config-file>cocoon.xconf</config-file>
-+   <dest-dir>../docs</dest-dir>
-+   <work-dir>../temp/docs</work-dir>
-+<!--<user-agent>xxx</user-agent>-->
-+   <accept>*/*</accept>
-+   <uri>favicon.ico</uri>
-+<!--<uri-file></uri-file>-->
-+   
-+</cocoon>
-+
+? .bash_history
+? .viminfo
+? dif
+? lib/core/nekodtd-0.1.5.jar
+? lib/core/nekopull-0.2.1.jar
+? lib/endorsed/xalan-2.5.0.jar
+? lib/endorsed/xercesImpl-2.4.0.jar
 Index: src/resources/conf/cocoon.xconf
 ===================================================================
 RCS file: /home/cvs/xml-forrest/src/resources/conf/cocoon.xconf,v
 retrieving revision 1.17
 diff -u -r1.17 cocoon.xconf
 --- src/resources/conf/cocoon.xconf	27 Mar 2003 03:53:46 -0000	1.17
-+++ src/resources/conf/cocoon.xconf	4 May 2003 09:08:24 -0000
++++ src/resources/conf/cocoon.xconf	18 May 2003 06:40:03 -0000
 @@ -11,17 +11,18 @@
  <!-- =========================== Sitemap =============================== -->
  
@@ -174,7 +73,7 @@ diff -u -r1.17 cocoon.xconf
      <component-instance class="org.apache.cocoon.components.modules.input.JXPathMetaModule" logger="core.modules.input" name="jxpath"/>
      <component-instance class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule" logger="core.modules.input" name="simplemap"/>
      <component-instance name="defaults"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
-@@ -86,16 +84,16 @@
+@@ -86,38 +84,27 @@
        </values>
      </component-instance>
  
@@ -184,6 +83,31 @@ diff -u -r1.17 cocoon.xconf
 -        <input-module name="session-attr"/>
 -        <input-module name="defaults"/>
 -      </component-instance>
+-
+-      <!-- For the site: scheme -->
+-      <component-instance
+-        class="org.apache.cocoon.components.modules.input.XMLFileModule"
+-        logger="core.modules.xml" name="linkmap">
+-        <file src="cocoon:/linkmap"/>
+-      </component-instance>
+-
+-      <!-- Links to URIs within the site -->
+-      <component-instance
+-        class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+-        logger="core.modules.mapper" name="site">
+-        <input-module name="linkmap"/>
+-        <prefix>/site//</prefix>
+-        <suffix>/@href</suffix>
+-      </component-instance>
+-
+-      <!-- Links to external URIs, as distinct from 'site' URIs -->
+-      <component-instance
+-        class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+-        logger="core.modules.mapper" name="ext">
+-        <input-module name="linkmap"/>
+-        <prefix>/site/external-refs//</prefix>
+-        <suffix>/@href</suffix>
+-      </component-instance>
 +    <component-instance logger="core.modules.input" name="forrest"    class="org.apache.cocoon.components.modules.input.ChainMetaModule">
 +      <input-module name="request-param"/>
 +      <input-module name="request-attr"/>
@@ -191,16 +115,24 @@ diff -u -r1.17 cocoon.xconf
 +      <input-module name="defaults"/>
 +    </component-instance>
  
--      <!-- For the site: scheme -->
--      <component-instance
--        class="org.apache.cocoon.components.modules.input.XMLFileModule"
 +    <!-- For the site: scheme -->
 +    <component-instance
 +      class="org.apache.cocoon.components.modules.input.XMLFileModule"
-         logger="core.modules.xml" name="linkmap">
-         <file src="cocoon:/linkmap"/>
-       </component-instance>
-@@ -125,6 +123,21 @@
++      logger="core.modules.xml" name="linkmap"/>
++
++    <!-- Links to URIs within the site -->
++    <component-instance
++      class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
++      logger="core.modules.mapper" name="site"/>
++
++    <!-- Links to external URIs, as distinct from 'site' URIs -->
++    <component-instance
++      class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
++      logger="core.modules.mapper" name="ext"/>
+ 
+ </input-modules>
+ 
+@@ -125,6 +112,21 @@
  <!-- ================================= XML ================================ -->
  
    <!--+
@@ -222,7 +154,7 @@ diff -u -r1.17 cocoon.xconf
        | XML Parser
        |
        | The default parser used in Apache Cocoon is
-@@ -145,44 +158,31 @@
+@@ -145,44 +147,31 @@
        |     XML validation is only being used for the documentation build.
        |     (If you are going to use it elsewhere, then do so with caution.)
        |     You really should have validated all of your XML documents already,
@@ -280,7 +212,7 @@ diff -u -r1.17 cocoon.xconf
      <parameter name="validate" value="false"/>
      <parameter name="namespace-prefixes" value="false"/>
      <parameter name="stop-on-warning" value="true"/>
-@@ -190,6 +190,9 @@
+@@ -190,6 +179,9 @@
      <parameter name="reuse-parsers" value="false"/>
      <!--parameter name="sax-parser-factory" value="???"/-->
      <!--parameter name="document-builder-factory" value="???"/-->
@@ -290,7 +222,7 @@ diff -u -r1.17 cocoon.xconf
    </xml-parser>
  
    <!--+
-@@ -239,10 +242,18 @@
+@@ -239,10 +231,18 @@
        | processor to start the output of the transformation as soon as possible.
        | if set to false, the transforer waits until the end of the
        | transformation to deliver the output.
@@ -310,7 +242,7 @@ diff -u -r1.17 cocoon.xconf
    </xslt-processor>
  
    <!-- Xpath Processor: -->
-@@ -250,9 +261,13 @@
+@@ -250,9 +250,13 @@
  
    <!-- The XMLizers converts different mime-types to XML -->
    <xmlizer>
@@ -326,7 +258,7 @@ diff -u -r1.17 cocoon.xconf
  </xmlizer>
  
  <!-- ============================ Object Stores =========================== -->
-@@ -264,18 +279,19 @@
+@@ -264,18 +268,19 @@
  
       <!--+
           | Indicates how many objects will be hold in the cache.
@@ -350,7 +282,7 @@ diff -u -r1.17 cocoon.xconf
        |
        | Common configuration parameters:
        |  use-cache-directory: Indicates that cache directory specified in
-@@ -285,13 +301,12 @@
+@@ -285,13 +290,12 @@
        |  directory: Specifies directory to use. Absolute or relative to the
        |             work directory.
        |
@@ -366,7 +298,7 @@ diff -u -r1.17 cocoon.xconf
      <parameter name="use-cache-directory" value="true"/>
      <parameter name="order" value="2701"/>
    </persistent-store>
-@@ -299,46 +314,36 @@
+@@ -299,46 +303,36 @@
    <!--+
        | Store Janitor: the store garbage collector and memory usage controller.
        |
@@ -421,7 +353,7 @@ diff -u -r1.17 cocoon.xconf
  
  
  <!-- ====================== System Components =========================== -->
-@@ -372,8 +377,8 @@
+@@ -372,8 +366,8 @@
        | It is currently used by the cinclude transformer
        +-->
    <component class="org.apache.cocoon.transformation.helpers.DefaultIncludeCacheManager" role="org.apache.cocoon.transformation.helpers.IncludeCacheManager">
@@ -432,3 +364,106 @@ diff -u -r1.17 cocoon.xconf
      <parameter name="preemptive-loader-url" 
                 value="http://localhost:8080/cocoon/samples/cinclude/loader"/>
      -->
+Index: src/resources/conf/linkmap.xmap
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/conf/linkmap.xmap,v
+retrieving revision 1.3
+diff -u -r1.3 linkmap.xmap
+--- src/resources/conf/linkmap.xmap	27 Mar 2003 12:35:15 -0000	1.3
++++ src/resources/conf/linkmap.xmap	18 May 2003 06:40:03 -0000
+@@ -22,7 +22,7 @@
+       </map:match>
+ 
+       <map:match pattern="abs-linkmap/**">
+-        <map:generate src="cocoon:/abs-linkmap" />
++        <map:generate src="cocoon://abs-linkmap" />
+          <map:transform type="xpath">
+           <map:parameter name="include" value="//*[@href='{1}']" />
+         </map:transform>
+@@ -30,7 +30,7 @@
+       </map:match>
+ 
+       <map:match pattern="**linkmap">
+-        <map:generate src="cocoon:/abs-linkmap" />
++        <map:generate src="cocoon://abs-linkmap" />
+         <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
+           <map:parameter name="path" value="{0}" />
+         </map:transform>
+@@ -41,7 +41,7 @@
+       site.xml.  The /** suffix identifies a @href prefix which all nodes in the
+       returned subtree must have. -->
+       <map:match pattern="**linkmap/**">
+-        <map:generate src="cocoon:/abs-linkmap/{2}" />
++        <map:generate src="cocoon://abs-linkmap/{2}" />
+         <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
+           <map:parameter name="path" value="{1}linkmap" />
+         </map:transform>
+Index: src/resources/conf/sitemap.xmap
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/conf/sitemap.xmap,v
+retrieving revision 1.94
+diff -u -r1.94 sitemap.xmap
+--- src/resources/conf/sitemap.xmap	7 May 2003 23:48:06 -0000	1.94
++++ src/resources/conf/sitemap.xmap	18 May 2003 06:40:03 -0000
+@@ -18,14 +18,18 @@
+       </map:transformer>
+ 
+       <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
+-        <input-module name="linkmap">
+-          <file src="{src}" reloadable="false" />
+-        </input-module>
+         <input-module name="site">
+           <input-module name="linkmap">
+             <file src="{src}" reloadable="false" />
+           </input-module>
+           <prefix>/site//</prefix>
++          <suffix>/@href</suffix>
++        </input-module>
++        <input-module name="ext">
++          <input-module name="linkmap">
++            <file src="{src}" reloadable="false" />
++          </input-module>
++          <prefix>/site/external-refs//</prefix>
+           <suffix>/@href</suffix>
+         </input-module>
+       </map:transformer>
+Index: src/resources/forrest-shbat/forrest.build.xml
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/forrest-shbat/forrest.build.xml,v
+retrieving revision 1.66
+diff -u -r1.66 forrest.build.xml
+--- src/resources/forrest-shbat/forrest.build.xml	13 May 2003 01:15:13 -0000	1.66
++++ src/resources/forrest-shbat/forrest.build.xml	18 May 2003 06:40:07 -0000
+@@ -564,7 +564,6 @@
+     <mkdir dir="${project.work-dir}"/>
+ 
+     <parallel>
+-
+       <java classname="org.apache.cocoon.Main"
+         fork="true"
+         maxmemory="${forrest.maxmemory}"
+@@ -584,6 +583,24 @@
+         <arg value="${project.start-uri}"/>              <!-- starting page -->
+         <arg value="-V" />                          <!-- be verbose -->
+       </java>
++
++      <!--
++      <java classname="org.apache.cocoon.Main"
++        fork="true"
++        dir="${project.ctxt-dir}"
++        failonerror="true"
++        maxmemory="${forrest.maxmemory}">
++        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
++        <arg value="-u${project.debuglevel}"/>
++        <arg value="-xcli.xconf"/>
++        <arg value="index.html"/>
++        <classpath>
++          <path refid="forrest.cp"/>
++        </classpath>
++      </java> 
++      -->
++
++
+       <sequential>
+         <!-- 
+         | Copy all non-xdocs content across, as we cannot rely on crawling to
