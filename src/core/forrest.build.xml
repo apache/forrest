@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/11/29 15:38:42 $              |
+    |             $Date: 2003/12/04 22:08:19 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -411,13 +411,15 @@ FORREST SITE BUILDER
   <!-- ===============================================================
        Cleans the site.  (typically before generating the new version)
        param: location to clean ${project.site-dir}
+       param: location to clean ${project.temp-dir}
+       param: location to clean ${project.webapp}
+       param: file to clean ${project.brokenlinkfile}
        =============================================================== -->
-  <target name="clean-site" depends="init-props">
-    <!-- <delete dir="${project.site-dir}"/> -->
-    <mkdir dir="${project.site-dir}"/>     
-    <delete includeEmptyDirs="false">
-      <fileset dir="${project.site-dir}"/>
-    </delete>     
+  <target name="clean-site" depends="init-props" description="Clean all directories and files generated during the build">
+    <delete failonerror="false" dir="${project.site-dir}"/>
+    <delete failonerror="false" dir="${project.temp-dir}"/>
+    <delete failonerror="false" dir="${project.webapp}"/>
+    <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
   
   <!-- ===============================================================
