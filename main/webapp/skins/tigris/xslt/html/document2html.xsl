@@ -29,7 +29,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
-  
+
   <xsl:template match="document">
     <div class="content">
      <div id="topmodule" align="right">
@@ -38,12 +38,12 @@ and tabs (tab2menu.xsl) to generate the final HTML.
         <tr>
         <td class="tasknav" >
           <div align="left">
-           <!-- 
-                site2html.xsl will search for this as 
-                   
+           <!--
+                site2html.xsl will search for this as
+
                    td[@class='tasknav']/div[@align='left']
 
-                to insert the breadcrumbs.   
+                to insert the breadcrumbs.
           -->
           </div>
         </td>
@@ -61,7 +61,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
        </tr>
       </table>
      </div>
-     
+
     <!-- ( ================= Content================== ) -->
     <div id="bodycol">
       <xsl:if test="normalize-space(header/title)!=''">
@@ -115,7 +115,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="@id">
+    <xsl:template match="link | jump | fork | source | anchor | icon | code | figure | @id" >
     <xsl:apply-imports/>
   </xsl:template>
 
@@ -131,13 +131,13 @@ and tabs (tab2menu.xsl) to generate the final HTML.
        <div class="h3">
         <h3><xsl:value-of select="title"/></h3>
         <xsl:apply-templates/>
-      </div>  
+      </div>
       </xsl:when>
       <xsl:when test="$level=2">
        <div class="h4">
         <h4><xsl:value-of select="title"/></h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
-      </div>  
+      </div>
 
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
@@ -159,8 +159,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:otherwise>
     </xsl:choose>
-
-  </xsl:template>  
+  </xsl:template>
 
   <xsl:template match="fixme">
     <div class="warningmessage">
@@ -168,82 +167,39 @@ and tabs (tab2menu.xsl) to generate the final HTML.
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-  
+
   <xsl:template match="note">
     <div class="infomessage">
       <p><strong>Note</strong></p>
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-  
+
   <xsl:template match="warning">
     <div class="errormessage">
       <p><strong>Warning</strong></p>
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-  
-  <xsl:template match="link">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="jump">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="fork">
-    <xsl:apply-imports/>
-  </xsl:template>
 
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:apply-imports/>
   </xsl:template>
 
-  <xsl:template match="source">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="anchor">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="icon">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="code">
-    <xsl:apply-imports/>
-  </xsl:template>
-
-  <xsl:template match="figure">
-    <xsl:apply-imports/>
-  </xsl:template>
-  
   <xsl:template match="table">
    <div class="h4">
     <xsl:apply-templates select="@id"/>
     <xsl:if test="caption">
         <h4><xsl:value-of select="caption"/></h4>
-    </xsl:if> 
+    </xsl:if>
     <xsl:apply-templates select="caption"/>
       <table border="1" cellspacing="2" cellpadding="3" width="100%" class="grid">
-        <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
-        <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
-        <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
-        <xsl:if test="@class"><xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute></xsl:if>
-        <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
-      
+        <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor"/>
         <xsl:apply-templates/>
     </table>
-   </div>    
+   </div>
   </xsl:template>
 
-  <xsl:template match="caption">
-    <!-- do not show caption elements, they are already in other places-->  
-  </xsl:template>
-  
-  <xsl:template match="title">
-    <!-- do not show title elements, they are already in other places-->
-  </xsl:template>
-
+  <!-- do not show caption or title elements, they are already in other places -->
+  <xsl:template match="caption | title"/>
 </xsl:stylesheet>
