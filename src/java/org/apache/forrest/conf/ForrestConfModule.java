@@ -83,9 +83,9 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         String attributeValue = this.getAttributeValues(name, modeConf,
                         objectModel)[0].toString();
 
-        debug(" - Requested:" + name);
-        debug(" - Unfiltered:" + original);
-        debug(" - Given:" + attributeValue);
+        if (debugging()) debug(" - Requested:" + name);
+        if (debugging()) debug(" - Unfiltered:" + original);
+        if (debugging()) debug(" - Given:" + attributeValue);
 
         return attributeValue;
     }
@@ -105,9 +105,10 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
     private final String getSystemProperty(String propertyName)
                     throws MalformedURLException, IOException {
 
-        String propertyValue = System.getProperty(propertyName, ".");
+        //if the property is not set, default to the webapp context
+        String propertyValue = System.getProperty(propertyName, "context:/");
 
-        debug("system property " + propertyName + "=" + propertyValue);
+        if (debugging()) debug("system property " + propertyName + "=" + propertyValue);
 
         return propertyValue;
     }
@@ -148,7 +149,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         filteringProperties = 
             loadAntPropertiesFromURI(filteringProperties,defaultRorrestPropertiesStringURI);
 
-        debug("Loaded project forrest.properties:" + filteringProperties);
+        if (debugging()) debug("Loaded project forrest.properties:" + filteringProperties);
     }
 
     /**
@@ -162,15 +163,16 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         Source source = null;
         InputStream in = null;
         try {
+           
             source = m_resolver.resolveURI(antPropertiesStringURI);
 
-            debug("Searching for forrest.properties in"
+            if (debugging()) debug("Searching for forrest.properties in"
                                                 + source.getURI());
             in = source.getInputStream();
             filteringProperties = new AntProperties(precedingProperties);
             filteringProperties.load(in);
 
-            debug("Loaded:" + antPropertiesStringURI +
+            if (debugging()) debug("Loaded:" + antPropertiesStringURI +
                                            filteringProperties.toString());
 
         } finally {
@@ -194,15 +196,18 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
     
     /**
      * Rocked science
+     */
+    private final boolean debugging() {
+        return getLogger().isDebugEnabled();
+   }
+    
+    /**
+     * Rocked science
      * @param debugString
      */
     private final void debug(String debugString) {
-        if (getLogger().isDebugEnabled()) {
             getLogger().debug(debugString);
-        }
    }
-    
-    
     
 }
 
