@@ -50,15 +50,16 @@
 */
 package org.apache.cocoon.transformation;
 
-import org.apache.avalon.excalibur.xml.Parser;
+import org.apache.excalibur.xml.dom.DOMParser;
+import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.NOPValidity;
+
 import org.apache.cocoon.ProcessingException;
-import org.apache.avalon.excalibur.xml.xpath.XPathProcessor;
 import org.apache.cocoon.environment.SourceResolver;
-import org.apache.cocoon.caching.Cacheable;
-import org.apache.cocoon.caching.CacheValidity;
-import org.apache.cocoon.caching.NOPCacheValidity;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.util.HashUtil;
 
@@ -120,17 +121,16 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.2 2003/02/07 05:22:08 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.3 2003/03/15 06:11:43 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
-    implements Cacheable
+    implements CacheableProcessingComponent
 {
 
     /** XPath Processor */
     private XPathProcessor processor = null;
-    /** DOM Parser */
-    private Parser parser = null;
+    private DOMParser parser = null;
 
     /** XPath specifying nodes to include. Defaults to the root node */
     protected String include = null;
@@ -154,9 +154,9 @@ public class XPathTransformer
             getLogger().error("cannot obtain XPathProcessor", e);
         }
         try {
-            this.parser = (Parser)this.manager.lookup(Parser.ROLE);
+            this.parser = (DOMParser)this.manager.lookup(DOMParser.ROLE);
         } catch (Exception e) {
-            getLogger().error("cannot obtain Parser", e);
+            getLogger().error("cannot obtain DOMParser", e);
         }
     }
 
@@ -375,8 +375,8 @@ public class XPathTransformer
      * @return A hash of the include and exclude parameters, thus uniquely
      * identifying this XPathTransformer amongst it's peers.
      */
-    public long generateKey() {
-        return HashUtil.hash(this.include+this.exclude);
+    public Serializable generateKey() {
+        return ""+HashUtil.hash(this.include+this.exclude);
     }
 
     /**
@@ -385,8 +385,8 @@ public class XPathTransformer
      * @return An "always valid" CacheValidity object. This transformer has no
      * inputs other than the incoming SAX events.
      */
-    public CacheValidity generateValidity() {
-        return new NOPCacheValidity();
+    public SourceValidity generateValidity() {
+        return new NOPValidity();
     }
 
     /**
