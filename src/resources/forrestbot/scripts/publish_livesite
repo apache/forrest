@@ -22,7 +22,10 @@ if [ ! -d "$SRC_DIR" ]; then
   exit
 fi
 LIVECVS=$XML_SITE/targets/$TARGET
-
+if [ ! -d "$LIVECVS" ]; then
+  echo "Expected checked-out xml-site/ HTML in non-existent directory $LIVECVS"
+  exit
+fi
 echo "Updating $LIVECVS from $SRC_DIR"
 pushd .
 cd $LIVECVS
