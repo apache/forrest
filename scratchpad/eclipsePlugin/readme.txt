@@ -7,8 +7,11 @@ For Development
 ===============
 
 If you want to help develop this plugin you need to import it as a project in
-Elipse, the easiest way is to use the Subclipse  SVN Browser plugin from 
+Eclipse, the easiest way is to use the Subclipse  SVN Browser plugin from 
 http://subclipse.tigris.org and do a "Check out as...")
+
+Executing the Plugin
+--------------------
 
 - Select Run | Run ...
 
