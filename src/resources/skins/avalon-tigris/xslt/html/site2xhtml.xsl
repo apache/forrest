@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2002/11/26 22:28:16 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.5 2003/01/09 07:59:51 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -82,11 +82,11 @@ $Id: site2xhtml.xsl,v 1.4 2002/11/26 22:28:16 nicolaken Exp $
       <tr class="status">
         <td>
           <xsl:comment>================= start BreadCrumb ==================</xsl:comment>
-            <a href="$config/trail/link1/@href"><xsl:value-of select="$config/trail/link1/@name" /></a> 
+            <a href="{$config/trail/link1/@href}"><xsl:value-of select="$config/trail/link1/@name" /></a> 
             <xsl:if test = "($config/trail/link2/@name)and(normalize-space($config/trail/link2/@name)!='')"><xsl:text> | </xsl:text></xsl:if>                                 
-            <a href="$config/trail/link2/@href"><xsl:value-of select="$config/trail/link2/@name" /></a>
+            <a href="{$config/trail/link2/@href}"><xsl:value-of select="$config/trail/link2/@name" /></a>
             <xsl:if test = "($config/trail/link3/@name)and(normalize-space($config/trail/link3/@name)!='')"><xsl:text> | </xsl:text></xsl:if>                                 
-            <a href="$config/trail/link3/@href"><xsl:value-of select="$config/trail/link3/@name" /></a>
+            <a href="{$config/trail/link3/@href}"><xsl:value-of select="$config/trail/link3/@name" /></a>
           <!-- useful when we have <link> elements instead of link(n:=1..3)  
           <xsl:for-each select="$config/trail/link">
             <xsl:if test="position()!=1">|</xsl:if>
