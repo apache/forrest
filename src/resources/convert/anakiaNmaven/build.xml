@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<project name="Forrest Converter" default="convert" basedir=".">
+
+    <property name="src.dir" location="${xdocs.dir}"/>
+    <!--<property name="src.format" value="maven"/>
+    <property name="target.format" value="forrest"/>-->
+    <property name="dest.dir" value="${user.dir}/temp"/>
+    <property name="converter.xsl" location="anakiaNmaven2document11.xsl"/>
+    <property name="book2project.xsl" location="projectNnavigation2book.xsl"/>
+
+    <target name="prepare" unless="xdocs.dir">
+        <echo message="Need to specify absolute path in xdocs.dir"/>
+        <echo message="property similar to"/>
+        <echo message="ant -Dxdocs.dir=/opt/projects/jakarta-avalon-excalibur/bzip/src/xdocs"/>
+        <fail/>
+    </target>
+
+    <target name="convert" depends="prepare">
+
+        <style style="${converter.xsl}"
+            force="true"
+            basedir="${src.dir}"
+            extension=".xml"
+            destdir="${dest.dir}">
+            <exclude name="**/project.xml"/>
+            <include name="**/*.xml"/>
+        </style>
+
+
+        <mkdir dir="${dest.dir}/stylesheets" />
+        
+        <style style="${book2project.xsl}"
+            force="true"
+            basedir="${src.dir}"
+            extension="-book.xml"
+            destdir="${dest.dir}">
+            <include name="**/project.xml"/>
+        </style>
+
+        <style style="${book2project.xsl}"
+            force="true"
+            basedir="${src.dir}"
+            extension="-book.xml"
+            destdir="${dest.dir}">
+            <include name="**/navigation.xml"/>
+        </style>
+        
+        <copy todir="${dest.dir}">
+          <fileset dir="${src.dir}">
+            <exclude name="**/*.xml"/>
+          </fileset>
+        </copy>         
+
+        <copy file="${dest.dir}/stylesheets/project-book.xml" tofile="${dest.dir}/book.xml" failonerror="false"/>
+        <copy file="${dest.dir}/stylesheets/navigation-book.xml" tofile="${dest.dir}/book.xml" failonerror="false"/>        
+        <delete dir="${dest.dir}/stylesheets" />
+        
+        
+        <copy file="${user.dir}/tabs.xml" todir="${dest.dir}"/>
+                
+        <fixcrlf srcdir="${dest.dir}"
+                tab="remove"
+                tablength="4"
+                eol="crlf"
+                javafiles="no"
+                includes="**/*.xml"
+         />
+  
+    </target>
+
+    <target name="update" depends="convert">
+        <copy todir="${src.dir}">
+            <fileset dir="${dest.dir}"/>
+        </copy>
+        <delete dir="${dest.dir}"/>
+    </target>
+
+</project>
