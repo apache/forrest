@@ -64,6 +64,39 @@ use eclipse for XML editing at present then just use your normal installation.
 
 Installing Required Plugins
 ---------------------------
+
+- Help -> Software Updates... -> Find and Install
+  - select "Search for new features to install"
+  - check the selection box for "Eclipse.org update site"
+  - expand the "Eclipse.org update site" tree node
+  - ensure that the following  options are checked
+    - EMF SDK 2.0.1
+    - GEF SDK 3.0.1
+    - JEM
+  - click "Next"
+  - wait while eclipse checks for updates
+  - check (at least) the following updates
+    - Eclipse Modelling Framework
+    - EMF SDK
+    - EMF Service Data Objects
+    - Graphical Editing FrameworkXSD Sxhema Infoset Model
+  - click "Next"
+  - accept the license aggreement (after reading it of course)
+  - click "Next"
+  - click "Finish"
+  - you will be asked if you want to install various plugins, just 
+    click "Install"
+  - this will take a while, especially if you are on a slow connection
+  - once all plugins are installed you will need to restart forrestEclipse
+    
+- Check the plugins are all installed correctly
+  - Help -> Software Updates -> Manage Configuration
+  - Ensure the configuration dialog is set to display disabled features
+    - third button from left in the toolbar should be depressed
+  - You should see the following features enabled (i.e. they do not have a little 
+    red no-entry sign on their icon
+  - If any are disabled then enable them by selecting them and clicking "Enable"
+    in the right pane
   
 - install the IBM code drop for the WTP project (this is the pre-alpha stuff)
   - download http://download.eclipse.org/webtools/downloads/initial-contributions/ibm.zip
@@ -71,20 +104,30 @@ Installing Required Plugins
   - In the extracted tree you will find another archive
     tmp/com.ibm.wtp.sdk-I-200407201920.zip extract its to the tmp directory
   - copy or move the contents of tmp/eclipse to your forrestEclipse directory
+  
+- restart forrestEclipse using the command "eclipse.exe -clean" (this will 
+  reload all the plugin descriptors, you do not need the "-clean" flag in 
+  subsequent restarts
+  
+- verify that the IBM plugins have been installed
+  - Help -> Software Updates -> Manage Configuration
+  - ensure com.ibm.wtp.sdk.6.0.0 is listed and does not have a little red "disabled" flag on the icon
 
-- restart forrestEclipse
+Export Forrest Eclipse Plugin
+-----------------------------
 
-Installing forrestEclipse Plugin
---------------------------------
+To work with the Forrest Eclipse plugin you need to first need to make it
+available in your wokspace. Here's how:
 
-To work with the Forrest Eclipse plugin you need to first compile it. Here's 
-how:
-
-- Import the Forrest Eclipse plugin code into you workspace
+Import the Forrest Eclipse plugin code into you workspace
   - File -> Import -> Existing Project into Workspace
-  - point to the "tools/eclipse" directory of your Forrest installation
+  - Click Next
+  - Click Browse and point to the "tools/eclipse" directory of your Forrest installation
+  - Click Finish
 
-- Compile and Export the plugin
+If you found the right directory, "forrestplugin" will show as "Project Name"
+
+Now export the plugin
   - File -> Export -> Deployable Plugins and Fragments
   - click Next
   - ensure org.apache.forrest.eclipse is checked in the "Available Plugins and Fragments List"
@@ -94,9 +137,13 @@ how:
   
 - Restart Eclipse
   
-- ensure Forrest eclipse plugin is installed
+Ensure Forrest eclipse plugin is installed
   - Help -> About -> Plug-in Details
   - look for org.apache.forrest.eclipse in the list of installed plugins
+  
+If you cannot see the Forrest plugin in the list you many need to start
+forrestEclipse with the "-clean" command line flag. This forces Eclipse to
+re-initialise its plugin database.
   
 NOTE - if you intend to help develop the Forrest Eclipse plugin (please do) 
 then you should be familar with using Eclipse for Plugin Development. A good
@@ -110,6 +157,8 @@ Create a project
 ----------------
 - File -> New -> Project
 - Forrest -> Seed New Project
+  Currently you cannot use whitespace in the project directory name.
+  This should change in a future version, see http://issues.cocoondev.org/browse/FOR-398
 
 Create new XDoc
 ---------------
@@ -127,16 +176,9 @@ Start Forrest
 - right click on Forrest project
 - select site -> stop
 
-(NOTE: currently broken)
+(NOTE: currently broken - you will have to manually kill the java process I'm afraid)
 
 Build Site
 ----------
 - right click on Forrest project
 - select site -> build
-
-
-============
-Known Issues
-============
-
-- If a project name has a space in it then the seeding of the project fails (problem with Forrest core?)
