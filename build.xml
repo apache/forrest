@@ -251,22 +251,18 @@
           description="Test that the features are okay before committing."/>
 
   <target name="testseed" depends="init">
-    <property name="forrest.home" value="${dist-shbat.dir}" />  
+    <property name="forrest.home" location="src/core" />  
     <property name="test.dir" value="${build.dir}/test"/>
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
     <ant antfile="${forrest.home}/forrest.build.xml" target="seed">
-      <property name="forrest.home" value="${dist-shbat.dir}" />  
+      <property name="forrest.home" value="${forrest.home}"/>  
       <property name="project.home" value="${test.dir}"/>
     </ant>
-    
-    <ant antfile="${test.dir}/forrest-targets.xml" target="site"/>
-    
-    <!--    
     <ant antfile="${forrest.home}/forrest.build.xml" target="site">
-      <property name="forrest.home" value="${dist-shbat.dir}" />  
+      <property name="forrest.home" value="${forrest.home}"/>  
       <property name="project.home" value="${test.dir}"/>
-    </ant>-->
+    </ant>
   </target>
   
   <!-- ================================== -->
