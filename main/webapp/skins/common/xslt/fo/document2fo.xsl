@@ -425,8 +425,12 @@
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
 
-    <!-- if marked as a 'page', and we're breaking on pages, and were not the last node -->
-    <xsl:if test="@class='page' and $page-break-top-sections and not(following-sibling::node())">
+    <!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
+    <xsl:if test="@class='pageBreakBefore' and $page-break-top-sections and preceding-sibling::node()">
+        <fo:block break-before="page"/>
+    </xsl:if>
+    <!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
+    <xsl:if test="@class='pageBreakAfter' and $page-break-top-sections and following-sibling::node()">
         <fo:block break-after="page"/>
     </xsl:if>
   </xsl:template>
