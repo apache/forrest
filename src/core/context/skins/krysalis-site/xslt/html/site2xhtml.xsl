@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.10 2004/01/11 10:36:29 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.11 2004/01/11 23:12:20 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -426,9 +426,9 @@ $Id: site2xhtml.xsl,v 1.10 2004/01/11 10:36:29 nicolaken Exp $
 	      <!-- ============ Page font settings =========== -->
 	      <td class="subborder trail" align="right" nowrap="true">
 	        Font size: 
+	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
 	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
 	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
-	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
           </td>
 	    </tr>
 
