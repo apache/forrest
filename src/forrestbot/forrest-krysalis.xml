@@ -14,17 +14,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project name="xml-forrest" default="main">
+<project name="forrest-krysalis" default="main">
 
-  <property name="getsrc.svn.url" value="http://svn.apache.org/repos/asf/xml/forrest/trunk"/>
-  <target name="getsrc" depends="getsrc.svn"/>
-  
-  <!-- create this file to be an ant project (not stored in CVS or SVN)
-  that sets deploy.cvs.user and deploy.cvs.password propeties -->
-  <import file="deploy.cvs.settings" optional="true"/>
-  <property name="deploy.cvs.module" value="xml-site/targets/forrest"/>
-  <target name="deploy" depends="deploy.cvs"/>
+    <property name="getsrc.svn.url" value="http://svn.apache.org/repos/asf/forrest/trunk"/>
+    <target name="getsrc" depends="getsrc.svn"/>
+    
+    <!-- any properties we set here will take precedence of the project's forrest.properties -->
+    <property name="project.skin" value="krysalis-site"/>
+    <property environment="env"/>
+    <import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/>
 
-  <property environment="env"/>
-  <import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/>
 </project>
+ 

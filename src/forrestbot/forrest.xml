@@ -14,13 +14,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project name="xml-forrest-seed" default="main">
+<project name="forrest" default="main">
 
-    <property name="getsrc.svn.url" value="http://svn.apache.org/repos/asf/xml/forrest/trunk/src/core/fresh-site"/>
-    <target name="getsrc" depends="getsrc.svn"/>
+  <property name="getsrc.svn.url" value="http://svn.apache.org/repos/asf/forrest/trunk"/>
+  <target name="getsrc" depends="getsrc.svn"/>
+  
+  <!-- create this file to be an ant project (not stored in CVS or SVN)
+  that sets deploy.cvs.user and deploy.cvs.password propeties -->
+  <import file="deploy.cvs.settings" optional="true"/>
+  <property name="deploy.cvs.module" value="xml-site/targets/forrest"/>
+  <target name="deploy" depends="deploy.cvs"/>
 
-    <property environment="env"/>
-    <import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/>
-
+  <property environment="env"/>
+  <import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/>
 </project>
-
