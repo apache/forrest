@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.6 $
+$Revision: 1.7 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -24,20 +24,41 @@ $Revision: 1.6 $
       <map:generator name="html"      src="org.apache.cocoon.generation.HTMLGenerator">
         <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
       </map:generator>
-      <map:generator name="text2xml" src="org.apache.cocoon.generation.TextGenerator" />
+      <map:generator name="text2xml" logger="sitemap.generator.textgenerator"
+                     src="org.apache.cocoon.generation.TextGenerator">
+       <parameter name="localizable" value="true"/>
+      </map:generator>
+      <map:generator name="exception"
+                  src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
+                  
     </map:generators>
     <map:serializers default="html"/>
     <map:matchers default="wildcard"/>
 
     <map:transformers default="xslt">
-      <map:transformer name="lexer" src="org.apache.cocoon.transformation.LexicalTransformer" logger="sitemap.transformer.lexer"/>
-      <map:transformer name="parser" src="org.apache.cocoon.transformation.ParserTransformer" logger="sitemap.transformer.parser">
-        <parameter name="flatten" value="true"/>
-        <parameter name="ignoring" value="true"/>
-      </map:transformer>
+	   <map:transformer name="pattern" 
+	                    src="org.apache.cocoon.transformation.PatternTransformer" 
+	                    logger="sitemap.transformer.pattern">
+	    <parameter name="groups" value="true"/>
+	   </map:transformer>
+	   <map:transformer name="lexer" 
+	                    src="org.apache.cocoon.transformation.LexicalTransformer" 
+	                    logger="sitemap.transformer.lexer">
+	    <parameter name="localizable" value="true"/>
+	   </map:transformer>
+	   <map:transformer name="parser" 
+	                    src="org.apache.cocoon.transformation.ParserTransformer" 
+	                    logger="sitemap.transformer.parser">
+	    <parameter name="flatten" value="true"/>
+	    <parameter name="recovery" value="true"/>
+	    <parameter name="localizable" value="true"/>
+	   </map:transformer>
+	
+	   <map:transformer name="extparser"
+	                    src="org.apache.cocoon.transformation.ExtendedParserTransformer"
+	                    logger="sitemap.transformer.extendedparser">
+	   </map:transformer>
     </map:transformers>
-
-
 
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.cocoon.acting.sourcetype.SourceTypeAction">
@@ -89,7 +110,12 @@ $Revision: 1.6 $
       </map:action>
     </map:actions>
     <map:selectors default="parameter">
-      <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
+	  <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
+   <map:selector logger="sitemap.selector.exception" name="exception"
+                 src="org.apache.cocoon.selection.ExceptionSelector">
+     <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
+     <exception class="java.lang.Throwable" unroll="true"/>
+   </map:selector>
     </map:selectors>
   </map:components>
 
@@ -197,9 +223,15 @@ $Revision: 1.6 $
           <map:when test="{project:content.xdocs}{1}.cwiki">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
               <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
+              
               <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
               <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-              <map:transform src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
+<!--
+    <map:transform                src="{forrest:home}/context/resources/chaperon/stylesheets/error4wiki.xsl"/>
+    <map:transform type="lexer"   src="{forrest:home}/context/resources/chaperon/grammars/error.xlex"/>
+    <map:transform                src="{forrest:home}/context/resources/chaperon/stylesheets/error2page.xsl"/>
+-->
+                <map:transform type="xsltc" src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
                 <map:parameter name="name" value="{2}" />
               </map:transform>
               <map:serialize type="xml-document"/>
@@ -241,8 +273,9 @@ $Revision: 1.6 $
         </map:select>
 
       </map:match>
+      
   </map:pipeline>
-  
+
   <map:pipeline type="caching" internal-only="true">
 
       <map:match pattern="*.xlex">
@@ -251,14 +284,14 @@ $Revision: 1.6 $
             <map:read src="resources/chaperon/grammars/{1}.xlex"/>
           </map:when>
           <map:otherwise>
-        <map:generate  type="text2xml"   src="resources/chaperon/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="resources/chaperon/grammars/grm.xlex"/>
-        <map:transform type="parser" src="resources/chaperon/grammars/grm.xgrm"/>
-        <map:transform               src="resources/chaperon/stylesheets/text4regex.xsl"/>
-        <map:transform type="lexer"  src="resources/chaperon/grammars/regex.xlex"/>
-        <map:transform type="parser" src="resources/chaperon/grammars/regex.xgrm"/>
-        <map:transform               src="resources/chaperon/stylesheets/grm2xlex.xsl"/>
-        <map:serialize type="xml"/>
+    <map:generate  type="text2xml"   src="{forrest:home}/context/resources/chaperon/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/grm.xlex"/>
+    <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/grm.xgrm"/>
+    <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/text4regex.xsl"/>
+    <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/regex.xlex"/>
+    <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/regex.xgrm"/>
+    <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/grm2xlex.xsl"/>
+    <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
       </map:match>
@@ -269,19 +302,32 @@ $Revision: 1.6 $
             <map:read src="resources/chaperon/grammars/{1}.xgrm"/>
           </map:when>
           <map:otherwise>
-        <map:generate  type="text2xml"   src="resources/chaperon/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="resources/chaperon/grammars/grm.xlex"/>
-        <map:transform type="parser" src="resources/chaperon/grammars/grm.xgrm"/>
-        <map:transform               src="resources/chaperon/stylesheets/text4regex.xsl"/>
-        <map:transform type="lexer"  src="resources/chaperon/grammars/regex.xlex"/>
-        <map:transform type="parser" src="resources/chaperon/grammars/regex.xgrm"/>
-        <map:transform               src="resources/chaperon/stylesheets/grm2xgrm.xsl"/>
-        <map:serialize type="xml"/>
+    <map:generate  type="text2xml"   src="{forrest:home}/context/resources/chaperon/grammars/{1}.grm"/>
+    <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/grm.xlex"/>
+    <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/grm.xgrm"/>
+    <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/text4regex.xsl"/>
+    <map:transform type="lexer"  src="{forrest:home}/context/resources/chaperon/grammars/regex.xlex"/>
+    <map:transform type="parser" src="{forrest:home}/context/resources/chaperon/grammars/regex.xgrm"/>
+    <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/grm2xgrm.xsl"/>
+    <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
       </map:match>
 
+   <map:match pattern="*.xegrm">
+        <map:select type="exists">
+          <map:when test="{forrest:home}/context/resources/chaperon/grammars/{1}.xegrm">
+            <map:read src="{forrest:home}/context/resources/chaperon/grammars/{1}.xegrm"/>
+          </map:when>
+          <map:otherwise>
+    <map:generate  type="text2xml"   src="{forrest:home}/context/resources/chaperon/grammars/{1}.egrm"/>
+    <map:transform type="extparser" src="{forrest:home}/context/resources/chaperon/grammars/egrm.xegrm"/>
+    <map:transform               src="{forrest:home}/context/resources/chaperon/stylesheets/egrm2xegrm.xsl"/>
+    <map:serialize type="xml"/>
+          </map:otherwise>
+        </map:select>
+      </map:match>
     </map:pipeline>
-    
+
   </map:pipelines>
 </map:sitemap>

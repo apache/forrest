@@ -4,7 +4,7 @@ Default Forrest sitemap, defining the whole site.
 Delegates to the other *.xmap files.  See
 http://xml.apache.org/forrest/sitemap-ref.html
 
-$Revision: 1.9 $
+$Revision: 1.10 $
 ==================================================== -->
 
 
@@ -12,12 +12,16 @@ $Revision: 1.9 $
   <map:components>
     <map:generators default="file">
       <map:generator name="file"      src="org.apache.cocoon.generation.FileGenerator" />
+      <map:generator name="exception"
+                  src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
       <!--
       <map:generator name="html"      src="org.apache.cocoon.generation.HTMLGenerator">
         <jtidy-config>jtidy.properties</jtidy-config>
       </map:generator>
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
       -->
+      <map:generator name="notifier" src="org.apache.cocoon.sitemap.NotifyingGenerator" />
+                  
     </map:generators>
 
     <map:transformers default="xslt">
@@ -59,11 +63,34 @@ $Revision: 1.9 $
         <!--<transformer-factory>com.icl.saxon.TransformerFactoryImpl</transformer-factory>-->
         <!--<transformer-factory>org.apache.xalan.xsltc.trax.TransformerFactoryImpl</transformer-factory>-->
       </map:transformer>
-
+      
+      <map:transformer name="xsltc" src="org.apache.cocoon.transformation.TraxTransformer" logger="sitemap.transformer.xslt" pool-max="32" pool-min="8" pool-grow="2">
+        <use-request-parameters>false</use-request-parameters>
+        <use-browser-capabilities-db>false</use-browser-capabilities-db>
+        <use-deli>false</use-deli>
+        <transformer-factory>org.apache.xalan.xsltc.trax.TransformerFactoryImpl</transformer-factory>
+      </map:transformer>
+      
       <map:transformer name="xinclude" src="org.apache.cocoon.transformation.XIncludeTransformer" logger="sitemap.transformer.xinclude" pool-grow="2" pool-max="16" pool-min="2" />
 
       <map:transformer name="cinclude" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.transformation.CIncludeTransformer" logger="sitemap.transformer.cinclude"/>
-
+   <map:transformer name="pattern" 
+                    src="org.apache.cocoon.transformation.PatternTransformer" 
+                    logger="sitemap.transformer.pattern">
+    <parameter name="groups" value="true"/>
+   </map:transformer>
+   <map:transformer name="lexer" 
+                    src="org.apache.cocoon.transformation.LexicalTransformer" 
+                    logger="sitemap.transformer.lexer">
+    <parameter name="localizable" value="true"/>
+   </map:transformer>
+   <map:transformer name="parser" 
+                    src="org.apache.cocoon.transformation.ParserTransformer" 
+                    logger="sitemap.transformer.parser">
+    <parameter name="flatten" value="true"/>
+    <parameter name="recovery" value="true"/>
+    <parameter name="localizable" value="true"/>
+   </map:transformer>
     </map:transformers>
 
     <map:readers default="resource">
@@ -108,6 +135,11 @@ $Revision: 1.9 $
 
     <map:selectors>
       <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.cocoon.selection.SourceExistsSelector" />
+   <map:selector logger="sitemap.selector.exception" name="exception"
+                 src="org.apache.cocoon.selection.ExceptionSelector">
+     <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
+     <exception class="java.lang.Throwable" unroll="true"/>
+   </map:selector>	 	
     </map:selectors>
 
     <map:pipes default="caching">
@@ -427,7 +459,7 @@ $Revision: 1.9 $
       </map:match>
      <map:match pattern="**.ico">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>     
+      </map:match> 
     </map:pipeline>
 
 
@@ -445,6 +477,6 @@ $Revision: 1.9 $
       </map:match>
     </map:pipeline>
 
-
-  </map:pipelines>
+  
+     </map:pipelines>
 </map:sitemap>
