@@ -42,6 +42,7 @@ if (logfile != null)
 	while ((line = in.readLine()) != null) {
 		out.println(line);
 	}
+	in.close();
 }
 %>
 </pre>

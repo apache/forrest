@@ -45,25 +45,36 @@ class StreamGobbler extends Thread {
 
 	// we have to read from the buffer whether we're going to debug or not; on some systems things will freeze up if the output isn't read
 	public void run() {
+        BufferedReader br = null;
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			br = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = br.readLine()) != null) {
 				if (debug)
 					log.log(type, line);
 			}
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			log.error("error reading from process", ioe);
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe2) {
+					log.error("couldn't cleanup after process IO exception", ioe2);
+				}
+			}
 		}
 	}
 }
 
 class ExecutorThread extends Thread {
 	private Process proc;
+	private Logger log;
 
 	public ExecutorThread(String id, Process p) {
 		super(id);
 		proc = p;
+		log = Logger.getLogger(Executor.class);
 	}
 
 	public void run() {
@@ -71,6 +82,13 @@ class ExecutorThread extends Thread {
         errorGobbler.start();
 		StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), Priority.DEBUG);
 		outputGobbler.start();
+		try {
+			proc.getInputStream().close();
+			proc.getErrorStream().close();
+			proc.getOutputStream().close();
+		} catch (IOException ioe) {
+			log.error("couldn't close process's input/output streams", ioe);
+		}
 	}
 
 }
