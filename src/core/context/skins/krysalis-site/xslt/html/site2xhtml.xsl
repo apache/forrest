@@ -379,70 +379,30 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       </xsl:if>
  	  
        <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
-        <tr>
-          <td></td>
-          <td>
-            <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                <tr>
-                  <td class="border top-left"></td>
-                  <td class="border"></td>
-                  <td class="border top-right"></td>
-                </tr>   
-            </table>
-          </td>      
-        </tr>
- 	     <tr>
+	     <tr>
            <td></td>
- 	       <td class="search">
-             <table class="dialog" cellspacing="0" cellpadding="0" border="0" width="100%"> 
-                 <tr>
-                  <td class="border" ></td>
-                  <td colspan="2" class="border" height="10"><b>Credits</b></td>
-                </tr>
-                <tr>
-                  <td colspan="3" height="8"></td>
-                </tr>
-		        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
-		          <xsl:variable name="name" select="name"/>
-		          <xsl:variable name="url" select="url"/>
-		          <xsl:variable name="image" select="image"/>
-		          <xsl:variable name="width" select="width"/>
-		          <xsl:variable name="height" select="height"/>
-		          <tr> 
-		            <td></td>
-		            <td colspan="4" height="5" class="logos">
-		              <a href="{$url}">
-		                <img alt="{$name} logo" border="0">
-		                  <xsl:attribute name="src">
-		                    <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
-		                    <xsl:value-of select="$image"/>
-		                  </xsl:attribute>
-		                  <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
-		                  <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
-		                </img>
-		              </a>
-		            </td>
-		            <td></td>
-		          </tr> 
-		        </xsl:for-each>
-                <tr>
-                  <td colspan="3" height="7"></td>
-                </tr>
-            </table> 
+ 	       <td colspan="2">
+	        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
+	          <xsl:variable name="name" select="name"/>
+	          <xsl:variable name="url" select="url"/>
+	          <xsl:variable name="image" select="image"/>
+	          <xsl:variable name="width" select="width"/>
+	          <xsl:variable name="height" select="height"/>
+	            <span class="logos">
+	              <a href="{$url}">
+	                <img alt="{$name} logo" border="0">
+	                  <xsl:attribute name="src">
+	                    <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+	                    <xsl:value-of select="$image"/>
+	                  </xsl:attribute>
+	                  <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
+	                  <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
+	                </img>
+	              </a>
+                  </span><br/>
+	        </xsl:for-each>
           </td>
         </tr> 
-      <tr>
-        <td></td>
-        <td>
-          <table cellspacing="0" cellpadding="0" border="0" width="100%">
-            <tr>
-              <td class="border bottom-left"></td>
-              <td class="border bottomborder"></td>
-              <td class="border bottom-right" ></td>
-            </tr>
-          </table>
-        </td>      
-      </tr>
       </xsl:if>      
 
     </table>
