@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +34,7 @@ isn't a major problem.
   <xsl:template match="f:site">
     <book software="Forrest"
       title="Apache Forrest"
-      copyright="Copyright 2002-2004 The Apache Software Foundation or its licensors,
-      copyright="as applicable.
+      copyright="Copyright 2002-2005 The Apache Software Foundation or its licensors, as applicable."
       <xsl:apply-templates/>
     </book>
   </xsl:template>
