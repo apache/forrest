@@ -37,28 +37,28 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
 <!--+
-	|Overall site template
-	+-->
+  |Overall site template
+  +-->
   <xsl:template match="site">
     <!--html lang="en" xml:lang="en"-->
     <html>
 <!--+
-	|HTML-head
-	+-->
+  |HTML-head
+  +-->
         <head>
-            <!--+
-   	|generator meta
-   	+-->
+<!--+
+  |generator meta
+  +-->
             <xsl:call-template name="html-meta"/>
-            <!--+
-	|title
-	+-->
+<!--+
+  |title
+  +-->
             <title>
                 <xsl:value-of select="div[@id='content']/h1"/>
             </title>
-            <!--+
-	|stylesheets
-	+-->
+<!--+
+  |stylesheets
+  +-->
             <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
                 />
             <link rel="stylesheet" href="{$root}skin/screen.css" 
@@ -68,13 +68,13 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <link rel="stylesheet" href="{$root}skin/profile.css" 
                 type="text/css" />
 <!--+
-    |Javascripts
-    +-->
+  |Javascripts
+  +-->
             <script type="text/javascript" language="javascript" 
                 src="{$root}skin/getBlank.js"></script>
-            <!--+
-	|favicon
-	+-->
+<!--+
+  |favicon
+  +-->
             <xsl:if test="//skinconfig/favicon-url">
                 <link rel="shortcut icon">
                     <xsl:attribute name="href">
@@ -85,11 +85,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             </xsl:if>
         </head>
 <!--+
-	|HTML-body
-	+-->
+  |HTML-body
+  +-->
       <body>
 <!--+Site structure
- 	 +++++++++++++++++++++++++++
+  +++++++++++++++++++++++++++
      +=========================+
      |       topstrip          |
      +=========================+
@@ -103,8 +103,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
      +++++++++++++++++++++++++++
      +-->
 <!--+
-   	|topstrip with logo's and search box 
-   	+-->
+  |topstrip with logo's and search box 
+  +-->
     <div id="top">
 <!--breadcrumbs org location-->
 <xsl:if test="not ($config/trail/@location='alt')">
@@ -118,7 +118,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |header
     +</xsl:comment>
-	  <div class="header">          
+    <div class="header">          
 <xsl:comment>+
     |start group logo
     +</xsl:comment> 
@@ -147,7 +147,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
              </xsl:choose>
    </xsl:variable>
-		<div class="projectlogo">
+     <div class="projectlogo">
             <xsl:if test="$xtest='false'" >
                     <xsl:attribute name="class">
                         <xsl:text>projectlogoA1</xsl:text>
@@ -159,8 +159,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <xsl:with-param name="logo" select="$config/project-logo"/>
             <xsl:with-param name="root" select="$root"/>
             <xsl:with-param name="description" select="$config/project-description"/>
-	      </xsl:call-template>
-	    </div>
+        </xsl:call-template>
+      </div>
 <xsl:comment>+
     |end Project Logo
     +</xsl:comment> 
@@ -206,8 +206,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
     </div>
 <!--+
-   	|centerstrip with menu and mainarea
-   	+-->
+  |centerstrip with menu and mainarea
+  +-->
     <div id="main">
         <div id="published">
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
@@ -233,39 +233,39 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |start Menu, mainarea
     +</xsl:comment>
-	    <xsl:if test="div[@id='menu']/ul/li">
-		  <xsl:call-template name="menu"/>
-	    </xsl:if>
+    <xsl:if test="div[@id='menu']/ul/li">
+      <xsl:call-template name="menu"/>
+    </xsl:if>
 <xsl:comment>+
     |start content
     +</xsl:comment>
-	    <xsl:apply-templates select="div[@id='content']"/>
+    <xsl:apply-templates select="div[@id='content']"/>
 <xsl:comment>+
     |end content
-    +</xsl:comment>	    
-	    <div class="clearboth">&#160;</div>
+    +</xsl:comment>    
+    <div class="clearboth">&#160;</div>
 
-	</div>
+  </div>
 <!--+
-   	|bottomstrip with footer
-   	+-->
+  |bottomstrip with footer
+  +-->
     <div id="footer">
 <xsl:comment>+
     |start bottomstrip
     +</xsl:comment>
-		  <div class="lastmodified"><script type="text/javascript"><![CDATA[<!--
-			  document.write("Last Published: " + document.lastModified);
-			  //  -->]]></script></div>
+  <div class="lastmodified"><script type="text/javascript"><![CDATA[<!--
+document.write("Last Published: " + document.lastModified);
+//  -->]]></script></div>
 
           <div class="copyright">
- 			Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
+ Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
           </div>
           
           <xsl:if test="$filename = 'index.html'">
             <div id="logos" >
-				<xsl:if test="$config/disable-compliance-links/@align">
-					<xsl:attribute name="style">text-align: <xsl:value-of select="$config/disable-compliance-links/@align"/></xsl:attribute>
-				</xsl:if>
+            <xsl:if test="$config/disable-compliance-links/@align">
+              <xsl:attribute name="style">text-align: <xsl:value-of select="$config/disable-compliance-links/@align"/></xsl:attribute>
+            </xsl:if>
               <!-- W3C logos style="text-align: center;"-->
               <xsl:call-template name="compliancy-logos"/>
               <xsl:if test="$filename = 'index.html' and $config/credits and not ($config/credits/credit/@box-location = 'alt')">
@@ -302,16 +302,15 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               </xsl:call-template>
             </div>
           </xsl:if>
-		  <div id="feedback">
-          	<xsl:value-of select="$config/feedback"/>
-          	<a id="feedbackto">
-          		<xsl:attribute name="href">
-    			    <xsl:value-of select="$config/feedback/@href"/>
-       				<xsl:value-of select="$path"/>
-          		</xsl:attribute>
-	          	<xsl:value-of select="$config/feedback/@to"/>
-          	</a>
-          	
+          <div id="feedback">
+            <xsl:value-of select="$config/feedback"/>
+            <a id="feedbackto">
+              <xsl:attribute name="href">
+                <xsl:value-of select="$config/feedback/@href"/>
+                <xsl:value-of select="$path"/>
+              </xsl:attribute>
+              <xsl:value-of select="$config/feedback/@to"/>
+            </a>
           </div>
 <xsl:comment>+
     |end bottomstrip
@@ -340,7 +339,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |start Menu
     +</xsl:comment>
-	  <div id="menu">
+   <div id="menu">
         <xsl:apply-templates select="div[@id='menu']/*"/>
 <div id="credit">
  <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
@@ -372,8 +371,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 style="display: none" />
         </div>
         <xsl:comment>+
-	|alternativ credits
-	+</xsl:comment>
+  |alternativ credits
+  +</xsl:comment>
       </div>
 <xsl:comment>+
     |end Menu
@@ -390,8 +389,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:variable>
     <xsl:variable name="whichGroup">
       <xsl:choose>
-    	<xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selectedmenuitemgroup</xsl:when>
-       	<xsl:otherwise>menuitemgroup</xsl:otherwise>
+        <xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selectedmenuitemgroup</xsl:when>
+        <xsl:otherwise>menuitemgroup</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     
@@ -474,14 +473,14 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
 <xsl:template name="html-meta">
 <!--+
-   	|generator meta
-   	+-->
+  |generator meta
+  +-->
 <xsl:comment>+
     |start generator meta
     +</xsl:comment>
-    	<meta name="Generator" content="Apache Forrest"/>
-		<meta name="Forrest-version" content="SVN-Head (0.6-dev)"/>
-      	<meta name="Forrest-skin-name" content="pelt"/>
+    <meta name="Generator" content="Apache Forrest"/>
+    <meta name="Forrest-version" content="SVN-Head (0.6-dev)"/>
+    <meta name="Forrest-skin-name" content="pelt"/>
 <xsl:comment>+
     |end generator meta
     +</xsl:comment>
