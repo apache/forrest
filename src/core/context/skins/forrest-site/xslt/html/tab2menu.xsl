@@ -16,6 +16,11 @@ See the imported tab2menu.xsl for details.
         </tr>
       </table>
     </div>
+    <xsl:if test="tab[@dir=$longest-dir]/tab">
+      <div class="level2tab">
+         <xsl:call-template name="level2tabs"/>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="pre-separator">
@@ -30,6 +35,10 @@ See the imported tab2menu.xsl for details.
       <img src="{$root}skin/images/spacer.gif" width="6" height="8" alt=""/>
     </td>
   </xsl:template>
+
+  <xsl:template name="level2-pre-separator"></xsl:template>
+  <xsl:template name="level2-post-separator"></xsl:template>
+  <xsl:template name="level2-separator">&#160;|&#160;</xsl:template>
 
   <xsl:template name="selected">
     <td valign="bottom">
@@ -73,6 +82,14 @@ See the imported tab2menu.xsl for details.
         </tr>
       </table>
     </td>
+  </xsl:template>
+
+  <xsl:template name="level2-not-selected">
+    <xsl:call-template name="base-not-selected"/>
+  </xsl:template>
+
+  <xsl:template name="level2-selected">
+     <xsl:call-template name="base-selected"/>
   </xsl:template>
 
 </xsl:stylesheet>

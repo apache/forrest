@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.3 2003/11/26 09:15:32 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.4 2003/12/29 10:04:41 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -129,10 +129,10 @@ $Id: site2xhtml.xsl,v 1.3 2003/11/26 09:15:32 nicolaken Exp $
           <xsl:apply-templates select="div[@class='tab']"/>
           <xsl:comment>================= end Tabs ==================</xsl:comment>
         </td>
-        <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" height="1" width="1" alt="" /></td>
+        <td bgcolor="{$header-color}"></td>
       </tr>
-      <tr>
-        <td colspan="4" bgcolor="{$menu-border}"><img class="spacer" src="{$spacer}" alt="" height="10" width="1" /></td>
+      <tr height="16">
+        <td colspan="4" bgcolor="{$menu-border}" height="10" ><xsl:apply-templates select="div[@class='level2tab']"/></td>
       </tr>
     </table>
     <xsl:comment>================= end Banner ==================</xsl:comment>
