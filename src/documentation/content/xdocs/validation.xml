@@ -11,7 +11,7 @@
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>$Revision: 1.4 $</version>
+    <version>$Revision: 1.5 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -100,7 +100,7 @@
       <note>
         The <code>failonerror</code> properties only work for files validated
         with &lt;xmlvalidate&gt;, not (yet) for those validated
-        with&lt;jing&gt;, where <code>failonerror</code> defaults to
+        with &lt;jing&gt;, where <code>failonerror</code> defaults to
         <code>true</code>.
       </note>
     </section>
@@ -114,7 +114,7 @@
         associating public identifiers (<code>-//APACHE//DTD Documentation
           V1.1//EN</code> above) with DTDs.
         If you <link href="your-project.html#adding_new_content_type">add a new content type</link>, you
-        should add the DTD to <code>${project.schema-dir}/dtd/</code>, and add
+        should add the DTD to <code>${project.schema-dir}/dtd/</code> and add
         an entry to the <code>${project.schema-dir}/catalog</code> file.  This
         section describes the details of this process.
       </p>
@@ -229,7 +229,7 @@ size CDATA #IMPLIED&gt;
             href="http://www.xml.com/axml/target.html#dt-PERef">parameter
             entities</link>.  They are like macros, whose content will be
           inserted when a parameter-entity reference, like
-          <code>%common-charents;</code> or <code>%document;</code>, is
+          <code>%common-charents;</code> or <code>%document;</code> is
           inserted.
         </p>
         <p>
@@ -250,7 +250,7 @@ size CDATA #IMPLIED&gt;
         <note><link
             href="http://www.oasis-open.org/docbook/documentation/reference/html/ch05.html">Chapter
             5: Customizing DocBook</link> of Norman Walsh's "DocBook: The
-          Definitive Guide" gives a fuller overview of the process of
+          Definitive Guide" gives a complete overview of the process of
           customizing a DTD.
         </note>
       </section>
@@ -274,7 +274,8 @@ size CDATA #IMPLIED&gt;
           Catalog file.</p>
         <note>
           See <link href="&catalog_intro;">this article</link> for a good
-          introduction to catalogs.
+          introduction to catalogs and the Cocoon documentation
+          <link href="http://xml.apache.org/cocoon/userdocs/concepts/catalog.html">Entity resolution with catalogs</link>.
         </note>
         <p>
           Forrest provides a standard catalog file,
@@ -299,11 +300,11 @@ size CDATA #IMPLIED&gt;
           with catalog B.  In our case, A is a custom project's catalog snippet,
           and B is the Forrest catalog.  Secondly, Cocoon does not (without
           tweaking) deal with more than one catalog file, so if your project
-          defines <code>${project.schema-dir}/catalog</code>, then you will
+          defines <code>${project.schema-dir}/catalog</code> then you will
           likely get errors about 'cannot resolve book-cocoon-v10.dtd'.  Until
           this is fixed (all help appreciated!) it is currently simpler just to
           hand-validate custom XML files, use
-          <code>project.validate.xdocs.excludes</code>to prevent validation of
+          <code>project.validate.xdocs.excludes</code> to prevent validation of
           new doc types and comment out the DOCTYPE declaration so Cocoon
           doesn't complain.
         </warning>
