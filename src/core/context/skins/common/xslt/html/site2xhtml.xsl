@@ -227,14 +227,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <xsl:template match="div[@id='skinconf-printlink']">
     <xsl:if test="$disable-print-link = 'false'"> 
 <script type="text/javascript" language="Javascript">
-function printit() {  
-if (window.print) {
-    window.print() ;  
-} else {
-    var WebBrowser = '&lt;OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2">&lt;/OBJECT>';
-document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
-    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
-}
+function printit() {
+  if (window.print) {
+    window.focus();
+    window.print();
+  }
 }
 </script>
 
