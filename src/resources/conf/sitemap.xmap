@@ -4,7 +4,7 @@ Default Forrest sitemap, defining the whole site.
 Delegates to the other *.xmap files.  See
 http://xml.apache.org/forrest/sitemap-ref.html
 
-$Revision: 1.113 $
+$Revision: 1.114 $
 ==================================================== -->
 
 
@@ -80,11 +80,14 @@ $Revision: 1.113 $
       <map:serializer name="html" mime-type="text/html" src="org.apache.cocoon.serialization.HTMLSerializer">
         <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
         <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
-        <encoding>ISO-8859-1</encoding>
       </map:serializer>
 
-      <map:serializer name="xml" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
-        <encoding>ISO-8859-1</encoding>
+      <map:serializer name="xml" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer"/>
+      
+      <map:serializer name="xml-document" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <cdata-section-elements>source</cdata-section-elements>
+        <doctype-public>-//APACHE//DTD Documentation V1.2//EN</doctype-public>
+        <doctype-system>document-v12.dtd</doctype-system>
       </map:serializer>
 
       <map:serializer name="fo2pdf" src="org.apache.cocoon.serialization.FOPSerializer" mime-type="application/pdf" />

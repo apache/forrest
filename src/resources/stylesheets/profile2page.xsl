@@ -5,8 +5,6 @@
 
  <xsl:import href="xml2html.xsl"/>
 
- <xsl:output indent="yes"/>
-
  <xsl:param name="key"/>
  <xsl:param name="result"/>
  <xsl:param name="component"/>

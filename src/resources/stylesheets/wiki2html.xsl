@@ -3,7 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:wiki="http://chaperon.sourceforge.net/grammar/wiki/1.0">
 
- <xsl:output indent="yes" method="xml"/>
+ <xsl:output method="xml"/>
 
  <xsl:template match="wiki:wiki">
     <xsl:apply-templates/>

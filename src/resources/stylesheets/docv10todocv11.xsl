@@ -7,8 +7,6 @@
   <xsl:output 
      doctype-public="-//APACHE//DTD Documentation V1.1//EN"
      doctype-system="document-v11.dtd"
-     indent="yes"
-         
       />
      
 

@@ -2,12 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- document-v20x.dtd to document-v12.dtd transformation -->
 
-  <!-- normally, I would include something like this:-->
-  <xsl:output 
-     doctype-public="-//APACHE//DTD Documentation V1.2//EN"
-     doctype-system="document-v1.2.dtd"
-     indent="no" />
-     
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>

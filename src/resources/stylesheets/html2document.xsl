@@ -4,14 +4,6 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:output method = "xml"  
-                version="1.0"
-                omit-xml-declaration="no" 
-                indent="no"
-                encoding="ISO-8859-1"
-                doctype-system="document-v11.dtd"
-                doctype-public="-//APACHE//DTD Documentation V1.1//EN" />
-
     <xsl:key name="h2s" match="h2" use="generate-id(preceding-sibling::h1[1])"/>
     <xsl:key name="h3s" match="h3" use="generate-id(preceding-sibling::h2[1])"/>
     <xsl:key name="h4s" match="h4" use="generate-id(preceding-sibling::h3[1])"/>

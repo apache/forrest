@@ -30,8 +30,6 @@ automatically generate a menu for (here wiki/):
 
   <xsl:output doctype-system="book-cocoon-v10.dtd" doctype-public="-//APACHE//DTD Cocoon Documentation Book V1.0//EN"/>
 
-  <xsl:output indent="yes"/>
-
   <xsl:param name="expected-extension" select="'xml'"/>
 
   <xsl:variable name="ext" select="concat('.', $expected-extension)"/>

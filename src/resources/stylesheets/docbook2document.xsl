@@ -13,7 +13,6 @@ Revision:
 
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-      <xsl:output method="xml" indent="yes" doctype-system="http://localhost/forrest/dtd/document-v11.dtd" doctype-public="-//APACHE//DTD Documentation V1.1//EN" encoding="UTF-8"/>
 
       <xsl:template match="/">
             <xsl:apply-templates select="book|chapter|revhistory|article"/>

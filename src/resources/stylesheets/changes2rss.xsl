@@ -7,7 +7,6 @@
   <xsl:output method = "xml"
     version="1.0" 
     encoding="ISO-8859-1" 
-    indent="yes"  
     doctype-public="-//Netscape Communications//DTD RSS 0.91//EN"                   
     doctype-system="http://my.netscape.com/publish/formats/rss-0.91.dtd"                   
     />

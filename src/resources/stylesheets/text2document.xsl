@@ -3,17 +3,11 @@
 <!--+
     | Transforms TextGenerator output to document format.
     |
-    | CVS $Id: text2document.xsl,v 1.2 2003/07/22 05:24:42 cheche Exp $
+    | CVS $Id: text2document.xsl,v 1.3 2003/07/30 08:37:54 cheche Exp $
     +-->
 
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<xsl:output indent="yes" 
-            method="xml"
-	    doctype-public="-//APACHE//DTD Documentation V1.2//EN"
-	    doctype-system="document-v12.dtd"
-            cdata-section-elements="source"/>
 
   <xsl:param name="filename"/>
 

@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.23 $
+$Revision: 1.24 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -92,6 +92,7 @@ $Revision: 1.23 $
           <map:parameter name="parameter-selector-test" value="{sourcetype}" />
 
           <map:when test="document-v10">
+          <!-- FIXME (JJP):  This should use the v12 now-->
             <map:transform src="resources/stylesheets/docv10todocv11.xsl" />
           </map:when>
 
@@ -178,7 +179,7 @@ $Revision: 1.23 $
             <map:generate src="content/xdocs/{1}.ihtml" type="html" />
             <map:transform src="resources/stylesheets/html2document.xsl" />
             <map:transform type="idgen" />
-            <map:serialize type="xml"/>
+            <map:serialize type="xml-document"/>
           </map:when>
 
           <map:when test="content/xdocs/{1}.cwiki">
@@ -195,17 +196,17 @@ $Revision: 1.23 $
                 <map:parameter name="name" value="{2}" />
               </map:transform>
               <map:transform type="idgen" />
-              <map:serialize type="xml"/>
+              <map:serialize type="xml-document"/>
             </map:match>
           </map:when>
 
-          <map:when test="content/{1}.txt">
+          <map:when test="content/xdocs/{1}.txt">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="text2xml" src="content/{1}{2}.txt" />
+              <map:generate type="text2xml" src="content/xdocs/{1}{2}.txt" />
               <map:transform src="resources/stylesheets/text2document.xsl">
                 <map:parameter name="filename" value="{2}" />
               </map:transform>
-              <map:serialize type="xml"/>
+              <map:serialize type="xml-document"/>
             </map:match>
           </map:when>
 
@@ -214,7 +215,7 @@ $Revision: 1.23 $
             <map:call resource="transform-to-document">
               <map:parameter name="src" value="content/xdocs/{1}.xml" />
             </map:call>
-            <map:serialize type="xml"/>
+            <map:serialize type="xml-document"/>
           </map:otherwise>
 
         </map:select>

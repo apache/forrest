@@ -4,12 +4,6 @@
                 xmlns:st="http://chaperon.sourceforge.net/schema/syntaxtree/1.0"
                 exclude-result-prefixes="st">
 
- <xsl:output indent="yes" 
-             method="html"
-             doctype-public="-//APACHE//DTD Documentation V1.1//EN"
-             doctype-system="document-v11.dtd"
-             cdata-section-elements="source"/>
-
  <xsl:param name="name"/>
 
  <xsl:template match="st:document">
