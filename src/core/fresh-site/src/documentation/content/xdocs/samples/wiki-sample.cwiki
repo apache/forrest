@@ -1,10 +1,18 @@
-!!!Forrest's Wiki Support
+!!!Forrest's JSPWiki Support
 
-Forrest now has partial support for documentation in Wiki format, thanks to the
+Forrest now has partial support for documentation in JSPWiki format, thanks to the
 [Chaperon parser|http://chaperon.sf.net/]. Wiki is a simple text format that can
 be learned in minutes. This page provides an overview of the syntax that
-Forrest supports, namely a subset of that used by the [Cocoon
-Wiki|http://wiki.cocoondev.org/].
+Forrest supports, namely a subset of that used by the
+[JSPWiki|http://www.jspwiki.org/Wiki.jsp?page=TextFormattingRules].
+There is also a
+[ChaperonTestPage|http://www.jspwiki.org/Wiki.jsp?page=ChaperonTestPage] which
+might provide some more hints (view its source).
+
+!!Important Note
+
+It is very easy to create broken documents by using this loose wiki syntax.
+Be sure to follow it explicitly.
 
 !!Quick reference
 
@@ -20,7 +28,7 @@ Wiki|http://wiki.cocoondev.org/].
 user instead of 'Link'.
 [1]        = Makes a reference to a footnote numbered 1.
 [#1]       = Marks the footnote number 1.
-[[link]    = creates text '[link]'.
+[[link]    = creates text '[link]'
 
 !heading   = small heading with text 'heading'
 !!heading  = medium heading with text 'heading'
@@ -37,27 +45,33 @@ __text__   = prints 'text' in bold.
 ;term:ex   = makes a definition for 'term' with the explanation 'ex'
 }}}
 
+!!Limitations
+These are the known limitations of the Forrest JSPWiki capability ...
+* The "definition" syntax (;term:ex) is not supported.
+* [[link] = creates text '[link]' (is not working).
+
+!!!Samples
+The following sections are samples. View the source to see their use
+(no, not the source of this HTML page, but the actual wiki source from which
+this page was generated).
+
 !!Writing text
 
 You don't need to know anything about the Wiki text formatting rules to use
 Wiki.  Just write normal text, and then use an empty line to mark a paragraph.
-It's just like writing an email.
+It is just like writing an email. Add more fancy items as you become more
+comfortable.
 
 !!Hyperlinks
 The link can also be a direct URL starting with http:, ftp:, mailto:, https:, or news:, in which case the link points to
-an external entity. For example, to point at the java.sun.com home page, use {{{[http://java.sun.com/]}}}, which becomes
-[http://java.sun.com/] or {{{[Java home page|http://java.sun.com/]}}}, which becomes [Java home page|http://java.sun.com/].
+an external entity. For example, to point at the java.sun.com home page, use
+{{{[http://java.sun.com/]}}}
+which becomes [http://java.sun.com/]
+{{{[Java home page|http://java.sun.com/]}}}
+which becomes [Java home page|http://java.sun.com/]
 
-To add a new page you just create a link to it from somewhere else. After all, there isn't much point in having a page
-if you can't access it! You'll then see a small question mark after the page name when you return to that page. Then
-click on it and you have created a new page!
-
-It's allowed to use almost any kind of characters inside a {{{[WikiName]}}}, as long
+Almost any kind of characters can be used inside a {{{[WikiName]}}} as long
 as they are letters or numbers.
-
-Note also that this Wiki can be configured to support standard CamelCase linking (if it's supported, the word CamelCase
-should be a link).  It's off by default, but if your friendly administrator has turned it on, then well, CamelCase all
-you want =).
 
 !!Adding pictures
 
@@ -66,7 +80,7 @@ any image in the wiki code by putting the image available somewhere on the web i
 just linking to it.
 For example, this is an inlined PNG image: [../images/icon.png].
 
-If you specify a link text e.g. {{{[this one here|http://example.com/example.png]}}} it becomes
+If you specify a link text e.g. {{{[this one here|http://example.com/example.png]}}} then it becomes
 the ALT text for those who either can't or don't want to view images.
 
 !!Bulleted lists
@@ -107,8 +121,8 @@ previous item.  If this sounds complicated, edit this page for an example, below
 * This is actually a multi-line item.
   We continue the second sentence on a line on a line of its own.
   We might as well do a third line while we're at it...
-  Notice, however, as all these sentences get put inside a single item!
-* The third line is again a single-line item for your convinience.
+  Notice, however, as all these sentences get rendered inside a single item!
+* The third line is again a single-line item.
 
 !!Definition lists and comments
 
@@ -130,28 +144,27 @@ You may use __bold__ text or ''italic'' text, by using two underscores (_) and t
 you're on a Windows computer, make sure that you are using the correct quote sign, as there is one that looks the same,
 but really isn't.
 
-
 !!Preformatted text
 
 If you want to add preformatted text (like code) just use three consecutive braces ({) to open a block, and three
-consecutive braces (}) to close a block. Edit this page for an example.
+consecutive braces (}) to close a block. See the Tables example below.
 
 !!Tables
 
-You can do simple tables by using using pipe signs ('|').  Use double pipe
-signs to start the heading of a table, and single pipe signs to then
+You can do simple tables by using using pipe symbols ('|').  Use double pipe
+symbols to start the heading of a table, and single pipe symbols to then
 write the rows of the table.  End with a line that is not a table.
 
 For example:
 
 {{{
 || Heading 1 || Heading 2
-| ''Gobble'' | Bar
-| [[Main]     | [[SandBox]
+| ''Italic Text'' | Plain Text
+| [Forrest Home Page|http://forrest.apache.org/] | [http://forrest.apache.org/]
 }}}
 
-gives you the following table.  Note how you can use links also inside tables.
+renders the following table.  Note how you can use links also inside tables.
 
 || Heading 1 || Heading 2
-| ''Gobble'' | Bar
-| [[Main]     | [[SandBox]
+| ''Italic Text'' | Plain Text
+| [Forrest Home Page|http://forrest.apache.org/] | [http://forrest.apache.org/]
