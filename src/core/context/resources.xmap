@@ -8,11 +8,14 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.3 $
+$Revision: 1.4 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
-      <map:generators default="file" />
+      <map:generators default="file" >
+        <map:generator name="asciiart-svg"
+                       src="org.apache.cocoon.generation.asciiart.AsciiArtSVGGenerator"/>
+      </map:generators>               
       <map:serializers default="html">
          <map:serializer name="svg2jpeg" mime-type="image/jpeg" src="org.apache.cocoon.serialization.SVGSerializer">
             <parameter name="quality" type="float" value="1.0" />
@@ -178,6 +181,13 @@ $Revision: 1.3 $
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/{1}.svg">
                   <map:generate src="{project:content.xdocs}/{1}.svg" />
+                  <map:transform src="{forrest:stylesheets}/project2text.xsl">
+                    <map:parameter name="config-file" value="{project:skinconf}"/>
+                  </map:transform>
+                  <map:serialize type="svg2png" />
+               </map:when>
+               <map:when test="{project:content.xdocs}/{1}.aart">
+                  <map:generate type="asciiart-svg" src="{project:content.xdocs}/{1}.aart" />
                   <map:transform src="{forrest:stylesheets}/project2text.xsl">
                     <map:parameter name="config-file" value="{project:skinconf}"/>
                   </map:transform>
