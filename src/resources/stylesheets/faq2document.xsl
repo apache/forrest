@@ -26,9 +26,9 @@
 
   <xsl:template match="faq" mode="index">
     <li>
-      <jump href="faq-{position()}">
+      <link href="#faq-{position()}">
         <xsl:value-of select="question"/>
-      </jump>
+      </link>
     </li>
   </xsl:template>
 
