@@ -238,7 +238,7 @@ function getCrumbTrailXHTML( crumbs )
 	for( var i = 0; i < crumbs.length; i++ )
 	{
 		xhtml += '<a href="' + crumbs[i][1] + '" class="' + CSS_CLASS_CRUMB + '">';
-		xhtml += sentenceCase( crumbs[i][0] ) + '</a>';
+		xhtml += unescape( crumbs[i][0] ) + '</a>';
 		if( i != (crumbs.length-1) )
 		{
 			xhtml += '<span class="' + CSS_CLASS_SEPARATOR + '">' + DISPLAY_SEPARATOR + '</span>';
