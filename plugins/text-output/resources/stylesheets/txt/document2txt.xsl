@@ -29,9 +29,9 @@ No navigation is provided and no rendering of graphics is attempted.
   <xsl:param name="dynamic-page" select="'false'"/>  
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
+  <xsl:param name="document-width">76</xsl:param>
 
   <xsl:variable name="indent-per-level">2</xsl:variable>
-  <xsl:variable name="document-width">76</xsl:variable>
 
   <xsl:template match="/">
     <xsl:apply-templates select="//document"/>
