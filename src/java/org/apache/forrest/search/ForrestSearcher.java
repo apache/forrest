@@ -86,7 +86,7 @@ import org.w3c.dom.Text;
 /**
  * <p>Searches the index for a given query string.</p>
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearcher.java,v 1.3 2003/09/17 15:01:22 nicolaken Exp $
+ * @version $Id: ForrestSearcher.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class ForrestSearcher {
   public ForrestSearcher() {

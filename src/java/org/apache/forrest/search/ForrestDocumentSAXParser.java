@@ -112,7 +112,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * <p><em>(Hope my English it's not too bad ;-)</em></p>
  *
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocumentSAXParser.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
+ * @version $Id: ForrestDocumentSAXParser.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 
 public class ForrestDocumentSAXParser extends DefaultHandler {

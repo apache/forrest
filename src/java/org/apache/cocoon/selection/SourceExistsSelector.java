@@ -95,7 +95,7 @@ import org.apache.avalon.framework.component.Composable;
  * </pre>
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: SourceExistsSelector.java,v 1.1 2003/10/12 12:45:05 jefft Exp $
+ * @version CVS $Id: SourceExistsSelector.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class SourceExistsSelector extends AbstractLogEnabled
   implements ThreadSafe, Selector, Composable {

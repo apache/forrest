@@ -95,7 +95,7 @@ import org.apache.lucene.util.Arrays;
  * or status.xml) and force the indexer to skip them.</li>
  *
  * @author Ramon Prades [RPR]
- * @version CVS $Id: ForrestIndexer.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
+ * @version CVS $Id: ForrestIndexer.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class ForrestIndexer {
 

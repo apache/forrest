@@ -66,7 +66,7 @@ import org.apache.lucene.document.Field;
 /**
  * Utility class to make Lucene Documents from Forrest Documents
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocument.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
+ * @version $Id: ForrestDocument.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class ForrestDocument {
 

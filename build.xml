@@ -50,16 +50,12 @@
 
     <property name="resource.dir"          location="src/resources"/>
     <property name="java.dir"          location="src/java"/>
-    <property name="scratchpad.src.dir"    location="src/scratchpad/src/java"/>
-    <property name="components.src.dir"    location="${java.dir}/components"/>
     <property name="build.dir"             location="build"/>
     <property name="build.docs"            location="build/docs"/>
    <!--
     <property name="build.javadocs"        value="build/docs/javadocs"/>
     -->
-    <property name="build.scratchpad.dir"  location="build/scratchpad"/>
     <property name="build.components.dir"  location="build/components"/>
-    <property name="build.scratchpad.classes" location="build/scratchpad/classes"/>
     <property name="build.components.classes" location="build/components/classes"/>
 
     <property name="dist.dir"              location="build/dist" />
@@ -77,7 +73,6 @@
     <mkdir dir="${build.dir}"/>
     
     <path id="classpath">
-      <fileset dir="src/scratchpad/lib" includes="**/*.jar"/>
       <fileset dir="lib" includes="**/*.jar"/>
       <pathelement location="${tools.jar}"/>
     </path>
@@ -221,7 +216,7 @@
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- Note that @tokens@ in config files will be unexpanded.              -->
   <!-- =================================================================== -->
-  <target name="webapp-webinf" depends="init, scratchpad.jar, components.jar" >
+  <target name="webapp-webinf" depends="init, components.jar" >
     <copy todir="${webapp.webinf.dir}" >
       <fileset dir="${resource.dir}/conf" >
         <exclude name="*.xmap" />
@@ -254,7 +249,6 @@
       <fileset dir="./lib/endorsed"    />
       <fileset dir="./lib/optional"/>
       <fileset dir="./lib/core"/>
-      <fileset dir="./src/scratchpad/lib"/>
     </copy>
         
     
@@ -490,36 +484,11 @@
 
 
   <!-- =================================================================== -->
-  <!-- Compile scratchpad classes                                          -->
-  <!-- =================================================================== -->
-  <target name="scratchpad.compile" depends="init">
-    <mkdir dir="${build.scratchpad.classes}"/>
-    <javac srcdir=   "${scratchpad.src.dir}"
-      destdir=       "${build.scratchpad.classes}"
-      debug=         "${build.compiler.debug}"
-      optimize=      "${build.compiler.optimize}"
-      deprecation=   "${build.compiler.deprecation}"
-      nowarn=        "${build.compiler.nowarn}"
-      classpathref=  "classpath">
-    </javac>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Create scratchpad jar                                               -->
-  <!-- =================================================================== -->
-  <target name="scratchpad.jar" depends="scratchpad.compile">
-    <mkdir dir="${build.scratchpad.dir}"/>
-    <jar destfile="${webapp.webinf.dir}/lib/xml-forrest-scratchpad-${version}.jar"
-      basedir="${build.scratchpad.classes}"/>
-  </target>
-
-
-  <!-- =================================================================== -->
   <!-- Compile Cocoon components                                           -->
   <!-- =================================================================== -->
   <target name="components.compile" depends="init">
     <mkdir dir="${build.components.classes}"/>
-    <javac srcdir=   "${components.src.dir}"
+    <javac srcdir=   "${java.dir}"
       destdir=       "${build.components.classes}"
       debug=         "${build.compiler.debug}"
       optimize=      "${build.compiler.optimize}"

@@ -123,7 +123,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.6 2003/04/19 09:28:16 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer

@@ -101,8 +101,8 @@ import java.io.IOException;
  *   like the JaxpParser) can be built to do this.  Then the complete
  *   parser can be recycled.
  *
- * @author $Author: jefft $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.2 2003/04/19 09:28:16 jefft Exp $
+ * @author $Author: nicolaken $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.1 2003/10/20 09:50:56 nicolaken Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
