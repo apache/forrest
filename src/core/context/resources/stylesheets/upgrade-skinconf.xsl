@@ -22,11 +22,43 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:import href="copyover.xsl"/>
+
   <xsl:template match="toc/@level">
    <xsl:attribute name="max-depth">
      <xsl:value-of select="."/>
    </xsl:attribute>
      <xsl:apply-templates />
   </xsl:template>
+ 
+  <!--Search Element-->
+  <!--First ignore these elements to avoid been copied.-->
+  <xsl:template match="disable-lucene|searchsite-name|searchsite-domain|comment()"/>
+  <xsl:template match="disable-search">
+    <xsl:if test=".='false'">
+      <xsl:element name="search">
+       <xsl:apply-templates select="../disable-lucene" mode="search-enable"/>
+       <xsl:apply-templates select="../searchsite-name" mode="search-enable"/>
+       <xsl:apply-templates select="../searchsite-domain" mode="search-enable"/>
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="disable-lucene" mode="search-enable">
+    <xsl:if test=".='false'">
+      <xsl:attribute name="provider">lucene</xsl:attribute>
+    </xsl:if>
+  </xsl:template >
+
+  <xsl:template match="searchsite-name" mode="search-enable">
+    <xsl:attribute name="name">
+     <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template match="searchsite-domain" mode="search-enable">
+    <xsl:attribute name="domain">
+     <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template >
 
 </xsl:stylesheet>

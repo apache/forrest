@@ -37,8 +37,7 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- Default skinconf.xml in the skins/ directory -->
-  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
-  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
+  <xsl:variable name="config" select="//skinconfig"/>
   <xsl:param name="path"/>
 
   <xsl:include href="dotdots.xsl"/>

@@ -106,9 +106,7 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
 
         <xsl:comment>================= start Search ==================</xsl:comment>
         <td bgcolor="{$header-color}" rowspan="2" valign="top">
-          <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and $config/searchsite-domain and
-            $config/searchsite-name">
+          <xsl:if test="$config/search">
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
                 <tr>
@@ -117,13 +115,13 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                   <td nowrap="nowrap">
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+                    <input type="hidden" name="sitesearch" value="{$config/search/attribute::domain}"/>
                     <input type="text" id="query" name="q" size="15"/>
                     <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
                     <input type="submit" value="Search" name="Search"/>
                     <br />
                     <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-                      the <xsl:value-of select="$config/searchsite-name"/> site
+                      the <xsl:value-of select="$config/search/attribute::name"/> site
                       <!-- setting search options off for the moment -->
                       <!--
                       <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists

@@ -25,12 +25,8 @@ be used to configure the chosen Forrest skin.
         "skinconfig-v06.dtd">
 
 <skinconfig>
-  <!-- Do we want to disable the Lucene search box? -->
-  <disable-lucene>true</disable-lucene>
-  <!-- Do we want to disable the Google search box? -->
-  <!-- Ensure not both 'false' -->
-  <!-- To show search box in an alternative location use 'alt' -->
-  <disable-search>false</disable-search>
+  <!-- To enable lucene search add provider="lucene" -->
+  <search name="MyProject" domain="mydomain"/>
   
   <!-- Do we want to disable the print link? If enabled, invalid HTML 4.0.1 -->
   <disable-print-link>true</disable-print-link>  
@@ -51,9 +47,6 @@ be used to configure the chosen Forrest skin.
   <disable-compliance-links>false</disable-compliance-links>
   <!-- Whether to render mailto: links unrecognisable by spam harvesters -->
   <obfuscate-mail-links>true</obfuscate-mail-links>
-
-  <searchsite-domain>mydomain</searchsite-domain>  
-  <searchsite-name>MyProject</searchsite-name>  
 
   <!-- mandatory project logo
        skin: forrest-site renders it at the top -->
@@ -107,6 +100,9 @@ be used to configure the chosen Forrest skin.
 
   <!-- Heading types can be clean|underlined|boxed  -->
   <headings type="boxed"/>
+  
+  <extra-css>
+  </extra-css>
   
   <colors>
   
@@ -207,20 +203,16 @@ be used to configure the chosen Forrest skin.
 -->
 
   </colors>
-  <!-- FIXME: this element does not validate (JJP) 
-  <extra-css>
-  </extra-css>
-  -->
  
   <!-- Settings specific to PDF output.  -->
-    <!-- FIXME: this element does not validate (JJP)
   <pdf>
+    <!-- 
        Supported page sizes are a0, a1, a2, a3, a4, a5, executive,
        folio, legal, ledger, letter, quarto, tabloid (default letter).
        Supported page orientations are portrait, landscape (default
        portrait).
-    <page size="letter" orientation="portrait"/>
     -->
+    <page size="letter" orientation="portrait"/>
 
     <!--
        Margins can be specified for top, bottom, inner, and outer
@@ -229,6 +221,7 @@ be used to configure the chosen Forrest skin.
        inner edge will be left on odd pages, right on even pages,
        the outer edge vice versa.
        Specified below are the default settings.
+    -->
     <margins double-sided="false">
       <top>1in</top>
       <bottom>1in</bottom>
@@ -236,7 +229,6 @@ be used to configure the chosen Forrest skin.
       <outer>1in</outer>
     </margins>
   </pdf>
-    -->
 
   <!-- Credits are typically rendered as a set of small clickable images in the
   page footer -->
