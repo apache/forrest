@@ -6,6 +6,9 @@
 
   <xsl:output method="xml"/>
   <xsl:param name="numbersections" select="'true'"/>
+
+  <!-- Section depth at which we stop numbering and just indent -->
+  <xsl:param name="numbering-max-depth" select="'3'"/>
   <xsl:param name="ctxbasedir" select="."/>
   <xsl:param name="xmlbasedir"/>
   <xsl:include href="pdfoutline.xsl"/>
@@ -213,7 +216,17 @@
   <xsl:template match="section">
     
     <xsl:param name="level">0</xsl:param>
-    <xsl:variable name="size" select="16-(number($level)*2)"/>
+
+    <xsl:variable name="size">
+      <xsl:choose>
+        <xsl:when test="number($level) = 1">
+          <xsl:value-of select="14"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="12"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     
     <fo:block
       font-family="serif"
@@ -221,6 +234,7 @@
       font-weight="bold"
       space-before="12pt"
       space-after="4pt">
+
       <xsl:attribute name="id">
         <xsl:choose>
           <xsl:when test="normalize-space(@id)!=''">
@@ -232,13 +246,19 @@
         </xsl:choose>
       </xsl:attribute>
 
-
-      <xsl:if test="$numbersections = 'true'">
+      <xsl:if test="$numbersections = 'true' and number($level) &lt; $numbering-max-depth+1">
         <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
         <xsl:text>. </xsl:text>
       </xsl:if>
-      <xsl:value-of select="title"/>
 
+      <!-- For sections 4  or more nestings deep, indent instead of number -->
+      <xsl:if test="number($level) &gt; $numbering-max-depth+1">
+        <xsl:attribute name="start-indent">
+          <xsl:value-of select="4+number($level)"/><xsl:text>pt</xsl:text>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:value-of select="title"/>
     </fo:block>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
