@@ -74,21 +74,24 @@
    <document>  
     <header>  
      <title>
+      <xsl:variable name="title" select="st:document/st:sections/st:section/st:title/st:textsequence"/>
       <xsl:choose>
-       <xsl:when test="$name">
+       <xsl:when test="$title">
+        <xsl:value-of select="$title"/>
+       </xsl:when>
+       <xsl:otherwise>
         <xsl:call-template name="splitString">
          <xsl:with-param name="restOfString" select="$name"/>
         </xsl:call-template>
-       </xsl:when>
-       <xsl:otherwise>
-        <xsl:value-of select="st:document/st:section/st:title/st:textsequence"/>
        </xsl:otherwise>
       </xsl:choose>
      </title>  
      </header>  
     <body>
   <xsl:apply-templates select="st:document/st:paragraphs/st:paragraph/*" mode="paragraph"/>  
-  <xsl:apply-templates select="st:document/st:section"/>
+  <xsl:apply-templates select="st:document/st:subsubsections/st:subsubsection"/>
+  <xsl:apply-templates select="st:document/st:subsections/st:subsection"/>
+  <xsl:apply-templates select="st:document/st:sections/st:section"/>
     </body>  
    </document>
  </xsl:template>
@@ -96,21 +99,21 @@
  <xsl:template match="st:section">
   <section>
    <title><xsl:value-of select="st:title/st:textsequence"/></title>
-   <xsl:apply-templates select="st:paragraphs/st:paragraph/*|st:paragraphs/st:subsection" mode="paragraph"/>
+   <xsl:apply-templates select="st:paragraphs/st:paragraph/*|st:subsections/st:subsection" mode="paragraph"/>
   </section>
  </xsl:template>
 
  <xsl:template match="st:subsection" mode="paragraph">
   <section>
    <title><xsl:value-of select="st:subtitle/st:textsequence"/></title>
-   <xsl:apply-templates select="st:subparagraphs/st:paragraph/*|st:subparagraphs/st:subsubsection" mode="paragraph"/>
+   <xsl:apply-templates select="st:paragraphs/st:paragraph/*|st:subsubsections/st:subsubsection" mode="paragraph"/>
   </section>
  </xsl:template>
 
  <xsl:template match="st:subsubsection" mode="paragraph">
   <section>
    <title><xsl:value-of select="st:subsubtitle/st:textsequence"/></title>
-   <xsl:apply-templates select="st:subsubparagraphs/st:paragraph/*" mode="paragraph"/>
+   <xsl:apply-templates select="st:paragraphs/st:paragraph/*" mode="paragraph"/>
   </section>
  </xsl:template>
 
@@ -267,6 +270,10 @@
 
  <xsl:template match="st:strongblock">
   <strong><xsl:value-of select="st:text"/></strong><xsl:text> </xsl:text>
+ </xsl:template>
+
+ <xsl:template match="st:codeblock">
+  <code><xsl:value-of select="st:text"/></code><xsl:text> </xsl:text>
  </xsl:template>
 
  <xsl:template match="st:bulletedlist1" mode="paragraph">

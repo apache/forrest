@@ -62,63 +62,61 @@
 %%
 
 document 
-  : document section 
-  | section
+  : sections
+  | subsections
+  | subsubsections
   | paragraphs
+  ;
+
+sections
+  : sections section
+  | section
+  ;
+
+subsections
+  : subsections subsection
+  | subsection
+  ;
+
+subsubsections
+  : subsubsections subsubsection
+  | subsubsection
   ;
 
 section 
   : title paragraphs
-  | title hardbreak paragraphs
+  | title paragraphs subsections
+  | title subsections
+  ;
+
+subsection
+  : subtitle paragraphs
+  | subtitle paragraphs subsubsections
+  | subtitle subsubsections
+  ;
+
+subsubsection
+  : subsubtitle paragraphs
   ;
 
 title
   : titleitem textsequence
+  | titleitem textsequence hardbreak
+  ;
+
+subtitle
+  : subtitleitem textsequence
+  | subtitleitem textsequence hardbreak
+  ;
+
+subsubtitle
+  : subsubtitleitem textsequence
+  | subsubtitleitem textsequence hardbreak
   ;
 
 paragraphs  
   : paragraphs paragraph hardbreak
   | paragraphs paragraph 
-  | paragraph hardbreak
-  | paragraph
-  | paragraphs subsection hardbreak
-  | paragraphs subsection
-  | subsection hardbreak
-  | subsection
-  ;
-
-subsection
-  : subtitle subparagraphs
-  | subtitle hardbreak subparagraphs
-  ;
-
-subtitle
-  : subtitleitem textsequence
-  ;
-
-subparagraphs
-  : subparagraphs paragraph hardbreak
-  | subparagraphs paragraph
-  | paragraph hardbreak
-  | paragraph
-  | subparagraphs subsubsection hardbreak
-  | subparagraphs subsubsection
-  | subsubsection hardbreak
-  | subsubsection
-  ;
-
-subsubsection
-  : subsubtitle subsubparagraphs
-  | subsubtitle hardbreak subsubparagraphs
-  ;
-
-subsubtitle
-  : subsubtitleitem textsequence
-  ;
-
-subsubparagraphs
-  : subsubparagraphs paragraph hardbreak
-  | subsubparagraphs paragraph
   | paragraph hardbreak
   | paragraph
   ;
@@ -255,3 +253,9 @@ strongblock
 codeblock 
   : codeopenitem text codecloseitem
   ;
+
+/*
+deflistblock
+  : defliststart text deflistnext
+  ;
+*/
