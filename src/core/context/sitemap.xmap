@@ -225,12 +225,23 @@ $Revision: 1.12 $
   <!-- =========================== Pipelines ================================= -->
   <map:pipelines>
 
+      <!-- 
+         This is the user pipeline, that can answer requests instead
+         of the Forrest one, or let requests pass through.
+         To take over the rendering of a file it must match the file name and path.
+         To take over the generation of the intermediate format, it must give
+         Forrest the same filename but ending with xml, and a DTD that Forrest
+         recognizes.
+      -->
       <map:pipeline internal-only="false">
-      <map:select type="exists">
-        <map:when test="{project:sitemap}">
-          <map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
-        </map:when>  
-      </map:select>
+           <map:select type="exists">
+             <map:when test="{project:sitemap}">
+               <map:mount uri-prefix="" 
+                          src="{project:sitemap}" 
+                          check-reload="yes" 
+                          pass-through="true"/>
+             </map:when>  
+           </map:select>
       </map:pipeline>
         
       <map:pipeline internal-only="false">
