@@ -93,8 +93,11 @@
          <link2 name="" href=""/>
          <link3 name="" href=""/>
        </trail>
-        <toc level="2" location="page"/>
-     </xsl:if>
+			</xsl:if>
+      
+      <xsl:if test="not(toc)">
+         <toc level="2" location="page"/>
+      </xsl:if>
 
     <xsl:if test="not(pdf/show-external-urls)">
         <pdf><show-external-urls>true</show-external-urls></pdf>
