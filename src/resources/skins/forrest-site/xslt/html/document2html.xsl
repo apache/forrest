@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="isfaq"/>
+  <xsl:param name="resource"/>
   <xsl:template match="document">
-    <td colspan="2" valign="top" class="content">
+    <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
-        <h1>
-          <xsl:value-of select="header/title"/>
-        </h1>
+        <table class="title">
+          <tr> 
+            <td valign="middle"> 
+              <h1>
+                <xsl:value-of select="header/title"/>
+              </h1>
+            </td>
+            <!--td align="center" width="80" nowrap><a href="" class="dida"><img src="images/singlepage.gif"><br>
+              single page<br>
+              version</a></td-->
+            <td align="center" width="80" nowrap="nowrap"><a href="{$resource}.pdf" class="dida"><img border="0" src="skin/images/printer.gif"/><br/>
+              print-friendly<br/>
+              version</a></td>
+          </tr>
+        </table>
       </xsl:if>
       <xsl:if test="normalize-space(header/subtitle)!=''">
         <h3>
@@ -27,7 +40,7 @@
         </p>
       </xsl:if>
       <xsl:apply-templates select="body"/>
-    </td>
+    </div>
   </xsl:template>
   <xsl:template match="body">
     <xsl:if test="section and not($isfaq='true')">
@@ -54,7 +67,7 @@
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
-<!--  section handling
+  <!--  section handling
   - <a name/> anchors are added if the id attribute is specified
   - generated anchors are still included for TOC - what should we do about this?
   - FIXME: provide a generic facility to process section irrelevant to their
@@ -130,6 +143,9 @@
       </xsl:if>
     </img>
   </xsl:template>
+  <xsl:template match="code">
+    <span class="codefrag"><xsl:value-of select="."/></span>
+  </xsl:template>
   <xsl:template match="figure">
     <div align="center">
       <img src="{@src}" alt="{@alt}" class="figure">
@@ -143,7 +159,12 @@
     </div>
   </xsl:template>
   <xsl:template match="table">
-    <table class="table" cellpadding="4" cellspacing="1">
+    <table cellpadding="4" cellspacing="1" class="ForrestTable">
+      <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
+      <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
+      <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
+      <xsl:if test="@class"><xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute></xsl:if>
+      <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
       <xsl:apply-templates/>
     </table>
   </xsl:template>
