@@ -161,7 +161,14 @@ Section handling
 
   <xsl:template match="link">
     <xsl:apply-templates select="@id"/>
-    <a href="{@href}">
+    <a>
+      <xsl:if test="@class='jump'">
+        <xsl:attribute name="target">_top</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@class='fork'">
+        <xsl:attribute name="target">_blank</xsl:attribute>
+      </xsl:if>
+      <xsl:copy-of select="@*"/>
       <xsl:apply-templates/>
     </a>
   </xsl:template>
