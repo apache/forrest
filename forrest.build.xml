@@ -1,0 +1,315 @@
+<?xml version="1.0"?>
+
+<!--
+Ant template-targets holding the actions forrest can peform on your project.
+Eventually all of this should be wrapped up into a Java Class and/or ant task
+
+This should be called by some forrest.bat or forrest.sh having a project-dir
+as its argument (. if none)
+That should be passed to here with -Dproject.home
+-->
+
+
+<project default="site" basedir="." name="Forrest template targets">
+
+	<description>
+		*=======================================================*
+		|   Forrest ant based site building target-temaplates   | 
+		*=======================================================*
+		                          by
+  			 		     Marc Portier (mpo@apache.org)
+	
+		    Call this through the ./bin/forrest.sh or *.bat
+	</description>
+	
+	
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **                    COMMON SETTINGS                          ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+  <!-- ===============================================================
+       Loads user defined settings.
+       Steps back to defaults when they are not set.
+       Echo's the settings if requested.
+       =============================================================== -->
+  <target name="init">
+	
+		<!-- setting defaults for parameters -->
+    <!-- people should use -D switch, or <ant><property>s to override these   -->
+		<property name="forrest.home" value="." />
+		<property name="project.home" value="." />
+
+    <!-- people should use forrest.properties to override following defaults  -->
+		<property file="${project.home}/forrest.properties" />
+
+		<property name="project.site-dir"    value="${project.home}/build/site"    />
+		<property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
+
+		<property name="project.temp-dir"    value="${project.home}/build/tmp"     />
+		<property name="project.work-dir"    value="${project.tmp-dir}/work"       />
+		<property name="project.ctxt-dir"    value="${project.tmp-dir}/context"    />
+
+
+
+		<!-- checks for presence of required classes and/or resources -->
+    <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
+    <available file="${tools.jar}"         property="tools.jar.present"/>
+		
+		
+    <!-- echo settings in -Dforrest.echo=true mode -->
+    <antcall target="echo-settings">
+  </target>
+
+
+  <!-- ===============================================================
+       Echo's the settings if requested. [-Dforrest.echo=true]
+       =============================================================== -->
+  <target name="echo-settings" depends="init" if="forrest.echo">
+    <echo>
+      ------------------------------------------------
+      | Forrest template run.
+      | Running from $${forrest.home} = ${forrest.home}
+      | Working on   $${project.home} = ${project.home}
+      ------------------------------------------------
+      | project.site-dir = ${project.site-dir}
+      | project.siteplan = ${project.siteplan}
+      | project.temp-dir = ${project.temp-dir}
+      | project.work-dir = ${project.work-dir}
+      | project.ctxt-dir = ${project.ctxt-dir}
+      | tools.jar.present= ${tools.jar.present}
+      ------------------------------------------------
+    </echo>
+  </target>
+
+
+  <!-- ===============================================================
+       Display the usage of this script. 
+       =============================================================== -->
+	<target name="usage" depends="init">
+		<echo>
+		TODO... COMPLETE THIS:
+		  should explain the usage. 
+			  part of it being: refering to the shell or bat use
+			  part of it being: <ant antfile=...>
+			setting FORREST_HOME and the like.
+			description of the targets.
+			starting with fresh-project and looking at the siteplan that comes out of it.
+		</echo>
+	</target>
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **                  SITE BUILDING ACTIONS                      ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+  <!-- ===============================================================
+       Makes the Cocoon context dir to work in. 
+			 Fills it with 
+			   forrest predefines.  
+				 site-content-parts
+				 derivatives from siteplan
+	     param: location of siteplan $project.siteplan
+			 param: location to make context-dir? 
+			        (we could just make up a temp one, and clean when done)
+       =============================================================== -->
+	<target name="prepare-context" depends="init" >
+		<echo>
+			TODO... COMPLETE THIS:
+			... some style and copy tasks?
+			
+		</echo>
+
+	</target>
+
+
+  <!-- ===============================================================
+       Makes the site   
+	     param: location of siteplan ${forrest.siteplan}
+			 param: location to put generated site ${forrest.out.dir}
+       =============================================================== -->
+  <target name="site" depends="init, prepare-context, clean-site ">
+		<path id="forrest.cp">
+			<fileset dir="${forrest.home}/WEB-INF/lib" includes="**/*.jar" />
+		</path>
+
+
+		<echo>
+			TODO... COMPLETE THIS:
+			... should call cocoon CLI on set forrest.cococontxt.dir
+		</echo>
+
+  </target>
+
+
+	<!-- ===============================================================
+	     Cleans the site.  (typically before generating the new version)
+			 param: location to clean ${forrest.out.dir}
+       =============================================================== -->
+  <target name="clean-site">
+		<echo>
+			TODO... COMPLETE THIS:
+			... should delete the site before building it 
+		</echo>
+
+		<!-- 
+    <delete dir="${forrest.out.dir}"/>
+		-->
+  </target>
+
+
+	<!-- ===============================================================
+       Builds a cocoon webapp for your project based on the siteplan.
+	     param: location of siteplan ${forrest.siteplan}
+			 param: location to put generated war ${forrest.out.war}
+       =============================================================== -->
+	<target name="webapp" depends="init, prepare-context">
+		<echo>
+			TODO... COMPLETE THIS:
+			... this should just war up the prepared context dir.
+		</echo>
+	</target>
+
+
+	<!-- ===============================================================
+       Validates all XML documents in the projects-
+	     param: location of siteplan ${forrest.siteplan}
+			 param: location to put generated war ${forrest.out.war}
+       =============================================================== -->
+	<target name="validate-docs" depends="init, prepare-context">
+		<echo>
+			TODO... COMPLETE THIS:
+			... this should just war up the prepared context dir.
+		</echo>
+	</target>
+
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **          PROJECT-TEMPLATE BUILDING ACTIONS                  ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+
+	<!-- ===============================================================
+	      Copies a template structure over to your project dir.
+
+				flag: with or without room for own skin 
+				... flags for others... thers
+
+        Mind this is typically called before any forrest.properties
+        or siteplan.xml exists (we should consider generating those as well
+ 
+        maybe even a template ant build?
+
+				dependend task for doing that alone.
+				>>> filling this with stuff from smart acorn.xml idea.
+       =============================================================== -->
+	<target name="fresh-project" 
+	        depends="fresh-xdocs, fresh-skin, fresh-descriptors, fresh-build" />
+
+
+
+
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **                 BOT EXECUTING ACTIONS                       ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+
+
+<!-- currently just a cut and paste: none of this will work atm. -->
+<!-- TODO... COMPLETE THIS: -->
+
+
+   <target name="bot.init" depends="init">
+     <!-- initializes environment to start on bot targets -->
+     <property name="bot.build.dir"              value="${xlayout.build.bot.dir}"/>
+     <property name="bot.work.build.xml"         value="${bot.build.dir}/work.build.xml"/>
+     <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
+     <property name="bot.forrestbot.xconf"       value="forrestbot.conf.xml" />
+     <property file="ant-mail.properties" />
+     <property name="bot.templates.build.xml"    value="${xlayout.source.resources.forrestbot.ant.di
+ r}/templates.build.xml" />
+     <property name="bot.work.builder.xslt"      value="${xlayout.source.resources.forrestbot.xslt.d
+ ir}/config2work.xsl" />
+     <property name="bot.default.builder.xslt"   value="${xlayout.source.resources.forrestbot.xslt.d
+ ir}/config2defaults.xsl" />
+     <mkdir dir="${bot.build.dir}" />
+     <echo message="Using config file: ${bot.forrestbot.xconf}" />
+   </target>
+
+   <target name="bot.conf2build" depends="bot.init" >
+     <!-- remove previous versions to force generation again -->
+     <delete file="${bot.work.build.xml}" />
+     <delete file="${bot.default.parameters.xml}" />
+
+     <!-- builds the different xml files this process needs.  -->
+     <style in="${bot.forrestbot.xconf}"
+        out="${bot.work.build.xml}"
+        style="${bot.work.builder.xslt}"/>
+     <style in="${bot.forrestbot.xconf}"
+        out="${bot.default.parameters.xml}"
+        style="${bot.default.builder.xslt}"/>
+     <copy todir="${bot.build.dir}" file="${bot.templates.build.xml}"/>
+   </target>
+
+  <target name="bot.prepare-cp" depends="bot.init, compile" >
+    <!-- todo: question if it is good practice to share WEB-INF classes -->
+    <mkdir dir="${bot.build.dir}/WEB-INF/classes"/>
+    <copy todir="${bot.build.dir}/WEB-INF/classes">
+      <fileset dir="${resource.dir}/schema">
+        <include name="CatalogManager.properties"/>
+      </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+    </copy>
+
+    <path id="forrest.cp">
+      <path refid="classpath"/>
+      <fileset dir="${build.dir}">
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${tools.dir}">
+        <include name="*/lib/*.jar"/>
+      </fileset>
+      <pathelement location="${tools.jar}"/>
+      <pathelement location="${bot.build.dir}/WEB-INF/classes"/>
+    </path>
+  </target>
+
+    <!-- delegates to the generated XML file -->
+    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
+  </target>
+
+ <target name="bot" depends="bot.run" />
+
+
+</project>
