@@ -33,7 +33,7 @@ See the imported tab2menu.xsl for details.
 
   <xsl:template name="selected">
     <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0"  style="height: 1.5em" summary="selected tab">
+      <table cellspacing="0" cellpadding="0" border="0"  style="height: 1.7em" summary="selected tab">
         <tr>
           <td bgcolor="#4C6C8F" width="5" valign="top">
             <img src="{$skin-img-dir}/tabSel-left.gif" alt="" width="5" height="5" />
@@ -55,7 +55,7 @@ See the imported tab2menu.xsl for details.
 
   <xsl:template name="not-selected">
     <td valign="bottom">
-      <table cellspacing="0" cellpadding="0" border="0" style="height: 1.4em" summary="non selected tab">
+      <table cellspacing="0" cellpadding="0" border="0" style="height: 1.6em" summary="non selected tab">
         <tr>
           <td bgcolor="#B2C4E0" width="5" valign="top">
             <img src="{$skin-img-dir}/tab-left.gif" alt="" width="5" height="5" />
