@@ -19,10 +19,13 @@
   <!-- default values -->
   <property name="getsrc.local.root-dir" value=""/>
 
+  <target name="getsrc.clean-workdir">
+      <delete dir="${build.work-dir}"/>
+  </target>
+
   <target name="getsrc.local">
     <property name="build.home-dir" value="${getsrc.local.root-dir}" />
   </target>
-
 
   <!-- default values -->
   <property name="getsrc.cvs.user" value="anoncvs"/>
@@ -34,7 +37,7 @@
 
   <property name="build.cvsmodule-dir"    location="work/cvsmodules"/>
 
-  <target name="getsrc.cvs">
+  <target name="getsrc.cvs" depends="getsrc.clean-workdir">
 
     <cvspass cvsroot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}" password="${getsrc.cvs.password}"/>
 
@@ -98,7 +101,7 @@
 
   <property name="build.svn-dir"    location="work/svn"/>
 
-  <target name="getsrc.svn">
+  <target name="getsrc.svn" depends="getsrc.clean-workdir">
     <!-- non-recursive; just to get forrest.properties -->
     <svncheckout repositoryUrl="${getsrc.svn.url}"
       destination="${build.svn-dir}/${ant.project.name}"

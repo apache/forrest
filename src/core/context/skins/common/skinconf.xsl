@@ -17,13 +17,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         
     <xsl:template match="skinconfig">
-
-     <xsl:if test="not(disable-lucene)">     
-       <disable-lucene>true</disable-lucene>
-     </xsl:if>
-     <xsl:if test="not(disable-search)">     
-       <disable-search>true</disable-search>
-     </xsl:if>
+      <xsl:copy>
      <xsl:if test="not(disable-print-link)">     
        <disable-print-link>true</disable-print-link>
      </xsl:if>
@@ -44,12 +38,6 @@
      </xsl:if>
 
      <!--
-     <xsl:if test="not(searchsite-domain)">     
-       <searchsite-domain>mydomain</searchsite-domain>
-     </xsl:if>
-     <xsl:if test="not(searchsite-name)">     
-       <searchsite-name>MyProject</searchsite-name>
-     </xsl:if>
      <xsl:if test="not(project-name)">     
        <project-name>MyProject</project-name>
      </xsl:if>
@@ -152,7 +140,6 @@
   </credits>     
   </xsl:if>
 
-     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:copy-of select="node()"/>     
       <!--

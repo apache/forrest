@@ -28,6 +28,13 @@
     <!-- set a property to be used in the notify target -->
     <property name="notify.deploy-location" value="${deploy.local.dir}"/>
   </target>
+
+  <property name="deploy.scp.dest" value=""/>
+  <target name="deploy.scp">
+    <scp todir="${deploy.scp.dest}">
+     <fileset dir="${build.site-dir}"/>
+    </scp>
+  </target>
   
   <property name="deploy.cvs.user" value="anoncvs"/>
   <property name="deploy.cvs.password" value="anoncvs"/>
@@ -52,7 +59,7 @@
     <copy todir="${deploy.cvsmodule-dir}/${deploy.cvs.module}">
       <fileset dir="${build.site-dir}"/>
     </copy>
-	<!-- add new files to CVS -->
+    <!-- add new files to CVS -->
     <!-- check in to CVS -->
     <cvs command="commit" cvsRoot="${deploy.cvs.fullroot}"
       dest="${deploy.cvsmodule-dir}/${deploy.cvs.module}"

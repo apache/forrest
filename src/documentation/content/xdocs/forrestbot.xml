@@ -23,11 +23,10 @@
 
   <body>
     <warning>This documentation applies to the forrestbot in the current
-    development version (i.e. svn trunk) and not the
-    forrestbot included with Forrest 0.5.1 or any previous release.
-    Documentation for that forrestbot is <link
-    href="site:forrestbot-old">here</link>. This page is incomplete and may have
-    errors.</warning>
+    development version (i.e. svn trunk) and not the forrestbot included with
+    Forrest 0.5.1 or any previous release. Documentation for that forrestbot
+    is <link href="site:forrestbot-old">here</link>. This page is incomplete
+    and may have errors.</warning>
 
     <section>
       <title>Using Forrestbot</title>
@@ -61,9 +60,9 @@
 </source>
 
       <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and getsrc.cvs.
-      Next, specify what implementations will be used by each workstage. By
-      default, 'local' will be used.</p>
+      Here, we set properties that will be used by notify.email and
+      getsrc.cvs. Next, specify what implementations will be used by each
+      workstage. By default, 'local' will be used.</p>
 
       <table>
         <tr>
@@ -96,7 +95,9 @@
           <td>deploy</td>
 
           <td><ul>
-              <li><link href="#getsrc.local">local</link></li>
+              <li><link href="#deploy.local">local</link></li>
+
+              <li><link href="#deploy.scp">scp</link></li>
             </ul></td>
         </tr>
 
@@ -235,8 +236,8 @@
             <tr>
               <td>getsrc.cvs.module</td>
 
-              <td>CVS module name (an alias, or full path) to the directory that
-              contains forrest.properties</td>
+              <td>CVS module name (an alias, or full path) to the directory
+              that contains forrest.properties</td>
 
               <td>${ant.project.name}</td>
 
@@ -273,7 +274,7 @@
               <td>getsrc.svn.url</td>
 
               <td>full repository URL for project (this directory must contain
-              forrest.properties) </td>
+              forrest.properties)</td>
 
               <td></td>
 
@@ -328,7 +329,7 @@
           </table>
         </section>
 
-        <section id="deploy.local">
+        <section id="deploy.scp">
           <title>deploy.local</title>
 
           <table>
@@ -351,6 +352,37 @@
               <td>sites/${ant.project.name}</td>
 
               <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="deploy.local">
+          <title>deploy.scp</title>
+
+          <p>${user.home}/.ssh/known_hosts must properly recognize the host,
+          so you should manually make an ssh connection to the host if you
+          never have before.</p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.scp.dest</td>
+
+              <td>Full destination reference in the format
+              user[:password]@host:/directory/path</td>
+
+              <td></td>
+
+              <td>Yes</td>
             </tr>
           </table>
         </section>
@@ -460,9 +492,9 @@
     <section>
       <title>Forrestbot design</title>
 
-      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
-      task is used to import multiple buildfiles into a single build. The
-      following is the flow of control when running forrestbot:</p>
+      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's
+      import task is used to import multiple buildfiles into a single build.
+      The following is the flow of control when running forrestbot:</p>
 
       <ul>
         <li>Your buildfile<ul>
@@ -476,8 +508,8 @@
 
       <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or other
-      post-build activities.</p>
+      other workstages buildfiles can implement reporting, deployment, or
+      other post-build activities.</p>
 
       <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
