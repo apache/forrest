@@ -218,6 +218,43 @@ example, or the skinconf color information.</P>
 output plugins. For example a fo presentation can be outputted as
 xhtml, pdf, rtf, doc, ps, etc. 
 </P>
+<H3>Forrest:templates</H3>
+<P>Forrest:templates or short f:t is a templating language to create views on 
+forrest input-data.</P>
+<P><B>Definition - Forrest-View:</B><BR/>
+View = content (nuggets) + functionality (fbit) + design (style)
+</P>
+<P>We will refer to incoming content as nuggets. Nuggets are pure content
+(without any information about fct., style,...). </P>
+
+<P>fbits can (but do not have to) use nuggets to implemend (or populate)
+the actual functionality needed in the requested view. 
+<DD>
+<DL>fbit containing nuggets (I mean it contains e.g. captions ->i18n
+nuggets)<BR/>
+&lt;forrest:fbit name="fontsize"/&gt;
+</DL><DL>
+pure fbit (no content just functionality -> IMO very rare, the
+example tag would as well contain i18n: close-schliessen-cerrar)<BR/> 
+&lt;forrest:fbit name="close-window"/&gt;
+</DL><DL>
+ pure fbit *using* nuggets (e.g. profiling data for the actual view.)<BR/>
+&lt;forrest:fbit name="searchbox" type="sport"/&gt;
+</DL>
+</DD>
+<P>Normally the nuggets and fbits will be implemented in an overall design.
+The design is a container concept of storing fbits and nuggets in
+graphical container (template + hooks). Templates can be outputed in
+different media (xhtml, fo,...) to create the overall design in
+different media of the document. </P>
+
+<P>This design state should only use registered contracts for fbits and
+nuggets but still have absolute controll over the style. See the last
+scale-dev discussion. I learned that the original idea of leather will
+not work like I first implemended it. It gives me now a good starting
+point but IMO we have to give the designer the controll over our output
+by defining a new templating language.</P>
+
 <H2><A NAME="dt"></A>A Schemas for Forrest 1.0 config files</H2>
 <P><EM>To be added.</EM></P>
 <H2><A NAME="references"></A>B References</H2>
