@@ -28,45 +28,24 @@
        ===============================================================
    -->
 
-   <target name="site" depends="init, webapp-local, -prepare-classpath" if="project.content.present"
-     description="Generates a static HTML website for this project">
+   <target name="site" depends="init, -prepare-classpath, check-contentdir" 
+                       if="project.content.present"
+                       description="Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this.
          actually clears the cache, not yet sure why it is really needed? -->
     <delete dir="${project.cocoon-work-dir}"/>
     <mkdir dir="${project.cocoon-work-dir}"/>
 
     <parallel>
-      <!--
+<!-- dir="${project.webapp}" -->
       <java classname="org.apache.cocoon.Main"
         fork="true"
-        maxmemory="${forrest.maxmemory}"
-        dir="."
-        failonerror="true"
-        classpathref="forrest.cp">
-        <jvmarg line="${forrest.jvmargs}"/>
-        <jvmarg line="${forrest.basic.jvmargs}"/>
-        <jvmarg
-          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-        <arg value="-c${project.webapp}"/>   <!- input to the process ->
-        <arg value="-d${project.site-dir}"/>   <!- output to be put ->
-        <arg value="-w${project.cocoon-work-dir}"/>   <!- temp dir to use for e.g. cache ->
-        <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
-        <arg value="-C${project.webapp}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
-        <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
-        <arg value="-k${project.webapp}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
-        <arg value="${project.start-uri}"/>              <!- starting page ->
-        <arg value="-V" />                          <!- be verbose ->
-      </java>
-      -->
-
-      <java classname="org.apache.cocoon.Main"
-        fork="true"
-        dir="${project.webapp}"
+        dir="${forrest.home}/context"  
         failonerror="true"
         maxmemory="${forrest.maxmemory}">
         <jvmarg line="${forrest.jvmargs}"/>
         <jvmarg line="${forrest.basic.jvmargs}"/>
-        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <jvmarg value="-Djava.endorsed.dirs=${forrest.endorsed.lib-dir}${path.separator}${java.endorsed.dirs}"/>
         <arg value="--logLevel=${project.debuglevel}"/>
         <arg value="--Logger=${project.logger}"/>
         <arg value="--logKitconfig=${project.logkitfile}"/>
@@ -77,7 +56,6 @@
           <path refid="forrest.cp"/>
         </classpath>
       </java> 
-
 
       <sequential>
         <!-- 
@@ -97,20 +75,30 @@
         <mkdir dir="${project.site-dir}/skin/images"/>
          <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
          <!-- Copy forrest skin images -->
+         <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
            <fileset dir="${forrest.skins-dir}/common/images"/>
+        </copy>
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
            <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
         </copy>
+
         <!-- Copy project skin images -->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
           <fileset dir="${project.skins-dir}/common/images"/>
+        </copy>
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
           <fileset dir="${project.skins-dir}/${project.skin}/images"/>
         </copy>
  
 
         <!-- Copy all other non-resource files -->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -119,13 +107,20 @@
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
+        </copy>
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
           <fileset dir="${forrest.skins-dir}/${project.skin}">
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
         </copy>
         
+        
         <!-- Copy all other non-resource files from project skins-->
+        <!-- Do the common ones first followed by those for the skin. -->
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
@@ -134,6 +129,11 @@
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
+        </copy>
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
           <fileset dir="${project.skins-dir}/${project.skin}">
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>

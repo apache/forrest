@@ -48,7 +48,7 @@ $Revision: 1.2 $
     <map:pipeline>
 
       <map:match pattern="changes.xml">
-        <map:generate type="file" src="status.xml" />
+        <map:generate type="file" src="{project:status}" />
         <map:transform src="{forrest:stylesheets}/changes2document.xsl" >
 	  <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
         </map:transform >
@@ -56,13 +56,13 @@ $Revision: 1.2 $
       </map:match>
 
       <map:match pattern="changes.rss">
-        <map:generate src="status.xml" />
+        <map:generate src="{project:status}" />
         <map:transform src="{forrest:stylesheets}/changes2rss.xsl" />
         <map:serialize type="rss091" />
       </map:match>
 
       <map:match pattern="todo.xml">
-        <map:generate type="file" src="status.xml" />
+        <map:generate type="file" src="{project:status}" />
         <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
         <map:serialize type="xml-document"/>
       </map:match>

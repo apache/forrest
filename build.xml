@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="dist" basedir="." name="Forrest build file">
+<project default="jar" basedir="." name="Forrest build file">
 
   <import file="src/forrestbar/build.xml"/>
   
@@ -48,6 +48,10 @@
     <property name="tools.dir"             location="tools"/>
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
+    
+    <property name="src-fresh-site"         location="src/core/fresh-site"/>
+    
+    <property name="forrestbot.dir"         location="scratchpad/forrestbot2"/>
 
     <buildnumber file="etc/build.number"/>
     <echo>
@@ -78,87 +82,28 @@
 
   <target name="clean" depends="init" description="Delete all generated files">
     <delete dir="${build.dir}"/>
+    <delete dir="${forrestbot.dir}/logs"/>
+    <delete dir="${forrestbot.dir}/work"/>
+    <delete dir="${forrestbot.dir}/build"/>
+    <delete dir="${forrestbot.dir}/webapp/target"/>
+    <delete dir="${forrestbot.dir}/webapp/maven.log"/>
+    <delete dir="src/core/context/WEB-INF/logs"/>
   </target>
 
+  <target name="dist-clean" depends="init, clean" description="Delete all non-forrest files">
+    <delete dir="${forrestbot.dir}/*.settings"/>
+    <delete file="**/*.bak"/>
+    <delete file="**/*~"/>
+  </target>
 
   <!-- =================================================================== -->
   <!-- Make release distributions                                          -->
   <!-- =================================================================== -->
 
 
-  <target name="release-dist-src" depends="init"
-    description="Makes a source release distribution">
-    <mkdir dir="${dist.dir}"/>
-
-    <!-- Hackery to fix linefeeds and permissions before zipping -->
-    <patternset id="scripts">
-      <include name="**/*.bat"/>
-      <include name="**/*.sh"/>
-      <include name="**/ant"/>
-      <include name="**/forrest"/>
-    </patternset>
-
-    <patternset id="noscripts">
-      <exclude name="**/*.bat"/>
-      <exclude name="**/*.sh"/>
-      <exclude name="**/ant"/>
-      <exclude name="**/forrest"/>
-    </patternset>
-
-    <property name="tmp-scripts" location="${build.dir}/tmp/scripts"/>
-    <mkdir dir="${tmp-scripts}"/>
-    <copy todir="${tmp-scripts}">
-      <fileset dir=".">
-        <patternset refid="scripts"/>
-      </fileset>
-    </copy>
-    <fixcrlf eol="crlf" srcdir="${tmp-scripts}" includes="**/*.bat"/>
-    <fixcrlf eol="lf" srcdir="${tmp-scripts}" excludes="**/*.bat"/>
-    <chmod dir="${tmp-scripts}" perm="ugo+rx" excludes="**/*.bat"/> 
-    <property name="tmp-fresh-site" location="${build.dir}/tmp/fresh-site"/>
-    <copy todir="${tmp-fresh-site}">
-      <fileset dir="${src-fresh-site}" />
-    </copy>
-    <fixcrlf eol="crlf" srcdir="${tmp-fresh-site}" excludes="**/*.gif **/*.png"/>
-
-    <property name="release-name-src" value="${name}-${version}-src"/>
-    <zip
-      file="${dist.dir}/${release-name-src}.zip" >
-      <zipfileset dir="." prefix="${release-name-src}">
-        <exclude name="build/**"/>
-        <patternset refid="noscripts"/>
-      </zipfileset>
-      <zipfileset prefix="${release-name-src}" dir="${tmp-scripts}"/>
-      <zipfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
-    </zip>
-
-    <tar longfile="gnu"
-      compression="gzip"
-      destfile="${dist.dir}/${release-name-src}.tar.gz" >
-      <tarfileset dir="." prefix="${release-name-src}" username="forrest" group="forrest">
-        <exclude name="build/**"/>
-        <patternset refid="noscripts"/>
-      </tarfileset>
-      <tarfileset prefix="${release-name-src}" dir="${tmp-scripts}"
-        mode="755" username="forrest" group="forrest">
-        <include name="**/*.sh"/>
-        <include name="**/ant"/>
-        <include name="**/forrest"/>
-      </tarfileset>
-      <tarfileset prefix="${release-name-src}" dir="${tmp-scripts}"
-        username="forrest" group="forrest">
-        <exclude name="**/*.sh"/>
-        <exclude name="**/ant"/>
-        <exclude name="**/forrest"/>
-      </tarfileset>
-      <tarfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
-    </tar>
-  </target>
-
-
-  <target name="release-dist-bin" depends="init, dist-shbat" 
-    description="Makes a binary release distribution">
-    <property name="release-name-bin" value="${name}-${version}-bin"/>
+  <target name="release-dist" depends="init, dist-clean, dist-shbat" 
+    description="Makes release distributions">
+    <property name="release-name-bin" value="${name}-${version}"/>
     <zip
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
@@ -184,11 +129,6 @@
       <tarfileset prefix="${release-name-bin}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
     </tar>
   </target>
-
-  <target name="release-dist" 
-    description="Makes source and binary release distributions"
-    depends="release-dist-bin, release-dist-src"/>
-
 
 
   <!-- =================================================================== -->
@@ -241,12 +181,6 @@
     -->
   </target>
  
-  <target name="refresh-code" depends="jar">
-    <copy todir="${dist-shbat.dir}/lib/core">
-      <fileset dir="${build.dir}" includes="*.jar"/>
-    </copy>
-  </target>
- 
   <target name="dist-shbat" 
     depends="init, jar, validate-config" >
 
@@ -254,38 +188,22 @@
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
     
-    <!-- copy the Forrest core -->
+    <!-- copy all Forrest -->
     <copy todir="${dist-shbat.dir}">
-      <fileset dir="./src/core" />
+      <fileset dir="." >
+        <exclude name="build/**"/>
+      </fileset>
     </copy>
-
-    <!-- copy licenses -->
-    <copy todir="${dist-shbat.dir}/legal">
-      <fileset dir="./legal" />
+     <copy todir="${dist-shbat.dir}">
+       <fileset dir="." >
+        <include name="build/xml-forrest.jar"/>
+      </fileset>
     </copy>
-
-    <!-- Copy Forrest jars -->
-    <antcall target="refresh-code"/>
-    
-    <mkdir dir="${dist-shbat.dir}/lib" />
-    <copy todir="${dist-shbat.dir}/lib">
-      <!-- copy everything so that also dirs with no jars are there, as
-           the forrest build expects these dirs to be present. -->
-      <fileset dir="./lib" includes="*/*.*"/>
-    </copy>
-    
-    <!-- Copy all tools, so the shbat distribution is self-contained -->
-    <copy todir="${dist-shbat.dir}/tools">
-      <fileset dir="${tools.dir}" />
-    </copy>
-    <copy todir="${dist-shbat.dir}/tools/ant/lib">
-      <fileset dir="lib/core" includes="xml-commons-resolver*.jar"/>
-    </copy>
-    
+        
     <!-- Fix bin/ permissions -->
-    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
-    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
-    <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/src/core/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/src/core/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/src/core/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <!-- Fix ant/bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/tools/ant/bin" includes="*.bat"/>
@@ -299,7 +217,8 @@
   | You have succesfully built the shell-bat distribution of Forrest.
   | Please find it at: ${dist-shbat.dir}
   | Please copy the contents to the install directory of your choice
-  | Please have the environment variable FORREST_HOME point to it.
+  | Please have the environment variable FORREST_HOME point to
+  |  ${dist-shbat.dir}/src/core
   | It is recommended to add
   |    unix: $FORREST_HOME/bin: to your $PATH
   |    win: %FORREST_HOME%\bin; to your %PATH%
@@ -322,42 +241,14 @@
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
   </target>
 
-
-  <!-- =================================================================== -->
-  <!-- Generate cocoon-webapp for project-site                             -->
-  <!-- =================================================================== -->
-  <target name="webapp" depends="dist-shbat"
-    description="Generates an unpackaged webapp of the website">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Generate a .war files of the project-site                           -->
-  <!-- =================================================================== -->
-  <target name="war" depends="dist-shbat"
-    description="Generates a .war file containing the website">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Validates Forrest XML documentation                                 -->
-  <!-- =================================================================== -->
-  <target name="validate" depends="dist-shbat"
-    description="Validates XML documentation files">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
-  </target>
-
   <!-- ================================== -->
   <!--        Test targets                -->
   <!-- ================================== -->
   <target name="test" 
           depends="testseed" 
-          description="Test that the features are ok before commmitting."/>
+          description="Test that the features are ok before committing."/>
 
-  <target  name="testseed" depends="init" description="Test that the features are ok before commmitting.">
+  <target  name="testseed" depends="init" description="Test that the features are ok before committing.">
     <property name="forrest.home" value="${dist-shbat.dir}" />  
     <property name="test.dir" value="${build.dir}/test"/>
     <delete dir="${test.dir}"/>
@@ -369,7 +260,6 @@
     
     <ant antfile="${test.dir}/forrest-targets.xml" target="site"/>
     
-
     <!--    
     <ant antfile="${forrest.home}/forrest.build.xml" target="site">
       <property name="forrest.home" value="${dist-shbat.dir}" />  

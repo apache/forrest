@@ -38,9 +38,7 @@ $Revision: 1.13 $
          <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer" />
          <map:serializer name="text"   mime-type="text/plain"  src="org.apache.cocoon.serialization.TextSerializer"/>
       </map:serializers>
-      <map:transformers default="xslt">
-        <map:transformer name="skinconf" src="org.apache.forrest.skinconf.SkinconfTransformer"/>
-      </map:transformers>
+      <map:transformers default="xslt"/>
       <map:readers default="resource" />
       <map:matchers default="wildcard" />
       <map:selectors default="browser" />
@@ -66,34 +64,34 @@ $Revision: 1.13 $
                </map:when>
                
               <!-- Second location: forrest skin dir -->
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.{ext}">
-                  <map:read src="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
+               <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.{ext}">
+                  <map:read src="{forrest:context}/skins/{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.css.xslt">
+               <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.css.xslt">
                   <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.css.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.css.xslt" />
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt">
+               <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt">
                   <map:call resource="pipe-svg2png-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
                
               <!-- Third location: forrest common skin dir -->
-               <map:when test="{forrest:home}context/skins/common/{path}/{name}.{ext}">
-                  <map:read src="{forrest:home}context/skins/common/{path}/{name}.{ext}" mime-type="{mime-type}" />
+               <map:when test="{forrest:context}/skins/common/{path}/{name}.{ext}">
+                  <map:read src="{forrest:context}/skins/common/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
-               <map:when test="{forrest:home}context/skins/common/{path}/{name}.css.xslt">
+               <map:when test="{forrest:context}/skins/common/{path}/{name}.css.xslt">
                   <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.css.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.css.xslt" />
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/common/{path}/{name}.svg.xslt">
+               <map:when test="{forrest:context}/skins/common/{path}/{name}.svg.xslt">
                   <map:call resource="pipe-svg2png-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.svg.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
                <map:otherwise>
@@ -116,9 +114,9 @@ $Revision: 1.13 $
                     <map:parameter name="fg-color-name" value="{fg-color-name}"/>   
                   </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt">
+               <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt">
                   <map:call resource="pipe-svg2png-corner-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
                     <map:parameter name="orientation-tb" value="{orientation-tb}"/>
                     <map:parameter name="orientation-lr" value="{orientation-lr}"/>
                     <map:parameter name="size" value="{size}"/>   
@@ -129,7 +127,7 @@ $Revision: 1.13 $
                </map:when>
                <map:otherwise>
                   <map:call resource="pipe-svg2png-corner-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.svg.xslt" />
+                    <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.svg.xslt" />
                     <map:parameter name="orientation-tb" value="{orientation-tb}"/>
                     <map:parameter name="orientation-lr" value="{orientation-lr}"/>
                     <map:parameter name="size" value="{size}"/>   
@@ -157,7 +155,7 @@ $Revision: 1.13 $
       </map:resource>
 
       <map:resource name="pipe-svg2png-corner-resource">
-        <map:generate src="cocoon:/skin/skinconf.xml" />
+        <map:generate src="cocoon://skinconf.xml" />
         <map:transform src="{path}">
             <map:parameter name="orientation-tb" 
                          value="{orientation-tb}"/>
@@ -177,7 +175,7 @@ $Revision: 1.13 $
       </map:resource>
       
       <map:resource name="generate-resource">
-        <map:generate src="cocoon:/skin/skinconf.xml" />
+        <map:generate src="cocoon://skinconf.xml" />
         <map:transform src="{path}"/>
       </map:resource>
       
@@ -191,25 +189,25 @@ $Revision: 1.13 $
    
    <map:pipelines>
        
-      <map:pipeline internal-only="false">
-         <map:match pattern="**skin/skinconf.xml">
-           <map:generate src="{project:skinconf}" />
-           <map:select type="exists">
-             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
-               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
-           <map:select type="exists">
-             <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
-               <map:transform src="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
-           <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
-           <map:transform type="skinconf"/>
-           <map:serialize type="xml" />
-         </map:match>
-       </map:pipeline>
-               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        <map:pipeline>
          <map:match pattern="**skin/**.js">
             <map:call resource="skin-read">

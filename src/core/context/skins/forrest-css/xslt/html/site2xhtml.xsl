@@ -50,10 +50,10 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
         <title><xsl:value-of select="div[@class='content']/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="alternate stylesheet" title="Krysalis" href="{$root}skin/krysalis.css" type="text/css"/>
-        <xsl:if test="$config/favicon-url">
+        <xsl:if test="//skinconfig/favicon-url">
           <link rel="shortcut icon">
             <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
             </xsl:attribute>
           </link>
         </xsl:if>
@@ -66,11 +66,11 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
         <!-- ================= start Banner ================== -->
    	    <div id="mainheader">
 	          <!-- ================= start Group Logo ================== -->
-	          <xsl:if test="$config/group-url">
+	          <xsl:if test="//skinconfig/group-url">
 	  	      	<xsl:call-template name="renderlogo">
-		        	<xsl:with-param name="name" select="$config/group-name"/>
-		            <xsl:with-param name="url" select="$config/group-url"/>
-		            <xsl:with-param name="logo" select="$config/group-logo"/>
+		        	<xsl:with-param name="name" select="//skinconfig/group-name"/>
+		            <xsl:with-param name="url" select="//skinconfig/group-url"/>
+		            <xsl:with-param name="logo" select="//skinconfig/group-logo"/>
 		            <xsl:with-param name="root" select="$root"/>
 		            <xsl:with-param name="imgid">grouplogo</xsl:with-param>
 		            <xsl:with-param name="linkid">grouplogolink</xsl:with-param>
@@ -113,11 +113,11 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 	          <!-- ================= end Search ================== -->
 			  <span class="textonly"> - </span>
 	          <!-- ================= start Project Logo ================== -->
-	          <xsl:if test="$config/project-url">
+	          <xsl:if test="//skinconfig/project-url">
 	              <xsl:call-template name="renderlogo">
-	                <xsl:with-param name="name" select="$config/project-name"/>
-	                <xsl:with-param name="url" select="$config/project-url"/>
-	                <xsl:with-param name="logo" select="$config/project-logo"/>
+	                <xsl:with-param name="name" select="//skinconfig/project-name"/>
+	                <xsl:with-param name="url" select="//skinconfig/project-url"/>
+	                <xsl:with-param name="logo" select="//skinconfig/project-logo"/>
 	                <xsl:with-param name="root" select="$root"/>
 		            <xsl:with-param name="imgid">projectlogo</xsl:with-param>
 		            <xsl:with-param name="linkid">projectlogolink</xsl:with-param>
@@ -181,13 +181,13 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 			</span>
 			<br class="textonly"/>
 	
-	        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+	        <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
 	          <div class="host">
 	            <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
 	            <xsl:call-template name="renderlogo">
-	              <xsl:with-param name="name" select="$config/host-name"/>
-	              <xsl:with-param name="url" select="$config/host-url"/>
-	              <xsl:with-param name="logo" select="$config/host-logo"/>
+	              <xsl:with-param name="name" select="//skinconfig/host-name"/>
+	              <xsl:with-param name="url" select="//skinconfig/host-url"/>
+	              <xsl:with-param name="logo" select="//skinconfig/host-logo"/>
 	              <xsl:with-param name="root" select="$root"/>
 	            </xsl:call-template>
 	          </div>
@@ -195,8 +195,8 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
 	
 			<span id="validation">
 	        	<xsl:call-template name="compliancy-logos"/>
-		        <xsl:if test="$filename = 'index.html' and $config/credits">
-		            <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+		        <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
+		            <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
 		              <xsl:variable name="name" select="name"/>
 		              <xsl:variable name="url" select="url"/>
 		              <xsl:variable name="image" select="image"/>
@@ -287,12 +287,10 @@ $Id: site2xhtml.xsl,v 1.4 2004/01/28 21:23:20 brondsem Exp $
     </a>
   </xsl:template>
   
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
+  <!-- Generates the PDF link -->
+  <xsl:template match="div[@id='skinconf-pdflink']">
+  	<a href="{$filename-noext}.pdf" id="printable"><img src="{$skin-img-dir}/pdfdoc.gif"
+      alt="PDF"/>PDF version</a>
   </xsl:template>
-   
-
+  
 </xsl:stylesheet>

@@ -42,28 +42,12 @@
     <echo>____________________________________</echo>
     <echo>Using skin ${project.skin}</echo>
     <echo>____________________________________</echo>
-    <filter token="skin"              value="${project.skin}" />
-    <filter token="menu-scheme"       value="${project.menu-scheme}" />
-    <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
-    <filter token="local-catalog"     value="${catalog}" />
-    <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
-    <filter token="i18n"              value="${project.i18n}" />
 
-    <copy todir="${project.webapp}/" >
-      <fileset dir="${forrest.home}/context" >
-        <exclude name="*.xmap" />
-        <exclude name="skins/**" />
-        <exclude name="resources/**" />        
-        <exclude name="WEB-INF/*.xconf" />
-        <exclude name="jettyconf.xml" />
-      </fileset>
-    </copy>
+    <mkdir dir="${project.webapp}"/>
 
-    <copy todir="${project.webapp}/" filtering="true" overwrite="true">
+    <copy todir="${project.webapp}/" filtering="false" overwrite="true">
       <fileset dir="${forrest.home}/context" >
-        <include name="*.xmap" />
-        <include name="WEB-INF/*.xconf" />
-        <exclude name="WEB-INF/cocoon-live.xconf"/>
+        <include name="**" />
       </fileset>
     </copy>
 
@@ -86,13 +70,13 @@
     validate, init, bare-context, copy-sitemap, copy-conf, upgrade-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
-    <copy toDir="${project.webapp}/WEB-INF" filtering="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${conf-dir}">
         <exclude name="*-${version}.xconf"/>
       </fileset>
     </copy>
-    <copy toDir="${project.webapp}/WEB-INF" filtering="true" overwrite="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="false" overwrite="true"
       failonerror="false">
       <fileset dir="${conf-dir}">
         <include name="*-${version}.*"/>
@@ -102,14 +86,14 @@
    </target>
 
   <target name="copy-sitemap" if="sitemap.present">
-    <copy toDir="${project.webapp}" filtering="true" overwrite="true" failonerror="false">
+    <copy toDir="${project.webapp}" filtering="false" overwrite="true" failonerror="false">
       <fileset dir="${sitemap-dir}">
         <exclude name="*-${version}.xmap"/>
         <include name="*.xmap"/>
         <include name="jtidy.properties"/>
       </fileset>
     </copy>
-    <copy toDir="${project.webapp}" filtering="true" overwrite="true">
+    <copy toDir="${project.webapp}" filtering="false" overwrite="true">
       <fileset dir="${sitemap-dir}">
         <include name="*-${version}.xmap"/>
       </fileset>

@@ -44,10 +44,10 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
-        <xsl:if test="$config/favicon-url">
+        <xsl:if test="//skinconfig/favicon-url">
           <link rel="shortcut icon">
             <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
             </xsl:attribute>
           </link>
         </xsl:if>
@@ -98,9 +98,9 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td >
             <div class="headerlogo">
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/group-name"/>
-              <xsl:with-param name="url" select="$config/group-url"/>
-              <xsl:with-param name="logo" select="$config/group-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/group-name"/>
+              <xsl:with-param name="url" select="//skinconfig/group-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/group-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
             </div>
@@ -109,9 +109,9 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td align="center" >
          <div class="headerlogo">
           <xsl:call-template name="renderlogo">
-            <xsl:with-param name="name" select="$config/project-name"/>
-            <xsl:with-param name="url" select="$config/project-url"/>
-            <xsl:with-param name="logo" select="$config/project-logo"/>
+            <xsl:with-param name="name" select="//skinconfig/project-name"/>
+            <xsl:with-param name="url" select="//skinconfig/project-url"/>
+            <xsl:with-param name="logo" select="//skinconfig/project-logo"/>
             <xsl:with-param name="root" select="$root"/>
           </xsl:call-template>
           </div>
@@ -198,7 +198,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         </td>
 
         <td align="right" width="10" height="10">
-          <span class="textheader"><xsl:value-of select="$config/project-name"/></span>
+          <span class="textheader"><xsl:value-of select="//skinconfig/project-name"/></span>
         </td>
       </tr>
       <!-- ( ================= Tabs ================== ) -->
@@ -293,9 +293,9 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td height="10" colspan="2"></td>
       </tr>
       
-      <xsl:if test="not($config/disable-search) or
-            $config/disable-search='alt' and $config/searchsite-domain and
-            $config/searchsite-name">
+      <xsl:if test="not(//skinconfig/disable-search) or
+            //skinconfig/disable-search='alt' and //skinconfig/searchsite-domain and
+            //skinconfig/searchsite-name">
       <tr>
         <td ></td>
         <td class="search">
@@ -316,8 +316,8 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td></td>
                   <td>
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
-                    the <xsl:value-of select="$config/searchsite-name"/> site
+                    <input type="hidden" name="sitesearch" value="{//skinconfig/searchsite-domain}"/>
+                    the <xsl:value-of select="//skinconfig/searchsite-name"/> site
                     <br />
                     <input type="text" id="query" name="q" size="13"/><input type="submit" value="Go" name="Search"/>
                   </td>
@@ -339,7 +339,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
           </tr>
           </xsl:if>
  	  
-          <xsl:if test="$filename = 'index.html' and $config/credits">
+          <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
  	     <tr>
                <td></td>
  	       <td class="search">
@@ -354,7 +354,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td colspan="3" height="8"></td>
                 </tr>
-		        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+		        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
 		          <xsl:variable name="name" select="name"/>
 		          <xsl:variable name="url" select="url"/>
 		          <xsl:variable name="image" select="image"/>
@@ -422,30 +422,30 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
             <xsl:when test="span/@class='sel'">
               <div class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="span" /></div>
-                <xsl:if test="//toc/tocc"> 
+                <xsl:if test="//tocitems/tocitem"> 
                   <div class="menupageitemgroup">
-                      <xsl:for-each select = "//toc/tocc">
+                      <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
                           <xsl:choose>
-                            <xsl:when test="string-length(toca)>15">
-                              <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a>
+                            <xsl:when test="string-length(@title)>15">
+                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
                             </xsl:when>
                             <xsl:otherwise>
-                              <a href="{toca/@href}"><xsl:value-of select="toca" /></a>
+                              <a href="{@href}"><xsl:value-of select="@title" /></a>
                             </xsl:otherwise>
                           </xsl:choose>
 
-                          <xsl:if test="toc2/tocc">
+                          <xsl:if test="tocitem">
                           <!-- nicolaken: this enables double-nested page links-->
                             <ul>
-                              <xsl:for-each select = "toc2/tocc">
+                              <xsl:for-each select = "tocitem">
 
                                 <xsl:choose>
-                                  <xsl:when test="string-length(toca)>15">
-                                    <li><a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a></li>
+                                  <xsl:when test="string-length(@title)>15">
+                                    <li><a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a></li>
                                   </xsl:when>
                                   <xsl:otherwise>
-                                    <li><a href="{toca/@href}"><xsl:value-of select="toca" /></a></li>
+                                    <li><a href="{@href}"><xsl:value-of select="@title" /></a></li>
                                   </xsl:otherwise>
                                 </xsl:choose>
 
@@ -470,9 +470,6 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
       </div>
   </xsl:template>
 
-  <xsl:template match="toc|toc2|tocc|toca">
-  </xsl:template>
-  
   <xsl:template name="mainarea">
 	  <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	    <!-- ( ================= middle NavBar ================== ) -->
@@ -499,6 +496,98 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
 	  </table>
   </xsl:template>
   
+  <xsl:template match="div[@class = 'skinconf-heading-1']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+      
+        <table class="h3" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td width="9" height="10"></td>
+              <td><h3><xsl:value-of select="h1"/></h3></td>
+              <td></td>
+            </tr>
+            <tr class="heading ">
+              <td class="bottom-left"></td>
+              <td class="bottomborder"></td>
+              <td class="bottom-right"></td>
+            </tr>
+ 
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <table class="h3 heading" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+            <td class="top-left"></td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><h3><xsl:value-of select="h1"/></h3></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class=" bottom-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <h3 class="h3"><xsl:value-of select="h1"/></h3>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="div[@class = 'skinconf-heading-2']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+        <table class="h4" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td width="9" height="10"></td>
+              <td><h4><xsl:value-of select="h1"/></h4></td>
+              <td></td>
+            </tr>
+            <tr class="subheading">
+              <td class="bottom-left"></td>
+              <td></td>
+              <td class="bottom-right"></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <table class="h4 subheading" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tbody>
+            <tr>
+              <td class="top-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><h4><xsl:value-of select="h1"/></h4></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class=" bottom-left"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>            
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <h4 class="h4"><xsl:value-of select="h1"/></h4>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="bottomstrip">
     <!-- ( ================= start Footer ================== ) -->
     <table>
@@ -510,12 +599,12 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
     </table>
     <table class="footer">
       <tr>
-        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+        <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
           <div class="host">
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/host-name"/>
-              <xsl:with-param name="url" select="$config/host-url"/>
-              <xsl:with-param name="logo" select="$config/host-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/host-name"/>
+              <xsl:with-param name="url" select="//skinconfig/host-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/host-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
           </div>
@@ -556,8 +645,8 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
   <xsl:template name="bottom-credit-icons">
       <!-- old place where to put credits icons-->
       <!--
-      <xsl:if test="$filename = 'index.html' and $config/credits">
-        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+      <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
+        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="url" select="url"/>
           <xsl:variable name="image" select="image"/>
@@ -576,13 +665,6 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         </xsl:for-each>
       </xsl:if>
       -->
-  </xsl:template>
-  
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>

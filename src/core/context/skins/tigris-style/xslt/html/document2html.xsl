@@ -50,10 +50,11 @@ $Id: document2html.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
         </td>
         <td id="issueid" class="tasknav">
         <div align="right">
-            <xsl:call-template name="pdflink"/>
-            <xsl:call-template name="printlink"/>
-            <xsl:call-template name="xmllink"/>
-	         &#160;
+          <div id="skinconf-printlink"/>
+          <xsl:if test="$dynamic-page='false'">
+            <div id="skinconf-pdflink"/>
+            <div id="skinconf-xmllink"/>
+          </xsl:if>
         </div>
         </td>
        </tr>
@@ -93,42 +94,7 @@ $Id: document2html.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
   </xsl:template>
 
   <xsl:template match="body">
-
-    <xsl:if test="section and $config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
-      <toc>
-        <xsl:for-each select="section">
-          <tocc>
-            <toca>
-              <xsl:attribute name="href">
-                <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-              </xsl:attribute>
-              <xsl:value-of select="title"/>
-            </toca>
-            <xsl:if test="section">
-              <toc2>
-                <xsl:for-each select="section">
-                  <tocc>
-                    <toca>
-                      <xsl:attribute name="href">
-                        <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-                      </xsl:attribute>
-                      <xsl:value-of select="title"/>
-                    </toca>
-                  </tocc>
-                </xsl:for-each>
-              </toc2>
-            </xsl:if>
-          </tocc>
-        </xsl:for-each>
-      </toc>
-    </xsl:if>
-    
-   <xsl:if test="$config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
-      <xsl:call-template name="minitoc">
-        <xsl:with-param name="tocroot" select="."/>
-        <xsl:with-param name="depth">1</xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
+    <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -149,6 +115,7 @@ $Id: document2html.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
 
   <xsl:template match="section">
     <a name="{generate-id()}"/>
+
     <xsl:apply-templates select="@id"/>
 
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
@@ -273,50 +240,4 @@ $Id: document2html.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
     <!-- do not show title elements, they are already in other places-->
   </xsl:template>
 
-  <!-- Generates the PDF link -->
-  <xsl:template name="pdflink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-        <a href="{$filename-noext}.pdf"><img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/> PDF</a>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template>
-  
-    <!-- Generates the XML link -->
-  <xsl:template name="xmllink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="$disable-xml-link = 'false'">
-        <a href="{$filename-noext}.xml"><img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/> xml</a>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template>
-  
-    <!-- Generates the "printer friendly version" link -->
-  <xsl:template name="printlink">
-    <xsl:if test="$disable-print-link = 'false'"> 
-<script type="text/javascript" language="Javascript">
-function printit() {  
-if (window.print) {
-    window.print() ;  
-} else {
-    var WebBrowser = '&lt;OBJECT ID="WebBrowser1" WIDTH="0" HEIGHT="0" CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2">&lt;/OBJECT>';
-document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
-    WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";  
-}
-}
-</script>
-
-<script type="text/javascript" language="Javascript">
-var NS = (navigator.appName == "Netscape");
-var VERSION = parseInt(navigator.appVersion);
-if (VERSION > 3) {
-    document.write('  <a href="javascript:printit()">');
-    document.write('    <img border="0"  src="{$skin-img-dir}/printer.gif" alt="Print this Page"/>');
-    document.write('  print</a>');
-}
-</script>
-
-    </xsl:if>
-  </xsl:template>
-  
 </xsl:stylesheet>

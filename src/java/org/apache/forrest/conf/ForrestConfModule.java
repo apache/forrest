@@ -31,6 +31,7 @@ import org.apache.cocoon.components.modules.input.DefaultsModule;
 import org.apache.cocoon.components.modules.input.InputModule;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceResolver;
 
 /**
@@ -65,96 +66,24 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                 Initializable, ThreadSafe, Serviceable
 {
 
-    private String         forrestHome, projectHome;
-    private SourceResolver m_resolver;
     private AntProperties  filteringProperties;
+    private String         forrestHome, projectHome, contextHome;
+    private SourceResolver m_resolver;
+    
+    private final static String defaultHome = "context:/";
 
-    public void service(ServiceManager manager) throws ServiceException {
-        System.out.println("getting resolver...");
-        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-        System.out.println("gotten resolver:" + m_resolver);
-    }
+    public Object getAttribute(String name, Configuration modeConf,
+                    Map objectModel) throws ConfigurationException {
+        String original = super.getAttributeValues(name, modeConf, objectModel)[0]
+                        .toString();
+        String attributeValue = this.getAttributeValues(name, modeConf,
+                        objectModel)[0].toString();
 
-    public void initialize() throws Exception {
-        // get location of forrest.home
-        //
-        //NOTE: Don't do this:
-        //
-        //        forrestHome = System.getenv("FORREST_HOME");
-        //
-        //      as it will get FORREST_HOME even when the app
-        //      is run as a .war
-        forrestHome = getAndResolveSystemProperty("forrest.home");
+        if (debugging()) debug(" - Requested:" + name);
+        if (debugging()) debug(" - Unfiltered:" + original);
+        if (debugging()) debug(" - Given:" + attributeValue);
 
-        // get location of project.home
-        projectHome = getAndResolveSystemProperty("project.home");
-
-        // get default-forrest.properties and load the values
-        String defaultRorrestPropertiesStringURI = forrestHome
-                        + SystemUtils.FILE_SEPARATOR
-                        + "default-forrest.properties";
-        System.out.println("defaultRorrestPropertiesStringURI:"
-                        + defaultRorrestPropertiesStringURI);
-
-        Source source = null;
-        InputStream in = null;
-        try {
-            System.out.println("using resolver:" + m_resolver);
-            source = m_resolver.resolveURI(defaultRorrestPropertiesStringURI);
-
-            System.out.println("Resolved URI:" + source);
-
-            in = source.getInputStream();
-            filteringProperties = new AntProperties();
-            filteringProperties.load(in);
-
-            System.out.println("Loaded defaults:" + filteringProperties);
-
-        } finally {
-            if (source != null) {
-                m_resolver.release(source);
-            }
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {}
-            }
-        }
-
-        // get forrest.properties and load the values
-        String forrestPropertiesStringURI = projectHome
-                        + SystemUtils.FILE_SEPARATOR + "forrest.properties";
-        System.out.println("forrestPropertiesStringURI:"
-                        + forrestPropertiesStringURI);
-
-        try {
-            System.out.println("using resolver:" + m_resolver);
-            source = m_resolver.resolveURI(forrestPropertiesStringURI);
-
-            System.out.println("Resolved URI:" + source);
-
-            in = source.getInputStream();
-            filteringProperties = new AntProperties(filteringProperties);
-            filteringProperties.load(in);
-        } finally {
-            if (source != null) {
-                m_resolver.release(source);
-            }
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {}
-            }
-        }
-
-        System.out.println("Loaded project stuff:" + filteringProperties);
-
-        //add forrest.home and project.home to properties
-        filteringProperties.setProperty("forrest.home", forrestHome);
-        filteringProperties.setProperty("project.home", projectHome);
-
-        System.out.println("Loaded all:" + filteringProperties);
-
+        return attributeValue;
     }
 
     public Object[] getAttributeValues(String name, Configuration modeConf,
@@ -169,40 +98,119 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         return attributeValues;
     }
 
-    public Object getAttribute(String name, Configuration modeConf,
-                    Map objectModel) throws ConfigurationException {
-        String original = super.getAttributeValues(name, modeConf, objectModel)[0]
-                        .toString();
-        String attributeValue = this.getAttributeValues(name, modeConf,
-                        objectModel)[0].toString();
+    private final String getSystemProperty(String propertyName){
 
-        System.out.println(" - Requested:" + name);
-        System.out.println(" - Original:" + original);
-        System.out.println(" - Given:" + attributeValue);
-        return attributeValue;
+        //if the property is not set, default to the webapp context
+        String propertyValue = System.getProperty(propertyName, defaultHome);
+
+        if (debugging()) debug("system property " + propertyName + "=" + propertyValue);
+
+        return propertyValue;
     }
 
-    private final String getAndResolveSystemProperty(String propertyName)
-                    throws MalformedURLException, IOException {
-        String raw = System.getProperty(propertyName, ".");
+    public void initialize() throws Exception {
 
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug("raw " + propertyName + "=" + raw);
-
+        //NOTE: Don't do this:
+        //
+        //        forrestHome = System.getenv("FORREST_HOME");
+        //
+        //      as it will get FORREST_HOME even when the app
+        //      is run as a .war
+        forrestHome = getSystemProperty("forrest.home");
+        projectHome = getSystemProperty("project.home");
+        if(projectHome.equals(defaultHome)) {
+            projectHome = defaultHome + SystemUtils.FILE_SEPARATOR + "/project";
         }
-
-        System.out.println("raw " + propertyName + "=" + raw);
-        System.out.println("resolver: " + m_resolver);
-
-        String value = m_resolver.resolveURI(raw).getURI();
-
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug("resolved " + propertyName + "=" + value);
-
+        if(forrestHome.equals(defaultHome)) {
+            contextHome = defaultHome;            
+        }else {
+            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/context"; 
         }
+            
+        
+        filteringProperties = new AntProperties();
+        
+        //add forrest.home and project.home to properties
+        filteringProperties.setProperty("forrest.home", forrestHome);
+        filteringProperties.setProperty("project.home", projectHome);
+        filteringProperties.setProperty("context.home", contextHome);
+      
+        //NOTE: the first values set get precedence, as in AntProperties
 
-        return raw;
+        // get forrest.properties and load the values
+        String forrestPropertiesStringURI = projectHome
+                        + SystemUtils.FILE_SEPARATOR + "forrest.properties";
+
+        filteringProperties = 
+            loadAntPropertiesFromURI(filteringProperties,forrestPropertiesStringURI);
+
+        
+        // get default-forrest.properties and load the values
+        String defaultRorrestPropertiesStringURI = contextHome
+                        + SystemUtils.FILE_SEPARATOR
+                        + "default-forrest.properties";
+
+        filteringProperties = 
+            loadAntPropertiesFromURI(filteringProperties,defaultRorrestPropertiesStringURI);
+
+        if (debugging()) debug("Loaded project forrest.properties:" + filteringProperties);
     }
 
+    /**
+     * @param antPropertiesStringURI
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws SourceNotFoundException
+     */
+    private AntProperties loadAntPropertiesFromURI(AntProperties precedingProperties, String antPropertiesStringURI) throws MalformedURLException, IOException, SourceNotFoundException {
+        
+        Source source = null;
+        InputStream in = null;
+        try {
+           
+            source = m_resolver.resolveURI(antPropertiesStringURI);
+
+            if (debugging()) debug("Searching for forrest.properties in"
+                                                + source.getURI());
+            in = source.getInputStream();
+            filteringProperties = new AntProperties(precedingProperties);
+            filteringProperties.load(in);
+
+            if (debugging()) debug("Loaded:" + antPropertiesStringURI +
+                                           filteringProperties.toString());
+
+        } finally {
+            if (source != null) {
+                m_resolver.release(source);
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {}
+            }
+        }
+        
+        return filteringProperties;
+    }
+
+    public void service(ServiceManager manager) throws ServiceException {
+        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+    }
+
+    
+    /**
+     * Rocked science
+     */
+    private final boolean debugging() {
+        return getLogger().isDebugEnabled();
+   }
+    
+    /**
+     * Rocked science
+     * @param debugString
+     */
+    private final void debug(String debugString) {
+            getLogger().debug(debugString);
+   }
+    
 }
-

@@ -113,29 +113,23 @@ public class AntProperties extends Properties
 
         StringTokenizer st = new StringTokenizer(stringToFilter, "@", true);
 
-        String currentToken = st.nextToken();
         STATE state;
 
-        if (currentToken.equals("@")) {
+        if (stringToFilter.startsWith("@")) {
             state = new STATE(STATE.START_TOKEN);
         } else {
             state = new STATE(STATE.STRING_NOT_TO_FILTER);
         }
 
-        while (st.hasMoreTokens()) {
+        for (String currentToken; st.hasMoreTokens(); state.increment()) {
+
+            currentToken = st.nextToken();
 
             if (state.isStringToFilter()) {
-                resultStringBuffer.append(getProperty(currentToken,"@"+currentToken+"@"));
-                System.out.println("currentToken to Filter:" + currentToken);
+                resultStringBuffer.append(getProperty(currentToken, "@"
+                                + currentToken + "@"));
             } else if (state.isStringNOTToFilter()) {
                 resultStringBuffer.append(currentToken);
-            }
-
-            System.out.println("resultStringBuffer;" + resultStringBuffer);
-
-            {
-                currentToken = st.nextToken();
-                state.increment();
             }
         }
 

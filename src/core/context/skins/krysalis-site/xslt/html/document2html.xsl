@@ -46,7 +46,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
             <xsl:call-template name="printerfriendlylink"/>
             <xsl:call-template name="xmllink"/>
             -->
-            <xsl:call-template name="pdflink"/>
+            <div id="skinconf-pdflink"/>
           </tr>
         </table>
       </xsl:if>
@@ -76,54 +76,8 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
   </xsl:template>
 
   <xsl:template match="body">
-
-    <xsl:if test="section and $config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
-      <toc>
-        <xsl:for-each select="section">
-          <tocc>
-            <toca>
-              <xsl:attribute name="href">
-                <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-              </xsl:attribute>
-              <xsl:value-of select="title"/>
-            </toca>
-            <xsl:if test="section">
-              <toc2>
-                <xsl:for-each select="section">
-                  <tocc>
-                    <toca>
-                      <xsl:attribute name="href">
-                        <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
-                      </xsl:attribute>
-                      <xsl:value-of select="title"/>
-                    </toca>
-                  </tocc>
-                </xsl:for-each>
-              </toc2>
-            </xsl:if>
-          </tocc>
-        </xsl:for-each>
-      </toc>
-    </xsl:if>
-    
-   <xsl:if test="$config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
-      <xsl:call-template name="minitoc">
-        <xsl:with-param name="tocroot" select="."/>
-        <xsl:with-param name="depth">1</xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
+    <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template name="generate-id">
-    <xsl:choose>
-      <xsl:when test="@id">
-        <xsl:value-of select="@id"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="generate-id(.)"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="@id">
@@ -138,110 +92,16 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
 
     <xsl:choose>
       <xsl:when test="$level=1">
-         <xsl:choose>
-           <xsl:when test="$config/headings/@type='underlined'">
-           
-	        <table class="h3" cellpadding="0" cellspacing="0" border="0" width="100%">
-	          <tbody>
-	            <tr>
-	              <td width="9" height="10"></td>
-	              <td><h3><xsl:value-of select="title"/></h3></td>
-	              <td></td>
-	            </tr>
-	            <tr class="heading ">
-	              <td class="bottom-left"></td>
-	              <td class="bottomborder"></td>
-	              <td class="bottom-right"></td>
-	            </tr>
-	
-	          </tbody>            
-	        </table>
-
-           </xsl:when>
-           <xsl:when test="$config/headings/@type='boxed'">
-           
-	        <table class="h3 heading" cellpadding="0" cellspacing="0" border="0" width="100%">
-	          <tbody>
-	            <tr>
-	              <td class="top-left"></td>
-	              <td></td>
-	              <td></td>
-	            </tr>
-	            <tr>
-	              <td></td>
-	              <td><h3><xsl:value-of select="title"/></h3></td>
-	              <td></td>
-	            </tr>
-	            <tr>
-	              <td class=" bottom-left"></td>
-	              <td></td>
-	              <td></td>
-	            </tr>
-	
-	          </tbody>            
-	        </table>
-                      
-          </xsl:when>
-          <xsl:otherwise>
-            <h3 class="h3"><xsl:value-of select="title"/></h3>
-          </xsl:otherwise>
-        </xsl:choose>
-        
-         <div class="section"><xsl:apply-templates/></div>  
-                    
+        <div class="skinconf-heading-{$level}">
+          <h1><xsl:value-of select="title"/></h1>
+        </div>
+        <div class="section"><xsl:apply-templates/></div>  
       </xsl:when>
       <xsl:when test="$level=2">
-         <xsl:choose>
-           <xsl:when test="$config/headings/@type='underlined'">
-           
-		        <table class="h4" cellpadding="0" cellspacing="0" border="0" width="100%">
-		          <tbody>
-		            <tr>
-		              <td width="9" height="10"></td>
-		              <td><h4><xsl:value-of select="title"/></h4></td>
-		              <td></td>
-		            </tr>
-		            <tr class="subheading">
-		              <td class="bottom-left"></td>
-		              <td></td>
-		              <td class="bottom-right"></td>
-		            </tr>
-		
-		          </tbody>            
-		        </table>
-
-           </xsl:when>
-           <xsl:when test="$config/headings/@type='boxed'">
-           
-		        <table class="h4 subheading" cellpadding="0" cellspacing="0" border="0" width="100%">
-		          <tbody>
-		            <tr>
-		              <td class="top-left"></td>
-		              <td></td>
-		              <td></td>
-		            </tr>
-		            <tr>
-		              <td></td>
-		              <td><h4><xsl:value-of select="title"/></h4></td>
-		              <td></td>
-		            </tr>
-		            <tr>
-		              <td class=" bottom-left"></td>
-		              <td></td>
-		              <td></td>
-		            </tr>
-		
-		          </tbody>            
-		        </table>
-
-          </xsl:when>
-          <xsl:otherwise>
-            <h4 class="h4"><xsl:value-of select="title"/></h4>
-          </xsl:otherwise>
-        </xsl:choose>
-
+        <div class="skinconf-heading-{$level}">
+          <h1><xsl:value-of select="title"/></h1>
+        </div>
         <xsl:apply-templates select="*[not(self::title)]"/>
-        
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
