@@ -15,33 +15,28 @@
   limitations under the License.
 -->
 <!--
-site2xhtml.xsl is the final stage in HTML page production.  It merges HTML from
+site2xml.xsl is the final stage in XML page production.  It merges HTML from
 document2html.xsl, tab2menu.xsl and book2menu.xsl, and adds the site header,
 footer, searchbar, css etc.  As input, it takes XML of the form:
 
-<site>
-  <div class="menu">
-    ...
-  </div>
-  <div class="tab">
-    ...
-  </div>
-  <div class="content">
-    ...
-  </div>
-</site>
+<elements>
+  <branding/>
+  <search/>
+  <menu/>
+  <content/>
+  <siteinfo/>
+</elements>
 
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
+  <!--xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/-->
 <!--+
   |Overall site template
   +-->
   <xsl:template match="site">
-    <!--html lang="en" xml:lang="en"-->
-    <html>
+    <elements>
 <!--+
   |HTML-head
   +-->
@@ -57,7 +52,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 <xsl:value-of select="div[@id='content']/h1"/>
             </title>
 <!--+
-  |stylesheets
+  |stylesheets test for overrides (implement overrides of css-stylesheet)
   +-->
             <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
                 />
@@ -70,12 +65,21 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <link rel="stylesheet" href="{$root}skin/profiling.css" 
                 type="text/css" />
 <!--+
-  |Javascripts
+  |Javascripts (check in skinconf whether needed)
   +-->
+  <!-- getBlank - needed for blank out a default value of a form field -->
             <script type="text/javascript" language="javascript" 
                 src="{$root}skin/getBlank.js"></script>
+  <!-- getMenu - needed for the default menu script -->
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/getMenu.js"></script>
+        
+   <!-- fontsize - needed if fontsize script should be in  -->
+   <!-- here:
+   <xsl:if test="//skinconf/functions/fontsize/@select='true'">
+    <xsl:apply-templates select="c-fontsize-fct/head"/>
+   </xsl:if>
+   -->
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/fontsize.js"></script>
 <!--+
@@ -94,12 +98,19 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |HTML-body
   +-->
   <body onload="init()">
-		<script type="text/javascript">ndeSetTextSize();</script>
+		   <!-- fontsize - needed if fontsize script should be in  -->
+   <!-- here:
+   <xsl:if test="//skinconf/functions/fontsize/@select='true'">
+    <xsl:apply-templates select="c-*-fct/body/@onload"/>
+   </xsl:if>
+   -->
+   <!-- here:
+   <xsl:if test="//skinconf/functions/fontsize/@select='true'">
+    <xsl:apply-templates select="c-fontsize-fct/body/script"/>
+   </xsl:if>
+   -->
+   <script type="text/javascript">ndeSetTextSize();</script>
 
-<!--+
-	|container - surrounding div
-	+-->
-	<div id="container">
 <!--+Default site structure
   +++++++++++++++++++++++++++
      +=========================+
@@ -328,12 +339,9 @@ document.write("Last Published: " + document.lastModified);
     |end bottomstrip
     +</xsl:comment>
     </div>
-<!--+
-	|end container
-	+-->
-</div>
+
       </body>
-    </html>
+    </elements>
   </xsl:template>
 <!--headings-->
 <xsl:template match="div[@class = 'skinconf-heading-1']">
