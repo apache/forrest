@@ -364,11 +364,11 @@ document.write("Last Published: " + document.lastModified);
     <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/valid-html401.png"
-          alt="Valid HTML 4.01!" style="height: 31px; width: 88px;" /></a>
+          alt="Valid HTML 4.01!" title="Valid HTML 4.01!" style="height: 31px; width: 88px;" /></a>
           
       <a href="http://jigsaw.w3.org/css-validator/"><img class="logoImage" 
           src="{$skin-img-dir}/vcss.png" 
-          alt="Valid CSS!" style="height: 31px; width: 88px;"/></a>
+          alt="Valid CSS!" title="Valid CSS!" style="height: 31px; width: 88px;"/></a>
     </xsl:if>
   </xsl:template>
 
@@ -558,7 +558,7 @@ if (VERSION > 3) {
       </div>
     </xsl:if>
   </xsl:template>
-<xsl:template match="div[@id='skinconf-toc-page']">
+  <xsl:template match="div[@id='skinconf-toc-page']">
     <xsl:if test="$config/toc">
       <xsl:if test="contains($minitoc-location,'page')">
         <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">

@@ -185,11 +185,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <xsl:if test="$filename = 'index.html' and //skinconfig/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/valid-html401.png"
-          alt="Valid HTML 4.01!" height="31" width="88" border="0"/></a>
+          alt="Valid HTML 4.01!" title="Valid HTML 4.01!" height="31" width="88" border="0"/></a>
           
       <a href="http://jigsaw.w3.org/css-validator/"><img class="logoImage" 
           src="{$skin-img-dir}/vcss.png" 
-          alt="Valid CSS!" height="31" width="88" border="0"/></a>
+          alt="Valid CSS!" title="Valid CSS!" height="31" width="88" border="0"/></a>
     </xsl:if>
   </xsl:template>
 
