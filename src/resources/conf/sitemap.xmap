@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-  <!-- =========================== Components ================================ -->
   <map:components>
     <map:generators default="file">
       <map:generator name="file" src="org.apache.cocoon.generation.FileGenerator" label="content" />
@@ -91,10 +90,6 @@
 
     </map:actions>
 
-    <!--
-    The different pipeline implementations
-    @todo use map:pipe and map:pipes with next cocoon CVS update
-    -->
     <map:pipes default="caching">
       <map:pipe name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
       <map:pipe name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
@@ -103,7 +98,6 @@
     </map:pipes>
   </map:components>
 
-  <!-- =========================== Views =================================== -->
   <map:views>
     <map:view name="content" from-label="content">
       <map:serialize type="xml" />
@@ -131,8 +125,6 @@
       <map:serialize/>
     </map:resource>
 
-    <!-- Checks the document type of the resource passed in the "src" parameter
-    and converts it to document if necessary -->
   </map:resources>
 
   <!-- =========================== Pipelines ================================= -->
@@ -143,19 +135,6 @@
       <!-- ============================================================ -->
       <!-- OUTPUT FORMATS                                               -->
       <!-- ============================================================ -->
-      <!--
-      <map:match pattern="dombug/*">
-        <map:mount check-reload="yes" src="dombug/" uri-prefix="dombug"/>
-      </map:match>
-      -->
-
-      <map:match pattern="test">
-        <map:generate src="content/xdocs/tabs.xml"/>
-        <map:transform type="linkrewriter" src="cocoon:/community/linkmap">
-          <map:parameter name="schemes" value="site ext"/>
-        </map:transform>
-        <map:serialize type="xml"/>
-      </map:match>
 
       <map:match pattern="*.html">
         <map:aggregate element="site">
@@ -199,7 +178,7 @@
     <!-- INTERMEDIATE FORMATS                                         -->
     <!-- ============================================================ -->
     <map:pipeline internal-only="false">
-  
+
       <map:match pattern="**body-*.xml">
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="xinclude"/>
@@ -240,7 +219,6 @@
     <!-- ============================================================ -->
     <!-- SOURCE FORMATS                                               -->
     <!-- ============================================================ -->
-
     <map:pipeline internal-only="false">
       <map:match pattern="**book.xml">
         <map:mount uri-prefix="" src="navigation.xmap" check-reload="yes" />
@@ -313,8 +291,7 @@
         <map:mount uri-prefix="" src="redirect.xmap" check-reload="yes" />
       </map:match>
 
-
-       <map:match pattern="**">
+      <map:match pattern="**">
         <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
       </map:match>
 
