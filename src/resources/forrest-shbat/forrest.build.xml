@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/09 06:29:50 $              |
+    |             $Date: 2003/05/12 00:33:30 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -690,27 +690,17 @@ Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
   </target>
 
   <!--
-  If you've been editing
-  docs in build/webapp/content/xdocs, this target copies them back to
-  src/documentation/content/xdocs/.  As 'overwrite' is false, this will not
-  clobber docs legitimately edited in src/documentation/content/xdocs/.
-
-  Hack until we get src/* webapp editing working.  
+  If you've been editing docs, images etc in build/webapp/*, this target copies
+  them back to src/documentation/*.  As 'overwrite' is false, this will not
+  clobber docs legitimately edited in src/documentation/*
   -->
-  <target name="backcopy" depends="init-props" description="If xdocs have been
-    edited in build/webapps, copies them back to src/*">
-    <copy toDir="${project.xdocs-dir}" filtering="false" overwrite="false">
-      <fileset dir="${project.webapp}/content/xdocs">
-        <exclude name="**/.*.swp"/>
+  <target name="backcopy" depends="init-props" description="If anything has been edited in build/webapps, copies them
+    back to src/documentation">
+    <copy toDir="${project.content-dir}" filtering="false" overwrite="false">
+      <fileset dir="${project.webapp}">
+        <present targetdir="${project.content-dir}"/>
       </fileset>
     </copy>
-    <copy toDir="${project.real-content-dir}" filtering="false" overwrite="false">
-      <fileset dir="${project.webapp}/content">
-        <exclude name="xdocs"/>
-        <exclude name="**/.*.swp"/>
-      </fileset>
-    </copy>
-    <copy file="${project.webapp}/skinconf.xml" toDir="${project.content-dir}" filtering="false" overwrite="false"/>
   </target>
 
   <!-- ===============================================================
