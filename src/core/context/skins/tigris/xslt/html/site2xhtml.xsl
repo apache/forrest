@@ -425,6 +425,18 @@ if (VERSION > 3) {
             <br/><script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
               //  -->]]></script>
+      <xsl:if test="$config/feedback">
+        <div id="feedback">
+          <xsl:value-of select="$config/feedback"/>
+          <a id="feedbackto">
+            <xsl:attribute name="href">
+              <xsl:value-of select="$config/feedback/@href"/>
+              <xsl:value-of select="$path"/>
+            </xsl:attribute>
+            <xsl:value-of select="$config/feedback/@to"/>
+          </a>
+        </div>
+      </xsl:if>
      </td>
     <td align="right" nowrap="nowrap">
           <xsl:call-template name="compliancy-logos"/>
