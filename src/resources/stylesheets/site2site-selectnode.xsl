@@ -17,8 +17,10 @@ Jeff Turner <jefft@apache.org>
   </xsl:variable>
 
   <xsl:template match="/*">
+    <!--
     <xsl:message>## path is <xsl:value-of select="$path"/></xsl:message>
     <xsl:message>## tab is <xsl:value-of select="$tab"/></xsl:message>
+    -->
     <xsl:copy>
       <xsl:apply-templates/>
     </xsl:copy>
