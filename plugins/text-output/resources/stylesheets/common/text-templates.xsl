@@ -28,6 +28,11 @@
     <xsl:call-template name="cr"/>
   </xsl:template>
 
+  <!-- Justify passed in text based on a passed in width and
+       type of alignment desired.
+
+       Currently only supports (and defaults to) center alignment
+  -->
   <xsl:template name="justify-text">
     <xsl:param name="text"/>
     <xsl:param name="width" select="'76'"/>
@@ -51,42 +56,6 @@
     </xsl:variable>
 
     <xsl:value-of select="concat($leader, $text)"/>
-  </xsl:template>
-
-  <xsl:template name="substring-before-last">
-    <xsl:param name="input" />
-    <xsl:param name="substr" />
-    <xsl:if test="$substr and contains($input, $substr)">
-      <xsl:variable name="temp" select="substring-after($input, $substr)" />
-      <xsl:value-of select="substring-before($input, $substr)" />
-      <xsl:if test="contains($temp, $substr)">
-        <xsl:value-of select="$substr" />
-        <xsl:call-template name="substring-before-last">
-          <xsl:with-param name="input" select="$temp" />
-          <xsl:with-param name="substr" select="$substr" />
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template>
-   
-  <xsl:template name="substring-after-last">
-    <xsl:param name="input"/>
-    <xsl:param name="substr"/>
-     
-    <!-- Extract the string which comes after the first occurence -->
-    <xsl:variable name="temp" select="substring-after($input,$substr)"/>
-    <xsl:choose>
-      <!-- If it still contains the search string the recursively process -->
-      <xsl:when test="$substr and contains($temp,$substr)">
-        <xsl:call-template name="substring-after-last">
-          <xsl:with-param name="input" select="$temp"/>
-          <xsl:with-param name="substr" select="$substr"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$temp"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="lineOf">
@@ -125,7 +94,7 @@
             <xsl:with-param name="size" select="$indent"/>
           </xsl:call-template>
           <xsl:value-of
-                select="concat(translate(normalize-space($text),'&#xa;',' '),$trailing-space)"/>
+                select="concat(normalize-space($text),$trailing-space)"/>
         </xsl:variable>
 
         <xsl:variable name="remaining">
