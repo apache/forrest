@@ -64,9 +64,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <!--         <link rel="stylesheet" href="{$root}skin/screen.css" 
                 type="text/css" media="screen" />
             <link rel="stylesheet" href="{$root}skin/print.css" type="text/css" 
-                media="print" />
-            <link rel="stylesheet" href="{$root}skin/profile.css" 
-                type="text/css" />--> 
+                media="print" />-->
+            <link rel="stylesheet" href="{$root}skin/navigation.css" 
+                type="text/css" /> 
             <link rel="stylesheet" href="{$root}skin/xnc-base.css" 
                 type="text/css" />
             <link rel="stylesheet" href="{$root}skin/xnc.css" 
@@ -366,7 +366,7 @@ document.write("Last Published: " + document.lastModified);
 <xsl:comment>+
     |start Menu
     +</xsl:comment>
-   <div id="menu">
+   <div id="nav-section">
 <!--menu - inner-->	
             <xsl:for-each select = "div[@id='menu']/ul/li">
               <xsl:call-template name = "innermenuli" >
@@ -431,7 +431,7 @@ document.write("Last Published: " + document.lastModified);
     </xsl:variable>
     
     
-    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="h1"/></div>
+    <div class="nav-section-title" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="h1"/></div>
       <div class="{$whichGroup}" id="{$tagid}">
         <xsl:for-each select= "ul/li">
 
