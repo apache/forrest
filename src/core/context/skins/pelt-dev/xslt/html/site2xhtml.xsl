@@ -498,19 +498,4 @@ document.write("Last Published: " + document.lastModified);
       </xsl:if>
     </xsl:if>
   </xsl:template>
-
-<xsl:template name="html-meta">
-<!--+
-  |generator meta
-  +-->
-<xsl:comment>+
-    |start generator meta
-    +</xsl:comment>
-    <meta name="Generator" content="Apache Forrest"/>
-    <meta name="Forrest-version" content="SVN-Head (0.6-dev)"/>
-    <meta name="Forrest-skin-name" content="pelt"/>
-<xsl:comment>+
-    |end generator meta
-    +</xsl:comment>
-</xsl:template>
 </xsl:stylesheet>

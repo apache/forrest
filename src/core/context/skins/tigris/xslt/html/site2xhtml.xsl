@@ -40,7 +40,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <xsl:template match="site">
     <html>
       <head>
-        <xsl:comment>*** This file is generated using Apache Forrest.  Do not edit.  ***</xsl:comment>      
+        <xsl:call-template name="html-meta"/>
         <style type="text/css">
           /* <![CDATA[ */ 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  

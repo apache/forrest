@@ -36,10 +36,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
-  
+
   <xsl:template match="site">
     <html>
       <head>
+        <xsl:call-template name="html-meta"/>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
@@ -69,7 +70,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           +=========================+
         -->
         
-        <xsl:call-template name = "topstrip" />
+        <xsl:call-template name="topstrip" />
 
         <xsl:call-template name="centerstrip"/>
 

@@ -278,8 +278,6 @@ if (VERSION > 3) {
 
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
-    
-    
     <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
     <xsl:if test="contains($config/toc/@location,'page')"> 
       <ul class="minitoc">
@@ -298,6 +296,28 @@ if (VERSION > 3) {
       </ul>
     </xsl:if>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="html-meta">  
+    <meta name="Generator" content="Apache Forrest"/>
+    <meta>
+      <xsl:attribute name="name">Forrest-version</xsl:attribute>
+      <xsl:attribute name="content">
+        <xsl:value-of select="//info/forrest-version"/>
+      </xsl:attribute>
+    </meta>
+    <meta>
+      <xsl:attribute name="name">Forrest-skin-name</xsl:attribute>
+      <xsl:attribute name="content">
+        <xsl:value-of select="//info/project-skin"/>
+      </xsl:attribute>
+    </meta>
+    <meta>
+      <xsl:attribute name="name">DC.date</xsl:attribute>
+      <xsl:attribute name="content">
+        <xsl:value-of select="//info/generate-timestamp"/>
+      </xsl:attribute>
+    </meta>
   </xsl:template>
 
   <xsl:template match="node()|@*" priority="-1">

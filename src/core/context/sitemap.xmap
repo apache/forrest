@@ -251,6 +251,12 @@ $Revision: 1.12 $
            <map:transform type="skinconf"/>
            <map:serialize type="xml" />
          </map:match>
+
+         <!-- Add some project info -->
+         <map:match pattern="info">
+           <map:generate src="{forrest:context}/WEB-INF/info.xml"/>
+           <map:serialize type="xml"/>
+         </map:match>
        </map:pipeline>
 
     <map:pipeline internal-only="false">
@@ -444,6 +450,7 @@ $Revision: 1.12 $
       <map:match pattern="*.html">
         <map:aggregate element="site">
           <map:part src="cocoon:/skinconf.xml"/>
+          <map:part src="cocoon:/info"/>
           <map:part src="cocoon:/tab-{0}"/>
           <map:part src="cocoon:/menu-{0}"/>
           <map:part src="cocoon:/body-{0}"/>
@@ -457,6 +464,7 @@ $Revision: 1.12 $
       <map:match pattern="**/*.html">
         <map:aggregate element="site">
           <map:part src="cocoon:/skinconf.xml"/>
+          <map:part src="cocoon:/info"/>
           <map:part src="cocoon:/{1}/tab-{2}.html"/>
           <map:part src="cocoon:/{1}/menu-{2}.html"/>
           <map:part src="cocoon:/{1}/body-{2}.html"/>
