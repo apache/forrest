@@ -33,7 +33,7 @@ set ANTFILE=%FORREST_HOME%\forrest.build.xml
 
 rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
-set ANT_HOME=%FORREST_HOME%\..\..\tools\ant
+set ANT_HOME=%FORREST_HOME%\..\..\..\tools\ant
 
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%

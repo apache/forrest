@@ -14,7 +14,7 @@ rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
 set OLD_ANT_HOME=%ANT_HOME%
-set ANT_HOME=tools\ant
+set ANT_HOME=..\tools\ant
 
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
