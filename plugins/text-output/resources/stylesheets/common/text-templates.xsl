@@ -81,43 +81,82 @@
     <xsl:param name="indent"/>
     <xsl:param name="width" select="'76'"/>
 
+    <!-- FIXME: Handle case when ($width - $indent) less than 1 -->
+    <xsl:variable name="work-width" select="$width - $indent"/>
+
+    <!-- We'll lose whether the text had a trailing space when we
+    normalize-space() it.  Needed if we're combining multiple outputs
+    of emit() into a single variable and then re-emitting ... -->
+    <xsl:variable name="trailing-space">
+      <xsl:if test="substring($text, string-length($text))=' '">
+        <xsl:text> </xsl:text>
+      </xsl:if>
+    </xsl:variable>
+
+    <!-- Normalized text.  We'll use this for calculations on
+    splitting, lengths, etc. -->
+    <xsl:variable name="ntext" select="normalize-space($text)"/>
+
     <xsl:choose>
-      <xsl:when test="string-length($text) > 0">
-        <xsl:variable name="trailing-space">
-          <xsl:if test="substring($text, string-length($text))=' '">
-            <xsl:text> </xsl:text>
-          </xsl:if>
+      <xsl:when test="string-length($ntext) > $work-width">
+
+        <!-- Grab string of the maximum width we can have. -->
+        <xsl:variable name="text-maxwidth">
+          <xsl:value-of select="substring($ntext, 1, $work-width)"/>
         </xsl:variable>
-      
-        <xsl:variable name="tmp">
-          <xsl:call-template name="lineOf">
-            <xsl:with-param name="size" select="$indent"/>
+
+        <!-- Grab the substring of text-maxwidth that breaks on the last
+        space in text-maxwidth -->
+        <xsl:variable name="text-wrap">
+          <xsl:call-template name="text-to-last-space">
+            <xsl:with-param name="text" select="$text-maxwidth"/>
           </xsl:call-template>
-          <xsl:value-of
-                select="concat(normalize-space($text),$trailing-space)"/>
         </xsl:variable>
 
-        <xsl:variable name="remaining">
-          <xsl:choose>
-            <xsl:when test="string-length($tmp) > $width">
-              <xsl:value-of select="substring($tmp, $width+1)"/>
-            </xsl:when>
-            <xsl:otherwise/>
-          </xsl:choose>
+        <!-- Grab the remaining text which will then be emit()'d again -->
+        <xsl:variable name="text-remaining">
+          <xsl:value-of select="substring($ntext, string-length($text-wrap)+1)"/>
         </xsl:variable>
 
-        <xsl:value-of select="substring($tmp, 1, $width)"/>
+        <xsl:call-template name="lineOf">
+          <xsl:with-param name="size" select="$indent"/>
+        </xsl:call-template>
+        <xsl:value-of select="$text-wrap"/>
         <xsl:call-template name="cr"/>
 
         <xsl:call-template name="emit">
-          <xsl:with-param name="text" select="$remaining"/>
+          <xsl:with-param name="text" select="$text-remaining"/>
           <xsl:with-param name="indent" select="$indent"/>
           <xsl:with-param name="width" select="$width"/>
         </xsl:call-template>
       </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="lineOf">
+          <xsl:with-param name="size" select="$indent"/>
+        </xsl:call-template>
+        <xsl:value-of select="concat($ntext,$trailing-space)"/>
+        <xsl:call-template name="cr"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Grab the text up until the last space in the passed text -->
+  <xsl:template name="text-to-last-space">
+    <xsl:param name="text"/>
+
+    <xsl:variable name="leading" select="substring-before($text, ' ')"/>
+    <xsl:variable name="remaining" select="substring-after($text,' ')"/>
+
+    <xsl:value-of select="concat($leading,' ')"/>
+
+    <xsl:choose>
+      <xsl:when test="contains($remaining,' ')">
+        <xsl:call-template name="text-to-last-space">
+          <xsl:with-param name="text" select="$remaining"/>
+        </xsl:call-template>
+      </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
-
   </xsl:template>
 
 </xsl:stylesheet>
