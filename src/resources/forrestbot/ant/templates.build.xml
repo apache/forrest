@@ -35,7 +35,7 @@
 
   <!--
     <property name="template.echo" value="true" />
-    
+
     uncomment this one or use -Dtemplate.echo=true at the commandline
     if you want to know the configuration of each template
   -->
@@ -52,6 +52,7 @@
     <property name="forrest.context.dir" value="${xlayout.source.resources.dir}" />
 
       <!-- where cocoon can have his toy-work-environment while generating: -->
+      <!-- mind: other stages can use this as a temp dir as well     -->
       <property name="project.work.dir"
               value="${project.context.dir}/../work" />
       <!-- where cocoon will spit out the generated stuff: -->
@@ -62,6 +63,7 @@
 
   <!-- ________________ PREPARE TEMPLATES __________________ -->
   <target name="echo.prepare" if="template.echo">
+
     <echo message="prepare workstage for project ${project.name}"/>
     <echo message="skin = ${prepare.skin}"/>
   </target>
@@ -70,10 +72,8 @@
     <!-- make it a clean space to work in -->
     <delete dir="${project.context.dir}"/>
     <delete dir="${project.docs.dir}"/>
-    <delete dir="${project.work.dir}"/>
     <mkdir dir="${project.context.dir}"/>
     <mkdir dir="${project.docs.dir}"/>
-    <mkdir dir="${project.work.dir}"/>
 
     <!-- copy over forrest config stuf and prepare the environment -->
     <!-- todo: get rid of the filter way of working ?
@@ -105,6 +105,8 @@
     </copy>
 
     <!-- decided to share this among all projects handled by bot
+         Todo: remove what is now disabled if it proves to work
+
     <mkdir dir="${project.context.dir}/WEB-INF/classes"/>
     <copy todir="${project.context.dir}/WEB-INF/classes">
       <fileset dir="${project.context.dir}/resources/schema">
@@ -154,11 +156,13 @@
       </fileset>
     </copy>
 
-    <!-- Copy the project descriptors can't be done here, since that's
-         project specific -->
+    <!-- Copy the project descriptors can't be done here, since that is
+         project specific: see get-src -->
   </target>
 
+
   <!-- ________________ GET-SRC TEMPLATES __________________ -->
+  <!-- [[get-src type cvs ]] -->
   <target name="echo.get-src.cvs" if="template.echo">
     <echo message="get-src workstage of type CVS for project ${project.name}"/>
     <echo message="cvs login: usr= ${get-src.cvs.user} / pwd= ${get-src.cvs.passwd}"/>
@@ -198,7 +202,29 @@
     </copy>
   </target>
 
+  <!-- [[get-src type local-copy ]] -->
+  <target name="echo.get-src.local-copy" if="template.echo">
+    <echo message="get-src workstage of type LOCAL-COPY for project ${project.name}"/>
+    <echo message="content-dir: ${get-src.cvs.content-dir} provides xdocs"/>
+    <echo message="project-dir: ${get-src.cvs.project-dir} provides [project-description].*ml files"/>
+  </target>
+
+  <target name="template.get-src.local-copy" depends="shared.set-props, echo.get-src.local-copy">
+    <!-- copy the xdocs content over to the context space -->
+    <copy todir="${project.context.dir}">
+      <fileset dir="${get-src.local-copy.content-dir}" />
+    </copy>
+    <!-- copy the project descriptors over to the context space  -->
+    <copy todir="${project.context.dir}" >
+      <fileset dir="${get-src.local-copy.project-dir}">
+        <include name="*.*ml"/>
+      </fileset>
+    </copy>
+  </target>
+
+
   <!-- ________________ GENERATE TEMPLATES __________________ -->
+
   <target name="echo.generate" if="template.echo">
     <property name="classpath-dump" refid="forrest.cp"/>
     <echo message="generate workstage for project ${project.name}"/>
@@ -208,6 +234,10 @@
   </target>
 
   <target name="template.generate" depends="shared.set-props, echo.generate">
+    <!-- clean out the temp space -->
+    <delete dir="${project.work.dir}"/>
+    <mkdir dir="${project.work.dir}"/>
+
     <java classname="org.apache.cocoon.Main" fork="true"
           dir="${project.context.dir}" failonerror="true"
           classpathref="forrest.cp"
@@ -222,11 +252,45 @@
   </target>
 
   <!-- ________________ DEPLOY TEMPLATES __________________ -->
+  <!-- [[deploy type scp ]] -->
   <target name="echo.deploy.scp" if="template.echo">
-      <echo message="deploy workstage of type scp for project ${project.name}"/>
+    <echo message="deploy workstage of type scp for project ${project.name}"/>
+    <echo message="will deploy to ${deploy.scp.host}" />
+    <echo message="as user ${deploy.scp.user}" />
+    <echo message="into dir ${deploy.scp.root}/${deploy.scp.dir}" />
   </target>
+
   <target name="template.deploy.scp" depends="shared.set-props, echo.deploy.scp">
-    <!-- todo: FIXME: not implemented yet -->
+    <!-- clean out the temp space -->
+    <delete dir="${project.work.dir}"/>
+    <mkdir dir="${project.work.dir}"/>
+    <property name="tempname" value="${project.name}-deploy" />
+    <property name="tempfile"
+              value="${project.work.dir}/${tempname}" />
+    <property name="remotedir" value="${deploy.scp.root}/${deploy.scp.dir}" />
+    <tar tarfile="${tempfile}.tar" basedir="${project.docs.dir}"/>
+    <gzip zipfile="${tempfile}.tar.gz" src="${tempfile}.tar"/>
+    <delete file="${tempfile}.tar"/>
+    <exec dir="." executable="scp">
+      <!--<arg value="-oProtocol=1"/>-->
+      <arg value="${tempfile}.tar.gz"/>
+      <arg value="${deploy.scp.user}@${deploy.scp.host}:${remotedir}"/>
+    </exec>
+    <exec dir="." executable="ssh">
+      <arg line="-n ${deploy.scp.host} -l ${deploy.scp.user} 'cd ${remotedir};gunzip ${tempname}.tar.gz;tar xUvf ${tempname}-deploy.tar;chmod -R g+u *;rm ${tempname}-deploy.tar'"/>
+    </exec>
+    <delete file="${tempfile}.tar.gz"/>
+  </target>
+
+  <!-- [[deploy type local-copy ]] -->
+  <target name="echo.deploy.local-copy" if="template.echo">
+      <echo message="deploy workstage of type scp for project ${project.name}"/>
+      <echo message="destination dir = ${deploy.local-copy.destination}" />
+  </target>
+  <target name="template.deploy.local-copy" depends="shared.set-props, echo.deploy.local-copy">
+    <copy todir="${deploy.local-copy.destination}">
+        <fileset dir="${project.docs.dir}" />
+    </copy>
   </target>
 
 

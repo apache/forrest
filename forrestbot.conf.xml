@@ -3,13 +3,13 @@
 
   <!DOCTYPE forrest-config SYSTEM "forrest-config.dtd">
 
-  DTD will be added once the remote build process 
+  DTD will be added once the remote build process
   has been finished and debugged (SN)
-  
+
   This file contains the configuration for the forrestbot:
     - which projects to build
     - using which parameters
-    
+
 -->
 <forrest-config>
   <defaults>
@@ -18,6 +18,9 @@
       <root name="/home/cvspublic"/>
       <user name="anoncvs"/>
       <passwd name="anoncvs"/>
+    </get-src>
+    <get-src type="local-copy" >
+      <project-dir name="." />
     </get-src>
     <deploy type="scp">
       <host name="krysalis.sourceforge.net"/>
@@ -29,21 +32,38 @@
       <debuglevel name="ERROR" />
     </generate>
   </defaults>
+
   <project name="xml-forrest">
-    <!-- as long as the skin is set using the <filter> the decision for which one to choose
-         is taken in the prepare stage -->
     <prepare>
         <skin name="bert"/>
     </prepare>
+
     <get-src type="cvs">
       <module name="xml-forrest"/>
       <dir name="src/documentation"/>
     </get-src>
+    <!-- as long as the skin is set using the <filter> tricks:
+         the decision for which one to choose is taken in the prepare stage
+         rather then the generate stage
     <generate>
       <skin name="bert" />
     </generate>
+    -->
     <deploy type="scp">
       <dir name="forrest"/>
     </deploy>
   </project>
+
+  <project name="xml-forrest-local">
+    <prepare>
+        <skin name="bert"/>
+    </prepare>
+    <get-src type="local-copy">
+      <content-dir name="src/documentation"/>
+    </get-src>
+    <deploy type="local-copy">
+      <destination name="build/site"/>
+    </deploy>
+  </project>
+
 </forrest-config>

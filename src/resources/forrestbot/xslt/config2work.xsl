@@ -37,7 +37,7 @@
    <target name="work">
      <parallel>
        <xsl:for-each select="project">
-         <antcall inheritRefs="true" target="work.{@name}"/>
+         <antcall inheritRefs="true" target="work.{@name}" />
        </xsl:for-each>
      </parallel>
    </target>

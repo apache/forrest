@@ -606,7 +606,9 @@
 
   <target name="bot.run" depends="bot.conf2build, bot.prepare-cp" >
     <!-- delegates to the generated XML file -->
-    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
+    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true">
+        <property name="bot.logs.dir" value="${xlayout.build.bot.projects}" />
+    </ant>
   </target>
 
   <target name="bot" depends="bot.run" />
