@@ -109,7 +109,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   +-->
     <div id="top">
 <!--breadcrumbs org location-->
-<xsl:if test="not ($config/trail/@location='alt')">
+<xsl:if test="not ($config/trail/@location)">
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
