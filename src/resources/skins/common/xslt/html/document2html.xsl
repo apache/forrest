@@ -13,12 +13,16 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.12 2003/02/11 21:54:42 stevenn Exp $
+$Id: document2html.xsl,v 1.13 2003/02/14 15:21:18 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- If non-blank, a PDF link for this page will not be generated -->
   <xsl:param name="nopdf"/>
+  <!-- If non-blank, a "printer-friendly" link for this page will not be generated -->
+  <xsl:param name="noprinterfriendly"/>
+  <!-- If non-blank, an XML link for this page will not be generated -->
+  <xsl:param name="noxml"/>  
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
   <!-- <xsl:include href="split.xsl"/> -->
@@ -50,7 +54,9 @@ $Id: document2html.xsl,v 1.12 2003/02/11 21:54:42 stevenn Exp $
                 <xsl:value-of select="header/title"/>
               </h1>
             </td>
+            <xsl:call-template name="printerfriendlylink"/>
             <xsl:call-template name="pdflink"/>
+            <xsl:call-template name="xmllink"/>
           </tr>
         </table>
       </xsl:if>
@@ -76,18 +82,38 @@ $Id: document2html.xsl,v 1.12 2003/02/11 21:54:42 stevenn Exp $
     </div>
   </xsl:template>
 
-  <!-- Generates the "printer friendly version" PDF link -->
-  <xsl:template name="pdflink">
-    <xsl:if test="$nopdf = ''"> <!-- nopdf flag unset -->
-      <td align="center" width="80" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
-          <img border="0" src="{$skin-img-dir}/printer.gif" alt="printer"/><br/>
-          print-friendly<br/>
-          PDF</a>
+  <!-- Generates the "printer friendly version" link -->
+  <xsl:template name="printerfriendlylink">
+    <xsl:if test="$noprinterfriendly = ''"> <!-- noprinterfriendly flag unset -->
+      <td align="center" width="40" nowrap="nowrap"><a href="printer-friendly/{$filename-noext}.html" class="dida">
+          <img border="0" src="{$skin-img-dir}/printer.gif" alt="printer friendly"/><br/>
+          printer<br/>
+          friendly</a>
       </td>
     </xsl:if>
   </xsl:template>
 
+  <!-- Generates the PDF link -->
+  <xsl:template name="pdflink">
+    <xsl:if test="$nopdf = ''"> <!-- nopdf flag unset -->
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
+          <img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
+          PDF</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+  
 
+  <!-- Generates the XML link -->
+  <xsl:template name="xmllink">
+    <xsl:if test="$noxml = ''"> <!-- noxml flag unset -->
+      <td align="center" width="40" nowrap="nowrap"><a href="doc-source/{$filename-noext}.html" class="dida">
+          <img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
+          xml</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="body">
     <xsl:if test="section and not($notoc='true')">
       <ul class="minitoc">

@@ -387,6 +387,8 @@
             </map:call>
          </map:match>
 
+
+       
 <!-- Generates body HTML for files in subdirs -->
          <map:match pattern="body-**/*.xml">
 <!-- if the file is present as ihtml, convert to doc-v11... -->
@@ -457,6 +459,8 @@
                </map:call>
             </map:act>
 
+
+          
 <!-- if the file is present as html, give that to the user... -->
             <map:act type="resource-exists">
                <map:parameter name="url" value="content/xdocs/{1}.ehtml" />
@@ -544,7 +548,32 @@
             <map:redirect-to uri="{request:contextPath}/index.html" />
          </map:match>
 
+              
          <map:match pattern="**">
+         
+<!-- Generates printerfriendly HTML from the body (link rewriting) -->
+         <map:match pattern="printer-friendly/**.html">
+            <map:generate src="cocoon://body-{1}.xml"/>
+            <map:serialize/>
+         </map:match>
+         
+         <map:match pattern="**/printer-friendly/*.html">
+            <map:generate src="cocoon://body-{1}/{2}.xml"/>
+            <map:serialize/>
+         </map:match>
+         
+<!-- Generates source HTML from the body (link rewriting) -->
+         <map:match pattern="doc-source/**.html">
+            <map:generate src="content/xdocs/{1}.xml"/>
+            <map:serialize type="xml"/>
+         </map:match>
+         
+         <map:match pattern="**/doc-source/*.html">
+            <map:generate src="content/xdocs/{1}/{2}.xml"/>
+            <map:serialize type="xml"/>
+         </map:match>
+         
+             
 <!-- if the file is present verbatim as content, give that to the user... -->
             <map:act type="resource-exists">
                <map:parameter name="url" value="content/{1}" />
@@ -599,6 +628,7 @@
                </map:match>
             </map:act>
 
+           
 <!-- ... otherwise try to generate it using these rules.  -->
             <map:match pattern="apachestats">
                <map:generate type="html" src="http://www.apache.org/~rubys/stats/xml.apache.org/">
