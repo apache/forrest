@@ -150,12 +150,12 @@ color: <xsl:value-of select="@hlink"/>;
     background-color: <xsl:value-of select="@value"/>;
 }   
 </xsl:template> 
-<!--xsl:template match="color[@name='searchbox']"> 
-#top .searchbox { 
+<xsl:template match="color[@name='searchbox']"> 
+.search-input { 
     background-color: <xsl:value-of select="@value"/> ;
     color: <xsl:value-of select="@font"/>; 
 } 
-</xsl:template-->
+</xsl:template>
 
 <!--xsl:template match="color[@name='body']">
 body         { background-color: <xsl:value-of select="@value"/>;
