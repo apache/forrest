@@ -23,15 +23,13 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:for="http://apache.org/forrest" version="1.0">
 
-<xsl:import href="copyover.xsl"/>
+  <xsl:import href="copyover.xsl"/>
 
-<xsl:variable name="config" select="//skinconfig"/>
+  <xsl:variable name="config" select="//skinconfig"/>
 
-<xsl:template match="for:project-name">
-    <xsl:value-of select="$config/project-name"/>
+  <xsl:template match="for:*">
+    <xsl:variable name="tmp" select="local-name()"/>
+    <xsl:value-of select="$config/*[local-name() = $tmp]"/>
   </xsl:template>
 
-<xsl:template match="for:group-name">
-    <xsl:value-of select="$config/group-name"/>
-  </xsl:template>
 </xsl:stylesheet>
