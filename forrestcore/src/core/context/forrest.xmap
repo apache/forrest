@@ -294,6 +294,16 @@ $Revision: 1.8 $
           </map:match>
         </map:when>
         <map:otherwise>
+        
+          <map:select type="exists">
+             <map:when test="{forrest:plugins}/sitemap.xmap">
+               <map:mount uri-prefix="" 
+                          src="{forrest:plugins}/sitemap.xmap" 
+                          check-reload="yes" 
+                          pass-through="true"/>
+            </map:when>  
+          </map:select>
+        
           <map:generate src="{project:content.xdocs}{uri}.xml" />
           <map:call resource="transform-to-document">
             <map:parameter name="src" value="{project:content.xdocs}{uri}.xml" />
