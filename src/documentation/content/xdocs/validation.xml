@@ -11,7 +11,7 @@
   <header>
     <title>XML Validation</title>
     <subtitle>DTDs, catalogs and whatnot</subtitle>
-    <version>1.0</version>
+    <version>$Revision: 1.4 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -34,23 +34,75 @@
       </p>
       <p>
         Despite the strict default behavior, Forrest is quite flexible about
-        validation.  It is possible for projects to specify exactly what files
-        they want (and don't want) validated, through the
-        <code>forrest.validate.excludes</code> and
-        <code>forrest.validate.includes</code> properties, set in
-        <code>forrest.properties</code>.  Each specifies a comma-separated
-        list of paths relative to <code>${project.xdocs-dir}</code>.  For
-        example, to avoid validating
+        validation.  Validation can be switched off for certain sections of a
+        project.  In validated sections, it is possible for projects to specify
+        exactly what files they want (and don't want) validated.  Forrest
+        validation is controlled through a set of properties in
+        <code>forrest.properties</code>:
+      </p>
+      <source>
+##############
+# validation properties
+
+# These props determine if validation is performed at all
+# Values are inherited unless overridden.
+# Eg, if forrest.validate=false, then all others are false unless set to true.
+#forrest.validate=true
+#forrest.validate.xdocs=${forrest.validate}
+#forrest.validate.skinconf=${forrest.validate}
+#forrest.validate.sitemap=${forrest.validate}
+#forrest.validate.stylesheets=${forrest.validate}
+#forrest.validate.skins=${forrest.validate}
+#forrest.validate.skins.stylesheets=${forrest.validate.skins}
+
+
+# Key:
+# *.failonerror=(true|false)    stop when an XML file is invalid
+# *.includes=(pattern)         Comma-separated list of path patterns to validate
+# *.excludes=(pattern)         Comma-separated list of path patterns to not validate
+
+#forrest.validate.failonerror=true
+#forrest.validate.includes=**/*
+#forrest.validate.excludes=
+#
+#forrest.validate.xdocs.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.xdocs.includes=*.x*
+#forrest.validate.xdocs.excludes=
+#
+#forrest.validate.skinconf.includes=${skinconf-file}
+#forrest.validate.skinconf.excludes=
+#forrest.validate.skinconf.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.sitemap.includes=${sitemap-file}
+#forrest.validate.sitemap.excludes=
+#forrest.validate.sitemap.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.stylesheets.includes=**/*.xsl
+#forrest.validate.stylesheets.excludes=
+#forrest.validate.stylesheets.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.skins.includes=**/*
+#forrest.validate.skins.excludes=**/*.xsl
+#forrest.validate.skins.failonerror=${forrest.validate.failonerror}
+#
+#forrest.validate.skins.stylesheets.includes=**/*.xsl
+#forrest.validate.skins.stylesheets.excludes=
+#forrest.validate.skins.stylesheets.failonerror=${forrest.validate.skins.failonerror}
+      </source>
+      <p>
+        For example, to avoid validating
         <code>${project.xdocs-dir}</code>/slides.xml and everything inside the
         <code>${project.xdocs-dir}/manual/</code> directory, add this to
         <code>forrest.properties</code>:
       </p>
       <source>forrest.validate.excludes=slides.xml, manual/**</source>
-      <p>
-        XML validation can also be made non-fatal by setting the following in
-        <code>forrest.properties</code>:
-      </p>
-      <source>forrest.validation.failonerror=false</source>
+      <note>
+        The <code>failonerror</code> properties only work for files validated
+        with &lt;xmlvalidate&gt;, not (yet) for those validated
+        with&lt;jing&gt;, where <code>failonerror</code> defaults to
+        <code>true</code>.
+      </note>
     </section>
 
     <section>
@@ -78,18 +130,19 @@
           the standard 'documentv11' format.  Our new elements are described
           by the following DTD:
         </p>
-        <source>            &lt;!ELEMENT release (downloads)&gt;
-          &lt;!ATTLIST release
-          version CDATA #REQUIRED
-          date CDATA #REQUIRED&gt;
+        <source>
+&lt;!ELEMENT release (downloads)&gt;
+&lt;!ATTLIST release
+version CDATA #REQUIRED
+date CDATA #REQUIRED&gt;
 
-          &lt;!ELEMENT downloads (file*)&gt;
+&lt;!ELEMENT downloads (file*)&gt;
 
-          &lt;!ELEMENT file EMPTY&gt;
-          &lt;!ATTLIST file
-          url CDATA #REQUIRED
-          name CDATA #REQUIRED
-          size CDATA #IMPLIED&gt;
+&lt;!ELEMENT file EMPTY&gt;
+&lt;!ATTLIST file
+url CDATA #REQUIRED
+name CDATA #REQUIRED
+size CDATA #IMPLIED&gt;
         </source>
         <p>
           The documentv11 entities are defined in a reusable 'module':
@@ -102,77 +155,78 @@
           <code>document-v11.mod</code>.  Here is the full DTD, with
           explanation to follow.
         </p>
-        <source>&lt;!-- ===================================================================
+        <source>
+&lt;!-- ===================================================================
 
-          Download Doc format
+Download Doc format
 
-          PURPOSE:
-          This DTD provides simple extensions on the Apache DocumentV11 format to link
-          to a set of downloadable files.
+PURPOSE:
+This DTD provides simple extensions on the Apache DocumentV11 format to link
+to a set of downloadable files.
 
-          TYPICAL INVOCATION:
+TYPICAL INVOCATION:
 
-          &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
-          "download-v11.dtd"&gt;
-
-
-          AUTHORS:
-          Jeff Turner &lt;jefft@apache.org&gt;
+&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+"download-v11.dtd"&gt;
 
 
-          COPYRIGHT:
-          Copyright (c) 2002 The Apache Software Foundation.
-
-          Permission to copy in any form is granted provided this notice is
-          included in all copies. Permission to redistribute is granted
-          provided this file is distributed untouched in all its parts and
-          included files.
-
-          ==================================================================== --&gt;
+AUTHORS:
+Jeff Turner &lt;jefft@apache.org&gt;
 
 
-          &lt;!-- =============================================================== --&gt;
-          &lt;!-- Include the Common ISO Character Entity Sets --&gt;
-          &lt;!-- =============================================================== --&gt;
+COPYRIGHT:
+Copyright (c) 2002 The Apache Software Foundation.
 
-          &lt;!ENTITY % common-charents PUBLIC
-          "-//APACHE//ENTITIES Common Character Entity Sets V1.0//EN"
-          "common-charents-v10.mod"&gt;
-          %common-charents;
+Permission to copy in any form is granted provided this notice is
+included in all copies. Permission to redistribute is granted
+provided this file is distributed untouched in all its parts and
+included files.
 
-          &lt;!-- =============================================================== --&gt;
-          &lt;!-- Document --&gt;
-          &lt;!-- =============================================================== --&gt;
+==================================================================== --&gt;
 
-          &lt;!ENTITY % document PUBLIC
-          "-//APACHE//ENTITIES Documentation V1.1//EN"
-          "document-v11.mod"&gt;
 
-          &lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
-          &lt;!ENTITY % local.sections "|release"&gt;
+&lt;!-- =============================================================== --&gt;
+&lt;!-- Include the Common ISO Character Entity Sets --&gt;
+&lt;!-- =============================================================== --&gt;
 
-          %document;
+&lt;!ENTITY % common-charents PUBLIC
+"-//APACHE//ENTITIES Common Character Entity Sets V1.0//EN"
+"common-charents-v10.mod"&gt;
+%common-charents;
 
-          &lt;!ELEMENT release (downloads)&gt;
-          &lt;!ATTLIST release
-          version CDATA #REQUIRED
-          date CDATA #REQUIRED&gt;
+&lt;!-- =============================================================== --&gt;
+&lt;!-- Document --&gt;
+&lt;!-- =============================================================== --&gt;
 
-          &lt;!ELEMENT downloads (file*)&gt;
+&lt;!ENTITY % document PUBLIC
+"-//APACHE//ENTITIES Documentation V1.1//EN"
+"document-v11.mod"&gt;
 
-          &lt;!ELEMENT file EMPTY&gt;
-          &lt;!ATTLIST file
-          url CDATA #REQUIRED
-          name CDATA #REQUIRED
-          size CDATA #IMPLIED&gt;
+&lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
+&lt;!ENTITY % local.sections "|release"&gt;
 
-          &lt;!-- =============================================================== --&gt;
-          &lt;!-- End of DTD --&gt;
-          &lt;!-- =============================================================== --&gt;
+%document;
 
+&lt;!ELEMENT release (downloads)&gt;
+&lt;!ATTLIST release
+version CDATA #REQUIRED
+date CDATA #REQUIRED&gt;
+
+&lt;!ELEMENT downloads (file*)&gt;
+
+&lt;!ELEMENT file EMPTY&gt;
+&lt;!ATTLIST file
+url CDATA #REQUIRED
+name CDATA #REQUIRED
+size CDATA #IMPLIED&gt;
+
+&lt;!-- =============================================================== --&gt;
+&lt;!-- End of DTD --&gt;
+&lt;!-- =============================================================== --&gt;
         </source>
         <p>
-          The &lt;!ENTITY % ... &gt; blocks are so-called <link href="http://www.xml.com/axml/target.html#dt-PERef">parameter
+          The &lt;!ENTITY % ... &gt; blocks are so-called <link
+            href="http://www.xml.com/axml/target.html#dt-PERef">parameter
             entities</link>.  They are like macros, whose content will be
           inserted when a parameter-entity reference, like
           <code>%common-charents;</code> or <code>%document;</code>, is
@@ -193,9 +247,16 @@
         <p>
           We now have a DTD for the 'download' document type. 
         </p>
+        <note><link
+            href="http://www.oasis-open.org/docbook/documentation/reference/html/ch05.html">Chapter
+            5: Customizing DocBook</link> of Norman Walsh's "DocBook: The
+          Definitive Guide" gives a fuller overview of the process of
+          customizing a DTD.
+        </note>
       </section>
       <section>
         <title>Associating DTDs with document types</title>
+
         <p>
           Recall that our DOCTYPE declaration for our download document type
           is:
@@ -230,6 +291,22 @@
           -- custom doctype --
           PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "dtd/download-v11.dtd"
         </source>
+        <warning>Currently (2002-11-15) there are some large problems with the
+          technique described here.  Firstly, if a custom DTD uses entities from
+          Forrest, it must include those included files under
+          ${project.schema-dir}/dtd, because currently Forrest's validation
+          seems unable to look in catalog A for an entity used in a DTD found
+          with catalog B.  In our case, A is a custom project's catalog snippet,
+          and B is the Forrest catalog.  Secondly, Cocoon does not (without
+          tweaking) deal with more than one catalog file, so if your project
+          defines <code>${project.schema-dir}/catalog</code>, then you will
+          likely get errors about 'cannot resolve book-cocoon-v10.dtd'.  Until
+          this is fixed (all help appreciated!) it is currently simpler just to
+          hand-validate custom XML files, use
+          <code>project.validate.xdocs.excludes</code>to prevent validation of
+          new doc types and comment out the DOCTYPE declaration so Cocoon
+          doesn't complain.
+        </warning>
         <p>
           The format is described in <link href="&catalog_spec;">the
             spec</link>, and is fairly simple.  Lines beginning with
