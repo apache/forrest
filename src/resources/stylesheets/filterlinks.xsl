@@ -15,18 +15,34 @@ paths in the page that Forrest will try to recursively render.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
 
-  <xsl:param name="ctxbasedir"/>
+  <xsl:param name="ctxbasedir" select="'undefined'"/>
 
   <xsl:template match="@src|@href|@background">
-    <!-- The ctxbasedir condition prevents the absolute image paths used in PDFs
-    from being rendered. It will go away when FOP improves -->
-    <xsl:if test="not(starts-with(., $ctxbasedir)) and
-                  not(contains(.,'apidocs')) and
-                  not(starts-with(., 'api/'))">
-      <xsl:copy>
-        <xsl:apply-templates select="."/>
-      </xsl:copy>
-    </xsl:if>
+
+    <xsl:choose>
+      <xsl:when test="starts-with(., $ctxbasedir)">
+        <xsl:message>Ignoring absolute PDF link: <xsl:value-of select="."/></xsl:message>
+        <!-- Ignore absolute image paths used in PDFs from being rendered. This
+        will go away when the FOP-Cocoon link improves -->
+      </xsl:when>
+      <xsl:when test="contains(., 'apidocs')">
+        <xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>
+        <!-- Ignore refs to Javadocs (links containing 'apidocs') -->
+      </xsl:when>
+      <xsl:when test="contains(., 'api/')">
+        <xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>
+        <!-- Ignore refs to Javadocs ('api/' prefix) -->
+      </xsl:when>
+      <xsl:when test="not(contains(., ':')) and substring(., string-length(.)) = '/'">
+        <xsl:message>Ignoring directory link: <xsl:value-of select="."/></xsl:message>
+        <!-- Don't try to render links to local directories (that end with '/'). -->
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy>
+          <xsl:apply-templates select="."/>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="@*|node()">
