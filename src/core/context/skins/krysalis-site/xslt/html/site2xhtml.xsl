@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.8 2004/01/08 16:18:43 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,6 +29,7 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
+		<link rel="shortcut icon" href="{$root}favicon.ico" />		
         <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
       </head>
@@ -74,7 +75,6 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
       <tr>
         <!-- ( ================= Group Logo ================== ) -->
         <td >
-          <xsl:if test="$config/group-url">
             <div class="headerlogo">
             <xsl:call-template name="renderlogo">
               <xsl:with-param name="name" select="$config/group-name"/>
@@ -83,8 +83,6 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
             </div>
-            <span class="textheader"><xsl:value-of select="$config/group-name"/></span>
-          </xsl:if>
         </td>
         <!-- ( ================= Project Logo ================== ) -->
         <td align="center" >
@@ -132,9 +130,9 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
                 </tr>
 
                 <tr>
-                  <td class="border bottom-left-thick"></td>
-                  <td class="border"></td>
-                  <td class="border bottom-right-thick"></td>
+                  <td class="search border bottom-left"></td>
+                  <td class="search border bottomborder"></td>
+                  <td class="search border bottom-right"></td>
                 </tr>
               </table>
             </form>
@@ -181,14 +179,14 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
     <table cellspacing="0" cellpadding="0" border="0" width="100%">
       <tr>
         <!-- ( =================  Menu  ================== ) -->
-        <td valign="top">
+        <td valign="top" >
           <!-- If we have any menu items, draw a menu -->
           <xsl:if test="div[@class='menu']/ul/li">
             <xsl:call-template name="menu"/>
           </xsl:if>
         </td>
         <!-- ( =================  Main Area  ================== ) -->
-        <td valign="top">
+        <td valign="top" width="100%">
            <xsl:call-template name="mainarea"/>
         </td>
       </tr>
@@ -201,8 +199,7 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
         <!-- ( ================= start left top NavBar ================== ) -->
         <td valign = "top">
           <table class="leftpagemargin" cellspacing="0" cellpadding="0" border="0">
-            <tr><td class="subborder">&#160;</td></tr>
-            <tr><td class="border" height="1"></td></tr>
+            <tr><td class="subborder trail">&#160;</td></tr>
           </table>
         </td>
         <!-- ( ================= end left top NavBar ================== ) -->
@@ -226,22 +223,75 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
         <td>
           <table cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td class="border bottom-left-thick"></td>
-              <td class="border"></td>
-              <td class="border bottom-right-thick" ></td>
+              <td class="border bottom-left"></td>
+              <td class="border bottomborder"></td>
+              <td class="border bottom-right" ></td>
             </tr>
           </table>
         </td>      
       </tr>
 
       <tr>
-        <td height="5" colspan="2"></td>
+        <td height="10" colspan="2"></td>
       </tr>                
 
- 	  <xsl:if test="$filename = 'index.html' and $config/credits">
+      <tr>       	  
+        <td ></td>
+       	  <td class="search">
+            <form method="get" action="http://www.google.com/search" target="_blank">
+             <table class="dialog" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td class="border top-left"></td>
+                  <td class="border"></td>
+                  <td class="border top-right"></td>
+                </tr>    
+                <tr>
+                  <td class="border" ></td>
+                  <td colspan="2" class="border" height="10"><b>Search</b></td>
+                </tr>
+                <tr>
+                  <td colspan="3" height="8"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+                    the <xsl:value-of select="$config/searchsite-name"/> site
+                    <br />
+                    <input type="text" id="query" name="q" size="13"/><input type="submit" value="Go" name="Search"/>
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td colspan="3" height="7"></td>
+                </tr>
+
+                <tr>
+                  <td class="border bottom-left"></td>
+                  <td class="border bottomborder"></td>
+                  <td class="border bottom-right"></td>
+                </tr>
+              </table>
+              </form>
+              </td>
+          </tr>     
+ 	  
+          <xsl:if test="$filename = 'index.html' and $config/credits">
  	     <tr>
- 	       <td colspan="2">
-             <table>
+               <td></td>
+ 	       <td class="search">
+             <table class="dialog" cellspacing="0" cellpadding="0" border="0" width="100%"> 
+                <tr>
+                  <td class="border top-left"></td>
+                  <td class="border"></td>
+                  <td class="border top-right"></td>
+                </tr>     
+                  <td class="border" ></td>
+                  <td colspan="2" class="border" height="10"><b>Credits</b></td>
+                <tr>
+                  <td colspan="3" height="8"></td>
+                </tr>
 		        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
 		          <xsl:variable name="name" select="name"/>
 		          <xsl:variable name="url" select="url"/>
@@ -262,8 +312,18 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
 		                </img>
 		              </a>
 		            </td>
+		            <td></td>
 		          </tr> 
 		        </xsl:for-each>
+                <tr>
+                  <td colspan="3" height="7"></td>
+                </tr>
+
+                <tr>
+                  <td class="border bottom-left"></td>
+                  <td class="border bottomborder"></td>
+                  <td class="border bottom-right"></td>
+                </tr>       
             </table> 
           </td>
         </tr> 
@@ -315,7 +375,6 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
 
                           <xsl:if test="toc2/tocc">
                           <!-- nicolaken: this enables double-nested page links-->
-                          <!--
                             <ul>
                               <xsl:for-each select = "toc2/tocc">
 
@@ -330,7 +389,7 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
 
                               </xsl:for-each>
                             </ul> 
-                            -->
+                          <!-- nicolaken: ...till here -->
                           </xsl:if>
                         </div>
                       </xsl:for-each>
@@ -353,10 +412,9 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
   </xsl:template>
   
   <xsl:template name="mainarea">
-	  <table cellspacing="0" cellpadding="0" border="0">
+	  <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	    <!-- ( ================= middle NavBar ================== ) -->
 	    <tr>
-	      <td></td>
 	      <!-- ============ Breadcrumbs =========== -->
           <td class="subborder trail">
 	         &#160;<xsl:call-template name="breadcrumbs"/>&#160;
@@ -368,17 +426,13 @@ $Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
 	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
           </td>
-          <td colspan="2" class="subborder">&#160;</td>
 	    </tr>
-	    <tr><td class="border" height="1" colspan="4"></td></tr>
 
 	    <!-- ( ================= Content================== ) -->
 	    <tr >
-	      <td width="10" align="left"></td>
-	      <td width="100%" align="left" colspan="3">
+	      <td align="left" colspan="2">
 	        <xsl:apply-templates select="div[@class='content']"/>
 	      </td>
-	      <td width="10"></td>
 	    </tr>
 	  </table>
   </xsl:template>

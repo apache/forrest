@@ -10,8 +10,10 @@
 
 <!-- ==================== main block colors ============================ -->
 <xsl:template match="color[@name='header']">
-.header         { background-color: <xsl:value-of select="@value"/>;} </xsl:template>
-
+.header         { background-color: <xsl:value-of select="@value"/>;} 
+.subborder.trail {border-bottom: 1px solid <xsl:value-of select="@value"/>;
+                  border-top: 1px solid <xsl:value-of select="@value"/>; } 
+.footer          {border-top: 1px solid <xsl:value-of select="@value"/>; } </xsl:template>
 <xsl:template match="color[@name='tab-selected']"> 
 .tab.selected      { background-color: <xsl:value-of select="@value"/>;} 
 .border         { background-color: <xsl:value-of select="@value"/>;} 
@@ -31,7 +33,9 @@
 .subheading { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
 
 <xsl:template match="color[@name='navstrip']">
-.subborder      { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
+.subborder      { background-color: <xsl:value-of select="@value"/>;}
+</xsl:template> 
+
 <xsl:template match="color[@name='toolbox']">
 <!-- toolbox unused -->
 </xsl:template> 
@@ -65,7 +69,7 @@ body         { background-color: <xsl:value-of select="@value"/>;} </xsl:templat
 
 
   <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.2 2004/01/03 16:20:35 nicolaken Exp $ */
+/* $Id: forrest.css.xslt,v 1.3 2004/01/08 16:18:44 nicolaken Exp $ */
    <xsl:apply-templates/>
   </xsl:template>
 
