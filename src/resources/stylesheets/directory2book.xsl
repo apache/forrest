@@ -14,8 +14,8 @@ automatically generate a menu for (here wiki/):
 <map:match pattern="wiki/**book-*">
   <map:generate type="directory" src="content/xdocs/wiki/{1}">
     <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
-    <map:parameter name="depth" value="10" />
-    <map:parameter name="exclude" value="[.][^x[^m][^l]|~$|^my-images$|^book[.]xml$" />
+    <map:parameter name="depth" value="5" />
+    <map:parameter name="exclude" value="[.][^x[^m][^l]|~$|^my-images$" />
   </map:generate>
   <map:transform src="resources/stylesheets/directory2book.xsl" />
   <map:serialize type="xml"/>
@@ -49,8 +49,10 @@ automatically generate a menu for (here wiki/):
 
   <xsl:template match="dir:directory">
     <menu label="{translate(@name,'-_',' ')}">
-      <xsl:apply-templates select="dir:file|dir:directory" />
+      <xsl:apply-templates select="dir:file" />
     </menu>
+      <!-- [descendant::dir:file] is to remove empty menu nodes -->
+      <xsl:apply-templates select="dir:directory [descendant::dir:file]" />
   </xsl:template>
 
   <xsl:template match="dir:file">
