@@ -240,13 +240,6 @@
     -->
   </target>
  
-  <!-- TODO: to be replaced by the build target once thhere is no more copying -->
-  <target name="refresh-code" depends="jar">
-    <copy todir="${dist-shbat.dir}/lib/core">
-      <fileset dir="${build.dir}" includes="*.jar"/>
-    </copy>
-  </target>
- 
   <target name="dist-shbat" 
     depends="init, jar, validate-config" >
 
@@ -265,7 +258,9 @@
     </copy>
 
     <!-- Copy Forrest jars -->
-    <antcall target="refresh-code"/>
+    <copy todir="${dist-shbat.dir}/lib/core">
+      <fileset dir="${build.dir}" includes="*.jar"/>
+    </copy>
     
     <mkdir dir="${dist-shbat.dir}/lib" />
     <copy todir="${dist-shbat.dir}/lib">
