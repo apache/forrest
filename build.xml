@@ -490,9 +490,32 @@
 
 
   <!-- ================================== -->
+  <!--        Test targets                -->
+  <!-- ================================== -->
+  <target name="test" 
+          depends="testseed" 
+          description="Test that the features are ok before commmitting."/>
+
+  <target  name="testseed" depends="init" description="Test that the features are ok before commmitting.">
+    <property name="forrest.home" value="${dist-shbat.dir}" />  
+    <property name="test.dir" value="${build.dir}/test"/>
+    <delete dir="${test.dir}"/>
+    <mkdir dir="${test.dir}"/>
+    <ant antfile="${forrest.home}/forrest.build.xml" target="seed">
+      <property name="forrest.home" value="${dist-shbat.dir}" />  
+      <property name="project.home" value="${test.dir}"/>
+    </ant>    
+    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
+      <property name="forrest.home" value="${dist-shbat.dir}" />  
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+  </target>
+  
+  <!-- ================================== -->
   <!--        Target used by Gump         -->
   <!-- ================================== -->
   <target  name="gump" description="Target used by Gump">
+    <!--<antcall target="test"/>-->
     <antcall target="site"/>
     <antcall target="webapp"/>
   </target>
