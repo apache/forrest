@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.12 $
+$Revision: 1.13 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -76,10 +76,14 @@ $Revision: 1.12 $
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:otherwise>
+               <map:when test="{forrest:home}context/skins/common/{path}/{name}.svg.xslt">
                   <map:call resource="pipe-svg2png-resource">
                     <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.svg.xslt" />
                   </map:call>
+               </map:when>
+               <map:otherwise>
+                   <!-- this should always fail; it is used so the error has the correct filename and extension -->
+                  <map:read src=".../{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:otherwise>
             </map:select>
       </map:resource>
