@@ -7,8 +7,8 @@
 #
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.2-dev
-COCOON_HOME=$BASE/../../../cocoon-2.1
+COCOON_VERSION=2.1.2
+COCOON_HOME=$BASE/../../../cocoon-2.1.2
 FORREST=$BASE/../..
 NEKODTD_VERSION=0.1.6
 NEKODTD_HOME=$BASE/../../../nekodtd-$NEKODTD_VERSION
@@ -16,8 +16,8 @@ NEKOPULL_VERSION=0.2.3
 NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
-JARSUFFIX=`date +%Y%m%d`
-#JARSUFFIX=2.1.1
+#JARSUFFIX=`date +%Y%m%d`
+JARSUFFIX=2.1.2
 
 ## We need to identify the old Cocoon jar amongst all the others.  This pattern
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
@@ -30,8 +30,8 @@ COCOONJAR_SUFFIX="[0-9]*"
 ## - 'real_with_cvs' copies to lib/core/, and marks jars for removal/addition
 ##   in CVS.  Should only be performed by Forrest committers
 #
-UPGRADE_TYPE=testing
-#UPGRADE_TYPE=real
+#UPGRADE_TYPE=testing
+UPGRADE_TYPE=real
 #UPGRADE_TYPE=real_with_cvs
 #
 ######################################################################
