@@ -4,7 +4,6 @@
 # A dubious script which commits generated website
 # contents to xml-site/targets/$MODULE 
 ###################################################
-
 MODULE=${1:-xml-forrest}
 case $MODULE in
 	xml-forrest) TARGET="forrest" ;;
@@ -29,24 +28,37 @@ fi
 echo "Updating $LIVECVS from $SRC_DIR"
 pushd .
 cd $LIVECVS
-cvsco
-cvs up -dP
+echo cvsco
+echo cvs up -dP
 echo "Now copying $SRC_DIR/*"
 cp -r -p $SRC_DIR/* .
 echo "done"
+
+function addfiles()
+{
+  echo "addfiles $@"
+  for i in $@; do
+    echo "Processing $i.."
+    if [ -d "$i" ]; then
+      cvs add `find $i -type d`
+      addfiles `find $i -type f`
+      continue
+    fi
+    MIME=`file -bi $i`
+    echo "New file $i has MIME type $MIME"
+    if [ `echo "$MIME" | grep -q 'text'` ]; then
+      echo "Adding $i as text"
+      cvsdo add $i
+    else
+      echo "Adding $i as binary"
+      cvs add -kb $i
+    fi
+  done
+}
 NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
-for i in $NEW_FILES; do
-  MIME=`file -bi $i`
-  echo "New file $i has MIME type $MIME"
-  if [ `echo "$MIME" | grep -q 'text'` ]; then
-    echo "Adding $i as text"
-    cvsdo add $i
-  else
-    echo "Adding $i as binary"
-    cvs add -kb $i
-  fi
-done
+addfiles $NEWFILES
+
 cvs up > /tmp/cvslist 2>&1
-cvs ci -m "Automatic publish at `date` by forrestrunner."
+#cvs ci -m "Automatic publish at `date` by forrestrunner."
 #cvs ci
 popd
