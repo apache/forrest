@@ -15,15 +15,24 @@
   limitations under the License.
 -->
 <project default="local-deploy" basedir="." name="Forrest build file">
+  <property name="forrest.root-dir"           location=".."/>   
+  <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
+  <property name="forrest.build.dir"          location="../build"/>
   
   <property name="plugins.dist-dir" value="../site-author/content/plugins"/>
-  <property name="plugins.localDeploy-dir" value="../build/plugins"/>
+  <property name="plugins.localDeploy-dir" value="${forrest.build.dir}/plugins"/>
   
   <property name="plugin.src.dir" value="src"/>
   <property name="plugin.resources.dir" value="resources"/>
   <property name="plugin.stylesheets.dir" value="${plugin.resources.dir}/stylesheets"/>
   
   <property name="plugin.template.dir" value="pluginTemplate"/>
+  
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <fileset dir="${forrest.ant.lib-dir}" includes="ant-contrib-*.jar" />
+    </classpath>
+  </taskdef>
   
   <target name="init">
     <mkdir dir="${plugins.dist-dir}"/>  

@@ -65,17 +65,66 @@
      </delete>
   </target>  
   
-  <target name="configure-plugin" unless="plugin.unavailable">
+  <target name="configure-plugin" 
+    unless="plugin.unavailable"
+    depends="check-plugin-type, configure-input-plugin, configure-output-plugin, configure-internal-plugin"/>
+    
+  <target name="check-plugin-type" 
+    unless="plugin.unavailable">
+    <available property="input-plugin" file="${forrest.plugins-dir}/${plugin.name}/input.xmap"/>
+    <available property="output-plugin" file="${forrest.plugins-dir}/${plugin.name}/output.xmap"/>
+    <available property="internal-plugin" file="${forrest.plugins-dir}/${plugin.name}/internal.xmap"/>
+  </target>
+  
+  <target name="configure-input-plugin"
+    if="input-plugin"
+    unless="plugin.unavailable">
      <!-- add the snippet to plugins/input.xmap that will mount the plugin
           specific input.xmap -->
+     <echo>Mounting input plugin: ${plugin-name}</echo>
      <xslt in="${forrest.plugins-dir}/input.xmap"
        out="${forrest.plugins-dir}/input.xmap.new"
        style="${forrest.home}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
+           <param name="plugin-type" expression="input"/>  
      </xslt>
      <move file="${forrest.plugins-dir}/input.xmap.new" 
        tofile="${forrest.plugins-dir}/input.xmap"/>
+  </target>
+  
+  <target name="configure-output-plugin"
+    if="output-plugin"
+    unless="plugin.unavailable">
+     <!-- add the snippet to plugins/output.xmap that will mount the plugin
+          specific input.xmap -->
+     <echo>Mounting output plugin: ${plugin-name}</echo>
+     <xslt in="${forrest.plugins-dir}/output.xmap"
+       out="${forrest.plugins-dir}/output.xmap.new"
+       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin.name}"/>  
+           <param name="plugin-type" expression="output"/>  
+     </xslt>
+     <move file="${forrest.plugins-dir}/output.xmap.new" 
+       tofile="${forrest.plugins-dir}/output.xmap"/>
+  </target>
+  
+  <target name="configure-internal-plugin"
+    if="internal-plugin"
+    unless="plugin.unavailable">
+     <!-- add the snippet to plugins/internal.xmap that will mount the plugin
+          specific input.xmap -->
+     <echo>Mounting internals plugin: ${plugin-name}</echo>
+     <xslt in="${forrest.plugins-dir}/internal.xmap"
+       out="${forrest.plugins-dir}/internal.xmap.new"
+       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin.name}"/>  
+           <param name="plugin-type" expression="internal"/>  
+     </xslt>
+     <move file="${forrest.plugins-dir}/internal.xmap.new" 
+       tofile="${forrest.plugins-dir}/internal.xmap"/>
   </target>
 
   <target name="fetch-plugins-descriptors" if="plugin.unavailable">
@@ -124,6 +173,12 @@
     <mkdir dir="${forrest.plugins-dir}"/>
     <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/input.xmap"
+      overwrite="true"/>
+    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+      tofile="${forrest.plugins-dir}/output.xmap"
+      overwrite="true"/>
+    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+      tofile="${forrest.plugins-dir}/internal.xmap"
       overwrite="true"/>
     
       <for list="${project.required.plugins}" param="name">
