@@ -70,9 +70,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
     private AntProperties  filteringProperties;
 
     public void service(ServiceManager manager) throws ServiceException {
-        System.out.println("getting resolver...");
         m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-        System.out.println("gotten resolver:" + m_resolver);
     }
 
     public void initialize() throws Exception {
@@ -84,31 +82,42 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         //
         //      as it will get FORREST_HOME even when the app
         //      is run as a .war
-        forrestHome = getAndResolveSystemProperty("forrest.home");
+        forrestHome = getSystemProperty("forrest.home");
 
         // get location of project.home
-        projectHome = getAndResolveSystemProperty("project.home");
+        projectHome = getSystemProperty("project.home");
+        
 
         // get default-forrest.properties and load the values
         String defaultRorrestPropertiesStringURI = forrestHome
                         + SystemUtils.FILE_SEPARATOR
                         + "default-forrest.properties";
-        System.out.println("defaultRorrestPropertiesStringURI:"
+
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug("Searching for default forrest.properties in:"
                         + defaultRorrestPropertiesStringURI);
+        }
 
         Source source = null;
         InputStream in = null;
         try {
-            System.out.println("using resolver:" + m_resolver);
             source = m_resolver.resolveURI(defaultRorrestPropertiesStringURI);
 
-            System.out.println("Resolved URI:" + source);
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                                "Searching for default forrest.properties in [RESOLVED]:"
+                                                + source.getURI());
+            }
 
             in = source.getInputStream();
             filteringProperties = new AntProperties();
             filteringProperties.load(in);
 
-            System.out.println("Loaded defaults:" + filteringProperties);
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                                "Loaded default forrest.properties:"
+                                                + filteringProperties);
+            }
 
         } finally {
             if (source != null) {
@@ -124,14 +133,22 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         // get forrest.properties and load the values
         String forrestPropertiesStringURI = projectHome
                         + SystemUtils.FILE_SEPARATOR + "forrest.properties";
-        System.out.println("forrestPropertiesStringURI:"
-                        + forrestPropertiesStringURI);
+
+        if (getLogger().isDebugEnabled()) {
+            getLogger()
+                            .debug(
+                                            "Searching for project forrest.properties in:"
+                                                            + defaultRorrestPropertiesStringURI);
+        }
 
         try {
-            System.out.println("using resolver:" + m_resolver);
             source = m_resolver.resolveURI(forrestPropertiesStringURI);
 
-            System.out.println("Resolved URI:" + source);
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                                "Searching for project forrest.properties in [RESOLVED]:"
+                                                + source.getURI());
+            }
 
             in = source.getInputStream();
             filteringProperties = new AntProperties(filteringProperties);
@@ -147,13 +164,20 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             }
         }
 
-        System.out.println("Loaded project stuff:" + filteringProperties);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(
+                            "Loaded project forrest.properties:"
+                                            + filteringProperties);
+        }
 
         //add forrest.home and project.home to properties
         filteringProperties.setProperty("forrest.home", forrestHome);
         filteringProperties.setProperty("project.home", projectHome);
 
-        System.out.println("Loaded all:" + filteringProperties);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(
+                            "Global forrest.properties:" + filteringProperties);
+        }
 
     }
 
@@ -176,32 +200,26 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         String attributeValue = this.getAttributeValues(name, modeConf,
                         objectModel)[0].toString();
 
-        System.out.println(" - Requested:" + name);
-        System.out.println(" - Original:" + original);
-        System.out.println(" - Given:" + attributeValue);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(" - Requested:" + name);
+            getLogger().debug(" - Unfiltered:" + original);
+            getLogger().debug(" - Given:" + attributeValue);
+        }
         return attributeValue;
     }
 
-    private final String getAndResolveSystemProperty(String propertyName)
+    private final String getSystemProperty(String propertyName)
                     throws MalformedURLException, IOException {
-        String raw = System.getProperty(propertyName, ".");
+
+        String propertyValue = System.getProperty(propertyName, ".");
 
         if (getLogger().isDebugEnabled()) {
-            getLogger().debug("raw " + propertyName + "=" + raw);
-
+            getLogger().debug(
+                            "system property " + propertyName + "="
+                                            + propertyValue);
         }
 
-        System.out.println("raw " + propertyName + "=" + raw);
-        System.out.println("resolver: " + m_resolver);
-
-        String value = m_resolver.resolveURI(raw).getURI();
-
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug("resolved " + propertyName + "=" + value);
-
-        }
-
-        return raw;
+        return propertyValue;
     }
 
 }

@@ -167,27 +167,29 @@
     <component-instance class="org.apache.cocoon.components.modules.input.DateMetaInputModule" logger="core.modules.input" name="datemeta"/>
     <component-instance class="org.apache.cocoon.components.modules.input.JXPathMetaModule" logger="core.modules.input" name="jxpath"/>
     <component-instance class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule" logger="core.modules.input" name="simplemap"/>
+    
     <component-instance logger="core.modules.input" name="forrest"    class="org.apache.cocoon.components.modules.input.ChainMetaModule">
       <input-module name="request-param"/>
       <input-module name="request-attr"/>
       <input-module name="session-attr"/>
       <input-module name="defaults"/>
     </component-instance>
-    <component-instance name="defaults"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
+    
+    <component-instance name="defaults" class="org.apache.forrest.conf.ForrestConfModule">
       <values>
-        <skin>@skin@</skin>
-        <menu-scheme>@menu-scheme@</menu-scheme>
-        <bugtracking-url>@bugtracking-url@</bugtracking-url>
-        <i18n>@i18n@</i18n>
+        <skin>@project.skin@</skin>
+        <menu-scheme>@project.menu-scheme@</menu-scheme>
+        <bugtracking-url>@project.bugtracking-url@</bugtracking-url>
+        <i18n>@project.i18n@</i18n>
         <home>@forrest.home@/</home>
         <skins-dir>@forrest.home@/context/skins/</skins-dir>
         <stylesheets>@forrest.home@/context/resources/stylesheets</stylesheets>
       </values>
     </component-instance>
 
-    <component-instance name="project"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
+    <component-instance name="project" class="org.apache.forrest.conf.ForrestConfModule">
       <values>
-        <skin>@skin@</skin>
+        <skin>@project.skin@</skin>
         <skinconf>@project.home@/@project.skinconf@</skinconf>        
         <doc>@project.home@/@project.content-dir@/</doc>
         <content>@project.home@/@project.raw-content-dir@/</content>
@@ -207,7 +209,7 @@
       class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
       logger="core.modules.mapper" name="conf">
       <input-module name="skinconf">
-        <file src="skinconf.xml" reloadable="true" />
+        <file src="cocoon://skinconf.xml" reloadable="true" />
       </input-module>
       <prefix>/skinconfig/</prefix>
     </component-instance>
@@ -283,9 +285,11 @@
       |     <parameter name="verbosity" value="2"/>
       +-->
   <entity-resolver logger="core.resolver">
-    <parameter name="catalog" value="@forrest.home@/context/resources/schema/catalog.xcat"/>
-    <parameter name="local-catalog" value="@local-catalog@"/>
-    <parameter name="verbosity" value="@catalog-verbosity@"/>
+    <parameter name="catalog" value="resources/schema/catalog.xcat"/>
+    <!-- TODO disabled for now, as filtering no longer works -->
+    <!--<parameter name="local-catalog" value="@local-catalog@"/>-->
+    <!-- TODO fixed to 1 for now, as filtering no longer works -->
+    <parameter name="verbosity" value="1"/>
   </entity-resolver>
 
   <!--+
