@@ -1,0 +1,102 @@
+#!/bin/sh
+
+# Regenerate a site's HTML with the forrestbot.
+
+SCRIPT=${1}
+[ -z "$SCRIPT" ] && echo >&2 "Usage: $0 <forrestbot script>" && exit 1
+
+. `dirname $0`/local-vars
+# default 20 minute timeout. 
+export CVS_RSH=ssh
+export PATH=$JAVA_HOME/bin:$PATH
+# Leaving EMAIL blank causes no email to be sent
+TSTAMP=`date +%Y-%m-%d-%k-%M`
+EMAIL=
+LOGS=$WEBAPP/logs
+DEST_DIR=$WEBAPP/sites
+PATH=$PATH:$HOME/apps/bin
+# Assume we're in the xml-forrest/src/resources/forrestbot/scripts
+FORREST=$BASE/../../../../
+# Set this to true if you want to delete any local mods to the $FORREST and
+# update from CVS.  Not recommended unless scripts/ is moved outside the
+# xml-forrest CVS hierarchy
+REGEN_FORREST=false
+# Set to true to delete the work/ directory, which contains forrestbot-checked
+# out CVS source.  Setting to false is faster, but less safe
+REGEN_WORK=true
+FORRESTBOT_SCRIPTS=$FORREST/src/resources/forrestbot/samples
+SHBAT=$BASE/shbat
+WORK=$BASE/work
+
+
+function setup()
+{
+	if [ ! -d $FORREST ]; then
+		echo "$FORREST not present"
+		exit
+	fi
+}
+
+function rebuild_forrest()
+{
+  pushd .
+  [ -d "$SHBAT" -a -e "$SHBAT/forrest.build.xml" ] && rm -r $SHBAT
+  cd $FORREST
+  # see www.red-bean.com/cvsutils
+  if [ "$REGEN_FORREST" = "true" -a `which cvsco` ]; then
+    cvsco
+    cvs up -dP
+  fi
+  ./build.sh -Ddist-shbat.dir=$SHBAT
+  popd
+}
+
+function prepare_workdir()
+{
+	pushd .
+	[ "$REGEN_WORK" = "true" -a -d "$WORK" ] && rm -r $WORK
+	if [ ! -d $WORK ]; then
+		mkdir $WORK && cd $WORK
+		cp -r $FORRESTBOT_SCRIPTS/* $WORK
+	fi
+	cd $WORK
+	[ -d build/bot ] && rm build/bot/work*.log
+	perl -i -pe "s:<!ENTITY email.*>:<!ENTITY email \"$EMAIL\">:g" $SCRIPT
+	perl -i -pe "s:<!ENTITY dest.*>:<!ENTITY dest \"$DEST_DIR\">:g" $SCRIPT
+	popd
+}
+
+function forrestbot()
+{
+	cd $WORK
+	$SHBAT/bin/forrestbot -Dbot.config=$SCRIPT &
+	cmdpid=$!
+	# Start "watchdog" process to terminate the command
+	# after $timeout seconds:
+	( sleep $TIMEOUT; echo "Forrestbot timed out after $TIMEOUT	seconds" ;
+	kill $cmdpid &&	(sleep 2; kill -1 $cmdpid) &&
+				(sleep 2; kill -9 $cmdpid)
+	) &
+	watchdogpid=$!
+	wait $cmdpid			# wait for command
+	kill $watchdogpid >/dev/null 2>&1
+}
+
+
+function copy_logs()
+{
+	mkdir -p $LOGS/old
+	for i in $WORK/build/bot/work*.log; do
+		cp $i $LOGS
+		cp $i $LOGS/old/`basename $i`-$TSTAMP
+	done
+	echo "Copied logs"
+}
+
+echo Running script $SCRIPT
+
+setup
+rebuild_forrest
+prepare_workdir
+forrestbot
+copy_logs

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+LOCAL_VARS=`dirname $0`/local-vars-`uname -n`
+if [ ! -f "$LOCAL_VARS" ]; then
+	echo "Please create a file local-vars-`uname -n` containing local variable definitions"
+	exit
+fi
+. $LOCAL_VARS
+
+# Defaults
+[ -z "$BASE" ] && BASE=.
+[ -z "$WEBAPP" ] && WEBAPP=$BASE/../webapp
+[ -z "$TIMEOUT" ] && TIMEOUT=$[20*60]
+echo BASE=$BASE
+echo WEBAPP=$WEBAPP

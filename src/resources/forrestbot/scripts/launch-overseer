@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Convenience script for running 'overseer' from the console and watching the
+# output.
+
+. `dirname $0`/local-vars
+./overseer < $WEBAPP/WEB-INF/commands > overseer.log &
+echo overseer pid: $!
+tail -f $WEBAPP/WEB-INF/refresh_log.txt overseer.log
