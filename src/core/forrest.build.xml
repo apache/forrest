@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/20 15:37:49 $              |
+    |             $Date: 2003/10/20 17:04:25 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -82,10 +82,6 @@ FORREST SITE BUILDER
     <property name="project.menu-scheme" value="tab_attributes" />
     <property name="status"      location="${project.home}/${project.status}" />
     <property name="project.bugtracking-url" value="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=" />
-
-    <!-- Files we don't want copied from build/* to src/* by the backcopy
-    command. Relative to build/webapp -->
-    <property name="forrest.backcopy.excludes" value="**/breadcrumbs.js,WEB-INF/**,status.xml"/>
 
     <!-- FIXME: rename project.content-dir to project.documentation-dir -->
     <property name="content-dir" location="${project.home}/${project.content-dir}" />
@@ -821,9 +817,9 @@ ${project.war}
        =============================================================== -->
   <target name="seed" depends="ensure-nocontent"
     description="Seeds a directory with a template project doc structure">
-    <unzip src="${forrest.home}/fresh-site.zip" 
-      dest="${project.home}"
-      overwrite="false"/>
+     <copy todir="${project.home}" overwrite="false">
+        <fileset dir="${forrest.home}/fresh-site"/>
+     </copy>
     <echo>
 -------------------------------
 ~~ Template project created! ~~
@@ -1041,74 +1037,6 @@ forrest.properties.
     </java>
   </target>  
 
-
-<!-- ***************************************************************** -->
-<!-- ***************************************************************** -->
-<!-- **                                                             ** -->
-<!-- **                                                             ** -->
-<!-- **              BACKCOPY                                       ** -->
-<!-- **                                                             ** -->
-<!-- **                                                             ** -->
-<!-- ***************************************************************** -->
-<!-- ***************************************************************** -->
-
-
-  <!--
-  If you've been editing docs, images etc in build/webapp/*, this target copies
-  them back to src/documentation/*.  As 'overwrite' is false, this will not
-  clobber docs legitimately edited in src/documentation/*
-  -->
-  <target name="backcopy" depends="init-props"
-    description="If anything has been edited in build/webapps, copies them back to src/documentation">
-    <!--
-    Copy everything EXCEPT docs that are in the Forrest context directory and
-    have been modified.
-    This translates to: copy all docs that are not in the Forrest context
-    directory, or that are, but are different.
-    -->
-    <copy toDir="${content-dir}" overwrite="false">
-      <fileset dir="${project.webapp}" excludes="${forrest.backcopy.excludes}">
-        <or>
-          <not>
-            <present targetdir="${forrest.home}/context"/>
-          </not>
-          <and>
-            <present targetdir="${forrest.home}/context"/>
-            <different targetdir="${forrest.home}/context"/>
-            <type type="file"/>
-          </and>
-        </or>
-      </fileset>
-    </copy>
-    <antcall target="overrides"/>
-  </target>
-
-  <target name="overrides" depends="init-props"
-    description="Prints a summary of which files a project is overriding">
-    <fileset dir="${content-dir}" id="overridden-files">
-      <present targetdir="${forrest.home}/context"/>
-      <different targetdir="${forrest.home}/context"/>
-    </fileset>
-    <fileset dir="${content-dir}" id="overridden-files-unmodified">
-      <present targetdir="${forrest.home}/context"/>
-      <not>
-        <different targetdir="${forrest.home}/context"/>
-      </not>
-    </fileset>
-    <property name="overridden" refid="overridden-files"/>
-    <property name="overridden-unmodified" refid="overridden-files-unmodified"/>
-    <echo>
-      +----------------------------+
-      | Forrest Overrides report   |
-      +----------------------------+
-
-      Overridden, modified   : ${overridden}
-      Overridden, unmodified : ${overridden-unmodified}
-    </echo>
-  </target>
-  <target name="clean" depends="init-props">
-  <delete dir="${project.build-dir}" />
-  </target>
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
