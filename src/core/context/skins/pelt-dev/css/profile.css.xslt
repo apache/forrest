@@ -100,34 +100,32 @@
 
 </xsl:template> 
 
-<!--xsl:template match="color[@name='toolbox']">
-.menu .menupagetitle  { background-color: <xsl:value-of select="@value"/>}
+<xsl:template match="color[@name='toolbox']">
+#menu .menupagetitle  { background-color: <xsl:value-of select="@value"/>}
 </xsl:template> 
 
 <xsl:template match="color[@name='border']">
-.subborder.trail {border-bottom: 1px solid <xsl:value-of select="@value"/>;
-                  border-top: 1px solid <xsl:value-of select="@value"/>; } 
-.footer          {border-top: 1px solid <xsl:value-of select="@value"/>; }
-.menu           { border-color: <xsl:value-of select="@value"/>;}
-.menu .menupagetitle  { border-color: <xsl:value-of select="@value"/>;}
-.menu .menupageitemgroup  { border-color: <xsl:value-of select="@value"/>;}
-</xsl:template--> 
-
-<xsl:template match="color[@name='menu']">
-#menu { background-color: <xsl:value-of select="@value"/>; }
-#menu li li h1 {  color: <xsl:value-of select="@font"/>;} 
-#menu li a:link {  color: <xsl:value-of select="@link"/>;} 
-#menu li a:visited {  color: <xsl:value-of select="@vlink"/>;} 
-#menu li a:hover {  color: <xsl:value-of select="@hlink"/>;} 
-#menu li .current {  color: <xsl:value-of select="@current"/>;}     
+#menu           { border-color: <xsl:value-of select="@value"/>;}
+#menu .menupagetitle  { border-color: <xsl:value-of select="@value"/>;}
+#menu .menupageitemgroup  { border-color: <xsl:value-of select="@value"/>;}
 </xsl:template> 
 
-<xsl:template match="color[@name='menuheading']">
+<xsl:template match="color[@name='menu']">
+#menu      { background-color: <xsl:value-of select="@value"/>;} 
+#menu  {  color: <xsl:value-of select="@font"/>;} 
+#menu a:link {  color: <xsl:value-of select="@link"/>;} 
+#menu a:visited {  color: <xsl:value-of select="@vlink"/>;} 
+#menu a:hover {  background-color: <xsl:value-of select="@value"/>;
+                 color: <xsl:value-of select="@hlink"/>;} 
+#menu .menupagetitle  { color: <xsl:value-of select="@hlink"/>;}     
+</xsl:template> 
+
+<!--xsl:template match="color[@name='menuheading']">
 #menu h1 {
     color: <xsl:value-of select="@font"/>;
     background-color: <xsl:value-of select="@value"/>;
 }   
-</xsl:template> 
+</xsl:template--> 
 <xsl:template match="color[@name='searchbox']"> #top .searchbox { 
     background-color: <xsl:value-of select="@value"/> ;
     color: <xsl:value-of select="@font"/>; } 

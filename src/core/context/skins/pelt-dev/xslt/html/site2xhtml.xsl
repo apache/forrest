@@ -363,28 +363,7 @@ document.write("Last Published: " + document.lastModified);
           alt="Valid CSS!" style="height: 31px; width: 88px;"/></a>
     </xsl:if>
   </xsl:template>
- <!-- handle all obfuscating mail links and disabling external link images -->
-  <xsl:template match="a">
-    <xsl:choose>
-      <xsl:when test="$obfuscate-mail-links='true' and starts-with(@href, 'mailto:') and contains(@href, '@')">
-        <xsl:variable name="mailto-1" select="substring-before(@href,'@')"/>
-        <xsl:variable name="mailto-2" select="substring-after(@href,'@')"/>
-          <a href="{$mailto-1}.at.{$mailto-2}">
-            <xsl:apply-templates/>
-          </a>
-       </xsl:when>
-       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, //skinconfig/group-url)) and not(contains(@href, //skinconfig/project-url))">
-          <a href="{@href}" class="external">
-            <xsl:apply-templates/>
-          </a>
-       </xsl:when>       
-       <xsl:otherwise>
-        <!-- xsl:copy-of makes sure we copy <a href> as well as <a name>
-             or any other <a ...> forms -->
-        <xsl:copy-of select="."/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+
   <xsl:template name="menu">
 <xsl:comment>+
     |start Menu
@@ -539,36 +518,6 @@ document.write("Last Published: " + document.lastModified);
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="minitoc">  
-    <xsl:param name="tocroot"/>
-    
-    
-    <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
-    <xsl:if test="contains($config/toc/@location,'page')"> 
-      <ul id="minitoc">
-        <xsl:for-each select="$tocroot/tocitem">
-          <li>
-            <a href="{@href}">
-              <xsl:value-of select="@title"/>
-            </a>
-            <xsl:if test="@level&lt;//skinconfig/toc/@max-depth+1">
-              <xsl:call-template name="minitoc">
-                <xsl:with-param name="tocroot" select="."/>
-              </xsl:call-template>
-            </xsl:if>
-          </li>
-        </xsl:for-each>
-      </ul>
-    </xsl:if>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
-  </xsl:template>
 <xsl:template name="html-meta">
 <!--+
   |generator meta
