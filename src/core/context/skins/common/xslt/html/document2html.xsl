@@ -33,6 +33,9 @@ $Id: document2html.xsl,v 1.4 2004/01/13 08:19:53 nicolaken Exp $
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <!-- the skinconf file -->
+  <xsl:variable name="config" select="//skinconfig"/>
+  
   <!-- If true, a PDF link for this page will not be generated -->
   <xsl:variable name="disable-pdf-link" select="//skinconfig/disable-pdf-link"/>
   <!-- If true, a "print" link for this page will not be generated -->
