@@ -54,6 +54,7 @@
     <xsl:variable name="fct-bit-description">
       <xsl:value-of select="document($fct-bit-file)/contract/description"/>
     </xsl:variable>
+    test=<xsl:value-of select="$fct-bit-file"/>
     <xsl:if test="$fct-bit-tlc='content'">
       <content>
         <contract name="{$fct-bit-title}" css="{$fct-bit-nc}" file-name="{@name}">
