@@ -203,25 +203,12 @@
       <title>Testing a Plugin</title>
       <p>Since your documentation for the plugin illustrates all of its 
       functionality you can use that site for testing the plugin. However, you
-      must first deploy in your local install of Forrest. The 
-      <code>plugins</code> directory of the Forrest project contains an
-      Apache Ant build file with some useful targets for deploying to a local
-      instance of Forrest.</p>
+      must first deploy in your local install of Forrest. Each plugin contains
+      a buildfile that includes a <code>test</code> target. This target, by
+      default, builds the documtantion for your plugin.</p>
       
-      <p class="instruction">Run the command <code>ant local-deploy</code> in
+      <p class="instruction">Run the command <code>ant test</code> in
       the plugins directory.</p>
-      
-      <p>You will be asked the name of the plugin you wish to deploy, enter
-      the name of your plugin and hit return. All the necessary files will be 
-      copied to your local Forrest installation. You can now generate your
-      documentation.</p>
-      
-      <note>You can pass the name of the plugin in the command line by setting
-      the <code>plugin-name</code> parameter. For example, 
-      <code>ant local-deploy -Dplugin-name=myPlugin</code></note>
-      
-      <p class="instruction">Run the command <code>forrest site</code> in your
-      plugin directory to generate your documentation.</p>
       
       <p>Of course, the build should complete without errors.</p>
       
@@ -232,8 +219,11 @@
       <p>It is also a really good idea to build proper tests for your 
       plugins using a suitable testing framework, for example, 
       <a href="http://webtest.canoo.com/">WebTest</a>. We recomend that you
-      use the samples in your documentation for your tests, this way you are
-      documenting your plugin at the same time as writing your tests.</p>
+      extend the <code>test</code> target in your plugins build file because
+      this target is also used when performing integration tests on Forrest.
+      In addition, we recomend that you use the samples in your documentation 
+      for your tests, this way you are documenting your plugin at the same time 
+      as writing your tests.</p>
     </section>
     
     <section>
