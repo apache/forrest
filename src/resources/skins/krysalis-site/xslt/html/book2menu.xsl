@@ -3,7 +3,7 @@
 book2menu.xsl generates the HTML menu.  See the imported book2menu.xsl for
 details.
 
-$Id: book2menu.xsl,v 1.3 2003/10/13 08:45:54 nicolaken Exp $
+$Id: book2menu.xsl,v 1.4 2003/10/13 12:32:28 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -20,7 +20,7 @@ $Id: book2menu.xsl,v 1.3 2003/10/13 08:45:54 nicolaken Exp $
 
   <xsl:template match="menu">
     <li>
-      <span class="manutitle"><xsl:value-of select="@label"/></span>
+      <span class="menutitle"><xsl:value-of select="@label"/></span>
       <ul>
         <xsl:apply-templates/>
       </ul>
