@@ -60,8 +60,8 @@
     <xsl:text> Fixes </xsl:text>
     <xsl:choose>
      <xsl:when test="contains(@fixes-bug, ',')">
-      <link href="{$buglist}{translate(@fixes-bug,' ','')}">
-       <xsl:text>bugs </xsl:text><xsl:value-of select="translate(@fixes-bug,' ','')"/>
+      <link href="{$buglist}{translate(normalize-space(@fixes-bug),' ','')}">
+       <xsl:text>bugs </xsl:text><xsl:value-of select="normalize-space(@fixes-bug),' ','')"/>
       </link>
      </xsl:when>
      <xsl:otherwise>
