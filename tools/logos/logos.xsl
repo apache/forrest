@@ -36,6 +36,9 @@
           <fileset dir="../../lib/core">
               <include name="batik*.jar"/>
          </fileset>
+          <fileset dir=".">
+              <include name="batik*.jar"/>
+         </fileset>
           <fileset dir="../../lib/endorsed">
               <include name="*.jar"/>
          </fileset>
