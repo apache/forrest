@@ -273,7 +273,19 @@ size CDATA #IMPLIED&gt;
           for the document
           types that Forrest provides.  Projects can augment this with their
           own catalog file located in
-          <code>${project.schema-dir}/catalog.xcat</code>
+          <code>${project.schema-dir}/catalog.xcat</code> to use it you must
+	    specify either the path (full or relative) to your 
+	    <code>catalog.xcat</code> in the <code>CatalogManager.properties</code>
+	    file. If you provide a relative path you must set the property 
+	    <code>relative-catalogs</code> to "yes".
+	  </p>
+        <p>
+          When Cocoon starts, it reads the <code>catalog.xcat</code> file from your
+          <code>project.classes-dir</code>. This is usually src/documentation/classes/
+          but you can change this in <code>forrest.properties</code>. When you seed 
+          a new site using <code>forrest seed-site</code> a sample catalog file
+          is placed in the site structure, you can use this as a template for your
+          own files.
         </p>
         <p>
           Forrest uses the XML Catalog syntax by default, although the older
@@ -292,14 +304,6 @@ size CDATA #IMPLIED&gt;
           spec</link>, and is fairly simple and very powerful.
           The "<code>public</code>" elements map
           a public identifier to a DTD (relative to the catalog file).
-        </p>
-        <p>
-          Next specify the full path to your <code>catalog.xcat</code> in the
-          <code>CatalogManager.properties</code> file.
-          When Cocoon starts, it reads this file from your
-          <code>project.classes-dir</code> (usually src/documentation/classes/).
-          If you don't have such a file, then copy a default file from a
-          fresh 'forrest seed site'.
         </p>
         <p>
           We now have a custom DTD and a catalog mapping which lets both
