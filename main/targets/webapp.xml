@@ -150,7 +150,12 @@
  <target name="war" depends="webapp"
    description="* Generates a dynamic servlet-based website (a packaged .war file)">
 
-   <jar destfile="${project.war}" basedir="${project.webapp}"/>
+   <jar destfile="${project.war}">
+    <fileset dir="${project.webapp}"/>
+    <fileset dir="${forrest.home}">
+      <include name="${build.plugins-dir}/**"/>
+    </fileset>
+   </jar>
    <echo>
 ---------------------------------
 Webapp .war file generated:
