@@ -320,15 +320,16 @@
       | Saxon XSLT Processor
       | For old (6.5.2) Saxon use:
       |  <parameter name="transformer-factory" value="com.icl.saxon.TransformerFactoryImpl"/>
-      | For new (7.x?) Saxon use:
+      | For new (7+) Saxon use:
       |  <parameter name="transformer-factory" value="net.sf.saxon.TransformerFactoryImpl"/>
-  <component logger="core.xslt-processor"
-             role="org.apache.excalibur.xml.xslt.XSLTProcessor/saxon"
-             class="org.apache.excalibur.xml.xslt.XSLTProcessorImpl">
-     <parameter name="use-store" value="false"/>
-     <parameter name="transformer-factory" value="com.icl.saxon.TransformerFactoryImpl"/>
-  </component>
   +-->
+  <component logger="core.xslt-processor"
+      role="org.apache.excalibur.xml.xslt.XSLTProcessor/saxon"
+      class="org.apache.excalibur.xml.xslt.XSLTProcessorImpl">
+    <parameter name="use-store" value="false"/>
+    <parameter name="incremental-processing" value="false"/>
+    <parameter name="transformer-factory" value="net.sf.saxon.TransformerFactoryImpl"/>
+  </component>
 
   <!-- Xpath Processor: -->
   <xpath-processor class="org.apache.excalibur.xml.xpath.XPathProcessorImpl" logger="core.xpath-processor"/>
