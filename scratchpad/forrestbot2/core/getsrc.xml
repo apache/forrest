@@ -37,7 +37,6 @@
   <property name="getsrc.cvs.root" value="/home/cvspublic"/>
   <property name="getsrc.cvs.host" value="cvs.apache.org"/>
   <property name="getsrc.cvs.module" value="${ant.project.name}"/>
-  <property name="getsrc.cvs.root-dir" value=""/>
   <property name="getsrc.cvs.tag" value=""/>
 
   <property name="build.cvsmodule-dir"    location="work/cvsmodules"/>
@@ -47,7 +46,7 @@
     <cvspass cvsroot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}" password="${getsrc.cvs.password}"/>
 
     <echo><![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
-      package="${getsrc.cvs.module}/${getsrc.cvs.root-dir}"
+      package="${getsrc.cvs.module}"
       dest="${build.cvsmodule-dir}"
       quiet="false"
       command="checkout -l"
@@ -55,33 +54,33 @@
       />]]></echo>
 
     <cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
-      package="${getsrc.cvs.module}/${getsrc.cvs.root-dir}"
+      package="${getsrc.cvs.module}"
       dest="${build.cvsmodule-dir}"
       quiet="true"
       command="checkout -l"
       tag="${getsrc.cvs.tag}"
       />
 
-    <echo>Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/${getsrc.cvs.root-dir}/forrest.properties..</echo>
-    <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/${getsrc.cvs.root-dir}/forrest.properties"/>
-    <loadproperties srcFile="${bot.home}/core/default-forrest.properties"/>
+    <echo>Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
+    <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties"/>
+    <loadproperties srcFile="${forrest.home}/default-forrest.properties"/>
 
     <echo><![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
-      package="${getsrc.cvs.module}/${getsrc.cvs.root-dir}/${project.content-dir}"
+      package="${getsrc.cvs.module}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="false"
       tag="${getsrc.cvs.tag}"
       />]]></echo>
 
     <cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
-      package="${getsrc.cvs.module}/${getsrc.cvs.root-dir}/${project.content-dir}"
+      package="${getsrc.cvs.module}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="true"
       tag="${getsrc.cvs.tag}"
       />
 
     <copy todir="${build.work-dir}">
-      <fileset dir="${build.cvsmodule-dir}/${getsrc.cvs.module}/${getsrc.cvs.root-dir}"/>
+      <fileset dir="${build.cvsmodule-dir}/${getsrc.cvs.module}"/>
     </copy>
 
   </target>
