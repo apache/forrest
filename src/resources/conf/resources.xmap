@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -88,6 +88,7 @@ $Revision: 1.1 $
         <map:select type="exists">
           <map:when test="resources/images/{1}.svg">
             <map:generate src="resources/images/{1}.svg" />
+	    <map:transform src="resources/stylesheets/project2text.xsl" />
             <map:serialize type="svg2png" />
           </map:when>
           <map:otherwise>
