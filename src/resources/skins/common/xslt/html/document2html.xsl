@@ -16,7 +16,7 @@ Section handling
   - FIXME: provide a generic facility to process section irrelevant to their
     nesting depth
 
-$Id: document2html.xsl,v 1.2 2002/12/24 02:04:22 crossley Exp $
+$Id: document2html.xsl,v 1.3 2003/01/11 11:18:11 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -96,14 +96,32 @@ $Id: document2html.xsl,v 1.2 2002/12/24 02:04:22 crossley Exp $
       <ul class="minitoc">
         <xsl:for-each select="section">
           <li>
-            <a href="#{generate-id()}">
+            <a>
+              <xsl:attribute name="href">
+                <xsl:text>#</xsl:text>
+                <xsl:if test="@id">
+                  <xsl:value-of select="@id"/>
+                </xsl:if>
+                <xsl:if test="not(@id)">
+                  <xsl:value-of select="generate-id()"/>
+                </xsl:if>
+              </xsl:attribute>
               <xsl:value-of select="title"/>
             </a>
             <xsl:if test="section">
               <ul class="minitoc">
                 <xsl:for-each select="section">
                   <li>
-                    <a href="#{generate-id()}">
+                    <a>
+                      <xsl:attribute name="href">
+                        <xsl:text>#</xsl:text>
+                        <xsl:if test="@id">
+                          <xsl:value-of select="@id"/>
+                        </xsl:if>
+                        <xsl:if test="not(@id)">
+                          <xsl:value-of select="generate-id()"/>
+                        </xsl:if>
+                      </xsl:attribute>
                       <xsl:value-of select="title"/>
                     </a>
                   </li>
