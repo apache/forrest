@@ -80,4 +80,57 @@
     </exec>
   </target>
 
+
+  <property name="deploy.svn.user" value=""/>
+  <property name="deploy.svn.password" value=""/>
+  <property name="deploy.svn.url" value=""/>
+  <property name="deploy.svn.commit-message" value="Automatic publish from forrestbot"/>
+  
+  <property name="deploy.svn.svn-dir" location="work/svn-deploy/${ant.project.name}"/>
+  <property name="deploy.svn.svn-filestoadd" location="work/svn-deploy/${ant.project.name}.toadd"/>
+  <target name="deploy.svn" description="FB: Deploy by committing to an SVN repository">
+    <!-- get current SVN source -->
+    <svncheckout
+        repositoryurl="${deploy.svn.url}"
+        username="${deploy.svn.user}"
+        password="${deploy.svn.password}"
+        destination="${deploy.svn.svn-dir}"
+        failonerror="true"
+    />
+    
+    <!-- copy new files into sandbox -->
+    <copy todir="${deploy.svn.svn-dir}">
+      <fileset dir="${build.site-dir}"/>
+    </copy>
+    
+    <!-- add new files to CVS -->
+    <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
+      <arg value="status"/>
+    </exec>
+    <!-- the status columns make all lines invalid filenames
+      we remove the status columns for the new files so the only valid
+      filenames in the list are new files
+    -->
+    <replace file="${deploy.svn.svn-filestoadd}" token="?      " value=""/>
+    <replace file="${deploy.svn.svn-filestoadd}" token="M      " value=""/>
+    <!-- don't fail on error here because
+      1) the targets file might have 'bad' filenames but we should continue
+      2) we would've already failed if the svn executable wasn't found
+    -->
+    <exec executable="svn" dir="${deploy.svn.svn-dir}">
+      <arg value="add"/>
+      <arg value="--targets"/>
+      <arg value="${deploy.svn.svn-filestoadd}"/>
+    </exec>
+    <!-- check in to SVN 
+    <svncommit
+        target="${deploy.svn.svn-dir}"
+        repositoryurl="${deploy.svn.url}"
+        commitmessage="${deploy.svn.commit-message}"
+        verbose="true"
+    />-->
+    
+  </target>
+
 </project>
