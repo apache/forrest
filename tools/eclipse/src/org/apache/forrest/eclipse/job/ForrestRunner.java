@@ -52,6 +52,8 @@ public class ForrestRunner extends ForrestJob implements IJavaLaunchConfiguratio
 	
 	private static final int EXCEPTION_UNABLE_TO_START = 2010;
 	
+	private String workingDir;
+	
 	/**
 	 * Create a Forrest runner that will run a Jetty server on a given directory
 	 * @param workingDir - the working directory for the command
@@ -64,6 +66,7 @@ public class ForrestRunner extends ForrestJob implements IJavaLaunchConfiguratio
 	
 	/* Run the Forrest server in a separate thread and return that thread to the Forrest manager.
 	 * @see java.lang.Runnable#run()
+	 * @refactor lots of potential to tidy up this code, for example extract a few methods, move relevant code to ForrestManager
 	 */
 	public IStatus run(IProgressMonitor monitor) {
 		if (logger.isDebugEnabled()) {
