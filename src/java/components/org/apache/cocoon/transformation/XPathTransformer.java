@@ -69,6 +69,8 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.NamedNodeMap;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -121,7 +123,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.4 2003/03/15 11:02:52 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.5 2003/03/17 07:39:33 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
@@ -240,33 +242,62 @@ public class XPathTransformer
      * replicate in <code>doc</code>. This is used as a template, not actually
      * physically copied.
      */
-    private void addNode(Document doc, Node nodeTemplate) {
+    private void addNode(Document doc, final Node nodeTemplate) {
         // Get a stack of node's ancestors (inclusive)
         Stack stack = new Stack();
         Node parent = nodeTemplate;
-        while (parent != nodeTemplate.getOwnerDocument()) {
+        Document oldDoc = nodeTemplate.getOwnerDocument();
+        while (parent != oldDoc) {
             stack.push(parent);
             parent = parent.getParentNode();
         }
         // Example stack: (top) [ /manual, /manual/s1, /manual/s1/@title ] (bottom)
 
-        // Now from the earliest non-root ancestor, add cloned nodes to the
+        // Now from the earliest (root) ancestor, add cloned nodes to the
         // doc. We check if a suitable ancestor node doesn't already exist in
         // addNode()
         parent = doc;
         while (!stack.empty()) {
-            Node n = (Node)stack.pop();
+            Node oldNode = (Node)stack.pop();
+            Node newNode = null;
             if (!stack.empty()) {
-                // Shallow copy of a parent node (in example: /manual, then /manual/s1)
-                n = doc.importNode(n, false);
-                parent = findOrCreateNode(parent, n);
+              // Shallow copy o a parent node (in example: /manual, then /manual/s1)
+              newNode = doc.importNode(oldNode, false); // Do a shallow copy
+              copyNamespaceDeclarations(oldNode, newNode);
+              parent = findOrCreateNode(parent, newNode);
             } else {
-                // Deep copy of the matched node (in example: /manual/s1/@title)
-                parent.appendChild(doc.importNode(n, true));
+              // Deep copy of the matched node (in example: /manual/s1/@title)
+              newNode = doc.importNode(oldNode, true);
+              copyNamespaceDeclarations(oldNode, newNode);
+              parent.appendChild(newNode);
             }
         }
     }
 
+    /**
+     * Add xmlns namespace declaration attribute to newNode, based on those from oldNode.
+     * It seems that a DOM object built from SAX with namespace-prefixes=false
+     * doesn't have xmlns attribute declarations by default, so we must
+     * manually add them.
+     * @param oldNode Original node, with namespace attributes intact
+     * @param newNode If an Element, this node will have an <code>xmlns</code>
+     * (or <code>xmlns:prefix</code>) attribute added to define the node's namespace.
+     */
+    private void copyNamespaceDeclarations(final Node oldNode, Node newNode) {
+      if (newNode.getNodeType() == Document.ELEMENT_NODE) {
+        String prefix = oldNode.getPrefix();
+        String nsURI = oldNode.getNamespaceURI();
+        Element newElem = (Element)newNode;
+        if (nsURI != null) {
+          if (prefix == null || prefix.equals("")) {
+            if (!newElem.hasAttribute("xmlns")) newElem.setAttribute("xmlns", nsURI);
+          } else {
+            if (!newElem.hasAttribute("xmlns:"+prefix)) newElem.setAttribute("xmlns:"+prefix, nsURI);
+          }
+        }
+      }
+    }
+ 
     /**
      * Add newNode as a child of parent, first checking if any equivalent node
      * to newNode already exists as a child of parent.
@@ -301,7 +332,7 @@ public class XPathTransformer
      * This is: they are both <code>null</code>, or they have the same length
      * and are character for character identical.
      */
-    private boolean nodeEquality(Node n1, Node n2) {
+    private boolean nodeEquality(final Node n1, final Node n2) {
         if (n1.getNodeType() != n2.getNodeType()) {
             return false;
         }
