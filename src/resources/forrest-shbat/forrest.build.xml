@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.3-dev                        |
-    |             $Date: 2003/01/11 07:37:27 $              |
+    |             $Date: 2003/01/11 10:45:31 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -349,7 +349,8 @@ FORREST SITE BUILDER
 
     <mkdir dir="${project.ctxt-dir}/WEB-INF"/>
 
-    <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true">
+    <!-- Force-copy these files as they have @tokens@ that will need replacing -->
+    <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true">
       <fileset dir="${forrest.home}/WEB-INF">
         <include name="*.xconf" />
       </fileset>
