@@ -43,13 +43,42 @@
       <section>
         <title>How is a Plugin Installed?</title>
     
-        <p>If a site requires a plugin then it will be named in the 
-        <code>project.required.plugins</code> property in the projects
-        <code>forrest.properties</code> file. When Forrest builds the site
-        it will automatically discover the plugin and install it. In otherwords,
-        the user need do nothing.</p>
+        <p>If a site requires one or more plugins then the site designer will 
+        have named them in the <code>project.required.plugins</code> property 
+        in the projects <code>forrest.properties</code> file. When Forrest 
+        builds the site it will automatically discover the plugin and install 
+        it. In otherwords, the user need do nothing.</p>
+    
+        <section>
+          <title>Upgrading from a Version of Forrest Without Plugins</title>
+          <p>The plugin functionality was introduced in version 0.7 of Forrest.
+          At this time some of the functionality previously in Forrest was
+          extracted into a plugin. However, we have not broken backward 
+          compatability with earlier versions. In the absence of a
+          <code>project.required.plugins</code> property in the projects 
+          <code>forrest.properties</code> file all plugins that contain 
+          functionality previously part of Forrest itself will be loaded
+          automatically. Unless you intend to use new functionality provided
+          by a plugin you will not need to make any changes top your project.</p>
           
+          <p>If you do require additional plugin functionality, be sure to
+          include all required plugins in the 
+          <code>project.required.plugins</code> property in the projects 
+          <code>forrest.properties</code>. You can view 
+          <code>forrestcore/src/core/context/default.forrest.properties</code>
+          to see the names of plugins that provide previously core 
+          functionality.</p>
+          
+          <p>It is also worth noting that there is a small performance 
+          improvement if you remove plugins that are not in use. Therefore,
+          if you do not use one or more of the plugins named in the 
+          <code>project.required.plugins</code> property of 
+          <code>forrestcore/src/core/context/default.forrest.properties</code>
+          it is recomended that you override this value in your projects
+          <code>forrest.properties</code> file.</p>
+        </section>
     </section>
+    
   </section>
     
     <section>
