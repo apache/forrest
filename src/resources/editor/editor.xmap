@@ -41,17 +41,17 @@
     <map:selectors default="browser"/>
   </map:components>
 
-	<map:views>
-		<map:view name="content" from-label="content">
-			<map:serialize type="xml"/>
-		</map:view>	
-		<map:view name="agg" from-label="agg">
-			<map:serialize type="xml"/>
-		</map:view>	
-		<map:view name="source" from-label="source">
-			<map:serialize type="xml"/>
-		</map:view>	
-	</map:views>
+  <map:views>
+    <map:view name="content" from-label="content">
+      <map:serialize type="xml"/>
+    </map:view> 
+    <map:view name="agg" from-label="agg">
+      <map:serialize type="xml"/>
+    </map:view> 
+    <map:view name="source" from-label="source">
+      <map:serialize type="xml"/>
+    </map:view> 
+  </map:views>
 
   <map:pipelines>
   
@@ -67,151 +67,151 @@
     <map:serialize type="xml"/>
    </map:match>
   </map:pipeline>
-  
-
-		<map:pipeline internal-only="false"><!-- true -->
-			<!-- 
-			
-				Generation pipelines to collect and format the appropriate content based on the requested behaviour and sub-editor
-				
-				-->
-
-			<!-- 
-				Directory Listing
-				
-				Uses the XPathDirectoryGenerator to extract the 'title' of each document
-				This one removes any filename from the path, (which is a PIA to do in XSL!)
-				Enforces using 'docs' folder of the main project as the root. 
-			-->
-			<map:match pattern="dir/**">
-				<map:generate type="xpathdirectory" src="content/xdocs/{1}/#/document/header/title"/>						
-				<map:transform src="editor/stylesheets/dir2skin.xsl"/>
-				<map:transform src="editor/stylesheets/skin.xsl"/>
-				<map:serialize type="html"/>							
-			</map:match>
-
-			<!-- 
-				New
-				
-				Start a new document from a template
-			-->
-			<map:match pattern="new(*)/**">
-				<map:generate src="editor/docs/template.xml"/>	<!-- get a template -->
-				<map:transform src="editor/stylesheets/file2editor.xsl"/>
-				<map:transform src="editor/stylesheets/skin.xsl"/>
-				<map:serialize type="html"/>								
-			</map:match>
-		
-  
-			<!-- 
-				Put
-				
-				Create a Document out of a Request
-				save it if ther are no validation errors
-			-->
-			<map:match pattern="put">
-				<map:generate type="request"/>
-				
-               				
-				<map:transform src="editor/stylesheets/editor2writer.xsl">
-					<map:parameter name="base" value="content/xdocs"/>
-				</map:transform>
-                
-                <map:transform type="textparser">
-                   <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
-                </map:transform>		
-            
-                <map:transform src="chaperon/stylesheets/wiki2document.xsl"/>
-                				
-				<map:transform type="write-source"/>
-				
-                <map:transform src="editor/stylesheets/writeresult2skin.xsl"/>
-                				
-                <map:transform src="editor/stylesheets/skin.xsl"/>                				
-                				
-				<map:serialize type="html"/>
-			</map:match>
-
-			<!-- 
-				Pre
-				
-				Create a Preview Document out of a Request
-				validate it
-			-->
-			<map:match pattern="pre(bravo)">
-				<map:generate type="request"/>
-				
-				<map:transform src="editor/stylesheets/request2editor.xsl"/>
-				
-                <map:transform type="textparser">
-                   <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
-                </map:transform>		
-            
-                <map:transform src="chaperon/stylesheets/wiki2html.xsl"/>
-            
-                <map:transform src="editor/stylesheets/skin.xsl"/>
-                
-				<map:serialize type="html"/>
-			</map:match>
 
 
-			
-			<map:match pattern="see(bravo)**.xml">
-				<map:redirect-to uri="../../{1}.html"/>
-			</map:match>
-		
-		
-			<map:match pattern="get(bravo)/**">
-			
-				<map:generate src="content/xdocs/{1}"/>
-				<map:transform src="editor/stylesheets/file2editor.xsl"/>
-				<map:transform src="editor/stylesheets/skin.xsl"/>
-				<map:serialize type="html"/>								
+  <map:pipeline internal-only="false"><!-- true -->
+    <!-- 
 
-					
-			</map:match>
-			
-					
-		</map:pipeline>
+    Generation pipelines to collect and format the appropriate content based on the requested behaviour and sub-editor
 
-		<map:pipeline>	
-		
-		    <map:match pattern="**.html">
-				<map:generate type="html" src="editor/docs/{1}.html"/>
-				<map:serialize type="html"/>
-            </map:match>
-		
-			<!-- the default page -->
-			<map:match pattern="">
-				<map:redirect-to uri="edit/editor.html"/>	
-			</map:match>
-			
-			<map:match pattern="/">
-				<map:redirect-to uri="edit/editor.html"/>	
-			</map:match>
-			
+    -->
 
-			<map:match pattern="**/*.gif">
-				<map:read src="editor/images/{2}.gif" mime-type="image/gif"/>
-			</map:match>
+    <!-- 
+    Directory Listing
 
-			<map:match pattern="**style">
-				<map:read mime-type="text/css" src="editor/docs/slash-edit.css"/>
-			</map:match>
+    Uses the XPathDirectoryGenerator to extract the 'title' of each document
+    This one removes any filename from the path, (which is a PIA to do in XSL!)
+    Enforces using 'docs' folder of the main project as the root. 
+    -->
+    <map:match pattern="dir/**">
+      <map:generate type="xpathdirectory" src="content/xdocs/{1}/#/document/header/title"/>           
+      <map:transform src="editor/stylesheets/dir2skin.xsl"/>
+      <map:transform src="editor/stylesheets/skin.xsl"/>
+      <map:serialize type="html"/>              
+    </map:match>
+
+    <!-- 
+    New
+
+    Start a new document from a template
+    -->
+    <map:match pattern="new(*)/**">
+      <map:generate src="editor/docs/template.xml"/>  <!-- get a template -->
+      <map:transform src="editor/stylesheets/file2editor.xsl"/>
+      <map:transform src="editor/stylesheets/skin.xsl"/>
+      <map:serialize type="html"/>                
+    </map:match>
 
 
-			<!-- generic error handlers -->
-			<map:handle-errors>
-				<map:transform src="editor/stylesheets/error/error2html.xsl"/>
-				<map:serialize status-code="500"/>
-			</map:handle-errors>
-			
-			<map:handle-errors type="404">
-				<map:transform src="editor/stylesheets/error/error2html.xsl"/>
-				<map:serialize/>
-			</map:handle-errors>
-		
-		</map:pipeline>
+    <!-- 
+    Put
 
-  </map:pipelines>
+    Create a Document out of a Request
+    save it if ther are no validation errors
+    -->
+    <map:match pattern="put">
+      <map:generate type="request"/>
+
+
+      <map:transform src="editor/stylesheets/editor2writer.xsl">
+        <map:parameter name="base" value="content/xdocs"/>
+      </map:transform>
+
+      <map:transform type="textparser">
+        <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
+      </map:transform>    
+
+      <map:transform src="chaperon/stylesheets/wiki2document.xsl"/>
+
+      <map:transform type="write-source"/>
+
+      <map:transform src="editor/stylesheets/writeresult2skin.xsl"/>
+
+      <map:transform src="editor/stylesheets/skin.xsl"/>                        
+
+      <map:serialize type="html"/>
+    </map:match>
+
+    <!-- 
+    Pre
+
+    Create a Preview Document out of a Request
+    validate it
+    -->
+    <map:match pattern="pre(bravo)">
+      <map:generate type="request"/>
+
+      <map:transform src="editor/stylesheets/request2editor.xsl"/>
+
+      <map:transform type="textparser">
+        <map:parameter name="grammar" value="chaperon/grammars/wiki.grm"/>
+      </map:transform>    
+
+      <map:transform src="chaperon/stylesheets/wiki2html.xsl"/>
+
+      <map:transform src="editor/stylesheets/skin.xsl"/>
+
+      <map:serialize type="html"/>
+    </map:match>
+
+
+
+    <map:match pattern="see(bravo)**.xml">
+      <map:redirect-to uri="../../{1}.html"/>
+    </map:match>
+
+
+    <map:match pattern="get(bravo)/**">
+
+      <map:generate src="content/xdocs/{1}"/>
+      <map:transform src="editor/stylesheets/file2editor.xsl"/>
+      <map:transform src="editor/stylesheets/skin.xsl"/>
+      <map:serialize type="html"/>                
+
+
+    </map:match>
+
+
+  </map:pipeline>
+
+  <map:pipeline>  
+
+    <map:match pattern="**.html">
+      <map:generate type="html" src="editor/docs/{1}.html"/>
+      <map:serialize type="html"/>
+    </map:match>
+
+    <!-- the default page -->
+    <map:match pattern="">
+      <map:redirect-to uri="edit/editor.html"/> 
+    </map:match>
+
+    <map:match pattern="/">
+      <map:redirect-to uri="edit/editor.html"/> 
+    </map:match>
+
+
+    <map:match pattern="**/*.gif">
+      <map:read src="editor/images/{2}.gif" mime-type="image/gif"/>
+    </map:match>
+
+    <map:match pattern="**style">
+      <map:read mime-type="text/css" src="editor/docs/slash-edit.css"/>
+    </map:match>
+
+
+    <!-- generic error handlers -->
+    <map:handle-errors>
+      <map:transform src="editor/stylesheets/error/error2html.xsl"/>
+      <map:serialize status-code="500"/>
+    </map:handle-errors>
+
+    <map:handle-errors type="404">
+      <map:transform src="editor/stylesheets/error/error2html.xsl"/>
+      <map:serialize/>
+    </map:handle-errors>
+
+  </map:pipeline>
+
+</map:pipelines>
 </map:sitemap>
