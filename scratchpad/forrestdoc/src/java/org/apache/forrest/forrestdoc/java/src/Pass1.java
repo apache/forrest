@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.3 2004/02/20 00:14:39 nicolaken Exp $
- * $Revision: 1.3 $
- * $Date: 2004/02/20 00:14:39 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.4 2004/02/20 00:17:28 nicolaken Exp $
+ * $Revision: 1.4 $
+ * $Date: 2004/02/20 00:17:28 $
  *
  * ====================================================================
  *
@@ -205,9 +205,9 @@ public class Pass1 implements FileListener {
 
             // if we have at least one command-line argument
             if (args.length > 0) {
-                System.out.println("outDirPath is " + getOutDir());
+                System.out.println("\noutDirPath is " + getOutDir());
                 symbolTable.setOutDirPath(getOutDir());
-                System.out.println("Parsing...");
+                System.out.print("\nParsing");
 
                 // for each directory/file specified on the command line
                 for (int i = 0; i < args.length; i++) {
@@ -215,7 +215,7 @@ public class Pass1 implements FileListener {
                             getRecurse(), this);    // parse it
                 }
 
-                System.out.println("Resolving types...");
+                System.out.print("\nResolving types");
 
                 // resolve the types of all symbols in the symbol table
                 symbolTable.resolveTypes();
@@ -228,7 +228,7 @@ public class Pass1 implements FileListener {
             Hashtable packageTable = symbolTable.getPackages();
             Enumeration pEnum = packageTable.elements();
 
-            System.out.println("\nPersisting definitions...");
+            System.out.print("\nPersisting definitions");
             
             while (pEnum.hasMoreElements()) {
                 PackageDef pDef = (PackageDef) pEnum.nextElement();
@@ -274,7 +274,7 @@ public class Pass1 implements FileListener {
                 pDef.persistDefinitions(getOutDir());
             }
 
-            System.out.println("\nPersisting references...");
+            System.out.print("\nPersisting references");
             symbolTable.persistRefs(getOutDir());
         } catch (Exception e) {
             System.err.println("exception: " + e);
