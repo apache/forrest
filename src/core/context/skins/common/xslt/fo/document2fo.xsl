@@ -705,13 +705,16 @@
       <!-- Make relative paths absolute -->
       <xsl:variable name="imgpath">
       <xsl:choose>
-        <xsl:when test="starts-with(string(@src), 'images/') or contains(string(@src), '../images')">
-          <xsl:value-of select="concat($imagesdir, substring-after(@src, 'images'))"/>
+        <!-- resources image dir -->
+        <xsl:when test="starts-with(string(@src),'images/')">
+          <xsl:value-of select="concat($imagesdir,substring-after(@src,'images'))"/>
         </xsl:when>
-        <xsl:when test="starts-with(string(@src), 'http') ">
+        <!-- already absolute -->
+        <xsl:when test="contains(string(@src),':') or starts-with(string(@src),'/')">
           <xsl:value-of select="@src"/>
         </xsl:when>
-        <xsl:otherwise><xsl:value-of select="concat($imagesdir, $xmlbasedir, @src)"/></xsl:otherwise>
+        <!-- relative to document -->
+        <xsl:otherwise><xsl:value-of select="concat($xmlbasedir,@src)"/></xsl:otherwise>
       </xsl:choose>
       </xsl:variable>
       <fo:external-graphic src="{$imgpath}">
