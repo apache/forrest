@@ -1,4 +1,14 @@
 <?xml version="1.0"?>
+<!-- =================================================
+'linkmap' pipelines.  A linkmap is a map from abstract ('site:index') to
+physical ('../index.html') links for the current page.
+
+Example URL:  http://localhost:8888/community/linkmap-index.html (links for community/index.html)
+Used by    :  The linkrewriter transformer
+Uses       :  content/xdocs/site.xml
+
+$Revision: 1.10 $
+==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
@@ -10,20 +20,19 @@
     <map:selectors default="browser"/>
   </map:components>
 
-  <map:resources>
-  </map:resources>
-
   <map:pipelines>
     <map:pipeline>
 
-      <!-- Used by **/linkmap-* -->
+      <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
         <map:generate src="content/xdocs/site.xml" />
         <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
         <map:serialize type="xml" />
       </map:match>
 
-
+      <!-- Special linkmap for pages containing aggregated content.  Links to aggregated content should be internal
+      (fragment identifiers), and other links should be regular hrefs.  The 'split' between these two types is decided
+      by the stylesheet. -->
       <map:match pattern="**linkmap-site.*">
         <map:generate src="cocoon://abs-linkmap" />
         <map:transform src="resources/stylesheets/aggregates/relativize-split-linkmap.xsl">
@@ -32,35 +41,12 @@
         <map:serialize type="xml"/>
       </map:match>
 
-      <!-- A linkmap (map from abstract to physical links) for the current page -->
-      <!-- Used by the linkrewriter transformer -->
+      <!-- Linkmap for regular pages -->
       <map:match pattern="**linkmap-*">
         <map:generate src="cocoon://abs-linkmap" />
         <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}{2}" />
           <map:parameter name="site-root" value="{conf:project-url}" />
-        </map:transform>
-        <map:serialize type="xml" />
-      </map:match>
-
-      <!-- A list of absolute links for the current page's menu -->
-      <!-- Used by menulinks/** -->
-      <map:match pattern="**abs-menulinks-*">
-        <map:generate src="cocoon://abs-linkmap" />
-        <map:transform type="xpath">
-          <map:parameter name="include" value="//*[@href='{1}']" />
-        </map:transform>
-        <map:serialize type="xml" />
-      </map:match>
-
-      <!-- A list of relative links for the current page's menu -->
-      <!-- Used when generating book.xml from a site.xml.  The /** suffix
-      identifies a @href prefix which all nodes in the
-      returned subtree must have. -->
-      <map:match pattern="**menulinks-*">
-        <map:generate src="cocoon://{1}abs-menulinks-{2}" />
-        <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
-          <map:parameter name="path" value="{1}{2}" />
         </map:transform>
         <map:serialize type="xml" />
       </map:match>
