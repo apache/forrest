@@ -19,7 +19,7 @@ set ANT_HOME=%FORREST_HOME%\ant
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-cd "%FORREST_HOME%\lib\endorsed"
+cd /D "%FORREST_HOME%\lib\endorsed"
 for %%i in (*.jar) do call "%FORREST_HOME%\bin\appendcp.bat" "%FORREST_HOME%\lib\endorsed\%%i"
 
 echo.
