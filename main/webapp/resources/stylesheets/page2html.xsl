@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -->
 
 <!--+
-    | Covert samples file to the HTML page. Uses styles/main.css stylesheet.
+    | Convert samples file to the HTML page. Uses styles/main.css stylesheet.
     +-->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -58,7 +58,7 @@
     </p>
 
     <p class="copyright">
-      Copyright &#169; 1999-2003 <a href="http://www.apache.org/">The Apache Software Foundation</a>.
+      Copyright &#169; 1999-2005 <a href="http://www.apache.org/">The Apache Software Foundation</a>.
       All rights reserved.
     </p>
    </body>
@@ -91,7 +91,7 @@
  </xsl:template>
 
  <xsl:template match="section">
-  <xsl:choose> <!-- stupid test for the hirachy deep -->
+  <xsl:choose> <!-- stupid test for the hierarchy depth -->
    <xsl:when test="../../../section">
     <h5><xsl:value-of select="title"/></h5>
    </xsl:when>
