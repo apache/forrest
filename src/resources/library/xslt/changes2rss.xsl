@@ -1,73 +1,64 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
- 
-     <xsl:output method = "xml"
-                 version="1.0" 
-                 encoding="ISO-8859-1" 
-                 indent="yes"  
-                 doctype-public="-//Netscape Communications//DTD RSS 0.91//EN"                   
-                 doctype-system="http://my.netscape.com/publish/formats/rss-0.91.dtd"                   
-                 />
-                 
-   <xsl:template match="status">
 
-  
-      <rss version="0.91">
-         <channel>
-            <title>Project Changes</title>
+  <xsl:param name="config-file" select="'../../skinconf.xml'"/>
+  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
 
-            <link>http://www.krysalis.org/centipede/changes.html</link>
+  <xsl:output method = "xml"
+    version="1.0" 
+    encoding="ISO-8859-1" 
+    indent="yes"  
+    doctype-public="-//Netscape Communications//DTD RSS 0.91//EN"                   
+    doctype-system="http://my.netscape.com/publish/formats/rss-0.91.dtd"                   
+    />
 
-            <description>Project Changes</description>
+  <xsl:template match="status">
 
-            <language>en-us</language>
+    <xsl:variable name="changes-url"
+      select="concat($config/project-url, '/changes.html')"/>
 
-            <xsl:for-each select="changes/release[1]/action">
-               <item>
-                  <title>
-                     <xsl:value-of select="@type" />
+    <rss version="0.91">
+      <channel>
+        <title><xsl:value-of select="$config/project-name"/> Changes</title>
 
-                     <xsl:if test="@context">about 
-                     <xsl:value-of select="@context" />
-                     </xsl:if>
+        <link><xsl:value-of select="$changes-url"/></link>
 
-                     <xsl:if test="@type='fix'">(fixes bug 
-                     <xsl:value-of select="@fixes-bug" />
+        <description><xsl:value-of select="$config/project-name"/> Changes</description>
 
-                     )</xsl:if>
-                  </title>
+        <language>en-us</language>
 
-                  <link>http://www.krysalis.org/centipede/changes.html</link>
+        <xsl:for-each select="changes/release[1]/action">
+          <item>
+            <title>
+              <xsl:value-of select="@context" />
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="@type" />
 
-                  <description>
-                  <xsl:value-of select="@type" />
+              <xsl:if test="@type='fix' and @fixes-bug">
+                (bug <xsl:value-of select="@fixes-bug" />)
+              </xsl:if>
 
-                  by 
-                  <xsl:value-of select="@dev" />
+            </title>
 
-                  <xsl:if test="@context">about 
-                  <xsl:value-of select="@context" />
-                  </xsl:if>
+            <link><xsl:value-of select="$changes-url"/></link>
 
-                  . 
-                  <xsl:if test="@type='fix'">It fixes bug 
-                  <xsl:value-of select="@fixes-bug" />
-
-                  .</xsl:if>
-
-                  . 
-                  <xsl:if test="@due-to">Thanks to 
-                  <xsl:value-of select="@due-to" />
-
-                  .</xsl:if> 
-                  
-                  Message: <xsl:value-of select="." />
-                  
-                  </description>
-               </item>
-            </xsl:for-each>
-         </channel>
-      </rss>
-   </xsl:template>
+            <description>
+              <xsl:value-of select="@context" />
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="@type" />
+              by 
+              <xsl:value-of select="@dev" />
+              <xsl:if test="@type='fix' and @fixes-bug">
+                (fixes bug <xsl:value-of select="@fixes-bug" />)
+              </xsl:if>
+              :
+              <xsl:value-of select="." />
+              <xsl:if test="@due-to"> Thanks to <xsl:value-of select="@due-to" />.</xsl:if> 
+            </description>
+          </item>
+        </xsl:for-each>
+      </channel>
+    </rss>
+  </xsl:template>
 </xsl:stylesheet>
 
