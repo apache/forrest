@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.24 2003/09/04 03:03:10 cheche Exp $
+$Id: document2html.xsl,v 1.25 2003/09/06 12:32:41 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -106,7 +106,7 @@ $Id: document2html.xsl,v 1.24 2003/09/04 03:03:10 cheche Exp $
   <xsl:template name="printlink">
     <xsl:if test="$disable-print-link = 'false'"> 
     
-<script Language="Javascript">
+<script type="text/javascript" language="Javascript">
 
 function printit(){  
 if (window.print) {
@@ -120,7 +120,7 @@ document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
 </script>
             
 
-<script Language="Javascript">  
+<script type="text/javascript" language="Javascript">  
 var NS = (navigator.appName == "Netscape");
 var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
@@ -341,23 +341,26 @@ if (VERSION > 3) {
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
     <xsl:param name="depth"/>     
-    <ul class="minitoc">
-      <xsl:for-each select="$tocroot/section">
-        <xsl:call-template name="toclink"/>
-        <xsl:if test="$depth&lt;$max-depth">
-          <xsl:call-template name="minitoc">
-            <xsl:with-param name="tocroot" select="."/>
-            <xsl:with-param name="depth" select="$depth + 1"/>          
-          </xsl:call-template>
-        </xsl:if>      
-      </xsl:for-each>
-    </ul>
+    <xsl:if test="count($tocroot/section) > 0">
+      <ul class="minitoc">
+        <xsl:for-each select="$tocroot/section">
+          <li>
+            <xsl:call-template name="toclink"/>
+            <xsl:if test="$depth&lt;$max-depth">
+              <xsl:call-template name="minitoc">
+                <xsl:with-param name="tocroot" select="."/>
+                <xsl:with-param name="depth" select="$depth + 1"/>          
+              </xsl:call-template>
+            </xsl:if>      
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="toclink">
     <xsl:variable name="tocitem" select="normalize-space(title)"/>
     <xsl:if test="string-length($tocitem)>0">
-      <li>
       <a>
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text>
@@ -367,7 +370,6 @@ if (VERSION > 3) {
         </xsl:attribute>
         <xsl:value-of select="$tocitem"/>
       </a>
-      </li>
     </xsl:if>
   </xsl:template>
   
