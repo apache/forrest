@@ -3,7 +3,7 @@
 
 <project default="dist" basedir="." name="Forrest build file">
 
-<description>
+  <description>
                    * ========================== *
                    |   Forrest Build System     |
                    * ========================== *
@@ -14,16 +14,16 @@
                    Jeff Turner (jefft@apache.org)
 
                    Run the build script: build.bat or build.sh
-</description>
+  </description>
 
   <target name="init">
-   <tstamp>
-     <format property="YEAR" pattern="yyyy" locale="en"/>
-   </tstamp>
+    <tstamp>
+      <format property="YEAR" pattern="yyyy" locale="en"/>
+    </tstamp>
 
-   <buildnumber file="etc/build.number"/>
-   <echo>
-    --------------------------------------------------------------
+    <buildnumber file="etc/build.number"/>
+    <echo>
+      --------------------------------------------------------------
 
       Using ${ant.version}
       Build file ${ant.file}
@@ -33,13 +33,13 @@
       Java Version ${ant.java.version}      
       Timestamp ${DSTAMP}${TSTAMP}
 
-    --------------------------------------------------------------
-   </echo>
- 
+      --------------------------------------------------------------
+    </echo>
+
     <xmlproperty file="module.xml"     prefix="xgump"    keeproot="true"  collapseAttributes="true" />
     <xmlproperty file="status.xml"     prefix="xstatus"  keeproot="false" collapseAttributes="true" />   
     <xmlproperty file="properties.xml"                   keeproot="false" collapseAttributes="true" />
- 
+
     <property name="name"                  value="${xgump.module.project.name}"/>
     <property name="packages"              value="${xgump.module.project.packages}"/>
 
@@ -70,10 +70,10 @@
   <!-- Make all known distributions                                        -->
   <!-- =================================================================== -->
   <target name="dist" 
-          description="Makes all the known incarnations of forrest"
-          depends="dist-shbat" />
+    description="Makes all the known incarnations of forrest"
+    depends="dist-shbat" />
 
-  
+
   <!-- =================================================================== -->
   <!-- Make the zip that holds what a fresh site should look like          -->
   <!-- =================================================================== -->
@@ -83,7 +83,7 @@
     <zip destfile="${fresh-site.zip}" basedir="${resource.dir}/fresh-site" />
   </target>
 
-  
+
   <!-- =================================================================== -->
   <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
   <!-- =================================================================== -->
@@ -158,7 +158,7 @@
     <copy todir="${bare-context.dir}/library/" >
       <fileset dir="${resource.dir}/library" />
     </copy>
-    
+
     <!-- Copy editor -->
     <copy todir="${bare-context.dir}/" >
       <fileset dir="${resource.dir}/editor" />
@@ -175,10 +175,10 @@
   <!-- Validate the important core configuration files                     -->
   <!-- =================================================================== -->
   <target name="validate-config" depends="init"
-          description="Validate the important core configuration files">
-<!-- FIXME allow switch
-          if="validate.config">
--->
+    description="Validate the important core configuration files">
+    <!-- FIXME allow switch
+    if="validate.config">
+    -->
     <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
       <classpath>
         <fileset dir="./lib/core" includes="*.jar" />
@@ -202,12 +202,12 @@
       <fileset dir="./src/resources/editor" includes="editor.xmap"/>
     </jing>
     <!-- book.xml -->
-<!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
+    <!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
     <echo message="validating **/book.xml ..."/>
     <jing rngfile="./src/resources/schema/relaxng/book-v01.rng">
       <fileset dir="./src" includes="**/book.xml"/>
     </jing>
--->
+    -->
   </target>
 
 
@@ -215,7 +215,7 @@
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
   <target name="dist-shbat" 
-          depends="validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
+    depends="validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
     <property name="dist-shbat.dir" value="./build/dist/shbat" />
 
@@ -231,7 +231,7 @@
     <!-- copy the prepared and wrapper stuff for the distribution -->
     <copy todir="${dist-shbat.dir}">
       <fileset dir="./src/resources/forrest-shbat" />
-  </copy>
+    </copy>
 
     <!-- copy licenses -->
     <copy todir="${dist-shbat.dir}/legal">
@@ -240,49 +240,49 @@
 
     <!-- copy the fresh-site.zip to clone from -->
     <copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
-    
+
     <!-- copy the web-inf as needed by the cocoon CLI -->
     <mkdir dir="${dist-shbat.dir}/WEB-INF" />
     <copy todir="${dist-shbat.dir}/WEB-INF">
       <fileset dir="${webapp.webinf.dir}" />
     </copy>
 
-	<mkdir dir="${dist-shbat.dir}/lib/endorsed" />
-	<copy todir="${dist-shbat.dir}/lib/endorsed">
-		<fileset dir="lib/endorsed" />
+    <mkdir dir="${dist-shbat.dir}/lib/endorsed" />
+    <copy todir="${dist-shbat.dir}/lib/endorsed">
+      <fileset dir="lib/endorsed" />
     </copy>
 
-	<mkdir dir="${dist-shbat.dir}/lib/optional" />
-	<copy todir="${dist-shbat.dir}/lib/optional">
-		<fileset dir="lib/optional" />
+    <mkdir dir="${dist-shbat.dir}/lib/optional" />
+    <copy todir="${dist-shbat.dir}/lib/optional">
+      <fileset dir="lib/optional" />
     </copy>
-    
-	<!-- Copy Ant jars, so the shbat distribution is self-contained -->
-	<mkdir dir="${dist-shbat.dir}/ant" />
-	<copy todir="${dist-shbat.dir}/ant">
-		<fileset dir="tools/ant" />
-  </copy>
 
-  <!-- Copy forrestbot -->
-	<mkdir dir="${dist-shbat.dir}/forrestbot" />
-	<copy todir="${dist-shbat.dir}/forrestbot">
-    <fileset dir="src/resources/forrestbot">
-      <exclude name="bin/**"/>
-    </fileset>
-  </copy>
-  <copy todir="${dist-shbat.dir}/bin">
-    <fileset dir="src/resources/forrestbot/bin"/>
-  </copy>
+    <!-- Copy Ant jars, so the shbat distribution is self-contained -->
+    <mkdir dir="${dist-shbat.dir}/ant" />
+    <copy todir="${dist-shbat.dir}/ant">
+      <fileset dir="tools/ant" />
+    </copy>
 
-	<!-- Fix bin/ permissions -->
+    <!-- Copy forrestbot -->
+    <mkdir dir="${dist-shbat.dir}/forrestbot" />
+    <copy todir="${dist-shbat.dir}/forrestbot">
+      <fileset dir="src/resources/forrestbot">
+        <exclude name="bin/**"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist-shbat.dir}/bin">
+      <fileset dir="src/resources/forrestbot/bin"/>
+    </copy>
+
+    <!-- Fix bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
     <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
     <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
 
-	<!-- Fix ant/bin/ permissions -->
-	<fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/ant/bin" includes="*.bat"/>
-	<fixcrlf eol="lf" srcdir="${dist-shbat.dir}/ant/bin" excludes="*.bat"/>
-	<chmod dir="${dist-shbat.dir}/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
+    <!-- Fix ant/bin/ permissions -->
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/ant/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/ant/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <!-- copy the bare-context dir as needed by the cocoon CLI -->
     <mkdir dir="${dist-shbat.dir}/context" />
@@ -352,15 +352,15 @@
   <!-- ForrestBar for Mozilla                                              -->
   <!-- =================================================================== -->
   <target name="forrestbar" depends="init">
-      <mkdir dir="${build.dir}" />
-      <mkdir dir="${build.dir}/work/forrestbar" />
-      <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
-         <fileset dir="src/resources/forrestbar" includes="content/**/*" />
-      </jar>
-      <copy file="src/resources/forrestbar/install.js" 
-            todir="${build.dir}/work/forrestbar" overwrite="true" />
-      <zip zipfile="${build.dir}/forrestbar.xpi" 
-           basedir="${build.dir}/work/forrestbar" />
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${build.dir}/work/forrestbar" />
+    <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
+      <fileset dir="src/resources/forrestbar" includes="content/**/*" />
+    </jar>
+    <copy file="src/resources/forrestbar/install.js" 
+      todir="${build.dir}/work/forrestbar" overwrite="true" />
+    <zip zipfile="${build.dir}/forrestbar.xpi" 
+      basedir="${build.dir}/work/forrestbar" />
   </target>
 
 
@@ -368,9 +368,9 @@
   <!--        Target used by Gump         -->
   <!-- ================================== -->
   <target  name="gump" description="Target used by Gump">
-      <antcall target="site"/>
-      <antcall target="webapp"/>
-    </target>
+    <antcall target="site"/>
+    <antcall target="webapp"/>
+  </target>
 
 
   <!-- =================================================================== -->
