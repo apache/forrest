@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>How-to create a forrest table in Excel</title> 
+  </header> 
+  <body> 
+    <section>
+      <title>
+        Create your table in Excel
+      </title>
+      <p>Follow these steps to create a new table in Excel:</p>
+      <ol>
+        <li>Set the document title in <code>File&rarr;Properties...</code></li>
+        <li>Set the sheet's title as section title; 
+            Put each table in a separate sheet</li>
+        <li>Create a table header in the first row</li>
+        <li>Insert your content into the table</li>
+        <li>Put spaces into empty cells</li>
+        <li>
+	  Set the output format to XML: <code>File&rarr;Save as...</code>,
+	  then select File type <code>XML</code>
+        </li>
+        <li>
+	  Choose a filename that ends in <code>-table.xml</code> and save
+        </li>
+      </ol>
+      <p>You may open the XML file directly with Excel afterwards.</p>
+      <p>
+        See the <a href="site:simple-table">Simple Table</a>
+	as an example.
+      </p>
+    </section>
+    <section>
+      <title>
+        Include your table in forrest
+      </title>
+      <p>Follow these steps to include a new table in your project:</p>
+      <ol>
+        <li>
+	  In your <code>forrest.properties</code> file:
+	  Include <code>org.apache.forrest.plugin.excel</code> in
+	  <code>project.required.plugins</code> 
+        </li>
+        <li>
+	  Include the file in your <code>site.xml</code> as usual:
+	  <code>&lt;mytable label="My Table" href="my-table.xml"/&gt;</code>
+        </li>
+      </ol>
+        <note>
+	  The plugin will treat <strong>all</strong> files ending in
+	  <code>-table.xml</code> as Excel-XML files.
+        </note>
+    </section>
+    <section>
+      <title>Options</title>
+    <section>
+      <title>Including figures</title>
+        <p>
+          If you want to include a figure above your table, put the
+	  keyword <code>figure</code> into the first column and the
+	  path into the second column (relative to <code>images</code>).
+	  You may include a caption in the fourth (4th) column.
+	  See the <a href="site:figure-table">Table with figure</a>
+	  as an example.
+        </p>
+      </section>
+    <section>
+        <title>
+	  Coloring cells
+        </title>
+        <p>
+	  For a color table you may specify the background color for
+	  single cells: put the color's hex-triplet (e.g. 
+	  <code>#FFD0AA</code>) into the cell. Make sure this is the
+	  only content.
+	  See the <a href="site:color-table">Color Table</a>
+	  as an example.
+        </p>
+      </section>
+    </section>
+  </body>
+</document>
