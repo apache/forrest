@@ -23,6 +23,15 @@
         <map:serialize type="xml" />
       </map:match>
 
+
+      <map:match pattern="**linkmap-site.*">
+        <map:generate src="cocoon://abs-linkmap" />
+        <map:transform src="resources/stylesheets/aggregates/relativize-split-linkmap.xsl">
+          <map:parameter name="path" value="{1}site.{2}" />
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+
       <!-- A linkmap (map from abstract to physical links) for the current page -->
       <!-- Used by the linkrewriter transformer -->
       <map:match pattern="**linkmap-*">
