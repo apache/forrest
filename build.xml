@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="dist" basedir="." name="Forrest build file">
+<project default="jar" basedir="." name="Forrest build file">
 
   <import file="src/forrestbar/build.xml"/>
   
@@ -247,40 +247,17 @@
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
     
-    <!-- copy the Forrest core -->
+    <!-- copy all Forrest -->
     <copy todir="${dist-shbat.dir}">
-      <fileset dir="./src/core" />
+      <fileset dir="." >
+        <exclude name="build/**"/>
+      </fileset>  
     </copy>
-
-    <!-- copy licenses -->
-    <copy todir="${dist-shbat.dir}/legal">
-      <fileset dir="./legal" />
-    </copy>
-
-    <!-- Copy Forrest jars -->
-    <copy todir="${dist-shbat.dir}/lib/core">
-      <fileset dir="${build.dir}" includes="*.jar"/>
-    </copy>
-    
-    <mkdir dir="${dist-shbat.dir}/lib" />
-    <copy todir="${dist-shbat.dir}/lib">
-      <!-- copy everything so that also dirs with no jars are there, as
-           the forrest build expects these dirs to be present. -->
-      <fileset dir="./lib" includes="*/*.*"/>
-    </copy>
-    
-    <!-- Copy all tools, so the shbat distribution is self-contained -->
-    <copy todir="${dist-shbat.dir}/tools">
-      <fileset dir="${tools.dir}" />
-    </copy>
-    <copy todir="${dist-shbat.dir}/tools/ant/lib">
-      <fileset dir="lib/core" includes="xml-commons-resolver*.jar"/>
-    </copy>
-    
+     
     <!-- Fix bin/ permissions -->
-    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
-    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
-    <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/src/core/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/src/core/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/src/core/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <!-- Fix ant/bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/tools/ant/bin" includes="*.bat"/>
@@ -294,7 +271,8 @@
   | You have succesfully built the shell-bat distribution of Forrest.
   | Please find it at: ${dist-shbat.dir}
   | Please copy the contents to the install directory of your choice
-  | Please have the environment variable FORREST_HOME point to it.
+  | Please have the environment variable FORREST_HOME point to
+  |  ${dist-shbat.dir}/src/core
   | It is recommended to add
   |    unix: $FORREST_HOME/bin: to your $PATH
   |    win: %FORREST_HOME%\bin; to your %PATH%
@@ -317,34 +295,6 @@
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
   </target>
 
-
-  <!-- =================================================================== -->
-  <!-- Generate cocoon-webapp for project-site                             -->
-  <!-- =================================================================== -->
-  <target name="webapp" depends="dist-shbat"
-    description="Generates an unpackaged webapp of the website">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Generate a .war files of the project-site                           -->
-  <!-- =================================================================== -->
-  <target name="war" depends="dist-shbat"
-    description="Generates a .war file containing the website">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Validates Forrest XML documentation                                 -->
-  <!-- =================================================================== -->
-  <target name="validate" depends="dist-shbat"
-    description="Validates XML documentation files">
-    <property name="forrest.home" value="${dist-shbat.dir}" />
-    <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
-  </target>
-
   <!-- ================================== -->
   <!--        Test targets                -->
   <!-- ================================== -->
@@ -364,7 +314,6 @@
     
     <ant antfile="${test.dir}/forrest-targets.xml" target="site"/>
     
-
     <!--    
     <ant antfile="${forrest.home}/forrest.build.xml" target="site">
       <property name="forrest.home" value="${dist-shbat.dir}" />  
