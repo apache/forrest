@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="./tools/stylesheets/module.xsl"?>
 <module name="xml-forrest">
     <url href="http://xml.apache.org/forrest/"/>
 
@@ -109,6 +108,39 @@
 
     </project>
 
+    <project name="xml-forrest-forrestbar">
+
+        <ant target="forrestbar"/>
+
+        <home nested="build"/>
+        <depend project="jakarta-ant"/>
+        <depend project="xml-xerces"/>
+
+    <!-- jars - the result of the build  -->
+        <jar id="forrestbar" name="forrestbar.xpi"/>
+
+       <nag from="Gump" to="forrest-dev@xml.apache.org"/>
+
+    </project>
+    
+    <project name="xml-forrest-scratchpad-forrestdoc-ws">
+
+        <ant basedir="scratchpad/forrestdoc" target="wp" />
+
+        <work nested="scratchpad/forrestdoc/build/classes"/> 
+        <work nested="scratchpad/forrestdoc/build/tools/ant"/>         
+
+        <home nested="scratchpad/forrestdoc/build"/>
+        
+        <depend project="jakarta-ant"/>
+        <depend project="xml-xerces"/>
+
+        <junitreport nested="scratchpad/forrestdoc/build/ws/forrestdoc"/>
+
+        <nag from="Gump" to="forrest-dev@xml.apache.org"/>
+
+    </project>
+        
 </module>
 
 
