@@ -51,8 +51,9 @@ FORREST SITE BUILDER
 
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
+    <property name="project.name"        value="my-project"    />
     <property name="project.site-dir"    value="${project.home}/build/site"    />
-    <property name="project.war"         value="${project.home}/build/my-project.war" />
+    <property name="project.war" value="${project.home}/build/${project.name}.war" />
     <property name="project.webapp"      value="${project.home}/build/webapp" />
     <property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
 
@@ -275,7 +276,7 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-conf" if="conf.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="false"
+    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
       overwrite="true" failonerror="false">
       <fileset dir="${project.conf-dir}"/>
     </copy>
@@ -330,8 +331,15 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-skins" if="skins.present">
-    <copy toDir="${project.ctxt-dir}/skins" filtering="true" overwrite="true" failonerror="false">
-      <fileset dir="${project.skins-dir}"/>
+    <copy toDir="${project.ctxt-dir}/skins" filtering="off" overwrite="true" failonerror="false">
+       <fileset dir="${project.skins-dir}" >
+        <include name="**/images/**" />
+      </fileset>
+    </copy>
+    <copy toDir="${project.ctxt-dir}/skins" filtering="on" overwrite="true" failonerror="false">
+      <fileset dir="${project.skins-dir}" >
+        <exclude name="**/images/**" />
+      </fileset>
     </copy>
   </target>
 
@@ -459,7 +467,7 @@ for any broken links in the generated site.
   </target>
 
   <!-- ===============================================================
-       Builds a cocoon webapp for your project based on the siteplan.
+       Builds a cocoon webapp for your project.
        param: location to put generated webapp ${project.webapp}
        =============================================================== -->
   <target name="webapp" depends="init, project.webapp.defined, prepare-context,
@@ -474,11 +482,17 @@ for any broken links in the generated site.
         <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
       </fileset>
     </copy>
+
     <copy todir="${project.webapp}/WEB-INF">
+      <!-- Note: no overwriting, so user's libs and classes get preference -->
       <fileset dir="${forrest.home}/WEB-INF">
-        <include name="*.xconf" />
         <include name="lib/**"/>
         <include name="classes/**"/>
+      </fileset>
+    </copy>
+    <copy todir="${project.webapp}/WEB-INF" filtering="true">
+      <fileset dir="${forrest.home}/WEB-INF">
+        <include name="*.xconf" />
       </fileset>
     </copy>
     <echo>
@@ -499,26 +513,19 @@ Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
   </target>
 
   <!-- ===============================================================
-       Builds a cocoon webapp for your project based on the siteplan.
-       param: location of siteplan ${project.siteplan}
+       Builds a cocoon .war for your project based on the siteplan.
        param: location to put generated war ${project.war}
        =============================================================== -->
- <target name="war" depends="init, prepare-context"
+ <target name="war" depends="webapp"
    description="Generates a dynamic servlet-based website (an packaged .war file)">
-    <!-- this will need revisions in the case of the siteplan
-         extra project-custom classes then will need to be warred in as well. -->
-    <war warfile="${project.war}"
-         webxml="${forrest.home}/WEB-INF/web.xml"
-         compress="true">
-      <fileset dir="${project.ctxt-dir}" >
-        <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
-      </fileset>
-      <webinf  dir="${forrest.home}/WEB-INF" >
-        <include name="*.xconf" />
-      </webinf>
-      <lib     dir="${forrest.home}/WEB-INF/lib"     />
-      <classes dir="${forrest.home}/WEB-INF/classes/"/>
-    </war>
+
+   <jar destfile="${project.war}" basedir="${project.webapp}"/>
+   <echo>
+---------------------------------
+Webapp .war file generated:
+${project.war}
+---------------------------------
+   </echo>
   </target>
 
 
