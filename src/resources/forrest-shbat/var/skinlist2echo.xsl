@@ -11,7 +11,11 @@
 	</xsl:template>
 	
 	<xsl:template match="skin">
-	    <echo><xsl:value-of select="@name"/> - <xsl:value-of select="normalize-space(description)"/></echo>
+<echo>
+* <xsl:value-of select="@name"/> - <xsl:value-of select="normalize-space(description)"/>
+  - author: <xsl:value-of select="@author"/>
+  - website: <xsl:value-of select="@website"/> 	    
+</echo>
 	</xsl:template>	
 	
 </xsl:stylesheet>
