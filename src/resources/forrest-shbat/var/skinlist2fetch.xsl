@@ -17,11 +17,13 @@
                <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
                <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
             </get>
+            <available property="versioned-skin.present">
+               <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+            </available>
          </target>
 
          <target name="fetch-unversioned-skin" unless="versioned-skin.present">
             <echo>Versioned skin unavailable, trying to get versionless skin...</echo>
-
             <get verbose="true" usetimestamp="true" ignoreerrors="true">
                <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />.zip</xsl:attribute>
                <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
@@ -32,7 +34,6 @@
             <available property="skin.present">
                <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
             </available>
-
             <fail unless="skin.present">
               Unable to download the 
               "<xsl:value-of select="$skin-name" />" skin from 
@@ -40,7 +41,6 @@
               In case the reason is the network connection, you can try 
               installing the package manually by placing the file in the 
               skins directory.</fail>
-
             <echo>Skin "<xsl:value-of select="$skin-name" />" correctly installed.</echo>
          </target>
       </project>
