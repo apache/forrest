@@ -25,6 +25,7 @@ FORREST_HOME=`dirname "$0"`/..
 # Save old ANT_HOME
 OLD_ANT_HOME="$ANT_HOME"
 unset ANT_HOME
+ANT_HOME="$FORREST_HOME/tools/ant "
 
 # ----- Set Up The Runtime Classpath ------------------------------------------
 
@@ -57,7 +58,7 @@ export CLASSPATH
 
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
-"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dforrest.home="$FORREST_DOT_HOME" -emacs $@
+"$ANT_HOME/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dforrest.home="$FORREST_DOT_HOME" -emacs $@
 RESULT=$?
 
 # ---- Restore Classpath
