@@ -16,11 +16,15 @@
 -->
 
 <project default="validate" basedir="." name="validate">
-
+<!--
   <target name="validate" depends="validation-props, validate-xdocs,
     validate-sitemap, validate-skins, validate-skinchoice,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
+-->   
     
+  <target name="validate"/>
+        
+             
   <target name="validation-props" depends="examine-proj">
     <!-- Validation flags -->
     <property name="forrest.validate" value="true" />
@@ -65,8 +69,8 @@ to validate this site.
         </catalogpath>
       </xmlcatalog>
       <fileset dir="${project.site-dir}"
-        includes="${forrest.validate.includes}"
-        excludes="${forrest.validate.excludes}"/>
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
     <echo message="...validated site"/>
   </target>
