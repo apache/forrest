@@ -161,23 +161,29 @@ Use the 'seed' target to create a template project structure.
 
  
   <!-- ===============================================================
-       Prepares the Lucene context indexing the site. [RPR]
+       Prepares the Lucene context indexing the site. 
        =============================================================== -->
-  <target name="lucene-index" depends="init, -prepare-classpath" if="use-lucene-indexer">
-    <java classname="org.apache.forrest.search.ForrestIndexer"
-      dir="${project.webapp}"
-      fork="true"
-      failonerror="true"
-      maxmemory="${forrest.maxmemory}">
-      <jvmarg line="${forrest.jvmargs}"/>
-      <jvmarg line="${forrest.basic.jvmargs}"/>
-      <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-      <arg line="-index ${project.index-dir}"/>
-      <arg value="${xdocs-dir}"/>
-      <classpath>
-        <path refid="forrest.cp"/>
-      </classpath>
-    </java>
-  </target>
+  <target name="lucene-index">
+   <java classname="org.apache.cocoon.Main"
+        fork="true"
+        dir="${project.webapp}"
+        failonerror="true"
+        maxmemory="${forrest.maxmemory}">
+        <jvmarg line="${forrest.jvmargs}"/>
+        <jvmarg line="${forrest.basic.jvmargs}"/>
+        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <arg value="--logLevel=${project.debuglevel}"/>
+        <arg value="--Logger=${project.logger}"/>
+        <arg value="--logKitconfig=${project.logkitfile}"/>
+        <arg value="--destDir=${project.temp-dir}"/>
+        <arg value="--xconf=${project.configfile}"/>
+        <arg value="--followLinks=false"/>
+        <arg value="-w${project.cocoon-work-dir}"/>
+        <arg value="lucene-update.html"/>
+        <classpath>
+          <path refid="forrest.cp"/>
+        </classpath>
+      </java>
+</target>
 
 </project>

@@ -58,6 +58,9 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
     </xsl:call-template>
   </xsl:variable>
 
+  <!-- Path of Lucene search results page (relative to $root) -->
+  <xsl:param name="lucene-search" select="'lucene-search.html'"/>
+
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
 

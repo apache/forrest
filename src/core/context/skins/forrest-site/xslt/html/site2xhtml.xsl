@@ -107,39 +107,73 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
         <xsl:comment>================= start Search ==================</xsl:comment>
         <td bgcolor="{$header-color}" rowspan="2" valign="top">
           <xsl:if test="$config/search">
-            <form method="get" action="http://www.google.com/search" target="_blank">
-              <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
-                <tr>
-                  <td colspan="3"><img class="spacer" src="{$spacer}" alt="" width="1" height="10" /></td>
-                </tr>
-                <tr>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                  <td nowrap="nowrap">
-                    <input type="hidden" name="sitesearch" value="{$config/search/attribute::domain}"/>
-                    <input type="text" id="query" name="q" size="15"/>
-                    <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
-                    <input type="submit" value="Search" name="Search"/>
-                    <br />
-                    <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-                      the <xsl:value-of select="$config/search/attribute::name"/> site
-                      <!-- setting search options off for the moment -->
-                      <!--
-                      <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
-                      -->
-                    </font>
-                  </td>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                </tr>
-                <tr>
-                  <td><img src="{$skin-img-dir}/search-left.gif" width="9" height="10" border="0" alt="" /></td>
-                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
-                  <td><img src="{$skin-img-dir}/search-right.gif" width="9" height="10" border="0" alt="" /></td>
-                </tr>
-              </table>
-            </form>
+           <xsl:choose>
+              <xsl:when test="$config/search/@provider = 'lucene'">
+                <!-- Lucene search -->
+                <form method="get" action="{$root}{$lucene-search}">
+                  <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
+                    <tr>
+                      <td colspan="3"><img class="spacer" src="{$spacer}" alt="" width="1" height="10" /></td>
+                    </tr>
+                    <tr>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                      <td nowrap="nowrap">
+                        <input type="text" id="query" name="queryString" size="15"/>
+                        <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
+                        <input type="submit" value="Search" name="Search"/>
+                        <br />
+                        <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
+                          the <xsl:value-of select="$config/search/attribute::name"/> site
+                        </font>
+                      </td>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                    </tr>
+                    <tr>
+                      <td><img src="{$skin-img-dir}/search-left.gif" width="9" height="10" border="0" alt="" /></td>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                      <td><img src="{$skin-img-dir}/search-right.gif" width="9" height="10" border="0" alt="" /></td>
+                    </tr>
+                  </table>
+                </form>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- Google search -->
+                <form method="get" action="http://www.google.com/search" target="_blank">
+                  <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
+                    <tr>
+                      <td colspan="3"><img class="spacer" src="{$spacer}" alt="" width="1" height="10" /></td>
+                    </tr>
+                    <tr>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                      <td nowrap="nowrap">
+                        <input type="hidden" name="sitesearch" value="{$config/search/attribute::domain}"/>
+                        <input type="text" id="query" name="q" size="15"/>
+                        <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
+                        <input type="submit" value="Search" name="Search"/>
+                        <br />
+                        <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
+                          the <xsl:value-of select="$config/search/attribute::name"/> site
+                          <!-- setting search options off for the moment -->
+                          <!--
+                          <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
+                          -->
+                        </font>
+                      </td>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                    </tr>
+                    <tr>
+                      <td><img src="{$skin-img-dir}/search-left.gif" width="9" height="10" border="0" alt="" /></td>
+                      <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
+                      <td><img src="{$skin-img-dir}/search-right.gif" width="9" height="10" border="0" alt="" /></td>
+                    </tr>
+                  </table>
+                </form>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:if>
+
         </td>
-        <xsl:comment>================= start Search ==================</xsl:comment>
+        <xsl:comment>================= end Search ==================</xsl:comment>
 
         <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" width="10" height="10" /></td>
       </tr>

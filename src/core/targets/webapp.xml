@@ -50,16 +50,13 @@
          Is this really a concern of the skinconf?
          The indexer must be off by default. If the optional skinconf parameter
          "disable-lucene" is missing or false, then off. 
-    -->
     <condition property="use-lucene-indexer">
-      <!-- sorry for the convolution -->
-      <and>
-        <isset property="skinconfig.disable-lucene"/>
-        <isfalse value="${skinconfig.disable-lucene}"/>
-      </and>
+        <isset property="skinconfig.search(provider)"/>
+        <equals arg1="${skinconfig.search(provider)}" arg2="lucene"/>
     </condition>
     <antcall target="lucene-index"/>
-    
+    -->
+
     <available file="${content-dir}/jettyconf.xml" 
       property="custom_jetty_config"/>
 

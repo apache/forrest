@@ -257,7 +257,12 @@ $Revision: 1.12 $
         <map:match pattern="site.xml">
           <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
         </map:match>
-     
+
+        <!-- Lucene index update and search -->
+        <map:match pattern="lucene-*.xml">
+          <map:mount uri-prefix="" src="search.xmap" check-reload="yes"/>
+        </map:match>
+
         <!-- Default source types -->
         <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
 
@@ -478,6 +483,9 @@ $Revision: 1.12 $
       </map:match>
      <map:match pattern="**.ico">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
+      </map:match> 
+      <map:match pattern="**.lucene">
+        <map:mount uri-prefix="" src="search.xmap" check-reload="yes" />
       </map:match> 
     </map:pipeline>
 
