@@ -28,7 +28,7 @@
 
 <xsl:import href="copyover.xsl"/>
 
-<xsl:param name="config-file" select="'../../skinconf.xml'"/>
+<xsl:param name="config-file" />
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
 
 <xsl:template match="for:project-name">
