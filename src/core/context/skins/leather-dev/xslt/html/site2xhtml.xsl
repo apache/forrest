@@ -59,8 +59,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |stylesheets
   +-->
-<!--            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
-                />-->
+            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
+                />
   <!--         <link rel="stylesheet" href="{$root}skin/screen.css" 
                 type="text/css" media="screen" />
             <link rel="stylesheet" href="{$root}skin/print.css" type="text/css" 
@@ -71,8 +71,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 type="text/css" /> 
             <link rel="stylesheet" href="{$root}skin/base.css" 
                 type="text/css" />
-            <link rel="stylesheet" href="{$root}skin/profiling.css" 
-                type="text/css" />
+<!--            <link rel="stylesheet" href="{$root}skin/profiling.css" 
+                type="text/css" />-->
 <!--+
   |Javascripts
   +-->

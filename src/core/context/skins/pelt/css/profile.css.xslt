@@ -99,14 +99,14 @@ color: <xsl:value-of select="@font"/>;
 </xsl:template>
 <!--Fix for other (old) profiles-->
 <xsl:template match="color[@name='navstrip']">
-#published { 
+#publishedStrip { 
 color: <xsl:value-of select="@font"/>;
 background: <xsl:value-of select="@value"/>; 
 }
 </xsl:template> 
 <!--has to go after the nav-strip (no 'navstrip')-->
 <xsl:template match="color[@name='published']">
-#published { 
+#publishedStrip { 
 color: <xsl:value-of select="@font"/>;
 background: <xsl:value-of select="@value"/>; 
 }
