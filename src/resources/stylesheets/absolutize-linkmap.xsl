@@ -30,10 +30,13 @@ Jeff Turner <jefft@apache.org>
   <!-- Recursive template to collate @href's -->
   <xsl:template name="absolutize">
     <xsl:param name="node"/>
-    <xsl:if test="$node/..">
-      <xsl:call-template name="absolutize">
-        <xsl:with-param name="node" select="$node/.."/>
-      </xsl:call-template>
+    <!-- Only append ancestor hrefs if we're not a http(s): URL -->
+    <xsl:if test="not(starts-with($node/@href, 'http:') or starts-with($node/@href, 'https:'))">
+      <xsl:if test="$node/..">
+        <xsl:call-template name="absolutize">
+          <xsl:with-param name="node" select="$node/.."/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
     <xsl:value-of select="$node/@href"/>
 
