@@ -79,54 +79,7 @@
          Set the <code>ANT_OPTS</code> environment variable before you run forrest.  The exact value you set
          it to is dependant on your JVM, but something like <code>ANT_OPTS=-Xmx500M</code> will probably work.
         </p>
-      </section><section id="encoding"><title>1.8. Does forrest like accents?</title>
-            <p>Short answer: yes, forrest can process text in any language so you can include:</p>
-            <dl>
-            <dt>accents</dt><dd>αινσϊ</dd>
-            <dt>dieresis</dt><dd>δλοφό</dd>
-            <dt>tildes</dt><dd>γρ&#297;υ&#361;</dd>
-            <dt>Everything that has a computer character representation</dt><dd><!-- include other common non-ASCII characters--></dd>
-            </dl>
-            <p>This is because sources for forrest docs are xml documents, which can include any of these
-            as long as the encoding your xml doc declares matches the actual encoding used in the file containing
-            the xml. For instance if you declare:</p>
-            <source xml:space="preserve">
-            
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-            
-            </source>
-            <p>but the file is actually using ISO-8859-1 you will probably get a validation error. specially if 
-            you include some non-ASCII characters.</p>
-            <p>
-            This situation is commonly encountered when you edit the templates created by <code>forrest seed</code> with your favorite 
-            (probably localized) editor without paying attention to the encoding. Or when you create a new file 
-            and simply copy the headers from another file
-            </p>
-            <p>Though UTF-8 is an encoding well suited for most languages is not ussually the default
-            in popular editors or systems.</p>
-            <p>In UNIX-like systems, most popular editors can handle different encodings to 
-            write the file in disk. On some editors the encoding of the file is preserved, in others the default
-            is used regardless the original encoding. On most cases the encoding used to write files
-            can be controled by setting the enviroment variable <code>LANG</code>
-            to an appropiate value, for instance:
-            </p>
-            <source xml:space="preserve">
-            
-$ export LANG=en_US.UTF-8
-            
-            </source>
-            <p>Of course the <em>appropiate</em> way of setting the encoding to use depends on the editor/OS, 
-            but ultimately relays on the user preferences. So you can use the encoding you prefer as long as 
-            the <code>encoding</code> attribute of the xml declaration matches the actual encoding of the file. 
-            This means 
-            that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
-            <source xml:space="preserve">
-            
-&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-            
-            </source>
-            
-        </section></section><section id="technical"><title>2. Technical</title><section id="edit-content"><title>2.1. What tools can be used to edit the content?</title>
+      </section></section><section id="technical"><title>2. Technical</title><section id="edit-content"><title>2.1. What tools can be used to edit the content?</title>
         <p>If you are using the Apache Forrest xml
           <link href="site:dtd-docs">document format</link> or DocBook
           or other xml document types, then you can use any text editor
@@ -349,7 +302,54 @@ X [0]                       brokenlink.html     BROKEN: reason
         and see more discussion at
         <link href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</link>.
         </p>
-      </section><section id="skin"><title>2.14. 
+      </section><section id="encoding"><title>2.14. Does Forrest handle accents for non-English languages?</title>
+        <p>Yes, Forrest can process text in any language, so you can include:</p>
+        <ul>
+          <li>accents: α ι ν σ ϊ</li>
+          <li>diereses: δ λ ο φ ό</li>
+          <li>tildes: γ ρ &#297; υ &#361;</li>
+        </ul>
+        <p>This is because sources for Forrest docs are xml documents, which can include any of these,
+          provided the encoding declared by the xml doc matches the actual encoding used in the file.
+          For example if you declare the default encoding:</p>
+        <source xml:space="preserve">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</source>
+        <p>but the file content is actually using ISO-8859-1 then you will
+           receive validation errors, especially if 
+           you include some non-ASCII characters.</p>
+        <p>
+          This situation is commonly encountered when you edit the templates
+          created by <code>forrest seed</code> with your favorite 
+          (probably localized) editor without paying attention to the encoding,
+          or when you create a new file 
+          and simply copy the headers from another file.
+        </p>
+        <p>Although UTF-8 is an encoding well-suited for most languages,
+          it is not usually the default in popular editors or systems.
+          In UNIX-like systems, most popular editors can handle different encodings to 
+          write the file in disk. With some editors the encoding of the file is preserved, while with others the default
+          is used regardless of the original encoding. In most cases the encoding used to write files
+          can be controlled by setting the environment variable <code>LANG</code>
+          to an appropriate value, for instance:
+        </p>
+        <source xml:space="preserve">[localhost]$ export LANG=en_US.UTF-8</source>
+        <p>Of course the <em>appropriate</em> way to set the encoding depends on the editor/OS, 
+          but ultimately relys on the user preferences. So you can use the encoding you prefer, as long as 
+          the <code>encoding</code> attribute of the xml declaration matches the actual encoding of the file. 
+          This means 
+          that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
+        <source xml:space="preserve">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;</source>
+        <p>Another option is to use "character entities" such as
+        <code>&amp;ouml;</code> (φ) or the numeric form
+        <code>&amp;#246;</code> (φ).
+        </p>
+        <p>Another related issue is that your webserver needs to send http
+          headers with the matching charset definitions to the html page.
+        </p>
+        <p>Here are some references which explain further:
+          <link href="http://orixo.com/events/gt2004/bios.html#torsten">GT2004 presentation by Torsten Schlabach</link> and 
+          <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode resources</link>.
+        </p>
+      </section><section id="skin"><title>2.15. 
         How to make the site look better and change its skin?
       </title>
         <p>
@@ -364,7 +364,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         Some projects may have special needs and can define their
         <link href="site:your-project/new-skin">own skin</link>.
         </p>
-      </section><section id="xsp"><title>2.15. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+      </section><section id="xsp"><title>2.16. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
         <p>First consider whether your needs would be better met by Cocoon itself, rather than Forrest.
         </p>
         <p>That said, there are valid reasons for wanting programmatically generated content, so here is how to enable
@@ -394,7 +394,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         </ol>
         <p>See also the 
         <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
-      </section><section id="breadcrumbs"><title>2.16. How do breadcrumbs work?  Why don't they work locally?</title>
+      </section><section id="breadcrumbs"><title>2.17. How do breadcrumbs work?  Why don't they work locally?</title>
       <p>Breadcrumbs begin with up to three URLs specified in
       <code>skinconf.xml</code>.  Here is what the Forrest site uses:</p>
       <source xml:space="preserve">
@@ -410,7 +410,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       there will be no extra breadcrumbs, only the ones that are specified
       in <code>skinconf.xml</code>.
       </p>
-      </section><section id="run_port"><title>2.17. How do I make <code>forrest run</code> listen on a different port?</title>
+      </section><section id="run_port"><title>2.18. How do I make <code>forrest run</code> listen on a different port?</title>
       <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
       <p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
       directory and set the port number in that file.  Then do <code>forrest run</code>
