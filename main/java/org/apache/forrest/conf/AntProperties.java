@@ -134,7 +134,7 @@ public class AntProperties extends Properties
         return resultStringBuffer.toString();
     }
 
-    private class STATE
+    private static class STATE
     {
 
         final static int STRING_NOT_TO_FILTER = 0;
