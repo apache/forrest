@@ -259,6 +259,12 @@
       <fileset dir="lib/core" includes="resolver*.jar"/>
     </copy>
 
+    <!-- Copy Jetty jars, so the shbat distribution is self-contained -->
+    <mkdir dir="${dist-shbat.dir}/jetty" />
+    <copy todir="${dist-shbat.dir}/jetty">
+      <fileset dir="tools/jetty" />
+    </copy>
+    
     <!-- Fix bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
     <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
