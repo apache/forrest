@@ -5,8 +5,7 @@
 PURPOSE:
   This DTD was developed to create a simple yet powerful document
   type for software How-Tos for use with the Apache projects.
-  It is an XML-compliant DTD and it's maintained by the Apache XML
-  project.
+  It is an XML-compliant DTD and is maintained by the Apache XML project.
 
 TYPICAL INVOCATION:
 
@@ -30,6 +29,7 @@ FIXME:
 
 CHANGE HISTORY:
   20020515 Initial version. (DS)
+  20020521 Added feedback element. (DS)
 
 COPYRIGHT:
   Copyright (c) @year@ The Apache Software Foundation.
@@ -65,7 +65,8 @@ COPYRIGHT:
 <!-- Document Type Definition -->
 <!-- =============================================================== -->
 
-<!ELEMENT howto (header, audience?, purpose?, prerequisites?, steps, extension?, faqs?, tips?, references? )>
+<!ELEMENT howto (header, audience?, purpose?, prerequisites?, steps,
+    extension?, faqs?, tips?, references?, feedback? )>
 <!ATTLIST howto %common.att;>
 
 
@@ -75,7 +76,7 @@ COPYRIGHT:
     <!ELEMENT purpose (%blocks;)* >
     <!ATTLIST purpose %title.att; %common.att;>
 
-    <!ELEMENT prerequisites (%blocks;)* >
+    <!ELEMENT prerequisites (section | %blocks;)* >
     <!ATTLIST prerequisites %title.att; %common.att;>
 
     <!ELEMENT audience (%blocks;)* >
@@ -90,8 +91,11 @@ COPYRIGHT:
     <!ELEMENT tips (section | %blocks;)* >
     <!ATTLIST tips %title.att; %common.att;>
 
-    <!ELEMENT references (%blocks;)* >
+    <!ELEMENT references (section | %blocks;)* >
     <!ATTLIST references %title.att; %common.att;>
+
+    <!ELEMENT feedback (%blocks;)* >
+    <!ATTLIST feedback %title.att; %common.att;>
 
     <!ELEMENT last-modified-content-date EMPTY >
     <!ATTLIST last-modified-content-date date CDATA #REQUIRED>
