@@ -20,6 +20,7 @@ package org.apache.forrest.forrestbot.webapp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -46,6 +47,7 @@ public class Config {
 			configureLog4j();
 			configureProperties();
 			validateProperties();
+			debugProperties();
 	}
 
 	private static void configureLog4j() {
@@ -89,6 +91,14 @@ public class Config {
 			if (!f.isDirectory()) {
 				log.error("Property " + directoriesToCheck[i] + " must reference a directory.  Current value: " + f.toString());
 			}
+		}
+	}
+	
+	protected static void debugProperties() {
+		log.debug("properties loaded from settings.properties:");
+		for (Iterator i = p.keySet().iterator(); i.hasNext();) {
+			String key = (String)i.next();
+			log.debug(key + "=" + p.getProperty(key));
 		}
 	}
 
