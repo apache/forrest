@@ -35,8 +35,18 @@ Credit: original from the jakarta-avalon project
             <xsl:for-each select="log/record">
               <xsl:sort select="sequence" data-type="number" order="descending"/>
               <section>
-                <title><xsl:value-of select="level"/>: <xsl:value-of select="message"/></title>
-                <p>Logged By: <strong><xsl:value-of select="class"/>.<xsl:value-of select="method"/>()</strong></p>
+                <xsl:choose>
+                  <xsl:when test="message='ENTRY'">
+                    <title>Entering: <xsl:value-of select="method"/>() in <xsl:value-of select="class"/></title>
+                  </xsl:when>
+                  <xsl:when test="message='EXIT'">
+                    <title>Exiting: <xsl:value-of select="method"/>() in <xsl:value-of select="class"/></title>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <title><xsl:value-of select="level"/>: <xsl:value-of select="message"/></title>
+                    <p>Logged By: <strong><xsl:value-of select="class"/>.<xsl:value-of select="method"/>()</strong></p>
+                  </xsl:otherwise>
+                </xsl:choose>
                 <p>Logged At: <strong> <xsl:value-of select="date"/> (<xsl:value-of select="millis"/>)</strong></p>
               </section>
             </xsl:for-each>
