@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 1999-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
 <!-- ===============================================
 *.dtd pipeline.  Generates XML from DTDs using the Neko parser.
 Useful for documenting DTD-based XML schemas, of which Forrest has plenty.
@@ -24,10 +26,8 @@ Example URL:  http://localhost:8888/forrest-issues.xml       # Source XML for FA
 Used by    :  sitemap.xmap
 Uses       :  resources/schema/dtd/*.dtd
 
-$Revision: 1.4 $
 ==================================================== -->
 
-<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
       <map:generator name="nekodtd" src="org.apache.forrest.xni.XNIConfigurableFileGenerator" />
@@ -39,16 +39,14 @@ $Revision: 1.4 $
 
   <map:pipelines>
     <map:pipeline>
-
       <map:match pattern="*.dtdx.xml">
         <map:generate type="nekodtd" src="{forrest:context}/resources/schema/dtd/{1}.dtd">
           <map:parameter name="config-class" value="org.cyberneko.dtd.DTDConfiguration" />
         </map:generate>
-        <map:transform src="{forrest:stylesheets}/dtdx2flat.xsl" />
-        <map:transform src="{forrest:stylesheets}/flat2document.xsl" />
+        <map:transform src="resources/stylesheets/dtdx2flat.xsl" />
+        <map:transform src="resources/stylesheets/flat2document.xsl" />
         <map:serialize type="xml-document"/>
       </map:match>
-
     </map:pipeline>
   </map:pipelines>
 </map:sitemap>
