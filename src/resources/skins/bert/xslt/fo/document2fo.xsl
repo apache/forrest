@@ -227,6 +227,18 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="authors">
+    <fo:block
+      space-before="20pt"
+      font-weight="bold"
+      font-size="9pt">
+      <xsl:for-each select="person">
+        <xsl:value-of select="@name"/>, <xsl:value-of select="@email"/>
+        <xsl:if test="not(position() = last())">, </xsl:if>
+      </xsl:for-each>
+    </fo:block>
+  </xsl:template>
+
   <xsl:template match="p">
     <fo:block
       space-before="4pt"
@@ -268,7 +280,8 @@
       </fo:list-item-label>
       <fo:list-item-body 
         start-indent="body-start()">
-        <fo:block>
+        <fo:block
+          font-family="serif">
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -281,7 +294,8 @@
         <fo:block>&#x2022;</fo:block>
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
-        <fo:block>
+        <fo:block
+          font-family="serif">
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -447,7 +461,7 @@
 
   <xsl:template match="figure">
     <!-- FIXME: Images are not found at the moment -->
-    <fo:external-graphic src="../resources/{@src}"/>
+    <fo:external-graphic src="{@src}"/>
     <!-- alt text and credits need inserting -->
   </xsl:template>
 
