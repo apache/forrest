@@ -3,16 +3,17 @@
 <project basedir="." default="main">
 
   <property name="forrest.home" value="${user.home}/apache/xml/xml-forrest/build/dist/shbat"/>
-  <property name="bot.home" value="${forrest.home}/forrestbot2"/>
+  <property name="bot.home" value="${forrest.home}/forrestbot2/core"/>
   <import file="${forrest.home}/forrest.build.xml"/>
 
-  <import file="${bot.home}/rebuild-forrest.xml"/>
+  <!--<import file="${bot.home}/rebuild-forrest.xml"/>-->
   <import file="${bot.home}/cvs.xml"/>
   <import file="${bot.home}/local.xml"/>
   <import file="${bot.home}/email.xml"/>
 
   <property name="administrator"  value="jefft@apache.org"/>
   <property name="build.work-dir"         value="work/${ant.project.name}"/>
+  <property name="build.site-dir"         value="work/${ant.project.name}/site"/>
   <property name="build.deploy-dir"       value="sites/${ant.project.name}"/>
   <mkdir dir="logs"/>
   <tstamp>
@@ -39,9 +40,11 @@
       <try>
         <record name="${build.logfile}" action="start"/>
         <antcall target="forrest.site" inheritAll="false">
-          <param name="basedir" value="${build.work-dir}"/>
+          <param name="project.home" value="${build.work-dir}"/>
+          <param name="project.build-dir" value="${build.work-dir}"/>
+          <param name="project.site-dir" value="${build.site-dir}"/>
         </antcall>
-        <record name="forrest.log" action="stop"/>
+        <record name="${build.logfile}" action="stop"/>
         <property name="completion-status" value="succeeded" />
       </try>
       <catch>
@@ -58,6 +61,6 @@
 
   <target name="notify" depends="email.notify"/>
 
-  <target name="main" depends="deploy, notify"/>
+  <target name="main" depends="getsrc, site, deploy, notify"/>
 
 </project>

@@ -13,17 +13,17 @@
       </fileset>
     </copy>
     <loadproperties srcFile="${build.work-dir}/forrest.properties"/>
-    <loadproperties srcFile="default-forrest.properties"/>
+    <loadproperties srcFile="${bot.home}/default-forrest.properties"/>
 
     <copy todir="${build.work-dir}/${project.content-dir}">
       <fileset dir="${local.root-dir}/${project.content-dir}"/>
     </copy>
   </target>
 
-  <target name="deploy" depends="site" unless="build-failed">
+  <target name="deploy">
     <mkdir dir="${build.deploy-dir}"/>
     <copy todir="${build.deploy-dir}">
-      <fileset dir="${build.work-dir}/${project.site-dir}"/>
+      <fileset dir="${build.site-dir}"/>
     </copy>
   </target>
 
