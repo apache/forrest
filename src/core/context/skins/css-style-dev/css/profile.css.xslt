@@ -37,7 +37,7 @@
 </xsl:template> 
 
 <xsl:template match="color[@name='tab-unselected']"> 
-#tabs li      { background: <xsl:value-of select="@value"/> url('images/tab-right.gif') no-repeat right top;} 
+#tabs li      { background-color: <xsl:value-of select="@value"/> ;} 
 #tabs li a:link {  color: <xsl:value-of select="@link"/>;  }
 #tabs li a:visited { color: <xsl:value-of select="@vlink"/>; }
 #tabs li a:hover { color: <xsl:value-of select="@hlink"/>; }
