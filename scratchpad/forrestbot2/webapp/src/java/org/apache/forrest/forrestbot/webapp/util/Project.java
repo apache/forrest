@@ -122,6 +122,7 @@ public class Project {
 		}
 
 		byte[] checkSuccess = new byte[Constants.BUILD_SUCCESS_STRING.length()];
+        // try for 2-byte eol
 		try {
 			f.seek((int) f.length() - checkSuccess.length - 2);
 			f.read(checkSuccess, 0, checkSuccess.length);
@@ -129,15 +130,26 @@ public class Project {
 			log.debug("couldn't find seek in log file: " + f.toString());
 			return Constants.STATUS_UNKNOWN;
 		}
-
-		if (Constants.BUILD_SUCCESS_STRING.equals(new String(checkSuccess))) {
+		if (Constants.BUILD_SUCCESS_STRING.equals(new String(checkSuccess)))
 			return Constants.STATUS_SUCCESS;
-		} else if (getLastBuilt().getTime() > (new Date()).getTime() - 60 * 1000) {
-			// if date is in last minute, consider it still running
-			return Constants.STATUS_RUNNING;
-		} else {
-			return Constants.STATUS_FAILED;
+        // try for 1-byte eol
+		try {
+			f.seek((int) f.length() - checkSuccess.length - 1);
+			f.read(checkSuccess, 0, checkSuccess.length);
+		} catch (IOException e1) {
+			log.debug("couldn't find seek in log file: " + f.toString());
+			return Constants.STATUS_UNKNOWN;
 		}
+		if (Constants.BUILD_SUCCESS_STRING.equals(new String(checkSuccess)))
+			return Constants.STATUS_SUCCESS;
+        
+        
+        // if date is in last minute, consider it still running
+		if (getLastBuilt().getTime() > (new Date()).getTime() - 60 * 1000)
+			return Constants.STATUS_RUNNING;
+        
+        // default
+		return Constants.STATUS_FAILED;
 	}
 
 	/**
