@@ -94,13 +94,13 @@
   
     <copy todir="${project.webapp}/WEB-INF/lib">
     <!-- Note: no overwriting, so user's libs and classes get preference -->
-      <fileset dir="${forrest.home}/lib/core">
+      <fileset dir="${forrest.root-dir}/lib/core">
         <include name="**.jar"/>
       </fileset>
-      <fileset dir="${forrest.home}/lib/optional">
+      <fileset dir="${forrest.root-dir}/lib/optional">
         <include name="**.jar"/>
       </fileset>
-      <fileset dir="${forrest.home}/lib/endorsed">
+      <fileset dir="${forrest.root-dir}/lib/endorsed">
         <include name="**.jar"/>
       </fileset>
     </copy>
@@ -112,7 +112,7 @@
     <!-- Copy XML jars if not running JDK 1.4 (where they're built-in) -->
     <available property="jdk1.4+" classname="java.lang.CharSequence"/>
     <copy todir="${project.webapp}/WEB-INF/lib">
-      <fileset dir="${forrest.home}/lib/endorsed">
+      <fileset dir="${forrest.root-dir}/lib/endorsed">
         <include name="*jar" unless="jdk1.4+"/>
       </fileset>
     </copy>
