@@ -209,6 +209,7 @@
 
   <map:match pattern="**tab-**.xml">
     <map:generate src="content/xdocs/tabs.xml"/>
+    <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
     <map:call resource="skinit">
      <map:parameter name="type" value="tab2menu"/>
      <map:parameter name="path" value="{2}"/>
@@ -231,6 +232,7 @@
 
   <map:match pattern="body-todo.xml">
      <map:generate type="file-nolabel" src="status.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
      <map:transform src="library/xslt/todo2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -240,6 +242,7 @@
 
    <map:match pattern="body-changes.xml">
      <map:generate type="file-nolabel" src="status.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
      <map:transform src="library/xslt/changes2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -249,6 +252,7 @@
 
    <map:match pattern="body-**/faq.xml">
      <map:generate type="file-nolabel" src="content/xdocs/{1}/faq.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/{1}/linkmap"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -260,6 +264,7 @@
 
    <map:match pattern="body-faq.xml">
      <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
      <map:transform src="library/xslt/faq2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -272,6 +277,7 @@
    <!-- index pages for contribution categories -->
    <map:match pattern="body-community/*/index.xml">
      <map:generate src="content/xdocs/community/{1}/index.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/community/{1}/linkmap"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/index"/>
@@ -281,6 +287,7 @@
    <!-- no special transformation, yet, for revision pages -->
    <map:match pattern="body-community**revision-*.xml">
      <map:generate src="content/xdocs/community{1}revision-{2}.xml"/>
+     <map:transform type="linkrewriter" src="cocoon:/community/{1}/linkmap"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
       <map:parameter name="path" value="community/{1}/revision-{2}"/>
@@ -293,6 +300,7 @@
        <map:part src="content/xdocs/community/{1}/{2}/{3}.xml"/>
        <map:part src="cocoon:/revisions-community/{1}/{2}/{3}" />
      </map:aggregate>
+     <map:transform type="linkrewriter" src="cocoon:/community/{1}/{2}/linkmap"/>
      <map:transform src="library/xslt/{1}2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
@@ -311,34 +319,6 @@
      </map:transform>
    <map:serialize type="xml" />
  </map:match>
-
-
-
-   <!-- Generate the "doclist" - list of all documentation
-     The first match generates each book.xml and adds a new attribute "uri".
-     The second match aggregates each book.xml into a doclist and
-     then converts it to a document.
-   -->
-   <map:match pattern="doclist/content/xdocs/**book.xml">
-     <map:generate src="content/xdocs/{1}book.xml"/>
-     <map:transform src="library/xslt/doclist.xsl">
-       <map:parameter name="uri" value="{1}"/>
-     </map:transform>
-     <map:serialize type="xml"/>
-    </map:match>
-
-   <map:match pattern="body-doclist.xml">
-     <map:aggregate element="doclist">
-       <map:part src="cocoon:/doclist/content/xdocs/book.xml"/>
-       <map:part src="cocoon:/doclist/content/xdocs/community/howto/book.xml"/>
-     </map:aggregate>
-     <map:transform src="library/xslt/doclist2document.xsl"/>
-     <map:call resource="skinit">
-      <map:parameter name="type" value="document2html"/>
-      <map:parameter name="path" value="doclist.xml"/>
-      <map:parameter name="nopdf" value="true"/>
-     </map:call>
-   </map:match>
 
    <!-- HTML DTD Documentation generation pipeline, makes use of NekoDTD tool -->
 
@@ -371,9 +351,7 @@
    <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
     <map:generate src="content/xdocs/{1}.xml"/>
-    <map:transform type="linkrewriter" src="cocoon:/linkmap">
-     <map:parameter name="bad-link-str" value="badlink"/>
-    </map:transform>
+    <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
     <map:call resource="transform-to-document">
      <map:parameter name="src" value="content/xdocs/{1}.xml"/>
     </map:call>
