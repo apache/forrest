@@ -56,6 +56,7 @@
       <xsl:apply-templates select="body"/>
     </div>
   </xsl:template>
+
   <xsl:template match="body">
     <xsl:if test="section and not($isfaq='true')">
       <ul class="minitoc">
@@ -81,6 +82,19 @@
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
+
+
+  <!-- Generate a <a name="..."> tag for an @id -->
+  <xsl:template match="@id">
+    <xsl:if test="normalize-space(.)!=''">
+      <a>
+        <xsl:attribute name="name">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </a>
+    </xsl:if>
+  </xsl:template>
+
   <!--  section handling
   - <a name/> anchors are added if the id attribute is specified
   - generated anchors are still included for TOC - what should we do about this?
@@ -89,6 +103,7 @@
 -->
   <xsl:template match="section">
     <a name="{generate-id()}"/>
+    <xsl:apply-templates select="@id"/>
     <xsl:if test="normalize-space(@id)!=''">
       <a name="{@id}"/>
     </xsl:if>
@@ -99,8 +114,10 @@
     <xsl:apply-templates select="*[not(self::title)]"/>
     </div>
   </xsl:template>
+
   <xsl:template match="section/section">
     <a name="{generate-id()}"/>
+    <xsl:apply-templates select="@id"/>
     <xsl:if test="normalize-space(@id)!=''">
       <a name="{@id}"/>
     </xsl:if>
@@ -111,7 +128,9 @@
     <xsl:apply-templates select="*[not(self::title)]"/>
     </div>
   </xsl:template>
+
   <xsl:template match="note | warning | fixme">
+    <xsl:apply-templates select="@id"/>
     <div class="frame {local-name()}">
       <div class="label">
         <xsl:choose>
@@ -128,27 +147,37 @@
       </div>
     </div>
   </xsl:template>
+
   <xsl:template match="link">
+    <xsl:apply-templates select="@id"/>
     <a href="{@href}">
       <xsl:apply-templates/>
     </a>
   </xsl:template>
+
   <xsl:template match="jump">
+    <xsl:apply-templates select="@id"/>
     <a href="{@href}" target="_top">
       <xsl:apply-templates/>
     </a>
   </xsl:template>
+
   <xsl:template match="fork">
+    <xsl:apply-templates select="@id"/>
     <a href="{@href}" target="_blank">
       <xsl:apply-templates/>
     </a>
   </xsl:template>
+
   <xsl:template match="p[@xml:space='preserve']">
-  <div class="pre">
-    <xsl:apply-templates/>
-  </div>
+    <xsl:apply-templates select="@id"/>
+    <div class="pre">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
+
   <xsl:template match="source">
+    <xsl:apply-templates select="@id"/>
     <pre class="code">
 <!-- Temporarily removed long-line-splitter ... gives out-of-memory problems -->
       <xsl:apply-templates/>
@@ -160,10 +189,13 @@
 -->
     </pre>
   </xsl:template>
+
   <xsl:template match="anchor">
     <a name="{@id}"/>
   </xsl:template>
+
   <xsl:template match="icon">
+    <xsl:apply-templates select="@id"/>
     <img src="{@src}" alt="{@alt}">
       <xsl:if test="@height">
         <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
@@ -173,10 +205,14 @@
       </xsl:if>
     </img>
   </xsl:template>
+
   <xsl:template match="code">
+    <xsl:apply-templates select="@id"/>
     <span class="codefrag"><xsl:value-of select="."/></span>
   </xsl:template>
+
   <xsl:template match="figure">
+    <xsl:apply-templates select="@id"/>
     <div align="center">
       <img src="{@src}" alt="{@alt}" class="figure">
         <xsl:if test="@height">
@@ -188,7 +224,9 @@
       </img>
     </div>
   </xsl:template>
+
   <xsl:template match="table">
+    <xsl:apply-templates select="@id"/>
     <table cellpadding="4" cellspacing="1" class="ForrestTable">
       <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
       <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
@@ -198,6 +236,7 @@
       <xsl:apply-templates/>
     </table>
   </xsl:template>
+
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>

@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.5 2002/11/02 10:09:39 jefft Exp $
+$Id: tab2menu.xsl,v 1.6 2002/11/09 11:37:44 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,8 +29,7 @@ $Id: tab2menu.xsl,v 1.5 2002/11/02 10:09:39 jefft Exp $
   <xsl:include href="dotdots.xsl"/>
   <xsl:include href="pathutils.xsl"/>
 
-  <!-- NOTE: Xalan has a bug (race condition?) where sometimes $root is only
-  half-evaluated -->
+  <!-- NOTE: Xalan has a bug (race condition?) where sometimes $root is only half-evaluated -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
@@ -46,13 +45,13 @@ $Id: tab2menu.xsl,v 1.5 2002/11/02 10:09:39 jefft Exp $
   </xsl:template>
 
   <!--
-  The longest path of any tab, whose path is a subset of the current URL.  Ie,
-  the path of the 'current' tab.
+    The longest path of any tab, whose path is a subset of the current URL.  Ie,
+    the path of the 'current' tab.
   -->
   <xsl:variable name="longest-dir">
     <xsl:for-each select="/tabs/tab[starts-with($path, @dir|@href)]">
-      <xsl:sort select="string-length(@dir|@href)" 
-        data-type="number" order="descending" />
+      <xsl:sort select="string-length(@dir|@href)"
+                data-type="number" order="descending"/>
       <xsl:if test="position()=1">
         <xsl:value-of select="@dir|@href"/>
       </xsl:if>
