@@ -24,8 +24,16 @@ If you want to help develop this plugin you need to import it as a project in
 Eclipse, the easiest way is to use the Subclipse  SVN Browser plugin from 
 http://subclipse.tigris.org and do a "Check out as...")
 
+Download Subclipse Plugin
+-------------------------
+
+- Select Help | Software updates | Find and Install | Search for new features
+
+- Add http://subclipse.tigris.org/update as URL
+
 Executing the Plugin
 --------------------
+On the context menu within resouce perspective:
 
 - Select Run | Run ...
 
