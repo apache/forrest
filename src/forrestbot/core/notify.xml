@@ -26,7 +26,7 @@
     <property name="notify.completion-status" value="- workstage should have set this -"/>
   </target>
 
-  <target name="notify.local" depends="notify.init, build">
+  <target name="notify.local" depends="notify.init, build" description="FB: Notify to the console">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
@@ -47,7 +47,7 @@
   <property name="notify.email.host" value="localhost"/>
   <property name="notify.email.to"   value="${user.name}@localhost"/>
   
-  <target name="notify.email" depends="notify.init, build" if="build.failed">
+  <target name="notify.email" depends="notify.init, build" if="build.failed" description="FB: Notify by email">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>

@@ -15,7 +15,7 @@
   limitations under the License.
 -->
 
-<project basedir="." default="main">
+<project name="forrestbot" basedir="." default="main">
 
   <property environment="ENV"/>
   <property name="forrest.home" location="${ENV.FORREST_HOME}"/>
@@ -30,15 +30,15 @@
   <import file="${bot.home}/core/notify.xml"/>
 
   <!-- default implmentations for each workstages -->
-  <target name="getsrc" depends="getsrc.cvs"/>
+  <target name="getsrc" depends="getsrc.cvs" description="FB: Get source via getsrc.cvs"/>
 
-  <target name="build" depends="build.forrest"/>
+  <target name="build" depends="build.forrest" description="FB: Build via `forrest site`"/>
 
-  <target name="deploy" depends="deploy.local"/>
+  <target name="deploy" depends="deploy.local" description="FB: Deploy via deploy.local"/>
 
-  <target name="notify" depends="notify.local"/>
+  <target name="notify" depends="notify.local" description="FB: Notify via notify.local"/>
 
   <!-- run the workstages -->
-  <target name="main" depends="getsrc, build, deploy, notify"/>
+  <target name="main" depends="getsrc, build, deploy, notify" description="FB: getsrc, build, deploy, notify"/>
 
 </project>

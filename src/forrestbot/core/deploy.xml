@@ -18,7 +18,7 @@
 
   <property name="deploy.local.dir" location="sites/${ant.project.name}"/>
 
-  <target name="deploy.local">
+  <target name="deploy.local" description="FB: Deploy to a local location">
     <mkdir dir="${deploy.local.dir}"/>
     <echo>Deploying from ${build.site-dir} to ${deploy.local.dir}</echo>
     <copy todir="${deploy.local.dir}">
@@ -30,7 +30,7 @@
   </target>
 
   <property name="deploy.scp.dest" value=""/>
-  <target name="deploy.scp">
+  <target name="deploy.scp" description="FB: Deploy to a remote location via scp">
     <scp todir="${deploy.scp.dest}">
      <fileset dir="${build.site-dir}"/>
     </scp>
@@ -45,7 +45,7 @@
   
   <property name="deploy.cvsmodule-dir" value="work/cvsmodules-deploy/${ant.project.name}"/>
   
-  <target name="deploy.cvs">
+  <target name="deploy.cvs" description="FB: Deploy by committing to a CVS repository">
     <condition property="isUnix">
         <os family="unix"/>
     </condition>
