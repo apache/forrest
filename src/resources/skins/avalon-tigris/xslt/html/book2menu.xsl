@@ -21,6 +21,8 @@ details.
     </div>
   </xsl:template>
 
+  <xsl:template match="menu-item[@type='hidden']"/>
+
   <xsl:template match="menu-item">
     <div class="menuItem">
       <xsl:apply-imports/>
