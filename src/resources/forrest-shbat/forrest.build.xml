@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        ${version}-dev                        |
-    |             $Date: 2003/09/05 17:25:10 $              |
+    |             $Date: 2003/09/06 08:13:59 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -240,7 +240,7 @@ FORREST SITE BUILDER
   </target>
 
   <!-- Sets up properties and filters -->
-  <target name="init" depends="ensure-content, init-props, init-skinprops"/>
+  <target name="init" depends="init-props, init-skinprops"/>
 
   <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
@@ -702,7 +702,7 @@ for any broken links in the generated site.
        Builds a cocoon webapp for your project.
        param: location to put generated webapp ${project.webapp}
        =============================================================== -->
-  <target name="webapp" depends="init, validate, project.webapp.defined, prepare-context,
+  <target name="webapp" depends="init, validate, project.webapp.defined, ensure-content, prepare-context,
          load-project-props"
    description="Generates a dynamic servlet-based website (an unpackaged webapp)">
     <!-- this will need revisions in the case of the siteplan
