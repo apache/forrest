@@ -30,6 +30,10 @@ $Revision: 1.13 $
       <map:generators default="file" >
         <map:generator name="asciiart-svg"
                        src="org.apache.cocoon.generation.asciiart.AsciiArtSVGGenerator"/>
+        <map:generator name="text" 
+                       src="org.apache.cocoon.generation.TextGenerator">
+    <parameter name="localizable" value="true"/>
+   </map:generator>
       </map:generators>               
       <map:serializers default="html">
          <map:serializer name="svg2jpeg" mime-type="image/jpeg" src="org.apache.cocoon.serialization.SVGSerializer">
@@ -38,7 +42,13 @@ $Revision: 1.13 $
          <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer" />
          <map:serializer name="text"   mime-type="text/plain"  src="org.apache.cocoon.serialization.TextSerializer"/>
       </map:serializers>
-      <map:transformers default="xslt"/>
+      <map:transformers default="xslt">
+       <map:transformer name="pattern" 
+                        src="org.apache.cocoon.transformation.PatternTransformer">
+        <parameter name="groups" value="true"/>
+       </map:transformer>
+      </map:transformers>
+      
       <map:readers default="resource" />
       <map:matchers default="wildcard" />
       <map:selectors default="browser" />
@@ -48,6 +58,11 @@ $Revision: 1.13 $
       <map:resource name="skin-read">
             <map:select type="exists">
               <!-- First location: project skin dir -->
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.css">
+		         <map:call resource="read-linked-text">
+		           <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.css" />
+		         </map:call>
+               </map:when>
                <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}">
                   <map:read src="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
@@ -64,6 +79,12 @@ $Revision: 1.13 $
                </map:when>
                
               <!-- Second location: forrest skin dir -->
+
+               <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.css">
+		         <map:call resource="read-linked-text">
+		           <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.css" />
+		         </map:call>
+               </map:when>
                <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.{ext}">
                   <map:read src="{forrest:context}/skins/{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
@@ -80,6 +101,11 @@ $Revision: 1.13 $
                </map:when>
                
               <!-- Third location: forrest common skin dir -->
+               <map:when test="{forrest:context}/skins/common/{path}/{name}.css">
+		         <map:call resource="read-linked-text">
+		           <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.css" />
+		         </map:call>
+               </map:when>
                <map:when test="{forrest:context}/skins/common/{path}/{name}.{ext}">
                   <map:read src="{forrest:context}/skins/common/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
@@ -184,30 +210,17 @@ $Revision: 1.13 $
             <map:parameter name="config-file" value="{project:skinconf}"/>
          </map:transform>      
       </map:resource>
+      
+      <map:resource name="read-linked-text">
+        <map:generate type="text" src="{path}" />
+        <map:transform type="pattern" src="resources/chaperon/grammars/link.xlex"/>
+        <map:transform src="resources/chaperon/stylesheets/pattern2link.xsl"/>                  
+        <map:serialize type="text" mime-type="text/css"/>
+      </map:resource>
 
    </map:resources>
    
    <map:pipelines>
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        <map:pipeline>
          <map:match pattern="**skin/**.js">
             <map:call resource="skin-read">
