@@ -106,6 +106,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -127,6 +128,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -156,6 +158,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
 
   </xsl:template>
@@ -181,6 +184,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
   </xsl:template>
   
@@ -197,6 +201,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$item"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
 
   </xsl:template>
@@ -318,6 +323,7 @@ No navigation is provided and no rendering of graphics is attempted.
     <xsl:call-template name="emit">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width" select="$document-width"/>
     </xsl:call-template>
 
     <xsl:call-template name="lineOf">
