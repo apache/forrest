@@ -256,12 +256,20 @@
   <!-- ==================================================================== -->
   
   <xsl:template match="@text:style-name">
+    <!-- class attributes on source document elements will be
+    available when Forrest's source document format is changed to
+    XHTML. -->
+    <!--
     <xsl:attribute name="class">
       <xsl:value-of select="."/>
     </xsl:attribute>
+    -->
   </xsl:template>
   
   <xsl:template name="style">
+    <!-- HACK: This makes intermediate documents invalid per the
+    Forrest Document DTD. To find out why this is done this way
+    nonetheless, read the comments attached to issue FOR-433. -->
     <style>
       <xsl:apply-templates select="//office:styles/style:style"/>
       <xsl:apply-templates select="//office:automatic-styles/style:style"/>

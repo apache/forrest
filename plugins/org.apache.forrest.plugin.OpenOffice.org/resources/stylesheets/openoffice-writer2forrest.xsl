@@ -104,7 +104,7 @@
       |   XHTML2 anyway ... (RP)
       +-->
   <xsl:template match="text:p[@text:style-name='Forrest: Fixme']">
-    <fixme>
+    <fixme author="">
       <xsl:apply-templates/>
     </fixme>
   </xsl:template>
