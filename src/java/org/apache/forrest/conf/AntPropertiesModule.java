@@ -43,8 +43,6 @@ import org.apache.excalibur.source.SourceResolver;
  *  is resolved via the SourceResolver system.
  * </p>
  * 
- * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @author <a href="mailto:unico@apache.org">Unico Hommes</a>
 */
 public class AntPropertiesModule extends AbstractJXPathModule 
 implements InputModule, Serviceable, Configurable, ThreadSafe {

@@ -28,7 +28,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @date barozzink 14-apr-2004
+ * Class for accessing properties in a properties file 
+ * roughly compatible with Ant property files, where ${name}
+ * is replaced with the value of the property 'name' if
+ * declared beforehand.
  **/
 public class AntProperties extends Properties {
 
