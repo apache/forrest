@@ -262,8 +262,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </div>
           
           <xsl:if test="$filename = 'index.html'">
-            <div class="logos">
-              <!-- W3C logos -->
+            <div id="logos" >
+				<xsl:if test="$config/disable-compliance-links/@align">
+					<xsl:attribute name="style">text-align: <xsl:value-of select="$config/disable-compliance-links/@align"/></xsl:attribute>
+				</xsl:if>
+              <!-- W3C logos style="text-align: center;"-->
               <xsl:call-template name="compliancy-logos"/>
               <xsl:if test="$filename = 'index.html' and $config/credits and not ($config/credits/credit/@box-location = 'alt')">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
