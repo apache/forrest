@@ -31,8 +31,10 @@ automatically generate a menu for (here wiki/):
   <xsl:output doctype-system="book-cocoon-v10.dtd" doctype-public="-//APACHE//DTD Cocoon Documentation Book V1.0//EN"/>
 
   <xsl:param name="expected-extension" select="'xml'"/>
+  <xsl:param name="served-extension" select="html"/>
 
   <xsl:variable name="ext" select="concat('.', $expected-extension)"/>
+  <xsl:variable name="sext" select="concat('.', $served-extension)"/>
 
   <xsl:template match="/">
     <book software="" title="" copyright="">
@@ -62,7 +64,7 @@ automatically generate a menu for (here wiki/):
           <xsl:variable name="path" select="concat($path, @name, '/')" />
           <xsl:value-of select="$path"/>
         </xsl:for-each>
-        <xsl:value-of select="concat(substring-before(@name, $ext), '.html')"/>
+        <xsl:value-of select="concat(substring-before(@name, $ext), $sext)"/>
       </xsl:attribute>
     </menu-item>
   </xsl:template>
