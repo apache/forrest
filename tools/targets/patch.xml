@@ -25,24 +25,32 @@
     <property name="patch.package" value="patch.tar.gz"/>
     <property name="patch.file" value="patch.txt"/>
 
-    <condition property="cvs.found">
+    <condition property="svn.found">
         <or>
-            <available file="cvs" filepath="${env.PATH}"/>
-            <available file="cvs.exe" filepath="${env.PATH}"/>
-            <available file="cvs.exe" filepath="${env.Path}"/>
+            <available file="svn" filepath="${env.PATH}"/>
+            <available file="svn.exe" filepath="${env.PATH}"/>
+            <available file="svn.exe" filepath="${env.Path}"/>
         </or>
     </condition>
 
     <target name="createpatch">
-        <fail unless="cvs.found"
-              message="You need a version of cvs to create the patch"/>
-        <cvs command="-q diff -u" output="${patch.file}"/>
+        <fail unless="svn.found"
+              message="You need a version of svn to create the patch"/>
+        <exec executable="svn" output="${patch.file}">
+            <arg value="diff"/>
+        </exec>
     </target>
 
     <target name="newfiles" depends="createpatch">
         <delete file="${patch.package}"/>
-        <cvs command="-q diff -N" output="${patch.file}.tmp"/>
-        <replace file="${patch.file}.tmp" token="? " value=""/>
+        <exec executable="svn" output="${patch.file}.tmp">
+            <arg value="status"/>
+        </exec>
+        <!-- the status columns make all lines invalid filenames (ignored by ant)
+            we remove the status columns for the new files so the only valid
+            filenames in the list are new files
+        -->
+        <replace file="${patch.file}.tmp" token="?      " value=""/>
         <tstamp>
             <format property="year" pattern="yyyy"/>
         </tstamp>
@@ -62,10 +70,8 @@
             setonempty="false"
             property="no.copyright"
             refid="no.copyright.set"/>
-            <!-- Commented out until someone decides if we need Copyright in all forrest pages
-	    <fail if="no.copyright"
-            message="Please assign the Apache Copyright (for ${year}) to these files and retry:${line.separator}${no.copyright}"/>
-	    -->
+        <fail if="no.copyright"
+            message="Please include the Apache Copyright header (for ${year}) to these files and retry:${line.separator}${no.copyright}"/>
     </target>
 
     <target name="patchpackage" depends="newfiles">
@@ -75,5 +81,10 @@
             includesfile="${patch.file}.tmp"
             excludes="${patch.file}.tmp"/>
         <delete file="${patch.file}.tmp"/>
+        <echo>
+Attach the following file to a new issue in the Forrest issue tracker:
+    ${patch.package} if you have added new files
+    ${patch.file} if you have only modified existing files
+        </echo>
     </target>
 </project>
