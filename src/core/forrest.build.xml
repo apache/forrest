@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2004/01/25 23:07:26 $              |
+    |             $Date: 2004/01/27 11:57:41 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -49,7 +49,7 @@ FORREST SITE BUILDER
   
     <!-- setting defaults for parameters -->
     <!-- people should use -D switch, or <ant><property>s to override these   -->
-
+ 
     <property name="project.home" location="." />
     <property name="/" value="${file.separator}"/>
     <echo message="Loading project specific properties from ${project.home}${/}forrest.properties" />
@@ -102,6 +102,11 @@ FORREST SITE BUILDER
     <filter filtersfile="${projfilters}"/>
     <filter token="forrest.home" value="${forrest.home}"/>
     <filter token="project.home" value="${project.home}"/>
+
+    <!-- These are used by Forrest to resolve all other values -->
+    <property name="forrest.basic.jvmargs" value="-Dproject.home=&quot;${project.home}&quot; -Dforrest.home=&quot;${forrest.home}&quot;"/>
+    <echo>forrest.basic.jvmargs:${forrest.basic.jvmargs}</echo>
+        
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
@@ -476,6 +481,7 @@ Use the 'seed' target to create a template project structure.
         failonerror="true"
         classpathref="forrest.cp">
         <jvmarg line="${forrest.jvmargs}"/>
+        <jvmarg line="${forrest.basic.jvmargs}"/>
         <jvmarg
           value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
         <arg value="-c${project.webapp}"/>   <!- input to the process ->
@@ -496,6 +502,7 @@ Use the 'seed' target to create a template project structure.
         failonerror="true"
         maxmemory="${forrest.maxmemory}">
         <jvmarg line="${forrest.jvmargs}"/>
+        <jvmarg line="${forrest.basic.jvmargs}"/>
         <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
         <arg value="--logLevel=${project.debuglevel}"/>
         <arg value="--Logger=${project.logger}"/>
@@ -604,6 +611,7 @@ ${project.site-dir}
       failonerror="true"
       maxmemory="${forrest.maxmemory}">
       <jvmarg line="${forrest.jvmargs}"/>
+      <jvmarg line="${forrest.basic.jvmargs}"/>
       <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
       <arg line="-index ${project.index-dir}"/>
       <arg value="${xdocs-dir}"/>
@@ -1059,7 +1067,6 @@ to validate this site.
   <target name="run" 
    description="Run Jetty with configuration set by the jetty.run property"
    depends="webapp-local">
-
     <java classname="org.mortbay.jetty.Server"
           dir="${project.webapp}"
           fork="yes"
@@ -1069,6 +1076,7 @@ to validate this site.
          <path refid="forrest.cp"/>
        </classpath>
        <jvmarg line="${forrest.jvmargs}"/>
+       <jvmarg line="${forrest.basic.jvmargs}"/>
        <jvmarg
          value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
        <arg line="jettyconf.xml" />
