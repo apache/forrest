@@ -224,19 +224,19 @@
 <li>
 <font color="#CFDCED">DTD documentation</font>
 <ul>
-        
+      
 <li>
 <a href="../docs/dtd-docs.html">index</a>
 </li>
-        
+      
 <li>
 <a href="../docs/document-v13.dtdx.html">document-v13</a>
 </li>
-        
+      
 <li>
 <a href="../docs/howto-v13.dtdx.html">howto-v13</a>
 </li>
-        
+      
 <li>
 <a href="../docs/faq-v13.dtdx.html">faq-v13</a>
 </li>
@@ -427,9 +427,8 @@
 
 </pre>
 <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and
-      getsrc.cvs. Next, specify what implementations will be used by each
-      workstage.</p>
+      Here, we set properties that will be used by notify.email and getsrc.cvs.
+      Next, specify what implementations will be used by each workstage.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
 <tr>
@@ -492,8 +491,7 @@
 <ul>
               
 <li>
-<a href="#deploy.local">deploy.local</a>
-              (default)</li>
+<a href="#deploy.local">deploy.local</a> (default)</li>
 
               
 <li>
@@ -524,8 +522,7 @@
 <ul>
               
 <li>
-<a href="#notify.local">notify.local</a>
-              (default)</li>
+<a href="#notify.local">notify.local</a> (default)</li>
 
               
 <li>
@@ -544,9 +541,9 @@
       your own implementation of a workstage, or use any other ant tasks to do
       additional work.</p>
 <p></p>
-<p>Many workstages use usernames and passwords. You may want to keep
-      them out of your project's xml file (especially if you store that file
-      in CVS or SVN). A nice way to do this is make a simple buildfile (e.g.
+<p>Many workstages use usernames and passwords. You may want to keep them
+      out of your project's xml file (especially if you store that file in CVS
+      or SVN). A nice way to do this is make a simple buildfile (e.g.
       my-settings.xml) that just sets those properties (don't include it in
       CVS/SVN!). Then in your project buildfile, have <span class="codefrag">&lt;import
       file="my-settings.xml"/&gt;</span>.</p>
@@ -696,8 +693,8 @@
               
 <td colspan="1" rowspan="1">getsrc.cvs.module</td>
 
-              <td colspan="1" rowspan="1">CVS module name (an alias, or full path) to the directory
-              that contains forrest.properties</td>
+              <td colspan="1" rowspan="1">CVS module name (an alias, or full path) to the directory that
+              contains forrest.properties</td>
 
               <td colspan="1" rowspan="1">${ant.project.name}</td>
 
@@ -847,9 +844,9 @@
 <a name="N102B9"></a><a name="deploy.local"></a>
 <h5>deploy.scp</h5>
 <div style="margin-left: 0 ; border: 2px">
-<p>${user.home}/.ssh/known_hosts must properly recognize the host,
-          so you should manually make an ssh connection to the host if you
-          never have before.</p>
+<p>${user.home}/.ssh/known_hosts must properly recognize the host, so
+          you should manually make an ssh connection to the host if you never
+          have before.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -1098,6 +1095,34 @@
             
 <tr>
               
+<td colspan="1" rowspan="1">notify.on.failure</td>
+
+              <td colspan="1" rowspan="1">On a build failure, notification will happen if this is
+              true.</td>
+
+              <td colspan="1" rowspan="1">true</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">notify.on.success</td>
+
+              <td colspan="1" rowspan="1">On a succesful build, notification will happen if this is
+              true.</td>
+
+              <td colspan="1" rowspan="1">true</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+
+            
+<tr>
+              
 <td colspan="1" rowspan="1">notify.log</td>
 
               <td colspan="1" rowspan="1">Log file</td>
@@ -1136,12 +1161,12 @@
           
 </table>
 </div>
-<a name="N104AB"></a><a name="notify.local"></a>
+<a name="N104D9"></a><a name="notify.local"></a>
 <h5>notify.local</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>No properties.</p>
 </div>
-<a name="N104B5"></a><a name="notify.email"></a>
+<a name="N104E3"></a><a name="notify.email"></a>
 <h5>notify.email</h5>
 <div style="margin-left: 0 ; border: 2px">
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -1190,12 +1215,12 @@
 </div>
 
     
-<a name="N10506"></a><a name="Forrestbot+design"></a>
+<a name="N10534"></a><a name="Forrestbot+design"></a>
 <h3>Forrestbot design</h3>
 <div style="margin-left: 0 ; border: 2px">
-<p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's
-      import task is used to import multiple buildfiles into a single build.
-      The following is the flow of control when running forrestbot:</p>
+<p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
+      task is used to import multiple buildfiles into a single build. The
+      following is the flow of control when running forrestbot:</p>
 <ul>
         
 <li>Your buildfile<ul>
@@ -1216,8 +1241,8 @@
 </ul>
 <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or
-      other post-build activities.</p>
+      other workstages buildfiles can implement reporting, deployment, or other
+      post-build activities.</p>
 <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
 </div>

@@ -224,19 +224,19 @@
 <li>
 <font color="#CFDCED">DTD documentation</font>
 <ul>
-        
+      
 <li>
 <a href="../docs/dtd-docs.html">index</a>
 </li>
-        
+      
 <li>
 <a href="../docs/document-v13.dtdx.html">document-v13</a>
 </li>
-        
+      
 <li>
 <a href="../docs/howto-v13.dtdx.html">howto-v13</a>
 </li>
-        
+      
 <li>
 <a href="../docs/faq-v13.dtdx.html">faq-v13</a>
 </li>
@@ -324,10 +324,10 @@
 <a href="#Build">Build</a>
 </li>
 <li>
-<a href="#Installation">Installation</a>
+<a href="#Requirements">Requirements</a>
 </li>
 <li>
-<a href="#TODO+Wishlist">TODO Wishlist</a>
+<a href="#Installation">Installation</a>
 </li>
 <li>
 <a href="#FAQ">FAQ</a>
@@ -341,18 +341,18 @@
 </li>
 </ul>
 </li>
+<li>
+<a href="#TODO+Wishlist">TODO Wishlist</a>
+</li>
 </ul>
     
-<p>This webapp implements a website staging application for sites built
-    with Apache Forrest. The webapp hosts HTML for a number of managed
-    websites. The user can regenerate these sites at will. Once the user is
-    satisfied with the site, they may 'deploy' the site, making it live.</p>
+<p>This webapp implements a website staging application for sites built with
+    Apache Forrest. The webapp hosts HTML for a number of managed websites. The
+    user can regenerate these sites at will. Once the user is satisfied with the
+    site, they may 'deploy' the site, making it live.</p>
 
     
-<p>The forrestbot web interface requires a servlet container such as <a class="external" href="http://jakarta.apache.org/tomcat/">Apache Tomcat</a>.</p>
-
-    
-<a name="N10017"></a><a name="Build"></a>
+<a name="N10010"></a><a name="Build"></a>
 <h3>Build</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>To build the webapp from source, you need <a class="external" href="http://maven.apache.org/">Apache Maven</a> installed. From a
@@ -361,7 +361,47 @@
 </div>
 
     
-<a name="N1002B"></a><a name="Installation"></a>
+<a name="N10024"></a><a name="Requirements"></a>
+<h3>Requirements</h3>
+<div style="margin-left: 0 ; border: 2px">
+<ul>
+        
+<li>Forrest</li>
+
+        
+<li>A servlet container such as <a class="external" href="http://jakarta.apache.org/tomcat">Apache Tomcat</a>
+</li>
+
+        
+<li>Directories for:</li>
+
+        
+<ul>
+          
+<li>forrestbot buildfiles</li>
+
+          
+<li>source and working files</li>
+
+          
+<li>log files</li>
+
+          
+<li>built websites (this is not their deployed location)</li>
+        
+</ul>
+
+        
+<li>A webserver to view the sites in the build directory</li>
+      
+</ul>
+<p>The server does not need local access to the sites' source nor final
+      deployed location. The buildfiles configure the transfer of those
+      files.</p>
+</div>
+
+    
+<a name="N1004F"></a><a name="Installation"></a>
 <h3>Installation</h3>
 <div style="margin-left: 0 ; border: 2px">
 <div class="frame note">
@@ -371,73 +411,66 @@
 </div>
 <ol>
         
-<li>Extract the war to a temporary directory</li>
+<li>Extract the war to an empty directory</li>
 
         
 <li>Modify welcome.local.html</li>
 
         
-<li>Modify osuser.xml if you want to use an authenticator other than
-        XML files</li>
+<li>Modify WEB-INF/classes/osuser.xml if you want to use an
+        authenticator other than XML files</li>
 
         
-<li>Modify projects.xml, groups.xml, and users.xml according to your
-        needs</li>
+<li>Modify projects.xml, groups.xml, and users.xml (all in
+        WEB-INF/classes) according to your needs</li>
 
         
-<li>Modify settings.properties according to the server's specific
-        setup</li>
+<li>Optionally modify logging via WEB-INF/classes/log4j.properties</li>
 
         
-<li>Repackage the war file</li>
+<li>Modify WEB-INF/classes/settings.properties according to the server's
+        specific setup</li>
 
         
-<li>Deploy the war file in Tomcat or some other servlet container</li>
+<li>Deploy the webapp in Tomcat or some other servlet container (you may
+        want to repackage the war file)</li>
+
+        
+<li>Make sure tomcat has permissions to write in forrestbot's build,
+        work, and log directories.</li>
       
 </ol>
+<p>Optional: set up "cron jobs" to execute forrestbot. This is completely
+      independant of the forrestbot web interface, but is often useful. A
+      suggested practice is to build the sites regularly and deploy them as
+      desired through the web interface.</p>
 </div>
 
     
-<a name="N10051"></a><a name="TODO+Wishlist"></a>
-<h3>TODO Wishlist</h3>
-<div style="margin-left: 0 ; border: 2px">
-<ul>
-        
-<li>seperate authorization of 'build' and 'deploy'</li>
-
-        
-<li>log everything, not just the build</li>
-
-        
-<li>view old log files</li>
-
-        
-<li>ability to reload all config files on the fly</li>
-
-        
-<li>put date at top of viewlog_body page</li>
-      
-</ul>
-</div>
-
-    
-<a name="N1006A"></a><a name="FAQ"></a>
+<a name="N1007B"></a><a name="FAQ"></a>
 <h3>FAQ</h3>
 <div style="margin-left: 0 ; border: 2px">
-<a name="N10070"></a><a name="The+build+and%2For+deploy+commands+don%27t+seem+to+work"></a>
+<a name="N10081"></a><a name="The+build+and%2For+deploy+commands+don%27t+seem+to+work"></a>
 <h4>The build and/or deploy commands don't seem to work</h4>
 <div style="margin-left: 0 ; border: 2px">
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">The only environment variable available is FORREST_HOME, which
+        is set by forrest-home in the settings.properties file. Use a wrapper
+        script (see below) if you need other environment variables.</div>
+</div>
 <p>Currently forrestbot only logs the forrest part of it's execution,
         not the whole thing. And the web interface starts a forrestbot process
-        and doesn't watch it's progress directly. So look at the debugging
-        output for the command executed and the working directory used. Log
-        into the server using the login of the Tomcat server and cd to the
-        working directory and then execute the command. This will fairly
-        accurately simulate what the web interface does.</p>
-<p>Also, set debug-exec=true in settings.properties and make sure
-        log4j.properties logs DEBUG. This will log all the thread output.</p>
+        and doesn't watch it's progress directly.</p>
+<p>Set debug-exec=true in settings.properties and make sure
+        log4j.properties logs at the DEBUG level. This will log all the thread
+        output.</p>
+<p>Then look at the debugging output for the command executed and the
+        working directory used. Log into the server as the use the Tomcat server
+        uses and cd to the working directory and then execute the command. This
+        will fairly accurately simulate what the web interface does.</p>
 </div>
-<a name="N1007D"></a><a name="Can+I+do+anything+with+this+besides+just+running+the%0A++++++++forrestbot%3F"></a>
+<a name="N10094"></a><a name="Can+I+do+anything+with+this+besides+just+running+the%0A++++++++forrestbot%3F"></a>
 <h4>Can I do anything with this besides just running the
         forrestbot?</h4>
 <div style="margin-left: 0 ; border: 2px">
@@ -445,16 +478,13 @@
         settings.properties. Here's an example:</p>
 <pre class="code">#!/bin/bash
 
-# remove env values set from container 
-PATH=/usr/bin
-CLASSPATH=
 # get env vars
 . /home/user/.profile
 
 # group writable for easier sharing of files with others who run forrestbot
 umask g+w
 
-# you can preprocess something
+# you can preprocess something here
 xmlfile=$2
 if [ "${xmlfile##*.}" = "xml" ]                # everything after last .
 then
@@ -474,6 +504,29 @@ forrest $*
 
 # you can postprocess something here</pre>
 </div>
+</div>
+
+    
+<a name="N100A3"></a><a name="TODO+Wishlist"></a>
+<h3>TODO Wishlist</h3>
+<div style="margin-left: 0 ; border: 2px">
+<ul>
+        
+<li>seperate authorization of 'build' and 'deploy'</li>
+
+        
+<li>log everything, not just the build</li>
+
+        
+<li>view old log files</li>
+
+        
+<li>ability to reload all config files on the fly</li>
+
+        
+<li>put date at top of viewlog_body page</li>
+      
+</ul>
 </div>
   
 <div class="attribution"></div>
