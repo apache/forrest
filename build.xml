@@ -116,16 +116,24 @@
     <fixcrlf eol="crlf" srcdir="${tmp-scripts}" includes="**/*.bat"/>
     <fixcrlf eol="lf" srcdir="${tmp-scripts}" excludes="**/*.bat"/>
     <chmod dir="${tmp-scripts}" perm="ugo+rx" excludes="**/*.bat"/> 
+    <property name="tmp-fresh-site" location="${build.dir}/tmp/fresh-site"/>
+    <property name="src-fresh-site" location="${resource.dir}/fresh-site"/>
+    <copy todir="${tmp-fresh-site}">
+      <fileset dir="${src-fresh-site}" />
+    </copy>
+    <fixcrlf eol="crlf" srcdir="${tmp-fresh-site}" excludes="**/*.gif **/*.png"/>
 
     <property name="release-name-src" value="${name}-${version}-src"/>
     <zip
       file="${dist.dir}/${release-name-src}.zip" >
       <zipfileset dir="." prefix="${release-name-src}">
         <exclude name="build/**"/>
+        <exclude name="${resource.dir}/fresh-site/**" />
         <patternset refid="noscripts"/>
       </zipfileset>
       <zipfileset prefix="${release-name-src}" dir="${tmp-scripts}"/>
       <zipfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
+      <zipfileset prefix="${release-name-src}/${resource.dir}/fresh-site" dir="${tmp-fresh-site}"/>
     </zip>
 
     <tar longfile="gnu"
