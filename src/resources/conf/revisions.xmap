@@ -3,7 +3,7 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
-      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" label="content" />
+      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
     </map:generators>
     <map:serializers default="html"/>
     <map:transformers default="xslt"/>
@@ -34,7 +34,7 @@
         <map:generate type="directory" src="content/xdocs/{1}">
           <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
         </map:generate>
-        <map:transform src="resources/stylesheets/directory2revisions.xsl" label="content">
+        <map:transform src="resources/stylesheets/directory2revisions.xsl">
           <map:parameter name="use-request-parameters" value="true" />
           <map:parameter name="page" value="{2}" />
         </map:transform>
@@ -46,7 +46,7 @@
           <map:part src="content/xdocs/{0}" />
           <map:part src="cocoon:/{1}/revisions-{2}" />
         </map:aggregate>
-        <map:transform src="resources/stylesheets/howto2document.xsl" label="content" />
+        <map:transform src="resources/stylesheets/howto2document.xsl" />
         <map:serialize type="xml"/>
       </map:match>
 

@@ -2,12 +2,12 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
-      <map:generator name="file" src="org.apache.cocoon.generation.FileGenerator" label="content" />
+      <map:generator name="file" src="org.apache.cocoon.generation.FileGenerator" />
       <!--
-      <map:generator name="html" src="org.apache.cocoon.generation.HTMLGenerator" label="content" />
-      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" label="content" />
-      <map:generator name="libre" src="org.apache.forrest.yer.use.cocoon.HierarchyGenerator" label="content" />
-      <map:generator name="textparser" src="org.apache.cocoon.generation.TextParserGenerator" label="content" />
+      <map:generator name="html" src="org.apache.cocoon.generation.HTMLGenerator" />
+      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator name="libre" src="org.apache.forrest.yer.use.cocoon.HierarchyGenerator" />
+      <map:generator name="textparser" src="org.apache.cocoon.generation.TextParserGenerator" />
       -->
     </map:generators>
 
@@ -66,13 +66,7 @@
       <map:serializer name="links" src="org.apache.cocoon.serialization.LinkSerializer">
         <encoding>ISO-8859-1</encoding>
       </map:serializer>
-
-      <map:serializer name="svg2jpeg" mime-type="image/jpeg" src="org.apache.cocoon.serialization.SVGSerializer">
-        <parameter name="quality" type="float" value="1.0"/>
-      </map:serializer>
-
-      <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer"/>
-      <!--
+     <!--
       <map:serializer mime-type="application/x-shockwave-flash" name="swf" src="org.apache.cocoon.serialization.SWFSerializer"/>
       <map:serializer mime-type="application/msword" name="fo2rtf" src="org.apache.cocoon.serialization.RTFSerializer"/>
       -->
@@ -84,23 +78,20 @@
     </map:matchers>
 
     <map:actions>
-      <!-- <map:action logger="sitemap.action.request" name="request" src="org.apache.cocoon.acting.RequestParamAction"/> -->
       <map:action logger="sitemap.action.resource-exists" name="resource-exists" src="org.apache.cocoon.acting.ResourceExistsAction"/>
-
     </map:actions>
 
     <map:pipes default="caching">
       <map:pipe name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
+      <!--
       <map:pipe name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
       <map:pipe name="profile-caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
       <map:pipe name="profile-noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
+      -->
     </map:pipes>
   </map:components>
 
   <map:views>
-    <map:view name="content" from-label="content">
-      <map:serialize type="xml" />
-    </map:view>
 
     <map:view name="links" from-position="last">
       <map:transform src="resources/stylesheets/filterlinks.xsl"/>
