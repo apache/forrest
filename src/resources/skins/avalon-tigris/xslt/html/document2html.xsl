@@ -1,20 +1,32 @@
 <?xml version="1.0"?>
+<!--
+This stylesheet contains the majority of templates for converting documentv11
+to HTML.  It renders XML as HTML in this form:
 
-<xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
+  <div class="content">
+   ...
+  </div>
+
+..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
+and tabs (tab2menu.xsl) to generate the final HTML.
+
+$Id: document2html.xsl,v 1.5 2002/12/07 18:26:43 nicolaken Exp $
+-->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
 
 <!-- ====================================================================== -->
 <!-- document section -->
 <!-- ====================================================================== -->
 
- <xsl:template match="/">
+ <xsl:template match="document">
   <!-- checks if this is the included document to avoid neverending loop -->
   <xsl:if test="not(book)">
       <document>
       <xsl:choose>
-		<xsl:when test="document/header/title">
-		      <title><xsl:value-of select="document/header/title"/></title>
+		<xsl:when test="header/title">
+		      <title><xsl:value-of select="header/title"/></title>
 		</xsl:when>
 		<xsl:otherwise>
 			<title>NO TITLE</title>
@@ -22,9 +34,9 @@
 	</xsl:choose>
       <body>
         <xsl:apply-templates/>
-        <xsl:if test="document/header/authors">
+        <xsl:if test="header/authors">
             <div align="right" id="authors">       
-               <xsl:for-each select="document/header/authors/person">
+               <xsl:for-each select="header/authors/person">
                      <xsl:choose>
                         <xsl:when test="position()=1">by&#160;</xsl:when>
 
@@ -39,12 +51,19 @@
       </body>
       </document>
    </xsl:if>
- 
+
+  
+    
    <xsl:if test="book">
     <xsl:apply-templates/>
    </xsl:if>
   </xsl:template>
 
+   <xsl:template match="body">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+ 
 <!-- ====================================================================== -->
 <!-- header section -->
 <!-- ====================================================================== -->
@@ -98,15 +117,15 @@
 <!-- ====================================================================== -->
 
   <xsl:template match="p">
-    <p><xsl:apply-templates/></p>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="note">
-   <p><i><xsl:apply-templates/></i></p>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="source">
-    <pre><xsl:apply-templates/></pre>
+    <xsl:apply-imports/>
   </xsl:template>
   
   <xsl:template match="//source/font">
@@ -114,7 +133,7 @@
   </xsl:template>
     
   <xsl:template match="fixme">
-   <!-- ignore on documentation -->
+    <xsl:apply-imports/>
   </xsl:template>
 
 <!-- ====================================================================== -->
@@ -122,31 +141,19 @@
 <!-- ====================================================================== -->
 
  <xsl:template match="ul|ol|dl">
-  <blockquote>
-   <xsl:copy>
-    <xsl:apply-templates/>
-   </xsl:copy>
-  </blockquote>
+    <xsl:apply-imports/>
  </xsl:template>
  
  <xsl:template match="li">
-  <xsl:copy>
-   <xsl:apply-templates/>
-  </xsl:copy>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="sl">
-  <ul>
-   <xsl:apply-templates/>
-  </ul>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="dt">
-  <li>
-   <strong><xsl:value-of select="."/></strong>
-   <xsl:text> - </xsl:text>
-   <xsl:apply-templates select="dd"/>   
-  </li>
+    <xsl:apply-imports/>
  </xsl:template>
 
 <!-- ====================================================================== -->
@@ -154,32 +161,23 @@
 <!-- ====================================================================== -->
 
   <xsl:template match="table">
-    <table>
-      <caption><xsl:value-of select="caption"/></caption>
-      <xsl:apply-templates/>
-    </table>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="tr">
-    <tr><xsl:apply-templates/></tr>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="th">
-    <td colspan="{@colspan}" rowspan="{@rowspan}">
-        <b><xsl:apply-templates/></b>&#160;
-    </td>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="td">
-    <td colspan="{@colspan}" rowspan="{@rowspan}">
-        <xsl:apply-templates/>&#160;
-    </td>
+    <xsl:apply-imports/>
   </xsl:template>
 
   <xsl:template match="tn">
-    <td colspan="{@colspan}" rowspan="{@rowspan}">
-      &#160;
-    </td>
+    <xsl:apply-imports/>
   </xsl:template>
   
   <xsl:template match="caption">
@@ -191,15 +189,15 @@
 <!-- ====================================================================== -->
 
  <xsl:template match="strong">
-   <b><xsl:apply-templates/></b>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="em">
-    <i><xsl:apply-templates/></i>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="code">
-    <code><xsl:apply-templates/></code>
+    <xsl:apply-imports/>
  </xsl:template>
  
 <!-- ====================================================================== -->
@@ -207,24 +205,15 @@
 <!-- ====================================================================== -->
 
  <xsl:template match="figure">
-  <p>
-  <xsl:choose>
-   <xsl:when test="string(@width) and string(@height)">
-   <img src="{@src}" alt="{@alt}" width="{@width}" height="{@height}" border="0"/>
-   </xsl:when>
-   <xsl:otherwise>
-   <img src="{@src}" alt="{@alt}" border="0"/>
-   </xsl:otherwise>
-  </xsl:choose>
-  </p>
+    <xsl:apply-imports/>
  </xsl:template>
  
  <xsl:template match="img">
-   <img src="{@src}" alt="{@alt}" border="0"/>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="icon">
-   <img src="{@src}" alt="{@alt}" border="0"/>
+    <xsl:apply-imports/>
  </xsl:template>
 
 <!-- ====================================================================== -->
@@ -232,23 +221,23 @@
 <!-- ====================================================================== -->
 
  <xsl:template match="link">
-   <a href="{@href}"><xsl:apply-templates/></a>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="connect">
-  <xsl:apply-templates/>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="jump">
-   <a href="{@href}#{@anchor}"><xsl:apply-templates/></a>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="fork">
-   <a href="{@href}" target="_blank"><xsl:apply-templates/></a>
+    <xsl:apply-imports/>
  </xsl:template>
 
  <xsl:template match="anchor">
-   <a name="{@id}"><xsl:comment>anchor</xsl:comment></a>
+    <xsl:apply-imports/>
  </xsl:template>  
 
 <!-- ====================================================================== -->
@@ -256,7 +245,7 @@
 <!-- ====================================================================== -->
 
  <xsl:template match="br">
-  <br/>
+    <xsl:apply-imports/>
  </xsl:template>
 
 </xsl:stylesheet>
