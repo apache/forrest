@@ -63,13 +63,12 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.lucene.analysis.Analyzer;
-
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -87,7 +86,7 @@ import org.w3c.dom.Text;
 /**
  * <p>Searches the index for a given query string.</p>
  * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearcher.java,v 1.2 2003/09/13 01:21:39 cheche Exp $
+ * @version $Id: ForrestSearcher.java,v 1.3 2003/09/17 15:01:22 nicolaken Exp $
  */
 public class ForrestSearcher {
   public ForrestSearcher() {
@@ -178,7 +177,7 @@ public class ForrestSearcher {
             String title = hits.doc(i).get("title");
             String summary = hits.doc(i).get("summary");
             String authors = hits.doc(i).get("author");
-            String path = hits.doc(i).get("path").replaceAll(".xml", ".html");
+            String path = StringUtils.replace(hits.doc(i).get("path"),".xml", ".html");
             float score = hits.score(i);
             Date modified = new Date(new Long(hits.doc(i).get("modified")).
                                      longValue());
