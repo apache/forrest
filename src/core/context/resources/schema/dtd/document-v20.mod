@@ -50,12 +50,16 @@ CHANGE HISTORY:
 <!ENTITY % text "#PCDATA">
 <!-- Entities referred to later on are defined up front -->
 <!ENTITY % markup "strong|em|code|sub|sup">
-<!ENTITY % special-inline "br|img|icon|acronym">
+<!ENTITY % special-inline "br|img|icon|acronym|map">
 <!ENTITY % links "a">
 <!ENTITY % paragraphs "p|source|note|warning|fixme">
 <!ENTITY % tables "table">
 <!ENTITY % lists "ol|ul|dl">
 <!ENTITY % special-blocks "figure|anchor">
+<!-- these are used for image maps -->
+<!ENTITY % Shape "(rect|circle|poly|default)">
+<!ENTITY % Coords "CDATA">
+
 <!-- =============================================================== -->
 <!-- Entities for general XML compliance -->
 <!-- =============================================================== -->
@@ -192,6 +196,19 @@ CHANGE HISTORY:
   usemap CDATA #IMPLIED
   ismap (ismap) #IMPLIED
   %common.att; 
+>
+<!-- support the img usemap attribute -->
+<!ELEMENT map ( area+)>
+<!ATTLIST map
+  name CDATA #IMPLIED
+>
+<!ELEMENT area EMPTY>
+<!ATTLIST area
+  shape %Shape; "rect"
+  coords %Coords; #IMPLIED
+  %link.att;
+  nohref (nohref) #IMPLIED
+  alt CDATA #REQUIRED
 >
 <!-- Image Icon (typically an inlined image placed as graphical item) -->
 <!ELEMENT icon EMPTY>
@@ -347,6 +364,7 @@ CHANGE HISTORY:
 <!ATTLIST anchor
   %common-idreq.att; 
 >
+
 <!-- =============================================================== -->
 <!-- Document -->
 <!-- =============================================================== -->
