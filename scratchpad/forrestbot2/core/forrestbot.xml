@@ -16,12 +16,15 @@
   <property name="build.work-dir"         location="work/${ant.project.name}"/>
   <property name="build.site-dir"         location="work/${ant.project.name}/site"/>
   <property name="build.deploy-dir"       location="sites/${ant.project.name}"/>
-  <mkdir dir="logs"/>
+  
   <tstamp>
     <format property="logtime" pattern="yyMMdd-hhmm"/>
   </tstamp>
-  <property name="build.logfile"          location="logs/${ant.project.name}.log"/>
-  <property name="build.logfile-stored"   location="logs/${ant.project.name}-${logtime}.log"/>
+
+  <property name="build.log-dir" location="logs"/>
+  <mkdir dir="${build.log-dir}"/>
+  <property name="build.logfile" location="${build.log-dir}/${ant.project.name}.log"/>
+  <property name="build.logfile-stored" location="${build.log-dir}/${ant.project.name}-${logtime}.log"/> 
 
   <property name="mail.host" value="localhost"/>
   <property name="mail.to"   value="${user.name}@localhost"/>
