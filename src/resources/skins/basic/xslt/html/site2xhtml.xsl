@@ -22,10 +22,6 @@
 
   <hr/><p><i>Copyright &#x00A9; @year@ @vendor@. All Rights Reserved.</i></p>
   <hr/>
-  <a href="http://krysalis.org/"><img src="skin/images/krysalis-compatible.jpg" alt="Krysalis Logo"/></a> 
-  <a href="http://xml.apache.org/cocoon/"><img src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo"/></a> 
-  <a href="http://jakarta.apache.org/ant/"><img src="skin/images/ant_logo_medium.gif" alt="Ant Logo"/></a> 
- 
  </body>
 </html>
 </xsl:template>

@@ -77,13 +77,6 @@
 			<br/>
           </td>
         </tr>        
-        <tr>
-          <td width="100%" align="right">
-            <a href="http://krysalis.org/"><img src="skin/images/krysalis-compatible.jpg" alt="Krysalis Logo"/></a> 
-            <a href="http://xml.apache.org/cocoon/"><img src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo"/></a> 
-            <a href="http://jakarta.apache.org/ant/"><img src="skin/images/ant_logo_medium.gif" alt="Ant Logo"/></a> 
-          </td>
-        </tr>
       </tbody>
     </table>
     

@@ -84,11 +84,6 @@ document.write("last modified: " + document.lastModified);
 						 Copyright &#x00A9;@year@ @vendor@. All Rights Reserved.
 
 			</div>
-  <a href="http://jakarta.apache.org/ant/"><img align="right" src="skin/images/ant_logo_medium.gif" alt="Ant Logo" border="0"/></a> 
-  <a href="http://xml.apache.org/cocoon/"><img align="right" src="skin/images/built-with-cocoon.gif" alt="Cocoon Logo" border="0"/></a> 
-  <a href="http://www.krysalis.org/"><img align="right" src="skin/images/krysalis-logo-small.gif" alt="Krysalis Logo" border="0"/></a> 
-  <a href="http://www.krysalis.org/centipede/"><img align="right" src="skin/images/centipede-logo-small.gif" alt="Krysalis Centipede Logo" border="0"/></a> 
-
 			<!-- end footer -->
 			
 </body>
