@@ -116,7 +116,7 @@ COPYRIGHT:
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
-<!-- A person is a general human entity -->
+<!-- A person is a general unparsed human entity -->
 <!ELEMENT person EMPTY>
 <!ATTLIST person
   %common.att; 
@@ -214,10 +214,11 @@ COPYRIGHT:
 <!-- ==================================================== -->
 <!-- Paragraphs -->
 <!-- ==================================================== -->
-<!-- Text Paragraph (normally vertically space delimited) -->
+<!-- Text Paragraph (normally vertically space delimited. Space can be preserved.) -->
 <!ELEMENT p (%content.mix;)*>
 <!ATTLIST p
   %common.att; 
+  xml:space (default|preserve) #IMPLIED
 >
 <!-- Source Paragraph (normally space is preserved) -->
 <!ELEMENT source (%content.mix;)*>

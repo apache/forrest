@@ -91,6 +91,12 @@
 <!-- paragraph section -->
 <!-- ====================================================================== -->
 
+  <xsl:template match="p[@xml:space='preserve']">
+    <div class="pre">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+ 
   <xsl:template match="p">
     <p><xsl:apply-templates/></p>
   </xsl:template>

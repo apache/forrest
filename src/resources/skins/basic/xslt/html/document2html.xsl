@@ -85,6 +85,11 @@
       <xsl:apply-templates/>
     </a>
   </xsl:template>
+  <xsl:template match="p[@xml:space='preserve']">
+    <div class="pre">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
   <xsl:template match="source">
     <pre class="code">
       <xsl:apply-templates/>

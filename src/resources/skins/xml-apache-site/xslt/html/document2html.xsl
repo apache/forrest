@@ -77,6 +77,13 @@
 	<!-- ====================================================================== -->
 	<!-- paragraph section -->
 	<!-- ====================================================================== -->
+	<xsl:template match="p[@xml:space='preserve']">
+		<div class="pre">
+		<font face="verdana,helvetica,sanserif" color="black">
+			<xsl:apply-templates/>
+		</font>
+		</div>
+	</xsl:template>
 	<xsl:template match="p">
 		<p><font face="verdana,helvetica,sanserif" color="black">
 			<xsl:apply-templates/>
