@@ -512,10 +512,14 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 	    <tr>
 	      <!-- ============ Breadcrumbs =========== -->
           <td class="subborder trail">
-	         &#160;<xsl:call-template name="breadcrumbs"/>&#160;
+	         &#160;
+			 <xsl:if test="not ($config/trail/@location)">
+				<xsl:call-template name="breadcrumbs"/>&#160;
+             </xsl:if>
           </td>
 	      <!-- ============ Page font settings =========== -->
 	      <td class="subborder trail" align="right" nowrap="nowrap">
+			 &#160;
 	       <xsl:if test="$disable-font-script = 'false'">
 	        Font size: 
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
