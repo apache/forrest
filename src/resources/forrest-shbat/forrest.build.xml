@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/09/16 16:35:09 $              |
+    |             $Date: 2003/09/20 08:33:56 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -400,10 +400,6 @@ FORREST SITE BUILDER
        param: location to find project descriptors == ${project.home} 
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
-  <target name="project-context-bot" depends="init, examine-proj, copy-conf, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-content, copy-lib, 
-    copy-classes, copy-skins, copy-skinconf, copy-status"/>
-
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
     copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
@@ -602,11 +598,8 @@ Use the 'seed' target to create a template project structure.
        ===============================================================
    -->
 
-   <target name="site" depends="prepare-context, -site"
-     description="Generates a static HTML website for this project"/>
-
-   <target name="-site" depends="init, -prepare-classpath"
-     if="project.content.present">
+   <target name="site" depends="prepare-context, init, -prepare-classpath" if="project.content.present"
+     description="Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this
          actually clears the cache, not yet clear why it is really needed? -->
     <delete dir="${project.work-dir}"/>
