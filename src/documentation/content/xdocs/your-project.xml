@@ -860,6 +860,94 @@ To run in Tomcat, add this to the config file (usu. server.xml):
             join if you have any suggestions.
           </note>
         </section>
-     </section>
-</body>
-</document>
+      </section>
+      <section>
+        <title>Invoking Forrest from Ant</title>
+        <p>
+          Established Java projects which use Ant will typically wish to subsume
+          Forrest's build targets ('site', 'webapp', 'validate' etc) into their
+          own build system, to provide a unified interface for users.  This
+          section describes how to invoke Forrest operations from an external
+          Ant build file.
+        </p>
+        <p>
+          Here are the targets that can be included in a project's build.xml
+          file to invoke Forrest:
+        </p>
+        <source><![CDATA[
+<target name="site" description="Generates static HTML documentation">
+  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
+</target>
+
+<target name="webapp" description="Generates an unpackaged webapp of the website">
+  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
+</target>
+
+<target name="war" description="Generates a .war file containing the website">
+  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
+</target>
+
+<target name="validate" description="Validates XML documentation files">
+  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
+</target>
+]]></source>
+        <note>
+          Always use <code>forrest.antproxy.xml</code>, not
+          <code>forrest.build.xml</code>.  The <code>forrest.antproxy.xml</code>
+          script invokes <code>forrest.build.xml</code> using Forrest's own
+          bundled version of Ant, which has non-standard support for catalog
+          files.
+        </note>
+        <p>
+          You'll notice that these targets require <code>${forrest.home}</code>
+          to be set.  <code>${forrest.home}</code> must point to the user's
+          shbat distribution of Forrest.  Thus we need a mechanism for the user
+          to inform the build script of their Forrest's location.  Typically
+          this is done by setting a property in a properties file like
+          <code>build.properties</code>, but can also be done by looking for the
+          <code>FORREST_HOME</code> environment variable.
+        </p>
+        <p>
+          Forrest comes with an Ant snippet file,
+          <code>forrest-targets.ent</code>, that supplies the targets listed
+          above, as well as searching for a <code>${forrest.home}</code>
+          definition in a number of likely places:
+        </p>
+        <ul>
+          <li>In the <code>FORREST_HOME</code> environment variable.</li>
+          <li>In the <code>build.properties</code> file.</li>
+          <li>In the <code>project.properties</code> file.</li>
+          <li>In the <code>ant.properties</code> file.</li>
+          <li>In the <code>.ant.properties</code> file.</li>
+        </ul>
+        <p>
+          <code>forrest-targets.ent</code> also prints out an informative error
+          message if <code>${forrest.home}</code> cannot be resolved.
+        </p>
+        <p>
+          <code>forrest-targets.ent</code> is supplied as part of the template
+          Forrest project (<code>'forrest seed'</code>).  The comments at the
+          top describe how to use it in a project's build.xml.  Typical usage
+          is:
+        </p>
+        <source><![CDATA[
+<!DOCTYPE project [
+<!ENTITY forrest-targets SYSTEM "file:./forrest-targets.ent">
+]>
+
+<project .... >
+
+  ....
+
+  <!-- Include Forrest targets -->
+  &forrest-targets;
+
+</project>
+]]></source>
+        <p>
+          Having done this, the Forrest targets (<code>site, webapp, war,
+            validate</code>) are automatically added to your project.  
+        </p>
+      </section>
+    </body>
+  </document>
