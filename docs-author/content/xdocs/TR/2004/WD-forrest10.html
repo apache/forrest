@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
 	<TITLE>Forrest 1.0</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.3  (Linux)">
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Win32)">
 	<META NAME="CREATED" CONTENT="20041116;13330320">
-	<META NAME="CHANGEDBY" CONTENT="Dave Brondsema">
-	<META NAME="CHANGED" CONTENT="20041117;22362000">
+	<META NAME="CHANGEDBY" CONTENT="Nicola Ken Barozzi">
+	<META NAME="CHANGED" CONTENT="20041129;10484471">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -172,10 +172,10 @@ Example:</P>
 myfile.javadocs.html 
 myfile.html </PRE><H4>
 Step 3: Filtering (content)</H4>
-<P>This is a new step, that adds navigation, metadata, extra content, functionality
-and transformations to the content stream.</P>
-<P>The filtering stages should use different filtering files to not produce markup 
-that is not needed by the view.</P>
+<P>This is a new step, that adds navigation, metadata, extra content,
+functionality and transformations to the content stream.</P>
+<P>The filtering stages should use different filtering files to not
+produce markup that is not needed by the view.</P>
 <P>Navigation is the addition of the 'tab' and 'linkmap' information
 to the stream. 
 </P>
@@ -184,8 +184,8 @@ to the stream.
 <P>Nuggets of information can be added based on the URL and on the
 contents of the main source. For example, newsfeeds about the page
 being processed.</P>
-<P>Fbits should be insert only as placeholder that the view can populate them 
-with the actual functionality</P>
+<P>Fbits should be insert only as placeholder that the view can
+populate them with the actual functionality</P>
 <P>Filtering on the main content can be done, like the automatic
 creation of links based on the site.xml linkmap or footnote
 processing.</P>
@@ -196,60 +196,62 @@ plugins).
 <P>Based on the view specified, the content is transformed in a
 format that contains presentation information. Example formats are
 html, fo (formatting objects) and svg.</P>
-<P>Note that this part adds functionality implementation to the content. For
-example, a search item can be displayed, or widgets can be used.
-These are fbits, or functionality bits, and are different from
-nuggets, which are extra content. 
+<P>Note that this part adds functionality implementation to the
+content. For example, a search item can be displayed, or widgets can
+be used. These are fbits, or functionality bits, and are different
+from nuggets, which are extra content. 
 </P>
 <P>Note that fbits are view dependant, so that a view can decide to
 implement them or not. The configuration of these bits are to be done
 with the new generic skinconf format and a new templating language.</P>
-<P>Example of current fbits are the search pane, the page format selector, etc.</P>
-<P>This new templating language will be forrest:templates, which contains forrest:view
-and forrest:template.</P>
+<P>Example of current fbits are the search pane, the page format
+selector, etc.</P>
+<P>This new templating language will be forrest:templates, which
+contains forrest:view and forrest:template.</P>
 <H4>Step 5: Theming (presentation)</H4>
-<P>The view is creating the html-skelleton that is
-used for <EM>theming</EM>. Themes are view dependend but e.g. you can write
-<EM>one</EM> theme for <EM>x</EM> view derivatives. Theming adds
-colors and general appearance info. In html it's css files for
-example, or the skinconf color information.</P>
+<P>The view is creating the html-skelleton that is used for <EM>theming</EM>.
+Themes are view dependend but e.g. you can write <EM>one</EM> theme
+for <EM>x</EM> view derivatives. Theming adds colors and general
+appearance info. In html it's css files for example, or the skinconf
+color information.</P>
 <H4>Step 6: Serializing (presentation)</H4>
 <P>The presentation is transformed to the actual final format with
 output plugins. For example a fo presentation can be outputted as
 xhtml, pdf, rtf, doc, ps, etc. 
 </P>
 <H3>Forrest:templates</H3>
-<P>Forrest:templates or short f:t is a templating language to create views on 
-forrest input-data.</P>
-<P><B>Definition - Forrest-View:</B><BR/>
-View = content (nuggets) + functionality (fbit) + design (style)
+<P>Forrest:templates or short f:t is a templating language to create
+views on forrest input-data.</P>
+<P><B>Definition - Forrest-View:</B> View = content (nuggets) +
+functionality (fbit) + design (style) 
 </P>
-<P>We will refer to incoming content as nuggets. Nuggets are pure content
-(without any information about fct., style,...). </P>
-
-<P>fbits can (but do not have to) use nuggets to implemend (or populate)
-the actual functionality needed in the requested view. 
-<DD>
-<DL>fbit containing nuggets (I mean it contains e.g. captions ->i18n
-nuggets)<BR/>
-&lt;forrest:fbit name="fontsize"/&gt;
-</DL><DL>
-pure fbit (no content just functionality -> IMO very rare, the
-example tag would as well contain i18n: close-schliessen-cerrar)<BR/> 
-&lt;forrest:fbit name="close-window"/&gt;
-</DL><DL>
- pure fbit *using* nuggets (e.g. profiling data for the actual view.)<BR/>
-&lt;forrest:fbit name="searchbox" type="sport"/&gt;
-</DL>
-</DD>
-<P>Normally the nuggets and fbits will be implemented in an overall design.
-The design is a container concept of storing fbits and nuggets in
-graphical container (template + hooks). Templates can be used to create the 
-overall design in different media (xhtml, fo,...) of the document.  </P>
-
-<P>This design state should only use registered contracts for fbits and
-nuggets but still have absolute controll over the style.</P>
-
+<P>We will refer to incoming content as nuggets. Nuggets are pure
+content (without any information about fct., style,...). 
+</P>
+<P>fbits can (but do not have to) use nuggets to implemend (or
+populate) the actual functionality needed in the requested view. 
+</P>
+<DL>
+	<DD STYLE="margin-bottom: 0.2in">fbit containing nuggets (I mean it
+	contains e.g. captions -&gt;i18n nuggets) &lt;forrest:fbit
+	name=&quot;fontsize&quot;/&gt; 
+	</DD></DL>
+<P>
+pure fbit (no content just functionality -&gt; IMO very rare, the
+example tag would as well contain i18n: close-schliessen-cerrar)
+&lt;forrest:fbit name=&quot;close-window&quot;/&gt; 
+</P>
+<P>pure fbit *using* nuggets (e.g. profiling data for the actual
+view.) &lt;forrest:fbit name=&quot;searchbox&quot; type=&quot;sport&quot;/&gt;
+</P>
+<P>Normally the nuggets and fbits will be implemented in an overall
+design. The design is a container concept of storing fbits and
+nuggets in graphical container (template + hooks). Templates can be
+used to create the overall design in different media (xhtml, fo,...)
+of the document. 
+</P>
+<P>This design state should only use registered contracts for fbits
+and nuggets but still have absolute controll over the style.</P>
 <H2><A NAME="dt"></A>A Schemas for Forrest 1.0 config files</H2>
 <P><EM>To be added.</EM></P>
 <H2><A NAME="references"></A>B References</H2>
@@ -350,7 +352,23 @@ nuggets but still have absolute controll over the style.</P>
 <P>This document was produced with the participation of current
 Apache Forrest Project members and of all participants to the public
 discussion.</P>
-<H2><A NAME="prodnotes"></A>E Production Notes (Non-Normative)</H2>
-<P><EM>To be added.</EM></P>
+<H2><A NAME="prodnotes"></A>E Development Notes (Non-Normative)</H2>
+<H3><EM><SPAN STYLE="font-style: normal">Decisions and threads</SPAN></EM></H3>
+<H4><EM><A HREF="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=110145900227224&amp;w=2"><U><SPAN STYLE="font-style: normal">[RT]
+RAW content</SPAN></U></A></EM></H4>
+<P><EM><SPAN STYLE="font-style: normal">Raw content is to be gotten
+like this:</SPAN></EM></P>
+<UL>
+	<LI><P><EM><SPAN STYLE="font-style: normal">for single files one can
+	ask for myfile.<B>source.</B><SPAN STYLE="font-weight: medium">extension</SPAN></SPAN></EM></P>
+	<LI><P><EM><SPAN STYLE="font-weight: medium"><SPAN STYLE="font-style: normal">for
+	whole dirs, the thing has to be declared in some sitewide metadata</SPAN></SPAN></EM></P>
+</UL>
+<H4><A HREF="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=110172138119333&amp;w=2">[RT]
+Directory structure and configuration</A>   
+</H4>
+<P>To be discussed</P>
+<P><BR><BR>
+</P>
 </BODY>
 </HTML>
