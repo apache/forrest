@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/21 11:07:17 $              |
+    |             $Date: 2003/05/24 07:26:20 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -564,7 +564,6 @@ Use the 'seed' target to create a template project structure.
     <mkdir dir="${project.work-dir}"/>
 
     <parallel>
-
       <java classname="org.apache.cocoon.Main"
         fork="true"
         maxmemory="${forrest.maxmemory}"
@@ -584,6 +583,24 @@ Use the 'seed' target to create a template project structure.
         <arg value="${project.start-uri}"/>              <!-- starting page -->
         <arg value="-V" />                          <!-- be verbose -->
       </java>
+
+      <!--
+      <java classname="org.apache.cocoon.Main"
+        fork="true"
+        dir="${project.ctxt-dir}"
+        failonerror="true"
+        maxmemory="${forrest.maxmemory}">
+        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+        <arg value="-u${project.debuglevel}"/>
+        <arg value="-xcli.xconf"/>
+        <arg value="index.html"/>
+        <classpath>
+          <path refid="forrest.cp"/>
+        </classpath>
+      </java> 
+      -->
+
+
       <sequential>
         <!-- 
         | Copy all non-xdocs content across, as we cannot rely on crawling to

@@ -18,14 +18,18 @@
       </map:transformer>
 
       <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
-        <input-module name="linkmap">
-          <file src="{src}" reloadable="false" />
-        </input-module>
         <input-module name="site">
           <input-module name="linkmap">
             <file src="{src}" reloadable="false" />
           </input-module>
           <prefix>/site//</prefix>
+          <suffix>/@href</suffix>
+        </input-module>
+        <input-module name="ext">
+          <input-module name="linkmap">
+            <file src="{src}" reloadable="false" />
+          </input-module>
+          <prefix>/site/external-refs//</prefix>
           <suffix>/@href</suffix>
         </input-module>
       </map:transformer>
