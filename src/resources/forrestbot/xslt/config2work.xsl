@@ -25,11 +25,23 @@
 
 <xsl:template name="listprojects">
 
-<!-- 
+<!--
   per-project invocation of the chain of workstages:
+  (for each project element in the input there is a child to the <parallel>
+   element in the output)
+
   <target name="work">
     <parallel>
-      <antcall target="work.xml-forrest" inheritRefs="true" /> 
+      <antipede-trycatch>
+        <try>
+          <ant antfile="[this-file]" target="work.[project-name]" .../>
+        </try>
+        <catch>
+          <...>
+        </catch>
+        <finally>
+          <mail .../>
+        </finally>
     </parallel>
   </target>
 -->
@@ -37,7 +49,36 @@
    <target name="work">
      <parallel>
        <xsl:for-each select="project">
-         <antcall inheritRefs="true" target="work.{@name}" />
+         <!-- todo: wrap it in try catch to make it send in case of fail as well -->
+         <antipede-trycatch>
+           <try>
+             <ant antfile="${{bot.work.build.xml}}" inheritRefs="true"
+                  target="work.{@name}" output="${{bot.build.dir}}/work.{@name}.log"/>
+             <property name="completion-status.{@name}" value="SUCCESS" />
+           </try>
+           <catch>
+             <echo message="Failed to complete workstages for project {@name}" />
+             <property name="completion-status.{@name}" value="FAIL" />
+           </catch>
+           <finally>
+             <xsl:if test="@sendlogto">
+               <mail from="forrest-bot@xml.apache.org"
+                     mailhost="${{mailhost}}"
+                     tolist="{@sendlogto}"
+                     subject="[DO NOT REPLY] ForrestBot site builder for '{@name}'"
+                     files="${{bot.build.dir}}/work.{@name}.log"
+                     failonerror="false">
+                 <message>
+Another hard day at the BOT factory, and quite happy to have worked for you.
+Our completion status for your project [<xsl:value-of select="@name" />] was ${completion-status.<xsl:value-of select="@name"/>}
+Please find the details in the log attached.
+
+The Forrest-Bot team. (http://xml.apache.org/forrest)
+                 </message>
+               </mail>
+             </xsl:if>
+           </finally>
+         </antipede-trycatch>
        </xsl:for-each>
      </parallel>
    </target>
@@ -52,7 +93,7 @@
   <target name="work.xml-forrest"
           depends="prepare.xml-forrest,
             get-src.xml-forrest,generate.xml-forrest,
-            deploy.xml-forrest,cleanup.xml-forrest" /> 
+            deploy.xml-forrest,cleanup.xml-forrest" />
 -->
 
   <xsl:for-each select="project">
@@ -79,7 +120,7 @@
   <target name="prepare.xml-forrest">
     <property ... />
     ...
-    <xmlproperty ... (defaults, to be overloaded eventually) /> 
+    <xmlproperty ... (defaults, to be overloaded eventually) />
     <ant ... target=" (project/workstage) " />
   </target>
   <target name="get-src.xml-forrest" depends="prepare.xml-forrest">
@@ -98,12 +139,12 @@
           </xsl:attribute>
         </xsl:if>
         <xsl:call-template name="insertprojectnodeprops">
-          <xsl:with-param name="projectnode" select="$projectnode"/> 
+          <xsl:with-param name="projectnode" select="$projectnode"/>
         </xsl:call-template>
         <xmlproperty file="${{bot.default.parameters.xml}}" keepRoot="false"/>
         <xsl:call-template name="insertantcalltotemplate">
-          <xsl:with-param name="projectnode" select="$projectnode"/> 
-          <xsl:with-param name="workstagenode" select="$workstagenode"/> 
+          <xsl:with-param name="projectnode" select="$projectnode"/>
+          <xsl:with-param name="workstagenode" select="$workstagenode"/>
         </xsl:call-template>
       </target>
     </xsl:for-each>

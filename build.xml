@@ -559,10 +559,12 @@
     <property name="bot.work.build.xml"         value="${bot.build.dir}/work.build.xml"/>
     <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
     <property name="bot.forrestbot.xconf"       value="forrestbot.conf.xml" />
+    <property file="ant-mail.properties" />
     <property name="bot.templates.build.xml"    value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
     <property name="bot.work.builder.xslt"      value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
     <property name="bot.default.builder.xslt"   value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
     <mkdir dir="${bot.build.dir}" />
+    <echo message="Using config file: ${bot.forrestbot.xconf}" />
   </target>
 
   <target name="bot.conf2build" depends="bot.init" >
@@ -606,9 +608,7 @@
 
   <target name="bot.run" depends="bot.conf2build, bot.prepare-cp" >
     <!-- delegates to the generated XML file -->
-    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true">
-        <property name="bot.logs.dir" value="${xlayout.build.bot.projects}" />
-    </ant>
+    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
   </target>
 
   <target name="bot" depends="bot.run" />

@@ -16,9 +16,42 @@
     [generate] let the cocoon crawler spit out the site
     [deploy] make the result of the generate step public in configured way
     [cleanup] no real need at the moment?
+    each workstage can come in different flavours depicted with their @style
+    in the forrestbot.conf.xml
+
+    currently there is:                    activated by forrestbot.conf.xml:
+    template.prepare                       <prepare>
+    template.get-src.cvs                   <get-src type="cvs">
+    template.get-src.local-copy            <get-src type="local-copy" >
+    template.generate                      <generate>
+    template.deploy.local-copy             <deploy type="local-copy" >
+    template.delpoy.scp                    <deploy type="scp" >
+    template.deploy.mail                   <deploy type="mail" >
+
+    each template target uses its own set of parameters (properties in fact)
+    that should be set before calling them
 
     Todo: maybe we will need a stage for getting soure of custom generators
           compile them to class files and slide them into the context as well
+          Also other extensions could come along
+
+    The Meta-template: (how to add one yourself)
+    could be silly to you, but there is this bit of a way of working to keep
+    this file a bit readable... so please fit in:
+    - build an echo target for each template target you make:
+
+    <target name="echo.workstage-name.optional-type" if="template.echo">
+          ... here you put echo ant-tasks that somewhat tell what you will
+          ... do with all the params you expect
+    </target>
+
+    <target name="template.workstage-name.optional-type"
+            depends="shared.set-props, echo.workstage-name.optional-type">
+          ... here you put whatever ant-tasks that actually do it
+    </target>
+
+    - in the future there will be a DTD for forrestbot.conf.xml that should be
+    updated probably after you added stuff here.
   -->
 
   <!-- Some defaults that typically get set before the template targets
@@ -29,8 +62,8 @@
   <property name="xlayout.build.bot.work.dir"       value="./build/bot/work" />
   <property name="xlayout.build.bot.docs.dir"       value="./build/bot/docs" />
   <property name="project.name"                     value="xml-forrest" />
-  <!-- Todo: cleanup/check more for implicit dependencies on being called from
-         the main ant script -->
+  <!-- Todo: always cleanup/check for more implicit dependencies on being
+             called from the main ant script -->
 
 
   <!--
@@ -287,12 +320,37 @@
       <echo message="deploy workstage of type scp for project ${project.name}"/>
       <echo message="destination dir = ${deploy.local-copy.destination}" />
   </target>
+
   <target name="template.deploy.local-copy" depends="shared.set-props, echo.deploy.local-copy">
     <copy todir="${deploy.local-copy.destination}">
         <fileset dir="${project.docs.dir}" />
     </copy>
   </target>
 
+
+  <!-- [[deploy type ftp ]] -->
+  <target name="echo.deploy.ftp" if="template.echo">
+    <echo>
+      deploy workstage of type ftp for project ${project.name}
+      will use ftp to host: ${deploy.ftp.host}
+      impersonating user: ${deploy.ftp.user} with passwd: ${deploy.ftp.passwd}
+      to copy the stuff to relative user dir: ${deploy.ftp.destination}
+    </echo>
+  </target>
+
+  <target name="template.deploy.ftp" depends="shared.set-props, echo.deploy.ftp">
+    <ftp server="${deploy.ftp.host}"
+         userid="${deploy.ftp.user}"
+         password="${deploy.ftp.passwd}"
+         remotedir="${deploy.ftp.destination}"
+         action="put"
+         depends="yes"
+         verbose="no"
+         ignoreNoncriticalErrors="true"
+    >
+      <fileset dir="${project.docs.dir}" />
+    </ftp>
+  </target>
 
   <!-- ________________ CLEANUP TEMPLATES __________________ -->
   <target name="echo.cleanup" if="template.echo">
