@@ -193,9 +193,7 @@ Credit: original from the jakarta-avalon project
                   <xsl:apply-templates/>
             </section>
       </xsl:template>
-      <xsl:template match="docinfo">
-            <xsl:apply-templates/>
-      </xsl:template>
+      
       <xsl:template match="cmdsynopsis">
             <!--
             <cmdsynopsis>
