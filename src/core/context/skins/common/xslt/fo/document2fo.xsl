@@ -19,6 +19,12 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
+  <!-- left, justify, right -->
+  <xsl:variable name="text-align" select="string(//skinconfig/pdf/page/@text-align)"/> 
+  
+  <!-- print URL of external links -->
+  <xsl:variable name="show-external-urls" select="//skinconfig/pdf/show-external-urls"/>
+  
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="toc-max-depth" select="number(//skinconfig/toc/@max-depth)"/>
 
@@ -54,8 +60,10 @@
   <xsl:variable name="outermargin"
                 select="string(//skinconfig/pdf/margins/outer)"/>
 
-
   <xsl:param name="numbersections" select="'true'"/>
+  
+  <!-- page breaks after TOC and each page if an aggregate document -->
+  <xsl:variable name="page-break-top-sections" select="'true'"/>
 
   <!-- Section depth at which we stop numbering and just indent -->
   <xsl:param name="numbering-max-depth" select="'3'"/>
@@ -260,10 +268,14 @@
         text-align="center">
         <xsl:apply-templates select="footer"/>
       </fo:block>
+      <!-- don't list page number on first page if it's contents is just the TOC -->
+      <xsl:if test="not($toc-max-depth > 0 and $page-break-top-sections)">
       <fo:block
         text-align="start">
+          <!-- insert i18n stuff here -->
         Page <fo:page-number/>
       </fo:block>
+      </xsl:if>
       <xsl:call-template name="info"/>
     </fo:static-content>
 
@@ -284,6 +296,7 @@
       </fo:block>
       <fo:block
         text-align="end">
+        <!-- insert i18n stuff here -->
         Page <fo:page-number/>
       </fo:block>
       <xsl:call-template name="info"/>
@@ -306,6 +319,7 @@
       </fo:block>
       <fo:block
         text-align="start">
+        <!-- insert i18n stuff here -->
         Page <fo:page-number/>
       </fo:block>
       <xsl:call-template name="info"/>
@@ -323,7 +337,7 @@
       </fo:block>
 
       <fo:block
-        text-align="justify"
+        text-align="{$text-align}"
         padding-before="18pt"
         padding-after="18pt">
         <xsl:apply-templates/>
@@ -355,6 +369,7 @@
       border-bottom="0.25pt solid"
       padding-before="6pt"
       padding-after="6pt">
+      <!-- insert i18n stuff here -->
       NOTICE: <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -409,6 +424,10 @@
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
 
+    <!-- if marked as a 'page', and we're breaking on pages, and were not the last node -->
+    <xsl:if test="@class='page' and $page-break-top-sections and not(following-sibling::node())">
+        <fo:block break-after="page"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="title">
@@ -431,6 +450,7 @@
       space-before="20pt"
       font-weight="bold"
       font-size="9pt">
+      <!-- insert i18n stuff here -->
       by
       <xsl:for-each select="person">
         <xsl:value-of select="@name"/>
@@ -622,6 +642,7 @@
       background-color="#A0C9F5">
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+        <!-- insert i18n stuff here -->
         <xsl:otherwise>Note: </xsl:otherwise>
       </xsl:choose><xsl:value-of select="title"/>
     </fo:block>
@@ -658,6 +679,7 @@
       border-end-style="solid"
       border-color="#C6C650"
       background-color="#C6C650">
+      <!-- insert i18n stuff here -->
       FIXME (<xsl:value-of select="@author"/>): <xsl:value-of select="title"/>
     </fo:block>
     <fo:block
@@ -682,12 +704,15 @@
   <xsl:template match="link">
     <xsl:choose>
       <xsl:when test="starts-with(@href, '#')">
-    <fo:basic-link color="blue" text-decoration="underline" internal-destination="{substring(@href,2)}">
-      <xsl:apply-templates/>
-    </fo:basic-link>
+        <fo:basic-link color="blue" text-decoration="underline" internal-destination="{substring(@href,2)}">
+          <xsl:apply-templates/>
+        </fo:basic-link>
       </xsl:when>
       <xsl:otherwise>
-    <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
+        <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
+        <xsl:if test="$show-external-urls and @href != string(.)">
+          (<xsl:value-of select="@href"/>)
+        </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -776,6 +801,7 @@
       <fo:block
         text-align="center"
         font-weight="bold">
+        <!-- insert i18n stuff here -->
         Table
         <xsl:text> </xsl:text>
         <xsl:number count="table" level="multiple"/>
@@ -850,6 +876,9 @@
       </fo:block>
       <fo:block font-family="sans" font-size="12pt" space-after="5pt"
       space-before="0pt" text-align="justify" width="7.5in">
+          <xsl:if test="$page-break-top-sections">
+            <xsl:attribute name="break-after">page</xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates select="section" mode="toc" />
       </fo:block>
     </xsl:if>
@@ -857,35 +886,38 @@
   </xsl:template>
 
   <xsl:template match="section" mode="toc">
-    <fo:block space-before="5pt" text-align-last="justify">
+    <xsl:param name="depth" select="'1'"/>
+    <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em" text-indent=".5em">
       <fo:inline>
-        <fo:basic-link internal-destination="{generate-id( )}">
+        <xsl:variable name="id">
+          <xsl:choose>
+            <xsl:when test="normalize-space(@id)!=''">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:basic-link internal-destination="{$id}">
+          <xsl:value-of select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)" />
+          <fo:inline font-size="10pt">
           <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
-          <xsl:text>. </xsl:text>
+          </fo:inline>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="title" />
           <fo:leader leader-pattern="dots" />
-          <fo:page-number-citation ref-id="{generate-id(  )}" />
+          <fo:page-number-citation ref-id="{$id}" />
         </fo:basic-link>
       </fo:inline>
-        <xsl:if test="$toc-max-depth > 1">
-          <xsl:apply-templates select="section" mode="toc2" />
+        <xsl:if test="$toc-max-depth > $depth">
+          <xsl:apply-templates select="section" mode="toc">
+            <xsl:with-param name="depth" select="$depth + 1"/>
+          </xsl:apply-templates>
         </xsl:if>
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="section" mode="toc2">
-    <fo:block start-indent=".5em" text-align-last="justify" text-indent=".5em">
-      <fo:inline padding-start="1em">
-        <fo:basic-link internal-destination="{generate-id( )}">
-          <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
-          <xsl:text>. </xsl:text>
-          <xsl:value-of select="title" />
-          <fo:leader leader-pattern="dots" />
-          <fo:page-number-citation ref-id="{generate-id(  )}" />
-        </fo:basic-link>
-      </fo:inline>
-    </fo:block>
-  </xsl:template>
 
 <!-- ====================================================================== -->
 <!-- Local Extensions section -->

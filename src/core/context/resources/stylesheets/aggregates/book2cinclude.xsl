@@ -66,7 +66,7 @@ jefft@apache.org
   </xsl:template>
 
   <xsl:template match="menu-item">
-    <section>
+    <section class="page">
       <xsl:attribute name="id">
         <xsl:text></xsl:text><xsl:value-of select="@href"/>
       </xsl:attribute>
