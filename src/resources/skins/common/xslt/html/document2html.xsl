@@ -13,11 +13,10 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.34 2003/09/22 13:07:48 jefft Exp $
+$Id: document2html.xsl,v 1.35 2003/09/27 14:40:25 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" 
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- the skinconf file -->
   <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
