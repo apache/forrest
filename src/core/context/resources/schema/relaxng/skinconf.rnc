@@ -43,10 +43,11 @@ skinconfig = element skinconfig {
             element year {text}?,                    # Used in Copyright
             element vendor {text}?,                  # Used in Copyright
             trail?,                                  # 'Breadcrumbs' trail in skins that support it
-            element toc {attribute level {text}?, attribute location {string}}?, # toc generation
+            element toc {attribute level {text}, attribute location {string}}?, # toc generation
             element headings {attribute type {text}}?, # heading style
             colors?,                                 # colors
             element extra-css {text}?,               # extra css to be included in the CSS output
+            pdf?,
             credits?
             )*
            }
@@ -67,7 +68,18 @@ colors   =  element colors {
                             attribute vlink {text}?,
                             attribute hlink {text}?)}* # each color
            }
-           
+
+pdf      = element pdf {
+             element page {(attribute size{text}, attribute orientation {text})},
+             element margins {
+                attribute double-sided {xsd:boolean},
+                element top {text}?,
+                element bottom {text}?,
+                element inner {text}?,
+                element outer {text}?
+             }
+           }
+
 ## Credits are typically rendered as a set of small clickable images in the
 ## page footer 
 credits = element credits { credit* }

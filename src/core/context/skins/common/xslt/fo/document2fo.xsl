@@ -25,6 +25,39 @@
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="toc-max-depth" select="number($config/toc/@level)"/>
 
+  <!-- The page size to be used -->
+  <xsl:variable name="pagesize" 
+                select="string($config/pdf/page/@size)"/>
+
+  <!-- The page orientation ("portrait" or "landscape") -->
+  <xsl:variable name="pageorientation" 
+                select="string($config/pdf/page/@orientation)"/>
+
+  <!-- Double-sided printing toggle -->
+  <xsl:variable name="doublesided"
+                select="string($config/pdf/margins/@double-sided)"/>
+
+  <!-- The top page margin -->
+  <xsl:variable name="topmargin"
+                select="string($config/pdf/margins/top)"/>
+
+  <!-- The bottom page margin -->
+  <xsl:variable name="bottommargin"
+                select="string($config/pdf/margins/bottom)"/>
+
+  <!-- The inner page margin (always the left margin if
+  double-sided printing is off, alternating between left and right if
+  it's on) -->
+  <xsl:variable name="innermargin"
+                select="string($config/pdf/margins/inner)"/>
+
+  <!-- The outer page margin (always the right margin if
+  double-sided printing is off, alternating between right and left if
+  it's on)-->
+  <xsl:variable name="outermargin"
+                select="string($config/pdf/margins/outer)"/>
+  
+
   <xsl:param name="numbersections" select="'true'"/>
 
   <!-- Section depth at which we stop numbering and just indent -->
@@ -34,17 +67,103 @@
   <xsl:include href="pdfoutline.xsl"/>
   <xsl:include href="footerinfo.xsl"/>
 
+
+  <!-- Determine page height for various page sizes (US Letter portrait
+  is the default) -->
+  <!-- FIXME: JJP:would this be better of a file? -->
+  <xsl:variable name="pageheight">
+    <xsl:choose>
+      <xsl:when test="$pageorientation = 'landscape'">
+        <xsl:choose>
+          <xsl:when test="$pagesize = 'a0'">841mm</xsl:when>
+          <xsl:when test="$pagesize = 'a1'">594mm</xsl:when>
+          <xsl:when test="$pagesize = 'a2'">420mm</xsl:when>
+          <xsl:when test="$pagesize = 'a3'">297mm</xsl:when>
+          <xsl:when test="$pagesize = 'a4'">210mm</xsl:when>
+          <xsl:when test="$pagesize = 'a5'">148mm</xsl:when>
+          <xsl:when test="$pagesize = 'executive'">7.25in</xsl:when>
+          <xsl:when test="$pagesize = 'folio'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'ledger'">11in</xsl:when>
+          <xsl:when test="$pagesize = 'legal'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'letter'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'quarto'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'tabloid'">11in</xsl:when>
+          <xsl:otherwise>8.5in</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$pagesize = 'a0'">1189mm</xsl:when>
+          <xsl:when test="$pagesize = 'a1'">841mm</xsl:when>
+          <xsl:when test="$pagesize = 'a2'">594mm</xsl:when>
+          <xsl:when test="$pagesize = 'a3'">420mm</xsl:when>
+          <xsl:when test="$pagesize = 'a4'">297mm</xsl:when>
+          <xsl:when test="$pagesize = 'a5'">210mm</xsl:when>
+          <xsl:when test="$pagesize = 'executive'">10.5in</xsl:when>
+          <xsl:when test="$pagesize = 'folio'">13in</xsl:when>
+          <xsl:when test="$pagesize = 'ledger'">17in</xsl:when>
+          <xsl:when test="$pagesize = 'legal'">14in</xsl:when>
+          <xsl:when test="$pagesize = 'quarto'">10.83in</xsl:when>
+          <xsl:when test="$pagesize = 'tabloid'">17in</xsl:when>
+          <xsl:otherwise>11in</xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Determine page width for various page sizes (US Letter portrait
+  is the default) -->
+  <xsl:variable name="pagewidth">
+    <xsl:choose>
+      <xsl:when test="$pageorientation = 'landscape'">
+        <xsl:choose>
+          <xsl:when test="$pagesize = 'a0'">1189mm</xsl:when>
+          <xsl:when test="$pagesize = 'a1'">841mm</xsl:when>
+          <xsl:when test="$pagesize = 'a2'">594mm</xsl:when>
+          <xsl:when test="$pagesize = 'a3'">420mm</xsl:when>
+          <xsl:when test="$pagesize = 'a4'">297mm</xsl:when>
+          <xsl:when test="$pagesize = 'a5'">210mm</xsl:when>
+          <xsl:when test="$pagesize = 'executive'">10.5in</xsl:when>
+          <xsl:when test="$pagesize = 'folio'">13in</xsl:when>
+          <xsl:when test="$pagesize = 'ledger'">17in</xsl:when>
+          <xsl:when test="$pagesize = 'legal'">14in</xsl:when>
+          <xsl:when test="$pagesize = 'quarto'">10.83in</xsl:when>
+          <xsl:when test="$pagesize = 'tabloid'">17in</xsl:when>
+          <xsl:otherwise>11in</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$pagesize = 'a0'">841mm</xsl:when>
+          <xsl:when test="$pagesize = 'a1'">594mm</xsl:when>
+          <xsl:when test="$pagesize = 'a2'">420mm</xsl:when>
+          <xsl:when test="$pagesize = 'a3'">297mm</xsl:when>
+          <xsl:when test="$pagesize = 'a4'">210mm</xsl:when>
+          <xsl:when test="$pagesize = 'a5'">148mm</xsl:when>
+          <xsl:when test="$pagesize = 'executive'">7.25in</xsl:when>
+          <xsl:when test="$pagesize = 'folio'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'ledger'">11in</xsl:when>
+          <xsl:when test="$pagesize = 'legal'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'letter'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'quarto'">8.5in</xsl:when>
+          <xsl:when test="$pagesize = 'tabloid'">11in</xsl:when>
+          <xsl:otherwise>8.5in</xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:template match="/">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
       <fo:layout-master-set>
 
         <fo:simple-page-master master-name="first-page"
-          page-height="11in" 
-          page-width="8.5in"
-          margin-top="1in" 
-          margin-bottom="1in" 
-          margin-left="1.25in" 
-          margin-right="1in">
+          page-height="{$pageheight}" 
+          page-width="{$pagewidth}"
+          margin-top="{$topmargin}" 
+          margin-bottom="{$bottommargin}" 
+          margin-left="{$innermargin}" 
+          margin-right="{$outermargin}">
           <fo:region-body
             margin-top="0.5in"
             margin-bottom=".5in"/>
@@ -55,12 +174,28 @@
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="even-page"
-          page-height="11in" 
-          page-width="8.5in"
-          margin-top="1in" 
-          margin-bottom="1in" 
-          margin-left="1.25in" 
-          margin-right="1in">
+          page-height="{$pageheight}" 
+          page-width="{$pagewidth}"
+          margin-top="{$topmargin}" 
+          margin-bottom="{$bottommargin}">
+          <xsl:choose>
+            <xsl:when test="$doublesided = 'true'">
+              <xsl:attribute name="margin-left">
+                <xsl:value-of select="$outermargin"/>
+              </xsl:attribute>
+              <xsl:attribute name="margin-right">
+                <xsl:value-of select="$innermargin"/>
+              </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="margin-left">
+                <xsl:value-of select="$innermargin"/>
+              </xsl:attribute>
+              <xsl:attribute name="margin-right">
+                <xsl:value-of select="$outermargin"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
           <fo:region-before
             region-name="even-header"
             extent="0.5in"
@@ -75,12 +210,12 @@
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="odd-page"
-          page-height="11in" 
-          page-width="8.5in"
-          margin-top="1in" 
-          margin-bottom="1in" 
-          margin-left="1.25in" 
-          margin-right="1in">
+          page-height="{$pageheight}" 
+          page-width="{$pagewidth}"
+          margin-top="{$topmargin}" 
+          margin-bottom="{$bottommargin}" 
+          margin-left="{$innermargin}" 
+          margin-right="{$outermargin}">
           <fo:region-before
             region-name="odd-header"
             extent="0.5in"
@@ -731,7 +866,7 @@
           <xsl:value-of select="title" />
           <fo:leader leader-pattern="dots" />
           <fo:page-number-citation ref-id="{generate-id(  )}" />
-	</fo:basic-link>
+        </fo:basic-link>
       </fo:inline>
         <xsl:if test="$toc-max-depth > 1">
           <xsl:apply-templates select="section" mode="toc2" /> 
