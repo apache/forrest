@@ -6,8 +6,8 @@ if [ "$JAVA_HOME" = "" ] ; then
   exit 1
 fi
 
-chmod u+x ./tools/ant/bin/antRun
-chmod u+x ./tools/ant/bin/ant
+chmod u+x ./tools/antipede/bin/antRun
+chmod u+x ./tools/antipede/bin/ant
 
 # ----- Verify and Set Required Environment Variables -------------------------
 
@@ -26,10 +26,11 @@ CP=$CLASSPATH
 export CP
 unset CLASSPATH
 
-CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S``echo ./tools/centipede/lib/*.jar | tr ' ' $S`"
+CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S`"
 export CLASSPATH
 
-$PWD/./tools/ant/bin/ant $@ 
+echo Using classpath: \"$CLASSPATH\"
+$PWD/./tools/antipede/bin/ant -emacs -logger org.apache.tools.ant.NoBannerLogger $@ 
 
 unset CLASSPATH
 
