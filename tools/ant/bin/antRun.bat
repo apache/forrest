@@ -18,14 +18,12 @@ REM
 REM
 
 if "%OS%"=="Windows_NT" @setlocal
-if "%OS%"=="WINNT" @setlocal
 
 if ""%1""=="""" goto runCommand
 
 rem Change drive and directory to %1
-if not "%OS%"=="Windows_NT" cd ""%1""
 if "%OS%"=="Windows_NT" cd /d ""%1""
-if "%OS%"=="WINNT" cd /d ""%1""
+if not "%OS%"=="Windows_NT" cd ""%1""
 shift
 
 rem Slurp the command line arguments. This loop allows for an unlimited number
@@ -44,5 +42,4 @@ rem echo %ANT_RUN_CMD%
 %ANT_RUN_CMD%
 
 if "%OS%"=="Windows_NT" @endlocal
-if "%OS%"=="WINNT" @endlocal
 
