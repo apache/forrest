@@ -57,7 +57,8 @@ export CLASSPATH
 
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
-"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_DOT_HOME" -emacs $@ 
+"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_DOT_HOME" -emacs $@
+RESULT=$?
 
 # ---- Restore Classpath
 unset CLASSPATH
@@ -69,4 +70,4 @@ export CLASSPATH
 ANT_HOME="$OLD_ANT_HOME"
 export ANT_HOME
 
-
+exit $RESULT
