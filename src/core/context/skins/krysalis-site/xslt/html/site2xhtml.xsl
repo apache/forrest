@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.5 2003/12/28 22:54:16 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.6 2004/01/03 15:36:20 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -28,6 +28,7 @@ $Id: site2xhtml.xsl,v 1.5 2003/12/28 22:54:16 nicolaken Exp $
       <head>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
+        <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
         <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
       </head>
@@ -151,10 +152,10 @@ $Id: site2xhtml.xsl,v 1.5 2003/12/28 22:54:16 nicolaken Exp $
         </td>
       </tr>
       <tr>
-        <td colspan="2" class="level2tabstrip border">
+        <td colspan="2" class="level2tabstrip">
           <xsl:apply-templates select="table[@class='level2tab']"/>
         </td>
-        <td colspan="2" class="datenote border">
+        <td colspan="2" class="datenote level2tabstrip">
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
