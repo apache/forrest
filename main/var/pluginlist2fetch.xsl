@@ -30,7 +30,7 @@
             <echo>Trying to get "<xsl:value-of select="$plugin-name" />" plugin version 
                   <xsl:value-of select="$forrest-version" />...</echo>
             <get verbose="true" usetimestamp="true" ignoreerrors="true">
-               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" /><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
+               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
                <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
             </get>
             <available property="versioned-plugin.present">
@@ -41,7 +41,7 @@
          <target name="fetch-unversioned-plugin" unless="versioned-plugin.present">
             <echo>Versioned plugin unavailable, trying to get versionless plugin...</echo>
             <get verbose="true" usetimestamp="true" ignoreerrors="true">
-               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" /><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
                <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
             </get>
          </target>
