@@ -15,7 +15,9 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
@@ -88,6 +90,8 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		if (monitor == null) {
 			monitor= new NullProgressMonitor();
 		}
+		
+		int exitValue = -1;
 		try {		
 			String strName = page.getProjectName();
 			monitor.beginTask("Creating "+ strName + " Forrest Project", 3);
@@ -116,9 +120,16 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 				cmdString = "cmd /c forrest -Dbasedir=" + strPath + "\\" + strName
 						+ " seed";
 			}
+			
 			try {
-				// TODO: if fhome is not set the wizard will fail
-				Runtime.getRuntime().exec(cmdString);
+		      String lineRead = null;
+			  Process seedProc = Runtime.getRuntime().exec(cmdString);
+		      BufferedReader reader = new BufferedReader(new InputStreamReader(seedProc.getInputStream()));
+		      while((lineRead = reader.readLine()) != null) {
+		      	// FIXME: should be logged properly
+	            System.out.println(lineRead);
+              }
+			  exitValue = seedProc.exitValue();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
