@@ -30,6 +30,7 @@
 
     <color name="heading" value="#a5b6c6"/>
     <color name="subheading" value="#CFDCED"/>
+    <color name="published" value="#000000"/>
         
     <color name="navstrip" value="#CFDCED" font="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
     <color name="toolbox" value="#a5b6c6"/>
@@ -73,7 +74,7 @@
      </xsl:if>  
      <xsl:if test="not(color[@name='tab-unselected'])">
       <color name="tab-unselected" value="#F7F7F7"  link="#000000" vlink="#000000" hlink="#000000"/>
-     </xsl:if>  
+     </xsl:if>
      <xsl:if test="not(color[@name='subtab-selected'])">
       <color name="subtab-selected" value="#a5b6c6"  link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  
@@ -85,7 +86,10 @@
      </xsl:if>  
      <xsl:if test="not(color[@name='subheading'])">
       <color name="subheading" value="#CFDCED"/>
-     </xsl:if>  
+     </xsl:if>
+     <xsl:if test="not(color[@name='published'])">
+        <color name="published" value="#ffffff"/>
+     </xsl:if> 
      <xsl:if test="not(color[@name='navstrip'])">
       <color name="navstrip" value="#CFDCED" font="#000000" link="#000000" vlink="#000000" hlink="#000000"/>
      </xsl:if>  

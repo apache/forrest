@@ -54,8 +54,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
       </head>
       <body onload="init()" >
-        <script type="text/javascript">ndeSetTextSize();</script>
 
+        <script type="text/javascript">ndeSetTextSize();</script>
         <!--
           +=========================+
           |       topstrip          |
@@ -105,7 +105,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             </div>
         </td>
         <!-- ( ================= Project Logo ================== ) -->
-        <td align="center" >
+	<xsl:choose>
+      <xsl:when test="$config/search and not($config/search/@box-location = 'alt')">
+        <td align="center" >   
          <div class="headerlogo">
           <xsl:call-template name="renderlogo">
             <xsl:with-param name="name" select="//skinconfig/project-name"/>
@@ -115,9 +117,25 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:call-template>
           </div>
         </td>
-        <!-- ( =================  Search ================== ) -->
+      </xsl:when>
+      <xsl:otherwise>
+      	<td align="right" colspan="3" valign="bottom"> 
+      	<div class="headerlogo right">
+          <xsl:call-template name="renderlogo">
+            <xsl:with-param name="name" select="//skinconfig/project-name"/>
+            <xsl:with-param name="url" select="//skinconfig/project-url"/>
+            <xsl:with-param name="logo" select="//skinconfig/project-logo"/>
+            <xsl:with-param name="root" select="$root"/>
+          </xsl:call-template>
+          </div>
+        </td>
+     </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+	      <xsl:when test="$config/search and not($config/search/@box-location = 'alt')">
+	      	        <!-- ( =================  Search ================== ) -->
         <td class="search" align="right" rowspan="2" valign="top">
-          <xsl:if test="$config/search and not($config/search/@box-location = 'alt')">
+         
 	    <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
                 <!-- Lucene search -->
@@ -193,12 +211,14 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 		</form>
 	      </xsl:otherwise>
 	    </xsl:choose>
-          </xsl:if>
         </td>
-
         <td align="right" width="10" height="10">
           <span class="textheader"><xsl:value-of select="//skinconfig/project-name"/></span>
         </td>
+	      </xsl:when>
+      </xsl:choose>
+      
+
       </tr>
       <!-- ( ================= Tabs ================== ) -->
       <tr>
@@ -211,9 +231,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           <xsl:apply-templates select="table[@class='level2tab']"/>
         </td>
         <td colspan="2" class="datenote level2tabstrip">
+        <div class="published">
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
-              //  -->]]></script>
+              //  -->]]></script></div>
         </td>
       </tr>
     </table>
@@ -492,13 +513,15 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 	      <!-- ============ Breadcrumbs =========== -->
           <td class="subborder trail">
 	         &#160;<xsl:call-template name="breadcrumbs"/>&#160;
-	      </td>
+          </td>
 	      <!-- ============ Page font settings =========== -->
 	      <td class="subborder trail" align="right" nowrap="true">
+	       <xsl:if test="$disable-font-script = 'false'">
 	        Font size: 
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
 	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
 	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+           </xsl:if>
           </td>
 	    </tr>
 

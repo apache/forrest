@@ -36,7 +36,9 @@
      <xsl:if test="not(obfuscate-mail-links)">     
        <obfuscate-mail-links>true</obfuscate-mail-links>
      </xsl:if>
-
+     <xsl:if test="not(disable-font-script)">     
+       <disable-font-script>true</disable-font-script>
+     </xsl:if>
      <!--
      <xsl:if test="not(project-name)">     
        <project-name>MyProject</project-name>

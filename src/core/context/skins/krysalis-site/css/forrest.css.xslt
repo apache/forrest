@@ -65,6 +65,10 @@
 .subheading { background-color: <xsl:value-of select="@value"/>;} 
 </xsl:template> 
 
+<xsl:template match="color[@name='published']">
+.published { color: <xsl:value-of select="@value"/>;}
+</xsl:template> 
+
 <xsl:template match="color[@name='navstrip']">
 .subborder      { color: <xsl:value-of select="@font"/>;
                   background-color: <xsl:value-of select="@value"/>;}

@@ -76,6 +76,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   <!-- Whether to obfuscate email links -->
   <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
+ <!-- If true, the font size script will not be rendered -->  
+  <xsl:variable name="disable-font-script" select="//skinconfig/disable-font-script"/>
   <!-- If true, an the images on all external links will not be added -->
   <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>  
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
