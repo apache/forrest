@@ -63,12 +63,10 @@ public final class ViewSummaryAction extends BaseAction {
 				log.debug("bad password");
 				errors.add("password", new ActionError("error.authentication"));
 				saveErrors(request, errors);
-				return mapping.findForward(Constants.FORWARD_NAME_FAILURE);
 			} else {
 				log.debug("authenticated");
 				request.getSession(true).setAttribute("auth", Boolean.TRUE);
 				request.getSession(true).setAttribute("username", username);
-				//return mapping.findForward(Constants.FORWARD_NAME_AUTHORIZED);
 			}
 		}
 
