@@ -24,9 +24,19 @@
   <body>
     <warning>This documentation applies to the forrestbot in the current
     development version (i.e. svn trunk) and not the forrestbot included with
-    Forrest 0.5.1 or any previous release. Documentation for that forrestbot
-    is <link href="site:forrestbot-old">here</link>. This page is incomplete
-    and may have errors.</warning>
+    Forrest 0.5.1 or any previous release. Documentation for that forrestbot is
+    <link href="site:forrestbot-old">here</link>. This page is incomplete and
+    may have errors.</warning>
+
+    <section>
+      <title>Overview</title>
+
+      <p>Forrestbot lets you automate building &amp; deploying websites. There
+      are implementations to get source from various locations, build it, then
+      deploy it somewhere. It can notify you afterwards, and it keeps a log of
+      the build process. Each workstage has multiple implementations; you can
+      use one or more of each.</p>
+    </section>
 
     <section>
       <title>Using Forrestbot</title>
@@ -53,16 +63,19 @@
 	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
 	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
 
+	&lt;!-- here we specify to use two notification implementations --&gt;
 	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
-	&lt;import file="${env.FORREST_HOME}/../../../scratchpad/forrestbot2/core/forrestbot.xml"/&gt;
+
+	&lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
+	&lt;property environment="env"/&gt;
+	&lt;import file="${env.FORREST_HOME}/../forrestbot/core/forrestbot.xml"/&gt;
 &lt;/project&gt;
 
 </source>
 
       <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and
-      getsrc.cvs. Next, specify what implementations will be used by each
-      workstage. By default, 'local' will be used.</p>
+      Here, we set properties that will be used by notify.email and getsrc.cvs.
+      Next, specify what implementations will be used by each workstage.</p>
 
       <table>
         <tr>
@@ -75,11 +88,11 @@
           <td>getsrc</td>
 
           <td><ul>
-              <li><link href="#getsrc.local">local</link></li>
+              <li><link href="#getsrc.local">getsrc.local</link></li>
 
-              <li><link href="#getsrc.cvs">cvs</link></li>
+              <li><link href="#getsrc.cvs">getsrc.cvs</link> (default)</li>
 
-              <li><link href="#getsrc.svn">svn</link></li>
+              <li><link href="#getsrc.svn">getsrc.svn</link></li>
             </ul></td>
         </tr>
 
@@ -87,7 +100,7 @@
           <td>build</td>
 
           <td><ul>
-              <li><link href="#build.forrest">forrest</link></li>
+              <li><link href="#build.forrest">build.forrest</link></li>
             </ul></td>
         </tr>
 
@@ -95,9 +108,11 @@
           <td>deploy</td>
 
           <td><ul>
-              <li><link href="#deploy.local">local</link></li>
+              <li><link href="#deploy.local">deploy.local</link> (default)</li>
 
-              <li><link href="#deploy.scp">scp</link></li>
+              <li><link href="#deploy.scp">deploy.scp</link></li>
+
+              <li><link href="#deploy.cvs">deploy.cvs</link></li>
             </ul></td>
         </tr>
 
@@ -105,9 +120,9 @@
           <td><link href="#notify">notify</link></td>
 
           <td><ul>
-              <li><link href="#notify.local">local</link></li>
+              <li><link href="#notify.local">notify.local</link> (default)</li>
 
-              <li><link href="#notify.email">email</link></li>
+              <li><link href="#notify.email">notify.email</link></li>
             </ul></td>
         </tr>
       </table>
@@ -117,6 +132,15 @@
       name="main" depends="getsrc, build, deploy, notify"/&gt;</code>, create
       your own implementation of a workstage, or use any other ant tasks to do
       additional work.</p>
+
+      <p></p>
+
+      <p>Many workstages use usernames and passwords. You may want to keep them
+      out of your project's xml file (especially if you store that file in CVS
+      or SVN). A nice way to do this is make a simple buildfile (e.g.
+      my-settings.xml) that just sets those properties (don't include it in
+      CVS/SVN!). Then in your project buildfile, have <code>&lt;import
+      file="my-settings.xml"/&gt;</code>.</p>
 
       <section>
         <title>Workstage Properties</title>
@@ -236,8 +260,8 @@
             <tr>
               <td>getsrc.cvs.module</td>
 
-              <td>CVS module name (an alias, or full path) to the directory
-              that contains forrest.properties</td>
+              <td>CVS module name (an alias, or full path) to the directory that
+              contains forrest.properties</td>
 
               <td>${ant.project.name}</td>
 
@@ -359,9 +383,9 @@
         <section id="deploy.local">
           <title>deploy.scp</title>
 
-          <p>${user.home}/.ssh/known_hosts must properly recognize the host,
-          so you should manually make an ssh connection to the host if you
-          never have before.</p>
+          <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
+          you should manually make an ssh connection to the host if you never
+          have before.</p>
 
           <table>
             <tr>
@@ -383,6 +407,85 @@
               <td></td>
 
               <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+
+        <section>
+          <title>deploy.cvs</title>
+
+          <p>This is only available on *nix operating systems. </p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.user</td>
+
+              <td>CVS username to use when committing changes</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.password</td>
+
+              <td>CVS password</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.root</td>
+
+              <td>CVS root</td>
+
+              <td>/home/cvs</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.host</td>
+
+              <td>CVS host</td>
+
+              <td>cvs.apache.org</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.module</td>
+
+              <td>CVS module</td>
+
+              <td>${ant.project.name}</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>deploy.cvs.commit-message</td>
+
+              <td>Message to use when committing. You probably want to put a
+              machine name or person's name here.</td>
+
+              <td>Automatic publish from forrestbot</td>
+
+              <td>No</td>
             </tr>
           </table>
         </section>
@@ -492,9 +595,9 @@
     <section>
       <title>Forrestbot design</title>
 
-      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's
-      import task is used to import multiple buildfiles into a single build.
-      The following is the flow of control when running forrestbot:</p>
+      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
+      task is used to import multiple buildfiles into a single build. The
+      following is the flow of control when running forrestbot:</p>
 
       <ul>
         <li>Your buildfile<ul>
@@ -508,8 +611,8 @@
 
       <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or
-      other post-build activities.</p>
+      other workstages buildfiles can implement reporting, deployment, or other
+      post-build activities.</p>
 
       <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
