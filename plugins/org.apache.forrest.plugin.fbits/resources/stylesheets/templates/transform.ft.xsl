@@ -26,7 +26,7 @@
   >
   
   <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
-  <!--FIXME: ¡¡¡Need to make sure all variables are matched!!!-->
+  <!--FIXME Need to make sure all variables are matched!!!-->
  	<xsl:param name="config-file"/>
   <xsl:param name="path"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
