@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.23 2003/09/03 11:01:41 cheche Exp $
+$Id: document2html.xsl,v 1.24 2003/09/04 03:03:10 cheche Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -410,6 +410,24 @@ if (VERSION > 3) {
     <p>
       <xsl:apply-templates/>
     </p>
+  </xsl:template>
+
+  <xsl:template name="email">
+    <a>
+    <xsl:attribute name="href">
+      <xsl:choose>
+      <xsl:when test="$obfuscate-mail-links='true'">
+        <xsl:variable name="user" select="substring-before(@email,'@')"/>
+	<xsl:variable name="host" select="substring-after(@email,'@')"/>
+	<xsl:value-of select="concat('mailto:',$user,'.at.',$host)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('mailto:',@email)"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+       <xsl:value-of select="@name"/>
+    </a>
   </xsl:template>
 
   <xsl:template match="node()|@*" priority="-1">
