@@ -295,8 +295,22 @@ The skin that most likely resembles these ones is called 'pelt'.
     </condition>
   </target>
 
+  <target name="check-java-version">
+    <!-- check java version, else user may get a confusing java.lang.UnsupportedClassVersionError -->
+    <if>
+      <or>
+        <equals arg1="${ant.java.version}" arg2="1.1"/>
+        <equals arg1="${ant.java.version}" arg2="1.2"/>
+        <equals arg1="${ant.java.version}" arg2="1.3"/>
+      </or>
+      <then>
+        <fail>Java 1.4 or higher is required; found Java ${ant.java.version} in ${java.home}</fail>
+      </then>
+    </if>
+  </target>
+
   <!-- Sets up properties and filters -->
-  <target name="init" depends="init-props, init-skins, init-plugins">
+  <target name="init" depends="check-java-version, init-props, init-skins, init-plugins">
     <available property="xml-forrest.jar.exists" file="${forrest.build.lib-dir}/xml-forrest.jar"/>
     <fail unless="xml-forrest.jar.exists">You must build forrest before you can run it.  In ${forrest.home} run './build.sh' (linux) or 'build' (windows)</fail>
   </target>
