@@ -79,7 +79,54 @@
          Set the <code>ANT_OPTS</code> environment variable before you run forrest.  The exact value you set
          it to is dependant on your JVM, but something like <code>ANT_OPTS=-Xmx500M</code> will probably work.
         </p>
-      </section></section><section id="technical"><title>2. Technical</title><section id="edit-content"><title>2.1. What tools can be used to edit the content?</title>
+      </section><section id="encoding"><title>1.8. Does forrest like accents?</title>
+            <p>Short answer: yes, forrest can process text in any language so you can include:</p>
+            <dl>
+            <dt>accents</dt><dd>αινσϊ</dd>
+            <dt>dieresis</dt><dd>δλοφό</dd>
+            <dt>tildes</dt><dd>γρ&#297;υ&#361;</dd>
+            <dt>Everything that has a computer character representation</dt><dd><!-- include other common non-ASCII characters--></dd>
+            </dl>
+            <p>This is because sources for forrest docs are xml documents, which can include any of these
+            as long as the encoding your xml doc declares matches the actual encoding used in the file containing
+            the xml. For instance if you declare:</p>
+            <source xml:space="preserve">
+            
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+            
+            </source>
+            <p>but the file is actually using ISO-8859-1 you will probably get a validation error. specially if 
+            you include some non-ASCII characters.</p>
+            <p>
+            This situation is commonly encountered when you edit the templates created by <code>forrest seed</code> with your favorite 
+            (probably localized) editor without paying attention to the encoding. Or when you create a new file 
+            and simply copy the headers from another file
+            </p>
+            <p>Though UTF-8 is an encoding well suited for most languages is not ussually the default
+            in popular editors or systems.</p>
+            <p>In UNIX-like systems, most popular editors can handle different encodings to 
+            write the file in disk. On some editors the encoding of the file is preserved, in others the default
+            is used regardless the original encoding. On most cases the encoding used to write files
+            can be controled by setting the enviroment variable <code>LANG</code>
+            to an appropiate value, for instance:
+            </p>
+            <source xml:space="preserve">
+            
+$ export LANG=en_US.UTF-8
+            
+            </source>
+            <p>Of course the <em>appropiate</em> way of setting the encoding to use depends on the editor/OS, 
+            but ultimately relays on the user preferences. So you can use the encoding you prefer as long as 
+            the <code>encoding</code> attribute of the xml declaration matches the actual encoding of the file. 
+            This means 
+            that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
+            <source xml:space="preserve">
+            
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+            
+            </source>
+            
+        </section></section><section id="technical"><title>2. Technical</title><section id="edit-content"><title>2.1. What tools can be used to edit the content?</title>
         <p>If you are using the Apache Forrest xml
           <link href="site:dtd-docs">document format</link> or DocBook
           or other xml document types, then you can use any text editor
@@ -362,6 +409,11 @@ X [0]                       brokenlink.html     BROKEN: reason
       the site locally, there is no domain and so
       there will be no extra breadcrumbs, only the ones that are specified
       in <code>skinconf.xml</code>.
+      </p>
+      </section><section id="run_port"><title>2.17. How do I make <code>forrest run</code> listen on a different port?</title>
+      <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
+      <p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
+      directory and set the port number in that file.  Then do <code>forrest run</code>
       </p>
       </section></section><section id="old_faqs"><title>3. Older versions</title><section id="unresolved_project.home"><title>3.1. When invoking Forrest 0.4 from the
         <code>forrest.antproxy.xml</code>, the build fails because

@@ -220,6 +220,9 @@
         How can I specify the amount of memory to be used by Java?
       </a>
 </li>
+<li>
+<a href="#encoding">1.8. Does forrest like accents?</a>
+</li>
 </ul>
 </li>
 <li>
@@ -295,6 +298,9 @@
 </li>
 <li>
 <a href="#breadcrumbs">2.16. How do breadcrumbs work?  Why don't they work locally?</a>
+</li>
+<li>
+<a href="#run_port">2.17. How do I make forrest run listen on a different port?</a>
 </li>
 </ul>
 </li>
@@ -484,9 +490,72 @@
          it to is dependant on your JVM, but something like <span class="codefrag">ANT_OPTS=-Xmx500M</span> will probably work.
         </p>
 </div>
-<a name="N1007E"></a><a name="technical"></a>
+<a name="N1007E"></a><a name="encoding"></a>
+<h4 class="faq">1.8. Does forrest like accents?</h4>
+<div align="right">
+<a href="#encoding-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>Short answer: yes, forrest can process text in any language so you can include:</p>
+<dl>
+            
+<dt>accents</dt>
+<dd>&aacute;&eacute;&iacute;&oacute;&uacute;</dd>
+            
+<dt>dieresis</dt>
+<dd>&auml;&euml;&iuml;&ouml;&uuml;</dd>
+            
+<dt>tildes</dt>
+<dd>&atilde;&ntilde;ĩ&otilde;ũ</dd>
+            
+<dt>Everything that has a computer character representation</dt>
+<dd>
+<!-- include other common non-ASCII characters-->
+</dd>
+            
+</dl>
+<p>This is because sources for forrest docs are xml documents, which can include any of these
+            as long as the encoding your xml doc declares matches the actual encoding used in the file containing
+            the xml. For instance if you declare:</p>
+<pre class="code">
+            
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+            
+            </pre>
+<p>but the file is actually using ISO-8859-1 you will probably get a validation error. specially if 
+            you include some non-ASCII characters.</p>
+<p>
+            This situation is commonly encountered when you edit the templates created by <span class="codefrag">forrest seed</span> with your favorite 
+            (probably localized) editor without paying attention to the encoding. Or when you create a new file 
+            and simply copy the headers from another file
+            </p>
+<p>Though UTF-8 is an encoding well suited for most languages is not ussually the default
+            in popular editors or systems.</p>
+<p>In UNIX-like systems, most popular editors can handle different encodings to 
+            write the file in disk. On some editors the encoding of the file is preserved, in others the default
+            is used regardless the original encoding. On most cases the encoding used to write files
+            can be controled by setting the enviroment variable <span class="codefrag">LANG</span>
+            to an appropiate value, for instance:
+            </p>
+<pre class="code">
+            
+$ export LANG=en_US.UTF-8
+            
+            </pre>
+<p>Of course the <em>appropiate</em> way of setting the encoding to use depends on the editor/OS, 
+            but ultimately relays on the user preferences. So you can use the encoding you prefer as long as 
+            the <span class="codefrag">encoding</span> attribute of the xml declaration matches the actual encoding of the file. 
+            This means 
+            that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
+<pre class="code">
+            
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+            
+            </pre>
+</div>
+<a name="N100C7"></a><a name="technical"></a>
 <h3 class="underlined_5">2. Technical</h3>
-<a name="N10082"></a><a name="edit-content"></a>
+<a name="N100CB"></a><a name="edit-content"></a>
 <h4 class="faq">2.1. What tools can be used to edit the content?</h4>
 <div align="right">
 <a href="#edit-content-menu">^</a>
@@ -510,7 +579,7 @@
           with the Mozilla web browser.
         </p>
 </div>
-<a name="N1009C"></a><a name="PDF-output"></a>
+<a name="N100E5"></a><a name="PDF-output"></a>
 <h4 class="faq">2.2. How can I generate one pdf-file out of
       the whole site or selected pages of the site?</h4>
 <div align="right">
@@ -536,7 +605,7 @@
          structure and navigation, rather than the old book.xml method.
        </p>
 </div>
-<a name="N100B6"></a><a name="clickable-email-adress"></a>
+<a name="N100FF"></a><a name="clickable-email-adress"></a>
 <h4 class="faq">2.3. How can I generate html-pages to show a 
       'clickable' email-address (of the author-element)?</h4>
 <div align="right">
@@ -548,7 +617,7 @@
        and edit the "headers/authors" template.
        </p>
 </div>
-<a name="N100C1"></a><a name="CVS_revison_tags"></a>
+<a name="N1010A"></a><a name="CVS_revison_tags"></a>
 <h4 class="faq">2.4. How can I generate html-pages to show the
       revision tag of cvs?</h4>
 <div align="right">
@@ -563,7 +632,7 @@
 <p>This technique could also be used for a modification date with
       $Date: 2004/01/15 08:52:47 $</p>
 </div>
-<a name="N100D3"></a><a name="ignoring_javadocs"></a>
+<a name="N1011C"></a><a name="ignoring_javadocs"></a>
 <h4 class="faq">2.5. 
         How do I stop Forrest breaking on links to external files that may not
         exist, like javadocs?
@@ -607,7 +676,7 @@
         </div>
 </div>
 </div>
-<a name="N10107"></a><a name="link_raw"></a>
+<a name="N10150"></a><a name="link_raw"></a>
 <h4 class="faq">2.6. How do I link to raw files such as config.txt and brochure.pdf?
       </h4>
 <div align="right">
@@ -633,7 +702,7 @@
           'forrest seed' site.
         </p>
 </div>
-<a name="N10124"></a><a name="claimed_patterns"></a>
+<a name="N1016D"></a><a name="claimed_patterns"></a>
 <h4 class="faq">2.7. Some of my files are not being processed because they use
       common filenames.
       </h4>
@@ -655,7 +724,7 @@
           (<a class="external" href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N10136"></a><a name="build_msg_a"></a>
+<a name="N1017F"></a><a name="build_msg_a"></a>
 <h4 class="faq">2.8. What do the symbols and numbers mean when Forrest lists each
         document that it has built?
       </h4>
@@ -679,7 +748,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          Column 4 is the page size.
         </p>
 </div>
-<a name="N10142"></a><a name="pdf_images"></a>
+<a name="N1018B"></a><a name="pdf_images"></a>
 <h4 class="faq">2.9. Images don't display in PDFs. How do I fix this?</h4>
 <div align="right">
 <a href="#pdf_images-menu">^</a>
@@ -719,7 +788,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           Forrest.</div>
 </div>
 </div>
-<a name="N1016E"></a><a name="index.html"></a>
+<a name="N101B7"></a><a name="index.html"></a>
 <h4 class="faq">2.10. 
         The tab link in my site incorrectly assumes that 'index.html' is present in
         the linked-to directory. How do I fix this?
@@ -745,7 +814,7 @@ X [0]                       brokenlink.html     BROKEN: reason
     &lt;map:redirect-to uri="manual/Introduction.html"/&gt;
   &lt;/map:match&gt;</pre>
 </div>
-<a name="N1018A"></a><a name="headless_operation"></a>
+<a name="N101D3"></a><a name="headless_operation"></a>
 <h4 class="faq">2.11. 
         When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
       </h4>
@@ -764,7 +833,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <a class="external" href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</a>.
         </p>
 </div>
-<a name="N101A6"></a><a name="catalog"></a>
+<a name="N101EF"></a><a name="catalog"></a>
 <h4 class="faq">2.12. 
         How do i configure my favourite XML editor or parser to find the
         local Forrest DTDs?
@@ -779,7 +848,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           local DTDs</a>.
         </p>
 </div>
-<a name="N101B2"></a><a name="label-entity"></a>
+<a name="N101FB"></a><a name="label-entity"></a>
 <h4 class="faq">2.13. 
         How to use special characters in the labels of the site.xml file?
       </h4>
@@ -801,7 +870,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         <a class="external" href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</a>.
         </p>
 </div>
-<a name="N101CB"></a><a name="skin"></a>
+<a name="N10214"></a><a name="skin"></a>
 <h4 class="faq">2.14. 
         How to make the site look better and change its skin?
       </h4>
@@ -822,7 +891,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         <a href="docs/your-project.html#new_skin">own skin</a>.
         </p>
 </div>
-<a name="N101E2"></a><a name="xsp"></a>
+<a name="N1022B"></a><a name="xsp"></a>
 <h4 class="faq">2.15. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -869,7 +938,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p>See also the 
         <a class="external" href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</a> Wiki page.</p>
 </div>
-<a name="N10217"></a><a name="breadcrumbs"></a>
+<a name="N10260"></a><a name="breadcrumbs"></a>
 <h4 class="faq">2.16. How do breadcrumbs work?  Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -891,9 +960,23 @@ X [0]                       brokenlink.html     BROKEN: reason
       in <span class="codefrag">skinconf.xml</span>.
       </p>
 </div>
-<a name="N1022C"></a><a name="old_faqs"></a>
+<a name="N10275"></a><a name="run_port"></a>
+<h4 class="faq">2.17. How do I make forrest run listen on a different port?</h4>
+<div align="right">
+<a href="#run_port-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>
+<span class="codefrag">forrest run -Dforrest.jvmargs="-Djetty.port=80"</span>
+</p>
+<p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
+      directory and then set the port number in that file.  Do <span class="codefrag">forrest run</span>
+      
+</p>
+</div>
+<a name="N10287"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">3. Older versions</h3>
-<a name="N10230"></a><a name="unresolved_project.home"></a>
+<a name="N1028B"></a><a name="unresolved_project.home"></a>
 <h4 class="faq">3.1. When invoking Forrest 0.4 from the
         forrest.antproxy.xml, the build fails because
         ${project.home} isn't resolved.
@@ -915,7 +998,7 @@ X [0]                       brokenlink.html     BROKEN: reason
        &lt;classpath refid="forrest-classpath"/&gt;
        &lt;jvmarg value="-Dforrest.home=${forrest.home}"/&gt;</pre>
 </div>
-<a name="N10245"></a><a name="odd_html"></a>
+<a name="N102A0"></a><a name="odd_html"></a>
 <h4 class="faq">3.2. 
         After upgrading to 0.4 my HTML looks significantly different, and table
         widths are wrong. What happened?
@@ -938,7 +1021,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <pre class="code">
   &lt;doctype-system&gt;http://www.w3.org/TR/html4/loose.dtd&lt;/doctype-system&gt;</pre>
 </div>
-<a name="N1025B"></a><a name="validation_error-doctype_root_null"></a>
+<a name="N102B6"></a><a name="validation_error-doctype_root_null"></a>
 <h4 class="faq">3.3. 
         When building my project, I get an validation error: Document root
           element "site", must match DOCTYPE root "null"..
@@ -961,7 +1044,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           listed to prevent an attempt at DTD-based validation.
         </p>
 </div>
-<a name="N10278"></a><a name="building_error-custom_sitemap"></a>
+<a name="N102D3"></a><a name="building_error-custom_sitemap"></a>
 <h4 class="faq">3.4. 
         When building my project, I get any of these errors: 
 	menu.xmap (The system cannot find the file specified)
@@ -977,9 +1060,9 @@ X [0]                       brokenlink.html     BROKEN: reason
           <a href="docs/upgrading_05.html">Upgrading to Forrest 0.5</a>).
         </p>
 </div>
-<a name="N1028D"></a><a name="general"></a>
+<a name="N102E8"></a><a name="general"></a>
 <h3 class="underlined_5">4. General</h3>
-<a name="N10291"></a><a name="generating_menus"></a>
+<a name="N102EC"></a><a name="generating_menus"></a>
 <h4 class="faq">4.1. What is the relationship between site.xml and
         book.xml?
       </h4>
@@ -998,7 +1081,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           See <a href="docs/linking.html">Menus and Linking</a>.
       </p>
 </div>
-<a name="N102AC"></a><a name="docbook"></a>
+<a name="N10307"></a><a name="docbook"></a>
 <h4 class="faq">4.2. 
         How do I use DocBook as the xml documentation format?
       </h4>
@@ -1056,7 +1139,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          for configuration guidance.
         </p>
 </div>
-<a name="N102CD"></a><a name="version"></a>
+<a name="N10328"></a><a name="version"></a>
 <h4 class="faq">4.3. 
         How to report which version of Forrest is being used and the
         properties that are set?
@@ -1075,7 +1158,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages.
         </p>
 </div>
-<a name="N102E1"></a><a name="logs"></a>
+<a name="N1033C"></a><a name="logs"></a>
 <h4 class="faq">4.4. 
         Where are the log files to find more infomation about errors?
       </h4>
@@ -1104,7 +1187,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           to the standard output.
         </p>
 </div>
-<a name="N10305"></a><a name="how_can_I_help"></a>
+<a name="N10360"></a><a name="how_can_I_help"></a>
 <h4 class="faq">4.5. 
         How to help?
       </h4>
@@ -1121,7 +1204,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           else. Don't be shy!
         </p>
 </div>
-<a name="N10311"></a><a name="patch"></a>
+<a name="N1036C"></a><a name="patch"></a>
 <h4 class="faq">4.6. 
         How to contribute a patch?
       </h4>
