@@ -449,6 +449,11 @@ Revision:
                   <xsl:apply-templates/>
             </table>
       </xsl:template>
+
+      <xsl:template match="mediaobject|imageobject">
+            <xsl:apply-templates/>
+      </xsl:template>
+
       <xsl:template match="graphic|imagedata">
             <tr>
                   <td>
