@@ -229,3 +229,11 @@ copy resolver
 copy excalibur-event
 copy util.concurrent
 
+if [ "$UPGRADE_TYPE" = "real" ]; then
+  UPDATEFILE=/tmp/forrest-updates
+  cvs -n up > $UPDATEFILE
+  # Add new jars
+  cat $UPDATEFILE | grep ^\? | cut -d\  -f 2 | xargs cvs add -kb
+  # Remove old jars
+  cat $UPDATEFILE | grep ^U | cut -d\  -f 2 | xargs cvs remove -f
+fi
