@@ -15,13 +15,18 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators default="file">
+      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+    </map:generators>
+  </map:components>
 
 <map:pipelines>
 
   <map:pipeline>
    <map:match pattern="static.get">
      <map:generate src="src/documentation/content/xdocs/fbits/c-fontsize-fct.xml"/>
-     <map:transform src="{forrest:plugins}/leather/resources/stylesheets/contract.xsl"/>
+     <map:transform src="resources/stylesheets/contract.xsl"/>
      <map:serialize type="xml"/>
    </map:match>
   </map:pipeline>
@@ -53,7 +58,7 @@ output e.g.
         <!-- sorted alphabetically -->
       	<map:parameter name="reverse" value="false"/>
       </map:generate>
-      <map:transform src="{forrest:plugins}/leather/resources/stylesheets/dir2contracts.xsl">
+      <map:transform src="resources/stylesheets/dir2contracts.xsl">
         <map:parameter name="contentDir" value="{realpath:leather/fbits}"/>
       </map:transform>
       <map:serialize type="xml"/>
@@ -62,8 +67,8 @@ output e.g.
   
   <map:pipeline>
     <map:match pattern="ft">
-		   <map:generate src="{forrest:plugins}/leather/src/documentation/ft-leather.xml"/>
-       <map:transform src="{forrest:plugins}/leather/resources/stylesheets/ft2xhtml.xsl">
+		   <map:generate src="src/documentation/ft-leather.xml"/>
+       <map:transform src="leather/resources/stylesheets/ft2xhtml.xsl">
           <map:parameter name="contextPath" value="{request:contextPath}"/>
        </map:transform>
        <map:serialize type="xml"/>
