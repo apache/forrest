@@ -67,12 +67,13 @@
   <!-- default values -->
   <property name="notify.email.host" value="localhost"/>
   <property name="notify.email.to"   value="${user.name}@localhost"/>
+  <property name="notify.email.from"   value="Forrestbot"/>
   
   <target name="notify.email" depends="notify.init, build" if="notify.do" description="FB: Notify by email">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
-    <mail from="Forrestbot"
+    <mail from="${notify.email.from}"
       mailhost="${notify.email.host}"
       tolist="${notify.email.to}"
       subject="ForrestBot build for ${ant.project.name} ${notify.completion-status}"
