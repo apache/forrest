@@ -12,23 +12,29 @@ function log() {
 
 MODULE=${1:-xml-forrest}
 case $MODULE in
-  xml-forrest) TARGET="forrest" ;;
-  xml-forrest-template) TARGET="forrest-sample" ;;
-  xml-site) TARGET="/" ;;
+  xml-forrest)          REPOS="xml-site"    ; TARGET="forrest" ;;
+  xml-forrest-template) REPOS="xml-site"    ; TARGET="forrest-sample" ;;
+  xml-site)             REPOS="xml-site"    ; TARGET="/" ;;
+  avalon-phoenix)       REPOS="avalon-site" ; TARGET="phoenix" ;;
 esac
 log "MODULE is $MODULE"
 [ "$MODULE" = "xml-site" ] && ARGS=-l
 log "ARGS is $ARGS"
 
 SRC_DIR=$WEBAPP/sites/$MODULE
-LIVECVS=$XML_SITE/targets/$TARGET
+[ "$REPOS" = "xml-site" ] && LIVECVS=$XML_SITE/targets/$TARGET
+[ "$REPOS" = "avalon-site" ] && LIVECVS=$AVALON_SITE/site/$TARGET
 
 function sanity_checks()
 {
   [ -z "$TARGET" ] && echo "Unknown module: $MODULE" && exit;
 
-  if [ -z "$XML_SITE" ]; then
+  if [ "$REPOS" = "xml-site" -a -z "$XML_SITE" ]; then
     echo "Please set the XML_SITE var in local-vars-`uname -n`"
+    exit
+  fi	
+  if [ "$REPOS" = "avalon-site" -a -z "$AVALON_SITE" ]; then
+    echo "Please set the AVALON_SITE var in local-vars-`uname -n`"
     exit
   fi	
   if [ ! -d "$SRC_DIR" ]; then
@@ -36,7 +42,7 @@ function sanity_checks()
     exit
   fi
   if [ ! -d "$LIVECVS" ]; then
-    echo "Expected checked-out xml-site/ HTML in non-existent directory $LIVECVS"
+    echo "Expected checked-out $REPOS/ HTML in non-existent directory $LIVECVS"
     exit
   fi
 }
@@ -48,7 +54,7 @@ function copy_contents()
   cd $LIVECVS
   cvsco $ARGS
   cvs up $ARGS -dP
-  log "Copying generated docs to xml-site.."
+  log "Copying generated docs to $REPOS.."
   log "  src  : $SRC_DIR/*"
   log "  dest : $PWD" 
   cp -r -p $SRC_DIR/* .
