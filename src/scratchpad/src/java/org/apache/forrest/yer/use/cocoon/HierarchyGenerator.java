@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.use.cocoon;
+package org.apache.forrest.yer.use.cocoon;
 
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.framework.parameters.Parameters;
@@ -68,17 +68,17 @@ import org.apache.cocoon.environment.SourceResolver;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceValidity;
 import org.xml.sax.SAXException;
-import org.apache.forrest.libre.yer.hierarchy.EntryFactory;
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyReader;
+import org.apache.forrest.yer.hierarchy.EntryFactory;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.HierarchyReader;
 
 import java.io.IOException;
 import java.util.Map;
 
-/** Class <code>org.apache.forrest.libre.yer.use.cocoon.HierarchyGenerator</code> ...
+/** Class <code>org.apache.forrest.yer.use.cocoon.HierarchyGenerator</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: HierarchyGenerator.java,v 1.3 2002/11/05 04:46:15 jefft Exp $
+ * @version CVS $Id: HierarchyGenerator.java,v 1.4 2002/11/05 05:52:41 jefft Exp $
  */
 public class HierarchyGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable {
@@ -166,7 +166,7 @@ extends ComposerGenerator implements CacheableProcessingComponent, Recyclable {
 
       //START hack that needs to be replaced
       //FIXME: get this through Avalon instead!
-      String rootFactory = "org.apache.forrest.libre.yer.impl.fs.FileEntryFactory";
+      String rootFactory = "org.apache.forrest.yer.impl.fs.FileEntryFactory";
       EntryFactory ef = EntryFactory.newInstance(rootFactory);
       ef.compose(this.manager); // the container should of have done this then
       //END hack that needs to be replaced by something like:

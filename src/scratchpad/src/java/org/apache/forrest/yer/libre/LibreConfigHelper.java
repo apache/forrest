@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
 import org.apache.avalon.framework.component.Composable;
 import org.apache.avalon.framework.component.ComponentManager;
@@ -63,8 +63,8 @@ import org.apache.avalon.excalibur.xml.Parser;
 import org.apache.avalon.excalibur.xml.EntityResolver;
 import org.apache.xml.resolver.tools.CatalogResolver;
 //import org.apache.cocoon.components.resolver.Resolver;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyConfig;
-import org.apache.forrest.libre.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.HierarchyConfig;
+import org.apache.forrest.yer.hierarchy.Entry;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -85,10 +85,10 @@ import java.io.IOException;
 // hierarchy implementations that choose to use the libre package can
 // provide a specific impl for this interface then!
 
-/** Class <code>org.apache.forrest.libre.yer.libre.LibreConfigHelper</code> ...
+/** Class <code>org.apache.forrest.yer.libre.LibreConfigHelper</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: LibreConfigHelper.java,v 1.3 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: LibreConfigHelper.java,v 1.4 2002/11/05 05:52:41 jefft Exp $
  */
 public class LibreConfigHelper implements Composable
 {

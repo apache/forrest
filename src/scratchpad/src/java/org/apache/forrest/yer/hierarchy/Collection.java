@@ -54,9 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
-/** Interface <code>org.apache.forrest.libre.yer.hierarchy.Collection</code> defines the
+/** Interface <code>org.apache.forrest.yer.hierarchy.Collection</code> defines the
  *  extra methods that should be offered by those Entry implementations that
  *  want to be the hierarchical parrent of a set of child Entries.
  *
@@ -70,7 +70,7 @@ package org.apache.forrest.libre.yer.hierarchy;
  *  Children are from <u>this</u> Collection so it makes sense in that respect. ]
  * 
  * @author $Author: jefft $
- * @version CVS $Id: Collection.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: Collection.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface Collection extends Entry
 {

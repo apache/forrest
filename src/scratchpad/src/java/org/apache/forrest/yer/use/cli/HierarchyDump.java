@@ -54,12 +54,12 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.use.cli;
+package org.apache.forrest.yer.use.cli;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyReader;
-import org.apache.forrest.libre.yer.hierarchy.EntryFactory;
-import org.apache.forrest.libre.sax.SAXConvenience;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.HierarchyReader;
+import org.apache.forrest.yer.hierarchy.EntryFactory;
+import org.apache.forrest.sax.SAXConvenience;
 
 import org.xml.sax.ContentHandler;
 
@@ -75,10 +75,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.FilterOutputStream;
 
-/** Class <code>org.apache.forrest.libre.yer.use.cli.HierarchyDump</code> ...
+/** Class <code>org.apache.forrest.yer.use.cli.HierarchyDump</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: HierarchyDump.java,v 1.2 2002/11/05 04:46:15 jefft Exp $
+ * @version CVS $Id: HierarchyDump.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public class HierarchyDump
 {
@@ -98,7 +98,7 @@ public class HierarchyDump
   public static void main(String[] args)
   {
     //FIXME: get these form CL or sysprops.
-    String rootFactory = "org.apache.forrest.libre.yer.impl.fs.FileEntryFactory";
+    String rootFactory = "org.apache.forrest.yer.impl.fs.FileEntryFactory";
     String rootLocation = "./src/documentation";
     OutputStream sink = System.out;
     if (args.length > 0) {

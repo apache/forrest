@@ -54,16 +54,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
 //sax
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
-import org.apache.forrest.libre.sax.SAXConvenience;
+import org.apache.forrest.sax.SAXConvenience;
 
-/** Class <code>org.apache.forrest.libre.yer.hierarchy.HierarchyReader</code> will
+/** Class <code>org.apache.forrest.yer.hierarchy.HierarchyReader</code> will
  *  traverse the presented structure hanging under the rootEntry.
  *  Comparable to a <code>org.xml.sax.XMLReader</code> this class will
  *  generate SAXEvents to the registered contentHandler.
@@ -92,7 +92,7 @@ import org.apache.forrest.libre.sax.SAXConvenience;
  * [FIXME: consider implementing org.apache.avalon.excalibur.xml in some
  *  sister class of this or something... more catchup on avalon needed.]
  * @author $Author: jefft $
- * @version CVS $Id: HierarchyReader.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: HierarchyReader.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public class HierarchyReader
 {

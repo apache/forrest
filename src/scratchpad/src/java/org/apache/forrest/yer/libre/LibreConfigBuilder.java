@@ -54,15 +54,15 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyConfig;
+import org.apache.forrest.yer.hierarchy.HierarchyConfig;
 
 
-/** Class <code>org.apache.forrest.libre.yer.libre.LibreConfigBuilder</code> is a helper
+/** Class <code>org.apache.forrest.yer.libre.LibreConfigBuilder</code> is a helper
  *  that builds up a LibreConfig object from a stream of SAXEvents.
  *
  *  It also provides a convenience constructor that will take a simple inputStream
@@ -70,7 +70,7 @@ import org.apache.forrest.libre.yer.hierarchy.HierarchyConfig;
  *  to this class instance.
  *
  * @author $Author: jefft $
- * @version CVS $Id: LibreConfigBuilder.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: LibreConfigBuilder.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public class LibreConfigBuilder extends DefaultHandler
 {

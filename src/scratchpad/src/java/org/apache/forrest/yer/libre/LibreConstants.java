@@ -54,13 +54,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
-/** Interface <code>org.apache.forrest.libre.yer.libre.LibreConstants</code> holds
+/** Interface <code>org.apache.forrest.yer.libre.LibreConstants</code> holds
  *  constants for different element and attributenames of the libre.xml files.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: LibreConstants.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: LibreConstants.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public interface LibreConstants
 {

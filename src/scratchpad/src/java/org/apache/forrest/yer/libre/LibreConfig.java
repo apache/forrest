@@ -54,17 +54,17 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
 import org.xml.sax.SAXException;
-import org.apache.forrest.libre.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.EntryVisitor;
-import org.apache.forrest.libre.yer.hierarchy.Collection;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyConfig;
-import org.apache.forrest.libre.yer.hierarchy.AttributeReader;
-import org.apache.forrest.libre.yer.hierarchy.EntryList;
-import org.apache.forrest.libre.yer.hierarchy.SortingEntryList;
+import org.apache.forrest.yer.hierarchy.SimpleEntryList;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.EntryVisitor;
+import org.apache.forrest.yer.hierarchy.Collection;
+import org.apache.forrest.yer.hierarchy.HierarchyConfig;
+import org.apache.forrest.yer.hierarchy.AttributeReader;
+import org.apache.forrest.yer.hierarchy.EntryList;
+import org.apache.forrest.yer.hierarchy.SortingEntryList;
 
 import java.io.InputStream;
 import java.io.File;
@@ -78,11 +78,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 
-/** Class <code>org.apache.forrest.libre.yer.libre.LibreConfig</code> holds the configuration
+/** Class <code>org.apache.forrest.yer.libre.LibreConfig</code> holds the configuration
  *  information that the libre system needs.
  *
  * @author $Author: jefft $
- * @version CVS $Id: LibreConfig.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: LibreConfig.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public class LibreConfig
 {

@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
 
 import java.util.List;
@@ -62,14 +62,14 @@ import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-/** Class <code>org.apache.forrest.libre.yer.hierarchy.SimpleEntryList</code> implements a
+/** Class <code>org.apache.forrest.yer.hierarchy.SimpleEntryList</code> implements a
  *  type-aware List of Entry objects.  It just wraps a <code>java.util.List
  *  </code> and does the necessary typecasting for you.  Also it offers a
  *  visitor mechanism so user of the list don't need to write their own
  *  iteration logic for visiting all the elements in the SimpleEntryList.
  *
  * @author $Author: jefft $
- * @version CVS $Id: SimpleEntryList.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: SimpleEntryList.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public class SimpleEntryList implements EntryList
 {

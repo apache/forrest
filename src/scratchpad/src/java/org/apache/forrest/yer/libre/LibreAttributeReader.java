@@ -54,14 +54,14 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
-import org.apache.forrest.libre.yer.hierarchy.AttributeReader;
+import org.apache.forrest.yer.hierarchy.AttributeReader;
 
-/** Interface <code>org.apache.forrest.libre.yer.libre.LibreAttributeReader</code> ...
+/** Interface <code>org.apache.forrest.yer.libre.LibreAttributeReader</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: LibreAttributeReader.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: LibreAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public interface LibreAttributeReader extends AttributeReader
 {

@@ -54,22 +54,22 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.Composable;
 
-/** Class <code>org.apache.forrest.libre.yer.hierarchy.EntryFactory</code> functions as
+/** Class <code>org.apache.forrest.yer.hierarchy.EntryFactory</code> functions as
  *  an Abstract Factory for retrieving a concrete Entry Factory.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: EntryFactory.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: EntryFactory.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public abstract class EntryFactory implements Composable
 {
   /** Constant for full qualified class name of the default EntryFactory */
   public static final String DEFAULT_FACTORY =
-                                "org.apache.forrest.libre.yer.impl.fs.FileEntryFactory";
+                                "org.apache.forrest.yer.impl.fs.FileEntryFactory";
 
   /** Creates a new Instance of the default EntryFactory
    * @return the new instance. */
@@ -81,7 +81,7 @@ public abstract class EntryFactory implements Composable
    * @param fcqn full qualified class name of the EntryFactory to create.
    * @return the new instance.
    *  Remarks: the specified class must be in the classpath.  Also it must
-   *  be a subclass of <code>org.apache.forrest.libre.yer.hierarchy.EntryFactory</code>.
+   *  be a subclass of <code>org.apache.forrest.yer.hierarchy.EntryFactory</code>.
    *  Finally the class must have a public default constructor (no arguments).
    */
   public static EntryFactory newInstance(String fqcn) {

@@ -54,27 +54,27 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.impl.fs;
+package org.apache.forrest.yer.impl.fs;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.libre.yer.libre.LibreConfig;
-import org.apache.forrest.libre.yer.hierarchy.AttributeReader;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.SimpleEntryList;
+import org.apache.forrest.yer.libre.LibreConfig;
+import org.apache.forrest.yer.hierarchy.AttributeReader;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Properties;
 
-/** Class <code>org.apache.forrest.libre.yer.impl.fs.FileEntryImpl</code> is a base class
+/** Class <code>org.apache.forrest.yer.impl.fs.FileEntryImpl</code> is a base class
  *  for the ItemImpl and CollectionImpl classes that implement the
- *  org.apache.forrest.libre.yer.hierarchy.* contracts for describing an underlaying
+ *  org.apache.forrest.yer.hierarchy.* contracts for describing an underlaying
  *  file-system structure.
- *  This implementation chooses to use the org.apache.forrest.libre.yer.libre configuration
+ *  This implementation chooses to use the org.apache.forrest.yer.libre configuration
  *  mechanism to add some artificial yet semi-automatic sequence information
  *  to the file system.
  *
  * @author $Author: jefft $
- * @version CVS $Id: FileEntryImpl.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: FileEntryImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public abstract class FileEntryImpl implements Entry
 {
@@ -130,7 +130,7 @@ public abstract class FileEntryImpl implements Entry
     return this.wrappedFile.getName();
   }
   /** For this implementation the userObject is the wrapped File Object.
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    */
   public Object getUserObject()
   {
@@ -141,14 +141,14 @@ public abstract class FileEntryImpl implements Entry
     this.wrappedFile = f;
   }
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry#getParent()
+   * @see org.apache.forrest.yer.hierarchy.Entry#getParent()
    */
   public Entry getParent()
   {
     return this.parent;
   }
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    */
   public void setParent(Entry parent)
   {

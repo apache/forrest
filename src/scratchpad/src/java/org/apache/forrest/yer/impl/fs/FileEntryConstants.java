@@ -54,14 +54,14 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.impl.fs;
+package org.apache.forrest.yer.impl.fs;
 
-/** Interface <code>org.apache.forrest.libre.yer.impl.fs.FileEntryConstants</code> holds
+/** Interface <code>org.apache.forrest.yer.impl.fs.FileEntryConstants</code> holds
  *  a number of Constants used inside the FileSystem oriented implmentation
- *  of the org.apache.forrest.libre.yer.hierarchy package.
+ *  of the org.apache.forrest.yer.hierarchy package.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: FileEntryConstants.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: FileEntryConstants.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface FileEntryConstants
 {

@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.sax;
+package org.apache.forrest.sax;
 
 //std
 import java.util.Properties;
@@ -68,9 +68,9 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 
 /** Set of static methods that make SAX-life easier.
- * 1st Checkin: $Date: 2002/11/05 04:46:14 $
+ * 1st Checkin: $Date: 2002/11/05 05:52:40 $
  * @author  $Author: jefft $
- * @version CVS $Id: SAXConvenience.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: SAXConvenience.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public class SAXConvenience {
 	/** Makes a standard empty TransformerHandler that can be used as a

@@ -54,16 +54,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
-/** Interface <code>org.apache.forrest.libre.yer.hierarchy.HierarchyConfig</code> functions
+/** Interface <code>org.apache.forrest.yer.hierarchy.HierarchyConfig</code> functions
  *  as a tagger interface (no methods defined).  It allows to specify the passing
  *  of an implementation specific Configuration object even on the more abstract
  *  level of Hierarchies and entries.
  *  At some point is also should enable us to intermingle implementation trees.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: HierarchyConfig.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: HierarchyConfig.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface HierarchyConfig
 {

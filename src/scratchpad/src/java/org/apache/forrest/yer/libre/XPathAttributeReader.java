@@ -54,9 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.Entry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.DOMException;
@@ -71,11 +71,11 @@ import java.io.InputStream;
 import java.io.IOException;
 
 
-/** Class <code>org.apache.forrest.libre.yer.libre.XPathAttributeReader</code> ...
+/** Class <code>org.apache.forrest.yer.libre.XPathAttributeReader</code> ...
  *
  * [FIXME this babe needs serious Avalon enabling in the ]
  * @author $Author: jefft $
- * @version CVS $Id: XPathAttributeReader.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: XPathAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public class XPathAttributeReader implements LibreAttributeReader
 {

@@ -54,15 +54,15 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
-import org.apache.forrest.libre.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.libre.yer.hierarchy.EntryList;
+import org.apache.forrest.yer.hierarchy.SimpleEntryList;
+import org.apache.forrest.yer.hierarchy.EntryList;
 
-/** Interface <code>org.apache.forrest.libre.yer.libre.EntrySorter</code> ...
+/** Interface <code>org.apache.forrest.yer.libre.EntrySorter</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: EntrySorter.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: EntrySorter.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public interface EntrySorter
 {

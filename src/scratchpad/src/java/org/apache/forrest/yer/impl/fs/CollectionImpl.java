@@ -54,16 +54,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.impl.fs;
+package org.apache.forrest.yer.impl.fs;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.libre.yer.libre.LibreConfig;
-import org.apache.forrest.libre.yer.libre.LibreConfigHelper;
-import org.apache.forrest.libre.yer.hierarchy.AttributeReader;
-import org.apache.forrest.libre.yer.hierarchy.Collection;
-import org.apache.forrest.libre.yer.hierarchy.HierarchyConfig;
-import org.apache.forrest.libre.yer.hierarchy.EntryList;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.SimpleEntryList;
+import org.apache.forrest.yer.libre.LibreConfig;
+import org.apache.forrest.yer.libre.LibreConfigHelper;
+import org.apache.forrest.yer.hierarchy.AttributeReader;
+import org.apache.forrest.yer.hierarchy.Collection;
+import org.apache.forrest.yer.hierarchy.HierarchyConfig;
+import org.apache.forrest.yer.hierarchy.EntryList;
 import org.apache.avalon.framework.component.ComponentManager;
 
 import java.io.File;
@@ -73,8 +73,8 @@ import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 
-/** Class <code>org.apache.forrest.libre.yer.impl.fs.CollectionImpl</code> makes an
- *  implementation of the <code>org.apache.forrest.libre.yer.hierarchy.Collection</code>
+/** Class <code>org.apache.forrest.yer.impl.fs.CollectionImpl</code> makes an
+ *  implementation of the <code>org.apache.forrest.yer.hierarchy.Collection</code>
  *  interface that helps represent the hierarchy of a filesystem directory
  *  structure. As such the wrapped UserObject of this Entry is a java.io.File
  *  of which isDirectory() is true.
@@ -84,7 +84,7 @@ import java.io.FileInputStream;
  *  in the file system by itself.
  *
  * @author $Author: jefft $
- * @version CVS $Id: CollectionImpl.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: CollectionImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public class CollectionImpl extends FileEntryImpl implements Collection
 {
@@ -94,7 +94,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   private LibreConfigHelper helper = null;
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    * @return true to indicate that this Entry is in fact a collection that
    *  'can' hold child Entries.  Note that it can be the case that there are
    *  no actual children in this Collection. */
@@ -104,7 +104,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Collection
+   * @see org.apache.forrest.yer.hierarchy.Collection
    *  Creates and returns either an ItemImpl or CollectionImpl object that
    *  wraps the Child File object that reflects the Child File specified by
    *  the location of the wrapped directory of this CollectionImpl.
@@ -121,7 +121,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
 
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Collection
+   * @see org.apache.forrest.yer.hierarchy.Collection
    *  Creates and returns either an ItemImpl or CollectionImpl object that
    *  wraps the Child File object that reflects the Child File specified
    *  which should be a child of the wrapped directory of this CollectionImpl.
@@ -144,7 +144,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Collection
+   * @see org.apache.forrest.yer.hierarchy.Collection
    *  Creates and returns the List of ItemImpl and CollectionImpl objects
    *  that wrap the childFiles of the wrapped Directory of this CollectionImpl.
    * @param cfg is the configuration object to fallback to for configuration
@@ -172,7 +172,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    */
   public EntryList getChildEntries()
   {
@@ -180,7 +180,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    */
   public InputStream getUserXMLStream() throws IOException
   {
@@ -190,7 +190,7 @@ public class CollectionImpl extends FileEntryImpl implements Collection
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry
+   * @see org.apache.forrest.yer.hierarchy.Entry
    */
   public String[] getAvaliableAttributeNames()
   {

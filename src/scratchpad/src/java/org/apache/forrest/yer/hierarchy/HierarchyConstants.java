@@ -54,13 +54,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
-/** Interface <code>org.apache.forrest.libre.yer.hierarchy.HierarchyConstants</code> holds a
+/** Interface <code>org.apache.forrest.yer.hierarchy.HierarchyConstants</code> holds a
  *  number of constants related to the XML representation of the Hierarchy.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: HierarchyConstants.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: HierarchyConstants.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface HierarchyConstants
 {

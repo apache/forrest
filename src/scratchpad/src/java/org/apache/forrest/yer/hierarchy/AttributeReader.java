@@ -54,13 +54,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
 
-/** Interface <code>org.apache.forrest.libre.yer.libre.AttributeReader</code> specifies
+/** Interface <code>org.apache.forrest.yer.libre.AttributeReader</code> specifies
  *  the contract for specific implentations of Classes that can read out
  *  specific (as coded into the implementation) information from <code>
- *  org.apache.forrest.libre.yer.hierarchy.Entry</code> objects.
+ *  org.apache.forrest.yer.hierarchy.Entry</code> objects.
  *
  *  Typically these AttributeReaders will call the <code>getUserObject()</code>
  *  or the <code>getUserXMLStream()</code> on the passed Entry first and
@@ -69,7 +69,7 @@ package org.apache.forrest.libre.yer.hierarchy;
  *  attributeReader implementatiosn close to those Entry implementations.
  *
  * @author $Author: jefft $
- * @version CVS $Id: AttributeReader.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: AttributeReader.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface AttributeReader
 {

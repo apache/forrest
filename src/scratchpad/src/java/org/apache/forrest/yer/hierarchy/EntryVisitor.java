@@ -54,9 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
-/** Interface <code>org.apache.forrest.libre.yer.hierarchy.EntryVisitor</code> specifies
+/** Interface <code>org.apache.forrest.yer.hierarchy.EntryVisitor</code> specifies
  *  a very simple contract for a class that wants to perform an operation on
  *  an Entry.  It's main use is in combination with the <code>EntryList</code>
  *  class to easily perform the same operation on all the members in a list
@@ -73,7 +73,7 @@ package org.apache.forrest.libre.yer.hierarchy;
  *  </code>
  *
  * @author $Author: jefft $
- * @version CVS $Id: EntryVisitor.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: EntryVisitor.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface EntryVisitor{
   public void visit(Entry theEntry);

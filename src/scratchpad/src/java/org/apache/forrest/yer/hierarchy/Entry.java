@@ -54,16 +54,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.hierarchy;
+package org.apache.forrest.yer.hierarchy;
 
 import java.io.InputStream;
 import java.io.IOException;
 
-/** Interface <code>org.apache.forrest.libre.yer.hierarchy.Entry</code> defines what
+/** Interface <code>org.apache.forrest.yer.hierarchy.Entry</code> defines what
  *  information <code>Entry</code>'s should be able to provide.
  * 
  * @author $Author: jefft $
- * @version CVS $Id: Entry.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: Entry.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public interface Entry
 {
@@ -95,7 +95,7 @@ public interface Entry
    *   implementation of this interface.  However having this method public
    *   allows for implementations to delegate the actual setting/finding out
    *   of the attributeValue to a generic package (like the libre package)
-   * @see org.apache.forrest.libre.outerj.hierarchy.*
+   * @see org.apache.forrest.outerj.hierarchy.*
    * @param attrName specifies the name of the attribute to set a new value for
    * @param attrValue the value to set.
    */

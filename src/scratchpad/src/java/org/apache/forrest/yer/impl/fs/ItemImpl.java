@@ -54,22 +54,22 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.impl.fs;
+package org.apache.forrest.yer.impl.fs;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
-import org.apache.forrest.libre.yer.hierarchy.SimpleEntryList;
-import org.apache.forrest.libre.yer.hierarchy.EntryList;
+import org.apache.forrest.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.SimpleEntryList;
+import org.apache.forrest.yer.hierarchy.EntryList;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 
-/** Class <code>org.apache.forrest.libre.yer.impl.fs.ItemImpl</code> represents a simple
+/** Class <code>org.apache.forrest.yer.impl.fs.ItemImpl</code> represents a simple
  *  FileEntryImpl that wraps a single file from a file system.
  *
  * @author $Author: jefft $
- * @version CVS $Id: ItemImpl.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: ItemImpl.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
  */
 public class ItemImpl extends FileEntryImpl
 {
@@ -87,7 +87,7 @@ public class ItemImpl extends FileEntryImpl
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry#hasChildEntries
+   * @see org.apache.forrest.yer.hierarchy.Entry#hasChildEntries
    * @return false to indicate that this is not a Collection of child Entries
    */
   public boolean hasChildEntries()
@@ -96,7 +96,7 @@ public class ItemImpl extends FileEntryImpl
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry#getAvaliableAttributeNames
+   * @see org.apache.forrest.yer.hierarchy.Entry#getAvaliableAttributeNames
    * @return the list of AtributeNames that are available for read on this
    *  EntryImpl
    */
@@ -106,7 +106,7 @@ public class ItemImpl extends FileEntryImpl
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry#getChildEntries
+   * @see org.apache.forrest.yer.hierarchy.Entry#getChildEntries
    * @return null since this Impl doesn't have any children
    */
   public EntryList getChildEntries()
@@ -115,7 +115,7 @@ public class ItemImpl extends FileEntryImpl
   }
 
   /**
-   * @see org.apache.forrest.libre.yer.hierarchy.Entry#getUserXMLStream
+   * @see org.apache.forrest.yer.hierarchy.Entry#getUserXMLStream
    * @return the FileInputStream on the wrapped File userObject.
    */
   public InputStream getUserXMLStream() throws IOException

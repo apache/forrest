@@ -54,9 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.libre.yer.libre;
+package org.apache.forrest.yer.libre;
 
-import org.apache.forrest.libre.yer.hierarchy.Entry;
+import org.apache.forrest.yer.hierarchy.Entry;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Pattern;
@@ -71,10 +71,10 @@ import org.apache.oro.text.GlobCompiler;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-/** Class <code>org.apache.forrest.libre.yer.libre.PropertyAttributeReader</code> ...
+/** Class <code>org.apache.forrest.yer.libre.PropertyAttributeReader</code> ...
  *
  * @author $Author: jefft $
- * @version CVS $Id: PropertyAttributeReader.java,v 1.2 2002/11/05 04:46:14 jefft Exp $
+ * @version CVS $Id: PropertyAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
  */
 public class PropertyAttributeReader  implements LibreAttributeReader
 {
