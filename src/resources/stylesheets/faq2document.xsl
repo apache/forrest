@@ -106,7 +106,14 @@
   </xsl:template>
 
   <xsl:template match="answer">
-    <xsl:apply-templates/>
+    <xsl:if test="count(p)>0"> 
+      <xsl:apply-templates/>
+    </xsl:if>
+    <xsl:if test="count(p)=0"> 
+      <p>
+        <xsl:apply-templates/>
+      </p>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="title">
