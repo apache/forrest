@@ -59,8 +59,43 @@ Often it it would be useful to have multiple paragraphs inside a list item:
 I can see no reason why being a "list item" implies being limited to a single
 paragraph.
 
+4) Allow <p>, <li> etc inside <dd>
+----------------------------------
+Submittor: Jeff Turner
+Date: 2002-11-20
+Yeas: jefft
+Nays:
+Summary:
 
-4) Allow <ol> and <ul> inside <p>
+Related to the above request.  Seems no reason why a Definition Description
+<dd> can't have multiple paragraphs, or anything else. Example:
+
+    <dt id="Merit"><strong>Merit</strong></dt>
+      <dd>
+        <p>
+        The concept of 'merit' is central to the Apache
+        philosophy and community methodology.  Merit is a qualitative
+        and subjective term, referring essentially to attributes
+        such as those below; however, it can probably be summed up
+        as the combination of the worth of one's accomplishments
+        and the respect of ones's peers.
+        </p>
+        <ul>
+          <li>technical competence</li>
+          <li>ability to get along with others</li>
+          <li>positive contributions to discussions and code</li>
+        </ul>
+        <p>
+        The acquisition of merit is a cumulative process; once
+        acquired, it doesn't decay.  It is possible to lose
+        merit, though, by violating the community ethics, guidelines,
+        or sensibilities.
+       </p>
+    </dd>
+
+
+
+5) Allow <ol> and <ul> inside <p>
 ---------------------------------
 Submittor: Jeff Turner
 Date: 2002-11-20
@@ -106,5 +141,62 @@ doesn't count as "pernicious mixed content", so I don't know what's going on.
 -----
 
 
+6) Allow <link> inside elements like <strong>
+---------------------------------------------
+Submittor: Jeff Turner
+Date: 2002-11-28
+Yeas:
+Nays:
+Summary:
+
+Use-case: 
+
+   <strong>no <link href="#Veto">vetos</link></strong>
+
+Seems innocent enough.
+
+
+
+7) Allow Anchors everywhere
+---------------------------
+Submittor: Jeff Turner
+Date: 2002-11-28
+Yeas: jefft
+Nays:
+Summary:
+
+The DTD currently allows 'id' attributes on all elements, and elements below
+<body> (IIRC) will have them rendered to a HTML <a name="...">.  Thus it would
+seem that <anchor> is completely unnecessary.  The problem is, sometimes one
+wants multiple IDs for an element, but the XML spec doesn't allow this:
+
+  Validity Constraint: One ID per Element Type
+  No element type may have more than one ID attribute specified. 
+
+Tim Bray's comment (http://www.xml.com/axml/notes/OneIDPer.html):
+
+  "In my opinion, this rule should really have a "for compatibility" attached
+  to it, because while it is a rule in SGML, I've never understood why an
+  element shouldn't have two different IDs."
+
+Nor do I.
+
+Here is a use-case for multiple IDs, attempting to solve it with anchors:
+
+        <dt>
+          <anchor id="LazyConsensus"/>
+          <anchor id="LazyApproval"/>
+          <strong>
+            Lazy consensus
+          </strong>
+        </dt>
+        <dd>(Also called 'lazy approval'.) .....
+
+Either we must allow anchors (hence multiple IDs) everywhere, or implement some
+hack to allow multiple Ids:
+
+        <dt id="LazyConsensus, LazyApproval>
+          .....
+ 
 -- 
-$Revision: 1.3 $ $Date: 2002/11/26 11:30:38 $
+$Revision: 1.4 $ $Date: 2002/11/28 10:45:20 $
