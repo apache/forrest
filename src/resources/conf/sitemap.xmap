@@ -48,6 +48,12 @@
      <encoding>ISO-8859-1</encoding>
    </map:serializer>
 
+   <map:serializer name="rss091"    mime-type="text/xml"         src="org.apache.cocoon.serialization.XMLSerializer">
+     <encoding>ISO-8859-1</encoding>
+     <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
+     <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
+   </map:serializer>
+   
    <map:serializer name="fo2pdf"
                 src="org.apache.cocoon.serialization.FOPSerializer"
                 mime-type="application/pdf"/>
@@ -435,6 +441,12 @@
     <map:serialize type="fo2pdf"/>
    </map:match>
 
+   <map:match pattern="changes.rss">
+     <map:generate type="file-nolabel" src="status.xml"/>
+     <map:transform src="library/xslt/changes2rss.xsl" label="content"/>
+     <map:serialize type="rss091"/>
+   </map:match>
+   
    <map:match pattern="todo.pdf">
     <map:generate type="file-nolabel" src="status.xml"/>
     <map:transform src="library/xslt/todo2document.xsl" label="content"/>
