@@ -81,7 +81,17 @@
           it appropriately for your site.
         </p>
         <p>
-          A bit of background may help explain this.  Cocoon generates a static
+          With the CVS version of Forrest, this is all that is required.
+          Forrest 0.4 needs one more change: a custom sitemap must be created
+          (copy <code>$FORREST_HOME/context/sitemap.xmap</code> to
+          <code>src/documentation/sitemap.xmap</code>, aka
+          <code>${project.sitemap}</code>), and change line 394 from:
+        </p>
+        <source>&lt;map:transform src="library/xslt/filterlinks.xsl" /&gt;</source>
+        <p>to:</p>
+        <source>&lt;map:transform src="resources/stylesheets/filterlinks.xsl" /&gt;</source>
+        <p>
+          A bit of background may help explain all this.  Cocoon generates a static
           version of a website by 'crawling' through the pages&mdash;that is,
           following links to determine what else to render.  Starting with
           <code>index.html</code>, Cocoon will:
