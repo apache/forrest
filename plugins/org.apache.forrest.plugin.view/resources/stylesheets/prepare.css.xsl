@@ -26,7 +26,7 @@
 		  <xsl:for-each select="//forrest:properties/*[@css='true']">
 	      <xi:include href="cocoon://get.contract-css.{@name}" />
 		  </xsl:for-each>
-      <test><xsl:apply-templates select="//extra-css"/></test>
+      <xsl:apply-templates select="//extra-css"/>
   </xsl:template>
   <xsl:template match="extra-css">
     <xsl:value-of select="."/>
