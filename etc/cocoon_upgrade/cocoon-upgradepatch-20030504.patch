@@ -1,0 +1,434 @@
+? lib/core/avalon-framework-4.1.4.jar
+? lib/core/cocoon-20030329.jar
+? lib/core/cocoon-batik-block-20030329.jar
+? lib/core/cocoon-chaperon-block-20030329.jar
+? lib/core/cocoon-deprecated-20030329.jar
+? lib/core/cocoon-fop-block-20030329.jar
+? lib/core/cocoon-html-block-20030329.jar
+? lib/core/cocoon-jfor-block-20030329.jar
+? lib/core/cocoon-linkrewriter-block-20030329.jar
+? lib/core/cocoon-lucene-block-20030329.jar
+? lib/core/cocoon-profiler-block-20030329.jar
+? lib/core/commons-cli-1.0.jar
+? lib/core/commons-jxpath-1.1.jar
+? lib/core/excalibur-component-complete-1.1.jar
+? lib/core/excalibur-event-1.0.2.jar
+? lib/core/excalibur-logger-1.0.1.jar
+? lib/core/excalibur-pool-1.2.jar
+? lib/core/excalibur-sourceresolve-20030319.jar
+? lib/core/excalibur-store-20030317.jar
+? lib/core/excalibur-xmlutil-20030317.jar
+? lib/core/logkit-1.2.jar
+? lib/core/util.concurrent-1.3.1.jar
+Index: src/resources/forrest-shbat/forrest.build.xml
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/forrest-shbat/forrest.build.xml,v
+retrieving revision 1.59
+diff -u -r1.59 forrest.build.xml
+--- src/resources/forrest-shbat/forrest.build.xml	24 Mar 2003 21:20:17 -0000	1.59
++++ src/resources/forrest-shbat/forrest.build.xml	29 Mar 2003 13:36:18 -0000
+@@ -554,23 +554,38 @@
+ 
+     <parallel>
+ 
++
++      <java classname="org.apache.cocoon.Main" fork="true"
++        dir="${project.ctxt-dir}" failonerror="true" maxmemory="128m">
++        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
++        <arg value="-u${project.debuglevel}"/>
++        <arg value="-xWEB-INF/cli.xconf"/>
++        <arg value="index.html"/>
++        <classpath>
++          <path refid="forrest.cp"/>
++        </classpath>
++      </java>
++
++
++      <!--
+       <java classname="org.apache.cocoon.Main"
+         fork="true"
+         dir="."
+         failonerror="true"
+         classpathref="forrest.cp">
+-        <jvmarg
+-          value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+-        <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
+-        <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
+-        <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
+-        <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
+-        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
+-        <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
+-        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
+-        <arg value="${project.start-uri}"/>              <!-- starting page -->
+-        <arg value="-V" />                          <!-- be verbose -->
++        <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
++        <arg value="-c${project.ctxt-dir}"/>   <!- input to the process ->
++        <arg value="-d${project.site-dir}"/>   <!- output to be put ->
++        <arg value="-w${project.work-dir}"/>   <!- temp dir to use for e.g. cache ->
++        <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
++        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
++        <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
++        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
++        <arg value="${project.start-uri}"/>              <!- starting page ->
++        <arg value="-V" />                          <!- be verbose ->
+       </java>
++      -->
++
+       <sequential>
+         <!-- 
+         | Copy all non-xdocs content across, as we cannot rely on crawling to
+Index: src/resources/conf/cli.xconf
+===================================================================
+RCS file: src/resources/conf/cli.xconf
+diff -N src/resources/conf/cli.xconf
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ src/resources/conf/cli.xconf	29 Mar 2003 13:38:15 -0000
+@@ -0,0 +1,22 @@
++<?xml version="1.0"?>
++<!-- all links here are relative to the build context dir, that
++     in the build.xml file is set to ${build.context} -->
++<cocoon verbose="true"  
++        follow-links="true" 
++        precompile-only="false" 
++        confirm-extensions="false">
++
++   <broken-link-file>../brokenlinks.txt</broken-link-file>
++<!--<load-class>org.firebirdsql.jdbc.Driver</load-class>-->
++   <logging log-kit="./logkit.xconf" logger="cli" level="ERROR" />
++   <context-dir>.</context-dir>
++   <config-file>cocoon.xconf</config-file>
++   <dest-dir>../docs</dest-dir>
++   <work-dir>../temp/docs</work-dir>
++<!--<user-agent>xxx</user-agent>-->
++   <accept>*/*</accept>
++   <uri>favicon.ico</uri>
++<!--<uri-file></uri-file>-->
++   
++</cocoon>
++
+Index: src/resources/conf/cocoon.xconf
+===================================================================
+RCS file: /home/cvs/xml-forrest/src/resources/conf/cocoon.xconf,v
+retrieving revision 1.17
+diff -u -r1.17 cocoon.xconf
+--- src/resources/conf/cocoon.xconf	27 Mar 2003 03:53:46 -0000	1.17
++++ src/resources/conf/cocoon.xconf	4 May 2003 09:08:24 -0000
+@@ -11,17 +11,18 @@
+ <!-- =========================== Sitemap =============================== -->
+ 
+   <!--+
+-      | New implementation of the sitemap. It is interpreted, so load times are super-fast,
+-      | and request processing is slightly faster than with the compiled engine thanks to
+-      | the HotSpot VM.
++      | New implementation of the sitemap. It is interpreted, so load times
++      | are super-fast, and request processing is slightly faster than with
++      | the compiled engine thanks to the HotSpot VM.
+       |
+       | Reloading of the sitemap:
+-      |   The check-reload attribute determines if the sitemap is reloaded on change.
++      |   The check-reload attribute determines if the sitemap is to be
++      |   reloaded on change.
+       |   Set to "no", the sitemap is generated once at startup.
+       |   Set to "yes", the sitemap is regenerated if it changes.
+       |
+       | For development environment, set the check-reload to yes.
+-      | For production environment, it is advisable to set the check-reload to no.
++      | For production environment, it is advisable to set check-reload to no.
+       +-->
+   <sitemap check-reload="yes" config="resource://org/apache/cocoon/components/treeprocessor/treeprocessor-builtins.xml" file="context://sitemap.xmap" logger="sitemap"/>
+ 
+@@ -37,12 +38,12 @@
+       | A number of components already use InputModules: the sitemap processor, 
+       | flow, some matchers, the linkrewriting transformer, database actions
+       | and more.
+-	  |
++      |
+       | For example the sitemap processor allows to obtain a value
+       | named "foo" from an the InputModule for request parameters by
+       | writing {request-param:foo} wherever a sitemap variable is
+       | allowed. 
+-	  |
++      |
+       | Some InputModules need the help of other InputModules to
+       | obtain values and only apply a function to the obtained value
+       | or change the name of the attribute. These modules usually
+@@ -56,9 +57,6 @@
+   <input-modules>
+     <component-instance class="org.apache.cocoon.components.modules.input.GlobalInputModule" logger="core.modules.input" name="global"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.RequestModule" logger="core.modules.input" name="request"/>
+-    <component-instance
+-      class="org.apache.cocoon.components.modules.input.RealPathModule"
+-      logger="core.modules.input" name="realpath"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.SessionModule" logger="core.modules.input" name="session"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.RequestParameterModule" logger="core.modules.input" name="request-param"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.RawRequestParameterModule" logger="core.modules.input" name="raw-request-param"/>
+@@ -74,10 +72,10 @@
+       <!--Eg: Mon, 28 Oct 2002 03:08:49 +1100 -->
+     </component-instance>
+     <component-instance class="org.apache.cocoon.components.modules.input.NullInputModule" logger="core.modules.input" name="nullinput"/>
++    <component-instance class="org.apache.cocoon.components.modules.input.RealPathModule" logger="core.modules.input" name="realpath"/> 
+     <component-instance class="org.apache.cocoon.components.modules.input.XMLMetaModule" logger="core.modules.input" name="xmlmeta"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.MapMetaModule" logger="core.modules.input" name="mapmeta"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.DateMetaInputModule" logger="core.modules.input" name="datemeta"/>
+-    <component-instance class="org.apache.cocoon.components.modules.input.XMLFormInput" logger="core.modules.input" name="xmlform"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.JXPathMetaModule" logger="core.modules.input" name="jxpath"/>
+     <component-instance class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule" logger="core.modules.input" name="simplemap"/>
+     <component-instance name="defaults"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
+@@ -86,16 +84,16 @@
+       </values>
+     </component-instance>
+ 
+-      <component-instance logger="core.modules.input" name="forrest"    class="org.apache.cocoon.components.modules.input.ChainMetaModule">
+-        <input-module name="request-param"/>
+-        <input-module name="request-attr"/>
+-        <input-module name="session-attr"/>
+-        <input-module name="defaults"/>
+-      </component-instance>
++    <component-instance logger="core.modules.input" name="forrest"    class="org.apache.cocoon.components.modules.input.ChainMetaModule">
++      <input-module name="request-param"/>
++      <input-module name="request-attr"/>
++      <input-module name="session-attr"/>
++      <input-module name="defaults"/>
++    </component-instance>
+ 
+-      <!-- For the site: scheme -->
+-      <component-instance
+-        class="org.apache.cocoon.components.modules.input.XMLFileModule"
++    <!-- For the site: scheme -->
++    <component-instance
++      class="org.apache.cocoon.components.modules.input.XMLFileModule"
+         logger="core.modules.xml" name="linkmap">
+         <file src="cocoon:/linkmap"/>
+       </component-instance>
+@@ -125,6 +123,21 @@
+ <!-- ================================= XML ================================ -->
+ 
+   <!--+
++      | Source Factories
++      |
++      | Each source factory adds a special uri schemes to the system.
++      +-->
++  <source-factories>
++    <component-instance class="org.apache.excalibur.source.impl.ResourceSourceFactory" name="resource"/>
++    <component-instance class="org.apache.cocoon.components.source.impl.ContextSourceFactory" name="context"/>
++    <component-instance class="org.apache.cocoon.components.source.impl.SitemapSourceFactory" name="cocoon"/>
++    <!-- the "*" protocol handles all uri schemes that are not explicitely specified. This includes all
++         JDK standard protocols, with special handling of the "file:" protocol which is modifiable
++         (can be written to) and traversable (directory structures can be crawled). -->
++    <component-instance class="org.apache.excalibur.source.impl.URLSourceFactory" name="*"/>
++  </source-factories>
++
++  <!--+
+       | XML Parser
+       |
+       | The default parser used in Apache Cocoon is
+@@ -145,44 +158,31 @@
+       |     XML validation is only being used for the documentation build.
+       |     (If you are going to use it elsewhere, then do so with caution.)
+       |     You really should have validated all of your XML documents already,
+-      |     according to their proper DTD or schema. Do not expect Cocoon to do it.
++      |     according to their proper DTD or schema. Do not expect Cocoon
++      |     to do it.
+       | - namespace-prefixes (boolean, default = false) : do we want
+       |     namespaces declarations also as 'xmlns:' attributes ?
+-      |     Note : setting this to true confuses some XSL processors (e.g. Saxon).
++      |     Note : setting this to true confuses some XSL processors
++      |     (e.g. Saxon).
+       | - stop-on-warning (boolean, default = true) : should the parser
+       |     stop parsing if a warning occurs ?
+-      | - stop-on-recoverable-error (boolean, default = true) : should the parser
+-      |     stop parsing if a recoverable error occurs ?
++      | - stop-on-recoverable-error (boolean, default = true) : should the
++      |     parser stop parsing if a recoverable error occurs ?
+       | - reuse-parsers (boolean, default = true) : do we want to reuse
+       |     parsers or create a new parser for each parse ?
+-      |     Note : even if this parameter is true, parsers are not
+-      |     recycled in case of parsing errors : some parsers (e.g. Xerces) don't like
++      |     Note : even if this parameter is true, parsers are not recycled
++      |     in case of parsing errors : some parsers (e.g. Xerces) do not like
+       |     to be reused after failure.
+       | - sax-parser-factory (string) : the name of the SAXParserFactory
+-      |     implementation class to be used instead of using the standard JAXP mechanism
+-      |     (SAXParserFactory.newInstance()). This allows to choose
+-      |     unambiguously the JAXP implementation to be used when several of them are
+-      |     available in the classpath.
++      |     implementation class to be used instead of using the standard
++      |     JAXP mechanism (SAXParserFactory.newInstance()). This allows to
++      |     choose unambiguously the JAXP implementation to be used when
++      |     several of them are available in the classpath.
+       | - document-builder-factory (string) : the name of the
+       |     DocumentBuilderFactory implementation to be used (similar to
+       |     sax-parser-factory for DOM).
+       +-->
+-  
+-  <!-- HSQLDB Server for samples:
+-    Comment this section out if you don't care about the samples.
+-        port   : number      port where the server is listening
+-        silent : true/false  display all queries
+-        trace  : true/false  display JDBC trace messages
+-        -->
+-        <!--
+-  <hsqldb-server class="org.apache.cocoon.components.hsqldb.ServerImpl" logger="core.hsqldb-server" pool-max="1" pool-min="1">
+-     <parameter name="port" value="9002"/>
+-     <parameter name="silent" value="true"/>
+-     <parameter name="trace" value="false"/>
+-   </hsqldb-server>
+-   -->
+-
+-<xml-parser class="org.apache.excalibur.xml.impl.JaxpParser" logger="core.xml-parser" pool-grow="4" pool-max="32" pool-min="8">
++  <xml-parser class="org.apache.excalibur.xml.impl.JaxpParser" logger="core.xml-parser" pool-grow="4" pool-max="32" pool-min="8">
+     <parameter name="validate" value="false"/>
+     <parameter name="namespace-prefixes" value="false"/>
+     <parameter name="stop-on-warning" value="true"/>
+@@ -190,6 +190,9 @@
+     <parameter name="reuse-parsers" value="false"/>
+     <!--parameter name="sax-parser-factory" value="???"/-->
+     <!--parameter name="document-builder-factory" value="???"/-->
++    <!-- drop-dtd-comments: causes all comment events originating from DTD
++         comments to be dropped right after parsing -->
++    <parameter name="drop-dtd-comments" value="true"/>
+   </xml-parser>
+ 
+   <!--+
+@@ -239,10 +242,18 @@
+       | processor to start the output of the transformation as soon as possible.
+       | if set to false, the transforer waits until the end of the
+       | transformation to deliver the output.
++      | WARNING: * if you enable incremental-processing, you should be aware of
++      |            the following bug:
++      |            http://nagoya.apache.org/bugzilla/show_bug.cgi?id=13186
++      |          * incremental-processing creates an additional, non-pooled thread.
++      |          * using incremental-processing does not save memory, the input
++      |            tree will still be build completely.
++      |          * incremental processing is a 'static' thing in Xalan: if you
++      |            enable it on one xslt-processor, enable it on all.
+       +-->
+   <xslt-processor logger="core.xslt-processor">
+      <parameter name="use-store" value="true"/>
+-     <parameter name="incremental-processing" value="true"/>
++     <parameter name="incremental-processing" value="false"/>
+   </xslt-processor>
+ 
+   <!-- Xpath Processor: -->
+@@ -250,9 +261,13 @@
+ 
+   <!-- The XMLizers converts different mime-types to XML -->
+   <xmlizer>
+-      <parser mime-type="text/html"  role="org.apache.excalibur.xml.sax.SAXParser/HTML"/>
+-      <parser mime-type="text/xml"   role="org.apache.excalibur.xml.sax.SAXParser"/>
++      <parser mime-type="text/xml" role="org.apache.excalibur.xml.sax.SAXParser"/>
++  
+       <parser mime-type="text/plain" role="org.apache.excalibur.xml.sax.SAXParser/Text"/>
++
++
++      <parser mime-type="text/html" role="org.apache.excalibur.xml.sax.SAXParser/HTML"/>
++
+ </xmlizer>
+ 
+ <!-- ============================ Object Stores =========================== -->
+@@ -264,18 +279,19 @@
+ 
+      <!--+
+          | Indicates how many objects will be hold in the cache.
+-         | When the number of maxobjects has been reached. The last object in the
+-         | cache will be thrown out.
++         | When the number of maxobjects has been reached. The last object
++         | in the cache will be thrown out.
+          +-->
+      <parameter name="maxobjects" value="100"/>
+ 
+-     <!-- Turns the swapping of the objects into persistent cache on and off. -->
++     <!-- Turns swapping of the objects into persistent cache on and off. -->
+      <parameter name="use-persistent-cache" value="false"/>
+   </transient-store>
+ 
+   <!--+
+       | Persistent Store: holds objects that have to survive shutdown.
+-      | WARNING: FilesystemStore is broken. Cocoon uses JispFilesystemStore instead.
++      | WARNING: FilesystemStore is broken. Cocoon uses DefaultStore based
++      | on the Avalon Excalibur JispStore instead.
+       |
+       | Common configuration parameters:
+       |  use-cache-directory: Indicates that cache directory specified in
+@@ -285,13 +301,12 @@
+       |  directory: Specifies directory to use. Absolute or relative to the
+       |             work directory.
+       |
+-      | JispFilesystemStore configuration parameters:
++      | DefaultStore configuration parameters:
+       |  datafile: Name of the store file to use. Defaults to cocoon.dat
+       |  indexfile: Name of the index file to use. Defaults to cocoon.idx
+       |  order: FIXME: put description here.
+       +-->
+-  <persistent-store class="org.apache.cocoon.components.store.JispFilesystemStore"
+-                    logger="core.store.persistent">
++  <persistent-store class="org.apache.cocoon.components.store.impl.DefaultStore" logger="core.store.persistent">
+     <parameter name="use-cache-directory" value="true"/>
+     <parameter name="order" value="2701"/>
+   </persistent-store>
+@@ -299,46 +314,36 @@
+   <!--+
+       | Store Janitor: the store garbage collector and memory usage controller.
+       |
+-      | Be careful with the heapsize and freememory parameters. Wrong values can
+-      | cause high cpu usage. Example configuration:
++      | Be careful with the heapsize and freememory parameters. Wrong values
++      | can cause high cpu usage. Example configuration:
+       | Jvm settings:
+       |    -Xmx200000000
+       | store-janitor settings:
+       |    <parameter name="freememory" value="5000000"/>
+       |    <parameter name="heapsize" value="150000000"/>
+       |
+-      | It is recommended to have heapsize equal to -Xmx, especially
+-      | on Sun's JVM which are unable to shrink its heap once it grows above minimum.
++      | It is recommended to have heapsize equal to -Xmx, especially on Sun's
++      | JVM which are unable to shrink its heap once it grows above minimum.
+       | Freememory should be greater than amount of memory necessary for normal
+       | application operation.
+       +-->
+   <store-janitor logger="core.store.janitor">
+      <!-- How much free memory shall be available in the jvm -->
+      <parameter name="freememory" value="1000000"/>
+-     <!-- Indicates the limit of the jvm memory consumption. The default max heapsize for Sun's JVM is 64Mb -->
++     <!-- Indicates the limit of the jvm memory consumption. The default max
++          heapsize for Sun's JVM is 64Mb -->
+      <parameter name="heapsize" value="67108864"/>
+      <!-- How often shall the cleanup thread check memory -->
+      <parameter name="cleanupthreadinterval" value="10"/>
+      <!-- Indicates the thread priority of the cleanup thread -->
+      <parameter name="threadpriority" value="5"/>
+-     <!-- How much percent of the elements of each registered Store shall be removed when low on memory. Default 10% -->
++     <!-- How much percent of the elements of each registered Store
++          shall be removed when low on memory. Default 10% -->
+      <parameter name="percent_to_free" value="10"/>
+   </store-janitor>
+ 
+ <!-- ========================= Protocol Handlers =========================== -->
+ 
+-  <!--+
+-      | Source Factories
+-      |
+-      | Each source factory adds a special uri protocol to the system.
+-      +-->
+-  <source-factories>
+-    <component-instance class="org.apache.excalibur.source.impl.ResourceSourceFactory" name="resource"/>
+-    <component-instance class="org.apache.cocoon.components.source.impl.ContextSourceFactory" name="context"/>
+-    <component-instance class="org.apache.cocoon.components.source.impl.SitemapSourceFactory" name="cocoon"/>
+-    <component-instance class="org.apache.cocoon.components.source.impl.FileSourceFactory" name="file"/>
+-    <component-instance class="org.apache.excalibur.source.impl.URLSourceFactory" name="*"/>
+-  </source-factories>
+ 
+ 
+ <!-- ====================== System Components =========================== -->
+@@ -372,8 +377,8 @@
+       | It is currently used by the cinclude transformer
+       +-->
+   <component class="org.apache.cocoon.transformation.helpers.DefaultIncludeCacheManager" role="org.apache.cocoon.transformation.helpers.IncludeCacheManager">
+-    <!-- Set the preemptive-loader-url to a pipeline inside Cocoon that contains the
+-         preemptive loader action. The URL must be absolute! 
++    <!-- Set the preemptive-loader-url to a pipeline inside Cocoon that
++         contains the preemptive loader action. The URL must be absolute! 
+     <parameter name="preemptive-loader-url" 
+                value="http://localhost:8080/cocoon/samples/cinclude/loader"/>
+     -->

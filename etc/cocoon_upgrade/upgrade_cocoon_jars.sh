@@ -12,7 +12,7 @@ FORREST=../..
 ######################################################################
 
 CLIB=$COCOON/lib/*
-CBUILD=$COCOON/build/cocoon-2.1-dev
+CBUILD=$COCOON/build/cocoon-2.1-M2-dev
 CBLOCKS=$CBUILD/blocks
 
 FDIST=$FORREST/build/dist/shbat
@@ -61,6 +61,8 @@ function bcopy()
     rm $FLIB/$1*
     cp $COCOON/src/blocks/*/lib/$1* $FLIB/
 }
+
+set -vx
 
 sanity_check
 
