@@ -253,8 +253,16 @@
   <!--        Test targets                -->
   <!-- ================================== -->
   <target name="test" 
-          depends="testseed" 
+          depends="testPlugins, testseed" 
           description="Test that the features are okay before committing."/>
+  
+  <target name="testPlugins"
+          description="test each of the plugins">
+    <!-- FIXME: need to iterate over all plugins when testing -->
+    <ant antfile="../plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+      <property name="basedir" location="../plugins/org.apache.forrest.plugin.pdf-output"/>
+    </ant>
+  </target>
 
   <target name="testseed" depends="init">
     <property name="forrest.home" location="." />  
