@@ -95,11 +95,11 @@ Stylesheet for generating site.xml from a IMS Manifest file.
     </xsl:variable>
 <sco><xsl:value-of select="$scoName"/></sco>
 <repository><xsl:value-of select="$repositoryURI"/></repository>
+<repositoryCommand><xsl:value-of select="$repositoryCommand"/></repositoryCommand>
     <xsl:choose>
       <xsl:when test="$repositoryCommand='getSCO'">
-        <xsl:variable name="scoName"><xsl:call-template name="getSCOName"><xsl:with-param name="path"><xsl:value-of select="//ims:resources/ims:resource[@identifier=$idref]/@href"/></xsl:with-param></xsl:call-template></xsl:variable>
-        <xsl:variable name="sco">http://<xsl:value-of select="$repositoryURI"/>/<xsl:value-of select="$scoName"/>/src/documentation/content/xdocs/imsmanifest.xml</xsl:variable>
-        <xsl:apply-templates select="document($sco)/ims:manifest">
+        <xsl:variable name="repositoryHREF">http://<xsl:value-of select="$repositoryURI"/>/<xsl:value-of select="$scoName"/>/src/documentation/content/xdocs/imsmanifest.xml</xsl:variable>
+        <xsl:apply-templates select="document($repositoryHREF)/ims:manifest">
           <xsl:with-param name="asset_base">repositoryCommand/getSCO/<xsl:value-of select="$scoName"/>/repositoryURI/<xsl:value-of select="$repositoryURI"/>/</xsl:with-param>
         </xsl:apply-templates>
       </xsl:when>
