@@ -721,12 +721,16 @@ Credit: original from the jakarta-avalon project
                   </xsl:choose>
             </tt>
       </xsl:template>
+    
     <xsl:template match="xref">
         <xsl:param name="linkend">
             <xsl:value-of select="@linkend"/>
         </xsl:param>
         <xsl:param name="endterm">
             <xsl:value-of select="@endterm"/>
+        </xsl:param>
+        <xsl:param name="xreflabelvalue">
+            <xsl:value-of select="@xreflabel"/>
         </xsl:param>
         <xsl:param name="linkendvalue">
             <xsl:if test="$linkend">
@@ -745,7 +749,14 @@ Credit: original from the jakarta-avalon project
                         <xsl:text>#</xsl:text>
                         <xsl:value-of select="$linkend"/>
                     </xsl:attribute>
-                    <xsl:value-of select="$linkendvalue"/>
+                    <xsl:choose>
+                        <xsl:when test="@xreflabel">
+                            <xsl:value-of select="$xreflabelvalue"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$linkendvalue"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:element>
                 <xsl:apply-templates/>
             </xsl:when>
