@@ -1,5 +1,4 @@
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
+<?xml version="1.0"?>
 <!--
   Copyright 2002-2004 The Apache Software Foundation
 
@@ -15,6 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
+
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!--
 
 A set of XSLT templates useful for parsing repository related commands.
