@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<howto>
+  <header>
+    <title>How to customize processing of html source</title>
+    <abstract>
+      Explains how to do additional processing of html source documents.
+    </abstract>
+    <last-modified-content-date date="2005-03-23" />
+  </header>
+
+  <audience title="Intended Audience">
+    <p>
+      Users who want to integrate HTML-pages that require custom
+      adjustments and everybody who wants to learn more about Forrest's
+      pipelines in general.
+    </p>
+  </audience>
+
+  <purpose title="Purpose">
+    <p>
+      Integrating legacy HTML-pages is a common task when migrating
+      existing websites to Forrest. This document explains how to implement
+      custom processing which is required when Forrest's standard pipeline
+      for html does not suffice.
+    </p>
+  </purpose>
+
+  <prerequisites title="Prerequisites">
+    <p>To follow these instructions you will need:</p>
+    <ol>
+      <li>
+        Read the <a href="site:howto/understand-pipelines">How to
+        understand html processing and sitemap pipelines</a>.
+      </li>
+      <li>
+        Know how to use a
+        <a href="site:project-sitemap">project sitemap</a>.
+      </li>
+      <li>
+        A basic understanding of coocons pipelines and their
+        components. You should know about matchers, generators,
+        transformers and serializers and have a rough idea how they work
+        together in a pipeline ( A good place to start learning about Cocoon is <a 
+        href="http://cocoon.apache.org/2.1/userdocs/concepts/">
+        Understanding Apache Cocoon</a>).
+      </li>
+      <li>
+        If you want to follow the examples right through your
+        Forrest, a current version of Forrest installed on your
+        system and read-access to Forrest's program directory is
+        necessary.
+      </li>
+      <li>
+        If you plan on creating your own custom processing for
+        html-pages, you'll also need write access to your
+        project directory.
+        <note>
+          We strongly recommend creating a backup of your
+          Forrest project directory before you proceed with your own adjustments!
+        </note>
+      </li>
+    </ol>
+  </prerequisites>
+
+  <steps title="Customizing the html-Pipeline">
+    <section id="when">
+        <title>When to customize?</title>
+        
+        <p>
+          The html-Pipeline in Forrest is designed to be able to also
+          integrate legacy html-Pages in a Forrest project. In doing so,
+          it will fix common markup errors and convert html to Forrest's
+          intermediate document format.
+        </p>
+        <p>
+          Due to the nature of html as presentational markup, there is no way
+          this automated process can identify elements in your pages that
+          are not required or even unwanted in the Forrest environment. 
+        </p>
+        <p>
+          A good example are pages from sites where the navigational elements
+          (menus, tabs etc.) are embedded in the html of each page.
+          Since Forrest can't know what is an unwanted menu and what belongs
+          to the page body that you want to keep, you will need to customize
+          the process to remove elements that are not needed. If you don't,
+          then you will see the original page from your legacy website,
+          menu and all, embedded in your new Forrest site.
+        </p>
+      </section>
+
+      <section id="how">
+        <title>How to customize?</title>
+        <p>
+          To add your own custom processing for a group of pages, you will
+          create a project sitemap with pipelines that process documents
+          according to your specifications.
+        </p>
+        <p>
+          This project sitemap is located in the file
+          'src\documentation\sitemap.xmap' in your Forrest project directory
+          and will be created automatically when you seed a new project.
+          At this point it contains only one
+          <a href="project_sitemap.xmap.html#Example+pipeline+for+%27**custom.xml%27">
+          pipeline for handling the '**custom.xml'-pattern</a> as an example.
+        </p>
+        <p>
+          To add your own custom processing, edit the file and add a new
+          pipeline to the project sitemap. Since the project sitemap is
+          loaded into the main sitemap
+          <a href="sitemap.xmap.html#Insertion+Point+for+Project+Sitemap">
+          right at the top</a>, your pipeline intercepts practically all
+          of Forrest's standard pipelines.
+        </p>
+      </section>
+
+      <section id="what">
+        <title>What to intercept?</title>
+        <p>
+          Where to intercept standard processing is really a matter of your
+          choice. A good rule is to replace as little standard handling
+          as possible so that future changes in the Forrest architecture are
+          less likely to break your application.
+        </p>
+        <p>
+          In our case all we need to do is add a transformation that
+          removes all the unwanted elements. The best place to do this
+          would be right after the generator has converted our document to
+          xhtml.
+        </p>
+        <p>
+          However, since we can only replace a complete pipeline,
+          we'll create a new pipeline that intercepts **.xml for our pages,
+          copy the steps the original processor is doing and add a
+          transformation of our own to it.
+        </p>
+      </section>
+      <section id="intercept">
+        <title>Intercept pattern</title>
+        <p>
+          Take great care when intercepting very basic pipelines.
+          Instead of designing our custom pipeline to match the
+          original **.xml pattern, try to narrow your matcher down to
+          something that will only match your pages.
+        </p>
+        <p>
+          If all your pages are located in a directory called mytest,
+          then use a matcher like '/mytest/*.xml' to avoid highjacking
+          the processing for all the other requests.
+        </p>
+        <p class="instruction">
+          Add a new pipeline in your project sitemap and set the matcher
+          to '/mytest/*.xml'.
+        </p>
+        <p>
+          The new pipeline should look like this and does nothing so far.
+        </p>
+<source><![CDATA[
+<!--Custom Pipeline for my bad html-pages-->        
+<map:pipeline>
+    <map:match pattern="mytest/*.xml">
+
+    </map:match>
+</map:pipeline>]]></source>
+        <p class="instruction">
+          Open the 'forrest.xmap', navigate to the file-resolver-section,
+          copy the four lines for handling *.html files and paste them into
+          your new pipeline.
+        </p>
+
+<source><![CDATA[
+<!--Custom Pipeline for my bad html-pages-->        
+<map:pipeline>
+    <map:match pattern="mytest/*.xml">
+      <map:generate src="{project:content.xdocs}{uri}.html" type="html"/>
+      <map:transform src="{forrest:stylesheets}/html2document.xsl"/>
+      <map:transform type="idgen"/>
+      <map:serialize type="xml-document"/>
+    </map:match>
+</map:pipeline>]]></source>
+        <p>
+          Your custom pipeline will now behave exactly like the standard
+          html-handler. Now all that is left to be done is creating the
+          custom transformation and adding it the pipeline.
+        </p>
+        <p class="instruction">
+          Design and test a new XSL-Transformation that removes the
+          unwanted elements and save it in your project's stylesheet
+          directory, usually src\documentation\resources\stylesheets
+          (defined in project.stylesheets-dir of forrest.properties),
+          which is central storage for all stylesheets in a project.
+        </p>
+        <fixme author="open">
+          I'm unclear about the translation from the property
+          project.stylesheets-dir to the variable {forrest:stylesheets}.
+          How and where does it take place and why are the names different?
+          That seems very confusing!          
+        </fixme>
+        <p class="instruction">
+          Add the new transformation as a new line, straight after the
+          generator, and save the changes. 
+        </p>
+<source><![CDATA[
+<!--Custom Pipeline for my bad html-pages-->        
+<map:pipeline>
+    <map:match pattern="mytest/*.xml">
+      <map:generate src="{project:content.xdocs}{uri}.html" type="html" />
+      <strong><map:transform src="{forrest:stylesheets}/fixMyBadHTML.xsl"/></strong>
+      <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+      <map:transform type="idgen" />
+      <map:serialize type="xml-document"/>
+    </map:match>
+</map:pipeline>]]></source>
+        <p>
+          Done! You have just added your own custom-processing.
+          Don't forget to view the pages to verify that it is working
+          properly.
+        </p>      
+        <note>
+          Our pipeline does not exactly do what the original pipeline does.
+          To make things easier, we omitted the internationalization part
+          in our pipeline. So if you need to create multi-language sites,
+          make sure that you adjust your pipeline accordingly.
+        </note>
+
+      </section>
+  </steps>
+</howto>
