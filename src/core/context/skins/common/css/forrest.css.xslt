@@ -65,9 +65,9 @@
   
   <xsl:template name="a-external">
 a.external  {
-        padding: 0 20px 0px 0px;
-	display:inline; display:inline-block;
-        background-repeat: no-repeat;
+  padding: 0 20px 0px 0px;
+	display:inline;
+  background-repeat: no-repeat;
 	background-position: center right;
 	background-image: url(images/external-link.gif);
 }
