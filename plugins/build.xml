@@ -38,12 +38,14 @@
   <property name="deploy.svn.svn-dir"         location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.svn.svn-filestoadd"  location="build/svn-deploy.toadd"/>
   
-  <property name="build.dir"             location="build"/>
-  <property name="build.classes"         location="${build.dir}/classes"/>
+  <property name="build.dir"                  location="build"/>
+  <property name="build.classes"              location="${build.dir}/classes"/>
+  <property name="build.docs"                 location="${build.dir}/site"/>
   
-  <property name="java.dir"              location="src/java"/>
-  
-  
+  <property name="java.dir"                    location="${plugin.src.dir}/java"/>
+  <property name="mocks.dir"                   location="${plugin.src.dir}/mocks"/>
+  <property name="lib.dir"                     location="lib"/>
+    
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
       <fileset dir="${forrest.ant.lib.dir}" includes="ant-contrib-*.jar" />
@@ -101,6 +103,7 @@
     </path>
   	
   	<available file="${java.dir}" property="java_exists" type="dir"/>
+  	<available file="${mocks.dir}" property="mocks_exists" type="dir"/>
     
   </target>
   
@@ -118,40 +121,56 @@
     
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
       <fileset dir="${plugins.dir}/${plugin-name}">
-        <exclude name="**/${build.dir}/**"/>
+        <exclude name="lib/**"/>
+        <exclude name="build/**"/>
       </fileset>
     </copy>
-  	<copy toFile="${plugins.localDeploy-dir}/${plugin-name}/lib/${plugin-name}.jar"
+  	<copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
   	      file="${build.dir}/${plugin-name}.jar"
   	      failonerror="false"/>
-    <!-- FIXME: execute local build file -->
+  	<copy toDir="${plugins.localDeploy-dir}/lib"
+      failonerror="false">
+  	    <fileset dir="lib"/>
+    </copy>
     <antcall target="build"/>
   </target>
   
   <target name="build"
           description="Any local actions that need to be carried out by the plugin are done here"/>
   
+  <target name="deploy-plugins.xml"
+          description="Deployes the plugins descriptor file (plugins.xml) to the website SVN repository"
+          depends="checkout-deployed">
+    <copy todir="${deploy.svn.svn-dir}" 
+          overwrite="true"
+          file="${forrest.plugins.dir}/plugins.xml"/>
+    <!-- check in to SVN -->
+    <svncommit
+        target="${deploy.svn.svn-dir}"
+        repositoryurl="${deploy.svn.url}"
+        commitmessage="Deployment plugins descriptor file (plugins.xml) (deployed by 'deploy-plugins.xml' target of plugin build script)"
+    />
+  </target>
+          
   <target name="deploy"
           description="Deploy the plugin to SVN"
-          depends="dist">
+          depends="dist, checkout-deployed, deploy-plugins.xml">
     <echo>Deploying ${plugin-name} to the web server</echo>
-    <!-- get current plugins directory from SVN -->
-    <svncheckout
-        repositoryurl="${deploy.svn.url}"
-        username="${deploy.svn.user}"
-        password="${deploy.svn.password}"
-        destination="${deploy.svn.svn-dir}"
-        failonerror="true"
-    />
-    
+  	    
     <!-- copy new files into sandbox -->
     <copy todir="${deploy.svn.svn-dir}" 
           overwrite="true" 
           file="${plugins.dist-dir}/${plugin-name}.zip"/>
-    <copy todir="${deploy.svn.svn-dir}" 
-          overwrite="true"
-          file="${forrest.plugins.dir}/plugins.xml"/>
-    
+  	<!-- Copy docs into sandbox
+  	<copy todir="${deploy.svn.svn-dir}/docs/${plugin-name}" 
+  	      overwrite="true">
+  		<fileset dir="${build.docs}"/>
+  	</copy>
+  	<fixcrlf srcdir="${build.docs}" 
+  		     eol="lf"
+  	         includes="**/*.xml **/*.html **/*.rss **/*.css **/*.js **/*.txt"/>
+  	 -->
+     
     <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
     <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
@@ -180,6 +199,18 @@
     />
   </target>
    
+  <target name="checkout-deployed" 
+	      description="Retrieve the currently deployed plugin files">    
+	<!-- get current plugins directory from SVN -->
+    <svncheckout
+        repositoryurl="${deploy.svn.url}"
+        username="${deploy.svn.user}"
+        password="${deploy.svn.password}"
+        destination="${deploy.svn.svn-dir}"
+        failonerror="true"
+    />
+  </target>
+	
   <target name="docs" depends="local-deploy">
     <echo>Building Docs for ${plugin-name}</echo>
     <ant antfile="${forrest.core}/forrest.build.xml" target="site">
@@ -190,7 +221,7 @@
   <!-- FIXME: needs to append FOrrest version number to filename -->
   <target name="dist"
           description="Build the distribution archive for all the plugins"
-          depends="init, test">
+          depends="init, test, docs">
     <mkdir dir="${plugins.dist-dir}"/>  
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
        basedir="${plugins.dir}/${plugin-name}"
@@ -221,9 +252,9 @@
   </target>
   
   <!-- =================================================================== -->
-  <!-- Compile Cocoon java classes                                         -->
+  <!-- Compile java classes                                         -->
   <!-- =================================================================== -->
-  <target name="compile" depends="init" if="java_exists">
+  <target name="compile" depends="init, compile-mocks" if="java_exists">
     <mkdir dir="${build.classes}"/>
     <javac srcdir=   "${java.dir}"
       destdir=       "${build.classes}"
@@ -233,8 +264,29 @@
       nowarn=        "${build.compiler.nowarn}"
       classpathref=  "classpath">
     </javac>
+  	
+  	<copy todir="${build.classes}">
+  		<fileset dir="${java.dir}">
+  			<exclude name="**/*.java"/>
+		</fileset>
+  	</copy>
   </target>
-	
+
+  <!-- =================================================================== -->
+  <!-- Compile any mock classes required to compile the main classes       -->
+  <!-- =================================================================== -->
+  <target name="compile-mocks" depends="init" if="mocks_exists">
+    <mkdir dir="${build.classes}"/>
+    <javac srcdir=   "${mocks.dir}"
+      destdir=       "${build.classes}"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
+  </target>
+
   <!-- =================================================================== -->
   <!-- Jar Cocoon classes                                                  -->
   <!-- =================================================================== -->
