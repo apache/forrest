@@ -260,7 +260,9 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="load-project-props" depends="validation-props, prepare-context" if="skinconf.present">
     <xslt in="${skinconf}" 
           out="${project.temp-dir}/no-doctype-project-skinconf.xml" 
-          style="${forrest.home/}/context/resources/stylesheets/strip-doctype.xsl"/>
+          style="${forrest.home}/context/resources/stylesheets/strip-doctype.xsl">
+        <xmlcatalog refid="fcatalog"/>
+    </xslt>              
 
     <xmlproperty file="${project.temp-dir}/no-doctype-project-skinconf.xml" 
                  collapseattributes="true"/>
@@ -270,7 +272,9 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="load-forrest-props" unless="skinconf.present">
      <xslt in="${forrest.home}/context/skinconf.xml" 
            out="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
-           style="${forrest.home/}/context/resources/stylesheets/strip-doctype.xsl"/>
+           style="${forrest.home}/context/resources/stylesheets/strip-doctype.xsl">
+        <xmlcatalog refid="fcatalog"/>
+    </xslt> 
 
     <!-- Forrest skinconf should have been previously validated in build.xml -->
     <xmlproperty file="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
