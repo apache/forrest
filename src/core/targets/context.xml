@@ -86,16 +86,11 @@
    </target>
 
   <target name="copy-sitemap" if="sitemap.present">
+<!--FIXME: Now that we don't copy anymore, this target should be renamed -->
     <copy toDir="${project.webapp}" filtering="false" overwrite="true" failonerror="false">
       <fileset dir="${sitemap-dir}">
         <include name="jtidy.properties"/>
       </fileset>
-    </copy>
-    <copy toDir="${project.webapp}" filtering="false" overwrite="true">
-      <fileset dir="${sitemap-dir}">
-        <include name="*-${version}.xmap"/>
-      </fileset>
-      <mapper type="glob" from="*-${version}.xmap" to="*.xmap"/>
     </copy>
   </target>
 
