@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "http://forrest.apache.org/dtd/document-v12.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "http://forrest.apache.org/dtd/document-v13.dtd">
 
 <document>
   <header>
@@ -247,15 +247,16 @@ Total time: 5 seconds
     <section id="seeding_existing">
       <title>Seeding an existing project</title>
       <p>
-        In the section above, we have run 'forrest seed' in an empty directory. If you
-        have an existing codebase which you wish to add Forrest docs to, run 'forrest
-        seed' in your project base directory, and the Forrest doc structure will be
-        grafted onto your project.
+        In the section above, we have run 'forrest seed' in an empty directory
+        to create a new project. If you have an existing codebase to which you
+        want to add Forrest docs, then run 'forrest seed' in your project base
+        directory, and the Forrest doc structure will be grafted onto your
+        project. This procedure only needs to be done once.
       </p>
       <p>
         If your project already has XML documentation, it may be easier to tell
-        Forrest where the XML lives, rather than rearrange your project directories to
-        accommodate Forrest. This can be done by editing
+        Forrest where the XML sources are, rather than rearrange your project
+        directories to accommodate Forrest. This can be done by editing
         <code>forrest.properties</code> (consult
         the <link href="#Changing_the_layout">Changing the layout</link>
         section for more details).
@@ -276,32 +277,42 @@ Total time: 5 seconds
           <code>src/documentation/skinconf.xml</code>, which looks like this:
         </p>
 <source><![CDATA[
+<!--
+Skin configuration file. This file contains details of your project,
+which will be used to configure the chosen Forrest skin.
+-->
+
  <!DOCTYPE skinconfig PUBLIC
-        "-//APACHE//DTD Skin Configuration V0.6-1//EN"
-        "skinconfig-v06-1.dtd">
+        "-//APACHE//DTD Skin Configuration V0.6-2//EN"
+        "skinconfig-v06-2.dtd">
 
 <skinconfig>
-  <!-- To enable lucene search add provider="lucene" -->
+  <!-- To enable lucene search add provider="lucene"
+    Add box-location="alt" to move the search box to an alternate location
+    (if the skin supports it) and box-location="all" to show it in all
+    available locations on the page.  Remove the <search> element to show
+    no search box.
+  -->
   <search name="MyProject" domain="mydomain"/>
-  
-  <!-- Do we want to disable the print link? If enabled, invalid HTML 4.0.1 -->
+
+  <!-- Disable the print link? If enabled, invalid HTML 4.0.1 -->
   <disable-print-link>true</disable-print-link>  
-  <!-- Do we want to disable the PDF link? -->
+  <!-- Disable the PDF link? -->
   <disable-pdf-link>false</disable-pdf-link>
-  <!-- Do we want to disable the xml source link? -->
-  <!-- The xml source link makes it possible to access the xml rendition of
-        the source frim the html page, and to have it generated statically.
-        This can be used to enable other sites and services to reuse the
-        xml format for their uses. Keep this disabled if you don't want other
-        sites to easily reuse your pages.-->
+  <!-- Disable the xml source link? -->
+  <!-- The xml source link makes it possible to access the xml rendition
+    of the source frim the html page, and to have it generated statically.
+    This can be used to enable other sites and services to reuse the
+    xml format for their uses. Keep this disabled if you don't want other
+    sites to easily reuse your pages.-->
   <disable-xml-link>true</disable-xml-link>
   
-  <!-- If true, an the images on all external links will not be added -->  
+  <!-- Disable navigation icons on all external links? -->
   <disable-external-link-image>false</disable-external-link-image>
   
-  <!-- Do we want to disable w3c compliance links? -->
+  <!-- Disable w3c compliance links? -->
   <disable-compliance-links>false</disable-compliance-links>
-  <!-- Whether to render mailto: links unrecognisable by spam harvesters -->
+  <!-- Render mailto: links unrecognisable by spam harvesters? -->
   <obfuscate-mail-links>true</obfuscate-mail-links>
 
   <!-- mandatory project logo
@@ -333,12 +344,16 @@ Total time: 5 seconds
   <!-- The following are used to construct a copyright statement -->
   <year>2004</year>
   <vendor>The Acme Software Foundation.</vendor>
-  <!-- if present, the copyright-link URL will used as a link in the copyright statement
-  <copyright-link>http://www.apache.org/licenses/LICENSE-2.0</copyright-link>
+  <!-- The optional copyright-link URL will used as a link in the
+    copyright statement
+  <copyright-link>http://www.apache.org/licenses/</copyright-link>
   -->
 
-  <!-- Some skins use this to form a 'breadcrumb trail' of links. If you don't
-  want these, set the attributes to blank. The DTD purposefully requires them.
+  <!-- Some skins use this to form a 'breadcrumb trail' of links.
+    If you don't want these, then set the attributes to blank.
+    The DTD purposefully requires them.
+    Use location="alt" to move the trail to an alternate location
+    (if the skin supports it).
   -->
   <trail>
     <link1 name="myGroup" href="http://www.apache.org/"/>
@@ -346,23 +361,30 @@ Total time: 5 seconds
     <link3 name="" href=""/>
   </trail>
 
-  <!-- Configure the TOC, ie the Table of Contents.
+  <!-- Configure the TOC, i.e. the Table of Contents.
   @max-depth
-  how many "section" levels need to be included in the
-  generated Table of Contents (TOC). 
+   how many "section" levels need to be included in the
+   generated Table of Contents (TOC). 
   @min-sections
-  Minimum required to create a TOC.
+   Minimum required to create a TOC.
   @location ("page","menu","page,menu")
-  Where to show the TOC.
+   Where to show the TOC.
   -->
   <toc max-depth="2" min-sections="1" location="page"/>
 
   <!-- Heading types can be clean|underlined|boxed  -->
   <headings type="boxed"/>
-  
+
   <extra-css>
+    <!-- A sample to show how the class attribute can be used -->
+    p.quote {
+      margin-left: 2em;
+      padding: .5em;
+      background-color: #f0f0f0;
+      font-family: monospace;
+    }
   </extra-css>
-  
+
   <colors>
   <!-- CSS coloring examples omitted for brevity -->
   </colors>
@@ -374,8 +396,9 @@ Total time: 5 seconds
        folio, legal, ledger, letter, quarto, tabloid (default letter).
        Supported page orientations are portrait, landscape (default
        portrait).
+       Supported text alignments are left, right, justify (default left).
     -->
-    <page size="letter" orientation="portrait"/>
+    <page size="letter" orientation="portrait" text-align="left"/>
 
     <!--
        Margins can be specified for top, bottom, inner, and outer
@@ -391,10 +414,15 @@ Total time: 5 seconds
       <inner>1.25in</inner>
       <outer>1in</outer>
     </margins>
+
+    <!--
+      Print the URL text next to all links going outside the file
+    -->
+    <show-external-urls>false</show-external-urls>
   </pdf>
 
-  <!-- Credits are typically rendered as a set of small clickable images in the
-  page footer -->
+  <!-- Credits are typically rendered as a set of small clickable
+    images in the page footer -->
   <credits>
     <credit>
       <name>Built with Apache Forrest</name>
@@ -403,20 +431,20 @@ Total time: 5 seconds
       <width>88</width>
       <height>31</height>
     </credit>
-    <!-- A credit with @role='pdf' will have its name and url displayed in the
-    PDF page's footer. -->
+    <!-- A credit with @role='pdf' will have its name and url
+      displayed in the PDF page's footer. -->
   </credits>
 
 </skinconfig>
 ]]></source>
         <p>
           Customise this file for your project. The <code>images/</code> directory
-          mentioned in 'project-logo' and 'group-logo' elements correspond to the
-          <code>src/documentation/resources/images</code> directory (this mapping is done
-          in the sitemap).
+          mentioned in 'project-logo' and 'group-logo' elements corresponds to the
+          <code>src/documentation/resources/images</code> directory
+          (this mapping is done automatically by the sitemap).
         </p>
         <p>
-          Having edited this file (and ensured it is valid XML!), re-run the 'forrest'
+          Having edited this file (and ensured it is valid XML), re-run the 'forrest'
           command in the site root, and the site should be updated.
         </p>
       </section>
