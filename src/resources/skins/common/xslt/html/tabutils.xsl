@@ -1,7 +1,17 @@
+<?xml version="1.0"?>
+
+<!--
+Some callable templates useful when dealing with tab paths.  Mostly used in
+tab2menu.xsl
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-
-  <xsl:template name="unselected-tab-href">
+  <!-- Given the current path and a tabs.xml entry, returns a relative path to
+  the specified tab's URL.  When rendering a set of tabs, this template will be
+  called once per tab.
+  -->
+  <xsl:template name="calculate-tab-href">
 
     <xsl:param name="dir_index" select="'index.html'"/>
 
