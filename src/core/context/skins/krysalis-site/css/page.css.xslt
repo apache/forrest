@@ -1,3 +1,14 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method = "text"  omit-xml-declaration="yes"  />
+    
+  <xsl:template match="skinconfig">
+  <!-- insert CSS here -->
+  
+/* $Id: page.css.xslt,v 1.1 2003/12/30 00:02:56 nicolaken Exp $
+<xsl:value-of select="group-logo"/>
+*/
+
 /* ==================== html tags ============================ */
 
 body {  margin: 0px 0px 0px 0px; font-family: Verdana, Helvetica, sans-serif; }
@@ -367,3 +378,12 @@ table .title { background-color: #FFFFFF; }
   :visited { voice-family: betty, female }
   :active { voice-family: betty, female; pitch-range: 80; pitch: x-high }
 }
+
+      
+  <!-- end CSS here -->
+  </xsl:template>
+
+  <xsl:template match="*"></xsl:template>
+  <xsl:template match="text()"></xsl:template>
+
+</xsl:stylesheet>
