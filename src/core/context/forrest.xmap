@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.2 $
+$Revision: 1.3 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -101,59 +101,59 @@ $Revision: 1.2 $
 
           <map:when test="document-v10">
           <!-- FIXME (JJP):  This should use the v12 now-->
-            <map:transform src="resources/stylesheets/docv10todocv11.xsl" />
+            <map:transform src="{forrest:stylesheets}/docv10todocv11.xsl" />
           </map:when>
 
           <map:when test="document-v20a">
-            <map:transform src="resources/stylesheets/docv20todocv12.xsl" />
+            <map:transform src="{forrest:stylesheets}/docv20todocv12.xsl" />
           </map:when>
 
           <map:when test="howto-v10">
-            <map:transform src="resources/stylesheets/howto2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
           </map:when>
 
           <map:when test="howto-v11">
-            <map:transform src="resources/stylesheets/howto2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
           </map:when>
           <map:when test="howto-v12">
-            <map:transform src="resources/stylesheets/howto2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
           </map:when>
 
           <map:when test="todo-v10">
-            <map:transform src="resources/stylesheets/todo2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
           </map:when>
 
           <map:when test="todo-v11">
-            <map:transform src="resources/stylesheets/todo2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
           </map:when>
 
           <map:when test="todo-v12">
-            <map:transform src="resources/stylesheets/todo2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
           </map:when>
 
           <map:when test="changes-v10">
-            <map:transform src="resources/stylesheets/changesv10tochangesv11.xsl" />
-            <map:transform src="resources/stylesheets/changes2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/changesv10tochangesv11.xsl" />
+            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
           </map:when>
 
           <map:when test="changes-v11">
-            <map:transform src="resources/stylesheets/changes2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
           </map:when>
 
           <map:when test="changes-v12">
-            <map:transform src="resources/stylesheets/changes2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
           </map:when>
 
           <map:when test="docbook-v4.1.2">
-            <map:transform src="resources/stylesheets/docbook2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/docbook2document.xsl" />
           </map:when>
           
           <map:when test="docbook-v4.2">
-            <map:transform src="resources/stylesheets/docbook2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/docbook2document.xsl" />
           </map:when>
 
           <map:when test="sdocbook-v1.0">
-            <map:transform src="resources/stylesheets/docbook2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/docbook2document.xsl" />
           </map:when>
 
           <map:otherwise />
@@ -173,7 +173,7 @@ $Revision: 1.2 $
         <map:select type="exists">
           <map:when test="{project:content.xdocs}{1}{2}.ehtml">
             <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
-            <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
+            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -189,7 +189,7 @@ $Revision: 1.2 $
           
           <map:when test="{project:content.xdocs}{1}.ihtml">
             <map:generate src="{project:content.xdocs}{1}.ihtml" type="html" />
-            <map:transform src="resources/stylesheets/html2document.xsl" />
+            <map:transform src="{forrest:stylesheets}/html2document.xsl" />
             <map:transform type="idgen" />
             <map:serialize type="xml-document"/>
           </map:when>
@@ -197,14 +197,14 @@ $Revision: 1.2 $
           <map:when test="{project:content.xdocs}{1}.cwiki">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
               <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
-              <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
-              <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
+              <map:transform type="lexer"   src="{forrest:home}/context/resources/grammars/wiki.xlex"/>
+              <map:transform type="parser"  src="{forrest:home}/context/resources/grammars/wiki.xgrm"/>
               <!--  Dynamically generated equivalents.  Matchers need to be added to
               the root sitemap for this to work.
               <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
               <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
               -->
-              <map:transform src="resources/stylesheets/wiki2document.xsl">
+              <map:transform src="{forrest:stylesheets}/wiki2document.xsl">
                 <map:parameter name="name" value="{2}" />
               </map:transform>
               <map:serialize type="xml-document"/>
@@ -214,7 +214,7 @@ $Revision: 1.2 $
           <map:when test="{project:content.xdocs}{1}.txt">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
               <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
-              <map:transform src="resources/stylesheets/text2document.xsl">
+              <map:transform src="{forrest:stylesheets}/text2document.xsl">
                 <map:parameter name="filename" value="{2}" />
               </map:transform>
               <map:serialize type="xml-document"/>
@@ -238,24 +238,24 @@ $Revision: 1.2 $
       These pipelines dynamically generate the wiki.{xlex,xgrm} files used in
       the *.cwiki pipeline.  They are not used by default to avoid the overhead.
       <map:match pattern="*.xlex">
-        <map:generate type="text2xml" src="resources/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
-        <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
-        <map:transform               src="resources/grammars/text4regex.xsl"/>
-        <map:transform type="lexer"  src="resources/grammars/regex.xlex"/>
-        <map:transform type="parser" src="resources/grammars/regex.xgrm"/>
-        <map:transform               src="resources/grammars/grm2xlex.xsl"/>
+        <map:generate type="text2xml" src="{forrest:home}/context/resources/grammars/{1}.grm"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/grm.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/esources/grammars/grm.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/grammars/text4regex.xsl"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/regex.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/regex.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/grammars/grm2xlex.xsl"/>
         <map:serialize type="xml"/>
       </map:match>
 
       <map:match pattern="*.xgrm">
-        <map:generate type="text2xml"  src="resources/grammars/{1}.grm"/>
-        <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
-        <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
-        <map:transform               src="resources/grammars/text4regex.xsl"/>
-        <map:transform type="lexer"  src="resources/grammars/regex.xlex"/>
-        <map:transform type="parser" src="resources/grammars/regex.xgrm"/>
-        <map:transform               src="resources/grammars/grm2xgrm.xsl"/>
+        <map:generate type="text2xml"  src="{forrest:home}/context/resources/grammars/{1}.grm"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/grm.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/grm.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/grammars/text4regex.xsl"/>
+        <map:transform type="lexer"  src="{forrest:home}/context/resources/grammars/regex.xlex"/>
+        <map:transform type="parser" src="{forrest:home}/context/resources/grammars/regex.xgrm"/>
+        <map:transform               src="{forrest:home}/context/resources/grammars/grm2xgrm.xsl"/>
         <map:serialize type="xml"/>
       </map:match>
       -->

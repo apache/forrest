@@ -11,7 +11,7 @@ Uses       :  content/xdocs/site.xml, or book.xml file if present.
 
 See http://xml.apache.org/forrest/sitemap-ref.html#menu_xml_generation
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -21,7 +21,7 @@ $Revision: 1.1 $
     <map:transformers default="xslt">
       <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="menu">
-          <catalogue id="menu" name="menu" location="translations"/>
+          <catalogue id="menu" name="menu" location="{project:translations}"/>
         </catalogues>
         <!-- Commented out to verify your translations
         <untranslated-text>untranslated</untranslated-text> -->
@@ -47,21 +47,21 @@ $Revision: 1.1 $
 
       <map:match pattern="abs-menulinks">
         <map:generate src="{project:content.xdocs}site.xml" />
-        <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
-        <map:transform src="resources/stylesheets/site2site-normalizetabs.xsl" />
+        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+        <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
         <map:serialize type="xml"/>
       </map:match>
 
       <map:match pattern="**menulinks-*">
         <map:generate src="{project:content.xdocs}site.xml" />
-        <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
+        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
 
         <map:select type="config">
           <map:parameter name="value" value="{defaults:menu-scheme}"/>
 
           <map:when test="tab_attributes">
-            <map:transform src="resources/stylesheets/site2site-normalizetabs.xsl" />
-            <map:transform src="resources/stylesheets/site2site-selectnode.xsl">
+            <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+            <map:transform src="{forrest:stylesheets}/site2site-selectnode.xsl">
               <map:parameter name="path" value="{1}{2}"/>
             </map:transform>
           </map:when>
@@ -74,7 +74,7 @@ $Revision: 1.1 $
 
           </map:select>
 
-        <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
+        <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}{2}" />
         </map:transform>
         <map:serialize type="xml" />
@@ -100,7 +100,7 @@ $Revision: 1.1 $
             <!-- If no book.xml, generate it from the linkmap. -->
             <map:generate src="cocoon:/{1}menulinks-{2}" />
             <!-- The above generates the subset of the linkmap relevant to our directory. -->
-            <map:transform src="resources/stylesheets/site2book.xsl" />
+            <map:transform src="{forrest:stylesheets}/site2book.xsl" />
           </map:otherwise>
 
         </map:select>
@@ -110,7 +110,7 @@ $Revision: 1.1 $
           <map:when test="true">
 
             <map:act type="locale">
-              <map:transform src="resources/stylesheets/i18n.xsl"/>
+              <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
               <map:transform type="i18n">
                 <!-- We can use a default locale attribute or Request Parameter
                 <map:parameter name="locale" value="{defaults:locale}"/>

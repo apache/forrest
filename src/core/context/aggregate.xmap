@@ -15,7 +15,7 @@ Example URL:  Typically http://localhost:8888/site.pdf
 Used by    :  sitemap.xmap, which binds the URL to this pipeline
 Uses       :  cocoon://abs-linkmap, in linkmap.xmap
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -33,14 +33,14 @@ $Revision: 1.1 $
       <!-- Aggregation of all XML in the site -->
       <map:match pattern="*.xml">
         <map:generate src="cocoon://abs-linkmap"/>
-        <map:transform src="resources/stylesheets/site2book.xsl" />
-        <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
+        <map:transform src="{forrest:stylesheets}/site2book.xsl" />
+        <map:transform src="{forrest:stylesheets}/aggregates/book2cinclude.xsl">
           <map:parameter name="ignore" value="{1}"/>
           <map:parameter name="title" value="{conf:project-name} Documentation"/>
         </map:transform>
         <map:transform type="cinclude"/>
-        <map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/>
-        <map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/>
+        <map:transform src="{forrest:stylesheets}/aggregates/doc2doc-uniqueids.xsl"/>
+        <map:transform src="{forrest:stylesheets}/aggregates/docs2document.xsl"/>
         <map:serialize type="xml"/>
       </map:match>
 
@@ -52,7 +52,7 @@ $Revision: 1.1 $
       <map:match pattern="linkmap-*.*">
         <map:generate src="cocoon://abs-linkmap" />
 
-        <map:transform src="resources/stylesheets/aggregates/relativize-split-linkmap.xsl">
+        <map:transform src="{forrest:stylesheets}/aggregates/relativize-split-linkmap.xsl">
           <map:parameter name="path" value="{1}.{2}" />
         </map:transform>
         <map:serialize type="xml"/>

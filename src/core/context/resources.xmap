@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.2 $
+$Revision: 1.3 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -99,17 +99,23 @@ $Revision: 1.2 $
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/images/{1}.svg">
                   <map:generate src="{project:content.xdocs}/images/{1}.svg" />
-                  <map:transform src="resources/stylesheets/project2text.xsl" />
+                  <map:transform src="{forrest:stylesheets}/project2text.xsl">
+                    <map:parameter name="config-file" value="{project:skinconf}"/>
+                  </map:transform>
                   <map:serialize type="svg2png" />
                </map:when>
                <map:when test="{project:resources.images}/{1}.svg">
                   <map:generate src="{project:resources.images}/{1}.svg" />
-                  <map:transform src="resources/stylesheets/project2text.xsl" />
+                  <map:transform src="{forrest:stylesheets}/project2text.xsl">
+                    <map:parameter name="config-file" value="{project:skinconf}"/>
+                  </map:transform>
                   <map:serialize type="svg2png" />
                </map:when>
                <map:when test="resources/images/{1}.svg">
                   <map:generate src="resources/images/{1}.svg" />
-                  <map:transform src="resources/stylesheets/project2text.xsl" />
+                  <map:transform src="{forrest:stylesheets}/project2text.xsl">
+                    <map:parameter name="config-file" value="{project:skinconf}"/>
+                  </map:transform>
                   <map:serialize type="svg2png" />
                </map:when>
                <map:when test="{project:content.xdocs}/images/{1}.png">
@@ -172,7 +178,9 @@ $Revision: 1.2 $
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/{1}.svg">
                   <map:generate src="{project:content.xdocs}/{1}.svg" />
-                  <map:transform src="resources/stylesheets/project2text.xsl" />
+                  <map:transform src="{forrest:stylesheets}/project2text.xsl">
+                    <map:parameter name="config-file" value="{project:skinconf}"/>
+                  </map:transform>
                   <map:serialize type="svg2png" />
                </map:when>
                <map:otherwise>

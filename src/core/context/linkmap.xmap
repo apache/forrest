@@ -10,7 +10,7 @@ Uses       :  content/xdocs/site.xml
 
 See http://xml.apache.org/forrest/sitemap-ref.html#menu_xml_generation
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 ==================================================== -->
 
 
@@ -28,7 +28,7 @@ $Revision: 1.1 $
       <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
         <map:generate src="{project:content.xdocs}site.xml" />
-        <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
+        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
         <map:serialize type="xml" />
       </map:match>
 
@@ -36,7 +36,7 @@ $Revision: 1.1 $
       <!-- Linkmap for regular pages -->
       <map:match pattern="**linkmap-*">
         <map:generate src="cocoon://abs-linkmap" />
-        <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
+        <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}{2}" />
           <map:parameter name="site-root" value="{conf:project-url}" />
         </map:transform>

@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/11/25 16:12:24 $              |
+    |             $Date: 2003/11/26 09:15:32 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -87,11 +87,6 @@ FORREST SITE BUILDER
     <property name="raw-content-dir" location="${project.home}/${project.content-dir}/content" />
     <property name="sitemap-dir"     location="${project.home}/${project.sitemap-dir}" />
     <property name="xdocs-dir"   location="${project.home}/${project.xdocs-dir}" />
-    <property name="resources-dir"   location="${project.home}/${project.resources-dir}"/>
-    <property name="stylesheets-dir" location="${project.home}/${project.stylesheets-dir}" />
-    <property name="images-dir"  location="${project.home}/${project.images-dir}" />
-    <property name="schema-dir"  location="${project.home}/${project.schema-dir}" />
-    <property name="grammars-dir" location="${project.home}/${project.grammars-dir}" />
     <property name="catalog"     location="${project.home}/${project.catalog}" />
     <property name="forrest.catalog.verbosity" value="1" />
     <property name="forrest.maxmemory" value="64m" />
@@ -103,7 +98,7 @@ FORREST SITE BUILDER
     <property name="classes-dir" location="${project.home}/${project.classes-dir}" />
     <property name="translations-dir" location="${project.home}/${project.translations-dir}" />
 
-    <!-- checks for presence of required classes and/or resources -->
+    <!-- checks for presence of tools.jar -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"       property="tools.jar.present"/>
 
@@ -123,7 +118,6 @@ FORREST SITE BUILDER
     <available property="raw-content.present" file="${raw-content-dir}" type="dir"/>
     <available property="sitemap.present" file="${sitemap-dir}" type="dir"/>
     <available property="xdocs.present" file="${xdocs-dir}" type="dir"/>
-    <available property="resources.present" file="${resources-dir}" type="dir"/>
     <available property="images.present" file="${images-dir}" type="dir"/>
     <available property="grammars.present" file="${grammars-dir}" type="dir"/>
     <available property="schema.present" file="${schema-dir}" type="dir"/>
@@ -133,7 +127,6 @@ FORREST SITE BUILDER
     <available property="skins.present" file="${skins-dir}" type="dir"/>
     <available property="skinconf.present" file="${skinconf}"/>
     <available property="status.present" file="${status}"/>
-    <available property="translations.present" file="${translations-dir}" type="dir" />
   </target>
 
   <target name="validation-props" depends="examine-proj">
@@ -309,6 +302,7 @@ FORREST SITE BUILDER
       <fileset dir="${forrest.home}/context" >
         <exclude name="*.xmap" />
         <exclude name="skins/**" />
+        <exclude name="resources/**" />        
         <exclude name="WEB-INF/*.xconf" />
       </fileset>
     </copy>
@@ -337,9 +331,8 @@ FORREST SITE BUILDER
        param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
-    validate, init, bare-context, copy-sitemap, copy-conf,
-    copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-lib, 
-    copy-classes, copy-skinconf, copy-status, copy-translations"/>
+    validate, init, bare-context, copy-sitemap, copy-conf, copy-lib, 
+    copy-classes, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.webapp}/WEB-INF" filtering="true"
@@ -373,37 +366,6 @@ FORREST SITE BUILDER
     </copy>
   </target>
 
-  <target name="copy-resources" if="resources.present">
-    <copy toDir="${project.webapp}/resources" failonerror="false">
-      <fileset dir="${resources-dir}">
-        <exclude name="stylesheets"/>
-        <exclude name="images"/>
-        <exclude name="grammars"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="copy-stylesheets" if="stylesheets.present">
-    <copy toDir="${project.webapp}/resources/stylesheets" 
-      overwrite="true" failonerror="false">
-      <fileset dir="${stylesheets-dir}"/>
-    </copy>
-  </target>
-
-  <target name="copy-images" if="images.present">
-    <copy toDir="${project.webapp}/resources/images" 
-      overwrite="true" failonerror="false">
-      <fileset dir="${images-dir}"/>
-    </copy>
-  </target>
-
-  <target name="copy-grammars" if="grammars.present">
-    <copy toDir="${project.webapp}/resources/grammars" 
-      overwrite="true" failonerror="false">
-      <fileset dir="${grammars-dir}"/>
-    </copy>
-  </target>
-
   <target name="copy-lib" if="lib.present">
     <copy toDir="${project.webapp}/WEB-INF/lib" 
       overwrite="true" failonerror="false">
@@ -427,13 +389,6 @@ FORREST SITE BUILDER
   <target name="copy-status" if="status.present">
     <copy file="${status}" todir="${project.webapp}" />
   </target>
-
-  <target name="copy-translations" if="translations.present" >
-    <copy todir="${project.webapp}/translations">
-    <fileset dir="${translations-dir}"/>
-    </copy>
-  </target>
-
 
   <!-- ===============================================================
        Makes the Cocoon context dir to work in and fills it completely.
