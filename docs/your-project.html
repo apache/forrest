@@ -10,10 +10,11 @@
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
 <link type="text/css" href="../skin/profile.css" rel="stylesheet">
-<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/menu.js" language="javascript" type="text/javascript"></script>
+<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/menu.js" language="javascript" type="text/javascript"></script><script src="../skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="../favicon.ico">
 </head>
-<body>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
 <div id="top">
 <!--+
     |breadtrail
@@ -47,9 +48,7 @@
     |start Search
     +-->
 <div class="searchbox">
-<div id="roundtopsmall">
-<img style="display: none" class="cornersmall" height="5" width="5" alt="" src="../skin/images/rc-t-l-5-1body-2searchbox-3searchbox.png"></div>
-<form action="http://www.google.com/search" method="get">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
 <input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
@@ -85,7 +84,13 @@
               document.write("Published: " + document.lastModified);
               //  --></script>
 </div>
-<div class="breadtrail">&nbsp;</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
 <!--+
     |start Menu, mainarea
     +-->
@@ -225,6 +230,12 @@
 <div class="pdflink">
 <a class="dida" href="your-project.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
+</div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
 <h1>Using Forrest</h1>
 <h3>A tutorial on how to use Forrest in your own projects</h3>
@@ -983,7 +994,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
     &lt;title&gt;Downloading Binaries&lt;/title&gt;
   &lt;/header&gt;
   &lt;body&gt;
-    &lt;section&gt;
+    &lt;section id="download"&gt;
       &lt;title&gt;Downloading binaries&lt;/title&gt;
       &lt;p&gt;
         Here are the binaries for FooProject
@@ -1009,7 +1020,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
          &lt;/downloads&gt;
        &lt;/release&gt;
     &lt;/section&gt;
-    &lt;section&gt;
+    &lt;section id="cvs"&gt;
       &lt;title&gt;Getting FooProject from CVS&lt;/title&gt;
       &lt;p&gt;....&lt;/p&gt;
     &lt;/section&gt;
@@ -1031,7 +1042,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
 
   &lt;xsl:template match="release"&gt;
-    &lt;section&gt;
+    &lt;section id="{@version}"&gt;
       &lt;title&gt;Version &lt;xsl:value-of select="@version"/&gt; (released
           &lt;xsl:value-of select="@date"/&gt;)&lt;/title&gt;
       &lt;table&gt;
@@ -1049,7 +1060,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
     &lt;/tr&gt;
   &lt;/xsl:template&gt;
 
-
   &lt;xsl:template match="@* | node() | comment()"&gt;
     &lt;xsl:copy&gt;
       &lt;xsl:apply-templates select="@*"/&gt;
@@ -1058,7 +1068,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
   &lt;/xsl:template&gt;
 
 &lt;/xsl:stylesheet&gt;
-
 </pre>
 <p>
             Place this file in the default stylesheets directory,
@@ -1069,8 +1078,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
             Now we will create a project sitemap to control the
             transformation of our custom xml
             structure into the Forrest intermediate xdocs structure.
-            We need to register our new
-            DTD and associate a transformation with it.
           </p>
 <div class="frame warning">
 <div class="label">Warning</div>
@@ -1083,47 +1090,34 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
 <div class="label">Note</div>
 <div class="content">
             The <a href="../docs/sitemap-ref.html">Sitemap
-            Reference</a> provides details on how the sitemap works, and
-            how it can be customized for specific projects.  Specifically, the
-            part to read is <a href="../docs/sitemap-ref.html#forrest_xmap">the
-            forrest.xmap section</a>.
+            Reference</a> provides details about how the sitemap works.
           </div>
 </div>
-<ol>
-            
-<li>Override <span class="codefrag">forrest.xmap</span> in your project by copying
-              <span class="codefrag">$FORREST_HOME/context/forrest.xmap</span> to your project's
-              <span class="codefrag">src/documentation/</span> directory.</li>
-            
-<li>
-              
-<p>Edit <span class="codefrag">forrest.xmap</span> ... locate the
-                <strong><span class="codefrag">sourcetype</span></strong> action and register
-                the new document type:</p>
-              
-<pre class="code">
-&lt;sourcetype name="download"&gt;
-  &lt;document-declaration public-id="-//Acme//DTD Download Documentation V1.0//EN" /&gt;
-&lt;/sourcetype&gt;</pre>
-            
-</li>
-            
-<li>
-              
-<p>Locate where the sourcetype action is used, and add a
-                <span class="codefrag">&lt;map:when&gt;</span> to handle the conversion
-                for our document type:</p>
-              
-<pre class="code">
-&lt;map:when test="download"&gt;
-  &lt;map:transform
-    src="resources/stylesheets/download2document.xsl" /&gt;
-&lt;/map:when&gt;</pre>
-            
-</li>
-          
-</ol>
-<a name="N10229"></a><a name="new_dtd"></a>
+<p>
+            Add the following as the file
+            <span class="codefrag">src/documentation/sitemap.xmap</span> ...
+          </p>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+ &lt;map:pipelines&gt;
+  &lt;map:pipeline&gt;
+   &lt;map:match pattern="**download.xml"&gt;
+    &lt;map:generate src="{project:content.xdocs}{1}download.xml" /&gt;
+    &lt;map:transform src="{project:resources.stylesheets}/download2document.xsl" /&gt;
+    &lt;map:serialize type="xml"/&gt;
+   &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+ &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;
+</pre>
+<p>
+            That will intercept the request for the body content, for only
+            this specific "download" document, and will transform it into the
+            intermediate Forrest "document" format. The normal Forrest machinery
+            will handle the aggregation with navigation menus etc. and will
+            apply the normal skin.
+          </p>
+<a name="N10207"></a><a name="new_dtd"></a>
 <h4>Registering a new DTD</h4>
 <p>
                  By default, Forrest requires that all XML files be valid, i.e.
@@ -1149,7 +1143,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
                  Please see <a href="../docs/validation.html">XML Validation</a>
                  for the full story.
                </p>
-<a name="N1024E"></a><a name="integrating_rss"></a>
+<a name="N1022C"></a><a name="integrating_rss"></a>
 <h3 class="underlined_5">Example: integrating external RSS content</h3>
 <p>Similar to the previous example, we can integrate RSS into our
               site by over-riding and editing the sitemap.  As described in 
@@ -1182,7 +1176,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
 </div>
 
       
-<a name="N10270"></a><a name="skins"></a>
+<a name="N1024E"></a><a name="skins"></a>
 <h2 class="underlined_10">Forrest skins</h2>
 <div class="section">
 <p>
@@ -1205,7 +1199,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
           many capabilities so that extra skins are not needed.
         </div>
 </div>
-<a name="N1028F"></a><a name="new_skin"></a>
+<a name="N1026D"></a><a name="new_skin"></a>
 <h3 class="underlined_5">Defining a new skin</h3>
 <p>
             Projects can define their own skin in the
@@ -1267,7 +1261,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
 </div>
 
     
-<a name="N102D0"></a><a name="webapp"></a>
+<a name="N102AE"></a><a name="webapp"></a>
 <h2 class="underlined_10">Interactive Forrest: faster turnaround when developing your docs</h2>
 <div class="section">
 <p>
@@ -1281,7 +1275,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
         a "live" Forrest webapp instance, the Forrest-based documentation
         development can be faster and easier than with comparable tools.
       </p>
-<a name="N102E1"></a><a name="forrest_run"></a>
+<a name="N102BF"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
           Type '<span class="codefrag">forrest run</span>' in your project root to start Forrest's
@@ -1293,7 +1287,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
           servlet container, type <span class="codefrag">forrest webapp</span> to build an open
           webapp in <span class="codefrag">build/webapp/</span>)
         </p>
-<a name="N102FA"></a><a name="using_webapp"></a>
+<a name="N102D8"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
@@ -1302,7 +1296,7 @@ new "<a href="../docs/project-sitemap.html">Using project sitemaps</a>" method.
           </p>
 </div>
     
-<a name="N10309"></a><a name="invoking_from_ant"></a>
+<a name="N102E7"></a><a name="invoking_from_ant"></a>
 <h2 class="underlined_10">Invoking Forrest from Ant</h2>
 <div class="section">
 <p>
