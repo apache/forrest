@@ -178,7 +178,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <div class="searchbox">
                 <form class="roundtopsmall" method="get" action="http://www.google.com/search"> 
                     <input type="hidden" 
-                    name="sitesearch" value="{$config/searchsite-domain}"/> 
+                    name="sitesearch" value="{$config/search/@domain}"/> 
                     <input type="text" id="query" name="q" size="15" 
                     value="Search the site:" 
                     onFocus="getBlank (this, 'Search the site:');"/>&#160; 
