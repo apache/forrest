@@ -515,7 +515,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 	         &#160;<xsl:call-template name="breadcrumbs"/>&#160;
           </td>
 	      <!-- ============ Page font settings =========== -->
-	      <td class="subborder trail" align="right" nowrap="true">
+	      <td class="subborder trail" align="right" nowrap="nowrap">
 	       <xsl:if test="$disable-font-script = 'false'">
 	        Font size: 
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
