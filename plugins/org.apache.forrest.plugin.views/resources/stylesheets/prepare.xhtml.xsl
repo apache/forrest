@@ -31,15 +31,7 @@
 		  <alias:import href="cocoon:/pathutils"/>
 		  <alias:import href="cocoon:/renderlogo"/>
       <alias:include href="cocoon:/prepare.include.{$request}"/>
-			  <alias:param name="path"/>
-			  <alias:param name="request"/>
-        <alias:variable name="config" select="//skinconfig"/>
-			  <alias:variable name="minitoc-location" select="$config/toc/@location"/>
-        <!--FIXME: get all additional templates-->
-<!--			<xsl:comment>All xhtml additional templates requested by the forrest:template</xsl:comment>
-      <xsl:for-each select="/*/forrest:properties/*[@additional='true']">
-        <xsl:copy-of select=""/>
-      </xsl:for-each>-->
+			<alias:param name="path"/>
       <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
 			<alias:template name="getHead">
 			  <xsl:for-each select="/*/forrest:properties/*[@head='true']">
