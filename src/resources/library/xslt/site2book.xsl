@@ -23,14 +23,26 @@ isn't a major problem.
     </book>
   </xsl:template>
 
-  <xsl:template match="*/*[count(*) > 0]">
-    <menu label="{@label}">
-      <xsl:apply-templates/>
-    </menu>
-  </xsl:template>
+  <xsl:template match="*/*">
+    <xsl:choose>
+      <xsl:when test="contains(@href, '#')">
+      </xsl:when>
 
-  <xsl:template match="*/*[count(*) = 0 and @label]">
-    <menu-item label="{@label}" href="{@href}"/>
+      <xsl:when test="not(contains(@href, '#')) and count(*) = 0
+      or count(*) > 0 and contains(*/@href, '#')">
+        <menu-item label="{@label}" href="{@href}"/>
+      </xsl:when>
+      <xsl:when test="not(@href) or substring(@href, string-length(@href)) = '/'">
+        <menu label="{@label}">
+          <xsl:apply-templates/>
+        </menu>
+      </xsl:when>
+      <xsl:otherwise>
+        <unknown label="{@label}">
+          <xsl:apply-templates/>
+        </unknown>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
