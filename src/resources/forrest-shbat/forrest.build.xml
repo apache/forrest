@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/09/13 05:08:08 $              |
+    |             $Date: 2003/09/14 13:40:57 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -855,7 +855,19 @@ Thanks for using Apache Forrest
     validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
 
-  <target name="validate-site" depends="validation-props" >
+  <target name="validate-site" depends="load-project-props">
+    <condition property="forrest.validate.skinconf.disable-xml-link">
+      <and>
+        <istrue value="${skinconfig.disable-xml-link}"/>
+      </and>
+    </condition>
+    <fail if="forrest.validate.skinconf.disable-xml-link">
+---------------------------------------     
+${skinconfig.project-name} have disable-xml-link
+please change it on ${project.skinconf} 
+to validate this site.
+---------------------------------------     
+    </fail>
     <xmlvalidate failonerror="${forrest.validate.site.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
         <catalogpath>
