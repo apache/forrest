@@ -29,7 +29,7 @@ See the imported tab2menu.xsl for details.
     <!-- Called from 'not-selected' -->
      <a>
       <xsl:attribute name="href">
-        <xsl:call-template name="unselected-tab-href">
+        <xsl:call-template name="calculate-tab-href">
           <xsl:with-param name="tab" select="."/>
           <xsl:with-param name="path" select="$path"/>
         </xsl:call-template>
