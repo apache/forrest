@@ -70,7 +70,10 @@
     </div>
   </xsl:template>
 
+<!--
   <xsl:template match="link | jump | fork">
+-->
+  <xsl:template match="link | fork">
     <a href="{@href}"><xsl:apply-templates/></a>
   </xsl:template>
   
