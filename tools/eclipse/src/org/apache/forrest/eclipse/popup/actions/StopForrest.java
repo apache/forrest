@@ -17,11 +17,13 @@ package org.apache.forrest.eclipse.popup.actions;
 
 import org.apache.forrest.eclipse.job.ForrestManager;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -58,6 +60,13 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 	 * @see IActionDelegate#selectionChanged(IAction, ISelection)
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			Object first = ((IStructuredSelection)selection).getFirstElement();
+            IResource resource = (IResource)first;
+            if (resource instanceof IProject) {
+                activeProject = (IProject)resource;
+            }            
+		}
 	}
 
 }
