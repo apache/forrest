@@ -30,8 +30,45 @@ Revision:
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
       <xsl:template match="/">
-            <xsl:apply-templates select="book|chapter|revhistory|article"/>
+            <xsl:apply-templates select="book|chapter|revhistory|article|refentry"/>
       </xsl:template>
+
+    <xsl:template match="/refentry">
+        <document>
+            <header>
+              <xsl:apply-templates select="refnamediv"/>
+            </header>
+            <body>
+              <xsl:apply-templates select="refsynopsisdiv"/>
+              <xsl:apply-templates select="refsect1"/>
+            </body>
+        </document>
+    </xsl:template>
+    
+    <xsl:template match="refsect1">
+       <section>
+         <xsl:apply-templates select="title"/>
+         <xsl:apply-templates select="para"/>
+       </section>
+    </xsl:template>
+    
+    <xsl:template match="refsynopsisdiv">
+      <section>
+        <title>SYNOPSIS</title>
+        <xsl:apply-templates select="cmdsynopsis"/>
+      </section>
+    </xsl:template>
+    
+    <xsl:template match="refnamediv">
+        <title><xsl:value-of select="refname"/><xsl:apply-templates select="refdescriptor"/></title>
+        <xsl:apply-templates select="refpurpose"/>
+    </xsl:template>
+    
+    <xsl:template match="refdescriptor">, <xsl:value-of select="."/></xsl:template>
+
+    <xsl:template match="refpurpose">
+      <abstract><xsl:value-of select="."/></abstract>
+    </xsl:template>
 
       <xsl:template match="/book">
             <document>
