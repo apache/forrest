@@ -16,6 +16,7 @@ To use the plugin you need to install it within Eclipse V3.0 or later.
 Although not required we recommend that you also install the Web Tools Platform
 Project (http://www.eclipse.org/webtools/index.html) which will provide many
 useful plugins such as XML and Schema editors, Browser View and much more.
+FIXME: Add Information about how to do this.
 
 For Development
 ===============
