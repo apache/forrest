@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         
-	<xsl:template match="skinconfig">
+    <xsl:template match="skinconfig">
 
      <xsl:if test="not(disable-lucene)">     
        <disable-lucene>true</disable-lucene>
@@ -27,6 +27,7 @@
      <xsl:if test="not(obfuscate-mail-links)">     
        <obfuscate-mail-links>true</obfuscate-mail-links>
      </xsl:if>
+     <!--
      <xsl:if test="not(searchsite-domain)">     
        <searchsite-domain>mydomain</searchsite-domain>
      </xsl:if>
@@ -68,8 +69,8 @@
      </xsl:if>
      <xsl:if test="not(vendor)">     
        <vendor>The Acme Software Foundation.</vendor>
-
      </xsl:if>
+     -->
      <xsl:if test="not(trail)">
        <trail>
          <link1 name="" href=""/>
@@ -79,11 +80,9 @@
        
      </xsl:if>
      <xsl:if test="not(trail)">
-       
-       
-       <toc level="2" location="page"/>
-  
+        <toc level="2" location="page"/>
      </xsl:if>
+     
   <xsl:if test="not(colors)">
   <colors>
     <color name="header" value="#294563"/>
@@ -95,7 +94,6 @@
 
     <color name="heading" value="#294563"/>
     <color name="subheading" value="#4a6d8c"/>
-
         
     <color name="navstrip" value="#cedfef"/>
     <color name="toolbox" value="#294563"/>
@@ -115,7 +113,6 @@
     <color name="code" value="#CFDCED"/>
         
     <color name="footer" value="#cedfef"/>
-
   </colors>
   </xsl:if>
 
@@ -137,7 +134,7 @@
   </credits>     
   </xsl:if>
  
- 	 <xsl:copy>
+     <xsl:copy>
       <xsl:copy-of select="*"/>
      </xsl:copy> 
     </xsl:template>
