@@ -55,8 +55,6 @@
   <target name="init">
     <input message="Which plugin you which to operate on?"
            addproperty="plugin-name"/>
-    
-    <mkdir dir="${plugins.dist-dir}"/>  
   </target>
   
   <target name="clean" depends="init">
@@ -140,6 +138,7 @@
   <target name="dist"
           description="Build the distribution archive for all the plugins"
           depends="init, test">
+    <mkdir dir="${plugins.dist-dir}"/>  
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
        basedir="${plugins.dir}/${plugin-name}"
        includes="**"
