@@ -190,7 +190,10 @@ FORREST SITE BUILDER
   </target>
 
   <!-- Sets up properties and filters -->
-  <target name="init" depends="init-props, init-skins"/>
+  <target name="init" depends="init-props, init-skins">
+    <available property="xml-forrest.jar.exists" file="${forrest.build.lib-dir}/xml-forrest.jar"/>
+    <fail unless="xml-forrest.jar.exists">You must build forrest before you can run it.  In ${forrest.root-dir} run './build.sh' (linux) or 'build' (windows)</fail>
+  </target>
 
   <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
@@ -211,7 +214,7 @@ FORREST SITE BUILDER
     <path id="forrest.cp">
          <pathelement path="${env.CLASSPATH}" />
          <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
-         <pathelement location="${forrest.build.lib-dir}/classes"/>
+         <pathelement location="${forrest.build.lib-dir}/xml-forrest.jar"/>
          <fileset dir="${forrest.jetty.lib-dir}">
            <include name="*.jar"/>
            <include name="*.JAR"/>
