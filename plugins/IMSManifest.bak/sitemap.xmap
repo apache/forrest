@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+  <!-- ============================================================ -->
+  <!-- IMS Maniifest Plugin                                         -->
+  <!-- This plugin replaces the site.xml and tabs.xml file with     -->
+  <!-- an IMS Manifest file conforming to the IMS specifications    -->
+  <!-- for Content Packages.                                        -->
+  <!--                                                              -->
+  <!-- In the absence of an IMSManifest.xml file the plugin will    -->
+  <!-- fallback to using the standard site.xml and tabs.xml files.  -->
+  <!-- ============================================================ -->
+
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+  <map:components>
+    <map:selectors>
+      <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
+    </map:selectors>
+  </map:components>
+  
+  <map:resources>
+    <map:resource name="skinit">
+        <map:select type="exists">
+          <map:when test="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+              <map:parameter name="notoc" value="{notoc}"/>
+              <!-- For backwards-compat with 0.2 - 0.4 skins -->
+              <map:parameter name="isfaq" value="{notoc}"/>
+              <map:parameter name="nopdf" value="{nopdf}"/>
+              <map:parameter name="path" value="{path}"/>
+              <map:parameter name="config-file" value="{project:skinconf}"/>
+            </map:transform>
+          </map:when>
+          <map:otherwise>
+            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/html/{type}.xsl">
+              <map:parameter name="notoc" value="{notoc}"/>
+              <!-- For backwards-compat with 0.2 - 0.4 skins -->
+              <map:parameter name="isfaq" value="{notoc}"/>
+              <map:parameter name="nopdf" value="{nopdf}"/>
+              <map:parameter name="path" value="{path}"/>
+              <map:parameter name="config-file" value="{project:skinconf}"/>
+            </map:transform>
+          </map:otherwise>
+        </map:select>
+      <map:serialize/>
+    </map:resource>
+
+  </map:resources>
+
+    
+  <map:pipelines>
+  
+   <!-- ============================================================ -->
+   <!-- Linkmap.xmap overrides                                       -->
+   <!-- ============================================================ -->
+  
+    <map:pipeline>
+      <map:match pattern="abs-linkmap">
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}imsmanifest.xml">
+            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+            <map:transform src="{forrest:plugins}/IMSManifest/resources/stylesheets/imsmanifest2site.xsl"/>
+          </map:when>
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml" />
+          </map:when>
+        </map:select>
+        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+        <map:serialize type="xml" />
+      </map:match>
+
+    </map:pipeline>
+    
+   <!-- ============================================================ -->
+   <!-- tabs.xmap overrides                                          -->
+   <!-- ============================================================ -->
+  
+    <map:pipeline >
+      <map:match pattern="**tab-*.html">
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}imsmanifest.xml">
+            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+            <map:transform src="{forrest:plugins}/IMSManifest/resources/stylesheets/imsmanifest2tabs.xsl"/>
+          </map:when>
+          <map:when test="{project:content.xdocs}tabs.xml">
+            <map:generate src="{project:content.xdocs}tabs.xml" />
+          </map:when>
+        </map:select>
+        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="tab2menu"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+        </map:call>
+      </map:match>      
+    </map:pipeline>
+ 
+    
+    <!-- ============================================================ -->
+    <!-- menu.xmap overrides                                          -->
+    <!-- ============================================================ -->
+    
+    <map:pipeline internal-only="false">
+
+      <map:match pattern="abs-menulinks">
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}imsmanifest.xml">
+            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+            <map:transform src="{forrest:plugins}/IMSManifest/resources/stylesheets/imsmanifest2site.xsl"/>
+            <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+            <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+            <map:serialize type="xml"/>
+          </map:when>
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml" />
+            <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+            <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+            <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
+            <map:serialize type="xml"/>
+          </map:when>
+        </map:select>
+      </map:match>
+
+      <map:match pattern="**menulinks-*">
+        
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}imsmanifest.xml">
+            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+            <map:transform src="{forrest:plugins}/IMSManifest/resources/stylesheets/imsmanifest2site.xsl"/>
+            <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+          </map:when>
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml" />
+            <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+          </map:when>
+        </map:select>
+
+        <map:select type="config">
+          <map:parameter name="value" value="{defaults:menu-scheme}"/>
+
+          <map:when test="tab_attributes">
+            <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+            <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
+            <map:transform src="{forrest:stylesheets}/site2site-selectnode.xsl">
+              <map:parameter name="path" value="{1}{2}"/>
+            </map:transform>
+          </map:when>
+
+        </map:select>
+
+        <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
+          <map:parameter name="path" value="{1}{2}" />
+        </map:transform>
+        <map:serialize type="xml" />
+      </map:match>
+    </map:pipeline>
+    
+  </map:pipelines>    
+</map:sitemap>
