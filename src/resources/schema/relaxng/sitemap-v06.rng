@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" 
-	 xmlns:sch="http://www.ascc.net/xml/schematron"
+         xmlns:sch="http://www.ascc.net/xml/schematron"
          xmlns="http://relaxng.org/ns/structure/1.0" 
          xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
          xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -71,6 +71,8 @@ CHANGE HISTORY:
               as additional configuration information. The exact contents
               depends on the implementation of each action, and since users can
               implement their own actions this content cannot be foreseen. (BD)
+20030212 V0.6 Add TagTransformer contents (VG)
+20030219 V0.6 Add new i18nTransformer contents <catalogues> (DC)
 
 ====================================================================
 -->
@@ -95,12 +97,12 @@ CHANGE HISTORY:
     <optional>
       <attribute name="default">
         <data type="string" /> 
-	<!-- CPA: in fact the default must always match the name attribute
-	of one of it's child elements. We will rely on a schematron schema to check
-	this (we cannot use ID/IDREF as there are multiple namespaces
-	e.g. map:generator uses a different namespace to
-	map:transformer) - NO - can't be done due to sitemap
-	  inheritance -->
+    	  <!-- CPA: in fact the default must always match the name attribute
+    	  of one of it's child elements. We will rely on a schematron schema to check
+    	  this (we cannot use ID/IDREF as there are multiple namespaces
+    	  e.g. map:generator uses a different namespace to
+    	  map:transformer) - NO - can't be done due to sitemap
+    	  inheritance -->
       </attribute>
     </optional>
   </define>
@@ -156,7 +158,7 @@ CHANGE HISTORY:
     </optional>
     <optional>
       <attribute name="pool-min">
-        <data type="positiveInteger" />
+        <data type="nonNegativeInteger" />
       </attribute>
     </optional>
     <optional>
@@ -282,6 +284,7 @@ CHANGE HISTORY:
 
 <!-- CPA: contents confirmed by inspection of I18nTransformer.java -->
   <define name="i18nTransformer.contents">
+    <optional><ref name="catalogues"/></optional>
     <optional><ref name="catalogue-name"/></optional>
     <optional><ref name="catalogue-location"/></optional>
     <optional><ref name="untranslated-text"/></optional>
@@ -329,6 +332,29 @@ CHANGE HISTORY:
     </zeroOrMore>
   </define>
 
+<!-- CH: contents confirmed by inspection of Web3RfcTransformer.java -->
+  <define name="web3RfcTransformer.contents">
+    <optional><element name="system"><text/></element></optional>
+  </define>
+
+  <define name="simpleFormExtractTransformer.contents">
+    <optional>
+       <element name="output">
+          <ref name="name.attr"/>
+          <text/>
+       </element>
+    </optional>
+  </define>
+
+<!-- VG: contents of TagTransformer from the scratchpad -->
+  <define name="tagTransformer.contents">
+    <optional>
+       <element name="transformer-hint">
+          <text/>
+       </element>
+    </optional>
+  </define>
+
 <!-- CPA: contents confirmed by inspection of AbstractTextSerializer.java -->
   <define name="textSerializer.contents">
     <optional><ref name="cdata-section-elements"/></optional>
@@ -341,6 +367,18 @@ CHANGE HISTORY:
     <optional><ref name="omit-xml-declaration"/></optional>
     <optional><ref name="standalone"/></optional>
     <optional><ref name="version"/></optional>
+  </define>
+
+  <define name="svg2jpegSerializer.contents">
+    <optional>
+       <element name="parameter">
+          <attribute name="name"/>
+          <attribute name="type">
+            <value type="string">float</value>
+          </attribute>
+          <attribute name="value"/>
+       </element>
+    </optional>
   </define>
 
 <!-- =============================================================== -->
@@ -410,7 +448,7 @@ CHANGE HISTORY:
           <ref name="map.flow-interpreters"/>
         </optional>
         <optional>
-          <ref name="map.pipelines"/>
+          <ref name="map.pipes"/>
         </optional>
       </interleave>
     </element>
@@ -470,13 +508,19 @@ CHANGE HISTORY:
     <element name="map:transformer">
       <ref name="map.transformer.attlist"/>
         <interleave>
-	  <ref name="traxTransformer.contents"/>
+          <ref name="traxTransformer.contents"/>
           <ref name="xsltTransformer.contents"/>
           <ref name="i18nTransformer.contents"/>
           <ref name="encodeURLTransformer.contents"/>
           <ref name="linkRewriterTransformer.contents"/>
+          <ref name="web3RfcTransformer.contents"/>
+          <ref name="simpleFormExtractTransformer.contents"/>
+          <ref name="tagTransformer.contents"/>
           <ref name="IdGeneratorTransformer.contents"/>
           <optional><ref name="mapping"/></optional>
+          <zeroOrMore>
+           <ref name="parameter"/>
+          </zeroOrMore>
         </interleave>
     </element>
   </define>
@@ -527,6 +571,29 @@ CHANGE HISTORY:
   </define>
   <define name="use-browser-capabilities-db.attlist" combine="interleave">
     <ref name="universal.attr"/>
+  </define>
+
+  <define name="catalogues">
+    <element name="catalogues">
+      <ref name="catalogues.attlist"/>
+      <oneOrMore>
+        <ref name="catalogue"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="catalogues.attlist" combine="interleave">
+    <ref name="default.attr"/>
+  </define>
+
+  <define name="catalogue">
+    <element name="catalogue">
+      <ref name="catalogue.attlist"/>
+    </element>
+  </define>
+  <define name="catalogue.attlist" combine="interleave">
+    <ref name="universal.attr"/>
+    <ref name="name.attr"/>
+    <attribute name="location"/>
   </define>
 
   <define name="catalogue-name">
@@ -604,7 +671,10 @@ CHANGE HISTORY:
   <define name="map.reader">
     <element name="map:reader">
       <ref name="map.reader.attlist"/>
-      <empty/> <!-- RNG: does reader ever have children? Its peers do. -->
+      <optional><ref name="database.reader.content"/></optional>
+      <zeroOrMore>
+       <ref name="parameter"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="map.reader.attlist" combine="interleave">
@@ -612,6 +682,11 @@ CHANGE HISTORY:
     <ref name="name.attr"/>
     <ref name="src.attr"/>
     <ref name="component.attr"/>
+  </define>
+
+  <define name="database.reader.content">
+     <!-- FIXME is this complete ? -->
+     <optional><element name="use-connection"><data type="string"/></element></optional>
   </define>
 
 <!-- Serializers ======================================= -->
@@ -624,8 +699,8 @@ CHANGE HISTORY:
     </element>
     <sch:pattern name="Test constraints on map:serialize">
       <sch:rule context="xmap:serialize">
-	<sch:assert test="count(following-sibling::*[not(self::xmap:handle-errors)])=0">
-	  map:serialize must be the last element in a pipeline (other than map:handle-errors).
+    	<sch:assert test="count(following-sibling::*[not(self::xmap:handle-errors)])=0">
+    	  map:serialize must be the last element in a pipeline (other than map:handle-errors).
         </sch:assert>
       </sch:rule>
     </sch:pattern>
@@ -641,6 +716,7 @@ CHANGE HISTORY:
     <element name="map:serializer">
       <ref name="map.serializer.attlist"/>
       <optional><ref name="textSerializer.contents"/></optional>
+      <optional><ref name="svg2jpegSerializer.contents"/></optional>
       <optional><ref name="set-content-length"/></optional>
       <optional><ref name="buffer-size"/></optional>
       <optional><ref name="user-config"/></optional>
@@ -832,10 +908,10 @@ CHANGE HISTORY:
     <zeroOrMore>
       <choice>
         <attribute>
-	  <anyName/>
-	</attribute>
-	<text/>
-	<ref name="anyElement"/>
+    	  <anyName/>
+    	</attribute>
+        <text/>
+        <ref name="anyElement"/>
       </choice>
     </zeroOrMore>
   </element>
@@ -916,7 +992,7 @@ CHANGE HISTORY:
   <define name="input-module">
     <element name="input-module">
       <ref name="input-module.attlist"/>
-      <data type="string" />
+      <zeroOrMore><ref name="anyElement"/></zeroOrMore>
     </element>
   </define>
   <define name="input-module.attlist" combine="interleave">
@@ -951,6 +1027,36 @@ CHANGE HISTORY:
     <ref name="name.attr"/>
     <ref name="src.attr"/>
     <ref name="component.attr"/>
+  </define>
+
+<!-- Pipes ======================================== -->
+  <define name="map.pipes">
+    <element name="map:pipes">
+      <ref name="map.pipes.attlist"/>
+      <zeroOrMore> 
+        <ref name="map.pipe"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="map.pipes.attlist" combine="interleave">
+    <ref name="universal.attr"/>
+    <ref name="default.attr"/>
+  </define>
+
+  <define name="map.pipe">
+    <element name="map:pipe">
+      <ref name="map.pipe.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="map.pipe.attlist" combine="interleave">
+    <ref name="universal.attr"/>
+    <ref name="name.attr"/>
+    <ref name="src.attr"/>
+    <ref name="component.attr"/>
+    <optional>
+       <ref name="autoCachingPoint"/>
+     </optional>
   </define>
 
 <!-- =============================================================== -->
@@ -1112,47 +1218,44 @@ CHANGE HISTORY:
         <zeroOrMore>
           <ref name="map.handle-errors"/>
         </zeroOrMore>
-        <optional>
-          <ref name="autoCachingPoint"/>
-        </optional>
       </optional>
 
       <!-- Schematron rules for map:pipeline follow -->
 
       <sch:pattern name="Test constraints on map:pipeline">
-	<sch:rule context="/xmap:sitemap/xmap:pipelines/xmap:pipeline">
-	  <sch:assert test="(@src and @name) 
-	                     or .//xmap:generate[not(ancestor::xmap:handle-errors)]
-	                     or .//xmap:aggregate[not(ancestor::xmap:handle-errors)]
-	                     or .//xmap:read[not(ancestor::xmap:handle-errors)]
-	                     or .//xmap:mount[not(ancestor::xmap:handle-errors)]
-	                     or .//xmap:redirect-to[not(ancestor::xmap:handle-errors)]
-	                     or .//xmap:call[not(ancestor::xmap:handle-errors)]">
-	    Pipeline with no map:generate|aggregate|act|mount|redirect-to|call, or src and name attributes, is illegal
-	  </sch:assert>
-	  <sch:assert test="not(.//*[namespace-uri()=namespace-uri(/xmap:sitemap)
-	                         and (local-name()='generate' or local-name()='aggregate' or local-name()='transform')
-			         and not(ancestor::xmap:handle-errors)])
-                            or .//*[namespace-uri()=namespace-uri(/xmap:sitemap)
-	                         and (local-name()='generate' or local-name()='aggregate' or local-name()='transform')
-			         and not(ancestor::xmap:handle-errors)]
-                                   [following::*[namespace-uri()=namespace-uri(/xmap:sitemap)
-                                                       and (local-name()='serialize' or local-name()='call')
-                                                       and not(ancestor::xmap:handle-errors)
-                                                ]/ancestor::xmap:pipeline[. = current()]
-                                   ]">
-	    Pipeline with map:generate|aggregate|transform must have map:serialize or map:call
-	  </sch:assert>
-	</sch:rule>
+    	 <sch:rule context="/xmap:sitemap/xmap:pipelines/xmap:pipeline">
+    	   <sch:assert test="(@src and @name) 
+    	                      or .//xmap:generate[not(ancestor::xmap:handle-errors)]
+    	                      or .//xmap:aggregate[not(ancestor::xmap:handle-errors)]
+    	                      or .//xmap:read[not(ancestor::xmap:handle-errors)]
+    	                      or .//xmap:mount[not(ancestor::xmap:handle-errors)]
+    	                      or .//xmap:redirect-to[not(ancestor::xmap:handle-errors)]
+    	                      or .//xmap:call[not(ancestor::xmap:handle-errors)]">
+    	     Pipeline with no map:generate|aggregate|act|mount|redirect-to|call, or src and name attributes, is illegal
+    	   </sch:assert>
+    	   <sch:assert test="not(.//*[namespace-uri()=namespace-uri(/xmap:sitemap)
+    	                        and (local-name()='generate' or local-name()='aggregate' or local-name()='transform')
+    	                        and not(ancestor::xmap:handle-errors)])
+    	                     or .//*[namespace-uri()=namespace-uri(/xmap:sitemap)
+    	                        and (local-name()='generate' or local-name()='aggregate' or local-name()='transform')
+    	                        and not(ancestor::xmap:handle-errors)]
+    	                                [following::*[namespace-uri()=namespace-uri(/xmap:sitemap)
+    	                                                    and (local-name()='serialize' or local-name()='call')
+    	                                                    and not(ancestor::xmap:handle-errors)
+    	                                             ]/ancestor::xmap:pipeline[. = current()]
+    	                                ]">
+    	     Pipeline with map:generate|aggregate|transform must have map:serialize or map:call
+    	   </sch:assert>
+    	 </sch:rule>
 
-	<sch:rule context="/xmap:sitemap/xmap:pipelines/xmap:pipeline//*[namespace-uri()=namespace-uri(/xmap:sitemap)
-                           and (local-name()='serialize' or local-name()='mount'  or local-name()='read'  
-                                or local-name()='redirect-to' or local-name()='call') ]">
-	  <sch:assert test="count(following-sibling::*[namespace-uri()=namespace-uri(/xmap:sitemap) 
-               and local-name() != 'handle-errors'])=0">
-	    Pipeline with component after map:serialize|read|mount|redirect-to|call is illegal 
-	  </sch:assert>
-	</sch:rule>
+    	 <sch:rule context="/xmap:sitemap/xmap:pipelines/xmap:pipeline//*[namespace-uri()=namespace-uri(/xmap:sitemap)
+    	                        and (local-name()='serialize' or local-name()='mount'  or local-name()='read'  
+    	                             or local-name()='redirect-to' or local-name()='call') ]">
+    	   <sch:assert test="count(following-sibling::*[namespace-uri()=namespace-uri(/xmap:sitemap) 
+    	            and local-name() != 'handle-errors'])=0">
+    	     Pipeline with component after map:serialize|read|mount|redirect-to|call is illegal 
+    	   </sch:assert>
+    	 </sch:rule>
       </sch:pattern>
     </element>
   </define>
@@ -1197,17 +1300,17 @@ CHANGE HISTORY:
       </optional>
     </element>
       <sch:pattern name="Test constraints on map:match and map:select">
-	<sch:rule context="xmap:match|xmap:when|xmap:otherwise[*]">
-	  <sch:assert test="*[namespace-uri()=namespace-uri(/xmap:sitemap)
-	                         and (local-name()='generate' or local-name()='transform'
-	                           or local-name()='serialize' or local-name()='aggregate'
-	                           or local-name()='read' or local-name()='redirect-to'
-	                           or local-name()='act' or local-name()='match' or local-name()='select' 
-	                           or local-name()='mount' or local-name()='call')
-			     ]">
-	    map:match|select without direct components, or map:mount|redirect-to|call|act|match|select is illegal
-	  </sch:assert>
-	</sch:rule>
+    	 <sch:rule context="xmap:match|xmap:when|xmap:otherwise[*]">
+    	   <sch:assert test="*[namespace-uri()=namespace-uri(/xmap:sitemap)
+    	                          and (local-name()='generate' or local-name()='transform'
+    	                            or local-name()='serialize' or local-name()='aggregate'
+    	                            or local-name()='read' or local-name()='redirect-to'
+    	                            or local-name()='act' or local-name()='match' or local-name()='select' 
+    	                            or local-name()='mount' or local-name()='call')
+    	              ]">
+    	     map:match|select without direct components, or map:mount|redirect-to|call|act|match|select is illegal
+    	   </sch:assert>
+    	 </sch:rule>
       </sch:pattern>
   </define>
   <define name="map.select.attlist" combine="interleave">
@@ -1405,21 +1508,21 @@ CHANGE HISTORY:
       <ref name="pipe.contents"/>
     </element>
       <sch:pattern name="Test constraints on map:handle-errors">
-	<sch:rule context="xmap:handle-errors">
-	  <sch:assert test="not(*[namespace-uri()=namespace-uri(/xmap:sitemap) 
-               and (local-name()='generate' or local-name()='mount')])">
-	    Error handler can't have: map:generate or map:mount.
-	  </sch:assert>
-	  <sch:assert test="*[namespace-uri()=namespace-uri(/xmap:sitemap) 
-               and (local-name()='serialize' or local-name()='call')]">
-	    Error handler must have map:serialize or map:call.
-	  </sch:assert>
-	</sch:rule>
-	<sch:rule context="xmap:handle-errors//xmap:serialize">
-	  <sch:assert test="not(following-sibling::*[namespace-uri()=namespace-uri(/xmap:sitemap)])">
-	    Error handler can not have any components after map:serialize
-	  </sch:assert>
-	</sch:rule>
+    	 <sch:rule context="xmap:handle-errors">
+    	   <sch:assert test="not(*[namespace-uri()=namespace-uri(/xmap:sitemap) 
+    	            and (local-name()='generate' or local-name()='mount')])">
+    	     Error handler can't have: map:generate or map:mount.
+    	   </sch:assert>
+    	   <sch:assert test="*[namespace-uri()=namespace-uri(/xmap:sitemap) 
+    	            and (local-name()='serialize' or local-name()='call')]">
+    	     Error handler must have map:serialize or map:call.
+    	   </sch:assert>
+    	 </sch:rule>
+    	 <sch:rule context="xmap:handle-errors//xmap:serialize">
+    	   <sch:assert test="not(following-sibling::*[namespace-uri()=namespace-uri(/xmap:sitemap)])">
+    	     Error handler can not have any components after map:serialize
+    	   </sch:assert>
+    	 </sch:rule>
       </sch:pattern>
   </define>
 
