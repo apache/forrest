@@ -80,10 +80,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   <!-- Whether to obfuscate email links -->
   <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
- <!-- If true, the font size script will not be rendered -->  
+ <!-- If true, the font size script will not be rendered -->
   <xsl:variable name="disable-font-script" select="//skinconfig/disable-font-script"/>
   <!-- If true, an the images on all external links will not be added -->
-  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>  
+  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
 
@@ -93,7 +93,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <xsl:if test="(//skinconfig/trail/link3/@name)and(//skinconfig/trail/link3/@name!='')"> &gt; <a href="{//skinconfig/trail/link3/@href}">  <xsl:value-of select="//skinconfig/trail/link3/@name"/></a> </xsl:if>
     <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"/>
   </xsl:template>
-  
+
   <xsl:template match="site">
     <html>
       <head>
@@ -185,19 +185,19 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <!-- Add links to any standards-compliance logos -->
   <xsl:template name="compliancy-logos">
     <xsl:if test="$filename = 'index.html' and //skinconfig/disable-compliance-links = 'false'">
-      <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
+      <a href="http://validator.w3.org/check/referer"><img class="logoImage"
           src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" title="Valid HTML 4.01!" height="31" width="88" border="0"/></a>
-          
-      <a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="logoImage" 
-          src="{$skin-img-dir}/vcss.png" 
+
+      <a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="logoImage"
+          src="{$skin-img-dir}/vcss.png"
           alt="Valid CSS!" title="Valid CSS!" height="31" width="88" border="0"/></a>
     </xsl:if>
   </xsl:template>
 
   <!-- Generates the PDF link -->
   <xsl:template match="div[@id='skinconf-pdflink']">
-    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
         <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
         PDF</a>
@@ -214,7 +214,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       </td>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- Generates the POD link -->
   <xsl:template match="div[@id='skinconf-podlink']">
     <xsl:if test="$disable-pod-link = 'false'">
@@ -224,20 +224,20 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       </td>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- Generates the XML link -->
   <xsl:template match="div[@id='skinconf-xmllink']">
     <xsl:if test="$disable-xml-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
-        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
-        xml</a>
+        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML"/><br/>
+        XML</a>
       </td>
     </xsl:if>
   </xsl:template>
 
   <!-- Generates the "printer friendly version" link -->
   <xsl:template match="div[@id='skinconf-printlink']">
-    <xsl:if test="$disable-print-link = 'false'"> 
+    <xsl:if test="$disable-print-link = 'false'">
 <script type="text/javascript" language="Javascript">
 function printit() {
   if (window.print) {
@@ -245,9 +245,7 @@ function printit() {
     window.print();
   }
 }
-</script>
 
-<script type="text/javascript" language="Javascript">
 var NS = (navigator.appName == "Netscape");
 var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
@@ -277,7 +275,7 @@ if (VERSION > 3) {
           <a href="{@href}" class="external">
             <xsl:apply-templates/>
           </a>
-       </xsl:when>       
+       </xsl:when>
        <xsl:otherwise>
         <!-- xsl:copy-of makes sure we copy <a href> as well as <a name>
              or any other <a ...> forms -->
@@ -298,10 +296,10 @@ if (VERSION > 3) {
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="minitoc">  
+  <xsl:template name="minitoc">
     <xsl:param name="tocroot"/>
     <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
-    <xsl:if test="contains($config/toc/@location,'page')"> 
+    <xsl:if test="contains($config/toc/@location,'page')">
       <ul class="minitoc">
         <xsl:for-each select="$tocroot/tocitem">
           <li>
@@ -320,23 +318,21 @@ if (VERSION > 3) {
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="html-meta">  
+  <xsl:template name="html-meta">
     <meta name="Generator" content="Apache Forrest"/>
-    <meta>
-      <xsl:attribute name="name">Forrest-version</xsl:attribute>
+    <meta name="Forrest-version">
       <xsl:attribute name="content">
         <xsl:value-of select="//info/forrest-version"/>
       </xsl:attribute>
     </meta>
-    <meta>
-      <xsl:attribute name="name">Forrest-skin-name</xsl:attribute>
+    <meta name="Forrest-skin-name">
       <xsl:attribute name="content">
         <xsl:value-of select="//info/project-skin"/>
       </xsl:attribute>
     </meta>
   </xsl:template>
 
-  <xsl:template name="feedback">  
+  <xsl:template name="feedback">
     <div id="feedback">
       <xsl:value-of select="$config/feedback"/>
       <xsl:choose>

@@ -29,10 +29,10 @@ Section handling
   - <a name/> anchors are added if the id attribute is specified
 
 -->
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:param name="dynamic-page" select="'false'"/>  
+  <xsl:param name="dynamic-page" select="'false'"/>
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
   <!-- <xsl:include href="split.xsl"/> -->
@@ -56,8 +56,8 @@ Section handling
   <xsl:template match="document">
     <div class="content">
       <table summary="" class="title">
-        <tr> 
-          <td valign="middle"> 
+        <tr>
+          <td valign="middle">
             <xsl:if test="normalize-space(header/title)!=''">
               <h1>
                 <xsl:value-of select="header/title"/>
@@ -139,6 +139,7 @@ Section handling
     <div class="frame {local-name()}">
       <div class="label">
         <xsl:choose>
+          <!-- FIXME: i18n Transformer here -->
           <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
           <xsl:when test="local-name() = 'note'">Note</xsl:when>
           <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
@@ -201,8 +202,8 @@ Section handling
       <xsl:apply-templates/>
 <!--
     <xsl:call-template name="format">
-    <xsl:with-param select="." name="txt" /> 
-     <xsl:with-param name="width">80</xsl:with-param> 
+    <xsl:with-param select="." name="txt" />
+     <xsl:with-param name="width">80</xsl:with-param>
      </xsl:call-template>
 -->
     </pre>
@@ -214,13 +215,8 @@ Section handling
 
   <xsl:template match="icon">
     <xsl:apply-templates select="@id"/>
-    <img src="{@src}" alt="{@alt}" class="icon">
-      <xsl:if test="@height">
-        <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@width">
-        <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
-      </xsl:if>
+    <img class="icon">
+        <xsl:copy-of select="@height | @width | @src | @alt"/>
     </img>
   </xsl:template>
 
@@ -232,13 +228,8 @@ Section handling
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div align="center">
-      <img src="{@src}" alt="{@alt}" class="figure">
-        <xsl:if test="@height">
-          <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
-        </xsl:if>
-        <xsl:if test="@width">
-          <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
-        </xsl:if>
+      <img class="figure">
+        <xsl:copy-of select="@height | @width | @src | @alt"/>
       </img>
     </div>
   </xsl:template>
@@ -246,11 +237,7 @@ Section handling
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
     <table cellpadding="4" cellspacing="1" class="ForrestTable">
-      <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
-      <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
-      <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
-      <xsl:if test="@class"><xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute></xsl:if>
-      <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
+      <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor"/>
       <xsl:apply-templates/>
     </table>
   </xsl:template>
@@ -264,9 +251,10 @@ Section handling
   <xsl:template match="header/authors">
     <xsl:for-each select="person">
       <xsl:choose>
-        <xsl:when test="position()=1">by&#160;</xsl:when>
-        <xsl:otherwise>,&#160;</xsl:otherwise>
+        <xsl:when test="position()=1">by</xsl:when>
+        <xsl:otherwise>,</xsl:otherwise>
       </xsl:choose>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="@name"/>
     </xsl:for-each>
   </xsl:template>
@@ -287,19 +275,15 @@ Section handling
       </xsl:choose>
     </span>
   </xsl:template>
-  
+
   <xsl:template match="@major">
      v<xsl:value-of select="."/>
   </xsl:template>
-  
-  <xsl:template match="@minor">
+
+  <xsl:template match="@minor | @fix">
      <xsl:value-of select="concat('.',.)"/>
   </xsl:template>
-  
-  <xsl:template match="@fix">
-     <xsl:value-of select="concat('.',.)"/>
-  </xsl:template>
-  
+
   <xsl:template match="@tag">
      <xsl:value-of select="concat('-',.)"/>
   </xsl:template>
@@ -340,8 +324,8 @@ Section handling
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-                                                                                
-  <!--  Templates for "toc" mode.  This will generate a complete 
+
+  <!--  Templates for "toc" mode.  This will generate a complete
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
 
@@ -379,6 +363,6 @@ Section handling
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
-  
+
 </xsl:stylesheet>
 
