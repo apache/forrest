@@ -20,53 +20,54 @@
     <title>Using project sitemaps</title> 
   </header> 
   <body> 
-    <section>
+    <section id="introduction">
       <title>Introduction</title>
-      
-      <p>With Forrest 0.6 it's now possible for projects to "plugin" 
-      to our sitemaps without having to copy stuff; this will make possible 
-      hassle-free update fo future Forrest versions.</p>
+
+      <p>With Forrest 0.6 it is now possible for projects to "plugin" 
+      to our sitemaps, without needing to copy the main sitemaps and keep
+      them them synchonised. This will enable hassle-free update to
+      future Forrest versions.</p>
     </section>
 
-    <section>
+    <section id="how">
       <title>How does it work?</title>
 
       <p>If a project has a <code>sitemap.xmap</code> file in it's 
-      documentation dir, it gets mounted automatically by Forrest and 
-      it becomes part of the processing: it's a preprocessing step, and 
-      it's the first one to handle the request. Because of this it can 
-      serve any file directly instead of Forrest: if it doesn't want to 
+      documentation dir, that gets mounted automatically by Forrest and 
+      becomes part of the processing: it is a preprocessing step, and 
+      is the first one to handle the request. Because of this it can 
+      serve any file directly. If it does not want to 
       serve a file, it can simply not match the URL and Forrest will take 
       care of it as usual.</p>
 
       <p>The cool thing is that if that pipeline serves an xml representation, 
       Forrest will provide a skinned version of it.</p>
 
-      <p>So if the project sitemap matches test.xml, and serves a correct 
-      documentDTD file, then the user will see test.html fully rendered by 
-      Forrest.</p>
+      <p>So if the project sitemap matches test.xml and transforms that to a
+      correctly structured Forrest intermediate "document-v*",
+      then the user will see test.html fully rendered by Forrest.</p>
 
-      <p>Of course, to resolve the directories in your sitemap it's important 
-      to use the 'project:' and 'forrest:' variables, to prevent any possible 
+      <p>Of course, to resolve the directories in your sitemap it is important 
+      to use the 'project:' and 'forrest:' variables to prevent any possible 
       issue in the future.</p>
     </section>
-    
-    <section>
-      <title>Example uses of this technique</title>
-      <p>Here are some examples ...</p>
 
-      <section>
+    <section id="examples">
+      <title>Example uses of this technique</title>
+
+      <section id="generate-site-and-tabs">
         <title>Generating site.xml and tabs.xml</title>
         <p>If you are using some other content packaging technique, such as
         IMS Content Packages, you will want to generate the site.xml and tabs.xml
         files from your content package. This can be done by creating custom
-        versions of <code>linkmap.xmap</code>, <code>menu.xmap</code> and
+        versions of <code>linkmap.xmap</code> and <code>menu.xmap</code> and
         <code>tabs.xmap</code> in your project directory.</p>
 
-        <p>As will custom sitemaps (see above) Forrest will automatically detect
+        <p>As with custom sitemaps (see above) Forrest will automatically detect
         the presence of a customised version of any of these files and will
         use them appropriately. These files act as a preprocessor stage and
-        any unhandled matches will be processed by the normal Forrest Xmap files.
+        any matches which are not handled will be processed by the normal
+        Forrest *.xmap files.
         </p>
       </section>
     </section>
