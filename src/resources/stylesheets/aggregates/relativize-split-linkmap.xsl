@@ -67,6 +67,7 @@ Jeff Turner <jefft@apache.org>
         <xsl:when test="contains(., '.png') or
           contains(., '.jpeg') or
           contains(., '.jpg') or
+          contains(., '.gif') or
           contains(., '.tif')">
           <!-- Image links are always relative -->
           <xsl:value-of select="$root"/><xsl:value-of select="."/>
