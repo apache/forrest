@@ -461,7 +461,7 @@ document.write("Last Published: " + document.lastModified);
 
           <xsl:choose>
             <xsl:when test="a">
-              <div class="menuitem"><a href="{a/@href}"><xsl:value-of select="a" /></a></div>
+              <div class="menuitem"><a href="{a/@href}" title="{a/@title}"><xsl:value-of select="a" /></a></div>
             </xsl:when>
             <xsl:when test="div/@class='current'">
               <div class="menupage">
