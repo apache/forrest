@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/11/09 10:15:17 $              |
+    |             $Date: 2003/11/13 08:23:48 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -635,7 +635,7 @@ ${project.site-dir}
   <!-- ===============================================================
        Prepares the Lucene context indexing the site. [RPR]
        =============================================================== -->
-  <target name="lucene-index" depends="init, -prepare-classpath" unless="stop-lucene-indexer">
+  <target name="lucene-index" depends="init, -prepare-classpath" if="use-lucene-indexer">
     <java classname="org.apache.forrest.search.ForrestIndexer"
       dir="${project.webapp}"
       fork="true"
@@ -688,9 +688,17 @@ ${project.site-dir}
         <include name="*jar" unless="jdk1.4+"/>
       </fileset>
     </copy>
-    <!-- Index files for Lucene [RPR] -->
-    <condition property="stop-lucene-indexer">
-      <istrue value="${skinconfig.disable-lucene}"/>
+    <!-- Prepare the Lucene search index -->
+    <!-- FIXME: There must be a better way to configure this.
+         Is this really a concern of the skinconf?
+         The indexer must be off by default. If the optional skinconf parameter
+         "disable-lucene" is missing or false, then off. 
+    -->
+    <condition property="use-lucene-indexer">
+      <!-- sorry for the convolution -->
+      <not>
+        <isfalse value="${skinconfig.disable-lucene}"/>
+      </not>
     </condition>
     <antcall target="lucene-index"/>
 
