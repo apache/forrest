@@ -81,7 +81,19 @@
   <map:actions>
    <!-- <map:action logger="sitemap.action.request" name="request" src="org.apache.cocoon.acting.RequestParamAction"/> -->
     <map:action logger="sitemap.action.resource-exists" name="resource-exists" src="org.apache.cocoon.acting.ResourceExistsAction"/>
+    <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.components.sourcetype.SourceTypeAction">
+      <sourcetype name="document-v11">
+        <document-declaration public-id="-//APACHE//DTD Documentation V1.1//EN"/>
+      </sourcetype>
+      <sourcetype name="howto-v10">
+        <document-declaration public-id="-//APACHE//DTD How-to V1.0//EN"/>
+      </sourcetype>
+    </map:action>
   </map:actions>
+
+  <map:selectors>
+    <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector"/>
+  </map:selectors>
 
   <!--
      The different pipeline implementations
@@ -133,6 +145,20 @@
 
   <map:resource name="skin-read">
     <map:read src="skins/{forrest:skin}/{path}" mime-type="{mime-type}"/>
+  </map:resource>
+
+  <!-- Checks the document type of the resource passed in the "src" parameter
+       and converts it to document if necessary -->
+  <map:resource name="transform-to-document">
+    <map:act type="sourcetype" src="{src}">
+      <map:select type="parameter">
+        <map:parameter name="parameter-selector-test" value="{sourcetype}"/>
+        <map:when test="howto-v10">
+          <map:transform src="library/xslt/howto2document.xsl" label="content"/>
+        </map:when>
+        <map:otherwise/>
+      </map:select>
+    </map:act>
   </map:resource>
 
  </map:resources>
@@ -254,15 +280,6 @@
    <map:serialize type="xml" />
  </map:match>
 
- <!-- Any other howto directories get transformed, without revisions -->
- <map:match pattern="body-**howto/*.xml">
-   <map:generate src="content/xdocs/{1}howto/{2}.xml"/>
-   <map:transform src="library/xslt/howto2document.xsl" label="content"/>
-   <map:call resource="skinit">
-     <map:parameter name="type" value="document2html"/>
-     <map:parameter name="path" value="{1}howto/{2}.xml"/>
-   </map:call>
- </map:match>
 
 
    <!-- Generate the "doclist" - list of all documentation
@@ -309,15 +326,21 @@
    <!-- Generates body HTML for files in subdirs -->
    <map:match pattern="body-**/*.xml">
     <map:generate src="content/xdocs/{1}/{2}.xml"/>
+    <map:call resource="transform-to-document">
+     <map:parameter name="src" value="content/xdocs/{1}/{2}.xml"/>
+    </map:call>
     <map:call resource="skinit">
      <map:parameter name="type" value="document2html"/>
      <map:parameter name="path" value="{1}/{2}.xml"/>
     </map:call>
-    </map:match>
+   </map:match>
 
    <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
     <map:generate src="content/xdocs/{1}.xml"/>
+    <map:call resource="transform-to-document">
+     <map:parameter name="src" value="content/xdocs/{1}.xml"/>
+    </map:call>
     <map:call resource="skinit">
      <map:parameter name="type" value="document2html"/>
      <map:parameter name="path" value="{1}.xml"/>
@@ -426,15 +449,12 @@
     <map:serialize type="fo2pdf"/>
    </map:match>
 
-   <map:match pattern="community/howto/**.pdf">
-    <map:generate src="content/xdocs/community/howto/{1}.xml"/>
-    <map:transform src="library/xslt/howto2document.xsl" label="content"/>
-    <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl"/>
-    <map:serialize type="fo2pdf"/>
-   </map:match>
 
    <map:match pattern="**.pdf">
     <map:generate src="content/xdocs/{1}.xml"/>
+    <map:call resource="transform-to-document">
+     <map:parameter name="src" value="content/xdocs/{1}.xml"/>
+    </map:call>
     <map:transform src="skins/{forrest:skin}/xslt/fo/document2fo.xsl"/>
     <map:serialize type="fo2pdf"/>
    </map:match>
