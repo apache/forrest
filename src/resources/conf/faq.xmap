@@ -23,7 +23,7 @@
         </sourcetype>
       </map:action>
     </map:actions>
- 
+
     <map:selectors default="browser">
       <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
     </map:selectors>
@@ -53,7 +53,7 @@
       </map:act>
       <map:transform type="idgen" />
     </map:resource>
- 
+
     <map:resource name="skinit">
       <map:transform src="skins/{forrest:skin}/xslt/html/{type}.xsl">
         <map:parameter name="notoc" value="{notoc}"/>
@@ -75,14 +75,14 @@
 
     <map:pipeline>
 
-    <!-- ============================================================ -->
-    <!-- INTERMEDIATE FORMATS                                         -->
-    <!-- ============================================================ -->
+      <!-- ============================================================ -->
+      <!-- INTERMEDIATE FORMATS                                         -->
+      <!-- ============================================================ -->
 
-    <!--Unfortunately we need to override all the document2html stuff too,
-    since notoc must be set to true. -->
-    <map:match pattern="**body-*.xml">
-      <map:generate src="cocoon:/{1}{2}.xml"/>
+      <!--Unfortunately we need to override all the document2html stuff too,
+      since notoc must be set to true. -->
+      <map:match pattern="**body-*.xml">
+        <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="xinclude"/>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap">
           <map:parameter name="schemes" value="site ext"/>
