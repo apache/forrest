@@ -3,8 +3,6 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:profile="http://apache.org/cocoon/profiler/1.0">
 
- <xsl:import href="xml2html.xsl"/>
-
  <xsl:param name="key"/>
  <xsl:param name="result"/>
  <xsl:param name="component"/>
@@ -269,9 +267,7 @@
 
     <xsl:choose>
      <xsl:when test="profile:fragment">
-      <xsl:for-each select="profile:fragment">
-       <xsl:apply-templates mode="xml2html"/>
-      </xsl:for-each>
+       <xsl:apply-templates/>
      </xsl:when>
      <xsl:otherwise>
       <b>Fragment not available!</b>
