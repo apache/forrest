@@ -14,6 +14,6 @@ if [ ! -p "$NAMEDPIPE" -a -e "$NAMEDPIPE" ]; then
   exit
 fi
 [ ! -e "$NAMEDPIPE" ] && mkfifo $NAMEDPIPE
-./overseer < $NAMEDPIPE > overseer.log &
+nohup ./overseer < $NAMEDPIPE > overseer.log &
 echo overseer pid: $!
 tail -f $WEBAPP/WEB-INF/refresh_log.txt overseer.log
