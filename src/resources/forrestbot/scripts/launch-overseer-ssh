@@ -1,0 +1,33 @@
+#!/bin/sh
+
+###################################################
+# Convenience script for running 'overseer' for use
+# by the webapp
+###################################################
+
+. `dirname $0`/local-vars
+
+NAMEDPIPE=$WEBAPP/WEB-INF/commands
+
+if [ ! -p "$NAMEDPIPE" -a -e "$NAMEDPIPE" ]; then
+  echo "----------------------------------"
+  echo "ERROR: The file:"
+  echo "  $NAMEDPIPE"
+  echo "exists and is not a named pipe. Please delete it and try again"
+  echo "----------------------------------"
+  exit
+fi
+[ ! -e "$NAMEDPIPE" ] && mkfifo $NAMEDPIPE
+
+OVERSEER_LOG=overseer.log
+
+echo "-------------------------------------"
+echo "Forrestbot 'overseer' server launched"
+echo ""
+echo "Instructions:"
+echo " 1) Type the ssh passphrase"
+echo " 2) ctrl-z this parent process"
+echo " 3) Type 'bg'"
+echo "------------------------------------"
+
+nohup ssh-agent bash -c "ssh-add > /dev/null && exec nohup ./overseer < $NAMEDPIPE > $OVERSEER_LOG"
