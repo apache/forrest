@@ -59,8 +59,9 @@ package org.apache.forrest.yer.libre;
 import org.apache.avalon.framework.component.Composable;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.excalibur.xml.Parser;
-import org.apache.avalon.excalibur.xml.EntityResolver;
+import org.apache.excalibur.xml.sax.SAXParser;
+import org.apache.excalibur.xml.dom.DOMParser;
+import org.apache.excalibur.xml.EntityResolver;
 import org.apache.xml.resolver.tools.CatalogResolver;
 //import org.apache.cocoon.components.resolver.Resolver;
 import org.apache.forrest.yer.hierarchy.HierarchyConfig;
@@ -71,7 +72,7 @@ import org.xml.sax.XMLReader;
 //import org.xml.sax.EntityResolver;
 
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.SAXParser;
+// import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
@@ -88,7 +89,7 @@ import java.io.IOException;
 /** Class <code>org.apache.forrest.yer.libre.LibreConfigHelper</code> ...
  * 
  * @author $Author: jefft $
- * @version CVS $Id: LibreConfigHelper.java,v 1.4 2002/11/05 05:52:41 jefft Exp $
+ * @version CVS $Id: LibreConfigHelper.java,v 1.5 2003/03/15 06:18:29 jefft Exp $
  */
 public class LibreConfigHelper implements Composable
 {
@@ -113,7 +114,7 @@ public class LibreConfigHelper implements Composable
     LibreConfigBuilder lcb = new LibreConfigBuilder(parentCfg, this);
     if (this.manager != null) {
       try {
-        Parser parser = getExcaliburParser();
+        SAXParser parser = getExcaliburSAXParser();
         parser.parse(new InputSource(fromStream), lcb);
       } catch(SAXException e) {
         e.printStackTrace();
@@ -134,10 +135,20 @@ public class LibreConfigHelper implements Composable
     return lcb.getLibreConfig();
   }
 
-  public Parser getExcaliburParser(){
+  public SAXParser getExcaliburSAXParser(){
     if (this.manager == null) return null;
     try {
-      return (Parser)this.manager.lookup(Parser.ROLE);
+      return (SAXParser)this.manager.lookup(SAXParser.ROLE);
+    } catch(ComponentException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public DOMParser getExcaliburDOMParser(){
+    if (this.manager == null) return null;
+    try {
+      return (DOMParser)this.manager.lookup(DOMParser.ROLE);
     } catch(ComponentException e) {
       e.printStackTrace();
     }
@@ -155,7 +166,7 @@ public class LibreConfigHelper implements Composable
       // but namespace-aware.
       spf.setNamespaceAware(true);
       spf.setValidating(false);
-      SAXParser sp = spf.newSAXParser();
+      javax.xml.parsers.SAXParser sp = spf.newSAXParser();
       parser = sp.getXMLReader();
       parser.setEntityResolver(getCatalogResolver());
     } catch(FactoryConfigurationError error) {

@@ -76,8 +76,8 @@ import java.util.Map;
 
 /** Class <code>org.apache.forrest.yer.use.cocoon.HierarchyGenerator</code> ...
  * 
- * @author $Author: mpo $
- * @version CVS $Id: HierarchyGenerator.java,v 1.5 2003/01/09 00:06:46 mpo Exp $
+ * @author $Author: jefft $
+ * @version CVS $Id: HierarchyGenerator.java,v 1.6 2003/03/15 06:18:29 jefft Exp $
  */
 public class HierarchyGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable {
@@ -117,7 +117,7 @@ extends ComposerGenerator implements CacheableProcessingComponent, Recyclable {
     super.setup(resolver, objectModel, src, par);
     //this is a dirty hack!
       try {
-          this.startLocation = resolver.resolveURI(super.source).getSystemId();
+          this.startLocation = resolver.resolveURI(super.source).getURI();
           this.theDepth = par.getParameterAsInteger(DEPTH_PARAMETER, DEPTH_DEFAULT);
       } catch (SourceException e) {
           getLogger().error("Can not resolve " + super.source);
