@@ -424,7 +424,7 @@ Use the 'seed' target to create a template project structure.
        param: debuglevel for logging ${project.debuglevel}
        param: location of log-file ${project.logkitfile}
        =============================================================== -->
- <target name="site" depends="ensure-content, init, prepare-context, clean-site, prepare-classpath"
+ <target name="site" depends="ensure-content, validate, init, prepare-context, clean-site, prepare-classpath"
    if="project.content.present"
          description="Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this
@@ -529,26 +529,6 @@ ${project.war}
   </target>
 
 
-  <!-- ===============================================================
-       Validates all XML documents in the projects-context dir.
-       param: location of siteplan ${forrest.siteplan} (future)
-
-       TODO: based on the siteplan we could produce also the special 
-       inline catalog format this task is needing. (in combination with 
-       the new <import> of ant that could be really snap)
-       =============================================================== -->
-  <target name="validate" depends="init, prepare-context, prepare-classpath">
-    <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
-      className="org.apache.xerces.parsers.SAXParser"
-      classpathref="forrest.cp">
-      <fileset dir="${project.ctxt-dir}">
-        <include name="content/xdocs/*.xml"/>
-        <include name="*.x*" />
-        <exclude name="*build.xml"/>
-      </fileset>
-    </xmlvalidate>
-  </target>
-
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
@@ -600,6 +580,26 @@ What to do now?
 Thanks for using Apache Forrest
 -------------------------------
     </echo>
+  </target>
+
+  <!-- ===============================================================
+       Validates all XML documents in the projects-context dir.
+       =============================================================== -->
+  <target name="validate" depends="init-props">
+    <xmlvalidate failonerror="no" lenient="yes" warn="yes">
+      <xmlcatalog>
+        <catalogfiles dir="${project.schema-dir}">
+          <include name="catalog" />
+        </catalogfiles>
+        <catalogfiles dir="${forrest.home}/context/resources/schema">
+          <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+      <fileset dir="${project.xdocs-dir}">
+        <include name="*.x*" />
+        <exclude name="*build.xml"/>
+      </fileset>
+    </xmlvalidate>
   </target>
 
 </project>
