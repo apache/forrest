@@ -545,12 +545,16 @@ Revision:
 
       <xsl:template match="figure">
             <table>
-                  <tr>
-                        <td>
-                              <xsl:value-of select="title"/>
-                        </td>
-                  </tr>
-                  <xsl:apply-templates select="*[not(self::title)]"/>
+                <tr>
+                    <td>
+                        <xsl:value-of select="title"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <xsl:apply-templates select="*[not(self::title)]"/>
+                    </td>
+                </tr>
             </table>
       </xsl:template>
 
@@ -563,24 +567,14 @@ Revision:
       </xsl:template>
 
       <xsl:template match="graphic|imagedata">
-           <table>
-            <tr>
-                  <td>
-                        <img alt="{@srccredit}" src="{@fileref}"/>
-                  </td>
-            </tr>
+            <img alt="{@srccredit}" src="{@fileref}"/>
             <xsl:if test="@srccredit">
-                  <tr>
-                        <td>
-                              <ul>
-                                    <li>
-                                          <xsl:value-of select="@srccredit"/>
-                                    </li>
-                              </ul>
-                        </td>
-                  </tr>
+                <ul>
+                      <li>
+                          <xsl:value-of select="@srccredit"/>
+                      </li>
+                </ul>
             </xsl:if>
-           </table>
       </xsl:template>
       <xsl:template match="simplelist">
             <ul>
