@@ -163,31 +163,15 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
   </target>
 
   <target name="validate-sitemap" depends="validation-props"
-    if="validate.sitemap" description="Validate the project sitemaps">
-    <available property="version-specific-sitemap" file="${sitemap-dir}/forrest-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/aggregate-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/dtd-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/faq-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/forrest-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/issues-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/linkmap-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/menu-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/profiler-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/raw-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/resources-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/revisions-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/sitemap-${version}.xmap" type="file"/>
-    <available property="version-specific-sitemap" file="${sitemap-dir}/status-${version}.xmap" type="file"/>
-
+    if="validate.sitemap" description="Validate the project sitemap">
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${content-dir}"
         includes="${forrest.validate.sitemap.includes}"
         excludes="${forrest.validate.sitemap.excludes}">
-        <include name="*.xmap" unless="version-specific-sitemap"/>
-        <include name="*-${version}.xmap" if="version-specific-sitemap"/>
+        <include name="sitemap.xmap"/>
       </fileset>
     </jing>
-    <echo message="...validated sitemap"/>
+    <echo message="...validated project sitemap"/>
   </target>
 
   <target name="validate-stylesheets" depends="validation-props"
