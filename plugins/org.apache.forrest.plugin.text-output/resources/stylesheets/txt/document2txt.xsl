@@ -256,6 +256,26 @@ No navigation is provided and no rendering of graphics is attempted.
 
   </xsl:template>
 
+  <xsl:template match="div|span">
+    <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+    <xsl:apply-templates>
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="width" select="$width"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="div|span" mode="in-list">
+    <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+    <xsl:apply-templates mode="in-list">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="width" select="$width"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
   <xsl:template match="ol|ul">
     <xsl:param name="level" select="'1'"/>
     <xsl:param name="width"
