@@ -22,7 +22,6 @@
 <document>
   <header>
     <title>Forrest Sitemap Reference</title>
-    <version>$Revision: 1.6 $</version>
   </header>
   <body>
     <p>
@@ -169,10 +168,10 @@
       </p>
       <p>
         Source pipelines always have a <code>.xml</code> extension.  Thus, 
-        <link href="index.xml">index.xml</link> gives you the XML source for the
-        index page.  Likewise, <link href="faq.xml">faq.xml</link> gives you XML
+        <link href="../index.xml">index.xml</link> gives you the XML source for the
+        index page.  Likewise, <link href="../faq.xml">faq.xml</link> gives you XML
         for the FAQ (transformed from FAQ syntax), and 
-        <link href="changes.xml">changes.xml</link> returns XML from status.xml.
+        <link href="../changes.xml">changes.xml</link> returns XML from status.xml.
         Take any page, and replace its extension (<code>.html</code> or
         <code>.pdf</code>) with <code>.xml</code>, and you'll have the Source
         XML.
@@ -204,21 +203,27 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           <link href="site:cap">SourceTypeAction</link> to work out the type of XML
           it is processing, and converts it to doc-v12 if necessary.
         </p>
-        <p>For instance, say we are rendering <link href="site:multi-page/step1">a
-            Howto document</link> called 'step1.xml'.  It contains this DOCTYPE
+        <p>For instance, say we are rendering <link href="site:write-howto">a
+            Howto document</link> called 'howto-howto.xml'.  It contains this DOCTYPE
           declaration:</p>
-        <source>&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.0//EN" "howto-v10.dtd"></source>
+        <source>&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.2//EN" "http://forrest.apache.org/dtd/howto-v12.dtd"></source>
         <p>The SourceTypeAction sees this, and applies this transform to get it
           to doc-v12:</p>
         <source><![CDATA[
-          <map:when test="howto-v10">
-            <map:transform src="resources/stylesheets/howto2document.xsl" />
+          <map:when test="howto-v12">
+            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
           </map:when>
           ]]></source>
+          <!--
+    if we link to an intermediate .xml file, the CLI crawler tries
+    to fetch the @hrefs from it but they still have site: in them 
+    which causes it to break
+    
         <p>
           The intermediate result is visible at the URL 
-          <link href="site:multi-page/step1">community/howto/multi/step1.xml</link>.
+          <link href="../howto/howto-howto.xml">howtos/howto-howto.xml</link>.
         </p>
+    -->
       </section>
       <section>
         <title>Other source pipelines</title>
@@ -342,10 +347,10 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           &lt;/map:match&gt;
         </source>
         <p>
-          So <link href="index.html">index.html</link> is formed from
-          aggregating <link href="body-index.html">body-index.html</link>, 
-          <link href="menu-index.html">menu-index.html</link> and 
-          <link href="tab-index.html">tab-index.html</link>, and then applying the
+          So <link href="../index.html">index.html</link> is formed from
+          aggregating <link href="../body-index.html">body-index.html</link>, 
+          <link href="../menu-index.html">menu-index.html</link> and 
+          <link href="../tab-index.html">tab-index.html</link>, and then applying the
           <code>site2xhtml.xsl</code> stylesheet to the result.
         </p>
         <p>
@@ -740,8 +745,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             ]]></source>
           <p>You can try these URIs out directly on a live Forrest to see what
             is going on (for example, Forrest's own 
-            <link href="abs-linkmap">abs-linkmap</link> and 
-            <link href="linkmap-index.html">linkmap-index.html</link>.
+            <link href="../abs-linkmap">abs-linkmap</link>).
           </p>
         </section>
       </section>
