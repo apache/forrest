@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/12/11 15:30:39 $              |
+    |             $Date: 2003/12/21 00:31:56 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -54,12 +54,14 @@ FORREST SITE BUILDER
     <property name="/" value="${file.separator}"/>
     <echo message="Loading project specific properties from ${project.home}${/}forrest.properties" />
     <property file="${project.home}/forrest.properties" />
+    <echo message="Loading user specific properties from ${user.home}${/}forrest.properties" />
+    <property file="${user.home}/forrest.properties" />
+    <echo message="Loading default properties from ${forrest.home}${/}default-forrest.properties" />
     <property file="${forrest.home}/default-forrest.properties" />
 
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
     <property name="forrest.skins-dir"   location="${forrest.home}/context/skins"/>   
-    <property name="project.name"        value="my-project"    />
     <property name="project.build-dir"   location="${project.home}/build"    />
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
@@ -70,18 +72,11 @@ FORREST SITE BUILDER
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
     
     <property name="project.brokenlinkfile" location="${project.build-dir}/brokenlinks.xml"/>
-    <property name="project.debuglevel"     value="ERROR"                         />
-    <property name="project.start-uri"      value="index.html"                    />
     <property name="project.configfile"     value="${project.webapp}/WEB-INF/cli.xconf" />
     <property name="project.logkitfile"     value="${project.webapp}/WEB-INF/logkit.xconf" />
     <property name="project.logger"         value="" />
-    <property name="project.i18n"           value="false" />
 
-    <!-- use of these property should be removed when the siteplan becomes active -->
-    <property name="project.skin"        value="forrest-site" />
-    <property name="project.menu-scheme" value="tab_attributes" />
     <property name="status"      location="${project.home}/${project.status}" />
-    <property name="project.bugtracking-url" value="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=" />
 
     <!-- FIXME: rename project.content-dir to project.documentation-dir -->
     <property name="content-dir" location="${project.home}/${project.content-dir}" />
@@ -89,9 +84,6 @@ FORREST SITE BUILDER
     <property name="sitemap-dir"     location="${project.home}/${project.sitemap-dir}" />
     <property name="xdocs-dir"   location="${project.home}/${project.xdocs-dir}" />
     <property name="catalog"     location="${project.home}/${project.catalog}" />
-    <property name="forrest.catalog.verbosity" value="1" />
-    <property name="forrest.maxmemory" value="64m" />
-    <property name="forrest.jvmargs" value="" />
     <property name="skins-dir"   location="${project.home}/${project.skins-dir}" />
     <property name="skinconf"    location="${project.home}/${project.skinconf}" />
     <property name="conf-dir"    location="${project.home}/${project.conf-dir}" />
