@@ -233,7 +233,6 @@ copy excalibur-xmlutil
 #jakarta-oro-2.0.6.jar
 #jakarta-regexp-1.2.jar
 copy jakarta-regexp
-#jing-20020724.jar
 # We'll keep our own jing thankyou
 #copy jing
 #jisp-2.0.1.jar
@@ -246,8 +245,7 @@ copy logkit
 bcopy lucene
 #nekodtd-20020615.jar
 #nekopull.jar
-#resolver-20021114.jar
-copy resolver
+copy xml-commons-resolver
 #xml-forrest-components.jar
 #xml-forrest-scratchpad.jar
 
