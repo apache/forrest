@@ -18,8 +18,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="@*">
-
-    <xsl:attribute name="name(.)">
+    <xsl:attribute name="{name(.)}">
       <xsl:choose>
         <!-- Change the site: and ext: links in the output so that Forrest
              understands that they are broken -->
@@ -33,6 +32,12 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:include href="copyover.xsl"/>
+	<!-- Identity transformation template -->			
+	<xsl:template match="/ | * | comment() | processing-instruction() | text()"> 
+		<xsl:copy> 
+			<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
+		</xsl:copy> 
+	</xsl:template> 
+    
   
 </xsl:stylesheet>
