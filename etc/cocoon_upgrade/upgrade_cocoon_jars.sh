@@ -20,15 +20,16 @@
 # directory is not on the same level as xml-forrest/, set the COCOON_HOME variable
 # below.
 #
+cd $PWD/../../../../
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.4
-COCOON_HOME=$BASE/../../../cocoon-2.1
-FORREST=$BASE/../..
-NEKODTD_VERSION=0.1.9
-NEKODTD_HOME=$BASE/../../../nekodtd-$NEKODTD_VERSION
-NEKOPULL_VERSION=0.2.3
-NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
+COCOON_VERSION=2.1.5-dev
+COCOON_HOME=$BASE/cocoon-2.1
+FORREST=$BASE/forrest/trunk
+NEKODTD_VERSION=0.1.10
+NEKODTD_HOME=$BASE/nekodtd-$NEKODTD_VERSION
+NEKOPULL_VERSION=0.2.4
+NEKOPULL_HOME=$BASE/nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
 #JARSUFFIX=`date +%Y%m%d`
@@ -146,11 +147,12 @@ function upgrade_endorsed()
   echo "done"
 }
 
-function copy_local_blocks_properties()
+function copy_local_properties()
 {
-  echo -n "Copy local.blocks.properties to $COCOON_HOME 		"
+  echo -n "Copy local.properties to $COCOON_HOME 		"
   push
   cp -bu local.blocks.properties $COCOON_HOME
+  cp -bu local.build.properties $COCOON_HOME
   pop
   echo "done"
 }
@@ -174,7 +176,7 @@ echo "  $FLIB_ENDORSED"
 
 sanity_check
 #Commented by default
-#copy_local_blocks_properties
+#copy_local_properties
 #build_cocoon
 
 upgrade_neko
@@ -190,6 +192,8 @@ bcopy chaperon
 #cocoon-20030311.jar
 rm $FLIB/cocoon-$COCOONJAR_SUFFIX.jar ; cp $CBUILD/cocoon.jar $FLIB/cocoon-$JARSUFFIX.jar
 rm $FLIB/cocoon-deprecated-*.jar ; cp $CBUILD/cocoon-deprecated.jar $FLIB/cocoon-deprecated-$JARSUFFIX.jar
+#cocoon xsp is a dependecy of linkrewriter 
+bzcopy xsp
 #cocoon-asciiart-block-20030311.jar
 bzcopy asciiart
 #cocoon-batik-block-20030311.jar
@@ -208,6 +212,8 @@ bzcopy linkrewriter
 bzcopy lucene
 #cocoon-profiler-block-20030311.jar
 bzcopy profiler
+#jakarta-bcel needed by the wiki stuff
+copy jakarta-bcel
 #commons-collections-2.1.jar
 copy commons-collections
 #commons-jxpath-1.1b1.jar
