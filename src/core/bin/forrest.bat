@@ -1,3 +1,4 @@
+@echo off
 rem Copyright 2002-2004 The Apache Software Foundation
 rem
 rem Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,6 @@ rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
-@echo off
 if "%OS%"=="Windows_NT" @setlocal
 
 rem ----- use the location of this script to infer $FORREST_HOME -------
