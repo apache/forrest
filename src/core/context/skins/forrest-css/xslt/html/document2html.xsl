@@ -63,7 +63,7 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
   </xsl:template>
 
   <xsl:template match="body">
-    <xsl:if test="$max-depth&gt;0 and not($notoc='true')" >
+    <xsl:if test="$config/toc/@max-depth&gt;0 and not($notoc='true')" >
       <xsl:call-template name="minitoc">
         <xsl:with-param name="tocroot" select="."/>
         <xsl:with-param name="depth">1</xsl:with-param>
@@ -94,7 +94,7 @@ $Id: document2html.xsl,v 1.1 2003/10/20 16:29:05 nicolaken Exp $
     <ul>
       <xsl:for-each select="$tocroot/section">
         <xsl:call-template name="toclink"/>
-        <xsl:if test="$depth&lt;$max-depth">
+        <xsl:if test="$depth&lt;$config/toc/@max-depth">
           <xsl:call-template name="minitoc">
             <xsl:with-param name="tocroot" select="."/>
             <xsl:with-param name="depth" select="$depth + 1"/>          

@@ -21,7 +21,7 @@
   <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
-  <xsl:variable name="toc-max-depth" select="number($config/toc/@level)"/>
+  <xsl:variable name="toc-max-depth" select="number($config/toc/@max-depth)"/>
 
   <xsl:param name="numbersections" select="'true'"/>
 

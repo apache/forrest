@@ -77,7 +77,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
 
   <xsl:template match="body">
 
-    <xsl:if test="section and $max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
+    <xsl:if test="section and $config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
       <toc>
         <xsl:for-each select="section">
           <tocc>
@@ -106,7 +106,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
       </toc>
     </xsl:if>
     
-   <xsl:if test="$max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
+   <xsl:if test="$config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
       <xsl:call-template name="minitoc">
         <xsl:with-param name="tocroot" select="."/>
         <xsl:with-param name="depth">1</xsl:with-param>
