@@ -30,7 +30,17 @@
     <property name="forrest.validate.failonerror" value="true" />
     <property name="forrest.validate.includes" value="**/*"/>
     <property name="forrest.validate.excludes" value=""/>
-  </target>
+    <property name="forrest.validate.xdocs.includes" value="**/*.xml"/>
+    <property name="forrest.validate.xdocs.excludes" value="site.xml,.*.swp"/>
+    <property name="forrest.validate.skinconf.includes" value="${skinconf-file}"/>
+    <property name="forrest.validate.skinconf.excludes" value=""/>
+    <property name="forrest.validate.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.skinconf.excludes" value=""/>
+    <property name="forrest.validate.skins.includes" value="**/*"/>
+    <property name="forrest.validate.skins.excludes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.stylesheets.excludes" value=""/>
+  </target>    
         
   <target name="validate-site" depends="load-project-props">
     <condition property="forrest.validate.skinconf.disable-xml-link">
@@ -66,8 +76,8 @@ to validate this site.
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
       <xmlcatalog refid="fcatalog" />
       <fileset dir="${xdocs-dir}"
-        includes="${forrest.validate.includes}"
-        excludes="${forrest.validate.excludes}"/>
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
     <echo message="...validated xdocs"/>
   </target>
