@@ -22,38 +22,48 @@
   <body> 
     <section>
       <title>Introduction</title>
-      <source>
-With a small but very important code change in Cocoon, I'm happy to 
-announce that we are finally getting to the end of the copyless struggle :-)
+      
+      <p>With Forrest 0.6 it's now possible for projects to "plugin" 
+      to our sitemaps without having to copy stuff; this will make possible 
+      hassle-free update fo future Forrest versions.</p>
 
-With current Forrest 0.6-dev it's now possible for projects to "plugin" 
-to our sitemaps without having to copy stuff; this will make possible 
-hassle-free update fo future Forrest versions.
+      <section>
+        <title>How does it work?</title>
 
-How does it work?
+        <p>If a project has a <code>sitemap.xmap</code> file in it's 
+        documentation dir, it gets mounted automatically by Forrest and 
+        it becomes part of the processing: it's a preprocessing step, and 
+        it's the first one to handle the request. Because of this it can 
+        serve any file directly instead of Forrest: if it doesn't want to 
+        serve a file, it can simply not match the URL and Forrest will take 
+        care of it as usual.</p>
 
-If a project has a sitemap.xmap file in it's documentation dir, it gets 
-mounted automatically by Forrest and it becomes part of the processing: 
-it's a preprocessing step, and it's the first one to handle the request. 
-Because of this it can serve any file directly instead of Forrest: if it 
-doesn't want to serve a file, it can simply not match the URL and 
-Forrest will take care of it as usual.
+        <p>The cool thing is that if that pipeline serves an xml representation, 
+        Forrest will provide a skinned version of it.</p>
 
-The cool thing is that if that pipeline serves an xml representation, 
-Forrest will provide a skinned version of it.
+        <p>So if the project sitemap matches test.xml, and serves a correct 
+        documentDTD file, then the user will see test.html fully rendered by 
+        Forrest.</p>
 
-So if the project sitemap matches test.xml, and serves a correct 
-documentDTD file, then the user will see test.html fully rendered by 
-Forrest.
-
-Of course, to resolve the directories it's important to use the 
-'project:' and 'forrest:' variables, to prevent any possible issue in 
-the future.
-
-This will also enable us to cleany refactor the Forrest internals, 
-because the mounts will not necessarily take final control of the 
-processing if a match is found.
-      </source>
+        <p>Of course, to resolve the directories in your sitemap it's important 
+        to use the 'project:' and 'forrest:' variables, to prevent any possible 
+        issue in the future.</p>
+      </section>
+    </section>
+    
+    <section>
+      <title>Generating site.xml and tabs.xml</title>
+      <p>If you are using some other content packaging technique, such as
+      IMS Content Packages, you will want to generate the site.xml and tabs.xml
+      files from your content package. This can be done by creating custom
+      versions of <code>linkmap.xmap</code>, <code>menu.xmap</code> and
+      <code>tabs.xmap</code> in your project directory.</p>
+      
+      <p>As will custom sitemaps (see above) Forrest will automatically detect
+      the presence of a customised version of any of these files and will
+      use them appropriately. These files act as a preprocessor stage and
+      any unhandled matches will be processed by the normal Forrest Xmap files.
+      </p>
     </section>
   </body>
 </document>
