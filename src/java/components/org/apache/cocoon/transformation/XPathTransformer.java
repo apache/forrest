@@ -120,7 +120,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.1 2003/01/12 12:25:40 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.2 2003/02/07 05:22:08 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
@@ -143,8 +143,6 @@ public class XPathTransformer
         super.setup(resolver, objectModel, source, parameters);
         this.include = (String)parameters.getParameter("include", "/");
         this.exclude = (String)parameters.getParameter("exclude", null);
-        this.include = (String)parameters.getParameter("include-if", "/");
-        this.exclude = (String)parameters.getParameter("exclude-if", null);
         }
 
 
@@ -162,12 +160,6 @@ public class XPathTransformer
         }
     }
 
-    public void startElement(String uri, String loc, String raw, Attributes a)
-        throws SAXException
-    {
-        getLogger().warn("################################### "+raw);
-        super.startElement(uri, loc, raw, a);
-    }
 
     /** Implementation of a template method declared in AbstractDOMTransformer.
      * @param doc DOM of XML received by the transformer
@@ -418,3 +410,4 @@ public class XPathTransformer
         this.exclude = null;
     }
 }
+
