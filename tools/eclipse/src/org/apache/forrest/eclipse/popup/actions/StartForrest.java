@@ -71,7 +71,6 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 		}
 		
 		Shell shell = new Shell();
-		String cmdString = null;
 		IPath path = JavaCore.getClasspathVariable("ECLIPSE_HOME");
 		// TODO: This should be a monitor messageDialog
 		messageDialog = new Shell(shell);
@@ -150,7 +149,7 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 			URL url;
 			try {
 				url = new URL("http://localhost:8888");
-				WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url, WebBrowserEditorInput.SHOW_ALL | WebBrowserEditorInput.FORCE_NEW_PAGE); 
+				WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url, WebBrowserEditorInput.SHOW_ALL);
 				WebBrowser.openURL(browserInput);
 			} catch (MalformedURLException e1) {
 				// Should never be thrown
