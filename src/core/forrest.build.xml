@@ -27,7 +27,21 @@ FORREST SITE BUILDER
 <project default="site" basedir="." name="forrest">
 
   <property name="version" value="0.6-dev"/>
+  
+  <property name="forrest.root-dir"           location="${forrest.home}/../.."/>     
+  
+  <property name="forrest.lib-dir"            location="${forrest.root-dir}/lib"/>   
+  <property name="forrest.core.lib-dir"       location="${forrest.lib-dir}/core"/>   
+  <property name="forrest.endorsed.lib-dir"   location="${forrest.lib-dir}/endorsed"/>   
+  <property name="forrest.optional.lib-dir"   location="${forrest.lib-dir}/optional"/>   
 
+  <property name="forrest.tools-dir"          location="${forrest.root-dir}/tools"/>
+  <property name="forrest.ant.tools-dir"      location="${forrest.tools-dir}/ant"/>  
+  <property name="forrest.ant.lib-dir"        location="${forrest.ant.tools-dir}/lib"/>  
+  <property name="forrest.jetty.lib-dir"      location="${forrest.tools-dir}/jetty"/>     
+    
+  <property name="forrest.build.lib-dir"      location="${forrest.root-dir}/build"/>     
+      
   <import file="targets/validate.xml"/>
   <import file="targets/webapp.xml"/>
   <import file="targets/war.xml"/>
@@ -47,12 +61,12 @@ FORREST SITE BUILDER
   
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
-      <fileset dir="${forrest.home}/lib/core" includes="jing*.jar" />
+      <fileset dir="${forrest.core.lib-dir}" includes="jing*.jar" />
     </classpath>
   </taskdef>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
-      <fileset dir="${forrest.home}/tools/ant/lib" includes="ant-contrib-*.jar" />
+      <fileset dir="${forrest.ant.lib-dir}" includes="ant-contrib-*.jar" />
     </classpath>
   </taskdef>
 
@@ -198,25 +212,31 @@ FORREST SITE BUILDER
     <path id="forrest.cp">
          <pathelement path="${env.CLASSPATH}" />
          <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
-         <fileset dir="${forrest.home}/tools/jetty">
+         <fileset dir="${forrest.build.lib-dir}">
            <include name="*.jar"/>
            <include name="*.JAR"/>
            <include name="*.zip"/>
            <include name="*.ZIP"/>
          </fileset>
-         <fileset dir="${forrest.home}/lib/endorsed">
+         <fileset dir="${forrest.jetty.lib-dir}">
+           <include name="*.jar"/>
+           <include name="*.JAR"/>
+           <include name="*.zip"/>
+           <include name="*.ZIP"/>
+         </fileset>
+         <fileset dir="${forrest.endorsed.lib-dir}">
            <include name="*.jar"/>
            <include name="*.JAR"/>
            <include name="*.zip"/>
            <include name="*.ZIP"/>
          </fileset>         
-         <fileset dir="${forrest.home}/lib/core">
+         <fileset dir="${forrest.core.lib-dir}">
            <include name="*.jar"/>
            <include name="*.JAR"/>
            <include name="*.zip"/>
            <include name="*.ZIP"/>
          </fileset>       
-         <fileset dir="${forrest.home}/lib/optional">
+         <fileset dir="${forrest.optional.lib-dir}">
            <include name="*.jar"/>
            <include name="*.JAR"/>
            <include name="*.zip"/>
@@ -311,7 +331,7 @@ FORREST SITE BUILDER
        <jvmarg line="${forrest.jvmargs}"/>
        <jvmarg line="${forrest.basic.jvmargs}"/>
        <jvmarg
-         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.endorsed.lib-dir}"/>
        <arg line="${content-dir}/jettyconf.xml" />
     </java>
   </target>
@@ -329,7 +349,7 @@ FORREST SITE BUILDER
        <jvmarg line="${forrest.jvmargs}"/>
        <jvmarg line="${forrest.basic.jvmargs}"/>
        <jvmarg
-         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.endorsed.lib-dir}"/>
        <arg line="${forrest.home}/context/jettyconf.xml" />
     </java>
   </target>  
