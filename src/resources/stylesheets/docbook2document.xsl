@@ -524,11 +524,14 @@ Revision:
             <xsl:apply-templates select="thead|tbody|tfoot"/>
       </xsl:template>
       <xsl:template match="thead">
+            <xsl:apply-templates mode="thead"/>
+      </xsl:template>
+      <xsl:template match="row" mode="thead">
             <tr>
-            <xsl:apply-templates select="row" mode="head"/>
+              <xsl:apply-templates mode="thead"/>
             </tr>
       </xsl:template>
-      <xsl:template match="row" mode="head">
+      <xsl:template match="entry" mode="thead">
             <th>
                   <xsl:apply-templates/>
             </th>
