@@ -23,11 +23,22 @@
  <section>
   <title>Introduction</title>
   <p>
-   The <strong>forrestbot</strong> will automatically build and publish your
-   documentation on a regular basis. This document provides a concise overview.
-   See
+   The <strong>ForrestBot</strong> will automatically build and publish your
+   documentation on a regular basis. The versatile ForrestBot can retrieve
+   source XML instances from various type of repository (e.g. local filesystem,
+   local CVS, remote CVS), generate the documents, and copy the result to a
+   local or remote location (optionally via secure methods). It can be run
+   from the command-line as part of your documentation edit-build-review cycle,
+   it can be called from cron to automate your website update, it can operate
+   as a centralised docs-build service for a set of remote projects, it can do
+   tasks in parallel, and do even more.
+  </p>
+  <p>
+   This document provides a concise overview of one particular scenario. See
    <link href="forrestbot.html">The ForrestBot</link> for details and understand
    <link href="forrest-contract.html">Our Contract</link>.
+   Please send your feedback to <code>forrest-dev</code> - the ForrestBot
+   will be enhanced to meet diverse needs.
   </p>
   <p>
    (Building the documentation for the actual Forrest project is a separate
@@ -39,13 +50,13 @@
 
  <section>
   <title>Establish project source directory</title>
-  <p>The directory that contains our XML instances.</p>
+  <p>The directory that contains your XML instances.</p>
   <ul>
    <li><code>PROJECT_HOME = /home/you/yourproject</code></li>
    <li><code>SRC_DOC = $PROJECT_HOME/src/documentation</code></li>
   </ul>
   <p>
-   Our XML instance documents are at <code>$SRC_DOC/content/xdocs</code>
+   Your XML instance documents are at <code>$SRC_DOC/content/xdocs</code>
   </p>
  </section>
 
@@ -72,10 +83,11 @@
  </section>
 
  <section>
-  <title>Run forrestbot</title>
+  <title>Run ForrestBot</title>
   <source>
-cd $FORREST_HOME
-./build.sh bot \
+[you@localhost] cd $FORREST_HOME
+[you@localhost] ./build.sh clean
+[you@localhost] ./build.sh bot \
 -Dbot.forrestbot.xconf=$PROJECT_HOME/yourproject.conf.xml \
 -Dtemplate.echo=true
   </source>
@@ -83,18 +95,19 @@ cd $FORREST_HOME
 
  <section>
   <title>Next Steps</title>
-  <p>Some enhancements to our local forrestbot would be ...</p>
+  <p>Some enhancements to your local ForrestBot would be ...</p>
   <ul>
-   <li>Add our own skin at 
+   <li>Add your own skin at 
    <code>$SRC_DOC/skins/yourproject</code> by copying one of the skins from
    <code>$FORREST_HOME/src/resources/skins</code> (use basic or forrest-site)
    </li>
    <li>Configure another <code><![CDATA[<project>]]></code> to conduct a secure
-     copy to our public website.
+     copy to your public website.
    </li>
-   <li>Get it to send us email about forrestbot activities.
+   <li>Manage your XML instances with CVS and instruct ForrestBot to get
+     the source.
    </li>
-   <li>Send our feedback to <code>forrest-dev</code>
+   <li>Get it to send you email about ForrestBot activities.
    </li>
   </ul>
  </section>
