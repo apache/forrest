@@ -464,7 +464,20 @@
 	     <input-module name="request-attr"/>
 	     <input-module name="session-attr"/>
 	     <input-module name="defaults"/>
-	  </component-instance>
+       </component-instance>
+
+
+       <!--
+       For backwards-compat: interpret {context:context} as
+       {request:contextPath}
+       -->
+       <component-instance
+         class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+         logger="core.modules.mapper" name="context">
+         <input-module name="request"/>
+         <suffix>Path</suffix>
+       </component-instance>
+
 	  
    </input-modules>
 
