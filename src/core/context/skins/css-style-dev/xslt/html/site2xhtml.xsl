@@ -47,17 +47,17 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
 	|HTML-head
 	+-->
         <head>
-<!--+
+            <!--+
    	|generator meta
    	+-->
             <xsl:call-template name="html-meta"/>
-<!--+
+            <!--+
 	|title
 	+-->
             <title>
                 <xsl:value-of select="div[@id='content']/h1"/>
             </title>
-<!--+
+            <!--+
 	|stylesheets
 	+-->
             <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
@@ -69,6 +69,11 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
             <link rel="stylesheet" href="{$root}skin/profile.css" 
                 type="text/css" />
 <!--+
+    |Javascripts
+    +-->
+            <script type="text/javascript" language="javascript" 
+                src="{$root}skin/getBlank.js"></script>
+            <!--+
 	|favicon
 	+-->
             <xsl:if test="//skinconfig/favicon-url">
@@ -168,12 +173,12 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
     +</xsl:comment> 
             <div class="searchbox">
                 <form method="get" action="http://www.google.com/search"> 
-                    <p><label for="query">Search the <xsl:value-of 
-                    select="$config/searchsite-name"/> site:</label></p> <input 
-                    type="hidden" name="sitesearch" 
-                    value="{$config/searchsite-domain}"/> <input type="text" 
-                    id="query" name="q" size="15"/>&#160; <input type="submit" 
-                    value="Search" name="Search"/> </form>
+                    <input type="hidden" 
+                    name="sitesearch" value="{$config/searchsite-domain}"/> 
+                    <input type="text" id="query" name="q" size="15" 
+                    value="Search the site:" 
+                    onFocus="getBlank (this, 'Search the site:');"/>&#160; 
+                    <input type="submit" value="Search" name="Search"/> </form>
             </div>
 <xsl:comment>+
     |end search
@@ -193,15 +198,22 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
    	|centerstrip with menu and mainarea
    	+-->
     <div id="main">
-<!--breadtrail location='alt'-->
-        <xsl:if test="$config/trail/@location='alt'">
+        <xsl:choose>
+        <xsl:when test="$config/trail/@location='alt'">
+            <!--breadtrail location='alt'-->
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
-      <div class="breadtrail">
-          <xsl:call-template name="breadcrumbs"/>
-      </div>
-        </xsl:if>
+              <div class="breadtrail">
+                  <xsl:call-template name="breadcrumbs"/>
+              </div>    
+        </xsl:when>
+        <xsl:otherwise>
+            <!--*NO* breadtrail-->
+            <div class="breadtrail" >&#160;</div>
+        </xsl:otherwise>
+</xsl:choose>
+
 <xsl:comment>+
     |start Menu, mainarea
     +</xsl:comment>
