@@ -21,6 +21,7 @@ FDIST=$FORREST/build/dist/shbat
 #FLIB=$FORREST/lib/core
 #FLIB=$FORREST/build/webapp/WEB-INF/lib
 FLIB=$FDIST/WEB-INF/lib
+FLIB_ENDORSED=$FDIST/WEB-INF/lib/endorsed
 
 DATE=`date +%Y%m%d`
 
