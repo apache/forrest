@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/23 10:46:37 $              |
+    |             $Date: 2003/10/23 13:35:54 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -695,7 +695,7 @@ for any broken links in the generated site.
        Builds a cocoon .war for your project based on the siteplan.
        param: location to put generated war ${project.war}
        =============================================================== -->
- <target name="war" depends="webapp"
+ <target name="war" depends="webapp, copy-xdocs,copy-content "
    description="Generates a dynamic servlet-based website (an packaged .war file)">
 
    <jar destfile="${project.war}" basedir="${project.webapp}"/>
@@ -707,7 +707,21 @@ ${project.war}
    </echo>
   </target>
 
-
+  <target name="copy-xdocs" if="xdocs.present">
+    <sync toDir="${project.webapp}/content/xdocs">
+      <fileset dir="${xdocs-dir}"/>
+    </sync>
+  </target>
+  
+  <!-- Copy all non-xdocs content -->
+  <target name="copy-content" if="raw-content.present">
+    <copy toDir="${project.webapp}/content" 
+      overwrite="false" failonerror="false">
+      <fileset dir="${raw-content-dir}">
+        <exclude name="${xdocs-dir}/**"/>
+      </fileset>
+    </copy>
+  </target>
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
