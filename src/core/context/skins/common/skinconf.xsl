@@ -130,7 +130,7 @@
    <credits>
     <credit>
       <name>Built with Apache Forrest</name>
-      <url>http://xml.apache.org/forrest/</url>
+      <url>http://forrest.apache.org/</url>
       <image>images/built-with-forrest-button.png</image>
       <width>88</width>
       <height>31</height>

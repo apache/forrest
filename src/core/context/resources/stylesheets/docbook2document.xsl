@@ -23,7 +23,7 @@ Docbook support, then use Norm Walsh's stylesheets - see Forrest FAQ.
 
 Credit: original from the jakarta-avalon project
 Revision:
- - Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest document...not yet complete.
+ - Kevin.Ross@iVerticalLeap.com - Moving towards forrest.apache.org document...not yet complete.
  - jefft@apache.org - Lots of fixups, notably the title now works, and footnotes work.
 
 -->
