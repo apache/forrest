@@ -18,8 +18,6 @@ package org.apache.forrest.forrestdoc.ant.doc;
 
 /**
  * Target dependency.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizReference {
     public static final int DEPENDS = 0;

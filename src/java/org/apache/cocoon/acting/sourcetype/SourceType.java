@@ -22,8 +22,6 @@ import java.util.*;
 /**
  * Represents a sourcetype. A sourcetype has a name and a number of rules
  * which are used to determine if a certain document is of this sourcetype.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class SourceType implements Configurable
 {

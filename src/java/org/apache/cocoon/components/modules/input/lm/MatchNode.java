@@ -45,8 +45,6 @@ import org.apache.cocoon.matching.Matcher;
  * <p>
  * Match nodes can be parametrized using <code>&lt;parameter&gt;</code> child elements.
  * </p>
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public final class MatchNode extends AbstractNode {
     

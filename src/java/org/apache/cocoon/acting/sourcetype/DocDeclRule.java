@@ -19,8 +19,6 @@ import org.apache.avalon.framework.configuration.*;
 
 /**
  * Rule which checks that the public id has a certain value.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class DocDeclRule implements SourceTypeRule
 {

@@ -25,9 +25,6 @@ import java.util.Comparator;
  * package, as a quick replacement to
  * the previous one that was not
  * ASL compatible.
- * 
- * @author <a href="mailto:mbryson@mindspring.com">Dave Bryson</a>
- * @version $Id: QuickSort.java,v 1.1 2004/02/09 11:09:20 nicolaken Exp $
  */
 public class QuickSort {
 

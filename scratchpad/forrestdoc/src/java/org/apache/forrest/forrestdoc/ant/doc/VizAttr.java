@@ -19,8 +19,6 @@ package org.apache.forrest.forrestdoc.ant.doc;
 /**
  * &lt;attr&gt; nested element handler. &lt;attr&gt; represents an
  * attribute in the DOT language.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizAttr {
     private String name = null;

@@ -64,8 +64,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * <p><em>(Hope my English it's not too bad ;-)</em></p>
  *
- * @author Ramon Prades [RPR]
- * @version $Id: ForrestDocumentSAXParser.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 
 public class ForrestDocumentSAXParser extends DefaultHandler {

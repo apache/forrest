@@ -25,8 +25,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * @author Mailton
- *         <p/>
  *         Classe que monta um documento em HTML com a documentação
  *         do respectivo arquivo.
  */

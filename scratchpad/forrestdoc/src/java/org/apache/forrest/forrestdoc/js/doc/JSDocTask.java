@@ -20,8 +20,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * @author mailton
- *         <p/>
  *         Ant task responsible for creating automatic documentation for .js files
  */
 public class JSDocTask extends Task {

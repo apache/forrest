@@ -40,8 +40,6 @@ import org.apache.excalibur.source.SourceResolver;
   * A ZIP source can be reached using the zip:// pseudo-protocol. The syntax is
   * zip://myFile.xml@myZip.zip (zip://[file]@[archive])
   * 
-  * @author <a href="http://apache.org/~reinhard">Reinhard Poetz</a>
-  * @version CVS $Id: ZipSourceFactory.java,v 1.1 2004/02/19 23:33:56 nicolaken Exp $
   * @since 0.6
   */ 
 public class ZipSourceFactory extends AbstractLogEnabled

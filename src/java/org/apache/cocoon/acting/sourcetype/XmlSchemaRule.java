@@ -21,8 +21,6 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 /**
  * A Rule which checks the value of the xsi:schemaLocation and xsi:noNamespaceSchemaLocation
  * attributes.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class XmlSchemaRule implements SourceTypeRule
 {

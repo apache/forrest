@@ -31,8 +31,6 @@ import java.io.PrintWriter;
 /**
  * Runs the javasrc converter as a task inside
  * the well known build tool "ant" (see ant.apache.org).
- * 
- * @author <a href="mailto:dims@yahoo.com">Davanum Srinivas</a>
  */
 public class JavaSrcTask extends MatchingTask {
 

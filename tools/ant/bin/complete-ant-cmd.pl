@@ -30,7 +30,6 @@
 #     }
 #     compctl -K ant_complete ant build.sh
 #     
-# @author Mike Williams <mikew@cortexebusiness.com.au>
 
 my $cmdLine = $ENV{'COMP_LINE'};
 my $antCmd = $ARGV[0];

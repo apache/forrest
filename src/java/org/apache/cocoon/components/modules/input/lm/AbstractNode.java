@@ -31,8 +31,6 @@ import org.apache.cocoon.sitemap.PatternException;
 
 /**
  * Base class for LocationMap nodes.
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public abstract class AbstractNode extends AbstractLogEnabled {
     

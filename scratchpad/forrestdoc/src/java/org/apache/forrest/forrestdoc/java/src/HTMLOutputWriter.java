@@ -22,7 +22,6 @@ import java.io.OutputStreamWriter;
 /**
  * Class HTMLOutputWriter
  * 
- * @author 
  * @version %I%, %G%
  */
 public class HTMLOutputWriter extends OutputStreamWriter {

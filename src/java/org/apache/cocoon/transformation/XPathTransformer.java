@@ -78,9 +78,6 @@ import org.xml.sax.SAXException;
  *   &lt;/map:match&gt;
  * </pre>
  * So <code>manual/Introduction</code> would return the first chapter.
- *
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer

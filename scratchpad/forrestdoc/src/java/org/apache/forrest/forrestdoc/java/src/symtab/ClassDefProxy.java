@@ -25,7 +25,6 @@ import java.util.Hashtable;
 /**
  * Class ClassDefProxy
  * 
- * @author 
  * @version %I%, %G%
  */
 public class ClassDefProxy extends ClassDef implements Externalizable {

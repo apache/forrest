@@ -34,8 +34,6 @@ import org.apache.excalibur.source.SourceUtil;
  *  required attribute <code>src</code> that contains the
  *  location string.
  * </p>
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public class LocationNode extends AbstractNode {
 

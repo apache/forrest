@@ -31,8 +31,6 @@ import org.apache.tools.ant.types.selectors.BaseExtendSelector;
  * Ant selector that selects files listed in an external text file.  
  * In the context of Forrest, the external text file lists "uncopied files"
  * from the Cocoon run, hence the name.
- *
- * @author Jeff Turner
  */
 public class UncopiedFileSelector extends BaseExtendSelector {
 

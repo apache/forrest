@@ -23,7 +23,6 @@ import java.util.HashMap;
  * the value of the xsi:schemaLocation and xsi:noNamespaceSchemaLocation attributes. All of these
  * attributes can be null.
  *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class SourceInfo
 {

@@ -27,10 +27,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-/**
- * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @version CVS $Id: SkinconfTransformer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
- */
 public class SkinconfTransformer
   extends AbstractTransformer {
 

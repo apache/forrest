@@ -33,8 +33,6 @@ import org.w3c.dom.Element;
 
 /**
  * <p>Searches the index for a given query string.</p>
- * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearcher.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class ForrestSearcher {
   public ForrestSearcher() {

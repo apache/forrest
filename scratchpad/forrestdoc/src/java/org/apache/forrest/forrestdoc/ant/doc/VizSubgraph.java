@@ -20,8 +20,6 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * &lt;subgraph&gt; nested element handler.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizSubgraph {
     VizPrinter printer = null;

@@ -2,14 +2,6 @@
  *
  * Run 'java Main <directory full of java files>'
  *
- * Contributing authors:
- *		John Mitchell		johnm@non.net
- *		Terence Parr		parrt@magelang.com
- *		John Lilley			jlilley@empathy.com
- *		Scott Stanchfield	thetick@magelang.com
- *		Markus Mohnen       mohnen@informatik.rwth-aachen.de
- *		Peter Williams		pwilliams@netdynamics.com
- *
  * Version 1.00 December 9, 1997 -- initial release
  * Version 1.01 December 10, 1997
  *		fixed bug in octal def (0..7 not 0..8)
@@ -51,10 +43,6 @@
  *		ESC lexer rule allowed 399 max not 377 max.
  *		java.tree.g didn't handle the expression of synchronized
  *			statements.
- *
- * Version tracking now done with following ID:
- *
- * $Id: java.g,v 1.1 2004/02/09 11:09:16 nicolaken Exp $
  *
  * BUG:
  * 		Doesn't like boolean.class!

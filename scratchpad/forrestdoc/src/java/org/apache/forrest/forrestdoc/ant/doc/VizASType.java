@@ -22,8 +22,6 @@ import java.util.Hashtable;
 
 /**
  * DOT attr_stmt type.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizASType {
     private final String name;

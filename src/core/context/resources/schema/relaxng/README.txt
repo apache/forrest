@@ -29,6 +29,3 @@ java -jar $FORREST_HOME/WEB-INF/lib/jing.jar [.rng file] [.xml file]
 
 If you're running JDK 1.3.x or lower, you'll need to add
 $FORREST_HOME/lib/endorsed/*.jar to your classpath first.
-
--- 
-$Id: README.txt,v 1.1 2003/10/20 15:38:12 nicolaken Exp $

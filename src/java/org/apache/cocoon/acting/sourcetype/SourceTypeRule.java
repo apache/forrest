@@ -19,8 +19,6 @@ import org.apache.avalon.framework.configuration.Configurable;
 
 /**
  * Interface to be implemented by all soucetype-defining rules.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public interface SourceTypeRule extends Configurable
 {

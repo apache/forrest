@@ -31,8 +31,6 @@ import org.apache.cocoon.selection.Selector;
 
 /**
  * Locationmap select statement.
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public final class SelectNode extends AbstractNode {
     

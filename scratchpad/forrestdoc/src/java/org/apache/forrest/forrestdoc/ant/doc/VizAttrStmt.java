@@ -24,8 +24,6 @@ import java.util.Vector;
 /**
  * &lt;attrstmt&gt; nested element handler. &lt;attrstmt&gt; represents
  * attr_stmt in <a href="http://www.research.att.com/~erg/graphviz/info/lang.html" target="_blank">the DOT language</a>.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizAttrStmt {
     /** attribute statement type */

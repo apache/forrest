@@ -52,8 +52,6 @@ import org.apache.cocoon.selection.Selector;
  *  </li>
  * </ul>
  * </p>
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public final class LocationMap extends AbstractLogEnabled {
     

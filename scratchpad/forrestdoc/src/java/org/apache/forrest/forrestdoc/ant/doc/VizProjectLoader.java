@@ -23,8 +23,6 @@ import java.util.Vector;
 
 /**
  * Project loader.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public interface VizProjectLoader {
     public void uniqueRef(boolean opt);

@@ -18,7 +18,6 @@ package org.apache.forrest.forrestdoc.java.src.util;
 /**
  * Class SortableString
  * 
- * @author 
  * @version %I%, %G%
  */
 public class SortableString implements JSComparable {

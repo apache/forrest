@@ -22,9 +22,6 @@ import java.util.Vector;
 
 /**
  * A class to print xml graph of dependencies.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
- * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
  */
 public class VizPrinter {
     /** the projects which will be printed */

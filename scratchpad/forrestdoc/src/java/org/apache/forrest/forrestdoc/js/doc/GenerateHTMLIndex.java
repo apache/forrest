@@ -28,8 +28,6 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 
 /**
- * @author Mailton
- *         <p/>
  *         Searches all javascript files and creates a index HTML
  *         with links to documentation
  */

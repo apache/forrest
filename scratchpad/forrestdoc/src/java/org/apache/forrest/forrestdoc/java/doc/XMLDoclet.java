@@ -33,9 +33,6 @@ import java.util.Vector;
 /**
  * Main Doclet class to generate JavaDocXML.  This doclet generates the
  * document conforming to DTD specified in javadoc-v04draft.dtd.
- * 
- * @author <a href="mailto:gopi@aztecsoft.com">Gopinath M.R.</a>
- * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
  */
 
 public class XMLDoclet extends Doclet {

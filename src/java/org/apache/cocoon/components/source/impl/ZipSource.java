@@ -32,9 +32,6 @@ import org.apache.excalibur.source.SourceValidity;
   * ATTENTION: The ZIP protocol is also part of Cocoon 2.1.4 (scratchpad). When
   *            Forrest uses this version or higher this file can be removed!!! (RP)
   *
-  * @author <a href="http://apache.org/~reinhard">Reinhard Poetz</a>
-  * @author <a href="mailto:cziegeler@apache.org">Carsten Ziegeler</a>
-  * @version CVS $Id: ZipSource.java,v 1.1 2004/02/19 23:33:56 nicolaken Exp $
   * @since 2.1.4 
   */
 public class ZipSource extends AbstractLogEnabled implements Source {

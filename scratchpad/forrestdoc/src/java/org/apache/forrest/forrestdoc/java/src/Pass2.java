@@ -1128,7 +1128,6 @@ class Reference {
 /**
  * Class ClassFile
  * 
- * @author 
  * @version %I%, %G%
  */
 class ClassFile {

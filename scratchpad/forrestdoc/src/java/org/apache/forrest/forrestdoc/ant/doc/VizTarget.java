@@ -21,8 +21,6 @@ import java.util.Vector;
 
 /**
  * Ant target.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class VizTarget {
     private String id;

@@ -24,7 +24,6 @@
   and extra-css are present 
 -->
   <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.2 2004/01/13 08:19:53 nicolaken Exp $ */
 
    <xsl:call-template name="aural"/>
    <xsl:call-template name="a-external"/>

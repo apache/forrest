@@ -41,8 +41,6 @@ import org.apache.cocoon.sitemap.PatternException;
  * using the <code>base</code> attribute on the <code>&lt;locator&gt;</code>
  * element and defaults to <code>.</code>.
  * </p>
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public final class LocatorNode extends AbstractNode {
     

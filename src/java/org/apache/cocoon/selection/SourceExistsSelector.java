@@ -55,9 +55,6 @@ import org.apache.avalon.framework.component.ComponentManager;
  *    &lt;/map:select>
  *    &lt;map:serialize type="fo2pdf" />
  * </pre>
- *
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: SourceExistsSelector.java,v 1.2 2003/10/22 17:43:58 unico Exp $
  */
 public class SourceExistsSelector extends AbstractLogEnabled
   implements ThreadSafe, Selector, Composable {

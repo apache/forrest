@@ -20,8 +20,6 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
  * A Rule which checks the local name and namespace of the document element.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class DocumentElementRule implements SourceTypeRule
 {

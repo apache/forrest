@@ -40,7 +40,6 @@ import java.util.Vector;
 /**
  * Class Pass1
  * 
- * @author 
  * @version %I%, %G%
  */
 public class Pass1 implements FileListener {

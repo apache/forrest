@@ -18,8 +18,6 @@ package org.apache.forrest.forrestdoc.ant.doc;
 
 /**
  * writer.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public interface VizWriter {
     public void print(String str);

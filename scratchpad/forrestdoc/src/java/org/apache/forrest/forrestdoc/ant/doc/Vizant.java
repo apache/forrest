@@ -30,8 +30,6 @@ import java.util.Enumeration;
 
 /**
  * Vizant task.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 public class Vizant extends Task {
     private File antfile;

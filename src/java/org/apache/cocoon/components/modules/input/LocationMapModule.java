@@ -41,8 +41,6 @@ import org.xml.sax.SAXException;
 
 /**
  * Resolves a request against a LocationMap.
- * 
- * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
 public class LocationMapModule extends AbstractLogEnabled 
     implements InputModule, Composable, Configurable, Disposable, ThreadSafe {

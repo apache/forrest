@@ -22,7 +22,6 @@ import java.util.Vector;
 /**
  * Class JSCollections
  * 
- * @author 
  * @version %I%, %G%
  */
 public class JSCollections {
@@ -111,7 +110,6 @@ public class JSCollections {
 /**
  * Class QSComparator
  * 
- * @author 
  * @version %I%, %G%
  */
 class QSComparator implements Comparator {

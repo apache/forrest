@@ -17,8 +17,6 @@
 
 <!--+
     | Transforms TextGenerator output to document format.
-    |
-    | CVS $Id: text2document.xsl,v 1.1 2003/10/20 15:38:24 nicolaken Exp $
     +-->
 
 <xsl:stylesheet version="1.0"

@@ -29,11 +29,6 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 
-/**
- * @TODO
- * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
- * @version CVS $Id: AbstractWrappingModule.java,v 1.3 2004/02/19 23:39:50 nicolaken Exp $
- */
 public abstract class AbstractWrappingModule extends AbstractLogEnabled
     implements InputModule, Configurable, Serviceable, Disposable {
 

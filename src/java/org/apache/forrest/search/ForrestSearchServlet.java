@@ -27,8 +27,6 @@ import org.w3c.dom.Document;
 
 /**
  * <p>This sevlet processes all search request inside a Forrest site.</p>
- * @author Ramon Prades [RPR]
- * @version $Id: ForrestSearchServlet.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class ForrestSearchServlet extends HttpServlet {
 

@@ -18,7 +18,6 @@ package org.apache.forrest.forrestdoc.java.src.symtab;
 /**
  * Interface ReferenceTypes
  * 
- * @author 
  * @version %I%, %G%
  */
 public interface ReferenceTypes {

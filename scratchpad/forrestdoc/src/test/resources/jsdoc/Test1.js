@@ -44,7 +44,6 @@ comment on its functionality, as in the following example:
 */
 /**
 * get the mode that has been activated
-* @author Mailton Almeida											
 * @param x: a parameter											
 * @return a return value
 */
@@ -55,7 +54,6 @@ function getMode(){
 
 /**
 * test function			
-* @author Mailton Almeida											
 * @param name: client name
 * @param agency: an agency where the client can go
 * @return the number of the client id

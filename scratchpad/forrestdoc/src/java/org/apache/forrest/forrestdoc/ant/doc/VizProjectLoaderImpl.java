@@ -33,8 +33,6 @@ import java.util.Vector;
 
 /**
  * An implementation of VizProjectLoader.
- * 
- * @author <a href="mailto:kengo@tt.rim.or.jp">KOSEKI Kengo</a>
  */
 
 public class VizProjectLoaderImpl implements VizProjectLoader {

@@ -15,8 +15,6 @@
   limitations under the License.
 -->
 
-<!-- CVS $Id: error2page.xsl,v 1.2 2004/03/06 02:25:33 antonio Exp $ -->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:lex="http://chaperon.sourceforge.net/schema/lexer/2.0"

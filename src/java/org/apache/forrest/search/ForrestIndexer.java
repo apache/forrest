@@ -47,8 +47,6 @@ import org.apache.lucene.util.Arrays;
  * <li>Could be a good idea to create a list of "reserved" filenames (i.e. book.xml
  * or status.xml) and force the indexer to skip them.</li>
  *
- * @author Ramon Prades [RPR]
- * @version CVS $Id: ForrestIndexer.java,v 1.2 2004/02/19 23:39:51 nicolaken Exp $
  */
 public class ForrestIndexer {
 

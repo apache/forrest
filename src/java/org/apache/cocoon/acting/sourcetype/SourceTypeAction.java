@@ -36,8 +36,6 @@ import java.util.*;
 /**
  * An action that assigns a "sourcetype" to a source. See the external documentation for
  * more information.
- *
- * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
 public class SourceTypeAction extends AbstractLogEnabled implements Configurable, ThreadSafe, Action
 {
