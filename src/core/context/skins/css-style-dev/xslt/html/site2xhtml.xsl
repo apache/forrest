@@ -46,33 +46,40 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
 <!--+
 	|HTML-head
 	+-->
-      <head>
+        <head>
 <!--+
    	|generator meta
    	+-->
- <xsl:call-template name="html-meta"/>
+            <xsl:call-template name="html-meta"/>
 <!--+
 	|title
 	+-->
-        <title><xsl:value-of select="div[@id='content']/h1"/></title>
+            <title>
+                <xsl:value-of select="div[@id='content']/h1"/>
+            </title>
 <!--+
 	|stylesheets
-	+-->   
-        <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" />
-        <link rel="stylesheet" href="{$root}skin/screen.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="{$root}skin/print.css" type="text/css" media="print" />
+	+-->
+            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
+                />
+            <link rel="stylesheet" href="{$root}skin/screen.css" 
+                type="text/css" media="screen" />
+            <link rel="stylesheet" href="{$root}skin/print.css" type="text/css" 
+                media="print" />
+            <link rel="stylesheet" href="{$root}skin/profile.css" 
+                type="text/css" />
 <!--+
 	|favicon
 	+-->
-        <xsl:if test="//skinconfig/favicon-url">
-          <link rel="shortcut icon">
-            <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
-            </xsl:attribute>
-          </link>
-        </xsl:if>
-  
-      </head>
+            <xsl:if test="//skinconfig/favicon-url">
+                <link rel="shortcut icon">
+                    <xsl:attribute name="href">
+                        <xsl:value-of 
+                            select="concat($root,//skinconfig/favicon-url)"/>
+                    </xsl:attribute>
+                </link>
+            </xsl:if>
+        </head>
 <!--+
 	|HTML-body
 	+-->
