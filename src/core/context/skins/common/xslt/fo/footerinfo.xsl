@@ -29,12 +29,13 @@ with @role='pdf' is present, that is used instead.  Eg:
 </credit>
 -->
   <xsl:template name="info">
+    <xsl:variable name="disable-copyright-footer" select="//skinconfig/pdf/disable-copyright-footer"/>
     <xsl:variable name="pdfcredit" select="//skinconfig/credits/credit[@role = 'pdf']"/>
     <xsl:variable name="text">
       <xsl:if test="$pdfcredit">
         <xsl:value-of select="$pdfcredit/name"/>
       </xsl:if>
-      <xsl:if test="not($pdfcredit)">
+      <xsl:if test="not($pdfcredit) and not($disable-copyright-footer = 'true')">
         <xsl:text>Copyright &#169; </xsl:text><xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
           select="//skinconfig/vendor"/><xsl:text> All rights reserved.</xsl:text>
       </xsl:if>
