@@ -20,28 +20,20 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.1 2002/11/16 20:58:12 jefft Exp $
+$Id: tab2menu.xsl,v 1.2 2002/11/16 23:01:48 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- ================================================================ -->
-  <!-- This template MUST be overridden                                 -->
+  <!-- These templates SHOULD be overridden                             -->
   <!-- ================================================================ -->
 
   <xsl:template match="tabs">
-    <xsl:call-template name="pre-separator"/>
-    <xsl:for-each select="tab">
-      <xsl:if test="position()!=1"><xsl:call-template name="separator"/></xsl:if>
-      <xsl:apply-templates select="."/>
-    </xsl:for-each>
-    <xsl:call-template name="post-separator"/>
+    <div class="tab">
+      <xsl:call-template name="base-tabs"/>
+    </div>
   </xsl:template>
-
-
-  <!-- ================================================================ -->
-  <!-- These templates SHOULD be overridden                             -->
-  <!-- ================================================================ -->
 
   <!-- Called before first tag -->
   <xsl:template name="pre-separator">
@@ -102,6 +94,18 @@ $Id: tab2menu.xsl,v 1.1 2002/11/16 20:58:12 jefft Exp $
     </xsl:call-template>
   </xsl:variable>
 
+  <!-- Called from tabs, after it has written the outer 'div class=tabs' and
+  any other HTML -->
+  <xsl:template name="base-tabs">
+    <xsl:call-template name="pre-separator"/>
+    <xsl:for-each select="tab">
+      <xsl:if test="position()!=1"><xsl:call-template name="separator"/></xsl:if>
+      <xsl:apply-templates select="."/>
+    </xsl:for-each>
+    <xsl:call-template name="post-separator"/>
+  </xsl:template>
+
+
   <xsl:template match="tab">
     <xsl:choose>
       <xsl:when test="@dir = $longest-dir or @href = $longest-dir">
@@ -113,10 +117,12 @@ $Id: tab2menu.xsl,v 1.1 2002/11/16 20:58:12 jefft Exp $
     </xsl:choose>
   </xsl:template>
 
+  <!-- Called from 'selected' -->
   <xsl:template name="base-selected">
     <xsl:value-of select="@label"/>
   </xsl:template>
 
+  <!-- Called from 'not-selected' -->
   <xsl:template name="base-not-selected">
     <a>
       <xsl:attribute name="href">
