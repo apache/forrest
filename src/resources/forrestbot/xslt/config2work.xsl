@@ -54,7 +54,7 @@
 -->
 
    <target name="work">
-     <parallel>
+     <sequential>
        <xsl:for-each select="project">
          <!-- todo: wrap it in try catch to make it send in case of fail as well -->
          <trycatch>
@@ -84,7 +84,7 @@
            </xsl:if>
          </trycatch>
        </xsl:for-each>
-     </parallel>
+     </sequential>
    </target>
 </xsl:template>
 
