@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.20 2003/07/29 22:00:17 cheche Exp $
+$Id: document2html.xsl,v 1.21 2003/08/07 12:26:09 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -125,7 +125,7 @@ if (VERSION > 3) {
 
   <!-- Generates the PDF link -->
   <xsl:template name="pdflink">
-    <xsl:if test="$disable-pdf-link = 'false'"> 
+    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
           <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
           PDF</a>
