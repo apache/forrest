@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -115,7 +115,7 @@
         <p>
          The <code>maxmemory</code> property in the <code>forrest.properties</code> file controls how much
          memory Cocoon uses. Like many other properties you can copy them from the default configuration at
-         <code>main/fresh-site/forrest.properties</code>
+         <code>src/core/fresh-site/forrest.properties</code>
         </p>
         <p>
          Set the <code>ANT_OPTS</code> environment variable before you run forrest.  The exact value you set
@@ -124,10 +124,11 @@
       </answer>
     </faq>
   </part>
-
-  <part id="technical">
-    <title>Technical</title>
-    <faq id="edit-content">
+  
+  
+  
+  <part id="content_faqs">
+    <title>Content Creation</title><faq id="edit-content">
       <question>What tools can be used to edit the content?</question>
       <answer>
         <p>If you are using the Apache Forrest xml
@@ -148,8 +149,7 @@
           with the Mozilla web browser.
         </p>
       </answer>
-    </faq>
-    <faq id="PDF-output">
+    </faq><faq id="PDF-output">
       <question>How can I generate one pdf-file out of
       the whole site or selected pages of the site?</question>
       <answer>
@@ -173,68 +173,40 @@
        </p>
        </answer>
     </faq>
+    <faq id="pageBreaks">
+      <question>How do I insert page breaks into documents?</question>
+      <answer>
+        <p>Page breaks do not make a great deal of sense in HTML documents
+        intended for display on a screen. However, PDF documents are intended
+        for printing and therefore page breaks can be important.</p>
+        <p>To insert a page break in a PDF document simply add 
+        <em>pageBreakBefore</em> or <em>pageBreakAfter</em> to the class
+        attribute of a section.</p>
+        <p>If you want these classes to be processed in your HTML documents
+        as well you should add the following to the <code>extra-css</code>
+        element in your projects <code>skinconf.xml</code></p>
+        <source>
+        .pageBreakBefore {
+          margin-bottom: 0;
+          page-break-before: always;
+        } 
+        
+        .pageBreakAfter {
+          margin-bottom: 0;
+          page-break-after: always;
+        }
+        </source>
+      </answer>
+    </faq>
     <faq id="clickable-email-address">
       <question>How can I generate html-pages to show a 
       'clickable' email-address (of the author-element)?</question>
        <answer>
        <p>You would override <code>
-       main/webapp/skins/common/xslt/html/document2html.xsl</code>
+       src/core/context/skins/common/xslt/html/document2html.xsl</code>
        and edit the "headers/authors" template.
        </p>
        </answer>
-    </faq>
-    <faq id="CVS_revison_tags">
-      <question>How can I generate html-pages to show the
-      revision tag of cvs?</question>
-      <answer>
-      <p>If you have:<code>&#60;version&#62;$Revision: 1.30
-      $&#60;/version&#62;</code>The &#39;1.30&#39; will be extracted and
-      displayed at the bottom of the page as &#34;version 1.30&#34;. See for
-      example the bottom of the
-      <link href="site:your-project"> Using Forrest</link> document.</p>
-      <p>This technique could also be used for a modification date with
-      $Date: 2004/01/15 08:52:47 $</p>
-      </answer>
-    </faq>
-
-    <faq id="ignoring_javadocs">
-      <question>
-        How do I stop Forrest breaking on links to external files that may not
-        exist, like javadocs?
-      </question>
-      <answer>
-        <p>
-          This can be done by overriding the <code>cli.xconf</code> config file,
-          and defining patterns for URLs to exclude.
-        </p>
-        <p>
-          This means creating a directory <code>src/documentation/conf</code>
-          (or wherever <code>${forrest.conf-dir}</code> points) and copying
-          <code>$FORREST_HOME/context/WEB-INF/cli.xconf</code> to it.  Then edit
-          cli.xconf, and add any exclude sections you require at the end.  The
-          default cli.xconf ignores directory links and links containing
-          'apidocs' or starting with 'api/':
-        </p>
-        <source><![CDATA[
-   ....
-   <!-- Includes and excludes can be used to limit which URLs are rendered -->
-   ]]><strong><![CDATA[
-   <exclude pattern="**/"/>
-   <exclude pattern="**apidocs**"/>
-   <exclude pattern="api/**"/>
-   ]]></strong><![CDATA[
-   <uri src="favicon.ico"/>
-</cocoon>]]></source>
-        <p>This is just an example, and you should modify it appropriately for
-          your site.</p>
-        <note>
-          Wildcards may be used.  These are a powerful feature of Cocoon's
-          <link href="site:sitemap-ref">sitemap</link>.
-          For example, <strong>foo/*</strong> would match
-          <code>foo/bar</code>, but not <code>foo/bar/baz</code>
-           &mdash; use <strong>foo/**</strong> to match that.
-        </note>
-      </answer>
     </faq>
 
     <faq id="link_raw">
@@ -261,54 +233,7 @@
         </p>
       </answer>
     </faq>
-
-    <faq id="claimed_patterns">
-      <question>Some of my files are not being processed because they use
-      common filenames.
-      </question>
-      <answer>
-         <p>The <code>org.apache.forrest.plugin.projectInfo</code> plugin uses these
-         patterns: <code>changes, todo</code>.  See the <link href="site:plugins">plugin documentation</link>
-         for instructions on how to enable or disable this plugin.
-         </p>
-         <p>
-          Other patterns are claimed by the default sitemaps for
-          special processing. These include:
-          <code>site, faq, images, my-images, skinconf,
-          community, howto</code>
-        </p>
-        <p>
-          Sometimes there are workarounds, e.g. faq.html or faq-interview.html
-          would fail, but interview-faq.html would be fine.
-          In future versions of Forrest we will attempt to deal with this issue
-          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link> and <link href="http://issues.cocoondev.org/browse/FOR-458">FOR-458</link>).
-        </p>
-      </answer>
-    </faq>
-
-    <faq id="build_msg_a">
-      <question>What do the symbols and numbers mean when Forrest lists each
-        document that it has built?
-      </question>
-      <answer>
-        <source><![CDATA[
-* [56/0]     6.281s 23.0Kb  index.html
-* [0/0]      0.0060s 4.0Kb   images/project-logo.gif
-^                           apidocs/index.html
-* [50/0]     1.582s 18.7Kb  todo.html
-X [0]                       brokenlink.html     BROKEN: reason
-* [50/0]     1.222s 20.2Kb  dreams.html
-* [0/0]      0.535s 11.1Kb  dreams.pdf
-...]]></source>
-        <p>
-         Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped).
-         Column 2 is the number of links that were gathered from that page.
-         Column 3 is the time taken.
-         Column 4 is the page size.
-        </p>
-      </answer>
-    </faq>
-
+  
     <faq id="pdf_images">
       <question>Images don't display in PDFs. How do I fix this?</question>
       <answer>
@@ -338,9 +263,8 @@ X [0]                       brokenlink.html     BROKEN: reason
           Forrest.</note>
       </answer>
     </faq>
-
-
-     <faq id="index.html">
+    
+    <faq id="index.html">
       <question>
         The tab link in my site incorrectly assumes that 'index.html' is present in
         the linked-to directory. How do I fix this?
@@ -365,37 +289,6 @@ X [0]                       brokenlink.html     BROKEN: reason
      </answer>
     </faq>
 
-    <faq id="headless_operation">
-      <question>
-        When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
-      </question>
-      <answer>
-        <p>
-          If you are using JDK 1.4.0 or newer, you can enable <em>headless</em>
-          operation by running Forrest with the <code>forrest.jvmarg</code>
-          parameter set to <code>-Djava.awt.headless=true</code>, like this:
-        </p>
-        <source>forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
-        <p>
-          See also
-          <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>.
-        </p>
-      </answer>
-    </faq>
-
-    <faq id="catalog">
-      <question>
-        How do i configure my favourite XML editor or parser to find the
-        local Forrest DTDs?
-      </question>
-      <answer>
-        <p>
-          Notes are provided for various tools at
-          <link href="site:catalog">Using Catalog Entity Resolver for
-          local DTDs</link>.
-        </p>
-      </answer>
-    </faq>
 
     <faq id="label-entity">
       <question>
@@ -468,7 +361,142 @@ X [0]                       brokenlink.html     BROKEN: reason
         </p>
       </answer>
     </faq>
+  </part>
 
+  <part id="technical">
+    <title>Technical</title>    
+    
+    
+    <faq id="CVS_revison_tags">
+      <question>How can I generate html-pages to show the
+      revision tag of cvs?</question>
+      <answer>
+      <p>If you have:<code>&#60;version&#62;$Revision: 1.30
+      $&#60;/version&#62;</code>The &#39;1.30&#39; will be extracted and
+      displayed at the bottom of the page as &#34;version 1.30&#34;. See for
+      example the bottom of the
+      <link href="site:your-project"> Using Forrest</link> document.</p>
+      <p>This technique could also be used for a modification date with
+      $Date: 2004/01/15 08:52:47 $</p>
+      </answer>
+    </faq>
+
+    <faq id="ignoring_javadocs">
+      <question>
+        How do I stop Forrest breaking on links to external files that may not
+        exist, like javadocs?
+      </question>
+      <answer>
+        <p>
+          This can be done by overriding the <code>cli.xconf</code> config file,
+          and defining patterns for URLs to exclude.
+        </p>
+        <p>
+          This means creating a directory <code>src/documentation/conf</code>
+          (or wherever <code>${forrest.conf-dir}</code> points) and copying
+          <code>$FORREST_HOME/context/WEB-INF/cli.xconf</code> to it.  Then edit
+          cli.xconf, and add any exclude sections you require at the end.  The
+          default cli.xconf ignores directory links and links containing
+          'apidocs' or starting with 'api/':
+        </p>
+        <source><![CDATA[
+   ....
+   <!-- Includes and excludes can be used to limit which URLs are rendered -->
+   ]]><strong><![CDATA[
+   <exclude pattern="**/"/>
+   <exclude pattern="**apidocs**"/>
+   <exclude pattern="api/**"/>
+   ]]></strong><![CDATA[
+   <uri src="favicon.ico"/>
+</cocoon>]]></source>
+        <p>This is just an example, and you should modify it appropriately for
+          your site.</p>
+        <note>
+          Wildcards may be used.  These are a powerful feature of Cocoon's
+          <link href="site:sitemap-ref">sitemap</link>.
+          For example, <strong>foo/*</strong> would match
+          <code>foo/bar</code>, but not <code>foo/bar/baz</code>
+           &mdash; use <strong>foo/**</strong> to match that.
+        </note>
+      </answer>
+    </faq>
+
+    <faq id="claimed_patterns">
+      <question>Some of my files are not being processed because they use
+      common filenames.
+      </question>
+      <answer>
+        <p>
+          Certain patterns are claimed by the default sitemaps for
+          special processing. These include:
+          <code>site, changes, todo, faq, images, my-images, skinconf,
+          community, howto</code>
+        </p>
+        <p>
+          Sometimes there are workarounds, e.g. faq.html or faq-interview.html
+          would fail, but interview-faq.html would be fine.
+          In future versions of Forrest we will attempt to deal with this issue
+          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link>).
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="build_msg_a">
+      <question>What do the symbols and numbers mean when Forrest lists each
+        document that it has built?
+      </question>
+      <answer>
+        <source><![CDATA[
+* [56/0]     6.281s 23.0Kb  index.html
+* [0/0]      0.0060s 4.0Kb   images/project-logo.gif
+^                           apidocs/index.html
+* [50/0]     1.582s 18.7Kb  todo.html
+X [0]                       brokenlink.html     BROKEN: reason
+* [50/0]     1.222s 20.2Kb  dreams.html
+* [0/0]      0.535s 11.1Kb  dreams.pdf
+...]]></source>
+        <p>
+         Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped).
+         Column 2 is the number of links that were gathered from that page.
+         Column 3 is the time taken.
+         Column 4 is the page size.
+        </p>
+      </answer>
+    </faq>
+
+     
+
+    <faq id="headless_operation">
+      <question>
+        When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
+      </question>
+      <answer>
+        <p>
+          If you are using JDK 1.4.0 or newer, you can enable <em>headless</em>
+          operation by running Forrest with the <code>forrest.jvmarg</code>
+          parameter set to <code>-Djava.awt.headless=true</code>, like this:
+        </p>
+        <source>forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
+        <p>
+          See also
+          <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="catalog">
+      <question>
+        How do i configure my favourite XML editor or parser to find the
+        local Forrest DTDs?
+      </question>
+      <answer>
+        <p>
+          Notes are provided for various tools at
+          <link href="site:catalog">Using Catalog Entity Resolver for
+          local DTDs</link>.
+        </p>
+      </answer>
+    </faq>
     <faq id="skin">
       <question>
         How to make the site look better and change its skin?
@@ -549,7 +577,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       <question>How do I make <code>forrest run</code> listen on a different port?</question>
       <answer>
       <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
-      <p>Or copy Forrest's main/webapp/jettyconf.xml file to your project's src/documentation
+      <p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
       directory and set the port number in that file.  Then do <code>forrest run</code>
       </p>
       </answer>
