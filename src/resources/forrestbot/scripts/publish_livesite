@@ -117,7 +117,7 @@ function update_rootfiles()
 function commit()
 {
   log "Now committing to CVS"
-  [ "MODULE" = "xml-site" ] && commitfiles="`(cvs up -l ;cvs up images skin) | cut -d\  -f 2 | tr '\n' ' '`"
+  [ "$MODULE" = "xml-site" ] && commitfiles="`(cvs up -l ;cvs up images skin) | cut -d\  -f 2 | tr '\n' ' '`"
   [ "$MODULE" = "avalon-site" ] && commitfiles="`(cvs up -l ;cvs up components developing history pmc project seca containers whoweare) | cut -d\  -f 2 | tr '\n' ' '`"
   log Committing $commitfiles
   cvs ci -m "Automatic publish at `date` from http://forrestbot.cocoondev.org."
