@@ -32,7 +32,7 @@
     <xmlproperty file="properties.xml"                   keeproot="false" collapseAttributes="true" />
 
     <property name="name" value="apache-forrest"/>
-    <property name="version" value="0.7-dev"/>
+    <property name="forrest.version" value="0.7-dev"/>
 
     <property name="java.dir"              location="src/java"/>
     <property name="build.dir"             location="build"/>
@@ -62,7 +62,7 @@
       Project Name ${ant.project.name}
       Java Version ${ant.java.version}      
       Timestamp ${DSTAMP}${TSTAMP}
-      This is: ${name} ${version}
+      This is: ${name} ${forrest.version}
 
       --------------------------------------------------------------
     </echo>
@@ -102,11 +102,11 @@
 
   <target name="release-dist" depends="init, dist-clean, dist-shbat" 
     description="Makes release distributions">
-    <property name="release-name-bin" value="${name}-${version}"/>
+    <property name="release-name-bin" value="${name}-${forrest.version}"/>
     <zip
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
-      <zipfileset dir="etc"  prefix="${release-name-bin}" includes="RELEASE-NOTES-${version}.txt"/>
+      <zipfileset dir="etc"  prefix="${release-name-bin}" includes="RELEASE-NOTES-${forrest.version}.txt"/>
     </zip>
     <tar longfile="gnu" compression="gzip"
       destfile="${dist.dir}/${release-name-bin}.tar.gz" >
@@ -123,7 +123,7 @@
         <include name="**/ant"/>
         <include name="**/forrest"/>
       </tarfileset>
-      <tarfileset prefix="${release-name-bin}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
+      <tarfileset prefix="${release-name-bin}" dir="etc" includes="RELEASE-NOTES-${forrest.version}.txt"/>
     </tar>
   </target>
 
