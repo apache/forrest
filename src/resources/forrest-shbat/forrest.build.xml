@@ -81,6 +81,8 @@ FORREST SITE BUILDER
     <property name="project.lib-dir"     value="${project.content-dir}/lib" />
     <property name="project.classes-dir" value="${project.content-dir}/classes" />
 
+    <property name="forrest.validate.failonerror" value="true" />
+
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"       property="tools.jar.present"/>
@@ -585,11 +587,11 @@ Thanks for using Apache Forrest
   <!-- ===============================================================
        Validates all XML documents in the projects-context dir.
        =============================================================== -->
-  <target name="validate" depends="init-props">
-    <xmlvalidate failonerror="no" lenient="yes" warn="yes">
+ <target name="validate" depends="init-props, examine-proj">
+   <xmlvalidate failonerror="${forrest.validate.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
         <catalogfiles dir="${project.schema-dir}">
-          <include name="catalog" />
+          <include name="catalog*"/>
         </catalogfiles>
         <catalogfiles dir="${forrest.home}/context/resources/schema">
           <include name="catalog" />
