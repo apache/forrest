@@ -103,14 +103,14 @@ import java.io.IOException;
  *   parser can be recycled.
  *
  * @author $Author: crossley $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.2 2002/07/12 01:58:07 crossley Exp $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.3 2002/07/12 07:14:29 crossley Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements Cacheable, Recyclable
 {
 
   /** Default constructor
-   * 
+   *
    */
   public XNIConfigurableFileGenerator()
   {
@@ -205,28 +205,27 @@ extends ComposerGenerator implements Cacheable, Recyclable
    */
   public void generate()
   throws IOException, SAXException, ProcessingException {
+    EntityResolver catalogResolver = null;
+    final String[] extendRecognizedProperties = {FULL_ENTITY_RESOLVER_PROPERTY_URI};
     try {
       getLogger().debug("XNIConfigurable generator start generate()");
 
-      //TODO: The Configurable Parser should become a full blown avalon component
-      //      And the resolver should be configured and composed on that level.
-
-      final EntityResolver catalogResolver = (EntityResolver)this.manager.lookup(EntityResolver.ROLE);
-      final String[] extendRecognizedProperties = {FULL_ENTITY_RESOLVER_PROPERTY_URI};
+      //TODO?: Make XNIConfigurableParser an avalon component in it's own right
+      //      Let the resolver and namespace stuff be configured and composed on that level.
+      //  some ideas on this: (any others?)
+      // - build a XNIConfigurableParser Component Interface with its ROLE
+      // - add a XNIConfigurableParserSelector that can select() based on full qualified class name
+      // - and release() after usage
+      // the select method could do 6 next lines:
+      catalogResolver = (EntityResolver)this.manager.lookup(EntityResolver.ROLE);
       parserConfig.addRecognizedProperties(extendRecognizedProperties);
       parserConfig.setProperty(FULL_ENTITY_RESOLVER_PROPERTY_URI, new EntityResolverWrapper(catalogResolver));
       final XMLReader parser = new AbstractSAXParser(parserConfig){};
       parser.setFeature("http://xml.org/sax/features/namespaces", true);
       parser.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-
-      //parser.setEntityResolver(catalogResolver);
-
-
       parser.setContentHandler(this.contentHandler);
       parser.parse(this.inputSource.getInputSource());
 
-      // TODO: and afterwards we could release that Parser.
-      this.manager.release(catalogResolver);
     } catch (IOException e){
       getLogger().warn("XNIConfigurable.generate()", e);
       throw new ResourceNotFoundException("Could not get resource to process:\n["
@@ -242,6 +241,8 @@ extends ComposerGenerator implements Cacheable, Recyclable
     } catch (Exception e){
       getLogger().error("Some strange thing just happened!!", e);
       throw new ProcessingException("XNIConfigurable.generate()",e);
+    } finally {
+      this.manager.release(catalogResolver);
     }
   }
 }
