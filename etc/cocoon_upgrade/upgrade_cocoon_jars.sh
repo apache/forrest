@@ -18,11 +18,20 @@ NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 JARSUFFIX=`date +%Y%m%d`
 #JARSUFFIX=m2
 
-## Decide what kind of update to perform.  'real' copies upgraded jars to
-## lib/core/, whereas 'testing' copies them to the distribution in
-## build/dist/shbat/*
+## We need to identify the old Cocoon jar amongst all the others.  This pattern
+## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
+COCOONJAR_SUFFIX="[0-9]*"
+
+## Decide what kind of update to perform.
+## - 'testing' copies them to the distribution in
+##   build/dist/shbat/*
+## - 'real' copies upgraded jars to lib/core/
+## - 'real_with_cvs' copies to lib/core/, and marks jars for removal/addition
+##   in CVS.  Should only be performed by Forrest committers
+#
 UPGRADE_TYPE=testing
 #UPGRADE_TYPE=real
+#UPGRADE_TYPE=real_with_cvs
 #
 ######################################################################
 
@@ -42,6 +51,9 @@ elif [ "$UPGRADE_TYPE" = "testing" ]; then
   FLIB_ENDORSED=$FDIST/lib/endorsed
 fi
 
+alias push="pushd . > /dev/null"
+alias pop="popd > /dev/null"
+
 function checkdir()
 {
   if [ ! -d "$1" ]; then 
@@ -49,7 +61,6 @@ function checkdir()
     exit
   fi
 }
-
 function sanity_check()
 {
   checkdir "$FORREST" FORREST
@@ -62,50 +73,61 @@ function sanity_check()
 
 function copy()
 {
-  pushd . 
+  echo -n "Copying jar:		$1		"
+  push
   cd $FLIB
   rm $1*
   cp $CLIB/$1* .
-  popd
+  pop
+  echo "done"
 }
 
 # Copy a block's compiled jar
 function bzcopy()
 {
-  pushd . 
+  echo -n "Copying block jar:	$1			"
+  push
+#  echo "Updating $FLIB/cocoon-$1-block-* = `ls $FLIB/cocoon-$1-block-*`"
   cd $FLIB
   rm cocoon-$1-block-*.jar
   cp $CBLOCKS/$1-block.jar cocoon-$1-block-$JARSUFFIX.jar
-  popd
+  pop
+  echo "done"
 }
 
 # Copy across a block's jar dependencies
 function bcopy()
 {
+  echo -n "Copying block dep:	$1			"
   rm $FLIB/$1*
   cp $COCOON/src/blocks/*/lib/$1* $FLIB/
+  echo "done"
 }
 
 function upgrade_neko()
 {
-  pushd . 
+  echo -n "Updating nekopull and nekodtd		"
+  push
   cd $FLIB
   rm neko{dtd,pull}*
   cp $NEKODTD_HOME/nekodtd.jar nekodtd-$NEKODTD_VERSION.jar
   cp $NEKOPULL_HOME/nekopull.jar nekopull-$NEKOPULL_VERSION.jar
-  popd
+  pop
+  echo "done"
 
 }
 
 function upgrade_endorsed()
 {
-  pushd . 
+  echo -n "Updating endorsed jars		"
+  push
   cd $FLIB_ENDORSED
   rm xalan* xerces* xml-apis*
 
   cp $CLIB/{xalan,xerces,xml-apis}* .
 
-  popd
+  pop
+  echo "done"
 }
 
 
@@ -127,8 +149,8 @@ bcopy batik-all
 #chaperon-20030208.jar
 bcopy chaperon
 #cocoon-20030311.jar
-rm $FLIB/cocoon-*.jar ; cp $CBUILD/cocoon.jar $FLIB/cocoon-$JARSUFFIX.jar
-rm $FLIB/cocoon-deprecated*.jar ; cp $CBUILD/cocoon-deprecated.jar $FLIB/cocoon-deprecated-$JARSUFFIX.jar
+rm $FLIB/cocoon-$COCOONJAR_SUFFIX.jar ; cp $CBUILD/cocoon.jar $FLIB/cocoon-$JARSUFFIX.jar
+rm $FLIB/cocoon-deprecated-*.jar ; cp $CBUILD/cocoon-deprecated.jar $FLIB/cocoon-deprecated-$JARSUFFIX.jar
 #cocoon-asciiart-block-20030311.jar
 bzcopy asciiart
 #cocoon-batik-block-20030311.jar
@@ -184,13 +206,13 @@ copy excalibur-store
 #excalibur-xmlutil-20030306.jar
 copy excalibur-xmlutil
 #fop-0.20.4.jar
-## We use a later version of FOP than Cocoon's
-#bcopy fop
+bcopy fop
 #jakarta-oro-2.0.6.jar
 #jakarta-regexp-1.2.jar
 copy jakarta-regexp
 #jing-20020724.jar
-copy jing
+# We'll keep our own jing thankyou
+#copy jing
 #jisp-2.0.1.jar
 copy jisp
 #jtidy-04aug2000r7-dev.jar
@@ -212,9 +234,9 @@ copy resolver
 copy excalibur-event
 copy util.concurrent
 
-if [ "$UPGRADE_TYPE" = "real" ]; then
+if [ "$UPGRADE_TYPE" = "real_with_cvs" ]; then
   UPDATEFILE=/tmp/forrest-updates
-  pushd .
+  push
   cd $FORREST
   echo "Diffing against CVS.."
   cvs -n up > $UPDATEFILE
@@ -230,8 +252,11 @@ if [ "$UPGRADE_TYPE" = "real" ]; then
       echo "Marking removed files for deletion from CVS: $OLDFILES"
       cvs remove -f $OLDFILES
   fi
+  pop
 fi
 
 echo "All done.  Upgraded Cocoon jars copied to:"
 echo "  $FLIB"
 echo "  $FLIB_ENDORSED"
+
+# vim: set noexpandtab list:
