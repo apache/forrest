@@ -210,8 +210,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <div id="publishedStrip">
 <xsl:comment>+
     |start Subtabs
-    +</xsl:comment>
-         <xsl:apply-templates select="span[@id='level2tabs']"/>
+    +</xsl:comment>&#160;
+		<xsl:apply-templates select="span[@id='level2tabs']"/>       
 <xsl:comment>+
     |end Endtabs
     +</xsl:comment>
