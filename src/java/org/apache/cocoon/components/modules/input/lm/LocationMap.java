@@ -51,8 +51,10 @@
 package org.apache.cocoon.components.modules.input.lm;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.DefaultComponentManager;
 import org.apache.avalon.framework.component.DefaultComponentSelector;
@@ -61,6 +63,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 import org.apache.cocoon.matching.WildcardURIMatcher;
@@ -98,6 +101,38 @@ public final class LocationMap extends AbstractLogEnabled {
      */
     public static final String URI = "http://apache.org/cocoon/locationmap/1.0";
     
+    /**
+     * Name of the special anchor map passed into the VariableContext.
+     * The value is <code>lm</code> .
+     * <p>
+     * This makes it possible to use special locationmap variables
+     * inside the locationmap definition.
+     * </p>
+     * <p>
+     * Special locationmap parameters are available thru this anchor map.
+     * For instance the hint parameter defined below can be accessed in 
+     * the locationmap definition as follows: <code>{#lm:hint}</code>
+     * </p>
+     * All anchor map parameters are also passed implicitly into each selector
+     * and matcher at run-time.
+     */
+    public static final String ANCHOR_NAME = "lm";
+    
+    /**
+     * Special anchor map key holding the 'hint' or 'argument' the LocationMap was
+     * called with.
+     * 
+     * <p>
+     * The value is <code>hint</code>.
+     * </p>
+     */
+    public static final String HINT_KEY = "hint";
+    
+    /**
+     * The hint's parameter name.
+     */
+    public static final String HINT_PARAM = "#" + ANCHOR_NAME + ":" + HINT_KEY;
+    
     private static final String DEFAULT_MATCHER  = "wildcard";
     private static final String DEFAULT_MATCHER_TYPE = WildcardURIMatcher.class.getName();
     private static final Configuration DEFAULT_MATCHER_CONFIGURATION = 
@@ -108,25 +143,25 @@ public final class LocationMap extends AbstractLogEnabled {
         new DefaultConfiguration("selector");
     
     
-    private final ComponentManager m_manager;
+    private LocationMapComponentManager m_manager;
     
-    // the global default matcher type as configured in the components section
+    // default matcher as configured in the components section
     private String m_defaultMatcher;
-    // the global default selector type as configured in the components section
+    
+    // default selector as configured in the components section
     private String m_defaultSelector;
     
     // the list of LocatorNodes
     private LocatorNode[] m_locatorNodes;
     
-    public LocationMap(final ComponentManager manager) {
-        m_manager = manager;
+    public LocationMap(ComponentManager manager) {
+        m_manager = new LocationMapComponentManager(manager);
     }
     
     public void build(final Configuration configuration) throws ConfigurationException {
         
         // components
         final Configuration components = configuration.getChild("components",true);
-        final DefaultComponentManager manager = new DefaultComponentManager(m_manager);
         
         // matchers
         final DefaultComponentSelector matcherSelector = new DefaultComponentSelector();
@@ -145,7 +180,7 @@ public final class LocationMap extends AbstractLogEnabled {
             matcherSelector.put(name,matcher);
         }
         matcherSelector.makeReadOnly();
-        manager.put(Matcher.ROLE+"Selector",matcherSelector);
+        m_manager.put(Matcher.ROLE+"Selector",matcherSelector);
         
         // selectors
         final DefaultComponentSelector selectorSelector = new DefaultComponentSelector();
@@ -164,14 +199,14 @@ public final class LocationMap extends AbstractLogEnabled {
             selectorSelector.put(name,selector);
         }
         selectorSelector.makeReadOnly();
-        manager.put(Selector.ROLE+"Selector",selectorSelector);
-        manager.makeReadOnly();
+        m_manager.put(Selector.ROLE+"Selector",selectorSelector);
+        m_manager.makeReadOnly();
         
         // locators
         final Configuration[] children = configuration.getChildren("locator");
         m_locatorNodes = new LocatorNode[children.length];
         for (int i = 0; i < children.length; i++) {
-            m_locatorNodes[i] = new LocatorNode(this,manager);
+            m_locatorNodes[i] = new LocatorNode(this,m_manager);
             m_locatorNodes[i].enableLogging(getLogger());
             m_locatorNodes[i].build(children[i]);
         }
@@ -181,25 +216,39 @@ public final class LocationMap extends AbstractLogEnabled {
         Object component = null;
         try {
             component = Class.forName(src).newInstance();
+            ContainerUtil.enableLogging(component,getLogger());
+            ContainerUtil.configure(component,config);
+            ContainerUtil.initialize(component);
         } catch (Exception e) {
             throw new ConfigurationException("Couldn't create object of type " + src,e);
         }
-        ContainerUtil.enableLogging(component,getLogger());
-        ContainerUtil.configure(component,config);
         return component;
     }
     
-    public String locate(String name, Map om) throws Exception {
+    public void dispose() {
+        Iterator components = m_manager.getComponents();
+        while(components.hasNext()) {
+            Object component = components.next();
+            if (component instanceof Disposable) {
+                ((Disposable) component).dispose();
+            }
+        }
+        m_manager = null;
+        m_locatorNodes = null;
+    }
+    
+    public String locate(String hint, Map om) throws Exception {
         
         String location = null;
         
         final InvokeContext context = new InvokeContext();
-        context.enableLogging(getLogger().getChildLogger("ctx"));
+        final Logger contextLogger = getLogger().getChildLogger("ctx");
+        context.enableLogging(contextLogger);
         context.compose(m_manager);
         
         final Map anchorMap = new HashMap(2);
-        anchorMap.put("name",name);
-        context.pushMap("lm",anchorMap);
+        anchorMap.put(HINT_KEY,hint);
+        context.pushMap(ANCHOR_NAME,anchorMap);
         
         for (int i = 0; i < m_locatorNodes.length; i++) {
             location = m_locatorNodes[i].locate(om,context);
@@ -208,7 +257,10 @@ public final class LocationMap extends AbstractLogEnabled {
             }
         }
         
-        context.popMap();
+        //context.popMap();
+        //context.reset();
+        context.dispose();
+        
         return location;
     }
     
@@ -220,4 +272,15 @@ public final class LocationMap extends AbstractLogEnabled {
         return m_defaultSelector;
     }
     
+    private static class LocationMapComponentManager extends DefaultComponentManager {
+        
+        LocationMapComponentManager(ComponentManager parent) {
+            super(parent);
+        }
+        
+        Iterator getComponents() {
+            return super.getComponentMap().values().iterator();
+        }
+        
+    }
 }
