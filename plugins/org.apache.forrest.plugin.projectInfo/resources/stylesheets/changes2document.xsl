@@ -18,10 +18,7 @@
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
-
- <xsl:import href="copyover.xsl"/>
- 
+    version="1.0"> 
 
  <!-- FIXME (JJP):  bugzilla is hardwired -->
  <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
@@ -124,5 +121,11 @@
      </xsl:otherwise>
    </xsl:choose>
  </xsl:template>
+
+  <xsl:template match="@*|*|text()|processing-instruction()|comment()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>
