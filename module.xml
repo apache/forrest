@@ -42,16 +42,15 @@
     <project name="apache-forrest">
         <version fix="0" major="0" minor="3" tag="-dev"/>
         <package>org.apache.forrest</package>
-        <ant target="gump" vm="1.2"/>
 
-    <!-- script name="build"/> -->
+        <script name="build"/>
 
     <!-- Project jars Forrest build strictly depends on -->
     <!-- needed for build -->
         <depend project="jakarta-ant"/>
         <depend project="xml-xerces"/>
         <depend project="xml-xalan2"/>
-        <depend project="xml-cocoon2"/>
+        <depend project="xml-cocoon2" inherit="all"/>
         <depend project="junit"/>
 
     <!-- Project jars Forrest build can use  -->
@@ -59,7 +58,7 @@
 
     <!-- Work dirs to be included in classpath  -->
         <work nested="build/classes"/>
-        <work nested="build/testcases"/>
+
         <home nested="build"/>
 
     <!-- jars - the result of the build  -->
@@ -75,4 +74,17 @@
              todir="forrest/" />
     -->
     </project>
+    
+    <project name="apache-forrest-forrestbar">
+
+        <ant target="forrestbar"/>
+
+        <home nested="build"/>
+
+    <!-- jars - the result of the build  -->
+        <jar id="forrestbar" name="forrestbar.xpi"/>
+
+
+    </project>
+        
 </module>
