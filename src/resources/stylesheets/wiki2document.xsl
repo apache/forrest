@@ -96,7 +96,7 @@
        <xsl:value-of select="$text"/>
       </link>
      </xsl:when>
-     <xsl:when test="starts-with($href,'http')">
+     <xsl:when test="starts-with($href,'http') or contains($href, '.html') or contains($href, '.pdf')">
       <link href="{$href}">
        <xsl:value-of select="$text"/>
       </link>
