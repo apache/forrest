@@ -62,7 +62,7 @@
       <xsl:with-param name="prevLevel" select="1"/>
     </xsl:call-template>
   </xsl:template>
-  <xsl:template match="text:h[@text:level='2'] | text:h[@text:level='3']| text:h[@text:level='4'] | text:h[@text:level='5']">
+  <xsl:template match="text:h[@text:level]">
     <xsl:variable name="level" select="@text:level"/>
     <xsl:call-template name="createSection">
       <xsl:with-param name="currentLevel" select="$level"/>
@@ -75,7 +75,7 @@
     <xsl:choose>
       <xsl:when test="$currentLevel &gt; $prevLevel+1">
         <section>
-          <title>hugo</title>
+          <title/>
           <xsl:call-template name="createSection">
             <xsl:with-param name="currentLevel" select="$currentLevel"/>
             <xsl:with-param name="prevLevel" select="$prevLevel +1"/>
@@ -96,6 +96,15 @@
   <!--+
       | paragraph
       +-->
+  <xsl:template match="text:p[@text:style-name='Heading']">
+      <section>
+      <title>
+        <xsl:apply-templates/>
+      </title>
+      <xsl:apply-templates select="key('rootChildren', generate-id())"/>
+      <xsl:apply-templates select="key('chieldElements', generate-id())"/>
+    </section>
+  </xsl:template>
   <xsl:template match="text:p">
     <xsl:element name="p">
       <xsl:apply-templates/>
