@@ -264,16 +264,18 @@
   <target name="testPlugins"
           depends="cleanPlugins"
           description="Test each type of the plugin">
-    
+    <!--
+      FIXME: these don't work as the compile stage executes since $java.dir = FORREST_HOME/main/java
+      instead of PLUGIN_HOME/java
     <echo>=============================</echo>
     <echo>Testing using an input plugin</echo>
     <echo>=============================</echo>
-    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.excel/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.excel"/>
     </ant>
     
     <echo>=============================</echo>
-    <echo>Testing using an ouput plugin</echo>      
+    <echo>Testing using an ouptut plugin</echo>      
     <echo>=============================</echo>
     <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output"/>
@@ -282,9 +284,10 @@
     <echo>=============================</echo>
     <echo>Testing using an internal plugin</echo>
     <echo>=============================</echo>
-    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+    <ant antfile="${forrest.home}/plugins/IMSManifest/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/IMSManifest"/>
     </ant>
+    -->
   </target>
   
   <target name="cleanPlugins"
@@ -293,6 +296,9 @@
   </target>
 
   <target name="testseed" depends="init, cleanPlugins">
+    <echo>=============================</echo>
+    <echo>Testing a seeded site</echo>
+    <echo>=============================</echo>
     <property name="test.dir" value="${build.dir}/test"/>
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
