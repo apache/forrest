@@ -4,7 +4,7 @@
 #   reserved.
 
 if [ -f "$HOME/.antrc" ] ; then 
-  . $HOME/.antrc
+  . "$HOME/.antrc"
 fi
 
 # OS specific support.  $var _must_ be set to either true or false.
@@ -21,17 +21,17 @@ if [ -z "$ANT_HOME" ] ; then
     ANT_HOME=/opt/ant
   fi
 
-  if [ -d ${HOME}/opt/ant ] ; then 
-    ANT_HOME=${HOME}/opt/ant
+  if [ -d "${HOME}/opt/ant" ] ; then 
+    ANT_HOME="${HOME}/opt/ant"
   fi
 
   ## resolve links - $0 may be a link to ant's home
-  PRG=$0
-  progname=`basename $0`
+  PRG="$0"
+  progname=`basename "$0"`
   saveddir=`pwd`
 
   # need this for relative symlinks
-  cd `dirname $PRG`
+  cd `dirname "$PRG"`
   
   while [ -h "$PRG" ] ; do
     ls=`ls -ld "$PRG"`
@@ -39,7 +39,7 @@ if [ -z "$ANT_HOME" ] ; then
     if expr "$link" : '.*/.*' > /dev/null; then
 	PRG="$link"
     else
-	PRG="`dirname $PRG`/$link"
+	PRG=`dirname "$PRG"`"/$link"
     fi
   done
   
@@ -114,11 +114,10 @@ if [ -n "$JAVA_HOME" ] ; then
     if [ -d ${OSXHACK} ] ; then
       for i in ${OSXHACK}/*.jar
       do
-        JIKESPATH=$JIKESPATH:$i
+        JIKESPATH="$JIKESPATH:$i"
       done
     fi
   fi
-
 else
   echo "Warning: JAVA_HOME environment variable is not set."
   echo "  If build fails because sun.* classes could not be found"

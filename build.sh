@@ -30,7 +30,7 @@ CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S`"
 export CLASSPATH
 
 echo Using classpath: \"$CLASSPATH\"
-$PWD/./tools/antipede/bin/ant -emacs  $@
+"$PWD/./tools/antipede/bin/ant" -emacs  $@
 
 unset CLASSPATH
 

@@ -9,7 +9,7 @@ if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
 @setlocal
 
-rem %~dp0 is name of current script under NT
+rem %~dp0 is expanded pathname of the current script under NT
 set DEFAULT_ANT_HOME=%~dp0
 
 rem : operator works similar to make : operator
@@ -36,7 +36,7 @@ rem agruments (up to the command line limit, anyway).
 set ANT_CMD_LINE_ARGS=
 
 :setupArgs
-if %1a==a goto doneStart
+if "%1a"=="a" goto doneStart
 set ANT_CMD_LINE_ARGS=%ANT_CMD_LINE_ARGS% %1
 shift
 goto setupArgs
