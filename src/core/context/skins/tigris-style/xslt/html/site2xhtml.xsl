@@ -461,11 +461,4 @@ if (VERSION > 3) {
       -->
   </xsl:template>
 
-  <xsl:template match="node()|@*" priority="-1">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:copy>
-  </xsl:template>
-
 </xsl:stylesheet>
