@@ -1,22 +1,51 @@
 <?xml version="1.0"?>
+<!--
+This stylesheet contains the majority of templates for converting documentv11
+to HTML.  It renders XML as HTML in this form:
+
+  <div class="content">
+   ...
+  </div>
+
+..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
+and tabs (tab2menu.xsl) to generate the final HTML.
+
+$Id: document2html.xsl,v 1.11 2002/11/02 10:09:39 jefft Exp $
+-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href = "split.xsl"/>
-
+  <!-- If non-blank, a PDF link for this page will not be generated -->
+  <xsl:param name="nopdf"/>
   <xsl:param name="isfaq"/>
-  <xsl:param name="resource"/> <!-- Filename part, eg 'index' from index.html' -->
-  <xsl:param name="dir"/>
-  <xsl:include href="dotdots.xsl"/>
+  <xsl:param name="path"/>
 
+  <xsl:include href="split.xsl"/>
+  <xsl:include href="dotdots.xsl"/>
+  <xsl:include href="pathutils.xsl"/>
+
+  <!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
-      <xsl:with-param name="path" select="$dir"/>
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
  
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
 
   <xsl:template match="document">
+  <!--
+    <xsl:message>
+     ##  path = <xsl:value-of select="$path"/>
+     ##  root = <xsl:value-of select="$root"/>
+     ##  nopdf = '<xsl:value-of select="$nopdf"/>'
+    </xsl:message>
+  -->
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
         <table class="title">
@@ -29,9 +58,11 @@
             <!--td align="center" width="80" nowrap><a href="" class="dida"><img src="images/singlepage.gif"><br>
               single page<br>
               version</a></td-->
-            <td align="center" width="80" nowrap="nowrap"><a href="{$resource}.pdf" class="dida"><img border="0" src="{$skin-img-dir}/printer.gif"/><br/>
+            <xsl:if test="$nopdf = ''"> <!-- nopdf flag unset -->
+            <td align="center" width="80" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida"><img border="0" src="{$skin-img-dir}/printer.gif"/><br/>
               print-friendly<br/>
               version</a></td>
+            </xsl:if>
           </tr>
         </table>
       </xsl:if>
@@ -140,9 +171,9 @@
     </a>
   </xsl:template>
   <xsl:template match="p[@xml:space='preserve']">
-  <div class="pre">
-    <xsl:apply-templates/>
-  </div>
+    <div class="pre">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
   <xsl:template match="source">
     <pre class="code">

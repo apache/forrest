@@ -1,18 +1,44 @@
 <?xml version="1.0"?>
+<!--
+site2xhtml.xsl is the final stage in HTML page production.  It merges HTML from
+document2html.xsl, tab2menu.xsl and book2menu.xsl, and adds the site header,
+footer, searchbar, css etc.  As input, it takes XML of the form:
+
+<site>
+  <div class="menu">
+    ...
+  </div>
+  <div class="tab">
+    ...
+  </div>
+  <div class="content">
+    ...
+  </div>
+</site>
+
+$Id: site2xhtml.xsl,v 1.11 2002/11/02 10:09:39 jefft Exp $
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
    <!-- Default skinconf.xml in the skins/ directory -->
   <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-  <xsl:param name="dir" select="'UNDEFINED'"/>
-  <xsl:param name="resource" select="'UNDEFINED'"/>
+  <xsl:param name="path"/>
   <xsl:include href="dotdots.xsl"/>
+  <xsl:include href="pathutils.xsl"/>
 
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
-      <xsl:with-param name="path" select="$dir"/>
+      <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
  
+  <xsl:variable name="filename">
+    <xsl:call-template name="filename">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
   <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
  
@@ -166,7 +192,7 @@
           <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169;
           <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
           select="$config/vendor"/> All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
-              document.write(" - "+"Last Published: " + document.lastModified);
+              document.write(". - "+"Last Published: " + document.lastModified);
             //  -->]]></script></font>
         </td>
       </tr>
@@ -177,7 +203,7 @@
         </xsl:if>
       </td>
       <td class="logos" bgcolor="#CFDCED" align="right">
-        <xsl:if test="$resource = 'index.html' and $config/credits">
+        <xsl:if test="$filename = 'index.html' and $config/credits">
           <div align="right">
           <xsl:for-each select="$config/credits/credit">
             <xsl:variable name="name" select="name"/>

@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:param name="path"/>
 
-  <xsl:param name="resource"/>
-
+  <xsl:include href="pathutils.xsl"/>
+  <xsl:variable name="filename">
+    <xsl:call-template name="filename">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+ 
   <xsl:template match="book">
     <menu>
       <xsl:apply-templates/>
@@ -25,7 +30,7 @@
   <xsl:template match="menu-item">-&#160;
     <xsl:if test="not(@type) or @type!='hidden'">
        <xsl:choose>
-         <xsl:when test="starts-with(@href, $resource)">
+         <xsl:when test="starts-with(@href, $filename)">
           <xsl:value-of select="@label"/>
          </xsl:when>
          <xsl:otherwise>
