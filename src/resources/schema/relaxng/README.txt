@@ -2,12 +2,14 @@ This directory contains XML schemas which describe the various XML formats used
 in Forrest.
 
 The schemas are written in RELAX NG, a schema language devised by James Clark,
-SGML boffin, XML inventor and all-round smart guy. RELAX NG is widely regarded
-to be the simplest, most powerful and easy to learn schema language available.
+SGML boffin, XML inventor and all-round smart guy.
+
+RELAX NG is widely regarded to be the simplest, most powerful, and easy to
+learn schema language available.
 
 Relevant URLs:
 
-The RELAX NG "home page":
+The RELAX NG "home page" at the OASIS RELAX NG Technical Committee:
 http://www.oasis-open.org/committees/relax-ng/
 
 The RELAX NG tutorial:
@@ -19,8 +21,11 @@ The definition of the non-XML syntax used here (.rnx files):
 The RELAX NG Compact Syntax spec (less readable than the one above):
   http://www.oasis-open.org/committees/relax-ng/compact-20020607.html
 
+Jing RELAX NG validator in Java:
+	http://www.thaiopensource.com/relaxng/
 
-To run an XML file against a .rng schema:
+To run an XML file against a .rng schema using Jing, see the
+"validate-config" target in xml-forrest/build.xml or do this:
 
 java -jar $FORREST_HOME/WEB-INF/lib/jing.jar [.rng file] [.xml file]
 
@@ -29,4 +34,4 @@ $FORREST_HOME/lib/endorsed/*.jar to your classpath first.
 
 -- 
 jefft@apache.org
-$Id: README.txt,v 1.1 2002/11/07 06:37:02 crossley Exp $
+$Id: README.txt,v 1.2 2002/11/14 09:06:35 crossley Exp $
