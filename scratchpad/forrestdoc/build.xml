@@ -1,0 +1,317 @@
+<?xml version="1.0" ?>
+<project
+ name="forrestdoc" default="dist" basedir=".">
+
+   <property name="project.name" value="project" />
+   <property name="project.dir"  value="." />
+
+   <property name="java.src" value="${project.dir}/src/java" />
+   <property name="ant.src"  value="${project.dir}/build.xml" />   
+   <property name="js.src"   value="./src/test/resources/jsdoc" />
+   
+   <property name="src" value="./src/java" />
+   <property name="resources"  value="./src/resources" />
+   <property name="build" value="./build" />
+   <property name="build.classes" value="${build}/classes" />
+   <property name="target" value="${build}/${project.name}" />   
+   <property name="dist" value="./dist" />
+
+   <property name="target.javasrc" value="${target}/javasrc" />
+   <property name="target.javadoc" value="${target}/javadoc" />
+   <property name="target.xml"     value="${target}/xml" />
+   <property name="target.dot"     value="${target}/dot" />
+   <property name="target.uml"     value="${target}/uml" />
+   <property name="target.jsdoc"   value="${target}/jsdoc" />
+   <property name="target.vizant"  value="${target}/vizant" />
+   
+            
+   <path id="lib.classpath">
+      <fileset  dir="lib">
+         <include name="*.jar" />
+      </fileset>
+      <fileset dir="${ant.home}/lib">
+         <include name="*.jar" />
+      </fileset>
+   </path>
+
+   <path id="task.classpath">
+      <fileset  dir="lib">
+         <include name="*.jar" />
+      </fileset>
+      <fileset dir="${ant.home}/lib">
+         <include name="*.jar" />
+      </fileset>
+      <pathelement path="${build.classes}"/>
+   </path>
+
+   <target
+    name="init">
+<!-- Create the time stamp -->
+      <tstamp />
+<!-- Create the build directory structure used by compile -->
+      <mkdir
+       dir="${build.classes}" />
+   </target>
+
+   <target name="compile" depends="init">
+<!-- Compile the java code from ${src} into ${target} -->
+      <javac srcdir="${src}"
+             debug="true"
+             destdir="${build.classes}"
+             classpathref="lib.classpath" />
+   </target>
+
+   <target name="dist" depends="compile">
+<!-- Create destination directory -->
+      <mkdir dir="${dist}" />
+
+<!-- Put everything in ${target} into the xml-forrestdoc.jar file -->
+      <jar jarfile="${dist}/xml-forrestdoc.jar"
+           basedir="${build.classes}" />
+
+   </target>
+
+   <target name="clean">
+<!-- Delete the ${target} and ${dist} directory trees -->
+      <delete dir="${build}" />
+      <delete dir="${dist}" />
+   </target>
+
+
+
+   <target name="test" 
+           description="create all possible docs for this project" 
+           depends="all">
+           
+   </target>        
+   
+   <target name="all" 
+           description="create all possible docs for this project" 
+           depends="javasrc, jsdoc, xml, uml, javadoc, vizant">
+           
+      <copy todir="${target}">
+        <fileset dir="${resources}/common" casesensitive="yes"/>
+      </copy> 
+                 
+   </target>    
+    <!-- 
+ 
+      The utility targets to run the aspects of ForrestDoc
+ 
+     -->
+
+
+   <target name="javasrc" depends="dist">
+   
+      <mkdir dir="${target.javasrc}" />
+
+      <java classname="org.apache.forrest.forrestdoc.java.src.Pass1"
+             fork="true"
+             dir="."
+             failonerror="true">
+         <sysproperty key="recurse" value="true" />
+         <sysproperty  key="title" value="Java Code Documentation" />
+         <sysproperty key="outdir" path="${target.javasrc}" />
+         <arg value="${java.src}" />
+         <classpath>
+            <fileset dir="${dist}">
+               <include name="*.jar" />
+            </fileset>
+            <fileset dir="lib">
+               <include name="*.jar" />
+            </fileset>
+         </classpath>
+      </java>
+
+      <java classname="org.apache.forrest.forrestdoc.java.src.Pass2"
+            fork="true"
+            dir="."
+            failonerror="true">
+         <sysproperty key="recurse" value="true" />
+         <sysproperty key="title" value="Java Code Documentation" />
+         <sysproperty key="outdir" path="${target.javasrc}" />
+         <arg value="${java.src}" />
+         <classpath>
+            <fileset dir="${dist}">
+               <include name="*.jar" />
+            </fileset>
+            <fileset dir="lib">
+               <include name="*.jar" />
+            </fileset>
+         </classpath>
+      </java>
+
+      <copy file="${resources}/javasrc/styles.css"
+            todir="${target.javasrc}"
+            filtering="off" />
+   </target>
+   
+   <target name="jsdoc" depends="compile">
+      <mkdir dir="${target.jsdoc}" />
+      <taskdef name="jsdoc" classname="org.apache.forrest.forrestdoc.js.doc.JSDocTask" classpath="./build/classes/"/>
+      <jsdoc jSDir="${js.src}" destDir="${target.jsdoc}" />
+   </target>   
+   
+   <target name="javasrc2" depends="compile">
+      <mkdir dir="${target.javasrc}" />
+      <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
+        <classpath refid="task.classpath"/>
+      </taskdef>
+      <javasrc srcDir="${java.src}" destDir="${target.javasrc}" />
+   </target>   
+
+   <target name="uml" depends="xml, xml2dot, dot">
+       <antcall target="dot">
+        <param name="dot.format" value="svg"/>
+      </antcall>    
+   </target>
+   <target name="umlgraph" depends="umldoclet, dot"/>
+         
+   <target name="umldoclet" depends="init, compile">
+        <javadoc 
+           sourcepath="${java.src}"
+           packagenames="*">
+      
+         <doclet name="org.apache.forrest.forrestdoc.java.doc.UmlDoclet"
+                 path="./build/classes/">
+              <!--  <param name="-horizontal" value="true"/> -->
+              <!--   <param name="-attributes" value="true"/> -->
+              <!--  <param name="-operations" value="true"/> -->
+              <!--   <param name="-visibility" value="true"/>  -->                          
+              <!--  <param name="-types" value="true"/> -->       
+               <param name="-all" value="true"/>                     
+       </doclet>
+     </javadoc>
+   </target>
+
+   <target name="javadoc" depends="init">
+      <mkdir dir="${target.javadoc}" />
+        <javadoc 
+           sourcepath="${java.src}"
+           destDir="${target.javadoc}"
+           packagenames="*">
+     </javadoc>
+   </target>   
+   
+   <target name="xml" depends="init, compile">
+      <mkdir dir="${target.xml}" />
+        <javadoc 
+           sourcepath="${java.src}"
+           packagenames="*">
+      
+         <doclet name="org.apache.forrest.forrestdoc.java.doc.XMLDoclet"
+                 path="./build/classes/">
+       <!--   <param name="-foo" value="foovalue"/>
+          <param name="-bar" value="barvalue"/> -->
+       </doclet>
+     </javadoc>
+     <move file="simple.xml" tofile="${target.xml}/xmldocs.xml"/>
+   </target>   
+      
+   <target name="xml2dot" depends="init">
+      <copy file="${resources}/javadoc/javadoc-v04draft.dtd" todir="${target.xml}" filtering="off" />
+     <xslt force="true" in="${target.xml}/xmldocs.xml" out="${target.dot}/graph.dot" style="src/resources/javadoc/xml2dot.xsl"/>
+   </target>   
+  
+   <target name="dot">
+      <mkdir dir="${target.uml}" />
+      <property name="dot.format" value="png"/> 
+      <property name="dot.source" value="${target.dot}/graph.dot"/> 
+      <property name="dot.dest" value="${target.uml}/graph"/> 
+                  
+      <exec executable="dot">
+         <arg line="-T${dot.format} ${dot.source} -o ${dot.dest}.${dot.format}" />
+      </exec>
+   </target>
+
+
+   <target name="vizant" depends="init, runvizant, xml2formats"/>
+   
+   <target name="runvizant" depends="init, compile">
+      <mkdir dir="${target.vizant}" />
+      <taskdef name="vizant" classname="org.apache.forrest.forrestdoc.ant.doc.Vizant" classpath="${build.classes}" />
+      <vizant antfile="${ant.src}" 
+              outfile="${target.vizant}/buildgraph.xml" 
+              uniqueref="true">
+       <!--       
+         <attrstmt type="graph"> 
+           <attr name="ranksep" value="1.0"/>
+           <attr name="nodesep" value="0.5"/>
+         </attrstmt>
+              
+        <attrstmt type="node">
+          <attr name="URL" value="javascript:alert('\N');"/>
+          <attr name="color" value="grey90"/>
+          <attr name="style" value="filled"/>
+        </attrstmt>
+
+        <attrstmt type="edge">
+          <attr name="color" value="grey70"/>
+        </attrstmt>
+
+        <attrstmt type="edge.antcall">
+          <attr name="label" value="antcall"/>
+          <attr name="fontcolor" value="gray70"/>
+          <attr name="fontsize" value="9"/>
+        </attrstmt>
+
+        <attrstmt type="node.default">
+          <attr name="color" value="pink"/>
+        </attrstmt>
+        
+        <subgraph>
+          <attrstmt type="graph">
+            <attr name="style" value="filled"/>
+            <attr name="color" value="grey95"/>
+          </attrstmt>
+        </subgraph>
+       --> 
+      </vizant>        
+   </target>
+
+   <target name="xml2formats">
+      <xslt in="${target.vizant}/buildgraph.xml" out="${target.vizant}/target.dot" style="src/resources/vizant/xml2dot.xsl" />
+
+      <antcall target="dot">
+        <param name="dot.source" value="${target.vizant}/target.dot"/>
+        <param name="dot.dest" value="${target.vizant}/vizant"/>
+      </antcall> 
+ 
+       <antcall target="dot">
+        <param name="dot.format" value="svg"/>
+        <param name="dot.source" value="${target.vizant}/target.dot"/>
+        <param name="dot.dest" value="${target.vizant}/vizant"/>
+      </antcall> 
+      
+      <xslt in="${target.vizant}/buildgraph.xml" out="${target.vizant}/target.html" style="src/resources/vizant/xml2html.xsl" />
+
+      <xslt in="${target.vizant}/buildgraph.xml" out="${target.vizant}/buildtg.xml" style="src/resources/vizant/xml2tg.xsl" />    
+      <copy file="${target.vizant}/buildtg.xml" tofile="${target.vizant}/InitialXML._xml"/>  
+      <copy todir="${target.vizant}">
+        <fileset dir="src/resources/touchgraph" casesensitive="yes"/>
+      </copy>          
+
+      <copy todir="${target.vizant}">
+        <fileset dir="src/resources/vizant" casesensitive="yes"/>
+      </copy>      
+   </target>
+
+
+   <target name="tg">
+    <java classname="com.touchgraph.linkbrowser.TGLinkBrowser" fork="yes">
+     <arg value="${target.vizant}/buildtg.xml"/>
+     <classpath>
+       <path>
+          <fileset dir="${target.vizant}" casesensitive="yes">
+           <patternset>
+             <include name="**/*.jar"/>
+             <include name="**/*.zip"/>
+           </patternset>
+         </fileset>  
+       </path> 
+     </classpath>
+      </java>
+   </target>
+   
+</project>
+
