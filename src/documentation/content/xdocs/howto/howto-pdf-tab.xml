@@ -52,61 +52,44 @@
   <steps title="Steps">
     <p>The procedure outlined below will define a project
       <code>sitemap.xmap</code> and create a new
-      <code>pdf-tab.xmap</code> based on the <code>aggregate.xmap</code>
+      <code>pdf-tab.xmap</code>.
     </p>
   <section id="sitemap">
     <title>Create your project's main sitemap.xmap</title>
     <p>
-      Simply copy the sitemap.xmap from the Forrest sitemaps at
-      <code>${FORREST_HOME}/context/sitemap.xmap</code> into your
+      If you do not have already a sitemap then create a new empty one in your
       <code>src/documentation</code> directory (or wherever
       ${project.sitemap-dir} points to).
     </p>
   </section>
 
   <section id="aggregator">
-    <title>Create the aggregator sitemap pdf-tab.xmap</title>
+    <title>Create another sitemap: pdf-tab.xmap</title>
     <p>
-    Copy the aggregate.xmap from Forrest sitemaps into your
-    ${project.sitemap-dir} and rename it to pdf-tab.xmap
+    Like before create an empty sitemap and name it pdf-tab.xmap.
     </p>
   </section>
 
-  <section id="workaround-202">
-    <title>Edit project sitemap.xmap</title>
-    <note>
-      This is a workaround for Issue FOR-202
-    </note>
-    <p>
-      Edit the project <code>sitemap.xmap</code> to comment-out the match
-      for the sitemap like this:
-    </p>
-    <source><![CDATA[
-<!--
-<map:pipeline internal-only="false">
-<map:select type="exists">
-  <map:when test="{project:sitemap}">
-    <map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
-  </map:when>  
-</map:select>
-</map:pipeline
--->]]>
-    </source>
-  </section>
-
-  <section id="mount">
+    <section id="mount">
     <title>Edit project sitemap.xmap to mount pdf-tab.xmap</title>
     <p>
-      Insert the following lines after the
-      <code><![CDATA[<map:match pattern="site.xml">]]></code>
-      pipeline in the section called "SOURCE FORMATS".
+      Your sitemap should look something like this.
     </p>
     <source><![CDATA[
-...
-<map:match pattern="pdf-tab.xml">
-   <map:mount uri-prefix="" src="pdf-tab.xmap" check-reload="yes" />
-</map:match>
-...]]>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:pipelines>
+    <map:pipeline internal-only="false">
+      <map:match pattern="**.xml">
+        <!-- pdf-tab definitions -->
+        <map:match pattern="pdf-tab.xml">
+          <map:mount uri-prefix="" src="pdf-tab.xmap"
+            check-reload="yes" />
+        </map:match>
+        <!-- end of pdf-tab definitions -->
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
+</map:sitemap>]]>
     </source>
   </section>
 
@@ -117,22 +100,28 @@
       should look like the following:
     </p>
     <source><![CDATA[
-<map:match pattern="*.xml">
-  <map:generate src="cocoon://abs-linkmap"/>
-  <map:transform type="xpath">
-	<map:parameter name="include" value="//*[@wholesite='true']"/>
-	<map:parameter name="exclude" value="//*[@wholesite='false']"/>
-  </map:transform>
-  <map:transform src="resources/stylesheets/site2book.xsl" />
-  <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
-     <map:parameter name="title"
-        value="{conf:project-name}: Still My Foo Site"/>
-  </map:transform>
-  <map:transform type="cinclude"/>
-  <map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/>
-  <map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/>
-  <map:serialize type="xml"/>
-</map:match>]]>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:pipelines>
+    <map:pipeline internal-only="false">
+     <map:match pattern="*.xml">
+	<map:generate src="cocoon://abs-linkmap"/>
+	  <map:transform type="xpath">
+	  	<map:parameter name="include" value="//*[@wholesite='true']"/>
+		<map:parameter name="exclude" value="//*[@wholesite='false']"/>
+	  </map:transform>
+	  <map:transform src="resources/stylesheets/site2book.xsl" />
+	  <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
+	     <map:parameter name="title"
+		value="{conf:project-name}: Still My Foo Site"/>
+	     </map:transform>
+	  <map:transform type="cinclude"/>
+	  <map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/>
+	  <map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/>
+	  <map:serialize type="xml"/>
+    </map:match>    
+   </map:pipeline>
+  </map:pipelines>
+</map:sitemap>]]>
     </source>
   </section>
   <section id="edit-site">
@@ -218,18 +207,6 @@
       <br/>
       <code><![CDATA[<map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/>]]></code>
     </p>
-    <note>
-      In the original <code>aggregate.xmap</code> there is the line
-      <br/>
-      <code><![CDATA[<map:parameter name="ignore" value="{1}"/>]]></code>
-      <br/>
-      just before the title definition
-      (<code><![CDATA[<map:parameter name="title" value=".../>]]></code>).
-      Be sure to delete it or comment it out if you like to generate a
-      pdf-file for specific sites. You only need it for the generation of
-      one pdf-file for the whole project (this is what
-      <code>aggregate.xmap</code> usually does).
-    </note>
   </section>
   </steps>
 
@@ -242,8 +219,5 @@
       In the future, this ability will probably be incorporated into the
       main Forrest process.
     </p>
-    <fixme author="open">
-      This document will need to be modified when Issue FOR-202 is solved.
-    </fixme>
   </feedback>
 </howto>
