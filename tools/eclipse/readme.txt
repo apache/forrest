@@ -54,64 +54,16 @@ as good as your existing environement yet (I'd love to know what is good/bad
 about it so I can feed it back to the WTP project at Eclipse). If you don't 
 use eclipse for XML editing at present then just use your normal installation.
 
-- download Eclipse 3.0 (you need the full SDK or, for a smaller 
-  download the eclipse platform) 
+- download Eclipse 3.0 (you need the full SDK) 
   - NOTE: 3.1 Milestone releases are not currently supported
-  - NOTE: the platform download does not include the java development plugins
 
 - extract to your chosen directory (don't forget to make this different 
   to you normal working directory - we'll call this installation forrestEclipse)
 
 - run forrestEclipse
 
-- install some required plugins
-  - Help -> Software Updates... -> Find and Install
-    - select "Search for new features to install"
-    - check the selection box for "Eclipse.org update site"
-    - expand the "Eclipse.org update site" tree node
-    - ensure that the following  options are checked
-      - EMF SDK 2.0.1
-      - GEF SDK 3.0.1
-      - JEM
-    - click "Next"
-    - wait while eclipse checks for updates
-    - check (at least) the following updates
-      - Eclipse Modelling Framework
-      - EMF SDK
-      - EMF Service Data Objects
-      - Graphical Editing FrameworkXSD Sxhema Infoset Model
-    - click "Next"
-    - accept the license aggreement (after reading it of course)
-    - click "Next"
-    - click "Finish"
-    - you will be asked if you want to install various plugins, just 
-      click "Install"
-    - this will take a while, especially if you are on a slow connection
-    - once all plugins are installed you will need to restart forrestEclipse
-    
-- Check the plugins are all installed correctly
-    - Help -> Software Updates -> Manage Configuration
-    - Ensure the configuration dialog is set to display disabled features
-      - third button from left in the toolbar should be depressed
-    - You should see the following features enabled (i.e. they do not have a little 
-      red no-entry sign on their icon
-    - If any are disableed then enable them by selecting them and clicking "Enable"
-      in the right pane
-
-- compile the Forrest Eclipse plugin into your forrestEclipse
-  - If you installed the full Eclipse SDK this can be done from within 
-    forrestEclipse, otherwise you will need to do it from within your main 
-    Eclipse installation
-  - import the FORREST_HOME/tools/eclipse project into your workspace
-    - File -> import -> Existing Project into workspace
-    - browse to FORREST_HOME/tools/eclipse
-    - click "OK"
-    - click "finish"
-  - Select File | Export
-  - Select Deployable Plugins and Fragments and follow the wizard (easiest 
-    to create directory structure directly in the forrestEclipse installation 
-    directory, that is make the destination directory your forestEclipse install
-    directory).
+Installing Requried Plugins
+---------------------------
   
 - install the IBM code drop for the WTP project (this is the pre-alpha stuff)
   - http://download.eclipse.org/webtools/downloads/initial-contributions/ibm.zip
