@@ -15,16 +15,26 @@
   <property name="build.compiler.depend" value="true"/>
   <property name="build.compiler.fulldepend" value="true"/>
   
+  <!-- Temporary fix.  Longer term solution to be discussed. -->
+  <property name="build.root"            value="./build"/>
+
+
   <!-- =================================================================== -->
   <!-- Indentify Classpath                                                 -->
   <!-- =================================================================== -->
   <path id="centipede.classpath">
+    <fileset dir="./lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>    
     <fileset dir="./tools/centipede/lib">
       <include name="*.jar"/>
     </fileset>
   </path>
     
   <path id="classpath">
+    <fileset dir="./lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>  
     <fileset dir="./lib/core">
       <include name="*.jar"/>
     </fileset>
@@ -33,7 +43,18 @@
     </fileset>
   </path>
 
+  <path id="examples.classpath">
+    <fileset dir="./lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>    
+    <!-- FIXME : how to build a path that references a property set in 'init' target ? -->
+    <pathelement path="${build.root}/jakarta-poi/classes"/>
+  </path>
+
   <path id="scratchpad.classpath">
+    <fileset dir="./lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>    
     <fileset dir="./lib/core">
       <include name="*.jar"/>
     </fileset>
