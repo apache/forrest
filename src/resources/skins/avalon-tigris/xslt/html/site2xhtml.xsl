@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.6 2003/01/25 11:16:38 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -26,7 +26,7 @@ $Id: site2xhtml.xsl,v 1.6 2003/01/25 11:16:38 nicolaken Exp $
   <xsl:template match="site">
       <html>
          <head>
-            <!-- This is a generated file.  Do not edit. -->
+            <xsl:comment>*** This is a generated file.  Do not edit.  ***</xsl:comment>
             <link type="text/css" href="{$root}skin/tigris.css" rel="stylesheet" />
             <link type="text/css" href="{$root}skin/mysite.css" rel="stylesheet" />
             <link type="text/css" href="{$root}skin/site.css"   rel="stylesheet" />
