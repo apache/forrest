@@ -158,6 +158,15 @@
      </map:call>    
    </map:match>
 
+   <map:match pattern="body-**howto**.xml">
+     <map:generate type="file-nolabel" src="content/xdocs/{1}howto{2}.xml"/>
+     <map:transform src="library/xslt/howto2document.xsl" label="content"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+      <map:parameter name="isfaq" value="true"/>
+     </map:call>
+   </map:match>
+
    <!-- Generate the "doclist" - list of all documentation
      The first match generates each book.xml and adds a new attribute "uri".
      The second match aggregates each book.xml into a doclist and
