@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/09/14 13:40:57 $              |
+    |             $Date: 2003/09/16 16:35:09 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -74,6 +74,7 @@ FORREST SITE BUILDER
     <property name="project.configfile"   value="${project.ctxt-dir}/WEB-INF/cli.xconf" />
     <property name="project.logkitfile"   value="${project.ctxt-dir}/WEB-INF/logkit.xconf" />
     <property name="project.logger"       value="" />
+    <property name="project.i18n"         value="false" />
 
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
@@ -106,6 +107,7 @@ FORREST SITE BUILDER
     <property name="project.conf-dir"    location="${project.content-dir}/conf" />
     <property name="project.lib-dir"     location="${project.content-dir}/lib" />
     <property name="project.classes-dir" location="${project.content-dir}/classes" />
+    <property name="project.translations-dir" location="${project.content-dir}/translations" />
 
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
@@ -130,6 +132,7 @@ FORREST SITE BUILDER
     <available property="skins.present" file="${project.skins-dir}" type="dir"/>
     <available property="skinconf.present" file="${project.skinconf}"/>
     <available property="status.present" file="${project.status}"/>
+    <available property="translations.present" file="${project.translations-dir}" type="dir" />
   </target>
 
   <target name="validation-props" depends="examine-proj">
@@ -329,6 +332,7 @@ FORREST SITE BUILDER
     <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
     <filter token="local-catalog"     value="${project.catalog}" />
     <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
+    <filter token="i18n"              value="${project.i18n}" />
 
     <!--
     These filters defined for backwards-compatibility with old skins.
@@ -403,7 +407,7 @@ FORREST SITE BUILDER
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
     copy-xdocs, copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-content, copy-lib, 
-    copy-classes, copy-skins, copy-skinconf, copy-status"/>
+    copy-classes, copy-skins, copy-skinconf, copy-status, copy-translations"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
@@ -519,6 +523,12 @@ FORREST SITE BUILDER
 
   <target name="copy-status" if="status.present">
     <copy file="${project.status}" todir="${project.ctxt-dir}" />
+  </target>
+
+  <target name="copy-translations" if="translations.present" >
+    <copy todir="${project.ctxt-dir}/translations">
+    <fileset dir="${project.translations-dir}"/>
+    </copy>
   </target>
 
 

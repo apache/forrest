@@ -4,7 +4,7 @@ Default Forrest sitemap, defining the whole site.
 Delegates to the other *.xmap files.  See
 http://xml.apache.org/forrest/sitemap-ref.html
 
-$Revision: 1.118 $
+$Revision: 1.119 $
 ==================================================== -->
 
 
@@ -61,6 +61,16 @@ $Revision: 1.118 $
       </map:transformer>
 
       <map:transformer name="xinclude" src="org.apache.cocoon.transformation.XIncludeTransformer" logger="sitemap.transformer.xinclude" pool-grow="2" pool-max="16" pool-min="2" />
+
+    <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+      <catalogues default="menu">
+        <catalogue id="menu" name="menu" location="translations"/>
+      </catalogues>
+      <!-- Commented out to verify your translations
+      <untranslated-text>untranslated</untranslated-text> -->
+      <cache-at-startup>true</cache-at-startup>
+    </map:transformer>
+
     </map:transformers>
 
     <map:readers default="resource">
@@ -100,6 +110,10 @@ $Revision: 1.118 $
     <map:selectors>
       <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.cocoon.selection.ResourceExistsSelector" />
     </map:selectors>
+    <map:actions>
+      <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
+    </map:actions>
+
 
     <map:pipes default="caching">
       <map:pipe name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
