@@ -5,8 +5,9 @@
                 version="1.0">
 
   <xsl:output method="xml"/>
-
+ 
   <xsl:include href="pdfoutline.xsl"/>
+  <xsl:include href="footerinfo.xsl"/>
 
   <xsl:template match="/">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -107,6 +108,7 @@
         text-align="start">
         Page <fo:page-number/>
       </fo:block>
+      <xsl:call-template name="info"/>
     </fo:static-content>
 
     <fo:static-content flow-name="even-header">
@@ -128,6 +130,7 @@
         text-align="end">
         Page <fo:page-number/>
       </fo:block>
+      <xsl:call-template name="info"/>
     </fo:static-content>
 
     <fo:static-content flow-name="odd-header">
@@ -149,6 +152,7 @@
         text-align="start">
         Page <fo:page-number/>
       </fo:block>
+      <xsl:call-template name="info"/>
     </fo:static-content>
 
     <fo:flow flow-name="xsl-region-body">
