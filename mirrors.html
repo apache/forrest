@@ -10,10 +10,11 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
-<body>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
 <div id="top">
 <!--+
     |breadtrail
@@ -47,10 +48,8 @@
     |start Search
     +-->
 <div class="searchbox">
-<div id="roundtopsmall">
-<img style="display: none" class="cornersmall" height="5" width="5" alt="" src="skin/images/rc-t-l-5-1body-2searchbox-3searchbox.png"></div>
-<form action="http://www.google.com/search" method="get">
-<input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -80,12 +79,25 @@
 </div>
 </div>
 <div id="main">
-<div id="published">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
 <script type="text/javascript" language="JavaScript"><!--
               document.write("Published: " + document.lastModified);
               //  --></script>
 </div>
-<div class="breadtrail">&nbsp;</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
 <!--+
     |start Menu, mainarea
     +-->
@@ -93,7 +105,7 @@
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_1.1')" id="menu_1.1Title" class="menutitle">About</div>
+<div onclick="SwitchMenu('menu_1.1', 'skin/')" id="menu_1.1Title" class="menutitle">About</div>
 <div id="menu_1.1" class="menuitemgroup">
 <div class="menuitem">
 <a href="index.html">Index</a>
@@ -120,7 +132,7 @@
 <a href="live-sites.html">Example sites</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2')" id="menu_1.2Title" class="menutitle">Related projects</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Related projects</div>
 <div id="menu_1.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="http://gump.apache.org/">Apache Gump</a>
@@ -156,6 +168,12 @@
 <div class="pdflink">
 <a class="dida" href="mirrors.pdf"><img alt="PDF" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
+</div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
 <h1>Obtain the Forrest distribution</h1>
 <div id="minitoc-area">
