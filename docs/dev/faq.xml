@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><document><header><title>Frequently Asked Questions</title></header><body><section id="Questions"><title>Questions</title><section id="getting_started"><title>1. Getting Started and Building Forrest</title><section id="overview"><title>1.1. 
+        Where can i read an overview about how to work with Forrest?
+      </title>
+        <p>
+          See the <link href="site:your-project">Using Forrest</link> guide.
+        </p>
+      </section><section id="website-status"><title>1.2. 
+       Which version of Forrest does the website documentation relate to? 
+      </title>
+        <p>
+          The documentation on the Forrest website relates to the current
+          head development version of the source repository. See
+          <link href="index.html#status">further explanation</link>.
+        </p>
+      </section><section id="requirements"><title>1.3. 
+        What are the system requirements for Forrest?
+      </title>
+        <p>
+          Forrest includes everything necessary to build and run, except
+          of course for Java. In addition to all the Cocoon JARs, Forrest
+          includes and uses its own version of Ant. Java 1.4+ is required.
+        </p>
+      </section><section id="cvs"><title>1.4. 
+        The old xml-forrest CVS code repository seems to be stale. What happened?
+      </title>
+        <p>
+          Forrest switched from a CVS code repository to SVN (subversion)
+          code repository. The old CVS repository is not kept current.
+        </p>
+      </section><section id="svn"><title>1.5. 
+        How can I use SVN to keep up to date with the latest codebase?
+      </title>
+        <p>
+          Follow these <link href="site:build">Building Forrest</link> notes.
+        </p>
+        <p>
+          The <link href="site:your-project">Using Forrest</link> guide provides
+          further step-by-step assistance in getting started with Forrest for your project.
+        </p>
+      </section><section id="single-document"><title>1.6. 
+        What is the best way to generate "standalone documents" using Forrest?
+      </title>
+        <p>
+          forrest site -Dproject.start-uri=myfile.pdf 
+        </p>
+        <p>
+          The <link href="site:your-project">Using Forrest</link> guide provides
+          further step-by-step assistance in getting started with Forrest for your project.
+        </p>
+      </section><section id="cygwin_mutex_error"><title>1.7. 
+        When running <code>./build.sh</code> in cygwin, I get an error:
+        <code>cygpath.exe: *** can't create title mutex, Win32 error 6</code>. 
+      </title>
+        <p>
+          This 
+          <link href="http://issues.cocoondev.org/secure/ViewIssue.jspa?key=FOR-10">appears
+            to be a bug in cygwin</link>. Please use the .bat script instead.
+        </p>
+      </section><section id="maxmemory"><title>1.8. 
+        How can I specify the amount of memory to be used by Java?
+      </title>
+        <p>
+         There are two ways to control this.  If you get an OutOfMemoryError when Cocoon is generating pages,
+         see the first paragraph.  If you get an OutOfMemoryError when outside of Cocoon (e.g., copying raw
+         files), see the second paragraph.
+        </p>
+        <p>
+         The <code>maxmemory</code> property in the <code>forrest.properties</code> file controls how much
+         memory Cocoon uses. Like many other properties you can copy them from the default configuration at
+         <code>src/core/fresh-site/forrest.properties</code>
+        </p>
+        <p>
+         Set the <code>ANT_OPTS</code> environment variable before you run forrest.  The exact value you set
+         it to is dependant on your JVM, but something like <code>ANT_OPTS=-Xmx500M</code> will probably work.
+        </p>
+      </section></section><section id="technical"><title>2. Technical</title><section id="edit-content"><title>2.1. What tools can be used to edit the content?</title>
+        <p>If you are using the Apache Forrest xml
+          <link href="site:dtd-docs">document format</link> or DocBook
+          or other xml document types, then you can use any text editor
+          or even a dedicated xml editor. You must ensure valid xml. See our
+          <link href="site:catalog">configuration notes</link>
+          for various editors.
+        </p>
+        <p>There are content management systems like
+         <link href="site:references/lenya">Apache Lenya</link>.
+        </p>
+        <p>Remember that Forrest can also use other source formats, such as
+          OpenOffice.org docs or JSPWiki. Use the appropriate editor for those
+          document types and ensure that the document stucture is consistent.
+          Forrest can also use "html" as the source format, in which case you
+          can use text editors or "html editors" such as the one provided
+          with the Mozilla web browser.
+        </p>
+      </section><section id="PDF-output"><title>2.2. How can I generate one pdf-file out of
+      the whole site or selected pages of the site?</title>
+      <p>Add the following entries to your site.xml file:</p>
+        <source xml:space="preserve">
+  &lt;about tab="home" label="About" href=""&gt;
+ &#9;  ...
+    &lt;all_site label="Full HTML" href="wholesite.html"/&gt;    
+    &lt;all_sitePDF label="Full PDF" href="wholesite.pdf"/&gt;  
+     ...
+  &lt;/about&gt;</source>
+       <p>
+       In this case the menu labeled "About" will have 2 new items: 
+       "Full PDF" and "Full HTML". (See also
+       <link href="site:howto/pdf-tab">How to create a PDF document for each tab</link>.)
+       </p>
+       <p>
+         This assumes that you use the
+         <link href="site:linking">site.xml</link> method for your site
+         structure and navigation, rather than the old book.xml method.
+       </p>
+       </section><section id="clickable-email-adress"><title>2.3. How can I generate html-pages to show a 
+      'clickable' email-address (of the author-element)?</title>
+       <p>You would override <code>
+       src/core/context/skins/common/xslt/html/document2html.xsl</code>
+       and edit the "headers/authors" template.
+       </p>
+       </section><section id="CVS_revison_tags"><title>2.4. How can I generate html-pages to show the
+      revision tag of cvs?</title>
+      <p>If you have:<code>&lt;version&gt;$Revision: 1.30
+      $&lt;/version&gt;</code>The '1.30' will be extracted and
+      displayed at the bottom of the page as "version 1.30". See for
+      example the bottom of the
+      <link href="site:your-project"> Using Forrest</link> document.</p>
+      <p>This technique could also be used for a modification date with
+      $Date: 2004/01/15 08:52:47 $</p>
+      </section><section id="ignoring_javadocs"><title>2.5. 
+        How do I stop Forrest breaking on links to external files that may not
+        exist, like javadocs?
+      </title>
+        <p>
+          This can be done by overriding the <code>cli.xconf</code> config file,
+          and defining patterns for URLs to exclude.
+        </p>
+        <p>
+          This means creating a directory <code>src/documentation/conf</code>
+          (or wherever <code>${forrest.conf-dir}</code> points) and copying
+          <code>$FORREST_HOME/context/WEB-INF/cli.xconf</code> to it.  Then edit
+          cli.xconf, and add any exclude sections you require at the end.  The
+          default cli.xconf ignores directory links and links containing
+          'apidocs' or starting with 'api/':
+        </p>
+        <source xml:space="preserve">
+   ....
+   &lt;!-- Includes and excludes can be used to limit which URLs are rendered --&gt;
+   <strong>
+   &lt;exclude pattern="**/"/&gt;
+   &lt;exclude pattern="**apidocs**"/&gt;
+   &lt;exclude pattern="api/**"/&gt;
+   </strong>
+   &lt;uri src="favicon.ico"/&gt;
+&lt;/cocoon&gt;</source>
+        <p>This is just an example, and you should modify it appropriately for
+          your site.</p>
+        <note>
+          Wildcards may be used.  These are a powerful feature of Cocoon's
+          <link href="site:sitemap-ref">sitemap</link>.
+          For example, <strong>foo/*</strong> would match
+          <code>foo/bar</code>, but not <code>foo/bar/baz</code>
+           &#8212; use <strong>foo/**</strong> to match that.
+        </note>
+      </section><section id="link_raw"><title>2.6. How do I link to raw files such as config.txt and brochure.pdf?
+      </title>
+        <p>
+          Place them in the <code>src/documentation/content</code> directory
+          and they will get copied into the output tree where you can link to
+          them. You can also have sub-directories there to reflect your xdocs
+          tree. See the samples documents when you 'forrest seed' a new
+          project for a demonstration of this ability.
+        </p>
+        <p>
+         For example, if
+         <code>src/documentation/content/xdocs/tools/downloads.xml</code>
+         has a <code>&lt;link href="tool.zip"&gt;</code> then put
+         <code>tool.zip</code> in the
+         <code>src/documentation/content/tools/</code> directory.
+        </p>
+        <p>
+          See the explanation and demonstration of "linking" in your local
+          'forrest seed' site.
+        </p>
+      </section><section id="claimed_patterns"><title>2.7. Some of my files are not being processed because they use
+      common filenames.
+      </title>
+        <p>
+          Certain patterns are claimed by the default sitemaps for
+          special processing. These include:
+          <code>site, changes, todo, faq, images, my-images, skinconf,
+          community, howto</code>
+        </p>
+        <p>
+          Sometimes there are workarounds, e.g. faq.html or faq-interview.html
+          would fail, but interview-faq.html would be fine.
+          In future versions of Forrest we will attempt to deal with this issue
+          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link>).
+        </p>
+      </section><section id="build_msg_a"><title>2.8. What do the symbols and numbers mean when Forrest lists each
+        document that it has built?
+      </title>
+        <source xml:space="preserve">
+* [56/0]     6.281s 23.0Kb  index.html
+* [0/0]      0.0060s 4.0Kb   images/project-logo.gif
+^                           apidocs/index.html
+* [50/0]     1.582s 18.7Kb  todo.html
+X [0]                       brokenlink.html     BROKEN: reason
+* [50/0]     1.222s 20.2Kb  dreams.html
+* [0/0]      0.535s 11.1Kb  dreams.pdf
+...</source>
+        <p>
+         Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped).
+         Column 2 is the number of links that were gathered from that page.
+         Column 3 is the time taken.
+         Column 4 is the page size.
+        </p>
+      </section><section id="pdf_images"><title>2.9. Images don't display in PDFs. How do I fix this?</title>
+        <p>
+&#9;  Forrest uses <link href="http://xml.apache.org/fop/">Apache FOP</link>
+          for rendering PDFs.  FOP cannot handle all image types natively, and
+          requires third-party jars to be added. FOP natively handles BMP, GIF,
+&#9;  JPG, TIFF and EPS (with a few limitations). FOP can also handle SVG
+&#9;  (via Batik!and PNG (see below). For details, see 
+&#9;  <link href="http://xml.apache.org/fop/graphics.html">FOP Graphics
+          formats</link>
+        </p>
+        <p>To get PNGs working in PDFs with Jimi:</p>
+        <ol>
+          <li>Download Jimi from
+           <link href="http://java.sun.com/products/jimi/">http://java.sun.com/products/jimi/</link></li>
+          <li>Unpack the Jimi distribution and copy JimiProClasses.zip to
+            <code>$FORREST/lib/optional/jimi-1.0.jar</code>.</li>
+        </ol>
+        <p>Alternatively you can use JAI (Java Advanced Imaging API at 
+&#9;  http://java.sun.com/products/java-media/jai). For more
+          info, see
+          <link href="http://xml.apache.org/fop/graphics.html#packages">FOP Graphics 
+          Packages</link>
+        </p>
+        <note>Due to Sun's licensing, we cannot redistribute Jimi or JAI with
+          Forrest.</note>
+      </section><section id="index.html"><title>2.10. 
+        The tab link in my site incorrectly assumes that 'index.html' is present in
+        the linked-to directory. How do I fix this?
+      </title>
+        <p>
+          In <code>tabs.xml</code>, use @href instead of @dir, and omit the
+          trailing '/'. Which file to serve is then a concern of the sitemap.
+          For example, if the "User Manual" tab should link to
+          <code>manual/Introduction.html</code> then
+          <code>tabs.xml</code> should contain:
+        </p>
+        <source xml:space="preserve">
+  &lt;tab label="User Manual" href="manual"/&gt;</source>
+        <p>
+          and add this rule to the sitemap:
+        </p>
+        <source xml:space="preserve">
+  &lt;map:match pattern="manual"&gt;
+    &lt;map:redirect-to uri="manual/Introduction.html"/&gt;
+  &lt;/map:match&gt;</source>
+     </section><section id="headless_operation"><title>2.11. 
+        When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
+      </title>
+        <p>
+          If you are using JDK 1.4.0 or newer, you can enable <em>headless</em>
+          operation by running Forrest with the <code>forrest.jvmarg</code>
+          parameter set to <code>-Djava.awt.headless=true</code>, like this:
+        </p>
+        <source xml:space="preserve">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
+        <p>
+          See also
+          <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>.
+        </p>
+      </section><section id="catalog"><title>2.12. 
+        How do i configure my favourite XML editor or parser to find the
+        local Forrest DTDs?
+      </title>
+        <p>
+          Notes are provided for various tools at
+          <link href="site:catalog">Using Catalog Entity Resolver for
+          local DTDs</link>.
+        </p>
+      </section><section id="label-entity"><title>2.13. 
+        How to use special characters in the labels of the site.xml file?
+      </title>
+        <p>
+        Use the numeric values for character entities.
+        For example, rather than using
+        <code>&amp;ouml;</code> use
+        <code>&amp;#246;</code>
+        </p>
+        <p>
+        See the
+        <link href="http://www.w3.org/TR/xhtml-modularization/dtd_module_defs.html#a_xhtml_character_entities">XHTML Character Entities</link>
+        and see more discussion at
+        <link href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</link>.
+        </p>
+      </section><section id="encoding"><title>2.14. Does Forrest handle accents for non-English languages?</title>
+        <p>Yes, Forrest can process text in any language, so you can include:</p>
+        <ul>
+          <li>accents: á é í ó ú</li>
+          <li>diereses: ä ë ï ö ü</li>
+          <li>tildes: ã ñ &#297; õ &#361;</li>
+        </ul>
+        <p>This is because sources for Forrest docs are xml documents, which can include any of these,
+          provided the encoding declared by the xml doc matches the actual encoding used in the file.
+          For example if you declare the default encoding:</p>
+        <source xml:space="preserve">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</source>
+        <p>but the file content is actually using ISO-8859-1 then you will
+           receive validation errors, especially if 
+           you include some non-ASCII characters.</p>
+        <p>
+          This situation is commonly encountered when you edit the templates
+          created by <code>forrest seed</code> with your favorite 
+          (probably localized) editor without paying attention to the encoding,
+          or when you create a new file 
+          and simply copy the headers from another file.
+        </p>
+        <p>Although UTF-8 is an encoding well-suited for most languages,
+          it is not usually the default in popular editors or systems.
+          In UNIX-like systems, most popular editors can handle different encodings to 
+          write the file in disk. With some editors the encoding of the file is preserved, while with others the default
+          is used regardless of the original encoding. In most cases the encoding used to write files
+          can be controlled by setting the environment variable <code>LANG</code>
+          to an appropriate value, for instance:
+        </p>
+        <source xml:space="preserve">[localhost]$ export LANG=en_US.UTF-8</source>
+        <p>Of course the <em>appropriate</em> way to set the encoding depends on the editor/OS, 
+          but ultimately relys on the user preferences. So you can use the encoding you prefer, as long as 
+          the <code>encoding</code> attribute of the xml declaration matches the actual encoding of the file. 
+          This means 
+          that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
+        <source xml:space="preserve">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;</source>
+        <p>Another option is to use "character entities" such as
+        <code>&amp;ouml;</code> (ö) or the numeric form
+        <code>&amp;#246;</code> (ö).
+        </p>
+        <p>Another related issue is that your webserver needs to send http
+          headers with the matching charset definitions to the html page.
+        </p>
+        <p>Here are some references which explain further:
+          <link href="http://orixo.com/events/gt2004/bios.html#torsten">GT2004 presentation by Torsten Schlabach</link> and 
+          <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode resources</link>.
+        </p>
+      </section><section id="skin"><title>2.15. 
+        How to make the site look better and change its skin?
+      </title>
+        <p>
+        There are <link href="site:skins">default skins</link> provided,
+        which are configurable and so should meet the needs of most projects.
+        The aim is to provide many capabilities so that extra skins are not
+        needed.
+        </p>
+        <p>
+        See notes about
+        <link href="site:your-project/skins">configuration</link> of the skins.
+        Some projects may have special needs and can define their
+        <link href="site:your-project/new-skin">own skin</link>.
+        </p>
+      </section><section id="xsp"><title>2.16. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+        <p>First consider whether your needs would be better met by Cocoon itself, rather than Forrest.
+        </p>
+        <p>That said, there are valid reasons for wanting programmatically generated content, so here is how to enable
+          XSP:</p>
+        <ol>
+          <li>Download 
+          <link href="http://cvs.apache.org/viewcvs.cgi/*checkout*/cocoon-2.1/lib/optional/jdtcore-2.1.0.jar?rev=1.1&amp;content-type=application/java">jdtcore-2.1.0.jar</link>,
+            and copy it to the $FORREST_HOME/context/WEB-INF/lib directory
+            (or lib/core/ directory in the source
+            distribution).</li>
+          <li><p>Override sitemap.xmap in your local project (copy $FORREST_HOME/context/sitemap.xmap to
+              src/documentation/), and add the following generator definition in the map:generators section:</p>
+            <source xml:space="preserve">
+  &lt;map:generator name="serverpages"
+     pool-grow="2" pool-max="32" pool-min="4"
+     src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;</source>
+          </li>
+          <li><p>Decide how you want to use XSP.  For single files, you could just define a *.xml matcher:</p>
+            <source xml:space="preserve">
+&lt;map:match pattern="dynamic.xml"&gt;
+  &lt;map:generate src="content/xdocs/dynamic.xsp" type="serverpages"/&gt;
+  ...
+  &lt;map:serialize type="xml"/&gt;
+&lt;/map:match&gt;</source>
+            <p>You may instead wish to override forrest.xmap to define a general mapping for XSPs.</p>
+          </li>
+        </ol>
+        <p>See also the 
+        <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
+      </section><section id="breadcrumbs"><title>2.17. How do breadcrumbs work?  Why don't they work locally?</title>
+      <p>Breadcrumbs begin with up to three URLs specified in
+      <code>skinconf.xml</code>.  Here is what the Forrest site uses:</p>
+      <source xml:space="preserve">
+  &lt;trail&gt;
+    &lt;link1 name="apache" href="http://www.apache.org/"/&gt;
+    &lt;link2 name="xml.apache" href="http://xml.apache.org/"/&gt;
+    &lt;link3 name="" href=""/&gt;
+  &lt;/trail&gt;</source>
+      <p>If any links are blank, they are not used.  After these first links,
+      JavaScript looks at the URL for the current page and
+      makes a link for each directory after the domain.  If you are viewing
+      the site locally, there is no domain and so
+      there will be no extra breadcrumbs, only the ones that are specified
+      in <code>skinconf.xml</code>.
+      </p>
+      </section><section id="run_port"><title>2.18. How do I make <code>forrest run</code> listen on a different port?</title>
+      <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
+      <p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
+      directory and set the port number in that file.  Then do <code>forrest run</code>
+      </p>
+      </section></section><section id="old_faqs"><title>3. Older versions</title><section id="unresolved_project.home"><title>3.1. When invoking Forrest 0.4 from the
+        <code>forrest.antproxy.xml</code>, the build fails because
+        <code>${project.home}</code> isn't resolved.
+      </title>
+        <p>This is a bug in 0.4. The following modification to
+          <code>FORREST_HOME/forrest.antproxy.xml</code> should fix it:</p>
+        <source xml:space="preserve">--- forrest.antproxy.xml        7 Feb 2003 22:21:15 -0000       1.2
++++ forrest.antproxy.xml        22 Feb 2003 09:39:42 -0000
+@@ -41,6 +41,7 @@
+   &lt;/path&gt;
+ 
+   &lt;target name="forrest"&gt;
++    &lt;property name="project.home" location="."/&gt;
+     &lt;java classname="org.apache.tools.ant.Main" fork="true"&gt;
+       &lt;classpath refid="forrest-classpath"/&gt;
+       &lt;jvmarg value="-Dforrest.home=${forrest.home}"/&gt;</source>
+      </section><section id="odd_html"><title>3.2. 
+        After upgrading to 0.4 my HTML looks significantly different, and table
+        widths are wrong. What happened?
+      </title>
+        <p>
+          Forrest now uses a HTML 4.0.1 <code>DOCTYPE</code> declaration:</p>
+          <source xml:space="preserve">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd"&gt;</source>
+        <p>
+          This causes browsers to render the page in standards-compliance mode,
+          or rather, not in "quirks" mode. For some operations (like determining
+          table column widths), quirks mode results in better looking pages.
+          For the old pre-0.4 behaviour, create a custom sitemap and remove the
+          line:</p>
+        <source xml:space="preserve">
+  &lt;doctype-system&gt;http://www.w3.org/TR/html4/loose.dtd&lt;/doctype-system&gt;</source>
+      </section><section id="validation_error-doctype_root_null"><title>3.3. 
+        When building my project, I get an validation error: <code>Document root
+          element "site", must match DOCTYPE root "null".</code>.
+      </title>
+        <p>
+          You are probably trying to build the project with an old version of
+          Forrest (built before 2003-01-08) that is incorrectly trying to validate
+          the <code>site.xml</code> file.  If so, please update your Forrest
+          installation.
+        </p>
+        <p>
+          Alternatively, you may be building with an up-to-date Forrest, but have
+          overridden <code>forrest.validate.xdocs.excludes</code> in
+          <code>forrest.properties</code>.  With the introduction of
+          <code>site.xml</code>, the above property must have <code>site.xml</code>
+          listed to prevent an attempt at DTD-based validation.
+        </p>
+      </section><section id="building_error-custom_sitemap"><title>3.4. 
+        When building my project, I get any of these errors: 
+&#9;<code>menu.xmap (The system cannot find the file specified)</code>
+&#9;<code>static.xmap (The system cannot find the file specified)</code>
+&#9;<code>Type 'xml-document' is not defined for 'serialize'</code>
+      </title>
+        <p>
+          You are using an old version of sitemap.xmap (see the document
+          <link href="site:upgrading_05">Upgrading to Forrest 0.5</link>).
+        </p>
+      </section></section><section id="general"><title>4. General</title><section id="generating_menus"><title>4.1. What is the relationship between <code>site.xml</code> and
+        <code>book.xml</code>?
+      </title>
+        <p>
+          One <code>site.xml</code> file in your project root can replace all the book.xml files
+          (one per directory) in your site.  Internally, Forrest uses <code>site.xml</code> to
+          dynamically generate book.xml files.  However, Forrest first checks
+          for the existence of a book.xml file, so backwards-compatibility is
+          preserved.  If a directory has a book.xml file, the book.xml will be
+          used to generate the menu.  This supplement is useful in situations
+          where <code>site.xml</code>-generated menus aren't appropriate.
+          See <link href="site:linking">Menus and Linking</link>.
+      </p>
+      </section><section id="docbook"><title>4.2. 
+        How do I use DocBook as the xml documentation format?
+      </title>
+        <p>
+         There are two ways. Forrest can transform the DocBook format into the
+         Forrest "xdocs" format on-the-fly and then render that as normal
+         Forrest documents.
+         Be aware that the stylesheet that does this transformation is
+         deliberately very limited and does not attempt to deal with all
+         DocBook elements.
+        </p>
+        <p>
+         The other way is to use the full DocBook stylesheets directly. The DocBook
+         DTDs are shipped with Forrest and automatically handled. However, you
+         will need to have the DocBook stylesheets on your system (they are
+         too massive to ship with Forrest) and configure Forrest accordingly.
+         You will need to create a
+         <link href="site:project-sitemap">project sitemap</link>
+          as explained in
+         <link href="site:your-project">Using Forrest</link>
+         and add matches to handle your DocBook documents.
+         Here is an example. Note that you need to change it to suit your
+         situation. The match must be very specific so that only the
+         DocBook documents are matched. The rest of the documents will be
+         handled by Forrest core. Powerful regex capabilities are available.
+        </p>
+        <source xml:space="preserve">&lt;?xml version="1.0"?&gt;
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+ &lt;map:pipelines&gt;
+  &lt;map:pipeline&gt;
+   &lt;map:match pattern="resolver-*.html"&gt;
+    &lt;map:generate src="{project:content.xdocs}resolver-{1}.xml"/&gt;
+    &lt;map:transform
+      src="file:///usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl"/&gt;
+    &lt;map:serialize type="xhtml"/&gt;
+   &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+ &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;
+        </source>
+        <p>
+         You can also use a mixture of the two methods, some handled
+         automatically by Forrest and some directly using DocBook stylesheets.
+         You can also have a mixture of source files as "document-v*" DTD and DocBook.
+        </p>
+        <p>
+         Ensure that the document type declaration in your xml instance is
+         well specified. Use a public identifier. The DTD will then be properly
+         resolved by Forrest. If you need to use different DTDs, then see
+         <link href="site:your-project/new_dtd">Using Forrest</link>
+         for configuration guidance.
+        </p>
+      </section><section id="version"><title>4.3. 
+        How to report which version of Forrest is being used and the
+        properties that are set?
+      </title>
+        <p>
+          Do <code>'forrest -projecthelp'</code> or <code>'./build.sh'</code>
+          to find the version number.
+        </p>
+        <p>
+          To list the properties, add "forrest.echo=true" to your
+          forrest.properties file and watch the build messages.
+          Doing <code>'forrest -v'</code> will provide verbose build messages.
+        </p>
+      </section><section id="logs"><title>4.4. 
+        Where are the log files to find more infomation about errors?
+      </title>
+        <p>
+          The logfiles are at <code>build/webapp/WEB-INF/logs/</code>
+        </p>
+        <p>
+          The log level can be raised with the <code>logkit.xconf</code>
+          configuration. If you are using Forrest in the interactive webapp
+          mode (which is generally easiest for debugging errors) then see the
+          <code>build/webapp/WEB-INF/logkit.xconf</code> file.
+          If you are generating a static site (with command-line 'forrest')
+          then copy <code>$FORREST_HOME/context/WEB-INF/logkit.xconf</code>
+          to your project at
+          <code>src/documentation/content/conf/logkit.xconf</code>
+          and modify it. See more information and efficiency tips with
+          <link href="http://wiki.apache.org/cocoon/ExploringTheLogs">Cocoon logging</link>.
+        </p>
+        <p>
+          Doing <code>'forrest -v'</code> will provide verbose build messages
+          to the standard output.
+        </p>
+      </section><section id="how_can_I_help"><title>4.5. 
+        How to help?
+      </title>
+        <p>
+          Join one of the Forrest project
+          <link href="ext:mail-lists">mailing lists</link>
+          and tell us what you would like to see improved.  We regard all feedback
+          as valuable, particularly from newcomers&#8212;often, close proximity
+          blinds software developers to faults that are obvious to everyone
+          else. Don't be shy!
+        </p>
+      </section><section id="patch"><title>4.6. 
+        How to contribute a patch?
+      </title>
+        <p>Please send all contributions via our
+          <link href="site:bugs">issue tracker</link>.
+          Here are notes about
+          <link href="site:contrib/patch">making patches</link>.
+        </p>
+        <p>More info about contributing can be found at the 
+          <link href="site:contrib">Contributing to Forrest</link> page.
+          It is always a good idea to check the Forrest
+          <link href="site:bugs">issue tracker</link>
+          and 
+          <link href="site:todo">to do list</link>
+          before diving in.
+        </p>
+      </section></section></section></body></document>
