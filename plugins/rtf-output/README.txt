@@ -18,7 +18,7 @@ Installation of this plugin is not automatic at this time. This is because there
 is no release of the plugin as yet. In order to install it follow these simple 
 steps:
 
-- copy the RTF plugin directory to forrest/build/plugins
+- copy the "rtf-output" plugin directory to forrest/build/plugins
 - copy the WEB-INF directory to forrest/main/webapp
-- add "rtf" (without quotes) to your projects "project.required.plgins"
+- add "rtf-output" (without quotes) to your projects "project.required.plgins"
   property
