@@ -61,6 +61,7 @@
     <copy todir="${build.context}" filtering="on">
       <fileset dir="${context.dir}/conf">
         <include name="sitemap.xmap"/>
+        <include name="cocoon.xconf"/>        
       </fileset> 
     </copy>
 
@@ -77,6 +78,7 @@
   <!-- Prepares the docs to create a .war                                  -->
   <!-- =================================================================== -->
   <target name="webapp" depends="init, prepare-docs">
+    <delete file="${build.context}/cocoon.xconf"/>
     <war warfile="${build.dir}/${name}.war" 
          webxml="${build.context}/WEB-INF/web.xml" 
          compress="true">
