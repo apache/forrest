@@ -153,15 +153,36 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         filteringProperties = 
             loadAntPropertiesFromURI(filteringProperties,defaultRorrestPropertiesStringURI);
 
+        aliasSkinProperties(filteringProperties);
         if (debugging()) debug("Loaded project forrest.properties:" + filteringProperties);
     }
 
     /**
-     * @param antPropertiesStringURI
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws SourceNotFoundException
+     * For backwards compatibility, alias old skin names to new ones. This must
+     * be kept in sync with aliasing in forrest.build.xml/init-props
+     * 
+     * @param properties to filter
      */
+    private void aliasSkinProperties(AntProperties props) {
+		// AntProperties.setProperty doesn't let you override, so we have to remove the property then add it again
+		String skinName = props.getProperty("project.skin");
+		if (skinName.equals("krysalis-site") || skinName.equals("forrest-site")
+				|| skinName.equals("forrest-css")) {
+			props.remove("project.skin");
+			props.setProperty("project.skin", "book-tab");
+		} else if (skinName.equals("avalon-tigris")
+				|| skinName.equals("tigris-style")) {
+			props.remove("project.skin");
+			props.setProperty("project.skin", "tigris-style-1_1");
+		}
+	}
+
+	/**
+	 * @param antPropertiesStringURI
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 * @throws SourceNotFoundException
+	 */
     private AntProperties loadAntPropertiesFromURI(AntProperties precedingProperties, String antPropertiesStringURI) throws MalformedURLException, IOException, SourceNotFoundException {
         
         Source source = null;
