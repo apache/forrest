@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.27 2003/09/06 14:22:27 jefft Exp $
+$Id: document2html.xsl,v 1.28 2003/09/08 12:02:54 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -81,24 +81,18 @@ $Id: document2html.xsl,v 1.27 2003/09/06 14:22:27 jefft Exp $
           <xsl:value-of select="header/subtitle"/>
         </h3>
       </xsl:if>
-      <xsl:if test="header/authors">
-        <p>
-          <font size="-2">
-            <xsl:for-each select="header/authors/person">
-              <xsl:choose>
-                <xsl:when test="position()=1">by&#160;</xsl:when>
-                <xsl:otherwise>,&#160;</xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="@name"/>
-            </xsl:for-each>
-          </font>
-        </p>
-      </xsl:if>
       <xsl:apply-templates select="header/version"/>
       <xsl:apply-templates select="header/type"/>
       <xsl:apply-templates select="header/notice"/>
       <xsl:apply-templates select="header/abstract"/>
       <xsl:apply-templates select="body"/>
+      <div class="attribution">
+        <xsl:apply-templates select="header/authors"/>
+        <xsl:if test="header/authors and header/version">
+          <xsl:text>; </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="header/version"/>
+      </div>
     </div>
   </xsl:template>
 
@@ -366,20 +360,36 @@ if (VERSION > 3) {
       </a>
     </xsl:if>
   </xsl:template>
-  
+
+  <xsl:template match="header/authors">
+    <xsl:for-each select="person">
+      <xsl:choose>
+        <xsl:when test="position()=1">by&#160;</xsl:when>
+        <xsl:otherwise>,&#160;</xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="@name"/>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="version">
-    <p class="version">
-    <!-- FIXME: i18n Transformer here -->
-    <xsl:text>Version: </xsl:text>
+    <span class="version">
       <xsl:apply-templates select="@major"/>
       <xsl:apply-templates select="@minor"/>
       <xsl:apply-templates select="@fix"/>
       <xsl:apply-templates select="@tag"/>
-    </p>
+      <xsl:choose>
+        <xsl:when test="starts-with(., '$Revision: ')">
+          version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
   </xsl:template>
   
   <xsl:template match="@major">
-     <xsl:value-of select="."/>
+     v<xsl:value-of select="."/>
   </xsl:template>
   
   <xsl:template match="@minor">
