@@ -38,10 +38,10 @@
        <xsl:element name="map:select">
          <xsl:attribute name="type">exists</xsl:attribute>
          <xsl:element name="map:when">
-           <xsl:attribute name="test">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/sitemap.xmap</xsl:attribute>
+           <xsl:attribute name="test">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/input.xmap</xsl:attribute>
            <xsl:element name="map:mount">
              <xsl:attribute name="uri-prefix"/>
-             <xsl:attribute name="src">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/sitemap.xmap</xsl:attribute> 
+             <xsl:attribute name="src">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/input.xmap</xsl:attribute> 
              <xsl:attribute name="check-reload">yes</xsl:attribute>  
              <xsl:attribute name="pass-through">true</xsl:attribute>
            </xsl:element>

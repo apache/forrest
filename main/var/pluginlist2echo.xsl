@@ -40,6 +40,7 @@ outside the Forrest distribution. The list below details all known plugins.
   - Author: <xsl:value-of select="@author"/>
   - Website: <xsl:value-of select="@website"/>
   - Version:  <xsl:value-of select="@version"/>
+  - Required Forrest Version: <xsl:value-of select="forrestVersion"/> 
 </echo>
 	</xsl:template>	
 	

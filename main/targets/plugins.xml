@@ -66,16 +66,16 @@
   </target>  
   
   <target name="configure-plugin" unless="plugin.unavailable">
-     <!-- add the snippet to plugins/sitemap.xmap that will mount the plugin
-          specific sitemap -->
-     <xslt in="${forrest.plugins-dir}/sitemap.xmap"
-       out="${forrest.plugins-dir}/sitemap.xmap.new"
+     <!-- add the snippet to plugins/input.xmap that will mount the plugin
+          specific input.xmap -->
+     <xslt in="${forrest.plugins-dir}/input.xmap"
+       out="${forrest.plugins-dir}/input.xmap.new"
        style="${forrest.home}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/sitemap.xmap.new" 
-       tofile="${forrest.plugins-dir}/sitemap.xmap"/>
+     <move file="${forrest.plugins-dir}/input.xmap.new" 
+       tofile="${forrest.plugins-dir}/input.xmap"/>
   </target>
 
   <target name="fetch-plugins-descriptors" if="plugin.unavailable">
@@ -123,7 +123,7 @@
     
     <mkdir dir="${forrest.plugins-dir}"/>
     <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
-      tofile="${forrest.plugins-dir}/sitemap.xmap"
+      tofile="${forrest.plugins-dir}/input.xmap"
       overwrite="true"/>
     
       <for list="${project.required.plugins}" param="name">
