@@ -29,7 +29,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <xsl:param name="contextPath"/>
   
   <!--+
@@ -42,23 +42,23 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |XHTML-head
   +-->
         <head>
-            <xsl:apply-templates select="contract" mode="xhtml-head"/>
+            <xsl:apply-templates select="forrest:contract" mode="xhtml-head"/>
         </head>
 <!--+
   |XHTML-body
   +-->
       <body>
-        <xsl:apply-templates select="contract" mode="xhtml-body"/>
+        <xsl:apply-templates select="forrest:contract" mode="xhtml-body"/>
       </body>
     </elements>
   </xsl:template>
   
-  <xsl:template match="contract" mode="xhtml-head">
+  <xsl:template match="forrest:contract" mode="xhtml-head">
     <xsl:comment>function name=<xsl:value-of select="@name"/> HEAD</xsl:comment>
     <xsl:copy-of select="xhtml/head/*"/>
   </xsl:template>
   
-  <xsl:template match="contract" mode="xhtml-body">
+  <xsl:template match="forrest:contract" mode="xhtml-body">
     <xsl:comment>function name=<xsl:value-of select="@name"/> BODY</xsl:comment>
     <xsl:copy-of select="xhtml/body/*"/>
   </xsl:template>

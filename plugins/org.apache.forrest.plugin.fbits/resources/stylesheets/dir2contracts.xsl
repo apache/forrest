@@ -20,6 +20,7 @@
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:dir="http://apache.org/cocoon/directory/2.0"
     xmlns:session="http://apache.org/cocoon/session/1.0"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0"
     >
 
 <xsl:param name="contentDir" select="'default/path'"/>
@@ -30,9 +31,9 @@
       function.
   -->
   <xsl:template match="/">
-      <contracts xmlns:xhtml="http://www.w3.org/1999/xhtml">
+      <forrest:contracts xmlns:forrest="http://apache.org/forrest/templates/1.0">
         <xsl:apply-templates select="//dir:file"/>                    
-      </contracts>
+      </forrest:contracts>
   </xsl:template>
 
 <xsl:template match="dir:file[starts-with(@name,'c-')]">
@@ -42,26 +43,26 @@
     <xsl:value-of select="@name"/>
   </xsl:variable>
   <xsl:variable name="fct-bit-title">
-    <xsl:value-of select="document($fct-bit-file)/contract/@name"/>
+    <xsl:value-of select="document($fct-bit-file)/forrest:contract/@name"/>
   </xsl:variable>
   <xsl:variable name="fct-bit-nc">
-    <xsl:value-of select="document($fct-bit-file)/contract/@nc"/>
+    <xsl:value-of select="document($fct-bit-file)/forrest:contract/@nc"/>
   </xsl:variable>
   <xsl:variable name="fct-bit-tlc">
-    <xsl:value-of select="document($fct-bit-file)/contract/@tlc"/>
+    <xsl:value-of select="document($fct-bit-file)/forrest:contract/@tlc"/>
   </xsl:variable>
   <xsl:variable name="fct-bit-description">
-    <xsl:value-of select="document($fct-bit-file)/contract/description"/>
+    <xsl:value-of select="document($fct-bit-file)/forrest:contract/description"/>
   </xsl:variable>
   <xsl:if test="$fct-bit-tlc='content'">
-    <contract name="{$fct-bit-title}" css="{$fct-bit-nc}" file-name="{@name}">
+    <forrest:contract name="{$fct-bit-title}" css="{$fct-bit-nc}" file-name="{@name}">
       <description>
         <xsl:value-of select="$fct-bit-description"/>
       </description>
       <realpath>  
         <xsl:value-of select="$fct-bit-file"/>
       </realpath>
-    </contract>
+    </forrest:contract>
   </xsl:if>
 </xsl:template>
 

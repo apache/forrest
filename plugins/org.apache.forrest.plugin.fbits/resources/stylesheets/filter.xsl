@@ -30,28 +30,24 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:forrest="http://apache.org/forrest/templates/1.0">
-  <xsl:param name="contextPath"/>
-  
-  <!--+
-  |Overall site template
-  +-->
+
   <xsl:template match="/">
-    <filter>
-      <xsl:apply-templates />
-    </filter>
+    <forrest:filter>
+      <xsl:apply-templates/>
+    </forrest:filter>
   </xsl:template>
+
   <xsl:template match="forrest:hook">
     <forrest:hook id="{@name}">
-      <xsl:apply-templates />
+      <xsl:apply-templates select="forrest:contract"/>
     </forrest:hook>
   </xsl:template>
-    <xsl:template match="forrest:contract">
+  
+  <xsl:template match="forrest:contract">
     <xsl:variable name="css-ft"><xsl:value-of select="@name"/></xsl:variable>
-    <div id="{@name}">id=<xsl:value-of select="$css-ft"/>
-      <xsl:apply-templates select="contracts" />
-    </div>
+    <xsl:copy-of select="//forrest:contracts/forrest:contract[@css=$css-ft]" />
   </xsl:template>
-  <xsl:template name="include" match="contracts">
-    <xsl:apply-templates select="content"/>
-  </xsl:template>
+  
+  <xsl:template match="forrest:contracts/forrest:contract"/>
+  
 </xsl:stylesheet>
