@@ -173,10 +173,26 @@
     </copy>
   </target>
 
+  <target name="getcvsmodule" depends="init">
+   
+    <property name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvs/jakarta-poi" /> 
+   
+    <delete dir="${getcvsmodule.work.dir}"/>
+    <mkdir dir="${getcvsmodule.work.dir}"/>
+     
+    <cvspass cvsroot=":pserver:anoncvs@jakarta.apache.org:/home/cvspublic"
+            password="anoncvs"
+     />
+       
+    <cvs cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
+         package="jakarta-poi"
+         dest="${getcvsmodule.work.dir}"
+    />                             
+  </target>     
+
   <target name="deploysite" depends="init">
     <antcall target="deploy">
       <param name="deploy.username"     value="nicolaken"/>
-      <param name="deploy.work.dir"     value="${build.dir}/work/forrest"/>
       <param name="deploy.package-name" value="xml-forrest"/>
       <param name="deploy.data.dir"     value="${build.dir}/docs"/>
       <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
@@ -184,17 +200,18 @@
     </antcall>                                
   </target>                                  
   
-  <target name="deploy" unless="deploy.username, deploy.work.dir, deploy.package-name
+  <target name="deploy" unless="deploy.username, deploy.package-name
                                     deploy.data.dir, deploy.hostname, deploy.remotedir">
   <!--
     deploy.username
-    deploy.work.dir
     deploy.package-name
     deploy.data.dir
     deploy.hostname
     deploy.remotedir
    -->
-   
+
+    <param name="deploy.work.dir"  value="${build.dir}/work/forrest/deploy/${deploy.package-name}"/>
+         
     <delete dir="${deploy.work.dir}"/>
     <mkdir dir="${deploy.work.dir}"/>
 
