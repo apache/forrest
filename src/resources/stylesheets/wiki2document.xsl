@@ -48,7 +48,7 @@
 
  <xsl:template match="st:textsequence" mode="paragraph">
   <p>
-   <xsl:apply-templates select="st:textblock/st:*"/>
+   <xsl:apply-templates select="st:textblock/st:*|st:softbreak"/>
   </p>
  </xsl:template>
 
@@ -84,6 +84,10 @@
 
  <xsl:template match="st:text">
   <xsl:value-of select="."/>
+ </xsl:template>
+
+ <xsl:template match="st:softbreak">
+ <xsl:text> </xsl:text>
  </xsl:template>
 
  <xsl:template match="st:link">
