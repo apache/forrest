@@ -370,9 +370,13 @@
     <map:act type="resource-exists">
      <map:parameter name="url" value="content/{1}"/>
 
-      <map:match pattern="**.html">
+     <map:match pattern="**.html">
+       <!--
+        Use these instead if you want JTidy to clean up your HTML
         <map:generate type="html" src="content/{1}.html"/>      
         <map:serialize type="html"/>
+        -->
+        <map:read src="content/{0}" mime-type="text/html"/>
       </map:match>
 
       <map:match pattern="**.xml">
