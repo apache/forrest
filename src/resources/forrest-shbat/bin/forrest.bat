@@ -1,32 +1,34 @@
 @echo off
-setlocal 
+if "%OS%"=="Windows_NT" @setlocal
 
-Rem ----- use the location of this script to infer $FORREST_HOME -------
+rem ----- use the location of this script to infer $FORREST_HOME -------
 set DEFAULT_FORREST_HOME=%~dp0\..
 if "%FORREST_HOME%"=="" set FORREST_HOME=%DEFAULT_FORREST_HOME%
 
-Rem ----- set the current working dir as the PROJECT_HOME variable  ----
+rem ----- set the current working dir as the PROJECT_HOME variable  ----
 call "%FORREST_HOME%\bin\setpwdvar.bat"
-set PROJECT_HOME="%PWD%"
+set PROJECT_HOME=%PWD%
 
-Rem ----- set the ant file to use --------------------------------------
-set ANTFILE="%FORREST_HOME%\forrest.build.xml"
+rem ----- set the ant file to use --------------------------------------
+set ANTFILE=%%FORREST_HOME%%\forrest.build.xml
 
-Rem ----- Save old ANT_HOME --------------------------------------------
+rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
 set ANT_HOME=%FORREST_HOME%\ant
 
+rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-for %%i in ("%FORREST_HOME%\lib\endorsed\*.jar") do call appendcp.bat %%i
+cd "%FORREST_HOME%\lib\endorsed"
+for %%i in (*.jar) do call "%FORREST_HOME%\bin\appendcp.bat" "%FORREST_HOME%\lib\endorsed\%%i"
 
-echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
+echo.
+echo Apache Forrest.  Run 'forrest -projecthelp' to list options
+echo.
+rem ----- call ant.. ---------------------------------------------------
+echo.
+call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME%" -Dproject.home="%PROJECT_HOME%" -Dforrest.home="%FORREST_HOME%" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
 
-Rem ----- call ant.. ---------------------------------------------------
-"%ANT_HOME%\bin\ant" -buildfile %ANTFILE% -Dbasedir="%PROJECT_HOME%" -Dproject.home="%PROJECT_HOME%" -Dforrest.home="%FORREST_HOME%" -emacs -logger org.apache.tools.ant.NoBannerLogger %1 %2 %3 %4 %5 %6 %7 %8 %9
-
-Rem ---- Restore old ANT_HOME
+rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%
 set CLASSPATH=%OLD_CLASSPATH%
-
-endlocal
