@@ -5,7 +5,7 @@
  This stylesheet was taken from the XSLT FAQ http://www.dpawson.co.uk/xsl/
  
  Comments and adaption to be used without normalize-space()
-  by Nicola Ken Barozzi nicolaken@apache.org
+  by forrest-dev@xml.apache.org
 --> 
 
 <!--
