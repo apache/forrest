@@ -4,13 +4,23 @@
        stylesheet in standalone editors -->
   <xsl:output method = "text"  omit-xml-declaration="yes"  />
 
-  <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.1 2004/01/03 15:35:37 nicolaken Exp $ */
-
-/*
+<!--
   If the skin doesn't override this, at least aural styles 
   and extra-css are present 
-*/
+-->
+  <xsl:template match="skinconfig">
+/* $Id: forrest.css.xslt,v 1.2 2004/01/13 08:19:53 nicolaken Exp $ */
+
+   <xsl:call-template name="aural"/>
+   <xsl:call-template name="a-external"/>
+   <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="colors">
+   <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template name="aural">
 
 /* ==================== aural ============================ */
 
@@ -37,10 +47,18 @@
   :visited { voice-family: betty, female }
   :active { voice-family: betty, female; pitch-range: 80; pitch: x-high }
 }
-
-   <xsl:apply-templates/>
   </xsl:template>
-
+  
+  <xsl:template name="a-external">
+a.external  {
+        padding: 0 20px 0px 0px;
+	display:inline; display:inline-block;
+        background-repeat: no-repeat;
+	background-position: center right;
+	background-image: url(/skin/images/external-link.gif);
+}
+  </xsl:template>
+  
   <xsl:template match="extra-css">
     <xsl:value-of select="."/>
   </xsl:template>

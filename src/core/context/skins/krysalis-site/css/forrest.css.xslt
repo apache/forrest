@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:import href="../../common/css/forrest.css.xslt"/>
+
   <!-- This is not used by Forrest but makes it possible to debug the 
        stylesheet in standalone editors -->
   <xsl:output method = "text"  omit-xml-declaration="yes"  />
   
-  <xsl:template match="colors">
-   <xsl:apply-templates/>
-  </xsl:template>
-
 <!-- ==================== main block colors ============================ -->
 <xsl:template match="color[@name='header']">
 .header         { background-color: <xsl:value-of select="@value"/>;} 
@@ -67,17 +66,5 @@ body         { background-color: <xsl:value-of select="@value"/>;} </xsl:templat
 <xsl:template match="color[@name='table-cell']"> 
 .content .ForrestTable td   { background-color: <xsl:value-of select="@value"/>;} </xsl:template> 
 
-
-  <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.5 2004/01/09 15:28:36 brondsem Exp $ */
-   <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="extra-css">
-    <xsl:value-of select="."/>
-  </xsl:template>
-  
-  <xsl:template match="*"></xsl:template>
-  <xsl:template match="text()"></xsl:template>
 
 </xsl:stylesheet>
