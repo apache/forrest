@@ -8,8 +8,8 @@ PURPOSE:
 TYPICAL INVOCATION:
 
   <!ENTITY % common PUBLIC
-      "-//APACHE//ENTITIES Common elements V1.0//EN"
-      "common-elems-v10.mod">
+      "-//APACHE//ENTITIES Common elements Vx.y//EN"
+      "common-elems-vxy.mod">
   %common;
 
   where
