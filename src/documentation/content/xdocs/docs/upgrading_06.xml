@@ -114,10 +114,43 @@
       </p>
     </section>
     
+    <section id="catalog">
+      <title>SystemIdentifiers for DTDs changed to forrest.apache.org</title>
+      <p>
+        Everyone should still continue to use the
+        <link href="site:catalog">Catalog Entity Resolver</link>
+        and that certainly still operates at the core of Forrest using the
+        well-defined PublicIdentifiers.
+        However, some impoverished XML tools do not, so they need to be able
+        to get the DTDs from the website. Some other tools rely on the System
+        Identifier rather than the Public Identifer. See Forrest Issue
+        <link href="http://issues.cocoondev.org/jira/secure/ViewIssue.jspa?key=FOR-107">FOR-107</link>.
+      </p>
+      <p>
+        In previous versions of Forrest, and maybe in your application if
+        you copied the fresh-site xdocs, there were inconsistent
+        SystemIdentifiers. Some used local filenames, others used
+        apache.org/forrest/dtd/ URIs. In v0.6 we changed to use
+        System Identifiers at forrest.apache.org/dtd/ as resource URLs.
+        You do not need to change them becaus eyou are using the entity
+        resolver, but to remain consistent, it probably is best.
+      </p>
+      <p>
+        Beware if you have a catalog where the mapping is not declared properly.
+        The Catalog Entity Resolver will miss the local mapping and happily
+        go to the network to get the DTDs. That would cause Forrest to appear
+        to be slow for you, yet it will still operate properly. While we are
+        on that topic, if you use the XSLT document() function - there is a 
+        <link href="http://issues.apache.org/bugzilla/show_bug.cgi?id=28341">Xalan bug 28341</link>
+        for DTD resolution via document() - please help to fix it.
+      </p>
+    </section>
+
     <section>
       <title>To be continued...</title>
-      <p>...as more issues are discovered/remembered :)  Please send feedback to the <link
-          href="site:mail-lists/forrest-dev">mailing list</link>.</p>
+      <p>...as more issues are discovered/remembered :)  Please send feedback
+      to the
+      <link href="site:mail-lists/forrest-dev">mailing list</link>.</p>
     </section>
   </body>
 </document>
