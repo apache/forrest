@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.8 2003/01/27 13:47:22 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -37,11 +37,11 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
             </title>
          </head>
     
-  <body marginwidth="0" marginheight="0" class="composite" bgcolor="white">
+  <body class="composite" bgcolor="white">
     
     <xsl:comment>================= start Banner ==================</xsl:comment>
       <div id="banner">
-        <table border="0" cellspacing="0" cellpadding="8" width="100%">
+        <table border="0" summary="banner" cellspacing="0" cellpadding="8" width="100%">
          <tbody>        
           <tr>
             <xsl:comment>================= start Group Logo ==================</xsl:comment>
@@ -77,7 +77,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
     <xsl:comment>================= end Banner ==================</xsl:comment>
 
     <xsl:comment>================= start Main ==================</xsl:comment>
-    <table id="breadcrumbs" border="0" cellspacing="0" cellpadding="0" width="100%">
+    <table id="breadcrumbs" summary="nav" border="0" cellspacing="0" cellpadding="0" width="100%">
      <tbody>    
       <xsl:comment>================= start Status ==================</xsl:comment>
       <tr class="status">
@@ -107,7 +107,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
       <xsl:comment>================= end Status ==================</xsl:comment>
 
 
-    <table border="0" cellspacing="0" cellpadding="8" width="100%" id="main">
+    <table border="0" summary="" cellspacing="0" cellpadding="8" width="100%" id="main">
      <tbody>
       <tr valign="top">
         <xsl:comment>================= start Menu ==================</xsl:comment>
@@ -124,7 +124,9 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
             <div class="app">
               <div align="center">
                 <h1><xsl:value-of select="/site/document/title" /></h1>
-                <h2><xsl:value-of select="/site/document/subtitle" /></h2>
+                <xsl:if test="/site/document/subtitle">
+                  <h2><xsl:value-of select="/site/document/subtitle" /></h2>
+                </xsl:if>
                </div>
                 <div class="h3">
                    <xsl:copy-of select="/site/document/body/node()|@*" />
@@ -174,20 +176,23 @@ $Id: site2xhtml.xsl,v 1.7 2003/01/25 11:20:29 nicolaken Exp $
       <td align="right">
         <xsl:comment>================= start Credits ==================</xsl:comment>
         <div align="right">
-        <div class="credit">
-        <xsl:if test="$filename = 'index.html' and $config/credits">
-          <xsl:for-each select="$config/credits/credit">
-            <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="name"/>
-              <xsl:with-param name="url" select="url"/>
-              <xsl:with-param name="logo" select="image"/>
-              <xsl:with-param name="root" select="$root"/>
-              <xsl:with-param name="width" select="width"/>
-              <xsl:with-param name="height" select="height"/>
-            </xsl:call-template>
-          </xsl:for-each>
-        </xsl:if>
-        </div>
+          <div class="credit">
+            <xsl:if test="$filename = 'index.html'">
+              <xsl:call-template name="compliancy-logos"/>
+              <xsl:if test="$config/credits">
+                <xsl:for-each select="$config/credits/credit">
+                  <xsl:call-template name="renderlogo">
+                    <xsl:with-param name="name" select="name"/>
+                    <xsl:with-param name="url" select="url"/>
+                    <xsl:with-param name="logo" select="image"/>
+                    <xsl:with-param name="root" select="$root"/>
+                    <xsl:with-param name="width" select="width"/>
+                    <xsl:with-param name="height" select="height"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </xsl:if>
+            </xsl:if>
+          </div>
         </div>
         <xsl:comment>================= end Credits ==================</xsl:comment>
         </td>
