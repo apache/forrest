@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.7-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>Building Forrest</title>
+<title>Draft: Proposal for ASF-wide Forrestbot</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
@@ -105,13 +105,13 @@
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_selected_1.1', 'skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">Getting Involved</div>
-<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div onclick="SwitchMenu('menu_1.1', 'skin/')" id="menu_1.1Title" class="menutitle">Getting Involved</div>
+<div id="menu_1.1" class="menuitemgroup">
 <div class="menuitem">
 <a title="" href="contrib.html">Contributing</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">Building Forrest</div>
+<div class="menuitem">
+<a title="" href="build.html">Building Forrest</a>
 </div>
 <div class="menuitem">
 <a title="" href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/?root=Apache-SVN">Browse SVN</a>
@@ -126,13 +126,13 @@
 <a title="" href="forrest-issues.html">Open Issues</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Proposals</div>
-<div id="menu_1.2" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.2', 'skin/')" id="menu_selected_1.2Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">Proposals</div>
+<div id="menu_selected_1.2" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a title="" href="proposal-asf-publish.html">ASF Publishing</a>
 </div>
-<div class="menuitem">
-<a title="" href="proposal-asf-forrestbot.html">ASF Forrestbot</a>
+<div class="menupage">
+<div class="menupagetitle">ASF Forrestbot</div>
 </div>
 </div>
 <div id="credit"></div>
@@ -151,7 +151,7 @@
 <div id="content">
 <div id="skinconf-txtlink"></div>
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="build.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="proposal-asf-forrestbot.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">
@@ -160,119 +160,79 @@
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>Building Forrest</h1>
+<h1>Draft: Proposal for ASF-wide Forrestbot</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
-<a href="#getting_from_source">Getting the Forrest source</a>
-<ul class="minitoc">
-<li>
-<a href="#Step-by-step+Subversion+%28SVN%29+instructions">Step-by-step Subversion (SVN) instructions</a>
+<a href="#overview">Overview</a>
 </li>
 <li>
-<a href="#snapshot">Using source snapshots</a>
-</li>
-</ul>
+<a href="#forrestbot">About Forrestbot</a>
 </li>
 <li>
-<a href="#building">Building and Installing Forrest</a>
-</li>
-<li>
-<a href="#run">Run Forrest, run!</a>
+<a href="#requirements">Requirements</a>
 </li>
 </ul>
 </div>
     
-<a name="N1000D"></a><a name="getting_from_source"></a>
-<h2 class="underlined_10">Getting the Forrest source</h2>
-<div class="section">
-<a name="N10013"></a><a name="Step-by-step+Subversion+%28SVN%29+instructions"></a>
-<h3 class="underlined_5">Step-by-step Subversion (SVN) instructions</h3>
-<div class="frame note">
-<div class="label">Note</div>
-<div class="content">If you are behind a proxy, see 
-          <a class="external" href="http://subversion.tigris.org/project_faq.html#proxy">this FAQ</a>.</div>
-</div>
-<ol> 
-          
-<li>Make sure you have a recent release of a
-           <a class="external" href="http://subversion.tigris.org/">Subversion</a>
-           client installed and properly configured.</li>
-          
-<li>Read the ASF notes about source repositories and
-           <a href="http://www.apache.org/dev/version-control.html">version control</a>.
-          </li>
-          
-<li>At a command prompt, enter
-           '<span class="codefrag">svn co http://svn.apache.org/repos/asf/forrest/trunk forrest</span>'
-           (committers should replace <span class="codefrag">http</span> with <span class="codefrag">https</span>).</li>
-          
-<li>This will create a directory called "<span class="codefrag">forrest</span>" where the Forrest source will be stored.</li> 
-        
-</ol>
-<p>Whenever you want to update your Forrest source tree to the current
-         version, change to the top-level
-"<span class="codefrag">forrest</span>" directory and invoke '<span class="codefrag">svn update</span>'.</p>
-<p>To see what changes you've made, invoke '<span class="codefrag">svn status</span>'</p>
-<p>SVN is really powerful. See
-          <a class="external" href="http://svnbook.red-bean.com/">Version Control with Subversion</a> - the opensource SVN book.
-        </p>
-<a name="N1005A"></a><a name="snapshot"></a>
-<h3 class="underlined_5">Using source snapshots</h3>
-<p>It is preferable to use SVN, but if you cannot for some reason, then
-          <a href="http://forrest.apache.org/mirrors.cgi">source snapshots</a> are available
-          (automatically packed every six hours).
-        </p>
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">This is a draft proposal document. It is not yet the
+     consensus of ASF nor the Infrastructure committee.
+    </div>
 </div>
 
-   
-<a name="N10069"></a><a name="building"></a>
-<h2 class="underlined_10">Building and Installing Forrest</h2>
+    
+<a name="N10010"></a><a name="overview"></a>
+<h2 class="underlined_10">Overview</h2>
 <div class="section">
-<p>
-       To build Forrest, type '<span class="codefrag">build</span>' on Windows, or '<span class="codefrag">./build.sh</span>' on
-       Unix. If everything is successful, you should see a message like this:
-     </p>
-<pre class="code">
-  *-----------------------------------------------------------------
-  | installation notice
-  *-----------------------------------------------------------------
-  | You have built the distribution of Forrest.
-  | Please set the environment variable FORREST_HOME point to src/core
-  | It is recommended to add
-  |    unix: $FORREST_HOME/bin: to your $PATH
-  |    win: %FORREST_HOME%\bin; to your %PATH%
-  | Then do 'forrest -projecthelp' to list options for the 'forrest' command
-  | More help at http://forrest.apache.org/
-  *-----------------------------------------------------------------
-     </pre>
-<p>
-       As the message says, you need to add the distribution's <span class="codefrag">bin/</span>
-       ("binary") directory to your PATH variable, so the <span class="codefrag">'forrest'</span>
-       command is available everywhere:
-     </p>
-<pre class="code">
-~/apache/forrest$ export FORREST_HOME=`pwd`/src/core
-~/apache/forrest$ export PATH=$PATH:$FORREST_HOME/bin
-     </pre>
-<p>
-       After updating the Forrest source from SVN if there have been certain types of
-       updates (to the Java source for xml-forrest.jar), you will have to build forrest again.
-     </p>
+<p>All ASF projects need to be able to concentrate on their projects
+        and the content of their websites, rather than get tangled up in
+        arcane website publication procedures.
+      </p>
+<p>A proposal is currently being discussed for
+        <a href="proposal-asf-publish.html">ASF-wide documentation staging
+        and publishing</a>. The context of this Forrestbot proposal is at
+        Item C through to Item G of that infrastructure, the "staging server".
+        This does not preclude other mechanisms - some projects might choose
+        to use Forrestbot.
+      </p>
 </div>
 
+    
+<a name="N10021"></a><a name="forrestbot"></a>
+<h2 class="underlined_10">About Forrestbot</h2>
+<div class="section">
+<p>The Forrestbot enables the automated building and deployment of
+        websites. It will retrieve the source from SVN or CVS, build the
+        website, and then deploy it. Notifications can be sent. It keeps a
+        log of the build process.
+        See more <a href="docs/forrestbot.html">detailed explanation</a>.
+      </p>
+<p>There is also a "web interface" component to Forrestbot to enable
+        the project committers to easily trigger their website build, view
+        the result, and deploy it to the staging server.
+        See more <a href="docs/forrestbot-web-interface.html">detailed explanation</a>.
+      </p>
+</div>
+
+    
+<a name="N10036"></a><a name="requirements"></a>
+<h2 class="underlined_10">Requirements</h2>
+<div class="section">
+<p>The staging server (e.g. stage.apache.org) would be a virtual server.
+        A stable version of "forrest" and "forrestbot" would be installed there.
+        Each project that uses forrestbot would have a forrestbot configuration
+        file. This defines the SVN or CVS repository to get the source from,
+        where to deploy the built site, and various other parameters.
+      </p>
+<p>The Forrestbot web interface requires a servlet container (e.g.
+        <a class="external" href="http://jakarta.apache.org/tomcat/">Apache Tomcat</a>) and
+        an <a class="external" href="http://httpd.apache.org/">Apache HTTP Server</a> would be
+        used to view the staging sites.
+      </p>
+</div>
   
-<a name="N1008D"></a><a name="run"></a>
-<h2 class="underlined_10">Run Forrest, run!</h2>
-<div class="section">
-<p>Forrest is now ready to go. Type '<span class="codefrag">forrest run</span>' to see
-    the local webapp using the bundled Jetty server. Edit some of Forrest's
-    core documentation and see the effect.
-    The document <a href="docs/your-project.html">Using Forrest</a> is
-    your next step.</p>
-</div>
-
-
 </div>
 <!--+
     |end content
