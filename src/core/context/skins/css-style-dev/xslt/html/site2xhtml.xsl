@@ -172,6 +172,12 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
     |start Search
     +</xsl:comment> 
             <div class="searchbox">
+        <div id="roundtopsmall">
+            <img 
+                src="{$skin-img-dir}/rc-t-l-5-1body-2searchbox-3searchbox.png" 
+                alt="" width="5" height="5" class="cornersmall" 
+                style="display: none" />
+        </div>
                 <form method="get" action="http://www.google.com/search"> 
                     <input type="hidden" 
                     name="sitesearch" value="{$config/searchsite-domain}"/> 
@@ -179,6 +185,12 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
                     value="Search the site:" 
                     onFocus="getBlank (this, 'Search the site:');"/>&#160; 
                     <input type="submit" value="Search" name="Search"/> </form>
+            <div id="roundbottomsmall">
+            <img 
+                src="{$skin-img-dir}/rc-b-l-5-1body-2menu-3menu.png" 
+                alt="" width="5" height="5" class="cornersmall" 
+                style="display: none" />
+        </div>
             </div>
 <xsl:comment>+
     |end search
@@ -198,6 +210,11 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
    	|centerstrip with menu and mainarea
    	+-->
     <div id="main">
+        <div id="published">
+           <script language="JavaScript" type="text/javascript"><![CDATA[<!--
+              document.write("Published: " + document.lastModified);
+              //  -->]]></script>
+        </div>
         <xsl:choose>
         <xsl:when test="$config/trail/@location='alt'">
             <!--breadtrail location='alt'-->
@@ -323,7 +340,85 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
     |end Menu
     +</xsl:comment>
   </xsl:template>
-  <!-- Generates the PDF link -->
+  
+  <xsl:template name="innermenuli">   
+    <xsl:param name="id"/>
+    <xsl:variable name="tagid">
+      <xsl:choose>
+        <xsl:when test="descendant-or-self::node()/li/span/@class='sel'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="concat('menu_',concat(font,$id))"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="whichGroup">
+      <xsl:choose>
+    	<xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selectedmenuitemgroup</xsl:when>
+       	<xsl:otherwise>menuitemgroup</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    
+    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="span"/></div>
+      <div class="{$whichGroup}" id="{$tagid}">
+        <xsl:for-each select= "ul/li">
+
+          <xsl:choose>
+            <xsl:when test="a">
+              <div class="menuitem"><a href="{a/@href}"><xsl:value-of select="a" /></a></div>
+            </xsl:when>
+            <xsl:when test="span/@class='sel'">
+              <div class="menupage">
+                <div class="menupagetitle"><xsl:value-of select="span" /></div>
+                <xsl:if test="//tocitems/tocitem and contains($config/toc/@location,'dd')"> 
+                <xsl:value-of select="$config/toc/@location"/>
+                  <div class="menupageitemgroup">
+                      <xsl:for-each select = "//tocitems/tocitem">
+                        <div class="menupageitem">
+                          <xsl:choose>
+                            <xsl:when test="string-length(@title)>15">
+                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <a href="{@href}"><xsl:value-of select="@title" /></a>
+                            </xsl:otherwise>
+                          </xsl:choose>
+
+                          <xsl:if test="tocitem">
+                          <!-- nicolaken: this enables double-nested page links-->
+                            <ul>
+                              <xsl:for-each select = "tocitem">
+
+                                <xsl:choose>
+                                  <xsl:when test="string-length(@title)>15">
+                                    <li><a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a></li>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <li><a href="{@href}"><xsl:value-of select="@title" /></a></li>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+
+                              </xsl:for-each>
+                            </ul> 
+                          <!-- nicolaken: ...till here -->
+                          </xsl:if>
+                        </div>
+                      </xsl:for-each>
+                  </div>
+                </xsl:if>
+              </div>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name = "innermenuli">
+                 <xsl:with-param name="id" select="concat($id, '.', position())"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+
+        </xsl:for-each>
+      </div>
+  </xsl:template>
+<!--+
+    |Generates the PDF link 
+    +-->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
       <div class="pdflink"><a href="{$filename-noext}.pdf" class="dida">

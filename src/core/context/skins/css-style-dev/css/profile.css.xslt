@@ -33,7 +33,6 @@
 #top .header .current a:link {  color: <xsl:value-of select="@link"/>;  }
 #top .header .current a:visited { color: <xsl:value-of select="@vlink"/>; }
 #top .header .current a:hover { color: <xsl:value-of select="@hlink"/>; }
-#main      { border-top: solid <xsl:value-of select="@value"/> 15px; }
 </xsl:template> 
 
 <xsl:template match="color[@name='tab-unselected']"> 
