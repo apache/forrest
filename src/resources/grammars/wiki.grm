@@ -1,5 +1,5 @@
 
-%token line "\-\-\-\- (\-*)";
+%token line "\-\-\-\- (\-+)";
 
 %token bulleteditem "\*+";
 
@@ -10,9 +10,7 @@
 %token tabletitleitem  "\|\|";
 %token tablecolumnitem "\|";
 
-%token titleitem "!!!";
-%token subtitleitem "!!";
-%token subsubtitleitem "!";
+%token titleitem "!+";
 
 %token emitem "''";
 
@@ -27,14 +25,10 @@
 
 %token link   "\[( [^\[\|\]]* \| )?   [^\[\|\]]* \]";
 
-%token text  "([^\t\n\r\[\{\}\|\*\\\-_!#'] | _[^_\n\r] | \{[^\{\n\r] | \}[^\}\n\r] | '[^'\n\r] 
-                                             | \[\[ | \\[^\\\n\r] | \-{1,3}[^\-\n\r]?)
-              ([^    \n\r\[\{\}\|\\\-_']     | _[^_\n\r] | \{[^\{\n\r] | \}[^\}\n\r] | '[^'\n\r] 
-                                             | \[\[ | \\[^\\\n\r] | \-{1,3}[^\-\n\r]? | \|[^\|\ \t])*";
+%token text  "([^\ \t\n\r\[\{\}\|\*_!#'] | _[^_] | \{[^\{] | \}[^\}] | '[^'] | \[\[)
+              ([^    \n\r\[\{\}\|_']     | _[^_] | \{[^\{] | \}[^\}] | '[^'] | \[\[ | \|[^\|\ \t])*";
 
 %right softbreak "\r(\n?) | \n";
-
-%right break "\\\\";
 
 %right hardbreak "(\r(\n?) | \n) (\r(\n?) | \n)+";
 
@@ -55,53 +49,9 @@ section
   | title hardbreak paragraphs
   ;
 
-title
-  : titleitem textsequence
-  ;
-
 paragraphs  
   : paragraphs paragraph hardbreak
   | paragraphs paragraph 
-  | paragraph hardbreak
-  | paragraph
-  | paragraphs subsection hardbreak
-  | paragraphs subsection
-  | subsection hardbreak
-  | subsection
-  ;
-
-subsection
-  : subtitle subparagraphs
-  | subtitle hardbreak subparagraphs
-  ;
-
-subtitle
-  : subtitleitem textsequence
-  ;
-
-subparagraphs
-  : subparagraphs paragraph hardbreak
-  | subparagraphs paragraph
-  | paragraph hardbreak
-  | paragraph
-  | subparagraphs subsubsection hardbreak
-  | subparagraphs subsubsection
-  | subsubsection hardbreak
-  | subsubsection
-  ;
-
-subsubsection
-  : subsubtitle subsubparagraphs
-  | subsubtitle hardbreak subsubparagraphs
-  ;
-
-subsubtitle
-  : subsubtitleitem textsequence
-  ;
-
-subsubparagraphs
-  : subsubparagraphs paragraph hardbreak
-  | subsubparagraphs paragraph
   | paragraph hardbreak
   | paragraph
   ;
@@ -184,13 +134,15 @@ tablecolumn
   : tablecolumnitem textblock
   ;
   
+title 
+  : titleitem textsequence
+  ;
+
 textsequence 
   : textsequence textblock softbreak
   | textsequence textblock 
   | textblock softbreak  
-  | textblock
-  | textsequence textblock break
-  | textblock break
+  | textblock           
   ; 
 
 textblock 
