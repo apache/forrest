@@ -37,7 +37,7 @@
   <target name="package-skin" description="Make a package of an existing skin" depends="init-props">
     <input message="Which skin do you want to package?"
            addproperty="skin-name"/>
-    <zip destfile="${forrest.skins-dir}/${skin-name}-${version}.zip"
+    <zip destfile="${forrest.skins-dir}/${skin-name}-${forrest.version}.zip"
        basedir="${forrest.skins-dir}/"
        includes="${skin-name}/**"/>
   </target>
@@ -114,7 +114,7 @@
           style="${forrest.home}/var/skinlist2fetch.xsl"
           force="true">
       <param name="skin-name" expression="${project.skin}"/>      
-      <param name="forrest-version" expression="${version}"/>   
+      <param name="forrest-version" expression="${forrest.version}"/>   
     </xslt>  
     <ant antfile="${project.temp-dir}/skinlist2fetchbuild.xml"/>
       </sequential>
