@@ -441,9 +441,54 @@
     <!-- if the file is present verbatim as content, give that to the user... -->
     <map:act type="resource-exists">
      <map:parameter name="url" value="content/{1}"/>
-     <map:read src="content/{../1}"/>
+
+     <map:match pattern="**.html">
+       <!--
+        Use this instead if you don't want JTidy to clean up your HTML
+        <map:read src="content/{0}" mime-type="text/html"/>
+        -->
+        <map:generate type="html" src="content/{1}.html"/>      
+        <map:serialize type="html"/>
+      </map:match>
+
+      <map:match pattern="**.xml">
+        <map:generate type="file" src="content/{1}.xml"/>      
+        <map:serialize type="xml"/>
+      </map:match>
+
+      <map:match pattern="skin/**.css">
+        <map:read src="content/{1}.css" mime-type="text/css"/>
+      </map:match>
+      
+      <map:match pattern="**.js">
+        <map:read src="content/{1}.js" mime-type="application/javascript"/>
+      </map:match>
+      
+      <map:match pattern="**.gif">
+        <map:read src="content/{1}.gif" mime-type="image/gif"/>
+      </map:match>
+
+      <map:match pattern="**.png">
+        <map:read src="content/{1}.png" mime-type="image/png"/>
+      </map:match>
+      
+      <map:match pattern="**.jpg">
+        <map:read src="content/{1}.jpg" mime-type="image/jpeg"/>
+      </map:match>
+
+      <map:match pattern="**.jpeg">
+        <map:read src="content/{1}.jpeg" mime-type="image/jpeg"/>
+      </map:match> 
+           
+      <map:match pattern="**.pdf">
+        <map:read src="content/{1}.pdf" mime-type="application/pdf"/>
+      </map:match>
+      
+      <map:match pattern="**">
+        <map:read src="content/{1}" mime-type="application/unknown"/>
+      </map:match>
     </map:act>
-   
+      
    <!-- ... otherwise try to generate it using these rules.  -->
   
   <map:match pattern="apachestats">
