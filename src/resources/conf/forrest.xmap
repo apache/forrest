@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.29 $
+$Revision: 1.30 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -182,15 +182,6 @@ $Revision: 1.29 $
 
         <map:select type="exists">
           
-          <!-- use the same form of ihtml for now -->
-          <map:when test="content/xdocs/{1}.html">
-            <map:generate src="content/xdocs/{1}.html" type="html" />
-            <map:transform src="resources/stylesheets/html2document.xsl" />
-            <map:transform type="idgen" />
-            <map:serialize type="xml-document"/>
-          </map:when>
-          
-          <!-- @deprecated -->
           <map:when test="content/xdocs/{1}.ihtml">
             <map:generate src="content/xdocs/{1}.ihtml" type="html" />
             <map:transform src="resources/stylesheets/html2document.xsl" />
