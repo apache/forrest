@@ -69,7 +69,9 @@ import org.apache.cocoon.acting.Action;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceNotFoundException;
 
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -101,7 +103,13 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
             throw new Exception("SourceTypeAction: src attribute should be defined and non-empty.");
         Source source = sourceResolver.resolveURI(src);
         XMLPullParser parser = new Xerces2();
-        parser.setInputSource(new XMLInputSource(null, src, null, source.getInputStream(), null));
+        try {
+          InputStream is = source.getInputStream();
+          parser.setInputSource(new XMLInputSource(null, src, null, is, null));
+        } catch (SourceNotFoundException e) {
+          getLogger().warn("Source '"+source+"' not found");
+          return null;
+        }
 
         // load nothing external
         parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
