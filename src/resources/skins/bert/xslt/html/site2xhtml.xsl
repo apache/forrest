@@ -21,8 +21,8 @@
     <!-- ================================= top bar with logo's and search box ===================================  -->
         <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="header with logos">
       <tr>
-        <td bgcolor="#294563"><a href="@group-logo.href@"><img src="@group-logo.src@" alt="Apache XML" width="220" height="65" border="0"/></a></td>
-        <td bgcolor="#294563" align="center" width="100%"><a href="@project-logo.href@"><img src="@project-logo.src@" border="0" width="220" height="65" alt="Forrest logo" /></a></td>
+        <td bgcolor="#294563"><a href="@group-logo.href@"><img src="@group-logo.src@" alt="@group-logo.alt@" width="220" height="65" border="0"/></a></td>
+        <td bgcolor="#294563" align="center" width="100%"><a href="@project-logo.href@"><img src="@project-logo.src@" border="0" width="220" height="65" alt="@project-logo.alt@" /></a></td>
         <td bgcolor="#294563" rowspan="2" valign="top">
           <form method="get" action="http://www.google.com/search" onsubmit="q.value = query.value + ' site:xml.apache.org'" target="_blank">
             <table bgcolor="#4C6C8F" cellpadding="0" cellspacing="0" border="0" summary="search">
@@ -143,7 +143,7 @@
       <tr><td bgcolor="#4C6C8F" height="1" colspan="2"><img src="skin/images/spacer.gif" alt="" width="1" height="1" /><a href="skin/images/label.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/page.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/chapter.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/chapter_open.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/current.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a></td></tr>
       <tr>
         <td align="center" class="copyright" bgcolor="#CFDCED" colspan="2">
-          <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169; 2002 Apache Sofware Foundation. All Rights Reserved<script language="JavaScript" type="text/javascript"><![CDATA[<!--
+          <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169; @year@ @vendor@. All Rights Reserved<script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(". - "+"Last Published: " + document.lastModified);
             //  -->]]></script></font>
         </td>
