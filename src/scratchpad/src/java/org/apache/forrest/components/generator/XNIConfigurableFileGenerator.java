@@ -24,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Xerces" and "Apache Software Foundation" must
+ * 4. The names "Apache Forrest" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -100,8 +100,8 @@ import java.io.IOException;
  *   like the JaxpParser) can be built to do this.  Then the complete
  *   parser can be recycled.
  *
- * @author $Author: stevenn $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.4 2002/07/24 14:46:19 stevenn Exp $
+ * @author $Author: jefft $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.5 2002/11/04 10:53:53 jefft Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable

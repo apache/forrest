@@ -22,7 +22,7 @@
     Alternately, this  acknowledgment may  appear in the software itself,  if
     and wherever such third-party acknowledgments normally appear.
 
- 4. The names "Jakarta", "Avalon", "Excalibur" and "Apache Software Foundation"
+ 4. The names "Apache Forrest" and "Apache Software Foundation"
     must not be used to endorse or promote products derived from this  software
     without  prior written permission. For written permission, please contact
     apache@apache.org.
