@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+
+<document>
+  <header>
+    <title>Extending Forrest with Plugins</title>
+  </header>
+
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>Forrest provides the core functionality for generating documentation
+      in various output formats from a range of input formats. However, it
+      does not end there. Forrest can be extended through the addition of
+      plugins. This document serves as an introduction to the Forrest
+      plugin mechanism.</p>
+  
+      <section>
+        <title>What plugins are available?</title>
+        <p>You can run the command <code>forrest available-plugins</code> to get
+        a list of the known plugins for Forrest.</p>
+        
+        <p>If you would like to have your own plugin added to this list then
+        contact the <a href="ext:mail-lists">developer mailing list</a>.</p>
+      </section>
+        
+        
+      <section>
+        <title>How is a Plugin Installed?</title>
+    
+        <p>If a site requires one or more plugins then the site designer will 
+        have named them in the <code>project.required.plugins</code> property 
+        in the projects <code>forrest.properties</code> file. When Forrest 
+        builds the site it will automatically discover the plugin and install 
+        it. In otherwords, the user need do nothing. For example, 
+        <code>project.required.plugins=OpenOffice.org,simplified-docbook</code>
+        will cause Forrest to load the plugins called "OpenOffice.org" and
+        "simplified-docbook".</p>
+    
+        <section>
+          <title>Upgrading from a Version of Forrest Without Plugins</title>
+          <p>The plugin functionality was introduced in version 0.7 of Forrest.
+          At this time some of the functionality previously in Forrest was
+          extracted into a plugin. However, we have not broken backward 
+          compatability with earlier versions. In the absence of a
+          <code>project.required.plugins</code> property in the projects 
+          <code>forrest.properties</code> file all plugins that contain 
+          functionality previously part of Forrest itself will be loaded
+          automatically. Unless you intend to use new functionality provided
+          by a plugin you will not need to make any changes top your project.</p>
+          
+          <p>If you do require additional plugin functionality, be sure to
+          include all required plugins in the 
+          <code>project.required.plugins</code> property in the projects 
+          <code>forrest.properties</code>. You can view 
+          <code>forrestcore/src/core/context/default.forrest.properties</code>
+          to see the names of plugins that provide previously core 
+          functionality.</p>
+          
+          <p>It is also worth noting that there is a small performance 
+          improvement if you remove plugins that are not in use. Therefore,
+          if you do not use one or more of the plugins named in the 
+          <code>project.required.plugins</code> property of 
+          <code>forrestcore/src/core/context/default.forrest.properties</code>
+          it is recomended that you override this value in your projects
+          <code>forrest.properties</code> file.</p>
+        </section>
+      </section>
+    </section>
+    
+    <section>
+      <title>Further Reading</title>
+      <ul>
+        <li><a href="site:documentation/developers/pluginInfrastructure">Plugin Infrastrucuture</a></li>
+        <li><a href="site:howto/buildPlugin">How to build a Plugin</a></li>
+      </ul>
+    </section>
+  </body>
+</document>
