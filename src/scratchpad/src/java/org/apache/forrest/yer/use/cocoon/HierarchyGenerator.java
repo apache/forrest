@@ -6,12 +6,14 @@ package org.outerj.yer.use.cocoon;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.generation.ComposerGenerator;
-import org.apache.cocoon.caching.Cacheable;
-import org.apache.cocoon.caching.CacheValidity;
+
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.ResourceNotFoundException;
-import org.apache.cocoon.environment.Source;
+import org.apache.cocoon.components.source.SourceUtil;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.environment.SourceResolver;
+import org.apache.excalibur.source.SourceException;
+import org.apache.excalibur.source.SourceValidity;
 import org.xml.sax.SAXException;
 import org.outerj.yer.hierarchy.EntryFactory;
 import org.outerj.yer.hierarchy.Entry;
@@ -23,16 +25,17 @@ import java.util.Map;
 /** Class <code>org.outerj.yer.use.cocoon.HierarchyGenerator</code> ...
  * 
  * @author $Author: stevenn $
- * @version CVS $Id: HierarchyGenerator.java,v 1.1 2002/06/11 13:19:21 stevenn Exp $
+ * @version CVS $Id: HierarchyGenerator.java,v 1.2 2002/07/24 14:46:19 stevenn Exp $
  */
 public class HierarchyGenerator
-extends ComposerGenerator implements Cacheable, Recyclable {
+extends ComposerGenerator implements CacheableProcessingComponent, Recyclable {
 
   /** Default constructor
    * 
    */
   public HierarchyGenerator()
   {
+      System.out.println();
   }
 
   /** The  source */
@@ -61,8 +64,13 @@ extends ComposerGenerator implements Cacheable, Recyclable {
   throws ProcessingException, SAXException, IOException {
     super.setup(resolver, objectModel, src, par);
     //this is a dirty hack!
-    this.startLocation = resolver.resolve(super.source).getSystemId();
-    this.theDepth = par.getParameterAsInteger(DEPTH_PARAMETER, DEPTH_DEFAULT);
+      try {
+          this.startLocation = resolver.resolveURI(super.source).getSystemId();
+          this.theDepth = par.getParameterAsInteger(DEPTH_PARAMETER, DEPTH_DEFAULT);
+      } catch (SourceException e) {
+          getLogger().error("Can not resolve " + super.source);
+          throw SourceUtil.handle("Unable to resolve " + super.source, e);
+      }
   }
 
   /**
@@ -70,17 +78,12 @@ extends ComposerGenerator implements Cacheable, Recyclable {
    * This key must be unique inside the space of this component.
    * This method must be invoked before the generateValidity() method.
    *
-   * @return The generated key or <code>0</code> if the component
+   * @return The generated key or <code>null</code> if the component
    *              is currently not cacheable.
    */
-  public long generateKey() {
-/* TODO: could we possibly find some test to actually ever find some
-   easy way of finding out the lastModified of anything in the dir?
-   if (this.inputSource.getLastModified() != 0) {
-      return HashUtil.hash(this.inputSource.getSystemId());
-    }
- */
-    return 0;
+  public java.io.Serializable generateKey() {
+    //TODO: think about making it cacheable!
+    return null;
   }
 
   /**
@@ -91,7 +94,7 @@ extends ComposerGenerator implements Cacheable, Recyclable {
    * @return The generated validity object or <code>null</code> if the
    *         component is currently not cacheable.
    */
-  public CacheValidity generateValidity() {
+  public SourceValidity generateValidity() {
     /*
     if (this.inputSource.getLastModified() != 0) {
       return new TimeStampCacheValidity(this.inputSource.getLastModified());

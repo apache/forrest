@@ -57,14 +57,11 @@
 package org.apache.forrest.components.generator;
 
 import org.apache.cocoon.generation.ComposerGenerator;
-import org.apache.cocoon.caching.Cacheable;
-import org.apache.cocoon.caching.CacheValidity;
-import org.apache.cocoon.caching.TimeStampCacheValidity;
-import org.apache.cocoon.environment.Source;
-import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.ResourceNotFoundException;
-//import org.apache.cocoon.components.resolver.Resolver;
+import org.apache.cocoon.components.source.SourceUtil;
+import org.apache.cocoon.environment.SourceResolver;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.excalibur.xml.EntityResolver;
 import org.apache.avalon.framework.parameters.Parameters;
@@ -73,8 +70,9 @@ import org.apache.xerces.xni.parser.XMLParserConfiguration;
 import org.apache.xerces.xni.parser.XMLConfigurationException;
 import org.apache.xerces.util.EntityResolverWrapper;
 import org.apache.xerces.parsers.AbstractSAXParser;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.apache.excalibur.source.*;
+
+import org.xml.sax.*;
 
 import java.util.Map;
 import java.io.IOException;
@@ -102,11 +100,11 @@ import java.io.IOException;
  *   like the JaxpParser) can be built to do this.  Then the complete
  *   parser can be recycled.
  *
- * @author $Author: crossley $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.3 2002/07/12 07:14:29 crossley Exp $
+ * @author $Author: stevenn $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.4 2002/07/24 14:46:19 stevenn Exp $
  */
 public class XNIConfigurableFileGenerator
-extends ComposerGenerator implements Cacheable, Recyclable
+extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
 {
 
   /** Default constructor
@@ -131,12 +129,12 @@ extends ComposerGenerator implements Cacheable, Recyclable
    * All instance variables are set to <code>null</code>.
    */
   public void recycle() {
-    super.recycle();
     if (this.inputSource != null) {
-      this.inputSource.recycle();
+      this.resolver.release(inputSource);
       this.inputSource = null;
     }
-  }
+    super.recycle();
+ }
 
   /**
    * Copy paste en serious cut from cocoon HTML Generator
@@ -144,12 +142,12 @@ extends ComposerGenerator implements Cacheable, Recyclable
   public void setup(SourceResolver resolver, Map objectModel, String src, Parameters par)
   throws ProcessingException, SAXException, IOException {
     super.setup(resolver, objectModel, src, par);
-    this.inputSource = resolver.resolve(super.source);
     String parserName = null;
 
     try {
-      parserName = par.getParameter(CONFIGCLASS_PARAMETER);
-      parserConfig = (XMLParserConfiguration)Class.forName(parserName).newInstance();
+        this.inputSource = resolver.resolveURI(super.source);
+        parserName = par.getParameter(CONFIGCLASS_PARAMETER);
+        parserConfig = (XMLParserConfiguration)Class.forName(parserName).newInstance();
     } catch(ParameterException e) {
       getLogger().error("Missing parameter " + CONFIGCLASS_PARAMETER, e);
       throw new ProcessingException("XNIConfigurable.setup()",e);
@@ -162,6 +160,9 @@ extends ComposerGenerator implements Cacheable, Recyclable
     } catch(ClassNotFoundException e) {
       getLogger().error("Can not find " + parserName, e);
       throw new ProcessingException("XNIConfigurable.setup()",e);
+    } catch (SourceException e) {
+      getLogger().error("Can not resolve " + super.source);
+      throw SourceUtil.handle("Unable to resolve " + super.source, e);
     }
   }
 
@@ -173,16 +174,8 @@ extends ComposerGenerator implements Cacheable, Recyclable
    * @return The generated key or <code>0</code> if the component
    *              is currently not cacheable.
    */
-  public long generateKey() {
-/* TODO: investigate how we can handle dependend files
-   this work was originally for DTD stuff, and external entities to this
-   will not be known to have changed, so currently no cache.
-
-   if (this.inputSource.getLastModified() != 0) {
-      return HashUtil.hash(this.inputSource.getSystemId());
-    }
- */
-    return 0;
+  public java.io.Serializable generateKey() {
+    return this.inputSource.getSystemId();
   }
 
   /**
@@ -193,9 +186,9 @@ extends ComposerGenerator implements Cacheable, Recyclable
    * @return The generated validity object or <code>null</code> if the
    *         component is currently not cacheable.
    */
-  public CacheValidity generateValidity() {
+  public SourceValidity generateValidity() {
     if (this.inputSource.getLastModified() != 0) {
-      return new TimeStampCacheValidity(this.inputSource.getLastModified());
+      this.inputSource.getValidity();
     }
     return null;
   }
@@ -224,7 +217,7 @@ extends ComposerGenerator implements Cacheable, Recyclable
       parser.setFeature("http://xml.org/sax/features/namespaces", true);
       parser.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
       parser.setContentHandler(this.contentHandler);
-      parser.parse(this.inputSource.getInputSource());
+      parser.parse(new InputSource(this.inputSource.getInputStream()));
 
     } catch (IOException e){
       getLogger().warn("XNIConfigurable.generate()", e);
@@ -232,8 +225,6 @@ extends ComposerGenerator implements Cacheable, Recyclable
               + "src = " + this.inputSource.getSystemId() + "]\n", e);
     } catch (SAXException e){
       getLogger().error("XNIConfigurable.generate()", e);
-      throw e;
-    } catch (ProcessingException e){
       throw e;
     } catch (XMLConfigurationException e) {
       getLogger().error( "Misconfig " + e.getType(), e);
