@@ -16,7 +16,7 @@ Section handling
   - FIXME: provide a generic facility to process section irrelevant to their
     nesting depth
 
-$Id: document2html.xsl,v 1.3 2003/01/11 11:18:11 jefft Exp $
+$Id: document2html.xsl,v 1.4 2003/01/11 15:46:24 stevenn Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -96,34 +96,12 @@ $Id: document2html.xsl,v 1.3 2003/01/11 11:18:11 jefft Exp $
       <ul class="minitoc">
         <xsl:for-each select="section">
           <li>
-            <a>
-              <xsl:attribute name="href">
-                <xsl:text>#</xsl:text>
-                <xsl:if test="@id">
-                  <xsl:value-of select="@id"/>
-                </xsl:if>
-                <xsl:if test="not(@id)">
-                  <xsl:value-of select="generate-id()"/>
-                </xsl:if>
-              </xsl:attribute>
-              <xsl:value-of select="title"/>
-            </a>
+            <xsl:call-template name="toclink"/>
             <xsl:if test="section">
               <ul class="minitoc">
                 <xsl:for-each select="section">
                   <li>
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:text>#</xsl:text>
-                        <xsl:if test="@id">
-                          <xsl:value-of select="@id"/>
-                        </xsl:if>
-                        <xsl:if test="not(@id)">
-                          <xsl:value-of select="generate-id()"/>
-                        </xsl:if>
-                      </xsl:attribute>
-                      <xsl:value-of select="title"/>
-                    </a>
+                    <xsl:call-template name="toclink"/>
                   </li>
                 </xsl:for-each>
               </ul>
@@ -144,20 +122,24 @@ $Id: document2html.xsl,v 1.3 2003/01/11 11:18:11 jefft Exp $
   </xsl:template>
 
   <xsl:template match="section">
+    <!-- count the number of section in the ancestor-or-self axis to compute
+         the title element name later on -->
+    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
     <a name="{generate-id()}"/>
+    <a>
+      <xsl:attribute name="name">
+        <xsl:text>xpointer(</xsl:text>
+        <xsl:for-each select="ancestor-or-self::*">
+          <xsl:value-of select="concat('/',local-name(),'[')"/><xsl:number/><xsl:text>]</xsl:text>
+        </xsl:for-each>
+        <xsl:text>)</xsl:text>
+      </xsl:attribute>
+    </a>
     <xsl:apply-templates select="@id"/>
-    <h3>
+    <!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
+    <xsl:element name="{concat('h',$sectiondepth + 2)}">
       <xsl:value-of select="title"/>
-    </h3>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-  </xsl:template>
-
-  <xsl:template match="section/section">
-    <a name="{generate-id()}"/>
-    <xsl:apply-templates select="@id"/>
-    <h4>
-      <xsl:value-of select="title"/>
-    </h4>
+    </xsl:element>
     <xsl:apply-templates select="*[not(self::title)]"/>
   </xsl:template>
 
@@ -278,6 +260,25 @@ $Id: document2html.xsl,v 1.3 2003/01/11 11:18:11 jefft Exp $
       <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
       <xsl:apply-templates/>
     </table>
+  </xsl:template>
+
+  <xsl:template name="toclink">
+    <a>
+      <xsl:attribute name="href">
+        <xsl:text>#</xsl:text>
+        <xsl:if test="@id">
+          <xsl:value-of select="@id"/>
+        </xsl:if>
+        <xsl:if test="not(@id)">
+          <xsl:text>xpointer(</xsl:text>
+          <xsl:for-each select="ancestor-or-self::*">
+            <xsl:value-of select="concat('/',local-name(),'[')"/><xsl:number/><xsl:text>]</xsl:text>
+          </xsl:for-each>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+      </xsl:attribute>
+      <xsl:value-of select="title"/>
+    </a>
   </xsl:template>
 
   <xsl:template match="node()|@*" priority="-1">
