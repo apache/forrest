@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/symtab/ArrayDef.java,v 1.1 2004/02/09 11:09:12 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:12 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/symtab/ArrayDef.java,v 1.2 2004/02/19 23:53:02 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/19 23:53:02 $
  *
  * ====================================================================
  *
@@ -91,7 +91,7 @@ class ArrayDef extends Definition implements TypedDef {
 
         super(name, occ, parentScope);
 
-        System.out.println("new ArrayDef");
+        // System.out.println("new ArrayDef");
     }
 
     /**

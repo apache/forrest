@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLIndex.java,v 1.2 2004/02/11 19:13:59 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2004/02/11 19:13:59 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLIndex.java,v 1.3 2004/02/19 23:53:02 nicolaken Exp $
+ * $Revision: 1.3 $
+ * $Date: 2004/02/19 23:53:02 $
  *
  * ====================================================================
  *
@@ -149,7 +149,7 @@ public class GenerateHTMLIndex {
                 file = (File) v.get(i);
                 docGenerator = new GenerateHTMLDoc(file, destDir);
             }
-            System.out.println("Número de files .js: " + v.size());
+            System.out.println("Number of .js files: " + v.size());
             for (int i = 0; i < v.size(); i++) {
                 System.out.println(file.getName());
                 file = (File) v.get(i);
