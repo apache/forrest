@@ -6,7 +6,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.20 $</version>
+    <version>$Revision: 1.21 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -86,7 +86,7 @@ U xml-forrest/build.bat
      <source>
 Apache Forrest.  Run 'forrest -projecthelp' to list options
 
-Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.build.xml
+Buildfile: /home/..../xml-forrest/build/dist/shbat/bin/../forrest.build.xml
 
     *=======================================================*
     |                Forrest Site Builder                   |
@@ -246,65 +246,65 @@ jeff@expresso:~/apache/xml-mysite$ tree
           <code>src/documentation/skinconf.xml</code>, which (minus its DTD) looks
           like this:
         </p>
-        <source><![CDATA[
-          <?xml version="1.0"?>
+<source><![CDATA[
+<?xml version="1.0"?>
 
-          <!--
-          Skin configuration file. This file contains details of your project, which will
-          be used to configure the chosen Forrest skin.
-          -->
-          <skinconfig>
-            <!-- Do we want the Google search box? -->
-            <disable-search>false</disable-search>
-            <searchsite-domain>myproj.mygroup.org</searchsite-domain>
-            <searchsite-name>MyProject</searchsite-name>
+<!--
+Skin configuration file. This file contains details of your project,
+which will be used to configure the chosen Forrest skin.
+-->
+<skinconfig>
+  <!-- Do we want the Google search box? -->
+  <disable-search>false</disable-search>
+  <searchsite-domain>myproj.mygroup.org</searchsite-domain>
+  <searchsite-name>MyProject</searchsite-name>
 
-            <project-name>MyProject</project-name>
-            <project-url>http://myproj.mygroup.org/</project-url>
-            <project-logo>images/project-logo.gif</project-logo>
+  <project-name>MyProject</project-name>
+  <project-url>http://myproj.mygroup.org/</project-url>
+  <project-logo>images/project-logo.gif</project-logo>
 
-            <group-name>MyGroup</group-name>
-            <group-url>http://mygroup.org</group-url>
-            <group-logo>images/group-logo.gif</group-logo>
+  <group-name>MyGroup</group-name>
+  <group-url>http://mygroup.org</group-url>
+  <group-logo>images/group-logo.gif</group-logo>
 
-            <!-- Eg, a sourceforge logo. forrest-site renders it to the
-             bottom-left corner -->
-            <host-logo></host-logo>
+  <!-- Eg, a sourceforge logo. forrest-site renders it to the
+   bottom-left corner -->
+  <host-logo></host-logo>
 
-            <!-- The following used to construct a copyright statement -->
-            <year>2002</year>
-            <vendor>The Apache Software Foundation.</vendor>
+  <!-- The following used to construct a copyright statement -->
+  <year>2002</year>
+  <vendor>The Apache Software Foundation.</vendor>
 
-            <!-- Some skins use this to form a 'breadcrumb trail' of links.
-             If you don't want these, set the attributes to blank. The DTD
-             purposefully requires them.
-            -->
-            <trail>
-              <link1 name="apache" href="http://www.apache.org/"/>
-              <link2 name="xml.apache" href="http://xml.apache.org/"/>
-              <link3 name="" href=""/>
-            </trail>
+  <!-- Some skins use this to form a 'breadcrumb trail' of links.
+   If you don't want these, set the attributes to blank. The DTD
+   purposefully requires them.
+  -->
+  <trail>
+    <link1 name="apache" href="http://www.apache.org/"/>
+    <link2 name="xml.apache" href="http://xml.apache.org/"/>
+    <link3 name="" href=""/>
+  </trail>
 
-            <!-- Credits are typically rendered as a set of small clickable
-             images in the page footer -->
-            <credits>
-              <credit>
-                <name>Built with Cocoon</name>
-                <url>http://xml.apache.org/cocoon/</url>
-                <image>skin/images/built-with-cocoon.gif</image>
-                <width>88</width>
-                <height>31</height>
-              </credit>
-              <credit>
-                <name>Krysalis Centipede</name>
-                <url>http://www.krysalis.org/centipede/</url>
-                <image>skin/images/centipede-logo-small.gif</image>
-                <width>138</width>
-                <height>31</height>
-              </credit>
-            </credits>
-          </skinconfig>
-          ]]></source>
+  <!-- Credits are typically rendered as a set of small clickable
+   images in the page footer -->
+  <credits>
+    <credit>
+      <name>Built with Cocoon</name>
+      <url>http://xml.apache.org/cocoon/</url>
+      <image>skin/images/built-with-cocoon.gif</image>
+      <width>88</width>
+      <height>31</height>
+    </credit>
+    <credit>
+      <name>Krysalis Centipede</name>
+      <url>http://www.krysalis.org/centipede/</url>
+      <image>skin/images/centipede-logo-small.gif</image>
+      <width>138</width>
+      <height>31</height>
+    </credit>
+  </credits>
+</skinconfig>
+]]></source>
         <p>
           Customise this file for your project. The <code>images/</code> directory
           mentioned in 'project-logo' and 'group-logo' elements correspond to the
@@ -560,16 +560,16 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
           <p>
             Then in <code>src/documentation/sitemap.xmap</code> add a 'matcher' like this:
           </p>
-          <source><![CDATA[
-            <map:match pattern="body-download.xml">
-              <map:generate src="content/xdocs/download.xml"/>
-              <map:transform src="resources/stylesheets/download2document.xsl"/>
-              <map:call resource="skinit">
-                <map:parameter name="type" value="document2html"/>
-                <map:parameter name="path" value="download.xml"/>
-              </map:call>
-            </map:match>
-            ]]></source>
+<source><![CDATA[
+<map:match pattern="body-download.xml">
+  <map:generate src="content/xdocs/download.xml"/>
+  <map:transform src="resources/stylesheets/download2document.xsl"/>
+  <map:call resource="skinit">
+    <map:parameter name="type" value="document2html"/>
+    <map:parameter name="path" value="download.xml"/>
+  </map:call>
+</map:match>
+]]></source>
           <p> 
             This should be added in the general region of the other 'body-*.xml'
             matchers.
@@ -579,14 +579,14 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
             that Forrest has of assembling a page's XML content:
           </p>
           <source><![CDATA[
-            <map:match pattern="*.html">
-              <map:aggregate element="site">
-                <map:part src="cocoon:/book-{1}.xml"/>
-                <map:part src="cocoon:/tab-{1}.xml"/>
-                <map:part src="cocoon:/body-{1}.xml"
-                  label="content"/>
-              </map:aggregate>
-              ...
+<map:match pattern="*.html">
+  <map:aggregate element="site">
+    <map:part src="cocoon:/book-{1}.xml"/>
+    <map:part src="cocoon:/tab-{1}.xml"/>
+    <map:part src="cocoon:/body-{1}.xml"
+      label="content"/>
+  </map:aggregate>
+  ...
               ]]></source>
             <p>
               So when Cocoon gets a request for 'download.html', it will do an
@@ -594,13 +594,13 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
               contents. Usually, this would be met by the following sitemap rule:
             </p>
             <source><![CDATA[
-              <map:match pattern="body-**.xml">
-                <map:generate src="content/xdocs/{1}.xml"/>
-                <map:call resource="skinit">
-                  <map:parameter name="type" value="document2html"/>
-                  <map:parameter name="path" value="{1}.xml"/>
-                </map:call>
-              </map:match>
+<map:match pattern="body-**.xml">
+  <map:generate src="content/xdocs/{1}.xml"/>
+  <map:call resource="skinit">
+    <map:parameter name="type" value="document2html"/>
+    <map:parameter name="path" value="{1}.xml"/>
+  </map:call>
+</map:match>
               ]]></source>
             <p>
               By declaring a custom 'body-download.xml' rule <em>before</em> this
@@ -646,14 +646,14 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
               like retrieve an RSS feed, and integrate it into our website:
             </p>
             <source><![CDATA[
-              <map:match pattern="body-weblog.xml">
-                <map:generate src="http://radio.weblogs.com/0107791/rss.xml"/>
-                <map:transform src="resources/stylesheets/rss2document.xsl"/>
-                <map:call resource="skinit">
-                  <map:parameter name="type" value="document2html"/>
-                  <map:parameter name="path" value="weblog.xml"/>
-                </map:call>
-              </map:match>
+<map:match pattern="body-weblog.xml">
+  <map:generate src="http://radio.weblogs.com/0107791/rss.xml"/>
+  <map:transform src="resources/stylesheets/rss2document.xsl"/>
+  <map:call resource="skinit">
+    <map:parameter name="type" value="document2html"/>
+    <map:parameter name="path" value="weblog.xml"/>
+  </map:call>
+</map:match>
               ]]></source>
           </section>
         <section>
@@ -669,9 +669,9 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
             directory:
           </p>
           <source><![CDATA[
-            <map:match pattern="images/**.*">
-              <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
-            </map:match>
+<map:match pattern="images/**.*">
+  <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
+</map:match>
             ]]></source>
           <p>
             Let's create a 'virtual' <code>images/svg/</code> directory, containing
@@ -680,10 +680,10 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
             <code>images/**.*</code> rule:
           </p>
           <source><![CDATA[
-            <map:match pattern="images/svg/*.png">
-              <map:generate src="resources/images/{1}.svg"/>
-              <map:serialize type="svg2png"/>
-            </map:match>
+<map:match pattern="images/svg/*.png">
+  <map:generate src="resources/images/{1}.svg"/>
+  <map:serialize type="svg2png"/>
+</map:match>
             ]]></source>
           <p>
             Now, we can place SVG images in
@@ -715,8 +715,9 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
   </defs>
 
   <g filter="url(#shadowFilter)" fill="url(#gradient)">
-    <text x="51%" y="70%" style="font-size:40pt; font-family:Arial ;
-                                 text-anchor: middle ; font-family: Verdana">
+    <text x="51%" y="70%"
+          style="font-size:40pt; font-family:Arial ;
+                 text-anchor: middle ; font-family: Verdana">
       FooProject
     </text>
   </g>
@@ -729,7 +730,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
             project logo with the line:
           </p>
           <source><![CDATA[
-            <project-logo>images/svg/logo.png</project-logo>
+<project-logo>images/svg/logo.png</project-logo>
             ]]></source>
           <p>
             Your project should now have a PNG logo looking like this:
@@ -751,7 +752,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
           change the following entry:
         </p>
         <source>
-          project.skin=forrest-site
+project.skin=forrest-site
         </source>
         <note>
           The mechanism for defining which skin to use will change in the future from
@@ -841,13 +842,13 @@ To run in Tomcat, add this to the config file (usu. server.xml):
             <code>$TOMCAT_HOME/conf/apps.xml</code>:
           </p>
           <source><![CDATA[
-            <?xml version="1.0" encoding="ISO-8859-1"?>
-            <webapps>
-              ....
-              <Context path='/MyProject'
-                docBase='/tmp/myproj/build/webapp'
-                reloadable='true'/>
-            </webapps>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<webapps>
+  ....
+  <Context path='/MyProject'
+    docBase='/tmp/myproj/build/webapp'
+    reloadable='true'/>
+</webapps>
             ]]></source>
           <p>
             Then restart Tomcat, and point your browser at
@@ -903,7 +904,8 @@ To run in Tomcat, add this to the config file (usu. server.xml):
   <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
 </target>
 
-<target name="war" description="Generates a .war file containing the website">
+<target name="war"
+        description="Generates a .war file containing the website">
   <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
 </target>
 
