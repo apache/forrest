@@ -524,35 +524,6 @@ $Revision: 1.12 $
         </map:select>
       </map:pipeline>
 
-      <!-- Plain Old Documentation -->
-      <map:match type="regexp" pattern="^(.*?)([^/]*).pod$">
-        <map:aggregate element="site">
-          <map:part src="cocoon:/skinconf.xml"/>
-          <map:part src="cocoon:/{1}{2}.xml"/>
-        </map:aggregate>
-        <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pod"/>
-        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl"/>
-        <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/text/document2pod.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/pod/document2pod.xsl">
-              <map:parameter name="docname" value="{2}"/>
-            </map:transform>
-          </map:when>
-          <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/text/document2pod.xsl">
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/text/document2pod.xsl">
-              <map:parameter name="docname" value="{2}"/>
-            </map:transform>
-          </map:when>
-          <map:otherwise>
-            <map:transform src="{forrest:context}/skins/common/xslt/text/document2pod.xsl">
-              <map:parameter name="docname" value="{2}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
-        <map:serialize type="text"/>
-      </map:match>
-
       <map:match pattern="*.html">
         <map:aggregate element="site">
           <map:part src="cocoon:/skinconf.xml"/>
