@@ -99,7 +99,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+Default site structure
   +++++++++++++++++++++++++++
      +=========================+
-     |    intro-branding       |
+     |       intro             |
      +=========================+
      +=========================+
      |       main              |
