@@ -114,10 +114,10 @@
         Jetty jar was mistakenly compiled for jdk 1.4
         - now re-compiled for jdk 1.3 
       </action>
-      <action dev="DB" type="remove" context="shbat" fixes-bug="FOR-140">
+      <action dev="DB" type="remove" context="core" fixes-bug="FOR-140">
         Forrest-targets with ant proxy is obsolete; use forrestbot now
       </action>
-      <action dev="DB" type="update" context="shbat" fixes-bug="FOR-137">
+      <action dev="DB" type="update" context="core" fixes-bug="FOR-137">
         'build patch' command updated for SVN
       </action>
       <action dev="JJP" type="update" context="core" due-to="Florian G. Haas" fixes-bug="FOR-9">
@@ -328,7 +328,7 @@
         The avalon-tigris skin is to be considered deprecated and no longer 
         developed.
       </action>
-      <action dev="DB" type="add" context="shbat">
+      <action dev="DB" type="add" context="core">
         Properties from ${user.home}/forrest.properties are loaded, after
         the project's forrest.properties and before the default-forrest.properties are.
       </action>
@@ -340,7 +340,7 @@
         Properties named by workstage and implementation for clarity and to
         prevent conflicts.
       </action>
-      <action dev="DB" type="update" context="shbat">
+      <action dev="DB" type="update" context="core">
         The 'clean-site' target appears in 'forrest -projecthelp'.  Deletes
         temp, webapp, and brokenlinks files too.
       </action>
@@ -410,7 +410,7 @@
           pipeline, to cater for the new system that does not copy docs prior
           to rendering.
       </action>
-      <action dev="NKB" type="add" context="shbat">
+      <action dev="NKB" type="add" context="core">
           Added a new property to forrest.properties
            (project.raw-content-dir=${project.content-dir}/content)
            to define where raw files are to be served from.
@@ -433,9 +433,9 @@
           - removed unused icons.
           - made location of minitoc configurable as "page", "menu", or "both"
       </action>
-      <action dev="NKB" type="update" context="shbat">
-          Removed duplicated copying of files during the creation of the shbat
-          distro. Now the shbat context dir is like the webapp context dir.
+      <action dev="NKB" type="update" context="core">
+          Removed duplicated copying of files during the creation of the 
+          distro. Now the command-line context dir is like the webapp context dir.
           This reduces Forrest build time from 53 to 19 seconds on my system.
       </action>
       <action dev="NKB" type="fix" context="skins"
@@ -522,7 +522,7 @@
       <action dev="JT" type="fix" context="skins">
         Fixed URLs for comma-separated bug keys in status.xml
       </action>
-      <action dev="JT" type="fix" context="shbat" fixes-bug="FOR-47, FOR-48">
+      <action dev="JT" type="fix" context="core" fixes-bug="FOR-47, FOR-48">
         Fix bugs in forrest.bat|sh scripts encountered when used in
         odd environments (perl and Win9x).
       </action>
@@ -544,14 +544,14 @@
         Fixed java.lang.reflect.InvocationTargetException caused by catalog DTD
         HTTP lookup. The build had an extra and older resolver.jar
       </action>
-      <action dev="JJP" type="fix" context="shbat" fixes-bug="FOR-31" >
+      <action dev="JJP" type="fix" context="core" fixes-bug="FOR-31" >
         Fix character return on line feed for fresh-site on the zip distribution
       </action>
       <action dev="JJP" type="fix" context="skins">
          New property "bugtracking-url" to allow a bug tracking systems
          other than bugzilla.
       </action>
-      <action dev="JJP" type="fix" context="shbat"
+      <action dev="JJP" type="fix" context="core"
         due-to="Eirik Bjørsnøs"  due-to-email="bjorsnos@stud.ntnu.no" >
          Added a "forrest clean" task that removes the project build directory.
       </action>
@@ -712,7 +712,7 @@
       <action dev="JT" type="fix" context="core">
         Links to subdirectories no longer blow up the command-line rendering.
       </action>
-      <action dev="JT" type="update" context="shbat">
+      <action dev="JT" type="update" context="core">
         The 'backcopy' command will now copy all types of custom content
         (*.xmap, skinconf.xml, xdocs, images, stylesheets, DTDs).
       </action>
@@ -837,7 +837,7 @@
         and make them configurable in properties.xml.
         Thanks to Mark Vovsi for pointing it out.
       </action>
-      <action dev="JT" type="fix" context="shbat">
+      <action dev="JT" type="fix" context="core">
         Fix a bug with forrest.antproxy.xml introduced in 0.4, which caused
         unresolved '${project.home}' variables.
       </action>
@@ -885,10 +885,10 @@
       <action dev="JT" type="fix" context="forrestbot">
         Got skins working in the forrestbot.
       </action>
-      <action dev="JT" type="add" context="shbat">
+      <action dev="JT" type="add" context="core">
         Added a minimal template skin.
       </action>
-      <action dev="NKB" type="fix" context="shbat" due-to="Berin Loritsch"
+      <action dev="NKB" type="fix" context="core" due-to="Berin Loritsch"
         due-to-email="bloritsch@apache.org">
         The problem with starting a new forked JVM is that all 
         properties get lost.  This makes it able to use one forrest.properties
@@ -977,7 +977,7 @@
       <action dev="JT" type="add" context="schemas">
         Added &lt;acronym&gt; tag.
       </action>
-      <action dev="JT" type="add" context="shbat">
+      <action dev="JT" type="add" context="core">
         Added a means to override the check for existing content: 
         <source>forrest seed -Dskip.contentcheck=yes</source>
         Thanks to Tom Klaasen.
@@ -1012,7 +1012,7 @@
         on the section title, rather than <code>document-id()</code>-generated
         characters.
       </action>
-      <action dev="JT" type="fix" context="shbat">
+      <action dev="JT" type="fix" context="core">
         Fixed site regeneration bugs where changing the skin in
         <code>forrest.properties</code> had no effect after the first build.
       </action>
@@ -1021,7 +1021,7 @@
         skinconf.xml 'credit' element has a role='pdf' attribute, this text will
         be used instead. Thanks to Keiron Liddle.
       </action>
-      <action dev="JT" type="fix" context="shbat">
+      <action dev="JT" type="fix" context="core">
         Now all files in <code>src/documentation/content</code> (except xdocs)
         and <code>src/documentation/resources/images</code> are copied across
         when Forrest generates a static site.  This fixes the problem when an
@@ -1041,7 +1041,7 @@
        <action dev="DC" type="update" context="forrestbot">
        Updated some documentation, especially Forrestbot Introduction
       </action> 
-      <action dev="NKB" type="fix" context="shbat">
+      <action dev="NKB" type="fix" context="core">
         Now files present in the content dir are correctly linked and
         copied verbatim by the CLI. The wellknown files are given with the
         correct mime-type, and links in html and xml are followed. 
@@ -1082,8 +1082,8 @@
         The visual effect is the same to the current framework and Exalibur
         Avalon sites.
       </action>       
-      <action dev="NKB" type="fix" context="shbat">
-        Now error reporting in shbat CLI runs should work and show the cause of the error;
+      <action dev="NKB" type="fix" context="core">
+        Now error reporting in CLI runs should work and show the cause of the error;
         before it was just reporting [broken link].
       </action>    
       <action dev="NKB" type="update" context="code">
@@ -1099,7 +1099,7 @@
         verbosity level, via forrest.properties configuration. This replaces
         tokens in the default cocoon.xconf
       </action>
-      <action dev="JT" type="fix" context="shbat" due-to="Omar Belhaj"
+      <action dev="JT" type="fix" context="core" due-to="Omar Belhaj"
         due-to-email="belhaj@online.no">
         Fixed a bug in forrest.bat, which would fail if run from a different
         drive to that Forrest was installed in.
@@ -1208,14 +1208,14 @@
       <action dev="NKB" type="update" context="webapp">
         Put the internal matches in a separate pipeline with internal-only="true".
       </action>      
-      <action dev="NKB" type="fix" context="shbat">
+      <action dev="NKB" type="fix" context="core">
         Now site builds do not delete files in build/site that are included in the 
         Ant list of default excludes, like CVS info.
       </action>   
       <action dev="NKB" type="add" context="edit">
-        Included Jetty in the shbat distro.
+        Included Jetty in the distro.
         type "forrest run" to have the ./build/webapp dir contents be run
-        in a local web server, starting from http://localhost:8888/index.html .
+        in a local web server, starting from http://localhost:8888/index.html
       </action>
       <action dev="JT" type="add" context="skins" due-to="Kevin Ross"
         due-to-email="Kevin.Ross@iVerticalLeap.com">
@@ -1266,16 +1266,16 @@
       <action dev="JT" type="fix" context="docs">
         Fixed broken PDFs in most subdirectories.
       </action>
-      <action dev="JT" type="add" context="shbat">
+      <action dev="JT" type="add" context="core">
         Added a subdirectory to the template site and fixed all broken links.
       </action>
-      <action dev="JT" type="add" context="shbat">
+      <action dev="JT" type="add" context="core">
         XML doc files are now validated before rendering with the 'validate'
         target.  Uses OASIS catalogs provided by Forrest, optionally augmented by
         user project catalogs.
       </action>
-      <action dev="JT" type="fix" context="shbat">
-        shbat distribution no longer requires Ant to be preinstalled.  Now, nothing
+      <action dev="JT" type="fix" context="core">
+        The distribution no longer requires Ant to be preinstalled.  Now, nothing
         but a Java installation is needed.
       </action>
       <action dev="JT" type="fix" context="build">
@@ -1283,7 +1283,7 @@
         Centipede).  It is buildable by typing 'ant' or with the provided build
         scripts.
       </action>
-      <action dev="JT" type="fix" context="shbat">
+      <action dev="JT" type="fix" context="core">
         Fixed ClassNotFoundException when running on JDK1.4.x
       </action>
       <action dev="JT" type="fix" context="schemas">
