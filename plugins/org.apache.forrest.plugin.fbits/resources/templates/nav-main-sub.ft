@@ -15,40 +15,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="txt-link" type="nugget"
+<forrest:contract name="nav-main-sub" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This functions will output the TXT link with image and print link.
+    This functions will output the nav-main-sub and link.
   </description>
   
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="txt-link" inputFormat="xsl" body="true" head="false">
+  format="xhtml" name="nav-main-sub" inputFormat="xsl" body="true" head="false" css="true">
 
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  
-		  <xsl:template name="txt-link-body">
-	      <script type="text/javascript" language="Javascript">
-	function printit() {
-	  if (window.print) {
-	    window.focus();
-	    window.print();
-	  }
-	}
-	        </script>
-	
-	        <script type="text/javascript" language="Javascript">
-	var NS = (navigator.appName == "Netscape");
-	var VERSION = parseInt(navigator.appVersion);
-	if (VERSION > 3) {
-	  document.write('<div class="txt" title="Print this Page">');
-	  document.write('  <a href="javascript:printit()" class="dida">');
-	  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
-	  document.write('    <br />');
-	  document.write('  PRINT</a>');
-	  document.write('</div>');
-	}
-	        </script>
+		  <xsl:template name="nav-main-sub-css">
+
+/*============Sub-tabs===========================*/
+#nav-main-sub {
+	text-align: right;
+	margin-right: 20px;
+}</xsl:template>   
+		  <xsl:template name="nav-main-sub-body">
+		     <xsl:apply-templates select="div[@id='nav-main-sub']"/>
 		  </xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>

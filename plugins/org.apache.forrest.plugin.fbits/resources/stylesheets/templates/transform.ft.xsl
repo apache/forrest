@@ -26,6 +26,11 @@
   >
   
   <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
+
+	<xsl:include href="dotdots.xsl"/>
+  <xsl:include href="pathutils.xsl"/>
+  <xsl:include href="renderlogo.xsl"/>
+  
   <!--FIXME 
     - Need to make sure all variables are matched!!!
     - Make sure that this variables get dynamically-->
@@ -33,13 +38,37 @@
   <xsl:param name="path"/>
   <xsl:param name="request"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-  <xsl:variable name="filename-noext">toBeImplemended</xsl:variable>
-  <xsl:variable name="skin-img-dir">skin/images</xsl:variable>
-  <xsl:variable name="root"></xsl:variable>
+  
+  <xsl:variable name="root">
+    <xsl:call-template name="dotdots">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+	  <!-- Source filename (eg 'foo.xml') of current page -->
+  <xsl:variable name="filename">
+    <xsl:call-template name="filename">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- Path of Lucene search results page (relative to $root) -->
+  <xsl:param name="lucene-search" select="'lucene-search.html'"/>
+
+  <xsl:variable name="filename-noext">
+    <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+	<xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
+  <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
+
 
 	<xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
   <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>
 
+  
   <xsl:template match="/">
     <xhtml>
       <head>
@@ -47,7 +76,28 @@
 <!--FIXME:
   Need to discuss how to insert default values-->
          <style type="text/css">
-body {background-color: yellow}
+body {
+	text-align:center;
+	font-family: verdana, helvetica, sans;
+	font-size: 8pt;
+}
+img {border:0;}
+hr {border:0px; height: 1px; background-color:#ddd;}
+
+/*============Container and branding=============*/
+#container {
+	width: 750px;
+	text-align:left;
+	margin: 0 auto 12px auto;
+}
+#branding {
+	padding: 0;
+	height: 75px;
+	max-height: 75px;
+	background: url(images/header-background.gif) transparent;
+	background-repeat: no-repeat;
+	position: relative;
+}
 h1 {font-size: 36pt}
 h2 {color: blue}
 p {margin-left: 50px}

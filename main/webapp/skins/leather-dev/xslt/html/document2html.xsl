@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
-  as applicable.
+  Copyright 2002-2004 The Apache Software Foundation
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,7 +24,7 @@ imported document2html.xsl for details.
   <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
 
   <xsl:template match="document">
-    <div id="content-main">
+    <div id="content">
 
       <div id="skinconf-pdflink"/>
 
@@ -93,7 +92,7 @@ imported document2html.xsl for details.
     <xsl:choose>
       <xsl:when test="$level=1">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h1><xsl:value-of select="title"/></h1>  test - 
         </div>
         <div class="section">
 			<xsl:apply-templates select="*[not(self::title)]"/>

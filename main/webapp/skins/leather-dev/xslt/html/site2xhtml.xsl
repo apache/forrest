@@ -34,32 +34,149 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:dyn="http://exslt.org/dynamic"
+  extension-element-prefixes="dyn">
+
+  
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
+  <xsl:variable name="request" value="substring-before($filename,'.html')"/>
+
+	<xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
+  <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>
+    
+  <xsl:template match="/">
+	    <xsl:apply-templates/>
+  </xsl:template>
+  
 <!--+
   |Overall site template
   +-->
   <xsl:template match="site">
-    <!--html lang="en" xml:lang="en"-->
-    <html>
+    <xhtml>
+      <head>
+    		<xsl:call-template name="getHead"/>
 <!--+
-  |HTML-head
+  |stylesheets -> 
+  |1. default css of the contracts
+  |2. default css to overide the above created
   +-->
-        <head>
-<!--+
-  |generator meta
-  +-->
-            <xsl:call-template name="html-meta"/>
+         <style type="text/css">
+<xsl:call-template name="getCss"/>
+</style>
+            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
+                />
 <!--+
   |title
   +-->
             <title>
                 <xsl:value-of select="div[@id='content']/h1"/>
             </title>
-<!--+
+      </head>
+      <body onload="init()">
+        <!--<p><xsl:value-of select="substring-before($filename,'.html')"/></p>-->
+        <xsl:call-template name="getBody"/>
+      </body>
+    </xhtml><!--
+    <site>
+      <name><xsl:value-of select="$filename"/></name>
+      <call><xsl:call-template name="getHead"/></call>
+	    <!-#-html lang="en" xml:lang="en"-#->
+	    <xsl:apply-templates/>
+    </site>-->
+  </xsl:template>
+  <xsl:template name="menu">
+<xsl:comment>+
+    |start Menu
+    +</xsl:comment>
+   <div id="nav">
+<ul>
+<!--menu - inner-->	
+            <xsl:for-each select = "div[@id='menu']/ul/li">
+              <xsl:call-template name = "innermenuli" >
+                  <xsl:with-param name="id" select="concat('1.', position())"/>
+              </xsl:call-template>
+            </xsl:for-each>
+</ul>
+</div>
+        <!--
+			<xsl:apply-templates select="div[@id='menu']/*" />
+		-->
+</xsl:template>  
+  <xsl:template name="innermenuli">   
+    <xsl:param name="id"/>
+    <xsl:variable name="tagid">
+      <xsl:choose>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="concat('menu_',concat(font,$id))"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="whichGroup">
+      <xsl:choose>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">currentmenuitemgroup</xsl:when>
+        <xsl:otherwise>menuitemgroup</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    
+    <li class="pagegroup"><strong><xsl:value-of select="h1"/></strong>
+      <ul>
+        <xsl:for-each select= "ul/li">
+
+          <xsl:choose>
+            <xsl:when test="a">
+              <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
+            </xsl:when>
+            <xsl:when test="div/@class='current'">
+              <li class="menupage">
+                <div class="menupagetitle"><xsl:value-of select="div" /></div>
+                <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
+                  <li class="menupageitemgroup">
+                      <xsl:for-each select = "//tocitems/tocitem">
+                        <div class="menupageitem">
+                          <xsl:choose>
+                            <xsl:when test="string-length(@title)>15">
+                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <a href="{@href}"><xsl:value-of select="@title" /></a>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </div>
+                      </xsl:for-each>
+                  </li>
+                </xsl:if>
+              </li>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name = "innermenuli">
+                 <xsl:with-param name="id" select="concat($id, '.', position())"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+
+        </xsl:for-each>
+      </ul></li>
+  </xsl:template>
+<!--    <html>
+<!-#-+
+  |HTML-head
+  +-#->
+        <head>
+<!-#-+
+  |generator meta
+  +-#->
+            <xsl:call-template name="html-meta"/>
+<!-#-+
+  |title
+  +-#->
+            <title>
+                <xsl:value-of select="div[@id='content']/h1"/>
+            </title>
+<!-#-+
   |stylesheets
-  +-->
+  +-#->
             <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
                 />
             <link rel="stylesheet" href="{$root}skin/navigation.css" 
@@ -70,18 +187,18 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 type="text/css" />
             <link rel="stylesheet" href="{$root}skin/profiling.css" 
                 type="text/css" />
-<!--+
+<!-#-+
   |Javascripts
-  +-->
+  +-#->
             <script type="text/javascript" language="javascript" 
                 src="{$root}skin/getBlank.js"></script>
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/getMenu.js"></script>
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/fontsize.js"></script>
-<!--+
+<!-#-+
   |favicon
-  +-->
+  +-#->
             <xsl:if test="//skinconfig/favicon-url">
                 <link rel="shortcut icon">
                     <xsl:attribute name="href">
@@ -91,17 +208,17 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 </link>
             </xsl:if>
         </head>
-<!--+
+<!-#-+
   |HTML-body
-  +-->
+  +-#->
   <body onload="init()">
 		<script type="text/javascript">ndeSetTextSize();</script>
 
-<!--+
+<!-#-+
 	|container - surrounding div
-	+-->
+	+-#->
 	<div id="container">
-<!--+Default site structure
+<!-#-+Default site structure
   +++++++++++++++++++++++++++
      +=========================+
      |       branding
@@ -119,15 +236,15 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
      |       siteinfo
      +=========================+
      +++++++++++++++++++++++++++
-     +-->
-<!--+
+     +-#->
+<!-#-+
   |branding with logos
-  +-->
+  +-#->
     <div id="branding">
 <xsl:comment>+
     |header
     +</xsl:comment>
-<!--breadcrumbs org location-->
+<!-#-breadcrumbs org location-#->
 <xsl:if test="not ($config/trail/@location)">
 <xsl:comment>+
     |breadtrail
@@ -182,13 +299,13 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |end Project Logo
     +</xsl:comment> 
-	<!--+
+	<!-#-+
   |centerstrip with menu and mainarea
-  +-->
+  +-#->
         <div id="branding-tagline">
-           <script language="JavaScript" type="text/javascript"><![CDATA[<!--
+           <script language="JavaScript" type="text/javascript"><![CDATA[<!-#-
               document.write("Published: " + document.lastModified);
-              //  -->]]></script>
+              //  -#->]]></script>
         </div>
 
 
@@ -198,11 +315,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               <div id="branding-trail-a1">
  <xsl:choose>
         <xsl:when test="$config/trail/@location='alt'">
-            <!--breadtrail location='alt'-->
+            <!-#-breadtrail location='alt'-#->
             <xsl:call-template name="breadcrumbs"/>             
         </xsl:when>
         <xsl:otherwise>
-            <!--*NO* breadtrail-->
+            <!-#-*NO* breadtrail-#->
             &#160;
         </xsl:otherwise>
 </xsl:choose>
@@ -218,7 +335,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
              <div class="search-input">
              <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
-                <!-- Lucene search -->
+                <!-#- Lucene search -#->
                 <form method="get" action="{$root}{$lucene-search}">
                   <input type="text" id="query" name="queryString" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>
 		  &#160;
@@ -266,16 +383,16 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |end content
     +</xsl:comment>    
 
-<!--+
+<!-#-+
   |siteinfo
-  +-->
+  +-#->
     <div id="siteinfo">
 <xsl:comment>+
     |start bottomstrip
     +</xsl:comment>
-  <div class="lastmodified"><script type="text/javascript"><![CDATA[<!--
+  <div class="lastmodified"><script type="text/javascript"><![CDATA[<!-#-
 document.write("Last Published: " + document.lastModified);
-//  -->]]></script></div>
+//  -#->]]></script></div>
 
           <div class="siteinfo-legal">
  Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
@@ -286,7 +403,7 @@ document.write("Last Published: " + document.lastModified);
             <xsl:if test="$config/disable-compliance-links/@align">
               <xsl:attribute name="style">text-align: <xsl:value-of select="$config/disable-compliance-links/@align"/></xsl:attribute>
             </xsl:if>
-              <!-- W3C logos style="text-align: center;"-->
+              <!-#- W3C logos style="text-align: center;"-#->
               <xsl:call-template name="compliancy-logos"/>
               <xsl:if test="$filename = 'index.html' and $config/credits and not ($config/credits/credit/@box-location = 'alt')">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
@@ -329,14 +446,14 @@ document.write("Last Published: " + document.lastModified);
     |end bottomstrip
     +</xsl:comment>
     </div>
-<!--+
+<!-#-+
 	|end container
-	+-->
+	+-#->
 </div>
       </body>
     </html>
   </xsl:template>
-<!--headings-->
+<!-#-headings-#->
 <xsl:template match="div[@class = 'skinconf-heading-1']">
     <xsl:choose>
       <xsl:when test="//skinconfig/headings/@type='underlined'">
@@ -364,7 +481,7 @@ document.write("Last Published: " + document.lastModified);
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- Add links to any standards-compliance logos -->
+  <!-#- Add links to any standards-compliance logos -#->
   <xsl:template name="compliancy-logos">
     <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
@@ -382,16 +499,16 @@ document.write("Last Published: " + document.lastModified);
     |start Menu
     +</xsl:comment>
    <div id="nav-section" class="roundbottom">
-<!--menu - inner-->	
+<!-#-menu - inner-#->	
             <xsl:for-each select = "div[@id='menu']/ul/li">
               <xsl:call-template name = "innermenuli" >
                   <xsl:with-param name="id" select="concat('1.', position())"/>
               </xsl:call-template>
             </xsl:for-each>
-        <!--
+        <!-#-
 			<xsl:apply-templates select="div[@id='menu']/*" />
-		-->
-<!--credits-->
+		-#->
+<!-#-credits-#->
 
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
            <div id="siteinfo-credits">
@@ -484,9 +601,9 @@ document.write("Last Published: " + document.lastModified);
       </div>
   </xsl:template>
 
-<!--+
+<!-#-+
     |Generates the PDF link 
-    +-->
+    +-#->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
       <div id="content-pdf" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
@@ -562,5 +679,5 @@ if (VERSION > 3) {
 	    </xsl:if>
       </xsl:if>
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
 </xsl:stylesheet>
