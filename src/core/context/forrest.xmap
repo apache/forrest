@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.4 $
+$Revision: 1.5 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -85,7 +85,7 @@ $Revision: 1.4 $
         </sourcetype>
         <sourcetype name="sdocbook-v1.0">
           <document-declaration public-id="-//OASIS//DTD Simplified DocBook XML V1.0//EN" />
-        </sourcetype>
+        </sourcetype>      
       </map:action>
     </map:actions>
     <map:selectors default="parameter">
@@ -215,6 +215,20 @@ $Revision: 1.4 $
               <map:serialize type="xml-document"/>
             </map:match>
           </map:when>
+
+          <map:when test="{project:content.xdocs}{1}.sxw">
+            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+              <map:generate src="{forrest:stylesheets}/aggregates/openoffice-writer.xml"/>
+              <map:transform src="{forrest:stylesheets}/aggregates/openoffice-writer.xsl">
+                <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxw"/>
+              </map:transform>
+              <map:transform type="cinclude"/>
+              <map:transform src="{forrest:stylesheets}/openoffice-writer2forrest.xsl">
+                <map:parameter name="filename" value="{2}" />
+              </map:transform>
+              <map:serialize type="xml-document"/>
+            </map:match>
+          </map:when>          
           
           <map:otherwise>
             <map:generate src="{project:content.xdocs}{1}.xml" />

@@ -4,7 +4,7 @@ Default Forrest sitemap, defining the whole site.
 Delegates to the other *.xmap files.  See
 http://xml.apache.org/forrest/sitemap-ref.html
 
-$Revision: 1.6 $
+$Revision: 1.7 $
 ==================================================== -->
 
 
@@ -50,6 +50,7 @@ $Revision: 1.6 $
       </map:transformer>
 
       <map:transformer name="xpath" logger="sitemap.transformer.xpath" src="org.apache.cocoon.transformation.XPathTransformer" />
+      
       <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer" logger="sitemap.transformer.xslt" pool-max="32" pool-min="8" pool-grow="2">
         <use-request-parameters>false</use-request-parameters>
         <use-browser-capabilities-db>false</use-browser-capabilities-db>
@@ -60,6 +61,8 @@ $Revision: 1.6 $
       </map:transformer>
 
       <map:transformer name="xinclude" src="org.apache.cocoon.transformation.XIncludeTransformer" logger="sitemap.transformer.xinclude" pool-grow="2" pool-max="16" pool-min="2" />
+
+      <map:transformer name="cinclude" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.transformation.CIncludeTransformer" logger="sitemap.transformer.cinclude"/>
 
     </map:transformers>
 
