@@ -67,7 +67,7 @@
              <echo message="Failed to complete workstages for project {@name}" />
              <property name="mail.completion-status" value="FAIL" />
            </catch>
-           <xsl:if test="@sendlogto">
+           <xsl:if test="@sendlogto and not(@sendlogto = '')">
        <finally>
          <property name="mail.to" value="{@sendlogto}" />
          <property name="mail.attachments" value="${{bot.build.dir}}/work.{@name}.log" />
