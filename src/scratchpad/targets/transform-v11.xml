@@ -1,26 +1,17 @@
 <!-- try.xml ... these are trial build targets which are currently
   undergoing testing. When ready they can be moved into the main build.xml -->
 
-<!-- FIXME: See note below about Ant xmlcatalog -->
 <!DOCTYPE project [
-<!ENTITY xmlcatalog-include SYSTEM "../../../src/resources/schema/catalog-ant.xcat">
+<!ENTITY xmlcatalog-include SYSTEM "../../../build/xml-forrest/src/resources/schema/catalog-ant.xcat">
 ]>
 
 <project default="transform2v11" basedir="."
          name="Doc Transition Trial: transform from v1.0 to v1.1">
 
-<!-- =================================================================== -->
-<!-- Initialization target                                               -->
-<!-- =================================================================== -->
 <target name="transform2v11">
 
-<!-- FIXME: Not sure how to consistently include the Ant xmlcatalog yet.
-  This method is working. However, we need to include it everywhere that
-  we want to use it. There might be a way to include it in higher build.xml
--->
-<echo message="Including the xmlcatalog ..."/>
-&xmlcatalog-include;
-<echo message="... done."/>
+  <echo message="Including the temporary Ant xmlcatalog."/>
+  &xmlcatalog-include;
 
   <property name="v10.dir" value="src/testcases/c2/v10"/>
   <property name="v11.dir" value="src/testcases/c2/v11"/>
