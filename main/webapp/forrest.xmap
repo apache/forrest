@@ -51,7 +51,15 @@ $Revision: 1.8 $
                   
     </map:generators>
     <map:serializers default="html"/>
-    <map:matchers default="wildcard"/>
+    <map:matchers default="wildcard">
+    <map:matcher name="i18n" src="org.apache.cocoon.matching.LocaleMatcher">
+    <negotiate>true</negotiate>
+    <use-locales>true</use-locales>
+    <use-blank-locale>true</use-blank-locale>
+    <default-locale language="en" country="US"/>
+    </map:matcher>
+    </map:matchers>
+
 
     <map:transformers default="xslt">
 	   <map:transformer name="pattern" 
@@ -297,23 +305,49 @@ $Revision: 1.8 $
       <!-- SOURCE FORMATS                                               -->
       <!-- ============================================================ -->
 
-      <map:match pattern="**.xml">
-        <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
-          <map:when test="true">
-          <map:act type="locale">
-            <map:call resource="file-resolver">
-              <map:parameter name="uri" value="{../1}_{language}"/>
-            </map:call>
-          </map:act>
-          </map:when>
-          <map:otherwise>
-            <map:call resource="file-resolver">
-              <map:parameter name="uri" value="{1}"/>
-            </map:call>
-          </map:otherwise>
-        </map:select>
-      </map:match>
+      <map:match type="wildcard" pattern="**.xml">
+       <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.xml">
+          <map:generate src="{source}" />
+          <map:call resource="transform-to-document">
+            <map:parameter name="src" value="{source}" />
+          </map:call>
+          <map:serialize type="xml-document"/>
+       </map:match>
+       <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.ihtml">
+         <map:generate src="{source}" type="html" />
+         <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+         <map:transform type="idgen" />
+         <map:serialize type="xml-document"/>
+       </map:match>
+       <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.html">
+         <map:generate src="{source}" type="html" />
+         <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+         <map:transform type="idgen" />
+         <map:serialize type="xml-document"/>
+       </map:match>
+       <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.txt">
+         <map:generate type="text2xml" src="{source}" />
+         <map:transform src="{forrest:stylesheets}/text2document.xsl">
+         <map:parameter name="filename" value="{2}" />
+         </map:transform>
+         <map:serialize type="xml-document"/>
+       </map:match>
+       <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.xml">
+          <map:generate src="{source}" />
+          <map:call resource="transform-to-document">
+            <map:parameter name="src" value="{source}" />
+          </map:call>
+          <map:serialize type="xml-document"/>
+       </map:match>
+       <map:select type="exists">
+         <map:when test="{project:temp-dir}/input.xmap">
+             <map:mount uri-prefix=""
+                        src="{project:temp-dir}/input.xmap"
+                        check-reload="yes"
+                        pass-through="true"/>
+         </map:when> 
+       </map:select>
+     </map:match>
       
   </map:pipeline>
 
