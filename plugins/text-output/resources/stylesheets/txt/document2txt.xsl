@@ -76,8 +76,8 @@ No navigation is provided and no rendering of graphics is attempted.
   <xsl:template match="header/authors">
     <xsl:for-each select="person">
       <xsl:choose>
-        <xsl:when test="position()=1">by&#160;</xsl:when>
-        <xsl:otherwise>,&#160;</xsl:otherwise>
+        <xsl:when test="position()=1">by </xsl:when>
+        <xsl:otherwise>, </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="@name"/>
     </xsl:for-each>
