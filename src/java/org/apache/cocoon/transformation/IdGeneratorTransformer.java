@@ -161,17 +161,17 @@ public class IdGeneratorTransformer
         getLogger().debug("## .. got "+sects.getLength()+" sections");
         for (int i=0; i<sects.getLength(); i++) {
             Element sect = (Element)sects.item(i);
-            sect.normalize();
-            getLogger().debug("## Using id XPath "+idXPath);
-            String id = null;
-            try {
-              id = processor.evaluateAsString(sect, idXPath);
-              id.trim();
-            } catch (Exception e) {
-                throw new SAXException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e, e);
-            }
-            getLogger().info("## Got id "+id);
             if (!sect.hasAttribute(this.idAttr)) {
+                sect.normalize();
+                getLogger().debug("## Using id XPath "+idXPath);
+                String id = null;
+                try {
+                  id = processor.evaluateAsString(sect, idXPath);
+                  id.trim();
+                } catch (Exception e) {
+                    throw new SAXException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e, e);
+                }
+                getLogger().info("## Got id "+id);
                 //FIXME: + produces an error on document schema
                 String newId = URLEncoder.encode(id);
                 newId = avoidConflicts(doc, sect, this.idAttr, newId);
