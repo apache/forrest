@@ -57,25 +57,50 @@ use eclipse for XML editing at present then just use your normal installation.
 - download Eclipse 3.0 (you need the full SDK) 
   - NOTE: 3.1 Milestone releases are not currently supported
 
-- extract to your chosen directory (don't forget to make this different 
-  to you normal working directory - we'll call this installation forrestEclipse)
+- Extract the complete tree it into a new directory
+  (we named it forrestEclipse)
+  
+- Run forrestEclipse/eclipse.exe
 
-- run forrestEclipse
-
-Installing Requried Plugins
+Installing Required Plugins
 ---------------------------
   
 - install the IBM code drop for the WTP project (this is the pre-alpha stuff)
-  - http://download.eclipse.org/webtools/downloads/initial-contributions/ibm.zip
-  - extract the zip to a temp directory
-  - extract tmp/com.ibm.wtp.sdk-I-200407201920.zip to the same temp directory
-  - copy or move the contents of temp/eclipse to your forrestEclipse directory
+  - download http://download.eclipse.org/webtools/downloads/initial-contributions/ibm.zip
+  - extract the zip to a temp directory (we named it tmp)
+  - In the extracted tree you will find another archive
+    tmp/com.ibm.wtp.sdk-I-200407201920.zip extract its to the tmp directory
+  - copy or move the contents of tmp/eclipse to your forrestEclipse directory
 
 - restart forrestEclipse
 
+Installing forrestEclipse Plugin
+--------------------------------
+
+To work with the Forrest Eclipse plugin you need to first compile it. Here's 
+how:
+
+- Import the Forrest Eclipse plugin code into you workspace
+  - File -> Import -> Existing Project into Workspace
+  - point to the "tools/eclipse" directory of your Forrest installation
+
+- Compile and Export the plugin
+  - File -> Export -> Deployable Plugins and Fragments
+  - click Next
+  - ensure org.apache.forrest.eclipse is checked in the "Available Plugins and Fragments List"
+  - in the "Export Options" section select "Deploy as a directory structure"
+  - in the destination section browse to your forrestEclipse installation directory
+  - click Finish
+  
+- Restart Eclipse
+  
 - ensure Forrest eclipse plugin is installed
   - Help -> About -> Plug-in Details
   - look for org.apache.forrest.eclipse in the list of installed plugins
+  
+NOTE - if you intend to help develop the Forrest Eclipse plugin (please do) 
+then you should be familar with using Eclipse for Plugin Development. A good
+startiung point is http://www.eclipse.org/articles/index.html
 
 ===============
 Getting Started
