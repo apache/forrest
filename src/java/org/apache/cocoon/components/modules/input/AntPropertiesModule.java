@@ -106,7 +106,7 @@ implements InputModule, Serviceable, Configurable, ThreadSafe {
         load(file);
     }
     
-    private void load(String file) throws ConfigurationException {
+    protected void load(String file) throws ConfigurationException {
         Source source = null;
         BufferedReader in = null;
         try {
@@ -120,27 +120,22 @@ implements InputModule, Serviceable, Configurable, ThreadSafe {
             Enumeration names;
              
             while((currentLine = in.readLine()) != null) {
-                
+                // # == comment
                 if(!currentLine.startsWith("#")){ 
-                    
-                    splitIndex =  currentLine.indexOf('=');  
-                    
-                    if(splitIndex != -1 ) {
-                            
-                        name = currentLine.substring(0, splitIndex).trim() ;
-                        value = currentLine.substring(splitIndex+1).trim() ;
-                       
+                    splitIndex =  currentLine.indexOf('='); 
+                    name = currentLine.substring(0, splitIndex).trim();
+                    //if the property is already there don't overwrite, as in Ant
+                    //properties defined first take precedence
+                    if(!m_properties.containsKey(name)){
+                        value = currentLine.substring(splitIndex+1).trim();
                         names = m_properties.propertyNames();
-                        
                         while( names.hasMoreElements() ) {
                             String currentName = (String) names.nextElement();
                             String valueToSearchFor = "${"+currentName+"}";
                             String valueToReplaceWith = (String) m_properties.get(currentName);
                             value = StringUtils.replace(value, valueToSearchFor, valueToReplaceWith);
                         }
-                            
-                        m_properties.put(name,value);
-                    }   
+                    }    
                 }    
             }
         }
