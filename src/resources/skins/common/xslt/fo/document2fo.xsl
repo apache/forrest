@@ -556,8 +556,7 @@
         <xsl:otherwise><xsl:value-of select="concat($ctxbasedir, $xmlbasedir, @src)"/></xsl:otherwise>
       </xsl:choose>
       </xsl:variable>
-      <fo:external-graphic src="{$imgpath}" content-width="scale-to-fit"
-                           content-height="scale-to-fit" max-width="100%">
+      <fo:external-graphic src="{$imgpath}">
         <xsl:if test="@height">
           <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
         </xsl:if>
