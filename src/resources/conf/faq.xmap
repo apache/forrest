@@ -81,15 +81,15 @@
 
       <!--Unfortunately we need to override all the document2html stuff too,
       since notoc must be set to true. -->
-      <map:match pattern="**body-*.xml">
+      <map:match pattern="**body-*.html">
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon:/{1}linkmap">
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html">
           <map:parameter name="schemes" value="site ext"/>
         </map:transform>
         <map:call resource="skinit">
           <map:parameter name="type" value="document2html"/>
-          <map:parameter name="path" value="/{1}{2}.xml"/>
+          <map:parameter name="path" value="/{1}{2}.html"/>
           <map:parameter name="notoc" value="true"/>
         </map:call>
       </map:match>
