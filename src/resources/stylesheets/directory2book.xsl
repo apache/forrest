@@ -2,7 +2,7 @@
 
 <!-- Converts the output of the DirectoryGenerator to Forrest's book.xml
 format.  Typically this would be used to define a book.xml pipeline for a
-specific page.  Eg, in navigation.xml, define the DirectoryGenerator:
+specific page.  Eg, in navigation.xmap, define the DirectoryGenerator:
 
 <map:generators default="file">
   <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
