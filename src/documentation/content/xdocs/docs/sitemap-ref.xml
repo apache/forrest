@@ -43,18 +43,18 @@
       <p>
         If you have a binary distribution, Forrest's sitemap comprises the
         $FORREST_HOME/context/*.xmap files.  Projects may override these files
-        by copying them into src/documentation/.
+        by copying them into the project's src/documentation/ directory.
       </p>
       <p>
-        The best way to experiment with the sitemap is to run <code>forrest
-          run</code> on a Forrest-using site.  Changes to the
+        The best way to experiment with the sitemap is to run '<code>forrest
+          run</code>' on a Forrest-using site.  Changes to the
         <code>build/webapp/*.xmap</code> files will now be immediately visible
-        on <link href="http://localhost:8888/">http://localhost:8888/</link>.
+        at <link href="http://localhost:8888/">http://localhost:8888/</link>
       </p>
     </section>
 
 
-    <section>
+    <section id="overview">
       <title>Sitemap Overview</title>
       <p>
         Forrest's sitemap is divided both physically and logically.  The most
@@ -67,14 +67,14 @@
         <tr>
           <th><strong>sitemap.xmap</strong></th>
           <td>Primary sitemap file, which delegates responsibility for serving
-            certain URIs to the others (technically called subsitemaps).  More
+            certain URIs to the others (technically called sub-sitemaps).  More
             on the structure of this file later.</td>
         </tr>
         <tr>
           <th>forrest.xmap</th>
           <td>Sitemap defining Source pipelines, which generate the body section
             of Forrest pages. All pipelines here deliver XML in Forrest's
-            intermediate 'document-v12' format, regardless of originating source
+            intermediate "document-v13" format, regardless of originating source
             or format.</td>
         </tr>
         <tr>
@@ -83,15 +83,15 @@
         </tr>
         <tr>
           <th>linkmap.xmap</th>
-          <td>Defines a mapping from abstract ('site:index') to physical
-            ('../index.html') links for the current page.  See 
+          <td>Defines a mapping from abstract ("site:index") to physical
+            ("../index.html") links for the current page.  See 
             <link href="site:linking">Menus and Linking</link> for a conceptual
             overview, and the <link href="#linkrewriting_impl">Link
               rewriting</link> section for technical details.</td>
         </tr>
         <tr>
           <th>resources.xmap</th>
-          <td>Serves 'resource' files (images, CSS, Javascript).</td>
+          <td>Serves "resource" files (images, CSS, Javascript).</td>
         </tr>
         <tr>
           <th>raw.xmap</th>
@@ -117,12 +117,12 @@
         <tr>
           <th>issues.xmap</th>
           <td>Generates a page of content from an RSS feed.  Used in Forrest to
-            generate a 'current issues' list from JIRA.</td>
+            generate a "current issues" list from JIRA.</td>
         </tr>
         <tr>
           <th>revisions.xmap</th>
           <td>
-            Support for HOWTO documents that want 'revisions'.  Revisions are
+            Support for HOWTO documents that want "revisions".  Revisions are
             XML snippets containing comments on the main XML file.  The main
             pipeline here automatically appends a page's revisions to the
             bottom.
@@ -132,14 +132,14 @@
           <th>dtd.xmap</th>
           <td>A Source pipeline that generates XML from a DTD, using Andy
             Clark's 
-            <link href="http://xml.apache.org/~andyc/neko/doc/dtd/index.html">DTD
+            <link href="http://www.apache.org/~andyc/neko/doc/dtd/index.html">DTD
               Parser</link>.  Useful for documenting DTD-based XML schemas, such
             as <link href="site:dtd-docs">Forrest's own DTDs</link>.
           </td>
         </tr>
         <tr>
           <th>profiler.xmap</th>
-          <td>Defines the 'profiler' pipeline. allowing pipelines to be benchmarked.</td>
+          <td>Defines the "profiler" pipeline. allowing pipelines to be benchmarked.</td>
         </tr>
       </table>
     </section>
@@ -162,23 +162,23 @@
         Most *.xmap files (forrest, aggregate, faq, status, issues, revisions,
         dtd) define Source pipelines.  Source pipelines define the content
         (body) XML for site pages.  The input XML format can be any format
-        (doc-v12, Docbook, RSS, FAQ, Howto) and from any source (local or
-        remote).  The output format is always Forrest's intermediate 'doc-v12'
+        (document-v13, Docbook, RSS, FAQ, Howto) and from any source (local or
+        remote).  The output format is always Forrest's intermediate "document-v13"
         format.
       </p>
       <p>
-        Source pipelines always have a <code>.xml</code> extension.  Thus, 
+        Source pipelines always have a "<code>.xml</code>" extension.  Thus, 
         <link href="../index.xml">index.xml</link> gives you the XML source for the
         index page.  Likewise, <link href="../faq.xml">faq.xml</link> gives you XML
         for the FAQ (transformed from FAQ syntax), and 
-        <link href="../changes.xml">changes.xml</link> returns XML from status.xml.
+        <link href="../changes.xml">changes.xml</link> returns XML from the status.xml file.
         Take any page, and replace its extension (<code>.html</code> or
-        <code>.pdf</code>) with <code>.xml</code>, and you'll have the Source
+        <code>.pdf</code>) with <code>.xml</code> and you'll have the Source
         XML.
       </p>
       <p>
         This is quite powerful, because we now have an abstraction layer, or
-        'virtual filesystem', on which the rest of Forrest's sitemap can build.
+        "virtual filesystem", on which the rest of Forrest's sitemap can build.
         Subsequent layers don't need to care whether the XML was obtained
         locally or remotely, or from what format.  Wikis, RSS, FAQs and Docbook
         files are all processed identically from here on.
@@ -187,10 +187,10 @@
                    (subsequent Forrest pipelines)
                                  |
 --------+------------------------^------------------------------------------
-        |          STANDARD FORREST FORMAT (current doc-v12)
+        |          STANDARD FORREST FORMAT (current document-v13)
         +-----^-------^-------^-------------^------^-----^----^------^-----
 SOURCE        |       |       |             |      |     |    |      |
-FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
+FORMATS    doc-v10  doc-v11  doc-v12 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 (*.xml)
                         (in forrest.xmap, faq.xmap, etc)
       </source>
@@ -199,18 +199,20 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         <p>
           Most of the usual Source pipelines are defined in
           <code>forrest.xmap</code>, which is the default (fallback) handler for
-          <code>**.xml</code> pages.  forrest.xmap uses the 
-          <link href="site:cap">SourceTypeAction</link> to work out the type of XML
-          it is processing, and converts it to doc-v12 if necessary.
+          <code>**.xml</code> pages. The forrest.xmap uses the 
+          <link href="site:cap">SourceTypeAction</link> to determine the type of XML
+          it is processing, and converts it to document-v13 if necessary.
         </p>
         <p>For instance, say we are rendering <link href="site:write-howto">a
-            Howto document</link> called 'howto-howto.xml'.  It contains this DOCTYPE
+            Howto document</link> called "howto-howto.xml".  It contains this DOCTYPE
           declaration:</p>
-        <source>&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.2//EN" "http://forrest.apache.org/dtd/howto-v12.dtd"></source>
+        <source>
+&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.3//EN"
+  "http://forrest.apache.org/dtd/howto-v12.dtd"></source>
         <p>The SourceTypeAction sees this, and applies this transform to get it
-          to doc-v12:</p>
+          to document-v13:</p>
         <source><![CDATA[
-          <map:when test="howto-v12">
+          <map:when test="howto-v13">
             <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
           </map:when>
           ]]></source>
@@ -225,7 +227,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         </p>
     -->
       </section>
-      <section>
+      <section id="other_source">
         <title>Other source pipelines</title>
         <p>As mentioned above, all non-core Source pipelines are distributed in
           independent <code>*.xmap</code> files.  There is a block of
@@ -262,7 +264,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         <section id="late_binding_pipelines">
           <title>Late-binding pipelines</title>
           <p>
-            One point of interest here is that the subsitemap is often not
+            One point of interest here is that the sub-sitemap is often not
             specific about which URLs it handles, and relies on the caller (the
             section listed above) to only pass relevant requests to it.  We term
             this "binding a URL" to a pipeline.</p>
@@ -270,10 +272,10 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             <code>**.xml</code>, but only <code>**faq.xml</code> requests are
             sent to it.</p>
           <p>This "late binding" is useful, because the whole URL space is
-            managed in <code>sitemap.xmap</code>, and not spread over lots of
+            managed in <code>sitemap.xmap</code> and not spread over lots of
             *.xmap files.  For instance, say you wish all <code>*.xml</code>
-            inside a <code>faq/</code> directory to be processed as FAQs.  Just
-            override <code>sitemap.xmap</code>, and redefine the relevant source
+            inside a "<code>faq/</code>" directory to be processed as FAQs.  Just
+            override <code>sitemap.xmap</code> and redefine the relevant source
             matcher:</p>
           <source><![CDATA[
         <map:match pattern="**faq.xml">
@@ -288,19 +290,19 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
       <p>
         To recap, we now have a <code>*.xml</code> pipeline defined for each
         page in the site, emitting standardized XML.  These pipeline definitions
-        are located in various *.xmap files, notably forrest.xmap.
+        are located in various *.xmap files, notably forrest.xmap
       </p>
       <p>
         We now wish to render the XML from these pipelines to output formats
         like HTML and PDF.
       </p>
-      <section>
+      <section id="pdf">
         <title>PDF output</title>
         <p>
           Easiest case first; PDFs don't require menus or headers, so we can
           simply transform our intermediate format into XSL:FO, and from there
           to PDF.  This is done by the following matcher in
-          <code>sitemap.xmap</code>:
+          <code>sitemap.xmap</code> ...
         </p>
         <source><![CDATA[
 1   <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
@@ -317,7 +319,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         <ol>
           <li>The first line uses a matching regexp to break the URL into
             directory <code>(.*?)</code> and filename
-            <code>([^/]*)</code> part.</li>
+            <code>([^/]*)</code> parts.</li>
           <li>We then generate XML from a <link href="#source_pipelines">Source
               pipeline</link>, with the URL <code>cocoon:/{1}{2}.xml</code></li>
           <li>We then expand any XInclude statements..</li>
@@ -327,12 +329,12 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         </ol>
         <p>Lastly, we generate a PDF using the fo2pdf serializer.</p>
       </section>
-      <section>
+      <section id="html">
         <title>HTML output</title>
         <p>Generating HTML pages is more complicated, because we have to merge
           the page body with a menu and tabs, and then add a header and footer.
           Here is the <code>*.html</code> matcher in
-          <code>sitemap.xmap</code>:</p>
+          <code>sitemap.xmap</code> ...</p>
         <source>
           &lt;map:match pattern="*.html"&gt;
             &lt;map:aggregate element="site"&gt;
@@ -348,9 +350,9 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         </source>
         <p>
           So <link href="../index.html">index.html</link> is formed from
-          aggregating <link href="../body-index.html">body-index.html</link>, 
+          aggregating <link href="../body-index.html">body-index.html</link> and
           <link href="../menu-index.html">menu-index.html</link> and 
-          <link href="../tab-index.html">tab-index.html</link>, and then applying the
+          <link href="../tab-index.html">tab-index.html</link> and then applying the
           <code>site2xhtml.xsl</code> stylesheet to the result.
         </p>
         <p>
@@ -401,7 +403,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           <li>
             <p>We then apply a custom-written
               <code>IdGeneratorTransformer</code>, which ensures that every
-              &lt;section> has an 'id' attribute, by generating one from the
+              &lt;section> has an "id" attribute if one is not supplied, by generating one from the
               &lt;title> if necessary.  For example, &lt;idgen> will
               transform:</p>
             <source>
@@ -428,7 +430,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
       </section>
       <section id="menu_pipeline">
         <title>Page menu</title>
-        <p>In <code>sitemap.xmap</code>, the matcher generating HTML for the menu is:</p>
+        <p>In the <code>sitemap.xmap</code> file, the matcher generating HTML for the menu is:</p>
         <source><![CDATA[
       <map:match pattern="**menu-*.html">
         <map:generate src="cocoon:/{1}book-{2}.html"/>
@@ -439,7 +441,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         </map:call>
       </map:match>
       ]]></source>
-        <p>We get XML from a 'book' pipeline, 
+        <p>We get XML from a "book" pipeline, 
         <link href="#linkrewriting_impl">rewrite links</link>, and apply the
           <code>book2menu.xsl</code> stylesheet to generate HTML.</p>
         <p>How the menu XML is actually generated (the *book-*.html pipeline) is
@@ -469,7 +471,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 
     <section id="menu_xml_generation">
       <title>Menu XML generation</title>
-      <p>The 'book' pipeline is defined in <code>sitemap.xmap</code>as:</p>
+      <p>The "book" pipeline is defined in <code>sitemap.xmap</code>as:</p>
       <source><![CDATA[
         <map:match pattern="**book-*.html">
           <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
@@ -481,7 +483,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           linking</link>).  We will not do through the sitemap itself
         (menu.xmap), but will instead describe the logical steps involved:</p>
       <ol>
-        <li>Take site.xml, and expand hrefs so that they are all
+        <li>Take site.xml and expand hrefs so that they are all
           root-relative.</li>
         <li><p>Depending on the <code>forrest.menu-scheme</code> property, we
             now apply one of the two algorithms for choosing a set of menu links
@@ -516,7 +518,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
                 ]]></source>
             </li>
             <li>
-              <p>For 'directory' menu generation, we simply use an
+              <p>For "directory" menu generation, we simply use an
                 <code>XPathTransformer</code> to include only pages in the
                 current page's directory, or below:</p>
               <source><![CDATA[
@@ -527,8 +529,8 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
               <p>
                 Here, <code>{1}</code> is the directory part of the current
                 page.  So if our current page is
-                <code>community/howto/index.html</code>, <code>{1}</code> will
-                be <code>community/howto/</code>, and the transformer will
+                <code>community/howto/index.html</code> then <code>{1}</code> will
+                be <code>community/howto/</code> and the transformer will
                 include all nodes in that directory.
               </p>
             </li>
@@ -538,7 +540,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         </li>
         <li>The <code>href</code> nodes in this are then made relative to the
           current page.</li>
-        <li>The XML is then transformed into a legacy <code>'book.xml'</code>
+        <li>The XML is then transformed into a legacy "<code>book.xml</code>"
           format, for compatibility with existing stylesheets, and this XML
           format is returned (hence the name of the matcher;
           <code>**book-*.html</code>).</li>
@@ -547,13 +549,13 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 
     <section id="linkrewriting_impl">
       <title>Link rewriting</title>
-      <p>In numerous places in <code>sitemap.xmap</code>, you will see the
+      <p>In numerous places in <code>sitemap.xmap</code> you will see the
         "linkrewriter" transformer in action.  For example:</p>
       <source><![CDATA[<map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>]]></source>
       <p>This statement is Cocoon's linking system in action.  A full
         description is provided in <link href="site:linking">Menus and
           Linking</link>.  Here we describe the implementation of linking.</p>
-      <section>
+      <section id="input_modules">
         <title>Cocoon foundations: Input Modules</title>
         <p>
           The implementation of <code>site:</code> linking is heavily based on
@@ -571,7 +573,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           rewritten before it is used to look up a value.
         </p>
         <p>
-          The idea for putting these together to rewrite <code>site:</code>
+          The idea for putting these together to rewrite "<code>site:</code>"
           links was described in <link href="ext:inputmoduletransformer">this
             thread</link>. The idea is to write a Cocoon Transformer that
           triggers on encountering &lt;link
@@ -582,17 +584,17 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           URI is then rewritten with the found value.  This transformer was
           implemented as 
           <link href="ext:linkrewritertransformer">LinkRewriterTransformer</link>,
-          currently distributed as a "block" in Cocoon 2.1.
+          currently distributed as a "block" in Cocoon 2.1
         </p>
       </section>
 
-      <section>
+      <section id="implement_rewriting">
         <title>Implementing <code>site:</code>-rewriting</title>
         <p>
-          Using the above components, <code>site:</code> URI rewriting is
+          Using the above components, "<code>site:</code>" URI rewriting is
           accomplished as follows.
         </p>
-        <section>
+        <section id="cocoon_xconf">
           <title>cocoon.xconf</title>
           <p>First, we declare all the input modules we will be needing:</p>
           <source><![CDATA[
@@ -614,12 +616,12 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           <ul>
             <li><strong>linkmap</strong> will provide access to the contents of
               &s;; for example, <code>linkmap:/site/about/index/@href</code>
-              should return the value 'index.html'.</li>
-            <li><strong>site</strong> provides a 'mask' over
+              should return the value "index.html".</li>
+            <li><strong>site</strong> provides a "mask" over
               <strong>linkmap</strong> such that <code>site:index</code> expands
-              to <code>linkmap:/site//index/@href</code>.
+              to <code>linkmap:/site//index/@href</code>
             </li>
-            <li><strong>ext</strong> provides another 'mask' over
+            <li><strong>ext</strong> provides another "mask" over
               <strong>linkmap</strong>, such that <code>ext:ant</code> would
               expand to <code>linkmap:/site/external-refs//ant/@href</code>
             </li>
@@ -629,7 +631,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             the next section.</p>
         </section>
 
-        <section>
+        <section id="sitemap">
           <title>sitemap.xmap</title>
           <p>
             Now in the sitemap, we define the LinkRewriterTransformer, and
@@ -681,29 +683,29 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
                   <file src="{src}" reloadable="false" />
               </input-module>]]></source>
               <p>The <code>{src}</code> text is expanded to the value of the
-                <code>src</code> attribute in the <code>linkrewriter</code>
-                instance, namely <code>cocoon:/{1}linkmap-{2}.html</code>.
+                "<code>src</code>" attribute in the "<code>linkrewriter</code>"
+                instance, namely "<code>cocoon:/{1}linkmap-{2}.html</code>"
                 Thus the <code>linkmap</code> module reads dynamically
                 generated XML specific to the current request.</p>
             </li>
             <li>
-              <p>One level out, we configure the <code>site</code> and
-                <code>ext</code> input modules, to map onto our dynamically
-                configured <code>linkmap</code> module.</p>
+              <p>One level out, we configure the "<code>site</code>" and
+                "<code>ext</code>" input modules, to map onto our dynamically
+                configured "<code>linkmap</code>" module.</p>
             </li>
             <li>
               <p>Then at the outermost level, we configure the
-                <code>linkrewriter</code> transformer.  First we tell it which
+                "<code>linkrewriter</code>" transformer.  First we tell it which
                 attributes to consider rewriting:</p>
               <source><![CDATA[
                 <link-attrs>href src</link-attrs>
                 <schemes>site ext</schemes>]]></source>
-              <p>So, <code>href</code> and <code>src</code> attributes starting
-                with <code>site:</code> or <code>ext:</code> are rewritten.</p>
+              <p>So, "<code>href</code>" and "<code>src</code>" attributes starting
+                with "<code>site:</code>" or "<code>ext:</code>" are rewritten.</p>
 
-              <p>By nesting the <code>site</code> and <code>ext</code> input
-                modules in <code>linkrewriter</code>'s configuration, we tell
-                <code>linkrewriter</code> to use these two input modules when
+              <p>By nesting the "<code>site</code>" and "<code>ext</code>" input
+                modules in the "<code>linkrewriter</code>" configuration, we tell
+                "<code>linkrewriter</code>" to use these two input modules when
                 rewriting links.</p>
             </li>
           </ul>
@@ -712,18 +714,18 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             The end result is that, for example, the source XML for the
             <code>community/body-index.html</code> page has its links rewritten
             by an XMLFileModule reading XML from
-            <code>cocoon:/community/linkmap-index.html</code>.
+            <code>cocoon:/community/linkmap-index.html</code>
           </p>
         </section>
-        <section>
+        <section id="dynamic_linkmap">
           <title>Dynamically generating a linkmap</title>
           <p>
-            Why do we need this 'linkmap' pipeline generating dynamic XML from
+            Why do we need this "linkmap" pipeline generating dynamic XML from
             &s;, instead of just using &s; directly?  The reasons are described
             in <link href="ext:linkmaps">the linkmap RT</link>: we need to
-            concatenate @hrefs and add ..'s to the paths, depending on which
+            concatenate @hrefs and add dot-dots to the paths, depending on which
             directory the linkee is in.  This is done with the following
-            pipelines in <code>linkmap.xmap</code>:
+            pipelines in <code>linkmap.xmap</code> ...
           </p>
           <source><![CDATA[
 <!-- site.xml with @href's appended to be context-relative. -->
