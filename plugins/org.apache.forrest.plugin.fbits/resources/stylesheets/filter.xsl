@@ -29,7 +29,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:forrest="http://apache.org/forrest/templates/1.0">
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"  
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  >
 
   <xsl:template match="/">
     <forrest:filter>
@@ -45,7 +49,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   
   <xsl:template match="forrest:contract">
     <xsl:variable name="css-ft"><xsl:value-of select="@name"/></xsl:variable>
-    <xsl:copy-of select="//forrest:contracts/forrest:contract[@css=$css-ft]" />
+    <xsl:variable name="includePath"><xsl:value-of select="//forrest:contracts/forrest:contract[@css=$css-ft]/realpath"/></xsl:variable>
+    <xi:include href="{$includePath}#xpointer(/*)"/>
   </xsl:template>
   
   <xsl:template match="forrest:contracts/forrest:contract"/>

@@ -19,6 +19,12 @@
     <map:generators default="file">
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
     </map:generators>
+    <map:transformers default="xslt">
+      <map:transformer name="cinclude"
+        src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="xinclude"
+        src="org.apache.cocoon.transformation.XIncludeTransformer"/>
+    </map:transformers>
   </map:components>
 
 <map:pipelines>
@@ -92,6 +98,8 @@ output e.g.
         <map:part src="cocoon:/contracts.get" /> 
       </map:aggregate>
       <map:transform src="resources/stylesheets/filter.xsl"/>
+      <map:transform type="xinclude"/>
+      <map:transform src="resources/stylesheets/contract.xsl"/>
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
