@@ -49,12 +49,13 @@
       failonerror="true"
       />
     <!-- copy new files into sandbox -->
-    <copy todir="${deploy.cvsmodule-dir}">
+    <copy todir="${deploy.cvsmodule-dir}/${deploy.cvs.module}">
       <fileset dir="${build.site-dir}"/>
     </copy>
+	<!-- add new files to CVS -->
     <!-- check in to CVS -->
     <cvs command="commit" cvsRoot="${deploy.cvs.fullroot}"
-      dest="${build.site-dir}"
+      dest="${deploy.cvsmodule-dir}/${deploy.cvs.module}"
       failonerror="true"
       noexec="true"
       />
