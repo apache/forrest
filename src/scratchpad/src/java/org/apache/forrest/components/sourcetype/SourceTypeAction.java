@@ -111,6 +111,8 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
         // note: namespace-aware parsing is by default true
 
         SourceInfo sourceInfo = new SourceInfo();
+        // pull-parse the document until we reach the document element and put the collected information
+        // into the sourceInfo object
         try
         {
             XMLEvent event;
@@ -142,9 +144,11 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
         }
         finally
         {
+            // this will also close the inputstream
             parser.cleanup();
         }
 
+        // Run over the SourceTypes until one is found that matches the information collected in sourceInfo
         Iterator sourceTypeIt = sourceTypes.iterator();
         while (sourceTypeIt.hasNext())
         {
@@ -153,11 +157,13 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
             {
                 HashMap returnMap = new HashMap();
                 returnMap.put("sourcetype", sourceType.getName());
-                getLogger().debug("SourceTypeAction: found sourcetype " + sourceType.getName() + " for source " + src);
+                if (getLogger().isDebugEnabled())
+                    getLogger().debug("SourceTypeAction: found sourcetype " + sourceType.getName() + " for source " + src);
                 return returnMap;
             }
         }
-        getLogger().debug("SourceTypeAction: found no sourcetype for source " + src);
+        if (getLogger().isDebugEnabled())
+            getLogger().debug("SourceTypeAction: found no sourcetype for source " + src);
         return null;
     }
 }
