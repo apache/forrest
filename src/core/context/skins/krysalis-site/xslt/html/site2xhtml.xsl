@@ -521,9 +521,23 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
           </div>
         </xsl:if>
         <td width="90%" align="center" colspan="2">
-          <span class="footnote">Copyright &#169;
-            <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-              select="$config/vendor"/> All rights reserved.
+          <span class="footnote">
+            <xsl:choose>
+              <xsl:when test="$config/copyright-link">
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="$config/copyright-link"/>
+                  </xsl:attribute>
+                Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+                <xsl:value-of select="$config/vendor"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+                <xsl:value-of select="$config/vendor"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            All rights reserved.
             <br/><script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
               //  -->]]></script></span>

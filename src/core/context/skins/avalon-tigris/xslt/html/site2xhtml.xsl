@@ -171,8 +171,22 @@ $Id: site2xhtml.xsl,v 1.2 2004/01/28 21:23:20 brondsem Exp $
         <td colspan="2">
           <div align="center">
             <div class="copyright">
-              Copyright &#169; <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-              select="$config/vendor"/>. All rights reserved.
+              <xsl:choose>
+                <xsl:when test="$config/copyright-link">
+                  <a>
+                    <xsl:attribute name="href">
+                      <xsl:value-of select="$config/copyright-link"/>
+                    </xsl:attribute>
+                  Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+                  <xsl:value-of select="$config/vendor"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+                  <xsl:value-of select="$config/vendor"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              All rights reserved.
             </div>
           </div>
         </td>
