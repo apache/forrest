@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.12 2003/03/25 17:07:21 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -160,11 +160,11 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
                     <xsl:comment>================= start Menu items ==================</xsl:comment>
                     <!-- original: <xsl:apply-templates select="div[@class='menu']"/>    -->
 
-                    <div class="menu"><ul>
+                    <div class="menu">
                         <xsl:for-each select = "div[@class='menu']/ul/li">
                           <xsl:call-template name = "innermenuli" />
                         </xsl:for-each>
-                    </ul></div>
+                    </div>
 
                     <xsl:comment>================= end Menu items ==================</xsl:comment>
                   </td>
@@ -239,10 +239,9 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
                   <td bgcolor="{$background-bars}" width="50%" align="right">
                     <!-- ============ Page navigation =========== -->
                       <span class="trail">Font size: 
-                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="ui">&#8211;</a>
-                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="ui">+</a>
-                                 &#160;<a href="javascript:void(0);" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="ui">R</a>
-                      
+                                 &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
+                                 &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+                                 &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>           
                     </span>
                     <img src="{$spacer}" alt="" height="8" width="10" />
                   </td>
@@ -268,6 +267,11 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
 
               </table>
             </td>
+          </tr>
+          <tr>
+           <td><!-- using breaks so it scales with font size -->
+             <br/><br/>
+           </td>
           </tr>
         </table>
         <xsl:comment>================= end Menu, NavBar, Content ==================</xsl:comment>
@@ -341,21 +345,21 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
 
 
   <xsl:template name="innermenuli">
-    <li><font color="#000000"><xsl:value-of select="font"/></font>
-      <ul>
+    <div class="menutitle"><xsl:value-of select="font"/></div>
+      <div class="menuitemgroup">
         <xsl:for-each select= "ul/li">
 
           <xsl:choose>
             <xsl:when test="a">
-              <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
+              <div class="menuitem"><a href="{a/@href}"><xsl:value-of select="a" /></a></div>
             </xsl:when>
             <xsl:when test="span/@class='sel'">
-              <li>
-                <span class="sel"><xsl:value-of select="span" /></span>
-                <xsl:if test="//toc/tocc"> <div class="page">
-                    <ul>
+              <div class="menupage">
+                <div class="menupagetitle"><xsl:value-of select="span" /></div>
+                <xsl:if test="//toc/tocc"> 
+                  <div class="menupageitemgroup">
                       <xsl:for-each select = "//toc/tocc">
-                        <li>
+                        <div class="menupageitem">
                           <xsl:choose>
                             <xsl:when test="string-length(toca)>15">
                               <a href="{toca/@href}" title="{toca}"><xsl:value-of select="substring(toca,0,20)" />...</a>
@@ -384,11 +388,11 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
                             </ul> 
                             -->
                           </xsl:if>
-                        </li>
+                        </div>
                       </xsl:for-each>
-                  </ul></div>
+                  </div>
                 </xsl:if>
-              </li>
+              </div>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name = "innermenuli" />
@@ -396,8 +400,7 @@ $Id: site2xhtml.xsl,v 1.11 2003/03/24 17:58:56 nicolaken Exp $
           </xsl:choose>
 
         </xsl:for-each>
-      </ul>
-    </li>
+      </div>
   </xsl:template>
 
 
