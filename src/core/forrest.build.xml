@@ -98,12 +98,10 @@ FORREST SITE BUILDER
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
     <property name="forrest.skins-dir"   location="${forrest.home}/context/skins"/>   
-    <property name="project.build-dir"   location="${project.home}/build"    />
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
     <property name="project.webapp"      location="${project.build-dir}/webapp" />
 
-    <property name="project.temp-dir"           location="${project.build-dir}/tmp"     />
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
     
     <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
@@ -202,7 +200,7 @@ skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  
     <tstamp prefix="generate">
       <format property="timestamp" timezone="en" pattern="yyyy-MM-dd'T'HH:mm'Z'"/>
     </tstamp>
-    <echo file="${forrest.home}/context/WEB-INF/info.xml">&lt;info>
+    <echo file="${project.temp-dir}/info.xml">&lt;info>
   &lt;project-skin>${project.skin}&lt;/project-skin>
   &lt;forrest-version>${version}&lt;/forrest-version>
   &lt;generate-timestamp>${generate.timestamp}&lt;/generate-timestamp>
