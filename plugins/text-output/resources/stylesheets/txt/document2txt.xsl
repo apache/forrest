@@ -210,7 +210,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="p">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:call-template name="cr"/>
 
@@ -233,7 +234,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="p" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="para">
       <xsl:apply-templates mode="in-list">
@@ -256,7 +258,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ol|ul">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
     <xsl:call-template name="cr"/>
     <xsl:apply-templates select="li">
       <xsl:with-param name="level" select="$level"/>
@@ -266,7 +269,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ol|ul" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
     <xsl:call-template name="cr"/>
     <xsl:apply-templates select="li" mode="in-list">
       <xsl:with-param name="level" select="$level"/>
@@ -276,23 +280,31 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="dl">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
     <xsl:call-template name="cr"/>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="dl" mode="in-list">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
     <xsl:apply-templates mode="in-list">
       <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="note | warning | fixme">
     <xsl:param name="level" select="'1'"/>
-    <xsl:call-template name="cr"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
+    <xsl:call-template name="cr"/>
     <xsl:call-template name="lineOf">
       <xsl:with-param name="size" select="$level * $indent-per-level"/>
     </xsl:call-template>
@@ -312,21 +324,21 @@ No navigation is provided and no rendering of graphics is attempted.
 
     <xsl:call-template name="justify-text">
       <xsl:with-param name="text" select="$title-text"/>
-      <xsl:with-param name="width"
-            select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:call-template>
     <xsl:call-template name="cr"/>
 
     <xsl:variable name="para">
       <xsl:apply-templates>
         <xsl:with-param name="level" select="$level"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
 
     <xsl:call-template name="wrap-text">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="$level * $indent-per-level"/>
-      <xsl:with-param name="width" select="$document-width"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:call-template>
 
     <xsl:call-template name="cr"/>
@@ -335,8 +347,7 @@ No navigation is provided and no rendering of graphics is attempted.
     </xsl:call-template>
 
     <xsl:call-template name="lineOf">
-      <xsl:with-param name="size"
-            select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="size" select="$width"/>
       <xsl:with-param name="chars" select="'-'"/>
     </xsl:call-template>
     <xsl:call-template name="cr"/>
@@ -345,6 +356,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="note | warning | fixme" mode="in-list">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="title-text">
       <xsl:text>** </xsl:text>
@@ -361,28 +374,27 @@ No navigation is provided and no rendering of graphics is attempted.
 
     <xsl:call-template name="justify-text">
       <xsl:with-param name="text" select="$title-text"/>
-      <xsl:with-param name="width"
-            select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:call-template>
     <xsl:call-template name="cr"/>
 
     <xsl:variable name="para">
       <xsl:apply-templates mode="in-list">
         <xsl:with-param name="level" select="$level"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
 
     <xsl:call-template name="wrap-text">
       <xsl:with-param name="text" select="$para"/>
       <xsl:with-param name="indent" select="'0'"/>
-      <xsl:with-param name="width" select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="width" select="$width"/>
       <xsl:with-param name="fixed" select="true"/>
     </xsl:call-template>
 
     <xsl:call-template name="cr"/>
     <xsl:call-template name="lineOf">
-      <xsl:with-param name="size"
-            select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="size" select="$width"/>
       <xsl:with-param name="chars" select="'-'"/>
     </xsl:call-template>
     <xsl:call-template name="cr"/>
@@ -403,7 +415,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ol/li">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="marker">
       <xsl:value-of select="position()"/>
@@ -426,7 +439,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ol/li" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="marker">
       <xsl:value-of select="position()"/>
@@ -449,7 +463,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ul/li">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
@@ -468,7 +483,8 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="ul/li" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
@@ -487,9 +503,13 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="dd">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
         <xsl:with-param name="level" select="'0'"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:call-template name="emit-with-indent">
@@ -501,9 +521,13 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="dd" mode="in-list">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
         <xsl:with-param name="level" select="'0'"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:call-template name="emit-with-indent">
@@ -516,10 +540,14 @@ No navigation is provided and no rendering of graphics is attempted.
   <!-- Simple items that can contain only in-line mark up -->
   <xsl:template match="dt">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+
     <xsl:call-template name="cr"/>
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
         <xsl:with-param name="level" select="'0'"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:call-template name="emit-with-indent">
@@ -531,10 +559,14 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="dt" mode="in-list">
     <xsl:param name="level" select="'1'"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
+
     <xsl:call-template name="cr"/>
     <xsl:variable name="item">
       <xsl:apply-templates mode="in-list">
         <xsl:with-param name="level" select="'0'"/>
+        <xsl:with-param name="width" select="$width"/>
       </xsl:apply-templates>
     </xsl:variable>
     <xsl:call-template name="emit-with-indent">
@@ -675,18 +707,20 @@ No navigation is provided and no rendering of graphics is attempted.
 
   <xsl:template match="text()">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:call-template name="wrap-text">
       <xsl:with-param name="text" select="."/>
       <xsl:with-param name="indent" select="'0'"/>
-      <xsl:with-param name="width" select="$document-width - ($level * $indent-per-level)"/>
+      <xsl:with-param name="width" select="$width"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="text()" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:param name="width" select="$document-width"/>
+    <xsl:param name="width"
+            select="$document-width - ($level * $indent-per-level)"/>
 
     <xsl:call-template name="wrap-text">
       <xsl:with-param name="text" select="."/>
