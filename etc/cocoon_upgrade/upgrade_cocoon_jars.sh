@@ -22,7 +22,7 @@ JARSUFFIX=`date +%Y%m%d`
 ## lib/core/, whereas 'testing' copies them to the distribution in
 ## build/dist/shbat/*
 UPGRADE_TYPE=testing
-#UPGRADE_TYPE=real
+UPGRADE_TYPE=real
 #
 ######################################################################
 
@@ -213,13 +213,22 @@ copy util.concurrent
 
 if [ "$UPGRADE_TYPE" = "real" ]; then
   UPDATEFILE=/tmp/forrest-updates
+  pushd .
+  cd $FORREST
+  echo "Diffing against CVS.."
   cvs -n up > $UPDATEFILE
   # Add new jars
-  echo "Marking new files for addition to CVS..."
-  cat $UPDATEFILE | grep ^\? | cut -d\  -f 2 | xargs cvs add -kb
+  NEWFILES=`cat $UPDATEFILE | grep ^\? | cut -d\  -f 2`
+  OLDFILES=`cat $UPDATEFILE | grep ^U | cut -d\  -f 2`
+  if [ ! -z "$NEWFILES" ]; then
+      echo "Marking new files for addition to CVS:  $NEWFILES"
+      cvs add -kb $NEWFILES
+  fi
   # Remove old jars
-  echo "Marking removed files for deletion from CVS..."
-  cat $UPDATEFILE | grep ^U | cut -d\  -f 2 | xargs cvs remove -f
+  if [ ! -z "$OLDFILES" ]; then
+      echo "Marking removed files for deletion from CVS: $OLDFILES"
+      cvs remove -f $OLDFILES
+  fi
 fi
 
 echo "All done.  Upgraded Cocoon jars copied to:"
