@@ -62,7 +62,7 @@
 
     <echo>Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
     <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties"/>
-    <loadproperties srcFile="${forrest.home}/context/default-forrest.properties"/>
+    <loadproperties srcFile="${forrest.home}/webapp/default-forrest.properties"/>
 
     <!-- only the project.content-dir directory -->
     <echo><![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
@@ -103,6 +103,7 @@
 
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
     <!-- non-recursive; just to get forrest.properties -->
+	<echo>svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
     <svncheckout repositoryUrl="${getsrc.svn.url}"
       destination="${build.svn-dir}/${ant.project.name}"
       revision="${getsrc.svn.revision}"
@@ -111,9 +112,10 @@
 
     <echo>Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
     <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
-    <loadproperties srcFile="${forrest.home}/context/default-forrest.properties"/>
+    <loadproperties srcFile="${forrest.home}/webapp/default-forrest.properties"/>
     
     <!-- only the project.content-dir directory -->
+	<echo>svn: ${getsrc.svn.url}/${project.content-dir} -> ${build.svn-dir}/${ant.project.name}/${project.content-dir}</echo>
     <svncheckout repositoryUrl="${getsrc.svn.url}/${project.content-dir}"
       destination="${build.svn-dir}/${ant.project.name}/${project.content-dir}"
       revision="${getsrc.svn.revision}"
