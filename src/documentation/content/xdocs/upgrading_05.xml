@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document> 
+  <header> 
+    <title>Upgrading to Forrest 0.5</title> 
+    <version>$Revision: 1.1 $</version>
+    <authors>
+      <person name="Jeff Turner" email="jefft@apache.org"/>
+    </authors>
+  </header> 
+  <body> 
+    <p>
+      This page describes changes to Forrest that affect people upgrading from 0.4 and earlier versions to 0.5.  A full
+      list of changes is visible in the <link href="site:changes">changelog</link>.  Please post your upgrade
+      experiences to the <link href="site:mail-lists/forrest-dev">forrest-dev mailing list</link>. As more experience is
+      gained, this document will be updated.  
+    </p>
+    <section>
+      <title>Upgrading the sitemap</title>
+      <p>
+        In brief, Forrest 0.5 is <em>mostly</em> backwards-compatible for sites that do not define a custom sitemap.
+        Between 0.4 and 0.5, the Forrest sitemap was completely rewritten.  Instead of a single sitemap.xmap doing
+        everything, a 'driver' sitemap.xmap now delegates to a number of mounted subsitemaps handling different functional
+        areas.  The new sitemap is fully described in the <link href="ext:sitemap-ref">Sitemap Reference</link>.
+      </p>
+      <p>Users that have overridden and augmented the Forrest 0.4 sitemap.xmap will need to:</p>
+      <ol>
+        <li>Move their overridden sitemap (<code>src/documentation/sitemap.xmap</code>) out the way</li>
+        <li>Copy the new sitemap, $FORREST_HOME/context/sitemap.xmap, to <code>src/documentation</code></li>
+        <li>Reapply customizations to the new sitemap.xmap.  Customizations can be determined by comparing the modified
+          sitemap.xmap with <link
+            href="http://cvs.apache.org/viewcvs.cgi/*checkout*/xml-forrest/src/resources/conf/sitemap.xmap?rev=1.66&amp;only_with_tag=FORREST_04">original
+            Forrest 0.4 sitemap</link>.</li>
+      </ol>
+    </section>
+    <section>
+      <title>Version-specific sitemaps</title>
+      <p>Forrest 0.5 now supports <em>version-specific sitemaps</em>.  Ie., if your project's overridden sitemap is
+        called <code>sitemap-0.5.xmap</code>, then this sitemap will be used in preference to
+        <code>sitemap.xmap</code>, or any other sitemap-*.xmap variants.</p>
+      <p>So if, for example, one has:</p>
+      <source>
+        src/documentation/sitemap.xmap
+        src/documentation/sitemap-0.5.xmap
+      </source>
+      <p>Then Forrest 0.4 will use sitemap.xmap, and Forrest 0.5 will use sitemap-0.5.xmap.  This means users don't
+        need to all upgrade to 0.5 at once.</p>
+      <p>As Forrest 0.5 has been split into multiple sitemaps, this version-specific behaviour is triggered for any
+        *-0.5.xmap file.  For example, if one has:</p>
+      <source>
+        src/documentation/sitemap.xmap
+        src/documentation/forrest-0.5.xmap
+      </source>
+      <p>Then Forrest 0.4 will use sitemap.xmap, and Forrest 0.5 will use Forrest's own sitemap.xmap, plus the
+        user-defined forrest-0.5.xmap file.</p>
+      <p>The same system prevents future compatibility problems, so Forrest 0.5 should continue to work when future
+        (incompatible) sitemaps are present:</p>
+      <source>
+        src/documentation/sitemap.xmap
+        src/documentation/sitemap-0.5.xmap
+        src/documentation/sitemap-0.6.xmap
+        src/documentation/sitemap-0.7.xmap
+      </source>
+      <note>If your <code>forrest.properties</code> defines the
+        <code>forrest.validate.sitemap.{includes,excludes}</code> properties, these will have to be updated to prevent
+        validation of sitemaps from unused versions.  If undefined, Forrest will only validate sitemaps from the
+        current version.</note>
+    </section>
+    <section>
+      <title>Excluding URLs: filterlinks.xsl removed</title>
+      <p>In Forrest 0.4, URLs could be excluded from command-line processing by overriding and editing
+        <code>filterlinks.xsl</code>, and excluding the link nodes.  Forrest 0.5 uses the rewritten command-line from
+        Cocoon 2.1.1, which apart from being twice as fast, <strong>does not use filterlinks.xsl</strong>.  Instead,
+        patterns for command-line inclusion and exclusion can be specified in cli.xconf, as described in <link
+          href="site:faq/ignoring_javadocs">this FAQ entry</link>.
+      </p>
+    </section>
+    <section>
+      <title>SVGs should omit DOCTYPE declarations</title>
+      <p>In Forrest 0.5, sites that render SVGs may encounter ClassCastExceptions:</p>
+      <source>
+javax.xml.transform.TransformerException: java.lang.ClassCastException
+    at org.apache.xalan.transformer.TransformerImpl.transformNode(TransformerImpl.java:1326)
+    at org.apache.xalan.transformer.TransformerImpl.run(TransformerImpl.java:3329)
+...</source>
+      <p>There appears to be a bug in Cocoon 2.1.1's SVG component where the DTD associated with SVGs cannot be
+        resolved.  The workaround is to edit your <code>src/documentation/resources/images/*.svg</code> files, and
+        comment out the <strong>&lt;!DOCTYPE ... &gt;</strong> declaration.</p>
+    </section>
+    <section>
+      <title>Skin invocation changes</title>
+      <p>Users with custom skins <em>may</em> need to update them, depending on what use they make of passed-in XSLT
+        parameters.  If your custom skin does not appear to work with 0.5, look in Forrest's <code>sitemap.xmap</code>
+        for occurrences of <code>{forrest:skin}</code>, and check that the callee (your XSLT) is expecting what the
+        caller (the sitemap) is passing it.  Forrest skins can be used as a reference.</p>
+    </section>
+    <section>
+      <title>To be continued...</title>
+      <p>..as more issues are discovered/remembered :)  Please send feedback to the <link
+          href="site:mail-lists/forrest-dev">mailing list</link>.</p>
+    </section>
+  </body>
+</document>
