@@ -72,6 +72,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   +-->
             <script type="text/javascript" language="javascript" 
                 src="{$root}skin/getBlank.js"></script>
+	        <script type="text/javascript" language="javascript" 
+				src="{$root}skin/menu.js"></script>
 <!--+
   |favicon
   +-->
@@ -388,9 +390,18 @@ document.write("Last Published: " + document.lastModified);
     |start Menu
     +</xsl:comment>
    <div id="menu">
-        <xsl:apply-templates select="div[@id='menu']/*"/>
-<div id="credit">
- <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
+<!--menu - inner-->	
+            <xsl:for-each select = "div[@id='menu']/ul/li">
+              <xsl:call-template name = "innermenuli" >
+                  <xsl:with-param name="id" select="concat('1.', position())"/>
+              </xsl:call-template>
+            </xsl:for-each>
+        <!--
+			<xsl:apply-templates select="div[@id='menu']/*" />
+		-->
+<!--credits-->
+	<div id="credit">
+	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
                   <xsl:variable name="url" select="url"/>
@@ -431,19 +442,19 @@ document.write("Last Published: " + document.lastModified);
     <xsl:param name="id"/>
     <xsl:variable name="tagid">
       <xsl:choose>
-        <xsl:when test="descendant-or-self::node()/li/span/@class='sel'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="concat('menu_',concat(font,$id))"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="whichGroup">
       <xsl:choose>
-        <xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selectedmenuitemgroup</xsl:when>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">selectedmenuitemgroup</xsl:when>
         <xsl:otherwise>menuitemgroup</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     
     
-    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="span"/></div>
+    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="h1"/></div>
       <div class="{$whichGroup}" id="{$tagid}">
         <xsl:for-each select= "ul/li">
 
@@ -451,9 +462,9 @@ document.write("Last Published: " + document.lastModified);
             <xsl:when test="a">
               <div class="menuitem"><a href="{a/@href}"><xsl:value-of select="a" /></a></div>
             </xsl:when>
-            <xsl:when test="span/@class='sel'">
+            <xsl:when test="div/@class='current'">
               <div class="menupage">
-                <div class="menupagetitle"><xsl:value-of select="span" /></div>
+                <div class="menupagetitle"><xsl:value-of select="div" /></div>
                 <xsl:if test="//tocitems/tocitem and contains($config/toc/@location,'dd')"> 
                 <xsl:value-of select="$config/toc/@location"/>
                   <div class="menupageitemgroup">
