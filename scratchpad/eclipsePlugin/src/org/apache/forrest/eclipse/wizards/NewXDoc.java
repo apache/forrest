@@ -124,7 +124,34 @@ public class NewXDoc extends Wizard implements INewWizard {
 			throwCoreException("Container \"" + containerName + "\" does not exist.");
 		}
 		
-        // create the file
+        createFile(resource, fileName, monitor);
+	    
+	    IContainer container = (IContainer) resource;
+	    final IFile file = container.getFile(new Path(fileName));
+		
+		monitor.worked(1);
+		monitor.setTaskName("Opening file for editing...");
+		getShell().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				IWorkbenchPage page =
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				try {
+					IDE.openEditor(page, file, true);
+				} catch (PartInitException e) {
+				}
+			}
+		});
+		monitor.worked(1);
+	}
+	
+	/*
+	 * Create the file and put the template data into it.
+	 */
+	protected void createFile(
+			IResource resource, 
+			String fileName, 
+			IProgressMonitor monitor) 
+	throws CoreException {
 		AntRunner runner = new AntRunner();
 		ForrestPlugin plugin = ForrestPlugin.getDefault();
 		String strPluginDir = plugin.getBundle().getLocation();
@@ -143,23 +170,6 @@ public class NewXDoc extends Wizard implements INewWizard {
 		runner.setArguments(sb.toString());
 		runner.run(monitor);
 	    resource.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-	    
-	    IContainer container = (IContainer) resource;
-	    final IFile file = container.getFile(new Path(fileName));
-		
-		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
-		getShell().getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbenchPage page =
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				try {
-					IDE.openEditor(page, file, true);
-				} catch (PartInitException e) {
-				}
-			}
-		});
-		monitor.worked(1);
 	}
 
 	private void throwCoreException(String message) throws CoreException {
