@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Forrestbot sample config file.
+Fetches the Forrest 'template' site (ie, that used by "forrest seed") from CVS
+and builds it.
+
+jefft@apache.org
+-->
+<forrest-config>
+  <defaults>
+    <get-src type="cvs">
+      <host name="cvs.apache.org"/>
+      <root name="/home/cvspublic"/>
+      <user name="anoncvs"/>
+      <passwd name="anoncvs"/>
+    </get-src>
+    <!--
+    <deploy type="scp">
+      <host name="localhost"/>
+      <root name="/home/jeff"/>
+      <user name="jeff"/>
+    </deploy>
+    -->
+  </defaults>
+
+  <project name="forrest-template">
+    <prepare>
+      <skin name="forrest-site"/>
+    </prepare>
+    <get-src type="cvs">
+      <module name="xml-forrest"/>
+      <dir name="src/resources/fresh-site"/>
+    </get-src>
+    <deploy type="local-copy">
+      <destination name="build/template-site"/>
+    </deploy>
+    <!--
+    <deploy type="scp">
+      <dir name="public_html/forrest-site"/>
+    </deploy>
+    -->
+
+  </project>
+
+</forrest-config>
