@@ -24,6 +24,11 @@
 
   <changes>
     <release version="0.5-dev" date="unreleased">
+      <action dev="NKB" type="update" context="skins">
+        Enabled multiple output links on each page (print - pdf - xml)
+        They can be enabled by adding the relative disable-*-link elements
+        and setting them to false.
+      </action>    
       <action dev="JT" type="fix" context="core">
         Allow users to determine which URLs Forrest should ignore, by overriding
         <code>stylesheets/filterlinks.xsl</code> (and other stylesheets in that
@@ -925,6 +930,29 @@
           </p>
         </fix>
       </issue>
+
+
+      <issue id="skin_images" date="2003-03-18">
+        <synopsis>
+          The pdf link on the document pages now appears only if 
+          explicitly stated in the skinconf.xml file.
+        </synopsis>
+        <affected date="2003-03-18">
+          All users that use and want to keep the pdf version of each page.
+        </affected>
+        <description>
+          <p>
+            Added mandatory 'disable-pdf-link' element in skinconf.xml
+          </p>
+        </description>
+        <fix>
+          To keep pdf links on each page, add a 'disable-pdf-link' 
+          in skinconf.xml set to false, as for other similar links 
+          (consistent behaviour). To make the file validate, please use
+          the page DTD contained in the forrest distro in 
+          ./src/resources/conf/skinconf.xml
+        </fix>
+      </issue>      
     </compatibility-breaks>
   </issues>
 

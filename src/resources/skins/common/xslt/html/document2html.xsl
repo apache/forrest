@@ -13,16 +13,22 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.15 2003/03/17 17:03:56 nicolaken Exp $
+$Id: document2html.xsl,v 1.16 2003/03/18 08:50:38 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <!-- If non-blank, a PDF link for this page will not be generated -->
-  <xsl:param name="nopdf"/>
-  <!-- If non-blank, a "print" link for this page will not be generated -->
-  <xsl:param name="noprint"/>
-  <!-- If non-blank, an XML link for this page will not be generated -->
-  <xsl:param name="noxml"/>  
+  <!-- the skinconf file -->
+  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
+  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
+  
+  <!-- If true, a PDF link for this page will not be generated -->
+  <xsl:variable name="disable-pdf-link" select="$config/disable-pdf-link"/>
+  <!-- If true, a "print" link for this page will not be generated -->
+  <xsl:variable name="disable-print-link" select="$config/disable-print-link"/>
+  <!-- If true, an XML link for this page will not be generated -->
+  <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
+
+    
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
   <!-- <xsl:include href="split.xsl"/> -->
@@ -84,7 +90,7 @@ $Id: document2html.xsl,v 1.15 2003/03/17 17:03:56 nicolaken Exp $
 
   <!-- Generates the "printer friendly version" link -->
   <xsl:template name="printlink">
-    <xsl:if test="$noprint = ''"> <!-- noprint flag unset -->
+    <xsl:if test="$disable-print-link = 'false'"> 
     
 <script Language="Javascript">
 
@@ -117,7 +123,7 @@ if (VERSION > 3) {
 
   <!-- Generates the PDF link -->
   <xsl:template name="pdflink">
-    <xsl:if test="$nopdf = ''"> <!-- nopdf flag unset -->
+    <xsl:if test="$disable-pdf-link = 'false'"> 
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
           <img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
           PDF</a>
@@ -128,7 +134,7 @@ if (VERSION > 3) {
 
   <!-- Generates the XML link -->
   <xsl:template name="xmllink">
-    <xsl:if test="$noxml = ''"> <!-- noxml flag unset -->
+    <xsl:if test="$disable-xml-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
           <img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
           xml</a>
