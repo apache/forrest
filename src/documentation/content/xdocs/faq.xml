@@ -122,6 +122,57 @@
         </p>
       </answer>
     </faq>
+    <faq id="encoding">
+        <question>Does forrest like accents?</question>
+        <answer>
+            <p>Short answer: yes, forrest can process text in any language so you can include:</p>
+            <dl>
+            <dt>accents</dt><dd>áéíóú</dd>
+            <dt>dieresis</dt><dd>äëïöü</dd>
+            <dt>tildes</dt><dd>ãñĩõũ</dd>
+            <dt>Everything that has a computer character representation</dt><dd><!-- include other common non-ASCII characters--></dd>
+            </dl>
+            <p>This is because sources for forrest docs are xml documents, which can include any of these
+            as long as the encoding your xml doc declares matches the actual encoding used in the file containing
+            the xml. For instance if you declare:</p>
+            <source>
+            <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+            ]]>
+            </source>
+            <p>but the file is actually using ISO-8859-1 you will probably get a validation error. specially if 
+            you include some non-ASCII characters.</p>
+            <p>
+            This situation is commonly encountered when you edit the templates created by <code>forrest seed</code> with your favorite 
+            (probably localized) editor without paying attention to the encoding. Or when you create a new file 
+            and simply copy the headers from another file
+            </p>
+            <p>Though UTF-8 is an encoding well suited for most languages is not ussually the default
+            in popular editors or systems.</p>
+            <p>In UNIX-like systems, most popular editors can handle different encodings to 
+            write the file in disk. On some editors the encoding of the file is preserved, in others the default
+            is used regardless the original encoding. On most cases the encoding used to write files
+            can be controled by setting the enviroment variable <code>LANG</code>
+            to an appropiate value, for instance:
+            </p>
+            <source>
+            <![CDATA[
+$ export LANG=en_US.UTF-8
+            ]]>
+            </source>
+            <p>Of course the <em>appropiate</em> way of setting the encoding to use depends on the editor/OS, 
+            but ultimately relays on the user preferences. So you can use the encoding you prefer as long as 
+            the <code>encoding</code> attribute of the xml declaration matches the actual encoding of the file. 
+            This means 
+            that if you are not willing to abandon ISO-8859-1 you can always use the following declaration instead:</p>
+            <source>
+            <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+            ]]>
+            </source>
+            
+        </answer>
+    </faq>
   </part>
 
   <part id="technical">
