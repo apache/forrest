@@ -184,12 +184,12 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     value="Search the site:" 
                     onFocus="getBlank (this, 'Search the site:');"/>&#160; 
                     <input type="submit" value="Search" name="Search"/> </form>
-            <div id="roundbottomsmall">
+            <!--div id="roundbottomsmall">
             <img 
                 src="{$skin-img-dir}/rc-b-l-5-1body-2menu-3menu.png" 
                 alt="" width="5" height="5" class="cornersmall" 
                 style="display: none" />
-        </div>
+        </div-->
             </div>
 <xsl:comment>+
     |end search
