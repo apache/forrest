@@ -35,31 +35,11 @@
 			  <alias:param name="request"/>
         <alias:variable name="config" select="//skinconfig"/>
 			  <alias:variable name="minitoc-location" select="$config/toc/@location"/>
-			  <!--<alias:variable name="root">
-			    <alias:call-template name="dotdots">
-			      <alias:with-param name="path" select="$path"/>
-			    </alias:call-template>
-			  </alias:variable>-->
-			<!--
-				  <!-#- Source filename (eg 'foo.xml') of current page -#->
-			  <alias:variable name="filename">
-			    <alias:call-template name="filename">
-			      <alias:with-param name="path" select="$path"/>
-			    </alias:call-template>
-			  </alias:variable>
-			
-			  <!-#- Path of Lucene search results page (relative to $root) -#->
-			  <alias:param name="lucene-search" select="'lucene-search.html'"/>
-			
-			  <alias:variable name="filename-noext">
-			    <alias:call-template name="filename-noext">
-			      <alias:with-param name="path" select="$path"/>
-			    </alias:call-template>
-			  </alias:variable>
-			
-				<alias:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
-			  <alias:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>-->
-
+        <!--FIXME: get all additional templates-->
+<!--			<xsl:comment>All xhtml additional templates requested by the forrest:template</xsl:comment>
+      <xsl:for-each select="/*/forrest:properties/*[@additional='true']">
+        <xsl:copy-of select=""/>
+      </xsl:for-each>-->
       <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
 			<alias:template name="getHead">
 			  <xsl:for-each select="/*/forrest:properties/*[@head='true']">
@@ -124,77 +104,7 @@ p {margin-left: 50px}
           </body>
          </xhtml>
        </alias:template>
-       <alias:template name="menu">
-<alias:comment>+
-    |start Menu
-    +</alias:comment>
-   	<div id="nav">
-			<ul>
-<!--menu - inner-->	
-        <alias:for-each select = "div[@id='menu']/ul/li">
-          <alias:call-template name = "innermenuli" >
-              <alias:with-param name="id" select="concat('1.', position())"/>
-          </alias:call-template>
-        </alias:for-each>
-			</ul>
-		</div>
-	</alias:template>  
-  
-  <alias:template name="innermenuli">   
-    <alias:param name="id"/>
-    <alias:variable name="tagid">
-      <alias:choose>
-        <alias:when test="descendant-or-self::node()/li/div/@class='current'"><alias:value-of select="concat('menu_selected_',$id)"/></alias:when>
-        <alias:otherwise><alias:value-of select="concat('menu_',concat(font,$id))"/></alias:otherwise>
-      </alias:choose>
-    </alias:variable>
-    <alias:variable name="whichGroup">
-      <alias:choose>
-        <alias:when test="descendant-or-self::node()/li/div/@class='current'">currentmenuitemgroup</alias:when>
-        <alias:otherwise>menuitemgroup</alias:otherwise>
-      </alias:choose>
-    </alias:variable>
-    
-    
-    <li class="pagegroup"><strong><alias:value-of select="h1"/></strong>
-      <ul>
-        <alias:for-each select= "ul/li">
-
-          <alias:choose>
-            <alias:when test="a">
-              <li><a href="{a/@href}"><alias:value-of select="a" /></a></li>
-            </alias:when>
-            <alias:when test="div/@class='current'">
-              <li class="menupage">
-                <div class="menupagetitle"><alias:value-of select="div" /></div>
-                <alias:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
-                  <li class="menupageitemgroup">
-                      <alias:for-each select = "//tocitems/tocitem">
-                        <div class="menupageitem">
-                          <alias:choose>
-                            <alias:when test="string-length(@title)>15">
-                              <a href="{@href}" title="{@title}"><alias:value-of select="substring(@title,0,20)" />...</a>
-                            </alias:when>
-                            <alias:otherwise>
-                              <a href="{@href}"><alias:value-of select="@title" /></a>
-                            </alias:otherwise>
-                          </alias:choose>
-                        </div>
-                      </alias:for-each>
-                  </li>
-                </alias:if>
-              </li>
-            </alias:when>
-            <alias:otherwise>
-              <alias:call-template name = "innermenuli">
-                 <alias:with-param name="id" select="concat($id, '.', position())"/>
-              </alias:call-template>
-            </alias:otherwise>
-          </alias:choose>
-
-        </alias:for-each>
-      </ul></li>
-  </alias:template>
+      
 		</alias:stylesheet>
 	</xsl:template>
 	
