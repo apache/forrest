@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:include href = "split.xsl"/>
+
   <xsl:param name="isfaq"/>
   <xsl:param name="resource"/>
   <xsl:template match="document">
@@ -127,7 +130,10 @@
   </xsl:template>
   <xsl:template match="source">
     <pre class="code">
-      <xsl:apply-templates/>
+    <xsl:call-template name="format">
+    <xsl:with-param select="." name="txt" /> 
+     <xsl:with-param name="width">80</xsl:with-param> 
+     </xsl:call-template>
     </pre>
   </xsl:template>
   <xsl:template match="anchor">
