@@ -96,7 +96,38 @@
       </answer>
     </faq>
 
-    <faq id="index.html">
+    <faq id="odd_html">
+      <question>
+        After upgrading to 0.4 my HTML looks significantly different, and table
+        widths are wrong. What happened?
+      </question>
+      <answer>
+        <p>
+          Forrest now uses a HTML 4.0.1 <code>DOCTYPE</code> declaration,
+          <code><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01
+            Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></code>.
+          This causes browsers to render the page in standards-compliance mode,
+          or rather, not in "quirks" mode. For some operations (like determining
+          table column widths), quirks mode results in better looking pages.
+          For the old pre-0.4 behaviour, create a custom sitemap and remove the
+          line:</p>
+        <source><![CDATA[
+          <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
+          ]]></source>
+        <source><![CDATA[
+          <tab label="User Manual" href="manual"/>
+          ]]></source>
+        <p>
+          and add this rule to the sitemap:
+        </p>
+        <source><![CDATA[
+          <map:match pattern="manual">
+            <map:redirect-to uri="manual/Introduction.html"/>
+          </map:match>
+          ]]></source>
+      </answer>
+    </faq>
+     <faq id="index.html">
       <question>
         The tab link in my site incorrectly assumes that 'index.html' is present in
         the linked-to directory. How do I fix this?
