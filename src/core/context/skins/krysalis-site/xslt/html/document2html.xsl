@@ -77,7 +77,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
 
   <xsl:template match="body">
 
-    <xsl:if test="section and $config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
+    <xsl:if test="section and //skinconfig/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'menu')">
       <toc>
         <xsl:for-each select="section">
           <tocc>
@@ -106,7 +106,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
       </toc>
     </xsl:if>
     
-   <xsl:if test="$config/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
+   <xsl:if test="//skinconfig/toc/@max-depth&gt;0 and not($notoc='true') and contains($minitoc-location,'page')" >
       <xsl:call-template name="minitoc">
         <xsl:with-param name="tocroot" select="."/>
         <xsl:with-param name="depth">1</xsl:with-param>
@@ -139,7 +139,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
     <xsl:choose>
       <xsl:when test="$level=1">
          <xsl:choose>
-           <xsl:when test="$config/headings/@type='underlined'">
+           <xsl:when test="//skinconfig/headings/@type='underlined'">
            
 	        <table class="h3" cellpadding="0" cellspacing="0" border="0" width="100%">
 	          <tbody>
@@ -158,7 +158,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
 	        </table>
 
            </xsl:when>
-           <xsl:when test="$config/headings/@type='boxed'">
+           <xsl:when test="//skinconfig/headings/@type='boxed'">
            
 	        <table class="h3 heading" cellpadding="0" cellspacing="0" border="0" width="100%">
 	          <tbody>
@@ -192,7 +192,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
       </xsl:when>
       <xsl:when test="$level=2">
          <xsl:choose>
-           <xsl:when test="$config/headings/@type='underlined'">
+           <xsl:when test="//skinconfig/headings/@type='underlined'">
            
 		        <table class="h4" cellpadding="0" cellspacing="0" border="0" width="100%">
 		          <tbody>
@@ -211,7 +211,7 @@ $Id: document2html.xsl,v 1.8 2004/01/23 09:53:04 nicolaken Exp $
 		        </table>
 
            </xsl:when>
-           <xsl:when test="$config/headings/@type='boxed'">
+           <xsl:when test="//skinconfig/headings/@type='boxed'">
            
 		        <table class="h4 subheading" cellpadding="0" cellspacing="0" border="0" width="100%">
 		          <tbody>

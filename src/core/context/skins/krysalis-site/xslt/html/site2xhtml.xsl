@@ -44,10 +44,10 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="stylesheet" href="{$root}skin/forrest.css" type="text/css"/>
-        <xsl:if test="$config/favicon-url">
+        <xsl:if test="//skinconfig/favicon-url">
           <link rel="shortcut icon">
             <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
             </xsl:attribute>
           </link>
         </xsl:if>
@@ -98,9 +98,9 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td >
             <div class="headerlogo">
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/group-name"/>
-              <xsl:with-param name="url" select="$config/group-url"/>
-              <xsl:with-param name="logo" select="$config/group-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/group-name"/>
+              <xsl:with-param name="url" select="//skinconfig/group-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/group-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
             </div>
@@ -109,19 +109,19 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td align="center" >
          <div class="headerlogo">
           <xsl:call-template name="renderlogo">
-            <xsl:with-param name="name" select="$config/project-name"/>
-            <xsl:with-param name="url" select="$config/project-url"/>
-            <xsl:with-param name="logo" select="$config/project-logo"/>
+            <xsl:with-param name="name" select="//skinconfig/project-name"/>
+            <xsl:with-param name="url" select="//skinconfig/project-url"/>
+            <xsl:with-param name="logo" select="//skinconfig/project-logo"/>
             <xsl:with-param name="root" select="$root"/>
           </xsl:call-template>
           </div>
         </td>
         <!-- ( =================  Search ================== ) -->
         <td class="search" align="right" rowspan="2" valign="top">
-          <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and not($config/disable-search='alt')
-            and $config/searchsite-domain and
-            $config/searchsite-name">
+          <xsl:if test="not(//skinconfig/disable-search) or
+            //skinconfig/disable-search='false' and not(//skinconfig/disable-search='alt')
+            and //skinconfig/searchsite-domain and
+            //skinconfig/searchsite-name">
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table class="dialog" cellspacing="0" cellpadding="0" border="0">
                 <tr>
@@ -133,12 +133,12 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td></td>
                   <td nowrap="nowrap">
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+                    <input type="hidden" name="sitesearch" value="{//skinconfig/searchsite-domain}"/>
                     <input type="text" id="query" name="q" size="15"/>
                     &#160;
                     <input type="submit" value="Search" name="Search"/>
                     <br />
-                      the <xsl:value-of select="$config/searchsite-name"/> site
+                      the <xsl:value-of select="//skinconfig/searchsite-name"/> site
                       <!-- setting search options off for the moment -->
                       <!--
                       <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
@@ -162,7 +162,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         </td>
 
         <td align="right" width="10" height="10">
-          <span class="textheader"><xsl:value-of select="$config/project-name"/></span>
+          <span class="textheader"><xsl:value-of select="//skinconfig/project-name"/></span>
         </td>
       </tr>
       <!-- ( ================= Tabs ================== ) -->
@@ -257,9 +257,9 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
         <td height="10" colspan="2"></td>
       </tr>
       
-      <xsl:if test="not($config/disable-search) or
-            $config/disable-search='alt' and $config/searchsite-domain and
-            $config/searchsite-name">
+      <xsl:if test="not(//skinconfig/disable-search) or
+            //skinconfig/disable-search='alt' and //skinconfig/searchsite-domain and
+            //skinconfig/searchsite-name">
       <tr>
         <td ></td>
         <td class="search">
@@ -280,8 +280,8 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td></td>
                   <td>
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
-                    the <xsl:value-of select="$config/searchsite-name"/> site
+                    <input type="hidden" name="sitesearch" value="{//skinconfig/searchsite-domain}"/>
+                    the <xsl:value-of select="//skinconfig/searchsite-name"/> site
                     <br />
                     <input type="text" id="query" name="q" size="13"/><input type="submit" value="Go" name="Search"/>
                   </td>
@@ -303,7 +303,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
           </tr>
           </xsl:if>
  	  
-          <xsl:if test="$filename = 'index.html' and $config/credits">
+          <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
  	     <tr>
                <td></td>
  	       <td class="search">
@@ -318,7 +318,7 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td colspan="3" height="8"></td>
                 </tr>
-		        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+		        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
 		          <xsl:variable name="name" select="name"/>
 		          <xsl:variable name="url" select="url"/>
 		          <xsl:variable name="image" select="image"/>
@@ -474,20 +474,20 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
     </table>
     <table class="footer">
       <tr>
-        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+        <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
           <div class="host">
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/host-name"/>
-              <xsl:with-param name="url" select="$config/host-url"/>
-              <xsl:with-param name="logo" select="$config/host-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/host-name"/>
+              <xsl:with-param name="url" select="//skinconfig/host-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/host-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
           </div>
         </xsl:if>
         <td width="90%" align="center" colspan="2">
           <span class="footnote">Copyright &#169;
-            <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-              select="$config/vendor"/> All rights reserved.
+            <xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
+              select="//skinconfig/vendor"/> All rights reserved.
             <br/><script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
               //  -->]]></script></span>
@@ -506,8 +506,8 @@ $Id: site2xhtml.xsl,v 1.13 2004/01/28 21:23:20 brondsem Exp $
   <xsl:template name="bottom-credit-icons">
       <!-- old place where to put credits icons-->
       <!--
-      <xsl:if test="$filename = 'index.html' and $config/credits">
-        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+      <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
+        <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
           <xsl:variable name="name" select="name"/>
           <xsl:variable name="url" select="url"/>
           <xsl:variable name="image" select="image"/>

@@ -47,10 +47,10 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
       <head>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
-        <xsl:if test="$config/favicon-url">
+        <xsl:if test="//skinconfig/favicon-url">
           <link rel="shortcut icon">
             <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,$config/favicon-url)"/>
+              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
             </xsl:attribute>
           </link>
         </xsl:if>
@@ -81,13 +81,13 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
 
         <xsl:comment>================= start Group Logo ==================</xsl:comment>
         <td bgcolor="{$header-color}">
-          <xsl:if test="$config/group-url">
+          <xsl:if test="//skinconfig/group-url">
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/group-name"/>
-              <xsl:with-param name="url" select="$config/group-url"/>
-              <xsl:with-param name="logo" select="$config/group-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/group-name"/>
+              <xsl:with-param name="url" select="//skinconfig/group-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/group-logo"/>
               <xsl:with-param name="root" select="$root"/>
-              <xsl:with-param name="description" select="$config/group-description"/>
+              <xsl:with-param name="description" select="//skinconfig/group-description"/>
             </xsl:call-template>
           </xsl:if>
         </td>
@@ -95,20 +95,20 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
         <xsl:comment>================= start Project Logo ==================</xsl:comment>
         <td bgcolor="{$header-color}" align="center" width="100%">
           <xsl:call-template name="renderlogo">
-            <xsl:with-param name="name" select="$config/project-name"/>
-            <xsl:with-param name="url" select="$config/project-url"/>
-            <xsl:with-param name="logo" select="$config/project-logo"/>
+            <xsl:with-param name="name" select="//skinconfig/project-name"/>
+            <xsl:with-param name="url" select="//skinconfig/project-url"/>
+            <xsl:with-param name="logo" select="//skinconfig/project-logo"/>
             <xsl:with-param name="root" select="$root"/>
-            <xsl:with-param name="description" select="$config/project-description"/>
+            <xsl:with-param name="description" select="//skinconfig/project-description"/>
           </xsl:call-template>
         </td>
         <xsl:comment>================= end Project Logo ==================</xsl:comment>
 
         <xsl:comment>================= start Search ==================</xsl:comment>
         <td bgcolor="{$header-color}" rowspan="2" valign="top">
-          <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and $config/searchsite-domain and
-            $config/searchsite-name">
+          <xsl:if test="not(//skinconfig/disable-search) or
+            //skinconfig/disable-search='false' and //skinconfig/searchsite-domain and
+            //skinconfig/searchsite-name">
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
                 <tr>
@@ -117,13 +117,13 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
                 <tr>
                   <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                   <td nowrap="nowrap">
-                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+                    <input type="hidden" name="sitesearch" value="{//skinconfig/searchsite-domain}"/>
                     <input type="text" id="query" name="q" size="15"/>
                     <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
                     <input type="submit" value="Search" name="Search"/>
                     <br />
                     <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
-                      the <xsl:value-of select="$config/searchsite-name"/> site
+                      the <xsl:value-of select="//skinconfig/searchsite-name"/> site
                       <!-- setting search options off for the moment -->
                       <!--
                       <input type="radio" name="web" value="web"/>web site&#160;&#160;<input type="radio" name="mail" value="mail"/>mail lists
@@ -228,8 +228,8 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
       <tr>
         <td align="center" class="copyright" bgcolor="{$background-bars}" colspan="2">
           <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169;
-          <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-          select="$config/vendor"/> All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
+          <xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
+          select="//skinconfig/vendor"/> All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
             //  -->]]></script></font>
         </td>
@@ -241,9 +241,9 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
               <!-- W3C logos -->
               <xsl:call-template name="compliancy-logos"/>
 
-              <xsl:if test="$config/credits">
+              <xsl:if test="//skinconfig/credits">
                 <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
-                <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+                <xsl:for-each select="//skinconfig/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
                   <xsl:variable name="url" select="url"/>
                   <xsl:variable name="image" select="image"/>
@@ -264,13 +264,13 @@ $Id: site2xhtml.xsl,v 1.5 2004/01/28 21:23:20 brondsem Exp $
               </xsl:if>
             </div>
           </xsl:if>
-        <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+        <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
           <div class="host">
             <img src="{$root}skin/images/spacer.gif" width="10" height="1" alt=""/>
             <xsl:call-template name="renderlogo">
-              <xsl:with-param name="name" select="$config/host-name"/>
-              <xsl:with-param name="url" select="$config/host-url"/>
-              <xsl:with-param name="logo" select="$config/host-logo"/>
+              <xsl:with-param name="name" select="//skinconfig/host-name"/>
+              <xsl:with-param name="url" select="//skinconfig/host-url"/>
+              <xsl:with-param name="logo" select="//skinconfig/host-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
           </div>

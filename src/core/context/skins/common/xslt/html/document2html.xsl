@@ -33,22 +33,18 @@ $Id: document2html.xsl,v 1.4 2004/01/13 08:19:53 nicolaken Exp $
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <!-- the skinconf file -->
-  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
-  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-  
   <!-- If true, a PDF link for this page will not be generated -->
-  <xsl:variable name="disable-pdf-link" select="$config/disable-pdf-link"/>
+  <xsl:variable name="disable-pdf-link" select="//skinconfig/disable-pdf-link"/>
   <!-- If true, a "print" link for this page will not be generated -->
-  <xsl:variable name="disable-print-link" select="$config/disable-print-link"/>
+  <xsl:variable name="disable-print-link" select="//skinconfig/disable-print-link"/>
   <!-- If true, an XML link for this page will not be generated -->
-  <xsl:variable name="disable-xml-link" select="$config/disable-xml-link"/>  
+  <xsl:variable name="disable-xml-link" select="//skinconfig/disable-xml-link"/>  
   <!-- Get the location where to generate the minitoc -->
-  <xsl:variable name="minitoc-location" select="$config/toc/@location"/>
+  <xsl:variable name="minitoc-location" select="//skinconfig/toc/@location"/>
   <!-- Whether to obfuscate email links -->
-  <xsl:variable name="obfuscate-mail-links" select="$config/obfuscate-mail-links"/>
+  <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
   <!-- If true, an the images on all external links will not be added -->
-  <xsl:variable name="disable-external-link-image" select="$config/disable-external-link-image"/>  
+  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>  
 
   <xsl:param name="dynamic-page" select="'false'"/>  
   <xsl:param name="notoc"/>
@@ -140,7 +136,7 @@ if (VERSION > 3) {
   <!-- Generates the PDF link -->
   <xsl:template name="pdflink">
     <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+      <xsl:if test="not(//skinconfig/disable-pdf-link) or $disable-pdf-link = 'false'"> 
         <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
           <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
           PDF</a>
@@ -163,7 +159,7 @@ if (VERSION > 3) {
   </xsl:template>
   
   <xsl:template match="body">
-    <xsl:if test="$config/toc">
+    <xsl:if test="//skinconfig/toc">
       <xsl:call-template name="minitoc">
         <xsl:with-param name="tocroot" select="."/>
         <xsl:with-param name="depth">1</xsl:with-param>
@@ -246,7 +242,7 @@ if (VERSION > 3) {
             <xsl:apply-templates/>
           </a>
        </xsl:when>
-       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, $config/group-url)) and not(contains(@href, $config/project-url))">
+       <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, //skinconfig/group-url)) and not(contains(@href, //skinconfig/project-url))">
           <a href="{@href}" class="external">
             <xsl:apply-templates/>
           </a>
@@ -350,12 +346,12 @@ if (VERSION > 3) {
   <xsl:template name="minitoc">  
     <xsl:param name="tocroot"/>
     <xsl:param name="depth"/>     
-    <xsl:if test="count($tocroot/section) >= $config/toc/@min-sections">
+    <xsl:if test="count($tocroot/section) >= //skinconfig/toc/@min-sections">
       <ul class="minitoc">
         <xsl:for-each select="$tocroot/section">
           <li>
             <xsl:call-template name="toclink"/>
-            <xsl:if test="$depth&lt;$config/toc/@max-depth">
+            <xsl:if test="$depth&lt;//skinconfig/toc/@max-depth">
               <xsl:call-template name="minitoc">
                 <xsl:with-param name="tocroot" select="."/>
                 <xsl:with-param name="depth" select="$depth + 1"/>
