@@ -41,9 +41,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </filter>
   </xsl:template>
   <xsl:template match="forrest:hook">
-    <div id="{@name}">
+    <forrest:hook id="{@name}">
       <xsl:apply-templates />
-    </div>
+    </forrest:hook>
   </xsl:template>
     <xsl:template match="forrest:contract">
     <xsl:variable name="css-ft"><xsl:value-of select="@name"/></xsl:variable>
