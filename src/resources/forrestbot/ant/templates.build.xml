@@ -2,14 +2,37 @@
 <project default="none" name="forrestbot-templates">
 
   <!--
-    Ant templates which are called from the generated work.build.xml file in which
-    most of the properties are set
+    This file carries the Ant-target templates which are called from the
+    generated work.build.xml file in which most of the properties are set that
+    are picked up by these templates.
+
+    Maintenance of this file should be in sync with the allowed (supportedd)
+    settings in the /forrestbot.conf.xml file.
+
+    These templates reflect the workstages defined in the stages.conf.xml file.
+    The various responsibilities for these workstages are:
+    [prepare] make a clean forrest-defined cocoon context environment
+    [get-src] slide in the project specific document sources in the cocoon env
+    [generate] let the cocoon crawler spit out the site
+    [deploy] make the result of the generate step public in configured way
+    [cleanup] no real need at the moment?
+
+    Todo: maybe we will need a stage for getting soure of custom generators
+          compile them to class files and slide them into the context as well
   -->
 
-  <!-- Some defaults that typically get set before the template targets are called -->
-  <property name="bot.build.dir" value="build" />
-  <property name="project.name" value="xml-forrest" />
-  
+  <!-- Some defaults that typically get set before the template targets
+       are called. Here there are some defaults for when they were not set -->
+  <property name="xlayout.build.bot.dir"            value="./build/bot" />
+  <property name="xlayout.build.bot.projects.dir"   value="./build/bot/projects" />
+  <property name="xlayout.build.bot.cvsmodules.dir" value="./build/bot/cvsmodules" />
+  <property name="xlayout.build.bot.work.dir"       value="./build/bot/work" />
+  <property name="xlayout.build.bot.docs.dir"       value="./build/bot/docs" />
+  <property name="project.name"                     value="xml-forrest" />
+  <!-- Todo: cleanup/check more for implicit dependencies on being called from
+         the main ant script -->
+
+
   <!--
     <property name="template.echo" value="true" />
     
@@ -17,15 +40,125 @@
     if you want to know the configuration of each template
   -->
 
-  <!-- Todo: cleanup the implicit dependency on being called from the
-       main ant script -->
 
-  <target name="template.prepare">
-    <echo message="prepare workstage for project ${project.name}"/>
-    <delete dir="${bot.build.dir}/${project.name}"/>
-    <mkdir dir="${bot.build.dir}/${project.name}/src"/>
+  <target name="shared.set-props" >
+    <!-- where we build the cocoon context per project: -->
+    <property name="project.context.dir"
+            value="${xlayout.build.bot.projects.dir}/${project.name}/context" />
+    <!-- where we will temporarily store and cache the various cvsmodules: -->
+    <property name="project.cvsmodule.dir"
+            value="${xlayout.build.bot.cvsmodules.dir}/${project.name}" />
+    <!-- where the stuff forrest is offering comes from -->
+    <property name="forrest.context.dir" value="${xlayout.source.resources.dir}" />
+
+      <!-- where cocoon can have his toy-work-environment while generating: -->
+      <property name="project.work.dir"
+              value="${project.context.dir}/../work" />
+      <!-- where cocoon will spit out the generated stuff: -->
+      <property name="project.docs.dir"
+              value="${project.context.dir}/../docs" />
   </target>
 
+
+  <!-- ________________ PREPARE TEMPLATES __________________ -->
+  <target name="echo.prepare" if="template.echo">
+    <echo message="prepare workstage for project ${project.name}"/>
+    <echo message="skin = ${prepare.skin}"/>
+  </target>
+
+  <target name="template.prepare" depends="shared.set-props, echo.prepare">
+    <!-- make it a clean space to work in -->
+    <delete dir="${project.context.dir}"/>
+    <delete dir="${project.docs.dir}"/>
+    <delete dir="${project.work.dir}"/>
+    <mkdir dir="${project.context.dir}"/>
+    <mkdir dir="${project.docs.dir}"/>
+    <mkdir dir="${project.work.dir}"/>
+
+    <!-- copy over forrest config stuf and prepare the environment -->
+    <!-- todo: get rid of the filter way of working ?
+         InputModes were mentioned -->
+    <filter token="skin"              value="${prepare.skin}"/>
+    <filter token="link1"             value="apache"/>
+    <filter token="link1.href"        value="http://www.apache.org/"/>
+    <filter token="link2"             value="xml.apache"/>
+    <filter token="link2.href"        value="http://xml.apache.org/"/>
+    <!-- the breadcrumb script already generates it,
+         so it needs to be kept blank -->
+    <filter token="link3"             value=""/>
+    <filter token="link3.href"        value=""/>
+    <filter token="group-logo.src"    value="images/group-logo.gif"/>
+    <filter token="group-logo.href"   value="http://xml.apache.org/"/>
+    <filter token="group-logo.alt"    value="Apache XML logo"/>
+    <filter token="project-logo.src"  value="images/project-logo.gif"/>
+    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>
+    <filter token="project-logo.alt"  value="Forrest logo"/>
+    <filter token="year"              value="2002"/>
+    <filter token="vendor"            value="Apache Sofware Foundation"/>
+
+    <!-- we're not dumping in the documentation source -->
+    <!-- that will come from the get-src stage -->
+
+    <!-- Copy entity catalog, entities and class files -->
+    <copy todir="${project.context.dir}/resources/schema" filtering="off">
+      <fileset dir="${resource.dir}/schema"/>
+    </copy>
+
+    <!-- decided to share this among all projects handled by bot
+    <mkdir dir="${project.context.dir}/WEB-INF/classes"/>
+    <copy todir="${project.context.dir}/WEB-INF/classes">
+      <fileset dir="${project.context.dir}/resources/schema">
+        <include name="CatalogManager.properties"/>
+      </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+    </copy>
+    -->
+
+    <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${project.context.dir}" filtering="on">
+      <fileset dir="${forrest.context.dir}/conf">
+        <include name="sitemap.xmap"/>
+        <include name="cocoon.xconf"/>
+        <include name="logkit.xconf"/>
+      </fileset>
+    </copy>
+
+    <!-- todo: check where the cocoon Main really looks for the sitemap -->
+    <copy todir="${project.context.dir}/WEB-INF/" filtering="on">
+      <fileset dir="${forrest.context.dir}/conf">
+        <exclude name="sitemap.xmap"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy libraries -->
+    <copy todir="${project.context.dir}/library/" filtering="off">
+      <fileset dir="${forrest.context.dir}/library">
+
+      </fileset>
+    </copy>
+
+    <!-- Copy skins -->
+    <copy todir="${project.context.dir}/skins/" filtering="on">
+      <fileset dir="${forrest.context.dir}/skins">
+        <exclude name="**/images/**"/>
+      </fileset>
+    </copy>
+    <copy todir="${project.context.dir}/skins/" filtering="off">
+      <fileset dir="${forrest.context.dir}/skins">
+        <include name="**/images/**"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy the project descriptors can't be done here, since that's
+         project specific -->
+  </target>
+
+  <!-- ________________ GET-SRC TEMPLATES __________________ -->
   <target name="echo.get-src.cvs" if="template.echo">
     <echo message="get-src workstage of type CVS for project ${project.name}"/>
     <echo message="cvs login: usr= ${get-src.cvs.user} / pwd= ${get-src.cvs.passwd}"/>
@@ -33,22 +166,39 @@
     <echo message="cvs update  for module: ${get-src.cvs.module} to dir: ${get-src.cvs.dir}"/>
   </target>
 
-  <target name="template.get-src.cvs" depends="echo.get-src.cvs">
+  <target name="template.get-src.cvs" depends="shared.set-props, echo.get-src.cvs">
     <cvspass cvsroot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
             password="${get-src.cvs.passwd}"
-     />
-
+            />
+    <mkdir dir="${project.cvsmodule.dir}" />
+    <!-- get from cvs only the directory that is holding the xdoc content -->
     <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
          package="${get-src.cvs.module}/${get-src.cvs.dir}"
-         dest="${bot.build.dir}/${project.name}/src"
+         dest="${project.cvsmodule.dir}"
          quiet="true"
-         >
-      <commandline>
-        <argument line="checkout -P"/>
-      </commandline>
-    </cvs>
+         />
+    <!-- get from cvs only the top section files: they should contain the *.*.ml
+         project descriptors (-L option makes non recursive cvs update) -->
+    <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
+         package="${get-src.cvs.module}"
+         dest="${project.cvsmodule.dir}"
+         quiet="true"
+         command="checkout -l"
+         />
+    <!-- copy the xdocs content over to the context space -->
+    <copy todir="${project.context.dir}">
+      <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}" />
+    </copy>
+
+    <!-- copy the project descriptors over to the context space  -->
+    <copy todir="${project.context.dir}" >
+      <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}">
+        <include name="*.*ml"/>
+      </fileset>
+    </copy>
   </target>
 
+  <!-- ________________ GENERATE TEMPLATES __________________ -->
   <target name="echo.generate" if="template.echo">
     <property name="classpath-dump" refid="forrest.cp"/>
     <echo message="generate workstage for project ${project.name}"/>
@@ -57,10 +207,9 @@
     <echo message="looking for java classes in ${classpath-dump}"/>
   </target>
 
-  <target name="template.generate" depends="echo.generate">
-    <!-- FIXME: the Cocoon generation template doesn't work currently! -->
-    <java classname="org.apache.cocoon.Main" fork="true" 
-          dir="${bot.build.dir}/${project.name}/src" failonerror="true"
+  <target name="template.generate" depends="shared.set-props, echo.generate">
+    <java classname="org.apache.cocoon.Main" fork="true"
+          dir="${project.context.dir}" failonerror="true"
           classpathref="forrest.cp"
           >
       <arg value="-c."/>
@@ -72,14 +221,21 @@
     </java>
   </target>
 
-  <target name="template.deploy.scp">
-    <!-- FIXME: not implemented yet -->
-    <echo message="deploy workstage of type scp for project ${project.name}"/>
+  <!-- ________________ DEPLOY TEMPLATES __________________ -->
+  <target name="echo.deploy.scp" if="template.echo">
+      <echo message="deploy workstage of type scp for project ${project.name}"/>
+  </target>
+  <target name="template.deploy.scp" depends="shared.set-props, echo.deploy.scp">
+    <!-- todo: FIXME: not implemented yet -->
   </target>
 
-  <target name="template.cleanup">
-    <!-- FIXME: not implemented yet -->
-    <echo message="cleanup workstage for project ${project.name}"/>
+
+  <!-- ________________ CLEANUP TEMPLATES __________________ -->
+  <target name="echo.cleanup" if="template.echo">
+      <echo message="cleanup workstage for project ${project.name}"/>
+  </target>
+  <target name="template.cleanup" depends="shared.set-props, echo.cleanup">
+    <!-- todo: FIXME: not implemented yet -->
   </target>
 
 </project>

@@ -56,9 +56,11 @@
 
     <property name="tools.dir"             value="./tools"/>
     <property name="tools.jar"             value="${java.home}/../lib/tools.jar"/>
-    <available file="${tools.jar}"  property="tools.jar.present"/>
+    <available file="${tools.jar}"         property="tools.jar.present"/>
 
   </target>
+
+
 
   <target name="run" depends="init">
 
@@ -105,12 +107,12 @@
      These are the most common build targets.
      You can also invoke them directly; see build.xml for more info.
      Builds will be in /build directory, distributions in /dist.
-     
+
      forrest-typical targets:
 
      docs ------------- generates static Forrest website
      webapp ----------- builds webapp (.war) deployable version of Forrest website
-     bot.run ---------- runs the forrestbot using the configuration specified in 
+     bot.run ---------- runs the forrestbot using the configuration specified in
                         forrestbot.conf.xml
 
      default centipede targets:
@@ -161,14 +163,14 @@
 
   <target  name="jar"   depends="-init"
            description="Make jars">
-           
+
     <antcall target="call-cent">
-      <param name="cent-name"   value="centipede"/> 
-      <param name="cent-target" value="package"/> 
+      <param name="cent-name"   value="centipede"/>
+      <param name="cent-target" value="package"/>
     </antcall>
-    
-  </target>     
-   
+
+  </target>
+
   <!-- ================================== -->
   <!--              Scratchpad               -->
   <!-- ================================== -->
@@ -199,7 +201,7 @@
     <filter token="link1.href"        value="http://www.apache.org/"/>
     <filter token="link2"             value="xml.apache"/>
     <filter token="link2.href"        value="http://xml.apache.org/"/>
-    <!-- the breadcrumb script already generates it, so it needs to be kept blank --> 
+    <!-- the breadcrumb script already generates it, so it needs to be kept blank -->
     <filter token="link3"             value=""/>
     <filter token="link3.href"        value=""/>
     <filter token="group-logo.src"    value="images/group-logo.gif"/>
@@ -261,7 +263,7 @@
         <exclude name="sitemap.xmap"/>
       </fileset>
     </copy>
-    
+
     <!-- Copy libraries -->
     <copy todir="${build.context}/library/" filtering="on">
       <fileset dir="${documentation.context.dir}/library">
@@ -379,7 +381,7 @@
       <arg value="-c."/>
       <arg value="-d../docs"/>
       <arg value="-w../work"/>
-      <arg value="-b../brokenlinks.txt"/>      
+      <arg value="-b../brokenlinks.txt"/>
       <arg value="-k../work/logkit.xconf"/>
       <arg value="-u${centipede.tools.cents.forrest.loglevel}"/>
       <arg value="index.html"/>
@@ -550,16 +552,16 @@
   <!-- ================================== -->
   <!--    Targets for the remote builds   -->
   <!-- ================================== -->
-  
+
   <target name="bot.init" depends="init">
     <!-- initializes environment to start on bot targets -->
-    <property name="bot.build.dir" value="${build.dir}/bot"/>
-    <property name="bot.work.build.xml" value="${bot.build.dir}/work.build.xml"/>
+    <property name="bot.build.dir"              value="${xlayout.build.bot.dir}"/>
+    <property name="bot.work.build.xml"         value="${bot.build.dir}/work.build.xml"/>
     <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
-    <property name="bot.forrestbot.xconf" value="forrestbot.conf.xml" />
-    <property name="bot.templates.build.xml" value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
-    <property name="bot.work.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
-    <property name="bot.default.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
+    <property name="bot.forrestbot.xconf"       value="forrestbot.conf.xml" />
+    <property name="bot.templates.build.xml"    value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
+    <property name="bot.work.builder.xslt"      value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
+    <property name="bot.default.builder.xslt"   value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
     <mkdir dir="${bot.build.dir}" />
   </target>
 
@@ -574,7 +576,21 @@
     <copy todir="${bot.build.dir}" file="${bot.templates.build.xml}"/>
   </target>
 
-  <target name="bot.run" depends="bot.conf2build, compile" >
+  <target name="bot.prepare-cp" depends="bot.init, compile" >
+    <!-- todo: question if it is good practice to share WEB-INF classes -->
+    <mkdir dir="${bot.build.dir}/WEB-INF/classes"/>
+    <copy todir="${bot.build.dir}/WEB-INF/classes">
+      <fileset dir="${resource.dir}/schema">
+        <include name="CatalogManager.properties"/>
+      </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+    </copy>
+
     <path id="forrest.cp">
       <path refid="classpath"/>
       <fileset dir="${build.dir}">
@@ -584,13 +600,17 @@
         <include name="*/lib/*.jar"/>
       </fileset>
       <pathelement location="${tools.jar}"/>
-      <pathelement location="${build.context}/WEB-INF/classes"/>
+      <pathelement location="${bot.build.dir}/WEB-INF/classes"/>
     </path>
+  </target>
+
+  <target name="bot.run" depends="bot.conf2build, bot.prepare-cp" >
     <!-- delegates to the generated XML file -->
     <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
   </target>
-  
-  
+
+  <target name="bot" depends="bot.run" />
+
   <!-- =================================================================== -->
   <!-- Import Ant-Centipede init targets - sets up basic build stuff       -->
   <!-- =================================================================== -->
