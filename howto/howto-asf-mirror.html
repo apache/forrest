@@ -215,7 +215,7 @@
 <a href="#menu">Add a menu entry for Download</a>
 </li>
 <li>
-<a href="#link">Add a link to cause the mirrors.ithml to be processed</a>
+<a href="#link">Cause the mirrors.ithml to be processed as an extra file</a>
 </li>
 <li>
 <a href="#forrest">Run 'forrest' to build your site</a>
@@ -345,29 +345,27 @@
   ...</pre>
 </div>
 <a name="N10096"></a><a name="link"></a>
-<h4>Add a link to cause the mirrors.ithml to be processed</h4>
+<h4>Cause the mirrors.ithml to be processed as an extra file</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Forrest gathers the links that are to be crawled, by reading site.xml
-       and by finding any other internal links in the actual documents.
-       There is no link to mirrors.html because it is an extra file that needs
-       to be generated and skinned, but not linked in any way.
+        and by finding any other internal links in the actual documents.
+        There is no link to mirrors.html because it is an extra file that needs
+        to be generated and skinned, but not linked in any way.
       </p>
-<p>To enable this, use the trick of an invisible link in one of your
-        xdocs, e.g.
-      <span class="codefrag">&lt;link href="site:mirrors"/&gt;</span>
-      
-</p>
-<div class="frame fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">
-        There must be a better way to process extra documents, probably using
-        the Cocoon cli.xconf file. The invisible link trick is not a good
-        workaround because the link is rendered into the final output and
-        can be crawled by robots.
-      </div>
+<p>The Cocoon command-line interface
+        (<a class="external" href="http://cocoon.apache.org/2.1/userdocs/offline/">CLI</a>)
+        to the rescue. Add an entry to your project's cli.xconf by copying the
+        default one from
+        <span class="codefrag">$FORREST_HOME/context/WEB-INF/cli.xconf</span> to your
+        <span class="codefrag">src/documentation/conf/</span> directory (or wherever
+        ${forrest.conf-dir} points). Add the following entry ...
+      </p>
+<pre class="code">
+&lt;uris name="mirrors" follow-links="false"&gt;
+  &lt;uri type="append" src="mirrors.html"/&gt;
+&lt;/uris&gt;</pre>
 </div>
-</div>
-<a name="N100AA"></a><a name="forrest"></a>
+<a name="N100B1"></a><a name="forrest"></a>
 <h4>Run 'forrest' to build your site</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -376,7 +374,7 @@
         will be generated with the skin applied.
       </p>
 </div>
-<a name="N100B7"></a><a name="explain"></a>
+<a name="N100BE"></a><a name="explain"></a>
 <h4>Explanation of the process</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Forrest automatically reads ihtml files and transforms the html source
