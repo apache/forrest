@@ -44,20 +44,67 @@
 
       <p>The plugins sitemap is mounted by Forrest's sitemap after the project 
       specific sitemap but before the Forrest default matchers. This allows 
-      individual projects to override/extend functionality provided in either 
-      a plugin or Forrest whilst plugins are only able to override/extend the 
-      default Forrest behaviour.</p>
-
-      <p>Forrest is easily extensible through the existing sitemap.xmap files, 
-      however the more features we add, the more complex the sitemap becomes. It 
-      is already quite difficult to understand the default sitemap.xmap files, 
-      and this will only get worse as new features find their way into the 
-      core.</p>
-
-      <p>By adopting a plugin model we can keep the core of Forrest tightly 
+      a plugin to override/extend default Forrest behaviour. By adopting a 
+      plugin model we can keep the core of Forrest tightly 
       focused on the basic functionality, whilst still facilitating extensions 
       to suit individual projects needs.</p>
-    
+      
+      <section id="pluginTypes">
+        <title>Types of Plugin</title>
+        <p>There are three types of plugin, <code>input</code>,
+        <code>output</code> and <code>internal</code>. Each plugin has a 
+        specific role to play and extends a different part of Forrest.</p>
+        
+        <note>At present only input plugins are fully operational, although it
+        is still possible to build output and internal plugins, however, they
+        are not currently dynamically installed.</note>
+        
+        <section id="inputPlugins">
+          <title>Input Plugins</title>
+          <p>Input plugins provide a new source format. For example, the
+          OpenOffice.org plugin extends Forrest to allow the use of
+          OpenOffice.org Application file formats.</p>
+          
+          <p>An input plugin provides an <code>input.xmap</code> file. 
+          This provides the source matchers (i.e. **.xml), it is 
+          mounted in forrest.xmap before the default forrest **.xml behaviour 
+          and therefore can override that default behaviour but it will not 
+          interfere with any internal Forrest infrastructure matches, or any 
+          other plugins infrastructure matches.</p>
+        </section>
+        
+        <section id="outputPlugins">
+          <title>Output Plugins</title>
+          
+          <p>Output plugins provide a new output format. For example, the
+          s5 plugin extends Forrest to produce HTML slides from Forrest
+          documents.</p>
+          
+          <p>An output plugin provides a <code>output.xmap</code> file.
+          This provides the relevant output matchers (i.e. 
+          **.html, **.pdf, **.slides), it is mounted before any of the default 
+          matchers for Forrest and so can override this default behaviour.</p>
+        </section>
+        
+        <section id="internalPlugins">
+          <title>Internal Plugins</title>
+          
+          <p>Internal plugins provide ways of extending or overriding Forrests
+          internal operations. For example, the IMSManifest plugin
+          allows Forrest projects to use an IMS Manifest file instead of 
+          a site.xml and tabs.xml.</p>
+          
+          <p>Internal plugins provide a <code>sitemap.xmap</code> file. 
+          This provides the infrastructure matchers (i.e. 
+          site.xml, faq.xml, issues.xml), and will be mounted before 
+          *any* of the Forrest matches. This sitemap can override any behaviour 
+          within Forrest and so developers of these plugins must be especially
+          careful with the construction of their matchers since they will be
+          processed before any other matchers and consequently can easily break
+          existing functionality.</p>
+        </section>
+      </section>
+      
       <section>
         <title>An Example Plugin</title>
   
