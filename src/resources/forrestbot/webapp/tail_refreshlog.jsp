@@ -8,9 +8,11 @@ private static final int TAIL_SIZE=1000;
 <%
 File f = new File(getServletContext().getRealPath(LOG_FILE));
 if (f.exists()) {
-	String logs = forrestbot.IOUtil.toString(new FileReader(f));
+try {
+  String logs = forrestbot.IOUtil.toString(new FileReader(f));
   int len = logs.length();
-	out.println( ((len < TAIL_SIZE) ? logs : logs.substring(logs.length()-TAIL_SIZE)) );
+  out.println( ((len < TAIL_SIZE) ? logs : logs.substring(logs.length()-TAIL_SIZE)) );
+  } catch (Throwable t) { out.println(t); }
 } else { %>
 
 Log file <%=LOG_FILE%> not found.
