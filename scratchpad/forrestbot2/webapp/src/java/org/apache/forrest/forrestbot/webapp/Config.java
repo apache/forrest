@@ -54,7 +54,7 @@ public class Config {
 	}
 
 	public static void validateProperties() {
-		String [] requiredProperties = { "forrest-exec", "config-dir", "build-dir", "logs-dir", "build-url", "refreshrate", "debug-exec" };
+		String [] requiredProperties = { "forrest-exec", "config-dir", "build-dir", "logs-dir", "build-url", "refreshrate", "debug-exec", "targets.build", "targets.deploy" };
 		String [] filesToCheck = { "forrest-exec" };
 		String [] directoriesToCheck = { "config-dir", "build-dir", "logs-dir" };
 		
