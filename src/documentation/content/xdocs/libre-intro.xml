@@ -21,11 +21,11 @@
         requires you to add this extra metadata using some libre.xml file. This
         libre.xml however has the following main advantages over the book.xml:</p> 
       <ul> 
-        <li>It's settings are 'inherited' down the directory tree, so you don't
-          need a libre.xml on each directory level. You only need it to change the subdir
-          traversing strategy from its parent dir.</li> 
-        <li>It's combining some 'filesystem-introspection'-like declarations
-          that are used in run-time filtering, sorting and attributing decissions.
+        <li>The settings are 'inherited' down the directory tree, so you do not
+          need a libre.xml on each directory level. You only need it to change
+          the subdir traversing strategy from its parent dir.</li> 
+        <li>It combines some 'filesystem-introspection'-like declarations
+          that are used in run-time filtering, sorting and attributing decisions.
           Introspection strategies are currently based on either (1) reading properties
           of the java.io.File object at hand, or (2) executing xpath expressions on the
           pointed at XML file. </li> 
@@ -34,7 +34,7 @@
     <section> 
       <title>Using Libre now (0.0 alfa)</title> 
       <warning>Disclaimer: most of what you read below is 'how it was intended'
-        . To what extend that matches the actual execution process is largely dependend
+        . To what extent that matches the actual execution process is largely dependent
         on my programming skills and thoroughness of testing. <br/>In other words:
         don't expect a thing unless you've seen it work. (at this time)</warning> 
       <section> 
@@ -67,10 +67,10 @@
       <section> 
         <title><code>libre.xml</code> Contents</title> 
         <p>That libre.xml file follows the
-          ./src/resources/schema/libre-v10.dtd. In fact the current release allows for
+          src/resources/schema/dtd/libre-v10.dtd. In fact the current release allows for
           some extra elements (I'll explain where) and some unrestricted attribute CDATA
           types that cause some extensible xml output resp. some java-introspection to be
-          triggered. So basically the DTD will be limiting you more then the runtime
+          triggered. So basically the DTD will be limiting you more than the runtime
           interpretation. (future versions will try to narrow this down seriously, main
           reason is that a more elaborate DTD allows for more XML-editor assistance in
           editing the files.)</p> 
@@ -128,7 +128,7 @@
               the output based on the fact if the location points to a directory resp. a
               file.</li> 
             <li>For locations that point to a filter it doesn't make sense, but
-              when it points to a directory it's nested <code>&lt;filter&gt;</code> and
+              when it points to a directory it is nested <code>&lt;filter&gt;</code> and
               <code>&lt;sort&gt;</code> elements get inherited down to the next level. </li> 
           </ul> 
           </ul> 
@@ -144,7 +144,7 @@
           </ul> 
           <source>&lt;filter logic="inverse" clear="no"&gt;</source> 
           <ul> 
-            <li>This element wraps a so called AttributeReader (there are
+            <li>This element wraps a so-called AttributeReader (there are
               currently two of them: <code>&lt;xpath&gt;</code> and
               <code>&lt;property&gt;</code>)</li> 
             <li>The AttributeReader is going to specify which
@@ -240,7 +240,7 @@
       </section> 
       <section> 
         <title>Important Side Effects</title> 
-        <p>A number of things libre is doing you should be aware off.</p> 
+        <p>There are some things that libre is doing that you should be aware of.</p> 
         <section> 
           <title>No libre.xml</title> 
           <p>When using an <code>&lt;auto&gt; </code>section, the filter will
@@ -363,7 +363,7 @@
           <li>xpath property reader needs to survive working on a non-xml
             document (by returning nothing rather then breaking on the exception)</li> 
           <li>general robustness and resilience towards
-            miss-configurations</li> 
+            mis-configurations</li> 
           <li>filestreams need to get closed and avalon resources need to be
             released properly</li> 
           <li>caching at the level of the generator needs to be set up</li> 
@@ -426,7 +426,7 @@
   &lt;/regexformatter&gt;
 &lt;/label&gt;</source> 
           <p>Allowing the formatter to be used around the xpath reader as well.
-            And opening up the possibility to maybe format other stuff then Strings:
+            And opening up the possibility to maybe format other stuff than Strings:
             <code>&lt;dateformat format="dd/mmm/yy"&gt; </code></p> 
           <p>It would also clearly distinguish the semantical difference of
             applying a test in the <code>&lt;filter&gt;</code> context:</p> 
@@ -458,8 +458,8 @@
               difference between all the get*Path methods on java.io.File?</li> 
           </ul> 
           <p>So the big idea here would be to go for an upfront declared list
-            of sensible and clearly defined properties we'ld like to read... Todays ideas
-            on that list:</p> 
+            of sensible and clearly defined properties that we would like to
+            read... Today's ideas about that list:</p> 
           <ul> 
             <li>name</li> 
             <li>isDirectory (isCollection?)</li> 
@@ -512,14 +512,14 @@
         some all-hierarchy-structures to SAX event thing, and since some of that is in
         here as well, we kind of picked that idea up out of the dustbin.</p> 
       <p>So reflecting the current packagenames we kind of have these sets of
-        responsabilities</p> 
+        responsibilities</p> 
       <ul> 
         <li><em>*.yer.hierarchy</em>: describe in a formal way how hierarchies
-          should be build up in order to have them dumped to XML using the
+          should be built up in order to have them dumped to XML using the
           HierarchyReader.</li> 
         <li><em>*.yer.use.cocoon</em>:house of the generator. It basically just
           gets a reader and subscribes the next ContentHandler in the cocoon pipeline to
-          the HierarchyReader it's using.</li> 
+          the HierarchyReader that it is using.</li> 
         <li><em>*.yer.impl</em>: hold the different implementations of the
           *.yer.hierarchy API </li> 
         <li><em>*.yer.impl.fs</em>: (only current impl) Build the described
