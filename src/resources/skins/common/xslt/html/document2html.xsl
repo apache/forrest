@@ -12,11 +12,8 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 
 Section handling
   - <a name/> anchors are added if the id attribute is specified
-  - generated anchors are still included for TOC - what should we do about this?
-  - FIXME: provide a generic facility to process section irrelevant to their
-    nesting depth
 
-$Id: document2html.xsl,v 1.4 2003/01/11 15:46:24 stevenn Exp $
+$Id: document2html.xsl,v 1.5 2003/01/12 16:00:38 stevenn Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -269,6 +266,8 @@ $Id: document2html.xsl,v 1.4 2003/01/11 15:46:24 stevenn Exp $
         <xsl:if test="@id">
           <xsl:value-of select="@id"/>
         </xsl:if>
+        <!-- these won't be used anymore since ids get added automatically based
+        on the title of the section -->
         <xsl:if test="not(@id)">
           <xsl:text>xpointer(</xsl:text>
           <xsl:for-each select="ancestor-or-self::*">
