@@ -67,9 +67,9 @@
        <body>
          <xsl:for-each select="h1">
            <section>
-      <xsl:if test="a/@name">
-        <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
-      </xsl:if>
+             <xsl:if test="a/@name">
+               <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
+             </xsl:if>
              <title><xsl:apply-templates/></title>
              <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
              <xsl:for-each select="key('h2s',generate-id(.))">

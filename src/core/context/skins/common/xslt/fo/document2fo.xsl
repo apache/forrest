@@ -929,6 +929,14 @@
    </fo:inline>
  </xsl:template>
 
-
+ <xsl:template match="p[@class='quote']">
+   <fo:block start-indent="1em"
+     space-before="4pt"
+     space-after="4pt"
+     background-color="#f0f0f0"
+     font-family="monospace">
+     <xsl:apply-templates/>
+   </fo:block>
+ </xsl:template>
 
 </xsl:stylesheet>
