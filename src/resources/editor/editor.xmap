@@ -39,6 +39,19 @@
     <map:readers default="resource"/>
     <map:matchers default="wildcard"/>
     <map:selectors default="browser"/>
+    
+  <!--
+     The different pipeline implementations
+  -->
+  <map:pipelines default="caching">
+     <map:pipeline name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
+     <map:pipeline name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
+     <!-- The following two can be used for profiling:
+     <map:pipeline name="profile-caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
+     <map:pipeline name="profile-noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
+     -->
+  </map:pipelines>
+      
   </map:components>
 
   <map:views>
@@ -55,7 +68,7 @@
 
   <map:pipelines>
   
-    <map:pipeline internal-only="true" cacheable="true">
+    <map:pipeline internal-only="true">
 
    <!-- IMPORTANT! This pipeline sould be cachable -->
    <map:match pattern="*.grm">
