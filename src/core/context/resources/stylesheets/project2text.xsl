@@ -20,7 +20,7 @@
     | xmlns:for has to be replaced for the final version
     +-->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:for="http://xml.apache.org/forrest" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:for="http://apache.org/forrest" version="1.0">
 
 <xsl:import href="copyover.xsl"/>
 
