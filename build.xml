@@ -105,7 +105,15 @@
      These are the most common build targets.
      You can also invoke them directly; see build.xml for more info.
      Builds will be in /build directory, distributions in /dist.
+     
+     forrest-typical targets:
 
+     docs ------------- generates static Forrest website
+     webapp ----------- builds webapp (.war) deployable version of Forrest website
+     bot.run ---------- runs the forrestbot using the configuration specified in 
+                        forrestbot.conf.xml
+
+     default centipede targets:
 
      compile ---------- compiles the source code
      test ------------- performs the jUnit tests
@@ -547,7 +555,7 @@
     <property name="bot.build.dir" value="${build.dir}/bot"/>
     <property name="bot.work.build.xml" value="${bot.build.dir}/work.build.xml"/>
     <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
-    <property name="bot.forrestbot.xconf" value="forrestbot.xconf" />
+    <property name="bot.forrestbot.xconf" value="forrestbot.conf.xml" />
     <property name="bot.templates.build.xml" value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
     <property name="bot.work.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
     <property name="bot.default.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
@@ -555,8 +563,8 @@
   </target>
 
   <target name="bot.conf2build" depends="bot.init" >
-<!--        builds the different xml files this process needs.  -->
-  <style in="${bot.forrestbot.xconf}"
+    <!-- builds the different xml files this process needs.  -->
+    <style in="${bot.forrestbot.xconf}"
        out="${bot.work.build.xml}"
        style="${bot.work.builder.xslt}"/>
     <style in="${bot.forrestbot.xconf}"
@@ -583,7 +591,7 @@
   
   
   <!-- =================================================================== -->
-  <!-- Import Ant-Centipede init targets - sets up basic build stuff                          -->
+  <!-- Import Ant-Centipede init targets - sets up basic build stuff       -->
   <!-- =================================================================== -->
   <!--
         This is the target that initializes tasks and properties used

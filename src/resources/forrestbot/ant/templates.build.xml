@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project default="none" name="forrestbot-templates">
-  <!-- Some defaults that typically get set befor the template targets get called -->
+
+  <!--
+    Ant templates which are called from the generated work.build.xml file in which
+    most of the properties are set
+  -->
+
+  <!-- Some defaults that typically get set before the template targets are called -->
   <property name="bot.build.dir" value="build" />
   <property name="project.name" value="xml-forrest" />
-  <property name="template.echo" value="false" />
+  
+  <!--
+    <property name="template.echo" value="true" />
+    
+    uncomment this one or use -Dtemplate.echo=true at the commandline
+    if you want to know the configuration of each template
+  -->
 
-  <!-- Todo: cleanup the implicit dependency on being called from theµ
+  <!-- Todo: cleanup the implicit dependency on being called from the
        main ant script -->
-
-
 
   <target name="template.prepare">
     <echo message="prepare workstage for project ${project.name}"/>
@@ -31,8 +41,8 @@
     <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
          package="${get-src.cvs.module}/${get-src.cvs.dir}"
          dest="${bot.build.dir}/${project.name}/src"
-         quiet="false"
-    >
+         quiet="true"
+         >
       <commandline>
         <argument line="checkout -P"/>
       </commandline>
@@ -48,24 +58,27 @@
   </target>
 
   <target name="template.generate" depends="echo.generate">
+    <!-- FIXME: the Cocoon generation template doesn't work currently! -->
     <java classname="org.apache.cocoon.Main" fork="true" 
-                dir="${bot.build.dir}/${project.name}/src" failonerror="true"
-                classpathref="forrest.cp">
+          dir="${bot.build.dir}/${project.name}/src" failonerror="true"
+          classpathref="forrest.cp"
+          >
       <arg value="-c."/>
       <arg value="-d../docs"/>
       <arg value="-w../work"/>
       <arg value="-l../work/cocoon.log"/>
       <arg value="-u${generate.debuglevel}"/>
       <arg value="index.html"/>
-
     </java>
   </target>
 
   <target name="template.deploy.scp">
+    <!-- FIXME: not implemented yet -->
     <echo message="deploy workstage of type scp for project ${project.name}"/>
   </target>
 
   <target name="template.cleanup">
+    <!-- FIXME: not implemented yet -->
     <echo message="cleanup workstage for project ${project.name}"/>
   </target>
 
