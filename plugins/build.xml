@@ -35,7 +35,6 @@
   <property name="deploy.svn.user"            value=""/>
   <property name="deploy.svn.password"        value=""/>
   <property name="deploy.svn.url"             value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
-  <property name="deploy.svn.commit-message"  value="Automatic deployment from plugins build"/>
   <property name="deploy.svn.svn-dir"         location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.svn.svn-filestoadd"  location="build/svn-deploy.toadd"/>
   
@@ -95,8 +94,12 @@
     />
     
     <!-- copy new files into sandbox -->
-    <copy todir="${deploy.svn.svn-dir}" file="${plugins.dist-dir}/${plugin-name}.zip"/>
-    <copy todir="${deploy.svn.svn-dir}" file="${forrest.plugins.dir}/plugins.xml"/>
+    <copy todir="${deploy.svn.svn-dir}" 
+          overwrite="true" 
+          file="${plugins.dist-dir}/${plugin-name}.zip"/>
+    <copy todir="${deploy.svn.svn-dir}" 
+          overwrite="true"
+          file="${forrest.plugins.dir}/plugins.xml"/>
     
     <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
