@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.5 2004/01/11 23:24:00 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -32,10 +32,10 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/quirks.css"; 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/inst.css"; 
-          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/forrest.css"; 
          /*  ]]> */
         </style>
         <link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" />
+        <link rel="stylesheet" type="text/css" href="{$root}skin/forrest.css" />
         <script src="{$root}skin/tigris.js" type="text/javascript"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
@@ -113,11 +113,9 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
         
         <!-- ( =================  Search ================== ) -->        
         <td align="right" valign="top">
-          <!--
-            per default only navigation search is present
-            
           <xsl:if test="not($config/disable-search) or
-            $config/disable-search='false' and $config/searchsite-domain and
+            $config/disable-search='false' and not($config/disable-search='alt')
+            and $config/searchsite-domain and
             $config/searchsite-name">
             <div id="login" align="right" class="right">
              <form method="get" action="http://www.google.com/search" target="_blank">
@@ -133,7 +131,6 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
              </form>
           </div>
          </xsl:if>
-         -->
         </td>       
        </tr>   
       </table>  
@@ -236,10 +233,9 @@ $Id: site2xhtml.xsl,v 1.4 2003/12/30 00:04:35 nicolaken Exp $
 
     <!-- ( =================  Search ================== ) -->       
         
-   <xsl:if test="not($config/disable-search) 
-                 or $config/disable-search='false' 
-                 and $config/searchsite-domain 
-                 and $config/searchsite-name">
+   <xsl:if test="not($config/disable-search) or
+                 $config/disable-search='alt' and $config/searchsite-domain and
+                 $config/searchsite-name">
     <form action="http://www.google.com/search" method="get">
       <div id="searchbox" class="toolgroup">
        <div class="label"><strong>Search</strong></div>
