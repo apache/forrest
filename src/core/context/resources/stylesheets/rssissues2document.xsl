@@ -19,7 +19,7 @@
 <xsl:template match="rss">
   <document>
     <header>
-      <title>Open issues</title>
+      <title>Open issues for the upcoming release</title>
     </header>
     <body>
       <note>These are the open issues for our upcoming release listed in our
