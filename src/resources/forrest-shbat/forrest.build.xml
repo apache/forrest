@@ -301,7 +301,10 @@ FORREST SITE BUILDER
        param: name of the skin to use ${project.skin} (now)
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
-  <target name="bare-context" depends="init" >
+       <target name="bare-context" depends="init" >
+         <echo>____________________________________</echo>
+         <echo>Using skin ${project.skin}</echo>
+         <echo>____________________________________</echo>
     <filter token="skin"              value="${project.skin}" />
     <filter token="local-catalog"     value="${project.catalog}" />
     <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
@@ -741,7 +744,7 @@ Thanks for using Apache Forrest
 
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap">
-    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v05.rng">
+    <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${project.content-dir}"
         includes="${forrest.validate.sitemap.includes}"
         excludes="${forrest.validate.sitemap.excludes}"/>
