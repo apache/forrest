@@ -113,12 +113,12 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                         forrestPropertiesStringURI);
 
         // get default-forrest.properties and load the values
-        String defaultRorrestPropertiesStringURI = contextHome
+        String defaultForrestPropertiesStringURI = contextHome
                         + SystemUtils.FILE_SEPARATOR
                         + "default-forrest.properties";
 
         filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                        defaultRorrestPropertiesStringURI);
+                        defaultForrestPropertiesStringURI);
 
         loadSystemProperties(filteringProperties);
         ForrestConfUtils.aliasSkinProperties(filteringProperties);
