@@ -7,7 +7,7 @@ tab2menu.xsl
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:param name="site-file" select="'cocoon://abs-linkmap'"/>
+  <xsl:param name="site-file" select="'cocoon://abs-menulinks'"/>
   <xsl:variable name="site" select="document($site-file)"/>
  
   <!-- Given the current path and a tabs.xml entry, returns a relative path to
