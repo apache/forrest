@@ -36,8 +36,8 @@ Credit: original from the jakarta-avalon project
               <xsl:sort select="sequence" data-type="number" order="descending"/>
               <section>
                 <title><xsl:value-of select="level"/>: <xsl:value-of select="message"/></title>
-                <p>Logged By: <strong><xsl:value-of select="class"/>.<xsl:value-of select="method"/></strong></p>
-                <p>Logged At: <strong> <xsl:value-of select="date"/> (<xsl:value-of select="method"/>)</strong></p>
+                <p>Logged By: <strong><xsl:value-of select="class"/>.<xsl:value-of select="method"/>()</strong></p>
+                <p>Logged At: <strong> <xsl:value-of select="date"/> (<xsl:value-of select="millis"/>)</strong></p>
               </section>
             </xsl:for-each>
           </body>
