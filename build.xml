@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+<!-- ===========================================================================
+
+
+                   * ===================================== *
+                   |   Krysalis Centipede Build System     |
+                   * ===================================== *      
+                                     by               
+                                             
+                   Nicola Ken Barozzi <barozzi@nicolaken.com>
+		   Marc Johnson <mjohnson at apache dot org>       
+                     
+                   extends the Apache Cocoon Build System 
+                       (http://xml.apache.org/cocoon/)
+                                     by
+                   Stefano Mazzocchi <stefano@apache.org>
+                   Carsten Ziegeler <cziegeler@apache.org>
+                   
+-->    
+<!-- =================  Main project targets and info =================  -->
+<!ENTITY project-target     SYSTEM "./src/targets/project.xtarget"> 
+<!ENTITY interactive-target SYSTEM "./src/targets/interactive.xtarget"> 
+<!-- =================================================================== -->
+
+<!-- ======================  Scratchpad targets =======================  -->
+<!ENTITY scratchpad-target SYSTEM "./src/scratchpad/targets/scratchpad.xtarget"> 
+<!-- =================================================================== -->
+
+<!-- ========================  Contrib targets ========================  --> 
+<!ENTITY contrib-target SYSTEM "./src/contrib/targets/contrib.xtarget">
+<!-- =================================================================== -->
+
+<!-- ==================  Krysalis Centipede targets ===================  --> 
+<!ENTITY preinit-target SYSTEM "./tools/centipede/targets/preinit.xtarget"> 
+<!ENTITY init-target    SYSTEM "./tools/centipede/targets/init.xtarget"> 
+<!ENTITY compile-target SYSTEM "./tools/centipede/targets/compile.xtarget"> 
+<!ENTITY util-target    SYSTEM "./tools/centipede/targets/util.xtarget"> 
+<!ENTITY dev-target     SYSTEM "./tools/centipede/targets/dev.xtarget"> 
+<!ENTITY test-target    SYSTEM "./tools/centipede/targets/test.xtarget"> 
+<!ENTITY robot-target   SYSTEM "./tools/centipede/targets/robot.xtarget"> 
+<!ENTITY docs-target    SYSTEM "./tools/centipede/targets/docs.xtarget"> 
+<!-- =================================================================== -->
+]>
+
+<project default="interactive" basedir="." name="krysalis">
+<!--
+
+Installing the build tools
+==========================
+
+The Krysalis build system is based on Apache Ant, which is a Java building tool
+originally developed for the Tomcat project but now used in many other
+Apache projects and extended by many developers.
+
+Ant is a little but very handy tool that uses a build file written in XML
+(this file) as building instructions. For more information refer to
+"http://jakarta.apache.org/ant/".
+
+To make things easier for you, this distribution contains a precompiled
+version of Ant and the build scripts take care of running it.
+
+The only thing that you have to make sure, is the "JAVA_HOME" environment
+property should be set to match the JVM you want to use.
+
+That's all you have to do to be ready to go.
+
+
+Building instructions
+=====================
+
+First, make sure your current working directory is where this very file 
+is located. Then type
+
+  ./build.sh (unix)
+  .\build.bat (win32)
+
+if everything is right and all the required packages are visible, this action
+will start the build and prompt you with options.
+Note, that if you do further development, compilation time is reduced since
+Ant is able of detecting which files have changed and to recompile them at need.
+
+Also, you'll note that reusing a single JVM instance for each task, increases
+tremendously the performance of the whole build system, compared to other
+tools (i.e. make or shell scripts) where a new JVM is started for each task.
+
+
+Building on another directory
+=============================
+
+Sometimes you might want to build on an external directory to keep the
+distribution clean: no worries, this is just an environment property away.
+Suppose you want to use the "../build" directory instead, you simply tipe
+
+ [unix]  ./build.sh  -Dbuild.root=../build
+ [win32] .\build.bat -Dbuild.root=..\build
+
+By using the -Dxxx=yyy argument, you are setting environments in the JVM: Ant
+is designed to give higher priority to system environments to allow you to
+modify _any_ <property> that you can find in the building instructions below,
+so it's just a matter of understanding what property you want to change
+and you don't have to touch this file (which you shouldn't need to do).
+
+
+Build targets
+=============
+
+The build system is not only responsible of compiling the project into a jar 
+file, but is also responsible for creating the HTML documentation, javadocs,
+distributions and web site. In fact, the file you have here is _exactly_ what
+is used by project maintainers to take care of everything in the project,
+no less and no more.
+
+To know more about the available targets take a look at this file, which is
+pretty self-explanatory.
+To see al list of all targets, type
+
+ [unix]  ./build.sh  -projecthelp
+ [win32] .\build.bat -projecthelp
+
+
+Build Dependencies
+==================
+Some components are optional and require special jar files to be compiled
+and added to the application. Some of these jars are already included
+in the distribution while others not.
+For each optional package which is not available, a warning can be
+printed. If you don't like these warnings, specify the property "omit.opt.warnings"
+(build -Domit.opt.warnings).
+
+Distribution Version
+====================
+When preparing a distribution for release, specify the version ID on
+the command line: -Dversion="dev-1.2.1", for example.
+
+Specifying a subset of unit tests to be executed
+================================================
+Specify the package on the command line:
+-Dtest.specific="org.krysalis.p.testme" will select only the testme
+tests to be run. If you've run any other unit tests in a prior
+session, you'll need to specify the 'clean' target to remove
+extraneous test classes from execution:
+
+./build.sh clean test -Dtest.specific="org/krysalis/p/testme"
+
+or
+
+.\build.bat clean test -Dtest.specific="org/krysalis/p/testme"
+
+
+                              Happy hacking from the Dev Team :)
+
+============================================================================ -->
+
+ 
+  <!-- =================================================================== -->
+  <!-- external reference are relative to to **/*.xtarget;                 -->
+  <!-- see entity decalrations at the start of this file                   -->
+  <!-- =================================================================== -->  
+  <!-- Pre Initialization      -->  &preinit-target;  
+  <!-- =================================================================== -->  
+  <!-- Project targets         -->  &project-target;    
+  <!-- =================================================================== -->
+  <!-- Initialization targets  -->  &init-target;  
+  <!-- =================================================================== -->
+  <!-- Compile targets         -->  &compile-target;  
+  <!-- =================================================================== -->  
+  <!-- Interactive targets     -->  &interactive-target;  
+  <!-- =================================================================== -->
+  <!-- Scratchpad targets      -->  &scratchpad-target;
+  <!-- =================================================================== -->
+  <!-- Contrib targets         -->  &contrib-target;
+  <!-- =================================================================== -->
+  <!-- Utility  targets        -->  &util-target;  
+  <!-- =================================================================== -->
+  <!-- Developer targets       -->  &dev-target;  
+  <!-- =================================================================== -->
+  <!-- Testcases targets       -->  &test-target;
+  <!-- =================================================================== -->
+  <!-- "Scripts" targets       -->  &robot-target;
+  <!-- =================================================================== -->
+  <!-- Documentation targets   -->  &docs-target;  
+  <!-- =================================================================== -->
+  
+</project>
+
+<!-- End of file -->
