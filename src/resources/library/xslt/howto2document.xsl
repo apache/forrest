@@ -6,14 +6,24 @@
 
  <xsl:import href="copyover.xsl"/>
 
-  <xsl:template match="all">
+  <!-- Processing a raw howto without revisions -->
+  <xsl:template match="/howto">
+    <document>
+      <xsl:copy-of select="header"/>
+      <body>
+        <xsl:apply-templates/>
+      </body>
+    </document>
+  </xsl:template>
+
+  <!-- Processing a howto combined with revisions -->
+  <xsl:template match="/all">
    <document>
     <xsl:copy-of select="howto/header"/>
      <body>
         <xsl:apply-templates select="howto"/>
-     	<xsl:apply-templates select="revisions"/>
-	</body>
-  
+        <xsl:apply-templates select="revisions"/>
+     </body>
    </document>
   </xsl:template>
   
