@@ -22,7 +22,12 @@ FORREST SITE BUILDER
              Call this through the 'forrest' command
   </description>
   
-  
+  <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
+    <classpath>
+      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+    </classpath>
+  </taskdef>
+
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
@@ -76,14 +81,9 @@ FORREST SITE BUILDER
     <property name="project.schema-dir" value="${project.content-dir}/resources/schema" />
     <property name="project.skins-dir"   value="${project.content-dir}/skins" />
     <property name="project.skinconf"    value="${project.content-dir}/skinconf.xml" />
-    <available property="project.skinconf.present" file="${project.skinconf}" type="file"/>
     <property name="project.conf-dir"     value="${project.content-dir}/conf" />
     <property name="project.lib-dir"     value="${project.content-dir}/lib" />
     <property name="project.classes-dir" value="${project.content-dir}/classes" />
-
-    <property name="forrest.validate.failonerror" value="true" />
-    <property name="forrest.validate.includes" value="*.x*"/>
-    <property name="forrest.validate.excludes" value=""/>
 
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
@@ -93,16 +93,104 @@ FORREST SITE BUILDER
     <antcall target="echo-settings" />
   </target>
 
+  <target name="examine-proj" depends="init-props">
+    <available property="conf.present" file="${project.conf-dir}" type="dir"/>
+    <available property="sitemap.present" file="${project.sitemap}"/>
+    <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
+    <available property="images.present" file="${project.images-dir}" type="dir"/>
+    <available property="schema.present" file="${project.schema-dir}" type="dir"/>
+    <available property="stylesheets.present" file="${project.stylesheets-dir}" type="dir"/>
+    <available property="lib.present" file="${project.lib-dir}" type="dir"/>
+    <available property="classes.present" file="${project.classes-dir}" type="dir"/>
+    <available property="skins.present" file="${project.skins-dir}" type="dir"/>
+    <available property="skinconf.present" file="${project.skinconf}"/>
+    <available property="status.present" file="${project.status}"/>
+  </target>
+
+  <target name="validation-props" depends="examine-proj">
+    <!-- Validation flags -->
+
+    <property name="forrest.validate" value="true" />
+    <condition property="validate">
+      <istrue value="${forrest.validate}"/>
+    </condition>
+    <property name="forrest.validate.failonerror" value="true" />
+    <property name="forrest.validate.includes" value="**/*"/>
+    <property name="forrest.validate.excludes" value=""/>
+
+    <property name="forrest.validate.xdocs" value="${forrest.validate}"/>
+    <condition property="validate.xdocs">
+      <and>
+        <istrue value="${forrest.validate.xdocs}"/>
+        <isset property="xdocs.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.xdocs.includes" value="*.x*"/>
+    <property name="forrest.validate.xdocs.excludes" value=""/>
+    <property name="forrest.validate.xdocs.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skinconf" value="${forrest.validate}"/>
+    <condition property="validate.skinconf">
+      <and>
+        <istrue value="${forrest.validate.skinconf}"/>
+        <isset property="skinconf.present"/>
+      </and>
+    </condition>
+    <basename file="${project.skinconf}" property="skinconf-file}"/>
+    <property name="forrest.validate.skinconf.includes" value="${skinconf-file}"/>
+    <property name="forrest.validate.skinconf.excludes" value=""/>
+    <property name="forrest.validate.skinconf.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.stylesheets" value="${forrest.validate}"/>
+    <condition property="validate.stylesheets">
+      <and>
+        <istrue value="${forrest.validate.stylesheets}"/>
+        <isset property="stylesheets.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.stylesheets.excludes" value=""/>
+    <property name="forrest.validate.stylesheets.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skins" value="${forrest.validate}"/>
+    <condition property="validate.skins">
+      <and>
+        <istrue value="${forrest.validate.skins}"/>
+        <isset property="skins.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.skins.includes" value="**/*"/>
+    <property name="forrest.validate.skins.excludes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.failonerror"
+      value="${forrest.validate.failonerror}" />
+
+    <property name="forrest.validate.skins.stylesheets" value="${forrest.validate.skins}"/>
+    <condition property="validate.skins.stylesheets">
+      <and>
+        <istrue value="${forrest.validate.skins.stylesheets}"/>
+        <isset property="skins.present"/>
+      </and>
+    </condition>
+    <property name="forrest.validate.skins.stylesheets.includes" value="**/*.xsl"/>
+    <property name="forrest.validate.skins.stylesheets.excludes" value=""/>
+    <property name="forrest.validate.skins.stylesheets.failonerror"
+      value="${forrest.validate.skins.failonerror}" />
+  </target>
+
+
   <!-- Load properties from user's skinconf.xml, if it is defined -->
-  <target name="load-project-props" depends="init-props" if="project.skinconf.present">
+  <target name="load-project-props" depends="validation-props, validate-skinconf" if="skinconf.present">
     <xmlproperty file="${project.skinconf}" collapseattributes="true"
-      validate="true"/>
+      validate="${validate.skinconf}"/>
   </target>
 
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
-  <target name="load-forrest-props" depends="init-props" unless="project.skinconf.present">
+  <target name="load-forrest-props" unless="skinconf.present">
     <xmlproperty file="${forrest.home}/context/skinconf.xml"
-      collapseattributes="true" validate="true"/>
+      collapseattributes="true" validate="true"/> <!-- Assume Forrest skinconf is valid -->
   </target>
 
   <!-- Define filters equating to elements in the skinconf.xml file. Skins can
@@ -262,23 +350,9 @@ FORREST SITE BUILDER
     copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
-  <target name="project-context" depends="ensure-content, validate, init, bare-context, examine-proj, copy-conf, copy-sitemap,
+  <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-conf, copy-sitemap,
     copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
-
-  <target name="examine-proj">
-    <available property="conf.present" file="${project.conf-dir}" type="dir"/>
-    <available property="sitemap.present" file="${project.sitemap}"/>
-    <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
-    <available property="images.present" file="${project.images-dir}" type="dir"/>
-    <available property="schema.present" file="${project.schema-dir}" type="dir"/>
-    <available property="stylesheets.present" file="${project.stylesheets-dir}" type="dir"/>
-    <available property="lib.present" file="${project.lib-dir}" type="dir"/>
-    <available property="classes.present" file="${project.classes-dir}" type="dir"/>
-    <available property="skins.present" file="${project.skins-dir}" type="dir"/>
-    <available property="skinconf.present" file="${project.skinconf}"/>
-    <available property="status.present" file="${project.status}"/>
-  </target>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
@@ -588,12 +662,14 @@ Thanks for using Apache Forrest
     </echo>
   </target>
 
-  <!-- ===============================================================
-       Validates all XML documents in the projects-context dir.
-       =============================================================== -->
- <target name="validate" depends="init-props, examine-proj"
-   description="Validates XML doc files in the project">
-   <xmlvalidate failonerror="${forrest.validate.failonerror}" lenient="no" warn="yes">
+
+
+
+  <target name="validate" depends="validation-props, validate-xdocs, validate-skins,
+    validate-stylesheets"  description="Validates XML doc files in the project"/>
+
+  <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
+    <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
         <catalogfiles dir="${project.schema-dir}">
           <include name="catalog*"/>
@@ -603,21 +679,42 @@ Thanks for using Apache Forrest
         </catalogfiles>
       </xmlcatalog>
       <fileset dir="${project.xdocs-dir}"
-        includes="${forrest.validate.includes}"
-        excludes="${forrest.validate.excludes}">
-      </fileset>
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
-    <!-- validation of certain key files using RELAX NG -->
-    <echo message=" "/>
-    <echo message="Conducting RELAX NG validation of skinconf.xml"/>
-    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
-     <classpath>
-      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
-     </classpath>
-    </taskdef>
+    <echo message="...validated xdocs"/>
+  </target>
+
+  <target name="validate-skinconf" depends="validation-props"
+    if="validate.skinconf">
     <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
-     <fileset dir="${project.content-dir}" includes="**/skinconf.xml"/>
+      <fileset dir="${project.content-dir}"
+        includes="forrest.validate.skinconf.includes"
+        excludes="forrest.validate.skinconf.excludes"/>
     </jing>
+    <echo message="...validated skinconf"/>
+  </target>
+
+  <target name="validate-stylesheets" depends="validation-props"
+    if="validate.stylesheets">
+    <jing rngfile="${forrest.home}/context/resources/schema/relax/xslt.rng">
+      <fileset dir="${project.stylesheets-dir}"
+        includes="${forrest.validate.stylesheets.includes}"
+        excludes="${forrest.validate.stylesheets.excludes}" />
+    </jing>
+    <echo message="...validated stylesheets"/>
+  </target>
+
+  <target name="validate-skins" depends="validate-skins-stylesheets"/>
+
+  <target name="validate-skins-stylesheets" depends="validation-props"
+    if="validate.skins.stylesheets">
+    <jing rngfile="${forrest.home}/context/resources/schema/relax/xslt.rng">
+      <fileset dir="${project.skins-dir}"
+        includes="${forrest.validate.skins.stylesheets.includes}"
+        excludes="${forrest.validate.skins.stylesheets.excludes}"/>
+    </jing>
+    <echo message="...validated skin stylesheets"/>
   </target>
 
 </project>
