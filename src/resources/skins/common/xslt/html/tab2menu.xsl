@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
+$Id: tab2menu.xsl,v 1.4 2002/12/06 16:20:21 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -122,7 +122,17 @@ $Id: tab2menu.xsl,v 1.3 2002/11/17 00:00:02 jefft Exp $
 
   <!-- Called from 'selected' -->
   <xsl:template name="base-selected">
-    <xsl:value-of select="@label"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="unselected-tab-href">
+          <xsl:with-param name="tab" select="."/>
+          <xsl:with-param name="path" select="$path"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <font color="#000000">      
+        <xsl:value-of select="@label"/>
+      </font>        
+    </a>
   </xsl:template>
 
   <!-- Called from 'not-selected' -->
