@@ -16,7 +16,7 @@ Section handling
   - FIXME: provide a generic facility to process section irrelevant to their
     nesting depth
 
-$Id: document2html.xsl,v 1.1 2002/11/16 20:58:12 jefft Exp $
+$Id: document2html.xsl,v 1.2 2002/12/24 02:04:22 crossley Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -164,9 +164,20 @@ $Id: document2html.xsl,v 1.1 2002/11/16 20:58:12 jefft Exp $
 
   <xsl:template match="link">
     <xsl:apply-templates select="@id"/>
-    <a href="{@href}">
-      <xsl:apply-templates/>
-    </a>
+    <xsl:choose>
+      <xsl:when test="starts-with(@href, 'mailto:') and contains(@href, '@')">
+        <xsl:variable name="mailto-1" select="substring-before(@href,'@')"/>
+        <xsl:variable name="mailto-2" select="substring-after(@href,'@')"/>
+          <a href="{$mailto-1}.at.{$mailto-2}">
+            <xsl:apply-templates/>
+          </a>
+       </xsl:when>
+       <xsl:otherwise>
+          <a href="{@href}">
+            <xsl:apply-templates/>
+          </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="jump">
