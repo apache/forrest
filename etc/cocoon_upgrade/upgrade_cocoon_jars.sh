@@ -25,11 +25,11 @@ BASE=$PWD/`dirname $0`
 
 ## MUST BE OVERRIDDEN:
 COCOON_VERSION=2.2.0-dev
-COCOON_HOME=$BASE/cocoon/2.2
-FORREST=$BASE/forrest/van
+COCOON_HOME=$BASE/openSource/cocoon
+FORREST=$BASE/openSource/forrest
 
 ## CAN BE OVERRIDDEN:
-JARSUFFIX=${COCOON_VERSION}-r111170
+JARSUFFIX=${COCOON_VERSION}-r125082
 
 ## Not necessary, at least for Cocoon 2.2.x
 NEKODTD_VERSION=0.1.10

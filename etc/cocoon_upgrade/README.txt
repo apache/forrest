@@ -6,15 +6,15 @@ version of Cocoon.
 
 Latest Release of Cocoon that has been incorporated (svn info):
 
-  URL: http://svn.apache.org/repos/asf/cocoon/trunk
-  Repository UUID: 13f79535-47bb-0310-9956-ffa450edef68
-  Revision: 111170
-  Node Kind: directory
-  Schedule: normal
-  Last Changed Author: crossley
-  Last Changed Rev: 110094
-  Last Changed Date: 2004-12-06 22:48:05 -0800 (Mon, 06 Dec 2004)
-  Properties Last Updated: 2004-11-11 19:09:27 -0800 (Thu, 11 Nov 2004)
+URL: https://svn.apache.org/repos/asf/cocoon/trunk
+Repository UUID: 13f79535-47bb-0310-9956-ffa450edef68
+Revision: 125082
+Node Kind: directory
+Schedule: normal
+Last Changed Author: cziegeler
+Last Changed Rev: 125082
+Last Changed Date: 2005-01-13 16:00:06 +0000 (Thu, 13 Jan 2005)
+Properties Last Updated: 2005-01-12 20:34:35 +0000 (Wed, 12 Jan 2005)
 
 
 Instructions for use:

@@ -40,37 +40,40 @@
 </xsl:comment>
 <xsl:comment>
 =======================================================================
-File created by etc/cocoon_upgrade/upgrade-skinconf.xsl
+File created by etc/cocoon_upgrade/upgrade-cocoon-xconf.xsl
 Please do not Edit!!!!!
 ========================================================================
 </xsl:comment>
+
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="cocoon">
+  <xsl:template match="components">
+
     <xsl:copy>
-    <xsl:copy-of select="@*"/>
-    <xsl:apply-templates select="sitemap"/>
-    <xsl:apply-templates select="input-modules"/>
-    <xsl:apply-templates select="source-factories"/>
-    <xsl:apply-templates select="entity-resolver"/>
-    <xsl:apply-templates select="xml-parser"/>
-    <xsl:apply-templates select="xslt-processor"/>
-    <xsl:apply-templates select="component"/>
-    <xsl:apply-templates select="xpath-processor"/>
-    <xsl:apply-templates select="xmlizer"/>
-    <xsl:apply-templates select="transient-store"/>
-    <xsl:apply-templates select="store"/>
-    <xsl:apply-templates select="persistent-store"/>
-    <xsl:apply-templates select="store-janitor"/>
-    <xsl:apply-templates select="classloader"/>
-    <xsl:apply-templates select="xml-serializer"/>
-    <xsl:apply-templates select="xml-deserializer"/>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates select="include"/>
+      <xsl:apply-templates select="sitemap"/>
+      <xsl:apply-templates select="input-modules"/>
+      <xsl:apply-templates select="source-factories"/>
+      <xsl:apply-templates select="entity-resolver"/>
+      <xsl:apply-templates select="xml-parser"/>
+      <xsl:apply-templates select="xslt-processor"/>
+      <xsl:apply-templates select="component"/>
+      <xsl:apply-templates select="xpath-processor"/>
+      <xsl:apply-templates select="xmlizer"/>
+      <xsl:apply-templates select="transient-store"/>
+      <xsl:apply-templates select="store"/>
+      <xsl:apply-templates select="persistent-store"/>
+      <xsl:apply-templates select="store-janitor"/>
+      <xsl:apply-templates select="classloader"/>
+      <xsl:apply-templates select="xml-serializer"/>
+      <xsl:apply-templates select="xml-deserializer"/>
     </xsl:copy>
   </xsl:template>
 
   <!-- Whole elements trees that need to be copied as is -->
-  <xsl:template match="sitemap|component-instance|xml-parser|xslt-processor|xpath-processor|classloader|xml-serializer|xml-deserializer">
+  <xsl:template match="sitemap|component-instance|xml-parser|xslt-processor|xpath-processor|classloader|xml-serializer|xml-deserializer|include">
     <xsl:copy>
     <xsl:copy-of select="@*"/>
     <!-- FIXME: remove comment() elements -->
