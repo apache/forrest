@@ -252,8 +252,13 @@ public class IdGeneratorTransformer
      * @return A hash of the element and id parameters, thus uniquely
      * identifying this IdGenerator amongst it's peers.
      */
-    public Serializable generateKey() {
+    public Serializable getKey() {
         return ""+HashUtil.hash(this.elementXPath+this.idXPath);
+    }
+
+    // for backwards-compat
+    public Serializable generateKey() {
+      return getKey();
     }
 
 

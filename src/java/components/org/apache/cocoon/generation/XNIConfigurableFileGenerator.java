@@ -101,8 +101,8 @@ import java.io.IOException;
  *   like the JaxpParser) can be built to do this.  Then the complete
  *   parser can be recycled.
  *
- * @author $Author: stevenn $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.1 2003/04/18 06:46:09 stevenn Exp $
+ * @author $Author: jefft $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.2 2003/04/19 09:28:16 jefft Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
@@ -175,8 +175,13 @@ extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
    * @return The generated key or <code>0</code> if the component
    *              is currently not cacheable.
    */
-  public java.io.Serializable generateKey() {
+  public java.io.Serializable getKey() {
     return this.inputSource.getURI();
+  }
+
+  // For backwards-compat with old versions of Cocoon
+  public java.io.Serializable generateKey() {
+    return getKey();
   }
 
   /**
@@ -187,11 +192,16 @@ extends ComposerGenerator implements CacheableProcessingComponent, Recyclable
    * @return The generated validity object or <code>null</code> if the
    *         component is currently not cacheable.
    */
-  public SourceValidity generateValidity() {
+  public SourceValidity getValidity() {
     if (this.inputSource.getLastModified() != 0) {
       this.inputSource.getValidity();
     }
     return null;
+  }
+
+  // For backwards-compat with old versions of Cocoon
+  public SourceValidity generateValidity() {
+    return getValidity();
   }
 
   /**

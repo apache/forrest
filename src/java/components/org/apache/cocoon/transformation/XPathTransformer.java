@@ -123,7 +123,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.5 2003/03/17 07:39:33 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.6 2003/04/19 09:28:16 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
@@ -406,8 +406,12 @@ public class XPathTransformer
      * @return A hash of the include and exclude parameters, thus uniquely
      * identifying this XPathTransformer amongst it's peers.
      */
-    public Serializable generateKey() {
+    public Serializable getKey() {
         return ""+HashUtil.hash(this.include+this.exclude);
+    }
+    // For backwards-compat
+    public Serializable generateKey() {
+      return getKey();
     }
 
     /**
@@ -416,8 +420,13 @@ public class XPathTransformer
      * @return An "always valid" SourceValidity object. This transformer has no
      * inputs other than the incoming SAX events.
      */
-    public SourceValidity generateValidity() {
+    public SourceValidity getValidity() {
         return new NOPValidity();
+    }
+
+    // for backwards-compat
+    public SourceValidity generateValidity() {
+      return getValidity();
     }
 
     /**
