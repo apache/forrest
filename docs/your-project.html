@@ -1418,12 +1418,18 @@ project.skinconf=${project.content-dir}/skinconf.xml
      &lt;/target&gt;
 &lt;/project&gt;
         </pre>
-<p>(Note: That technique requires Ant 1.6+ otherwise the &lt;import&gt;
+<p>Because you are using your own version
+      of Ant to do Forrest's work, you will need to provide the
+      supporting catalog entity resolver:
+      '<span class="codefrag">cp forrest/lib/xml-commons-resolver-1.1.jar $ANT_HOME/lib</span>'
+      </p>
+<p>Note: The technique described above requires Ant 1.6+ otherwise
+        the &lt;import&gt;
         task will not be available for you to use. Forrest
         bundles the latest version of Ant, so you can invoke your project
-        like this: <span class="codefrag">forrest -f myproject.xml</span>.
-        This will not run forrest; it will just use Forrest's Ant to execute
-        your buildfile.)
+        like this: '<span class="codefrag">forrest -f myproject.xml</span>'.
+        This will not run the '<span class="codefrag">forrest</span>' command. It will just
+        use Forrest's Ant and resolver to execute your buildfile.
       </p>
 <p>
         Another option is to use the Forrest Antlet from the Krysalis Project's <a class="external" href="http://antworks.sourceforge.net/importer/">Antworks Importer</a>.
