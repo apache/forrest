@@ -7,11 +7,12 @@
   <!-- ================== -->
   <target name="prepare-docs" depends="init">
 
-    <property name="centipede.tools.cents.forrest.loglevel" value="INFO"/> 
+    <property name="centipede.tools.cents.forrest.loglevel" value="WARN"/> 
     <property name="use.skin" value="forrest-site"/> 
     
     <property name="documentation.source.dir" value="${context.dir}"/>     
     
+    <echo>Running docs generation from: ${documentation.source.dir}.</echo>
     
     <!-- define filters -->     
     <filter token="skin"              value="${use.skin}"/>
@@ -143,7 +144,9 @@
           depends="making-docs"
           description="* Generates the documentation">
 
-    <java classname="org.apache.cocoon.Main" fork="true" dir="${build.context}" failonerror="true">
+    <property name="${dir.containing.docs}" value="${build.context}"/>
+
+    <java classname="org.apache.cocoon.Main" fork="true" dir="${dir.containing.docs}" failonerror="true">
       <arg value="-c."/>
       <arg value="-d../docs"/>
       <arg value="-w../work"/>
