@@ -51,6 +51,7 @@ That should be passed to here with -Dproject.home
     <property file="${project.home}/forrest.properties" />
 
     <property name="project.site-dir"    value="${project.home}/build/site"    />
+    <property name="project.war"         value="${project.home}/build/my-project.war" />
     <property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
 
     <property name="project.temp-dir"    value="${project.home}/build/tmp"     />
@@ -312,29 +313,45 @@ That should be passed to here with -Dproject.home
 
   <!-- ===============================================================
        Builds a cocoon webapp for your project based on the siteplan.
-       param: location of siteplan ${forrest.siteplan}
-       param: location to put generated war ${forrest.out.war}
+       param: location of siteplan ${project.siteplan}
+       param: location to put generated war ${project.war}
        =============================================================== -->
   <target name="webapp" depends="init, prepare-context">
-    <echo>
-      TODO... COMPLETE THIS:
-      ... this should just war up the prepared context dir.
-    </echo>
+    <!-- this will need revisions in the case of the siteplan
+         extra project-custom classes then will need to be warred in as well. -->
+    <war warfile="${project.war}"
+         webxml="${forrest.home}/WEB-INF/web.xml"
+         compress="true">
+      <fileset dir="${project.ctxt-dir}" >
+        <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
+      </fileset>
+      <webinf  dir="${forrest.home}/WEB-INF" >
+        <include name="*.xconf" />
+      </webinf>
+      <lib     dir="${forrest.home}/WEB-INF/lib"     />
+      <classes dir="${forrest.home}/WEB-INF/classes/"/>
+    </war>
   </target>
 
 
   <!-- ===============================================================
-       Validates all XML documents in the projects-
-       param: location of siteplan ${forrest.siteplan}
-       param: location to put generated war ${forrest.out.war}
-       =============================================================== -->
-  <target name="validate-docs" depends="init, prepare-context">
-    <echo>
-      TODO... COMPLETE THIS:
-      ... this should validate the project-content-dir.
-    </echo>
-  </target>
+       Validates all XML documents in the projects-context dir.
+       param: location of siteplan ${forrest.siteplan} (future)
 
+       TODO: based on the siteplan we could produce also the special 
+       inline catalog format this task is needing. (in combination with 
+       the new <import> of ant that could be really snap)
+       =============================================================== -->
+  <target name="validate" depends="init, prepare-context, prepare-classpath">
+    <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
+       className="org.apache.xerces.parsers.SAXParser"
+       classpathref="forrest.cp">
+       <fileset dir="${project.ctxt-dir}">
+         <include name="*.x*" />
+         <exclude name="*build.xml"/>
+      </fileset>
+    </xmlvalidate>
+  </target>
 
 
 <!-- ***************************************************************** -->
@@ -363,16 +380,10 @@ That should be passed to here with -Dproject.home
         dependend task for doing that alone.
         >>> filling this with stuff from smart acorn.xml idea.
        =============================================================== -->
-  <target name="fresh-project">
-  <!--
-          depends="fresh-xdocs, fresh-skin, fresh-descriptors, fresh-build" />
-
-  -->
-    <echo>
-      TODO: COMPLETE THIS....
-      with the various dependencies....
-      should be using some mechanism in the ant unzip task so we NEVER overwrite content already present in the PROJECT.HOME! (probably exists on unzip task)
-    </echo>
+  <target name="seed">
+    <unzip src="${forrest.home}/fresh-site.zip" 
+           dest="${project.home}"
+           overwrite="false"                       />
   </target>
 
 
@@ -434,7 +445,6 @@ That should be passed to here with -Dproject.home
     <!-- delegates to the generated XML file -->
     <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
   </target>
-
 
 
 </project>
