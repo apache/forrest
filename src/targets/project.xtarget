@@ -36,19 +36,33 @@
 
    
     <!-- make filtered copy of XML docs -->
+    <copy todir="${build.context}" filtering="on" overwrite="true">
+      <fileset dir="${documentation.source.dir}" casesensitive="no">
+        <include name="**/*.x*"/>
+      </fileset>
+    </copy>
+
+    <!-- make non filtered copy of images -->
+    <copy todir="${build.context}" filtering="off">
+      <fileset dir="${documentation.source.dir}" casesensitive="no">
+        <exclude name="**/*.x*"/>
+      </fileset>
+    </copy>
+        
+<!--        
     <copy todir="${build.context}/content/xdocs/" filtering="on" overwrite="true">
       <fileset dir="${documentation.source.dir}/xdocs/" casesensitive="no">
         <include name="**/*.x*"/>
       </fileset>
     </copy>
 
-    <!-- make non filtered copy of images -->
     <copy todir="${build.context}/resources/images/" filtering="off">
       <fileset dir="${documentation.source.dir}/images/" casesensitive="no">
         <exclude name="**/*.x*"/>
       </fileset>
     </copy>
-        
+             
+-->
     <!-- Copy entity catalog and entities -->
     <copy todir="${build.context}/resources/schema" filtering="on">
       <fileset dir="${resource.dir}/schema"/>
