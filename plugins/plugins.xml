@@ -18,29 +18,134 @@
   <!ENTITY % links.att 'name CDATA #REQUIRED'>
   <!ENTITY % link.att 'name CDATA #REQUIRED href CDATA #REQUIRED'>
   <!ELEMENT plugins (plugin*)>
-  <!ELEMENT plugin (description)>
+  <!ELEMENT plugin (description, forrestVersion)>
   <!ATTLIST plugin name CDATA #REQUIRED
+                 type (input|output|internal) #REQUIRED
                  url  CDATA #REQUIRED
                  author CDATA #REQUIRED
-                 website CDATA #IMPLIED>
+                 website CDATA #IMPLIED
+                 version CDATA #IMPLIED>
   <!ELEMENT description (#PCDATA)>
+  <!ELEMENT forrestVersion (#PCDATA)>
   ]>
   
 <plugins>
-  
+
+<!-- ================================================================== -->
+<!-- Input Plugins                                                      -->
+<!-- ================================================================== -->  
+
   <plugin name="feeder"
+        type="input"
         author="Ross Gardler"
         website="http://www.burrokeet.org"
-        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/">
+        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/"
+        version="0.1-dev">
     <description>
       Embed syndicated content in a Forrest site. 
     </description>
+    <forrestVersion>0.7</forrestVersion>
   </plugin>
   
-  <plugin name="IMSManifest"
+  <plugin name="OpenOffice.org"
+        type="input"
+        author="Apache Forrest Project"
+        website="http://forrest.apache.org/plugins/OpenOffice.org"
+        url="http://www.apache.org/plugins/"
+        version="0.7-dev">
+    <description>
+      Embed OpenOffice.org application content in a Forrest site. 
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+  
+  <plugin name="simplified-docbook"
+        type="input"
+        author="Apache Forrest Project"
+        website="http://forrest.apache.org/plugins/simplified-docbook"
+        url="http://www.apache.org/plugins/"
+        version="0.7-dev">
+    <description>
+      Support of Simplified Docbook files.
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>  
+  
+  <plugin name="wiki"
+        type="input"
+        author="Apache Forrest Project"
+        website="http://forrest.apache.org/plugins/wiki"
+        url="http://www.apache.org/plugins/"
+        version="0.7-dev">
+    <description>
+      Embed various wiki documents in a Forrest site. 
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+
+<!-- ================================================================== -->
+<!-- Output Plugins                                                     -->
+<!-- ================================================================== -->
+  
+  <plugin name="htmlArea"
+        type="output"
         author="Ross Gardler"
-        website="http://www.burrakeet.org"
-        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/">
+        website="http://www.burrokeet.org"
+        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/"
+        version="0.1-dev">
+    <description>
+      WYSIWYG editing (requires Forrest ro be running dynamically). 
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+  
+  <plugin name="org.apache.forrest.plugin.pdf-output"
+        type="output"
+        author="Apache Forrest Project"
+        website="http://forrest.apache.org"
+        url="http://www.apache.org/plugins/"
+        version="0.7">
+    <description>
+      Allow Forrest documents to be output in PDF format. 
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+  
+  <plugin name="org.apache.forrest.plugin.fbits"
+        type="output"
+        author="Apache Forrest Project"
+        website="http://forrest.apache.org"
+        url="http://www.apache.org/plugins/"
+        version="0.1-dev">
+    <description>
+      Allow Forrest documents to output fbits that are used in e.g. leather. 
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+  
+  <plugin name="s5"
+        type="output"
+        author="Ross Gardler"
+        website="http://forrest.apache.org/~rgarlder/testingGround/forrestPlugins/s5"
+        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/"
+        version="0.1-dev">
+    <description>
+      Create S5: A Simple Standards-Based Slide Show System presentations
+      from xdocs.
+    </description>
+    <forrestVersion>0.7</forrestVersion>
+  </plugin>
+  
+  <!-- ================================================================== -->
+  <!-- Internal Plugins                                                   -->
+  <!-- ================================================================== -->
+  
+  <plugin name="IMSManifest"
+        type="internal"
+        author="Ross Gardler"
+        website="http://forrest.apache.org/plugins/IMSManifest"
+        url="http://www.apache.org/plugins/"
+        version="0.1-dev">
 
     <description>
       Use an IMS Manifest file to manage site structure. Generates site.xml and
@@ -48,23 +153,7 @@
       
       Also enables content in one Content Packge to be embedded in another.
     </description>
+    <forrestVersion>0.7</forrestVersion>
   </plugin>
   
-  <plugin name="OpenOffice.org"
-        author="Apache Forrest Project"
-        website="http://forrest.apache.org/plugins/OpenOffice.org"
-        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/">
-    <description>
-      Embed OpenOffice.org application content in a Forrest site. 
-    </description>
-  </plugin>
-  
-  <plugin name="simplified-docbook"
-        author="Apache Forrest Project"
-        website="http://forrest.apache.org/plugins/simplified-docbook"
-        url="http://www.apache.org/~rgardler/testingGround/forrestPlugins/">
-    <description>
-      Support of Simplified Docbook files.
-    </description>
-  </plugin>
 </plugins>
