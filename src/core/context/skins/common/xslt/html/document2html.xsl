@@ -34,7 +34,8 @@ $Id: document2html.xsl,v 1.4 2004/01/13 08:19:53 nicolaken Exp $
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- the skinconf file -->
-  <xsl:variable name="config" select="//skinconfig"/>
+  <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
+  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
   
   <!-- If true, a PDF link for this page will not be generated -->
   <xsl:variable name="disable-pdf-link" select="$config/disable-pdf-link"/>
