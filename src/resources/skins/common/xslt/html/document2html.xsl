@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.9 2003/01/27 08:05:50 jefft Exp $
+$Id: document2html.xsl,v 1.10 2003/02/05 13:15:25 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -82,7 +82,7 @@ $Id: document2html.xsl,v 1.9 2003/01/27 08:05:50 jefft Exp $
       <td align="center" width="80" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
           <img border="0" src="{$skin-img-dir}/printer.gif" alt="printer"/><br/>
           print-friendly<br/>
-          version</a>
+          PDF</a>
       </td>
     </xsl:if>
   </xsl:template>
