@@ -204,7 +204,7 @@ function getCrumbTrail( crumbs )
 	for( var i = 0; i < crumbs.length; i++ )
 	{
 		xhtml += '<a class="toplink" href="' + crumbs[i][1] + '" >';
-		xhtml += sentenceCase( crumbs[i][0] ) + '</a>';
+		xhtml += unescape( crumbs[i][0] ) + '</a>';
 		if( i != (crumbs.length-1) )
 		{
 			xhtml += DISPLAY_SEPARATOR;
