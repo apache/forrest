@@ -10,7 +10,7 @@ ext: return the last extension of the filename in a path
 filename-noext: return the file part of a path without its last extension
 
 @author Jeff Turner <jefft@apache.org>
-$Id: pathutils.xsl,v 1.2 2002/11/09 05:10:41 jefft Exp $
+$Id: pathutils.xsl,v 1.2.2.1 2002/11/22 12:50:56 jefft Exp $
 -->
 
 <!-- Returns the directory part of a path.  Equivalent to Unix 'dirname'.
@@ -97,6 +97,20 @@ Examples:
   <xsl:value-of select="substring($filename, 1, string-length($filename) - string-length($ext))"/>
 </xsl:template>
 
+<!-- Returns a path with the filename stripped of its last extension.
+Examples:
+'foo/bar/index.dtdx.html' -> 'foo/bar/index.dtdx'
+-->
+<xsl:template name="path-noext">
+  <xsl:param name="path"/>
+  <xsl:variable name="ext">
+    <xsl:call-template name="ext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:value-of select="substring($path, 1, string-length($path) - string-length($ext))"/>
+</xsl:template>
+
 <!--
 Uncomment this to test.
 Usage: saxon pathutils.xsl pathutils.xsl path=foo/bar
@@ -115,6 +129,9 @@ Usage: saxon pathutils.xsl pathutils.xsl path=foo/bar
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
     filename-noext= <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+    path-noext= <xsl:call-template name="path-noext">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:message>

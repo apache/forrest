@@ -10,6 +10,12 @@
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:variable name="path-noext">
+    <xsl:call-template name="path-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:template match="book">
     <div class="menuBar">
       <xsl:apply-templates select="menu"/>
@@ -25,8 +31,14 @@
 
   <xsl:template match="menu-item">
     <div class="menuItem">
+      <xsl:variable name="href-noext">
+        <xsl:call-template name="path-noext">
+          <xsl:with-param name="path" select="@href"/>
+        </xsl:call-template>
+      </xsl:variable>
+
        <xsl:choose>
-        <xsl:when test="starts-with(@href, $filename-noext)">
+        <xsl:when test="$href-noext = $path-noext">
           <span class="menuSelected"><xsl:value-of select="@label"/></span>
         </xsl:when>
         <xsl:otherwise>
