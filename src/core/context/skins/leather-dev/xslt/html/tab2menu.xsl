@@ -43,11 +43,11 @@ which is then merged by site2xhtml.xsl
   <xsl:import href="../../../common/xslt/html/tab2menu.xsl"/>
 
   <xsl:template match="tabs">
-  	<ul id="tabs">
+  	<ul id="nav-main">
   		<xsl:call-template name="base-tabs"/>
   	</ul>
     <xsl:if test="tab[@dir=$longest-dir]/tab">
-      <div id="level2tabs">
+      <div id="nav-main-level2tabs">
         <xsl:call-template name="level2tabs"/>
       </div>
     </xsl:if>

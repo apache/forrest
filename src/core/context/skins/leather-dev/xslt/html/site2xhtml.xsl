@@ -103,7 +103,13 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+Default site structure
   +++++++++++++++++++++++++++
      +=========================+
-     |       branding          |
+     |    intro-branding       |
+     +=========================+
+     +=========================+
+     |       main              |
+     +=========================+
+     +=========================+
+     |       outro             |
      +=========================+
      +++++++++++++++++++++++++++
      +-->
@@ -170,50 +176,40 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |end Project Logo
     +</xsl:comment> 
 
+
         <xsl:if 
             test="$config/search and not($config/search/@box-location = 'alt')">
 <xsl:comment>+
     |start Search
     +</xsl:comment> 
-            <div class="searchbox">
-        <div id="roundtopsmall">
-            <img 
-                src="{$skin-img-dir}/rc-t-l-5-1body-2searchbox-3searchbox.png" 
-                alt="" width="5" height="5" class="cornersmall" 
-                style="display: none" />
-        </div>
-                <form method="get" action="http://www.google.com/search"> 
+             <div class="search-input">
+                <form class="roundtopsmall" method="get" action="http://www.google.com/search"> 
                     <input type="hidden" 
-                    name="sitesearch" value="{$config/searchsite-domain}"/> 
+                    name="sitesearch" value="{$config/search/@domain}"/> 
                     <input type="text" id="query" name="q" size="15" 
                     value="Search the site:" 
                     onFocus="getBlank (this, 'Search the site:');"/>&#160; 
                     <input type="submit" value="Search" name="Search"/> </form>
-            <!--div id="roundbottomsmall">
-            <img 
-                src="{$skin-img-dir}/rc-b-l-5-1body-2menu-3menu.png" 
-                alt="" width="5" height="5" class="cornersmall" 
-                style="display: none" />
-        </div-->
             </div>
 <xsl:comment>+
     |end search
     +</xsl:comment> 
         </xsl:if>
-      </div>
 <div id="nav">
 <xsl:comment>+
     |start Tabs
     +</xsl:comment>
-	<ul id="nav-main">
-        <xsl:apply-templates select="ul[@id='tabs']/*"/>
-	</ul>
-         <xsl:apply-templates select="div[@id='level2tabs']"/>
+        <xsl:apply-templates select="ul[@id='nav-main']"/>       
 <xsl:comment>+
     |end Tabs
     +</xsl:comment>
 </div>
-        <div id="branding-published">
+      </div>
+	<!--+
+  |centerstrip with menu and mainarea
+  +-->
+        <div id="branding-tagline">
+<xsl:apply-templates select="div[@id='nav-main-level2tabs']"/>
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
               //  -->]]></script>
@@ -233,9 +229,6 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         </xsl:otherwise>
 </xsl:choose>
 </div>  
-	<!--+
-  |centerstrip with menu and mainarea
-  +-->
 
        
 
@@ -368,7 +361,7 @@ document.write("Last Published: " + document.lastModified);
 <xsl:comment>+
     |start Menu
     +</xsl:comment>
-   <div id="nav-section">
+   <div id="nav-section" class="roundbottom">
 <!--menu - inner-->	
             <xsl:for-each select = "div[@id='menu']/ul/li">
               <xsl:call-template name = "innermenuli" >
@@ -379,8 +372,9 @@ document.write("Last Published: " + document.lastModified);
 			<xsl:apply-templates select="div[@id='menu']/*" />
 		-->
 <!--credits-->
-	<div id="siteinfo-credits">
+
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
+           <div id="siteinfo-credits">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
                   <xsl:variable name="url" select="url"/>
@@ -400,13 +394,10 @@ document.write("Last Published: " + document.lastModified);
                     </img>
                   </a>
                 </xsl:for-each>
+	       </div>
               </xsl:if>
-		</div>
-        <div id="roundbottom">
-            <img 
-                src="{$skin-img-dir}/rc-b-l-15-1body-2menu-3menu.png" 
-                alt="" width="15" height="15" class="corner" 
-                style="display: none" />
+
+        <div class="roundbottom-left">&#160;
         </div>
         <xsl:comment>+
   |alternativ credits
