@@ -16,13 +16,13 @@ NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
 JARSUFFIX=`date +%Y%m%d`
-JARSUFFIX=m2
+#JARSUFFIX=m2
 
 ## Decide what kind of update to perform.  'real' copies upgraded jars to
 ## lib/core/, whereas 'testing' copies them to the distribution in
 ## build/dist/shbat/*
 UPGRADE_TYPE=testing
-UPGRADE_TYPE=real
+#UPGRADE_TYPE=real
 #
 ######################################################################
 
@@ -65,30 +65,21 @@ function copy()
   pushd . 
   cd $FLIB
   rm $1*
-
   cp $CLIB/$1* .
-
-  if [ "$UPGRADE_TYPE" = "real" ]; then
-    echo "cvs add -kb `echo $1*`"
-  fi
   popd
 }
 
+# Copy a block's compiled jar
 function bzcopy()
 {
   pushd . 
   cd $FLIB
   rm cocoon-$1-block-*.jar
-
   cp $CBLOCKS/$1-block.jar cocoon-$1-block-$JARSUFFIX.jar
-
-  if [ "$UPGRADE_TYPE" = "real" ]; then
-    echo "CVS adding `echo cocoon-$1-block-*.jar`"
-  fi
-
   popd
 }
 
+# Copy across a block's jar dependencies
 function bcopy()
 {
   rm $FLIB/$1*
@@ -100,13 +91,8 @@ function upgrade_neko()
   pushd . 
   cd $FLIB
   rm neko{dtd,pull}*
-
   cp $NEKODTD_HOME/nekodtd.jar nekodtd-$NEKODTD_VERSION.jar
   cp $NEKOPULL_HOME/nekopull.jar nekopull-$NEKOPULL_VERSION.jar
-
-  if [ "$UPGRADE_TYPE" = "real" ]; then
-    echo "cvs add -kb `echo neko{dtd,pull}-*`"
-  fi
   popd
 
 }
@@ -119,11 +105,7 @@ function upgrade_endorsed()
 
   cp $CLIB/{xalan,xerces,xml-apis}* .
 
-  if [ "$UPGRADE_TYPE" = "real" ]; then
-    echo "cvs add -kb `echo {xalan,xerces,xml-apis}*`"
-  fi
   popd
-
 }
 
 
@@ -233,7 +215,13 @@ if [ "$UPGRADE_TYPE" = "real" ]; then
   UPDATEFILE=/tmp/forrest-updates
   cvs -n up > $UPDATEFILE
   # Add new jars
+  echo "Marking new files for addition to CVS..."
   cat $UPDATEFILE | grep ^\? | cut -d\  -f 2 | xargs cvs add -kb
   # Remove old jars
+  echo "Marking removed files for deletion from CVS..."
   cat $UPDATEFILE | grep ^U | cut -d\  -f 2 | xargs cvs remove -f
 fi
+
+echo "All done.  Upgraded Cocoon jars copied to:"
+echo "  $FLIB"
+echo "  $FLIB_ENDORSED"
