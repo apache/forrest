@@ -5,74 +5,26 @@
   <property environment="ENV"/>
   <property name="forrest.home" location="${ENV.FORREST_HOME}"/>
   <property name="bot.home" location="${forrest.home}/../../../scratchpad/forrestbot2"/>
-  <!--<property name="bot.home" location="${forrest.home}/forrestbot2"/>-->
+  <!--<property name="bot.home" location="${forrest.home}/forrestbot"/>-->
+
   <import file="${forrest.home}/forrest.build.xml"/>
 
-  <!--<import file="${bot.home}/rebuild-forrest.xml"/>-->
-  <import file="${bot.home}/core/cvs.xml"/>
-  <import file="${bot.home}/core/local.xml"/>
-  <import file="${bot.home}/core/email.xml"/>
+  <!-- include workstage implementations -->
+  <import file="${bot.home}/core/getsrc.xml"/>
+  <import file="${bot.home}/core/build.xml"/>
+  <import file="${bot.home}/core/deploy.xml"/>
+  <import file="${bot.home}/core/notify.xml"/>
 
-  <property name="administrator"  value="jefft@apache.org"/>
-  <property name="build.work-dir"         location="work/${ant.project.name}"/>
-  <property name="build.site-dir"         location="work/${ant.project.name}/site"/>
-  <property name="build.deploy-dir"       location="sites/${ant.project.name}"/>
-  
-  <tstamp>
-    <format property="logtime" pattern="yyMMdd-hhmm"/>
-  </tstamp>
+  <!-- default implmentations for each workstages -->
+  <target name="getsrc" depends="getsrc.cvs"/>
 
-  <property name="build.log-dir" location="logs"/>
-  <mkdir dir="${build.log-dir}"/>
-  <property name="build.logfile" location="${build.log-dir}/${ant.project.name}.log"/>
-  <property name="build.logfile-stored" location="${build.log-dir}/${ant.project.name}-${logtime}.log"/> 
+  <target name="build" depends="build.forrest"/>
 
-  <property name="mail.host" value="localhost"/>
-  <property name="mail.to"   value="${user.name}@localhost"/>
+  <target name="deploy" depends="deploy.local"/>
 
-  <target name="getsrc" depends="cvs.getsrc"/>
+  <target name="notify" depends="notify.local"/>
 
-  <target name="site" depends="getsrc">
-
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-      <classpath>
-        <pathelement location="${bot.home}/lib/ant-contrib-0.5.jar"/>
-      </classpath>
-    </taskdef>
-
-    <trycatch property="errmsg">
-      <try>
-        <record name="${build.logfile}" action="start"/>
-        <echo>
-          ....... Forrest render START
-          ... Rendering docs in ${build.work-dir}
-        </echo>
-        <antcall target="forrest.site" inheritAll="false">
-          <param name="project.home" value="${build.work-dir}"/>
-          <param name="project.build-dir" value="${build.work-dir}"/>
-          <param name="project.site-dir" value="${build.site-dir}"/>
-        </antcall>
-        <echo>
-          ....... Forrest render END
-        </echo>
-        <record name="${build.logfile}" action="stop"/>
-        <property name="completion-status" value="succeeded" />
-      </try>
-      <catch>
-        <record name="${build.logfile}" action="stop"/>
-        <echo>Oops, something broke</echo>
-        <property name="completion-status" value="FAILED" />
-        <property name="build-failed" value="true"/>
-        <throw refid="exception" message="${errmsg}"/>
-      </catch>
-    </trycatch>
-    <copy file="${build.logfile}" tofile="${build.logfile-stored}"/>
-  </target>
-
-  <target name="deploy" depends="local.deploy"/>
-
-  <target name="notify" depends="local.notify"/>
-
-  <target name="main" depends="getsrc, site, deploy, notify"/>
+  <!-- run the workstages -->
+  <target name="main" depends="getsrc, build, deploy, notify"/>
 
 </project>

@@ -32,16 +32,16 @@
       <p>A sample buildfile:</p>
 
       <source>&#60;project name=&#34;myproject&#34;&#62;
-	&#60;property name=&#34;mail.host&#34; value=&#34;smtp.myhost.com&#34;/&#62;
-	&#60;property name=&#34;mail.to&#34; value=&#34;me@myhost.com&#34;/&#62;
-	&#60;property name=&#34;administrator&#34; value=&#34;Your Name &#38;lt;me@myhost.com&#62;&#34;/&#62;
-	&#60;property name=&#34;user&#34; value=&#34;anoncvs&#34;/&#62;
-	&#60;property name=&#34;password&#34; value=&#34;anoncvs&#34;/&#62;
-	&#60;property name=&#34;root&#34; value=&#34;/home/cvspublic&#34;/&#62;
-	&#60;property name=&#34;host&#34; value=&#34;cvs.myhost.com&#34;/&#62;
-	&#60;property name=&#34;module&#34; value=&#34;myproject&#34;/&#62;
+	&#60;property name=&#34;notify.email.host&#34; value=&#34;smtp.myhost.com&#34;/&#62;
+	&#60;property name=&#34;notify.email.to&#34; value=&#34;me@domain.com&#34;/&#62;
+	&#60;property name=&#34;notify.administrator&#34; value=&#34;Your Name &#38;lt;me@domain.com&#62;&#34;/&#62;
+	&#60;property name=&#34;getsrc.cvs.user&#34; value=&#34;anoncvs&#34;/&#62;
+	&#60;property name=&#34;getsrc.cvs.password&#34; value=&#34;anoncvs&#34;/&#62;
+	&#60;property name=&#34;getsrc.cvs.root&#34; value=&#34;/home/cvspublic&#34;/&#62;
+	&#60;property name=&#34;getsrc.cvs.host&#34; value=&#34;cvs.myhost.com&#34;/&#62;
+	&#60;property name=&#34;getsrc.cvs.module&#34; value=&#34;myproject&#34;/&#62;
 
-	&#60;target name=&#34;notify&#34; depends=&#34;local.notify, email.notify&#34;/&#62;
+	&#60;target name=&#34;notify&#34; depends=&#34;notify.local, notify.email&#34;/&#62;
 	&#60;import file=&#34;${env.FORREST_HOME}/../../../scratchpad/forrestbot2/core/forrestbot.xml&#34;/&#62;
 &#60;/project&#62;
 
@@ -62,33 +62,309 @@
         <tr>
           <td>getsrc</td>
 
-          <td><ul><li>local</li><li>cvs</li></ul></td>
+          <td><ul><li><link href="#getsrc.local">local</link></li><li><link
+          href="#getsrc.cvs">cvs</link></li></ul></td>
         </tr>
 
         <tr>
-          <td>site</td>
+          <td>build</td>
 
-          <td><em>forrest itself</em></td>
+          <td><ul><li><link href="#build.forrest">forrest</link></li></ul></td>
         </tr>
 
         <tr>
           <td>deploy</td>
 
-          <td><ul><li>local</li></ul></td>
+          <td><ul><li><link href="#getsrc.local">local</link></li></ul></td>
         </tr>
 
         <tr>
-          <td>notify</td>
+          <td><link href="#notify">notify</link></td>
 
-          <td><ul><li>local</li><li>email</li></ul></td>
+          <td><ul><li><link href="#notify.local">local</link></li><li><link
+          href="#notify.email">email</link></li></ul></td>
         </tr>
       </table>
 
       <p>If you want to do more advanced processing for your project, you can
       override the &#39;main&#39; target, which by default is <code>&#60;target
-      name=&#34;main&#34; depends=&#34;getsrc, site, deploy, notify&#34;/&#62;</code>,
+      name=&#34;main&#34; depends=&#34;getsrc, build, deploy, notify&#34;/&#62;</code>,
       create your own implementation of a workstage, or use any other ant tasks
       to do additional work.</p>
+
+      <section>
+        <title>Workstages</title>
+
+        <p>Each workstage implementation is configurable with properties. The
+        following tables describe each property and whether or not you are
+        required to set it in your buildfile.</p>
+
+        <section id="getsrc.local">
+          <title>getsrc.local</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.local.root-dir</td>
+
+              <td>Absolute path to the project&#39;s root directory on the local
+              computer</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="getsrc.cvs">
+          <title>getsrc.cvs</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.user</td>
+
+              <td>CVS username</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.password</td>
+
+              <td>CVS password</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.root</td>
+
+              <td>CVS root directory</td>
+
+              <td>/home/cvsroot</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.host</td>
+
+              <td>CVS host</td>
+
+              <td>cvs.apache.org</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.module</td>
+
+              <td>CVS module name</td>
+
+              <td>${ant.project.name}</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.root-dir</td>
+
+              <td>Directory within module that contains the forrest project</td>
+
+              <td></td>
+
+              <td>No</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.cvs.tag</td>
+
+              <td>CVS tag or branch name</td>
+
+              <td></td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="build.forrest">
+          <title>build.forrest</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>build.log-dir</td>
+
+              <td>Directory to hold log files</td>
+
+              <td>logs</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="deploy.local">
+          <title>deploy.local</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>deploy.local.dir</td>
+
+              <td>Path to deploy site to. Relative paths will be relative to
+              ${bot.home}</td>
+
+              <td>sites/${ant.project.name}</td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="notify">
+          <title>notify</title>
+
+          <p>These settings are used by all notify implementations.</p>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>notify.administrator</td>
+
+              <td>Name and email address of the forrestbot administrator</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>notify.log</td>
+
+              <td>Log file</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+
+            <tr>
+              <td>notify.deploy-location</td>
+
+              <td>Deployed location</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+
+            <tr>
+              <td>notify.completion-status</td>
+
+              <td>Result of the build</td>
+
+              <td></td>
+
+              <td>No. Set by other workstage(s).</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="notify.local">
+          <title>notify.local</title>
+
+          <p>No properties.</p>
+        </section>
+
+        <section id="notify.email">
+          <title>notify.email</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>notify.email.host</td>
+
+              <td>SMTP host through which the email will be sent.</td>
+
+              <td>localhost</td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>notify.email.to</td>
+
+              <td>Email address to send notification to.</td>
+
+              <td>${user.name}@localhost</td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
+      </section>
     </section>
 
     <section>

@@ -1,0 +1,48 @@
+<project name="notify">
+
+  <!-- default values -->
+  <property name="notify.administrator"  value=""/>
+
+  <!-- set property defaults after other workstages have been run -->
+  <target name="notify.init">
+    <property name="notify.log" value="${build.logfile-stored}"/>
+    <property name="notify.deploy-location" value="- workstage should have set this -"/>
+    <property name="notify.completion-status" value="- workstage should have set this -"/>
+  </target>
+
+  <target name="notify.local" depends="notify.init, build">
+    <tstamp>
+      <format property="NOW" pattern="dd MMMM hh:mm aa"/>
+    </tstamp>
+    <echo>
+      ----------------------------------
+      Forrestbot build for ${ant.project.name} ${notify.completion-status}
+      Output in: ${notify.deploy-location}
+      Log in:    ${notify.log}
+
+      Time: ${NOW}
+      Using Forrest ${version}
+      ----------------------------------
+    </echo>
+  </target>
+
+
+  <!-- default values -->
+  <property name="notify.email.host" value="localhost"/>
+  <property name="notify.email.to"   value="${user.name}@localhost"/>
+  
+  <target name="notify.email" depends="notify.init, build" if="build.failed">
+    <tstamp>
+      <format property="NOW" pattern="dd MMMM hh:mm aa"/>
+    </tstamp>
+    <mail from="forrestbot@xml.apache.org"
+      mailhost="${notify.email.host}"
+      tolist="${notify.email.to}"
+      subject="ForrestBot build for ${ant.project.name} ${notify.completion-status}"
+      failonerror="false"
+      files="${build.logfile}"
+      messagefile="${bot.home}/core/emailtemplate.txt">
+    </mail>
+  </target>
+  
+</project>
