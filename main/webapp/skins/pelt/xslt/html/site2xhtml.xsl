@@ -366,7 +366,7 @@ document.write("Last Published: " + document.lastModified);
           src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" title="Valid HTML 4.01!" style="height: 31px; width: 88px;" /></a>
           
-      <a href="http://jigsaw.w3.org/css-validator/"><img class="logoImage" 
+      <a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/vcss.png" 
           alt="Valid CSS!" title="Valid CSS!" style="height: 31px; width: 88px;"/></a>
     </xsl:if>
