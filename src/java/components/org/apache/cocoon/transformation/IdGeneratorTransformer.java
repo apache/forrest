@@ -217,6 +217,7 @@ public class IdGeneratorTransformer
             }
             getLogger().info("## Got id "+id);
             if (!sect.hasAttribute(this.idAttr)) {
+                //FIXME: + produces an error on document schema
                 String newId = URLEncoder.encode(id);
                 newId = avoidConflicts(doc, sect, this.idAttr, newId);
 
