@@ -715,11 +715,10 @@ Thanks for using Apache Forrest
     validate-stylesheets"  description="Validates XML doc files in the project"/>
 
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
-    <basename file="${project.catalog}" property="catalog-file"/>
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
         <catalogpath>
-          <pathelement location="${project.schema-dir}/${catalog-file}"/>
+          <pathelement location="${project.catalog}"/>
           <pathelement
             location="${forrest.home}/context/resources/schema/catalog"/>
         </catalogpath>
