@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                          0.5                          |
-    |             $Date: 2003/09/10 09:37:10 $              |
+    |             $Date: 2003/09/12 19:07:30 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -62,6 +62,7 @@ FORREST SITE BUILDER
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
     <property name="project.webapp"      location="${project.build-dir}/webapp" />
+    <property name="project.index-dir"   location="${project.webapp}/lucene-index" />
 
     <property name="project.temp-dir"    location="${project.build-dir}/tmp"     />
     <property name="project.work-dir"    location="${project.temp-dir}/work"      />
@@ -349,7 +350,7 @@ FORREST SITE BUILDER
     <filter token="project-logo.href" value="${skinconfig.project-url}"/>
     <filter token="project-logo.alt"  value="${skinconfig.project-name} logo"/>
 
-    <copy todir="${project.ctxt-dir}/" filtering="off">
+    <copy todir="${project.ctxt-dir}/" >
       <fileset dir="${forrest.home}/context" >
         <exclude name="*.xmap" />
         <exclude name="skins/**" />
@@ -360,7 +361,7 @@ FORREST SITE BUILDER
       </fileset>
     </copy>
 
-    <copy todir="${project.ctxt-dir}/" filtering="on" overwrite="true">
+    <copy todir="${project.ctxt-dir}/" filtering="true" overwrite="true">
     <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
         <include name="*.xmap" />
@@ -443,7 +444,7 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-resources" if="resources.present">
-    <copy toDir="${project.ctxt-dir}/resources" filtering="false" failonerror="false">
+    <copy toDir="${project.ctxt-dir}/resources" failonerror="false">
       <fileset dir="${project.resources-dir}">
         <exclude name="stylesheets"/>
         <exclude name="images"/>
@@ -453,21 +454,21 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-stylesheets" if="stylesheets.present">
-    <copy toDir="${project.ctxt-dir}/resources/stylesheets" filtering="false"
+    <copy toDir="${project.ctxt-dir}/resources/stylesheets" 
       overwrite="true" failonerror="false">
       <fileset dir="${project.stylesheets-dir}"/>
     </copy>
   </target>
 
   <target name="copy-images" if="images.present">
-    <copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
+    <copy toDir="${project.ctxt-dir}/resources/images" 
       overwrite="true" failonerror="false">
       <fileset dir="${project.images-dir}"/>
     </copy>
   </target>
 
   <target name="copy-grammars" if="grammars.present">
-    <copy toDir="${project.ctxt-dir}/resources/grammars" filtering="false"
+    <copy toDir="${project.ctxt-dir}/resources/grammars" 
       overwrite="true" failonerror="false">
       <fileset dir="${project.grammars-dir}"/>
     </copy>
@@ -475,7 +476,7 @@ FORREST SITE BUILDER
 
   <!-- Copy all non-xdocs content -->
   <target name="copy-content" if="real-content.present">
-    <copy toDir="${project.ctxt-dir}/content" filtering="false"
+    <copy toDir="${project.ctxt-dir}/content" 
       overwrite="false" failonerror="false">
       <fileset dir="${project.real-content-dir}">
         <exclude name="xdocs/**"/>
@@ -484,26 +485,26 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-lib" if="lib.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF/lib" filtering="false"
+    <copy toDir="${project.ctxt-dir}/WEB-INF/lib" 
       overwrite="true" failonerror="false">
       <fileset dir="${project.lib-dir}"/>
     </copy>
   </target>
 
   <target name="copy-classes" if="classes.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF/classes" filtering="false"
+    <copy toDir="${project.ctxt-dir}/WEB-INF/classes" 
       overwrite="true" failonerror="false">
       <fileset dir="${project.classes-dir}"/>
     </copy>
   </target>
 
   <target name="copy-skins" if="skins.present">
-    <copy toDir="${project.ctxt-dir}/skins" filtering="off" overwrite="true" failonerror="false">
+    <copy toDir="${project.ctxt-dir}/skins" overwrite="true" failonerror="false">
        <fileset dir="${project.skins-dir}" >
         <include name="**/images/**" />
       </fileset>
     </copy>
-    <copy toDir="${project.ctxt-dir}/skins" filtering="on" overwrite="true" failonerror="false">
+    <copy toDir="${project.ctxt-dir}/skins" filtering="true" overwrite="true" failonerror="false">
       <fileset dir="${project.skins-dir}" >
         <exclude name="**/images/**" />
       </fileset>
@@ -512,12 +513,12 @@ FORREST SITE BUILDER
 
   <target name="copy-skinconf" if="skinconf.present">
     <copy file="${project.skinconf}"
-      toDir="${project.ctxt-dir}" filtering="false"
+      toDir="${project.ctxt-dir}" 
       overwrite="true" failonerror="false"/>
   </target>
 
   <target name="copy-status" if="status.present">
-    <copy file="${project.status}" todir="${project.ctxt-dir}" filtering="false"/>
+    <copy file="${project.status}" todir="${project.ctxt-dir}" />
   </target>
 
 
@@ -650,7 +651,7 @@ Use the 'seed' target to create a template project structure.
         | please ensure they keep in synch.
         -->
         <property name="skindir" location="${project.ctxt-dir}/skins/${project.skin}"/>
-        <copy toDir="${project.site-dir}" filtering="false"
+        <copy toDir="${project.site-dir}" 
           overwrite="true" failonerror="false">
           <fileset dir="${project.ctxt-dir}/content">
             <exclude name="xdocs/**"/>
@@ -660,13 +661,13 @@ Use the 'seed' target to create a template project structure.
 
         <!-- Copy skin images -->
         <mkdir dir="${project.site-dir}/skin/images"/>
-        <copy toDir="${project.site-dir}/skin/images" filtering="false" overwrite="true"
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
           <fileset dir="${skindir}/images"/>
         </copy>
 
         <!-- Copy all other non-resource files -->
-        <copy toDir="${project.site-dir}/skin" filtering="false"
+        <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
           <mapper type="flatten"/>
@@ -690,7 +691,24 @@ for any broken links in the generated site.
     </echo>
   </target>
 
-
+  <!-- ===============================================================
+       Prepares the Lucene context indexing the site. [RPR]
+       =============================================================== -->
+  <target name="lucene-index" depends="init, -prepare-classpath" unless="stop-lucene-indexer">
+    <java classname="org.apache.forrest.search.ForrestIndexer"
+      dir="${project.ctxt-dir}"
+      fork="true"
+      failonerror="true"
+      maxmemory="${forrest.maxmemory}">
+      <jvmarg line="${forrest.jvmargs}"/>
+      <jvmarg value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
+      <arg line="-index ${project.index-dir}"/>
+      <arg value="${project.xdocs-dir}"/>
+      <classpath>
+        <path refid="forrest.cp"/>
+      </classpath>
+    </java>
+  </target>
 
   <target name="project.webapp.defined" unless="project.webapp">
     <fail>
@@ -711,7 +729,8 @@ for any broken links in the generated site.
     <!-- this will need revisions in the case of the siteplan
     extra project-custom classes then will need to be warred in as well. -->
     <mkdir dir="${project.webapp}/WEB-INF"/>
-    <copy file="${forrest.home}/WEB-INF/web.xml" todir="${project.webapp}/WEB-INF"/>
+    <copy file="${forrest.home}/WEB-INF/web.xml" filtering="true" 
+      todir="${project.webapp}/WEB-INF"/>
     <copy todir="${project.webapp}" preservelastmodified="true">
       <fileset dir="${project.ctxt-dir}" >
         <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
@@ -733,6 +752,11 @@ for any broken links in the generated site.
         <include name="*jar" unless="jdk1.4+"/>
       </fileset>
     </copy>
+    <!-- Index files for Lucene [RPR] -->
+    <condition property="stop-lucene-indexer">
+      <istrue value="${skinconfig.disable-lucene}"/>
+    </condition>
+    <antcall target="lucene-index"/>
     <echo>
 ---------------------------------
 Webapp generated in ${project.webapp}
@@ -1020,7 +1044,7 @@ forrest.properties.
     This translates to: copy all docs that are not in the Forrest context
     directory, or that are, but are different.
     -->
-    <copy toDir="${project.content-dir}" filtering="false" overwrite="false">
+    <copy toDir="${project.content-dir}" overwrite="false">
       <fileset dir="${project.webapp}" excludes="${forrest.backcopy.excludes}">
         <or>
           <not>

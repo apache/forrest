@@ -305,8 +305,28 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
+  <!--
+    SearchServlet - Used to search in site (Lucene)
+  -->
+  <servlet>
+    <servlet-name>SearchServlet</servlet-name>
+    <servlet-class>org.apache.forrest.search.ForrestSearchServlet</servlet-class>
+    <init-param>
+      <param-name>project-skin</param-name>
+      <param-value>@skin@</param-value>
+    </init-param>
+  </servlet>
+  
+  
   <!-- URL space mappings ============================================= -->
-
+  <!--
+    Calls to "search.cmd" are processed by this servlet
+   -->
+  <servlet-mapping>
+     <servlet-name>SearchServlet</servlet-name>
+     <url-pattern>/search.cmd</url-pattern>
+  </servlet-mapping>
+		    
   <!--
     Cocoon handles all the URL space assigned to the webapp using its sitemap.
     It is recommended to leave it unchanged. Under some circumstances though

@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.32 2003/09/12 10:25:55 stevenn Exp $
+$Id: document2html.xsl,v 1.33 2003/09/12 19:07:31 cheche Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -39,7 +39,8 @@ $Id: document2html.xsl,v 1.32 2003/09/12 10:25:55 stevenn Exp $
       <xsl:otherwise>2</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-    
+
+  <xsl:param name="dynamic-page" select="'false'"/>  
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
   <xsl:param name="obfuscate-mail-links" select="'false'"/>
@@ -129,22 +130,26 @@ if (VERSION > 3) {
 
   <!-- Generates the PDF link -->
   <xsl:template name="pdflink">
-    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
+    <xsl:if test="$dynamic-page='false'">
+      <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+        <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
           <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
           PDF</a>
-      </td>
+        </td>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   
 
   <!-- Generates the XML link -->
   <xsl:template name="xmllink">
-    <xsl:if test="$disable-xml-link = 'false'">
-      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
+    <xsl:if test="$dynamic-page='false'">
+      <xsl:if test="$disable-xml-link = 'false'">
+        <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
           <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
           xml</a>
-      </td>
+        </td>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   
