@@ -34,7 +34,7 @@ unset CLASSPATH
 CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S`"
 export CLASSPATH
 
-echo Using classpath: \"$CLASSPATH\"
+echo "Using classpath: $CLASSPATH"
 "$PWD/./tools/ant/bin/ant" -logger org.apache.tools.ant.NoBannerLogger -emacs  $@
 
 unset CLASSPATH
