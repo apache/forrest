@@ -60,8 +60,8 @@ Revision:
        <xsl:template match="/article">
              <document>
                    <header>
-                         <xsl:apply-templates select="articleinfo/title"/>
-                         <xsl:apply-templates select="articleinfo/subtitle"/>
+                         <xsl:apply-templates select="articleinfo/title|title"/>
+                         <xsl:apply-templates select="articleinfo/subtitle|subtitle"/>
                          <authors>
                                <xsl:apply-templates select="articleinfo/author"/>
                                <xsl:apply-templates select="articleinfo/corpauthor"/>
