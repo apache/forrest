@@ -26,7 +26,16 @@ See the imported tab2menu.xsl for details.
 
   <xsl:template name="not-selected" mode="print">
     <span class="unselectedTab">
-      <xsl:call-template name="base-not-selected"/>
+    <!-- Called from 'not-selected' -->
+     <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="unselected-tab-href">
+          <xsl:with-param name="tab" select="."/>
+          <xsl:with-param name="path" select="$path"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:value-of select="@label"/>
+     </a>
     </span>
   </xsl:template>
 
