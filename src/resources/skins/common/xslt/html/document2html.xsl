@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.13 2003/02/14 15:21:18 nicolaken Exp $
+$Id: document2html.xsl,v 1.14 2003/02/17 00:10:44 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -54,9 +54,13 @@ $Id: document2html.xsl,v 1.13 2003/02/14 15:21:18 nicolaken Exp $
                 <xsl:value-of select="header/title"/>
               </h1>
             </td>
-            <xsl:call-template name="printerfriendlylink"/>
+            <!-- NKB disabling till it's more tested -->
+            <!--     anyone, feel free to work on it  -->
+            <!-- <xsl:call-template name="printerfriendlylink"/> -->
             <xsl:call-template name="pdflink"/>
-            <xsl:call-template name="xmllink"/>
+            <!-- NKB disabling till it's more tested -->
+            <!--     anyone, feel free to work on it  -->
+            <!-- <xsl:call-template name="xmllink"/> -->
           </tr>
         </table>
       </xsl:if>
