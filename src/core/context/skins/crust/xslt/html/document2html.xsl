@@ -41,10 +41,8 @@ and tabs (tab2menu.xsl) to generate the final HTML.
                 <xsl:value-of select="header/title"/>
               </h1>
             </td>
-            <!--
-            <xsl:call-template name="printerfriendlylink"/>
-            <xsl:call-template name="xmllink"/>
-            -->
+            <div id="skinconf-printlink"/>
+            <div id="skinconf-xmllink"/>
             <div id="skinconf-podlink"/>
             <div id="skinconf-txtlink"/>
             <div id="skinconf-pdflink"/>
