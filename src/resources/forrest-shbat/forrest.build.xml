@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/25 05:57:04 $              |
+    |             $Date: 2003/05/26 07:12:32 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -908,10 +908,11 @@ forrest.properties.
   <target name="run" 
    description="Run Jetty with configuration set by the jetty.run property"
    depends="webapp">
-          
+
     <java classname="org.mortbay.jetty.Server"
           dir="${project.webapp}"
           fork="yes"
+          maxmemory="${forrest.maxmemory}"
           failonerror="yes">
        <classpath>
          <pathelement path="${env.CLASSPATH}" />
@@ -928,8 +929,9 @@ forrest.properties.
            <include name="*.ZIP"/>
          </fileset>
        </classpath>
-      <jvmarg
-        value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
+       <jvmarg line="${forrest.jvmargs}"/>
+       <jvmarg
+         value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.home}/lib/endorsed"/>
        <arg line="jettyconf.xml" />
     </java>
   </target>  
