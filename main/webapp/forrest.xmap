@@ -240,48 +240,6 @@ $Revision: 1.8 $
         </map:select>
       </map:act>
     </map:resource>
-    <map:resource name="file-resolver">
-      <map:select type="exists">
-        <map:when test="{project:content.xdocs}{uri}.ihtml">
-          <map:generate src="{project:content.xdocs}{uri}.ihtml" type="html" />
-          <map:transform src="{forrest:stylesheets}/html2document.xsl" />
-          <map:transform type="idgen" />
-          <map:serialize type="xml-document"/>
-        </map:when>
-        <map:when test="{project:content.xdocs}{uri}.html">
-          <map:generate src="{project:content.xdocs}{uri}.html" type="html" />
-          <map:transform src="{forrest:stylesheets}/html2document.xsl" />
-          <map:transform type="idgen" />
-          <map:serialize type="xml-document"/>
-        </map:when>        
-        <map:when test="{project:content.xdocs}{uri}.txt">
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
-            <map:transform src="{forrest:stylesheets}/text2document.xsl">
-              <map:parameter name="filename" value="{2}" />
-            </map:transform>
-            <map:serialize type="xml-document"/>
-          </map:match>
-        </map:when>
-        <map:otherwise>
-        
-          <map:select type="exists">
-             <map:when test="{project:temp-dir}/input.xmap">
-               <map:mount uri-prefix="" 
-                          src="{project:temp-dir}/input.xmap" 
-                          check-reload="yes" 
-                          pass-through="true"/>
-            </map:when>  
-          </map:select>
-        
-          <map:generate src="{project:content.xdocs}{uri}.xml" />
-          <map:call resource="transform-to-document">
-            <map:parameter name="src" value="{project:content.xdocs}{uri}.xml" />
-          </map:call>
-          <map:serialize type="xml-document"/>
-        </map:otherwise>
-      </map:select>
-    </map:resource>
   </map:resources>
 
   <map:pipelines>
