@@ -25,4 +25,4 @@ See the files in the top-level of the Forrest distribution called
 LICENSE.txt and NOTICE.txt and see licenses for accompanying products
 in the "legal" directory.
 
-Thanks for using Apache Forrest ... http://xml.apache.org/forrest/
+Thanks for using Apache Forrest ... http://forrest.apache.org/
