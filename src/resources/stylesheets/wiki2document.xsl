@@ -15,16 +15,9 @@
  <xsl:template match="st:document">
   <document>
    <header>
-    <title>
-      <xsl:choose>
-        <xsl:when test="st:section/st:title//st:text">
-          <xsl:value-of select="st:section/st:title//st:text"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </title>
+     <title>
+       <xsl:value-of select="$name"/>
+     </title>
    </header>
    <body>
     <xsl:apply-templates select="st:paragraphs/st:paragraph/st:*" mode="paragraph"/>  
