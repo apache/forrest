@@ -26,8 +26,15 @@
              cdata-section-elements="source"/>
 
  <xsl:template match="st:output">
-  <xsl:apply-templates select="st:document/st:paragraphs/st:paragraph/*" mode="paragraph"/>  
-  <xsl:apply-templates select="st:document/st:section"/>
+   <document>  
+    <header>  
+     <title><xsl:value-of select="st:document/st:section/st:title/st:textsequence"/></title>  
+    </header>  
+    <body>
+      <xsl:apply-templates select="st:document/st:paragraphs/st:paragraph/*" mode="paragraph"/>  
+      <xsl:apply-templates select="st:document/st:section"/>
+    </body>  
+   </document>
  </xsl:template>
 
  <xsl:template match="st:section">
@@ -149,7 +156,7 @@
       </link>
      </xsl:when>
      <xsl:otherwise>
-      <link href="view.do?page={$href}">
+      <link href="{$href}.html">
        <xsl:value-of select="$href"/>
       </link>
      </xsl:otherwise>
