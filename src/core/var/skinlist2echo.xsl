@@ -19,8 +19,15 @@
 	<xsl:template match="skins">
       <project default="echoskins">
       	<target name="echoskins">
-      	<echo>Available skins:</echo>
-  	      <xsl:apply-templates select="skin" />
+      	<echo>Available skins:
+Forrest provides some default skins which should meet most needs.
+crust, pelt-dev, tigris
+See http://forrest.apache.org/docs/skins.html
+
+Additional skins which are maintained by other people are available from
+outside the Forrest distribution. Currently these are only basic test skins
+to demonstrate the concept of a remote skin respository.</echo>
+  	    <xsl:apply-templates select="skin" />
 	    </target>
 	  </project>
 	</xsl:template>
