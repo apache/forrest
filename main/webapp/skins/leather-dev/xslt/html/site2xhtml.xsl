@@ -131,7 +131,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
-      <div id="branding-trail">
+      <div id="b-trail">
           <xsl:call-template name="breadcrumbs"/>
       </div>
 </xsl:if>
@@ -140,7 +140,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |start group logo
     +</xsl:comment> 
         <xsl:if test="$config/group-url">
-          <div class="grouplogo">
+          <div class="bl-group">
             <xsl:call-template name="renderlogo">
               <xsl:with-param name="name" select="$config/group-name"/>
               <xsl:with-param name="url" select="$config/group-url"/>
