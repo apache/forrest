@@ -102,12 +102,15 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
    	|topstrip with logo's and search box 
    	+-->
     <div id="top">
+<!--breadcrumbs org location-->
+<xsl:if test="not ($config/trail/@location='alt')">
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
       <div class="breadtrail">
           <xsl:call-template name="breadcrumbs"/>
       </div>
+</xsl:if>
 <xsl:comment>+
     |header
     +</xsl:comment>
@@ -190,6 +193,15 @@ $Id: site2xhtml.xsl,v 1.19 2003/12/26 00:46:04 mroch Exp $
    	|centerstrip with menu and mainarea
    	+-->
     <div id="main">
+<!--breadtrail location='alt'-->
+        <xsl:if test="$config/trail/@location='alt'">
+<xsl:comment>+
+    |breadtrail
+    +</xsl:comment>
+      <div class="breadtrail">
+          <xsl:call-template name="breadcrumbs"/>
+      </div>
+        </xsl:if>
 <xsl:comment>+
     |start Menu, mainarea
     +</xsl:comment>
