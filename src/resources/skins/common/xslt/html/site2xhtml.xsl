@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.4 2003/01/27 13:47:22 jefft Exp $
+$Id: site2xhtml.xsl,v 1.5 2003/01/28 00:19:32 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -116,7 +116,7 @@ $Id: site2xhtml.xsl,v 1.4 2003/01/27 13:47:22 jefft Exp $
   <xsl:template name="compliancy-logos">
     <xsl:if test="$config/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img border="0" class="logoImage" 
-          src="skin/images/valid-html401.png"
+          src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" height="31" width="88"/></a>
     </xsl:if>
   </xsl:template>
