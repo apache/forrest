@@ -175,7 +175,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <div class="searchbox">
         <div id="roundtopsmall">
             <img 
-                src="{$skin-img-dir}/rc-t-l-5-1body-2searchbox-3searchbox.png" 
+                src="{$skin-img-dir}/rc-t-l-5-1header-2searchbox-3searchbox.png" 
                 alt="" width="5" height="5" class="cornersmall" 
                 style="display: none" />
         </div>
