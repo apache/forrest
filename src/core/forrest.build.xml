@@ -145,7 +145,7 @@ FORREST SITE BUILDER
         0.5 => 0.6
         krysalis-site => crust
         forrest-site => ... warn about future removal
-        forrest-css => crust
+        forrest-css => pelt
         avalon-tigris => tigris
         tigris-style => tigris
         
@@ -167,7 +167,7 @@ FORREST SITE BUILDER
         <elseif>
             <equals arg1="${project.skin}" arg2="forrest-css"/>
             <then>
-                <property name="project.new-skin-name" value="crust"/>
+                <property name="project.new-skin-name" value="pelt"/>
             </then>
         </elseif>
         <elseif>
@@ -188,7 +188,17 @@ FORREST SITE BUILDER
         <then>
 <echo>
 -- Warning --
-skin "${project.skin}" no longer exists, using "${project.new-skin-name}" instead.  Please update forrest.properties
+skin "${project.skin}" no longer exists, the skin named 
+"${project.new-skin-name}" will be automatically used instead.  
+
+If this is the first time you see this, it means that you have
+to regenerate and publish the *whole* site, so that all pages 
+are rendered with the "${project.new-skin-name}" skin.
+
+If you fail to do so it's almost certain that the site won't 
+look right.
+
+Please update forrest.properties to remove this warning. 
 </echo>
             <var name="project.skin" value="${project.new-skin-name}"/>
         </then>
