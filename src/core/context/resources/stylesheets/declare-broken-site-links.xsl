@@ -38,13 +38,21 @@
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
--->
-	<!-- Identity transformation template -->			
+		
 	<xsl:template match="/ | * | comment() | processing-instruction() | text()"> 
 		<xsl:copy> 
 			<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
 		</xsl:copy> 
 	</xsl:template> 
+-->
+
     
+    <!-- Identity transformation template -->			
+    <xsl:template match="/ | @* | * | comment() | processing-instruction() | text()"> 
+    	<xsl:copy> 
+    		<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
+    	</xsl:copy> 
+    </xsl:template> 
+        
   
 </xsl:stylesheet>
