@@ -144,7 +144,7 @@ FORREST SITE BUILDER
     Skin aliasing for backwards compatability
         0.5 => 0.6
         krysalis-site => crust
-        forrest-site => crust
+        forrest-site => ... warn about future removal
         forrest-css => crust
         avalon-tigris => tigris
         tigris-style => tigris
@@ -156,12 +156,14 @@ FORREST SITE BUILDER
         <then>
             <property name="project.new-skin-name" value="crust"/>
         </then>
+        <!-- temporarily bring back forrest-site
         <elseif>
             <equals arg1="${project.skin}" arg2="forrest-site"/>
             <then>
                 <property name="project.new-skin-name" value="crust"/>
             </then>
         </elseif>
+        -->
         <elseif>
             <equals arg1="${project.skin}" arg2="forrest-css"/>
             <then>
@@ -186,10 +188,20 @@ FORREST SITE BUILDER
         <then>
 <echo>
 -- Warning --
-skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  Please update forrest.properties
+skin "${project.skin}" no longer exists, using "${project.new-skin-name}" instead.  Please update forrest.properties
 </echo>
             <var name="project.skin" value="${project.new-skin-name}"/>
         </then>
+    </if>
+    <if>
+      <equals arg1="${project.skin}" arg2="forrest-site"/>
+      <then>
+<echo>
+-- Warning --
+Using skin "${project.skin}" which is deprecated.
+Please migrate to one of the new skins listed in forrest.properties
+</echo>
+      </then>
     </if>
 
     <!-- echo settings in -Dforrest.echo=true mode -->

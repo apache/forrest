@@ -98,7 +98,7 @@ public class ForrestConfUtils
     public static void aliasSkinProperties(AntProperties props) {
         // AntProperties.setProperty doesn't let you override, so we have to remove the property then add it again
         String skinName = props.getProperty("project.skin");
-        if (skinName.equals("krysalis-site") || skinName.equals("forrest-site")
+        if (skinName.equals("krysalis-site")
                         || skinName.equals("forrest-css")) {
             props.remove("project.skin");
             props.setProperty("project.skin", "crust");
