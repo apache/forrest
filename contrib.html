@@ -268,10 +268,20 @@
         checked out via the http: protocol, then the following command will
         convert it.</p>
 <pre class="code">svn sw https://svn.apache.org/repos/asf/forrest/trunk</pre>
+<p>Line ending issues can be a problem when committing, since developers use
+        both Linux and Windows.  SVN can understand that files are text (as opposed to binary like images), but
+        this must be specified for every new file added.  The commandline SVN client
+        can be <a class="external" href="http://issues.cocoondev.org/browse/FOR-124">configured to automatically do this</a>
+        for certain file extensions.  To do it manually, make sure all line endings
+        are in your current OS's native format (the dos2unix and unix2dos utilities
+        may be useful) and then do a <span class="codefrag">svn propset svn:eol-style native myfilename.txt</span>
+        and <span class="codefrag">svn commit -m "fix line endings" myfilename.txt</span>
+      
+</p>
 </div>
 
     
-<a name="N10081"></a><a name="procedure"></a>
+<a name="N1008E"></a><a name="procedure"></a>
 <h2 class="underlined_10">Procedure for Raising Development Issues</h2>
 <div class="section">
 <p> There are two methods for discussing development and submitting
@@ -306,7 +316,7 @@
 </div>
 
     
-<a name="N100A2"></a><a name="tips"></a>
+<a name="N100AF"></a><a name="tips"></a>
 <h2 class="underlined_10">Contribution Notes and Tips</h2>
 <div class="section">
 <p> This is a collection of tips for contributing to the project in a
