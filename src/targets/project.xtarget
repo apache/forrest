@@ -59,12 +59,16 @@
 
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
-      <fileset dir="${context.dir}/conf"/>
+      <fileset dir="${context.dir}/conf">
+        <include name="sitemap.xmap"/>
+      </fileset> 
     </copy>
 
      <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}/WEB-INF/" filtering="on">
-      <fileset dir="${context.dir}/conf"/>
+      <fileset dir="${context.dir}/conf">
+        <exclude name="sitemap.xmap"/>
+      </fileset> 
     </copy>
     
   </target>
@@ -77,7 +81,9 @@
          webxml="${build.context}/WEB-INF/web.xml" 
          compress="true">
 
-      <fileset dir="${build.context}"/>
+      <fileset dir="${build.context}">
+        <exclude name="WEB-INF/web.xml"/>
+      </fileset>
       <lib dir="lib/endorsed"/>
       <lib dir="lib/core"/>
       <lib dir="lib/optional"/>
