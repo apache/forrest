@@ -44,7 +44,7 @@
     <property name="name"                  value="${xgump.module.project.name}"/>
     <property name="packages"              value="${xgump.module.project.packages}"/>
     <property name="version"
-      value="${xgump.module.project.version.major}.${xgump.module.project.version.minor}${xgump.module.project.version.tag}"/>
+		value="${xgump.module.project.version.major}.${xgump.module.project.version.minor}.${xgump.module.project.version.fix}${xgump.module.project.version.tag}"/>
 
     <property name="resource.dir"          location="src/resources"/>
     <property name="scratchpad.src.dir"    location="src/scratchpad/src/java"/>
@@ -153,6 +153,7 @@
     <zip
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
+      <zipfileset dir="etc"  prefix="${release-name-bin}/etc"/>
       <zipfileset dir="etc"  prefix="${release-name-bin}" includes="RELEASE-NOTES-${version}.txt"/>
     </zip>
     <tar longfile="gnu" compression="gzip"
@@ -170,6 +171,7 @@
         <include name="**/ant"/>
         <include name="**/forrest"/>
       </tarfileset>
+      <tarfileset prefix="${release-name-bin}/etc" dir="etc"/>
       <tarfileset prefix="${release-name-bin}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
     </tar>
   </target>
