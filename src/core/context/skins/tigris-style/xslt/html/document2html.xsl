@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
+$Id: document2html.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -23,17 +23,23 @@ $Id: document2html.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
        <!-- ( ================= middle NavBar ================== ) -->
         <tr>
         <td class="tasknav" >
-        <div align="left">
+          <div align="left">
+           <!-- 
+                site2html.xsl will search for this as 
+                   
+                   td[@class='tasknav']/div[@align='left']
+
+                to insert the breadcrumbs.   
+          -->
+          </div>
+        </td>
+        <td id="issueid" class="tasknav">
+        <div align="right">
             <xsl:call-template name="pdflink"/>
             <xsl:call-template name="printlink"/>
             <xsl:call-template name="xmllink"/>
+	         &#160;
         </div>
-        </td>
-        <td id="issueid" class="tasknav">
-        <div align="right">Font size:
-	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
-	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
-	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>       </div>
         </td>
        </tr>
       </table>
@@ -168,10 +174,27 @@ $Id: document2html.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
 
   </xsl:template>  
 
-  <xsl:template match="fixme | note | warning">
-    <xsl:apply-imports/>
+  <xsl:template match="fixme">
+    <div class="warningmessage">
+      <p><strong>Fixme (<xsl:value-of select="@author"/>)</strong></p>
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
-
+  
+  <xsl:template match="note">
+    <div class="infomessage">
+      <p><strong>Note</strong></p>
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="warning">
+    <div class="errormessage">
+      <p><strong>Warning</strong></p>
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+  
   <xsl:template match="link">
     <xsl:apply-imports/>
   </xsl:template>
@@ -207,11 +230,30 @@ $Id: document2html.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
   <xsl:template match="figure">
     <xsl:apply-imports/>
   </xsl:template>
-
+  
   <xsl:template match="table">
-    <xsl:apply-imports/>
+   <div class="h4">
+    <xsl:apply-templates select="@id"/>
+    <xsl:if test="caption">
+        <h4><xsl:value-of select="caption"/></h4>
+    </xsl:if> 
+    <xsl:apply-templates select="caption"/>
+      <table border="1" cellspacing="2" cellpadding="3" width="100%" class="grid">
+        <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
+        <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
+        <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
+        <xsl:if test="@class"><xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute></xsl:if>
+        <xsl:if test="@bgcolor"><xsl:attribute name="bgcolor"><xsl:value-of select="@bgcolor"/></xsl:attribute></xsl:if>
+      
+        <xsl:apply-templates/>
+    </table>
+   </div>    
   </xsl:template>
 
+  <xsl:template match="caption">
+    <!-- do not show caption elements, they are already in other places-->  
+  </xsl:template>
+  
   <xsl:template match="title">
     <!-- do not show title elements, they are already in other places-->
   </xsl:template>

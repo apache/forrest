@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.2 2003/12/26 21:03:54 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -29,19 +29,18 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
         <style type="text/css">
           /* <![CDATA[ */ 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  
+          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/quirks.css"; 
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/inst.css"; 
           /*  ]]> */
         </style>
         <link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" />
         <script src="{$root}skin/tigris.js" type="text/javascript"></script>
-        <script type="text/javascript" language="javascript" src="{$root}skin/fontsize.js"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
         <meta http-equiv="Content-type" content="text/html" />
         <meta http-equiv="Content-style-type" content="text/css" />
       </head>
       <body onload="init();focus()" marginwidth="0" marginheight="0" class="composite">
-        <script type="text/javascript">ndeSetTextSize();</script>
 
         <!--
           +=========================+
@@ -111,6 +110,9 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
         
         <!-- ( =================  Search ================== ) -->        
         <td align="right" valign="top">
+          <!--
+            per default only navigation search is present
+            
           <xsl:if test="not($config/disable-search) or
             $config/disable-search='false' and $config/searchsite-domain and
             $config/searchsite-name">
@@ -128,6 +130,7 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
              </form>
           </div>
          </xsl:if>
+         -->
         </td>       
        </tr>   
       </table>  
@@ -137,9 +140,13 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
       <xsl:apply-templates select="div[@class='tabs']"/>
 
   <div id="breadcrumbs">
-    <xsl:call-template name="breadcrumbs"/>
+    subtabs | go | here
   </div>
 
+  </xsl:template>
+  
+  <xsl:template match="td[@class='tasknav']/div[@align='left']" >
+    <xsl:call-template name="breadcrumbs"/>
   </xsl:template>
   
   <xsl:template name="centerstrip" >
@@ -212,30 +219,37 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
       </xsl:if>
     </div>
     <!-- ( ================= end Menu items ================== ) -->
-    
-    <form action="" method="get">
+
+    <!-- ( =================  Search ================== ) -->       
+        
+   <xsl:if test="not($config/disable-search) 
+                 or $config/disable-search='false' 
+                 and $config/searchsite-domain 
+                 and $config/searchsite-name">
+    <form action="http://www.google.com/search" method="get">
       <div id="searchbox" class="toolgroup">
        <div class="label"><strong>Search</strong></div>
        <div class="body">
-        <div>
+        <div>the <xsl:value-of select="$config/searchsite-name"/> site
+<!--
         <select name="scope">
-
          <option value="projectAndSubs" selected="selected">This project</option>
          <option value="myprojects">My projects</option>
          <option value="domain" >All projects</option>
         </select>
+-->
        </div>
        <div>
-        <input type="hidden" name="resultsPerPage" value="40" /> 
-        <input type="text" name="query" size="10" /> 
-        <input type="submit" name="Button" value="Go" />
+        <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+        <input type="text" id="query" name="q" size="10" /> 
+        <input type="submit" value="Search" name="Search" />
 
        </div>
-       <div><a href="#">Advanced search</a>    </div>
+       <!--<div><a href="#">Advanced search</a>    </div>-->
       </div>
      </div>
      </form>
- 
+    </xsl:if>    
     
  	<xsl:if test="$filename = 'index.html' and $config/credits">
       <div id="admfun" class="toolgroup">
@@ -276,6 +290,9 @@ $Id: site2xhtml.xsl,v 1.1 2003/12/22 09:56:11 nicolaken Exp $
 
   </xsl:template>
  
+  <xsl:template match="toc|toc2|tocc|toca">
+  </xsl:template>
+  
   <xsl:template name="mainarea">
       <xsl:apply-templates select="div[@class='content']"/>
   </xsl:template>
