@@ -221,7 +221,7 @@
       id="{generate-id()}">
 
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
-      <xsl:text> </xsl:text>
+      <xsl:text>. </xsl:text>
       <xsl:value-of select="title"/>
 
       <xsl:if test="normalize-space(@id)!=''">
