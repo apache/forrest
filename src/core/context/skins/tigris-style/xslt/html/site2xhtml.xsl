@@ -59,7 +59,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         </xsl:if>
         <script src="{$root}skin/tigris.js" type="text/javascript"></script>
         <script type="text/javascript" language="javascript" src="{$root}skin/menu.js"></script>
-        <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
+        <title><xsl:value-of select="div[@class='content']//div[@id='apphead']/h2/em"/></title>
         <meta http-equiv="Content-style-type" content="text/css" />
       </head>
       <body onload="init();focus()" marginwidth="0" marginheight="0" class="composite">
