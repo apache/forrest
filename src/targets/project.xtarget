@@ -57,13 +57,6 @@
       </fileset>
     </move>
 
-  </target>
-  
-  <!-- =================================================================== -->
-  <!-- Prepares the docs to create a .war                                  -->
-  <!-- =================================================================== -->
-  <target name="prepare-webapp" depends="init, prepare-docs">
-
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
       <fileset dir="${context.dir}/conf"/>
@@ -73,13 +66,13 @@
     <copy todir="${build.context}/WEB-INF/" filtering="on">
       <fileset dir="${context.dir}/conf"/>
     </copy>
-
+    
   </target>
- 
+  
   <!-- =================================================================== -->
   <!-- Prepares the docs to create a .war                                  -->
   <!-- =================================================================== -->
-  <target name="webapp" depends="init, prepare-webapp">
+  <target name="webapp" depends="init, prepare-docs">
     <war warfile="${build.dir}/${name}.war" 
          webxml="${build.context}/WEB-INF/web.xml" 
          compress="true">
