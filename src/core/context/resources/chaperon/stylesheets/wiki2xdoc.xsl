@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-                xmlns:st="http://chaperon.sourceforge.net/schema/syntaxtree/1.0"
+                xmlns:st="http://chaperon.sourceforge.net/schema/syntaxtree/2.0"
                 exclude-result-prefixes="st">
 
  <xsl:output indent="yes" 
@@ -10,14 +10,14 @@
              doctype-system="document-v11.dtd"
              cdata-section-elements="source"/>
 
- <xsl:template match="st:document">
+ <xsl:template match="st:output">
   <document>
    <header>
-    <title><xsl:value-of select="st:section/st:title/st:textsequence"/></title>
+    <title><xsl:value-of select="st:document/st:section/st:title/st:textsequence"/></title>
    </header>
    <body>
-    <xsl:apply-templates select="st:paragraphs/st:paragraph/*" mode="paragraph"/>  
-    <xsl:apply-templates select="st:section"/>
+    <xsl:apply-templates select="st:document/st:paragraphs/st:paragraph/*" mode="paragraph"/>  
+    <xsl:apply-templates select="st:document/st:section"/>
    </body>
   </document>
  </xsl:template>
@@ -141,7 +141,7 @@
       </link>
      </xsl:when>
      <xsl:otherwise>
-      <link href="{$href}.html">
+      <link href="view.do?page={$href}">
        <xsl:value-of select="$href"/>
       </link>
      </xsl:otherwise>
