@@ -15,10 +15,8 @@
  */
 package org.apache.forrest.conf;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Enumeration;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,7 +29,6 @@ import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.cocoon.components.modules.input.AbstractJXPathModule;
 import org.apache.cocoon.components.modules.input.InputModule;
-import org.apache.commons.lang.StringUtils;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
 
@@ -73,37 +70,15 @@ implements InputModule, Serviceable, Configurable, ThreadSafe {
     
     protected void load(String file) throws ConfigurationException {
         Source source = null;
-        BufferedReader in = null;
+        InputStream in = null;
         try {
             source = m_resolver.resolveURI(file);
            
-            in = new BufferedReader(new InputStreamReader(source.getInputStream()));
+            in = source.getInputStream();
             
-            m_properties = new Properties();
-            String currentLine, name, value;
-            int splitIndex;
-            Enumeration names;
-             
-            while((currentLine = in.readLine()) != null) {
-                // # == comment
-                if(!currentLine.startsWith("#")&&!(currentLine.trim().length()==0)){ 
-                    splitIndex =  currentLine.indexOf('='); 
-                    name = currentLine.substring(0, splitIndex).trim();
-                    //if the property is already there don't overwrite, as in Ant
-                    //properties defined first take precedence
-                    if(!m_properties.containsKey(name)){
-                        value = currentLine.substring(splitIndex+1).trim();
-                        names = m_properties.propertyNames();
-                        while( names.hasMoreElements() ) {
-                            String currentName = (String) names.nextElement();
-                            String valueToSearchFor = "${"+currentName+"}";
-                            String valueToReplaceWith = (String) m_properties.get(currentName);
-                            value = StringUtils.replace(value, valueToSearchFor, valueToReplaceWith);
-                        }
-                        m_properties.put(name,value);
-                    }    
-                }    
-            }
+            m_properties = new AntProperties();
+            m_properties.load(in);
+ 
         }
         catch (IOException e) {
             throw new ConfigurationException("Cannot load properties file " + file);
