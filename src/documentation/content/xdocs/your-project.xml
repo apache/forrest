@@ -5,7 +5,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.33 $</version>
+    <version>$Revision: 1.34 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -51,7 +51,7 @@ Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.bui
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/12/29 10:07:53 $              |
+    |             $Date: 2003/12/30 04:45:27 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -842,8 +842,7 @@ project.skin=forrest-site
         Always use <code>forrest.antproxy.xml</code>, not
         <code>forrest.build.xml</code>.  The <code>forrest.antproxy.xml</code>
         script invokes <code>forrest.build.xml</code> using Forrest's own
-        bundled version of Ant, which has non-standard support for catalog
-        files.
+        bundled version of Ant.
       </note>
       <p>
         You'll notice that these targets require <code>${forrest.home}</code>
@@ -851,19 +850,19 @@ project.skin=forrest-site
         shbat distribution of Forrest.  Thus we need a mechanism for the user
         to inform the build script of their Forrest's location.  Typically
         this is done by setting a property in a properties file like
-        <code>build.properties</code>, but can also be done by looking for the
+        <code>project.properties</code>, but can also be done by looking for the
         <code>FORREST_HOME</code> environment variable.
       </p>
       <p>
         Forrest comes with an Ant snippet file,
-        <code>forrest-targets.ent</code>, that supplies the targets listed
+        <code>forrest-targets.ent</code> that supplies the targets listed
         above, as well as searching for a <code>${forrest.home}</code>
         definition in a number of likely places:
       </p>
       <ul>
         <li>In the <code>FORREST_HOME</code> environment variable.</li>
-        <li>In the <code>build.properties</code> file.</li>
         <li>In the <code>project.properties</code> file.</li>
+        <li>In the <code>build.properties</code> file.</li>
         <li>In the <code>ant.properties</code> file.</li>
         <li>In the <code>.ant.properties</code> file.</li>
       </ul>
@@ -895,6 +894,11 @@ project.skin=forrest-site
         Having done this, the Forrest targets (<code>site, webapp, war,
           validate</code>) are automatically added to your project.  
       </p>
+      <note>
+        Take care if you set forrrest.home using <code>build.properties</code>
+        because if your build already reads build.properties then the forrest
+        targets will not be able to re-set the forrest.home property.
+      </note>
     </section>
   </body>
 </document>

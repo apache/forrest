@@ -1,12 +1,12 @@
 <!--
 This build.xml snippet contains Forrest targets for Ant 1.5+.  It checks that
 the user has set ${forrest.home}, either in one of:
-  build.properties
+  FORREST_HOME environment variable
   project.properties
+  build.properties
   ant.properties
   .ant.properties
-or with the FORREST_HOME environment variable, and prints an informative error
-message if not found.
+and prints an informative error message if not found.
 
 Usage:
 1) Copy this file to somewhere in your project.
@@ -63,7 +63,7 @@ A minimal build.xml would thus be:
   </target>
 
   <target name="forrest.checkenv" if="env.FORREST_HOME">
-    <echo level="verbose">Found $FORREST_HOME..</echo>
+    <echo level="verbose">Found $FORREST_HOME=${env.FORREST_HOME}</echo>
     <property name="forrest.home" location="${env.FORREST_HOME}"/>
     <echo level="verbose">forrest.home set to ${forrest.home}</echo>
     <available file="${forrest.home}" type="dir" property="forrest.home.present"/>
@@ -161,8 +161,8 @@ A minimal build.xml would thus be:
       Then either:
 
       - Set FORREST_HOME as the Forrest build instructions describe
-      - Create a build.properties, with the forrest.home property pointing to
-        the forrest shbat directory, eg:
+      - Create a project.properties, with the forrest.home property
+        pointing to the forrest shbat directory, e.g.
 
         forrest.home=${winpath}  (Windows)
         forrest.home=${unixpath}  (Unix)
