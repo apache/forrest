@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.21 $
+$Revision: 1.22 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -201,15 +201,15 @@ $Revision: 1.21 $
             </map:match>
           </map:when>
 
-	  <map:when test="content/{1}.txt">
-	    <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-	      <map:generate type="text2xml" src="content/{1}{2}.txt" />
-	      <map:transform src="resources/stylesheets/text2document.xsl">
-	        <map:parameter name="filename" value="{2}" />
-	      </map:transform>
-	      <map:serialize type="xml"/>
+          <map:when test="content/{1}.txt">
+            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+              <map:generate type="text2xml" src="content/{1}{2}.txt" />
+              <map:transform src="resources/stylesheets/text2document.xsl">
+                <map:parameter name="filename" value="{2}" />
+              </map:transform>
+              <map:serialize type="xml"/>
             </map:match>
-	  </map:when>
+          </map:when>
 
           <map:otherwise>
             <map:generate src="content/xdocs/{1}.xml" />
