@@ -33,7 +33,7 @@ Installing
 * For XXEv2.5p3+
   * Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
 * For XXEv2.5p2 or prior you also need to do
-  * Open XXE</li>
+  * Open XXE
   * select Options > Options > Schema > Add File
   * Specify the XML Catalog file:
   * "[FORREST_HOME]/context/resources/schema/catalog.xcat" (where [FORREST_HOME] is the value of your FORREST_HOME environment variable)
