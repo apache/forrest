@@ -4,6 +4,7 @@
   <xsl:param name="config-file" select="'../../../../skinconf.xml'"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
   <xsl:param name="dir" select="'UNDEFINED'"/>
+  <xsl:param name="resource" select="'UNDEFINED'"/>
   <xsl:include href="dotdots.xsl"/>
 
   <xsl:variable name="root">
@@ -179,7 +180,7 @@
         </xsl:if>
       </td>
       <td class="logos" bgcolor="#CFDCED" colspan="5" align="right">
-        <xsl:if test="$config/credits">
+        <xsl:if test="$resource = 'index.html' and $config/credits">
           <div align="right">
           <xsl:for-each select="$config/credits/credit">
             <xsl:variable name="name" select="name"/>
