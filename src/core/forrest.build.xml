@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/21 11:39:11 $              |
+    |             $Date: 2003/10/21 17:20:46 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -65,17 +65,16 @@ FORREST SITE BUILDER
     <property name="project.webapp"      location="${project.build-dir}/webapp" />
     <property name="project.index-dir"   location="${project.webapp}/lucene-index" />
 
-    <property name="project.temp-dir"    location="${project.build-dir}/tmp"     />
-    <property name="project.work-dir"    location="${project.temp-dir}/work"      />
-    <property name="project.ctxt-dir"    location="${project.temp-dir}/context"   />
-
-    <property name="project.brokenlinkfile" location="${project.temp-dir}/brokenlinks.xml"/>
-    <property name="project.debuglevel"  value="ERROR"                         />
-    <property name="project.start-uri"   value="index.html"                    />
-    <property name="project.configfile"   value="${project.ctxt-dir}/WEB-INF/cli.xconf" />
-    <property name="project.logkitfile"   value="${project.ctxt-dir}/WEB-INF/logkit.xconf" />
-    <property name="project.logger"       value="" />
-    <property name="project.i18n"         value="false" />
+    <property name="project.temp-dir"           location="${project.build-dir}/tmp"     />
+    <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
+    
+    <property name="project.brokenlinkfile" location="${project.build-dir}/brokenlinks.xml"/>
+    <property name="project.debuglevel"     value="ERROR"                         />
+    <property name="project.start-uri"      value="index.html"                    />
+    <property name="project.configfile"     value="${project.webapp}/WEB-INF/cli.xconf" />
+    <property name="project.logkitfile"     value="${project.webapp}/WEB-INF/logkit.xconf" />
+    <property name="project.logger"         value="" />
+    <property name="project.i18n"           value="false" />
 
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
@@ -272,9 +271,9 @@ FORREST SITE BUILDER
       | //temp dir to throw stuff in (i.e. work and ctxt)
       | project.temp-dir    = ${project.temp-dir} 
       | //temp working directory for generation process
-      | project.work-dir    = ${project.work-dir} 
+      | project.cocoon-work-dir    = ${project.cocoon-work-dir} 
       | //temp context directory for generation process
-      | project.ctxt-dir    = ${project.ctxt-dir} 
+      | project.webapp    = ${project.webapp} 
       | //debuglevel for logging (DEBUG, INFO, WARN, ERROR, FATAL_ERROR)
       | project.debuglevel  = ${project.debuglevel}
       | //file for list of broken links
@@ -298,8 +297,8 @@ FORREST SITE BUILDER
   <target name="prepare-classpath" depends="prepare-context, -prepare-classpath"/>
   <target name="-prepare-classpath">
     <path id="forrest.cp">
-      <pathelement location="${project.ctxt-dir}/WEB-INF/classes"/>
-      <fileset dir="${project.ctxt-dir}/WEB-INF/lib" includes="*.jar"/>
+      <pathelement location="${project.webapp}/WEB-INF/classes"/>
+      <fileset dir="${project.webapp}/WEB-INF/lib" includes="*.jar"/>
       <pathelement location="${forrest.home}/context/WEB-INF/classes"/>
       <fileset dir="${forrest.home}/jetty" includes="servlet-2.3.jar"/>
       <fileset dir="${forrest.home}/lib/endorsed" includes="*.jar"/>
@@ -324,12 +323,12 @@ FORREST SITE BUILDER
        Fills the Cocoon context dir to work in 
        with the forrest-predefines.
        param: name of the skin to use ${project.skin} (now)
-       param: location to make temporary context-dir ${project.ctxt-dir} 
+       param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
-       <target name="bare-context" depends="init" >
-         <echo>____________________________________</echo>
-         <echo>Using skin ${project.skin}</echo>
-         <echo>____________________________________</echo>
+  <target name="bare-context" depends="init" >
+    <echo>____________________________________</echo>
+    <echo>Using skin ${project.skin}</echo>
+    <echo>____________________________________</echo>
     <filter token="skin"              value="${project.skin}" />
     <filter token="menu-scheme"       value="${project.menu-scheme}" />
     <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
@@ -357,7 +356,7 @@ FORREST SITE BUILDER
     <filter token="project-logo.href" value="${skinconfig.project-url}"/>
     <filter token="project-logo.alt"  value="${skinconfig.project-name} logo"/>
 
-    <copy todir="${project.ctxt-dir}/" >
+    <copy todir="${project.webapp}/" >
       <fileset dir="${forrest.home}/context" >
         <exclude name="*.xmap" />
         <exclude name="skins/**" />
@@ -368,7 +367,7 @@ FORREST SITE BUILDER
       </fileset>
     </copy>
 
-    <copy todir="${project.ctxt-dir}/" filtering="true" overwrite="true">
+    <copy todir="${project.webapp}/" filtering="true" overwrite="true">
     <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
         <include name="*.xmap" />
@@ -378,10 +377,10 @@ FORREST SITE BUILDER
       </fileset>
     </copy>
 
-    <mkdir dir="${project.ctxt-dir}/WEB-INF"/>
+    <mkdir dir="${project.webapp}/WEB-INF"/>
 
     <!-- Force-copy these files as they have @tokens@ that will need replacing -->
-    <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true">
+    <copy todir="${project.webapp}/WEB-INF" filtering="true" overwrite="true">
       <fileset dir="${forrest.home}/context/WEB-INF">
         <include name="*.xconf" />
       </fileset>
@@ -389,8 +388,8 @@ FORREST SITE BUILDER
 
     <!--Hack to stop the classpath definition breaking. If the project has any
     custom jars or classes, they will be added to these dirs -->
-    <mkdir dir="${project.ctxt-dir}/WEB-INF/lib"/>
-    <mkdir dir="${project.ctxt-dir}/WEB-INF/classes"/>
+    <mkdir dir="${project.webapp}/WEB-INF/lib"/>
+    <mkdir dir="${project.webapp}/WEB-INF/classes"/>
   </target>
 
 
@@ -401,7 +400,7 @@ FORREST SITE BUILDER
           with siteplan: based on that plan; should allow more different parts)
        param: location to find the content ${content-dir}(now)
        param: location to find project descriptors == ${project.home} 
-       param: location to make temporary context-dir ${project.ctxt-dir} 
+       param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
@@ -409,13 +408,13 @@ FORREST SITE BUILDER
     copy-classes, copy-skins, copy-skinconf, copy-status, copy-translations"/>
 
   <target name="copy-conf" if="conf.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="true"
       overwrite="true" failonerror="false">
       <fileset dir="${conf-dir}">
         <exclude name="*-${version}.xconf"/>
       </fileset>
     </copy>
-    <copy toDir="${project.ctxt-dir}/WEB-INF" filtering="true" overwrite="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="true" overwrite="true"
       failonerror="false">
       <fileset dir="${conf-dir}">
         <include name="*-${version}.*"/>
@@ -425,14 +424,14 @@ FORREST SITE BUILDER
    </target>
 
   <target name="copy-sitemap" if="sitemap.present">
-    <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true" failonerror="false">
+    <copy toDir="${project.webapp}" filtering="true" overwrite="true" failonerror="false">
       <fileset dir="${sitemap-dir}">
         <exclude name="*-${version}.xmap"/>
         <include name="*.xmap"/>
         <include name="jtidy.properties"/>
       </fileset>
     </copy>
-    <copy toDir="${project.ctxt-dir}" filtering="true" overwrite="true">
+    <copy toDir="${project.webapp}" filtering="true" overwrite="true">
       <fileset dir="${sitemap-dir}">
         <include name="*-${version}.xmap"/>
       </fileset>
@@ -441,13 +440,13 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-xdocs" if="xdocs.present">
-    <sync toDir="${project.ctxt-dir}/content/xdocs">
+    <sync toDir="${project.webapp}/content/xdocs">
       <fileset dir="${xdocs-dir}"/>
     </sync>
   </target>
 
   <target name="copy-resources" if="resources.present">
-    <copy toDir="${project.ctxt-dir}/resources" failonerror="false">
+    <copy toDir="${project.webapp}/resources" failonerror="false">
       <fileset dir="${resources-dir}">
         <exclude name="stylesheets"/>
         <exclude name="images"/>
@@ -457,21 +456,21 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-stylesheets" if="stylesheets.present">
-    <copy toDir="${project.ctxt-dir}/resources/stylesheets" 
+    <copy toDir="${project.webapp}/resources/stylesheets" 
       overwrite="true" failonerror="false">
       <fileset dir="${stylesheets-dir}"/>
     </copy>
   </target>
 
   <target name="copy-images" if="images.present">
-    <copy toDir="${project.ctxt-dir}/resources/images" 
+    <copy toDir="${project.webapp}/resources/images" 
       overwrite="true" failonerror="false">
       <fileset dir="${images-dir}"/>
     </copy>
   </target>
 
   <target name="copy-grammars" if="grammars.present">
-    <copy toDir="${project.ctxt-dir}/resources/grammars" 
+    <copy toDir="${project.webapp}/resources/grammars" 
       overwrite="true" failonerror="false">
       <fileset dir="${grammars-dir}"/>
     </copy>
@@ -479,7 +478,7 @@ FORREST SITE BUILDER
 
   <!-- Copy all non-xdocs content -->
   <target name="copy-content" if="raw-content.present">
-    <copy toDir="${project.ctxt-dir}/content" 
+    <copy toDir="${project.webapp}/content" 
       overwrite="false" failonerror="false">
       <fileset dir="${raw-content-dir}">
         <exclude name="${xdocs-dir}/**"/>
@@ -488,26 +487,26 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-lib" if="lib.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF/lib" 
+    <copy toDir="${project.webapp}/WEB-INF/lib" 
       overwrite="true" failonerror="false">
       <fileset dir="${lib-dir}"/>
     </copy>
   </target>
 
   <target name="copy-classes" if="classes.present">
-    <copy toDir="${project.ctxt-dir}/WEB-INF/classes" 
+    <copy toDir="${project.webapp}/WEB-INF/classes" 
       overwrite="true" failonerror="false">
       <fileset dir="${classes-dir}"/>
     </copy>
   </target>
 
   <target name="copy-skins" if="skins.present">
-    <copy toDir="${project.ctxt-dir}/skins" overwrite="true" failonerror="false">
+    <copy toDir="${project.webapp}/skins" overwrite="true" failonerror="false">
        <fileset dir="${skins-dir}" >
         <include name="**/images/**" />
       </fileset>
     </copy>
-    <copy toDir="${project.ctxt-dir}/skins" filtering="true" overwrite="true" failonerror="false">
+    <copy toDir="${project.webapp}/skins" filtering="true" overwrite="true" failonerror="false">
       <fileset dir="${skins-dir}" >
         <exclude name="**/images/**" />
       </fileset>
@@ -516,16 +515,16 @@ FORREST SITE BUILDER
 
   <target name="copy-skinconf" if="skinconf.present">
     <copy file="${skinconf}"
-      toDir="${project.ctxt-dir}" 
+      toDir="${project.webapp}" 
       overwrite="true" failonerror="false"/>
   </target>
 
   <target name="copy-status" if="status.present">
-    <copy file="${status}" todir="${project.ctxt-dir}" />
+    <copy file="${status}" todir="${project.webapp}" />
   </target>
 
   <target name="copy-translations" if="translations.present" >
-    <copy todir="${project.ctxt-dir}/translations">
+    <copy todir="${project.webapp}/translations">
     <fileset dir="${translations-dir}"/>
     </copy>
   </target>
@@ -543,7 +542,7 @@ FORREST SITE BUILDER
             with siteplan: e.g. sitemap and catalog)
        param: name of the skin to use ${project.skin} (now)
        param: location to find the content ${content-dir}(now)
-       param: location to make temporary context-dir ${project.ctxt-dir} 
+       param: location to make temporary context-dir ${project.webapp} 
        =============================================================== -->
   <target name="prepare-context" depends="init, bare-context, project-context" />
 
@@ -594,19 +593,19 @@ Use the 'seed' target to create a template project structure.
        Makes the site.
        param: name of the skin to use ${project.skin} (now)
        param: location to find the content ${content-dir}(now)
-       param: location to make temporary context-dir ${project.ctxt-dir} 
-       param: location to make temporary work-dir ${content-dir}
+       param: location to make temporary context-dir ${project.webapp} 
+       param: location to make temporary cocoon-work-dir ${content-dir}
        param: debuglevel for logging ${project.debuglevel}
        param: location of log-file ${project.logkitfile}
        ===============================================================
    -->
 
-   <target name="site" depends="prepare-context, init, -prepare-classpath" if="project.content.present"
+   <target name="site" depends="init, webapp, -prepare-classpath" if="project.content.present"
      description="Generates a static HTML website for this project">
     <!-- clean out the temp space, if we don't cocoon fails on this
          actually clears the cache, not yet clear why it is really needed? -->
-    <delete dir="${project.work-dir}"/>
-    <mkdir dir="${project.work-dir}"/>
+    <delete dir="${project.cocoon-work-dir}"/>
+    <mkdir dir="${project.cocoon-work-dir}"/>
 
     <parallel>
       <!--
@@ -619,13 +618,13 @@ Use the 'seed' target to create a template project structure.
         <jvmarg line="${forrest.jvmargs}"/>
         <jvmarg
           value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
-        <arg value="-c${project.ctxt-dir}"/>   <!- input to the process ->
+        <arg value="-c${project.webapp}"/>   <!- input to the process ->
         <arg value="-d${project.site-dir}"/>   <!- output to be put ->
-        <arg value="-w${project.work-dir}"/>   <!- temp dir to use for e.g. cache ->
+        <arg value="-w${project.cocoon-work-dir}"/>   <!- temp dir to use for e.g. cache ->
         <arg value="-u${project.debuglevel}"/> <!- threshold for log messages ->
-        <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
+        <arg value="-C${project.webapp}/WEB-INF/cocoon.xconf"/>      <!- cocoon.xconf file to use ->
         <arg value="-b${project.brokenlinkfile}"/>  <!- output list of broken links ->
-        <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
+        <arg value="-k${project.webapp}/WEB-INF/logkit.xconf"/>  <!- output list of broken links ->
         <arg value="${project.start-uri}"/>              <!- starting page ->
         <arg value="-V" />                          <!- be verbose ->
       </java>
@@ -633,7 +632,7 @@ Use the 'seed' target to create a template project structure.
 
       <java classname="org.apache.cocoon.Main"
         fork="true"
-        dir="${project.ctxt-dir}"
+        dir="${project.webapp}"
         failonerror="true"
         maxmemory="${forrest.maxmemory}">
         <jvmarg line="${forrest.jvmargs}"/>
@@ -656,13 +655,13 @@ Use the 'seed' target to create a template project structure.
         | discover the whole URI space.  Note: we are emulating the sitemap here;
         | please ensure they keep in synch.
         -->
-        <property name="skindir" location="${project.ctxt-dir}/skins/${project.skin}"/>
+        <property name="skindir" location="${project.webapp}/skins/${project.skin}"/>
         <copy toDir="${project.site-dir}" 
           overwrite="true" failonerror="false">
-          <fileset dir="${project.ctxt-dir}/content">
+          <fileset dir="${project.webapp}/content">
             <exclude name="xdocs/**"/>
           </fileset>
-          <fileset dir="${project.ctxt-dir}/resources" includes="images"/>
+          <fileset dir="${project.webapp}/resources" includes="images"/>
         </copy>
 
         <!-- Copy skin images -->
@@ -702,7 +701,7 @@ for any broken links in the generated site.
        =============================================================== -->
   <target name="lucene-index" depends="init, -prepare-classpath" unless="stop-lucene-indexer">
     <java classname="org.apache.forrest.search.ForrestIndexer"
-      dir="${project.ctxt-dir}"
+      dir="${project.webapp}"
       fork="true"
       failonerror="true"
       maxmemory="${forrest.maxmemory}">
@@ -737,11 +736,6 @@ for any broken links in the generated site.
     <mkdir dir="${project.webapp}/WEB-INF"/>
     <copy file="${forrest.home}/context/WEB-INF/web.xml" filtering="true" 
       todir="${project.webapp}/WEB-INF"/>
-    <copy todir="${project.webapp}" preservelastmodified="true">
-      <fileset dir="${project.ctxt-dir}" >
-        <exclude name="*.xconf" /> <!-- CLI wants them there, webapp finds them in WEB-INF -->
-      </fileset>
-    </copy>
 
     <copy todir="${project.webapp}/WEB-INF">
       <!-- Note: no overwriting, so user's libs and classes get preference -->
@@ -1060,9 +1054,9 @@ forrest.properties.
           depends="init-props, skin-unavailable, fetch-skins-descriptor"
           description="What skins are available?">
     <xslt in="${forrest.home}/context/skins/skins.xml" 
-          out="${project.work-dir}/skinlist2echobuild.xml"
+          out="${project.temp-dir}/skinlist2echobuild.xml"
           style="${forrest.home}/var/skinlist2echo.xsl"/>  
-    <ant antfile="${project.work-dir}/skinlist2echobuild.xml"/>
+    <ant antfile="${project.temp-dir}/skinlist2echobuild.xml"/>
   </target>  
   
   <target name="package-skin" description="Make a package of an existing skin">
@@ -1126,13 +1120,13 @@ forrest.properties.
           if = "skin.unavailable"
           depends="init-props, fetch-skins-descriptor">
     <xslt in="${forrest.home}/context/skins/skins.xml" 
-          out="${project.work-dir}/skinlist2fetchbuild.xml"
+          out="${project.temp-dir}/skinlist2fetchbuild.xml"
           style="${forrest.home}/var/skinlist2fetch.xsl"
           force="true">
       <param name="skin-name" expression="${project.skin}"/>      
       <param name="forrest-version" expression="${version}"/>   
     </xslt>  
-    <ant antfile="${project.work-dir}/skinlist2fetchbuild.xml"/>
+    <ant antfile="${project.temp-dir}/skinlist2fetchbuild.xml"/>
   </target>    
   
   
