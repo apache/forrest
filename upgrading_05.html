@@ -1,0 +1,661 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Upgrading to Forrest 0.5</title>
+<link type="text/css" href="skin/page.css" rel="stylesheet">
+<link rel="shortcut icon" href="favicon.ico">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<!--================= start Navigation Path ==================-->
+<table summary="navigation path" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td nowrap="nowrap" valign="middle" bgcolor="#CFDCED" height="20"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><!--===== breadcrumb trail (javascript-generated) ====--><font size="2" face="Arial, Helvetica, Sans-serif"><a href="http://www.apache.org/">apache</a> &gt; <a href="http://xml.apache.org/">xml.apache</a><script src="skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script></font></td>
+</tr>
+<tr>
+<td bgcolor="#4C6C8F" height="2"><img height="2" width="2" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+<!--================= end Navigation Path ==================-->
+<!--================= start Banner ==================-->
+<table summary="header with logos" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<!--================= start Group Logo ==================-->
+<td bgcolor="#294563"><a href="http://xml.apache.org/"><img class="logoImage" alt="Apache XML" src="images/group-logo.gif"></a></td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td width="100%" align="center" bgcolor="#294563"><a href="http://xml.apache.org/forrest/"><img class="logoImage" alt="Forrest" src="images/project-logo.gif"></a></td>
+<!--================= end Project Logo ==================-->
+<!--================= start Search ==================--><td valign="top" rowspan="2" bgcolor="#294563">
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0" bgcolor="#4C6C8F">
+<tr>
+<td colspan="3"><img height="10" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap"><input value="xml.apache.org" name="as_sitesearch" type="hidden"><input size="15" name="as_q" id="query" type="text"><img height="1" width="5" alt="" src="skin/images/spacer.gif" class="spacer"><input name="Search" value="Search" type="submit">
+<br>
+<font face="Arial, Helvetica, Sans-serif" size="2" color="white">
+                          the Apache XML site
+                          
+                          
+                        </font></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img alt="" border="0" height="10" width="9" src="skin/images/search-left.gif"></td><td><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td><img alt="" border="0" height="10" width="9" src="skin/images/search-right.gif"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Search ==================--><td bgcolor="#294563"><img height="10" width="10" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td valign="bottom" bgcolor="#294563" colspan="2">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<table summary="tab bar" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="6"><img alt="" height="8" width="6" src="skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="selected tab" style="height: 1.8em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="skin/images/tabSel-left.gif"></td><td valign="middle" bgcolor="#4C6C8F"><font color="#ffffff" size="2" face="Arial, Helvetica, Sans-serif"><b><a class="base-selected" href="index.html">Home</a></b></font></td><td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="skin/images/tabSel-right.gif"></td>
+</tr>
+</table>
+</td><td width="6"><img alt="" height="8" width="6" src="skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="community/index.html">Community</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
+</td><td width="6"><img alt="" height="8" width="6" src="skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="community/howto/index.html">How-to</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<!--================= end Tabs ==================-->
+</td><td bgcolor="#294563"></td>
+</tr>
+<tr>
+<td height="10" bgcolor="#4C6C8F" colspan="4"></td>
+</tr>
+</table>
+<!--================= end Banner ==================-->
+<!--================= start Menu, NavBar, Content ==================-->
+<table summary="page content" bgcolor="#ffffff" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top">
+<table summary="menu" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<!--================= start left top NavBar ==================-->
+<td rowspan="3" valign="top">
+<table summary="blue line" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td bgcolor="#294563"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td bgcolor="#CFDCED"><font color="#4C6C8F" size="4" face="Arial, Helvetica, Sans-serif">&nbsp;</font></td>
+</tr>
+<tr>
+<td bgcolor="#294563"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+</td>
+<!--================= end left top NavBar ==================--><td bgcolor="#294563"><img width="1" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td valign="bottom" bgcolor="#4C6C8F"><img width="10" height="10" alt="" src="skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap" valign="top" bgcolor="#4C6C8F">
+<!--================= start Menu items ==================-->
+<div class="menu">
+<ul>
+<li>
+<font color="#CFDCED">About</font>
+<ul>
+    
+<li>
+<a href="index.html">Index</a>
+</li>
+    
+<li>
+<a href="license.html">License</a>
+</li>
+    
+<li>
+<a class="external" href="http://www.apache.org/dyn/closer.cgi/xml/forrest/">Download</a>
+</li>
+    
+<li>
+<a href="who.html">Who we are</a>
+</li>
+    
+<li>
+<a href="faq.html">FAQs</a>
+</li>
+    
+<li>
+<a href="changes.html">Changes</a>
+</li>
+    
+    
+<li>
+<a href="todo.html">Todo</a>
+</li>
+    
+<li>
+<a href="live-sites.html">Example sites</a>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Documentation</font>
+<ul>
+    
+<li>
+<a href="your-project.html">Using Forrest</a>
+</li>
+    
+<li>
+<a href="validation.html">XML Validation</a>
+</li>
+    
+<li>
+<a href="linking.html">Menus and Linking</a>
+</li>
+    
+<li>
+<a href="sitemap-ref.html">Sitemap Reference</a>
+</li>
+    
+<li>
+<a href="searching.html">Searching</a>
+</li>
+    
+<li>
+<a href="skin-package.html">Skin Packages</a>
+</li>
+    
+    
+<li>
+<a href="forrest-contract.html">Our Contract</a>
+</li>
+    
+<li>
+<a href="compliance.html">Standards Compliance</a>
+</li>
+    
+<li>
+<a href="dtd-docs.html">DTD documentation</a>
+</li>
+    
+<li>
+<a href="catalog.html">Using DTD Catalogs</a>
+</li>
+    
+<li>
+<a href="cap.html">Sourcetype Action</a>
+</li>
+    
+<li>
+<a href="oowriter.html">OpenOffice Writer docs</a>
+</li>    
+    
+<li>
+<a href="forrestbar.html">The ForrestBar</a>
+</li>
+    
+<li>
+<a href="forrestbot.html">Forrestbot (CVS)</a>
+</li>
+    
+<li>
+<a href="forrestbot-old.html">Forrestbot (stable)</a>
+</li>
+    
+    
+<li>
+<a href="upgrading_06.html">Upgrading to 0.6</a>
+</li>
+    
+<li>
+<span class="sel"><font color="#ffcc00">Upgrading to 0.5</font></span>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Older Docs</font>
+<ul>
+    
+<li>
+<a href="primer.html">Forrest Primer</a>
+</li>
+    
+<li>
+<a href="libre-intro.html">Libre</a>
+</li>
+    
+<li>
+<a href="dreams.html">Dream list</a>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Some Samples</font>
+<ul>
+    
+<li>
+<a href="document-v12.html">document-v12</a>
+</li>
+    
+<li>
+<a href="wiki-sample.html">Wiki Reference</a>
+</li>
+ 
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Getting Involved</font>
+<ul>
+    
+<li>
+<a href="contrib.html">Contributing</a>
+</li>
+    
+<li>
+<a href="build.html">Building Forrest</a>
+</li>
+    
+<li>
+<a class="external" href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/?root=Apache-SVN">Browse SVN</a>
+</li>
+    
+<li>
+<a href="mail-lists.html">Mail lists</a>
+</li>
+    
+<li>
+<a href="mail-archives.html">Mail Archives</a>
+</li>
+    
+<li>
+<a class="external" href="http://issues.cocoondev.org/jira/secure/BrowseProject.jspa?id=10000">Bugs and Issues</a>
+</li>
+    
+<li>
+<a href="forrest-issues.html">Open Issues</a>
+</li>
+  
+</ul>
+</li>
+<li>
+<font color="#CFDCED">Related projects</font>
+<ul>
+    
+<li>
+<a class="external" href="http://gump.apache.org/">Apache Gump</a>
+</li>
+    
+<li>
+<a class="external" href="http://cocoon.apache.org/">Apache Cocoon</a>
+</li>
+    
+<li>
+<a class="external" href="http://cocoon.apache.org/lenya/">Apache Lenya</a>
+</li>
+    
+<li>
+<a class="external" href="http://www.krysalis.org/">Krysalis Centipede</a>
+</li>
+  
+</ul>
+</li>
+</ul>
+</div>
+<!--================= end Menu items ==================-->
+</td><td valign="bottom" bgcolor="#4C6C8F"><img width="10" height="10" alt="" src="skin/images/spacer.gif" class="spacer"></td><td bgcolor="#294563"><img width="1" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td valign="bottom" align="left" colspan="2" rowspan="2" bgcolor="#4C6C8F"><img height="10" width="10" border="0" alt="" src="skin/images/menu-left.gif"></td><td bgcolor="#4C6C8F"><img height="10" width="10" alt="" src="skin/images/spacer.gif" class="spacer"></td><td valign="bottom" align="right" colspan="2" rowspan="2" bgcolor="#4C6C8F"><img height="10" width="10" border="0" alt="" src="skin/images/menu-right.gif"></td>
+</tr>
+<tr>
+<td height="1" bgcolor="#294563"><img width="1" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+</table>
+</td><td valign="top" width="100%">
+<table summary="content" width="100%" border="0" cellpadding="0" cellspacing="0">
+<!--================= start middle NavBar ==================-->
+<tr>
+<td colspan="4" bgcolor="#294563"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td align="left" width="10" bgcolor="#CFDCED"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td align="left" width="50%" bgcolor="#CFDCED"><font color="#4C6C8F" size="3" face="Arial, Helvetica, Sans-serif">
+                &nbsp;
+                
+                </font><img width="10" height="8" alt="" src="skin/images/spacer.gif" class="spacer"></td><td align="right" width="50%" bgcolor="#CFDCED"><font color="#4C6C8F" size="3" face="Arial, Helvetica, Sans-serif">
+                &nbsp;
+                
+                </font><img width="10" height="8" alt="" src="skin/images/spacer.gif" class="spacer"></td><td width="10" bgcolor="#CFDCED"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="4" bgcolor="#294563"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<!--================= end middle NavBar ==================-->
+<!--================= start Content==================-->
+<tr>
+<td align="left" width="10"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td><td colspan="2" align="left" width="100%">
+<div class="content">
+<table class="title" summary="">
+<tr>
+<td valign="middle">
+<h1>Upgrading to Forrest 0.5</h1>
+</td><td nowrap="nowrap" width="40" align="center"><a class="dida" href="upgrading_05.pdf"><img alt="PDF" src="skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a></td>
+</tr>
+</table>
+<ul class="minitoc">
+<li>
+<a href="#Introduction">Introduction</a>
+</li>
+<li>
+<a href="#New+Features">New Features</a>
+</li>
+<li>
+<a href="#Upgrading+the+sitemap">Upgrading the sitemap</a>
+</li>
+<li>
+<a href="#Version-specific+sitemaps">Version-specific sitemaps</a>
+</li>
+<li>
+<a href="#Excluding+URLs%3A+filterlinks.xsl+removed+and+cli.xconf+added">Excluding URLs: filterlinks.xsl removed and cli.xconf added</a>
+</li>
+<li>
+<a href="#Skin+invocation+changes">Skin invocation changes</a>
+</li>
+<li>
+<a href="#Upgrading+skinconf.xml">Upgrading skinconf.xml</a>
+</li>
+<li>
+<a href="#Upgrading+forrest.properties">Upgrading forrest.properties</a>
+</li>
+<li>
+<a href="#Run+a+clean+target+after+upgrade">Run a clean target after upgrade</a>
+</li>
+<li>
+<a href="#SVGs+should+omit+DOCTYPE+declarations">SVGs should omit DOCTYPE declarations</a>
+</li>
+<li>
+<a href="#To+be+continued...">To be continued...</a>
+</li>
+</ul> 
+    
+<a name="N10010"></a><a name="Introduction"></a>
+<h3>Introduction</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+      This page describes changes to Forrest that affect people who are
+      upgrading from 0.4 and earlier to the 0.5 version.
+      Please post your upgrade experiences to the
+      <a href="mail-lists.html#forrest-dev">forrest-dev mailing list</a>.
+      As more experience is gained, this document will be updated.  
+      </p>
+</div>
+
+    
+<a name="N1001E"></a><a name="New+Features"></a>
+<h3>New Features</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>This new version includes many changes, as it as been under
+        development for seven months (in part, awaiting the Cocoon 2.1 release).
+        The following list shows some of the key new features for Forrest 0.5
+        (for the full list of changes, see the
+        <a href="changes.html">change log</a>).
+      </p>
+<ul>
+        
+<li>Significantly faster (100% - 300%) command-line rendering</li>
+        
+<li>Docbook support. The DTDs are shipped. Document types are
+        automatically detected by the sitemap and there is a basic stylesheet
+        which converts DocBook documents to intermediate forrest document-v12
+        for standard rendering. For rendering as full DocBook, see
+        <a href="faq.html#docbook">this FAQ entry</a>.
+       </li>
+
+        
+<li>Configuration of URLs to ignore with cli.xconf configuration.</li>
+
+        
+<li>Skin enhancements.</li>
+
+        
+<li>The document-v12 DTDs are added. You can still use the old
+        document-v11 DTDs if you would rather. However it is easy to upgrade
+        - just change the document type declarations in you project's xdocs
+        and run '<span class="codefrag">forrest validate-xdocs</span>'.</li>
+
+        
+<li>Automated handling of documents in Wiki syntax. See the
+         fresh-site example which are generated when you
+         '<span class="codefrag">forrest seed</span>' a new project.</li>
+
+        
+<li>The '<span class="codefrag">forrest backcopy</span>' target copies all
+         types of content that you may have edited under the webapp while
+         doing a '<span class="codefrag">forrest run</span>'.</li>
+
+        
+<li>Flag for email obfuscation.</li>
+
+        
+<li>Support for raw un-processed content. See 
+        <a href="faq.html#link_raw">this FAQ entry</a>.
+        </li>
+
+        
+<li>Element <span class="codefrag">&lt;abstract&gt;</span> is now rendered in the 
+        HTML output.</li>
+
+        
+<li>Images scale properly in PDF output. See also
+        <a href="faq.html#pdf_images">this FAQ entry</a>.
+        </li>
+
+        
+<li>Configurable table-of-content depth with new 'toc' element in
+        the <span class="codefrag">skinconf.xml</span> configuration.</li>
+      
+</ul>
+</div>
+    
+<a name="N10071"></a><a name="Upgrading+the+sitemap"></a>
+<h3>Upgrading the sitemap</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>
+        In brief, Forrest 0.5 is <em>mostly</em> backwards-compatible for sites that do not define a custom sitemap.
+        Between 0.4 and 0.5, the Forrest sitemap was completely rewritten.  Instead of a single sitemap.xmap doing
+        everything, a 'driver' sitemap.xmap now delegates to a number of mounted subsitemaps handling different functional
+        areas.  The new sitemap is fully described in the <a href="sitemap-ref.html">Sitemap Reference</a>.
+      </p>
+<p>Users that have overridden and augmented the Forrest 0.4 sitemap.xmap
+      (run '<span class="codefrag">forrest overrides</span>' to see if your project has)
+      will need to:</p>
+<ol>
+        
+<li>Move their overridden sitemap (<span class="codefrag">src/documentation/sitemap.xmap</span>) out the way</li>
+        
+<li>Copy the new sitemap, $FORREST_HOME/context/sitemap.xmap, to <span class="codefrag">src/documentation</span>
+</li>
+        
+<li>Reapply your customizations to the new sitemap.xmap.  Customizations can be determined by comparing your modified
+          sitemap.xmap with <a class="external" href="http://cvs.apache.org/viewcvs.cgi/*checkout*/xml-forrest/src/resources/conf/sitemap.xmap?rev=1.66&only_with_tag=FORREST_04">original
+            Forrest 0.4 sitemap</a>.</li>
+      
+</ol>
+</div>
+
+    
+<a name="N1009D"></a><a name="Version-specific+sitemaps"></a>
+<h3>Version-specific sitemaps</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>Forrest 0.5 now supports <em>version-specific sitemaps</em>.  Ie., if your project's overridden sitemap is
+        called <span class="codefrag">sitemap-0.5.xmap</span>, then this sitemap will be used in preference to
+        <span class="codefrag">sitemap.xmap</span>, or any other sitemap-*.xmap variants.</p>
+<p>So if, for example, one has:</p>
+<pre class="code">
+        src/documentation/sitemap.xmap
+        src/documentation/sitemap-0.5.xmap
+      </pre>
+<p>Then Forrest 0.4 will use sitemap.xmap, and Forrest 0.5 will use sitemap-0.5.xmap.  This means users don't
+        need to all upgrade to 0.5 at once.</p>
+<p>As Forrest 0.5 has been split into multiple sitemaps, this version-specific behaviour is triggered for any
+        *-0.5.xmap file.  For example, if one has:</p>
+<pre class="code">
+        src/documentation/sitemap.xmap
+        src/documentation/forrest-0.5.xmap
+      </pre>
+<p>Then Forrest 0.4 will use sitemap.xmap, and Forrest 0.5 will use Forrest's own sitemap.xmap, plus the
+        user-defined forrest-0.5.xmap file.</p>
+<p>The same system prevents future compatibility problems, so Forrest 0.5 should continue to work when future
+        (incompatible) sitemaps are present:</p>
+<pre class="code">
+        src/documentation/sitemap.xmap
+        src/documentation/sitemap-0.5.xmap
+        src/documentation/sitemap-0.6.xmap
+        src/documentation/sitemap-0.7.xmap
+      </pre>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">If your <span class="codefrag">forrest.properties</span> defines the
+        <span class="codefrag">forrest.validate.sitemap.{includes,excludes}</span> properties, these will have to be updated to prevent
+        validation of sitemaps from unused versions.  If undefined, Forrest will only validate sitemaps from the
+        current version.</div>
+</div>
+</div>
+    
+<a name="N100D7"></a><a name="Excluding+URLs%3A+filterlinks.xsl+removed+and+cli.xconf+added"></a>
+<h3>Excluding URLs: filterlinks.xsl removed and cli.xconf added</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>In Forrest 0.4 certain URLs could be excluded from command-line
+      processing by overriding and editing
+      <span class="codefrag">filterlinks.xsl</span> and so excluding the link nodes.
+      </p>
+<p>Forrest 0.5 uses the re-written command-line from Cocoon 2.1.1 which,
+      apart from being much faster,
+      <strong>does not use filterlinks.xsl</strong>.  Instead, patterns for
+      command-line inclusion and exclusion can be specified in cli.xconf,
+      as described in
+      <a href="faq.html#ignoring_javadocs">this FAQ entry</a>. There is
+      already a default cli.xconf but you can over-ride that with your own if
+      needed by copying <span class="codefrag">resources/conf/cli.xconf</span> from the Forrest
+      distribution into your project's top-level directory.
+      </p>
+</div>
+
+    
+<a name="N100F1"></a><a name="Skin+invocation+changes"></a>
+<h3>Skin invocation changes</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>Users with custom skins <em>may</em> need to update them, depending on what use they make of passed-in XSLT
+        parameters.  If your custom skin does not appear to work with 0.5, look in Forrest's <span class="codefrag">sitemap.xmap</span>
+        for occurrences of <span class="codefrag">{forrest:skin}</span>, and check that the callee (your XSLT) is expecting what the
+        caller (the sitemap) is passing it.  Forrest skins can be used as a reference.</p>
+</div>
+
+    
+<a name="N10104"></a><a name="Upgrading+skinconf.xml"></a>
+<h3>Upgrading skinconf.xml</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>Look at the <a class="external" href="http://cvs.apache.org/viewcvs/xml-forrest/src/resources/fresh-site/src/documentation/skinconf.xml.diff?r1=1.7%3AFORREST_04&r2=1.15%3AFORREST_05&diff_format=h">differences
+        for the sample skinconf.xml</a> as a guide.
+        You will need to update the internal DTD and add several new elements.
+      </p>
+</div>
+
+    
+<a name="N10112"></a><a name="Upgrading+forrest.properties"></a>
+<h3>Upgrading forrest.properties</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>Look at the <a class="external" href="http://cvs.apache.org/viewcvs/xml-forrest/src/resources/fresh-site/forrest.properties.diff?r1=1.20%3AFORREST_04&r2=1.32%3AFORREST_05&diff_format=h">differences
+        for the sample forrest.properties</a> as a guide. Note that
+        project.sitemap has changed to project.sitemap-dir and note that
+        cli.xconf now controls some settings that were previously controlled
+        by forrest.properties, such as project.start-uri
+      </p>
+</div>
+
+    
+<a name="N10120"></a><a name="Run+a+clean+target+after+upgrade"></a>
+<h3>Run a clean target after upgrade</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>To avoid any issue with old classes being loaded, run a
+       '<span class="codefrag">forrest clean</span>' just after you upgraded to this version.</p>
+</div>
+
+    
+<a name="N1012D"></a><a name="SVGs+should+omit+DOCTYPE+declarations"></a>
+<h3>SVGs should omit DOCTYPE declarations</h3>
+<div style="margin-left: 0 ; border: 2px">
+<div class="frame fixme">
+<div class="label">Fixme (forrest-dev)</div>
+<div class="content">Is this note still relevant?</div>
+</div>
+<p>In Forrest 0.5, sites that render SVGs may encounter ClassCastExceptions:</p>
+<pre class="code">
+javax.xml.transform.TransformerException: java.lang.ClassCastException
+    at org.apache.xalan.transformer.TransformerImpl.transformNode(TransformerImpl.java:1326)
+    at org.apache.xalan.transformer.TransformerImpl.run(TransformerImpl.java:3329)
+...</pre>
+<p>There appears to be a bug in Cocoon 2.1.1's SVG component where the DTD associated with SVGs cannot be
+        resolved.  The workaround is to edit your <span class="codefrag">src/documentation/resources/images/*.svg</span> files, and
+        comment out the <strong>&lt;!DOCTYPE ... &gt;</strong> declaration.</p>
+</div>
+
+    
+<a name="N10149"></a><a name="To+be+continued..."></a>
+<h3>To be continued...</h3>
+<div style="margin-left: 0 ; border: 2px">
+<p>..as more issues are discovered/remembered :)  Please send feedback to the <a href="mail-lists.html#forrest-dev">mailing list</a>.</p>
+</div>
+  
+<div class="attribution">
+<span class="version">
+          version 1.8</span>
+</div>
+</div>
+</td><td width="10"><img width="10" height="1" alt="" src="skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<!--================= end Content==================-->
+</table>
+</td>
+</tr>
+</table>
+<!--================= end Menu, NavBar, Content ==================-->
+<!--================= start Footer ==================-->
+<table summary="footer" cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td colspan="2" height="1" bgcolor="#4C6C8F"><img height="1" width="1" alt="" src="skin/images/spacer.gif" class="spacer"><a href="skin/images/label.gif"></a><a href="skin/images/page.gif"></a><a href="skin/images/chapter.gif"></a><a href="skin/images/chapter_open.gif"></a><a href="skin/images/current.gif"></a></td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#CFDCED" class="copyright" align="center"><font size="2" face="Arial, Helvetica, Sans-Serif"><a href="http://www.apache.org/licenses/LICENSE-2.0">
+              Copyright &copy; 2002-2004&nbsp;
+              The Apache Software Foundation.</a>
+          All rights reserved.
+          <script type="text/javascript" language="JavaScript"><!--
+              document.write(" - "+"Last Published: " + document.lastModified);
+            //  --></script></font></td>
+</tr>
+<tr>
+<td colspan="2" align="left" bgcolor="#CFDCED" class="logos"></td>
+</tr>
+</table>
+<!--================= end Footer ==================-->
+</body>
+</html>
