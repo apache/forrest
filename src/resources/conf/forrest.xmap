@@ -41,15 +41,15 @@
           <map:parameter name="parameter-selector-test" value="{sourcetype}" />
 
           <map:when test="howto-v10">
-            <map:transform src="library/xslt/howto2document.xsl" label="content" />
+            <map:transform src="resources/stylesheets/howto2document.xsl" label="content" />
           </map:when>
 
           <map:when test="docbook-v4.2">
-            <map:transform src="library/xslt/docbook2document.xsl" label="content" />
+            <map:transform src="resources/stylesheets/docbook2document.xsl" label="content" />
           </map:when>
 
           <map:when test="sdocbook-v1.0">
-            <map:transform src="library/xslt/docbook2document.xsl" label="content" />
+            <map:transform src="resources/stylesheets/docbook2document.xsl" label="content" />
           </map:when>
 
           <map:otherwise />
@@ -67,7 +67,7 @@
         <map:act type="resource-exists">
           <map:parameter name="url" value="content/xdocs/{1}.ihtml" />
           <map:generate src="content/xdocs/{../1}.ihtml" type="html" />
-          <map:transform src="library/xslt/html2document.xsl" />
+          <map:transform src="resources/stylesheets/html2document.xsl" />
           <map:transform type="idgen" />
           <map:serialize type="xml"/>
         </map:act>
@@ -75,7 +75,7 @@
         <map:act type="resource-exists">
           <map:parameter name="url" value="content/xdocs/{1}.ehtml" />
           <map:generate src="content/xdocs/{../1}.ehtml" />
-          <map:transform src="library/xslt/html2htmlbody.xsl" />
+          <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
           <map:serialize type="xml" />
         </map:act>
 
@@ -86,9 +86,9 @@
             <map:parameter name="grammar" value="chaperon/grammars/wiki.grm" />
             <map:parameter name="includeignorabletokens" value="true" />
           </map:generate>
-          <map:transform src="library/xslt/wiki2htmlpage.xsl" />
-          <map:transform src="library/xslt/wiki2html.xsl" />
-          <map:transform src="library/xslt/html2document.xsl" />
+          <map:transform src="resources/stylesheets/wiki2htmlpage.xsl" />
+          <map:transform src="resources/stylesheets/wiki2html.xsl" />
+          <map:transform src="resources/stylesheets/html2document.xsl" />
           <map:transform type="idgen" />
           <map:serialize type="xml"/>
         </map:act>

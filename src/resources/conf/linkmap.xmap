@@ -18,7 +18,7 @@
     <map:pipeline>
       <map:match pattern="abs-linkmap">
         <map:generate src="content/xdocs/site.xml" />
-        <map:transform src="library/xslt/absolutize-linkmap.xsl" />
+        <map:transform src="resources/stylesheets/absolutize-linkmap.xsl" />
         <map:serialize type="xml" />
       </map:match>
 
@@ -32,7 +32,7 @@
 
       <map:match pattern="**linkmap">
         <map:generate src="cocoon:/abs-linkmap" />
-        <map:transform src="library/xslt/relativize-linkmap.xsl">
+        <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
           <map:parameter name="path" value="{0}" />
         </map:transform>
         <map:serialize type="xml" />
@@ -43,7 +43,7 @@
       returned subtree must have. -->
       <map:match pattern="**linkmap/**">
         <map:generate src="cocoon:/abs-linkmap/{2}" />
-        <map:transform src="library/xslt/relativize-linkmap.xsl">
+        <map:transform src="resources/stylesheets/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}linkmap" />
         </map:transform>
         <map:serialize type="xml" />
