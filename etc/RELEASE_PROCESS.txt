@@ -14,27 +14,27 @@ Preparations
  - Edit module.xml and replace the '-dev' text with '':
     ...
     <project name="xml-forrest">
-        <version fix="0" major="0" minor="4" tag="-dev"/>
+        <version fix="0" major="0" minor="6" tag="-dev"/>
 
  - Edit status.xml, remove the -dev from the current <release> tag, and set the
    date.  Also add a new <release> for development on the next version  e.g.
    from:
 
-    <release version="0.4-dev" date="unreleased">
+    <release version="0.6-dev" date="unreleased">
       ...
  
    to:
 
-    <release version="0.5-dev" date="unreleased">
+    <release version="0.7-dev" date="unreleased">
     </release>
-    <release version="0.4" date="2002-02-13">
+    <release version="0.6" date="2002-02-13">
       ...
 
- - Edit src/core/forrest.build.xml to update the version tag which is
-   embedded in the Ant script:
+ - Edit src/core/forrest.build.xml to update the version tag to remove
+   the "-dev" which is embedded in the Ant script:
 
     |                 Forrest Site Builder                  |
-    |                        0.4-dev                        |
+    |                        0.6-dev                        |
                                 ^^^^
 
  - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
@@ -54,21 +54,22 @@ Preparations
    - Use the .tar.gz from the UNIX machine and .zip from the Windows machine.
    - In that way, SVN will ensure correct line-endings on all text files.
 
+ - Understand how to sign releases and generate MD5 and PGP.
+   http://wiki.apache.org/old/SigningReleases
+
  - Test the actual distribution on various platforms.
-   - Put the tar.gz and the zip file at a committers' Apache website.
+   - Put the tar.gz and the zip file at a committers' Apache website
+     (include the *.asc and *.md5 too).
    - Ask all developers to download and test (command-line, run, and webapp).
    - Follow the actual user instructions.
    - Use it to build some difficult sites.
    - Ensure that the compressed archives will unpack correctly.
 
- - Understand how to sign releases and generate MD5 and PGP.
-   http://wiki.apache.org/old/SigningReleases
+FIXME: update for SVN.
 
  - If everything looks okay, tag CVS with 'cvs tag FORREST_xy', where 'xy' is a
    compact form of the version (eg 04, 041, 05).  Run 'cvs log build.xml' to
    see existing tags.
-
-FIXME: update for SVN.
 
  - For 0.x releases, create a maintenance branch in CVS with 'cvs tag -b
    FORREST_xy_BRANCH'.
@@ -88,7 +89,7 @@ Upload and announcement
 
  - Edit the forrest/src/documentation/content/xdocs/mirrors.ihtml
  - Edit the Forrest home page in the "News and events" section.
- - Rebuild the Forrest website as normal.
+ - Rebuild and publish the Forrest website as normal.
 
  - Wait for the various mirrors to pick up the new files.
    This has been known to take up to 10 hours. Test it via 
@@ -122,12 +123,12 @@ Cleanups
  - Edit module.xml, increment the version and add a -dev tag:
 
     <project name="xml-forrest">
-        <version fix="0" major="0" minor="5" tag="-dev"/>
+        <version fix="0" major="0" minor="7" tag="-dev"/>
 
  - Edit src/core/forrest.build.xml and update the version:
 
     |                 Forrest Site Builder                  |
-    |                          0.5                          |
+    |                        0.7-dev                        |
 
 
 
