@@ -1,18 +1,3 @@
-<!--
-  Copyright 2003-2004 The Apache Software Foundation
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -29,6 +14,9 @@
 	<th><bean:message key="summary.status"/></th>
 	<th><bean:message key="summary.log"/></th>
 	<th><bean:message key="summary.date"/></th>
+	<c:if test="${auth}">
+		<th><bean:message key="summary.execute"/></th>
+	</c:if>
 </tr>
 <logic:iterate id="project" name="projects" type="ProjectDTO">
 	<tr>
@@ -58,9 +46,6 @@
 			</c:otherwise>
 		</c:choose>
 		<td>
-		<%--
-			<a href="<c:out value="${project.logUrl}"/>"><bean:message key="summary.log"/></a>
-		--%>
 			<c:if test="${project.logged}">
 				<html:link page="/viewlog.do" paramid="project" paramname="project" paramproperty="name"><bean:message key="summary.log"/></html:link>
 			</c:if>
@@ -70,38 +55,23 @@
 				<fmt:formatDate value="${project.lastBuilt}" type="BOTH"/>
 			</c:if>
 		</td>
+		<c:if test="${auth}">
+			<td>
+				<html:form action="/execute">
+					<input type="hidden" name="project" value="<c:out value="${project.name}"/>"/>
+					<c:if test="${project.buildable}">
+						<html:submit property="build">
+			                <bean:message key="summary.execute.build"/>
+			            </html:submit>
+			        </c:if>
+					<c:if test="${project.deployable}">
+						<html:submit property="deploy">
+			                <bean:message key="summary.execute.deploy"/>
+			            </html:submit>
+			        </c:if>
+			    </html:form>
+    	    </td>
+	    </c:if>
 	</tr>
 </logic:iterate>
 </table>
-
-<%--
-
-<form method="POST">
-	Username: <input type="text" name="username" value="<%= (username!=null?username:"")%>"> <br>
-	Password: <input type="password" name="passwd" value="<%=(password!=null?password:"")%>"> <br>
-	<% if (privs != null) { %>
-		Select a module:
-		<select name="module">
-			<%
-			for (int i=0; i<sites.size(); i++) {
-				String sitename = (String)sites.get(i);
-			if (privs.contains(sitename)) {
-				out.println("<option value='"+sitename+"'>"+sitename);
-			}
-			}
-			%>
-		</select>
-		<br>
-		Select an action:
-		<% if (privs.contains("build")) { %>
-			<input type="submit" name="action" value="build"/>
-		<% } %>
-		<% if (privs.contains("deploy")) { %>
-			<input type="submit" name="action" value="deploy"/>
-		<% } %>
-	<% } else if (privs == null) { %>
-		<input type="submit" value="login">
-	<% } %>
-</form>
-
---%>

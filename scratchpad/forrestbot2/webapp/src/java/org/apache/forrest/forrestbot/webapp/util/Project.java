@@ -1,18 +1,6 @@
 /*
-* Copyright 2004 The Apache Software Foundation
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Created on Feb 10, 2004
+ */
 package org.apache.forrest.forrestbot.webapp.util;
 
 import java.io.File;
@@ -22,11 +10,15 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.apache.forrest.forrestbot.webapp.Constants;
 import org.apache.forrest.forrestbot.webapp.Config;
 import org.apache.forrest.forrestbot.webapp.dto.ProjectDTO;
 import org.apache.log4j.Logger;
+
+import com.opensymphony.user.Group;
+import com.opensymphony.user.UserManager;
 
 public class Project {
 	protected ProjectDTO dto;
@@ -50,6 +42,31 @@ public class Project {
 		dto.setLogUrl(getLogUrl());
 		dto.setStatus(getStatus());
 		dto.setLogged(isLogged());
+	}
+
+	public void loadSecurity(String user) {
+		dto.setBuildable(isBuildable(user));
+		dto.setDeployable(isDeployable(user));
+	}
+
+	private boolean isBuildable(String user) {
+		UserManager userManager = UserManager.getInstance();
+		try {
+			for (Iterator i = userManager.getGroups().iterator(); i.hasNext();) {
+				Group g = (Group) i.next();
+				if (g.containsUser(dto.getName()) && g.containsUser(user))
+					return true;
+			}
+		} catch (Exception e) {
+			log.warn("error while checking if " + user + " has access to build " + dto.getName(), e);
+		}
+		
+		return false;
+	}
+
+	private boolean isDeployable(String user) {
+		// for now we don't need to seperate deployable and buildable security
+		return isBuildable(user);
 	}
 
 	private boolean isLogged() {
@@ -104,22 +121,15 @@ public class Project {
 			// if date is in last minute, consider it still running
 			return Constants.STATUS_RUNNING;
 		} else {
-
 			return Constants.STATUS_FAILED;
 		}
 	}
 
+	/**
+	 * @return Collection of type ProjectDTO
+	 */
 	public static Collection getAllProjects() {
-		/* based on available directories
-		File f = new File(build_dir);
-		File[] possibleSites = f.listFiles();
-		ArrayList sites = new ArrayList();
-		for (int i = 0; i < possibleSites.length; i++) {
-			if (possibleSites[i].isDirectory()) {
-				sites.add(possibleSites[i].getName());
-			}
-		}
-		*/
+
 		/* based on config files */
 		Collection sites = new ArrayList();
 		File f = new File(Config.getProperty("config-dir"));
@@ -136,5 +146,16 @@ public class Project {
 			}
 		}
 		return sites;
+	}
+
+
+	public static boolean exists(String project) {
+		Collection c = getAllProjects();
+		for (Iterator i = c.iterator(); i.hasNext();) {
+			if (((ProjectDTO)i.next()).getName().equals(project)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

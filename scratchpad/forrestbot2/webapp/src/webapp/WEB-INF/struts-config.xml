@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright 2004 The Apache Software Foundation
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
@@ -21,6 +6,11 @@
       <form-property name="submit" type="java.lang.String" initial="unsubmitted"/>
       <form-property name="username" type="java.lang.String"/>
       <form-property name="password" type="java.lang.String"/>
+    </form-bean>
+    <form-bean name="ExecuteForm" type="org.apache.struts.action.DynaActionForm">
+      <form-property name="project" type="java.lang.String"/>
+      <form-property name="build" type="java.lang.String"/>
+      <form-property name="deploy" type="java.lang.String"/>
     </form-bean>
   </form-beans>
   <global-forwards>
@@ -46,6 +36,17 @@
     </action>
     <action type="org.apache.forrest.forrestbot.webapp.action.ViewLogHeaderAction" path="/viewlog_header">
 		<forward name="Success" path="viewlog_header"/>
+    </action>
+    <action type="org.apache.forrest.forrestbot.webapp.action.ExecuteAction"
+      path="/execute"
+      name="ExecuteForm"
+      scope="request"
+      validate="false"
+      input="/summary.jsp">
+        <forward name="Success" path="execute"/>
+    </action>
+    <action type="org.apache.forrest.forrestbot.webapp.action.LogoutAction" path="/logout">
+		<forward name="Success" path="logout"/>
     </action>
   </action-mappings>
   

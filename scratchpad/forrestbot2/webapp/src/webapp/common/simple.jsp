@@ -10,9 +10,6 @@
 	<h2>
 		<tiles:insert attribute="title"/>
 	</h2>
-    <tiles:insert attribute="welcome"/>
-    <tiles:insert attribute="welcome-local"/>
-    <tiles:insert attribute="login"/>
     <tiles:insert attribute="body-content"/>
     <tiles:insert attribute="footer"/>
 

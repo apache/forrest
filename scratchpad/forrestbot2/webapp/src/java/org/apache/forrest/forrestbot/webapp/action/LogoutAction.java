@@ -5,29 +5,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.forrest.forrestbot.webapp.Constants;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public final class ViewLogFrameAction extends BaseAction {
-	private static Logger log = Logger.getLogger(ViewLogFrameAction.class);
+public final class LogoutAction extends BaseAction {
+	private static Logger log = Logger.getLogger(LogoutAction.class);
 
-	ActionErrors errors = new ActionErrors();
-
-	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
 
-		String project = request.getParameter("project");
+		// session
+		request.getSession(true).removeAttribute("auth");
 		
-		request.setAttribute("project", project);
+		// request & application for good measure
+		request.removeAttribute("auth");
+		request.getSession(true).getServletContext().removeAttribute("auth");
 		
 		return mapping.findForward(Constants.FORWARD_NAME_SUCCESS);
-
 	}
 }
