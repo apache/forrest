@@ -11,7 +11,7 @@ Uses       :  content/xdocs/site.xml, or book.xml file if present.
 
 See http://xml.apache.org/forrest/sitemap-ref.html#menu_xml_generation
 
-$Revision: 1.11 $
+$Revision: 1.12 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -104,26 +104,26 @@ $Revision: 1.11 $
           </map:otherwise>
 
         </map:select>
-	
+
         <map:select type="config">
-           <map:when test="{defaults:i18n}">
+          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:when test="true">
 
-             <map:act type="locale">
+            <map:act type="locale">
               <map:transform src="resources/stylesheets/i18n.xsl"/>
-	      <map:transform type="i18n">
-	        <!-- We can use a default locale attribute or Request Parameter
-	        <map:parameter name="locale" value="{defaults:locale}"/>
-	        <map:parameter name="locale" value="{request-param:locale}"/>
-	        -->
-	        <map:parameter name="locale" value="{lang}{country}{variant}"/>
-	      </map:transform>
-
-	    </map:act>
+              <map:transform type="i18n">
+                <!-- We can use a default locale attribute or Request Parameter
+                <map:parameter name="locale" value="{defaults:locale}"/>
+                <map:parameter name="locale" value="{request-param:locale}"/>
+                -->
+                <map:parameter name="locale" value="{lang}{country}{variant}"/>
+              </map:transform>
+            </map:act>
 
           </map:when>
         </map:select>
-	
-	<map:serialize type="xml"/>
+
+        <map:serialize type="xml"/>
 
       </map:match>
 
