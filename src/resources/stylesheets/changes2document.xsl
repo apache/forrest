@@ -22,7 +22,8 @@
  </xsl:template>
 
  <xsl:template match="release">
-  <section title="Version {@version} ({@date})">
+  <section>
+   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
    <ul>
     <xsl:apply-templates/>
    </ul>
