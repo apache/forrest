@@ -5,9 +5,24 @@
 # directory is not on the same level as xml-forrest/, set the COCOON variable
 # below.
 #
+BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON=../../../cocoon-2.1
-FORREST=../..
+COCOON=$BASE/../../../cocoon-2.1
+FORREST=$BASE/../..
+NEKODTD_VERSION=0.1.5
+NEKODTD_HOME=$BASE/../../../nekodtd-$NEKODTD_VERSION
+NEKOPULL_VERSION=0.2.2
+NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
+
+## CAN be overridden:
+JARSUFFIX=`date +%Y%m%d`
+JARSUFFIX=m2
+
+## Decide what kind of update to perform.  'real' copies upgraded jars to
+## lib/core/, whereas 'testing' copies them to the distribution in
+## build/dist/shbat/*
+UPGRADE_TYPE=testing
+UPGRADE_TYPE=real
 #
 ######################################################################
 
@@ -18,12 +33,14 @@ CBLOCKS=$CBUILD/blocks
 FDIST=$FORREST/build/dist/shbat
 
 ## Determines where to copy new jars to:
-#FLIB=$FORREST/lib/core
-#FLIB=$FORREST/build/webapp/WEB-INF/lib
-FLIB=$FDIST/WEB-INF/lib
-FLIB_ENDORSED=$FDIST/WEB-INF/lib/endorsed
 
-DATE=`date +%Y%m%d`
+if [ "$UPGRADE_TYPE" = "real" ]; then
+  FLIB=$FORREST/lib/core
+  FLIB_ENDORSED=$FORREST/lib/endorsed
+elif [ "$UPGRADE_TYPE" = "testing" ]; then
+  FLIB=$FDIST/WEB-INF/lib
+  FLIB_ENDORSED=$FDIST/WEB-INF/lib/endorsed
+fi
 
 function checkdir()
 {
@@ -38,34 +55,77 @@ function sanity_check()
   checkdir "$FORREST" FORREST
   checkdir "$COCOON" COCOON
   checkdir "$FLIB" FLIB
+  checkdir "$NEKODTD_HOME" NEKODTD_HOME
+  checkdir "$NEKOPULL_HOME" NEKOPULL_HOME
+#
 }
 
 function copy()
 {
-    rm $FLIB/$1*
-    cp $CLIB/$1* $FLIB
-}
-function zcopy()
-{
-    rm $FLIB/$1*
-    cp $CBUILD/$1* $FLIB
+  pushd . 
+  cd $FLIB
+  case $UPGRADE_TYPE in
+    "testing")
+    rm $1*
+    ;;
+    "real")
+    cvsdo remove -f $1*
+    ;;
+  esac
+
+  cp $CLIB/$1* .
+
+  if [ "$UPGRADE_TYPE" = "real" ]; then
+    cvs add -kb $1* &
+  fi
+  popd
 }
 
 function bzcopy()
 {
-    rm $FLIB/cocoon-$1-block-*.jar
-    cp $CBLOCKS/$1-block.jar $FLIB/cocoon-$1-block-$DATE.jar
+  rm $FLIB/cocoon-$1-block-*.jar
+  cp $CBLOCKS/$1-block.jar $FLIB/cocoon-$1-block-$JARSUFFIX.jar
 }
 
 function bcopy()
 {
-    rm $FLIB/$1*
-    cp $COCOON/src/blocks/*/lib/$1* $FLIB/
+  rm $FLIB/$1*
+  cp $COCOON/src/blocks/*/lib/$1* $FLIB/
 }
+
+function upgrade_neko()
+{
+  pushd . 
+  cd $FLIB
+  case $UPGRADE_TYPE in
+    "testing")
+    rm neko{dtd,pull}*
+    ;;
+    "real")
+    cvsdo remove -f neko{dtd,pull}*
+    ;;
+  esac
+
+  cp $NEKODTD_HOME/nekodtd.jar nekodtd-$NEKODTD_VERSION.jar
+  cp $NEKOPULL_HOME/nekopull.jar nekopull-$NEKOPULL_VERSION.jar
+
+  if [ "$UPGRADE_TYPE" = "real" ]; then
+    cvs add -kb neko{dtd,pull}-* &
+  fi
+  popd
+
+}
+
+
+echo "Performing $UPGRADE_TYPE upgrade. New jars copied to:"
+echo "  $FLIB"
+echo "  $FLIB_ENDORSED"
 
 set -vx
 
 sanity_check
+
+upgrade_neko
 
 #set -vx
 #avalon-framework-4.1.3.jar
@@ -75,8 +135,8 @@ bcopy batik-all
 #chaperon-20030208.jar
 bcopy chaperon
 #cocoon-20030311.jar
-rm $FLIB/cocoon-*.jar ; cp $CBUILD/cocoon.jar $FLIB/cocoon-$DATE.jar
-rm $FLIB/cocoon-deprecated*.jar ; cp $CBUILD/cocoon-deprecated.jar $FLIB/cocoon-deprecated-$DATE.jar
+rm $FLIB/cocoon-*.jar ; cp $CBUILD/cocoon.jar $FLIB/cocoon-$JARSUFFIX.jar
+rm $FLIB/cocoon-deprecated*.jar ; cp $CBUILD/cocoon-deprecated.jar $FLIB/cocoon-deprecated-$JARSUFFIX.jar
 #cocoon-asciiart-block-20030311.jar
 bzcopy asciiart
 #cocoon-batik-block-20030311.jar
@@ -158,3 +218,4 @@ copy resolver
 # New jars not in the 2003-03-11 snapshot
 copy excalibur-event
 copy util.concurrent
+
