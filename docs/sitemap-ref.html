@@ -78,6 +78,15 @@
 <td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-left.gif"></td><td valign="middle" bgcolor="#4C6C8F"><font color="#ffffff" size="2" face="Arial, Helvetica, Sans-serif"><b><a class="base-selected" href="../docs/your-project.html">Documentation</a></b></font></td><td valign="top" width="5" bgcolor="#4C6C8F"><img height="5" width="5" alt="" src="../skin/images/tabSel-right.gif"></td>
 </tr>
 </table>
+</td><td width="6"><img alt="" height="8" width="6" src="../skin/images/spacer.gif"></td><td valign="bottom">
+<table summary="non selected tab" style="height: 1.6em" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-left.gif"></td><td valign="middle" bgcolor="#B2C4E0"><a class="base-not-selected" href="../howto/index.html">How-To</a></td><td valign="top" width="5" bgcolor="#B2C4E0"><img height="5" width="5" alt="" src="../skin/images/tab-right.gif"></td>
+</tr>
+<tr>
+<td colspan="3" height="1"></td>
+</tr>
+</table>
 </td>
 </tr>
 </table>
@@ -401,7 +410,7 @@
       provides an overview of the sitemap we have written for Forrest.
     </p>
     
-<a name="N10021"></a><a name="getting_started"></a>
+<a name="N1001E"></a><a name="getting_started"></a>
 <h3>Getting started</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -419,7 +428,7 @@
 
 
     
-<a name="N10038"></a><a name="Sitemap+Overview"></a>
+<a name="N10035"></a><a name="Sitemap+Overview"></a>
 <h3>Sitemap Overview</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -563,7 +572,7 @@
     -->
 
     
-<a name="N1010F"></a><a name="source_pipelines"></a>
+<a name="N1010C"></a><a name="source_pipelines"></a>
 <h3>Source pipelines (**.xml)</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -576,10 +585,10 @@
       </p>
 <p>
         Source pipelines always have a <span class="codefrag">.xml</span> extension.  Thus, 
-        <a href="index.xml">index.xml</a> gives you the XML source for the
-        index page.  Likewise, <a href="faq.xml">faq.xml</a> gives you XML
+        <a href="../index.xml">index.xml</a> gives you the XML source for the
+        index page.  Likewise, <a href="../faq.xml">faq.xml</a> gives you XML
         for the FAQ (transformed from FAQ syntax), and 
-        <a href="changes.xml">changes.xml</a> returns XML from status.xml.
+        <a href="../changes.xml">changes.xml</a> returns XML from status.xml.
         Take any page, and replace its extension (<span class="codefrag">.html</span> or
         <span class="codefrag">.pdf</span>) with <span class="codefrag">.xml</span>, and you'll have the Source
         XML.
@@ -602,7 +611,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 (*.xml)
                         (in forrest.xmap, faq.xmap, etc)
       </pre>
-<a name="N1013A"></a><a name="forrest_xmap"></a>
+<a name="N10137"></a><a name="forrest_xmap"></a>
 <h4>forrest.xmap</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -612,23 +621,19 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           <a href="../docs/cap.html">SourceTypeAction</a> to work out the type of XML
           it is processing, and converts it to doc-v12 if necessary.
         </p>
-<p>For instance, say we are rendering <a class="external" href="error:site:multi-page/step1">a
-            Howto document</a> called 'step1.xml'.  It contains this DOCTYPE
+<p>For instance, say we are rendering <a href="../howto/howto-howto.html">a
+            Howto document</a> called 'howto-howto.xml'.  It contains this DOCTYPE
           declaration:</p>
-<pre class="code">&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.0//EN" "howto-v10.dtd"&gt;</pre>
+<pre class="code">&lt;!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V1.2//EN" "http://forrest.apache.org/dtd/howto-v12.dtd"&gt;</pre>
 <p>The SourceTypeAction sees this, and applies this transform to get it
           to doc-v12:</p>
 <pre class="code">
-          &lt;map:when test="howto-v10"&gt;
-            &lt;map:transform src="resources/stylesheets/howto2document.xsl" /&gt;
+          &lt;map:when test="howto-v12"&gt;
+            &lt;map:transform src="{forrest:stylesheets}/howto2document.xsl" /&gt;
           &lt;/map:when&gt;
           </pre>
-<p>
-          The intermediate result is visible at the URL 
-          <a class="external" href="error:site:multi-page/step1">community/howto/multi/step1.xml</a>.
-        </p>
 </div>
-<a name="N10167"></a><a name="Other+source+pipelines"></a>
+<a name="N1015F"></a><a name="Other+source+pipelines"></a>
 <h4>Other source pipelines</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>As mentioned above, all non-core Source pipelines are distributed in
@@ -663,7 +668,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         &lt;/map:match&gt;
         ....
         ....</pre>
-<a name="N1017A"></a><a name="late_binding_pipelines"></a>
+<a name="N10172"></a><a name="late_binding_pipelines"></a>
 <h5>Late-binding pipelines</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -689,7 +694,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 </div>
 
     
-<a name="N101A5"></a><a name="output_pipelines"></a>
+<a name="N1019D"></a><a name="output_pipelines"></a>
 <h3>Output pipelines</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -701,7 +706,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         We now wish to render the XML from these pipelines to output formats
         like HTML and PDF.
       </p>
-<a name="N101B4"></a><a name="PDF+output"></a>
+<a name="N101AC"></a><a name="PDF+output"></a>
 <h4>PDF output</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -742,7 +747,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 </ol>
 <p>Lastly, we generate a PDF using the fo2pdf serializer.</p>
 </div>
-<a name="N101EE"></a><a name="HTML+output"></a>
+<a name="N101E6"></a><a name="HTML+output"></a>
 <h4>HTML output</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Generating HTML pages is more complicated, because we have to merge
@@ -763,10 +768,10 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           &lt;/map:match&gt;
         </pre>
 <p>
-          So <a href="index.html">index.html</a> is formed from
-          aggregating <a href="body-index.html">body-index.html</a>, 
-          <a href="menu-index.html">menu-index.html</a> and 
-          <a href="tab-index.html">tab-index.html</a>, and then applying the
+          So <a href="../index.html">index.html</a> is formed from
+          aggregating <a href="../body-index.html">body-index.html</a>, 
+          <a href="../menu-index.html">menu-index.html</a> and 
+          <a href="../tab-index.html">tab-index.html</a>, and then applying the
           <span class="codefrag">site2xhtml.xsl</span> stylesheet to the result.
         </p>
 <p>
@@ -790,10 +795,10 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 </div>
 </div>
     
-<a name="N10238"></a><a name="intermediate_pipelines"></a>
+<a name="N10230"></a><a name="intermediate_pipelines"></a>
 <h3>Intermediate pipelines</h3>
 <div style="margin-left: 0 ; border: 2px">
-<a name="N1023E"></a><a name="body_pipeline"></a>
+<a name="N10236"></a><a name="body_pipeline"></a>
 <h4>Page body</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Here is the matcher which generates the page body:</p>
@@ -855,7 +860,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
         
 </ol>
 </div>
-<a name="N10283"></a><a name="menu_pipeline"></a>
+<a name="N1027B"></a><a name="menu_pipeline"></a>
 <h4>Page menu</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>In <span class="codefrag">sitemap.xmap</span>, the matcher generating HTML for the menu is:</p>
@@ -876,7 +881,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           sufficiently complex to require a 
           <a href="#menu_xml_generation">section of its own</a>.</p>
 </div>
-<a name="N102A9"></a><a name="tab_pipeline"></a>
+<a name="N102A1"></a><a name="tab_pipeline"></a>
 <h4>Page tabs</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>Tab generation is quite tame compared to menus:</p>
@@ -898,7 +903,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 </div>
 
     
-<a name="N102C5"></a><a name="menu_xml_generation"></a>
+<a name="N102BD"></a><a name="menu_xml_generation"></a>
 <h3>Menu XML generation</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>The 'book' pipeline is defined in <span class="codefrag">sitemap.xmap</span>as:</p>
@@ -999,7 +1004,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 </div>
 
     
-<a name="N1034B"></a><a name="linkrewriting_impl"></a>
+<a name="N10343"></a><a name="linkrewriting_impl"></a>
 <h3>Link rewriting</h3>
 <div style="margin-left: 0 ; border: 2px">
 <p>In numerous places in <span class="codefrag">sitemap.xmap</span>, you will see the
@@ -1008,7 +1013,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
 <p>This statement is Cocoon's linking system in action.  A full
         description is provided in <a href="../docs/linking.html">Menus and
           Linking</a>.  Here we describe the implementation of linking.</p>
-<a name="N10362"></a><a name="Cocoon+foundations%3A+Input+Modules"></a>
+<a name="N1035A"></a><a name="Cocoon+foundations%3A+Input+Modules"></a>
 <h4>Cocoon foundations: Input Modules</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -1041,14 +1046,14 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
           currently distributed as a "block" in Cocoon 2.1.
         </p>
 </div>
-<a name="N10396"></a><a name="Implementing+"></a>
+<a name="N1038E"></a><a name="Implementing+"></a>
 <h4>Implementing site:-rewriting</h4>
 <div style="margin-left: 0 ; border: 2px">
 <p>
           Using the above components, <span class="codefrag">site:</span> URI rewriting is
           accomplished as follows.
         </p>
-<a name="N103A5"></a><a name="cocoon.xconf"></a>
+<a name="N1039D"></a><a name="cocoon.xconf"></a>
 <h5>cocoon.xconf</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>First, we declare all the input modules we will be needing:</p>
@@ -1093,7 +1098,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             They will be configured in <span class="codefrag">sitemap.xmap</span> as described in
             the next section.</p>
 </div>
-<a name="N103E3"></a><a name="sitemap.xmap"></a>
+<a name="N103DB"></a><a name="sitemap.xmap"></a>
 <h5>sitemap.xmap</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -1194,7 +1199,7 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             <span class="codefrag">cocoon:/community/linkmap-index.html</span>.
           </p>
 </div>
-<a name="N10456"></a><a name="Dynamically+generating+a+linkmap"></a>
+<a name="N1044E"></a><a name="Dynamically+generating+a+linkmap"></a>
 <h5>Dynamically generating a linkmap</h5>
 <div style="margin-left: 0 ; border: 2px">
 <p>
@@ -1225,17 +1230,13 @@ FORMATS    doc-v10  docv11  docv12  ...  Docbook  FAQ  Howto  Wiki  RSS  ??
             </pre>
 <p>You can try these URIs out directly on a live Forrest to see what
             is going on (for example, Forrest's own 
-            <a href="abs-linkmap">abs-linkmap</a> and 
-            <a href="linkmap-index.html">linkmap-index.html</a>.
+            <a href="../abs-linkmap">abs-linkmap</a>).
           </p>
 </div>
 </div>
 </div>
   
-<div class="attribution">
-<span class="version">
-          version 1.6</span>
-</div>
+<div class="attribution"></div>
 </div>
 </td><td width="10"><img width="10" height="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
 </tr>
