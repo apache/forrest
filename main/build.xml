@@ -257,14 +257,17 @@
           description="Test that the features are okay before committing."/>
   
   <target name="testPlugins"
+          depends="cleanPlugins"
           description="test each of the plugins">
     <!-- FIXME: need to iterate over all plugins when testing -->
     <ant antfile="../plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
       <property name="basedir" location="../plugins/org.apache.forrest.plugin.pdf-output"/>
     </ant>
-    <ant antfile="../plugins/org.apache.forrest.plugin.XHTML-output/build.xml" target="test">
-      <property name="basedir" location="../plugins/org.apache.forrest.plugin.XHTML-output"/>
-    </ant>
+  </target>
+  
+  <target name="cleanPlugins"
+          description="Remove installed plugins before testing to ensure they are correctly installed when run">
+    <delete dir="../build/plugins"/>
   </target>
 
   <target name="testseed" depends="init">
