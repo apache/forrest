@@ -28,12 +28,12 @@ set ANTFILE=%%FORREST_HOME%%\forrest.build.xml
 
 rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
-set ANT_HOME=%FORREST_HOME%\tools\ant
+set ANT_HOME=%FORREST_HOME%\..\..\tools\ant
 
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-for %%i in ("%FORREST_HOME%\lib\endorsed\*.jar") do call "%FORREST_HOME%\bin\appendcp.bat" "%%i"
+for %%i in ("%FORREST_HOME%\..\..\lib\endorsed\*.jar") do call "%FORREST_HOME%\bin\appendcp.bat" "%%i"
 
 echo.
 echo Apache Forrest.  Run 'forrest -projecthelp' to list options
