@@ -11,7 +11,14 @@
       <tr>
         <td height="20" bgcolor="#CFDCED" valign="middle" nowrap="nowrap">
           <img src="skin/images/spacer.gif" border="0" alt="" width="5" height="1" />
-          <font face="Arial, Helvetica, Sans-serif" size="2"><a href="@link1.href@">@link1@</a> &#62; <a href="@link2.href@">@link2@</a> &#62; <a href="@link3.href@">@link3@</a></font>
+          
+          <!-- breadcrumb trail (javascript-generated) -->
+          <font face="Arial, Helvetica, Sans-serif" size="2">
+              <script type="text/javascript" language="JavaScript" src="skin/breadcrumbs.js"></script>
+          </font>
+          <!-- end breadcrumb trail -->
+          <!-- old trail -->
+          <!--<a href="@link1.href@">@link1@</a> &#62; <a href="@link2.href@">@link2@</a> &#62; <a href="@link3.href@">@link3@</a>-->
         </td>
       </tr>
       <tr>
