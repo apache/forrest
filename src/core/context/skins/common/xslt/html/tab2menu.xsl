@@ -144,9 +144,7 @@ which is then merged by site2xhtml.xsl
   </xsl:variable>
   
   <xsl:variable name="matching-id">
-    <xsl:call-template name="matching-id">
-      <xsl:with-param name="tabfile" select="/"/>
-    </xsl:call-template>
+    <xsl:call-template name="matching-id"/>
   </xsl:variable>
 
   <!-- Called from tabs, after it has written the outer 'div class=tabs' and
