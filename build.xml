@@ -76,14 +76,14 @@
     --------------------------------------------------------------
      These are the most common build targets.
      You can also invoke them directly; see build.xml for more info.
-     Builds will be in /build directory, distributions in /dist.
+     Builds will be in /build directory, distributions in /build/dist.
 
      forrest-typical targets:
 
      dist ------------- build all incarnation distributions:
      dist-shbat ------- build the forrest.sh/bat incarnation (requires ant to *run*)
 
-     futrure targets:
+     future targets:
 
      dist-cent      ??? ??? future target making centipede-cent
      dist-maven     ??? ??? future target making maven plugin
@@ -93,7 +93,8 @@
      forrest-test targets:
 
      docs ------------- generates static Forrest website for itself as the project to run on.
-     webapp ----------- builds webapp (.war) deployable version of Forrest website
+     webapp ----------- builds unpacked webapp version of Forrest website
+     war -------------- builds webapp .war file of Forrest website
      bot.run ---------- runs the forrestbot using the configuration specified in
                         forrestbot.conf.xml
 
@@ -347,7 +348,7 @@
   <!-- Validate xml                                                        -->
   <!-- =================================================================== -->
   <target name="validate-docs" depends="dist-shbat" 
-	        description="Checks that the xml files are valid and conform to the DTD.">
+        description="Checks that the xml files are valid and conform to the DTD.">
     <!-- warning to other projects:
        This target is using internally build productions for test.
        This is by no means an example of how you can use it inside your project 
@@ -476,9 +477,9 @@
   </target>
 
   <target name="bot.conf2build" depends="bot.init" >
-		<!-- remove previous versions to force generation again -->
-		<delete file="${bot.work.build.xml}" />
-		<delete file="${bot.default.parameters.xml}" />
+    <!-- remove previous versions to force generation again -->
+    <delete file="${bot.work.build.xml}" />
+    <delete file="${bot.default.parameters.xml}" />
 
     <!-- builds the different xml files this process needs.  -->
     <style in="${bot.forrestbot.xconf}"
