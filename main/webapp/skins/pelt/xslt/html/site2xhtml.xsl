@@ -514,6 +514,14 @@ document.write("Last Published: " + document.lastModified);
       </div>
     </xsl:if>
   </xsl:template>
+  <xsl:template match="div[@id='skinconf-txtlink']">
+    <xsl:if test="not($config/disable-txt-link) or $disable-txt-link = 'false'"> 
+      <div class="podlink" title="Plain Text Documentation"><a href="{$filename-noext}.txt" class="dida">
+        <img class="skin" src="{$skin-img-dir}/txtdoc.png" alt="TXT - icon" /><br/>
+        TXT</a>
+      </div>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="div[@id='skinconf-podlink']">
     <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'"> 
       <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">

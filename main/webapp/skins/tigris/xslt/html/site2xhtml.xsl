@@ -194,7 +194,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <xsl:if test="not($config/disable-txt-link) or $disable-txt-link = 'false'"> 
       <div class="txtlink" title="Text Format"><a href="{$filename-noext}.txt" class="dida">
         <img class="skin" src="{$skin-img-dir}/txtdoc.gif" alt="TXT -icon" /><br/>
-        txt</a>
+        TXT</a>
       </div>
     </xsl:if>
   </xsl:template>

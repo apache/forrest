@@ -205,6 +205,16 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
+  <!-- Generates the TXT link -->
+  <xsl:template match="div[@id='skinconf-txtlink']">
+    <xsl:if test="$disable-txt-link = 'false'">
+      <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.txt" class="dida">
+        <img class="skin" src="{$skin-img-dir}/txtdoc.png" alt="TXT"/><br/>
+        TXT</a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+  
   <!-- Generates the POD link -->
   <xsl:template match="div[@id='skinconf-podlink']">
     <xsl:if test="$disable-pod-link = 'false'">
