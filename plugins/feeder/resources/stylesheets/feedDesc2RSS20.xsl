@@ -24,7 +24,7 @@ Stylesheet for generating an aggregated feed from multple feeds.
 
   <xsl:output method="xml" version="1.0" encoding="UTF-8"/>
     
-  <xsl:template match="aggregateDescriptor">
+  <xsl:template match="feedDescriptor">
     <rss version="2.0">
       <xsl:apply-templates/>
     </rss>
