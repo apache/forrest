@@ -1,0 +1,44 @@
+########################################
+# This is a template local-vars-* file.
+# Copy it to local-vars-`uname -n` and customize.
+# If you run the script and webapp from the default
+# xml-forrest/src/resources/forrestbot/scripts/ directory, the default values
+# should be fine, and only XML_SITE needs to be defined.
+
+
+# BASE is a pointer to the 'scripts' directory from Forrest. It defaults to
+# '.', and should be set to an absolute path if called from cron
+BASE=/usr/serverlocal/forrestbot/scripts
+
+# Points to a CVS checkout of the xml-forrest module, which will be
+# (optionally) 'cvs update'ed and rebuilt on every run.  Defaults to
+# $BASE/../../../../ ie, assuming the user is in
+# xml-forrest/src/resources/forrestbot/scripts/
+FORREST=/usr/serverlocal/src/apache/xml-forrest
+
+# Assuming the overseer command is being fed instructions from the webapp, this
+# variable points to the webapp context root.  Defaults to $BASE/../webapp
+WEBAPP=/www/forrestbot.cocoondev.org/webapps/ROOT
+
+# If you want the 'publish_livesite' command to work, you must set XML_SITE to
+# point to a CVS checkout of the xml-site module.
+XML_SITE=/home/j/jeffturner/xml-site
+
+# Max number of seconds we expect a full forrestbot run to take, before we
+# assume something's hung and kill the processes.  Defaults to 20 minutes.
+TIMEOUT=$[10*60]
+
+# Set this to true if you want to delete any local mods to the $FORREST and
+# update from CVS.  Not recommended unless scripts/ is moved outside the
+# xml-forrest CVS hierarchy. Defaults to false
+REGEN_FORREST=false
+
+# In a headless environment like your typical Unix box (not running X), you
+# should install Xvfb, and set this DISPLAY variable appropriately. No default.
+# The value ':0' is correct if Xvfb is invoked with:
+# /usr/X11R6/bin/Xvfb :0 -screen 0 2048x2048x24
+export DISPLAY=:0
+
+# If you run the script from cron, you should set generic env vars like
+# JAVA_HOME here:
+export JAVA_HOME=/usr/jdk1.3.1_03
