@@ -335,7 +335,7 @@
 <!-- Document -->
 <!-- =============================================================== -->
 
-<!ELEMENT document (header?, body, footer?)>
+<!ELEMENT document (header, body, footer?)>
 <!ATTLIST document %common.att;>
 
     <!-- ==================================================== -->
@@ -344,14 +344,14 @@
 
     <!ENTITY % local.headers "">
 
-    <!ELEMENT header (title, subtitle?, version?, type?, authors,
+    <!ELEMENT header (title, subtitle?, version?, type?, authors?,
                       notice*, abstract? %local.headers;)>
     <!ATTLIST header %common.att;>
 
-    <!ELEMENT title (%text;)>
+    <!ELEMENT title (%text; | %markup;)*>
     <!ATTLIST title %common.att;>
 
-    <!ELEMENT subtitle (%text;)>
+    <!ELEMENT subtitle (%text; | %markup;)*>
     <!ATTLIST subtitle %common.att;>
 
     <!ELEMENT version (%text;)>
@@ -380,8 +380,8 @@
     <!ELEMENT body (%sections;|%blocks;)+>
     <!ATTLIST body %common.att;>
 
-    <!ELEMENT section (%sections;|%blocks;)*>
-    <!ATTLIST section %title.att; %common.att;>
+    <!ELEMENT section (title, (%sections;|%blocks;)*)>
+    <!ATTLIST section %common.att;>
 
     <!-- ==================================================== -->
     <!-- Footer -->

@@ -3,8 +3,8 @@
 <!ATTLIST faqs %common.att;
                %title.att;>
 
-    <!ELEMENT part ((faq | part)+) >
-    <!ATTLIST part %title.att; %common.att;>
+    <!ELEMENT part (title, (faq | part)+) >
+    <!ATTLIST part %common.att;>
 
     <!ELEMENT faq (question, answer)>
     <!ATTLIST faq %common.att;>
