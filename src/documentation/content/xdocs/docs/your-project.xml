@@ -40,17 +40,20 @@
        Forrest</link> from source.
      </p>
      <p>
-     After downloading and extracting forrest, you need to add environment variables.  In Unix/Linux:
+     After downloading and extracting forrest, you need to add environment variables.
      </p>
+     <p>In Unix/Linux:</p>
      <source>
 ~/apache-forrest-0.5.1$ export FORREST_HOME=`pwd`
 ~/apache-forrest-0.5.1$ export PATH=$PATH:$FORREST_HOME/bin
      </source>
-     <p>
-     In Windows, go to "My Computer", "Properties", "Advanced", "Environment Variables" and add:
-     <code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.5.1</code> and
-     <code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
-     </p>
+     <p>In Windows:</p>
+     <source>
+Go to "My Computer", "Properties", "Advanced", "Environment Variables"
+and add:
+<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.5.1</code>
+<code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
+     </source>
      <p>
        To see what the forrest command can do, type 'forrest -projecthelp'
        </p>
@@ -84,7 +87,7 @@ Default target: site
       <p>
         As 'site' is the default target, just running 'forrest' without options will
         generate a "static HTML website". For example, typing 'forrest' in the
-       xml-forrest directory would build Forrest's own website. But we're going to be
+       top-level "forrest" directory would build Forrest's own website. But we're going to be
        building a new site, so read on.
       </p>
     </section>
@@ -545,8 +548,9 @@ project.skinconf=${project.content-dir}/skinconf.xml
       </ul>
       <p>
         If your site defines its own sitemap, it must perform all the operations of
-        the Forrest default.  To get started, simply copy the Forrest sitemaps from
-        <code>xml-forrest/src/resources/conf/*.xmap</code> into your
+        the Forrest default.  Simply copy the relevant sitemaps
+        that you wish to over-ride, from Forrest sitemaps at
+        <code>forrest/src/core/context/*.xmap</code> into your
         <code>src/documentation</code> directory (or wherever
         <code>${project.sitemap-dir}</code> points to).
       </p>
@@ -564,8 +568,9 @@ project.skinconf=${project.content-dir}/skinconf.xml
           Say that <code>download.xml</code> lists downloads for a certain package. It would be
           best to represent download information in a custom XML format:
         </p>
-        <source><![CDATA[<!DOCTYPE document
-          PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
+        <source><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
+  "dtd/download-v10.dtd">
 <document> 
   <header>
     <title>Downloading Binaries</title>
@@ -605,15 +610,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </document>]]></source>
         <p>This should be placed in your content directory, typically
           <code>src/documentation/content/xdocs</code>, and an entry added to
-          site.xml.</p>
+          site.xml</p>
         <p>
           To handle these special tags, one would write a stylesheet to convert
           them to regular documentv12 format. Here is such a stylesheet,
           download2document.xsl:
         </p>
-        <source><![CDATA[
-<?xml version="1.0" encoding="utf-8"?>
-
+        <source><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -649,7 +652,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 
 ]]></source>
           <p>
-            Place this in the default stylesheets directory,
+            Place this file in the default stylesheets directory,
             <code>src/documentation/resources/stylesheets</code> (or wherever
             ${project.stylesheets-dir} points).
           </p>
@@ -664,7 +667,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
           <ol>
             <li>Override <code>forrest.xmap</code> in your project by copying
-              $FORREST_HOME/context/forrest.xmap to your project's
+              $FORREST_HOME/src/core/context/forrest.xmap to your project's
               src/documentation/ directory.</li>
             <li>
               <p>Edit <code>forrest.xmap</code>, locate the
@@ -705,7 +708,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
                    location, in the catalog file,
                    <code>${project.schema-dir}/catalog.xcat</code>.  Eg:
                    <code>PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
-                     "dtd/download-v11.dtd"</code></li>
+                     "dtd/download-v10.dtd"</code></li>
                </ul>
                <p>
                  Please read <link href="site:validation">XML Validation</link>
@@ -817,7 +820,7 @@ project.skin=forrest-site
 </xsl:stylesheet>]]></source>
           <p>In order to use this feature in your custom skins you must copy
           the common skin from the forrest distribution into your custom skins 
-          directory (see <code>xml-forrest/src/resources/skins/common</code>).
+          directory (see <code>forrest/src/core/context/skins/common</code>).
           This will protect your skin from changes in the Forrest common skin,
           but you must remember to update this skin in order to take advantage
           of new features added by the Forrest team.</p>
