@@ -38,15 +38,23 @@
     <section> 
       <title>Configuration</title> 
       <p>The action should be declared and configured in the map:actions
-        section of the sitemap. Example:</p> 
-      <source><![CDATA[<map:action name="sourcetype" src="org.apache.cocoon.acting.sourcetype.SourceTypeAction">
-  <sourcetype name="documentv13">
-    <document-declaration public-id="-//APACHE//DTD Documentation V1.3//EN"/>
-  </sourcetype>
-  <sourcetype name="foo">
-    <document-element local-name="foo">
-  </sourcetype>
-</map:action>]]></source> 
+        section of your sitemap. Example:</p> 
+      <source><![CDATA[<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+ <map:components>
+  <...>]]>
+  <strong><![CDATA[<map:actions>
+   <map:action name="sourcetype"
+      src="org.apache.cocoon.acting.sourcetype.SourceTypeAction">
+    <sourcetype name="download-v1.0">
+     <document-declaration
+        public-id="-//Acme//DTD Download Documentation V1.0//EN" />
+    </sourcetype>      
+   </map:action>
+  </map:actions>]]></strong><![CDATA[
+ </map:components>
+ <...>
+</map:sitemap>]]></source> 
+      <p>There are other examples in <code>main/webapp/forrest.xmap</code></p>
       <p>Each sourcetype-tag declares a source type. Inside the sourcetype-tag
         a number of rules can be defined, described below. The sourcetypes will be
         checked in the same order as they are defined in the configuration, the first
@@ -77,7 +85,11 @@
         using the 'src' attribute on the map:act element.</p> 
       <source><![CDATA[<map:act type="sourcetype" src="{1}">
 ...
-</map:act>]]></source> 
+</map:act>]]></source>
+      <p>See a real-life example in the advanced section of the
+        <link href="your-project.html#adding_new_content_type_2">Using Forrest</link>
+        document.
+      </p>
     </section> 
   </body> 
 </document> 
