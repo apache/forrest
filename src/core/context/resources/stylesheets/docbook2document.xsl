@@ -30,7 +30,7 @@ Credit: original from the jakarta-avalon project
             <xsl:apply-templates select="book|chapter|revhistory|article|refentry"/>
       </xsl:template>
 
-    <xsl:template match="/refentry">
+    <xsl:template match="refentry">
         <document>
             <header>
             <title><xsl:value-of select="refmeta/refentrytitle"/><xsl:apply-templates select="refmeta/manvolnum"/></title>
@@ -81,7 +81,7 @@ Credit: original from the jakarta-avalon project
       - <xsl:value-of select="."/>
     </xsl:template>
 
-      <xsl:template match="/book">
+      <xsl:template match="book">
             <document>
                   <header>
                         <xsl:apply-templates select="bookinfo/title"/>
@@ -101,7 +101,7 @@ Credit: original from the jakarta-avalon project
             </document>
       </xsl:template>
 
-      <xsl:template match="/chapter">
+      <xsl:template match="chapter">
             <document>
                   <header>
                         <xsl:apply-templates select="title"/>
@@ -121,7 +121,7 @@ Credit: original from the jakarta-avalon project
             </document>
       </xsl:template>
 
-       <xsl:template match="/article">
+       <xsl:template match="article">
              <document>
                    <header>
                          <xsl:apply-templates select="articleinfo/title|title"/>
