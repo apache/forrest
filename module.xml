@@ -1,14 +1,8 @@
 <?xml version="1.0"?>
 <module name="xml-forrest">
+
     <url href="http://xml.apache.org/forrest/"/>
 
-  <!-- tells forrest to kick in for the site -->
-    <forrest version="0.1">
-        <skin name="xml-apache-site" style="xml-apache-site"/>
-    <!-- other forrest available skins
-    <skin name="jakarta-site" style="jakarta-site"/>
-    <skin name="cocoon-printer" style="cocoon-printer"/>  -->
-    </forrest>
     <cvs repository="xml"/>
     <mailing-lists>
         <mailing-list mail="forrest-dev@xml.apache.org"
@@ -80,7 +74,7 @@
              todir="forrest/" />
     -->
 
-       <nag from="Gump" to="forrest-dev@xml.apache.org"/>
+       <nag from="nicolaken@apache.org" to="forrest-dev@xml.apache.org"/>
 
     </project>
 
@@ -105,18 +99,17 @@
     <!-- jars - the result of the build  -->
         <jar id="forrestbar" name="forrestbar.xpi"/>
 
-       <nag from="Gump" to="forrest-dev@xml.apache.org"/>
+       <nag from="nicolaken@apache.org" to="forrest-dev@xml.apache.org"/>
 
     </project>
 
-    <project name="xml-forrest-scratchpad-forrestdoc-autotest">
+    <project name="xml-forrest-scratchpad-forrestdoc">
 
-        <ant basedir="scratchpad/forrestdoc" target="project" />
+        <ant basedir="scratchpad/forrestdoc" target="jar" >
+           <property name="version" value="@@DATE@@"/>
+        </ant>
 
-        <work nested="scratchpad/forrestdoc/build/classes"/> 
-        <work nested="scratchpad/forrestdoc/build/tools/ant"/>         
-
-        <home nested="scratchpad/forrestdoc/build"/>
+        <home nested="scratchpad/forrestdoc/dist"/>
         
         <depend project="jakarta-ant"/>
         <depend project="ant-contrib"/>
@@ -124,9 +117,28 @@
         <depend project="xml-xalan2"/>
         <depend project="antlr"/>
 
-        <junitreport nested="scratchpad/forrestdoc/build/forrestdoc/forrestdoc"/>
+        <jar name="xml-forrest-scratchpad-forrestdoc.jar"/>
+        
+        <nag from="nicolaken@apache.org" to="forrest-dev@xml.apache.org"/>
 
-        <nag from="Gump" to="forrest-dev@xml.apache.org"/>
+    </project>
+    
+    <project name="xml-forrest-scratchpad-forrestdoc-autotest">
+
+        <ant basedir="scratchpad/forrestdoc" target="project" />
+
+        <home nested="scratchpad/forrestdoc/build"/>
+        
+        <depend project="xml-forrest-scratchpad-forrestdoc"/>
+        <depend project="jakarta-ant"/>
+        <depend project="ant-contrib"/>
+        <depend project="xml-xerces"/>
+        <depend project="xml-xalan2"/>
+        <depend project="antlr"/>
+
+        <javadoc parent="scratchpad/forrestdoc/build/forrestdoc/forrestdoc"/>
+
+        <nag from="nicolaken@apache.org" to="forrest-dev@xml.apache.org"/>
 
     </project>
         
