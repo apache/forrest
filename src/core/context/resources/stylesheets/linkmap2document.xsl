@@ -38,7 +38,7 @@
 
      <xsl:template match="*">
         <xsl:if test="@label">
-          <li><a href="{@href}"><xsl:value-of select="@label" /></a></li>
+          <li><a href="{@href}"><xsl:value-of select="@label" /></a>&#160;&#160;&#160;_________________________&#160;&#160;<em><xsl:value-of select="name(.)" /></em></li>
         </xsl:if>
         
         <xsl:if test="*">
