@@ -7,14 +7,15 @@ import org.apache.avalon.framework.component.Composable;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.excalibur.xml.Parser;
+import org.apache.avalon.excalibur.xml.EntityResolver;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.apache.cocoon.components.resolver.Resolver;
+//import org.apache.cocoon.components.resolver.Resolver;
 import org.outerj.yer.hierarchy.HierarchyConfig;
 import org.outerj.yer.hierarchy.Entry;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.EntityResolver;
+//import org.xml.sax.EntityResolver;
 
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.SAXParser;
@@ -33,8 +34,8 @@ import java.io.IOException;
 
 /** Class <code>org.outerj.yer.libre.LibreConfigHelper</code> ...
  * 
- * @author $Author: stevenn $
- * @version CVS $Id: LibreConfigHelper.java,v 1.1 2002/06/11 13:19:21 stevenn Exp $
+ * @author $Author: crossley $
+ * @version CVS $Id: LibreConfigHelper.java,v 1.2 2002/07/12 07:10:14 crossley Exp $
  */
 public class LibreConfigHelper implements Composable
 {
@@ -133,10 +134,10 @@ public class LibreConfigHelper implements Composable
     return parser;
   }
 
-  public EntityResolver getCatalogResolver() {
+  public org.xml.sax.EntityResolver getCatalogResolver() {
     if (this.manager != null) {
       try {
-        Resolver resolver = (Resolver)this.manager.lookup(Resolver.ROLE);
+        EntityResolver resolver = (EntityResolver)this.manager.lookup(EntityResolver.ROLE);
         return resolver;
       } catch(ComponentException e) {
         e.printStackTrace();
