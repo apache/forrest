@@ -20,12 +20,14 @@
  </xsl:template>
 
  <xsl:template match="actions">
-  <section title="{@priority}">
+  <section>
+   <title><xsl:value-of select="@priority"/></title>
    <ul>
     <xsl:for-each select="action">
      <li>
       <strong><xsl:text>[</xsl:text><xsl:value-of select="@context"/><xsl:text>]</xsl:text></strong><xsl:text> </xsl:text>
       <xsl:apply-templates mode="copy"/>
+      <xsl:text> </xsl:text>&#8594;<xsl:text> </xsl:text><xsl:value-of select="@assigned-to"/>
      </li>
     </xsl:for-each>
    </ul>
