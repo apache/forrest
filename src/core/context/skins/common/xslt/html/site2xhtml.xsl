@@ -324,12 +324,6 @@ if (VERSION > 3) {
         <xsl:value-of select="//info/project-skin"/>
       </xsl:attribute>
     </meta>
-    <meta>
-      <xsl:attribute name="name">DC.date</xsl:attribute>
-      <xsl:attribute name="content">
-        <xsl:value-of select="//info/generate-timestamp"/>
-      </xsl:attribute>
-    </meta>
   </xsl:template>
 
   <xsl:template name="feedback">  
