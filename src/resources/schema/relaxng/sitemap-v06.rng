@@ -302,6 +302,17 @@ CHANGE HISTORY:
     <optional><ref name="exclude-name"/></optional>
   </define>
 
+  <define name="linkRewriterTransformer.contents">
+    <zeroOrMore>
+      <element name="input-module">
+        <ref name="anyAttribute"/>
+        <zeroOrMore>
+          <ref name="anyElement"/>
+        </zeroOrMore>
+      </element>
+    </zeroOrMore>
+  </define>
+
 <!-- CPA: contents confirmed by inspection of AbstractTextSerializer.java -->
   <define name="textSerializer.contents">
     <optional><ref name="cdata-section-elements"/></optional>
@@ -447,6 +458,7 @@ CHANGE HISTORY:
           <ref name="xsltTransformer.contents"/>
           <ref name="i18nTransformer.contents"/>
           <ref name="encodeURLTransformer.contents"/>
+          <ref name="linkRewriterTransformer.contents"/>
           <optional><ref name="mapping"/></optional>
         </interleave>
     </element>
@@ -811,6 +823,14 @@ CHANGE HISTORY:
     </zeroOrMore>
   </element>
 </define>
+
+  <define name="anyAttribute">
+    <zeroOrMore>
+      <attribute>
+        <anyName/>
+      </attribute>
+    </zeroOrMore>
+  </define>
 
 <!-- Matchers ========================================== -->
   <define name="map.matchers">

@@ -451,34 +451,60 @@
       <component-instance name="date"           	class="org.apache.cocoon.components.modules.input.DateInputModule"/>
       <component-instance name="nullinput"      	class="org.apache.cocoon.components.modules.input.NullInputModule"/>
       <component-instance name="xmlmeta"        	class="org.apache.cocoon.components.modules.input.XMLMetaModule"/>
-      <component-instance name="mapmeta"    	    class="org.apache.cocoon.components.modules.input.MapMetaModule"/>
-      <component-instance name="defaults"      	class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
-		    <values>
-         <skin>@skin@</skin>
-         <base-url>/forrest</base-url>
-		   </values>
-     </component-instance>
-	  
-      <component-instance logger="core.modules.input" name="forrest"   	class="org.apache.cocoon.components.modules.input.ChainMetaModule">
-	     <input-module name="request-param"/>
-	     <input-module name="request-attr"/>
-	     <input-module name="session-attr"/>
-	     <input-module name="defaults"/>
-       </component-instance>
+      <component-instance name="mapmeta"          class="org.apache.cocoon.components.modules.input.MapMetaModule"/>
+      <component-instance name="defaults"       class="org.apache.cocoon.components.modules.input.DefaultsMetaModule">
+        <values>
+          <skin>@skin@</skin>
+          <base-url>/forrest</base-url>
+        </values>
+      </component-instance>
+
+      <component-instance logger="core.modules.input" name="forrest"    class="org.apache.cocoon.components.modules.input.ChainMetaModule">
+        <input-module name="request-param"/>
+        <input-module name="request-attr"/>
+        <input-module name="session-attr"/>
+        <input-module name="defaults"/>
+      </component-instance>
+
+      <!-- For the site: scheme -->
+      <component-instance
+        class="org.apache.cocoon.components.modules.input.XMLFileModule"
+        logger="core.modules.xml" name="linkmap">
+        <file src="cocoon:/linkmap"/>
+        <!-- Shouldn't this be the default? -->
+        <reloadable>true</reloadable>
+      </component-instance>
+
+      <!-- Links to URIs within the site -->
+      <component-instance
+        class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+        logger="core.modules.mapper" name="site">
+        <input-module name="linkmap"/>
+        <prefix>/site//</prefix>
+        <suffix>/@href</suffix>
+      </component-instance>
+
+      <!-- Links to external URIs, as distinct from 'site' URIs -->
+      <component-instance
+        class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+        logger="core.modules.mapper" name="ext">
+        <input-module name="linkmap"/>
+        <prefix>/site/external-refs//</prefix>
+        <suffix>/@href</suffix>
+      </component-instance>
 
 
-       <!--
-       For backwards-compat: interpret {context:context} as
-       {request:contextPath}
-       -->
-       <component-instance
-         class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
-         logger="core.modules.mapper" name="context">
-         <input-module name="request"/>
-         <suffix>Path</suffix>
-       </component-instance>
+      <!--
+      For backwards-compat: interpret {context:context} as
+      {request:contextPath}
+      -->
+      <component-instance
+        class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+        logger="core.modules.mapper" name="context">
+        <input-module name="request"/>
+        <suffix>Path</suffix>
+      </component-instance>
 
-	  
    </input-modules>
 
    <output-modules>
