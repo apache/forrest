@@ -97,6 +97,23 @@
         <get src="@{url}" 
            dest="${forrest.skins-dir}/skins-${skin-counter}.xml"
            verbose="true" usetimestamp="true" ignoreerrors="true"/>
+        <if>
+        <not>
+       		<available file="${forrest.skins-dir}/skins-${skin-counter}.xml"/>
+       	</not>
+       <then>
+       <fail>Stopped...
+ERROR
+=====
+       
+Unable to retrieve the skins descriptors at @{url}.
+There may be more information about the reason for this in ouput
+above. The usual cause is that Forrest has been unable to download
+the file. If you are behind a firewall then set the proxy.host 
+and proxy.port values in the forrest.properties file.
+       </fail>
+     </then>
+   </if>
         <math result="skin-counter" operand1="${skin-counter}" operation="+" operand2="1" datatype="int"/>
       </sequential>
     </for>
