@@ -38,6 +38,7 @@
 
     <cvspass cvsroot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}" password="${getsrc.cvs.password}"/>
 
+    <!-- non-recursive; just to get forrest.properties -->
     <echo><![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
       package="${getsrc.cvs.module}"
       dest="${build.cvsmodule-dir}"
@@ -58,6 +59,7 @@
     <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/default-forrest.properties"/>
 
+    <!-- only the project.content-dir directory -->
     <echo><![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
       package="${getsrc.cvs.module}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
@@ -76,6 +78,43 @@
       <fileset dir="${build.cvsmodule-dir}/${getsrc.cvs.module}"/>
     </copy>
 
+  </target>
+
+
+  <taskdef resource="taskdef.properties">
+    <classpath>
+      <!-- non-recursive doesn't work from 0.8 stable -->
+      <pathelement location="${bot.home}/lib/jsvn-0.9-dev.jar"/>
+    </classpath>
+  </taskdef>
+
+  <!-- default values -->
+  <property name="getsrc.svn.url" value=""/>
+  <property name="getsrc.svn.revision" value="HEAD"/>
+
+  <property name="build.svn-dir"    location="work/svn"/>
+
+  <target name="getsrc.svn">
+    <!-- non-recursive; just to get forrest.properties -->
+    <svncheckout repositoryUrl="${getsrc.svn.url}"
+      destination="${build.svn-dir}/${ant.project.name}"
+      revision="${getsrc.svn.revision}"
+      failonerror="true"
+      recursive="false"/>
+
+    <echo>Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
+    <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
+    <loadproperties srcFile="${forrest.home}/default-forrest.properties"/>
+    
+    <!-- only the project.content-dir directory -->
+    <svncheckout repositoryUrl="${getsrc.svn.url}/${project.content-dir}"
+      destination="${build.svn-dir}/${ant.project.name}/${project.content-dir}"
+      revision="${getsrc.svn.revision}"
+      failonerror="true"/>
+
+    <copy todir="${build.work-dir}">
+      <fileset dir="${build.svn-dir}/${ant.project.name}"/>
+    </copy>
   </target>
 
 </project>
