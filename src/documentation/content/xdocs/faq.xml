@@ -91,14 +91,22 @@ repository is not kept current.
 
     <faq id="maxmemory">
       <question>
-        How can i specify the amount of memory to be used by Java?
+        How can I specify the amount of memory to be used by Java?
       </question>
       <answer>
         <p>
-         Set the <code>maxmemory</code> property in the
-         <code>forrest.properties</code> file. Like many other properties
-         you can copy them from the default configuration at
-         <code>src/resources/fresh-site/forrest.properties</code>
+         There are two ways to control this.  If you get an OutOfMemoryError when Cocoon is generating pages,
+         see the first paragraph.  If you get an OutOfMemoryError when outside of Cocoon (e.g., copying raw
+         files), see the second paragraph.
+        </p>
+        <p>
+         The <code>maxmemory</code> property in the <code>forrest.properties</code> file controls how much
+         memory Cocoon uses. Like many other properties you can copy them from the default configuration at
+         <code>src/core/fresh-site/forrest.properties</code>
+        </p>
+        <p>
+         Set the <code>ANT_OPTS</code> environment variable before you run forrest.  The exact value you set
+         it to is dependant on your JVM, but something like <code>ANT_OPTS=-Xmx500M</code> will probably work.
         </p>
       </answer>
     </faq>
