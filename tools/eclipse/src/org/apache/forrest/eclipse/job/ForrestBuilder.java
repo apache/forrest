@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IStatus;
 
 
 /**
- * Run a version of FOrrest
+ * Run a version of Forrest
  */
 public class ForrestBuilder extends ForrestJob  {
 	/**
