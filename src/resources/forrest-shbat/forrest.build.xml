@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/05/12 00:33:30 $              |
+    |             $Date: 2003/05/13 01:15:13 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -86,6 +86,7 @@ FORREST SITE BUILDER
     <property name="project.catalog"     location="${project.schema-dir}/catalog.xcat" />
     <property name="forrest.catalog.verbosity" value="1" />
     <property name="forrest.maxmemory" value="64m" />
+    <property name="forrest.jvmargs" value="" />
     <property name="project.skins-dir"   location="${project.content-dir}/skins" />
     <property name="project.skinconf"    location="${project.content-dir}/skinconf.xml" />
     <property name="project.conf-dir"    location="${project.content-dir}/conf" />
@@ -569,7 +570,8 @@ Use the 'seed' target to create a template project structure.
         maxmemory="${forrest.maxmemory}"
         dir="."
         failonerror="true"
-        classpathref="forrest.cp">
+        classpathref="forrest.cp"
+        jvmargs="${forrest.jvmargs}">
         <jvmarg
           value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
         <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
