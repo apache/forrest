@@ -21,17 +21,17 @@ paths in the page that Forrest will try to recursively render.
 
     <xsl:choose>
       <xsl:when test="contains(., 'apidocs')">
-        <xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>
+      <!--<xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>-->
       </xsl:when>
       <xsl:when test="contains(., 'api/')">
-        <xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>
+        <!--<xsl:message>Ignoring javadoc link: <xsl:value-of select="."/></xsl:message>-->
       </xsl:when>
       <xsl:when test="not(contains(., ':')) and substring(., string-length(.)) = '/'">
-        <xsl:message>Ignoring directory link: <xsl:value-of select="."/></xsl:message>
+        <!--<xsl:message>Ignoring directory link: <xsl:value-of select="."/></xsl:message>-->
         <!-- Don't try to render links to local directories (that end with '/'). -->
       </xsl:when>
       <xsl:when test="starts-with(., $ctxbasedir)">
-        <xsl:message>Ignoring absolute PDF link: <xsl:value-of select="."/></xsl:message>
+        <!--<xsl:message>Ignoring absolute PDF link: <xsl:value-of select="."/></xsl:message>-->
         <!-- Ignore absolute image paths used in PDFs from being rendered. This
         will go away when the FOP-Cocoon link improves -->
       </xsl:when>
