@@ -3,7 +3,13 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file"/>
-    <map:serializers default="html"/>
+    <map:serializers default="html">
+      <map:serializer name="svg2jpeg" mime-type="image/jpeg" src="org.apache.cocoon.serialization.SVGSerializer">
+        <parameter name="quality" type="float" value="1.0"/>
+      </map:serializer>
+      <map:serializer mime-type="image/png" name="svg2png" src="org.apache.cocoon.serialization.SVGSerializer"/>
+    </map:serializers>
+ 
     <map:transformers default="xslt"/>
     <map:readers default="resource"/>
     <map:matchers default="wildcard"/>
