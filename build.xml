@@ -222,6 +222,12 @@
     -->
   </target>
  
+  <target name="refresh-code" depends="jar">
+    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
+      <fileset dir="${build.dir}" includes="*.jar"/>
+    </copy>
+  </target>
+ 
   <target name="dist-shbat" 
     depends="init, jar, validate-config" >
 
@@ -242,9 +248,9 @@
     <!-- Copy Forrest jars -->
     <!-- @TODO REDUCE COPYING -->
     <mkdir dir="${dist-shbat.dir}/context/WEB-INF/lib" />
-    <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
-      <fileset dir="${build.dir}" includes="*.jar"/>
-    </copy>
+  
+    <antcall target="refresh-code"/>
+    
     <copy todir="${dist-shbat.dir}/context/WEB-INF/lib">
       <fileset dir="./lib/core" includes="*.jar"/>
       <fileset dir="./lib/endorsed" includes="*.jar"/>
