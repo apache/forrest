@@ -24,6 +24,9 @@
      <xsl:if test="not(disable-pdf-link)">     
        <disable-pdf-link>true</disable-pdf-link>
      </xsl:if>
+     <xsl:if test="not(disable-pod-link)">     
+       <disable-pod-link>true</disable-pod-link>
+     </xsl:if>
      <xsl:if test="not(disable-xml-link)">     
        <disable-xml-link>true</disable-xml-link>
      </xsl:if>
