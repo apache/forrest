@@ -564,4 +564,38 @@
       basedir="${build.components.classes}"/>
   </target>
 
+
+  <!-- =================================================================== -->
+  <!-- Generate DTDs with entities expanded                                -->
+  <!-- =================================================================== -->
+  <target name='expand-dtd' depends="init" description="Generates '-full' DTDs,
+	  with all entity refs expanded, for use with catalog-ignorant editors like
+	  IDEA">
+
+	<taskdef name="dtd2xml" classpathref="classpath" classname="org.cyberneko.dtd.anttasks.DTD2XML"/>
+	<property name="dtdx.dir" location="build/tmp/dtdx"/>
+	<mkdir dir="${dtdx.dir}"/>
+	<!-- Generate an intermediate XML representation of each DTD -->
+	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" extension=".dtdx">
+		<fileset dir="${resource.dir}/schema/dtd">
+			<include name="changes-v12.dtd"/>
+			<include name="document-v11.dtd"/>
+			<include name="document-v12.dtd"/>
+			<include name="faq-v12.dtd"/>
+			<include name="howto-v12.dtd"/>
+			<include name="todo-v12.dtd"/>
+			<include name="v20a/document-v20.dtd"/>
+			<include name="v20a/faq-v20.dtd"/>
+		</fileset>
+	</dtd2xml>
+
+	<!-- Now transform the intermediate format back to the regular DTD format -->
+	<!-- Note that we could also transform to XSD or RNG -->
+	<xslt basedir="${dtdx.dir}"
+		destdir="${dist-shbat.dir}/context/resources/schema/dtd"
+		extension="-full.dtd"
+		style="tools/dtdconverters/dtdx2dtd.xsl"/>
+</target>
+
+
 </project>
