@@ -19,6 +19,9 @@
 <xsl:stylesheet version="1.0" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="office meta  table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
   <xsl:param name="filename"/>
   <xsl:param name="extension"/>
+  
+  <xsl:variable name="OOtemplate" select="/office:document/office:meta/meta:template/@xlink:title"/>
+   
   <xsl:output method="xml" indent="yes" omit-xml-declaration="no"/>
   <xsl:output method="xml" version="1.0" encoding="UTF-8" 
     doctype-public="-//APACHE//DTD Documentation V1.2//EN" 
@@ -46,6 +49,14 @@
             </xsl:otherwise>
           </xsl:choose>
         </title>
+        <!-- Abstract is required field in HowTos, so always create it and fill with description field  -->
+        <abstract>
+          <xsl:value-of select="/office:document/office:meta/dc:description"/>
+        </abstract>
+      
+        <!-- last modified date -->
+        <last-modified-content-date date="{substring-before(/office:document/office:meta/dc:date, 'T')}"/>
+
         <xsl:call-template name="style"/>
       </header>
       <xsl:apply-templates select="//office:body"/>
@@ -57,8 +68,31 @@
       +-->
   <xsl:template match="office:body">
     <body>
-      <xsl:apply-templates select="key('rootChildren', generate-id())"/>
-      <xsl:apply-templates select="text:h[@text:level='1']"/>      
+      <xsl:if test="$OOtemplate = 'OpenOffice.org Writer HowTo Template'">
+        <!-- Special processing for top of HowTos -->
+        <header>
+          <title>
+              <xsl:choose>
+                <xsl:when test="/office:document/office:meta/dc:title = '' or not(/office:document/office:meta/dc:title)">
+                  <xsl:value-of select="$filename"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="/office:document/office:meta/dc:title"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </title>
+            <section id="Overview">
+              <title>Overview</title>
+            <p>
+              <xsl:value-of select="/office:document/office:meta/dc:description"/>
+            </p>
+          </section>
+          </header>
+          
+        </xsl:if> 
+         <xsl:apply-templates select="key('rootChildren', generate-id())"/>
+        <xsl:apply-templates select="text:h[@text:level='1']"/>  
+      
     </body>
   </xsl:template>
   
@@ -71,6 +105,7 @@
       <xsl:with-param name="prevLevel" select="1"/>
     </xsl:call-template>
   </xsl:template>
+  
   <xsl:template match="text:h[@text:level='2'] | text:h[@text:level='3']| text:h[@text:level='4'] | text:h[@text:level='5']">
     <xsl:variable name="level" select="@text:level"/>
     <xsl:call-template name="createSection">
@@ -78,29 +113,26 @@
       <xsl:with-param name="prevLevel" select="preceding-sibling::text:h[@text:level &lt; $level][1]/@text:level "/>
     </xsl:call-template>
   </xsl:template>
+  
   <xsl:template name="createSection">
     <xsl:param name="currentLevel"/>
     <xsl:param name="prevLevel"/>
-    <xsl:choose>
-      <xsl:when test="$currentLevel &gt; $prevLevel+1">
-        <section>
-          <title>hugo</title>
-          <xsl:call-template name="createSection">
-            <xsl:with-param name="currentLevel" select="$currentLevel"/>
-            <xsl:with-param name="prevLevel" select="$prevLevel +1"/>
-          </xsl:call-template>
-        </section>
-      </xsl:when>
-      <xsl:otherwise>
-        <section>
-          <title>
-            <xsl:apply-templates/>
-          </title>
-          <xsl:apply-templates select="key('rootChildren', generate-id())"/>
-          <xsl:apply-templates select="key('chieldElements', generate-id())"/>
-        </section>
-      </xsl:otherwise>
-    </xsl:choose>
+          
+      
+    <section class="{.}">  
+      <title>
+        <xsl:apply-templates/>
+      </title>
+      <!-- Report structuring errors with a fixme -->
+      <xsl:if test="$currentLevel &gt; $prevLevel+1">
+        <fixme author="openoffice-common2forrest template">
+          The previous heading is more than one level below the heading before it. To remove this fixme, correct the structuring of your document.
+        </fixme>
+      </xsl:if>
+      <xsl:apply-templates select="key('rootChildren', generate-id())"/>
+      <xsl:apply-templates select="key('chieldElements', generate-id())"/>
+    </section>
+  
   </xsl:template>
   
   <!--+

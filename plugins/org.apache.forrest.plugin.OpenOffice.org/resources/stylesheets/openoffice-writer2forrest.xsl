@@ -20,7 +20,6 @@
   
   <xsl:import href="openoffice-common2forrest.xsl"/>
   
-  
   <!-- ================================================================== -->
   <!-- The templates below match special styles created in a special 
        Forrest template. However, there is no longer any need to use this
@@ -109,6 +108,18 @@
       <xsl:apply-templates/>
     </fixme>
   </xsl:template>
+  
+  <!--+
+      | Fixme2
+      | - translates the yellow stickers to fixmes
+      |   
+      +-->
+  <xsl:template match="office:annotation">
+    <fixme author="{@office:author}">
+      <xsl:apply-templates/>
+    </fixme>
+  </xsl:template>
+  
 
   <!--+
       | Note
@@ -117,5 +128,32 @@
     <note>
       <xsl:apply-templates/>
     </note>
-  </xsl:template>    
+  </xsl:template>
+   
+  <!--+
+      | special list format p2
+      |
+      | 0verwrites template in openoffice-common2forrest
+      | to allow for bulleted list item 'forrest: instructional step' in oo to 
+      | become a simple para with a class-attr in forrest (instruction)
+      | In order to do so, this template omits the <ul>-Element
+      | and bypasses the processing of the <li>-Element.
+      |        
+      +-->
+      
+  <xsl:template match="text:unordered-list[@text:style-name='L2']">
+      <xsl:apply-templates select="text:list-item/text:p"/>
+      <xsl:apply-templates select="text:list-item/text:unordered-list"/>
+      <xsl:apply-templates select="text:list-item/text:ordered-list"/> 
+  </xsl:template> 
+   
+  <!--+
+      | Instructional step
+      +-->
+  <xsl:template match="text:p[@text:style-name='P2']">
+    <p class="instruction">
+      <xsl:apply-templates/>
+    </p>
+  </xsl:template> 
+      
 </xsl:stylesheet>
