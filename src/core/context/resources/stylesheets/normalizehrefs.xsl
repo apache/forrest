@@ -12,9 +12,9 @@ href="somedir/../someotherdir/index.html" ==> href="someotherdir/index.html"
   <xsl:template match="@href">
     <xsl:if test="normalize-space(.)!=''">
       <xsl:attribute name="href">
-	      <xsl:call-template name="normalize" >
-	        <xsl:with-param name="path" select="." />
-      	</xsl:call-template>
+      <xsl:call-template name="normalize">
+        <xsl:with-param name="path" select="."/>
+      </xsl:call-template>
       </xsl:attribute>
     </xsl:if>
   </xsl:template>
