@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/02 07:07:06 $              |
+    |             $Date: 2003/10/02 07:16:12 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -1115,6 +1115,15 @@ forrest.properties.
   
   <!-- public targets -->     
      
+    <target name="available-skins"
+          depends="init-props, skin-unavailable, fetch-skins-descriptor"
+          description="What skins are available?">
+    <xslt in="${forrest.home}/context/skins/skins.xml" 
+          out="${project.work-dir}/skinlist2echobuild.xml"
+          style="${forrest.home}/var/skinlist2echo.xsl"/>  
+    <ant antfile="${project.work-dir}/skinlist2echobuild.xml"/>
+  </target>  
+  
   <target name="package-skin" description="Make a package of an existing skin">
     <input message="Which skin do you want to package?"
            addproperty="skin-name"/>
@@ -1122,7 +1131,6 @@ forrest.properties.
        basedir="${forrest.home}/context/skins/"
        includes="${skin-name}/**"/>
   </target>
-
 
   <target name="install-skin" 
           depends = "init-skins"
@@ -1132,6 +1140,10 @@ forrest.properties.
                 
   <target name="init-skins" depends="init-props, check-skin, fetch-skin, unpack-skins"/>   
 
+  <target name="skin-unavailable">   
+    <property name="skin.unavailable" value="true"/>
+  </target>  
+  
   <target name="check-skin">   
     <condition property="skin.unavailable">
       <and>
@@ -1164,15 +1176,6 @@ forrest.properties.
       <get src="http://xml.apache.org/forrest/skins/skins.xml" 
            dest="${forrest.home}/context/skins/skins.xml"
            verbose="true" usetimestamp="true" ignoreerrors="false"/>
-  </target>  
-  
-  <target name="available-skins"
-          depends="init-props, fetch-skins-descriptor"
-          description="What skins are available?">
-    <xslt in="${forrest.home}/context/skins/skins.xml" 
-          out="${project.work-dir}/skinlist2echobuild.xml"
-          style="${forrest.home}/var/skinlist2echo.xsl"/>  
-    <ant antfile="${project.work-dir}/skinlist2echobuild.xml"/>
   </target>  
   
   <target name="fetch-skin" 
