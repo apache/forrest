@@ -73,7 +73,7 @@
          <property name="mail.attachments" value="${{bot.build.dir}}/work.{@name}.log" />
          <condition property="mail.send">
            <or>
-           <equals arg1="${{mail.completion-status}}" arg2="error" />
+           <equals arg1="${{mail.completion-status}}" arg2="FAIL" />
                    <equals arg1="{@sendon}" arg2="always" />
          </or>
          </condition>
