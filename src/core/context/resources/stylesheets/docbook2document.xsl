@@ -232,12 +232,7 @@ Credit: original from the jakarta-avalon project
                   </title>
             </section>
       </xsl:template>
-      <xsl:template match="sect1|sect2|sect3|sect4|sect5">
-            <section>
-                  <xsl:apply-templates/>
-            </section>
-      </xsl:template>
-       <xsl:template match="example">
+      <xsl:template match="example">
             <section>
                   <xsl:apply-templates/>
             </section>
@@ -370,11 +365,30 @@ Credit: original from the jakarta-avalon project
             </li>
       </xsl:template>
       <xsl:template match="revnumber|revremark|authorinitials|date"/>
-      <xsl:template match="section">
-            <section>
-                  <xsl:apply-templates/>
-            </section>
+    
+      <xsl:template match="sect1|sect2|sect3|sect4|sect5|section">
+            <xsl:param name="idval">
+                <xsl:if test="@id">
+                            <xsl:value-of select="@id"/>
+                </xsl:if>
+            </xsl:param>
+          <xsl:choose>
+              <xsl:when test="@id">
+                  <xsl:element name="section">
+                  <xsl:attribute name="id">
+                        <xsl:value-of select="$idval"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates/>
+                  </xsl:element>                  
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:element name="section">
+                      <xsl:apply-templates/>
+                  </xsl:element>
+              </xsl:otherwise>
+          </xsl:choose>
       </xsl:template>
+    
       <xsl:template match="dedication">
             <table>
                   <tr>
@@ -707,8 +721,46 @@ Credit: original from the jakarta-avalon project
                   </xsl:choose>
             </tt>
       </xsl:template>
-
-
+    <xsl:template match="xref">
+        <xsl:param name="linkend">
+            <xsl:value-of select="@linkend"/>
+        </xsl:param>
+        <xsl:param name="endterm">
+            <xsl:value-of select="@endterm"/>
+        </xsl:param>
+        <xsl:param name="linkendvalue">
+            <xsl:if test="$linkend">
+                <xsl:value-of select="//*[@id=$linkend]/title"/>
+            </xsl:if>
+        </xsl:param>
+        <xsl:param name="endtermvalue">
+            <xsl:if test="$endterm">
+                <xsl:value-of select="//*[@id=$endterm]"/>
+            </xsl:if>
+        </xsl:param>
+        <xsl:choose>
+            <xsl:when test="//xref[not(@endterm)]">
+                <xsl:element name="link">
+                    <xsl:attribute name="href">
+                        <xsl:text>#</xsl:text>
+                        <xsl:value-of select="$linkend"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="$linkendvalue"/>
+                </xsl:element>
+                <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:element name="link">
+                    <xsl:attribute name="href">
+                        <xsl:text>#</xsl:text>
+                        <xsl:value-of select="$linkend"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="$endtermvalue"/>
+                </xsl:element>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
       <xsl:template match="node()|@*" priority="-1">
             <xsl:copy>
