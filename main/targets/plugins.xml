@@ -23,7 +23,7 @@
           description="What plugins are available?">
     <for param="plugin-descriptor-file">
       <path>
-        <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+        <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
       </path>
       <sequential>
         <xslt in="@{plugin-descriptor-file}" 
@@ -82,24 +82,24 @@
      <!-- add the snippet to plugins/input.xmap that will mount the plugin
           specific input.xmap -->
      <echo>Mounting input plugin: ${plugin.name}</echo>
-     <xslt in="${forrest.plugins-dir}/input.xmap"
-       out="${forrest.plugins-dir}/input.xmap.new"
+     <xslt in="${project.temp-dir}/input.xmap"
+       out="${project.temp-dir}/input.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="input"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/input.xmap.new" 
-       tofile="${forrest.plugins-dir}/input.xmap"/>
-     <xslt in="${forrest.plugins-dir}/resources.xmap"
-       out="${forrest.plugins-dir}/resources.xmap.new"
+     <move file="${project.temp-dir}/input.xmap.new" 
+       tofile="${project.temp-dir}/input.xmap"/>
+     <xslt in="${project.temp-dir}/resources.xmap"
+       out="${project.temp-dir}/resources.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="resources"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/resources.xmap.new" 
-       tofile="${forrest.plugins-dir}/resources.xmap"/>
+     <move file="${project.temp-dir}/resources.xmap.new" 
+       tofile="${project.temp-dir}/resources.xmap"/>
   </target>
   
   <target name="configure-output-plugin"
@@ -108,15 +108,15 @@
      <!-- add the snippet to plugins/output.xmap that will mount the plugin
           specific input.xmap -->
      <echo>Mounting output plugin: ${plugin.name}</echo>
-     <xslt in="${forrest.plugins-dir}/output.xmap"
-       out="${forrest.plugins-dir}/output.xmap.new"
+     <xslt in="${project.temp-dir}/output.xmap"
+       out="${project.temp-dir}/output.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="output"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/output.xmap.new" 
-       tofile="${forrest.plugins-dir}/output.xmap"/>
+     <move file="${project.temp-dir}/output.xmap.new" 
+       tofile="${project.temp-dir}/output.xmap"/>
   </target>
   
   <target name="configure-internal-plugin"
@@ -125,20 +125,20 @@
      <!-- add the snippet to plugins/internal.xmap that will mount the plugin
           specific input.xmap -->
      <echo>Mounting internals plugin: ${plugin-name}</echo>
-     <xslt in="${forrest.plugins-dir}/internal.xmap"
-       out="${forrest.plugins-dir}/internal.xmap.new"
+     <xslt in="${project.temp-dir}/internal.xmap"
+       out="${project.temp-dir}/internal.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
        force="true">
            <param name="plugin-name" expression="${plugin.name}"/>  
            <param name="plugin-type" expression="internal"/>  
      </xslt>
-     <move file="${forrest.plugins-dir}/internal.xmap.new" 
-       tofile="${forrest.plugins-dir}/internal.xmap"/>
+     <move file="${project.temp-dir}/internal.xmap.new" 
+       tofile="${project.temp-dir}/internal.xmap"/>
   </target>
 
   <target name="fetch-plugins-descriptors" if="plugin.unavailable">
     <delete>
-      <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+      <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
     </delete>
   
     <var name="plugin-counter" value="1"/>
@@ -146,7 +146,7 @@
       <sequential>
         <echo>fetching descriptor: @{url}</echo>
         <get src="@{url}" 
-           dest="${forrest.plugins-dir}/plugins-${plugin-counter}.xml"
+           dest="${project.temp-dir}/plugins-${plugin-counter}.xml"
            verbose="true" usetimestamp="true" ignoreerrors="true"/>
         <math result="plugin-counter" operand1="${plugin-counter}" operation="+" operand2="1" datatype="int"/>
       </sequential>
@@ -158,7 +158,7 @@
           depends="init-props, fetch-plugins-descriptors">
     <for param="plugin-descriptor-file">
       <path>
-        <fileset dir="${forrest.plugins-dir}" includes="plugins-*.xml"/>
+        <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
       </path>
       <sequential>
         <xslt in="@{plugin-descriptor-file}" 
@@ -180,17 +180,18 @@
     description="ensure the required plugins are available locally, if any are not download them automatically">
     
     <mkdir dir="${forrest.plugins-dir}"/>
+    <mkdir dir="${project.temp-dir}"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
-      tofile="${forrest.plugins-dir}/input.xmap"
+      tofile="${project.temp-dir}/input.xmap"
       overwrite="true"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
-      tofile="${forrest.plugins-dir}/resources.xmap"
+      tofile="${project.temp-dir}/resources.xmap"
       overwrite="true"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
-      tofile="${forrest.plugins-dir}/output.xmap"
+      tofile="${project.temp-dir}/output.xmap"
       overwrite="true"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
-      tofile="${forrest.plugins-dir}/internal.xmap"
+      tofile="${project.temp-dir}/internal.xmap"
       overwrite="true"/>
     
       <for list="${project.required.plugins}" param="name">
