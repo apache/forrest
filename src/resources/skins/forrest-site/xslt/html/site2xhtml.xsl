@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.15 2002/11/29 12:25:14 jefft Exp $
+$Id: site2xhtml.xsl,v 1.16 2003/01/17 01:19:38 crossley Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -259,8 +259,8 @@ $Id: site2xhtml.xsl,v 1.15 2002/11/29 12:25:14 jefft Exp $
             <xsl:variable name="image" select="image"/>
             <xsl:variable name="width" select="width"/>
             <xsl:variable name="height" select="height"/>
-            <a href="{$url}" valign="top">
-            <img alt="{$name} logo" border="0">
+            <a href="{$url}">
+            <img alt="{$name} logo" valign="top" border="0">
               <xsl:attribute name="src">
                 <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
                 <xsl:value-of select="$image"/>
