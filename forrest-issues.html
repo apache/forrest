@@ -10,10 +10,11 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
-<body>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
 <div id="top">
 <!--+
     |breadtrail
@@ -47,9 +48,7 @@
     |start Search
     +-->
 <div class="searchbox">
-<div id="roundtopsmall">
-<img style="display: none" class="cornersmall" height="5" width="5" alt="" src="skin/images/rc-t-l-5-1body-2searchbox-3searchbox.png"></div>
-<form action="http://www.google.com/search" method="get">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
 <input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
@@ -85,7 +84,13 @@
               document.write("Published: " + document.lastModified);
               //  --></script>
 </div>
-<div class="breadtrail">&nbsp;</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
 <!--+
     |start Menu, mainarea
     +-->
@@ -133,38 +138,35 @@
 <a class="dida" href="forrest-issues.pdf"><img alt="PDF" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
 <h1>Open issues for the upcoming release</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
+<a href="#%5BFOR-286%5D+Forrest+cannot+run+from+directories+with+spaces+in+the+path">[FOR-286] Forrest cannot run from directories with spaces in the path</a>
+</li>
+<li>
+<a href="#%5BFOR-285%5D+Make+the+html+export%2Brendering+reasonably+stable">[FOR-285] Make the html export+rendering reasonably stable</a>
+</li>
+<li>
+<a href="#%5BFOR-284%5D+No+pipeline+matched+request%3A+samples%2Fext%3Adtd-docs">[FOR-284] No pipeline matched request: samples/ext:dtd-docs</a>
+</li>
+<li>
 <a href="#%5BFOR-281%5D+Upgrade+the+Using+Forrest+document+to+reflect+new+project+sitemap+method">[FOR-281] Upgrade the Using Forrest document to reflect new project sitemap method</a>
 </li>
 <li>
-<a href="#%5BFOR-279%5D+use+of+Ant+xmlproperty+on+the+skinconf.xml+causes+trip+to+website+to+get+DTD">[FOR-279] use of Ant xmlproperty on the skinconf.xml causes trip to website to get DTD</a>
-</li>
-<li>
 <a href="#%5BFOR-277%5D+investiagte+use+of+forrest-0.6-dev+as+webapp+with+Tomcat+5">[FOR-277] investiagte use of forrest-0.6-dev as webapp with Tomcat 5</a>
-</li>
-<li>
-<a href="#%5BFOR-255%5D+catalog+entity-resolver+fails+and+gets+skinconf+DTD+from+website+when+using+document%28%29">[FOR-255] catalog entity-resolver fails and gets skinconf DTD from website when using document()</a>
-</li>
-<li>
-<a href="#%5BFOR-254%5D+validate+target">[FOR-254] validate target</a>
 </li>
 <li>
 <a href="#%5BFOR-245%5D+changing+skins+and+going+out+in+the+public+view">[FOR-245] changing skins and going out in the public view</a>
 </li>
 <li>
 <a href="#%5BFOR-224%5D+All+documentation+needs+review%2C+to+be+up-to-date+with+copyless+procedure">[FOR-224] All documentation needs review, to be up-to-date with copyless procedure</a>
-</li>
-<li>
-<a href="#%5BFOR-223%5D+build+target+%22release-dist%22+still+refers+to+old+dist%2Fshbat%2F+stuff">[FOR-223] build target "release-dist" still refers to old dist/shbat/ stuff</a>
-</li>
-<li>
-<a href="#%5BFOR-202%5D+Custom+sitemap.xmap+causes+hang">[FOR-202] Custom sitemap.xmap causes hang</a>
-</li>
-<li>
-<a href="#%5BFOR-198%5D+local+stylesheets+for+a+user+project+not+found">[FOR-198] local stylesheets for a user project not found</a>
 </li>
 <li>
 <a href="#%5BFOR-172%5D+Finish+off+copyless+behaviour">[FOR-172] Finish off copyless behaviour</a>
@@ -179,7 +181,37 @@
        <a class="external" href="http://issues.cocoondev.org/secure/IssueNavigator.jspa?pid=10000&resolutionIds=-1&tempMax=1000&reset=true">all</a> open issues).
       The listing below is regenerated on each Forrest run.</div>
 </div>
-<a name="N10011"></a><a name="%5BFOR-281%5D+Upgrade+the+Using+Forrest+document+to+reflect+new+project+sitemap+method"></a>
+<a name="N10011"></a><a name="%5BFOR-286%5D+Forrest+cannot+run+from+directories+with+spaces+in+the+path"></a>
+<h2 class="underlined_10">[FOR-286] Forrest cannot run from directories with spaces in the path</h2>
+<div class="section">
+<p>
+<a class="external" href="http://issues.cocoondev.org//browse/FOR-286">http://issues.cocoondev.org//browse/FOR-286</a>
+</p>
+<p>When running forrest from a directory with spaces in the path (typical is c:\Program Files\Forrest\) it won't work. Something wrong with the bat scripts...</p>
+</div>
+<a name="N1001F"></a><a name="%5BFOR-285%5D+Make+the+html+export%2Brendering+reasonably+stable"></a>
+<h2 class="underlined_10">[FOR-285] Make the html export+rendering reasonably stable</h2>
+<div class="section">
+<p>
+<a class="external" href="http://issues.cocoondev.org//browse/FOR-285">http://issues.cocoondev.org//browse/FOR-285</a>
+</p>
+<p>We need to get this done for the Incubator.</p>
+</div>
+<a name="N1002D"></a><a name="%5BFOR-284%5D+No+pipeline+matched+request%3A+samples%2Fext%3Adtd-docs"></a>
+<h2 class="underlined_10">[FOR-284] No pipeline matched request: samples/ext:dtd-docs</h2>
+<div class="section">
+<p>
+<a class="external" href="http://issues.cocoondev.org//browse/FOR-284">http://issues.cocoondev.org//browse/FOR-284</a>
+</p>
+<p>Doing 'forrest site' on the seed we get:
+<br>
+
+<br>
+X [0]  samples/ext:dtd-docs  
+<br>
+&nbsp;&nbsp;&nbsp;BROKEN: No pipeline matched request: samples/ext:dtd-docs</p>
+</div>
+<a name="N1003B"></a><a name="%5BFOR-281%5D+Upgrade+the+Using+Forrest+document+to+reflect+new+project+sitemap+method"></a>
 <h2 class="underlined_10">[FOR-281] Upgrade the Using Forrest document to reflect new project sitemap method</h2>
 <div class="section">
 <p>
@@ -187,17 +219,7 @@
 </p>
 <p>In the docs/your-project.xml document, the &quot;Download example&quot; needs to be enhanced.</p>
 </div>
-<a name="N1001F"></a><a name="%5BFOR-279%5D+use+of+Ant+xmlproperty+on+the+skinconf.xml+causes+trip+to+website+to+get+DTD"></a>
-<h2 class="underlined_10">[FOR-279] use of Ant xmlproperty on the skinconf.xml causes trip to website to get DTD</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-279">http://issues.cocoondev.org//browse/FOR-279</a>
-</p>
-<p>Doing 'forrest war', the build system uses the &lt;xmlproperty&gt; Ant task to load the skinconf.xml which causes Ant to try to get the DTD from the website. The Ant xmlcatalog cannot yet be used with Ant xmlproperty.
-<br>
-Our Dave has submitted patch at <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=27053">http://issues.apache.org/bugzilla/show_bug.cgi?id=27053</a> (not complete and needs investigation).</p>
-</div>
-<a name="N1002D"></a><a name="%5BFOR-277%5D+investiagte+use+of+forrest-0.6-dev+as+webapp+with+Tomcat+5"></a>
+<a name="N10049"></a><a name="%5BFOR-277%5D+investiagte+use+of+forrest-0.6-dev+as+webapp+with+Tomcat+5"></a>
 <h2 class="underlined_10">[FOR-277] investiagte use of forrest-0.6-dev as webapp with Tomcat 5</h2>
 <div class="section">
 <p>
@@ -215,22 +237,6 @@ This is the background email to forrest-users:
 <br>
 &nbsp;Wed, 4 Aug 2004 10:18:34 -0500</p>
 </div>
-<a name="N1003B"></a><a name="%5BFOR-255%5D+catalog+entity-resolver+fails+and+gets+skinconf+DTD+from+website+when+using+document%28%29"></a>
-<h2 class="underlined_10">[FOR-255] catalog entity-resolver fails and gets skinconf DTD from website when using document()</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-255">http://issues.cocoondev.org//browse/FOR-255</a>
-</p>
-<p>The Catalog Entity Resolver fails and so follows the systemIdentifier to get the website copy of the DTD. This seems to be happening due to the use of the XSLT document() function.</p>
-</div>
-<a name="N10049"></a><a name="%5BFOR-254%5D+validate+target"></a>
-<h2 class="underlined_10">[FOR-254] validate target</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-254">http://issues.cocoondev.org//browse/FOR-254</a>
-</p>
-<p>the validate target should be run by default</p>
-</div>
 <a name="N10057"></a><a name="%5BFOR-245%5D+changing+skins+and+going+out+in+the+public+view"></a>
 <h2 class="underlined_10">[FOR-245] changing skins and going out in the public view</h2>
 <div class="section">
@@ -247,33 +253,7 @@ This is the background email to forrest-users:
 </p>
 <p>Since the change to copyless there is stacks of documentation that needs to be modified.</p>
 </div>
-<a name="N10073"></a><a name="%5BFOR-223%5D+build+target+%22release-dist%22+still+refers+to+old+dist%2Fshbat%2F+stuff"></a>
-<h2 class="underlined_10">[FOR-223] build target "release-dist" still refers to old dist/shbat/ stuff</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-223">http://issues.cocoondev.org//browse/FOR-223</a>
-</p>
-<p>The &quot;release-dist&quot; target needs to be fixed and tested, since the changes for &quot;copyless&quot;.</p>
-</div>
-<a name="N10081"></a><a name="%5BFOR-202%5D+Custom+sitemap.xmap+causes+hang"></a>
-<h2 class="underlined_10">[FOR-202] Custom sitemap.xmap causes hang</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-202">http://issues.cocoondev.org//browse/FOR-202</a>
-</p>
-<p>If there is a sitemap.xmap file in the &quot;project.content-dir&quot;, the build process of a site (target: &quot;site&quot;) will hang with an OutOfMemoryError.
-<br>
-</p>
-</div>
-<a name="N1008F"></a><a name="%5BFOR-198%5D+local+stylesheets+for+a+user+project+not+found"></a>
-<h2 class="underlined_10">[FOR-198] local stylesheets for a user project not found</h2>
-<div class="section">
-<p>
-<a class="external" href="http://issues.cocoondev.org//browse/FOR-198">http://issues.cocoondev.org//browse/FOR-198</a>
-</p>
-<p>When a user project defines their own sitemap and stylesheets, then the sitemaps are over-ridden okay, but their local stylesheets are not found.</p>
-</div>
-<a name="N1009D"></a><a name="%5BFOR-172%5D+Finish+off+copyless+behaviour"></a>
+<a name="N10073"></a><a name="%5BFOR-172%5D+Finish+off+copyless+behaviour"></a>
 <h2 class="underlined_10">[FOR-172] Finish off copyless behaviour</h2>
 <div class="section">
 <p>

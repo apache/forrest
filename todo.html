@@ -10,10 +10,11 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
-<body>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
 <div id="top">
 <!--+
     |breadtrail
@@ -47,9 +48,7 @@
     |start Search
     +-->
 <div class="searchbox">
-<div id="roundtopsmall">
-<img style="display: none" class="cornersmall" height="5" width="5" alt="" src="skin/images/rc-t-l-5-1body-2searchbox-3searchbox.png"></div>
-<form action="http://www.google.com/search" method="get">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
 <input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
@@ -85,7 +84,13 @@
               document.write("Published: " + document.lastModified);
               //  --></script>
 </div>
-<div class="breadtrail">&nbsp;</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
 <!--+
     |start Menu, mainarea
     +-->
@@ -157,6 +162,12 @@
 <a class="dida" href="todo.pdf"><img alt="PDF" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
 <h1>Todo List</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -171,42 +182,46 @@
 </li>
 </ul>
 </div>
-      
+    
 <a name="N10008"></a><a name="high"></a>
 <h2 class="underlined_10">high</h2>
 <div class="section">
 <ul>
 <li>
 <strong>[all]</strong> 
-<!-- Please leave this action at the top -->
-         Please see our Jira 
-         <a class="external" href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">issue tracker</a>
-
-         for tasks to be done. &rarr; open</li>
+        <!-- Please leave this action at the top -->
+        Please see our Jira
+        <a class="external" href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">issue tracker</a> for tasks to be done.
+       &rarr; open</li>
 <li>
-<strong>[code]</strong> Rework the menu generation system to make it more flexible. See thread 
-         <a class="external" href="http://marc.theaimsgroup.com/?w=2&r=1&s=Fixing+menus&q=t">Fixing menus</a>
-          &rarr; open</li>
+<strong>[code]</strong> 
+        Rework the menu generation system to make it more flexible.  See thread
+        <a class="external" href="http://marc.theaimsgroup.com/?w=2&r=1&s=Fixing+menus&q=t">Fixing
+          menus</a>
+       &rarr; open</li>
 <li>
-<strong>[code]</strong> Define an 'object model' for Forrest sites, in the form of a Cocoon pipeline, that defines 
-         <ul>
-            
+<strong>[code]</strong> 
+        Define an 'object model' for Forrest sites, in the form of a Cocoon
+        pipeline, that defines
+        <ul>
+          
 <li>The directory structure of a site</li>
-
-            
-<li>Site metadata (what currently lives in skinconf.xml + gump.xml stuff)</li>
-
-            
+          
+<li>Site metadata (what currently lives in skinconf.xml + gump.xml
+            stuff)</li>
+          
 <li>Perhaps site.xml metadata for pages?</li>
-         
+        
 </ul>
-
-         This info can then be made public to the sitemap (via XMLFileModule attributes) and the stylesheets (through 
-         <span class="codefrag">document(cocoon:/...)</span>
-
-         calls or inlined with source XML). &rarr; open</li>
+        This info can then be made public to the sitemap (via XMLFileModule
+        attributes) and the stylesheets (through
+        <span class="codefrag">document(cocoon:/...)</span> calls or inlined with source XML).
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Finalise the project-definition DTDs, like status.xml and module.xml; try to come up with a common format with others on community.at.apache.org. &rarr; NKB</li>
+<strong>[code]</strong> 
+          Finalise the project-definition DTDs, like status.xml and module.xml;
+          try to come up with a common format with others on community.at.apache.org.
+         &rarr; NKB</li>
 </ul>
 </div>
 
@@ -216,33 +231,63 @@
 <div class="section">
 <ul>
 <li>
-<strong>[code]</strong> Finish the RSS feed for status.xml. Aggregate status.xml and project.xml to have all needed project data. &rarr; NKB</li>
+<strong>[code]</strong> 
+          Finish the RSS feed for status.xml.
+          Aggregate status.xml and project.xml to have all needed project data.
+         &rarr; NKB</li>
 <li>
-<strong>[docs]</strong> Add stylesheets to render the enhanced status.xml file contents. &rarr; open</li>
+<strong>[docs]</strong> 
+          Add stylesheets to render the enhanced status.xml file contents.
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> In skinconf.xml, change 'disable-search' to 'enable-search'. &rarr; JT</li>
+<strong>[code]</strong> 
+          In skinconf.xml, change 'disable-search' to 'enable-search'.
+         &rarr; JT</li>
 <li>
-<strong>[code]</strong> Enhance the initial forrest toolbar for Mozilla. See email discussion 
-         <a class="external" href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102471820523388">draft forrest toolbar for Mozilla</a>
-
-         . &rarr; NKB</li>
+<strong>[code]</strong> 
+          Enhance the initial forrest toolbar for Mozilla.
+          See email discussion <a class="external" href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102471820523388">draft forrest toolbar for Mozilla</a>.
+         &rarr; NKB</li>
 <li>
-<strong>[code]</strong> Fix things so docs can be edited in src/*, and have the changes appear immediately in the webapp. Involves creating/using an InputModule for passing 'forrest.skin' and other properties to the sitemap, so we can avoid the @skin@ hack, and a bit of forrest.build.xml hacking. There are some @tokens@ in a forrest-site CSS file that also need some sort of in-place modification. Perhaps a @token@-to-value Transformer could be the same ${variable}-to-value Transformer mentioned in the RT [3]. &rarr; open</li>
+<strong>[code]</strong> 
+          Fix things so docs can be edited in src/*, and have the changes appear
+          immediately in the webapp.  Involves creating/using an InputModule for
+          passing 'forrest.skin' and other properties to the sitemap, so we can
+          avoid the @skin@ hack, and a bit of forrest.build.xml hacking.  There
+          are some @tokens@ in a forrest-site CSS file that also need some sort
+          of in-place modification.  Perhaps a @token@-to-value Transformer could
+          be the same ${variable}-to-value Transformer mentioned in the RT [3].
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Act on 
-         <a class="external" href="http://marc.theaimsgroup.com/?t=104099660500001&r=1&w=2">'Entities in XML docs' RT</a>
-
-         . I can implement Stefano's suggested solution quite easily, but is such limited functionality worth the cost of introducing a proprietary ${variable} syntax? Maybe.. Best short-term alternative seems to be using the XNI XInclude processor for pre-validation inclusion. &rarr; open</li>
+<strong>[code]</strong> 
+          Act on <a class="external" href="http://marc.theaimsgroup.com/?t=104099660500001&r=1&w=2">'Entities in XML docs' RT</a>.
+          I can implement Stefano's
+          suggested solution quite easily, but is such limited functionality
+          worth the cost of introducing a proprietary ${variable} syntax? Maybe..
+          Best short-term alternative seems to be using the XNI XInclude
+          processor for pre-validation inclusion.
+         &rarr; open</li>
 <li>
-<strong>[docs]</strong> A lot of the info on the website is outdated. &rarr; open</li>
+<strong>[docs]</strong> 
+          A lot of the info on the website is outdated.
+         &rarr; open</li>
 <li>
-<strong>[docs]</strong> Using metadata from site.xml, it would at least be possible to indicate how old the doc is, and perhaps indicate its relevance from a small controlled vocabulary. &rarr; open</li>
+<strong>[docs]</strong> 
+          Using metadata
+          from site.xml, it would at least be possible to indicate how old the
+          doc is, and perhaps indicate its relevance from a small controlled
+          vocabulary.
+         &rarr; open</li>
 <li>
-<strong>[design]</strong> Develop a mechanism for supporting legacy URLs. See email discussion - 
-         <a class="external" href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102390892524750">redirects with static sites</a>
-          &rarr; open</li>
+<strong>[design]</strong> 
+          Develop a mechanism for supporting legacy URLs.
+          See email discussion -
+          <a class="external" href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102390892524750">redirects with static sites</a>
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Fix up and integrate the Forrest Maven plugin. &rarr; open</li>
+<strong>[code]</strong> 
+          Fix up and integrate the Forrest Maven plugin.
+         &rarr; open</li>
 </ul>
 </div>
 
@@ -252,28 +297,44 @@
 <div class="section">
 <ul>
 <li>
-<strong>[code]</strong> Ensure that PHP-like stuff can be embedded easily in Forrest files and document it. &rarr; open</li>
+<strong>[code]</strong> 
+          Ensure that PHP-like stuff can be embedded easily in Forrest files and
+          document it.
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Continue the development of the 
-         <a href="docs/libre-intro.html">Libre</a>
-
-         facility - replacement for */book.xml &rarr; open</li>
+<strong>[code]</strong> 
+          Continue the development of the <a href="docs/libre-intro.html">Libre</a> facility - replacement for
+          */book.xml
+         &rarr; open</li>
 <li>
-<strong>[docs]</strong> Start a community doc where we list tools such as "forrestbar". &rarr; open</li>
+<strong>[docs]</strong> 
+          Start a community doc where we list tools such as "forrestbar".
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Migrate to a decent schema language, primarily so that we can use namespaces in XML docs, allowing things like XInclude, 
-         <a class="external" href="http://www.xml.com/pub/a/2002/10/30/rdf-friendly.html">in-line metadata</a>
-
-         , in-line SVG, Jelly snippets, or anything else users can make a Transformer for. &rarr; open</li>
+<strong>[code]</strong> 
+          Migrate to a decent schema language, primarily so that we can use
+          namespaces in XML docs, allowing things like XInclude, 
+          <a class="external" href="http://www.xml.com/pub/a/2002/10/30/rdf-friendly.html">in-line metadata</a>,
+          in-line SVG, Jelly snippets, or anything else users can make a
+          Transformer for.
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Streamline the process of adding support for new schemas. Ideally we'd have an auto-download system, e.g. 'forrest-update docbook' would fetch and install the Docbook DTDs, create catalog entries, sitemap mods etc. &rarr; open</li>
+<strong>[code]</strong> 
+          Streamline the process of adding support for new schemas.  Ideally we'd
+          have an auto-download system, e.g. 'forrest-update docbook' would fetch
+          and install the Docbook DTDs, create catalog entries, sitemap mods etc.
+         &rarr; open</li>
 <li>
-<strong>[code]</strong> Make a CSS Generator and a stylesheet to serialize it to text. &rarr; NKB</li>
+<strong>[code]</strong> 
+          Make a CSS Generator and a stylesheet to serialize it to text.
+         &rarr; NKB</li>
 <li>
-<strong>[docs]</strong> Add a document about authoring in XML for beginners.. &rarr; open</li>
+<strong>[docs]</strong> 
+          Add a document about authoring in XML for beginners..
+         &rarr; open</li>
 </ul>
-</div>
-   
+</div>    
+    
 </div>
 <!--+
     |end content

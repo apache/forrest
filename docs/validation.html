@@ -10,10 +10,11 @@
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
 <link type="text/css" href="../skin/profile.css" rel="stylesheet">
-<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/menu.js" language="javascript" type="text/javascript"></script>
+<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/menu.js" language="javascript" type="text/javascript"></script><script src="../skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="../favicon.ico">
 </head>
-<body>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
 <div id="top">
 <!--+
     |breadtrail
@@ -47,9 +48,7 @@
     |start Search
     +-->
 <div class="searchbox">
-<div id="roundtopsmall">
-<img style="display: none" class="cornersmall" height="5" width="5" alt="" src="../skin/images/rc-t-l-5-1body-2searchbox-3searchbox.png"></div>
-<form action="http://www.google.com/search" method="get">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
 <input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
@@ -85,7 +84,13 @@
               document.write("Published: " + document.lastModified);
               //  --></script>
 </div>
-<div class="breadtrail">&nbsp;</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
 <!--+
     |start Menu, mainarea
     +-->
@@ -226,6 +231,12 @@
 <a class="dida" href="validation.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
 <h1>XML Validation</h1>
 <h3>DTDs, catalogs and whatnot</h3>
 <div id="minitoc-area">
@@ -353,7 +364,7 @@
 <div class="section">
 <p>
         Forrest provides an <a class="external" href="http://www.oasis-open.org/committees/entity/spec.html">OASIS Catalog</a>
-        [see <a class="external" href="http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html">tutorial</a>]
+        [see <a class="external" href="http://xml.apache.org/commons/components/resolver/resolver-article.html">tutorial</a>]
         <span class="codefrag">forrest/src/core/context/resources/schema/catalog.xcat</span>
         as a means of associating public identifiers
         (e.g. <span class="codefrag">-//APACHE//DTD Documentation V1.1//EN</span> above) with DTDs.
@@ -524,7 +535,7 @@ size CDATA #IMPLIED&gt;
 <div class="frame note">
 <div class="label">Note</div>
 <div class="content">
-          See <a class="external" href="http://www.arbortext.com/Think_Tank/XML_Resources/Issue_Three/issue_three.html">this article</a> for a good
+          See <a class="external" href="http://xml.apache.org/commons/components/resolver/resolver-article.html">this article</a> for a good
           introduction to catalogs and the Cocoon documentation
           <a class="external" href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
         </div>
