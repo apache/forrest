@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.3 2003/07/17 11:41:18 jefft Exp $
+$Id: site2xhtml.xsl,v 1.4 2003/09/01 06:11:10 crossley Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -32,7 +32,7 @@ $Id: site2xhtml.xsl,v 1.3 2003/07/17 11:41:18 jefft Exp $
   <xsl:template match="site">
     <html>
       <head>
-        <title><xsl:value-of select="div[@class='content']/div[@class='pagetitle']"/></title>
+        <title><xsl:value-of select="div[@class='content']/h1"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
         <link rel="alternate stylesheet" title="Krysalis" href="{$root}skin/krysalis.css" type="text/css"/>
 		 <link rel="shortcut icon" href="{$root}favicon.ico" />		 
