@@ -1,7 +1,7 @@
                                Forrestbot Scripts
 
                                 jefft@apache.org
-                 $Revision: 1.5 $ $Date: 2003/01/19 07:02:30 $
+                 $Revision: 1.1 $ $Date: 2003/10/21 08:38:31 $
                             ------------------------
 
 This directory contains shell scripts for using the Forrestbot from a webapp or

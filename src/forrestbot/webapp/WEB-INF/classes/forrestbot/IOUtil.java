@@ -69,7 +69,7 @@ import java.io.Writer;
  *
  * @author <a href="mailto:peter at apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/12/07 09:33:59 $
+ * @version CVS $Revision: 1.1 $ $Date: 2003/10/21 08:38:32 $
  * @since 4.0
  */
 

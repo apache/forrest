@@ -1,7 +1,7 @@
                             Forrestbot web interface
 
                                 jefft@apache.org
-                 $Revision: 1.2 $ $Date: 2002/12/07 12:54:02 $
+                 $Revision: 1.1 $ $Date: 2003/10/21 08:38:31 $
                             ------------------------
 
 This webapp implements a website staging application for sites built with
