@@ -82,8 +82,12 @@
            description="create all possible docs for this workspace">
            
      <property name="resolved.ws.dir" location="${ws.dir}"/>
+     <!--
      <property name="ws.build.dir" location="${ws.dir}/build/forrestdoc"/>    
      <property name="ws.temp.dir" location="${ws.dir}/build/temp"/>     
+     -->
+     <property name="ws.build.dir" location="./build/ws/forrestdoc"/>    
+     <property name="ws.temp.dir" location="./build/temp/ws"/>     
           
      <mkdir dir="${ws.build.dir}" />
      <mkdir dir="${ws.temp.dir}" />              
@@ -91,6 +95,7 @@
      <dirset dir="${ws.dir}" id="ws.project.dirs">
         <include name="*"/>
         <exclude name=".*"/>
+        <exclude name="Copy of*"/>
         <exclude name="build"/>
      </dirset>
      
@@ -116,7 +121,7 @@
             <ant antfile="core.xml" dir="." target="project"
                 inheritAll="true" inheritRefs="true">
               <property name="project.dir"    value="@{current.project.dir}"/>
-              <property name="target.dir"  value="${ws.dir}/build/forrestdoc"/>  
+              <property name="target.dir"  value="${ws.build.dir}"/>  
            </ant>
          </try>
          <catch>
