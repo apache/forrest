@@ -85,7 +85,7 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 		String fhome = ForrestPlugin.getDefault().getPluginPreferences()
 				.getString(ForrestPreferences.FORREST_HOME);
 
-		// TODO: Working diretory should not be a property it should be whatever directory project Forrest is currently working with
+		// TODO: Working diretory should not be a property it should be whatever project directory Eclipse is currently working with
 		String wdir = ForrestPlugin.getDefault().getPluginPreferences()
 				.getString(ForrestPreferences.WORKING_DIR);
 		
@@ -154,14 +154,18 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			// specify classpath
 			List classpath = new ArrayList();
 
-			String sPath = fhome + File.separator + "lib";
+			String parent = ".." + File.separator;
+			
+			String sPath = fhome + File.separator + parent + parent + "lib";
 			File searchDir = new File(sPath);
-			File jettyDir = new File(fhome + File.separator + "tools"
+			File forrestBuildDir = new File(fhome + File.separator + parent + parent + "build");
+			File jettyDir = new File(fhome + File.separator + parent + parent + "tools"
 					+ File.separator + "jetty");
 
 			try {
 				//FIXME: check that the search directory exists, if it doesn't eclipse throws an unhandled loop exception
 				List allfiles = Utilities.getFileListing(searchDir);
+				allfiles.addAll(Utilities.getFileListing(forrestBuildDir));
 				allfiles.addAll(Utilities.getFileListing(jettyDir));
 				Iterator filesListing = allfiles.iterator();
 				String thisFile;
@@ -191,10 +195,10 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			workingCopy.setAttribute(ATTR_DEFAULT_CLASSPATH, false);
 
 			// specify working diretory
-			File workingDir = workingDirectory.append("build").append("webapp")
-					.toFile();
-			workingCopy.setAttribute(ATTR_WORKING_DIRECTORY, workingDir
-					.getAbsolutePath());
+			workingCopy.setAttribute(ATTR_WORKING_DIRECTORY, wdir);
+			
+			workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-Dproject.home=\"" + wdir.toString() + "\"");
+			workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-Dforrest.home=\"" + fhome.toString() + "\"");
 
 			ILaunchConfiguration configuration = workingCopy.doSave();
 			IProgressMonitor monitor = new NullProgressMonitor();
@@ -207,6 +211,7 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
