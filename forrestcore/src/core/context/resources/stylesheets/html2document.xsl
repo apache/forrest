@@ -65,49 +65,67 @@
     <!--infer structure from sibling headings-->
     <xsl:template match="body">
        <body>
-         <xsl:for-each select="h1">
-           <section>
-             <xsl:if test="a/@name">
-               <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
-             </xsl:if>
-             <title><xsl:apply-templates/></title>
-             <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
-             <xsl:for-each select="key('h2s',generate-id(.))">
-               <section>
-                 <title><xsl:apply-templates/></title>
-                 <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
-                 <xsl:for-each select="key('h3s',generate-id(.))">
-                   <section>
-                     <title><xsl:apply-templates/></title>
-                     <xsl:apply-templates select="following-sibling::*[1]"
-                                          mode="next"/>
-                     <xsl:for-each select="key('h4s',generate-id(.))">
-                       <section>
-                         <title><xsl:apply-templates/></title>
-                         <xsl:apply-templates select="following-sibling::*[1]"
-                                              mode="next"/>
-                         <xsl:for-each select="key('h5s',generate-id(.))">
-                           <section>
-                             <title><xsl:apply-templates/></title>
-                             <xsl:apply-templates select="following-sibling::*[1]"
-                                                  mode="next"/>
-                             <xsl:for-each select="key('h6s',generate-id(.))">
-                               <section>
-                                 <title><xsl:apply-templates/></title>
-                              <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
-                               </section>
-                             </xsl:for-each>
-                           </section>
-                         </xsl:for-each>
-                       </section>
-                     </xsl:for-each>
-                   </section>
-                 </xsl:for-each>
-               </section>
-             </xsl:for-each>
-           </section>
-         </xsl:for-each>
+         <xsl:choose>
+           <xsl:when test="h1">
+             <xsl:call-template name="process_h1"/>
+           </xsl:when>
+           <xsl:otherwise>
+             <section>
+               <xsl:if test="a/@name">
+                 <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
+               </xsl:if>
+               <title/>
+               <xsl:apply-templates/>
+               <xsl:call-template name="process_h1"/>
+             </section>
+           </xsl:otherwise>
+         </xsl:choose>
        </body>
+    </xsl:template>
+    
+    <xsl:template name="process_h1">
+       <xsl:for-each select="h1">
+         <section>
+           <xsl:if test="a/@name">
+             <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
+           </xsl:if>
+           <title><xsl:apply-templates/></title>
+           <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
+           <xsl:for-each select="key('h2s',generate-id(.))">
+             <section>
+               <title><xsl:apply-templates/></title>
+               <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
+               <xsl:for-each select="key('h3s',generate-id(.))">
+                 <section>
+                   <title><xsl:apply-templates/></title>
+                   <xsl:apply-templates select="following-sibling::*[1]"
+                                        mode="next"/>
+                   <xsl:for-each select="key('h4s',generate-id(.))">
+                     <section>
+                       <title><xsl:apply-templates/></title>
+                       <xsl:apply-templates select="following-sibling::*[1]"
+                                            mode="next"/>
+                       <xsl:for-each select="key('h5s',generate-id(.))">
+                         <section>
+                           <title><xsl:apply-templates/></title>
+                           <xsl:apply-templates select="following-sibling::*[1]"
+                                                mode="next"/>
+                           <xsl:for-each select="key('h6s',generate-id(.))">
+                             <section>
+                               <title><xsl:apply-templates/></title>
+                            <xsl:apply-templates select="following-sibling::*[1]" mode="next"/>
+                             </section>
+                           </xsl:for-each>
+                         </section>
+                       </xsl:for-each>
+                     </section>
+                   </xsl:for-each>
+                 </section>
+               </xsl:for-each>
+             </section>
+           </xsl:for-each>
+         </section>
+       </xsl:for-each>
     </xsl:template>
 
     <!--process each sibling in order until the next heading level-->
@@ -266,7 +284,7 @@
     </xsl:template>
     
     <!-- Strip -->
-    <xsl:template match="font|div|big">
+    <xsl:template match="font|big">
       <xsl:apply-templates/>
     </xsl:template>
 
@@ -296,13 +314,11 @@
     
       <xsl:apply-templates/>
     </xsl:template>
-        
 
-                
-    <xsl:template match="node()|@*" priority="-1">
-        <xsl:copy>
-            <xsl:apply-templates select="node()|@*"/>
-        </xsl:copy>
+    <xsl:template match="@*|*|text()|processing-instruction()|comment()">
+      <xsl:copy>
+        <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+      </xsl:copy>
     </xsl:template>
 
 
