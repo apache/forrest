@@ -35,3 +35,6 @@ call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME
 rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%
 set CLASSPATH=%OLD_CLASSPATH%
+
+rem Fix FOR-47
+if not "%OS%"=="Windows_NT" cd ""%PWD%""
