@@ -5,7 +5,8 @@
                 version="1.0">
 
   <xsl:output method="xml"/>
-  <xsl:param name="basedir" select="'file:'"/>
+  <xsl:param name="ctxbasedir" select="."/>
+  <xsl:param name="xmlbasedir"/>
   <xsl:include href="pdfoutline.xsl"/>
   <xsl:include href="footerinfo.xsl"/>
 
@@ -503,7 +504,12 @@
       </xsl:if>
 
       <!-- Make relative paths absolute -->
-      <xsl:variable name="imgpath" select="concat($basedir, @src)"/>
+      <xsl:variable name="imgpath">
+      <xsl:choose>
+        <xsl:when test="starts-with(string(@src), 'images/')"><xsl:value-of select="concat($ctxbasedir, 'resources/' , @src)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="concat($ctxbasedir, $xmlbasedir, @src)"/></xsl:otherwise>
+      </xsl:choose>
+      </xsl:variable>
       <fo:external-graphic src="{$imgpath}" content-width="scale-to-fit"
                            content-height="scale-to-fit" max-width="100%">
         <xsl:if test="@height">
