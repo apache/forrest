@@ -42,27 +42,27 @@ COPYRIGHT:
 
 <!ENTITY % ISOlat1 PUBLIC
     "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
-    "ISOlat1.pen">
+    "../entity/ISOlat1.pen">
 %ISOlat1;
 
 <!ENTITY % ISOpub PUBLIC
     "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-    "ISOpub.pen">
+    "../entity/ISOpub.pen">
 %ISOpub;
 
 <!ENTITY % ISOtech PUBLIC
     "ISO 8879:1986//ENTITIES General Technical//EN//XML"
-    "ISOtech.pen">
+    "../entity/ISOtech.pen">
 %ISOtech;
 
 <!ENTITY % ISOnum PUBLIC
     "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
-    "ISOnum.pen">
+    "../entity/ISOnum.pen">
 %ISOnum;
 
 <!ENTITY % ISOdia PUBLIC
     "ISO 8879:1986//ENTITIES Diacritical Marks//EN//XML"
-    "ISOdia.pen">
+    "../entity/ISOdia.pen">
 %ISOdia;
 
 <!-- =============================================================== -->
