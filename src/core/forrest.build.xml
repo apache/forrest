@@ -105,14 +105,13 @@ FORREST SITE BUILDER
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
     <property name="project.war"         location="${project.build-dir}/${project.name}.war" />
     <property name="project.webapp"      location="${project.build-dir}/webapp" />
-    <property name="project.index-dir"   location="${project.webapp}/lucene-index" />
 
     <property name="project.temp-dir"           location="${project.build-dir}/tmp"     />
     <property name="project.cocoon-work-dir"    location="${project.temp-dir}/cocoon-work"      />
     
     <property name="project.brokenlinkfile" location="${project.build-dir}/brokenlinks.xml"/>
-    <property name="project.configfile"     value="${forrest.home}/context/WEB-INF/cli.xconf" />
-    <property name="project.logkitfile"     value="${forrest.home}/context/WEB-INF/logkit.xconf" />
+    <property name="project.configfile"     value="${project.webapp}/WEB-INF/cli.xconf" />
+    <property name="project.logkitfile"     value="${project.webapp}/WEB-INF/logkit.xconf" />
     <property name="project.logger"         value="debug" />
 
     <property name="status"      location="${project.home}/${project.status}" />
@@ -145,7 +144,7 @@ FORREST SITE BUILDER
     <!-- These are used by Forrest to resolve all other values -->
     <property name="forrest.basic.jvmargs" value="-Dproject.home=&quot;${project.home}&quot; -Dforrest.home=&quot;${forrest.home}&quot;"/>
     <echo>forrest.basic.jvmargs:${forrest.basic.jvmargs}</echo>
-        
+
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
@@ -187,6 +186,9 @@ FORREST SITE BUILDER
     <property name="skinfilters" value="${project.temp-dir}/skinfilters.properties"/>
     <echoproperties prefix="skinconfig" destfile="${skinfilters}"/>
     <filter filtersfile="${skinfilters}"/>
+    <condition property="use-lucene-indexer">
+        <equals arg1="${skinconfig.search.provider}" arg2="lucene"/>
+    </condition>
   </target>
 
   <!-- Sets up properties and filters -->
@@ -312,7 +314,7 @@ FORREST SITE BUILDER
 
 
   <target name="run" 
-   depends="init, run_custom_jetty, run_default_jetty"/>
+   depends="init, webapp-local, run_custom_jetty, run_default_jetty"/>
  
   <target name="run_custom_jetty"
    if="custom_jetty_config"
@@ -336,7 +338,7 @@ FORREST SITE BUILDER
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
-          dir="${forrest.home}/context"
+          dir="${project.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
