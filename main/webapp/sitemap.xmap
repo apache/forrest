@@ -92,7 +92,7 @@ $Revision: 1.12 $
       <map:transformer name="skinconf" src="org.apache.forrest.conf.SkinconfTransformer"/>
               
       <!-- Generates @id attributes from <title> strings -->
-      <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
+      <map:transformer name="idgen" src="org.apache.forrest.util.IdGeneratorTransformer">
         <element>//*[local-name() = 'section']</element>
         <id>title/text()</id>
       </map:transformer>
@@ -119,7 +119,7 @@ $Revision: 1.12 $
         </input-module>
       </map:transformer>
 
-      <map:transformer name="xpath" logger="sitemap.transformer.xpath" src="org.apache.cocoon.transformation.XPathTransformer" />
+      <map:transformer name="xpath" logger="sitemap.transformer.xpath" src="org.apache.forrest.util.XPathTransformer" />
       
       <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer" logger="sitemap.transformer.xslt" pool-max="32" pool-min="8" pool-grow="2">
         <use-request-parameters>false</use-request-parameters>
@@ -211,7 +211,7 @@ $Revision: 1.12 $
     </map:matchers>
 
     <map:selectors>
-      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.cocoon.selection.SourceExistsSelector" />
+      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
    <map:selector logger="sitemap.selector.exception" name="exception"
                  src="org.apache.cocoon.selection.ExceptionSelector">
      <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
