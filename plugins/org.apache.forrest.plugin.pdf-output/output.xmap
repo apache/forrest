@@ -26,8 +26,15 @@
     <map:pipeline>
       <!-- generate .pdf files from .fo -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
-        <map:generate src="cocoon://{1}{2}.fo"/>
-        <map:serialize type="fo2pdf"/>
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}/{1}{2}.pdf">
+            <map:read src="{project:content.xdocs}/{1}{2}.pdf"/>
+          </map:when>
+          <map:otherwise>
+            <map:generate src="cocoon://{1}{2}.fo"/>
+            <map:serialize type="fo2pdf"/>
+          </map:otherwise>
+        </map:select>
       </map:match>  
     </map:pipeline>
   </map:pipelines>
