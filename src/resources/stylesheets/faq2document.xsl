@@ -58,7 +58,7 @@
 		  little benefit (JT)
 	    <xsl:number level="multiple" count="faq|part" format="1.1. "/>
 		-->
-        <xsl:apply-templates select="question"/>
+        <xsl:apply-templates select="question" mode="index"/>
       </link>
     </li>
   </xsl:template>
@@ -99,6 +99,10 @@
         <xsl:value-of select="concat(concat(local-name(.), '-'), generate-id(.))"/>
       </xsl:otherwise>
   </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="question" mode="index">
+    <xsl:apply-templates select="node()[not(local-name()='elaboration')]"/>
   </xsl:template>
 
   <xsl:template match="question">

@@ -51,8 +51,11 @@ COPYRIGHT:
     <!ELEMENT faq (question, answer)>
     <!ATTLIST faq %common.att;>
 
-        <!ELEMENT question (%content.mix;)*>
+        <!ELEMENT question (%content.mix;|elaboration)*>
         <!ATTLIST question %common.att;>
+
+        <!ELEMENT elaboration (%content.mix;)*>
+        <!ATTLIST elaboration %common.att;>
 
         <!ELEMENT answer (%flow;)*>
         <!ATTLIST answer author IDREF #IMPLIED>
