@@ -450,15 +450,16 @@ project.skinconf=${project.content-dir}/skinconf.xml
         be before the catch-all sitemap rules (eg &lt;map:match
         pattern="*.html"&gt;), or they won't trigger.
       </p>
-        <section>
-          <title>Example: Adding a new content type</title>
-          <note>This section will shortly be made obsolete by <link
-              href="cap.html">Content Aware Pipelines (CAPs)</link>.</note>
-          <p>
-            Say that download.xml lists downloads for a certain package. It would be
-            best to represent download information in a custom XML format:
-          </p>
-          <source><![CDATA[
+      <section id="adding_new_content_type">
+        <title>Example: Adding a new content type</title>
+        <note>This section will shortly be made obsolete by <link
+            href="cap.html">Content Aware Pipelines (CAPs)</link>.</note>
+        <p>
+          Say that download.xml lists downloads for a certain package. It would be
+          best to represent download information in a custom XML format:
+        </p>
+        <source
+><![CDATA[<!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
 <document> 
   ...
   <body>
@@ -822,24 +823,50 @@ To run in Tomcat, add this to the config file (usu. server.xml):
       <section>
         <title>XML validation</title>
         <p>
-          As of October 2002, Forrest does not validate XML content before trying to
-          render it.  It is thus strongly recommended that users do their own XML
-          validation, rather than try to understand XSLT failure messages.
+          By default, Forrest will try to validate your XML before generating
+          HTML or a webapp from it, and fail if any errors are detected.
+          Validation can be performed manually by typing 'forrest validate' in
+          the project root.
         </p>
         <p>
-          Each XML file should have a DOCTYPE declaration at the top, indicating its
-          content type. The DOCTYPE declaration is <em>required</em> if the XML is to
-          be considered valid. Most files will have the following DOCTYPE
-          declaration:
+          Validation errors can be made non-fatal by setting the following in
+          <code>forrest.properties</code>:
+        </p>
+        <source>forrest.validation.failonerror=false</source>
+
+        <warning>
+          Each XML file <em>must</em> have a DOCTYPE declaration at the top,
+          indicating its content type. The DOCTYPE declaration is
+          <em>required</em> if the XML is to be considered valid.  If, during
+          development, you wish to experiment with DTD-less XML files, make
+          validation non-fatal as described above.
+        </warning>
+
+          <p>
+            Most files will have the following DOCTYPE declaration:
         </p>
         <source><![CDATA[
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 ]]></source>
+
+        <section>
+          <title>Validating new XML types</title>
+          <p>
+            Forrest provides an SGML Catalog,
+            <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
+            associating public identifiers (<code>-//APACHE//DTD Documentation
+              V1.1//EN</code> above) with DTDs.  If you add a new content type,
+            you should add the DTD to
+            <code>src/documentation/resources/schema/dtd</code>, and add an entry
+            to the <code>src/documentation/resources/schema/catalog</code> file.
+            This process is described the <link
+              href="#adding_new_content_type">Adding a new content type</link>
+            example.  If done properly, files of the new content type will be
+            validated along with the others.
+          </p>
+        </section>
         <p>
-          Forrest provides an SGML Catalog,
-          <code>xml-forrest/src/resources/schema/catalog</code>, as a means of
-          associating DTDs with public identifiers (<code>-//APACHE//DTD
-            Documentation V1.1//EN</code> above). If you have an XML editor that
+          If you have an XML editor that
           understands SGML or XML catalogs, let it know where this catalog file is,
           and you will be able to validate any Forrest XML file, regardless of
           location.
