@@ -579,6 +579,16 @@ $Revision: 1.12 $
         </map:select>
       </map:pipeline>
 
+      <!-- FIXME: temporary fix to get text plugin working
+           this mount should be managed by the plugns framework -->
+      <map:pipeline internal-only="false">
+        <map:select type="exists">
+          <map:when test="{forrest:plugins}/text-output/sitemap.xmap">
+            <map:mount uri-prefix="" src="{forrest:plugins}/text-output/sitemap.xmap" check-reload="yes" pass-through="true"/>
+          </map:when>
+        </map:select>
+      </map:pipeline>
+
       <!-- Plain Old Documentation -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).pod$">
         <map:aggregate element="site">
