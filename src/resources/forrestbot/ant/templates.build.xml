@@ -109,23 +109,9 @@
 
   <!-- ________________ PREPARE TEMPLATES __________________ -->
   <target name="echo.prepare" if="template.echo">
-
-    <echo message="prepare workstage for project ${project.name}"/>
-    <echo message="skin = ${prepare.skin}"/>
   </target>
 
   <target name="template.prepare" depends="shared.set-props, echo.prepare">
-    <echo>
-      ############################
-      # Target: prepare
-      # Calling ${forrest.home}/forrest.build.xml#bare-context
-      # In dir ${basedir}
-      # Skin="${prepare.skin}"
-      ############################
-    </echo>
-    <ant dir="${basedir}" antfile="${forrest.home}/forrest.build.xml" target="bare-context">
-      <property name="project.skin" value="${prepare.skin}"/>
-    </ant>
   </target>
 
 
@@ -140,16 +126,25 @@
   </target>
 
   <target name="template.get-src.cvs" depends="shared.set-props, echo.get-src.cvs">
+    <echo>
+      ############################
+      # Target: get-src.cvs
+      ############################
+    </echo>
+
     <cvspass cvsroot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
             password="${get-src.cvs.passwd}"
             />
     <mkdir dir="${project.cvsmodule.dir}" />
+    <echo>## Retrieving ${get-src.cvs.module}/${get-src.cvs.content-dir}</echo>
     <!-- get from cvs only the directory that is holding the xdoc content -->
     <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
          package="${get-src.cvs.module}/${get-src.cvs.content-dir}"
          dest="${project.cvsmodule.dir}"
          quiet="true"
          />
+
+    <echo>## Retrieving ${get-src.cvs.module}</echo>
     <!-- get from cvs only the top section files: they should contain the *.*.ml
          project descriptors (-L option makes non recursive cvs update) -->
     <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
@@ -159,34 +154,10 @@
          command="checkout -l"
          />
 
-    <echo>
-      ############################
-      # Target: get-src.cvs
-      # Calling ${forrest.home}/forrest.build.xml#project-context-bot
-      # In dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.project-dir}"
-      # Content dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.content-dir}"
-      # Skin="${prepare.skin}"
-      ############################
-    </echo>
-    <!--
-    dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}"-->
-    <ant
-      dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.project-dir}"
-      antfile="${forrest.home}/forrest.build.xml" target="project-context-bot">
-      <property name="project.skin" value="${prepare.skin}"/>
-      <property name="forrest.echo" value="true"/>
-    </ant>
-
-    <!--
+    <mkdir dir="${project.ctxt-dir}"/>
     <copy todir="${project.ctxt-dir}">
-      <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}/${get-src.cvs.dir}" />
+      <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}"/>
     </copy>
-    <copy todir="${project.ctxt-dir}" >
-      <fileset dir="${project.cvsmodule.dir}/${get-src.cvs.module}">
-        <include name="*.*ml"/>
-      </fileset>
-    </copy>
-    -->
   </target>
 
   <!-- [[get-src type local-copy ]] -->
@@ -200,13 +171,11 @@
     <echo>
       ############################
       # Target: get-src.local-copy
-      # Calling ${forrest.home}/forrest.build.xml#project-context-bot
-      # In dir ${get-src.local-copy.project-dir}
       ############################
     </echo>
-    <ant dir="${get-src.local-copy.project-dir}"
-      antfile="${forrest.home}/forrest.build.xml" target="project-context-bot">
-    </ant>
+    <copy todir="${project.ctxt-dir}">
+      <fileset dir="${get-src.local-copy.project-dir}"/>
+    </copy>
   </target>
 
   <!-- ________________ GENERATE TEMPLATES __________________ -->
@@ -223,17 +192,14 @@
     <echo>
       ############################
       # Target: generate
-      # Calling ${forrest.home}/forrest.build.xml#-site
+      # Calling ${forrest.home}/forrest.build.xml#site
       # In dir ${project.ctxt-dir}
       ############################
     </echo>
-    <!--# In dir ${get-src.local-copy.project-dir}-->
-    <!--<ant dir="${project.ctxt-dir}"-->
-      <ant dir="${project.ctxt-dir}"
-        antfile="${forrest.home}/forrest.build.xml" target="-site">
-        <property name="project.content.present" value="HACK"/>
-        <property name="project.skin" value="${prepare.skin}"/>
-      </ant>
+    <ant dir="${project.ctxt-dir}"
+       antfile="${forrest.home}/forrest.build.xml" target="site">
+       <property name="project.skin" value="${prepare.skin}"/>
+    </ant>
   </target>
 
   <!-- ________________ DEPLOY TEMPLATES __________________ -->
