@@ -26,8 +26,12 @@
       <library name="forrestplugin.jar">
          <export name="*"/>
       </library>
+      <library name="lib/log4j-1.2.9.jar">
+         <export name="*"/>
+      </library>
    </runtime>
    <requires>
+      <import plugin="org.apache.ant"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.launching"/>
@@ -107,6 +111,12 @@
       class="org.eclipse.webbrowser.internal.WebBrowserEditor"
       extensions="html,htm,gif,jpg,jpeg,xhtml"
       contributorClass="org.eclipse.webbrowser.internal.WebBrowserEditorActionBarContributor"/>
+  </extension>
+  <extension
+        point="org.eclipse.ant.core.extraClasspathEntries">
+     <extraClasspathEntry
+           headless="true"
+           library="build/org/apache/forrest/ForrestListener.class"/>
   </extension>
    
 
