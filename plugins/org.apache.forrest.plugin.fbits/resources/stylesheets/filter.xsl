@@ -40,15 +40,18 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       <xsl:apply-templates />
     </filter>
   </xsl:template>
-  <xsl:template match="filter/forrest:hook">
+  <xsl:template match="forrest:hook">
     <div id="{@name}">
       <xsl:apply-templates />
     </div>
   </xsl:template>
-    <xsl:template match="filter/forrest:contract">
-    <xsl:variable name="css-ft" value="@name"/>
-    <div id="{@name}"><xsl:value-of select="$css-ft"/>
-      <xsl:apply-templates />
+    <xsl:template match="forrest:contract">
+    <xsl:variable name="css-ft"><xsl:value-of select="@name"/></xsl:variable>
+    <div id="{@name}">id=<xsl:value-of select="$css-ft"/>
+      <xsl:apply-templates select="contracts" />
     </div>
+  </xsl:template>
+  <xsl:template name="include" match="contracts">
+    <xsl:apply-templates select="content"/>
   </xsl:template>
 </xsl:stylesheet>
