@@ -4,30 +4,7 @@
   <property name="getsrc.local.root-dir" value=""/>
 
   <target name="getsrc.local">
-    <echo>
-      ....... getsrc.local START
-      Copying source from ${getsrc.local.root-dir}
-    </echo>
-    <mkdir dir="${build.work-dir}"/>
-    <copy todir="${build.work-dir}">
-      <fileset dir="${getsrc.local.root-dir}">
-        <include name="forrest.properties"/>
-        <include name="status.xml"/>
-        <include name="module.xml"/>
-      </fileset>
-    </copy>
-    <echo>Loading ${build.work-dir}/forrest.properties..</echo>
-    <loadproperties srcFile="${build.work-dir}/forrest.properties"/>
-    <loadproperties srcFile="${bot.home}/core/default-forrest.properties"/>
-    <echo>
-      Copying source from ${project.root-dir}/${project.content-dir}
-    </echo>
-    <copy todir="${build.work-dir}/${project.content-dir}">
-      <fileset dir="${getsrc.local.root-dir}/${project.content-dir}"/>
-    </copy>
-    <echo>
-      ....... getsrc.local END
-    </echo>
+    <property name="build.home-dir" value="${getsrc.local.root-dir}" />
   </target>
 
 

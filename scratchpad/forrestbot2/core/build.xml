@@ -12,6 +12,11 @@
   <property name="build.logfile-stored" location="${build.log-dir}/${ant.project.name}-${logtime}.log"/> 
 
   <target name="build.forrest" depends="getsrc">
+
+    <!-- defining this inside the target instead of at the top of the file
+         so that getsrc.local can override -->
+    <property name="build.home-dir"         location="${build.work-dir}" />  
+  
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
       <classpath>
         <pathelement location="${bot.home}/lib/ant-contrib-0.5.jar"/>
@@ -26,7 +31,7 @@
           ... Rendering docs in ${build.work-dir}
         </echo>
         <antcall target="site" inheritAll="false">
-          <param name="project.home" value="${build.work-dir}"/>
+          <param name="project.home" value="${build.home-dir}"/>
           <param name="project.build-dir" value="${build.work-dir}"/>
           <param name="project.site-dir" value="${build.site-dir}"/>
         </antcall>
