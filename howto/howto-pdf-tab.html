@@ -167,10 +167,7 @@
 <a href="#sitemap">Create your project's main sitemap.xmap</a>
 </li>
 <li>
-<a href="#aggregator">Create the aggregator sitemap pdf-tab.xmap</a>
-</li>
-<li>
-<a href="#workaround-202">Edit project sitemap.xmap</a>
+<a href="#aggregator">Create another sitemap: pdf-tab.xmap</a>
 </li>
 <li>
 <a href="#mount">Edit project sitemap.xmap to mount pdf-tab.xmap</a>
@@ -249,85 +246,72 @@
 <div class="section">
 <p>The procedure outlined below will define a project
       <span class="codefrag">sitemap.xmap</span> and create a new
-      <span class="codefrag">pdf-tab.xmap</span> based on the <span class="codefrag">aggregate.xmap</span>
-    
-</p>
-<a name="N10054"></a><a name="sitemap"></a>
+      <span class="codefrag">pdf-tab.xmap</span>.
+    </p>
+<a name="N10051"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Create your project's main sitemap.xmap</h3>
 <p>
-      Simply copy the sitemap.xmap from the Forrest sitemaps at
-      <span class="codefrag">${FORREST_HOME}/context/sitemap.xmap</span> into your
+      If you do not have already a sitemap then create a new empty one in your
       <span class="codefrag">src/documentation</span> directory (or wherever
       ${project.sitemap-dir} points to).
     </p>
-<a name="N10064"></a><a name="aggregator"></a>
-<h3 class="underlined_5">Create the aggregator sitemap pdf-tab.xmap</h3>
+<a name="N1005E"></a><a name="aggregator"></a>
+<h3 class="underlined_5">Create another sitemap: pdf-tab.xmap</h3>
 <p>
-    Copy the aggregate.xmap from Forrest sitemaps into your
-    ${project.sitemap-dir} and rename it to pdf-tab.xmap
+    Like before create an empty sitemap and name it pdf-tab.xmap.
     </p>
-<a name="N1006E"></a><a name="workaround-202"></a>
-<h3 class="underlined_5">Edit project sitemap.xmap</h3>
-<div class="frame note">
-<div class="label">Note</div>
-<div class="content">
-      This is a workaround for Issue FOR-202
-    </div>
-</div>
-<p>
-      Edit the project <span class="codefrag">sitemap.xmap</span> to comment-out the match
-      for the sitemap like this:
-    </p>
-<pre class="code">
-&lt;!--
-&lt;map:pipeline internal-only="false"&gt;
-&lt;map:select type="exists"&gt;
-  &lt;map:when test="{project:sitemap}"&gt;
-    &lt;map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" /&gt;
-  &lt;/map:when&gt;  
-&lt;/map:select&gt;
-&lt;/map:pipeline
---&gt;
-    </pre>
-<a name="N10082"></a><a name="mount"></a>
+<a name="N10068"></a><a name="mount"></a>
 <h3 class="underlined_5">Edit project sitemap.xmap to mount pdf-tab.xmap</h3>
 <p>
-      Insert the following lines after the
-      <span class="codefrag">&lt;map:match pattern="site.xml"&gt;</span>
-      pipeline in the section called "SOURCE FORMATS".
+      Your sitemap should look something like this.
     </p>
 <pre class="code">
-...
-&lt;map:match pattern="pdf-tab.xml"&gt;
-   &lt;map:mount uri-prefix="" src="pdf-tab.xmap" check-reload="yes" /&gt;
-&lt;/map:match&gt;
-...
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+  &lt;map:pipelines&gt;
+    &lt;map:pipeline internal-only="false"&gt;
+      &lt;map:match pattern="**.xml"&gt;
+        &lt;!-- pdf-tab definitions --&gt;
+        &lt;map:match pattern="pdf-tab.xml"&gt;
+          &lt;map:mount uri-prefix="" src="pdf-tab.xmap"
+            check-reload="yes" /&gt;
+        &lt;/map:match&gt;
+        &lt;!-- end of pdf-tab definitions --&gt;
+      &lt;/map:match&gt;
+    &lt;/map:pipeline&gt;
+  &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;
     </pre>
-<a name="N10093"></a><a name="edit-aggregator"></a>
+<a name="N10076"></a><a name="edit-aggregator"></a>
 <h3 class="underlined_5">Edit the file pdf-tab.xmap</h3>
 <p>
       The <span class="codefrag">&lt;map:match pattern="*.xml"&gt;</span> element
       should look like the following:
     </p>
 <pre class="code">
-&lt;map:match pattern="*.xml"&gt;
-  &lt;map:generate src="cocoon://abs-linkmap"/&gt;
-  &lt;map:transform type="xpath"&gt;
-	&lt;map:parameter name="include" value="//*[@wholesite='true']"/&gt;
-	&lt;map:parameter name="exclude" value="//*[@wholesite='false']"/&gt;
-  &lt;/map:transform&gt;
-  &lt;map:transform src="resources/stylesheets/site2book.xsl" /&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl"&gt;
-     &lt;map:parameter name="title"
-        value="{conf:project-name}: Still My Foo Site"/&gt;
-  &lt;/map:transform&gt;
-  &lt;map:transform type="cinclude"/&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/&gt;
-  &lt;map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/&gt;
-  &lt;map:serialize type="xml"/&gt;
-&lt;/map:match&gt;
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+  &lt;map:pipelines&gt;
+    &lt;map:pipeline internal-only="false"&gt;
+     &lt;map:match pattern="*.xml"&gt;
+	&lt;map:generate src="cocoon://abs-linkmap"/&gt;
+	  &lt;map:transform type="xpath"&gt;
+	  	&lt;map:parameter name="include" value="//*[@wholesite='true']"/&gt;
+		&lt;map:parameter name="exclude" value="//*[@wholesite='false']"/&gt;
+	  &lt;/map:transform&gt;
+	  &lt;map:transform src="resources/stylesheets/site2book.xsl" /&gt;
+	  &lt;map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl"&gt;
+	     &lt;map:parameter name="title"
+		value="{conf:project-name}: Still My Foo Site"/&gt;
+	     &lt;/map:transform&gt;
+	  &lt;map:transform type="cinclude"/&gt;
+	  &lt;map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/&gt;
+	  &lt;map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/&gt;
+	  &lt;map:serialize type="xml"/&gt;
+    &lt;/map:match&gt;    
+   &lt;/map:pipeline&gt;
+  &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;
     </pre>
-<a name="N100A6"></a><a name="edit-site"></a>
+<a name="N10089"></a><a name="edit-site"></a>
 <h3 class="underlined_5">Edit your site.xml</h3>
 <p>Add the following entry to your site.xml in the
       <span class="codefrag">&lt;about&gt;</span> element
@@ -368,7 +352,7 @@
 	 as the child (will cause a <span class="codefrag">stack overflow</span> if you do)!!!
 	</div>
 </div>
-<a name="N100D6"></a><a name="explain"></a>
+<a name="N100B9"></a><a name="explain"></a>
 <h3 class="underlined_5">Explanation of the operation</h3>
 <p>
       Line 4 of our example
@@ -416,27 +400,10 @@
 <span class="codefrag">&lt;map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/&gt;</span>
     
 </p>
-<div class="frame note">
-<div class="label">Note</div>
-<div class="content">
-      In the original <span class="codefrag">aggregate.xmap</span> there is the line
-      <br>
-      
-<span class="codefrag">&lt;map:parameter name="ignore" value="{1}"/&gt;</span>
-      
-<br>
-      just before the title definition
-      (<span class="codefrag">&lt;map:parameter name="title" value=".../&gt;</span>).
-      Be sure to delete it or comment it out if you like to generate a
-      pdf-file for specific sites. You only need it for the generation of
-      one pdf-file for the whole project (this is what
-      <span class="codefrag">aggregate.xmap</span> usually does).
-    </div>
-</div>
 </div>
 
   
-<a name="N10121"></a><a name="Feedback and further development of this How-To"></a>
+<a name="N100F1"></a><a name="Feedback and further development of this How-To"></a>
 <h2 class="underlined_10">Feedback and further development of this How-To</h2>
 <div class="section">
 <p>
@@ -447,12 +414,6 @@
       In the future, this ability will probably be incorporated into the
       main Forrest process.
     </p>
-<div class="frame fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">
-      This document will need to be modified when Issue FOR-202 is solved.
-    </div>
-</div>
 </div>
 
 </div>
