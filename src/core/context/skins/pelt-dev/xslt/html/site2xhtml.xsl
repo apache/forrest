@@ -327,13 +327,13 @@ document.write("Last Published: " + document.lastModified);
 <xsl:template match="div[@class = 'skinconf-heading-1']">
     <xsl:choose>
       <xsl:when test="//skinconfig/headings/@type='underlined'">
-      	<h3 class="underlined_10"><xsl:value-of select="h1"/></h3>
+      	<h2 class="underlined_10"><xsl:value-of select="h1"/></h2>
       </xsl:when>
       <xsl:when test="//skinconfig/headings/@type='boxed'">
-	       <h3 class="boxed"><xsl:value-of select="h1"/></h3>
+	       <h2 class="boxed"><xsl:value-of select="h1"/></h2>
       </xsl:when>
       <xsl:otherwise>
-        <h3 class="h3"><xsl:value-of select="h1"/></h3>
+        <h2 class="h3"><xsl:value-of select="h1"/></h2>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -341,13 +341,13 @@ document.write("Last Published: " + document.lastModified);
   <xsl:template match="div[@class = 'skinconf-heading-2']">
     <xsl:choose>
       <xsl:when test="//skinconfig/headings/@type='underlined'">
-        <h4 class="underlined_5"><xsl:value-of select="h1"/></h4>
+        <h3 class="underlined_5"><xsl:value-of select="h2"/></h3>
       </xsl:when>
       <xsl:when test="//skinconfig/headings/@type='boxed'">
-       	<h4 class="boxed"><xsl:value-of select="h1"/></h4>
+       	<h3 class="boxed"><xsl:value-of select="h1"/></h3>
       </xsl:when>
       <xsl:otherwise>
-        <h4 class="h4"><xsl:value-of select="h1"/></h4>
+        <h3 class="h4"><xsl:value-of select="h1"/></h3>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -401,7 +401,7 @@ document.write("Last Published: " + document.lastModified);
                   </a>
                 </xsl:for-each>
               </xsl:if>
-</div>
+		</div>
         <div id="roundbottom">
             <img 
                 src="{$skin-img-dir}/rc-b-l-15-1body-2menu-3menu.png" 
@@ -472,6 +472,7 @@ document.write("Last Published: " + document.lastModified);
         </xsl:for-each>
       </div>
   </xsl:template>
+
 <!--+
     |Generates the PDF link 
     +-->

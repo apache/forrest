@@ -35,7 +35,7 @@ imported document2html.xsl for details.
       <xsl:if test="normalize-space(header/subtitle)!=''">
         <h3><xsl:value-of select="header/subtitle"/></h3>
       </xsl:if>
-
+<!--
       <xsl:apply-templates select="header/type"/>
       <xsl:apply-templates select="header/notice"/>
       <xsl:apply-templates select="header/abstract"/>
@@ -48,7 +48,28 @@ imported document2html.xsl for details.
         </xsl:if>
         <xsl:apply-templates select="header/version"/>
       </div>
-      
+    -->  
+	<xsl:if test="header/abstract">
+        <div class="abstract">
+          <xsl:value-of select="header/abstract"/>
+        </div>
+      </xsl:if>
+
+      <xsl:apply-templates select="body"/>
+
+      <xsl:if test="header/authors">
+        <p align="right">
+          <font size="-2">
+            <xsl:for-each select="header/authors/person">
+              <xsl:choose>
+                <xsl:when test="position()=1">by&#160;</xsl:when>
+                <xsl:otherwise>,&#160;</xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="@name"/>
+            </xsl:for-each>
+          </font>
+        </p>
+      </xsl:if>
     </div>
   </xsl:template>
 
@@ -71,13 +92,15 @@ imported document2html.xsl for details.
     <xsl:choose>
       <xsl:when test="$level=1">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h1><xsl:value-of select="title"/></h1>  test - 
         </div>
-        <div class="section"><xsl:apply-templates/></div>  
+        <div class="section">
+			<xsl:apply-templates select="*[not(self::title)]"/>
+		</div>  
       </xsl:when>
       <xsl:when test="$level=2">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h2><xsl:value-of select="title"/></h2>
         </div>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>

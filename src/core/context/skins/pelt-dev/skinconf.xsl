@@ -90,6 +90,9 @@
      <xsl:if test="not(color[@name='subheading'])">
       <color name="subheading" value="#CFDCED"/>
      </xsl:if>
+      <xsl:if test="not(color[@name='published'])">
+		<color name="feedback" value="#4C6C8F" font="#FFFFFF" align="right"/>
+     </xsl:if> 
      <xsl:if test="not(color[@name='published'])">
         <color name="published" value="#ffffff"/>
      </xsl:if> 
