@@ -74,6 +74,28 @@
       </answer>
     </faq>
 
+    <faq id="unresolved_project.home">
+      <question>When invoking Forrest 0.4 from the
+        <code>forrest.antproxy.xml</code>, the build fails because
+        <code>${project.home}</code> isn't resolved.
+      </question>
+      <answer>
+        <p>This is a bug in 0.4. The following modification to
+          <code>FORREST_HOME/forrest.antproxy.xml</code> should fix it:</p>
+        <source
+><![CDATA[--- forrest.antproxy.xml        7 Feb 2003 22:21:15 -0000       1.2
++++ forrest.antproxy.xml        22 Feb 2003 09:39:42 -0000
+@@ -41,6 +41,7 @@
+   </path>
+ 
+   <target name="forrest">
++    <property name="project.home" location="."/>
+     <java classname="org.apache.tools.ant.Main" fork="true">
+       <classpath refid="forrest-classpath"/>
+       <jvmarg value="-Dforrest.home=${forrest.home}"/>]]></source>
+      </answer>
+    </faq>
+
     <faq id="index.html">
       <question>
         The tab link in my site incorrectly assumes that 'index.html' is present in
