@@ -73,7 +73,11 @@ FORREST SITE BUILDER
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
     <property name="project.status"      value="${project.home}/status.xml" />
+    <!-- FIXME: rename project.content-dir to project.documentation-dir -->
     <property name="project.content-dir" value="${project.home}/src/documentation" />
+    <!-- NOTE: Do not rely on this 'project.real-content-dir' property, as it
+    will go away soon -->
+    <property name="project.real-content-dir" value="${project.content-dir}/content" />
     <property name="project.sitemap"     value="${project.content-dir}/sitemap.xmap" />
     <property name="project.xdocs-dir"   value="${project.content-dir}/content/xdocs" />
     <property name="project.stylesheets-dir" value="${project.content-dir}/resources/stylesheets" />
@@ -95,6 +99,7 @@ FORREST SITE BUILDER
 
   <target name="examine-proj" depends="init-props">
     <available property="conf.present" file="${project.conf-dir}" type="dir"/>
+    <available property="real-content.present" file="${project.real-content-dir}" type="dir"/>
     <available property="sitemap.present" file="${project.sitemap}"/>
     <available property="xdocs.present" file="${project.xdocs-dir}" type="dir"/>
     <available property="images.present" file="${project.images-dir}" type="dir"/>
@@ -125,6 +130,7 @@ FORREST SITE BUILDER
         <isset property="xdocs.present"/>
       </and>
     </condition>
+    <echo>validate.xdocs is ${validate.xdocs}</echo>
     <property name="forrest.validate.xdocs.includes" value="*.x*"/>
     <property name="forrest.validate.xdocs.excludes" value=""/>
     <property name="forrest.validate.xdocs.failonerror"
@@ -351,7 +357,7 @@ FORREST SITE BUILDER
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="project-context" depends="examine-proj, ensure-content, validate, init, bare-context, copy-conf, copy-sitemap,
-    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
+    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-content, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
@@ -373,6 +379,14 @@ FORREST SITE BUILDER
     </copy>
   </target>
 
+  <target name="copy-resources" if="resources.present">
+    <copy toDir="${project.ctxt-dir}/resources" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.resources-dir}">
+      </fileset>
+    </copy>
+  </target>
+
   <target name="copy-stylesheets" if="stylesheets.present">
     <copy toDir="${project.ctxt-dir}/resources/stylesheets" filtering="false"
       overwrite="true" failonerror="false">
@@ -381,9 +395,19 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-images" if="images.present">
-<copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
+    <copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${project.images-dir}"/>
+    </copy>
+  </target>
+
+  <!-- Copy all non-xdocs content -->
+  <target name="copy-content" if="real-content.present">
+    <copy toDir="${project.ctxt-dir}/content" filtering="false"
+      overwrite="true" failonerror="false">
+      <fileset dir="${project.real-content-dir}">
+        <exclude name="xdocs/**"/>
+      </fileset>
     </copy>
   </target>
 
