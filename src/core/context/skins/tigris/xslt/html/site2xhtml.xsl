@@ -368,7 +368,7 @@ if (VERSION > 3) {
 		            <td></td>
 		            <td colspan="4" height="5" class="logos">
 		              <a href="{$url}">
-		                <img alt="{$name} logo" border="0">
+		                <img alt="{$name} logo" title="{$name}" border="0">
 		                  <xsl:attribute name="src">
 		                    <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
 		                    <xsl:value-of select="$image"/>
@@ -450,7 +450,7 @@ if (VERSION > 3) {
           <xsl:variable name="width" select="width"/>
           <xsl:variable name="height" select="height"/>
           <a href="{$url}">
-            <img alt="{$name} logo" border="0">
+            <img alt="{$name} logo" title="{$name}" border="0">
               <xsl:attribute name="src">
                 <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
                 <xsl:value-of select="$image"/>

@@ -110,7 +110,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
      +++++++++++++++++++++++++++
      +-->
 <!--+
-  |branding with logo's
+  |branding with logos
   +-->
     <div id="branding">
 <xsl:comment>+
@@ -282,7 +282,7 @@ document.write("Last Published: " + document.lastModified);
                   <xsl:variable name="width" select="width"/>
                   <xsl:variable name="height" select="height"/>
                   <a href="{$url}">
-                    <img alt="{$name} logo" border="0">
+                    <img alt="{$name} - logo" title="{$name}" border="0">
                       <xsl:attribute name="src">
                         <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
                         <xsl:value-of select="$image"/>
@@ -388,7 +388,7 @@ document.write("Last Published: " + document.lastModified);
                   <xsl:variable name="width" select="width"/>
                   <xsl:variable name="height" select="height"/>
                   <a href="{$url}">
-                    <img alt="{$name} logo" border="0">
+                    <img alt="{$name} - logo" title="{$name}" border="0">
                       <xsl:attribute name="src">
                         <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
                         <xsl:value-of select="$image"/>
@@ -406,7 +406,7 @@ document.write("Last Published: " + document.lastModified);
         <div class="roundbottom-left">&#160;
         </div>
         <xsl:comment>+
-  |alternativ credits
+  |alternative credits
   +</xsl:comment>
       </div>
 <xsl:comment>+
