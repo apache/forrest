@@ -30,30 +30,32 @@
       <title>Introduction</title>
       <p>
         This document describes Forrest's internal URI space; how it is managed
-        with &s;, how menus are generated, and how various link schemes (site:,
-        ext:) work.  An overview of the implementation is also provided.
+        with the "&s;" configuration file, how menus are generated,
+        and how various link schemes (site: and ext:) operate.
+        An overview of the implementation is also provided.
       </p>
     </section>
 
     <section id="site">
       <title>site.xml</title>
       <p>
-        &s; is what we'd call a 'site map' if Cocoon hadn't already claimed
-        that term. &s; is a loosely structured XML file, acting as a map of the
+        The "&s;" configuration file is what we would call a "site map"
+        if Cocoon hadn't already claimed that term. 
+        The "&s;" is a loosely structured XML file, acting as a map of the
         site's contents.  It provides a unique identifier (an XPath address)
-        for 'nodes' of information in the website.  A 'node' of site information
+        for "nodes" of information in the website.  A "node" of site information
         can be:
       </p>
       <ul>
-        <li>A category of information, like 'the user guide'. A category may
+        <li>A category of information, like "the user guide". A category may
           correspond to a directory, but that is not required.</li>
-        <li>A specific page, e.g. 'the FAQ page'</li>
-        <li>A specific section in a page, e.g. "the 'general' section of the FAQ
-          page" (identified by <code>id="general"</code> attribute)</li>
+        <li>A specific page, e.g. "the FAQ page"</li>
+        <li>A specific section in a page, e.g. the "general" section of the FAQ
+          page (identified by <code>id="general"</code> attribute)</li>
       </ul>
       <p>
-        In addition to providing fine-grained addressing of site info, &s;
-        allows <em>metadata</em> to be associated with each node, with
+        In addition to providing fine-grained addressing of site info, the &s;
+        allows <em>metadata</em> to be associated with each node, using
         attributes or child elements.  Most commonly, a <code>label</code>
         attribute is used to provide a text description of the node.
       </p>
@@ -66,11 +68,11 @@
         <dt><link href="#semantic_linking">Indirect linking</link></dt>
         <dd>&s; provides a basic aliasing mechanism for linking, e.g. one
           can write &lt;link href="site:changes"> from anywhere in the site, and
-          link to the 'changes' information node (translated to changes.html).
+          link to the "changes" information node (translated to changes.html).
           More on this below.</dd>
       </dl>
       <p>
-        Here is a sample site.xml, a stripped-down version from Forrest's
+        Here is a sample &s; ... a stripped-down version from Forrest's
         own <link href="ext:forrest">website</link>:
       </p>
       <source><![CDATA[
@@ -131,23 +133,23 @@
 
         </site>
         ]]></source>
-      <p>As you can see, things are pretty free-form. The rules are as follows:</p>
+      <p>As you can see, things are quite free-form. The rules are as follows:</p>
       <ul>
-        <li>The root element must be 'site', and normal content should be in the
-          namespace <code>http://apache.org/forrest/linkmap/1.0</code>. Feel
+        <li>The root element must be "site", and normal content should be in the
+          namespace <code>http://apache.org/forrest/linkmap/1.0</code> (Feel
           free to mix in your own content (RDF, dublin core, etc) under new
-          namespaces</li>
-        <li>Element names are used as identifiers.  The <code>foo</code> in
-          <code>site:foo</code> must therefore be a valid NMTOKEN.</li>
+          namespaces)</li>
+        <li>Element names are used as identifiers.  The "<code>foo</code>" in
+          "<code>site:foo</code>" must therefore be a valid NMTOKEN.</li>
         <li>Elements with <code>href</code> attributes can be used as identifiers
-          in <code>site:</code> URIs</li>
-        <li>Relative href attribute contents are 'accumulated' by prepending hrefs
+          in "<code>site:</code>" URIs</li>
+        <li>Relative href attribute contents are "accumulated" by prepending hrefs
           from ancestor nodes</li>
         <li>Elements without <code>label</code> attributes (and their children)
           are not displayed in the menu.</li>
         <li>Elements below <code>external-refs</code> are mapped to the
-          <code>ext:</code> scheme.  so <code>ext:cocoon/ml</code> becomes
-          <code>http://xml.apache.org/cocoon/mail-lists.html</code></li>
+          "<code>ext:</code>" scheme.  So "<code>ext:cocoon/ml</code>" becomes
+          "<code>http://xml.apache.org/cocoon/mail-lists.html</code>"</li>
       </ul>
     </section>
 
@@ -165,43 +167,43 @@
     <tab id="howto" label="How-Tos" dir="community/howto"/>
 </tabs>
       ]]></source>
-      <p>Using the &s; listed above, we would get these menus:</p>
+      <p>Using the "&s;" listed above, we would get these menus:</p>
       <p>
         <img src="images/menu.png" alt="Menu generated from site.xml"/>&nbsp;&nbsp;&nbsp;
         <img src="images/menu2.png" alt="Community menu generated from site.xml"/>&nbsp;&nbsp;&nbsp;
         <img src="images/menu3.png" alt="Howto menu generated from site.xml"/>
       </p>
       
-      <p>When using the <code>dir</code> attribute as above the value of the
-      <code>indexfile</code> parameter is appended to the value of the 
-      <code>dir</code> attribute (together with a preceding '/'). For example,
+      <p>When using the "<code>dir</code>" attribute as above the value of the
+      "<code>indexfile</code>" parameter is appended to the value of the 
+      "<code>dir</code>" attribute (together with a preceding '/'). For example,
       the link for the community tab above is 
-      <code>community/mailLists.html</code>. Note that <code>indexfile</code>
-      defaults to <code>index.html</code> if no value is supplied. Therefore the
+      <code>community/mailLists.html</code>. Note that "<code>indexfile</code>"
+      defaults to "<code>index.html</code>" if no value is supplied. Therefore the
       link for the howto tab is <code>community/howto/index.html</code>.</p>
       
       <section id="tabs-external">
         <title>Tabs for External Resources</title>
         <p>You can make a tab point to an external resource by using the 
-        <code>href</code> attribute instead of the <code>dir</code> attribute.
-        The value of <code>href</code> should be the URI of the resource you wish 
+        "<code>href</code>" attribute instead of the "<code>dir</code>" attribute.
+        The value of "<code>href</code>" should be the URI of the resource you wish 
         to link to. For example:</p>
       
         <source><![CDATA[
 <tab id="apache" label="XML Apache" href="http://xml.apache.org/"/>
         ]]></source>
         
-        <p>Unlike the <code>dir</code> attribute, the value of <code>href</code>
+        <p>Unlike the "<code>dir</code>" attribute, the value of "<code>href</code>"
         is left unmodified by Forrest unless it is root-relative and obviously 
         specifies a directory (ends in '/'). In which case /index.html will be 
-        added</p>
+        added.</p>
       </section>
 
       <section id="selecting-entries">
         <title>Selecting menu entries</title>
         <p>Forrest decides which menu entries to display by examining the
-          <code>tab</code> attributes in &s;.  All &s; entries with a
-          <code>tab</code> equal to that of the current page are put in the
+          "<code>tab</code>" attributes in the &s; file. All &s; entries with a
+          "<code>tab</code>" equal to that of the current page are put in the
           menu.</p>
         <p>Consider our &s; example:</p>
           <source>
@@ -228,24 +230,24 @@
         &lt;step1 label="Step 1" href="step1.html"/&gt;
       ...</source>
         <p>
-          Every &s; node can potentially have a <code>tab</code> attribute.  If
-          unspecified, nodes inherit the <code>tab</code> of their parent.  Thus
+          Every &s; node can potentially have a "<code>tab</code>" attribute.  If
+          unspecified, nodes inherit the "<code>tab</code>" of their parent.  Thus
           everything in the <strong>&lt;about&gt;</strong> section has an implicit
-          <code>tab="home"</code>.</p>
+          <code>tab="home" </code>attribute.</p>
         <note>You can see this by viewing your site's 
         <link href="../abs-menulinks">abs-menulinks</link> pipeline in a
           browser.</note>
         <p>Say that the user is viewing the <code>linking.html</code>
           page.  The <strong>&lt;linking&gt;</strong> node has an implicit tab
-          value of <code>home</code>.  Forrest will select <em>all nodes with
-            tab="home"</em>, and put them in the menu.
+          value of "<code>home</code>".  Forrest will select <em>all nodes with
+            tab="home"</em> and put them in the menu.
         </p>
       </section>
 
       <section id="other-menu-selection">
         <title>Alternative menu selection mechanisms.</title>
         <p>
-          The <code>tab</code> attribute-based scheme for selecting a menu's
+          The "<code>tab</code>" attribute-based scheme for selecting a menu's
           entries is not the only one, although it is the most flexible.  Here
           we describe a few alternatives.
         </p>
@@ -264,7 +266,7 @@
           <ul>
             <li>Edit <code>forrest.properties</code> and set
               <code>project.menu-scheme=directories</code></li>
-            <li>Remove the <code>id</code> attributes from <code>tabs.xml</code>
+            <li>Remove the "<code>id</code>" attributes from <code>tabs.xml</code>
               entries.</li>
           </ul>
         </section>
@@ -274,10 +276,10 @@
             Historically, menus in Forrest have been generated from a
             <code>book.xml</code> file, one per directory.  This mechanism is
             still available, and if a <code>book.xml</code> is found, it will be
-            used in preference to the &s;-generated menu.  <code>book.xml</code>
-            files can use <code>site:</code> URIs to ease the maintenance burden
-            that led to book.xml's obsolescence.  In general, however, we
-            recommend that users avoid <code>book.xml</code>.
+            used in preference to the menu generated by the &s; file. The <code>book.xml</code>
+            files can use "<code>site:</code>" URIs to ease the maintenance burden
+            that led to obsolescence of book.xml files.  In general, however, we
+            recommend that users avoid <code>book.xml</code> files.
           </p>
         </section>
       </section>
@@ -286,7 +288,7 @@
         <title>Selecting the current tab</title>
         <p>
           The tab selection algorithm is quite simple: the tab with the
-          <code>id</code> which matches that of the current <code>site.xml</code>
+          "<code>id</code>" which matches that of the current <code>site.xml</code>
           node is "selected". If you experience any problems, try to add a 
           <code>&lt;foo label="Foo" href="index.html"/&gt;</code> to 
           <code>site.xml</code>
@@ -301,8 +303,8 @@
       is created from the titles of each section in your xdoc. By default only
       sections up to two levels deep are included and the table of contents is
       displayed at the top of the page. However, you can configure this
-      behaviour in <code>src/documentation/skinconf.xml</code> using the <code>toc</code>
-      element.</p>
+      behaviour in <code>src/documentation/skinconf.xml</code> using the 
+      "<code>toc</code>" element.</p>
       
       <source><![CDATA[
 <toc level="2" location="page"/>
@@ -345,7 +347,7 @@
           The theoretical problem with this is that the content producer should
           not know or care how Forrest is going to render the source.  A URI
           should only <em>identify</em> a resource, not specify it's type
-          [<link href="ext:semantic-linking">mail ref</link>]
+          [<link href="ext:semantic-linking">mail ref</link>] and
           [<link href="ext:cool-uris">cool URIs</link>]. In fact, as Forrest
           typically renders to multiple output formats (HTML and PDF), links in
           one of them (here, the PDF) are likely to break.
@@ -356,22 +358,22 @@
         <title>Indirect linking</title>
         <p>
           Forrest's solution is simple: instead of &lt;link href="todo.html">,
-          write &lt;link href="site:todo">, where:
+          write &lt;link href="site:todo"> where:
         </p>
         <dl>
           <dt>site</dt>
-          <dd>is a URI 'scheme'; a namespace that restricts
+          <dd>is a URI "scheme"; a namespace that restricts
             the syntax and semantics of the rest of the URI
-            [<link href="ext:uri-rfc">rfc2396</link>].  The semantics of 'site' are
+            [<link href="ext:uri-rfc">rfc2396</link>].  The semantics of "site" are
             "this identifier locates something in the site's XML sources".</dd>
           <dt>todo</dt>
           <dd>identifies the content in <code>todo.xml</code>, by reference to a
-            'node' of content declared in &s;.</dd>
+            "node" of content declared in &s;</dd>
         </dl>
         <p>
           We call this indirect, or <em>semantic</em> linking because instead of
           linking to a physical representation (todo.html), we've linked to the
-          'idea' of "the todo file".  It doesn't matter where it physically lives;
+          "idea" of "the todo file".  It doesn't matter where it physically lives;
           that will be sorted out by Forrest.
         </p>
 
@@ -379,34 +381,34 @@
           <title>Resolving site: URIs</title>
 
           <p>
-            How exactly does <code>site:todo</code> get resolved?  A full answer
+            How exactly does "<code>site:todo</code>" get resolved?  A full answer
             is provided in the <link href="#implementation">implementation</link>
-            section.  Essentially, the <code>todo</code> part has
-            <code>/site//</code> prepended, and <code>/@href</code> appended, to
-            form string <code>/site//todo/@href</code>.  This is
-            then used as an XPath expression in &s; identifying the string
-            replacement, in this case <code>todo.html</code>.
+            section.  Essentially, the "<code>todo</code>" part has
+            "<code>/site//</code>" prepended, and "<code>/@href</code>" appended, to
+            form the string "<code>/site//todo/@href</code>".  This is
+            then used as an XPath expression in &s; to identify the string
+            replacement, in this case <code>todo.html</code>
           </p>
           <p>
-            Thus by modifying the XPath prefix and suffix, just about any XML
+            Thus by modifying the XPath prefix and suffix, almost any XML
             format can be accommodated.
           </p>
           <note>
             Actually, the XPath is applied to XML generated dynamically from
-            &s;.  The generated XML has @href's fully expanded ('absolutized')
-            and ..'s added ('relativized') as needed.
+            &s;.  The generated XML has each "@href" fully expanded ("absolutized")
+            and dot-dots (..) added as needed ("relativized").
           </note>
 
           <p>
-            Notice that the '//' allows us any degree of specificity when linking.
-            In the sample &s; above, both <code>site:new_content_type</code> and
-            <code>site:about/your-project/new_content_type</code> identify the
+            Notice that the "//" allows us any degree of specificity when linking.
+            In the sample &s; above, both "<code>site:new_content_type</code>" and
+            "<code>site:about/your-project/new_content_type</code>" identify the
             same node.  It is up to you to decide how specific to make links.  One
-            nice benefit of link 'ambiguity' is that &s; can be reorganized
-            without breaking links.  For example, 'new_content_type' currently
-            identifies a node in 'your-project'.  By leaving that fact unspecified
-            in <code>site:new_content_type</code>, we are free to make
-            'new_content_type' its own XML file, or a node in another file, in
+            nice benefit of link "ambiguity" is that &s; can be reorganized
+            without breaking links.  For example, "new_content_type" currently
+            identifies a node in "your-project".  By leaving that fact unspecified
+            in "<code>site:new_content_type</code>" we are free to make
+            "new_content_type" its own XML file, or a node in another file, in
             another category.
           </p>
         </section>
@@ -414,14 +416,14 @@
         <section id="resolve-ext-uris">
           <title>ext: URIs: linking to external URLs</title>
           <p>
-            The <code>ext:</code> scheme was created partly to demonstrate the
+            The "<code>ext:</code>" scheme was created partly to demonstrate the
             ease with which new schemes can be defined, and partly for practical
-            use.  <code>ext:</code> URIs identify nodes in &s; below the
+            use. The "<code>ext:</code>" URIs identify nodes in &s; below the
             &lt;external-refs&gt; node.  By convention, nodes here link to URLs
             outside the website, and are not listed in the menu generated from
-            &s;.
+            the &s; file.
           </p>
-          <p>Here is a &s; snippet illustrating <code>external-refs</code>:</p>
+          <p>Here is a &s; snippet illustrating "<code>external-refs</code>":</p>
           <source><![CDATA[
             <site>
               ...
@@ -447,8 +449,8 @@
             <link href="ext:cocoon/ml">http://xml.apache.org/cocoon/mail-lists.html</link>
           </p>
           <p>
-            The general rules of &s; and <code>site:</code> linking apply.
-            Specifically, the @href aggregation makes defining large numbers of
+            The general rules of &s; and "<code>site:</code>" linking apply.
+            Specifically, the "@href" aggregation makes defining large numbers of
             related URLs easy.
           </p>
         </section>
@@ -456,16 +458,16 @@
         <section id="source-uris">
           <title>Theory: source URIs</title>
           <p>
-            <code>site:</code> URIs like <code>site:todo</code> are examples of
-            <em>source</em> URIs, in contrast to the more usual
-            <code>foo.html</code>-style URIs, which we here call
-            <em>destination</em> URIs.  This introduces an important concept: that
-            the <em>source</em> URI space exists and is independent of that of the
-            generated site.  Furthermore, URIs (ie, links) are first-class objects,
+            The "<code>site:</code>" URIs like "<code>site:todo</code>" are examples of
+            "<em>source</em>" URIs, in contrast to the more usual
+            <code>foo.html</code> style URIs, which we here call
+            "<em>destination</em>" URIs.  This introduces an important concept: that
+            the "<em>source</em>" URI space exists and is independent of that of the
+            generated site.  Furthermore, URIs (i.e. links) are first-class objects,
             on par with XML documents, in that just as XML content is transformed,
             so are the links.  Within the source URI space, we can have all sorts of
-            interesting schemes (person:, mail:, google:, java:, etc). These will
-            all be translated into plain old <code>http:</code> or relative URIs
+            interesting schemes (person: mail: google: java: etc). These will
+            all be translated into plain old "<code>http:</code>" or relative URIs
             in the destination URI space, just like exotic XML source formats are
             translated into plain old HTML in the output.
           </p>
@@ -475,12 +477,12 @@
         <section id="future-schemes">
           <title>Future schemes</title>
           <p>
-            So far, <code>site:</code> and <code>ext:</code> schemes are defined.
+            So far, the "<code>site:</code>" and "<code>ext:</code>" schemes are defined.
             To give you some ideas on other things we'd like to implement (and
             we'd welcome help implementing), here are a few possibilities.
           </p>
           <table>
-            <tr><th>Scheme</th><th>Example 'From'</th><th>Example 'To'</th><th>Description</th></tr>
+            <tr><th>Scheme</th><th>Example "From"</th><th>Example "To"</th><th>Description</th></tr>
             <tr>
               <td>java</td>
               <td>java:org.apache.proj.SomeClass</td>
@@ -509,9 +511,9 @@
               <td>person</td>
               <td>person:JT, person:JT/blog etc</td>
               <td><code>mailto:jefft&lt;at&gt;apache.org</code>,
-                <code>http://www.webweavertech.com/jefft/weblog/</code>, etc:</td>
+                <code>http://www.webweavertech.com/jefft/weblog/</code></td>
               <td>
-                A <code>person:</code> scheme could be used, say, to insert an
+                A "<code>person:</code>" scheme could be used, say, to insert an
                 automatically obfuscated email address, or link to a URI in some
                 way associated with that person.
               </td>
@@ -519,10 +521,10 @@
           </table>
           <p>
             There are even more possibilities in specific environments.  In an
-            intranet, a <code>project:XYZ</code> scheme could identify company
+            intranet, a "<code>project:XYZ</code>" scheme could identify company
             project pages.  In a project like <link href="ext:ant">Apache
               Ant</link>, each Task could be identified with
-            <code>task:&lt;taskname&gt;</code>, eg <code>task:pathconvert</code>.
+            <code>task:&lt;taskname&gt;</code>, e.g. <code>task:pathconvert</code>.
           </p>
         </section>
       </section>
@@ -530,7 +532,7 @@
     <section id="concept">
       <title>Concept</title>
       <p>
-        The <code>site:</code> scheme and associated ideas for &s; were
+        The "<code>site:</code>" scheme and associated ideas for &s; were
         originally described in <link href="ext:linkmaps">the 'linkmap' RT
           email</link> to the forrest-dev list (RT means 'random thought'; a
         Cocoon invention).   Only section 2 has been implemented, and there is
