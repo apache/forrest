@@ -35,30 +35,38 @@
 	<!-- ====================================================================== -->
 	<!-- body section -->
 	<!-- ====================================================================== -->
-	<xsl:template match="s1">
-		<font color="#0086b2" size="+2" face="verdana, helvetica, sans serif">
+	<xsl:template match="section">
+	
+	 <xsl:variable name = "level" select = "count(ancestor::section)+1" />
+	 
+	 <xsl:choose>
+	 	<xsl:when test="$level=1">
+	 	  <font color="#0086b2" size="+2" face="verdana, helvetica, sans serif">
    			<xsl:value-of select="@title"/>
-		</font>
-		<hr size="1" style="color: #0086b2"/>
-		<xsl:apply-templates/>
-	</xsl:template>
-	<xsl:template match="s2">
+	  	  </font>
+		  <hr size="1" style="color: #0086b2"/>
+	      <xsl:apply-templates/>
+	 	</xsl:when>
+	 	<xsl:when test="$level=2">
 		<font color="#0086b2" size="+1" face="verdana, helvetica, sans serif">
    			<b><xsl:value-of select="@title"/></b>
 		</font>
 		<xsl:apply-templates/>
-	</xsl:template>
-	<xsl:template match="s3">
+	 	</xsl:when>
+	 	<xsl:when test="$level=3">
 		<font color="#0086b2" size="+1" face="verdana, helvetica, sans serif">
    			<xsl:value-of select="@title"/>
 		</font>
 		<xsl:apply-templates/>
-	</xsl:template>
-	<xsl:template match="s4">
+	 	</xsl:when>
+	 	<xsl:otherwise>
 		<font color="#0086b2" face="verdana, helvetica, sans serif">
    			<b><xsl:value-of select="@title"/></b>
 		</font>
-		<xsl:apply-templates/>
+		<xsl:apply-templates/>	 	 
+	 	</xsl:otherwise>
+	 </xsl:choose>
+
 	</xsl:template>
 	<!-- ====================================================================== -->
 	<!-- footer section -->
@@ -79,7 +87,7 @@
 			<table width="100%" cellspacing="3" cellpadding="0" border="0">
 				<tr>
 					<td width="28" valign="top">
-						<img src="images/note.gif" width="28" height="29" vspace="0" hspace="0" border="0" alt="Note"/>
+						<img src="skin/images/note.gif" width="28" height="29" vspace="0" hspace="0" border="0" alt="Note"/>
 					</td>
 					<td valign="top">
 						<font size="-1" face="verdana,helvetica,sanserif" color="black">
@@ -97,18 +105,18 @@
 			<table cellspacing="4" cellpadding="0" border="0">
 				<tr>
 					<td bgcolor="#0086b2" width="1" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 					<td bgcolor="#0086b2" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 					<td bgcolor="#0086b2" width="1" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 				</tr>
 				<tr>
 					<td bgcolor="#0086b2" width="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 					<td bgcolor="#ffffff">
 						<pre>
@@ -116,18 +124,18 @@
 						</pre>
 					</td>
 					<td bgcolor="#0086b2" width="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 				</tr>
 				<tr>
 					<td bgcolor="#0086b2" width="1" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 					<td bgcolor="#0086b2" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 					<td bgcolor="#0086b2" width="1" height="1">
-						<img src="images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
+						<img src="skin/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/>
 					</td>
 				</tr>
 			</table>
