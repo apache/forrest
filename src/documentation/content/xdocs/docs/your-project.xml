@@ -754,10 +754,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
             transformation of our custom xml
             structure into the Forrest intermediate xdocs structure.
           </p>
-<warning>
-This section of the document is currently being enhanced to reflect the
-new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
-</warning>
           <note>
             The <link href="site:sitemap-ref">Sitemap
             Reference</link> provides details about how the sitemap works.
@@ -840,8 +836,83 @@ new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
                </p>
             </section>
           </section>
+
+          <section id="adding_new_content_type_2">
+            <title>Example: Adding a new content type (advanced)</title>
+            <p>
+              The simple user sitemap in the previous example is fine for
+              simple situations. For a complete solution to the "Download DTD"
+              issue we need a more advanced sitemap which will do different
+              processing depending on the version of the document type
+              declaration. Let us show the sitemap and then explain it.
+            </p>
+            <source><![CDATA[<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+ <map:components>
+  <map:selectors default="parameter">
+	  <map:selector logger="sitemap.selector.parameter"
+       name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
+  </map:selectors>
+  <map:actions>
+   <map:action logger="sitemap.action.sourcetype" name="sourcetype"
+       src="org.apache.cocoon.acting.sourcetype.SourceTypeAction">
+    <sourcetype name="download-v1.0">
+     <document-declaration
+        public-id="-//Acme//DTD Download Documentation V1.0//EN" />
+    </sourcetype>      
+    <sourcetype name="download-v1.1">
+     <document-declaration
+        public-id="-//Acme//DTD Download Documentation V1.1//EN" />
+    </sourcetype>      
+   </map:action>
+  </map:actions>
+ </map:components>
+
+ <map:pipelines>
+  <map:pipeline>
+   <map:match pattern="**download.xml">
+    <map:generate src="{project:content.xdocs}{1}download.xml" />
+    <map:act type="sourcetype" src="{project:content.xdocs}{1}download.xml">
+     <map:select type="parameter">
+      <map:parameter name="parameter-selector-test" value="{sourcetype}" />
+      <map:when test="download-v1.0">
+       <map:transform
+          src="{project:resources.stylesheets}/download2document.xsl" />
+      </map:when>
+      <map:when test="download-v1.1">
+       <map:transform
+          src="{project:resources.stylesheets}/download-v11-2document.xsl" />
+      </map:when>
+     </map:select>
+    </map:act>
+    <map:serialize type="xml"/>
+   </map:match>
+  </map:pipeline>
+ </map:pipelines>
+</map:sitemap>
+]]></source>
+            <p>
+              This is the type of processing that happens in the main
+              <code>src/core/context/forrest.xmap</code> sitemap. We have
+              added similar handling to our project sitemap. Basically, this
+              uses the <link href="site:cap">SourceTypeAction (content aware pipelines)</link>
+              to detect the doctype. The new document-v11.dtd needs to be also
+              added to your project Catalog.
+            </p>
+            <p>
+              Note that any sitemap component must be declared before it
+              can be used, because the project sitemap is the first sitemap
+              to be consulted.
+            </p>
+          </section>
+
           <section id="integrating_rss">
             <title>Example: integrating external RSS content</title>
+<warning>
+This section of the document is currently being enhanced to reflect the
+new "<link href="site:project-sitemap">Using project sitemaps</link>" method.
+</warning>
             <p>Similar to the previous example, we can integrate RSS into our
               site by over-riding and editing the sitemap.  As described in 
               the "source pipelines" section of the
