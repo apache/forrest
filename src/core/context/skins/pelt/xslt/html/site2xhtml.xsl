@@ -500,24 +500,24 @@ document.write("Last Published: " + document.lastModified);
     +-->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div class="pdflink" title="PDF"><a href="{$filename-noext}.pdf" class="dida">
-        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF" /><br/>
+      <div class="pdflink" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
+        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF -icon" /><br/>
         PDF</a>
       </div>
     </xsl:if>
   </xsl:template>
   <xsl:template match="div[@id='skinconf-xmllink']">
     <xsl:if test="not($config/disable-xml-link) or $disable-xml-link = 'false'"> 
-      <div class="xmllink" title="XML"><a href="{$filename-noext}.xml" class="dida">
-        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML" /><br/>
+      <div class="xmllink" title="raw XML"><a href="{$filename-noext}.xml" class="dida">
+        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
         XML</a>
       </div>
     </xsl:if>
   </xsl:template>
   <xsl:template match="div[@id='skinconf-podlink']">
     <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'"> 
-      <div class="podlink" title="POD"><a href="{$filename-noext}.pod" class="dida">
-        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD" /><br/>
+      <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">
+        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" /><br/>
         POD</a>
       </div>
     </xsl:if>
@@ -539,9 +539,9 @@ var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
   document.write('<div class="printlink" title="Print this Page">');
   document.write('  <a href="javascript:printit()" class="dida">');
-  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page" />');
+  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
   document.write('    <br />');
-  document.write('  print</a>');
+  document.write('  PRINT</a>');
   document.write('</div>');
 }
         </script>

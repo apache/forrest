@@ -475,8 +475,8 @@ document.write("Last Published: " + document.lastModified);
     +-->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div id="content-pdf"><a href="{$filename-noext}.pdf" class="dida">
-        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
+      <div id="content-pdf" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
+        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF - icon"/><br/>
         PDF</a>
       </div>
     </xsl:if>
