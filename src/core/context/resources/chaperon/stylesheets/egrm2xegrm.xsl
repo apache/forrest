@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:text="http://chaperon.sourceforge.net/schema/text/1.0"
                 xmlns:st="http://chaperon.sourceforge.net/schema/syntaxtree/2.0"
                 xmlns="http://chaperon.sourceforge.net/schema/grammar/2.0"
                 exclude-result-prefixes="st text">
@@ -8,16 +9,13 @@
  <xsl:output indent="yes" method="xml" encoding="ASCII"/>
 
  <xsl:template match="st:output/st:grammar">
-  <grammar>
+  <grammar start="{st:start/st:name}">
 
    <xsl:if test="not (st:start)">
-    bla
     <xsl:message terminate="yes">
      Start element is not defined!
     </xsl:message>
    </xsl:if>
-
-   <xsl:attribute name="start"><xsl:value-of select="st:start/st:name"/></xsl:attribute>
 
    <xsl:comment>This file was generated! Don't edit!</xsl:comment>
 
@@ -26,9 +24,7 @@
  </xsl:template>
 
  <xsl:template match="st:definition">
-  <definition>
-   <xsl:attribute name="name"><xsl:value-of select="st:name"/></xsl:attribute>
-     
+  <definition name="{st:name}">
    <xsl:apply-templates select="st:regex"/>
   </definition>
  </xsl:template>
