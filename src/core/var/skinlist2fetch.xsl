@@ -22,50 +22,42 @@
 
    <xsl:template match="skins">
       <project default="fetchskin">
-        <xsl:choose>
-         <xsl:when test="skin[@name=$skin-name]/@url">
-             <target name="fetchskin" depends="fetch-versioned-skin, fetch-unversioned-skin, final-check"/>
-    
-             <target name="fetch-versioned-skin">
-                <echo>Trying to get "<xsl:value-of select="$skin-name" />" skin version 
-                      <xsl:value-of select="$forrest-version" />...</echo>
-                <get verbose="true" usetimestamp="true" ignoreerrors="true">
-                   <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
-                   <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
-                </get>
-                <available property="versioned-skin.present">
-                   <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
-                </available>
-             </target>
-    
-             <target name="fetch-unversioned-skin" unless="versioned-skin.present">
-                <echo>Versioned skin unavailable, trying to get versionless skin...</echo>
-                <get verbose="true" usetimestamp="true" ignoreerrors="true">
-                   <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />.zip</xsl:attribute>
-                   <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
-                </get>
-             </target>
-    
-             <target name="final-check">
-                <available property="skin.present">
-                   <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
-                </available>
-                <fail unless="skin.present">
-                  Unable to download the 
-                  "<xsl:value-of select="$skin-name" />" skin from 
-                  <xsl:value-of select="skin[@name=$skin-name]/@url" />. 
-                  In case the reason is the network connection, you can try 
-                  installing the package manually by placing the file in the 
-                  skins directory.</fail>
-                <echo>Skin "<xsl:value-of select="$skin-name" />" correctly installed.</echo>
-             </target>
-        </xsl:when>
-        <xsl:otherwise>
-            <target name="fetchskin">
-                <fail>There is no "<xsl:value-of select="$skin-name" />" skin available.</fail>
-            </target>
-        </xsl:otherwise>
-        </xsl:choose>
+      
+         <target name="fetchskin" depends="fetch-versioned-skin, fetch-unversioned-skin, final-check"/>
+
+         <target name="fetch-versioned-skin">
+            <echo>Trying to get "<xsl:value-of select="$skin-name" />" skin version 
+                  <xsl:value-of select="$forrest-version" />...</echo>
+            <get verbose="true" usetimestamp="true" ignoreerrors="true">
+               <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
+               <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+            </get>
+            <available property="versioned-skin.present">
+               <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+            </available>
+         </target>
+
+         <target name="fetch-unversioned-skin" unless="versioned-skin.present">
+            <echo>Versioned skin unavailable, trying to get versionless skin...</echo>
+            <get verbose="true" usetimestamp="true" ignoreerrors="true">
+               <xsl:attribute name="src"><xsl:value-of select="skin[@name=$skin-name]/@url" /><xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+               <xsl:attribute name="dest">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+            </get>
+         </target>
+
+         <target name="final-check">
+            <available property="skin.present">
+               <xsl:attribute name="file">${forrest.home}/context/skins/<xsl:value-of select="$skin-name" />.zip</xsl:attribute>
+            </available>
+            <fail unless="skin.present">
+              Unable to download the 
+              "<xsl:value-of select="$skin-name" />" skin from 
+              <xsl:value-of select="skin[@name=$skin-name]/@url" />. 
+              In case the reason is the network connection, you can try 
+              installing the package manually by placing the file in the 
+              skins directory.</fail>
+            <echo>Skin "<xsl:value-of select="$skin-name" />" correctly installed.</echo>
+         </target>
       </project>
    </xsl:template>
 
