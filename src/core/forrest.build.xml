@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/11/26 09:15:32 $              |
+    |             $Date: 2003/11/29 15:38:42 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -58,6 +58,7 @@ FORREST SITE BUILDER
 
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
+    <property name="forrest.skins-dir"   location="${forrest.home}/context/skins"/>   
     <property name="project.name"        value="my-project"    />
     <property name="project.build-dir"   location="${project.home}/build"    />
     <property name="project.site-dir"    location="${project.build-dir}/site"    />
@@ -515,28 +516,56 @@ Use the 'seed' target to create a template project structure.
         | discover the whole URI space.  Note: we are emulating the sitemap here;
         | please ensure they keep in synch.
         -->
-        <property name="skindir" location="${project.webapp}/skins/${project.skin}"/>
         <copy toDir="${project.site-dir}" 
           overwrite="true" failonerror="false">
-          <fileset dir="${project.webapp}/content">
-            <exclude name="xdocs/**"/>
-          </fileset>
+            <fileset dir="${content-dir}/content"> <!-- FIXME: what about raw-content-dir? -->
+              <exclude name="xdocs/**"/> <!-- FIXME: should use properties since they can be overridden in forrest.properties -->
+            </fileset>
           <fileset dir="${project.webapp}/resources" includes="images"/>
         </copy>
 
         <!-- Copy skin images -->
         <mkdir dir="${project.site-dir}/skin/images"/>
+         <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
+         <!-- Copy forrest skin images -->
         <copy toDir="${project.site-dir}/skin/images" overwrite="true"
           failonerror="false">
-          <fileset dir="${skindir}/images"/>
+           <fileset dir="${forrest.skins-dir}/common/images"/>
+           <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
         </copy>
+        <!-- Copy project skin images -->
+        <copy toDir="${project.site-dir}/skin/images" overwrite="true"
+          failonerror="false">
+          <fileset dir="${project.skins-dir}/common/images"/>
+          <fileset dir="${project.skins-dir}/${project.skin}/images"/>
+        </copy>
+ 
 
         <!-- Copy all other non-resource files -->
         <copy toDir="${project.site-dir}/skin" 
           overwrite="true"
           failonerror="false">
           <mapper type="flatten"/>
-          <fileset dir="${skindir}">
+          <fileset dir="${forrest.skins-dir}/common">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+          <fileset dir="${forrest.skins-dir}/${project.skin}">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+        </copy>
+        
+        <!-- Copy all other non-resource files from project skins-->
+        <copy toDir="${project.site-dir}/skin" 
+          overwrite="true"
+          failonerror="false">
+          <mapper type="flatten"/>
+          <fileset dir="${project.skins-dir}/common">
+            <exclude name="images/**"/>
+            <exclude name="xslt/**"/>
+          </fileset>
+          <fileset dir="${project.skins-dir}/${project.skin}">
             <exclude name="images/**"/>
             <exclude name="xslt/**"/>
           </fileset>
@@ -817,7 +846,7 @@ to validate this site.
     <condition property="project.skin.present">
       <available file="${project.skin}" type="dir">
         <filepath path="${skins-dir}"/>
-        <filepath path="${forrest.home}/context/skins"/>
+        <filepath path="${forrest.skins-dir}"/>
       </available>
     </condition>
 
@@ -896,7 +925,7 @@ to validate this site.
     <target name="available-skins"
           depends="init-props, skin-unavailable, fetch-skins-descriptor"
           description="What skins are available?">
-    <xslt in="${forrest.home}/context/skins/skins.xml" 
+    <xslt in="${forrest.skins-dir}/skins.xml" 
           out="${project.temp-dir}/skinlist2echobuild.xml"
           style="${forrest.home}/var/skinlist2echo.xsl"/>  
     <ant antfile="${project.temp-dir}/skinlist2echobuild.xml"/>
@@ -905,8 +934,8 @@ to validate this site.
   <target name="package-skin" description="Make a package of an existing skin">
     <input message="Which skin do you want to package?"
            addproperty="skin-name"/>
-    <zip destfile="${forrest.home}/context/skins/${skin-name}-${version}.zip"
-       basedir="${forrest.home}/context/skins/"
+    <zip destfile="${forrest.skins-dir}/${skin-name}-${version}.zip"
+       basedir="${forrest.skins-dir}/"
        includes="${skin-name}/**"/>
   </target>
 
@@ -926,10 +955,10 @@ to validate this site.
     <condition property="skin.unavailable">
       <and>
         <not>
-          <available type="dir" file="${forrest.home}/context/skins/${project.skin}"/>
+          <available type="dir" file="${forrest.skins-dir}/${project.skin}"/>
         </not>
         <not>
-          <available type="file" file="${forrest.home}/context/skins/${project.skin}.zip"/>
+          <available type="file" file="${forrest.skins-dir}/${project.skin}.zip"/>
         </not>
         <not>
           <available type="dir" file="${skins-dir}/${project.skin}"/>
@@ -940,13 +969,13 @@ to validate this site.
             
   <target name="unpack-skins"
           depends="init-props">
-     <unzip dest="${forrest.home}/context/skins/">
-       <fileset dir="${forrest.home}/context/skins/">
+     <unzip dest="${forrest.skins-dir}/">
+       <fileset dir="${forrest.skins-dir}/">
           <include name="*.zip"/>
         </fileset>
      </unzip>       
      <delete>
-        <fileset dir="${forrest.home}/context/skins/">
+        <fileset dir="${forrest.skins-dir}/">
           <include name="*.zip"/>
         </fileset>
      </delete>
@@ -955,14 +984,14 @@ to validate this site.
   <target name="fetch-skins-descriptor"
           if = "skin.unavailable">
       <get src="http://xml.apache.org/forrest/skins/skins.xml" 
-           dest="${forrest.home}/context/skins/skins.xml"
+           dest="${forrest.skins-dir}/skins.xml"
            verbose="true" usetimestamp="true" ignoreerrors="false"/>
   </target>  
   
   <target name="fetch-skin" 
           if = "skin.unavailable"
           depends="init-props, fetch-skins-descriptor">
-    <xslt in="${forrest.home}/context/skins/skins.xml" 
+    <xslt in="${forrest.skins-dir}/skins.xml" 
           out="${project.temp-dir}/skinlist2fetchbuild.xml"
           style="${forrest.home}/var/skinlist2fetch.xsl"
           force="true">
