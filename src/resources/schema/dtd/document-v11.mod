@@ -27,6 +27,13 @@ AUTHORS:
 FIXME:
 
 CHANGE HISTORY:
+[Version 1.?]
+  20030320 Make @href required for link elements. (SN)
+  20030320 Allow paragraphs (p|source|note|warning|fixme) inside li. (SN)
+  20030320 Allow paragraphs (p|source|note|warning|fixme) and lists (ol|ul|dl) inside dd. (SN)
+  20030320 Allow links (link|jump|fork) and inline elements (br|img|icon|acronym) inside title. (SN)
+
+
 [Version 1.0]
   20020608 Initial version. (SN)
 
