@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.6 2003/04/02 11:01:32 jefft Exp $
+$Id: tab2menu.xsl,v 1.7 2003/06/03 22:31:10 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -97,6 +97,13 @@ $Id: tab2menu.xsl,v 1.6 2003/04/02 11:01:32 jefft Exp $
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:variable name="matching-id">
+    <xsl:call-template name="matching-id">
+      <xsl:with-param name="tabfile" select="/"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+
   <!-- Called from tabs, after it has written the outer 'div class=tabs' and
   any other HTML -->
   <xsl:template name="base-tabs">
@@ -111,7 +118,10 @@ $Id: tab2menu.xsl,v 1.6 2003/04/02 11:01:32 jefft Exp $
 
   <xsl:template match="tab">
     <xsl:choose>
-      <xsl:when test="@dir = $longest-dir or @href = $longest-dir">
+      <xsl:when test="@id and @id = $matching-id">
+        <xsl:call-template name="selected"/>
+	  </xsl:when>
+      <xsl:when test="not(@id) and @dir = $longest-dir or @href = $longest-dir">
         <xsl:call-template name="selected"/>
       </xsl:when>
       <xsl:otherwise>

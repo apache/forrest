@@ -7,6 +7,9 @@ tab2menu.xsl
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="site-file" select="'cocoon://abs-linkmap'"/>
+  <xsl:variable name="site" select="document($site-file)"/>
+ 
   <!-- Given the current path and a tabs.xml entry, returns a relative path to
   the specified tab's URL.  When rendering a set of tabs, this template will be
   called once per tab.
@@ -47,7 +50,14 @@ tab2menu.xsl
     </xsl:if>
   </xsl:template>
 
-
+  <!--
+    The id of any tab, whose path is a subset of the current URL.  Ie,
+    the path of the 'current' tab.
+  -->
+  <xsl:template name="matching-id" xmlns:l="http://apache.org/forrest/linkmap/1.0">
+    <xsl:value-of select="$site//*[starts-with(@href, $path)]/@tab"/>
+  </xsl:template>
+ 
   <!--
     The longest path of any tab, whose path is a subset of the current URL.  Ie,
     the path of the 'current' tab.
