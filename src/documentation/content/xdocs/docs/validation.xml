@@ -191,9 +191,9 @@ COPYRIGHT:
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-                                                                                                    
+
       http://www.apache.org/licenses/LICENSE-2.0
-                                                                                                    
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -282,13 +282,13 @@ size CDATA #IMPLIED&gt;
           is:
         </p>
         <source>&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
-          "download-v11.dtd"&gt;
+          "download-v10.dtd"&gt;
         </source>
         <p>
           We only care about the quoted section after <code>PUBLIC</code>, called
           the "public identifier", which globally identifies our document type.
           We cannot rely on the subsequent "system identifier" part
-          ("download-v11.dtd"), because as a relative reference it is liable to
+          ("download-v10.dtd"), because as a relative reference it is liable to
           break.  The solution Forrest uses is to ignore the system id, and rely
           on a mapping from the public ID to a stable DTD location, via a
           Catalog file.</p>
@@ -305,8 +305,7 @@ size CDATA #IMPLIED&gt;
           own catalog file located in
           <code>${project.schema-dir}/catalog.xcat</code>.
           Use the "project.catalog" property in <code>forrest.properties</code>
-          if you need a different pathname. Remember to raise the "verbosity"
-          level if you suspect problems with your catalog.
+          if you need a different pathname.
         </p>
         <p>
           Forrest uses the XML Catalog syntax by default, although the SGML
@@ -317,7 +316,7 @@ size CDATA #IMPLIED&gt;
 <!-- OASIS XML Catalog for Forrest -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   <public publicId="-//Acme//DTD Download Documentation V1.0//EN"
-    uri="dtd/download.dtd"/>
+    uri="dtd/download-v10.dtd"/>
 </catalog>]]></source>
         <p>
           The format is described in <link href="ext:catalog_spec">the
@@ -326,12 +325,20 @@ size CDATA #IMPLIED&gt;
           a public identifier to a DTD (relative to the catalog file).
         </p>
         <p>
-          We now have a custom DTD and a catalog mapping which lets Forrest
+          Next specify the full path to your <code>catalog.xcat</code> in the
+          <code>src/documentation/classes/CatalogManager.properties</code> file.
+          Cocoon needs this file when it starts to run. A template file is
+          provided in the "fresh-site" when you do the
+          '<code>forrest seed</code>' to commence a new project.
+        </p>
+        <p>
+          We now have a custom DTD and a catalog mapping which lets both
+          Forrest and Cocoon
           locate the DTD.  Now if we were to run <code>'forrest validate'</code>
           our download file would validate along with all the others.  If
           something goes wrong, try running <code>'forrest -v validate'</code> to
           see the error in more detail. Remember to raise the "verbosity"
-          level in <code>forrest.properties</code> if you suspect problems
+          level in <code>cocoon.xconf</code> if you suspect problems
           with your catalog.
         </p>
       </section>
