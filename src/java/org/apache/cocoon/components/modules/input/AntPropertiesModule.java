@@ -121,7 +121,7 @@ implements InputModule, Serviceable, Configurable, ThreadSafe {
              
             while((currentLine = in.readLine()) != null) {
                 // # == comment
-                if(!currentLine.startsWith("#")){ 
+                if(!currentLine.startsWith("#")&&!(currentLine.trim().length()==0)){ 
                     splitIndex =  currentLine.indexOf('='); 
                     name = currentLine.substring(0, splitIndex).trim();
                     //if the property is already there don't overwrite, as in Ant
@@ -135,6 +135,7 @@ implements InputModule, Serviceable, Configurable, ThreadSafe {
                             String valueToReplaceWith = (String) m_properties.get(currentName);
                             value = StringUtils.replace(value, valueToSearchFor, valueToReplaceWith);
                         }
+                        m_properties.put(name,value);
                     }    
                 }    
             }
