@@ -13,22 +13,6 @@
       <format property="YEAR" pattern="yyyy" locale="en"/>
     </tstamp>
 
-    <buildnumber file="etc/build.number"/>
-    <echo>
-      --------------------------------------------------------------
-
-      Using ${ant.version}
-      Build file ${ant.file}
-      Use 'build.[sh|bat] -projecthelp' to see other options.
-      Build system home ${ant.home}
-      Build number ${build.number}
-      Project Name ${ant.project.name}
-      Java Version ${ant.java.version}      
-      Timestamp ${DSTAMP}${TSTAMP}
-
-      --------------------------------------------------------------
-    </echo>
-
     <xmlproperty file="module.xml"     prefix="xgump"    keeproot="true"  collapseAttributes="true" />
     <xmlproperty file="status.xml"     prefix="xstatus"  keeproot="false" collapseAttributes="true" />   
     <xmlproperty file="properties.xml"                   keeproot="false" collapseAttributes="true" />
@@ -49,6 +33,23 @@
     <property name="tools.dir"             location="tools"/>
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"         property="tools.jar.present"/>
+
+    <buildnumber file="etc/build.number"/>
+    <echo>
+      --------------------------------------------------------------
+
+      Using ${ant.version}
+      Build file ${ant.file}
+      Use 'build.[sh|bat] -projecthelp' to see other options.
+      Build system home ${ant.home}
+      Build number ${build.number}
+      Project Name ${ant.project.name}
+      Java Version ${ant.java.version}      
+      Timestamp ${DSTAMP}${TSTAMP}
+      This is: ${name} ${version}
+
+      --------------------------------------------------------------
+    </echo>
     
     <mkdir dir="${build.dir}"/>
     
