@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/11/13 08:23:48 $              |
+    |             $Date: 2003/11/25 16:12:24 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -311,20 +311,12 @@ FORREST SITE BUILDER
         <exclude name="skins/**" />
         <exclude name="WEB-INF/*.xconf" />
       </fileset>
-      <fileset dir="${forrest.home}/context" >
-        <include name="skins/${project.skin}/images/**" />
-        <include name="skins/common/images/**" />
-      </fileset>
     </copy>
 
     <copy todir="${project.webapp}/" filtering="true" overwrite="true">
-    <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
         <include name="*.xmap" />
-        <include name="skins/${project.skin}/**" />
-        <include name="skins/common/**" />
         <include name="WEB-INF/*.xconf" />
-        <exclude name="skins/**/images/**" />
       </fileset>
     </copy>
 
@@ -347,7 +339,7 @@ FORREST SITE BUILDER
   <target name="project-context" depends="examine-proj, ensure-content,
     validate, init, bare-context, copy-sitemap, copy-conf,
     copy-stylesheets, copy-images, copy-grammars, copy-resources, copy-lib, 
-    copy-classes, copy-skins, copy-skinconf, copy-status, copy-translations"/>
+    copy-classes, copy-skinconf, copy-status, copy-translations"/>
 
   <target name="copy-conf" if="conf.present">
     <copy toDir="${project.webapp}/WEB-INF" filtering="true"
@@ -423,19 +415,6 @@ FORREST SITE BUILDER
     <copy toDir="${project.webapp}/WEB-INF/classes" 
       overwrite="true" failonerror="false">
       <fileset dir="${classes-dir}"/>
-    </copy>
-  </target>
-
-  <target name="copy-skins" if="skins.present">
-    <copy toDir="${project.webapp}/skins" overwrite="true" failonerror="false">
-       <fileset dir="${skins-dir}" >
-        <include name="**/images/**" />
-      </fileset>
-    </copy>
-    <copy toDir="${project.webapp}/skins" filtering="true" overwrite="true" failonerror="false">
-      <fileset dir="${skins-dir}" >
-        <exclude name="**/images/**" />
-      </fileset>
     </copy>
   </target>
 
