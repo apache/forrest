@@ -21,9 +21,13 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   
   <xsl:template match="/">
-    <forrest:property body="{forrest:contract/forrest:template/@body}" 
-      head="{forrest:contract/forrest:template/@head}" 
-      name="{forrest:contract/forrest:template/@name}"/>
+    <xsl:apply-templates select="//forrest:template"/>
   </xsl:template>
-  
+
+	<xsl:template match="forrest:template">
+    <forrest:property body="{@body}" 
+      head="{@head}"
+      css="{@css}"
+      name="{@name}"/>
+	</xsl:template>
 </xsl:stylesheet>

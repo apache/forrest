@@ -20,17 +20,26 @@
   <description>
     This function lets you change the size of the font you are using in the site with a jscript.
   </description>
-  
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="fontsize" inputFormat="xsl" body="true" head="true">
+  format="xhtml" name="fontsize" inputFormat="xsl" body="true" head="true" css="true">
 	 	<xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			  <xsl:template name="fontsize-head">
 		      <script type="text/javascript" language="javascript" 
-			        src="${root}skin/fontsize.js"></script>
+			        src="{$root}skin/fontsize.js">&#160;</script>
 			  </xsl:template>
 			  
+        <xsl:template name="fontsize-css">
+.branding-trail {
+  position: relative; /* IE bugfix cont'd */
+  font-size: 70%;
+  text-align: right;
+  float: right;
+  margin: -10px 5px 0px 5px;
+  padding: 0;
+}</xsl:template>
+        
 			  <xsl:template name="fontsize-body">
 			      <script type="text/javascript">ndeSetTextSize();</script>
 			      <div class="branding-trail">

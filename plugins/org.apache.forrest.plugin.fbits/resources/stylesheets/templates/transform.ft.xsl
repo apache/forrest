@@ -26,11 +26,16 @@
   >
   
   <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
-  <!--FIXME Need to make sure all variables are matched!!!-->
+  <!--FIXME 
+    - Need to make sure all variables are matched!!!
+    - Make sure that this variables get dynamically-->
  	<xsl:param name="config-file"/>
   <xsl:param name="path"/>
   <xsl:param name="request"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
+  <xsl:variable name="filename-noext">toBeImplemended</xsl:variable>
+  <xsl:variable name="skin-img-dir">skin/images</xsl:variable>
+  <xsl:variable name="root"></xsl:variable>
 
 	<xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
   <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>
@@ -39,6 +44,16 @@
     <xhtml>
       <head>
     		<xsl:call-template name="getHead"/>
+<!--FIXME:
+  Need to discuss how to insert default values-->
+         <style type="text/css">
+body {background-color: yellow}
+h1 {font-size: 36pt}
+h2 {color: blue}
+p {margin-left: 50px}
+<xsl:call-template name="getCss"/>
+</style>
+
       </head>
       <body onload="init()">
         <xsl:call-template name="getBody"/>

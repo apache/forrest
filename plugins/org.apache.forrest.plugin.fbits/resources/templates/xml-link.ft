@@ -23,12 +23,35 @@
     
     <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="xml-link" inputFormat="xsl" body="true" head="false">
+  format="xhtml" name="xml-link" inputFormat="xsl" body="true" css="true">
       <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-			  
+			  <xsl:template name="xml-link-css">
+.xml-link {
+    position: relative; /* IE bugfix cont'd */
+    float: right;
+    margin: 0px 5px;
+    padding: 0;
+}
+.xml-link br {
+    margin-top: -10px;
+    padding-left: 1px;
+}
+.xml-link a {
+    display: block;
+    font-size: 70%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.xml-link img {
+    display: block;
+    height: 16px;
+    width: 16px;
+}</xsl:template>
 			  <xsl:template name="xml-link-body">
-				    <div class="xml" title="raw XML"><a href="${filename-noext}.xml" class="dida">
-				      <img class="skin" src="${skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
+				    <div class="xml-link" title="raw XML"><a href="{$filename-noext}.xml" class="dida">
+				      <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
 				      XML</a>
 				    </div>
 			  </xsl:template>

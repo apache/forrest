@@ -32,7 +32,13 @@
 		      <alias:call-template name="{@name}-head" />
 			  </xsl:for-each>
 		   </alias:template>
-		   
+	    <xsl:comment>All xhtml css elements requested by the forrest:template</xsl:comment>
+			<alias:template name="getCss">
+			  <xsl:for-each select="/*/forrest:properties/*[@css='true']">
+		      <alias:call-template name="{@name}-css" />
+			  </xsl:for-each>
+		   </alias:template>
+		   	   
       <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
 			<alias:template name="getBody">
           <xsl:apply-templates select="/*/forrest:view"/>

@@ -21,23 +21,27 @@
   <description>
     This function will output the html feedback information.
   </description>
-  
+
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="feedback" inputFormat="xsl" body="true" head="false">
-      
-      <!--Looking for: -->
-      <!-- The optional feedback element will be used to construct a
-    feedback link in the footer with the page pathname appended:
-    <a href="@href">{@to}</a>
-    -->
-<!--  <feedback to="webmaster@foo.com"
-    href="mailto:webmaster@foo.com?subject=Feedback&#160;" >
-    Send feedback about the website to:
-  </feedback>-->
+  format="xhtml" name="feedback" inputFormat="xsl" body="true" head="false" css="true">
+
       <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        
+        <xsl:template name="feedback-css">
+#feedback {
+    color: black;
+    background: #CFDCED;
+    text-align:center;
+    margin-top: 5px;
+}
+#feedback #feedbackto {
+    font-size: 90%;
+    color: black;
+}</xsl:template>
+        
 	    <xsl:template name="feedback-body">
 		    <div id="feedback">
 		      <xsl:value-of select="$config/feedback"/>

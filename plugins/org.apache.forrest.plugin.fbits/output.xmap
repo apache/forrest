@@ -51,10 +51,25 @@
 	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
 	      <encoding>UTF-8</encoding>
 	    </map:serializer>
+      <map:serializer name="txt" 
+			   src="org.apache.cocoon.serialization.TextSerializer"
+			   mime-type="text/plain" 
+			   logger="sitemap.serializer.text" 
+			 />
     </map:serializers>
   </map:components>
 
-<map:pipelines>
+	<map:pipelines>
+    <map:pipeline>
+
+  <!-- FIXME: add your plugin matches here -->
+    <map:match pattern="test">
+      <map:generate src="foo.xml"/>
+      <map:transform src="resources/stylesheets/templates/java.xsl" />
+      <map:serialize type="html"/>
+    </map:match>
+  </map:pipeline>
+  
 <!--Get the xsl:templates of the requested contract 
   -->
  <map:pipeline>
@@ -77,11 +92,21 @@
    </map:match>
   </map:pipeline>
 
+<!--<!-#-Get the forrest:css of the requested contract 
+  -#->
+	<map:pipeline>
+   <map:match pattern="get.css-meta.*">
+     <map:generate src="resources/templates/{1}.ft"/>
+     <map:transform src="resources/stylesheets/templates/contract.css.xsl"/>
+     <map:serialize type="xml"/>
+   </map:match>
+  </map:pipeline>-->
+
   <map:pipeline>
     <map:match pattern="prepare.view.*">
       <map:select type="exists">
         <!--here we will have to test, whether the requested page needs a specific view.
-          This will be assumed as soon there is a .ft 
+          This will be assumed as soon there is a .fv
           e.g. index.xml + index.fv-->
         <map:when test="{project:content.xdocs}{1}.fv">
           <map:generate src="{project:content.xdocs}{1}.fv"/>
@@ -115,7 +140,7 @@
      	<map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-<!--Aggregate the forrest:properties requested by the main.ft-->
+<!--Aggregate the forrest:properties requested by the *.fv-->
   <map:pipeline>
     <map:match pattern="prepare.meta.*">
       <map:generate src="cocoon:/prepare.view.{1}"/>
@@ -124,7 +149,15 @@
      	<map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-  
+<!--<!-#-Aggregate the forrest:css requested by the *.fv-#->
+  <map:pipeline>
+    <map:match pattern="prepare.css.*">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/templates/prepare.css.xsl"/>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>-->  
  <!--Aggregate all contracts-templates requested by the view
   getHead - will parse the xhtml head output
   getBody - will parse the xhtml body output 
@@ -139,7 +172,7 @@
      	<map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-  <!--Outputs xhtml of the main.ft-->
+  <!--Outputs xhtml of the *.fv-->
   <map:pipeline>
     <map:match pattern="transform.*">
       <map:aggregate element="forrest:filter">
@@ -155,6 +188,22 @@
     </map:match>
     
   </map:pipeline>
+  <!--Outputs xhtml of the *.fv-->
+<!--  <map:pipeline>
+    <map:match pattern="css.*">
+      <map:aggregate element="forrest:filter">
+        <map:part src="cocoon:/prepare.view.{1}" />
+        <map:part src="cocoon:/prepare.meta.{1}" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/templates/transform.ft.css.xsl" >
+        <map:parameter name="path" value="{path}"/>
+        <map:parameter name="request" value="{1}"/>
+        <map:parameter name="config-file" value="{project:skinconf}"/>
+      </map:transform>
+     	<map:serialize type="txt"/>
+    </map:match>
+    
+  </map:pipeline>-->
  <!-- 
   <!-#-Old stuff-#->
 <!-#-
