@@ -24,8 +24,9 @@
   <body>
     <warning>This documentation applies to the forrestbot in CVS, not the
     forrestbot included with Forrest 0.5.1 or any previous release.
-    Documentation for that forrestbot is <link href="site:forrestbot-old">here</link>.
-    This page is incomplete and may have errors.</warning>
+    Documentation for that forrestbot is <link
+    href="site:forrestbot-old">here</link>. This page is incomplete and may have
+    errors.</warning>
 
     <section>
       <title>Using Forrestbot</title>
@@ -42,26 +43,26 @@
 
       <p>A sample buildfile:</p>
 
-      <source>&#60;project name=&#34;myproject&#34;&#62;
-	&#60;property name=&#34;notify.email.host&#34; value=&#34;smtp.myhost.com&#34;/&#62;
-	&#60;property name=&#34;notify.email.to&#34; value=&#34;me@domain.com&#34;/&#62;
-	&#60;property name=&#34;notify.administrator&#34; value=&#34;Your Name &#38;lt;me@domain.com&#62;&#34;/&#62;
-	&#60;property name=&#34;getsrc.cvs.user&#34; value=&#34;anoncvs&#34;/&#62;
-	&#60;property name=&#34;getsrc.cvs.password&#34; value=&#34;anoncvs&#34;/&#62;
-	&#60;property name=&#34;getsrc.cvs.root&#34; value=&#34;/home/cvspublic&#34;/&#62;
-	&#60;property name=&#34;getsrc.cvs.host&#34; value=&#34;cvs.myhost.com&#34;/&#62;
-	&#60;property name=&#34;getsrc.cvs.module&#34; value=&#34;myproject&#34;/&#62;
+      <source>&lt;project name="mysampleproject"&gt;
+	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
+	&lt;property name="notify.email.to" value="me@domain.com"/&gt;
+	&lt;property name="notify.administrator" value="Your Name &amp;lt;me@domain.com&gt;"/&gt;
+	&lt;property name="getsrc.cvs.user" value="anoncvs"/&gt;
+	&lt;property name="getsrc.cvs.password" value="anoncvs"/&gt;
+	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
+	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
+	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
 
-	&#60;target name=&#34;notify&#34; depends=&#34;notify.local, notify.email&#34;/&#62;
-	&#60;import file=&#34;${env.FORREST_HOME}/../../../scratchpad/forrestbot2/core/forrestbot.xml&#34;/&#62;
-&#60;/project&#62;
+	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
+	&lt;import file="${env.FORREST_HOME}/../../../scratchpad/forrestbot2/core/forrestbot.xml"/&gt;
+&lt;/project&gt;
 
 </source>
 
       <p>First, set properties needed by the workstages you are going to use.
       Here, we set properties that will be used by notify.email and getsrc.cvs.
       Next, specify what implementations will be used by each workstage. By
-      default, &#39;local&#39; will be used.</p>
+      default, 'local' will be used.</p>
 
       <table>
         <tr>
@@ -73,42 +74,81 @@
         <tr>
           <td>getsrc</td>
 
-          <td><ul><li><link href="#getsrc.local">local</link></li><li><link
-          href="#getsrc.cvs">cvs</link></li></ul></td>
+          <td><ul>
+              <li><link href="#getsrc.local">local</link></li>
+
+              <li><link href="#getsrc.cvs">cvs</link></li>
+
+              <li><link href="#getsrc.svn">svn</link></li>
+            </ul></td>
         </tr>
 
         <tr>
           <td>build</td>
 
-          <td><ul><li><link href="#build.forrest">forrest</link></li></ul></td>
+          <td><ul>
+              <li><link href="#build.forrest">forrest</link></li>
+            </ul></td>
         </tr>
 
         <tr>
           <td>deploy</td>
 
-          <td><ul><li><link href="#getsrc.local">local</link></li></ul></td>
+          <td><ul>
+              <li><link href="#getsrc.local">local</link></li>
+            </ul></td>
         </tr>
 
         <tr>
           <td><link href="#notify">notify</link></td>
 
-          <td><ul><li><link href="#notify.local">local</link></li><li><link
-          href="#notify.email">email</link></li></ul></td>
+          <td><ul>
+              <li><link href="#notify.local">local</link></li>
+
+              <li><link href="#notify.email">email</link></li>
+            </ul></td>
         </tr>
       </table>
 
       <p>If you want to do more advanced processing for your project, you can
-      override the &#39;main&#39; target, which by default is <code>&#60;target
-      name=&#34;main&#34; depends=&#34;getsrc, build, deploy, notify&#34;/&#62;</code>,
-      create your own implementation of a workstage, or use any other ant tasks
-      to do additional work.</p>
+      override the 'main' target, which by default is <code>&lt;target
+      name="main" depends="getsrc, build, deploy, notify"/&gt;</code>, create
+      your own implementation of a workstage, or use any other ant tasks to do
+      additional work.</p>
 
       <section>
-        <title>Workstages</title>
+        <title>Workstage Properties</title>
 
         <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
+
+        <section>
+          <title>Misc Properties</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>ant.project.name (you specify this by &lt;project
+              name="____"&gt; in your buildfile)</td>
+
+              <td>This must be unique for each project.</td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+          </table>
+        </section>
 
         <section id="getsrc.local">
           <title>getsrc.local</title>
@@ -127,7 +167,7 @@
             <tr>
               <td>getsrc.local.root-dir</td>
 
-              <td>Absolute path to the project&#39;s root directory on the local
+              <td>Absolute path to the project's root directory on the local
               computer</td>
 
               <td></td>
@@ -208,6 +248,43 @@
               <td>CVS tag or branch name</td>
 
               <td></td>
+
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
+
+        <section id="getsrc.svn">
+          <title>getsrc.svn</title>
+
+          <table>
+            <tr>
+              <th>Property</th>
+
+              <th>Description</th>
+
+              <th>Default Value</th>
+
+              <th>Required?</th>
+            </tr>
+
+            <tr>
+              <td>getsrc.svn.url</td>
+
+              <td>full repository URL for project (this directory must contain
+              forrest.properties) </td>
+
+              <td></td>
+
+              <td>Yes</td>
+            </tr>
+
+            <tr>
+              <td>getsrc.svn.revision</td>
+
+              <td>Revision number to fetch</td>
+
+              <td>HEAD</td>
 
               <td>No</td>
             </tr>
@@ -382,12 +459,18 @@
     <section>
       <title>Forrestbot design</title>
 
-      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6&#39;s
-      import task is used to import multiple buildfiles into a single build. The
+      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
+      task is used to import multiple buildfiles into a single build. The
       following is the flow of control when running forrestbot:</p>
 
       <ul>
-        <li>Your buildfile<ul><li>forrestbot.xml<ul><li>workstage buildfiles</li><li>forrest.build.xml</li></ul></li></ul></li>
+        <li>Your buildfile<ul>
+            <li>forrestbot.xml<ul>
+                <li>workstage buildfiles</li>
+
+                <li>forrest.build.xml</li>
+              </ul></li>
+          </ul></li>
       </ul>
 
       <p>The workstage buildfiles set up the properties and files so that the
