@@ -19,7 +19,7 @@
 
   <target name="validate" depends="validation-props, validate-xdocs,
     validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
-    validate-stylesheets"  description="Conduct various validations: xdocs, skins, sitemap"/>
+    validate-stylesheets"  description="Validate all: xdocs, skins, sitemap, etc"/>
     
   <target name="validation-props" depends="examine-proj">
     <!-- Validation flags -->
@@ -150,7 +150,7 @@ to validate this site.
   </target>
 
   <target name="validate-skinconf" depends="validation-props"
-          if="validate.skinconf">
+          if="validate.skinconf" description="Validate skinconf">
     <xmlvalidate failonerror="${forrest.validate.skinconf.failonerror}" 
                  lenient="no" warn="yes">
       <xmlcatalog refid="fcatalog" />
@@ -190,7 +190,7 @@ to validate this site.
   </target>
 
   <target name="validate-stylesheets" depends="validation-props"
-    if="validate.stylesheets">
+    if="validate.stylesheets" description="Validate XSL files">
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/xslt.rng">
       <fileset dir="${stylesheets-dir}"
         includes="${forrest.validate.stylesheets.includes}"
@@ -199,7 +199,7 @@ to validate this site.
     <echo message="...validated stylesheets"/>
   </target>
 
-  <target name="validate-skins" depends="validate-skins-stylesheets"/>
+  <target name="validate-skins" depends="validate-skins-stylesheets" description="Validate skins"/>
 
   <target name="validate-skins-stylesheets" depends="validation-props"
     if="validate.skins.stylesheets">
@@ -212,7 +212,7 @@ to validate this site.
   </target>
 
   <!-- Check that ${project.skin} points to an existing skin. -->
-  <target name="validate-skinchoice">
+  <target name="validate-skinchoice" depends="validation-props" description="Validate skin choice">
     <condition property="project.skin.present">
       <available file="${project.skin}" type="dir">
         <filepath path="${skins-dir}"/>

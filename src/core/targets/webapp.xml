@@ -36,9 +36,7 @@
   
 <target name="webapp-local" depends="init, validate, project.webapp.defined, ensure-content, prepare-context,
          load-project-props"
-   description="Generates a dynamic servlet-based website (an unpackaged webapp).
-   Note this webapp is suitable for local execution only, use the 'webapp'
-   target if you wish to deploy remotely.">
+   description="Generates a dynamic servlet-based website (an unpackaged webapp).  Note this webapp is suitable for local execution only, use the 'war' or 'webapp' target if you wish to deploy remotely.">
     <!-- this will need revisions in the case of the siteplan
     extra project-custom classes then will need to be warred in as well. -->
 <!--  should be already there
@@ -154,7 +152,7 @@
        param: location to put generated war ${project.war}
        =============================================================== -->
  <target name="war" depends="webapp"
-   description="Generates a dynamic servlet-based website (an packaged .war file)">
+   description=">> Generates a dynamic servlet-based website (a packaged .war file)">
 
    <jar destfile="${project.war}" basedir="${project.webapp}"/>
    <echo>
