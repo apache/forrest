@@ -6,14 +6,31 @@
 
  <xsl:import href="copyover.xsl"/>
 
-  <xsl:template match="howto">
+  <xsl:template match="all">
    <document>
-     <xsl:copy-of select="header"/>
-     <body><xsl:apply-templates select="*[not(name()='header')]"/></body>
+    <xsl:copy-of select="howto/header"/>
+     <body>
+        <xsl:apply-templates select="howto"/>
+     	<xsl:apply-templates select="revisions"/>
+	</body>
+  
    </document>
   </xsl:template>
   
-  <xsl:template match="overview | purpose | prerequisites | audience | steps | extension | tips | references">
+  <xsl:template match="howto">
+    <xsl:if test="normalize-space(header/abstract)!=''">
+      <xsl:apply-templates select="header/abstract"/>
+    </xsl:if>
+     <xsl:apply-templates select="*[not(name()='header')]"/>
+  </xsl:template>
+  
+  <xsl:template match="howto/header/abstract">
+    <section title="Overview" >
+      <xsl:apply-templates/>
+    </section>
+  </xsl:template>
+  
+  <xsl:template match="purpose | prerequisites | audience | steps | extension  | faqs | tips | references | feedback ">
     <section>
       <xsl:choose>
         <xsl:when test="normalize-space(@title)!=''">
@@ -23,8 +40,35 @@
           <xsl:attribute name="title"><xsl:value-of select="name()"/></xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates/>
+     <xsl:apply-templates/>
     </section>
+  </xsl:template>
+  
+  <xsl:template match="faq">
+    <section title="{question}" >
+      <xsl:apply-templates select="answer" />
+    </section>
+  </xsl:template>
+  
+   <xsl:template match="answer">
+      <xsl:copy-of select="."/>
+    </xsl:template>
+    
+   <xsl:template match="question">
+    </xsl:template>
+  
+  <xsl:template match="revisions">
+    <section title="Revisions" >
+    <p>Find a problem with this document? Consider contacting the author or submitting your own revision. For instructions, read the How To Submit a Revision.</p>
+      <ul>
+       <xsl:apply-templates select="revision"/>
+      </ul>
+    </section>
+  </xsl:template>
+  
+  <xsl:template match="revision">
+  <xsl:variable name="href"><xsl:value-of select="concat(substring-before(@name,'.xml'),'.html')" /></xsl:variable>
+   <li>Revision, <a href="{ $href}"><xsl:value-of select="@date"/></a></li>
   </xsl:template>
   
 </xsl:stylesheet>

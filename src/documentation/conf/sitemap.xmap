@@ -8,6 +8,7 @@
 
   <map:generators default="file">
    <map:generator  name="file"        src="org.apache.cocoon.generation.FileGenerator" label="content"/>
+   <map:generator  name="directory"        src="org.apache.cocoon.generation.DirectoryGenerator" label="content"/>
    <!-- FIXME: Change this once better view handling is implemented -->
    <map:generator  name="file-nolabel" src="org.apache.cocoon.generation.FileGenerator"/>
   </map:generators>
@@ -156,12 +157,42 @@
      </map:call>    
    </map:match>
 
-   <map:match pattern="body-**howto**.xml">
-     <map:generate type="file-nolabel" src="content/xdocs/{1}howto{2}.xml"/>
-     <map:transform src="library/xslt/howto2document.xsl" label="content"/>
+   <!-- index pages for contribution categories -->
+   <map:match pattern="body-community/*/index.xml">
+     <map:generate src="content/xdocs/community/{1}/index.xml"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
+   </map:match>
+
+   <!-- no special transformation, yet, for revision pages -->
+   <map:match pattern="body-community**revision-*.xml">
+     <map:generate src="content/xdocs/community{1}revision-{2}.xml"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
+   </map:match>
+
+   <!-- all contribution docs -->
+   <map:match pattern="body-community/*/*/**.xml">
+  	 <map:aggregate element="all" >
+       <map:part src="content/xdocs/community/{1}/{2}/{3}.xml"/>
+       <map:part src="cocoon:/revisions-community/{1}/{2}/{3}" />
+     </map:aggregate>
+     <map:transform src="library/xslt/{1}2document.xsl" label="content"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="document2html"/>
      </map:call>
+   </map:match>
+
+   <!-- revisions only implemented for community pages -->
+  <map:match pattern="revisions-community/*/*/**">
+   	 <map:generate type="directory" src="content/xdocs/community/{1}/{2}"  />
+     <map:transform src="library/xslt/directory2revisions.xsl" label="content" >
+   		 <map:parameter name="use-request-parameters" value="true"/>
+   		 <map:parameter name="page" value="{3}"/>
+     </map:transform> 
+	 <map:serialize type="xml" />
    </map:match>
 
    <!-- Generate the "doclist" - list of all documentation
@@ -263,6 +294,11 @@
       <map:parameter name="path" value="images/{2}.{3}"/>
       <map:parameter name="mime-type" value="image/{3}"/>
     </map:call>                                 
+   </map:match>
+
+   <!-- DS: handles images local to a contributor directory -->
+   <map:match pattern="**my-images/**.*">
+    <map:read src="content/xdocs/{1}my-images/{2}.{3}" mime-type="image/{3}"/>
    </map:match>
       
    <map:match pattern="images/**.*">
