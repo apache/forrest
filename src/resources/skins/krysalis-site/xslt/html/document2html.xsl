@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.10 2003/02/28 05:53:57 jefft Exp $
+$Id: document2html.xsl,v 1.11 2003/05/22 00:12:38 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -157,7 +157,7 @@ $Id: document2html.xsl,v 1.10 2003/02/28 05:53:57 jefft Exp $
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
-        <h4><xsl:value-of select="title"/></h4>
+        <h4 class="faq"><xsl:value-of select="title"/></h4>
         <div align="right"><a href="#{@id}-menu">^</a></div>
         <div style="margin-left: 15px">
           <xsl:apply-templates select="*[not(self::title)]"/>
