@@ -23,6 +23,7 @@
                    run the build script (build.bat or build.sh)
 </description>
 
+
   <path id="classpath">
     <fileset dir="./lib/endorsed">
       <include name="*.jar"/>
@@ -39,7 +40,6 @@
   <!-- =================================================================== -->
   <!-- Targets for this project                                            -->
   <!-- =================================================================== -->
-
   <target name="init" depends="-init">
     <property name="name"                  value="${xgump.module.project.name}"/>
     <property name="packages"              value="${xgump.module.project.packages}"/>
@@ -61,36 +61,6 @@
   </target>
 
 
-
-  <target name="run" depends="init">
-
-    <antcall target="runforrestrun">
-      <param name="getcvsmodule.package"      value="jakarta-poi"/>
-      <param name="getcvsmodule.work.dir"     value="${build.dir}/work/forrest/cvsmodule" />
-      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>
-      <param name="deploy.username"           value="forrestbot"/>
-      <param name="deploy.package-name"       value="jakarta-poi"/>
-      <param name="deploy.data.dir"           value="${build.dir}/docs"/>
-      <param name="deploy.hostname"           value="krysalis.sourceforge.net"/>
-      <param name="deploy.remotedir"          value="/home/groups/k/kr/krysalis/htdocs/poi"/>
-    </antcall>
-
-  </target>
-
-  <target name="runforrestrun" depends="getcvsmodule, prepare-docs, owdocs, deploy"/>
-
-  <target name="updateforrestsite" depends="init, docs, deployforrestsite, sendlog"/>
-
-  <target name="deployforrestsite" depends="init, docs">
-    <antcall target="deploy">
-      <param name="deploy.username"     value="forrestbot"/>
-      <param name="deploy.package-name" value="xml-forrest"/>
-      <param name="deploy.data.dir"     value="${build.dir}/docs"/>
-      <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
-      <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/forrest"/>
-    </antcall>
-  </target>
-
   <!-- =================================================================== -->
   <!-- Interactive build                                                   -->
   <!-- =================================================================== -->
@@ -98,7 +68,7 @@
     <echo>
     --------------------------------------------------------------
 
-          ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
+     ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
 
     --------------------------------------------------------------
      Using ${ant.version}
@@ -110,11 +80,24 @@
 
      forrest-typical targets:
 
-     docs ------------- generates static Forrest website
+     dist ------------- build all incarnation distributions:
+     dist-shbat ------- build the forrest.sh/bat incarnation (requires ant to *run*)
+
+     futrure targets:
+
+     dist-cent      ??? ??? future target making centipede-cent
+     dist-maven     ??? ??? future target making maven plugin
+     dist-jar       ??? ??? future target making jar that has both main as ant-task wrapper classes
+
+
+     forrest-test targets:
+
+     docs ------------- generates static Forrest website for itself as the project to run on.
      webapp ----------- builds webapp (.war) deployable version of Forrest website
      bot.run ---------- runs the forrestbot using the configuration specified in
                         forrestbot.conf.xml
 
+     
      default centipede targets:
 
      compile ---------- compiles the source code
@@ -146,7 +129,6 @@
   <!-- ================================== -->
   <!--              Compile               -->
   <!-- ================================== -->
-
   <target  name="compile"   depends="-init"
            description="Compile java source code">
 
@@ -157,13 +139,12 @@
 
   </target>
 
+
   <!-- ================================== -->
   <!--              jar                   -->
   <!-- ================================== -->
-
   <target  name="jar"   depends="-init"
            description="Make jars">
-
     <antcall target="call-cent">
       <param name="cent-name"   value="centipede"/>
       <param name="cent-target" value="package"/>
@@ -171,153 +152,15 @@
 
   </target>
 
-  <!-- ================================== -->
-  <!--              Scratchpad               -->
-  <!-- ================================== -->
 
+  <!-- ================================== -->
+  <!--           Scratchpad               -->
+  <!-- ================================== -->
   <target  name="scratchpad"   depends="-init"
            description="Execute scratchpad targets">
-
     <ant antfile="${xlayout.source.scratchpad.targets.dir}/scratchpad.xml"/>
-
   </target>
 
-  <!-- ================== -->
-  <!-- Prepares the docs  -->
-  <!-- ================== -->
-  <target name="prepare-docs" depends="init, compile">
-
-    <property name="centipede.tools.cents.forrest.loglevel" value="ERROR"/>
-    <property name="use.skin" value="forrest-site"/>
-
-    <property name="documentation.context.dir"  value="${resource.dir}"/>
-    <property name="documentation.source.dir"   value="${context.dir}"/>
-
-    <echo>Running docs generation from: ${documentation.source.dir}.</echo>
-
-    <!-- define filters -->
-    <filter token="skin"              value="${use.skin}"/>
-    <filter token="link1"             value="apache"/>
-    <filter token="link1.href"        value="http://www.apache.org/"/>
-    <filter token="link2"             value="xml.apache"/>
-    <filter token="link2.href"        value="http://xml.apache.org/"/>
-    <!-- the breadcrumb script already generates it, so it needs to be kept blank -->
-    <filter token="link3"             value=""/>
-    <filter token="link3.href"        value=""/>
-    <filter token="group-logo.src"    value="images/group-logo.gif"/>
-    <filter token="group-logo.href"   value="http://xml.apache.org/"/>
-    <filter token="group-logo.alt"    value="Apache XML logo"/>
-    <filter token="project-logo.src"  value="images/project-logo.gif"/>
-    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>
-    <filter token="project-logo.alt"  value="Forrest logo"/>
-    <filter token="year" value="2002"/>
-    <filter token="vendor" value="Apache Sofware Foundation"/>
-
-
-    <mkdir dir="${build.context}"/>
-    <mkdir dir="${build.docs}"/>
-    <mkdir dir="${build.dir}/work"/>
-
-
-    <!-- make filtered copy of XML docs -->
-    <copy todir="${build.context}" filtering="on" overwrite="true">
-      <fileset dir="${documentation.source.dir}" casesensitive="no">
-        <include name="**/*.x*"/>
-      </fileset>
-    </copy>
-
-    <!-- make non filtered copy of images -->
-    <copy todir="${build.context}" filtering="off">
-      <fileset dir="${documentation.source.dir}" casesensitive="no">
-        <exclude name="**/*.x*"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy entity catalog, entities and class files -->
-    <copy todir="${build.context}/resources/schema" filtering="on">
-      <fileset dir="${resource.dir}/schema"/>
-    </copy>
-    <mkdir dir="${build.context}/WEB-INF/classes"/>
-    <copy todir="${build.context}/WEB-INF/classes">
-      <fileset dir="${build.context}/resources/schema">
-        <include name="CatalogManager.properties"/>
-      </fileset>
-      <fileset dir="${build.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-      <fileset dir="${build.scratchpad.dest}">
-        <include name="**/*.class"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy Cocoon configuration, sitemap and skin conf -->
-    <copy todir="${build.context}" filtering="on">
-      <fileset dir="${documentation.context.dir}/conf">
-        <include name="sitemap.xmap"/>
-        <include name="skinconf.xml"/>
-        <include name="cocoon.xconf"/>
-        <include name="logkit.xconf"/>
-      </fileset>
-    </copy>
-    <copy todir="${build.context}/WEB-INF/" filtering="on">
-      <fileset dir="${documentation.context.dir}/conf">
-        <exclude name="sitemap.xmap"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy libraries -->
-    <copy todir="${build.context}/library/" filtering="on">
-      <fileset dir="${documentation.context.dir}/library">
-
-      </fileset>
-    </copy>
-
-    <!-- Copy skins -->
-    <copy todir="${build.context}/skins/" filtering="on">
-      <fileset dir="${documentation.context.dir}/skins">
-        <exclude name="**/images/**"/>
-      </fileset>
-    </copy>
-    <copy todir="${build.context}/skins/" filtering="off">
-      <fileset dir="${documentation.context.dir}/skins">
-        <include name="**/images/**"/>
-      </fileset>
-    </copy>
-
-    <!-- Copy the project descriptors -->
-    <copy todir="${build.context}" filtering="on">
-      <fileset dir=".">
-        <include name="*.*ml"/>
-      </fileset>
-    </copy>
-
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Prepares the docs to create a .war                                  -->
-  <!-- =================================================================== -->
-  <target name="webapp" depends="init, prepare-docs">
-    <delete file="${build.context}/cocoon.xconf"/>
-    <war warfile="${build.dir}/${name}.war"
-         webxml="${build.context}/WEB-INF/web.xml"
-         compress="true">
-
-      <fileset dir="${build.context}">
-        <exclude name="WEB-INF/web.xml"/>
-      </fileset>
-      <lib dir="lib/endorsed"/>
-      <lib dir="lib/core"/>
-      <lib dir="lib/optional"/>
-      <lib dir="src/scratchpad/lib"/>
-      <classes dir="${build.context}/WEB-INF/classes/"/>
-
-    </war>
-
-  </target>
-
-  <target name="cleandocs" depends="init" description="* Cleans the build docs directories">
-    <delete dir="${build.docs}"/>
-  </target>
 
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
@@ -340,216 +183,279 @@
     </javadoc>
   </target>
 
+
+  <!-- =================================================================== -->
+  <!-- Make all known distributions                                        -->
+  <!-- =================================================================== -->
+  <target name="dist" 
+          description="Makes all the known incarnations of forrest"
+          depends="dist-shbat" />
+
+  
+  <!-- =================================================================== -->
+  <!-- Make the zip that holds what a fresh site should look like          -->
+  <!-- =================================================================== -->
+  <target name="fresh-site-zip" depends="init">
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="fresh-site.zip" value="./build/fresh-site.zip" />
+    <zip destfile="${fresh-site.zip}" basedir="${resource.dir}/fresh-site" />
+  </target>
+
+  
+  <!-- =================================================================== -->
+  <!-- Make the WEB-INF directory like cocoon (CLI or webapp) needs it     -->
+  <!-- =================================================================== -->
+  <target name="webapp-webinf" depends="init, compile" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="webapp.webinf.dir" value="./build/webapp/WEB-INF" />
+
+    <mkdir dir="${webapp.webinf.dir}" />
+    <copy todir="${webapp.webinf.dir}" >
+      <fileset dir="${resource.dir}/conf" >
+        <exclude name="sitemap.xmap" />
+        <exclude name="skinconf.xml" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${webapp.webinf.dir}/classes" />
+    <copy todir="${webapp.webinf.dir}/classes" >
+      <fileset dir="${resource.dir}/schema">
+        <include name="CatalogManager.properties"/>
+      </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+    </copy>
+
+    <mkdir dir="${webapp.webinf.dir}/lib"/>
+    <copy todir="${webapp.webinf.dir}/lib">
+      <fileset dir="./lib/endorsed"    />
+      <fileset dir="./lib/core"/>
+      <fileset dir="./lib/optional"/>
+      <fileset dir="./src/scratchpad/lib"/>
+    </copy>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Make the bare context directory like cocoon (CLI or webapp) needs it-->
+  <!-- =================================================================== -->
+  <target name="bare-context-dir" depends="init, compile" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="bare-context.dir" value="./build/bare-context" />
+
+    <!-- Copy entity catalog, entities and class files -->
+    <copy todir="${bare-context.dir}/resources/schema" >
+      <fileset dir="${resource.dir}/schema"/>
+    </copy>
+
+    <!-- Copy default image files. These may be overridden by identically named
+    files in ${project.home}/src/documentation/resources/images. -->
+    <copy todir="${bare-context.dir}/resources/images" >
+      <fileset dir="${resource.dir}/images"/>
+    </copy>
+
+    <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${bare-context.dir}">
+      <fileset dir="${resource.dir}/conf">
+        <include name="sitemap.xmap"/>
+        <include name="skinconf.xml"/>
+        <!-- this is already in the WEB-INF, the webapp will find it there
+             however we need it here in the cocoon CLI mode -->
+        <include name="cocoon.xconf"/>
+        <include name="logkit.xconf"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy libraries -->
+    <copy todir="${bare-context.dir}/library/" >
+      <fileset dir="${resource.dir}/library" />
+    </copy>
+
+    <!-- Copy skins -->
+    <copy todir="${bare-context.dir}/skins/" >
+      <fileset dir="${resource.dir}/skins" />
+    </copy>
+
+  </target>
+
+
+
+  <!-- =================================================================== -->
+  <!-- Make the shell-bat distribution                                     -->
+  <!-- =================================================================== -->
+  <target name="dist-shbat" 
+          depends="fresh-site-zip, webapp-webinf, bare-context-dir" >
+    <!-- TODO: decide on a better place to read/set this prop from/to -->
+    <property name="dist-shbat.dir" value="./build/dist/shbat" />
+
+    <!-- fresh drop-off location for the distribution -->
+    <delete dir="${dist-shbat.dir}" />
+    <mkdir dir="${dist-shbat.dir}" />
+
+    <!-- copy the ant script at the heart of the distribution -->
+    <copy todir="${dist-shbat.dir}" file="forrest.build.xml" />
+
+    <!-- copy the prepared and wrapper stuff for the distribution -->
+    <copy todir="${dist-shbat.dir}">
+      <fileset dir="./src/resources/forrest-shbat" />
+    </copy>
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
+
+    <!-- copy the fresh-site.zip to clone from -->
+    <copy todir="${dist-shbat.dir}" file="${fresh-site.zip}" />
+    
+    <!-- copy the web-inf as needed by the cocoon CLI -->
+    <mkdir dir="${dist-shbat.dir}/WEB-INF" />
+    <copy todir="${dist-shbat.dir}/WEB-INF">
+      <fileset dir="${webapp.webinf.dir}" />
+    </copy>
+
+    <!-- copy the bare-context dir as needed by the cocoon CLI -->
+    <mkdir dir="${dist-shbat.dir}/context" />
+    <copy todir="${dist-shbat.dir}/context">
+      <fileset dir="${bare-context.dir}" />
+    </copy>
+
+    <echo>
+  *-----------------------------------------------------------------
+  | installation notice 
+  *-----------------------------------------------------------------
+  | You have succesfully build the shell-bat version of forrest.
+  | Please find it at: ${dist-shbat.dir}
+  | Please copy the contents to the install directory of your choice
+  | Please have the environment variable FORREST_HOME point to it.
+  | It is recommended to add
+  |    unix: $FORREST_HOME/bin: to your $PATH
+  |    win: %FORREST_HOME%\bin; to your %PATH%
+  | Calling
+  |    unix: $FORREST_HOME/bin/forrest.sh usage 
+  |    win: %FORREST_HOME%\bin\forrest.bat usage
+  | will explain how to use this distribution.
+  | More help at http://xml.apache.org/forrest and forrest-dev@xml.apache.org
+  *-----------------------------------------------------------------
+    </echo>
+  </target>
+
+
   <!-- =================================================================== -->
   <!-- Validate xml                                                        -->
   <!-- =================================================================== -->
-  <target name="validate-docs" description="Checks that the xml files are valid and conform to the DTD.">
-    <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
-       className="org.apache.xerces.parsers.SAXParser">
+  <target name="validate-docs" depends="dist-shbat" 
+	        description="Checks that the xml files are valid and conform to the DTD.">
+    <!-- warning to other projects:
+       This target is using internally build productions for test.
+       This is by no means an example of how you can use it inside your project 
+      (although it will resemble it in many ways, to make the test meaningfull)
 
-       <classpath>
-         <fileset dir="./lib/endorsed">
-           <include name="*.jar"/>
-         </fileset>
-       </classpath>
+       The correct way of using forrest for your project is to build one of the
+       forrest distribution-flavours and readup on how you should do that in the 
+       appropriate documentation. -->
+    <property name="forrest.home" value="${dist-shbat.dir}" />
+    <ant antfile="${forrest.home}/forrest.build.xml" target="validate">
+      <property name="project.home"     value="."            />
+    </ant>
+  </target>
 
-       <fileset dir="."
-                includes="*.x*" excludes="build.xml"/>
 
-     </xmlvalidate>
+  <!-- =================================================================== -->
+  <!-- Generate project-site                                               -->
+  <!-- =================================================================== -->
+  <target name="docs" depends="dist-shbat" description="Generates the documentation">
+    <!-- warning to other projects:
+       This target is using internally build productions for test.
+       This is by no means an example of how you can use it inside your project 
+      (although it will resemble it in many ways, to make the test meaningfull)
+
+       The correct way of using forrest for your project is to build one of the
+       forrest distribution-flavours and readup on how you should do that in the 
+       appropriate documentation. 
+      (which is by the way generated by calling this very target) -->
+    <property name="forrest.home" value="${dist-shbat.dir}" />
+    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
+      <property name="project.home"     value="."            />
+      <property name="project.site-dir" value="./build/docs" />
+    </ant>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Generate cocoon-webapp for project-site                             -->
+  <!-- =================================================================== -->
+  <target name="webapp" depends="dist-shbat">
+    <!-- warning to other projects:
+       This target is using internally build productions for test.
+       This is by no means an example of how you can use it inside your project 
+      (although it will resemble it in many ways, to make the test meaningfull)
+
+       The correct way of using forrest for your project is to build one of the
+       forrest distribution-flavours and readup on how you should do that in the 
+       appropriate documentation. -->
+    <property name="forrest.home" value="${dist-shbat.dir}" />
+    <ant antfile="${forrest.home}/forrest.build.xml" target="webapp">
+      <property name="project.home"     value="."            />
+      <property name="project.webapp" value="./build/webapp" />
+    </ant>
   </target>
 
   <!-- =================================================================== -->
-  <!-- The documentation system                                            -->
+  <!-- Generate a .war files of the project-site                           -->
   <!-- =================================================================== -->
-  <target name="docs"
-          depends="cleandocs, owdocs"
-          description="* Generates the documentation"/>
-
-  <!-- =================================================================== -->
-  <!-- The documentation system                                            -->
-  <!-- =================================================================== -->
-  <target name="owdocs"
-          depends="prepare-docs"
-          description="* Generates the documentation">
-
-    <property name="dir.containing.docs" value="${build.context}"/>
-
-    <echo message="-------------------------------------------------------------"/>
-    <echo message="  Building docs, please stand by ..."/>
-
-    <java classname="org.apache.cocoon.Main" fork="true" dir="${dir.containing.docs}" failonerror="true">
-      <arg value="-c."/>
-      <arg value="-d../docs"/>
-      <arg value="-w../work"/>
-      <arg value="-b../brokenlinks.txt"/>
-      <arg value="-k../work/logkit.xconf"/>
-      <arg value="-u${centipede.tools.cents.forrest.loglevel}"/>
-      <arg value="-V"/>
-      <arg value="index.html"/>
-      <classpath>
-        <path refid="classpath"/>
-        <fileset dir="${build.dir}">
-          <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${tools.dir}">
-          <include name="*/lib/*.jar"/>
-        </fileset>
-        <pathelement location="${tools.jar}"/>
-        <pathelement location="${build.context}/WEB-INF/classes"/>
-      </classpath>
-    </java>
-
-    <echo message="  ...docs generated successfully in ${build.docs}"/>
-    <echo message="-------------------------------------------------------------"/>
-
+  <target name="war" depends="dist-shbat">
+    <property name="forrest.home" value="${dist-shbat.dir}" />
+    <ant antfile="${forrest.home}/forrest.build.xml" target="war">
+      <property name="project.home"     value="."            />
+      <property name="project.war" value="./build/${name}.war" />
+    </ant>
   </target>
+
 
   <!-- =================================================================== -->
-  <!-- Creates the web site                                                -->
+  <!-- ForrestBar for Mozilla                                              -->
   <!-- =================================================================== -->
-  <target name="site" depends="docs, javadocs"
-      description="Generates the web site (for site maintainers only)">
-    <mkdir dir="${site}"/>
-    <copy todir="${site}" filtering="off">
-      <fileset dir="${build.docs}">
-      </fileset>
-    </copy>
-    <copy todir="${site}/apidocs" filtering="off">
-      <fileset dir="${build.javadocs}"/>
-    </copy>
-  </target>
-
-
-  <target name="getcvsmodule" depends="init">
-
-    <property name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />
-    <property name="getcvsmodule.package" value="xml-forrest" />
-
-    <delete dir="${getcvsmodule.work.dir}"/>
-    <mkdir dir="${getcvsmodule.work.dir}"/>
-
-    <cvspass cvsroot=":pserver:anoncvs@jakarta.apache.org:/home/cvspublic"
-            password="anoncvs"
-     />
-
-    <cvs cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
-         package="${getcvsmodule.package}"
-         dest="${getcvsmodule.work.dir}"
-         quiet="true"
-    />
-  </target>
-
-  <target name="deploy" unless="deploy.username, deploy.package-name
-                                    deploy.data.dir, deploy.hostname, deploy.remotedir">
-  <!--
-    deploy.username
-    deploy.package-name
-    deploy.data.dir
-    deploy.hostname
-    deploy.remotedir
-   -->
-
-    <property name="deploy.work.dir"  value="${build.dir}/work/forrest/deploy/${deploy.package-name}"/>
-
-    <delete dir="${deploy.work.dir}"/>
-    <mkdir dir="${deploy.work.dir}"/>
-
-    <property name="deploy.tar.fullpath"
-              value="${deploy.work.dir}/${deploy.package-name}-deploy"/>
-
-    <tar tarfile="${deploy.tar.fullpath}.tar" basedir="${deploy.data.dir}"/>
-    <gzip zipfile="${deploy.tar.fullpath}.tar.gz" src="${deploy.tar.fullpath}.tar"/>
-    <delete file="${deploy.tar.fullpath}.tar"/>
-
-    <exec dir="." executable="scp">
-      <!--<arg value="-oProtocol=1"/>-->
-      <arg value="${deploy.tar.fullpath}.tar.gz"/>
-      <arg value="${deploy.username}@${deploy.hostname}:${deploy.remotedir}"/>
-    </exec>
-
-    <exec dir="." executable="ssh">
-      <arg line="-n ${deploy.hostname} -l ${deploy.username} 'cd ${deploy.remotedir};gunzip ${deploy.package-name}-deploy.tar.gz;tar xUvf ${deploy.package-name}-deploy.tar;chmod -R g+u *;rm ${deploy.package-name}-deploy.tar'"/>
-    </exec>
-
-    <delete file="${deploy.tar.fullpath}.tar.gz"/>
-
-  </target>
-
-  <target name="sendlog" depends="init" if="sendlog.to">
-
-   <mail from="forrest-dev@xml.apache.org"
-         tolist="${sendlog.to}"
-         subject="[DO NOT REPLY] Building in the Forrest"
-         files="forrestbot.log" />
-
-  </target>
-
-
-  <target name="testpoi" depends="init, testpoicvs, testpoigen, testpoideploy"/>
-
-
-  <target name="testpoicvs" depends="init">
-
-    <antcall target="getcvsmodule">
-      <param name="getcvsmodule.package"  value="jakarta-poi"/>
-      <param name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />
-    </antcall>
-
-  </target>
-
-  <target name="testpoigen" depends="init">
-
-    <antcall target="prepare-docs">
-      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>
-    </antcall>
-
-    <antcall target="owdocs"></antcall>
-
-  </target>
-
-  <target name="testpoideploy" depends="init">
-
-
-    <antcall target="deploy">
-      <param name="deploy.username"     value="forrestbot"/>
-      <param name="deploy.package-name" value="jakarta-poi"/>
-      <param name="deploy.data.dir"     value="${build.dir}/docs"/>
-      <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
-      <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/poi"/>
-    </antcall>
-
-  </target>
-
-
-
-   <target name="forrestbar" depends="init">
-
+  <target name="forrestbar" depends="init">
       <mkdir dir="${build.dir}" />
       <mkdir dir="${build.dir}/work/forrestbar" />
-
       <jar jarfile="${build.dir}/work/forrestbar/forrestbar.jar">
          <fileset dir="src/resources/forrestbar" includes="content/**/*" />
       </jar>
-
-      <copy file="src/resources/forrestbar/install.js" todir="${build.dir}/work/forrestbar" overwrite="true" />
-
-      <zip zipfile="${build.dir}/forrestbar.xpi" basedir="${build.dir}/work/forrestbar" />
-
-   </target>
-
+      <copy file="src/resources/forrestbar/install.js" 
+            todir="${build.dir}/work/forrestbar" overwrite="true" />
+      <zip zipfile="${build.dir}/forrestbar.xpi" 
+           basedir="${build.dir}/work/forrestbar" />
+  </target>
 
 
   <!-- ================================== -->
   <!--        Target used by Gump         -->
   <!-- ================================== -->
-
   <target  name="gump" description="Target used by Gump">
-
       <antcall target="docs"/>
       <antcall target="webapp"/>
-
   </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Import Ant-Centipede init targets - sets up basic build stuff       -->
+  <!-- =================================================================== -->
+  <!--
+        This is the target that initializes tasks and properties used
+        commonly in every other target.
+
+        Remember to add depends="init" to every target, so that this
+        target is called before any other.
+
+        This target is internal; to make it unusable from the commandline,
+        its name starts with a hyphen.
+        To make it invisible when using -projecthelp, it lacks a description.
+  -->
+
+    &import-antipede;
 
   <!-- ================================== -->
   <!--    Targets for the remote builds   -->
@@ -634,6 +540,5 @@
         To make it invisible when using -projecthelp, it lacks a description.
   -->
 
-    &import-antipede;
 
 </project>
