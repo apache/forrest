@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.18 2003/07/23 13:12:42 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.19 2003/09/29 07:39:28 crossley Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -301,7 +301,9 @@ $Id: site2xhtml.xsl,v 1.18 2003/07/23 13:12:42 nicolaken Exp $
 
           <div class="menu">
             <xsl:for-each select = "div[@class='menu']/ul/li">
-              <xsl:call-template name = "innermenuli" />
+              <xsl:call-template name = "innermenuli" >
+                <xsl:with-param name="id" select="concat(position(),'B')"/>
+              </xsl:call-template>
             </xsl:for-each>
           </div>
 
@@ -358,10 +360,11 @@ $Id: site2xhtml.xsl,v 1.18 2003/07/23 13:12:42 nicolaken Exp $
 
 
   <xsl:template name="innermenuli">
+    <xsl:param name="id"/>
     <xsl:variable name="tagid">
       <xsl:choose>
-    	<xsl:when test="descendant-or-self::node()/li/span/@class='sel'">selected</xsl:when>
-       	<xsl:otherwise><xsl:value-of select="font"/></xsl:otherwise>
+        <xsl:when test="descendant-or-self::node()/li/span/@class='sel'"><xsl:value-of select="concat('_selected_',$id)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="concat(font,$id)"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="whichGroup">
@@ -422,7 +425,9 @@ $Id: site2xhtml.xsl,v 1.18 2003/07/23 13:12:42 nicolaken Exp $
               </div>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:call-template name = "innermenuli" />
+              <xsl:call-template name = "innermenuli">
+                <xsl:with-param name="id" select="concat(position(),'A')"/>
+              </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
 
