@@ -487,16 +487,6 @@ No navigation is provided and no rendering of graphics is attempted.
     
   
   <!-- End of "toc" mode templates -->
-    
-  <xsl:template match="text()">
-    <xsl:param name="level"/>
-
-    <xsl:call-template name="emit">
-      <xsl:with-param name="text" select="."/>
-      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
-    </xsl:call-template>
-
-  </xsl:template>
 
 </xsl:stylesheet>
 
