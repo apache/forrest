@@ -263,10 +263,27 @@
   
   <target name="testPlugins"
           depends="cleanPlugins"
-          description="test each of the plugins">
-    <!-- FIXME: need to iterate over all plugins when testing -->
+          description="Test each type of the plugin">
+    
+    <echo>=============================</echo>
+    <echo>Testing using an input plugin</echo>
+    <echo>=============================</echo>
+    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+      <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.excel"/>
+    </ant>
+    
+    <echo>=============================</echo>
+    <echo>Testing using an ouput plugin</echo>      
+    <echo>=============================</echo>
     <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output"/>
+    </ant>
+    
+    <echo>=============================</echo>
+    <echo>Testing using an internal plugin</echo>
+    <echo>=============================</echo>
+    <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.pdf-output/build.xml" target="test">
+      <property name="basedir" location="${forrest.home}/plugins/IMSManifest"/>
     </ant>
   </target>
   
