@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.16 2003/03/18 08:50:38 nicolaken Exp $
+$Id: document2html.xsl,v 1.17 2003/05/22 02:33:32 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -112,7 +112,7 @@ var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
     document.write('<td align="center" width="40" nowrap="nowrap">');     
     document.write('  <a href="javascript:printit()" class="dida">');        
-    document.write('    <img border="0" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br/>');   
+    document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/><br/>');   
     document.write('  print</a>');   
     document.write('</td>');           
 }
@@ -125,7 +125,7 @@ if (VERSION > 3) {
   <xsl:template name="pdflink">
     <xsl:if test="$disable-pdf-link = 'false'"> 
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
-          <img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
+          <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
           PDF</a>
       </td>
     </xsl:if>
@@ -136,7 +136,7 @@ if (VERSION > 3) {
   <xsl:template name="xmllink">
     <xsl:if test="$disable-xml-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
-          <img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
+          <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/><br/>
           xml</a>
       </td>
     </xsl:if>
@@ -281,7 +281,7 @@ if (VERSION > 3) {
 
   <xsl:template match="icon">
     <xsl:apply-templates select="@id"/>
-    <img src="{@src}" alt="{@alt}">
+    <img src="{@src}" alt="{@alt}" class="icon">
       <xsl:if test="@height">
         <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
       </xsl:if>

@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
+$Id: site2xhtml.xsl,v 1.21 2003/05/22 02:33:33 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -38,7 +38,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
     <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="navigation path">
       <tr>
         <td height="20" bgcolor="{$background-bars}" valign="middle" nowrap="nowrap">
-          <img src="{$spacer}" border="0" alt="" width="5" height="1" />
+          <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
           <xsl:comment>===== breadcrumb trail (javascript-generated) ====</xsl:comment>
           <font face="Arial, Helvetica, Sans-serif" size="2">
               <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"/>
@@ -46,7 +46,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
         </td>
       </tr>
       <tr>
-        <td height="2" bgcolor="{$menu-border}"><img src="{$spacer}" border="0" alt="" width="2" height="2" /></td>
+        <td height="2" bgcolor="{$menu-border}"><img class="spacer" src="{$spacer}" alt="" width="2" height="2" /></td>
       </tr>
     </table>
     <xsl:comment>================= end Navigation Path ==================</xsl:comment>
@@ -88,14 +88,14 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
             <form method="get" action="http://www.google.com/search" target="_blank">
               <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
                 <tr>
-                  <td colspan="3"><img src="{$spacer}" alt="" width="1" height="10" /></td>
+                  <td colspan="3"><img class="spacer" src="{$spacer}" alt="" width="1" height="10" /></td>
                 </tr>
                 <tr>
-                  <td><img src="{$spacer}" alt="" width="1" height="1" /></td>
+                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                   <td nowrap="nowrap">
                     <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
                     <input type="text" id="query" name="q" size="15"/>
-                    <img src="{$spacer}" alt="" width="5" height="1" />
+                    <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
                     <input type="submit" value="Search" name="Search"/>
                     <br />
                     <font color="white" size="2" face="Arial, Helvetica, Sans-serif">
@@ -106,11 +106,11 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
                       -->
                     </font>
                   </td>
-                  <td><img src="{$spacer}" alt="" width="1" height="1" /></td>
+                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                 </tr>
                 <tr>
                   <td><img src="{$skin-img-dir}/search-left.gif" width="9" height="10" border="0" alt="" /></td>
-                  <td><img src="{$spacer}" alt="" width="1" height="1" /></td>
+                  <td><img class="spacer" src="{$spacer}" alt="" width="1" height="1" /></td>
                   <td><img src="{$skin-img-dir}/search-right.gif" width="9" height="10" border="0" alt="" /></td>
                 </tr>
               </table>
@@ -119,7 +119,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
         </td>
         <xsl:comment>================= start Search ==================</xsl:comment>
 
-        <td bgcolor="{$header-color}"><img src="{$spacer}" alt="" width="10" height="10" /></td>
+        <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" width="10" height="10" /></td>
       </tr>
       <tr>
         <td colspan="2" bgcolor="{$header-color}" valign="bottom">
@@ -127,10 +127,10 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
           <xsl:apply-templates select="div[@class='tab']"/>
           <xsl:comment>================= end Tabs ==================</xsl:comment>
         </td>
-        <td bgcolor="{$header-color}"><img src="{$spacer}" height="1" width="1" alt="" /></td>
+        <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" height="1" width="1" alt="" /></td>
       </tr>
       <tr>
-        <td colspan="4" bgcolor="{$menu-border}"><img src="{$spacer}" alt="" height="10" width="1" /></td>
+        <td colspan="4" bgcolor="{$menu-border}"><img class="spacer" src="{$spacer}" alt="" height="10" width="1" /></td>
       </tr>
     </table>
     <xsl:comment>================= end Banner ==================</xsl:comment>
@@ -139,61 +139,24 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
     <table cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#ffffff" summary="page content">
       <tr>
         <td valign="top">
-          <table cellpadding="0" cellspacing="0" border="0" summary="menu">
-            <tr>
-              <xsl:comment>================= start left top NavBar ==================</xsl:comment>
-              <td valign="top" rowspan="3">
-                <table cellspacing="0" cellpadding="0" border="0" summary="blue line">
-                  <tr><td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
-                  <tr><td bgcolor="{$background-bars}"><font face="Arial, Helvetica, Sans-serif" size="4" color="{$menu-border}">&#160;</font></td></tr>
-                  <tr><td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
-                </table>
-              </td>
-              <xsl:comment>================= end left top NavBar ==================</xsl:comment>
-
-              <td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-              <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
-              <td bgcolor="{$menu-border}" valign="top" nowrap="nowrap">
-                <xsl:comment>================= start Menu items ==================</xsl:comment>
-                <xsl:apply-templates select="div[@class='menu']"/>
-                <xsl:comment>================= end Menu items ==================</xsl:comment>
-              </td>
-              <td bgcolor="{$menu-border}" valign="bottom"><img src="{$spacer}" alt="" height="10" width="10" /></td>
-              <td bgcolor="{$header-color}"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-            </tr>
-            <tr>
-              <!-- Menu: bottom left -->
-              <td bgcolor="{$menu-border}" rowspan="2" colspan="2" align="left" valign="bottom">
-                <img src="{$skin-img-dir}/menu-left.gif" alt="" border="0" width="10" height="10" />
-              </td>
-              <!-- Menu: bottom -->
-              <td bgcolor="{$menu-border}">
-                <img src="{$spacer}" alt="" border="0" width="10" height="10" />
-              </td>
-              <!-- Menu: bottom right -->
-              <td bgcolor="{$menu-border}" rowspan="2" colspan="2" align="right" valign="bottom">
-                <img src="{$skin-img-dir}/menu-right.gif" alt="" border="0" width="10" height="10" />
-              </td>
-            </tr>
-            <tr>
-              <td bgcolor="{$header-color}" height="1"><img src="{$spacer}" alt="" height="1" width="1" /></td>
-            </tr>
-          </table>
+          <xsl:if test="div[@class='menu']/ul/li">
+            <xsl:call-template name="menu"/>
+        </xsl:if>
         </td>
         <td width="100%" valign="top">
           <table cellspacing="0" cellpadding="0" border="0" width="100%" summary="content">
 
             <xsl:comment>================= start middle NavBar ==================</xsl:comment>
-            <tr><td bgcolor="{$header-color}" colspan="4"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+            <tr><td bgcolor="{$header-color}" colspan="4"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td></tr>
             <tr>
-              <td bgcolor="{$background-bars}" width="10" align="left"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+              <td bgcolor="{$background-bars}" width="10" align="left"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
               <td bgcolor="{$background-bars}" width="50%" align="left">
                 <!-- ============ Page number =========== -->
                 <font face="Arial, Helvetica, Sans-serif" size="3" color="{$menu-border}">
                 &#160;
                 <!-- <b>Page 1 of 5</b> -->
                 </font>
-                  <img src="{$spacer}" alt="" height="8" width="10" />
+                <img class="spacer" src="{$spacer}" alt="" height="8" width="10" />
               </td>
               <td bgcolor="{$background-bars}" width="50%" align="right">
                 <!-- ============ Page navigation =========== -->
@@ -201,21 +164,21 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
                 &#160;
                 <!-- <b>&#171; prev&#160;&#160;<font size="4">[3]</font>&#160;&#160;next &#187;</b> -->
                 </font>
-                  <img src="{$spacer}" alt="" height="8" width="10" />
+                <img class="spacer" src="{$spacer}" alt="" height="8" width="10" />
               </td>
-              <td bgcolor="{$background-bars}" width="10"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+              <td bgcolor="{$background-bars}" width="10"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
             </tr>
-            <tr><td bgcolor="{$header-color}" colspan="4"><img src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+            <tr><td bgcolor="{$header-color}" colspan="4"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td></tr>
             <xsl:comment>================= end middle NavBar ==================</xsl:comment>
 
 
             <xsl:comment>================= start Content==================</xsl:comment>
             <tr>
-              <td width="10" align="left"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+              <td width="10" align="left"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
               <td width="100%" align="left">
                 <xsl:apply-templates select="div[@class='content']"/>
               </td>
-              <td width="10"><img src="{$spacer}" alt="" height="1" width="10" /></td>
+              <td width="10"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td>
             </tr>
             <xsl:comment>================= end Content==================</xsl:comment>
 
@@ -230,7 +193,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
     <table border="0" width="100%" cellpadding="0" cellspacing="0" summary="footer">
       <tr>
         <td bgcolor="{$menu-border}" height="1" colspan="2">
-          <img src="{$spacer}" alt="" width="1" height="1" />
+          <img class="spacer" src="{$spacer}" alt="" width="1" height="1" />
           <a href="{$skin-img-dir}/label.gif"/>
           <a href="{$skin-img-dir}/page.gif"/>
           <a href="{$skin-img-dir}/chapter.gif"/>
@@ -272,7 +235,7 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
                       <xsl:if test="$width"><xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute></xsl:if>
                       <xsl:if test="$height"><xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute></xsl:if>
                     </img>
-                    <img src="{$spacer}" border="0" alt="" width="5" height="1" />
+                    <img class="spacer" src="{$spacer}" alt="" width="5" height="1" />
                   </a>
                 </xsl:for-each>
               </xsl:if>
@@ -296,6 +259,49 @@ $Id: site2xhtml.xsl,v 1.20 2003/02/10 06:46:03 jefft Exp $
     <xsl:comment>================= end Footer ==================</xsl:comment>
       </body>
     </html>
+  </xsl:template>
+
+  <xsl:template name="menu">
+    <table cellpadding="0" cellspacing="0" border="0" summary="menu">
+      <tr>
+        <xsl:comment>================= start left top NavBar ==================</xsl:comment>
+        <td valign="top" rowspan="3">
+          <table cellspacing="0" cellpadding="0" border="0" summary="blue line">
+            <tr><td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+            <tr><td bgcolor="{$background-bars}"><font face="Arial, Helvetica, Sans-serif" size="4" color="{$menu-border}">&#160;</font></td></tr>
+            <tr><td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" height="1" width="10" /></td></tr>
+          </table>
+        </td>
+        <xsl:comment>================= end left top NavBar ==================</xsl:comment>
+
+        <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" height="1" width="1" /></td>
+        <td bgcolor="{$menu-border}" valign="bottom"><img class="spacer" src="{$spacer}" alt="" height="10" width="10" /></td>
+        <td bgcolor="{$menu-border}" valign="top" nowrap="nowrap">
+          <xsl:comment>================= start Menu items ==================</xsl:comment>
+          <xsl:apply-templates select="div[@class='menu']"/>
+          <xsl:comment>================= end Menu items ==================</xsl:comment>
+        </td>
+        <td bgcolor="{$menu-border}" valign="bottom"><img class="spacer" src="{$spacer}" alt="" height="10" width="10" /></td>
+        <td bgcolor="{$header-color}"><img class="spacer" src="{$spacer}" alt="" height="1" width="1" /></td>
+      </tr>
+      <tr>
+        <!-- Menu: bottom left -->
+        <td bgcolor="{$menu-border}" rowspan="2" colspan="2" align="left" valign="bottom">
+          <img src="{$skin-img-dir}/menu-left.gif" alt="" border="0" width="10" height="10" />
+        </td>
+        <!-- Menu: bottom -->
+        <td bgcolor="{$menu-border}">
+          <img class="spacer" src="{$spacer}" alt="" width="10" height="10" />
+        </td>
+        <!-- Menu: bottom right -->
+        <td bgcolor="{$menu-border}" rowspan="2" colspan="2" align="right" valign="bottom">
+          <img src="{$skin-img-dir}/menu-right.gif" alt="" border="0" width="10" height="10" />
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="{$header-color}" height="1"><img class="spacer" src="{$spacer}" alt="" height="1" width="1" /></td>
+      </tr>
+    </table>
   </xsl:template>
 
   <xsl:template match="node()|@*" priority="-1">

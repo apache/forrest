@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.6 2003/02/09 16:18:50 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.7 2003/05/22 02:33:32 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -105,7 +105,7 @@ $Id: site2xhtml.xsl,v 1.6 2003/02/09 16:18:50 nicolaken Exp $
             </xsl:call-template>
           </xsl:for-each>
         </xsl:if>
-        <a href="http://validator.w3.org/check/referer"><img border="0"
+        <a href="http://validator.w3.org/check/referer"><img class="skin" border="0"
             src="http://www.w3.org/Icons/valid-html401"
             alt="Valid HTML 4.01!" height="31" width="88"/></a>
       </body>
@@ -115,11 +115,11 @@ $Id: site2xhtml.xsl,v 1.6 2003/02/09 16:18:50 nicolaken Exp $
   <!-- Add links to any standards-compliance logos -->
   <xsl:template name="compliancy-logos">
     <xsl:if test="$config/disable-compliance-links = 'false'">
-      <a href="http://validator.w3.org/check/referer"><img border="0" class="logoImage" 
+      <a href="http://validator.w3.org/check/referer"><img class="logoImage" 
           src="{$skin-img-dir}/valid-html401.png"
           alt="Valid HTML 4.01!" height="31" width="88"/></a>
           
-      <a href="http://jigsaw.w3.org/css-validator/"><img border="0" class="logoImage" 
+      <a href="http://jigsaw.w3.org/css-validator/"><img class="logoImage" 
           src="{$skin-img-dir}/vcss.png" 
           alt="Valid CSS!" height="31" width="88"/></a>
     </xsl:if>
