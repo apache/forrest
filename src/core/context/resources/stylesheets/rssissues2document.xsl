@@ -22,9 +22,9 @@
       <title>Open issues</title>
     </header>
     <body>
-      <note>These are the open issues in our
+      <note>These are the open issues for our next released.
        <link href="http://issues.cocoondev.org/jira/secure/BrowseProject.jspa?id=10000">bug tracking system</link>
-       with a list limit of 50 issues
+       with a list limit for current version
        (see 
        <link href="http://issues.cocoondev.org/jira/secure/IssueNavigator.jspa?pid=10000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
       The listing below is regenerated on each Forrest run.</note>
