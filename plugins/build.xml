@@ -55,7 +55,6 @@
   <target name="init">
     <input message="Which plugin you which to operate on?"
            addproperty="plugin-name"/>
-    <echo>Forrest root is ${forrest.root-dir}, home is ${forrest.home}</echo>
     
     <mkdir dir="${plugins.dist-dir}"/>  
   </target>
@@ -142,7 +141,7 @@
           description="Build the distribution archive for all the plugins"
           depends="init, test">
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
-       basedir="${plugin-name}"
+       basedir="${plugins.dir}/${plugin-name}"
        includes="**"
        excludes="**/build/**"/>
   </target>
