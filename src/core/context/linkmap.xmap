@@ -53,7 +53,12 @@ $Revision: 1.2 $
          </map:when>  
        </map:select>
      </map:pipeline>
-
+      <map:match pattern="linkmap.xml">
+        <map:generate src="cocoon://abs-linkmap" />
+        <map:transform src="{forrest:stylesheets}/linkmap2document.xsl"/>
+        <map:serialize type="xml" />
+      </map:match>
+      
      <map:pipeline>
       <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
@@ -61,7 +66,6 @@ $Revision: 1.2 $
         <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
         <map:serialize type="xml" />
       </map:match>
-
 
       <!-- Linkmap for regular pages -->
       <map:match pattern="**linkmap-*">
