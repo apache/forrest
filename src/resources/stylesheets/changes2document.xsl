@@ -6,11 +6,11 @@
 
  <xsl:import href="copyover.xsl"/>
  
- <xsl:param name="bugtracking-url"/>
 
  <!-- FIXME (JJP):  bugzilla is hardwired -->
- <xsl:variable name="bugzilla" select="'http://nagoya.apache.org/bugzilla/'"/>
- <xsl:variable name="buglist" select="concat($bugzilla, 'buglist.cgi?bug_id=')"/>
+ <xsl:variable name="bugzilla" select="'http://nagoya.apache.org/bugzilla/buglist.cgi?bug_id='"/>
+
+ <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
  <xsl:template match="/">
   <xsl:apply-templates select="//changes"/>
@@ -59,22 +59,48 @@
    </xsl:if>
 
    <xsl:if test="@fixes-bug">
-    <xsl:text> Fixes </xsl:text>
-    <xsl:choose>
-     <xsl:when test="contains(@fixes-bug, ',')">
-      <link href="{$buglist}{translate(normalize-space(@fixes-bug),' ','')}">
-       <xsl:text>bugs </xsl:text><xsl:value-of select="normalize-space(@fixes-bug)"/>
-      </link>
+     <xsl:text> Fixes </xsl:text>
+     <xsl:call-template name="print-bugs">
+       <xsl:with-param name="buglist" select="translate(normalize-space(@fixes-bug),' ','')"/>
+     </xsl:call-template>
+     <!--
+     <xsl:choose>
+       <xsl:when test="contains(@fixes-bug, ',')">
+         <!-<link href="{$bugtracking-url}{translate(normalize-space(@fixes-bug),' ','')}">->
+           <link href="{$bugtracking-url}">
+             <xsl:text>bugs </xsl:text><xsl:value-of select="normalize-space(@fixes-bug)"/>
+           </link>
+         </xsl:when>
+         <xsl:otherwise>
+           <link href="{$bugtracking-url}{@fixes-bug}">
+             <xsl:text>bug </xsl:text><xsl:value-of select="@fixes-bug"/>
+           </link>
+         </xsl:otherwise>
+       </xsl:choose>
+       -->
+       <xsl:text>.</xsl:text>
+     </xsl:if>
+   </li>
+ </xsl:template>
+
+ <!-- Print each bug id in a comma-separated list -->
+ <xsl:template name="print-bugs">
+   <xsl:param name="buglist"/>
+   <xsl:choose>
+     <xsl:when test="contains($buglist, ',')">
+       <xsl:variable name="current" select="substring-before($buglist, ',')"/>
+       <link href="{concat($bugtracking-url, $current)}">
+         <xsl:value-of select="$current"/>
+       </link>
+       <xsl:text>, </xsl:text>
+       <xsl:call-template name="print-bugs">
+         <xsl:with-param name="buglist" select="substring-after($buglist, ',')"/>
+       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise>
-      <link href="{$bugtracking-url}{@fixes-bug}">
-       <xsl:text>bug </xsl:text><xsl:value-of select="@fixes-bug"/>
-      </link>
+       <link href="{concat($bugtracking-url, $buglist)}"><xsl:value-of select="$buglist"/></link>
      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>.</xsl:text>
-   </xsl:if>
-  </li>
+   </xsl:choose>
  </xsl:template>
 
 </xsl:stylesheet>
