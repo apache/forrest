@@ -29,7 +29,7 @@ unset CLASSPATH
 CLASSPATH="`echo ./lib/endorsed/*.jar | tr ' ' $S``echo ./tools/centipede/lib/*.jar | tr ' ' $S`"
 export CLASSPATH
 
-$PWD/./tools/ant/bin/ant -listener org.apache.tools.ant.XmlLogger $@ 
+$PWD/./tools/ant/bin/ant $@ 
 
 unset CLASSPATH
 
