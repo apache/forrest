@@ -54,9 +54,19 @@
               Unable to download the 
               "<xsl:value-of select="$plugin-name" />" plugin from 
               <xsl:value-of select="plugin[@name=$plugin-name]/@url" />. 
-              In case the reason is the network connection, you can try 
-              installing the package manually by placing the file in the 
-              plugins directory.</fail>
+              There are a number of possible causes for this:
+              
+              One possible problem is that you do not have write access to 
+              FORREST_HOME, in which case ask your system admin to install the 
+              required Forrest plugin as described below.
+              
+              A further possibility is that Forrest may be unable to connect to 
+              the plugin distribution server, again the solution is to maually 
+              install the plugin.
+              
+              To manually install a plugin download the plugin zip file from
+              <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
+              extract it into to <xsl:value-of select="$plugin-dir"/>/<xsl:value-of select="$plugin-name" />.</fail>
             <echo>Plugin "<xsl:value-of select="$plugin-name" />" correctly installed.</echo>
          </target>
       </project>
