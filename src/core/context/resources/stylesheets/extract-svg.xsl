@@ -20,17 +20,17 @@
     | xmlns:for has to be replaced for the final version
     +-->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:for="http://apache.org/forrest" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:svg="http://www.w3.org/2000/svg" version="1.0">
 
-<xsl:import href="copyover.xsl"/>
-
-<xsl:variable name="config" select="//skinconfig"/>
-
-<xsl:template match="for:project-name">
-    <xsl:value-of select="$config/project-name"/>
+  <xsl:template match="/">
+    <xsl:apply-templates select="//svg:svg"/>
   </xsl:template>
 
-<xsl:template match="for:group-name">
-    <xsl:value-of select="$config/group-name"/>
+  <xsl:template match="svg:svg">
+    <xsl:copy-of select="."/>
   </xsl:template>
+
+  <xsl:template match="*"/>
+
 </xsl:stylesheet>

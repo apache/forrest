@@ -78,7 +78,7 @@ $Revision: 1.13 $
                   </map:call>
                </map:when>
                <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-transformed-svg2png-resource">
                     <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
@@ -100,7 +100,7 @@ $Revision: 1.13 $
                   </map:call>
                </map:when>
                <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-transformed-svg2png-resource">
                     <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
@@ -121,7 +121,7 @@ $Revision: 1.13 $
                   </map:call>
                </map:when>
                <map:when test="{forrest:context}/skins/common/{path}/{name}.svg.xslt">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-transformed-svg2png-resource">
                     <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
@@ -135,7 +135,7 @@ $Revision: 1.13 $
        <map:resource name="read-svg2png-corner-resource">
             <map:select type="exists">
                <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt">
-                  <map:call resource="pipe-svg2png-corner-resource">
+                  <map:call resource="pipe-transformed-svg2png-corner-resource">
                     <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt" />
                     <map:parameter name="orientation-tb" value="{orientation-tb}"/>
                     <map:parameter name="orientation-lr" value="{orientation-lr}"/>
@@ -146,7 +146,7 @@ $Revision: 1.13 $
                   </map:call>
                </map:when>
                <map:when test="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt">
-                  <map:call resource="pipe-svg2png-corner-resource">
+                  <map:call resource="pipe-transformed-svg2png-corner-resource">
                     <map:parameter name="path" value="{forrest:context}/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
                     <map:parameter name="orientation-tb" value="{orientation-tb}"/>
                     <map:parameter name="orientation-lr" value="{orientation-lr}"/>
@@ -171,14 +171,23 @@ $Revision: 1.13 $
       </map:resource>
       
       <map:resource name="pipe-text-resource">
-        <map:call resource="generate-resource">
+        <map:call resource="generate-transformed-resource">
            <map:parameter name="path" value="{path}" />
          </map:call>
          <map:serialize type="text" mime-type="{mime-type}"/>
       </map:resource>
 
-      <map:resource name="pipe-svg2png-resource">
-         <map:call resource="generate-resource">
+      <map:resource name="pipe-aggregate-svg2png-resource">
+         <map:call resource="generate-aggregate-resource">
+           <map:parameter name="path" value="{path}" />
+         </map:call>
+         <map:call resource="transform-project2text"/>
+         <map:transform src="{forrest:stylesheets}/extract-svg.xsl"/>
+         <map:serialize type="svg2png" />
+      </map:resource>
+
+      <map:resource name="pipe-transformed-svg2png-resource">
+         <map:call resource="generate-transformed-resource">
            <map:parameter name="path" value="{path}" />
          </map:call>
          <map:call resource="transform-project2text"/>
@@ -205,15 +214,20 @@ $Revision: 1.13 $
         <map:serialize type="svg2png" />
       </map:resource>
       
-      <map:resource name="generate-resource">
+      <map:resource name="generate-aggregate-resource">
+        <map:aggregate element="resource">
+          <map:part src="cocoon://skinconf.xml" />
+          <map:part src="{path}"/>
+        </map:aggregate>
+      </map:resource>
+      
+      <map:resource name="generate-transformed-resource">
         <map:generate src="cocoon://skinconf.xml" />
         <map:transform src="{path}"/>
       </map:resource>
       
       <map:resource name="transform-project2text">
-         <map:transform src="{forrest:stylesheets}/project2text.xsl">
-            <map:parameter name="config-file" value="{project:skinconf}"/>
-         </map:transform>      
+         <map:transform src="{forrest:stylesheets}/project2text.xsl"/>
       </map:resource>
       
       <map:resource name="read-linked-text">
@@ -278,7 +292,7 @@ $Revision: 1.13 $
             </map:call>
          </map:match>
 
-         <!-- DS: handles images local to a contributor directory -->
+         <!-- handles images local to a contributor directory -->
          <map:match pattern="**my-images/**.*">
             <map:read src="{project:content.xdocs}{1}my-images/{2}.{3}" mime-type="image/{3}" />
          </map:match>
@@ -286,17 +300,17 @@ $Revision: 1.13 $
          <map:match pattern="images/**.png">
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/images/{1}.svg">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-aggregate-svg2png-resource">
                     <map:parameter name="path" value="{project:content.xdocs}/images/{1}.svg" />
                   </map:call>
                </map:when>
                <map:when test="{project:resources.images}/{1}.svg">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-aggregate-svg2png-resource">
                     <map:parameter name="path" value="{project:resources.images}/{1}.svg" />
                   </map:call>
                </map:when>
                <map:when test="resources/images/{1}.svg">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-aggregate-svg2png-resource">
                     <map:parameter name="path" value="resources/images/{1}.svg" />
                   </map:call>
                </map:when>
@@ -363,7 +377,7 @@ $Revision: 1.13 $
          <map:match pattern="**.png">
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/{1}.svg">
-                  <map:call resource="pipe-svg2png-resource">
+                  <map:call resource="pipe-aggregate-svg2png-resource">
                     <map:parameter name="path" value="{project:content.xdocs}/{1}.svg" />
                   </map:call>
                </map:when>
