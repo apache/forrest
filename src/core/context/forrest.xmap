@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.7 $
+$Revision: 1.8 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -108,6 +108,8 @@ $Revision: 1.7 $
           <document-declaration public-id="-//OASIS//DTD Simplified DocBook XML V1.0//EN" />
         </sourcetype>      
       </map:action>
+      <map:action logger="sitemap.action.locale" name="locale" src="org.apache.cocoon.acting.LocaleAction">
+      </map:action>
     </map:actions>
     <map:selectors default="parameter">
 	  <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
@@ -116,6 +118,7 @@ $Revision: 1.7 $
      <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
      <exception class="java.lang.Throwable" unroll="true"/>
    </map:selector>
+      <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
   </map:components>
 
@@ -186,6 +189,57 @@ $Revision: 1.7 $
         </map:select>
       </map:act>
     </map:resource>
+    <map:resource name="file-resolver">
+      <map:select type="exists">
+        <map:when test="{project:content.xdocs}{uri}.ihtml">
+          <map:generate src="{project:content.xdocs}{uri}.ihtml" type="html" />
+          <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+          <map:transform type="idgen" />
+          <map:serialize type="xml-document"/>
+        </map:when>
+        <map:when test="{project:content.xdocs}{uri}.cwiki">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
+            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+            <map:transform type="xsltc" 
+              src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
+              <map:parameter name="name" value="{2}" />
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
+        <map:when test="{project:content.xdocs}{uri}.txt">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
+            <map:transform src="{forrest:stylesheets}/text2document.xsl">
+              <map:parameter name="filename" value="{2}" />
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
+        <map:when test="{project:content.xdocs}{uri}.sxw">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate src="{forrest:stylesheets}/aggregates/openoffice-writer.xml"/>
+            <map:transform src="{forrest:stylesheets}/aggregates/openoffice-writer.xsl">
+              <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxw"/>
+            </map:transform>
+            <map:transform type="cinclude"/>
+            <map:transform src="{forrest:stylesheets}/openoffice-writer2forrest.xsl">
+              <map:parameter name="filename" value="{2}" />
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
+        <map:otherwise>
+          <map:generate src="{project:content.xdocs}{uri}.xml" />
+          <map:call resource="transform-to-document">
+            <map:parameter name="src" value="{project:content.xdocs}{uri}.xml" />
+          </map:call>
+          <map:serialize type="xml-document"/>
+        </map:otherwise>
+      </map:select>
+    </map:resource>
   </map:resources>
 
   <map:pipelines>
@@ -210,68 +264,21 @@ $Revision: 1.7 $
       <!-- ============================================================ -->
 
       <map:match pattern="**.xml">
-
-        <map:select type="exists">
-          
-          <map:when test="{project:content.xdocs}{1}.ihtml">
-            <map:generate src="{project:content.xdocs}{1}.ihtml" type="html" />
-            <map:transform src="{forrest:stylesheets}/html2document.xsl" />
-            <map:transform type="idgen" />
-            <map:serialize type="xml-document"/>
-          </map:when>
-
-          <map:when test="{project:content.xdocs}{1}.cwiki">
-            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
-              
-              <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-              <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-<!--
-    <map:transform                src="{forrest:home}/context/resources/chaperon/stylesheets/error4wiki.xsl"/>
-    <map:transform type="lexer"   src="{forrest:home}/context/resources/chaperon/grammars/error.xlex"/>
-    <map:transform                src="{forrest:home}/context/resources/chaperon/stylesheets/error2page.xsl"/>
--->
-                <map:transform type="xsltc" src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
-                <map:parameter name="name" value="{2}" />
-              </map:transform>
-              <map:serialize type="xml-document"/>
-            </map:match>
-          </map:when>
-
-          <map:when test="{project:content.xdocs}{1}.txt">
-            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.txt" />
-              <map:transform src="{forrest:stylesheets}/text2document.xsl">
-                <map:parameter name="filename" value="{2}" />
-              </map:transform>
-              <map:serialize type="xml-document"/>
-            </map:match>
-          </map:when>
-
-          <map:when test="{project:content.xdocs}{1}.sxw">
-            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate src="{forrest:stylesheets}/aggregates/openoffice-writer.xml"/>
-              <map:transform src="{forrest:stylesheets}/aggregates/openoffice-writer.xsl">
-                <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxw"/>
-              </map:transform>
-              <map:transform type="cinclude"/>
-              <map:transform src="{forrest:stylesheets}/openoffice-writer2forrest.xsl">
-                <map:parameter name="filename" value="{2}" />
-              </map:transform>
-              <map:serialize type="xml-document"/>
-            </map:match>
-          </map:when>          
-          
-          <map:otherwise>
-            <map:generate src="{project:content.xdocs}{1}.xml" />
-            <map:call resource="transform-to-document">
-              <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
+        <map:select type="config">
+          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:when test="true">
+          <map:act type="locale">
+            <map:call resource="file-resolver">
+              <map:parameter name="uri" value="{../1}_{lang}"/>
             </map:call>
-            <map:serialize type="xml-document"/>
+          </map:act>
+          </map:when>
+          <map:otherwise>
+            <map:call resource="file-resolver">
+              <map:parameter name="uri" value="{1}"/>
+            </map:call>
           </map:otherwise>
-
         </map:select>
-
       </map:match>
       
   </map:pipeline>
