@@ -11,19 +11,30 @@ Uses       :  content/xdocs/site.xml, or book.xml file if present.
 
 See http://xml.apache.org/forrest/sitemap-ref.html#menu_xml_generation
 
-$Revision: 1.10 $
+$Revision: 1.11 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file"/>
     <map:serializers default="html"/>
-    <map:transformers default="xslt"/>
+    <map:transformers default="xslt">
+      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+        <catalogues default="menu">
+          <catalogue id="menu" name="menu" location="translations"/>
+        </catalogues>
+        <!-- Commented out to verify your translations
+        <untranslated-text>untranslated</untranslated-text> -->
+        <cache-at-startup>true</cache-at-startup>
+      </map:transformer>
+    </map:transformers>
     <map:matchers default="wildcard"/>
     <map:selectors default="browser">
       <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
-
+    <map:actions>
+      <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
+    </map:actions>
   </map:components>
 
   <map:pipelines>
