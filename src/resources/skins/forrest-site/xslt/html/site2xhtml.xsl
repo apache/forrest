@@ -165,7 +165,7 @@
         <td align="center" class="copyright" bgcolor="#CFDCED" colspan="2">
           <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169;
           <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
-          select="$config/vendor"/>. All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
+          select="$config/vendor"/> All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
             //  -->]]></script></font>
         </td>
