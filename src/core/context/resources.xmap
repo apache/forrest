@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.9 $
+$Revision: 1.10 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -173,19 +173,15 @@ $Revision: 1.9 $
       <map:pipeline internal-only="true">
          <map:match pattern="skinconf">
            <map:generate src="{project:skinconf}" />
-           <map:select type="exists">
-             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
-               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
+           <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
            <map:select type="exists">
              <map:when test="{forrest:home}context/skins/{forrest:skin}/skinconf.xsl">
                <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
              </map:when>
            </map:select>
            <map:select type="exists">
-             <map:when test="{forrest:home}context/skins/common/skinconf.xsl">
-               <map:transform src="{forrest:home}context/skins/common/skinconf.xsl"/>
+             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
+               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
              </map:when>
            </map:select>
            <map:serialize type="xml" />
