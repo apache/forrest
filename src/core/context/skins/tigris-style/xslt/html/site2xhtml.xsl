@@ -62,7 +62,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <title><xsl:value-of select="div[@class='content']//div[@id='apphead']/h2/em"/></title>
         <meta http-equiv="Content-style-type" content="text/css" />
       </head>
-      <body onload="init();focus()" marginwidth="0" marginheight="0" class="composite">
+      <body onload="focus()" marginwidth="0" marginheight="0" class="composite">
 
         <!--
           +=========================+
