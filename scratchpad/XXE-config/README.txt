@@ -38,6 +38,12 @@ Installing
   * Specify the XML Catalog file:
   * "[FORREST_HOME]/context/resources/schema/catalog.xcat" (where [FORREST_HOME] is the value of your FORREST_HOME environment variable)
 
+Building
+========
+To build the configuration:
+* set the FORREST_HOME environment variable
+* run 'ant' in this directory
+
 References
 ==========
 XMLmind XML Editor
