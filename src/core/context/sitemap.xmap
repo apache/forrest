@@ -216,6 +216,14 @@ $Revision: 1.12 $
   <map:pipelines>
 
       <map:pipeline internal-only="false">
+      <map:select type="exists">
+        <map:when test="{project:sitemap}">
+          <map:mount uri-prefix="" src="{project:sitemap}" check-reload="yes" />
+        </map:when>  
+      </map:select>
+      </map:pipeline>
+        
+      <map:pipeline internal-only="false">
          <map:match pattern="skinconf.xml">
            <map:generate src="{project:skinconf}" />
            <map:select type="exists">
