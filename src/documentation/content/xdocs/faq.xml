@@ -119,13 +119,15 @@ repository is not kept current.
       <question>How can I generate one pdf-file out of
       the whole site or selected pages of the site?</question>
       <answer>
-      <p><![CDATA[
-        <about tab="home" label="Home" href="">
+      <p>Add the following entries to your site.xml file:</p>
+        <source><![CDATA[
+  <about tab="home" label="Home" href="">
  	  ...
-          <all_site label="Full HTML" href="site.html"/>    
-          <all_sitePDF label="Full PDF" href="site.pdf"/>  
-          ...
-        </about>]]>
+    <all_site label="Full HTML" href="site.html"/>    
+    <all_sitePDF label="Full PDF" href="site.pdf"/>  
+     ...
+  </about>]]></source>
+       <p>
        In this case the menu labeled "About" will have 2 new items: 
        "Full PDF" and "Full HTML".
        </p>
@@ -141,7 +143,7 @@ repository is not kept current.
       'clickable' email-address (of the author-element)?</question>
        <answer>
        <p>You would override <code>
-       src/resources/skins/common/xslt/html/document2html.xsl</code>
+       src/core/context/skins/common/xslt/html/document2html.xsl</code>
        and edit the "headers/authors" template.
        </p>
        </answer>
@@ -153,9 +155,8 @@ repository is not kept current.
       <p>If you have:<code>&#60;version&#62;$Revision: 1.30
       $&#60;/version&#62;</code>The &#39;1.30&#39; will be extracted and
       displayed at the bottom of the page as &#34;version 1.30&#34;. See for
-      example the bottom of <link
-      href="http://xml.apache.org/forrest/your-project.html">
-      http://xml.apache.org/forrest/your-project.html</link></p>
+      example the bottom of the
+      <link href="site:your-project"> Using Forrest</link> document.</p>
       <p>This technique could also be used for a modification date with
       $Date: 2004/01/15 08:52:47 $</p>
       </answer>
@@ -187,14 +188,16 @@ repository is not kept current.
    <exclude pattern="**apidocs**"/>
    <exclude pattern="api/**"/>
    ]]></strong><![CDATA[
-
    <uri src="favicon.ico"/>
 </cocoon>]]></source>
         <p>This is just an example, and you should modify it appropriately for
           your site.</p>
         <note>
-          Wildcards may be used.  Wildcards work as in Cocoon's sitemap.  <strong>foo/*</strong> would match
-          <code>foo/bar</code>, but not <code>foo/bar/baz</code> &mdash; use <strong>foo/**</strong> to match that.
+          Wildcards may be used.  These are a powerful feature of Cocoon's
+          <link href="site:sitemap-ref">sitemap</link>.
+          For example, <strong>foo/*</strong> would match
+          <code>foo/bar</code>, but not <code>foo/bar/baz</code>
+           &mdash; use <strong>foo/**</strong> to match that.
         </note>
       </answer>
     </faq>
@@ -233,8 +236,7 @@ repository is not kept current.
 X [0]                       brokenlink.html     BROKEN: reason
 * [50/0]     1.222s 20.2Kb  dreams.html
 * [0/0]      0.535s 11.1Kb  dreams.pdf
-...
-          ]]></source>
+...]]></source>
         <p>
          Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped).
          Column 2 is the number of links that were gathered from that page.
@@ -285,22 +287,21 @@ X [0]                       brokenlink.html     BROKEN: reason
       </question>
       <answer>
         <p>
-          In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing
-          '/'. That will leave which file to serve up to the sitemap.  For example, if
-          the 'User Manual' tab should link to <code>manual/Introduction.html</code>,
+          In <code>tabs.xml</code>, use @href instead of @dir, and omit the
+          trailing '/'. Which file to serve is then a concern of the sitemap.
+          For example, if the "User Manual" tab should link to
+          <code>manual/Introduction.html</code> then
           <code>tabs.xml</code> should contain:
         </p>
         <source><![CDATA[
-          <tab label="User Manual" href="manual"/>
-          ]]></source>
+  <tab label="User Manual" href="manual"/>]]></source>
         <p>
           and add this rule to the sitemap:
         </p>
         <source><![CDATA[
-          <map:match pattern="manual">
-            <map:redirect-to uri="manual/Introduction.html"/>
-          </map:match>
-          ]]></source>
+  <map:match pattern="manual">
+    <map:redirect-to uri="manual/Introduction.html"/>
+  </map:match>]]></source>
      </answer>
     </faq>
 
@@ -350,10 +351,10 @@ X [0]                       brokenlink.html     BROKEN: reason
             distribution).</li>
           <li><p>Override sitemap.xmap in your local project (copy $FORREST_HOME/context/sitemap.xmap to
               src/documentation/conf/), and add the following generator definition in the map:generators section:</p>
-            <source>
-              &lt;map:generator name="serverpages" pool-grow="2"
-              pool-max="32" pool-min="4" src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;
-            </source>
+            <source><![CDATA[
+  <map:generator name="serverpages"
+     pool-grow="2" pool-max="32" pool-min="4"
+     src="org.apache.cocoon.generation.ServerPagesGenerator"/>]]></source>
           </li>
           <li><p>Decide how you want to use XSP.  For single files, you could just define a *.xml matcher:</p>
             <source><![CDATA[
@@ -364,7 +365,6 @@ X [0]                       brokenlink.html     BROKEN: reason
 </map:match>]]></source>
             <p>You may instead wish to override forrest.xmap to define a general mapping for XSPs.</p>
           </li>
-
         </ol>
         <p>See also the <link
             href="http://wiki.cocoondev.org/Wiki.jsp?page=AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
@@ -374,17 +374,20 @@ X [0]                       brokenlink.html     BROKEN: reason
     <faq id="breadcrumbs">
       <question>How do breadcrumbs work?  Why don't they work locally?</question>
       <answer>
-      <p>Breadcrumbs begin with up to three URLs specified in <code>skinconf.xml</code>.  Here's what the Forrest site uses:</p>
+      <p>Breadcrumbs begin with up to three URLs specified in
+      <code>skinconf.xml</code>.  Here is what the Forrest site uses:</p>
       <source><![CDATA[
   <trail>
     <link1 name="apache" href="http://www.apache.org/"/>
     <link2 name="xml.apache" href="http://xml.apache.org/"/>
     <link3 name="" href=""/>
-  </trail>
-]]></source>
-      <p>If any links are blank, they aren't used.  After these first links, JavaScript looks at the URL for the current page and
-      makes a link for each directory after the domain.  If you are looking at the site locally, there is no domain and so
-      there will only be the breadcrumbs specified in <code>skinconf.xml</code>.
+  </trail>]]></source>
+      <p>If any links are blank, they are not used.  After these first links,
+      JavaScript looks at the URL for the current page and
+      makes a link for each directory after the domain.  If you are viewing
+      the site locally, there is no domain and so
+      there will be no extra breadcrumbs, only the ones that are specified
+      in <code>skinconf.xml</code>.
       </p>
       </answer>
     </faq>
@@ -421,17 +424,18 @@ X [0]                       brokenlink.html     BROKEN: reason
       </question>
       <answer>
         <p>
-          Forrest now uses a HTML 4.0.1 <code>DOCTYPE</code> declaration,
-          <code><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01
-            Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></code>.
+          Forrest now uses a HTML 4.0.1 <code>DOCTYPE</code> declaration:</p>
+          <source><![CDATA[
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">]]></source>
+        <p>
           This causes browsers to render the page in standards-compliance mode,
           or rather, not in "quirks" mode. For some operations (like determining
           table column widths), quirks mode results in better looking pages.
           For the old pre-0.4 behaviour, create a custom sitemap and remove the
           line:</p>
         <source><![CDATA[
-          <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
-          ]]></source>
+  <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>]]></source>
       </answer>
     </faq>
     <faq id="validation_error-doctype_root_null">
@@ -486,8 +490,8 @@ X [0]                       brokenlink.html     BROKEN: reason
           dynamically generate book.xml files.  However, Forrest first checks
           for the existence of a book.xml file, so backwards-compatibility is
           preserved.  If a directory has a book.xml file, the book.xml will be
-          used to generate the menu.  This is useful in situations where
-          &s;-generated menus aren't appropriate.
+          used to generate the menu.  This supplement is useful in situations
+          where &s;-generated menus aren't appropriate.
           See <link href="site:linking">Menus and Linking</link>.
       </p>
       </answer>
@@ -500,12 +504,14 @@ X [0]                       brokenlink.html     BROKEN: reason
       <answer>
         <p>
          There are two ways. Forrest can transform the DocBook format into the
-         Forrest "document" DTD on-the-fly and then render that as normal.
+         Forrest "xdocs" format on-the-fly and then render that as normal
+         Forrest documents.
          Be aware that the stylesheet that does this transformation is
-         deliberately very limited.
+         deliberately very limited and does not attempt to deal with all
+         DocBook elements.
         </p>
         <p>
-         The other way is to use the DocBook stylesheets directly. The DocBook
+         The other way is to use the full DocBook stylesheets directly. The DocBook
          DTDs are shipped with Forrest and automatically handled. However, you
          will need to have the DocBook stylesheets on your system (they are
          too massive to ship with Forrest) and configure Forrest accordingly.
@@ -521,13 +527,12 @@ X [0]                       brokenlink.html     BROKEN: reason
       src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/>
     <map:serialize/>
   </map:match>
-...
-]]>
+...]]>
         </source>
         <p>
          You can also use a mixture of the two methods, some handled
          automatically by Forrest and some directly using DocBook stylesheets.
-         You can also have a mixture of "document-v*" DTD and DocBook.
+         You can also have a mixture of source files as "document-v*" DTD and DocBook.
         </p>
         <p>
          Ensure that the document type declaration in your xml instance is
@@ -563,14 +568,15 @@ X [0]                       brokenlink.html     BROKEN: reason
       </question>
       <answer>
         <p>
-          Join the forrest-dev <link href="site:mail-lists">mailing list</link>,
-          and tell us what you'd like to see improved.  We regard all feedback
+          Join one of the Forrest project
+          <link href="site:mail-lists">mailing lists</link>
+          and tell us what you would like to see improved.  We regard all feedback
           as valuable, particularly from newcomers&mdash;often, close proximity
           blinds software developers to faults that are obvious to everyone
           else. Don't be shy!
         </p>
         <p>
-          More info on contributing can be found on the <link
+          More info about contributing can be found at the <link
             href="site:contrib">Contributing to Forrest</link> page.  Its always
           a good idea to check the Forrest <link href="site:todo">to do</link>
           list before diving in.
