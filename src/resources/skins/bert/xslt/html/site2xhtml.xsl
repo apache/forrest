@@ -7,7 +7,7 @@
     <xsl:text disable-output-escaping="yes"><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">]]></xsl:text>
     <html>
       <head>
-        <title><xsl:value-of select="td[@class='content']/h2"/></title>
+        <title><xsl:value-of select="div[@class='content']/h2"/></title>
         <link rel="stylesheet" href="skin/page.css" type="text/css"/>
       </head>
       <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
