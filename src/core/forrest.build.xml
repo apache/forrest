@@ -258,13 +258,23 @@ The skin that most likely resembles these ones is called 'pelt'.
 
   <!-- Load properties from user's skinconf.xml, if it is defined -->
   <target name="load-project-props" depends="validation-props, prepare-context" if="skinconf.present">
-    <xmlproperty file="${skinconf}" collapseattributes="true"/>
+    <xslt in="${skinconf}" 
+          out="${project.temp-dir}/no-doctype-project-skinconf.xml" 
+          style="${forrest.home/}/context/resources/stylesheets/strip-doctype.xsl"/>
+
+    <xmlproperty file="${project.temp-dir}/no-doctype-project-skinconf.xml" 
+                 collapseattributes="true"/>
   </target>
 
   <!-- Load properties from Forrest's default skinconf.xml, unless a user's is defined -->
   <target name="load-forrest-props" unless="skinconf.present">
-    <xmlproperty file="${forrest.home}/context/skinconf.xml" collapseattributes="true" />
-    <!-- Forrest skinconf should have been previously validated in buld.xml -->
+     <xslt in="${forrest.home}/context/skinconf.xml" 
+           out="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
+           style="${forrest.home/}/context/resources/stylesheets/strip-doctype.xsl"/>
+
+    <!-- Forrest skinconf should have been previously validated in build.xml -->
+    <xmlproperty file="${project.temp-dir}/no-doctype-forrest-skinconf.xml" 
+                 collapseattributes="true"/> 
   </target>
 
   <!-- Define filters equating to elements in the skinconf.xml file. Skins can
