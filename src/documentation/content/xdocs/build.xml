@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "http://apache.org/forrest/dtd/document-v12.dtd">
+<document>
+  <header>
+    <title>Building Forrest</title>
+    <authors> <person name="Dave Brondsema" email="brondsem@apache.org"/>
+    </authors>
+  </header>
+  <body>
+    <section id="getting_from_source">
+      <title>Getting the Forrest source</title>
+      <section>
+        <title>Step-by-step cvs instructions for Windows</title>
+        <ol> 
+          <li>Download a recent release of WinCVS (homepage is
+            <link href="http://www.wincvs.org/">http://www.wincvs.org/</link>); </li> 
+          <li>Install it;</li> 
+          <li>Start it;</li> 
+          <li>Click on Admin-&gt;Preferences;</li> 
+          <li> In "Enter the CVSROOT:" enter
+            "<code>:pserver:anoncvs@cvs.apache.org:/home/cvspublic</code>" (without
+            quotes);</li> 
+          <li>In "Authentication:" choose "passwd file on the cvs server";</li> 
+          <li>Click "Ok";</li> 
+          <li>Click Admin-&gt;Login;</li> 
+          <li> When asked for the password: answer "<code>anoncvs</code>"
+            (without quotes);</li> 
+          <li> Click "Create-&gt;Checkout module";</li> 
+          <li>Module name and path on the server is "<code>xml-forrest</code>"
+            (no quotes);</li> 
+          <li>Choose a dir to put the source code in;</li> 
+          <li>Click "Ok";</li> 
+          <li>If everything goes well, messages will start to appear in the log
+            window;</li> 
+          <li>Wait until you see "<code>*****CVS exited normally with code
+              0*****</code>" in the log window;</li> 
+          <li>The Forrest source is now on your harddrive.</li> 
+        </ol> 
+      </section> 
+      <section>
+        <title>Step-by-step cvs instructions for Unix</title>
+        <ol> 
+          <li>Make sure you have a CVS client package installed on your Unix
+            system.</li> 
+          <li>Start the shell of your choice.</li> 
+          <li>Enter "<code>cvs -d
+              :pserver:anoncvs@cvs.apache.org:/home/cvspublic login</code>".</li> 
+          <li>When asked for the password: answer "<code>anoncvs</code>".</li> 
+          <li>Enter "<code>cvs -d
+              :pserver:anoncvs@cvs.apache.org:/home/cvspublic -z3 checkout
+              xml-forrest</code>". This will create a directory called
+            "<code>xml-forrest</code>" where the Forrest source will be stored.</li> 
+          <li>Wait until cvs has finished.</li> 
+          <li>The Forrest source is now on your harddrive.</li> 
+        </ol> 
+        <p>In case you want to update your Forrest source tree to the current
+          version, change to the "<code>xml-forrest</code>" directory and invoke
+          "<code>cvs -z3 update -d -P</code>".</p> 
+      </section> 
+    </section>
+
+   <section id="building">
+     <title>Building and Installing Forrest</title>
+     <p>
+       To build Forrest, type <code>build</code> on Windows, or <code>./build.sh</code> on
+       Unix. If everything is successful, you should see a message like this:
+     </p>
+     <source>
+  *-----------------------------------------------------------------
+  | installation notice 
+  *-----------------------------------------------------------------
+  | You have succesfully built the shell-bat distribution of Forrest.
+  | Please find it at: ./build/dist/shbat
+  | Please copy the contents to the install directory of your choice
+  | Please have the environment variable FORREST_HOME point to it.
+  | It is recommended to add
+  |    unix: $FORREST_HOME/bin: to your $PATH
+  |    win: %FORREST_HOME%\bin; to your %PATH%
+  | Calling
+  |    unix: $FORREST_HOME/bin/forrest -projecthelp
+  |    win: %FORREST_HOME%\bin\forrest -projecthelp
+  | will list options for the 'forrest' command
+  | More help at http://xml.apache.org/forrest/ and forrest-dev@xml.apache.org
+  *-----------------------------------------------------------------
+     </source>
+     <p>
+       You now have the binary distribution built in <code>build/dist/shbat</code>.
+       Copy it somewhere more sensible if you like (e.g.
+       <code>/usr/local/forrest</code> on Unix), though if you intend to update your
+       Forrest from CVS, leaving it where it is would be best.</p>
+     <p>
+       As the message says, you need to add the distribution's <code>bin/</code>
+       ("binary") directory to your PATH variable, so the <code>'forrest'</code>
+       command is available everywhere:
+     </p>
+     <source>
+~/apache/xml-forrest$ export FORREST_HOME=`pwd`/build/dist/shbat
+~/apache/xml-forrest$ export PATH=$PATH:$FORREST_HOME/bin
+     </source>
+     <p>
+       After updating the Forrest source from CVS, or after you have made changes, you
+       will need to build forrest again.  In Windows, run <code>build clean</code> then
+       <code>build</code>.  In Unix, run <code>./build.sh clean</code> then <code>./build.sh</code>
+     </p>
+    </section>
+
+</body>
+</document>

@@ -5,7 +5,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.31 $</version>
+    <version>$Revision: 1.32 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -20,68 +20,28 @@
       </p>
     </section>
 
-    <section id="getting_from_source">
-      <title>Getting the Forrest source</title>
-      <p>
-        Currently, the primary way to get Forrest is through CVS. Please consult <link
-          href="primer.html#cvs">The Forrest Primer</link> for a description of what
-     this involves.</p>
-   <p>Here is how to get Forrest with a shell-based CVS client:</p>
-     <source>
-~/apache$ export CVSROOT=:pserver:anoncvs@cvs.apache.org:/home/cvspublic
-~/apache$ cvs login
-Logging in to :pserver:anoncvs@cvs.apache.org:2401/home/cvspublic
-CVS password: 
-~/apache$ cvs checkout xml-forrest
-U xml-forrest/.cvsignore
-U xml-forrest/appendcp.bat
-U xml-forrest/build-old.xml
-U xml-forrest/build.bat
-....
-     </source>
-   </section>
-
    <section id="installing">
-     <title>Building and Installing Forrest</title>
+     <title>Installing Forrest</title>
      <p>
-       To build Forrest, type <code>build</code> on Windows, or <code>./build.sh</code> on
-       Unix. If everything is successful, you should see a message like this:
+       <link href="site:about/download">Download</link> the latest release of Forrest, or
+       if you want to try the development version, <link href="site:getting-involved/build">build
+       Forrest</link> from source.
+     </p>
+     <p>
+     After downloading and extracting forrest, you need to add environment variables.  In Unix/Linux:
      </p>
      <source>
-  *-----------------------------------------------------------------
-  | installation notice 
-  *-----------------------------------------------------------------
-  | You have succesfully built the shell-bat distribution of Forrest.
-  | Please find it at: ./build/dist/shbat
-  | Please copy the contents to the install directory of your choice
-  | Please have the environment variable FORREST_HOME point to it.
-  | It is recommended to add
-  |    unix: $FORREST_HOME/bin: to your $PATH
-  |    win: %FORREST_HOME%\bin; to your %PATH%
-  | Calling
-  |    unix: $FORREST_HOME/bin/forrest -projecthelp
-  |    win: %FORREST_HOME%\bin\forrest -projecthelp
-  | will list options for the 'forrest' command
-  | More help at http://xml.apache.org/forrest/ and forrest-dev@xml.apache.org
-  *-----------------------------------------------------------------
+~/apache-forrest-0.5.1$ export FORREST_HOME=`pwd`
+~/apache-forrest-0.5.1$ export PATH=$PATH:$FORREST_HOME/bin
      </source>
      <p>
-       You now have the binary distribution built in <code>build/dist/shbat</code>.
-       Copy it somewhere more sensible if you like (e.g.
-       <code>/usr/local/forrest</code> on Unix), though if you intend to update your
-       Forrest from CVS, leaving it where it is would be best.</p>
-     <p>
-       As the message says, you need to add the distribution's <code>bin/</code>
-       ("binary") directory to your PATH variable, so the <code>'forrest'</code>
-       command is available everywhere:
+     In Windows, go to "My Computer", "Properties", "Advanced", "Environment Variables" and add:
+     <code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.5.1</code> and
+     <code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
      </p>
-     <source>
-~/apache/xml-forrest$ export FORREST_HOME=`pwd`/build/dist/shbat
-~/apache/xml-forrest$ export PATH=$PATH:$FORREST_HOME/bin
-     </source>
      <p>
        To see what the forrest command can do, type 'forrest -projecthelp'
-     </p>
+       </p>
      <source>
 Apache Forrest.  Run 'forrest -projecthelp' to list options
 
@@ -91,7 +51,7 @@ Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.bui
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/11/25 16:13:00 $              |
+    |             $Date: 2003/12/12 19:31:14 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
