@@ -217,7 +217,12 @@
       <xsl:value-of select="."/>
     </link>
   </xsl:template>
-  <xsl:template match="text:a[@office:target-frame-name='_new']">
+  <xsl:template match="text:a[@office:target-frame-name='_blank']">
+    <fork href="{@xlink:href}" title="{@office:name}">
+      <xsl:value-of select="."/>
+    </fork>
+  </xsl:template>  
+  <xsl:template match="text:a[@office:target-frame-name='_top']">
     <jump href="{@xlink:href}" title="{@office:name}">
       <xsl:value-of select="."/>
     </jump>
