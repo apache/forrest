@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="isfaq"/>
+
   <xsl:template match="document">
     <td colspan="2" valign="top" class="content">
       <table>
@@ -40,10 +42,29 @@
   </xsl:template>
 
   <xsl:template match="body">
+    <xsl:if test="section and not($isfaq='true')">
+      <ul class="minitoc">
+        <xsl:for-each select="section">
+          <li>
+            <a href="#{generate-id()}"><xsl:value-of select="@title"/></a>
+            <xsl:if test="section">
+              <ul class="minitoc">
+                <xsl:for-each select="section">
+                  <li>
+                    <a href="#{generate-id()}"><xsl:value-of select="@title"/></a>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </xsl:if>
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="section">
+    <a name="{generate-id()}"/>
     <h3>
       <xsl:value-of select="@title"/>
     </h3>
