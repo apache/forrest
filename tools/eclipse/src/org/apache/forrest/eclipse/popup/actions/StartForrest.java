@@ -15,8 +15,8 @@
  */
 package org.apache.forrest.eclipse.popup.actions;
 
-import org.apache.forrest.ForrestRunner;
 import org.apache.forrest.eclipse.ForrestPlugin;
+import org.apache.forrest.eclipse.job.ForrestManager;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -86,7 +86,7 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 			return;
 		}
 		
-		Job forrest = new ForrestRunner(workingDirectory.toOSString(), ForrestRunner.COMMAND_START);
+		Job forrest = ForrestManager.getInstance().getForrestJob(workingDirectory.toOSString(), ForrestManager.COMMAND_START);
 		forrest.setUser(true);
 		forrest.schedule();
 	}
