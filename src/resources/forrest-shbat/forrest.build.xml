@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/09/20 08:33:56 $              |
+    |             $Date: 2003/09/30 14:50:01 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -1103,4 +1103,66 @@ forrest.properties.
   <delete dir="${project.build-dir}" />
   </target>
 
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- **              SKIN PACKAGES                                  ** -->
+<!-- **                                                             ** -->
+<!-- **                                                             ** -->
+<!-- ***************************************************************** -->
+<!-- ***************************************************************** -->
+  
+  <!-- public targets -->     
+     
+  <target name="package-skin" description="Make a package of an existing skin">
+    <input message="Which skin do you want to package?"
+           addproperty="skin-name"/>
+    <jar destfile="${forrest.home}/context/skins/${skin-name}.fsj"
+       basedir="${forrest.home}/context/skins/"
+       includes="${skin-name}/**"/>
+  </target>
+      
+  <target name="install-skin" 
+          depends = "init-props, fetch-skin, unpack-skin"
+          description="Install the needed skin from the remote repository"/>
+          
+  <!-- private targets -->        
+          
+  <target name="unpack-skin"
+          depends="init-props">
+     <unjar src="${forrest.home}/context/skins/${project.skin}.fsj"
+            dest="${forrest.home}/context/skins/"/>
+     <delete file="${forrest.home}/context/skins/${project.skin}.fsj"/>
+  </target>  
+
+  <target name="fetch-skins-descriptor">
+      <get src="http://www.apache.org/~nicolaken/whiteboard/forrestskins/skins.xml" 
+           dest="${forrest.home}/context/skins/skins.xml"/>
+  </target>  
+  
+  <target name="available-skins"
+          depends="init-props, fetch-skins-descriptor"
+          description="What skins are available?">
+    <xslt in="${forrest.home}/context/skins/skins.xml" 
+          out="${project.work-dir}/skinlist2echobuild.xml"
+          style="${forrest.home}/var/skinlist2echo.xsl"/>  
+    <ant antfile="${project.work-dir}/skinlist2echobuild.xml"/>
+  </target>  
+  
+  <target name="fetch-skin" 
+          depends="init-props, fetch-skins-descriptor"
+          description="Get a skin from the remote repository">
+    <xslt in="${forrest.home}/context/skins/skins.xml" 
+          out="${project.work-dir}/skinlist2fetchbuild.xml"
+          style="${forrest.home}/var/skinlist2fetch.xsl">
+      <param name="skin-name" expression="${project.skin}"/>       
+    </xslt>  
+    <ant antfile="${project.work-dir}/skinlist2fetchbuild.xml"/>
+  </target>    
+  
+  <target name="install-skin" 
+          depends = "init-props, fetch-skin, unpack-skin"
+          description="Install a skin from the remote repository"/>
+   
 </project>
