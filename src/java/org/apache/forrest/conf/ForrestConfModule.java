@@ -67,8 +67,10 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 {
 
     private AntProperties  filteringProperties;
-    private String         forrestHome, projectHome;
+    private String         forrestHome, projectHome, contextHome;
     private SourceResolver m_resolver;
+    
+    private final static String defaultHome = "context:/";
 
     public Object getAttribute(String name, Configuration modeConf,
                     Map objectModel) throws ConfigurationException {
@@ -99,7 +101,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
     private final String getSystemProperty(String propertyName){
 
         //if the property is not set, default to the webapp context
-        String propertyValue = System.getProperty(propertyName, "context:/");
+        String propertyValue = System.getProperty(propertyName, defaultHome);
 
         if (debugging()) debug("system property " + propertyName + "=" + propertyValue);
 
@@ -116,13 +118,19 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         //      is run as a .war
         forrestHome = getSystemProperty("forrest.home");
         projectHome = getSystemProperty("project.home");
+        if(projectHome.equals(defaultHome)) {
+            contextHome = defaultHome;            
+        }else {
+            contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/context"; 
+        }
+            
         
         filteringProperties = new AntProperties();
         
         //add forrest.home and project.home to properties
         filteringProperties.setProperty("forrest.home", forrestHome);
         filteringProperties.setProperty("project.home", projectHome);
-
+        filteringProperties.setProperty("context.home", contextHome);
       
         //NOTE: the first values set get precedence, as in AntProperties
 
