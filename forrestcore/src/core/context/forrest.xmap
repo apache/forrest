@@ -315,19 +315,6 @@ $Revision: 1.8 $
             <map:serialize type="xml-document"/>
           </map:match>
         </map:when>
-        <map:when test="{project:content.xdocs}{uri}.sxw">
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate src="{forrest:stylesheets}/aggregates/openoffice-writer.xml"/>
-            <map:transform src="{forrest:stylesheets}/aggregates/openoffice-writer.xsl">
-              <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxw"/>
-            </map:transform>
-            <map:transform type="cinclude"/>
-            <map:transform src="{forrest:stylesheets}/openoffice-writer2forrest.xsl">
-              <map:parameter name="filename" value="{2}" />
-            </map:transform>
-            <map:serialize type="xml-document"/>
-          </map:match>
-        </map:when>
         <map:otherwise>
           <map:generate src="{project:content.xdocs}{uri}.xml" />
           <map:call resource="transform-to-document">
