@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project default="none" name="forrestbot-templates">
+  <!-- Some defaults that typically get set befor the template targets get called -->
+  <property name="bot.build.dir" value="build" />
+  <property name="project.name" value="xml-forrest" />
+  <property name="template.echo" value="false" />
+
+  <!-- Todo: cleanup the implicit dependency on being called from theµ
+       main ant script -->
+
+
+
+  <target name="template.prepare">
+    <echo message="prepare workstage for project ${project.name}"/>
+    <delete dir="${bot.build.dir}/${project.name}"/>
+    <mkdir dir="${bot.build.dir}/${project.name}/src"/>
+  </target>
+
+  <target name="echo.get-src.cvs" if="template.echo">
+    <echo message="get-src workstage of type CVS for project ${project.name}"/>
+    <echo message="cvs login: usr= ${get-src.cvs.user} / pwd= ${get-src.cvs.passwd}"/>
+    <echo message="cvs update from host: ${get-src.cvs.host} with root: ${get-src.cvs.root}"/>
+    <echo message="cvs update  for module: ${get-src.cvs.module} to dir: ${get-src.cvs.dir}"/>
+  </target>
+
+  <target name="template.get-src.cvs" depends="echo.get-src.cvs">
+    <cvspass cvsroot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
+            password="${get-src.cvs.passwd}"
+     />
+
+    <cvs cvsRoot=":pserver:${get-src.cvs.user}@${get-src.cvs.host}:${get-src.cvs.root}"
+         package="${get-src.cvs.module}/${get-src.cvs.dir}"
+         dest="${bot.build.dir}/${project.name}/src"
+         quiet="false"
+    >
+      <commandline>
+        <argument line="checkout -P"/>
+      </commandline>
+    </cvs>
+  </target>
+
+  <target name="echo.generate" if="template.echo">
+    <property name="classpath-dump" refid="forrest.cp"/>
+    <echo message="generate workstage for project ${project.name}"/>
+    <echo message="using cocoon in dir ${bot.build.dir}/${project.name}/src"/>
+    <echo message="at debug level = ${generate.debuglevel}"/>
+    <echo message="looking for java classes in ${classpath-dump}"/>
+  </target>
+
+  <target name="template.generate" depends="echo.generate">
+    <java classname="org.apache.cocoon.Main" fork="true" 
+                dir="${bot.build.dir}/${project.name}/src" failonerror="true"
+                classpathref="forrest.cp">
+      <arg value="-c."/>
+      <arg value="-d../docs"/>
+      <arg value="-w../work"/>
+      <arg value="-l../work/cocoon.log"/>
+      <arg value="-u${generate.debuglevel}"/>
+      <arg value="index.html"/>
+
+    </java>
+  </target>
+
+  <target name="template.deploy.scp">
+    <echo message="deploy workstage of type scp for project ${project.name}"/>
+  </target>
+
+  <target name="template.cleanup">
+    <echo message="cleanup workstage for project ${project.name}"/>
+  </target>
+
+</project>
