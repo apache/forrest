@@ -15,18 +15,12 @@
  */
 package org.apache.forrest.eclipse.popup.actions;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.forrest.ForrestRunner;
 import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -39,8 +33,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.webbrowser.WebBrowser;
-import org.eclipse.webbrowser.WebBrowserEditorInput;
 
 public class StartForrest 
 implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
@@ -94,7 +86,7 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 			return;
 		}
 		
-		Job forrest = new ForrestStarter(workingDirectory.toOSString());
+		Job forrest = new ForrestRunner(workingDirectory.toOSString(), "run");
 		forrest.schedule();
 	}
 
@@ -111,52 +103,4 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 		}
 	}
 	
-	/**
-	 * Manage the starting a Forrest server in a specific working directory.
-	 * Once Forrest has started open a web browser for the server.
-	 */
-	class ForrestStarter extends Job {
-		ForrestRunner forrestRunner;
-		IProgressMonitor monitor;
-		
-		/**
-		 * Create a new Forrest starter for the given working directory.
-		 * @param string
-		 * @refactor Need a factory to create instances for each Working Directory, run Forrest on a different port for each 
-		 */
-		public ForrestStarter(String wdir) {
-			super("Server Starter");
-			this.setUser(true);
-			forrestRunner = new ForrestRunner(wdir);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-		 */
-		public IStatus run(IProgressMonitor monitor) {
-			this.monitor = monitor;
-			monitor.beginTask("Starting Test Server", 2);
-			monitor.subTask("Start Server");
-			forrestRunner.start();
-			while (forrestRunner.getStatus() != ForrestRunner.RUNNING
-					&& forrestRunner.getStatus() != ForrestRunner.EXCEPTION) {
-			}
-			monitor.worked(1);
-			if (forrestRunner.getStatus() != ForrestRunner.EXCEPTION) {
-				//FIXME: Handle startup exception
-			}
-			monitor.subTask("Open index page");
-			URL url;
-			try {
-				url = new URL("http://localhost:8888");
-				WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url, WebBrowserEditorInput.SHOW_ALL);
-				WebBrowser.openURL(browserInput);
-			} catch (MalformedURLException e1) {
-				// Should never be thrown
-				e1.printStackTrace();
-			}		
-			monitor.worked(2);
-			return Status.OK_STATUS;
-		}
-	}
 }

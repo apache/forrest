@@ -15,13 +15,13 @@
  */
 package org.apache.forrest.eclipse.popup.actions;
 
-import java.io.IOException;
-
+import org.apache.forrest.ForrestRunner;
 import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.action.IAction;
@@ -58,14 +58,13 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 	public void run(IAction action) {
 		String cmdString = null;
 		IPath path = JavaCore.getClasspathVariable("ECLIPSE_HOME");
-		// TODO: This should be a progress dialog
-		Shell dialog = new Shell(new Shell());
 
 		// TODO: move preferences code to utilities class
 		String fhome = ForrestPlugin.getDefault().getPluginPreferences()
 				.getString(ForrestPreferences.FORREST_HOME);
 		
 		if (fhome.equals("")) {
+			Shell dialog = new Shell(new Shell());
 			dialog.setText("Configure Forrest");
 			dialog.setSize(400, 100);
 			Label statusMsg = new Label(dialog, SWT.NONE);
@@ -79,33 +78,11 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 			return;
 		}
 
-		dialog.setText("Forrest Server");
-		dialog.setSize(500, 250);
-		Label statusMsg = new Label(dialog, SWT.NONE);
-		StringBuffer sb = new StringBuffer("Forrest is building the site.\n");
-		sb.append("\n\nPlease wait...");
-		statusMsg.setText(sb.toString());
-		statusMsg.setLocation(30, 25);
-		statusMsg.pack();
-		dialog.open();
-
 		IPath workingDirectory = activeProject.getLocation();
-
-		if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
-			cmdString = "forrest -Dbasedir=" + workingDirectory
-					+ " site";
-		} else if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-			cmdString = "cmd /c forrest -Dbasedir=" + workingDirectory
-					+ " site";
-		}		
-		try {
-			Runtime.getRuntime().exec(cmdString);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		dialog.close();
+		
+		Job forrest = new ForrestRunner(workingDirectory.toOSString(), "site");
+		forrest.setUser(true);
+		forrest.schedule();
 	}
 
 	/**

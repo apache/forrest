@@ -15,94 +15,108 @@
  */
 package org.apache.forrest;
 
-import java.io.BufferedReader;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URL;
+
+import org.apache.forrest.eclipse.ForrestPlugin;
+import org.apache.forrest.eclipse.preference.ForrestPreferences;
+import org.eclipse.ant.core.AntRunner;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
 
 /**
  * Run and monitor a version of Forrest..
  */
-public class ForrestRunner implements Runnable {
-	/** Indicates the ForrestRunner is initialised and ready to be started */
-	public static final int INITIALISED = 0;
-	/** Indicates the ForrestRunner is confiuguring the environment for the server */
-	public static final int CONFIGURING = 5;
-	/** Indicates the Forrest server is starting up */
-	public static final int STARTING = 10;
-	/** Indicates the Forrest server is running */
-	public static final int RUNNING = 20;
-	/** Indicates the Forrest server is stopping */
-	public static final int STOPPING = 30;
-	/** Indicates the Forrest server has stopped */
-	public static final int STOPPED = 40;
-	/** Indicates the Forrest server has hit an exception condition */
-	public static final int EXCEPTION = 101; 
+public class ForrestRunner extends Job  {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(ForrestRunner.class);
+
+	public static final String COMMAND_STOP = "stop";
+	
+	public static final int EXCEPTION_UNIDENTIFIED = 1001;
+	public static final int EXCEPTION_UNABLE_TO_STOP = 1010;
 	
 	private int stop_port = Integer.getInteger("STOP.PORT",8079).intValue();
 	private String _key = System.getProperty("STOP.KEY","mortbay");
 	
-	protected String exceptionMessage;
-	
 	private static ForrestRunner INSTANCE;
-	protected File workingDirectory;
 	protected String cmdString;
-	Process forrestProcess;
-	protected Thread forrestThread;
-	protected BufferedReader forrestOutput;
-	protected int status;
-
+	
 	/**
-	 * Create a JettyRunner to execute Jetty on the
-	 * supplied working directory. 
+	 * Create a Forrest runner to execute a specified command on a given directory
+	 * @param workingDir - the working directory for the command
+	 * @param cmd - the forrest command
 	 */
-	public ForrestRunner(String workingDir) {
-		this.workingDirectory = new File(workingDir);
-		if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
-			cmdString = "forrest -Dbasedir=" + workingDir
-			+ " run";
-		} else if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-			cmdString = "cmd /c forrest -Dbasedir=" + workingDir
-			+ " run";
-		} // FIXME: implement for Mac and other OS's
-
-		forrestThread = new Thread(this);
+	public ForrestRunner(String workingDir, String cmd) {
+		super("Forrest Runner");
+		
+		ForrestPlugin plugin = ForrestPlugin.getDefault();
+		URL urlPluginDir = plugin.getBundle().getEntry("/");
+		String strLog4jConf = "D:\\projects\\burrokeet\\forrestplugin\\conf\\log4j.xml";
+		DOMConfigurator.configure(strLog4jConf);
+		
+		if (cmd.equals(COMMAND_STOP)) {
+			cmdString=COMMAND_STOP;
+		} else {
+			String fhome = ForrestPlugin.getDefault().getPluginPreferences()
+			  .getString(ForrestPreferences.FORREST_HOME);
+			StringBuffer sb = new StringBuffer("-Dproject.home=");
+			sb.append(workingDir);
+			sb.append(" -Dbasedir=");
+			sb.append(fhome + File.separatorChar + "main");
+			sb.append(" ");
+			sb.append(cmd);
+			cmdString = sb.toString();
+		}
 		INSTANCE = this;
-		status = INITIALISED;
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run() {
-		try {
-			String str;
-			while ((str = forrestOutput.readLine()) != null) {
-				// FIXME: Output should be sent to log not console
-				System.out.println(str);
-				if (str.indexOf("init-props:") != -1) {
-					status = CONFIGURING;
-				} else if (str.indexOf("run_default_jetty:") != -1 || str.indexOf("run_custom_jetty:") != -1) {
-					status = STARTING;
-				} else if (str.indexOf("EVENT  Started org.mortbay.jetty.Server") != -1) {
-					status = RUNNING;
-				} else if (str.indexOf("FIXME: what is the message that indicates server is stopping") != -1) {
-					status = STOPPING;
-				} else if (str.indexOf("FIXME: what is the message that indicates server has stopped") != -1) {
-					status = STOPPED;
-				} else if (str.indexOf("org.mortbay.util.MultiException[java.net.BindException: Address already in use: JVM_Bind]") != -1) {
-					exceptionMessage = str;
-					status = EXCEPTION;
-				} 
-			}			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public IStatus run(IProgressMonitor monitor) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("run(IProgressMonitor) - start");
 		}
+		
+		IStatus status;
+		
+		if (cmdString.equals("COMMAND_STOP")) {
+			status = this.stop();
+		} else {
+			String fhome = ForrestPlugin.getDefault().getPluginPreferences()
+			  .getString(ForrestPreferences.FORREST_HOME);
+			AntRunner runner = new AntRunner();
+			String antFile = fhome + File.separatorChar + "main" + File.separatorChar + "forrest.build.xml";
+			try {
+				runner.setBuildFileLocation(antFile);
+				runner.setArguments(cmdString);
+				logger.info("run() - Running ANT with command string = " + cmdString);
+				runner.run(monitor);
+				status = Status.OK_STATUS;
+			} catch (CoreException e) {
+				logger.error("run(IProgressMonitor)", e);
+				status = new Status(Status.ERROR, null, ForrestRunner.EXCEPTION_UNIDENTIFIED, "Forrest Exception", null);
+			}
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("run(IProgressMonitor) - end");
+		}
+		return status;
 	}
 	
 	/**
@@ -110,24 +124,25 @@ public class ForrestRunner implements Runnable {
 	 *
 	 */
 	public void start(){
-		System.out.println("Starting Forrest with the command " + cmdString);
-		try {
-			forrestProcess = Runtime.getRuntime().exec(cmdString, null, workingDirectory);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (logger.isDebugEnabled()) {
+			logger.debug("start() - start");
 		}
-		
-		forrestOutput = new BufferedReader(
-				new InputStreamReader(forrestProcess.getInputStream()));
-		forrestThread.start();
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("start() - end");
+		}
 	}
 	
 	/**
 	 * Stop this version of Forrest.
 	 *
 	 */
-	public void stop() {
+	public Status stop() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("stop() - start");
+		}
+		IStatus status;
+
 		try {
             Socket s=new Socket(InetAddress.getByName("127.0.0.1"), stop_port);
             OutputStream out = s.getOutputStream();
@@ -135,14 +150,16 @@ public class ForrestRunner implements Runnable {
             out.flush();
             s.shutdownOutput();
             s.close();
+            status = Status.OK_STATUS;
         } catch (Exception e) {
-			exceptionMessage = "Unable to Stop Server (" + e.getMessage() + ")";
-        	status = EXCEPTION;
-        	// TODO: log this error correctly
-            e.printStackTrace();
+			logger.error("stop()", e);
+			status = new Status(Status.ERROR, null, ForrestRunner.EXCEPTION_UNABLE_TO_STOP, "Forrest Exception", null);
         }
-		forrestProcess.destroy();
-		forrestThread.stop();
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("stop() - end");
+		}
+		return (Status)status;
 	}
 	
 	
@@ -150,22 +167,13 @@ public class ForrestRunner implements Runnable {
 	 * @return Returns the running Forrest instance.
 	 */
 	public static ForrestRunner getInstance() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("getInstance() - start");
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("getInstance() - end");
+		}
 		return INSTANCE;
-	}
-	
-	/**
-	 * Get the current status of this ForrestRunner.
-	 * @return Returns the status.
-	 */
-	public int getStatus() {
-		return status;
-	}
-	
-	/** 
-	 * Get the message associated with the last exception thrown by this version of Forrest.
-	 * @return A message describing the last exception
-	 */
-	public String getExceptionMessage() {
-		return exceptionMessage;
 	}
 }

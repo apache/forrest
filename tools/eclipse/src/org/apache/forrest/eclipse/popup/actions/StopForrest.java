@@ -17,11 +17,11 @@ package org.apache.forrest.eclipse.popup.actions;
 
 import org.apache.forrest.ForrestRunner;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -48,10 +48,10 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 	 * @see IActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
-		ForrestRunner.getInstance().stop();
-		// FIXME: only provide this feedback when we *know* it has stopped
-		MessageDialog.openInformation(new Shell(), "Forrest",
-				"Forrest server stopped");
+		IPath workingDirectory = activeProject.getLocation();
+		Job forrest = new ForrestRunner(workingDirectory.toOSString(), ForrestRunner.COMMAND_STOP);
+		forrest.setUser(true);
+		forrest.schedule();
 	}
 
 	/**
