@@ -14,14 +14,13 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.35 $
+$Revision: 1.36 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
   <!-- FIXME (JJP): This should not be here. Should be define on sitemap -->
   <map:generators default="file">
-      <map:generator name="serverpages" src="org.apache.cocoon.generation.ServerPagesGenerator"/>
       <map:generator name="html"      src="org.apache.cocoon.generation.HTMLGenerator">
         <jtidy-config>jtidy.properties</jtidy-config>
       </map:generator>
@@ -215,13 +214,6 @@ $Revision: 1.35 $
             </map:match>
           </map:when>
           
-	  <map:when test="content/xdocs/{1}.xsp">
-            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-              <map:generate type="serverpages" src="content/xdocs/{1}{2}.xsp" />
-              <map:transform src="resources/stylesheets/page2document.xsl" />
-              <map:serialize type="xml-document"/>
-            </map:match>
-          </map:when>
           <map:otherwise>
             <map:generate src="content/xdocs/{1}.xml" />
             <map:call resource="transform-to-document">
