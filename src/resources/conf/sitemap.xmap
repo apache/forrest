@@ -23,6 +23,21 @@
     <use-browser-capabilities-db>false</use-browser-capabilities-db>
    </map:transformer>
   -->
+    <map:transformer name="linkrewriter"
+      src="org.apache.cocoon.transformation.LinkRewriterTransformer">
+      <input-module name="linkmap" src="{src}" reloadable="true"/>
+      <input-module name="site">
+        <input-module name="linkmap" src="{src}" reloadable="true"/>
+        <prefix>/site//</prefix>
+        <suffix>/@href</suffix>
+      </input-module>
+    </map:transformer>
+    <map:transformer name="xpath"
+       logger="sitemap.transformer.xpath"
+       src="org.apache.cocoon.transformation.XPathTransformer"
+     />
+
+ 
     <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer"
                         logger="sitemap.transformer.xsltc"
                         pool-max="32" pool-min="8" pool-grow="2">
@@ -142,7 +157,22 @@
   </map:resource>
 
   <map:resource name="book">
-    <map:generate src="content/xdocs/{../1}book.xml"/>
+    <map:act type="resource-exists">
+      <!-- If a hand-created book.xml exists, use it -->
+      <map:parameter name="url" value="content/xdocs/{dir}book.xml"/>
+      <map:generate src="content/xdocs/{../dir}book.xml"/>
+      <map:call resource="skinit">
+        <map:parameter name="type" value="book2menu"/>
+        <map:parameter name="path" value="{../path}"/>
+      </map:call>
+    </map:act>
+
+    <!-- If no book.xml, generate it from the linkmap. -->
+
+    <map:generate src="cocoon:/{dir}linkmap/{dir}"/>
+    <!-- The above generates the subset of the linkmap relevant to our
+    directory. -->
+    <map:transform src="library/xslt/site2book.xsl"/>
     <map:call resource="skinit">
       <map:parameter name="type" value="book2menu"/>
       <map:parameter name="path" value="{path}"/>
@@ -175,7 +205,7 @@
   
   <!-- Pipeline that manages the internal URI space
        For the external URI space manager, see the next pipeline. -->
-  <map:pipeline internal-only="true">
+  <map:pipeline>
 
   <map:match pattern="**tab-**.xml">
     <map:generate src="content/xdocs/tabs.xml"/>
@@ -187,12 +217,14 @@
 
   <map:match pattern="**book-**/*.xml">
     <map:call resource="book">
-     <map:parameter name="path" value="{2}/{3}.xml"/>
+      <map:parameter name="dir" value="{2}/"/>
+      <map:parameter name="path" value="{2}/{3}.xml"/>
     </map:call>
   </map:match>
 
   <map:match pattern="**book-**.xml">
     <map:call resource="book">
+      <map:parameter name="dir" value=""/>
       <map:parameter name="path" value="{2}.xml"/>
     </map:call>
   </map:match>
@@ -235,12 +267,6 @@
       <map:parameter name="isfaq" value="true"/>
 
      </map:call>
-   </map:match>
-
-
-   <!-- Redirect requests for community/ (eg in the trail) to the home page -->
-   <map:match pattern="community/index.html">
-     <map:redirect-to uri="../index.html"/>
    </map:match>
 
    <!-- index pages for contribution categories -->
@@ -332,6 +358,7 @@
    <!-- Generates body HTML for files in subdirs -->
    <map:match pattern="body-**/*.xml">
     <map:generate src="content/xdocs/{1}/{2}.xml"/>
+    <map:transform type="linkrewriter" src="cocoon:/{1}/linkmap"/>
     <map:call resource="transform-to-document">
      <map:parameter name="src" value="content/xdocs/{1}/{2}.xml"/>
     </map:call>
@@ -344,6 +371,9 @@
    <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
     <map:generate src="content/xdocs/{1}.xml"/>
+    <map:transform type="linkrewriter" src="cocoon:/linkmap">
+     <map:parameter name="bad-link-str" value="badlink"/>
+    </map:transform>
     <map:call resource="transform-to-document">
      <map:parameter name="src" value="content/xdocs/{1}.xml"/>
     </map:call>
@@ -351,6 +381,42 @@
      <map:parameter name="type" value="document2html"/>
      <map:parameter name="path" value="{1}.xml"/>
     </map:call>
+   </map:match>
+ </map:pipeline>
+
+
+ <map:pipeline>
+   <map:match pattern="abs-linkmap">
+     <map:generate src="content/xdocs/site.xml"/>
+     <map:transform src="library/xslt/absolutize-linkmap.xsl"/>
+     <map:serialize type="xml"/>
+   </map:match>
+
+   <map:match pattern="abs-linkmap/**">
+     <map:generate src="cocoon:/abs-linkmap"/>
+     <map:transform type="xpath">
+       <map:parameter name="include" value="//*[@href='{1}']"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+
+   <map:match pattern="**linkmap">
+     <map:generate src="cocoon:/abs-linkmap"/>
+     <map:transform src="library/xslt/relativize-linkmap.xsl">
+       <map:parameter name="path" value="{0}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+
+   <!-- This derivation of '**linkmap' is used when generating book.xml from a
+   site.xml.  The /** suffix identifies a @href prefix which all nodes in the
+   returned subtree must have. -->
+   <map:match pattern="**linkmap/**">
+     <map:generate src="cocoon:/abs-linkmap/{2}"/>
+     <map:transform src="library/xslt/relativize-linkmap.xsl">
+       <map:parameter name="path" value="{1}linkmap"/>
+     </map:transform>
+     <map:serialize type="xml"/>
    </map:match>
 
   </map:pipeline>
@@ -362,7 +428,7 @@
    <map:match pattern="edit**">
      <map:mount uri-prefix="edit" src="editor.xmap" check-reload="yes"/>
    </map:match>
-   
+
    <!-- ==================   External URI-space    ========================= -->   
 
 
@@ -474,7 +540,7 @@
    <!-- ================  Directory redirects   =========================== -->
    <!-- Redirect any request for a directory to the directory's index.html file  -->
    <map:match pattern="**/">
-     <map:redirect-to uri="{request:contextPath}/{1}/index.html"/>
+    <map:redirect-to uri="{request:contextPath}/{1}/index.html"/>
    </map:match>
 
    <!-- ================  Libre   =========================== -->
@@ -564,8 +630,8 @@
    </map:match>
 
    </map:match>
-   
-  </map:pipeline>
+
+ </map:pipeline>
  </map:pipelines>
 
 </map:sitemap>
