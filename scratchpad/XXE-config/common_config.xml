@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<configuration name="Forrest Doc v20"
+<configuration name="Forrest Common"
   xsi:schemaLocation="http://www.xmlmind.com/xmleditor/schema/configuration
                       xsd/configuration.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -24,9 +24,9 @@
   <include location="toolBar.xml" />
   
   <documentResources>
-    <resource path="//img/@src" />
-    <resource path="//figure/@src" />
-    <resource path="//icon/@src" />
+    <resource path="//img/@src"/>
+    <resource path="//figure/@src"/>
+    <resource path="//icon/@src"/>
   </documentResources>
   
   <elementTemplate xmlns="" name="tableHeaded">
@@ -64,10 +64,6 @@
       <td></td>
       <td></td>
     </tr>
-  </elementTemplate>
-  
-  <elementTemplate xmlns="" name="aFork">
-    <a target="_blank"/>
   </elementTemplate>
   
   <!-- Bindings =========================================================== -->
@@ -135,29 +131,6 @@
         <command name="insertNode" parameter="textAfter" />
         <command name="cancelSelection" />
       </sequence>
-    </macro>
-  </command>
-  
-  <!-- v1.x versus v2.x deciders -->
-  <command name="forrest.insertFork">
-    <macro trace="false">
-      <choice>
-        <!-- v1.x -->
-        <command name="convert" parameter="[implicitElement] fork" />
-        <!-- v2.x -->
-        <command name="convert" parameter="[implicitElement] #template(a,aFork)" />
-      </choice>
-    </macro>
-  </command>
-
-  <command name="forrest.insertLink">
-    <macro trace="false">
-      <choice>
-        <!-- v1.x -->
-        <command name="convert" parameter="[implicitElement] link" />
-        <!-- v2.x -->
-        <command name="convert" parameter="[implicitElement] a" />
-      </choice>
     </macro>
   </command>
 
