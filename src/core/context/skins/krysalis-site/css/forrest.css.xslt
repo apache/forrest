@@ -65,7 +65,7 @@ body         { background-color: <xsl:value-of select="@value"/>;} </xsl:templat
 
 
   <xsl:template match="skinconfig">
-/* $Id: forrest.css.xslt,v 1.1 2004/01/03 15:36:08 nicolaken Exp $ */
+/* $Id: forrest.css.xslt,v 1.2 2004/01/03 16:20:35 nicolaken Exp $ */
    <xsl:apply-templates/>
   </xsl:template>
 

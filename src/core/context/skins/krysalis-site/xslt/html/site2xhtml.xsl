@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </?>
 </site>
 
-$Id: site2xhtml.xsl,v 1.6 2004/01/03 15:36:20 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.7 2004/01/03 16:20:35 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -188,7 +188,7 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/03 15:36:20 nicolaken Exp $
           </xsl:if>
         </td>
         <!-- ( =================  Main Area  ================== ) -->
-        <td valign="top" width="100%">
+        <td valign="top">
            <xsl:call-template name="mainarea"/>
         </td>
       </tr>
@@ -353,7 +353,7 @@ $Id: site2xhtml.xsl,v 1.6 2004/01/03 15:36:20 nicolaken Exp $
   </xsl:template>
   
   <xsl:template name="mainarea">
-	  <table cellspacing="0" cellpadding="0" border="0" width="100%">
+	  <table cellspacing="0" cellpadding="0" border="0">
 	    <!-- ( ================= middle NavBar ================== ) -->
 	    <tr>
 	      <td></td>
