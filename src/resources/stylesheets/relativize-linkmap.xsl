@@ -59,7 +59,7 @@ Jeff Turner <jefft@apache.org>
 
     <xsl:attribute name="href">
       <xsl:choose>
-        <xsl:when test="starts-with(., 'http:') or starts-with(., 'https:')">
+        <xsl:when test="contains(., ':') and not(contains(substring-before(., ':'), '/'))">
           <xsl:value-of select="."/>
         </xsl:when>
         <xsl:when test="contains(., '.png') or
