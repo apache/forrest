@@ -27,13 +27,16 @@
           <note>If you are behind a proxy, see <link 
 href="http://subversion.tigris.org/project_faq.html#proxy">this FAQ</link>.</note>
         <ol> 
-          <li>Make sure you have a recent release of <link href="http://subversion.tigris.org/">Subversion</link> installed.</li>
+          <li>Make sure you have a recent release of a
+           <link href="http://subversion.tigris.org/">Subversion</link>
+           client installed.</li>
           <li>At a command prompt, enter "<code>svn co http://svn.apache.org/repos/asf/xml/forrest/trunk forrest</code>" (committers should replace <code>http</code> with <code>https</code>)</li>
           <li>This will create a directory called "<code>forrest</code>" where the Forrest source will be stored.</li> 
         </ol> 
-        <p>In case you want to update your Forrest source tree to the current version, change to the 
-"<code>forrest</code>" directory and invoke "<code>svn up</code>".</p> 
-        <p>To see what changes you've made, invoke "<code>svn stat</code>"</p>
+        <p>Whenever you want to update your Forrest source tree to the current
+         version, change to the top-level
+"<code>forrest</code>" directory and invoke "<code>svn update</code>".</p> 
+        <p>To see what changes you've made, invoke "<code>svn status</code>"</p>
         <p>SVN is really powerful. See
           <link href="http://svnbook.red-bean.com/">Version Control with Subversion</link> - the opensource SVN book.
         </p>
@@ -43,47 +46,46 @@ href="http://subversion.tigris.org/project_faq.html#proxy">this FAQ</link>.</not
    <section id="building">
      <title>Building and Installing Forrest</title>
      <p>
-       To build Forrest, type <code>build</code> on Windows, or <code>./build.sh</code> on
+       To build Forrest, type '<code>build</code>' on Windows, or '<code>./build.sh</code>' on
        Unix. If everything is successful, you should see a message like this:
      </p>
      <source>
   *-----------------------------------------------------------------
-  | installation notice 
+  | installation notice
   *-----------------------------------------------------------------
-  | You have succesfully built the shell-bat distribution of Forrest.
-  | Please find it at: ./build/dist/shbat
-  | Please copy the contents to the install directory of your choice
-  | Please have the environment variable FORREST_HOME point to it.
+  | You have built the distribution of Forrest.
+  | Please set the environment variable FORREST_HOME point to src/core
   | It is recommended to add
   |    unix: $FORREST_HOME/bin: to your $PATH
   |    win: %FORREST_HOME%\bin; to your %PATH%
-  | Calling
-  |    unix: $FORREST_HOME/bin/forrest -projecthelp
-  |    win: %FORREST_HOME%\bin\forrest -projecthelp
-  | will list options for the 'forrest' command
-  | More help at http://xml.apache.org/forrest/ and forrest-dev@xml.apache.org
+  | Then do 'forrest -projecthelp' to list options for the 'forrest' command
+  | More help at http://xml.apache.org/forrest/
   *-----------------------------------------------------------------
      </source>
-     <p>
-       You now have the binary distribution built in <code>build/dist/shbat</code>.
-       Copy it somewhere more sensible if you like (e.g.
-       <code>/usr/local/forrest</code> on Unix), though if you intend to update your
-       Forrest from SVN, leaving it where it is would be best.</p>
      <p>
        As the message says, you need to add the distribution's <code>bin/</code>
        ("binary") directory to your PATH variable, so the <code>'forrest'</code>
        command is available everywhere:
      </p>
      <source>
-~/apache/xml-forrest$ export FORREST_HOME=`pwd`/build/dist/shbat
-~/apache/xml-forrest$ export PATH=$PATH:$FORREST_HOME/bin
+~/apache/forrest$ export FORREST_HOME=`pwd`/src/core
+~/apache/forrest$ export PATH=$PATH:$FORREST_HOME/bin
      </source>
      <p>
        After updating the Forrest source from SVN, or after you have made changes, you
-       will need to build forrest again.  In Windows, run <code>build</code>.  In Unix,
-	   run <code>./build.sh</code>
+       will need to build forrest again. If there have been major updates,
+       then run '<code>build clean</code>' before '<code>./build.sh</code>'
      </p>
     </section>
+
+  <section id="run">
+    <title>Run Forrest, run!</title>
+    <p>Forrest is now ready to go. Type '<code>forrest run</code>' to see
+    the local webapp using the bundled Jetty server. Edit some of Forrest's
+    core documentation and see the effect.
+    The document <link href="site:your-project">Using Forrest</link> is
+    your next step.</p>
+  </section>
 
 </body>
 </document>
