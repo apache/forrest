@@ -7,8 +7,8 @@
 #
 BASE=$PWD/`dirname $0`
 ## MUST BE OVERRIDDEN:
-COCOON_VERSION=2.1.2
-COCOON_HOME=$BASE/../../../cocoon-2.1.2
+COCOON_VERSION=2.1.3-dev
+COCOON_HOME=$BASE/../../../cocoon-2.1
 FORREST=$BASE/../..
 NEKODTD_VERSION=0.1.6
 NEKODTD_HOME=$BASE/../../../nekodtd-$NEKODTD_VERSION
@@ -16,8 +16,8 @@ NEKOPULL_VERSION=0.2.3
 NEKOPULL_HOME=$BASE/../../../nekopull-$NEKOPULL_VERSION
 
 ## CAN be overridden:
-#JARSUFFIX=`date +%Y%m%d`
-JARSUFFIX=2.1.2
+JARSUFFIX=`date +%Y%m%d`
+#JARSUFFIX=2.1.2
 
 ## We need to identify the old Cocoon jar amongst all the others.  This pattern
 ## identifies it.  By default, we assume a date (see $JARSUFFIX) was used
@@ -169,7 +169,7 @@ upgrade_endorsed
 #avalon-framework-4.1.3.jar
 copy avalon-framework
 #batik-all-1.5b2.jar
-bcopy batik-all
+#bcopy batik-all
 #chaperon-20030208.jar
 bcopy chaperon
 #cocoon-20030311.jar
@@ -198,6 +198,7 @@ copy commons-collections
 #commons-jxpath-1.1b1.jar
 copy commons-jxpath
 #commons-lang-1.0.1.jar
+copy commons-lang
 #excalibur-cli-1.0.jar
 copy commons-cli
 #excalibur-component-20020916.jar
@@ -231,6 +232,7 @@ copy excalibur-xmlutil
 #fop-0.20.4.jar
 #bcopy fop
 #jakarta-oro-2.0.6.jar
+copy jakarta-oro
 #jakarta-regexp-1.2.jar
 copy jakarta-regexp
 #jing-20020724.jar
