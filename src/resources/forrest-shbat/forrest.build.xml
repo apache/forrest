@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                          0.5                          |
-    |             $Date: 2003/09/07 04:16:32 $              |
+    |             $Date: 2003/09/07 13:48:58 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -173,7 +173,8 @@ FORREST SITE BUILDER
         <isset property="sitemap.present"/>
       </and>
     </condition>
-    <property name="forrest.validate.sitemap.includes" value="*.xmap"/>
+
+    <property name="forrest.validate.sitemap.includes" value=""/>
     <property name="forrest.validate.sitemap.excludes" value=""/>
     <property name="forrest.validate.sitemap.failonerror"
       value="${forrest.validate.failonerror}" />
@@ -875,11 +876,28 @@ Thanks for using Apache Forrest
 
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap">
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/forrest-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/aggregate-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/dtd-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/faq-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/forrest-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/issues-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/linkmap-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/menu-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/profiler-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/raw-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/resources-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/revisions-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/sitemap-${version}.xmap" type="file"/>
+    <available property="version-specific-sitemap" file="${project.sitemap-dir}/status-${version}.xmap" type="file"/>
 
     <jing rngfile="${forrest.home}/context/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${project.content-dir}"
         includes="${forrest.validate.sitemap.includes}"
-        excludes="${forrest.validate.sitemap.excludes}"/>
+        excludes="${forrest.validate.sitemap.excludes}">
+        <include name="*.xmap" unless="version-specific-sitemap"/>
+        <include name="*-${version}.xmap" if="version-specific-sitemap"/>
+      </fileset>
     </jing>
     <echo message="...validated sitemap"/>
   </target>
