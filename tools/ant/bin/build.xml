@@ -1,0 +1,27 @@
+<project default="validate-v11" basedir="." name="Doc Transition Trial: validate v1.1">
+
+  <target name="validate-v11">
+
+    <property name="resources.dir" value="/home/jeff/apache/xml/xml-forrest/src/resources"/>
+    <property name="v11.dir" value="/home/jeff/apache/xml/xml-forrest/src/documentation/content/xdocs"/>
+
+    <echo message="Validating v11 xdocs ..."/>
+    <xmlvalidate failonerror="yes" 
+      lenient="no" 
+      warn="yes"
+	  >
+	  <!--
+	  classname="org.apache.xerces.parsers.SAXParser" 
+	  -->
+      <fileset dir="${v11.dir}" includes="*.xml" excludes="book.xml"/>
+      <xmlcatalog>
+        <catalogfiles dir="${resources.dir}/schema">
+            <include name="catalog" />
+        </catalogfiles>
+      </xmlcatalog>
+    </xmlvalidate>
+
+  </target>
+</project>
+
+<!-- End of file -->
