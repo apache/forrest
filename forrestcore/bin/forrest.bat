@@ -33,13 +33,13 @@ set ANTFILE=%FORREST_HOME%\forrest.build.xml
 
 rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
-set ANT_HOME=%FORREST_HOME%\..\..\..\tools\ant
+set ANT_HOME=%FORREST_HOME%\..\tools\ant
 
 rem ----- Save and set CLASSPATH --------------------------------------------
 set OLD_CLASSPATH=%CLASSPATH%
 set CLASSPATH=
-cd /d "%FORREST_HOME%\..\..\lib\endorsed\"
-for %%i in ("*.jar") do call %FORREST_HOME%\bin\appendcp.bat "%FORREST_HOME%\..\..\lib\endorsed\%%i"
+cd /d "%FORREST_HOME%\..\lib\endorsed\"
+for %%i in ("*.jar") do call %FORREST_HOME%\bin\appendcp.bat "%FORREST_HOME%\..\lib\endorsed\%%i"
 cd /d %PWD%
 
 echo.
