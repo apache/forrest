@@ -707,11 +707,13 @@
   <xsl:template match="section" mode="toc">
     <fo:block space-before="5pt" text-align-last="justify">
       <fo:inline>
-        <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
-        <xsl:text>. </xsl:text>
-        <xsl:value-of select="title" />
-        <fo:leader leader-pattern="dots" />
-        <fo:page-number-citation ref-id="{generate-id(  )}" />
+        <fo:basic-link internal-destination="{generate-id( )}">
+          <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
+          <xsl:text>. </xsl:text>
+          <xsl:value-of select="title" />
+          <fo:leader leader-pattern="dots" />
+          <fo:page-number-citation ref-id="{generate-id(  )}" />
+	</fo:basic-link>
       </fo:inline>
         <xsl:if test="$toc-max-depth > 1">
           <xsl:apply-templates select="section" mode="toc2" /> 
@@ -722,11 +724,13 @@
   <xsl:template match="section" mode="toc2">
     <fo:block start-indent=".5em" text-align-last="justify" text-indent=".5em">
       <fo:inline padding-start="1em">
-        <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
-        <xsl:text>. </xsl:text>
-        <xsl:value-of select="title" />
-        <fo:leader leader-pattern="dots" />
-        <fo:page-number-citation ref-id="{generate-id(  )}" />
+        <fo:basic-link internal-destination="{generate-id( )}">
+          <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple" />
+          <xsl:text>. </xsl:text>
+          <xsl:value-of select="title" />
+          <fo:leader leader-pattern="dots" />
+          <fo:page-number-citation ref-id="{generate-id(  )}" />
+        </fo:basic-link>
       </fo:inline>
     </fo:block>
   </xsl:template>
