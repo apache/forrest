@@ -17,16 +17,11 @@
   </map:generators>
 
   <map:transformers default="xslt">
-  <!--
-   <map:transformer     name="xslt"      src="org.apache.cocoon.transformation.TraxTransformer">
-    <use-request-parameters>false</use-request-parameters>
-    <use-browser-capabilities-db>false</use-browser-capabilities-db>
-   </map:transformer>
-  -->
-  <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
-    <element>/document/body//*[local-name() = 'section']</element>
-    <id>title/text()</id>
-  </map:transformer>
+    <map:transformer name="idgen" src="org.apache.cocoon.transformation.IdGeneratorTransformer">
+      <element>/document/body//*[local-name() = 'section']</element>
+      <id>title/text()</id>
+    </map:transformer>
+  
     <map:transformer name="linkrewriter"
       src="org.apache.cocoon.transformation.LinkRewriterTransformer">
       <input-module name="linkmap" src="{src}" reloadable="true"/>
@@ -36,11 +31,11 @@
         <suffix>/@href</suffix>
       </input-module>
     </map:transformer>
+    
     <map:transformer name="xpath"
        logger="sitemap.transformer.xpath"
        src="org.apache.cocoon.transformation.XPathTransformer"
      />
-
  
     <map:transformer name="xslt" src="org.apache.cocoon.transformation.TraxTransformer"
                         logger="sitemap.transformer.xsltc"
@@ -77,13 +72,14 @@
                 src="org.apache.cocoon.serialization.FOPSerializer"
                 mime-type="application/pdf"/>
 
-
    <map:serializer name="links"                               src="org.apache.cocoon.serialization.LinkSerializer">
      <encoding>ISO-8859-1</encoding>
    </map:serializer>
+   
    <map:serializer name="svg2jpeg" mime-type="image/jpeg"     src="org.apache.cocoon.serialization.SVGSerializer">
        <parameter name="quality" type="float" value="1.0"/>
    </map:serializer>
+   
    <map:serializer name="svg2png" mime-type="image/png"       src="org.apache.cocoon.serialization.SVGSerializer"/>
   </map:serializers>
 
@@ -122,6 +118,7 @@
 
   <!--
      The different pipeline implementations
+     @todo use map:pipe and map:pipes with next cocoon CVS update
   -->
   <map:pipelines default="caching">
      <map:pipeline name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
@@ -356,6 +353,20 @@
 
    <!-- Generates body HTML for files in subdirs -->
    <map:match pattern="body-**/*.xml">
+         
+     <!-- if the file is present as ihtml, give that to the user... -->
+     <map:act type="resource-exists">
+       <map:parameter name="url" value="content/xdocs/{1}/{2}.ihtml"/>
+       <map:generate src="content/xdocs/{../1}/{../2}.ihtml" type="html"/>
+       <map:transform src="library/xslt/html2document.xsl"/>
+       <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
+       <map:transform type="idgen"/>
+       <map:call resource="skinit">
+         <map:parameter name="type" value="document2html"/>
+         <map:parameter name="path" value="{../1}/{../2}.xml"/>
+       </map:call>
+     </map:act> 
+   
     <map:generate src="content/xdocs/{1}/{2}.xml"/>
     <map:transform type="linkrewriter" src="cocoon:/{1}/linkmap"/>
     <map:transform type="idgen"/>
@@ -370,6 +381,20 @@
 
    <!-- Generates body HTML for root-level files -->
    <map:match pattern="body-**.xml">
+      
+     <!-- if the file is present as ihtml, give that to the user... -->
+     <map:act type="resource-exists">
+       <map:parameter name="url" value="content/xdocs/{1}.ihtml"/>
+       <map:generate src="content/xdocs/{../1}.ihtml" type="html"/>
+       <map:transform src="library/xslt/html2document.xsl"/>
+       <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
+       <map:transform type="idgen"/>
+       <map:call resource="skinit">
+         <map:parameter name="type" value="document2html"/>
+         <map:parameter name="path" value="{../1}.xml"/>
+       </map:call>
+     </map:act> 
+   
     <map:generate src="content/xdocs/{1}.xml"/>
     <map:transform type="linkrewriter" src="cocoon:/linkmap"/>
     <map:transform type="idgen"/>
@@ -382,7 +407,6 @@
     </map:call>
    </map:match>
  </map:pipeline>
-
 
  <map:pipeline>
    <map:match pattern="abs-linkmap">
