@@ -500,12 +500,53 @@ document.write("Last Published: " + document.lastModified);
     +-->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div class="pdflink"><a href="{$filename-noext}.pdf" class="dida">
-        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/><br/>
+      <div class="pdflink" title="PDF"><a href="{$filename-noext}.pdf" class="dida">
+        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF" /><br/>
         PDF</a>
       </div>
     </xsl:if>
   </xsl:template>
+  <xsl:template match="div[@id='skinconf-xmllink']">
+    <xsl:if test="not($config/disable-xml-link) or $disable-xml-link = 'false'"> 
+      <div class="xmllink" title="XML"><a href="{$filename-noext}.xml" class="dida">
+        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML" /><br/>
+        XML</a>
+      </div>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="div[@id='skinconf-podlink']">
+    <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'"> 
+      <div class="podlink" title="POD"><a href="{$filename-noext}.pod" class="dida">
+        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD" /><br/>
+        POD</a>
+      </div>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="div[@id='skinconf-printlink']">
+    <xsl:if test="not($config/disable-print-link) or $disable-print-link = 'false'"> 
+        <script type="text/javascript" language="Javascript">
+function printit() {
+  if (window.print) {
+    window.print() ;  
+  }
+}
+        </script>
+
+        <script type="text/javascript" language="Javascript">
+var NS = (navigator.appName == "Netscape");
+var VERSION = parseInt(navigator.appVersion);
+if (VERSION > 3) {
+  document.write('<div class="printlink" title="Print this Page">');
+  document.write('  <a href="javascript:printit()" class="dida">');
+  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page" />');
+  document.write('    <br />');
+  document.write('  print</a>');
+  document.write('</div>');
+}
+        </script>
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="div[@id='disable-font-script']">
     <xsl:if test="$disable-font-script = 'false'">
 	  <div class="trail">
