@@ -130,10 +130,14 @@
   </xsl:template>
   <xsl:template match="source">
     <pre class="code">
+<!-- Temporarily removed long-line-splitter ... gives out-of-memory problems -->
+      <xsl:apply-templates/>
+<!--
     <xsl:call-template name="format">
     <xsl:with-param select="." name="txt" /> 
      <xsl:with-param name="width">80</xsl:with-param> 
      </xsl:call-template>
+-->
     </pre>
   </xsl:template>
   <xsl:template match="anchor">
