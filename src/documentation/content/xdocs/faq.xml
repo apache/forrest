@@ -296,6 +296,45 @@
       </answer>
     </faq>
 
+    <faq id="docbook">
+      <question>
+        How do i use DocBook as the xml documentation format?
+      </question>
+      <answer>
+        <p>
+         There are two ways. Forrest can transform the DocBook format into the
+         Forrest "document" DTD on-the-fly and then render that as normal.
+         The stylesheet that does this transformation still needs a little
+         work but it handles most things.
+        </p>
+        <p>
+         The other way is to use the DocBook stylesheets directly. The DocBook
+         DTDs are shipped with Forrest and automatically handled. However, you
+         will need to have the DocBook stylesheets on your system (they are
+         too massive to ship with Forrest) and configure Forrest accordingly.
+         You will need to create a "sitemap" as explained in
+         <link href="site:your-project">Using Forrest</link>
+         and add matches to handle your DocBook documents, e.g.
+        </p>
+        <source><![CDATA[
+...
+  <map:match pattern="**/resolver-*.html">
+    <map:generate src="content/xdocs/{1}/resolver-{2}.xml"/>
+    <map:transform
+      src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/>
+    <map:serialize/>
+  </map:match>
+...
+]]>
+        </source>
+        <p>
+         You can also use a mixture of the two methods, some handled
+         automatically by Forrest and some directly using DocBook stylesheets.
+         You can also have a mixture of "document-v*" DTD and DocBook.
+        </p>
+      </answer>
+    </faq>
+
     <faq id="obsolete_docs">
       <question>
         Why am I a little confused by the Forrest documentation?
