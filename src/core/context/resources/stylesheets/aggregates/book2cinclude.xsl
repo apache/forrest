@@ -48,8 +48,7 @@ jefft@apache.org
 
   <xsl:template match="menu-item[@type='hidden']"/>  <!-- Ignore hidden items -->
   <xsl:template match="menu-item[contains(@href, '#')]"/>  <!-- Ignore #frag-id items -->
-  <xsl:template match="menu-item[starts-with(@href, 'http:')]"/>  <!-- Ignore absolute http urls -->
-  <xsl:template match="menu-item[starts-with(@href, 'https:')]"/>  <!-- Ignore absolute https urls -->
+  <xsl:template match="menu-item[contains(@href, ':')]"/>  <!-- Ignore all non-local links -->
   <xsl:template match="menu-item[starts-with(@href, $ignore)]"/>  <!-- Ignore the aggregated pages -->
 
   <!-- Recursive template to collate @href's -->
