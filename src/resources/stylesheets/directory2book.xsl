@@ -53,8 +53,17 @@ automatically generate a menu for (here wiki/):
   </xsl:template>
 
   <xsl:template match="dir:file[not(@name=concat('book', $ext))]">
-    <menu-item label="{substring-before(@name, $ext)}"
-    href="{concat(substring-before(@name, $ext), '.html')}"/>
+    <menu-item label="{substring-before(@name, $ext)}">
+      <xsl:attribute name="href">
+      <xsl:variable name="path" />
+        <!-- [not (position()=last())] is to ignore the root node -->
+        <xsl:for-each select="ancestor::dir:directory [not (position()=last())]">
+          <xsl:variable name="path" select="concat($path, @name, '/')" />
+          <xsl:value-of select="$path"/>
+        </xsl:for-each>
+        <xsl:value-of select="concat(substring-before(@name, $ext), '.html')"/>
+      </xsl:attribute>
+    </menu-item>
   </xsl:template>
 
 </xsl:stylesheet>
