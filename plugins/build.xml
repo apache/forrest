@@ -16,11 +16,11 @@
 -->
 <project default="local-deploy" basedir="." name="Forrest_Plugins_build_file">
   <property environment="env"/>
-  <property name="forrest.root-dir"           location="${env.FORREST_HOME}"/>   
-  <property name="forrest.home"               location="${env.FORREST_HOME}/main" />  
-  <property name="forrest.ant.lib.dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
-  <property name="forrest.build.dir"          location="${forrest.root-dir}/build"/>
-  <property name="forrest.plugins.dir"        location="${forrest.root-dir}/plugins"/>
+  <property name="forrest.home"               location="${env.FORREST_HOME}"/>   
+  <property name="forrest.core"               location="${env.FORREST_HOME}/main" />  
+  <property name="forrest.ant.lib.dir"        location="${forrest.home}/tools/ant/lib"/>  
+  <property name="forrest.build.dir"          location="${forrest.home}/build"/>
+  <property name="forrest.plugins.dir"        location="${forrest.home}/plugins"/>
   
   <property name="plugins.dir"                location="${ant.file.Forrest_Plugins_build_file}/.."/>
   <property name="plugins.dist-dir"           location="build/dist"/>
@@ -131,8 +131,7 @@
    
   <target name="docs" depends="local-deploy">
     <echo>Building Docs for ${plugin-name}</echo>
-    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
-      <property name="forrest.home" value="${forrest.home}"/>  
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site">
       <property name="project.home" value="${basedir}"/>
     </ant>    
   </target>
