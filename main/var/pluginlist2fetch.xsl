@@ -22,8 +22,9 @@
    <xsl:param name="forrest-version" />
 
    <xsl:template match="plugins">
+         <xsl:choose>
+           <xsl:when test="plugin[@name=$plugin-name]">
       <project default="fetchplugin">
-      
          <target name="fetchplugin" depends="fetch-versioned-plugin, fetch-unversioned-plugin, final-check"/>
 
          <target name="fetch-versioned-plugin">
@@ -70,6 +71,13 @@
             <echo>Plugin "<xsl:value-of select="$plugin-name" />" correctly installed.</echo>
          </target>
       </project>
+         </xsl:when>
+         <xsl:otherwise>
+            <project default="findPlugin">
+              <target name="findplugin"/>
+            </project>
+         </xsl:otherwise>
+       </xsl:choose>
    </xsl:template>
 
    <xsl:template match="plugin">
