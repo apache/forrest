@@ -40,7 +40,7 @@ public class ForrestLogTargetFactory
             String projectHome = ForrestConfUtils.getProjectHome();
             if(!projectHome.equals(ForrestConfUtils.defaultHome)){
                 DefaultContext newContext = new DefaultContext(context);
-                newContext.put("context-root",projectHome + "/build");
+                newContext.put("context-root",projectHome + "/build/webapp");
                 currentContext = newContext;
             }
         } catch (Exception e) {
