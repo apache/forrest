@@ -1,18 +1,18 @@
 <!-- ===================================================================
 
-     Apache FAQ DTD (Version 1.1)
+     Apache Contributors DTD (Version 1.1)
 
 PURPOSE:
-  This DTD was developed to create a simple yet powerful document
-  type for software FAQ's for use with the Apache projects.
+  This DTD was developed to create a simple document listing the
+  contributors to a project.
   It is an XML-compliant DTD and it's maintained by the Apache XML
   project.
 
 TYPICAL INVOCATION:
 
-  <!DOCTYPE faqs PUBLIC
-       "-//APACHE//DTD FAQ Vx.y//EN"
-       "faq-vxy.dtd">
+  <!DOCTYPE contributors PUBLIC
+       "-//APACHE//DTD Contributors Vx.y//EN"
+       "contributors-vxy.dtd">
 
   where
 
@@ -20,21 +20,15 @@ TYPICAL INVOCATION:
     y := minor version
 
 NOTES:
-  FAQs represent a powerful knowledge base and a very good way of solving
-  common user problems reducing messages on mail lists and reducing the effort
-  required for software installation and usage. Thid DTD want to be a common
-  format for FAQ interchange to allow FAQ-O-Matic-type workgroup services to
-  be published in other formats as well as enhancing data interchange.
 
 AUTHORS:
-  Stefano Mazzocchi <stefano@apache.org>
+  Steven Noels <stevenn@apache.org>
 
 FIXME:
 
 CHANGE HISTORY:
-  19991129 Initial version. (SM)
-  20011212 Used public identifiers for external entities (SM)
-  20020418 Added an (optional) 'part' element to create sections in a faq (SNS)
+[Version 1.0]
+  20020608 Initial version. (SN)
 
 COPYRIGHT:
   Copyright (c) @year@ The Apache Software Foundation.
@@ -47,22 +41,29 @@ COPYRIGHT:
 ==================================================================== -->
 
 <!-- =============================================================== -->
-<!-- Include the Documentation DTD -->
+<!-- Include the common documentation elements -->
 <!-- =============================================================== -->
 
 <!ENTITY % document PUBLIC
-    "-//APACHE//ENTITIES Documentation V1.1//EN"
-    "document-v11.mod">
+    "-//APACHE//DTD Documentation V1.1//EN"
+    "document-v11.dtd">
 %document;
 
 <!-- =============================================================== -->
 <!-- Document Type Definition -->
 <!-- =============================================================== -->
 
-<!ENTITY % faq PUBLIC
-    "-//APACHE//ENTITIES FAQ V1.1//EN"
-    "faq-v11.mod">
-%faq;
+<!ELEMENT contributors (header, (category | contributors)+)>
+<!ATTLIST contributors %common.att;>
+
+    <!ELEMENT category (title, contributor+) >
+    <!ATTLIST category %common.att;>
+
+    <!ELEMENT contributor (person, img?, bio)>
+    <!ATTLIST contributor %common.att;>
+
+        <!ELEMENT bio (%blocks;)*>
+        <!ATTLIST bio %common.att;>
 
 <!-- =============================================================== -->
 <!-- End of DTD -->

@@ -1,3 +1,44 @@
+<!-- ===================================================================
+
+     Apache Common Documentation elements (Version 1.1)
+
+PURPOSE:
+  This DTD was developed to create a simple yet powerful document
+  type for software documentation for use with the Apache projects.
+
+TYPICAL INVOCATION:
+
+  <!ENTITY % document PUBLIC
+      "-//APACHE//ENTITIES Documentation Vxy//EN"
+      "document-vxy.mod">
+  %document;
+
+  where
+
+    x := major version
+    y := minor version
+
+NOTES:
+
+AUTHORS:
+  Stefano Mazzocchi <stefano@apache.org>
+  Steven Noels <stevenn@apache.org>
+
+FIXME:
+
+CHANGE HISTORY:
+[Version 1.0]
+  20020608 Initial version. (SN)
+
+COPYRIGHT:
+  Copyright (c) @year@ The Apache Software Foundation.
+
+  Permission to copy in any form is granted provided this notice is
+  included in all copies. Permission to redistribute is granted
+  provided this file is distributed untouched in all its parts and
+  included files.
+
+==================================================================== -->
 
 <!-- =============================================================== -->
 <!-- Useful entities for increased DTD readability -->
@@ -393,3 +434,7 @@
 
         <!ELEMENT legal (%content.mix;)*>
         <!ATTLIST legal %common.att;>
+
+<!-- =============================================================== -->
+<!-- End of DTD -->
+<!-- =============================================================== -->
