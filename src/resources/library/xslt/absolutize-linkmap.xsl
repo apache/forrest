@@ -31,7 +31,7 @@ Jeff Turner <jefft@apache.org>
   <xsl:template name="absolutize">
     <xsl:param name="node"/>
     <xsl:if test="$node/..">
-      <xsl:call-template name="abs">
+      <xsl:call-template name="absolutize">
         <xsl:with-param name="node" select="$node/.."/>
       </xsl:call-template>
     </xsl:if>
