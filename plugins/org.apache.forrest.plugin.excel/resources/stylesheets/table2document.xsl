@@ -11,6 +11,7 @@
      <title><xsl:value-of select="*/o:Title"/></title>
     </header>
     <body>
+      <p><xsl:value-of select="*/o:Description"/></p>
       <xsl:apply-templates/>
     </body>
    </document>
@@ -18,18 +19,22 @@
 
   <xsl:template match="ss:Worksheet"> 
     <section>
+      <xsl:attribute name="id"><xsl:value-of select="@ss:Name"/></xsl:attribute>
       <title><xsl:value-of select="@ss:Name"/></title>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
 
   <xsl:template match="ss:Table">
+    <xsl:apply-templates select="ss:Row[ss:Cell[position()='1']='text']"   mode="text"/>
     <xsl:apply-templates select="ss:Row[ss:Cell[position()='1']='figure']" mode="figure"/>
     <table>
       <caption><xsl:value-of select="parent::ss:Worksheet/@ss:Name"/></caption>
       <xsl:apply-templates select="ss:Row[position()=1]" mode="header"/>
       <xsl:apply-templates 
-           select="ss:Row[ss:Cell!='' and position()!=1 and ss:Cell[position()='1']!='figure']"/>
+           select="ss:Row[ss:Cell!='' and position()!=1 
+              and ss:Cell[position()='1']!='figure' 
+              and ss:Cell[position()='1']!='text']"/>
     </table>
   </xsl:template>
 
@@ -48,36 +53,44 @@
   </xsl:template>
   <xsl:template match="ss:Cell">
     <td>
-      <xsl:if test="contains(ss:Data, '#')">
+      <xsl:choose>
+      <xsl:when test="contains(ss:Data, '#')">
         <xsl:attribute name="style">background-color:<xsl:value-of select="ss:Data"/>;
         <xsl:if test="contains(ss:Data, '#000000')">
           color:#ffffff
         </xsl:if>
         </xsl:attribute>
-      </xsl:if>
-      <xsl:value-of disable-output-escaping="no" select="ss:Data" />
+        <xsl:value-of select="ss:Data" />
+      </xsl:when>
+      <xsl:when test="contains(ss:Data, '.png') or contains(ss:Data, '.gif') or contains(ss:Data, '.jpg')">
+        <img>
+          <xsl:attribute name="src">images/<xsl:value-of select="ss:Data"/></xsl:attribute>
+          <xsl:attribute name="alt">images/<xsl:value-of select="ss:Data"/></xsl:attribute>
+        </img>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of disable-output-escaping="no" select="ss:Data" />
+      </xsl:otherwise>
+      </xsl:choose>
     </td>
   </xsl:template>
 
   <xsl:template match="ss:Row" mode="figure">
-    <table><tr><td>
-    <xsl:element name="img">  <!-- changed to figure: renders @ALT as caption -->
+    <xsl:element name="img">
       <xsl:attribute name="src"><xsl:text>images/</xsl:text>
          <xsl:value-of select="ss:Cell[position()='2']"/>
       </xsl:attribute>
       <xsl:attribute name="alt">
-         <xsl:value-of select="ss:Cell[position()='4']/ss:Data"/>
+         <xsl:value-of select="ss:Cell[position()='4' or @ss:Index='4']/ss:Data"/>
       </xsl:attribute>
     </xsl:element>
-    </td></tr>
-<!-- this is not needed since @ALT is rendered as figure caption
-    <tr><td>
-    <em>Figure: <xsl:value-of select="ss:Cell[position()='4' or @ss:Index='4']"/></em>
-    </td></tr>
--->
-    </table>
   </xsl:template>
 
+  <xsl:template match="ss:Row" mode="text">
+    <p>
+      <xsl:value-of select="ss:Cell[position()='2']"/>
+    </p>
+  </xsl:template>
 
   <xsl:template match="node()"/>   <!-- remove anything else -->
 
