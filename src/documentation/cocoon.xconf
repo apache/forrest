@@ -622,11 +622,11 @@ class="org.apache.cocoon.components.profiler.ProfilingNonCachingEventPipeline"/>
 
   <!-- Resource Monitor:
     The Monitor keeps track on changes to a Resource.
-  -->
   <monitor logger="core.monitor">
     <thread priority="5" frequency="10000"/>
   </monitor>
-
+  -->
+  
 <!-- ======================== The sitemap  ============================== -->
 
   <!-- Reloading of the sitemap:
@@ -650,69 +650,8 @@ class="org.apache.cocoon.components.profiler.ProfilingNonCachingEventPipeline"/>
     asynchron and for more safety the check-reload to no.
 
   <sitemap file="sitemap.xmap" reload-method="asynchron" check-reload="yes" logger="sitemap"/>
-  -->
+  -->  
 
   <sitemap class="org.apache.cocoon.treeprocessor.TreeProcessor" logger="sitemap"/>
-  
-<!-- ===================== Sitemap Components =========================== -->
-
-  <!-- Here defined some core Cocoon sitemap components, as File generator
-       or XSLT transformer. Note that syntax of this file slightly differs
-       from the syntax of <map:components> section of the sitemap.xmap file.
-  -->
-  <generators>
-    <component-instance name="file" class="org.apache.cocoon.generation.FileGenerator"
-                        label="content,data"
-                        logger="sitemap.generator.file"
-                        pool-max="32" pool-min="2" pool-grow="4"/>
-
-    <component-instance name="serverpages" class="org.apache.cocoon.generation.ServerPagesGenerator"
-                        label="content,data"
-                        logger="sitemap.generator.serverpages"
-                        pool-max="32" pool-min="0" pool-grow="2"/>
-  </generators>
-
-  <transformers>
-    <component-instance name="xslt" class="org.apache.cocoon.transformation.TraxTransformer"
-                        logger="sitemap.transformer.xslt"
-                        pool-max="32" pool-min="2" pool-grow="4">
-      <use-request-parameters>false</use-request-parameters>
-      <use-browser-capabilities-db>false</use-browser-capabilities-db>
-      <use-deli>false</use-deli>
-    </component-instance>
-  </transformers>
-
-  <serializers>
-   <component-instance name="links" class="org.apache.cocoon.serialization.LinkSerializer"
-                       encoding="iso8859-1"
-                       logger="sitemap.serializer.links"
-                       pool-max="32" pool-min="2" pool-grow="4"/>
-
-   <component-instance name="xml" class="org.apache.cocoon.serialization.XMLSerializer"
-                       encoding="iso8859-1"
-                       mime-type="text/xml"
-                       logger="sitemap.serializer.xml"
-                       pool-max="32" pool-min="2" pool-grow="4"/>
-
-   <component-instance name="html" class="org.apache.cocoon.serialization.HTMLSerializer"
-                       encoding="iso8859-1"
-                       mime-type="text/html"
-                       logger="sitemap.serializer.html"
-                       pool-max="32" pool-min="4" pool-grow="4">
-     <buffer-size>1024</buffer-size>
-   </component-instance>
-  </serializers>
-
-  <readers>
-   <component-instance name="resource" class="org.apache.cocoon.reading.ResourceReader"
-                       logger="sitemap.reader.resource"
-                       pool-max="32"/>
-  </readers>
- 
-<!--
-  <matchers/>
-  <selectors/>
-  <actions/>
--->
 
 </cocoon>

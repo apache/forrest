@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<module name="xml-forrest">
+
+  <url href="http://xml.apache.org/forrest/"/>
+  
+  <cvs repository="jakarta"/> 
+
+  <mailing-lists> 
+    <mailing-list user="developer" 
+                  mail="forrest-dev@xml.apache.org" 
+                  subscribe="forrest-dev-subscribe@xml.apache.org" 
+                  unsubscribe="forrest-dev-unsubscribe@xml.apache.org"/>    
+  </mailing-lists>    
+   
+  <description>
+    Forrest wants to provide a good technological infrastructure for 
+    software development for the Apache Software Foundation based on ASF 
+    software, ASF practices and experience and modern software design 
+    principles.
+  </description>
+
+  <detailed>
+    Ever seen 'sourceforge'? ok, than you know what a technological 
+    insfrastructure for open development is. Ever seen Mozilla's
+    'tinkerbox' and 'bonsai'? ok, then you know what we mean for
+    'helping tools'. Take all the wishes/dreams that you ever had 
+    when you were participating in an OSS community... well, we 
+    want Forrest to make them possible.
+  </detailed>
+
+  <what>
+    <goal>publishing system for documentation </goal>
+    <goal>a build system for code</goal>
+    <goal>analysis of logs and publishing of results </goal>
+  </what>
+    
+  <why>
+    If you ever participated in ASF open development you know why: there is 
+    always the feeling that you are left on your own, that each project, effort, 
+    community mail list and invidual has to struggle to keep up with the others 
+    and to keep coherence. This effort was started by those who believe that a 
+    better and more coherent technical infrastructure is a first step in the 
+    right direction.
+  </why>
+  
+  <who>
+    <!-- in strict alphabetical order -->
+    <person name="David Crossley"     email="crossley@apache.org"  id="DC" />
+    <person name="Stefano Mazzocchi"  email="stefano@apache.org"   id="SM" />
+    <person name="John Morrison"      email="morrijr@apache.org"   id="JM" />
+    <person name="Nicola Ken Barozzi" email="nicolaken@apache.org" id="NKB"/>
+    <person name="Steven Noels"       email="stevenn@apache.org"   id="SN" />
+    <person name="Sam Ruby"           email="rubys@apache.org"     id="RS" />
+    
+    <person name="Volunteer needed"   email="forrest-dev@xml.apache.org" id="open"/>    
+  </who>
+  
+  <todo>
+   <actions priority="high">
+    <action context="code" assigned-to="open">
+     Merge other Gump DTDs and work on them. We have to standardize the work on 
+     the rest of the DTDs that will be required by Forrest.
+    </action>   
+    <action context="code" assigned-to="NKB">
+     Merge Gump project descriptor DTDs with project-info.xml and give it a first DTD.
+    </action>
+    <action context="code" assigned-to="NKB">
+     Put a CSS in project-info.xml for easy reading and editing.
+    </action>
+    <action context="code" assigned-to="NKB">
+     Ensure solid XML infrastructure. At least the initial XML instances
+     (e.g. project-info.xml) need to validate using external tools.
+    </action>
+    <action context="code" assigned-to="open">
+     Make Forrest output its site with an initial style.
+    </action>    
+    <action context="code" assigned-to="NKB">
+     Add Forrest to Gump runs and make Gump update Forrest site automagically;
+     in the future this will be used for the generation of other projects too.
+    </action>        
+   </actions>
+  </todo>
+  <changes>
+   <release version="0.1" date="2002">
+    <action dev="SN" type="add">
+     Imported Centipede as a build system.
+    </action>
+    <action dev="DC" type="update" due-to="Steven Noels" due-to-email="stevenn@outerthought.org">
+     Ensure that initial DTDs are valid and that the initial XML instances can be
+     validated using these DTDs and OASIS Catalogs.
+    </action>
+    <action dev="SM" type="add">
+     Initial Import
+    </action>
+   </release>
+  </changes>  
+  <licence>This software is released under the Apache Public License 1.1. 
+           For detailed legal and licensing issues, please read the LICENSE.* files
+           in the /legal directory.
+  </licence>
+  <credits>
+    <credit>This software includes software developed by the Krysalis Project 
+            (http://www.krysalis.org/).
+    </credit>
+  </credits>
+  
+  <project name="IzPress">
+    <url href="http://www.izforge.com/izpress/"/>
+    <description>
+      IzPress is a small Java tool that you can use in order to reduce the 
+      size of your HTML pages by up to 20%. It preserves your code and only 
+      removes the useless characters in it.
+    </description>
+    <home nested="tools/centipede"/>
+    <jar name="lib/IzPress.jar"/>
+  </project>
+  
+  <project name="Forrest">
+  
+    <version major="0"
+             minor="1"   
+             fix  ="0"   
+             tag="dev"/> 
+   
+    <package>org.apache.forrest</package>
+
+    <ant target="gump"/>
+    
+    <!-- script name="build"/> -->
+    
+    <!-- Project jars Forrest build strictly depends on -->
+    <!-- needed for build -->
+    <depend project="jakarta-ant"/>
+    <depend project="xml-xerces"/>
+    <depend project="xml-xalan2"/>
+    <depend project="jtidy"/>
+    <depend project="junit"/>
+    <depend project="IzPress"/>
+    
+    <!-- Project jars Forrest build can use  -->    
+    <!-- <option project="xxx"/> -->
+ 
+    <!-- Work dirs to be included in classpath  -->          
+    <work nested="build/xml-forrest/classes"/>
+    <work nested="build/xml-forrest/testcases"/>
+    <work nested="tools/tmp/anttasks"/>
+
+    <home nested="build/xml-forrest"/>
+
+    <!-- POI jars - the result of the build  -->        
+    <jar name="xml-forrest.jar"            id="poi"/>
+    <jar name="xml-forrest-scratchpad.jar" id="scratchpad"/>
+    <jar name="xml-forrest-contrib.jar"    id="contrib"/>
+    <jar name="xml-forrest-examples.jar"   id="examples"/>
+    
+    <!-- POI Javadocs - location in the build dirs  -->         
+    <javadoc parent="build/xml-forrest/javadocs"/>
+    
+    <!-- Getting ready for automatic site updates
+    <deliver fromdir="build/xml-forrest/docs" 
+             tosite="jakarta-apache-org"
+             todir="poi/" />    
+    -->         
+            
+  </project>
+
+</module>

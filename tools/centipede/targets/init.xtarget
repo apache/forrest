@@ -2,7 +2,11 @@
   <!-- Initialization target                                               -->
   <!-- =================================================================== -->
   <target name="init">
-    <tstamp/>
+    <tstamp>
+      <format property="TODAY" pattern="dd-MMMM-yyyy" locale="en"/>
+      <format property="YEAR"  pattern="yyyy"/>
+    </tstamp>
+
     <echo message="--------------------------------------------------------------"/>    
     <echo message="Setting up customized ant tasks..."/>  
            
@@ -45,20 +49,23 @@
     <!--
     Load project information from project-info.xml
     -->
-    <property name="project-info" value="./project-info.xml"/>    
+    <property name="project-info" value="./forrest.xgump"/>    
     <xml-property file="${project-info}"/>
     
     <!--
     Project information
     -->
-    <property name="fullname"      value="${xml.project.name}"/>
-    <property name="name"          value="${xml.project.info.module}"/>
-    <property name="Name"          value="${xml.project.name}"/>
-    <property name="packages"      value="${xml.project.info.packages}"/>
-    <property name="short.version" value="${xml.project.info.version}"/>
-    <property name="version.tag"   value="${xml.project.info.tag}"/>
-    <property name="version"       value="${short.version}-${version.tag}"/>
-    <property name="year"          value="${xml.project.info.year}"/>
+    <property name="fullname"      value="${xml.module.project.name}"/>
+    <property name="name"          value="${xml.module.name}"/>
+    <property name="Name"          value="${xml.module.name}"/>
+    <property name="packages"      value="${xml.module.project.package}.*"/>
+    <property name="ver.V"         value="${xml.module.project.version.major}."/>
+    <property name="ver.v"         value="${xml.module.project.version.minor}."/>
+    <property name="ver.fix"       value="${xml.module.project.version.fix}."/>
+    <property name="ver.tag"       value="${xml.module.project.version.tag}"/>    
+    <property name="short.version" value="${ver.V}.${ver.v}.${ver.fix}"/>
+    <property name="version"       value="${short.version}-${ver.tag}"/>
+    <property name="year"          value="${YEAR}"/>
     
     <echo message="--------------------------------------------------------------"/>    
     <echo message="                      ${fullname} [${year}]                   "/>     

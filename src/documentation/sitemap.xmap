@@ -5,16 +5,55 @@
 <!-- =========================== Components ================================ -->
 
  <map:components>
-  <!-- Components used are declared in the cocoon tool section -->
-   
-  <map:generators   default="file"/>      <!-- available: file, serverpages -->
-  <map:transformers default="xslt"/>      <!-- available: xslt              -->
-  <map:readers      default="resource"/>  <!-- available: resource          -->
-  <map:serializers  default="html"/>      <!-- available: html, xml, links  -->
-  <map:matchers     default="wildcard">
+
+  <map:generators default="file">
+   <map:generator  name="file"        src="org.apache.cocoon.generation.FileGenerator" label="content"/>
+   <!-- FIXME: Change this once better view handling is implemented -->
+   <map:generator  name="file-nolabel" src="org.apache.cocoon.generation.FileGenerator"/>
+  </map:generators>
+
+  <map:transformers default="xslt">
+   <map:transformer     name="xslt"      src="org.apache.cocoon.transformation.TraxTransformer">
+    <use-request-parameters>false</use-request-parameters>
+    <use-browser-capabilities-db>false</use-browser-capabilities-db>
+   </map:transformer>
+  </map:transformers>
+
+  <map:readers default="resource">
+   <map:reader name="resource"       src="org.apache.cocoon.reading.ResourceReader"/>
+  </map:readers>
+
+  <map:serializers default="html">
+   <map:serializer name="html"   mime-type="text/html"        src="org.apache.cocoon.serialization.HTMLSerializer">
+     <encoding>iso8859-1</encoding>
+   </map:serializer>
+   <map:serializer name="xml"    mime-type="text/xml"         src="org.apache.cocoon.serialization.XMLSerializer">
+     <encoding>iso8859-1</encoding>
+   </map:serializer>   
+   <map:serializer name="links"                               src="org.apache.cocoon.serialization.LinkSerializer">
+     <encoding>iso8859-1</encoding>
+   </map:serializer>   
+   <map:serializer name="svg2jpeg" mime-type="image/jpeg"     src="org.apache.cocoon.serialization.SVGSerializer">
+       <parameter name="quality" type="float" value="1.0"/>
+   </map:serializer>
+   <map:serializer name="svg2png" mime-type="image/png"       src="org.apache.cocoon.serialization.SVGSerializer"/>
+  </map:serializers>
+
+  <map:matchers default="wildcard">
    <map:matcher name="wildcard" src="org.apache.cocoon.matching.WildcardURIMatcher"/>
   </map:matchers>
   
+  <map:selectors default="skin-parameter">
+    <map:selector name="request-parameter" logger="sitemap.selector.request-parameter"
+                 src="org.apache.cocoon.selection.RequestParameterSelector">
+      <parameter-name>skin</parameter-name> 
+    </map:selector>
+    <map:selector name="style-parameter" logger="sitemap.selector.request-parameter"
+                 src="org.apache.cocoon.selection.RequestParameterSelector">
+      <parameter-name>style</parameter-name> 
+    </map:selector>
+   
+  </map:selectors>
  </map:components>
 
 <!-- =========================== Views =================================== -->
@@ -25,72 +64,116 @@
   </map:view>
 
   <map:view name="links" from-position="last">
-   <map:transform src="stylesheets/filterlinks.xsl"/>
+   <map:transform src="library/xslt/filterlinks.xsl"/>
    <map:serialize type="links"/>
   </map:view>
-
  </map:views>
 
+ <map:resources>
+  <map:resource name="skinit">
+   <map:transform src="skins/xml-apache-site/xslt/html/{type}.xsl"/>
+   <map:serialize type="html"/>
+  </map:resource>
+  
+  <map:resource name="skin-style">
+    <map:read src="skins/xml-apache-site/{path}" mime-type="{mime-type}"/>
+  </map:resource>
+
+  <map:resource name="skin-res">
+    <map:read src="skins/xml-apache-site/{path}" mime-type="{mime-type}"/>
+  </map:resource>
+ </map:resources>
+ 
 <!-- =========================== Pipelines ================================= -->
 
  <map:pipelines>
-
-  <!-- Documentation pipeline -->
+  
   <map:pipeline>
+  
    <map:match pattern="">
     <map:redirect-to uri="index.html"/>
    </map:match>
+   
+ <!--
 
+  <map:pipeline>
+   <map:match pattern="">
+     <map:redirect-to uri="page3333.html"/>
+   </map:match>
+
+   <map:match pattern="*[*].html">
+     <map:aggregate element="site" label="content">
+       <map:part src="site.xml" />
+       <map:part src="index.xml"/>
+       <map:part src="{1}.xml" element="book"/>
+     </map:aggregate>
+     <map:transform src="site2html.xsl">
+       <map:parameter name="page-index" value="{2}"/>
+       <map:parameter name="page-count" value="5"/>
+       <map:parameter name="page-name" value="{1}"/>
+     </map:transform>
+     <map:serialize/>
+   </map:match>
+-->
+   
    <map:match pattern="**book-**.xml">
-     <map:generate src="xdocs/{1}book.xml"/>
-       <map:transform src="stylesheets/book2menu.xsl">
-         <map:parameter name="use-request-parameters" value="true"/>
-         <map:parameter name="resource" value="{2}.html"/>
-       </map:transform>
-     <map:serialize type="xml"/>
+     <map:generate src="content/xdocs/{1}book.xml"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="book2menu"/>
+     </map:call>         
    </map:match>
 
    <map:match pattern="body-todo.xml">
-     <map:generate type="file" src="xdocs/todo.xml"/>
-     <map:transform src="stylesheets/todo2document.xsl" label="content"/>     
-     <map:transform src="stylesheets/document2docbook.xsl"/>
-     <map:transform src="stylesheets/docbook2body.xsl"/>
-     <map:serialize/>
+     <map:generate type="file-nolabel" src="content/xdocs/todo.xml"/>
+     <map:transform src="library/xslt/todo2document.xsl" label="content"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>         
    </map:match>
 
    <map:match pattern="body-changes.xml">
-     <map:generate type="file" src="xdocs/changes.xml"/>
-     <map:transform src="stylesheets/changes2document.xsl" label="content"/>
-     <map:transform src="stylesheets/document2docbook.xsl"/>
-     <map:transform src="stylesheets/docbook2body.xsl"/>
-     <map:serialize/>
+     <map:generate type="file-nolabel" src="content/xdocs/changes.xml"/>
+     <map:transform src="library/xslt/changes2document.xsl" label="content"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
    </map:match>
 
    <map:match pattern="body-faq.xml">
-     <map:generate type="file" src="xdocs/faq.xml"/>
-     <map:transform src="stylesheets/faq2document.xsl" label="content"/>
-     <map:transform src="stylesheets/document2docbook.xsl"/>
-     <map:transform src="stylesheets/docbook2body.xsl"/>
-     <map:serialize/>
+     <map:generate type="file-nolabel" src="content/xdocs/faq.xml"/>
+     <map:transform src="library/xslt/faq2document.xsl" label="content"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
+   </map:match>
+
+   <!-- Generate the "doclist" - list of all documentation
+     The first match generates each book.xml and adds a new attribute "uri".
+     The second match aggregates each book.xml into a doclist and
+     then converts it to a document.
+   -->
+   <map:match pattern="doclist/content/xdocs/**book.xml">
+     <map:generate src="content/xdocs/{1}book.xml"/>
+     <map:transform src="library/xslt/doclist.xsl">
+       <map:parameter name="uri" value="{1}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+   <map:match pattern="body-doclist.xml">
+     <map:aggregate element="doclist">
+       <map:part src="cocoon:/doclist/content/xdocs/book.xml"/>
+     </map:aggregate>
+     <map:transform src="library/xslt/doclist2document.xsl"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
    </map:match>
 
    <map:match pattern="body-**.xml">
-     <map:generate src="xdocs/{1}.xml"/>
-     <map:transform src="stylesheets/document2docbook.xsl"/>
-     <map:transform src="stylesheets/docbook2body.xsl"/>
-     <map:serialize/>
-   </map:match>
-
-   <map:match pattern="*.xml">
-    <map:aggregate element="site">
-     <map:part src="cocoon:/book-{1}.xml"/>
-     <map:part src="cocoon:/body-{1}.xml" label="content"/>
-    </map:aggregate>
-    <map:transform src="stylesheets/site2xhtml.xsl">
-       <map:parameter name="use-request-parameters" value="true"/>
-       <map:parameter name="header" value="graphics/{1}-header.jpg"/>
-     </map:transform>
-    <map:serialize/>
+     <map:generate src="content/xdocs/{1}.xml"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="document2html"/>
+     </map:call>    
    </map:match>
 
    <map:match pattern="*.html">
@@ -98,11 +181,9 @@
      <map:part src="cocoon:/book-{1}.xml"/>
      <map:part src="cocoon:/body-{1}.xml" label="content"/>
     </map:aggregate>
-    <map:transform src="stylesheets/site2xhtml.xsl">
-       <map:parameter name="use-request-parameters" value="true"/>
-       <map:parameter name="header" value="graphics/{1}-header.jpg"/>
-     </map:transform>
-    <map:serialize/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="site2xhtml"/>
+     </map:call>    
    </map:match>
 
    <map:match pattern="**/*.html">
@@ -110,39 +191,64 @@
      <map:part src="cocoon:/{1}/book-{1}/{2}.xml"/>
      <map:part src="cocoon:/body-{1}/{2}.xml" label="content"/>
     </map:aggregate>
-    <map:transform src="stylesheets/site2xhtml.xsl">
-       <map:parameter name="use-request-parameters" value="true"/>
-       <map:parameter name="header" value="graphics/{2}-header.jpg"/>
-     </map:transform>
-    <map:serialize/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="site2xhtml"/>
+     </map:call>    
    </map:match>
 
    <!-- ================  Static  =========================== -->
 
-   <map:match pattern="**.txt">
-    <map:read src="xdocs/{1}.txt" mime-type="text/plain"/>
+   <map:match pattern="common/**.js">
+     <map:read src="resources/scripts/{1}.js" mime-type="application/javascript"/>
    </map:match>
 
-   <map:match pattern="**resources/**.js">
-     <map:read src="stylesheets/{2}.js" mime-type="application/javascript"/>
+   <map:match pattern="**.js">
+    <map:read src="resources/css/{1}.css" mime-type="text/css"/>
+   </map:match>
+   
+   <map:match pattern="common/**.css">
+    <map:read src="resources/css/{1}.css" mime-type="text/css"/>
    </map:match>
 
    <map:match pattern="**.css">
-    <map:read src="{1}.css" mime-type="text/css"/>
+    <map:call resource="skin-style">
+      <map:parameter name="path" value="css/{1}.css"/>
+      <map:parameter name="mime-type" value="text/css"/>
+    </map:call>  
+   </map:match>
+      
+   <map:match pattern="common/images/**.*">
+    <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
+   </map:match>
+   
+   <map:match pattern="images/**.gif">
+    <map:call resource="skin-res">
+      <map:parameter name="path" value="images/{1}.gif"/>
+      <map:parameter name="mime-type" value="image/gif"/>
+    </map:call>                                 
    </map:match>
 
-   <map:match pattern="**images/*.png">
-    <map:read src="images/{2}.png" mime-type="image/png"/>
+   <map:match pattern="images/**.jpg">
+    <map:call resource="skin-res">
+      <map:parameter name="path" value="images/{1}.jpg"/>
+      <map:parameter name="mime-type" value="image/jpeg"/>
+    </map:call>                                 
    </map:match>
-
-   <map:match pattern="**images/*.jpg">
-    <map:read src="images/{2}.jpg" mime-type="image/jpeg"/>
+   
+   <map:match pattern="images/**.png">
+    <map:call resource="skin-res">
+      <map:parameter name="path" value="images/{1}.png"/>
+      <map:parameter name="mime-type" value="image/png"/>
+    </map:call>                                 
    </map:match>
-
-   <map:match pattern="**images/*.gif">
-    <map:read src="images/{2}.gif" mime-type="image/gif"/>
+      
+   <map:match pattern="**favicon.ico">
+    <map:call resource="skin-res">
+      <map:parameter name="path" value="images/favicon.ico"/>
+      <map:parameter name="mime-type" value="application/ico"/>
+    </map:call>    
    </map:match>
-
+         
   </map:pipeline>
  </map:pipelines>
 

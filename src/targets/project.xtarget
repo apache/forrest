@@ -5,25 +5,26 @@
   <!-- =================================================================== -->
   <!-- Prepares the docs                                                   -->
   <!-- =================================================================== -->
-  <target name="prepare-docs" depends="init">
+  <target name="prepare-docs" depends="init, cleandocs">
 
     <mkdir dir="${build.context}"/>
-    <mkdir dir="${build.context}/images"/>
     <mkdir dir="${build.docs}"/>
     <mkdir dir="${build.dir}/work"/>
 
     <!-- make filtered copy of XML docs -->
     <copy todir="${build.context}" filtering="on">
-      <fileset dir="${context.dir}">
-        <exclude name="images/**"/>
+      <fileset dir="${context.dir}" casesensitive="no">
+        <include name="**/*.xml"/>
       </fileset>
     </copy>
 
-    <!-- Copy images -->
-    <copy todir="${build.context}/images" filtering="off">
-      <fileset dir="${context.dir}/images"/>
+    <!-- make filtered copy of images -->
+    <copy todir="${build.context}" filtering="off">
+      <fileset dir="${context.dir}" casesensitive="no">
+        <exclude name="**/*.xml"/>
+      </fileset>
     </copy>
-
+    
     <!-- Copy entity catalog and entities -->
     <copy todir="${build.context}/resources/schema" filtering="on">
       <fileset dir="${resource.dir}/schema"/>
@@ -36,29 +37,11 @@
     </move>
 
   </target>
-
-
-  <!-- =================================================================== -->
-  <!-- Set a variable if the generated docs are already up-to-date.        -->
-  <!-- =================================================================== -->
-  <target name="docs_check" depends="init">
-    <uptodate property="docs.notrequired" targetfile="${build.docs}/index.html" >
-      <srcfiles dir="." includes="project-info.xml"/>
-      <srcfiles dir="${context.dir}/xdocs" includes="**/*.xml"/>
-    </uptodate>
+  
+  <target name="cleandocs" depends="init" description="* Cleans the build docs directories">
+    <delete dir="${build.docs}"/>
   </target>
-
-  <!-- =================================================================== -->
-  <!-- If generated  docs is already up-to-date, print a message saying so. -->
-  <!-- =================================================================== -->
-  <target name="docs_done" if="docs.notrequired">
-    <echo message="-------------------------------------------------------------"/>
-    <echo message="Not rebuilding docs, as they are up-to-date:"/>
-    <echo message="  ${build.docs}/index.html is more recent than"/>
-    <echo message="  project-info.xml and ${context.dir}/xdocs/*.xml"/>
-    <echo message="-------------------------------------------------------------"/>
-  </target>
-
+  
   <!-- =================================================================== -->
   <!-- If generated  docs is already up-to-date, print a message saying so. -->
   <!-- =================================================================== -->
@@ -71,8 +54,7 @@
   <!-- The documentation system                                            -->
   <!-- =================================================================== -->
   <target name="docs"
-          depends="package, prepare-docs, docs_check, making-docs, docs_done"
-          unless="docs.notrequired"
+          depends="prepare-docs, making-docs"
           description="* Generates the documentation">
 
     <java classname="org.apache.cocoon.Main" fork="true" dir="${build.context}" failonerror="true">
