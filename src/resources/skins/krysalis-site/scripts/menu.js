@@ -4,7 +4,7 @@
                    The Apache Software License, Version 1.1
  ============================================================================
 
- Copyright (C) @skinconfig.year@ The Apache Software Foundation. All rights reserved.
+ Copyright (C) 2002-2003 The Apache Software Foundation. All rights reserved.
 
  Redistribution and use in source and binary forms, with or without modifica-
  tion, are permitted provided that the following conditions are met:
@@ -67,14 +67,21 @@ function SwitchMenu(obj)
 {
   if(document.getElementById)  {
     var el = document.getElementById(obj);
+    var title = document.getElementById(obj+'Title');
 
     if(obj=="selected"&&el.style.display == ""){
+      //nicolaken: doesn't work :-(
+      //title.style.backgroundImage = "url('images/chapter_open.gif')";
       el.style.display = "block";
     }
 
     if(el.style.display != "block"){ 
+      //nicolaken: doesn't work :-(
+      //title.style.backgroundImage = 'url([url]images/chapter_open.gif[/url])';
       el.style.display = "block";
     }else{
+      //nicolaken: doesn't work :-(
+      //title.style.backgroundImage = "url('images/chapter.gif')";
       el.style.display = "none";
     }
   }// end -  if(document.getElementById) 

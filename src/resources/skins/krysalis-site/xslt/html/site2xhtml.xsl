@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.17 2003/07/22 15:49:20 nicolaken Exp $
+$Id: site2xhtml.xsl,v 1.18 2003/07/23 13:12:42 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -372,7 +372,7 @@ $Id: site2xhtml.xsl,v 1.17 2003/07/22 15:49:20 nicolaken Exp $
     </xsl:variable>
     
     
-    <div class="menutitle" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="font"/></div>
+    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="font"/></div>
       <div class="{$whichGroup}" id="{$tagid}">
         <xsl:for-each select= "ul/li">
 
