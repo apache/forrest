@@ -5,270 +5,279 @@
                 version="1.0">
 
   <xsl:output method="xml"/>
-  
+
   <xsl:template match="/">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
-   
-    <fo:layout-master-set>
-        <fo:simple-page-master master-name="title"
-                               page-height="11in"
-                               page-width="8.5in"
-                               margin-top="1in"
-                               margin-bottom="1in"
-                               margin-left="1.25in"
-                               margin-right="1.5in">
-          <fo:region-before extent=".5in" region-name="title-header"/>
-          <fo:region-body margin-top="1in" margin-bottom="1in"/>
-          <fo:region-after extent=".5in" region-name="title-footer"/>
-        </fo:simple-page-master>
+      <fo:layout-master-set>
 
-        <fo:simple-page-master master-name="inside"
-                               page-height="11in"
-                               page-width="8.5in"
-                               margin-top="1in"
-                               margin-bottom="1in"
-                               margin-left="1.5in"
-                               margin-right="1.25in">
-          <fo:region-before extent=".5in" region-name="inside-header"/>
-          <fo:region-body margin-top="1in" margin-bottom="1in"/>
-          <fo:region-after extent=".5in" region-name="inside-footer"/>
+        <fo:simple-page-master master-name="first-page"
+          page-height="11in" 
+          page-width="8.5in"
+          margin-top="1in" 
+          margin-bottom="1in" 
+          margin-left="1.25in" 
+          margin-right="1in">
+          <fo:region-body
+            margin-top="0.5in"
+            margin-bottom=".5in"/>
+          <fo:region-after 
+            region-name="first-footer"
+            extent=".5in"
+            display-align="before"/>
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="even-page"
-                               page-height="11in" 
-                               page-width="8.5in"
-                               margin-top="1in" 
-                               margin-bottom="1in" 
-                               margin-left="1.25in" 
-                               margin-right="1in">
-          <fo:region-before extent=".5in" region-name="even-header"/>
-          <fo:region-body margin-top=".5in" margin-bottom=".5in"/>
-          <fo:region-after extent=".5in" region-name="even-footer"/>
+          page-height="11in" 
+          page-width="8.5in"
+          margin-top="1in" 
+          margin-bottom="1in" 
+          margin-left="1.25in" 
+          margin-right="1in">
+          <fo:region-before
+            region-name="even-header"
+            extent="0.5in"
+            border-bottom="0.5pt solid"/>
+          <fo:region-body
+            margin-top="0.5in"
+            margin-bottom=".5in"/>
+          <fo:region-after 
+            region-name="even-footer"
+            extent=".5in"
+            display-align="before"/>
         </fo:simple-page-master>
 
         <fo:simple-page-master master-name="odd-page"
-                               page-height="11in"
-                               page-width="8.5in"
-                               margin-top="1in"
-                               margin-bottom="1in"
-                               margin-left="1in"
-                               margin-right="1.25in">
-          <fo:region-before extent=".5in" region-name="odd-header"/>
-          <fo:region-body margin-top=".5in" margin-bottom=".5in"/>
-          <fo:region-after extent=".5in" region-name="odd-footer"/>
+          page-height="11in" 
+          page-width="8.5in"
+          margin-top="1in" 
+          margin-bottom="1in" 
+          margin-left="1.25in" 
+          margin-right="1in">
+          <fo:region-before
+            region-name="odd-header"
+            extent="0.5in"
+            border-bottom="0.5pt solid"/>
+          <fo:region-body
+            margin-top="0.5in"
+            margin-bottom=".5in"/>
+          <fo:region-after 
+            region-name="odd-footer"
+            extent=".5in"
+            display-align="before"/>
         </fo:simple-page-master>
 
-        <fo:page-sequence-master master-name="chapter">
+        <fo:page-sequence-master master-name="book">
           <fo:repeatable-page-master-alternatives>
-            <fo:conditional-page-master-reference master-name="title"
-                                                  page-position="first"
-                                                  odd-or-even="odd"/>
-            <fo:conditional-page-master-reference master-name="odd-page"
-                                                  odd-or-even="odd"
-                                                  blank-or-not-blank="not-blank"/>
-            <fo:conditional-page-master-reference master-name="even-page"
-                                                  page-position="last"/>
-            <fo:conditional-page-master-reference master-name="even-page"
-                                                  odd-or-even="even"/>
+            <fo:conditional-page-master-reference
+              page-position="first"
+              master-reference="first-page"/>
+            <fo:conditional-page-master-reference
+              odd-or-even="odd"
+              master-reference="odd-page"/>
+            <fo:conditional-page-master-reference
+              odd-or-even="even"
+              master-reference="even-page"/>
           </fo:repeatable-page-master-alternatives>
         </fo:page-sequence-master>
       </fo:layout-master-set>
-
-      <fo:page-sequence master-name="title">
-        <xsl:if test="//authors">
-          <fo:static-content flow-name="title-footer">
-            <fo:block font-family="serif"
-                      font-size="16pt"
-                      font-style="italic"
-                      text-align="end">
-              <xsl:for-each select="//authors/person">
-                <xsl:value-of select="@name"/>
-              </xsl:for-each>
-            </fo:block>
-          </fo:static-content>
-        </xsl:if>
-        <fo:flow flow-name="xsl-region-body">
-          <fo:block font-family="serif"
-                    font-size="48pt"
-                    font-weight="bold">
-            <xsl:value-of select="//title"/>
-          </fo:block>
-          <xsl:if test="//subtitle">
-            <fo:block font-family="serif"
-                      font-size="24pt"
-                      border-top-style="solid"
-                      border-top-width=".5pt"
-                      space-before="12pt"
-                      text-align="end">
-              <xsl:value-of select="//subtitle"/>
-            </fo:block>
-          </xsl:if>
-        </fo:flow>
+      
+      <fo:page-sequence master-reference="book">
+        <xsl:apply-templates/>
       </fo:page-sequence>
-      <xsl:apply-templates/>
-      <xsl:call-template name="authors"/>
+      
     </fo:root>
   </xsl:template>
-
+  
   <xsl:template match="document">
-    <fo:page-sequence force-page-count="end-on-even" master-name="chapter">
-      <fo:title><xsl:value-of select="header/title"/></fo:title>
-      <fo:static-content flow-name="even-header">
-        <fo:block text-align="start"
-                  line-height="12pt"
-                  font-style="italic"
-                  font-family="serif"
-                  font-size="10pt"
-                  border-after-style="solid"
-                  border-after-width=".5pt">
-          <xsl:value-of select="header/title"/>
-        </fo:block>
-      </fo:static-content>
-      <fo:static-content flow-name="even-footer">
-        <fo:block text-align="start"
-                  line-height="12pt"
-                  border-before-style="solid"
-                  border-before-width=".5pt"
-                  font-family="serif"
-                  font-size="10pt"><fo:page-number/></fo:block>
-      </fo:static-content>
-      <fo:static-content flow-name="odd-header">
-        <fo:block text-align="end"
-                  line-height="12pt"
-                  font-style="italic"
-                  font-family="serif"
-                  font-size="10pt"
-                  border-after-style="solid"
-                  border-after-width=".5pt">
-          <xsl:value-of select="title"/>
-        </fo:block>
-      </fo:static-content>
-      <fo:static-content flow-name="odd-footer">
-        <fo:block text-align="end"
-                  line-height="12pt"
-                  border-before-style="solid"
-                  border-before-width=".5pt"
-                  font-family="serif"
-                  font-size="10pt"><fo:page-number/></fo:block>
-      </fo:static-content>
-      <fo:static-content flow-name="title-footer">
-        <fo:block text-align="end"
-                  line-height="12pt"
-                  border-before-style="solid"
-                  border-before-width=".5pt"
-                  font-family="serif"
-                  font-size="10pt"><fo:page-number/></fo:block>
-      </fo:static-content>
-      <fo:flow flow-name="xsl-region-body">
-        <fo:block space-before="2in" font-family="serif" font-size="24pt" font-weight="bold">
-          <xsl:value-of select="title"/>
-        </fo:block>
-        <xsl:if test="header/subtitle">
-          <fo:block font-style="italic"
-                    font-family="serif"
-                    font-size="18pt"
-                    space-after="10pt">
-            <xsl:value-of select="header/subtitle"/>
-          </fo:block>
-        </xsl:if>
+    <fo:title><xsl:value-of select="header/title"/></fo:title>
+    
+    <fo:static-content flow-name="first-footer">
+      <fo:block
+        border-top="0.25pt solid"
+        padding-before="6pt"
+        text-align="center">
+        <xsl:apply-templates select="footer"/>
+      </fo:block>
+      <fo:block
+        text-align="start">
+        Page <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+
+    <fo:static-content flow-name="even-header">
+      <fo:block
+        text-align="end"
+        font-style="italic">
+        <xsl:value-of select="header/title"/>
+      </fo:block>
+    </fo:static-content>
+
+    <fo:static-content flow-name="even-footer">
+      <fo:block
+        border-top="0.25pt solid"
+        padding-before="6pt"
+        text-align="center">
+        <xsl:apply-templates select="footer"/>
+      </fo:block>
+      <fo:block
+        text-align="end">
+        Page <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+
+    <fo:static-content flow-name="odd-header">
+      <fo:block
+        text-align="start"
+        font-style="italic">
+        <xsl:value-of select="header/title"/>
+      </fo:block>
+    </fo:static-content>
+    
+    <fo:static-content flow-name="odd-footer">
+      <fo:block
+        border-top="0.25pt solid"
+        padding-before="6pt"
+        text-align="center">
+        <xsl:apply-templates select="footer"/>
+      </fo:block>
+      <fo:block
+        text-align="start">
+        Page <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block
+        padding-before="24pt"
+        padding-after="24pt"
+        font-size="24pt"
+        font-weight="bold">
+        <xsl:value-of select="header/title"/>
+      </fo:block>
+      
+      <fo:block
+        text-align="justify"
+        padding-before="18pt"
+        padding-after="18pt">
         <xsl:apply-templates/>
-        <xsl:apply-templates select="//authors"/>
-      </fo:flow>
-    </fo:page-sequence>
+      </fo:block>
+    </fo:flow>
   </xsl:template>
-
-  <xsl:template match="header">
-    <fo:page-sequence master-name="inside">
-      <fo:flow flow-name="xsl-region-body">
-        <fo:block font-weight="bold" font-size="14pt">
-          <xsl:value-of select="title"/>
-        </fo:block>
-        <xsl:if test="subtitle">
-          <fo:block font-weight="bold" font-size="10pt">
-            <xsl:value-of select="subtitle"/>
-          </fo:block>
-        </xsl:if>
-        <xsl:if test="authors">
-          <fo:block font-size="10pt">
-            <xsl:text>by </xsl:text>
-            <xsl:for-each select="authors/person">
-              <xsl:if test="not(position()=1)">
-                <xsl:text>, </xsl:text>
-              </xsl:if>
-              <xsl:value-of select="name"/>
-            </xsl:for-each>
-          </fo:block>
-        </xsl:if>
-        <xsl:apply-templates select="abstract"/>
-      </fo:flow>
-    </fo:page-sequence>
-  </xsl:template>
-
+  
   <xsl:template match="abstract">
-    <fo:block font-size="8pt"
-              text-align="justify"
-              space-before="20pt"
-              width="7.5in"
-              font-family="serif">
+    <fo:block
+      font-size="12pt"
+      text-align="center"
+      space-before="20pt"
+      space-after="25pt"
+      width="7.5in"
+      font-family="serif"
+      font-style="italic">
       <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="notice">
+    <fo:block
+      font-size="10pt"
+      text-align="left"
+      space-before="20pt"
+      width="7.5in"
+      font-family="serif"
+      border-top="0.25pt solid"
+      border-bottom="0.25pt solid"
+      padding-before="6pt"
+      padding-after="6pt">
+      NOTICE: <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="section">
+    
     <xsl:param name="level">0</xsl:param>
     <xsl:variable name="size" select="16-(number($level)*2)"/>
-
-    <fo:block font-family="serif"
-              font-size="{$size}pt"
-              font-weight="bold"
-              space-before="12pt">
+    
+    <fo:block
+      font-family="serif"
+      font-size="{$size}pt"
+      font-weight="bold"
+      space-before="12pt">
+      <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="title"/>
     </fo:block>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
+    
   </xsl:template>
-
-  <xsl:template match="p">
-    <fo:block space-after="8pt"
-              font-family="serif"><xsl:apply-templates/></fo:block>
+  
+  <xsl:template match="title">
+    <!-- do nothing as titles are handled in their parent templates -->
   </xsl:template>
+  
+  <xsl:template match="subtitle">
+    <xsl:param name="level">0</xsl:param>
+    <xsl:variable name="size" select="16-(number($level)*1.5)"/>
 
-  <xsl:template match="source">
-    <fo:block font-family="monospace"
-              font-size="10pt"
-              background-color="#f0f0f0"
-              white-space-collapse="false"
-              keep-together="always">
-       <xsl:apply-templates/>
+    <fo:block
+      font-weight="bold"
+      font-size="{$size}pt">
+      <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="p">
+    <fo:block
+      space-before="4pt"
+      space-after="4pt"
+      font-family="serif">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+
+  <xsl:template match="source">
+    <fo:block
+      font-family="monospace"
+      font-size="10pt"
+      background-color="#f0f0f0"
+      white-space-collapse="false"
+      text-align="start">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  
   <xsl:template match="ol|ul">
-    <fo:list-block provisional-distance-between-starts="9mm"
-                   provisional-label-separation="3mm">
+    <fo:list-block 
+      provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt"
+      text-align="start">
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
-
+  
   <xsl:template match="ol/li">
     <fo:list-item>
-      <fo:list-item-label start-indent="50%" end-indent="label-end()">
+      <fo:list-item-label 
+        end-indent="label-end()">
         <fo:block>
           <xsl:number format="1."/>
         </fo:block>
       </fo:list-item-label>
-      <fo:list-item-body start-indent="body-start()">
+      <fo:list-item-body 
+        start-indent="body-start()">
         <fo:block>
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-
+  
   <xsl:template match="ul/li">
     <fo:list-item>
-      <fo:list-item-label start-indent="50%" end-indent="label-end()">
+      <fo:list-item-label end-indent="label-end()">
         <fo:block>&#x2022;</fo:block>
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
@@ -278,11 +287,47 @@
       </fo:list-item-body>
     </fo:list-item>
   </xsl:template>
-
+  
+  <xsl:template match="dl">
+    <fo:list-block
+      provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt"
+      text-align="start">
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+  
+  <xsl:template match="dt">
+    <fo:list-item>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block></fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block
+          font-weight="bold">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
+  <xsl:template match="dd">
+    <fo:list-item>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block></fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
   <xsl:template match="strong">
     <fo:inline font-weight="bold"><xsl:apply-templates/></fo:inline>
   </xsl:template>
-
+  
   <xsl:template match="em">
     <fo:inline font-style="italic"><xsl:apply-templates/></fo:inline>
   </xsl:template>
@@ -292,87 +337,241 @@
   </xsl:template>
 
   <xsl:template match="warning">
-    <fo:block margin-left="1in"
-              margin-right="1in"
-              font-weight="bold"
-              font-size="10pt"
-              font-family="serif"
-              space-before="10pt"
-              border-before-style="solid"
-              border-start-style="solid"
-              border-end-style="solid"
-              background-color="#800000"
-              color="#ffffff">
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-weight="bold"
+      font-size="10pt"
+      font-family="serif"
+      space-before="10pt"
+      border-before-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#D00000"
+      background-color="#D00000"
+      color="#ffffff">
       Warning: <xsl:value-of select="title"/>
     </fo:block>
-    <fo:block margin-left="1in"
-              margin-right="1in"
-              font-family="serif"
-              font-size="8pt"
-              border-after-style="solid"
-              border-start-style="solid"
-              border-end-style="solid"
-              background-color="#f0f0f0"
-              padding-start="3pt"
-              padding-end="3pt"
-              padding-before="3pt"
-              padding-after="3pt">
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-family="serif"
+      font-size="8pt"
+      border-after-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#D00000"
+      background-color="#fff0f0"
+      padding-start="3pt"
+      padding-end="3pt"
+      padding-before="3pt"
+      padding-after="3pt"
+      space-after="10pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="note">
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-weight="bold"
+      font-size="10pt"
+      color="#ffffff"
+      font-family="serif"
+      space-before="10pt"
+      border-before-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#A0C9F5"
+      background-color="#A0C9F5">
+      Note: <xsl:value-of select="title"/>
+    </fo:block>
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-family="serif"
+      font-size="8pt"
+      space-after="10pt"
+      border-after-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#A0C9F5"
+      background-color="#F0F0FF"
+      padding-start="3pt"
+      padding-end="3pt"
+      padding-before="3pt"
+      padding-after="3pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="fixme">
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-weight="bold"
+      font-size="10pt"
+      color="#FFFFFF"
+      font-family="serif"
+      space-before="10pt"
+      border-before-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#C6C650"
+      background-color="#C6C650">
+      FIXME (<xsl:value-of select="@author"/>): <xsl:value-of select="title"/>
+    </fo:block>
+    <fo:block
+      margin-left="0.25in"
+      margin-right="0.25in"
+      font-family="serif"
+      font-size="8pt"
+      space-after="10pt"
+      border-after-style="solid"
+      border-start-style="solid"
+      border-end-style="solid"
+      border-color="#C6C650"
+      background-color="#FFF0F0"
+      padding-start="3pt"
+      padding-end="3pt"
+      padding-before="3pt"
+      padding-after="3pt">
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="link">
-    <fo:basic-link external-destination="{@uri}"><xsl:apply-templates/></fo:basic-link>
+    <fo:basic-link external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
   </xsl:template>
 
   <xsl:template match="figure">
-    <fo:block text-align="center" font-weight="bold" font-family="serif" space-before="10pt" space-after="20pt">
-      <xsl:value-of select="title"/>
-      <xsl:apply-templates/>
-    </fo:block>
+    <!-- FIXME: Images are not found at the moment -->
+    <fo:external-graphic src="../resources/{@src}"/>
+    <!-- alt text and credits need inserting -->
   </xsl:template>
 
-  <xsl:template match="graphic">
-    <fo:external-graphic src="build/documentation/resources/{@fileref}">
-      <xsl:attribute name="content-type">
-        <xsl:text>content-type:image/</xsl:text>
-        <xsl:value-of select="translate(@format,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
-      </xsl:attribute>
-    </fo:external-graphic>
-    <xsl:if test="@srccredit">
-      <fo:block font-size="8pt" font-family="serif" font-style="italic">
-        &#x2022; <xsl:value-of select="@srccredit"/>
+  <xsl:template match="table">
+    <!-- FIXME: Apache FOP must have column widths specified at present,
+         this section can be removed when this limitation is removed from Fop. 
+         Unfortunately, this means that each column is a fixed width,
+         but at least the table displays! -->
+
+    <xsl:variable name="max-number-columns">
+      <xsl:for-each select="tr">
+        <xsl:sort select="count(td|th)" data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="count(td|th)"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+
+
+    <xsl:variable name="column-width">
+      <xsl:value-of select="6.25 div number($max-number-columns)"/>in
+    </xsl:variable>
+
+    <fo:table>
+                  
+      <fo:table-column>
+        <xsl:attribute name="column-width">
+          <xsl:value-of select="$column-width"/>
+        </xsl:attribute>
+
+        <xsl:attribute name="number-columns-repeated">
+          <xsl:value-of select="number($max-number-columns)"/>
+        </xsl:attribute>
+      </fo:table-column>
+
+      <!-- End of hack for Fop support (if removing this hack, remember 
+           you need the <fo:table> element) -->
+
+      <fo:table-body
+        font-size="10pt"
+        font-family="sans-serif">
+        <xsl:apply-templates select="tr"/>
+      </fo:table-body>
+    </fo:table>
+
+    <!-- FIXME: Apache Fop does not support the caption element yet.
+         This hack will display the table caption accordingly. -->
+    <xsl:if test="caption">
+      <fo:block
+        text-align="center"
+        font-weight="bold">
+        Table
+        <xsl:text> </xsl:text>
+        <xsl:number count="table" level="multiple"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="caption"/>
       </fo:block>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="table">
-    <fo:table width="100%" table-layout="fixed">
+  <xsl:template match="tr">
+    <fo:table-row>
       <xsl:apply-templates/>
-    </fo:table>
+    </fo:table-row>
   </xsl:template>
 
   <xsl:template match="th">
-    <fo:table-header>
-      <xsl:apply-templates/>
-    </fo:table-header>
-  </xsl:template>
-
-  <xsl:template match="tr">
-    <fo:table-row><xsl:apply-templates/></fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="tbody">
-    <fo:table-body>
-      <xsl:apply-templates/>
-    </fo:table-body>
+      <fo:table-cell
+        padding-before="4pt"
+        padding-after="4pt"
+        padding-start="4pt"
+        padding-end="4pt"
+        background-color="#A0C9F5">
+        <xsl:attribute name="number-columns-spanned">
+          <xsl:value-of select="@colspan"/>
+        </xsl:attribute>
+        <xsl:attribute name="number-rows-spanned">
+          <xsl:value-of select="@rowspan"/>
+        </xsl:attribute>
+        <fo:block
+          text-align="center">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:table-cell>
   </xsl:template>
 
   <xsl:template match="td">
-    <fo:table-cell>
-      <xsl:apply-templates/>
+    <fo:table-cell
+      padding-before="4pt"
+      padding-after="4pt"
+      padding-start="4pt"
+      padding-end="4pt"
+      border="1pt solid #A0C9F5">
+      <xsl:attribute name="number-columns-spanned">
+          <xsl:value-of select="@colspan"/>
+        </xsl:attribute>
+        <xsl:attribute name="number-rows-spanned">
+          <xsl:value-of select="@rowspan"/>
+        </xsl:attribute>
+      <fo:block>
+        <xsl:apply-templates/>
+      </fo:block>
     </fo:table-cell>
   </xsl:template>
 
+  <xsl:template match="legal">
+    <fo:inline
+      font-size="8pt">
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
+<!-- ====================================================================== -->
+<!-- Local Extensions section -->
+<!-- ====================================================================== -->
+
+ <xsl:template match="citation">
+   <fo:inline>
+     [<xsl:value-of select="@def"/>]
+   </fo:inline>
+ </xsl:template>
+
+
+
 </xsl:stylesheet>
+
 

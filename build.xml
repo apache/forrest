@@ -538,7 +538,50 @@
 
   </target>
 
+  <!-- ================================== -->
+  <!--    Targets for the remote builds   -->
+  <!-- ================================== -->
+  
+  <target name="bot.init" depends="init">
+    <!-- initializes environment to start on bot targets -->
+    <property name="bot.build.dir" value="${build.dir}/bot"/>
+    <property name="bot.work.build.xml" value="${bot.build.dir}/work.build.xml"/>
+    <property name="bot.default.parameters.xml" value="${bot.build.dir}/default.parameters.xml"/>
+    <property name="bot.forrestbot.xconf" value="forrestbot.xconf" />
+    <property name="bot.templates.build.xml" value="${xlayout.source.resources.forrestbot.ant.dir}/templates.build.xml" />
+    <property name="bot.work.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2work.xsl" />
+    <property name="bot.default.builder.xslt" value="${xlayout.source.resources.forrestbot.xslt.dir}/config2defaults.xsl" />
+    <mkdir dir="${bot.build.dir}" />
+  </target>
 
+  <target name="bot.conf2build" depends="bot.init" >
+<!--        builds the different xml files this process needs.  -->
+  <style in="${bot.forrestbot.xconf}"
+       out="${bot.work.build.xml}"
+       style="${bot.work.builder.xslt}"/>
+    <style in="${bot.forrestbot.xconf}"
+       out="${bot.default.parameters.xml}"
+       style="${bot.default.builder.xslt}"/>
+    <copy todir="${bot.build.dir}" file="${bot.templates.build.xml}"/>
+  </target>
+
+  <target name="bot.run" depends="bot.conf2build, compile" >
+    <path id="forrest.cp">
+      <path refid="classpath"/>
+      <fileset dir="${build.dir}">
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${tools.dir}">
+        <include name="*/lib/*.jar"/>
+      </fileset>
+      <pathelement location="${tools.jar}"/>
+      <pathelement location="${build.context}/WEB-INF/classes"/>
+    </path>
+    <!-- delegates to the generated XML file -->
+    <ant antfile="${bot.work.build.xml}" target="work" inheritRefs="true"/>
+  </target>
+  
+  
   <!-- =================================================================== -->
   <!-- Import Ant-Centipede init targets - sets up basic build stuff                          -->
   <!-- =================================================================== -->

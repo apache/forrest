@@ -46,6 +46,12 @@
    <map:serializer name="xml"    mime-type="text/xml"         src="org.apache.cocoon.serialization.XMLSerializer">
      <encoding>ISO-8859-1</encoding>
    </map:serializer>
+
+   <map:serializer name="fo2pdf"
+                src="org.apache.cocoon.serialization.FOPSerializer"
+                mime-type="application/pdf"/>
+
+
    <map:serializer name="links"                               src="org.apache.cocoon.serialization.LinkSerializer">
      <encoding>ISO-8859-1</encoding>
    </map:serializer>
@@ -290,6 +296,18 @@
      <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
      </map:call>
+   </map:match>
+
+   <map:match pattern="*.pdf">
+    <map:generate src="content/xdocs/{1}.xml"/>
+    <map:transform src="skins/@skin@/xslt/fo/document2fo.xsl"/>
+    <map:serialize type="fo2pdf"/>
+   </map:match>
+
+   <map:match pattern="**/*.pdf">
+    <map:generate src="{1}/{2}.xml"/>
+    <map:transform src="skins/@skin@/xslt/fo/document2fo.xsl"/>
+    <map:serialize type="fo2pdf"/>
    </map:match>
 
    <!-- ================  Libre   =========================== -->
