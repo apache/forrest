@@ -1,40 +1,15 @@
 #!/bin/sh
 
 # set the current working dir as the PROJECT_HOME variable 
-PROJECT_HOME="$PWD"
 
-# Try to determine the FORREST_HOME
-if [ -z "$FORREST_HOME" ] ; then
-  # Note: this piece of code is based on ant's shell script
-
-  ## resolve links - $0 may be a link to ant's home
-  PRG=$0
-  progname=`basename $0`
-  saveddir=`pwd`
-
-  # need this for relative symlinks
-  cd `dirname $PRG`
-
-  while [ -h "$PRG" ] ; do
-    ls=`ls -ld "$PRG"`
-    link=`expr "$ls" : '.*-> \(.*\)$'`
-    if expr "$link" : '.*/.*' > /dev/null; then
-  PRG="$link"
-    else
-  PRG="`dirname $PRG`/$link"
-    fi
-  done
-
-  FORREST_HOME=`dirname "$PRG"`/..
-
-  # make it fully qualified
-  FORREST_HOME=`cd "$FORREST_HOME" && pwd`
-
-  cd $saveddir
+if [ "$TERM" = "cygwin" ] ; then
+  PROJECT_HOME=`cygpath -w "$PWD"`
+else
+  PROJECT_HOME=$PWD
 fi
 
-# set the ant file to use
-ANTFILE="$FORREST_HOME/forrest.build.xml"
+# use the location of this script to infer $FORREST_HOME
+FORREST_HOME=`dirname "$0"`/..
 
 # Save old ANT_HOME
 OLD_ANT_HOME="$ANT_HOME"
@@ -44,20 +19,34 @@ unset ANT_HOME
 
 if [ "$TERM" = "cygwin" ] ; then
   S=';'
+  FORREST_DOT_HOME=`cygpath -w "$FORREST_HOME"`
 else
   S=':'
+  FORREST_DOT_HOME=$FORREST_HOME
 fi
+
+# set the ant file to use
+ANTFILE="$FORREST_DOT_HOME/forrest.build.xml"
 
 CP="$CLASSPATH"
 export CP
 unset CLASSPATH
 
-CLASSPATH=`echo $FORREST_HOME/lib/endorsed/*.jar | tr ' ' $S`
+for i in $FORREST_HOME/lib/endorsed/*.jar; do
+  if [ "$TERM" = "cygwin" ] ; then
+    LIB=`cygpath -w $i`
+  else
+    LIB=$i
+  fi
+
+  CLASSPATH=$CLASSPATH$S$LIB
+done
+
 export CLASSPATH
 
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
-"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_HOME" -emacs $@ 
+"$FORREST_HOME/ant/bin/ant" -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -Dproject.home="$PROJECT_HOME" -Dforrest.home="$FORREST_DOT_HOME" -emacs $@ 
 
 # ---- Restore Classpath
 unset CLASSPATH
@@ -68,4 +57,5 @@ export CLASSPATH
 # Restore old ANT_HOME
 ANT_HOME="$OLD_ANT_HOME"
 export ANT_HOME
+
 
