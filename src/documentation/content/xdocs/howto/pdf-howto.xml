@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "document-v12.dtd">
+<document>
+  <header>
+    <title>Howto for generating user-specific pdf-sites</title>
+  </header>
+  <body>
+    <section>
+      <title>Who should read this?</title>
+      <p>
+        By default Forrest generates a pdf-file for each site of your project. As well you can create a pdf of the whole site. But sometimes it may be necessary to
+        generate a pdf-file out of selected tab. Trying to say only parts of the site. This howto describes how you can get at it.
+      </p>
+    </section>
+    <section>
+      <title>The way it works...</title>
+      <p>
+        Now let us go into it...
+      </p>
+      <ol>
+        <li>
+          Change to the <code>[project]/src/documentation</code> directory.
+        </li>
+        <li>
+          You have to define your own aggregate.xmap. 
+          Simply copy the relevant sitemaps that you wish to over-ride, from Forrest sitemaps at forrest/src/core/context/*.xmap into your src/documentation directory (or wherever ${project.sitemap-dir} points to).
+          Copy aggregate.xmap to e.g. foo.xmap.
+        </li>
+        <li>
+          Edit the file <code>sitemap.xmap</code> and insert the following lines after the &lt;map:match pattern="site.xml"&gt;
+          pipeline (around line 194):
+          <source xml:space="preserve">
+          <![CDATA[ 
+...
+&lt;map:match pattern="foo.xml"&gt;
+   &lt;map:mount uri-prefix="" src="foo.xmap" check-reload="yes" /&gt;
+&lt;/map:match&gt;
+...
+]]>
+          </source>
+        </li>
+        <li>
+          Edit the file <code>foo.xmap</code>; the <![CDATA[&lt;map:match pattern="*.xml"&gt; ]]>element should look like the
+          following:
+         <source xml:space="preserve">
+         <![CDATA[
+&lt;map:match pattern="*.xml"&gt;
+  &lt;map:generate src="cocoon://abs-linkmap"/&gt;
+  &lt;map:transform type="xpath"&gt;
+     &lt;map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/&gt;
+  &lt;/map:transform&gt;
+  &lt;map:transform src="resources/stylesheets/site2book.xsl" /&gt;
+  &lt;map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl"&gt;
+     &lt;map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/&gt;
+  &lt;/map:transform&gt;
+  &lt;map:transform type="cinclude"/&gt;
+  &lt;map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/&gt;
+  &lt;map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/&gt;
+  &lt;map:serialize type="xml"/&gt;
+&lt;/map:match&gt;
+]]>
+          </source>
+        </li>
+        <li>
+          What happens there?
+          <ul>
+            <li>
+               Line 4 of our example
+              <br/>
+              <code><![CDATA[&lt;map:parameter name="include" value="/*[name()='site']/*[name()='MyFooSite']"/&gt;]]></code>
+              looks at your site.xml and finds something like:
+              <source xml:space="preserve">
+              <![CDATA[
+...
+&lt;MyFooSite label="Your foo site"&gt;
+  &lt;firstchapter label="Introduction" href="first.html"/&gt;
+  &lt;sec_chapter label="Conclusion" href="second.html/&gt;
+&lt;/MyFooSite&gt;
+...
+]]>
+              </source>
+              So it takes all the elements of <code><![CDATA[&lt;MyFooSite&gt;]]></code> - that means <code><![CDATA[&lt;MyFootSite&gt;]]></code>
+              and its "children" - for the content of the pdf-file to generate.
+            </li>
+            <li>
+              Line 8 defines the title of the pdf-file by taking the content of the project-name variable in
+              <code>skinconf.xml</code> and adding some funny text:
+              <br/>
+              <code><![CDATA[&lt;map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/&gt;]]></code>
+            </li>
+          </ul>
+          <note>
+            In the original <code>aggregate.xmap</code> there is the line
+            <br/>
+            <code><![CDATA[&lt;map:parameter name="ignore" value="{1}"/&gt;]]></code>
+            <br/>
+            just before the title definition (<code><![CDATA[&lt;map:parameter name="title" value=".../&gt;]]></code>). Be sure to
+            delete it or comment it out if you like to generate a pdf-file for specific sites. You only need it for
+            the generation of one pdf-file for the whole project (this is what <code>aggregate.xmap</code> usually does).
+          </note>
+        </li>
+        <li>
+          In site.xml, add something like
+          <source xml:space="preserve">
+          <![CDATA[
+&lt;all&gt;
+  &lt;whole_foosite href="FooSite.pdf"/&gt;
+&lt;/all&gt;
+]]>
+          </source>
+          This allows you to link to it via a <code><![CDATA[&lt;link href="site:whole_foosite"&gt;]]></code> reference. If you need
+          it in the menue entries add the label attribute to the <code><![CDATA[&lt;whole_foosite&gt;]]></code> element:
+          <code><![CDATA[&lt;whole_foosite label="My first PDF-file" href="FooSite.pdf"/&gt;]]></code>
+        </li>
+      </ol>
+      <p>
+        Enjoy it!
+      </p>
+    </section>
+  </body>
+</document>
