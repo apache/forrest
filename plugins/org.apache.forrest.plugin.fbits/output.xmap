@@ -30,6 +30,83 @@
   </map:components>
 
 <map:pipelines>
+<!--Get the xsl:templates of the requested contract 
+  -->
+ <map:pipeline>
+   <map:match pattern="get.contract.*.*">
+     <map:generate src="resources/templates/{1}.ft"/>
+     <map:transform src="resources/stylesheets/templates/contract.xsl">
+      <!--¿which output format?-->
+      <map:parameter name="format" value="{2}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+  </map:pipeline>
+<!--Get the forrest:properties of the requested contract 
+  -->
+	<map:pipeline>
+   <map:match pattern="get.contract-meta.*">
+     <map:generate src="resources/templates/{1}.ft"/>
+     <map:transform src="resources/stylesheets/templates/contract.property.xsl"/>
+     <map:serialize type="xml"/>
+   </map:match>
+  </map:pipeline>
+  
+  <!--NOTE: The following pipelines are e.g. main.ft -> should be * for document specific output-->
+  
+<!--Aggregate the contract-templates requested by the main.ft for the xsl:include-->
+  <map:pipeline>
+    <map:match pattern="prepare.include.main">
+      <map:generate src="src/documentation/FORREST-INF/main.ft"/>
+      <map:transform src="resources/stylesheets/templates/prepare.include.main.xsl">
+	      <map:parameter name="config-file" value="{project:skinconf}"/>
+      </map:transform>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+<!--Aggregate the forrest:properties requested by the main.ft-->
+  <map:pipeline>
+    <map:match pattern="prepare.meta.main">
+      <map:generate src="src/documentation/FORREST-INF/main.ft"/>
+      <map:transform src="resources/stylesheets/templates/prepare.meta.main.xsl"/>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+  
+ <!--Aggregate all contracts-templates requested by the main.ft
+  getHead - will parse the xhtml head output
+  getBody - will parse the xhtml body output 
+  --> 
+  <map:pipeline>
+    <map:match pattern="prepare.xhtml.main">
+      <map:aggregate element="forrest:filter">
+        <map:part src="src/documentation/FORREST-INF/main.ft" />
+        <map:part src="cocoon:/prepare.meta.main" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/templates/prepare.xhtml.main.xsl" >
+      </map:transform>
+     	<map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+  <!--Outputs xhtml of the main.ft-->
+  <map:pipeline>
+    <map:match pattern="transform.ft">
+      <map:aggregate element="forrest:filter">
+        <map:part src="src/documentation/FORREST-INF/main.ft" />
+        <map:part src="cocoon:/prepare.meta.main" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/templates/transform.main.ft.xsl" >
+        <map:parameter name="path" value="{path}"/>
+        <map:parameter name="config-file" value="{project:skinconf}"/>
+      </map:transform>
+     	<map:serialize type="html"/>
+    </map:match>
+    
+  </map:pipeline>
+  
+  <!--Old stuff-->
 <!--
   [poc] - Proof of concept pipeline
   you can transform xsl 
@@ -61,7 +138,6 @@
      <map:serialize type="xml"/>
    </map:match>
   </map:pipeline>
-  
 <!-- 
   
 1. check all aviable fct -> ls.fbits
