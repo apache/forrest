@@ -24,62 +24,64 @@
       <!-- ============================================================ -->
       <map:match pattern="**">
 
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/{1}" />
-          <map:match pattern="**.html">
-            <!--
-            Use this instead if you want JTidy to clean up your HTML
-            <map:generate type="html" src="content/{0}" />
-            <map:serialize type="html"/>
-            -->
-            <map:read src="content/{0}" mime-type="text/html"/>
-          </map:match>
+        <map:select type="exists">
+          <map:when test="content/{1}">
+            <map:match pattern="**.html">
+              <!--
+              Use this instead if you want JTidy to clean up your HTML
+              <map:generate type="html" src="content/{0}" />
+              <map:serialize type="html"/>
+              -->
+              <map:read src="content/{0}" mime-type="text/html"/>
+            </map:match>
 
-          <map:match pattern="**.xml">
-            <map:generate type="file" src="content/{0}" />
-            <map:serialize type="xml" />
-          </map:match>
+            <map:match pattern="**.xml">
+              <map:generate type="file" src="content/{0}" />
+              <map:serialize type="xml" />
+            </map:match>
 
-          <map:match pattern="skin/**.css">
-            <map:read src="content/{1}.css" mime-type="text/css" />
-          </map:match>
+            <map:match pattern="skin/**.css">
+              <map:read src="content/{1}.css" mime-type="text/css" />
+            </map:match>
 
-          <map:match pattern="**.js">
-            <map:read src="content/{0}" mime-type="application/javascript" />
-          </map:match>
+            <map:match pattern="**.js">
+              <map:read src="content/{0}" mime-type="application/javascript" />
+            </map:match>
 
-          <map:match pattern="**.gif">
-            <map:read src="content/{0}" mime-type="image/gif" />
-          </map:match>
+            <map:match pattern="**.gif">
+              <map:read src="content/{0}" mime-type="image/gif" />
+            </map:match>
 
-          <map:match pattern="**.png">
-            <map:read src="content/{0}" mime-type="image/png" />
-          </map:match>
+            <map:match pattern="**.png">
+              <map:read src="content/{0}" mime-type="image/png" />
+            </map:match>
 
-          <map:match pattern="**.jpg">
-            <map:read src="content/{0}" mime-type="image/jpeg" />
-          </map:match>
+            <map:match pattern="**.jpg">
+              <map:read src="content/{0}" mime-type="image/jpeg" />
+            </map:match>
 
-          <map:match pattern="**.jpeg">
-            <map:read src="content/{0}" mime-type="image/jpeg" />
-          </map:match>
+            <map:match pattern="**.jpeg">
+              <map:read src="content/{0}" mime-type="image/jpeg" />
+            </map:match>
 
-          <map:match pattern="**.pdf">
-            <map:read src="content/{0}" mime-type="application/pdf" />
-          </map:match>
+            <map:match pattern="**.pdf">
+              <map:read src="content/{0}" mime-type="application/pdf" />
+            </map:match>
 
-          <map:match pattern="**.swf">
-            <map:read src="content/{0}" mime-type="application/x-shockwave-flash" />
-          </map:match>
+            <map:match pattern="**.swf">
+              <map:read src="content/{0}" mime-type="application/x-shockwave-flash" />
+            </map:match>
 
-          <map:match pattern="**.txt">
-            <map:read src="content/{0}" mime-type="text/plain" />
-          </map:match>
+            <map:match pattern="**.txt">
+              <map:read src="content/{0}" mime-type="text/plain" />
+            </map:match>
 
-          <map:match pattern="**">
-            <map:read src="content/{1}"/>
-          </map:match>
-        </map:act>
+            <map:match pattern="**">
+              <map:read src="content/{1}"/>
+            </map:match>
+
+          </map:when>
+        </map:select>
       </map:match>
 
     </map:pipeline>

@@ -142,12 +142,13 @@
       <!-- ============================================================ -->
 
       <map:match pattern="**body-*.html">
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}{2}.ehtml" />
-          <map:generate src="content/xdocs/{../1}{../2}.ehtml" />
-          <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
-          <map:serialize type="xml" />
-        </map:act>
+        <map:select type="exists">
+          <map:when test="content/xdocs/{1}{2}.ehtml">
+            <map:generate src="content/xdocs/{1}{2}.ehtml" />
+            <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
+            <map:serialize type="xml" />
+          </map:when>
+        </map:select>
       </map:match>
 
       <!-- ============================================================ -->
@@ -156,37 +157,43 @@
 
       <map:match pattern="**.xml">
 
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}.ihtml" />
-          <map:generate src="content/xdocs/{../1}.ihtml" type="html" />
-          <map:transform src="resources/stylesheets/html2document.xsl" />
-          <map:transform type="idgen" />
-          <map:serialize type="xml"/>
-        </map:act>
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}.cwiki" />
-          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="content/xdocs/{1}{2}.cwiki" />
-            <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
-            <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
-            <!--  Dynamically generated equivalents.  Matchers need to be added to
-            the root sitemap for this to work.
-            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-            -->
-            <map:transform src="resources/stylesheets/wiki2document.xsl">
-              <map:parameter name="name" value="{2}" />
-            </map:transform>
+        <map:select type="exists">
+
+          <map:when test="content/xdocs/{1}.ihtml">
+            <map:generate src="content/xdocs/{1}.ihtml" type="html" />
+            <map:transform src="resources/stylesheets/html2document.xsl" />
             <map:transform type="idgen" />
             <map:serialize type="xml"/>
-          </map:match>
-        </map:act>
+          </map:when>
 
-        <map:generate src="content/xdocs/{1}.xml" />
-        <map:call resource="transform-to-document">
-          <map:parameter name="src" value="content/xdocs/{1}.xml" />
-        </map:call>
-        <map:serialize type="xml"/>
+          <map:when test="content/xdocs/{1}.cwiki">
+            <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+              <map:generate type="text2xml" src="content/xdocs/{1}{2}.cwiki" />
+              <map:transform type="lexer"   src="resources/grammars/wiki.xlex"/>
+              <map:transform type="parser"  src="resources/grammars/wiki.xgrm"/>
+              <!--  Dynamically generated equivalents.  Matchers need to be added to
+              the root sitemap for this to work.
+              <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+              <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+              -->
+              <map:transform src="resources/stylesheets/wiki2document.xsl">
+                <map:parameter name="name" value="{2}" />
+              </map:transform>
+              <map:transform type="idgen" />
+              <map:serialize type="xml"/>
+            </map:match>
+          </map:when>
+
+          <map:otherwise>
+            <map:generate src="content/xdocs/{1}.xml" />
+            <map:call resource="transform-to-document">
+              <map:parameter name="src" value="content/xdocs/{1}.xml" />
+            </map:call>
+            <map:serialize type="xml"/>
+          </map:otherwise>
+
+        </map:select>
+
       </map:match>
 
 

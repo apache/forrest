@@ -15,22 +15,27 @@
 
       <map:match pattern="**book-*">
 
-        <map:act type="resource-exists">
-          <!-- If a hand-created book.xml exists, use it -->
-          <map:parameter name="url" value="content/xdocs/{1}book.xml" />
-          <map:generate src="content/xdocs/{../1}book.xml" />
-          <map:serialize type="xml"/>
-        </map:act>
+        <map:select type="exists">
 
-        <!-- If no book.xml, generate it from the linkmap. -->
-        <map:generate src="cocoon://{1}menulinks-{2}" />
-        <!-- The above generates the subset of the linkmap relevant to our directory. -->
-        <map:transform src="resources/stylesheets/site2book.xsl" />
-        <map:serialize type="xml"/>
+          <map:when test="content/xdocs/{1}book.xml">
+            <!-- If a hand-created book.xml exists, use it -->
+            <map:parameter name="url" value="content/xdocs/{1}book.xml" />
+            <map:generate src="content/xdocs/{../1}book.xml" />
+            <map:serialize type="xml"/>
+          </map:when>
+
+          <map:otherwise>
+            <!-- If no book.xml, generate it from the linkmap. -->
+            <map:generate src="cocoon://{1}menulinks-{2}" />
+            <!-- The above generates the subset of the linkmap relevant to our directory. -->
+            <map:transform src="resources/stylesheets/site2book.xsl" />
+            <map:serialize type="xml"/>
+          </map:otherwise>
+
+        </map:select>
 
       </map:match>
 
     </map:pipeline>
-
   </map:pipelines>
 </map:sitemap>

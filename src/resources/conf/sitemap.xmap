@@ -78,9 +78,9 @@
       <map:matcher name="regexp" src="org.apache.cocoon.matching.RegexpURIMatcher"/>
     </map:matchers>
 
-    <map:actions>
-      <map:action logger="sitemap.action.resource-exists" name="resource-exists" src="org.apache.cocoon.acting.ResourceExistsAction"/>
-    </map:actions>
+    <map:selectors>
+      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.cocoon.selection.ResourceExistsSelector" />
+    </map:selectors>
 
     <map:pipes default="caching">
       <map:pipe name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
@@ -192,16 +192,17 @@
       </map:match>
 
       <map:match pattern="**body-*.html">
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/xdocs/{1}{2}.ehtml" />
-          <map:generate src="content/xdocs/{../1}{../2}.ehtml" />
-          <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
-          <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
-            <map:parameter name="link-attrs" value="href src"/>
-            <map:parameter name="schemes" value="site ext"/>
-          </map:transform>
-          <map:serialize type="xml" />
-        </map:act>
+        <map:select type="exists">
+          <map:when test="content/xdocs/{1}{2}.ehtml">
+            <map:generate src="content/xdocs/{1}{2}.ehtml" />
+            <map:transform src="resources/stylesheets/html2htmlbody.xsl" />
+            <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html">
+              <map:parameter name="link-attrs" value="href src"/>
+              <map:parameter name="schemes" value="site ext"/>
+            </map:transform>
+            <map:serialize type="xml" />
+          </map:when>
+        </map:select>
       </map:match>
 
       <!-- Default matches -->
@@ -261,10 +262,11 @@
       <!-- +==========================================================+ -->
 
       <map:match type="regexp" pattern="^.+$">
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="content/{0}" />
-          <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
-        </map:act>
+        <map:select type="exists">
+          <map:when test="content/{0}">
+            <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
+          </map:when>
+        </map:select>
       </map:match>
 
       <map:match pattern="*.html">

@@ -74,13 +74,15 @@
       </map:match>
 
       <map:match pattern="images/**.png">
-        <map:act type="resource-exists">
-          <map:parameter name="url" value="resources/images/{1}.svg" />
-          <map:generate src="resources/images/{../1}.svg" />
-          <map:serialize type="svg2png" />
-        </map:act>
-
-        <map:read src="resources/images/{1}.png" mime-type="image/png" />
+        <map:select type="exists">
+          <map:when test="resources/images/{1}.svg">
+            <map:generate src="resources/images/{1}.svg" />
+            <map:serialize type="svg2png" />
+          </map:when>
+          <map:otherwise>
+            <map:read src="resources/images/{1}.png" mime-type="image/png" />
+          </map:otherwise>
+        </map:select>
       </map:match>
 
       <map:match pattern="images/**.*">
