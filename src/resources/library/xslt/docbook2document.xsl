@@ -24,29 +24,74 @@ transformation.  So, yes, I think it can be done with a little more work (and
 it will need to continuously evolve for a while).
 
 Credit: original from the jakarta-avalon project
-Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest document...not yet complete.
+Revision:
+Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest document...not yet complete.
+jefft@apache.org - Lots of fixups, notably the title now works, and footnotes work.
+
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
       <xsl:output method="xml" indent="yes" doctype-system="http://localhost/forrest/dtd/document-v11.dtd" doctype-public="-//APACHE//DTD Documentation V1.1//EN" encoding="UTF-8"/>
+
       <xsl:template match="/">
+            <xsl:apply-templates select="book|chapter|revhistory"/>
+      </xsl:template>
+
+      <xsl:template match="/book">
             <document>
                   <header>
-                        <xsl:apply-templates select="/*/bookinfo/title"/>
+                        <xsl:apply-templates select="bookinfo/title"/>
+                        <xsl:apply-templates select="bookinfo/subtitle"/>
                         <authors>
-                              <xsl:apply-templates select="/*/bookinfo/author"/>
+                              <xsl:apply-templates select="bookinfo/author"/>
                         </authors>
+                        <!--
                         <notice/>
                         <abstract/>
+                        -->
                   </header>
                   <body>
-                        <xsl:apply-templates select="/*/node()[ local-name() != 'bookinfo' ]"/>
+                        <xsl:apply-templates select="node()[ local-name() != 'bookinfo']"/>
+                        <xsl:call-template name="apply-footnotes"/>
                   </body>
             </document>
       </xsl:template>
+
+      <xsl:template match="/chapter">
+            <document>
+                  <header>
+                        <xsl:apply-templates select="title"/>
+                        <xsl:apply-templates select="subtitle"/>
+                        <authors>
+                              <xsl:apply-templates select="chapterinfo/authorgroup/author"/>
+                        </authors>
+                  </header>
+                  <body>
+                        <xsl:apply-templates select="node()[
+                              local-name() != 'title' and
+                              local-name() != 'subtitle' and
+                              local-name() != 'chapterinfo' 
+                              ]"/>
+                        <xsl:call-template name="apply-footnotes"/>
+                  </body>
+            </document>
+      </xsl:template>
+
+      <xsl:template name="apply-footnotes">
+            <xsl:if test="//footnote">
+                  <section><title>Footnotes</title>
+                        <xsl:apply-templates select="//footnote" mode="base"/>
+                  </section>
+            </xsl:if>
+      </xsl:template>
+
       <xsl:template match="author">
             <xsl:element name="person">
-                  <xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute>
-                  <xsl:attribute name="name"><xsl:if test="honorific"><xsl:value-of select="honorific"/>. </xsl:if><xsl:if test="firstname"><xsl:value-of select="firstname"/></xsl:if><xsl:value-of select="surname"/></xsl:attribute>
+                  <xsl:if test="id"><xsl:attribute name="id"><xsl:value-of select="id"/></xsl:attribute></xsl:if>
+                  <xsl:attribute name="name">
+                        <xsl:if test="honorific"><xsl:value-of select="honorific"/>. </xsl:if>
+                        <xsl:if test="firstname"><xsl:value-of select="firstname"/></xsl:if>
+                        <xsl:text> </xsl:text><xsl:value-of select="surname"/>
+                  </xsl:attribute>
                   <xsl:attribute name="email"><xsl:value-of select="address/email"/></xsl:attribute>
             </xsl:element>
       </xsl:template>
@@ -60,13 +105,13 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
       </xsl:template>
       <xsl:template match="cmdsynopsis">
             <!--
-               <cmdsynopsis>
+            <cmdsynopsis>
                   <command>xindice add_collection</command>
                   <arg choice="req">-c <replaceable>context</replaceable></arg>
                   <arg choice="req">-n <replaceable>name</replaceable></arg>
                   <arg choice="opt">-v <replaceable></replaceable></arg>
-               </cmdsynopsis>
-               -->
+            </cmdsynopsis>
+            -->
             <p>
                   <code>
                         <xsl:value-of select="command"/>
@@ -80,7 +125,7 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
                         <xsl:apply-templates/>
                   </xsl:when>
                   <xsl:otherwise>
-                         [<xsl:apply-templates/>]
+                        [<xsl:apply-templates/>]
                   </xsl:otherwise>
             </xsl:choose>
       </xsl:template>
@@ -125,7 +170,11 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
                   <xsl:value-of select="."/>
             </link>
       </xsl:template>
-      <xsl:template match="subtitle"/>
+      <xsl:template match="subtitle">
+            <subtitle>
+                  <xsl:value-of select="."/>
+            </subtitle>
+      </xsl:template>
       <xsl:template match="title">
             <title>
                   <xsl:value-of select="."/>
@@ -161,6 +210,7 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
                   </header>
                   <body>
                         <section>
+                              <title>Revision History</title>
                               <table>
                                     <xsl:variable name="unique-revisions" select="revision[not(revnumber=preceding-sibling::revision/revnumber)]/revnumber"/>
                                     <xsl:variable name="base" select="."/>
@@ -168,8 +218,8 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
                                           <tr>
                                                 <td>
                                                       <b>Revision <xsl:value-of select="."/> 
-                   (<xsl:value-of select="$base/revision[revnumber=current()]/date"/>)
-                </b>
+                                                            (<xsl:value-of select="$base/revision[revnumber=current()]/date"/>)
+                                                      </b>
                                                 </td>
                                           </tr>
                                           <tr>
@@ -189,14 +239,10 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
             </document>
       </xsl:template>
       <xsl:template match="para">
-            <p>
-                  <xsl:apply-templates/>
-            </p>
+            <p><xsl:apply-templates/></p>
       </xsl:template>
       <xsl:template match="emphasis">
-            <em>
-                  <xsl:apply-templates/>
-            </em>
+            <em><xsl:apply-templates/></em>
       </xsl:template>
       <xsl:template match="revision">
             <li>
@@ -344,20 +390,34 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
             </xsl:element>
       </xsl:template>
       <xsl:template match="footnote">
+            <xsl:variable name="footnote-id">
+                  <xsl:value-of select="count(preceding::footnote)+1"/>
+            </xsl:variable>
+            <anchor id="footnote-{$footnote-id}-ref"/>
             <sup>
-                  <a href="#{generate-id(.)}">
-                        <xsl:value-of select="generate-id(.)"/>
-                  </a>
+                  <link href="#footnote-{$footnote-id}">
+                        <xsl:value-of select="$footnote-id"/>
+                  </link>
             </sup>
       </xsl:template>
+
       <xsl:template match="footnote" mode="base">
-            <a name="{generate-id(.)}"/>
-            <xsl:value-of select="generate-id(.)"/>
-            <xsl:text>) </xsl:text>
-            <i>
-                  <xsl:value-of select="."/>
-            </i>
+            <p>
+                  <xsl:variable name="footnote-id">
+                        <xsl:value-of select="count(preceding::footnote)+1"/>
+                  </xsl:variable>
+                  <anchor id="footnote-{$footnote-id}"/>
+                  <link href="#footnote-{$footnote-id}-ref">
+                        <xsl:value-of select="$footnote-id"/>
+                  </link><xsl:text>) </xsl:text>
+                  <!-- Most footnotes have a para nested; strip if there is only one-->
+                  <xsl:if test="not(para)"><xsl:apply-templates/></xsl:if>
+                  <xsl:if test="count(para)=1"><xsl:apply-templates
+                              select="para/node()"/></xsl:if>
+            </p>
+            <xsl:if test="count(para)>1"><xsl:apply-templates/></xsl:if>
       </xsl:template>
+
       <xsl:template match="figure">
             <table>
                   <tr>
@@ -435,3 +495,4 @@ Revision: Kevin.Ross@iVerticalLeap.com - Moving towards xml.apache.org/forrest d
             </xsl:copy>
       </xsl:template>
 </xsl:stylesheet>
+<!-- vim: set ft=xml sw=6: -->
