@@ -107,8 +107,7 @@
 
     <xsl:comment>================= start Footer ==================</xsl:comment>
     <div class="footer">
-    <table border="0"
-           height="20" width="100%" cellpadding="0"
+    <table border="0" width="100%" cellpadding="0"
            cellspacing="0" summary="footer">
       <tr>
         <xsl:comment>================= start Copyright ==================</xsl:comment>
