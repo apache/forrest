@@ -147,7 +147,7 @@
       <tr>
         <td width="10"><img src="skin/images/spacer.gif" alt="" height="1" width="10" /></td>
       </tr>
-      <tr><td bgcolor="#4C6C8F" height="1" colspan="2"><img src="skin/images/spacer.gif" alt="" width="1" height="1" /><a href="skin/images/label.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/page.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/chapter.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/chapter_open.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a><a href="skin/images/current.gif"><img src="skin/images/spacer.gif" alt="" width="1" height="1" border="0"/></a></td></tr>
+      <tr><td bgcolor="#4C6C8F" height="1" colspan="2"><img src="skin/images/spacer.gif" alt="" width="1" height="1" /><a href="skin/images/label.gif"></a><a href="skin/images/page.gif"></a><a href="skin/images/chapter.gif"></a><a href="skin/images/chapter_open.gif"></a><a href="skin/images/current.gif"></a><a href="/favicon.ico"></a></td></tr>
       <tr>
         <td align="center" class="copyright" bgcolor="#CFDCED" colspan="2">
           <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169; @year@ @vendor@. All Rights Reserved<script language="JavaScript" type="text/javascript"><![CDATA[<!--
