@@ -33,7 +33,7 @@ isn't a major problem.
   <xsl:template match="f:site">
     <book software="Forrest"
       title="Apache Forrest"
-      copyright="2002 The Apache Software Foundation">
+      copyright="Copyright 2002-2004 The Apache Software Foundation">
       <xsl:apply-templates/>
     </book>
   </xsl:template>
