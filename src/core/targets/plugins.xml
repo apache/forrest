@@ -18,7 +18,7 @@
 <project basedir="." name="plugins">
    <!-- public targets -->     
      
-    <target name="available-plugins"
+  <target name="available-plugins"
           depends="init-props, plugin-unavailable, fetch-plugins-descriptors"
           description="What plugins are available?">
     <for param="plugin-descriptor-file">
@@ -33,20 +33,10 @@
       </sequential>
     </for>
   </target>  
-  
-  <target name="get-plugin-name"
-    description="Ask the user for the name of the plugin they wish to install">
-    <input message="Enter the name of the plugin you wish to install: " 
-      addproperty="plugin.name"/>
-  </target>
-
-  <target name="install-plugin" 
-          depends = "get-plugin-name, init-plugins"
-          description="Install the needed plugin from the remote repository"/>
           
   <!-- private -->        
                 
-  <target name="init-plugins" depends="init-props, check-plugin, fetch-plugin, unpack-plugins, configure-plugins"/>   
+  <target name="init-plugins" depends="init-props, install-required-plugins"/>   
 
   <target name="plugin-unavailable">   
     <property name="plugin.unavailable" value="true"/>
@@ -65,21 +55,21 @@
     </condition>
   </target>  
             
-  <target name="unpack-plugins"
+  <target name="unpack-plugin"
           depends="init-props">
      <unzip dest="${forrest.plugins-dir}/">
        <fileset dir="${forrest.plugins-dir}/">
-          <include name="*.zip"/>
+          <include name="${plugin.name}.zip"/>
         </fileset>
      </unzip>       
      <delete>
         <fileset dir="${forrest.plugins-dir}/">
-          <include name="*.zip"/>
+          <include name="${plugin.name}.zip"/>
         </fileset>
      </delete>
   </target>  
   
-  <target name="configure-plugins">
+  <target name="configure-plugin">
      <!-- add the snippet to plugins/sitemap.xmap that will mount the plugin
           specific sitemap -->
      <xslt in="${forrest.plugins-dir}/sitemap.xmap"
@@ -131,5 +121,18 @@
       </sequential>
     </for>
   </target>    
+  
+  <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin, configure-plugin"/>
+  
+  <target name="install-required-plugins">
+    <for list="${project.required.plugins}" param="name">
+      <sequential>
+        <echo>Installing plugin: @{name}</echo>
+        <antcall target="install-plugin">
+          <param name="plugin.name" value="@{name}"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
   
 </project>
