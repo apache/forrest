@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation
+  Copyright 2002-2005 The Apache Software Foundation
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -44,14 +44,14 @@
      </p>
      <p>In Unix/Linux:</p>
      <source>
-~/apache-forrest-0.6$ export FORREST_HOME=`pwd`
+~/apache-forrest-0.6$ export FORREST_HOME=`pwd`/src/core
 ~/apache-forrest-0.6$ export PATH=$PATH:$FORREST_HOME/bin
      </source>
      <p>In Windows:</p>
      <source>
 Go to "My Computer", "Properties", "Advanced", "Environment Variables"
 and add:
-<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.6</code>
+<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.6\src\core</code>
 <code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
      </source>
      <p>
@@ -1048,6 +1048,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <project name="myproject" default="hello">
      <!-- FORREST_HOME must be set as an environment variable -->
      <property environment="env"/>
+     <property name="forrest.home" value="${env.FORREST_HOME}"/>
      <import file="${env.FORREST_HOME}/forrest.build.xml"/>
 
      <!-- 'site' is a target imported from forrest.build.xml -->
@@ -1056,7 +1057,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
      </target>
 </project>
         ]]></source>
-      <p>(Note: That technique requires Ant 1.6+ otherwise the &lt;import&gt;
+      <p>Because you are using your own version
+      of Ant to do Forrest's work, you will need to provide the
+      supporting catalog entity resolver:
+      '<code>cp forrest/lib/core/xml-commons-resolver-1.1.jar $ANT_HOME/lib</code>'
+      </p>
+
+      <p>(Note: The technique described above requires Ant 1.6+ otherwise the &lt;import&gt;
         task will not be available for you to use. Forrest
         bundles the latest version of Ant, so you can invoke your project
         like this: <code>forrest -f myproject.xml</code>.
