@@ -1,0 +1,46 @@
+<!-- try.xml ... these are trial build targets which are currently
+  undergoing testing. When ready they can be moved into the main build.xml -->
+
+<!-- FIXME: See note below about Ant xmlcatalog -->
+<!DOCTYPE project [
+<!ENTITY xmlcatalog-include SYSTEM "../../../src/resources/schema/catalog-ant.xcat">
+]>
+
+<project default="validate-v10" basedir="."
+         name="Doc Transition Trial: validate v1.0">
+
+<!-- =================================================================== -->
+<!-- Initialization target                                               -->
+<!-- =================================================================== -->
+<target name="validate-v10">
+
+<!-- FIXME: Not sure how to consistently include the Ant xmlcatalog yet.
+  This method is working. However, we need to include it everywhere that
+  we want to use it. There might be a way to include it in higher build.xml
+-->
+<echo message="Including the xmlcatalog ..."/>
+&xmlcatalog-include;
+<echo message="... done."/>
+
+  <property name="v10.dir" value="src/testcases/c2/v10"/>
+
+  <echo message="Validating v10 xdocs."/>
+  <xmlvalidate failonerror="yes" 
+    lenient="no" 
+    warn="yes"
+    classname="org.apache.xerces.parsers.SAXParser" 
+    classpath="./lib/endorsed/xerces-2.0.1.jar"
+  >
+    <fileset dir="${v10.dir}" includes="**/*.xml, *.xml"
+      excludes="drafts/**, ctwig/**, dictionary.xml, plan/changes-doc.xml, plan/todo-doc.xml" />  
+    <xmlcatalog refid="forrest-schema">
+      <classpath>
+        <pathelement location="${resource.dir}/schema" />
+      </classpath>
+    </xmlcatalog>
+  </xmlvalidate>
+
+</target>
+</project>
+
+<!-- End of file -->
