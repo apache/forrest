@@ -29,9 +29,9 @@ COCOONJAR_SUFFIX="[0-9]*"
 ## - 'real_with_cvs' copies to lib/core/, and marks jars for removal/addition
 ##   in CVS.  Should only be performed by Forrest committers
 #
-#UPGRADE_TYPE=testing
+UPGRADE_TYPE=testing
 #UPGRADE_TYPE=real
-UPGRADE_TYPE=real_with_cvs
+#UPGRADE_TYPE=real_with_cvs
 #
 ######################################################################
 
