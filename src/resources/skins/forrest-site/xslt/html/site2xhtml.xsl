@@ -160,12 +160,9 @@
     </table>
 <!-- footer -->
     <table border="0" height="20" width="100%" cellpadding="0" cellspacing="0" summary="footer">
-      <tr>
-        <td width="10"><img src="{$spacer}" alt="" height="1" width="10" /></td>
-      </tr>
       <tr><td bgcolor="#4C6C8F" height="1" colspan="2"><img src="{$spacer}" alt="" width="1" height="1" /><a href="{$skin-img-dir}/label.gif"></a><a href="{$skin-img-dir}/page.gif"></a><a href="{$skin-img-dir}/chapter.gif"></a><a href="{$skin-img-dir}/chapter_open.gif"></a><a href="{$skin-img-dir}/current.gif"></a><a href="/favicon.ico"></a></td></tr>
       <tr>
-        <td align="center" class="copyright" bgcolor="#CFDCED" colspan="6">
+        <td align="center" class="copyright" bgcolor="#CFDCED" colspan="2">
           <font face="Arial, Helvetica, Sans-Serif" size="2">Copyright &#169;
           <xsl:value-of select="$config/year"/>&#160;<xsl:value-of
           select="$config/vendor"/> All rights reserved.<script language="JavaScript" type="text/javascript"><![CDATA[<!--
@@ -174,12 +171,12 @@
         </td>
       </tr>
       <tr>
-      <td class="logos" bgcolor="#CFDCED" colspan="1" align="left">
+      <td class="logos" bgcolor="#CFDCED" align="left">
         <xsl:if test="$config/host-logo and not($config/host-logo = '')">
             <a href="{$config/host-url}"><img src="{$config/host-logo}" alt="{$config/host-name} logo" border="0"/></a>
         </xsl:if>
       </td>
-      <td class="logos" bgcolor="#CFDCED" colspan="5" align="right">
+      <td class="logos" bgcolor="#CFDCED" align="right">
         <xsl:if test="$resource = 'index.html' and $config/credits">
           <div align="right">
           <xsl:for-each select="$config/credits/credit">
