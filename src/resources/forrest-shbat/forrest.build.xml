@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/01 11:36:47 $              |
+    |             $Date: 2003/10/01 13:44:08 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -246,7 +246,7 @@ FORREST SITE BUILDER
   </target>
 
   <!-- Sets up properties and filters -->
-  <target name="init" depends="init-props, init-skinprops"/>
+  <target name="init" depends="init-props, init-skinprops, init-skins"/>
 
   <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
@@ -1118,27 +1118,52 @@ forrest.properties.
   <target name="package-skin" description="Make a package of an existing skin">
     <input message="Which skin do you want to package?"
            addproperty="skin-name"/>
-    <jar destfile="${forrest.home}/context/skins/${skin-name}.fsj"
+    <zip destfile="${forrest.home}/context/skins/${skin-name}-${version}.fsj"
        basedir="${forrest.home}/context/skins/"
        includes="${skin-name}/**"/>
   </target>
-      
+
+
   <target name="install-skin" 
-          depends = "init-props, fetch-skin, unpack-skin"
+          depends = "init-skins"
           description="Install the needed skin from the remote repository"/>
           
-  <!-- private targets -->        
-          
-  <target name="unpack-skin"
+  <!-- private -->        
+                
+  <target name="init-skins" depends="init-props, check-skin, fetch-skin, unpack-skins"/>   
+
+  <target name="check-skin">   
+    <condition property="skin.unavailable">
+      <and>
+        <not>
+          <available type="dir" file="${forrest.home}/context/skins/${project.skin}"/>
+        </not>
+        <not>
+          <available type="file" file="${forrest.home}/context/skins/${project.skin}.fsj"/>
+        </not>
+      </and>
+    </condition>
+  </target>  
+            
+  <target name="unpack-skins"
           depends="init-props">
-     <unjar src="${forrest.home}/context/skins/${project.skin}.fsj"
-            dest="${forrest.home}/context/skins/"/>
-     <delete file="${forrest.home}/context/skins/${project.skin}.fsj"/>
+     <unzip dest="${forrest.home}/context/skins/">
+       <fileset dir="${forrest.home}/context/skins/">
+          <include name="*.fsj"/>
+        </fileset>
+     </unzip>       
+     <delete>
+        <fileset dir="${forrest.home}/context/skins/">
+          <include name="*.fsj"/>
+        </fileset>
+     </delete>
   </target>  
 
-  <target name="fetch-skins-descriptor">
+  <target name="fetch-skins-descriptor"
+          if = "skin.unavailable">
       <get src="http://xml.apache.org/forrest/skins/skins.xml" 
-           dest="${forrest.home}/context/skins/skins.xml"/>
+           dest="${forrest.home}/context/skins/skins.xml"
+           verbose="true" usetimestamp="true" ignoreerrors="false"/>
   </target>  
   
   <target name="available-skins"
@@ -1151,18 +1176,17 @@ forrest.properties.
   </target>  
   
   <target name="fetch-skin" 
-          depends="init-props, fetch-skins-descriptor"
-          description="Get a skin from the remote repository">
+          if = "skin.unavailable"
+          depends="init-props, fetch-skins-descriptor">
     <xslt in="${forrest.home}/context/skins/skins.xml" 
           out="${project.work-dir}/skinlist2fetchbuild.xml"
-          style="${forrest.home}/var/skinlist2fetch.xsl">
-      <param name="skin-name" expression="${project.skin}"/>       
+          style="${forrest.home}/var/skinlist2fetch.xsl"
+          force="true">
+      <param name="skin-name" expression="${project.skin}"/>      
+      <param name="forrest-version" expression="${version}"/>   
     </xslt>  
     <ant antfile="${project.work-dir}/skinlist2fetchbuild.xml"/>
   </target>    
   
-  <target name="install-skin" 
-          depends = "init-props, fetch-skin, unpack-skin"
-          description="Install a skin from the remote repository"/>
-   
+  
 </project>
