@@ -6,7 +6,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.19 $</version>
+    <version>$Revision: 1.20 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -127,10 +127,11 @@ Default target: site
 ~/apache/xml-mysite$ forrest seed
 Apache Forrest.  Run 'forrest -projecthelp' to list options
 
-Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.build.xml
+Buildfile: /home/..../xml-forrest/build/dist/shbat/bin/../forrest.build.xml
 
 init-props:
-Loading project specific properties from /home/jeff/apache/xml-mysite/forrest.properties
+Loading project specific properties from
+/home/jeff/apache/xml-mysite/forrest.properties
 
 echo-settings:
 
@@ -266,15 +267,17 @@ jeff@expresso:~/apache/xml-mysite$ tree
             <group-url>http://mygroup.org</group-url>
             <group-logo>images/group-logo.gif</group-logo>
 
-            <!-- Eg, a sourceforge logo. forrest-site renders it to the bottom-left corner -->
+            <!-- Eg, a sourceforge logo. forrest-site renders it to the
+             bottom-left corner -->
             <host-logo></host-logo>
 
             <!-- The following used to construct a copyright statement -->
             <year>2002</year>
             <vendor>The Apache Software Foundation.</vendor>
 
-            <!-- Some skins use this to form a 'breadcrumb trail' of links. If you don't
-            want these, set the attributes to blank. The DTD purposefully requires them.
+            <!-- Some skins use this to form a 'breadcrumb trail' of links.
+             If you don't want these, set the attributes to blank. The DTD
+             purposefully requires them.
             -->
             <trail>
               <link1 name="apache" href="http://www.apache.org/"/>
@@ -282,8 +285,8 @@ jeff@expresso:~/apache/xml-mysite$ tree
               <link3 name="" href=""/>
             </trail>
 
-            <!-- Credits are typically rendered as a set of small clickable images in the
-            page footer -->
+            <!-- Credits are typically rendered as a set of small clickable
+             images in the page footer -->
             <credits>
               <credit>
                 <name>Built with Cocoon</name>
@@ -472,7 +475,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
           best to represent download information in a custom XML format:
         </p>
         <source
-><![CDATA[<!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
+><![CDATA[<!DOCTYPE document
+PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
 <document> 
   ...
   <body>
@@ -484,11 +488,11 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <release version="0.9.13" date="2002-10-11">
         <downloads>
           <file
-            url="http://prdownloads.sourceforge.net/aft/fooproj-0.9.13-bin.zip?download"
+            url="http://prdownloads.sf.net/aft/fooproj-0.9.13-bin.zip?download"
             name="fooproj-0.9.13-bin.zip"
             size="5738322"/>
           <file
-            url="http://prdownloads.sourceforge.net/aft/fooproj-0.9.13-src.zip?download"
+            url="http://prdownloads.sf.net/aft/fooproj-0.9.13-src.zip?download"
             name="fooproj-0.9.13-src.zip"
             size="10239777"/>
         </downloads>
@@ -532,7 +536,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
   <xsl:template match="file">
     <tr>
       <td><link href="{@url}"><xsl:value-of select="@name"/></link></td>
-      <td><xsl:value-of select="format-number(@size div (1024*1024), '##.##')"/> MB</td>
+      <td><xsl:value-of
+           select="format-number(@size div (1024*1024), '##.##')"/> MB</td>
     </tr>
   </xsl:template>
 
@@ -692,7 +697,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
           <source><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" width="340" height="65" viewBox="0 0 340 60">
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="340" height="65" viewBox="0 0 340 60">
   <title>FooProject logo</title>
 
   <defs>
@@ -709,7 +715,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
   </defs>
 
   <g filter="url(#shadowFilter)" fill="url(#gradient)">
-    <text x="51%" y="70%" style="font-size:40pt; font-family:Arial ; text-anchor: middle ; font-family: Verdana">
+    <text x="51%" y="70%" style="font-size:40pt; font-family:Arial ;
+                                 text-anchor: middle ; font-family: Verdana">
       FooProject
     </text>
   </g>
@@ -891,7 +898,8 @@ To run in Tomcat, add this to the config file (usu. server.xml):
   <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
 </target>
 
-<target name="webapp" description="Generates an unpackaged webapp of the website">
+<target name="webapp"
+        description="Generates an unpackaged webapp of the website">
   <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
 </target>
 
