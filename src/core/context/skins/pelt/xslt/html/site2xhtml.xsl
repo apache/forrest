@@ -73,7 +73,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <script type="text/javascript" language="javascript" 
                 src="{$root}skin/getBlank.js"></script>
 	        <script type="text/javascript" language="javascript" 
-				src="{$root}skin/menu.js"></script>
+				src="{$root}skin/getMenu.js"></script>
 	        <script type="text/javascript" language="javascript" 
 				src="{$root}skin/fontsize.js"></script>
 <!--+
@@ -422,8 +422,27 @@ document.write("Last Published: " + document.lastModified);
     </xsl:variable>
     
     
-    <div class="menutitle" id="{$tagid}Title" onclick="SwitchMenu('{$tagid}')"><xsl:value-of select="h1"/></div>
+ <!--    <div class="menutitle" id="{$tagid}Title" 
+        onclick="SwitchMenu('{$tagid}', '{$tagid}Title', '{$root}skin/')">
+        <xsl:value-of select="h1"/>
+    </div>-->   
+    <div class="menutitle" id="{$tagid}Title" 
+        onclick="SwitchMenu('{$tagid}', '{$root}skin/')">
+        <xsl:if test="contains($tagid, '_selected_')" >
+            <xsl:attribute name="style">
+                <xsl:text>background-image: url('</xsl:text>
+                <xsl:value-of select="$root"/>
+                <xsl:text>skin/images/chapter_open.gif');</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="h1"/>
+    </div>
       <div class="{$whichGroup}" id="{$tagid}">
+        <xsl:if test="contains($tagid, '_selected_')" >
+          <xsl:attribute name="style">
+            <xsl:text>display: block;</xsl:text>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:for-each select= "ul/li">
 
           <xsl:choose>
