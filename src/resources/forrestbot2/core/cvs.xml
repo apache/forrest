@@ -5,6 +5,7 @@
   <property name="root" value="/home/cvspublic"/>
   <property name="host" value="cvs.apache.org"/>
   <property name="module" value="${ant.project.name}"/>
+  <property name="tag" value=""/>
 
   <property name="build.cvsmodule-dir"    value="work/cvsmodules"/>
   <property name="build.work-dir"         value="work/${ant.project.name}"/>
@@ -23,6 +24,7 @@
       dest="${build.cvsmodule-dir}"
       quiet="false"
       command="checkout -l"
+      tag="${tag}"
       />]]></echo>
 
     <cvs cvsRoot=":pserver:${user}@${host}:${root}"
@@ -30,6 +32,7 @@
       dest="${build.cvsmodule-dir}"
       quiet="true"
       command="checkout -l"
+      tag="${tag}"
       />
 
     <echo>Loading ${build.cvsmodule-dir}/${module}${root-dir}/forrest.properties..</echo>
@@ -40,12 +43,14 @@
       package="${module}${root-dir}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="false"
+      tag="${tag}"
       />]]></echo>
 
     <cvs cvsRoot=":pserver:${user}@${host}:${root}"
       package="${module}${root-dir}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
       quiet="true"
+      tag="${tag}"
       />
 
     <copy todir="${build.work-dir}">
