@@ -106,7 +106,7 @@
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
-<!--
+  <!--
   Get the forrest:properties of the requested contract. 
   This will determine which templates (css, head, body) we have to call later on
   -->
@@ -205,7 +205,7 @@ transform this dir-list of the project and add more information
           <map:part src="cocoon://tab-{1}.html"/>
           <map:part src="cocoon://menu-{1}.html"/>
           <map:part src="cocoon://body-{1}.html"/>
-          <map:part src="cocoon:/prepare.view.{1}"/>
+          <map:part src="cocoon:/prepare.view-nugget.{1}"/>
         </map:aggregate>
         <map:serialize type="xml"/>
     </map:match>
@@ -216,11 +216,31 @@ transform this dir-list of the project and add more information
           <map:part src="cocoon://{1}/tab-{2}.html"/>
           <map:part src="cocoon://{1}/menu-{2}.html"/>
           <map:part src="cocoon://{1}/body-{2}.html"/>
-          <map:part src="cocoon:/prepare.view.{1}"/>
+          <map:part src="cocoon:/prepare.view-nugget.{2}"/>
         </map:aggregate>
         <map:serialize type="xml"/>
       </map:match>
+  <!--
+    Get the nugget (xml) of the requested contract.
+  -->
+   <map:match pattern="resolve.nugget.*.*">
+     <map:generate src="cocoon:/prepare.view.{2}"/>
+     <map:transform src="resources/stylesheets/nugget.xsl">
+      <map:parameter value="{1}" name="contract"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+ 
+   <map:match pattern="get.nugget.*.*">
+	    <map:generate src="cocoon://resolve.nugget.{1}.{2}"/>
+      <!--FIXME: get resolved first-->
+	    <map:transform src="resources/nuggets/{1}.fn"/>
+	    <map:serialize type="xml"/>
+	 </map:match>
+   
   </map:pipeline>  
+
+  
 <!-- END
 	2. nuggets
 	-->
@@ -259,7 +279,15 @@ transform this dir-list of the project and add more information
       </map:select>
      	<map:serialize type="xml"/>
     </map:match>
-    
+    <!--Add nuggets to the view that the content can be used later on.-->
+    <map:match pattern="prepare.view-nugget.*">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.view.xsl">
+        <map:parameter name="view" value="{1}"/>
+      </map:transform>
+      <map:transform type="xinclude"/>
+     	<map:serialize type="xml"/>
+    </map:match>
 <!--
   Aggregate the contract-templates requested by the view with xinclude.
   The result is a stylesheet with all needed xsl:templates.
