@@ -19,15 +19,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.DefaultComponentManager;
-import org.apache.avalon.framework.component.DefaultComponentSelector;
+import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
+import org.apache.avalon.framework.service.DefaultServiceManager;
+import org.apache.avalon.framework.service.DefaultServiceSelector;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 import org.apache.cocoon.selection.Selector;
@@ -47,8 +47,7 @@ import org.apache.cocoon.selection.Selector;
  *   Provide a tool for more powerful virtual linking.
  *  </li>
  *  <li>
- *   Enable Forrest with a standard configuration override
- *   mechanism.
+ *   Enable Forrest with a standard configuration override mechanism.
  *  </li>
  * </ul>
  * </p>
@@ -93,22 +92,21 @@ public final class LocationMap extends AbstractLogEnabled {
      */
     public static final String HINT_PARAM = "#" + ANCHOR_NAME + ":" + HINT_KEY;
     
-    // Component manager containing the locationmap components
-    // as declared in the components section.
-    private LocationMapComponentManager m_manager;
+    /** Component manager containing the locationmap components */
+    private LocationMapServiceManager m_manager;
     
-    // default matcher as configured in the components section
+    /** default matcher */
     private String m_defaultMatcher;
     
-    // default selector as configured in the components section
+    /** default selector */
     private String m_defaultSelector;
     
-    // the list of LocatorNodes
+    /** list of LocatorNodes */
     private LocatorNode[] m_locatorNodes;
     
     
-    public LocationMap(ComponentManager manager) {
-        m_manager = new LocationMapComponentManager(manager);
+    public LocationMap(ServiceManager manager) {
+        m_manager = new LocationMapServiceManager(manager);
     }
     
     /**
@@ -116,33 +114,33 @@ public final class LocationMap extends AbstractLogEnabled {
      * the LocatorNodes.
      */
     public void build(final Configuration configuration) throws ConfigurationException {
-        
+
         // components
         final Configuration components = configuration.getChild("components");
-        
+
         // matchers
         Configuration child = components.getChild("matchers",false);
         if (child != null) {
-            final DefaultComponentSelector matcherSelector = new DefaultComponentSelector();
+            final DefaultServiceSelector matcherSelector = new DefaultServiceSelector();
             m_defaultMatcher = child.getAttribute("default");
             final Configuration[] matchers = child.getChildren("matcher");
             for (int i = 0; i < matchers.length; i++) {
                 String name = matchers[i].getAttribute("name");
                 String src  = matchers[i].getAttribute("src");
-                Matcher matcher = (Matcher) createComponent(src,matchers[i]);
-                matcherSelector.put(name,matcher);
+                Matcher matcher = (Matcher) createComponent(src, matchers[i]);
+                matcherSelector.put(name, matcher);
             }
             matcherSelector.makeReadOnly();
-            if (!matcherSelector.hasComponent(m_defaultMatcher)) {
+            if (!matcherSelector.isSelectable(m_defaultMatcher)) {
                 throw new ConfigurationException("Default matcher is not defined.");
             }
-            m_manager.put(Matcher.ROLE+"Selector",matcherSelector);
+            m_manager.put(Matcher.ROLE+"Selector", matcherSelector);
         }
-        
+
         // selectors
         child = components.getChild("selectors",false);
         if (child != null) {
-            final DefaultComponentSelector selectorSelector = new DefaultComponentSelector();
+            final DefaultServiceSelector selectorSelector = new DefaultServiceSelector();
             m_defaultSelector = child.getAttribute("default");
             final Configuration[] selectors = child.getChildren("selector");
             for (int i = 0; i < selectors.length; i++) {
@@ -152,18 +150,19 @@ public final class LocationMap extends AbstractLogEnabled {
                 selectorSelector.put(name,selector);
             }
             selectorSelector.makeReadOnly();
-            if (!selectorSelector.hasComponent(m_defaultSelector)) {
+            if (!selectorSelector.isSelectable(m_defaultSelector)) {
                 throw new ConfigurationException("Default selector is not defined.");
             }
             m_manager.put(Selector.ROLE+"Selector",selectorSelector);
-            m_manager.makeReadOnly();
         }
-        
+
+        m_manager.makeReadOnly();
+
         // locators
         final Configuration[] children = configuration.getChildren("locator");
         m_locatorNodes = new LocatorNode[children.length];
         for (int i = 0; i < children.length; i++) {
-            m_locatorNodes[i] = new LocatorNode(this,m_manager);
+            m_locatorNodes[i] = new LocatorNode(this, m_manager);
             m_locatorNodes[i].enableLogging(getLogger());
             m_locatorNodes[i].build(children[i]);
         }
@@ -183,7 +182,9 @@ public final class LocationMap extends AbstractLogEnabled {
         try {
             component = Class.forName(src).newInstance();
             ContainerUtil.enableLogging(component,getLogger());
-            ContainerUtil.configure(component,config);
+            if (config != null) {
+                ContainerUtil.configure(component, config);
+            }
             ContainerUtil.initialize(component);
         } catch (Exception e) {
             throw new ConfigurationException("Couldn't create object of type " + src,e);
@@ -192,12 +193,9 @@ public final class LocationMap extends AbstractLogEnabled {
     }
     
     public void dispose() {
-        Iterator components = m_manager.getComponents();
+        final Iterator components = m_manager.getObjects();
         while(components.hasNext()) {
-            Object component = components.next();
-            if (component instanceof Disposable) {
-                ((Disposable) component).dispose();
-            }
+        	ContainerUtil.dispose(components.next());
         }
         m_manager = null;
         m_locatorNodes = null;
@@ -209,21 +207,20 @@ public final class LocationMap extends AbstractLogEnabled {
      * the first non-null result.
      */
     public String locate(String hint, Map om) throws Exception {
-        
+
         String location = null;
-        
+
         final InvokeContext context = new InvokeContext();
         final Logger contextLogger = getLogger().getChildLogger("ctx");
-        context.enableLogging(contextLogger);
-        //TODO nicolaken: temp hack to get it compiling with 2.2
-        throw new RuntimeException("Cannot use LocationMap intended for 2.1 with 2.2; please reconvert to Serviceable.");
-        /* uncomment
-        context.compose(m_manager);       
-        
+
+        ContainerUtil.enableLogging(context, contextLogger);
+        ContainerUtil.compose(context, new WrapperComponentManager(m_manager));
+        ContainerUtil.service(context, m_manager);
+
         final Map anchorMap = new HashMap(2);
         anchorMap.put(HINT_KEY,hint);
         context.pushMap(ANCHOR_NAME,anchorMap);
-        
+
         for (int i = 0; i < m_locatorNodes.length; i++) {
             location = m_locatorNodes[i].locate(om,context);
             if (location != null) {
@@ -231,14 +228,13 @@ public final class LocationMap extends AbstractLogEnabled {
             }
         }
         
-        context.dispose();
-        
+        ContainerUtil.dispose(context);
+
         if (getLogger().isDebugEnabled() && location == null) {
             getLogger().debug("No location matched request with hint " + hint);
         }
-        
+
         return location;
-        */
     }
     
     /**
@@ -259,14 +255,16 @@ public final class LocationMap extends AbstractLogEnabled {
      * Overide DefaultComponentManager to access the list of all
      * components.
      */
-    private static class LocationMapComponentManager extends DefaultComponentManager {
+    private static class LocationMapServiceManager extends DefaultServiceManager {
         
-        LocationMapComponentManager(ComponentManager parent) {
+        LocationMapServiceManager(ServiceManager parent) {
             super(parent);
         }
         
-        Iterator getComponents() {
-            return super.getComponentMap().values().iterator();
+        Iterator getObjects() {
+            return super.getObjectMap().values().iterator();
         }
+
     }
+
 }

@@ -19,29 +19,31 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.sitemap.PatternException;
 
 /**
- * Base class for LocationMap nodes.
+ * Base class for LocationMap nodes. Defines the contract between the
+ * LocationMap and its nodes.
  */
 public abstract class AbstractNode extends AbstractLogEnabled {
     
     
-    protected final ComponentManager m_manager;
+    protected final ServiceManager m_manager;
     
     // optional parameters defined by the node's configuration
     private Map m_parameters;
     
     
-    public AbstractNode(final ComponentManager manager) {
+    public AbstractNode(final ServiceManager manager) {
         m_manager = manager;
     }
     
@@ -70,8 +72,8 @@ public abstract class AbstractNode extends AbstractLogEnabled {
             final String value = children[i].getAttribute("value");
             try {
                 parameters.put(
-                    VariableResolverFactory.getResolver(name,m_manager),
-                    VariableResolverFactory.getResolver(value,m_manager));
+                    VariableResolverFactory.getResolver(name, new WrapperComponentManager(m_manager)),
+                    VariableResolverFactory.getResolver(value, new WrapperComponentManager(m_manager)));
             } catch(PatternException pe) {
                 String msg = "Invalid pattern '" + value + "' at " 
                     + children[i].getLocation();

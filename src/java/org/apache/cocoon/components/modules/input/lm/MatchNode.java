@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.ComponentSelector;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.ServiceSelector;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 
@@ -63,7 +63,7 @@ public final class MatchNode extends AbstractNode {
     // the child nodes
     private AbstractNode[] m_nodes;
     
-    public MatchNode(final LocatorNode ln, final ComponentManager manager) {
+    public MatchNode(final LocatorNode ln, final ServiceManager manager) {
         super(manager);
         m_ln = ln;
     }
@@ -75,10 +75,9 @@ public final class MatchNode extends AbstractNode {
         // get the matcher
         m_type = configuration.getAttribute("type",m_ln.getDefaultMatcher());
         try {
-            ComponentSelector matchers = (ComponentSelector) 
-                super.m_manager.lookup(Matcher.ROLE + "Selector");
+            ServiceSelector matchers = (ServiceSelector) super.m_manager.lookup(Matcher.ROLE + "Selector");
             m_matcher = (Matcher) matchers.select(m_type);
-        } catch (ComponentException e) {
+        } catch (ServiceException e) {
             final String message = "Unable to get Matcher of type " + m_type;
             throw new ConfigurationException(message,e);
         }
@@ -93,13 +92,13 @@ public final class MatchNode extends AbstractNode {
             AbstractNode node = null;
             String name = children[i].getName();
             if (name.equals("location")) {
-                node = new LocationNode(m_ln,super.m_manager);
+                node = new LocationNode(m_ln, super.m_manager);
             }
             else if (name.equals("match")) {
                 node = new MatchNode(m_ln,super.m_manager);
             }
             else if (name.equals("select")) {
-                node = new SelectNode(m_ln,super.m_manager);
+                node = new SelectNode(m_ln, super.m_manager);
             }
             else if (!name.equals("parameter")) {
                 final String message =

@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.ComponentSelector;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.ServiceSelector;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.selection.Selector;
 
@@ -47,7 +47,7 @@ public final class SelectNode extends AbstractNode {
     private AbstractNode[] m_nodes;
     
     
-    public SelectNode(LocatorNode ln, ComponentManager manager) {
+    public SelectNode(LocatorNode ln, ServiceManager manager) {
         super(manager);
         m_ln = ln;
     }
@@ -59,10 +59,9 @@ public final class SelectNode extends AbstractNode {
         // get the selector
         m_type = configuration.getAttribute("type",m_ln.getDefaultSelector());
         try {
-            final ComponentSelector selectors = (ComponentSelector) 
-                super.m_manager.lookup(Selector.ROLE + "Selector");
+            final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Selector.ROLE + "Selector");
             m_selector = (Selector) selectors.select(m_type);
-        } catch (ComponentException e) {
+        } catch (ServiceException e) {
             final String message = "Unable to get Selector of type " + m_type;
             throw new ConfigurationException(message,e);
         }
@@ -74,13 +73,13 @@ public final class SelectNode extends AbstractNode {
             AbstractNode node = null;
             String name = children[i].getName();
             if (name.equals("location")) {
-                node = new LocationNode(m_ln,super.m_manager);
+                node = new LocationNode(m_ln, super.m_manager);
             } 
             else if (name.equals("match")) {
-                node = new MatchNode(m_ln,super.m_manager);
+                node = new MatchNode(m_ln, super.m_manager);
             }
             else if (name.equals("select")) {
-                node = new SelectNode(m_ln,super.m_manager);
+                node = new SelectNode(m_ln, super.m_manager);
             }
             else if (!name.equals("parameter")) {
                 final String message = "Unknown select node child:" + name;

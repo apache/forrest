@@ -22,16 +22,16 @@ import java.util.Map;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.Component;
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.NamespacedSAXConfigurationHandler;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.cocoon.components.modules.input.lm.*;
+import org.apache.cocoon.components.modules.input.lm.LocationMap;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.SourceValidity;
@@ -43,11 +43,11 @@ import org.xml.sax.SAXException;
  * Resolves a request against a LocationMap.
  */
 public class LocationMapModule extends AbstractLogEnabled 
-    implements InputModule, Composable, Configurable, Disposable, ThreadSafe {
+    implements InputModule, Serviceable, Configurable, Disposable, ThreadSafe {
     
     private static final Iterator ATTNAMES = Collections.EMPTY_LIST.iterator();
     
-    private ComponentManager m_manager;
+    private ServiceManager m_manager;
     private SourceResolver m_resolver;
     private String m_src;
     private SourceValidity m_srcVal;
@@ -58,7 +58,7 @@ public class LocationMapModule extends AbstractLogEnabled
     public LocationMapModule() {
     }
     
-    public void compose(ComponentManager manager) throws ComponentException {
+    public void service(ServiceManager manager) throws ServiceException {
         m_manager = manager;
         m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
     }
@@ -130,7 +130,7 @@ public class LocationMapModule extends AbstractLogEnabled
         catch (SAXException e) {
             throw new ConfigurationException("Unable to build LocationMap.",e);
         }
-        catch (ComponentException e) {
+        catch (ServiceException e) {
             throw new ConfigurationException("Unable to build LocationMap.",e);
         }
         finally {

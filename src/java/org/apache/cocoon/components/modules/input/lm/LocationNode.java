@@ -17,14 +17,14 @@ package org.apache.cocoon.components.modules.input.lm;
 
 import java.util.Map;
 
-import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.sitemap.PatternException;
-import org.apache.excalibur.source.SourceUtil;
 
 /**
  * locationmap leaf statement identifying a location.
@@ -38,44 +38,32 @@ import org.apache.excalibur.source.SourceUtil;
 public class LocationNode extends AbstractNode {
 
     private final LocatorNode m_ln;
-    
+
     // the resolvable location source
     private VariableResolver m_src;
-    
-    public LocationNode(final LocatorNode ln, final ComponentManager manager) {
+
+    public LocationNode(final LocatorNode ln, final ServiceManager manager) {
         super(manager);
         m_ln = ln;
     }
-    
+
     public void build(final Configuration configuration) throws ConfigurationException {
         try {
             m_src = VariableResolverFactory.getResolver(
-                configuration.getAttribute("src"),super.m_manager);
+            		configuration.getAttribute("src"), 
+					new WrapperComponentManager(super.m_manager));
         } catch (PatternException e) {
-            final String message = "Illegal pattern syntax at for location attribute 'src' " +                "at " + configuration.getLocation();
+            final String message = "Illegal pattern syntax at for location attribute 'src'" +
+            		" at " + configuration.getLocation();
             throw new ConfigurationException(message,e);
         }
-
     }
     
     /**
      * Resolve the location string against the InvokeContext.
      */
     public String locate(Map om, InvokeContext context) throws Exception {
-        
-        String src = m_src.resolve(context,om);
-        
-        // relative, prefix with locator base
-        if (src.charAt(0) != '/' && SourceUtil.indexOfSchemeColon(src) == -1) {
-            String base = (String) context.getMapByAnchor(LocationMap.ANCHOR_NAME).get("base");
-            src =  base + (base.charAt(base.length()-1) == '/' ? "" : "/") + src;
-        }
-        
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug("location: " + src);
-        }
-        
-        return src;
+        return m_src.resolve(context, om);
     }
 
 }

@@ -19,14 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.sitemap.PatternException;
+import org.apache.excalibur.source.SourceUtil;
 
 
 /**
@@ -52,29 +53,38 @@ public final class LocatorNode extends AbstractNode {
     
     // the contained Match- and SelectNodes
     private AbstractNode[] m_nodes;
-    
-    public LocatorNode(final LocationMap lm, final ComponentManager manager) {
+
+    public LocatorNode(final LocationMap lm, final ServiceManager manager) {
         super(manager);
         m_lm = lm;
     }
     
     public void build(final Configuration configuration) throws ConfigurationException {
-        String base = configuration.getAttribute("base",".");
-        try {
-            m_baseLocation = VariableResolverFactory.getResolver(base,super.m_manager);
-        } catch (PatternException e) {
-            final String message = "Illegal pattern syntax for locator attribute 'base' " +                "at " + configuration.getLocation(); 
-            throw new ConfigurationException(message);
+    	
+    	super.build(configuration);
+
+        // get the base attribute
+        String base = configuration.getAttribute("base", null);
+        if (base != null) {
+            try {
+                m_baseLocation = VariableResolverFactory.getResolver(base, new WrapperComponentManager(super.m_manager));
+            } catch (PatternException e) {
+                final String message = "Illegal pattern syntax for locator attribute 'base'" +
+                		" at " + configuration.getLocation();
+                throw new ConfigurationException(message);
+            }
         }
+        
+        // get the child nodes
         final Configuration[] children = configuration.getChildren();
         final List nodes = new ArrayList(children.length);
         for (int i = 0; i < children.length; i++) {
             AbstractNode node = null;
             if (children[i].getName().equals("match")) {
-                node = new MatchNode(this,super.m_manager);
+                node = new MatchNode(this, super.m_manager);
             }
             else if (children[i].getName().equals("select")) {
-                node = new SelectNode(this,super.m_manager);
+                node = new SelectNode(this, super.m_manager);
             }
             else {
                 final String message = "Illegal locator node child: " 
@@ -94,14 +104,24 @@ public final class LocatorNode extends AbstractNode {
      * non-null result.
      */
     public String locate(Map om, InvokeContext context) throws Exception {
-        
-        // resolve the base location and put it in the anchor map
-        Map anchorMap = context.getMapByAnchor(LocationMap.ANCHOR_NAME);
-        anchorMap.put("base",m_baseLocation.resolve(context,om));
-        
+
+        // resolve the base location
+    	String base = null;
+    	if (m_baseLocation != null) {
+    		base = m_baseLocation.resolve(context, om);
+        	if (base != null && base.charAt(base.length()-1) != '/') {
+        		base = base + "/";
+        	}
+    	}
+
         for (int i = 0; i < m_nodes.length; i++) {
-            final String location = m_nodes[i].locate(om,context);
+            String location = m_nodes[i].locate(om, context);
             if (location != null) {
+                if (base != null && base.length() != 0)  {
+                	if (location.charAt(0) != '/' && SourceUtil.indexOfSchemeColon(location) == -1) {
+                        location = base + location;
+                	}
+                }
                 if (getLogger().isDebugEnabled()) {
                     getLogger().debug("located: " + location);
                 }
