@@ -143,7 +143,8 @@ FORREST SITE BUILDER
     <!-- 
     Skin aliasing for backwards compatability
         0.5 => 0.6
-        krysalis-site => crust
+        krysalis-site => ... warn about future removal
+        crust => ... warn about future removal
         forrest-site => ... warn about future removal
         forrest-css => pelt
         avalon-tigris => tigris
@@ -152,24 +153,10 @@ FORREST SITE BUILDER
     This must be kept in sync with ForrestConfModule.java/aliasSkinProperties()
     -->
     <if>
-        <equals arg1="${project.skin}" arg2="krysalis-site"/>
+        <equals arg1="${project.skin}" arg2="forrest-css"/>
         <then>
-            <property name="project.new-skin-name" value="crust"/>
+            <property name="project.new-skin-name" value="pelt"/>
         </then>
-        <!-- temporarily bring back forrest-site
-        <elseif>
-            <equals arg1="${project.skin}" arg2="forrest-site"/>
-            <then>
-                <property name="project.new-skin-name" value="crust"/>
-            </then>
-        </elseif>
-        -->
-        <elseif>
-            <equals arg1="${project.skin}" arg2="forrest-css"/>
-            <then>
-                <property name="project.new-skin-name" value="pelt"/>
-            </then>
-        </elseif>
         <elseif>
             <equals arg1="${project.skin}" arg2="avalon-tigris"/>
             <then>
@@ -182,6 +169,28 @@ FORREST SITE BUILDER
                 <property name="project.new-skin-name" value="tigris"/>
             </then>
         </elseif>
+        <elseif>
+            <equals arg1="${project.skin}" arg2="crust"/>
+            <then>
+                <property name="project.new-skin-name" value="krysalis-site"/>
+            </then>
+        </elseif>
+        <!-- temporarily bring back krysalis-site
+        <elseif>
+            <equals arg1="${project.skin}" arg2="krysalis-site"/>
+            <then>
+                <property name="project.new-skin-name" value="pelt"/>
+            </then>
+        </elseif>
+        -->
+        <!-- temporarily bring back forrest-site
+        <elseif>
+            <equals arg1="${project.skin}" arg2="forrest-site"/>
+            <then>
+                <property name="project.new-skin-name" value="crust"/>
+            </then>
+        </elseif>
+        -->        
     </if>
     <if>
         <isset property="project.new-skin-name"/>
@@ -204,12 +213,17 @@ Please update forrest.properties to remove this warning.
         </then>
     </if>
     <if>
-      <equals arg1="${project.skin}" arg2="forrest-site"/>
+      <or>
+          <equals arg1="${project.skin}" arg2="forrest-site"/>
+          <equals arg1="${project.skin}" arg2="krysalis-site"/>
+          <equals arg1="${project.skin}" arg2="crust"/>
+      </or>
       <then>
 <echo>
 -- Warning --
 Using skin "${project.skin}" which is deprecated.
-Please migrate to one of the new skins listed in forrest.properties
+Please migrate to one of the new skins listed in forrest.properties.
+The skin that most likely resembles these ones is called 'pelt'.
 </echo>
       </then>
     </if>

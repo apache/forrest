@@ -97,8 +97,8 @@ public class ForrestConfUtils
      */
     public static void aliasSkinProperties(AntProperties props) {
         String skinName = props.getProperty("project.skin");
-        if (skinName.equals("krysalis-site")) {
-            setSkinToUse(props, "crust");
+        if (skinName.equals("crust")) {
+            setSkinToUse(props, "krysalis-site");
         } else if (skinName.equals("avalon-tigris")
                         || skinName.equals("tigris-style")) {
             setSkinToUse(props, "tigris");
