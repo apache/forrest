@@ -6,7 +6,7 @@ book2menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
   </div>
 which is then merged with other HTML by site2xhtml.xsl
 
-$Id: book2menu.xsl,v 1.10 2003/08/31 11:59:38 jefft Exp $
+$Id: book2menu.xsl,v 1.11 2003/08/31 12:15:53 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -67,21 +67,21 @@ $Id: book2menu.xsl,v 1.10 2003/08/31 11:59:38 jefft Exp $
   <xsl:template match="menu-item">
     <!-- Use apply-imports when overriding -->
 
-    <xsl:variable name="href-noext">
-      <xsl:call-template name="path-noext">
+    <xsl:variable name="href-nofrag">
+      <xsl:call-template name="path-nofrag">
         <xsl:with-param name="path" select="@href"/>
       </xsl:call-template>
     </xsl:variable>
 
     <xsl:variable name="node-path">
       <xsl:call-template name="normalize">
-        <xsl:with-param name="path" select="concat($dirname, $href-noext)"/>
+        <xsl:with-param name="path" select="concat($dirname, $href-nofrag)"/>
       </xsl:call-template>
     </xsl:variable>
 
     <xsl:choose>
       <!-- Compare with extensions stripped -->
-      <xsl:when test="$node-path = $path-noext">
+      <xsl:when test="$node-path = $path-nofrag">
         <xsl:choose>
           <xsl:when test="contains(@href, '#')">
             <xsl:call-template name="selected-anchor"/>
@@ -119,14 +119,14 @@ $Id: book2menu.xsl,v 1.10 2003/08/31 11:59:38 jefft Exp $
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="filename-noext">
-    <xsl:call-template name="filename-noext">
+  <xsl:variable name="path-nofrag">
+    <xsl:call-template name="path-nofrag">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="path-noext">
-    <xsl:call-template name="path-noext">
+  <xsl:variable name="path-nofrag">
+    <xsl:call-template name="path-nofrag">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
@@ -140,7 +140,7 @@ $Id: book2menu.xsl,v 1.10 2003/08/31 11:59:38 jefft Exp $
   <xsl:template match="external">
     <li>
       <xsl:choose>
-        <xsl:when test="starts-with(@href, $filename-noext)">
+        <xsl:when test="starts-with(@href, $path-nofrag)">
           <span class="externalSelected">
             <xsl:call-template name="print-external"/>
           </span>
