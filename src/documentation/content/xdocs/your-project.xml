@@ -6,7 +6,7 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.27 $</version>
+    <version>$Revision: 1.28 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -92,7 +92,7 @@ Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.bui
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/07/16 12:24:37 $              |
+    |             $Date: 2003/07/17 10:49:59 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -676,92 +676,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
               <code>rssissues2document.xsl</code> to your needs)</p>
 
           </section>
-        <section id="png_from_svg">
-          <title>Example: Generating PNG from SVG</title>
-          <note>
-            It should now be possible to drop a SVG file into
-            <code>resources/images</code>, and henceforth assume a PNG will be
-            generated.
-          </note>
-          <p>
-            <link href="http://www.w3.org/TR/SVG/">SVG</link> (Scalar Vector
-            Graphics) is an XML format for creating images. Using SVG, one can create
-            dynamic images; logos with embedded version numbers and so forth.
-          </p>
-          <p>
-            Forrest's sitemap contains the following rule, mapping
-            <code>images/*</code> to files in the <code>resources/images</code>
-            directory:
-          </p>
-          <source><![CDATA[
-<map:match pattern="images/**.*">
-  <map:read src="resources/images/{1}.{2}" mime-type="image/{2}"/>
-</map:match>
-            ]]></source>
-          <p>
-            Let's create a 'virtual' <code>images/svg/</code> directory, containing
-            PNG images dynamically generated from SVG source in resources/images.
-            Place the following rule <em>before</em> the default
-            <code>images/**.*</code> rule:
-          </p>
-          <source><![CDATA[
-<map:match pattern="images/svg/*.png">
-  <map:generate src="resources/images/{1}.svg"/>
-  <map:serialize type="svg2png"/>
-</map:match>
-            ]]></source>
-          <p>
-            Now, we can place SVG images in
-            <code>src/documentation/resources/images/*.svg</code>, and display them
-            with tags like &lt;figure src="images/svg/*.png"/&gt;.
-          </p>
-          <p>
-            Here is a simple SVG
-            logo, <code>logo.svg</code>, displaying 'FooProject' with a shadow and
-            gradient fill:
-          </p>
-          <source><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="340" height="65" viewBox="0 0 340 60">
-  <title>FooProject logo</title>
-
-  <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-      <stop style="stop-color:white" offset="0"/>
-      <stop style="stop-color:lightgreen" offset="1"/>
-    </linearGradient>
-
-    <filter id="shadowFilter"  filterUnits="objectBoundingBox">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="2 2" result="blur"/>
-      <feOffset in="blur" dx="4" dy="4" result="offsetBlur"/>
-      <feComposite in="SourceGraphic" in2="offsetBlur" operator="over"/>
-    </filter>
-  </defs>
-
-  <g filter="url(#shadowFilter)" fill="url(#gradient)">
-    <text x="51%" y="70%"
-          style="font-size:40pt; font-family:Arial ;
-                 text-anchor: middle ; font-family: Verdana">
-      FooProject
-    </text>
-  </g>
-</svg>
-            ]]></source>
-          <p>
-            Place this file in
-            <code>src/documentation/resources/images/logo.svg</code>. Then edit
-            <code>src/documentation/skinconf.xml</code>, and use this image as the
-            project logo with the line:
-          </p>
-          <source><![CDATA[
-<project-logo>images/svg/logo.png</project-logo>
-            ]]></source>
-          <p>
-            Your project should now have a PNG logo looking like this:
-          </p>
-          <figure src="images/sample-logo.png" alt="Sample logo"/>
-        </section>
       </section>
 
       <section id="skins">
@@ -822,89 +736,54 @@ project.skin=forrest-site
       </section>
 
     <section id="webapp">
-      <title>Forrest webapps: developing docs faster</title>
+      <title>Interactive Forrest: developing docs faster</title>
       <p>
         In comparison to simpler tools like <link
-          href="ext:anakia">Anakia</link>,
-        Cocoon's command-line mode (and hence Forrest) is painfully slow.  As the
-        <link href="site:dreams">dream list</link> notes, Forrest was originally
-        intended to be used for dynamic sites, and the Cocoon crawler used only to
-        create static snapshots for mirroring.  This section describes how, by
-        developing with a "live" Forrest webapp instance, Forrest-based doc
-        development can be faster and easier than comparable tools.
+          href="ext:anakia">Anakia</link>, Cocoon's command-line mode (and hence
+        Forrest) is painfully slow.  As the <link href="site:dreams">dream
+          list</link> notes, Forrest was originally intended to be used for
+        dynamic sites, and the Cocoon crawler used only to create static
+        snapshots for mirroring.  This section describes how, by developing with
+        a "live" Forrest webapp instance, Forrest-based doc development can be
+        faster and easier than comparable tools.
       </p>
-      <section id="servlet_engine">
-        <title>Installing a servlet engine</title>
+      <section id="forrest_run">
+        <title>Running as a webapp</title>
         <p>
-          To run a "live" forrest, you'll need a servlet container, like <link
-            href="ext:tomcat">Jakarta Tomcat</link>. The
-          best choice is currently <link
-            href="ext:tomcat/r3.3.1">Tomcat 3.3.1</link>, which has been
-          fairly well tested with Forrest,
-          restarts much faster than 4.x, and handles context reloads well.
+          Type <code>forrest run</code> in your project root to start Forrest's
+          built-in Jetty web server.  Once it has started, point your browser at
+          <link href="http://localhost:8888">http://localhost:8888</link>, which
+          should show your website, rendered on demand as each page is clicked.
         </p>
+        <p>Alternatively if you wish to run Forrest from within an existing
+          servlet container, type <code>forrest webapp</code> to build an open
+          webapp in <code>build/webapp/</code>.
+        </p>
+        <section id="using_webapp">
+          <title>Using the webapp</title>
+          <p>
+            With the setup above, you can edit the XML files in
+            <code>build/webapp/content/xdocs</code> and see the changes immediately
+            in the browser.
+          </p>
+          <p>
+            To get the edited content back to its home directory, either copy it
+            once you have finished editing (with the <code>forrest
+              backcopy</code> command), or symlink the
+            <code>src/documentation/content/xdocs</code> directory to
+            <code>build/webapp/content/xdocs</code>.
+          </p>
+
+          <note>In the future, we are hoping that Forrest will be able to work with
+            <em>in-place</em> content, eliminating the step of copying everything
+            into the <code>build/</code> directory.  There are also suggestions for making
+            webapp-based content generation the primary technique. Future
+            directions like these are debated on 
+            the forrest-dev <link href="site:mail-lists">mail list</link>.
+            Please join if you have any suggestions.
+          </note>
+        </section>
       </section>
-    <section id="generate_webapp">
-      <title>Generating a site webapp</title>
-      <p>
-        To generate a webapp rather than a static HTML site, run <code>forrest
-          webapp</code> in your project root.  If successful, you should see a
-        message like:
-      </p>
-      <source><![CDATA[
----------------------------------
-Webapp generated in /tmp/myproj/build/webapp
-
-To run in Tomcat, add this to the config file (usu. server.xml):
-
-<Context path='/MyProject'
-            docBase='/tmp/myproj/build/webapp'
-            reloadable='true'/>
----------------------------------
-]]></source>
-      <p>
-        For Tomcat 3.3, add the &lt;Context&gt; line to
-        <code>$TOMCAT_HOME/conf/apps.xml</code>:
-      </p>
-    <source><![CDATA[
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<webapps>
-  ....
-  <Context path='/MyProject'
-    docBase='/tmp/myproj/build/webapp'
-    reloadable='true'/>
-</webapps>]]></source>
-      <p>
-        Then restart Tomcat, and point your browser at
-        <code>http://localhost:8080/MyProject</code> ... you should see a
-        dynamically generated page identical to that produced by the Cocoon
-        crawler.
-      </p>
-    </section>
-    <section id="using_webapp">
-      <title>Using the webapp</title>
-      <p>
-        With the setup above, you can edit the XML files in
-        <code>build/webapp/content/xdocs</code> and see the changes immediately
-        in the browser.
-      </p>
-      <p>
-        To get the edited content back to its home directory, either copy it
-        once you have finished editing (with the <code>forrest
-          backcopy</code> command), or symlink the
-        <code>src/documentation/content/xdocs</code> directory to
-        <code>build/webapp/content/xdocs</code>.
-      </p>
-
-      <note>In the future, we are hoping that Forrest will be able to work with
-        <em>in-place</em> content, eliminating the step of copying everything
-        into the <code>build/</code> directory.  There are also suggestions for making
-        webapp-based content generation the primary technique. Future
-        directions like these are debated on 
-        the forrest-dev <link href="site:mail-lists">mail list</link>.
-        Please join if you have any suggestions.
-      </note>
-    </section>
     </section>
     <section id="invoking_from_ant">
       <title>Invoking Forrest from Ant</title>
@@ -920,24 +799,24 @@ To run in Tomcat, add this to the config file (usu. server.xml):
         file to invoke Forrest:
       </p>
       <source><![CDATA[
-<target name="site" description="Generates static HTML documentation">
-  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
-</target>
+        <target name="site" description="Generates static HTML documentation">
+          <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
+        </target>
 
-<target name="webapp"
-        description="Generates an unpackaged webapp of the website">
-  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
-</target>
+        <target name="webapp"
+          description="Generates an unpackaged webapp of the website">
+          <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
+        </target>
 
-<target name="war"
-        description="Generates a .war file containing the website">
-  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
-</target>
+        <target name="war"
+          description="Generates a .war file containing the website">
+          <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
+        </target>
 
-<target name="validate" description="Validates XML documentation files">
-  <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
-</target>
-]]></source>
+        <target name="validate" description="Validates XML documentation files">
+          <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
+        </target>
+        ]]></source>
       <note>
         Always use <code>forrest.antproxy.xml</code>, not
         <code>forrest.build.xml</code>.  The <code>forrest.antproxy.xml</code>
@@ -976,21 +855,21 @@ To run in Tomcat, add this to the config file (usu. server.xml):
         Forrest project (<code>'forrest seed'</code>).  The comments at the
         top describe how to use it in a project's build.xml.  Typical usage
         is:
-        </p>
+      </p>
       <source><![CDATA[
-<!DOCTYPE project [
-<!ENTITY forrest-targets SYSTEM "file:./forrest-targets.ent">
-]>
+        <!DOCTYPE project [
+        <!ENTITY forrest-targets SYSTEM "file:./forrest-targets.ent">
+        ]>
 
-<project .... >
+        <project .... >
 
-  ....
+          ....
 
-  <!-- Include Forrest targets -->
-  &forrest-targets;
+          <!-- Include Forrest targets -->
+          &forrest-targets;
 
-</project>
-]]></source>
+        </project>
+        ]]></source>
       <p>
         Having done this, the Forrest targets (<code>site, webapp, war,
           validate</code>) are automatically added to your project.  
