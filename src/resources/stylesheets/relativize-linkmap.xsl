@@ -44,7 +44,7 @@ Jeff Turner <jefft@apache.org>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:param name="path"/>
-  <xsl:param name="site-root" select="'http://localhost:8787/forrest/'"/>
+  <xsl:param name="site-root"/>
 
   <xsl:include href="dotdots.xsl"/>
 
@@ -62,14 +62,18 @@ Jeff Turner <jefft@apache.org>
         <xsl:when test="starts-with(., 'http:') or starts-with(., 'https:')">
           <xsl:value-of select="."/>
         </xsl:when>
+        <xsl:when test="contains(., '.png') or
+          contains(., '.jpeg') or
+          contains(., '.jpg') or
+          contains(., '.tif')">
+          <!-- Image links are always relative -->
+          <xsl:value-of select="$root"/><xsl:value-of select="."/>
+        </xsl:when>
+
 
         <!-- PDFs can handle inline images, but everything else must become an
         external link -->
-        <xsl:when test="contains($path, '.pdf') and not(
-        contains(., '.png') or
-        contains(., '.jpeg') or
-        contains(., '.jpg') or
-        contains(., '.tif'))">
+        <xsl:when test="contains($path, '.pdf')">
 
           <!-- Links to outside a PDF are all absolute -->
           <xsl:value-of select="concat($site-root, .)"/>
