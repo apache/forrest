@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-chmod u+x ./tools/ant/bin/antRun
-chmod u+x ./tools/ant/bin/ant
-
 # ----- Verify and Set Required Environment Variables -------------------------
 
 if [ "$TERM" = "cygwin" ] ; then
