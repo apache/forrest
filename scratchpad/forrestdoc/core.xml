@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<project
+ name="forrestdoc" default="dist" basedir=".">
+
+   <property name="project.dir"   location="."/>  
+   <property name="target.dir"   location="${project.dir}/build/forrestdoc"/>  
+
+   <basename property="project.dirname"  file="${project.dir}"/>
+   <property name="project.target.dir"   location="${target.dir}/${project.dirname}"/>  
+         
+   <echo>Using Project dir: ${project.dir}</echo>
+   <echo>Using Target dir: ${project.target.dir}</echo>
+
+   <import file="./src/java.xml"/>   
+   <import file="./src/ant.xml"/>
+   <import file="./src/js.xml"/>   
+   
+   <target name="project" 
+           description="create all possible docs for this project" 
+           depends="javasrc, jsdoc, xml, uml, javadoc, vizant">
+      <copy todir="${project.target.dir}">
+        <fileset dir="${resources.dir}/common" casesensitive="yes"/>
+      </copy> 
+   </target>    
+         
+</project>
+

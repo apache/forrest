@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<project
+ name="forrestdoc-ant" default="dist" basedir=".">
+
+   <condition property="ant.build.available">
+      <available file="${project.dir}/build.xml"/>
+  </condition>
+  
+   <echo>ant buildfine available: ${ant.build.available}</echo>
+     
+   <property name="target.vizant.dir"  location="${project.target.dir}/vizant" />
+
+   <target name="vizant" depends="runvizant, antxml2formats" if="ant.build.available"/>
+   
+   <target name="runvizant" if="ant.build.available">
+      <mkdir dir="${target.vizant.dir}" />
+      <taskdef name="vizant" classname="org.apache.forrest.forrestdoc.ant.doc.Vizant">
+         <classpath refid="task.classpath"/>
+      </taskdef>   
+      <vizant antfile="${project.dir}/build.xml" 
+              outfile="${target.vizant.dir}/buildgraph.xml" 
+              uniqueref="true">
+       <!--       
+         <attrstmt type="graph"> 
+           <attr name="ranksep" value="1.0"/>
+           <attr name="nodesep" value="0.5"/>
+         </attrstmt>
+              
+        <attrstmt type="node">
+          <attr name="URL" value="javascript:alert('\N');"/>
+          <attr name="color" value="grey90"/>
+          <attr name="style" value="filled"/>
+        </attrstmt>
+
+        <attrstmt type="edge">
+          <attr name="color" value="grey70"/>
+        </attrstmt>
+
+        <attrstmt type="edge.antcall">
+          <attr name="label" value="antcall"/>
+          <attr name="fontcolor" value="gray70"/>
+          <attr name="fontsize" value="9"/>
+        </attrstmt>
+
+        <attrstmt type="node.default">
+          <attr name="color" value="pink"/>
+        </attrstmt>
+        
+        <subgraph>
+          <attrstmt type="graph">
+            <attr name="style" value="filled"/>
+            <attr name="color" value="grey95"/>
+          </attrstmt>
+        </subgraph>
+       --> 
+      </vizant>        
+   </target>
+
+   <target name="antxml2formats" if="ant.build.available">
+      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/target.dot" style="${resources.dir}/vizant/xml2dot.xsl" />
+
+      <antcall target="dot">
+        <param name="dot.source" value="${target.vizant.dir}/target.dot"/>
+        <param name="dot.dest" value="${target.vizant.dir}/vizant"/>
+      </antcall> 
+ 
+       <antcall target="dot">
+        <param name="dot.format" value="svg"/>
+        <param name="dot.source" value="${target.vizant.dir}/target.dot"/>
+        <param name="dot.dest" value="${target.vizant.dir}/vizant"/>
+      </antcall> 
+      
+      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/target.html" style="${resources.dir}/vizant/xml2html.xsl" />
+
+      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/buildtg.xml" style="${resources.dir}/vizant/xml2tg.xsl" />    
+      <copy file="${target.vizant.dir}/buildtg.xml" tofile="${target.vizant.dir}/InitialXML._xml"/>  
+      <copy todir="${target.vizant.dir}">
+        <fileset dir="${resources.dir}/touchgraph" casesensitive="yes"/>
+      </copy>          
+
+      <copy todir="${target.vizant.dir}">
+        <fileset dir="${resources.dir}/vizant" casesensitive="yes"/>
+      </copy>      
+   </target>
+
+   <target name="tg" if="ant.build.available">
+    <java classname="com.touchgraph.linkbrowser.TGLinkBrowser" fork="yes">
+     <arg value="${target.vizant.dir}/buildtg.xml"/>
+     <classpath>
+       <path>
+          <fileset dir="${target.vizant.dir}" casesensitive="yes">
+           <patternset>
+             <include name="**/*.jar"/>
+             <include name="**/*.zip"/>
+           </patternset>
+         </fileset>  
+       </path> 
+     </classpath>
+      </java>
+   </target>
+   
+</project>
+

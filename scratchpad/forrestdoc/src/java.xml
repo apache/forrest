@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<!-- made to be imported in teh main forrestdoc build driver -->
+<project  name="forrestdoc-java">
+
+   <property name="target.javasrc.dir" location="${project.target.dir}/javasrc" />
+   <property name="target.javadoc.dir" location="${project.target.dir}/javadoc" />
+   <property name="target.xml.dir"     location="${project.target.dir}/xml" />
+   <property name="target.dot.dir"     location="${project.target.dir}/dot" />
+   <property name="target.uml.dir"     location="${project.target.dir}/uml" />
+
+   <presetdef name="fjavadoc">
+     <javadoc 
+           useexternalfile="true">
+       <fileset dir="${project.dir}" defaultexcludes="yes">
+        <include name="**/*.java" />
+       </fileset>
+    </javadoc>
+   </presetdef>
+   
+   <target name="javasrc">
+      <mkdir dir="${target.javasrc.dir}" />
+      <java classname="org.apache.forrest.forrestdoc.java.src.Pass1"
+             fork="true"
+             dir="."
+             failonerror="true"
+             maxmemory="256m">
+         <sysproperty key="recurse" value="true" />
+         <sysproperty  key="title" value="Java Code Documentation" />
+         <sysproperty key="outdir" path="${target.javasrc.dir}" />
+         <arg value="${project.dir}" />
+         <classpath refid="task.classpath"/>
+      </java>
+
+      <java classname="org.apache.forrest.forrestdoc.java.src.Pass2"
+            fork="true"
+            dir="."
+            failonerror="true"
+            maxmemory="256m">
+         <sysproperty key="recurse" value="true" />
+         <sysproperty key="title" value="Java Code Documentation" />
+         <sysproperty key="outdir" path="${target.javasrc.dir}" />
+         <arg value="${project.dir}" />
+         <classpath refid="task.classpath"/>
+      </java>
+
+      <copy file="${resources.dir}/javasrc/styles.css"
+            todir="${target.javasrc.dir}"
+            filtering="off" />
+   </target>
+   
+   <target name="javasrc2">
+      <mkdir dir="${target.javasrc.dir}" />
+      <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
+        <classpath refid="task.classpath"/>
+      </taskdef>
+      <javasrc srcDir="${project.dir}" destDir="${target.javasrc.dir}" />
+   </target>   
+
+   <target name="uml" depends="xml, xml2dot, dot">
+       <antcall target="dot">
+        <param name="dot.format" value="svg"/>
+      </antcall>    
+   </target>
+   <target name="umlgraph" depends="umldoclet, dot"/>
+         
+   <target name="umldoclet">
+        <fjavadoc>
+         <doclet name="org.apache.forrest.forrestdoc.java.doc.UmlDoclet"
+                 path="./build/classes/">
+              <!--  <param name="-horizontal" value="true"/> -->
+              <!--   <param name="-attributes" value="true"/> -->
+              <!--  <param name="-operations" value="true"/> -->
+              <!--   <param name="-visibility" value="true"/>  -->                          
+              <!--  <param name="-types" value="true"/> -->       
+               <param name="-all" value="true"/>                     
+       </doclet>
+     </fjavadoc>
+   </target>
+
+   <target name="javadoc">
+      <mkdir dir="${target.javadoc.dir}" />
+        <fjavadoc destDir="${target.javadoc.dir}"
+                  author = "true"
+                  version="true">
+<!--    <doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+    <header><![CDATA[<h2>header</h2>]]></header>
+    <footer><![CDATA[<h3>footer</h3>]]></footer>    
+    <bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>
+-->    
+    <tag name="todo" scope="all" description="To do:" />
+    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+     </fjavadoc>
+   </target>   
+   
+   <target name="xml">
+      <mkdir dir="${target.xml.dir}" />
+        <fjavadoc>
+      
+         <doclet name="org.apache.forrest.forrestdoc.java.doc.XMLDoclet"
+                 path="./build/classes/">
+       <!--   <param name="-foo" value="foovalue"/>
+          <param name="-bar" value="barvalue"/> -->
+       </doclet>
+     </fjavadoc>
+     <move file="simple.xml" tofile="${target.xml.dir}/xmldocs.xml"/>
+   </target>   
+      
+   <target name="xml2dot">
+      <copy file="${resources.dir}/javadoc/javadoc-v04draft.dtd" todir="${target.xml.dir}" filtering="off" />
+     <xslt force="true" in="${target.xml.dir}/xmldocs.xml" out="${target.dot.dir}/graph.dot" style="${resources.dir}/javadoc/xml2dot.xsl"/>
+   </target>   
+  
+   <target name="dot">
+      <mkdir dir="${target.uml.dir}" />
+      <property name="dot.format" value="png"/> 
+      <property name="dot.source" value="${target.dot.dir}/graph.dot"/> 
+      <property name="dot.dest" value="${target.uml.dir}/graph"/> 
+                  
+      <exec executable="dot">
+         <arg line="-T${dot.format} ${dot.source} -o ${dot.dest}.${dot.format}" />
+      </exec>
+   </target>
+   
+</project>
+

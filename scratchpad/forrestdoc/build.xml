@@ -1,41 +1,11 @@
 <?xml version="1.0" ?>
 <project
- name="forrestdoc" default="dist" basedir=".">
+ name="forrestdoc" default="project" basedir=".">
 
    <!-- init -->
    <tstamp />
-   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+   <property file="build.properties"/>
    
-   <property name="project.dir"  location="." />
-   <property name="target.dir"   location="${project.dir}/build/forrestdoc"/>  
-   <basename property="project.dirname"  file="${project.dir}"/>
-   <property name="project.target.dir"   location="${target.dir}/${project.dirname}"/>  
-         
-   <echo>scan dir: ${project.dir}</echo>
-   <echo>target dir: ${project.target.dir}</echo>
-
-   <condition property="ant.build.available">
-      <available file="${project.dir}/build.xml"/>
-  </condition>
-  
-   <echo>ant buildfine available: ${ant.build.available}</echo>
-     
-   <property name="src.dir"           location="./src/java" />
-   <property name="resources.dir"     location="./src/resources" />
-   <property name="build.dir"         location="./build" />
-   <property name="dist.dir"          location="./dist" />
-   <property name="lib.dir"           location="./lib" />   
-
-   <property name="build.classes.dir" location="${build.dir}/classes" />
-   
-   <property name="target.javasrc.dir" location="${project.target.dir}/javasrc" />
-   <property name="target.javadoc.dir" location="${project.target.dir}/javadoc" />
-   <property name="target.xml.dir"     location="${project.target.dir}/xml" />
-   <property name="target.dot.dir"     location="${project.target.dir}/dot" />
-   <property name="target.uml.dir"     location="${project.target.dir}/uml" />
-   <property name="target.jsdoc.dir"   location="${project.target.dir}/jsdoc" />
-   <property name="target.vizant.dir"  location="${project.target.dir}/vizant" />
-
    <path id="lib.classpath">
       <fileset  dir="${lib.dir}">
          <include name="*.jar" />
@@ -48,18 +18,18 @@
    <path id="task.classpath">
       <path refid="lib.classpath"/>
       <pathelement path="${build.classes.dir}"/>
+      <pathelement path="${ant.build.dir}"/>
    </path>
 
-   <presetdef name="fjavadoc">
-     <javadoc 
-           useexternalfile="true">
-       <fileset dir="${project.dir}" defaultexcludes="yes">
-        <include name="**/*.java" />
-       </fileset>
-    </javadoc>
-   </presetdef>
-   
-   
+   <mkdir dir="${ant.build.dir}" />
+   <javac srcdir="${ant.src.dir}"
+          debug="true"
+          destdir="${ant.build.dir}"
+          classpathref="lib.classpath" />
+             
+   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+   <taskdef name="extendedpathconvert" classname="org.apache.forrest.tools.taskdefs.PathConvert" classpathref="task.classpath"/>
+  
    <!-- Targets -->
    
    <target name="compile"
@@ -83,228 +53,87 @@
       <delete dir="${build.dir}" />
       <delete dir="${dist.dir}" />
    </target>
-
-   <target name="test" 
-           description="test this project" 
-           depends="all">
-   </target>        
-   
-   <target name="project" 
-           description="create all possible docs for this project" 
-           depends="javasrc, jsdoc, xml, uml, javadoc, vizant">
-      <copy todir="${project.target.dir}">
-        <fileset dir="${resources.dir}/common" casesensitive="yes"/>
-      </copy> 
-   </target>    
    
    <target name="all" 
            description="test this project" 
            depends="project">
-   </target>     
-   
-   <!-- 
-       The utility targets to run the aspects of ForrestDoc
-    -->
-   <target name="javasrc" depends="compile">
-      <mkdir dir="${target.javasrc.dir}" />
-      <java classname="org.apache.forrest.forrestdoc.java.src.Pass1"
-             fork="true"
-             dir="."
-             failonerror="true"
-             maxmemory="256m">
-         <sysproperty key="recurse" value="true" />
-         <sysproperty  key="title" value="Java Code Documentation" />
-         <sysproperty key="outdir" path="${target.javasrc.dir}" />
-         <arg value="${project.dir}" />
-         <classpath refid="task.classpath"/>
-      </java>
-
-      <java classname="org.apache.forrest.forrestdoc.java.src.Pass2"
-            fork="true"
-            dir="."
-            failonerror="true"
-            maxmemory="256m">
-         <sysproperty key="recurse" value="true" />
-         <sysproperty key="title" value="Java Code Documentation" />
-         <sysproperty key="outdir" path="${target.javasrc.dir}" />
-         <arg value="${project.dir}" />
-         <classpath refid="task.classpath"/>
-      </java>
-
-      <copy file="${resources.dir}/javasrc/styles.css"
-            todir="${target.javasrc.dir}"
-            filtering="off" />
-   </target>
-   
-   <target name="jsdoc" depends="compile">
-      <mkdir dir="${target.jsdoc.dir}" />
-      <taskdef name="jsdoc" classname="org.apache.forrest.forrestdoc.js.doc.JSDocTask" classpath="./build/classes/"/>
-      <jsdoc jSDir="${project.dir}" destDir="${target.jsdoc.dir}" />
    </target>   
    
-   <target name="javasrc2" depends="compile">
-      <mkdir dir="${target.javasrc.dir}" />
-      <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
-        <classpath refid="task.classpath"/>
-      </taskdef>
-      <javasrc srcDir="${project.dir}" destDir="${target.javasrc.dir}" />
-   </target>   
-
-   <target name="uml" depends="xml, xml2dot, dot">
-       <antcall target="dot">
-        <param name="dot.format" value="svg"/>
-      </antcall>    
-   </target>
-   <target name="umlgraph" depends="umldoclet, dot"/>
-         
-   <target name="umldoclet" depends="compile">
-        <fjavadoc>
-         <doclet name="org.apache.forrest.forrestdoc.java.doc.UmlDoclet"
-                 path="./build/classes/">
-              <!--  <param name="-horizontal" value="true"/> -->
-              <!--   <param name="-attributes" value="true"/> -->
-              <!--  <param name="-operations" value="true"/> -->
-              <!--   <param name="-visibility" value="true"/>  -->                          
-              <!--  <param name="-types" value="true"/> -->       
-               <param name="-all" value="true"/>                     
-       </doclet>
-     </fjavadoc>
-   </target>
-
-   <target name="javadoc">
-      <mkdir dir="${target.javadoc.dir}" />
-        <fjavadoc destDir="${target.javadoc.dir}"
-                  author = "true"
-                  version="true">
-<!--    <doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
-    <header><![CDATA[<h2>header</h2>]]></header>
-    <footer><![CDATA[<h3>footer</h3>]]></footer>    
-    <bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>
--->    
-    <tag name="todo" scope="all" description="To do:" />
-    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
-     </fjavadoc>
-   </target>   
+   <target name="project"  depends="compile"
+           description="create all possible docs for this project">
+         <echo>START</echo>
+         <trycatch property="foo" reference="bar">
+         <try>
+            <ant antfile="core.xml" dir="." target="project"
+                inheritAll="true" inheritRefs="true"/>
+         </try>
+         <catch>
+           <echo>In &lt;catch&gt;.</echo>
+         </catch>
+         <finally>
+           <echo>In &lt;finally&gt;.</echo>
+         </finally>
+       </trycatch>
+   </target>    
    
-   <target name="xml" depends="compile">
-      <mkdir dir="${target.xml.dir}" />
-        <fjavadoc>
-      
-         <doclet name="org.apache.forrest.forrestdoc.java.doc.XMLDoclet"
-                 path="./build/classes/">
-       <!--   <param name="-foo" value="foovalue"/>
-          <param name="-bar" value="barvalue"/> -->
-       </doclet>
-     </fjavadoc>
-     <move file="simple.xml" tofile="${target.xml.dir}/xmldocs.xml"/>
-   </target>   
-      
-   <target name="xml2dot">
-      <copy file="${resources.dir}/javadoc/javadoc-v04draft.dtd" todir="${target.xml.dir}" filtering="off" />
-     <xslt force="true" in="${target.xml.dir}/xmldocs.xml" out="${target.dot.dir}/graph.dot" style="${resources.dir}/javadoc/xml2dot.xsl"/>
-   </target>   
-  
-   <target name="dot">
-      <mkdir dir="${target.uml.dir}" />
-      <property name="dot.format" value="png"/> 
-      <property name="dot.source" value="${target.dot.dir}/graph.dot"/> 
-      <property name="dot.dest" value="${target.uml.dir}/graph"/> 
-                  
-      <exec executable="dot">
-         <arg line="-T${dot.format} ${dot.source} -o ${dot.dest}.${dot.format}" />
-      </exec>
-   </target>
-
-
-   <target name="vizant" depends="runvizant, xml2formats" if="ant.build.available"/>
+   <!-- driver targets -->   
    
-   <target name="runvizant" depends="compile" if="ant.build.available">
-      <mkdir dir="${target.vizant.dir}" />
-      <taskdef name="vizant" classname="org.apache.forrest.forrestdoc.ant.doc.Vizant">
-         <classpath refid="task.classpath"/>
-      </taskdef>   
-      <vizant antfile="${project.dir}/build.xml" 
-              outfile="${target.vizant.dir}/buildgraph.xml" 
-              uniqueref="true">
-       <!--       
-         <attrstmt type="graph"> 
-           <attr name="ranksep" value="1.0"/>
-           <attr name="nodesep" value="0.5"/>
-         </attrstmt>
+   <target name="ws"  depends="compile"
+           description="create all possible docs for this workspace">
+           
+     <property name="resolved.ws.dir" location="${ws.dir}"/>
+     <property name="ws.build.dir" location="${ws.dir}/build/forrestdoc"/>    
+     <property name="ws.temp.dir" location="${ws.dir}/build/temp"/>     
+          
+     <mkdir dir="${ws.build.dir}" />
+     <mkdir dir="${ws.temp.dir}" />              
               
-        <attrstmt type="node">
-          <attr name="URL" value="javascript:alert('\N');"/>
-          <attr name="color" value="grey90"/>
-          <attr name="style" value="filled"/>
-        </attrstmt>
-
-        <attrstmt type="edge">
-          <attr name="color" value="grey70"/>
-        </attrstmt>
-
-        <attrstmt type="edge.antcall">
-          <attr name="label" value="antcall"/>
-          <attr name="fontcolor" value="gray70"/>
-          <attr name="fontsize" value="9"/>
-        </attrstmt>
-
-        <attrstmt type="node.default">
-          <attr name="color" value="pink"/>
-        </attrstmt>
-        
-        <subgraph>
-          <attrstmt type="graph">
-            <attr name="style" value="filled"/>
-            <attr name="color" value="grey95"/>
-          </attrstmt>
-        </subgraph>
-       --> 
-      </vizant>        
-   </target>
-
-   <target name="xml2formats" if="ant.build.available">
-      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/target.dot" style="${resources.dir}/vizant/xml2dot.xsl" />
-
-      <antcall target="dot">
-        <param name="dot.source" value="${target.vizant.dir}/target.dot"/>
-        <param name="dot.dest" value="${target.vizant.dir}/vizant"/>
-      </antcall> 
- 
-       <antcall target="dot">
-        <param name="dot.format" value="svg"/>
-        <param name="dot.source" value="${target.vizant.dir}/target.dot"/>
-        <param name="dot.dest" value="${target.vizant.dir}/vizant"/>
-      </antcall> 
-      
-      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/target.html" style="${resources.dir}/vizant/xml2html.xsl" />
-
-      <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/buildtg.xml" style="${resources.dir}/vizant/xml2tg.xsl" />    
-      <copy file="${target.vizant.dir}/buildtg.xml" tofile="${target.vizant.dir}/InitialXML._xml"/>  
-      <copy todir="${target.vizant.dir}">
-        <fileset dir="${resources.dir}/touchgraph" casesensitive="yes"/>
-      </copy>          
-
-      <copy todir="${target.vizant.dir}">
-        <fileset dir="${resources.dir}/vizant" casesensitive="yes"/>
-      </copy>      
-   </target>
+     <dirset dir="${ws.dir}" id="ws.project.dirs">
+        <include name="*"/>
+        <exclude name=".*"/>
+        <exclude name="build"/>
+     </dirset>
+     
+     <extendedpathconvert pathsep="," type="xml" file="${ws.temp.dir}/dirs.xml" refid="ws.project.dirs">
+       <map from="${resolved.ws.dir}" to=""/>
+     </extendedpathconvert>     
+    
+     <xslt in="${ws.temp.dir}/dirs.xml" 
+           out="${ws.build.dir}/projects.html" style="${resources.dir}/ws/dir2projects.xsl" />
+     <xslt in="${ws.temp.dir}/dirs.xml" 
+           out="${ws.build.dir}/projects-summary.html" style="${resources.dir}/ws/dir2projects-summary.xsl" />    
+     <copy file="${resources.dir}/ws/index.html" todir="${ws.build.dir}"/>    
+     <copy file="${resources.dir}/ws/styles.css" todir="${ws.build.dir}"/>
+               
+    <for param="current.project.dir">
+      <path>
+       <dirset  refid="ws.project.dirs"/>
+      </path> 
+        <sequential>
+         <echo>START @{current.project.dir}</echo>
+         <trycatch property="foo" reference="bar">
+         <try>
+            <ant antfile="core.xml" dir="." target="project"
+                inheritAll="true" inheritRefs="true">
+              <property name="project.dir"    value="@{current.project.dir}"/>
+              <property name="target.dir"  value="${ws.dir}/build/forrestdoc"/>  
+           </ant>
+         </try>
+         <catch>
+           <echo>In &lt;catch&gt;.</echo>
+         </catch>
+         <finally>
+           <echo>In &lt;finally&gt;.</echo>
+         </finally>
+       </trycatch>
 
 
-   <target name="tg" if="ant.build.available">
-    <java classname="com.touchgraph.linkbrowser.TGLinkBrowser" fork="yes">
-     <arg value="${target.vizant.dir}/buildtg.xml"/>
-     <classpath>
-       <path>
-          <fileset dir="${target.vizant.dir}" casesensitive="yes">
-           <patternset>
-             <include name="**/*.jar"/>
-             <include name="**/*.zip"/>
-           </patternset>
-         </fileset>  
-       </path> 
-     </classpath>
-      </java>
-   </target>
+
+        </sequential>          
+    </for>          
+    
+   </target>    
+   
    
 </project>
 
