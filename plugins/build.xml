@@ -17,7 +17,9 @@
 <project default="local-deploy" basedir="." name="Forrest build file">
   <property name="forrest.root-dir"           location=".."/>   
   <property name="forrest.ant.lib-dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
-  <property name="forrest.build.dir"          location="../build"/>
+  <property name="forrest.build.dir"          location="${forrest.root-dir}/build"/>
+  
+  <property name="plugin.dir" value="${plugin-name}"/>
   
   <property name="plugins.dist-dir" value="../site-author/content/plugins"/>
   <property name="plugins.localDeploy-dir" value="${forrest.build.dir}/plugins"/>
@@ -45,7 +47,7 @@
     <input message="Which plugin do you want to deploy?"
            addproperty="plugin-name"/>
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
-      <fileset dir="${plugin-name}">
+      <fileset dir="${plugin.dir}">
        <exclude name="**/build/**"/>
       </fileset>
     </copy>
