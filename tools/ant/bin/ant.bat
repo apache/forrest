@@ -3,7 +3,7 @@
 REM   Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
 REM   reserved.
 
-if exist "%HOME%\antrc_pre.bat" call "%HOME%\antrc_pre.bat"
+if exist "%HOME%\forrestrc_pre.bat" call "%HOME%\forrestrc_pre.bat"
 
 if "%OS%"=="Windows_NT" @setlocal
 
@@ -92,5 +92,5 @@ set ANT_CMD_LINE_ARGS=
 if "%OS%"=="Windows_NT" @endlocal
 
 :mainEnd
-if exist "%HOME%\antrc_post.bat" call "%HOME%\antrc_post.bat"
+if exist "%HOME%\forrestrc_post.bat" call "%HOME%\forrestrc_post.bat"
 
