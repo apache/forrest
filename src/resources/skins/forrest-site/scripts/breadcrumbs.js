@@ -62,6 +62,16 @@
  *@version    1.0
  */
 
+/**
+ * IE 5 on Mac doesn't know Array.push.
+ *
+ * Implement it - courtesy to fritz.
+ */
+var abc	= new Array();
+if (!abc.push) {
+  Array.prototype.push	= function(what){this[this.length]=what}
+}
+
 /* ========================================================================
 	CONSTANTS
    ======================================================================== */
@@ -132,9 +142,9 @@ var PATH_SEPARATOR = "/";
  * string.
  */
 function sentenceCase( string )
-{
-	var lower = string.toLowerCase();
-	return lower.substr(0,1).toUpperCase() + lower.substr(1);
+{        return string;
+	//var lower = string.toLowerCase();
+	//return lower.substr(0,1).toUpperCase() + lower.substr(1);
 }
 
 /**
