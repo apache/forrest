@@ -74,7 +74,7 @@
          </xsl:when>
          <xsl:otherwise>
             <project default="findPlugin">
-              <target name="findplugin"/>
+              <target name="findPlugin"/>
             </project>
          </xsl:otherwise>
        </xsl:choose>
