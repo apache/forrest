@@ -6,12 +6,7 @@
 
 <xsl:template match="document" mode="outline">
   <fox:bookmarks>
-    <fox:outline internal-destination="{generate-id()}">
-      <fox:label>
-        <xsl:value-of select="header/title"/>
-      </fox:label>
       <xsl:apply-templates select="body/section" mode="outline"/>
-    </fox:outline>
   </fox:bookmarks>
 </xsl:template>
 
