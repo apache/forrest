@@ -17,7 +17,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.6-dev                        |
-    |             $Date: 2003/10/01 13:44:08 $              |
+    |             $Date: 2003/10/02 07:07:06 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -1118,7 +1118,7 @@ forrest.properties.
   <target name="package-skin" description="Make a package of an existing skin">
     <input message="Which skin do you want to package?"
            addproperty="skin-name"/>
-    <zip destfile="${forrest.home}/context/skins/${skin-name}-${version}.fsj"
+    <zip destfile="${forrest.home}/context/skins/${skin-name}-${version}.zip"
        basedir="${forrest.home}/context/skins/"
        includes="${skin-name}/**"/>
   </target>
@@ -1139,7 +1139,7 @@ forrest.properties.
           <available type="dir" file="${forrest.home}/context/skins/${project.skin}"/>
         </not>
         <not>
-          <available type="file" file="${forrest.home}/context/skins/${project.skin}.fsj"/>
+          <available type="file" file="${forrest.home}/context/skins/${project.skin}.zip"/>
         </not>
       </and>
     </condition>
@@ -1149,12 +1149,12 @@ forrest.properties.
           depends="init-props">
      <unzip dest="${forrest.home}/context/skins/">
        <fileset dir="${forrest.home}/context/skins/">
-          <include name="*.fsj"/>
+          <include name="*.zip"/>
         </fileset>
      </unzip>       
      <delete>
         <fileset dir="${forrest.home}/context/skins/">
-          <include name="*.fsj"/>
+          <include name="*.zip"/>
         </fileset>
      </delete>
   </target>  
