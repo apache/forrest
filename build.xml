@@ -249,7 +249,8 @@
   <!-- Generate project-site                                               -->
   <!-- =================================================================== -->
   <target name="docs" depends="site"/>
-  <target name="site" depends="dist-shbat" description="Generates the documentation">
+  <target name="site" depends="dist-shbat"
+    description="Generates static HTML documentation">
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="site"/>
     <!--
@@ -264,7 +265,8 @@
   <!-- =================================================================== -->
   <!-- Generate cocoon-webapp for project-site                             -->
   <!-- =================================================================== -->
-  <target name="webapp" depends="dist-shbat">
+  <target name="webapp" depends="dist-shbat"
+    description="Generates an unpackaged webapp of the website">
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="webapp"/>
   </target>
@@ -272,7 +274,8 @@
   <!-- =================================================================== -->
   <!-- Generate a .war files of the project-site                           -->
   <!-- =================================================================== -->
-  <target name="war" depends="dist-shbat">
+  <target name="war" depends="dist-shbat"
+    description="Generates a .war file containing the website">
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="war"/>
   </target>
@@ -280,7 +283,8 @@
   <!-- =================================================================== -->
   <!-- Validates Forrest XML documentation                                 -->
   <!-- =================================================================== -->
-  <target name="validate" depends="dist-shbat">
+  <target name="validate" depends="dist-shbat"
+    description="Validates XML documentation files">
     <property name="forrest.home" value="${dist-shbat.dir}" />
     <ant antfile="${forrest.home}/forrest.antproxy.xml" target="validate"/>
   </target>
@@ -305,7 +309,7 @@
   <!--        Target used by Gump         -->
   <!-- ================================== -->
   <target  name="gump" description="Target used by Gump">
-      <antcall target="docs"/>
+      <antcall target="site"/>
       <antcall target="webapp"/>
     </target>
 
