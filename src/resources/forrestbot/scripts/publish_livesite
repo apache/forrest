@@ -18,6 +18,7 @@ case $MODULE in
   xml-site)             REPOS="xml-site"    ; TARGET="/" ;;
   avalon-phoenix)       REPOS="avalon-site" ; TARGET="phoenix" ;;
   avalon-site)       REPOS="avalon-site" ; TARGET="/" ;;
+#  cocoon-site)       REPOS="xml-site"    ; TARGET="cocoon"
 esac
 log "MODULE is $MODULE"
 [ "$MODULE" = "xml-site" ] && ARGS=-l
@@ -141,7 +142,7 @@ if [ "$MODULE" = "xml-site" -o "$MODULE" = "avalon-site" ]; then
   update_rootfiles
 
 else 
-  log "Generating list of new-to-CVS files.."
+  log "Generating list of new-to-CVS $REPOS files in $PWD.."
   NEW_FILES=`cvs up | grep '^\?' | cut -d\  -f 2`
   log "Adding new files to CVS: $NEW_FILES"
   [ ! -z "$NEW_FILES" ] && addfiles $NEW_FILES
