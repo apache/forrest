@@ -14,27 +14,30 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="local-deploy" basedir="." name="Forrest Plugins build file">
-  <property name="forrest.root-dir"           location=".."/>   
+<project default="local-deploy" basedir="." name="Forrest_Plugins_build_file">
+  <property environment="env"/>
+  <property name="forrest.root-dir"           location="${env.FORREST_HOME}"/>   
+  <property name="forrest.home"               location="${env.FORREST_HOME}/main" />  
   <property name="forrest.ant.lib.dir"        location="${forrest.root-dir}/tools/ant/lib"/>  
   <property name="forrest.build.dir"          location="${forrest.root-dir}/build"/>
   <property name="forrest.plugins.dir"        location="${forrest.root-dir}/plugins"/>
   
-  <property name="plugins.dist-dir" value="build/dist"/>
-  <property name="plugins.localDeploy-dir" value="${forrest.build.dir}/plugins"/>
+  <property name="plugins.dir"                location="${ant.file.Forrest_Plugins_build_file}/.."/>
+  <property name="plugins.dist-dir"           location="build/dist"/>
+  <property name="plugins.localDeploy-dir"    location="${forrest.build.dir}/plugins"/>
   
-  <property name="plugin.src.dir" value="src"/>
-  <property name="plugin.resources.dir" value="resources"/>
-  <property name="plugin.stylesheets.dir" value="${plugin.resources.dir}/stylesheets"/>
+  <property name="plugin.src.dir"             value="src"/>
+  <property name="plugin.resources.dir"       value="resources"/>
+  <property name="plugin.stylesheets.dir"     value="${plugin.resources.dir}/stylesheets"/>
   
-  <property name="plugin.template.dir" value="pluginTemplate"/>
+  <property name="plugin.template.dir"        value="pluginTemplate"/>
   
-  <property name="deploy.svn.user" value=""/>
-  <property name="deploy.svn.password" value=""/>
-  <property name="deploy.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
-  <property name="deploy.svn.commit-message" value="Automatic deployment from plugins build"/>
-  <property name="deploy.svn.svn-dir" location="${forrest.build.dir}/svn-plugins-deploy"/>
-  <property name="deploy.svn.svn-filestoadd" location="build/svn-deploy.toadd"/>
+  <property name="deploy.svn.user"            value=""/>
+  <property name="deploy.svn.password"        value=""/>
+  <property name="deploy.svn.url"             value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
+  <property name="deploy.svn.commit-message"  value="Automatic deployment from plugins build"/>
+  <property name="deploy.svn.svn-dir"         location="${forrest.build.dir}/svn-plugins-deploy"/>
+  <property name="deploy.svn.svn-filestoadd"  location="build/svn-deploy.toadd"/>
   
   
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -52,28 +55,39 @@
   <target name="init">
     <input message="Which plugin you which to operate on?"
            addproperty="plugin-name"/>
-    
-    <!-- if the plugin.dir is not yet set we must be running interactively, so the plugin.dir is the same as the plugin-name -->
-    <property name="plugin.dir" value="${plugin-name}"/>
+    <echo>Forrest root is ${forrest.root-dir}, home is ${forrest.home}</echo>
     
     <mkdir dir="${plugins.dist-dir}"/>  
+  </target>
+  
+  <target name="clean" depends="init">
+    <delete dir="${plugins.localDeploy-dir}/${plugin-name}"/>
+    <delete dir="${plugins.dist-dir}"/>
   </target>
   
   <!-- FIXME: Forrest should really use the plugins in-place if they are available as source -->
   <target name="local-deploy"
           description="Deploy a plugin locally"
           depends="init">
+          
+    <echo>Locally deploying ${plugin-name}</echo>
     
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
-      <fileset dir="${plugin.dir}">
+      <fileset dir="${plugins.dir}/${plugin-name}">
        <exclude name="**/build/**"/>
       </fileset>
     </copy>
+    <!-- FIXME: execute local build file -->
+    <antcall target="build"/>
   </target>
+  
+  <target name="build"
+          description="Any local actions that need to be carried out by the plugin are done here"/>
   
   <target name="deploy"
           description="Deploy the plugin to SVN"
           depends="dist">
+    <echo>Deploying ${plugin-name} to the web server</echo>
     <!-- get current plugins directory from SVN -->
     <svncheckout
         repositoryurl="${deploy.svn.url}"
@@ -114,13 +128,21 @@
         commitmessage="Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"
     />
   </target>
+   
+  <target name="docs" depends="local-deploy">
+    <echo>Building Docs for ${plugin-name}</echo>
+    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
+      <property name="forrest.home" value="${forrest.home}"/>  
+      <property name="project.home" value="${basedir}"/>
+    </ant>    
+  </target>
   
   <!-- FIXME: needs to append FOrrest version number to filename -->
   <target name="dist"
           description="Build the distribution archive for all the plugins"
-          depends="init">
+          depends="init, test">
     <zip destfile="${plugins.dist-dir}/${plugin-name}.zip"
-       basedir="${plugin.dir}"
+       basedir="${plugin-name}"
        includes="**"
        excludes="**/build/**"/>
   </target>
@@ -148,6 +170,8 @@
     <move file="${plugin-name}/sitemap.xmap"
           tofile="${plugin-name}/${plugin-type}.xmap"/>
   </target>
+  
+  <target name="test" depends="init, clean, docs"/>
 </project>
   
   

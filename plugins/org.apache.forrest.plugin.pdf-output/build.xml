@@ -16,36 +16,20 @@
 -->
 <project default="docs" basedir="." name="Forrest plugin build file">
 
-  <property name="forrest.root-dir" location="../.."/>   
-  <property name="forrest.home" location="../../main" />  
-  <property name="build.dir" location="build"/>
   <property name="plugin-name" value="org.apache.forrest.plugin.pdf-output"/>
 
-  <target name="local-deploy">
-    <echo>Locally deploying ${plugin-name}</echo>
-    <ant antfile="../build.xml" target="local-deploy">  
-      <property name="plugin.dir" value="../${plugin-name}"/>
-    </ant>
-  </target>
+  <import file="../build.xml"/>
   
-  <target name="deploy"
-    description="Deploy the plugin (by default this deploys to Apache Forrest web servers)">
-    <echo>Deploying ${plugin-name} to the web server</echo>
-    <ant antfile="../build.xml" target="deploy">  
-      <property name="plugin.dir" value="../${plugin-name}"/>
-    </ant>
+  <!-- Add any additional installation work here in the build target, for example:
+  <target name="build"
+          description="Extract the tools">
+     <unzip dest="${plugins.localDeploy-dir}/${plugin-name}/resources">
+       <fileset dir="tools">
+          <include name="pluginBionaryTools.zip"/>
+        </fileset>
+     </unzip>   
   </target>
-   
-  <target name="docs" depends="local-deploy">
-    <echo>Building Docs for ${plugin-name}</echo>
-    <ant antfile="${forrest.home}/forrest.build.xml" target="site">
-      <property name="forrest.home" value="${forrest.home}"/>  
-      <property name="project.home" value="${basedir}"/>
-    </ant>
-    
-  </target>
-  
-  <target name="test" depends="docs"/>
+  -->
 </project>
   
   
