@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.7 2003/05/22 02:33:32 jefft Exp $
+$Id: site2xhtml.xsl,v 1.8 2003/09/02 13:13:21 cheche Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -59,6 +59,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/05/22 02:33:32 jefft Exp $
             <xsl:with-param name="url" select="$config/group-url"/>
             <xsl:with-param name="logo" select="$config/group-logo"/>
             <xsl:with-param name="root" select="$root"/>
+            <xsl:with-param name="description" select="$config/group-description"/>
           </xsl:call-template>
         </xsl:if>
         <xsl:call-template name="renderlogo">
@@ -66,6 +67,7 @@ $Id: site2xhtml.xsl,v 1.7 2003/05/22 02:33:32 jefft Exp $
           <xsl:with-param name="url" select="$config/project-url"/>
           <xsl:with-param name="logo" select="$config/project-logo"/>
           <xsl:with-param name="root" select="$root"/>
+          <xsl:with-param name="description" select="$config/project-description"/>
         </xsl:call-template>
         <xsl:comment>================= start Tabs ==================</xsl:comment>
         <xsl:apply-templates select="div[@class='tab']"/>

@@ -19,6 +19,7 @@ Note that text and image are mandatory parts of the template.
     <xsl:param name="width"/>
     <xsl:param name="height"/>
     <xsl:param name="root"/>
+    <xsl:param name="description"/>
     <a href="{$url}">
       <xsl:choose>
         <xsl:when test="$logo and not($logo = '')">
@@ -32,6 +33,9 @@ Note that text and image are mandatory parts of the template.
             </xsl:if>
             <xsl:if test="$height">
               <xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$description">
+              <xsl:attribute name="title"><xsl:value-of select="$description"/></xsl:attribute>
             </xsl:if>
 	  </img>
         </xsl:when>
