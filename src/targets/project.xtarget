@@ -2,29 +2,50 @@
   <!-- Targets for this project                                            -->
   <!-- =================================================================== -->
   
+    
   <!-- =================================================================== -->
   <!-- Prepares the docs                                                   -->
   <!-- =================================================================== -->
   <target name="prepare-docs" depends="init, cleandocs">
 
+    <property name="centipede.tools.cents.forrest.loglevel" value="INFO"/> 
+    <property name="use.skin" value="forrest-site"/> 
+    
+    <!-- define filters -->     
+    <filter token="skin"              value="${use.skin}"/>
+    <filter token="link1"             value="apache"/>
+    <filter token="link1.href"        value="http://www.apache.org/"/>
+    <filter token="link2"             value="xml.apache"/>
+    <filter token="link2.href"        value="http://xml.apache.org/"/>
+    <filter token="link3"             value="forrest"/>
+    <filter token="link3.href"        value="http://xml.apache.org/forrest/"/>
+    <filter token="group-logo.src"    value="images/group-logo.gif"/>
+    <filter token="group-logo.href"   value="http://xml.apache.org/"/>
+    <filter token="project-logo.src"  value="images/project-logo.gif"/>                    
+    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>                    
+    <filter token="year" value="2002"/>  
+    <filter token="vendor" value="Apache Sofware Foundation"/>  
+    
+        
     <mkdir dir="${build.context}"/>
     <mkdir dir="${build.docs}"/>
     <mkdir dir="${build.dir}/work"/>
 
+   
     <!-- make filtered copy of XML docs -->
-    <copy todir="${build.context}" filtering="on">
+    <copy todir="${build.context}" filtering="on" overwrite="true">
       <fileset dir="${context.dir}" casesensitive="no">
-        <include name="**/*.xml"/>
+        <include name="**/*.x*"/>
       </fileset>
     </copy>
 
-    <!-- make filtered copy of images -->
+    <!-- make non filtered copy of images -->
     <copy todir="${build.context}" filtering="off">
       <fileset dir="${context.dir}" casesensitive="no">
-        <exclude name="**/*.xml"/>
+        <exclude name="**/*.x*"/>
       </fileset>
     </copy>
-    
+        
     <!-- Copy entity catalog and entities -->
     <copy todir="${build.context}/resources/schema" filtering="on">
       <fileset dir="${resource.dir}/schema"/>
@@ -42,6 +63,26 @@
     <delete dir="${build.docs}"/>
   </target>
   
+  <!-- =================================================================== -->
+  <!-- Validate xml                                                        -->
+  <!-- =================================================================== -->
+  <target name="validate-docs" description="Checks that the xml files are valid and conform to the DTD.">
+    <xmlvalidate failonerror="yes" lenient="yes" warn="yes" 
+       className="org.apache.xerces.parsers.SAXParser">
+     
+       <classpath>      
+         <fileset dir="./lib/endorsed">
+           <include name="*.jar"/>
+         </fileset>  
+       </classpath>
+         
+       <fileset dir="." 
+                includes="*.x*" excludes="build.xml"/>  
+                       
+     </xmlvalidate>
+  </target>
+  
+    
   <!-- =================================================================== -->
   <!-- If generated  docs is already up-to-date, print a message saying so. -->
   <!-- =================================================================== -->
@@ -62,7 +103,7 @@
       <arg value="-d../docs"/>
       <arg value="-w../work"/>
       <arg value="-l../work/cocoon.log"/>
-      <arg value="-uINFO"/>
+      <arg value="-u${centipede.tools.cents.forrest.loglevel}"/>
       <arg value="index.html"/>
       <classpath>
         <path refid="classpath"/>
@@ -82,30 +123,6 @@
     
   </target>
   
-  <!-- =================================================================== -->
-  <!-- Create the announcements                                            -->
-  <!-- =================================================================== -->
- <target name="announcement" depends="prepare" description="* Creates the announcement for new releases">
-
-    <copy file="${project-info}" tofile="${build.project-info}" filtering="on"/>
-
-    <style basedir="./" destdir="./" style="${projectinfo2announcement}"
-           includes="project-info.xml" extension=".txt"/>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Create the text version of projectinfo                              -->
-  <!-- =================================================================== -->
-  <target name="projectinfo" depends="prepare" description="* Creates the text version of projectinfo">
-
-    <copy file="${project-info}" tofile="${build.project-info}" filtering="on"/>
-
-    <style basedir="./" destdir="./" style="${project-info2txt}"
-           includes="project-info.xml" extension=".txt"/>
-
-  </target>
-
-
   <!-- =================================================================== -->
   <!-- Creates the web site                                                -->
   <!-- =================================================================== -->
