@@ -19,7 +19,7 @@ FORREST SITE BUILDER
                   Marc Portier (mpo@apache.org)
                   Jeff Turner (jefft@apache.org)
   
-        Call this through the /bin/forrest command
+             Call this through the 'forrest' command
   </description>
   
   
@@ -284,7 +284,7 @@ FORREST SITE BUILDER
       overwrite="true" failonerror="false">
       <fileset dir="${project.conf-dir}"/>
     </copy>
- </target>
+  </target>
 
   <target name="copy-sitemap" if="sitemap.present">
     <copy file="${project.sitemap}" toDir="${project.ctxt-dir}" filtering="true"
@@ -539,13 +539,13 @@ ${project.war}
        =============================================================== -->
   <target name="validate" depends="init, prepare-context, prepare-classpath">
     <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
-       className="org.apache.xerces.parsers.SAXParser"
-       classpathref="forrest.cp">
-       <fileset dir="${project.ctxt-dir}">
-         <include name="content/xdocs/*.xml"/>
-         <include name="*.x*" />
-         <exclude name="*build.xml"/>
-       </fileset>
+      className="org.apache.xerces.parsers.SAXParser"
+      classpathref="forrest.cp">
+      <fileset dir="${project.ctxt-dir}">
+        <include name="content/xdocs/*.xml"/>
+        <include name="*.x*" />
+        <exclude name="*build.xml"/>
+      </fileset>
     </xmlvalidate>
   </target>
 
@@ -564,20 +564,9 @@ ${project.war}
 
   <!-- ===============================================================
         Copies a template structure over to your project dir.
-
-        flag: with or without room for own skin 
-        ... flags for others... thers
-
-        Mind this is typically called before any forrest.properties
-        or siteplan.xml exists (we should consider generating those as well
- 
-        maybe even a template ant build?
-
-        dependend task for doing that alone.
-        >>> filling this with stuff from smart acorn.xml idea.
        =============================================================== -->
- <target name="seed" depends="ensure-nocontent"
-         description="Seeds a directory with a template project doc structure">
+  <target name="seed" depends="ensure-nocontent"
+    description="Seeds a directory with a template project doc structure">
     <unzip src="${forrest.home}/fresh-site.zip" 
       dest="${project.home}"
       overwrite="false"/>
