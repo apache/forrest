@@ -86,7 +86,6 @@
         <xsl:number level="multiple" count="faq|part" format="1.1. "/>
         <xsl:apply-templates select="question"/>
       </title>
-      <link href="#{$id}-menu">^</link>
       <xsl:apply-templates select="answer"/>
     </section>
   </xsl:template>

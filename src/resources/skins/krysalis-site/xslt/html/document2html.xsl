@@ -10,7 +10,7 @@ to HTML.  It renders XML as HTML in this form:
 ..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
 and tabs (tab2menu.xsl) to generate the final HTML.
 
-$Id: document2html.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
+$Id: document2html.xsl,v 1.2 2003/01/27 06:42:49 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -143,12 +143,20 @@ $Id: document2html.xsl,v 1.1 2002/12/07 16:26:34 nicolaken Exp $
             </table>
                 <xsl:apply-templates select="*[not(self::title)]"/>
 	 	</xsl:when>
+        <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
+        <xsl:when test="$level=3 and $isfaq='true'">
+          <h4><xsl:value-of select="title"/></h4>
+          <div align="right"><a href="#{@id}-menu">^</a></div>
+            <div style="margin-left: 15px">
+              <xsl:apply-templates select="*[not(self::title)]"/>
+            </div>
+        </xsl:when>
 	 	<xsl:when test="$level=3">
+          <h4><xsl:value-of select="title"/></h4>
+          <xsl:apply-templates select="*[not(self::title)]"/>
 
-	 	  <h4><xsl:value-of select="title"/></h4>
-	 	      <xsl:apply-templates select="*[not(self::title)]"/>
+        </xsl:when>
 
-	 	</xsl:when>
 	 	<xsl:otherwise>
 	 	  <h5><xsl:value-of select="title"/></h5>
 	 	      <xsl:apply-templates select="*[not(self::title)]"/>

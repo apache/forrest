@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.7 2003/01/27 03:57:16 jefft Exp $
+$Id: document2html.xsl,v 1.8 2003/01/27 06:42:49 jefft Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -127,8 +127,26 @@ $Id: document2html.xsl,v 1.7 2003/01/27 03:57:16 jefft Exp $
     <!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
     <xsl:element name="{concat('h',$sectiondepth + 2)}">
       <xsl:value-of select="title"/>
+      <xsl:if test="$isfaq='true' and $sectiondepth = 3">
+        <span style="float: right"><a href="#{@id}-menu">^</a></span>
+      </xsl:if>
     </xsl:element>
-    <xsl:apply-templates select="*[not(self::title)]"/>
+
+    <!-- Indent FAQ entry text 15 pixels -->
+    <xsl:variable name="indent">
+      <xsl:choose>
+        <xsl:when test="$isfaq='true' and $sectiondepth = 3">
+          <xsl:text>15</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <div style="margin-left: {$indent} ; border: 2px">
+          <xsl:apply-templates select="*[not(self::title)]"/>
+    </div>
   </xsl:template>
 
   <xsl:template match="note | warning | fixme">
