@@ -29,7 +29,8 @@ with @role='pdf' is present, that is used instead.  Eg:
 </credit>
 -->
 
-  <xsl:variable name="config" select="//skinconfig"/>
+  <xsl:param name="config-file"/>
+  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
 
   <xsl:template name="info">
     <xsl:variable name="pdfcredit" select="$config/credits/credit[@role = 'pdf']"/>

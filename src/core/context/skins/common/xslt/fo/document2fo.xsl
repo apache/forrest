@@ -20,7 +20,8 @@
                 version="1.0">
 
   <!-- the skinconf file -->
-  <xsl:variable name="config" select="//skinconfig"/>
+  <xsl:param name="config-file"/>
+  <xsl:variable name="config" select="document('$config-file')/skinconfig"/>
   <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="toc-max-depth" select="number($config/toc/@max-depth)"/>
 
