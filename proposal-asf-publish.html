@@ -208,6 +208,9 @@
 <a href="#impediments">Background and impediments</a>
 </li>
 <li>
+<a href="#demo">Demonstration</a>
+</li>
+<li>
 <a href="#scratch">Scratch notes</a>
 </li>
 </ul>
@@ -224,14 +227,22 @@
 </div>
 
     
-<a name="N10010"></a><a name="overview"></a>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+      There is nothing specific to Apache Forrest in this proposal.
+    </div>
+</div>
+
+    
+<a name="N10013"></a><a name="overview"></a>
 <h2 class="underlined_10">Overview</h2>
 <div class="section">
 <p>All ASF projects need to be able to concentrate on their projects
         and the content of their websites, rather than get tangled up in
         arcane website publication procedures.
       </p>
-<p>There is a "staging and publishing server" which is separate
+<p>There would be a "staging and publishing server" which is separate
         from the live production web server. The project committers would
         commit their source changes, then trigger a "documentation build",
         then review the staging website.
@@ -244,7 +255,7 @@
 </div>
 
     
-<a name="N1001D"></a><a name="infrastructure"></a>
+<a name="N10020"></a><a name="infrastructure"></a>
 <h2 class="underlined_10">Publication infrastructure and actions</h2>
 <div class="section">
 <pre class="code">
@@ -277,7 +288,7 @@
 |                  |      | Production webserver $tlp.apache.org |   |
 +------------------+      +--------------------------------------+   V
 </pre>
-<a name="N1004B"></a><a name="A"></a>
+<a name="N1004E"></a><a name="A"></a>
 <h3 class="underlined_5">[A] Commit the changes to source documents</h3>
 <p>The content changes are committed to the project's source repository.
         The committer might have already built and tested the documents with
@@ -286,18 +297,18 @@
         even have installed a local build system, they might just edit or
         patch the content.
       </p>
-<a name="N10055"></a><a name="B"></a>
+<a name="N10058"></a><a name="B"></a>
 <h3 class="underlined_5">[B] Source docs are managed in project SVN</h3>
 <p>The source files for the project's website are held in an SVN
        repository. These might be XML source for some projects, while others
        might have simple HTML docs.
       </p>
-<a name="N1005F"></a><a name="C"></a>
+<a name="N10062"></a><a name="C"></a>
 <h3 class="underlined_5">[C] Trigger the build</h3>
 <p>Via a secure https web interface, or via ssh to the server and use
        command-line.
       </p>
-<a name="N10069"></a><a name="D"></a>
+<a name="N1006C"></a><a name="D"></a>
 <h3 class="underlined_5">[D] Build the documents</h3>
 <p>The build system on the server will generate the project documents
         and deploy them to the staging server website.
@@ -308,19 +319,19 @@
         problems to the committer (e.g. xml validation, broken links,
         content and spelling errors, configuration errors).
       </p>
-<a name="N10076"></a><a name="E"></a>
+<a name="N10079"></a><a name="E"></a>
 <h3 class="underlined_5">[E] Staging server enables review</h3>
 <p>A pre-release website. Anyone can review online. Some projects might want to
         password-protect.
       </p>
-<a name="N10080"></a><a name="F"></a>
+<a name="N10083"></a><a name="F"></a>
 <h3 class="underlined_5">[F] Approve and publish</h3>
 <p>When satisfied, they "approve and publish" so as to copy the stage
         to the "publication point".
         Via a secure https web interface, or via ssh to the server and use
         command-line.
       </p>
-<a name="N1008A"></a><a name="G"></a>
+<a name="N1008D"></a><a name="G"></a>
 <h3 class="underlined_5">[G] Publication point</h3>
 <p>A holding area, from which the production website can be recreated
         as required.
@@ -333,7 +344,7 @@ mv ${publish_dir}.1 ${publish_dir}.2
 mv ${publish_dir} ${publish_dir}.1
 mv $staging_dir $publish_dir
       </pre>
-<a name="N10098"></a><a name="H"></a>
+<a name="N1009B"></a><a name="H"></a>
 <h3 class="underlined_5">[H] Rsync pull from publication point into production</h3>
 <p>
       Someone with commit access for the project would issue a command on
@@ -362,14 +373,14 @@ The new way ...
    rsync -avz -e ssh --delete stage.apache.org:/www/jakarta.apache.org/$proj/ \
                                                /www/jakarta.apache.org/$proj/
       </pre>
-<a name="N100A9"></a><a name="I"></a>
+<a name="N100AC"></a><a name="I"></a>
 <h3 class="underlined_5">[I] Production webserver for the project</h3>
 <p>The live production website for the project at $tlp.apache.org
       </p>
 </div>
 
     
-<a name="N100B4"></a><a name="notes"></a>
+<a name="N100B7"></a><a name="notes"></a>
 <h2 class="underlined_10">Other notes</h2>
 <div class="section">
 <ul>
@@ -412,7 +423,7 @@ The new way ...
 </div>
 
     
-<a name="N100D8"></a><a name="impediments"></a>
+<a name="N100DB"></a><a name="impediments"></a>
 <h2 class="underlined_10">Background and impediments</h2>
 <div class="section">
 <p>This is a collection of notes about the past impediments
@@ -437,10 +448,19 @@ The new way ...
 </ul>
 </div>
 
+    
+<a name="N100EE"></a><a name="demo"></a>
+<h2 class="underlined_10">Demonstration</h2>
+<div class="section">
+<p>
+      See <a class="external" href="http://brutus.apache.org/docs/">demonstration</a> on brutus.
+      </p>
+</div>
+
 <!--
 -->
     
-<a name="N100ED"></a><a name="scratch"></a>
+<a name="N100FE"></a><a name="scratch"></a>
 <h2 class="underlined_10">Scratch notes</h2>
 <div class="section">
 <p>Some notes which have not yet been incorporated ...</p>
