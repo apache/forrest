@@ -32,58 +32,22 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   
   <xsl:template match="document">
     <div class="content">
-     <div id="topmodule" align="right">
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-       <!-- ( ================= middle NavBar ================== ) -->
-        <tr>
-        <td class="tasknav" >
-          <div align="left">
-           <!-- 
-                site2html.xsl will search for this as 
-                   
-                   td[@class='tasknav']/div[@align='left']
-
-                to insert the breadcrumbs.   
-          -->
-          </div>
-        </td>
-        <td id="issueid" class="tasknav">
-        <div align="right">
-          <div id="skinconf-printlink"/>
-          <xsl:if test="$dynamic-page='false'">
-            <div id="skinconf-podlink"/>
-            <div id="skinconf-txtlink"/>
-            <div id="skinconf-pdflink"/>
-            <div id="skinconf-xmllink"/>
-          </xsl:if>
-        </div>
-        </td>
-       </tr>
-      </table>
-     </div>
-     
-    <!-- ( ================= Content================== ) -->
-    <div id="bodycol">
       <xsl:if test="normalize-space(header/title)!=''">
-        <div id="apphead">
-         <h2><em><xsl:value-of select="header/title"/></em></h2>
-        </div>
+         <h2><xsl:value-of select="header/title"/></h2>
       </xsl:if>
       <xsl:if test="normalize-space(header/subtitle)!=''">
-        <h3><em><xsl:value-of select="header/subtitle"/></em></h3>
+        <h3><xsl:value-of select="header/subtitle"/></h3>
       </xsl:if>
       <xsl:if test="header/abstract">
-        <div class="abstract">
+        <p class="abstract">
           <xsl:value-of select="header/abstract"/>
-        </div>
+        </p>
       </xsl:if>
 
-      <div id="projecthome" class="app">
         <xsl:apply-templates select="body"/>
 
        <xsl:if test="header/authors">
-        <p align="right">
-          <font size="-2">
+        <p class="authors">
             <xsl:for-each select="header/authors/person">
               <xsl:choose>
                 <xsl:when test="position()=1">by&#160;</xsl:when>
@@ -91,16 +55,12 @@ and tabs (tab2menu.xsl) to generate the final HTML.
               </xsl:choose>
               <xsl:value-of select="@name"/>
             </xsl:for-each>
-          </font>
         </p>
       </xsl:if>
-       </div>
-      </div>
-    </div>
+    </div>  
   </xsl:template>
 
   <xsl:template match="body">
-    <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -128,32 +88,22 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 
     <xsl:choose>
       <xsl:when test="$level=1">
-       <div class="h3">
         <h3><xsl:value-of select="title"/></h3>
         <xsl:apply-templates/>
-      </div>  
       </xsl:when>
       <xsl:when test="$level=2">
-       <div class="h4">
         <h4><xsl:value-of select="title"/></h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
-      </div>  
-
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
         <h4 class="faq"><xsl:value-of select="title"/></h4>
-        <div align="right"><a href="#{@id}-menu">^</a></div>
-        <div style="margin-left: 15px">
-          <xsl:apply-templates select="*[not(self::title)]"/>
-        </div>
+        <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
       <xsl:when test="$level=3">
         <h4><xsl:value-of select="title"/></h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
-
       </xsl:when>
-
       <xsl:otherwise>
         <h5><xsl:value-of select="title"/></h5>
         <xsl:apply-templates select="*[not(self::title)]"/>
@@ -163,22 +113,19 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   </xsl:template>  
 
   <xsl:template match="fixme">
-    <div class="warningmessage">
-      <p><strong>Fixme (<xsl:value-of select="@author"/>)</strong></p>
+    <div class="fixme"><xsl:value-of select="@author"/>:
       <xsl:apply-templates/>
     </div>
   </xsl:template>
   
   <xsl:template match="note">
-    <div class="infomessage">
-      <p><strong>Note</strong></p>
+    <div class="note">
       <xsl:apply-templates/>
     </div>
   </xsl:template>
   
   <xsl:template match="warning">
-    <div class="errormessage">
-      <p><strong>Warning</strong></p>
+    <div class="warning">
       <xsl:apply-templates/>
     </div>
   </xsl:template>
@@ -220,13 +167,12 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   </xsl:template>
   
   <xsl:template match="table">
-   <div class="h4">
     <xsl:apply-templates select="@id"/>
     <xsl:if test="caption">
         <h4><xsl:value-of select="caption"/></h4>
     </xsl:if> 
     <xsl:apply-templates select="caption"/>
-      <table border="1" cellspacing="2" cellpadding="3" width="100%" class="grid">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <xsl:if test="@cellspacing"><xsl:attribute name="cellspacing"><xsl:value-of select="@cellspacing"/></xsl:attribute></xsl:if>
         <xsl:if test="@cellpadding"><xsl:attribute name="cellpadding"><xsl:value-of select="@cellpadding"/></xsl:attribute></xsl:if>
         <xsl:if test="@border"><xsl:attribute name="border"><xsl:value-of select="@border"/></xsl:attribute></xsl:if>
@@ -235,7 +181,6 @@ and tabs (tab2menu.xsl) to generate the final HTML.
       
         <xsl:apply-templates/>
     </table>
-   </div>    
   </xsl:template>
 
   <xsl:template match="caption">
