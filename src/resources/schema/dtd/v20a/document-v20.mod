@@ -31,6 +31,7 @@ CHANGE HISTORY:
 [Version 2.0a]
   20030505  Add a meta element to the header, for generic metadata
   20030505  Zap jump and fork, and rename 'link' to 'a' for better HTMLness
+  20030510  Fix bug which allowed nested lists like <ol><ol>. Now lists can only contain li's.
 
 
 COPYRIGHT:
@@ -299,7 +300,7 @@ COPYRIGHT:
   %common.att; 
 >
 <!-- Unordered list (typically bulleted) -->
-<!ELEMENT ul (li | %lists;)+>
+<!ELEMENT ul (li)+>
 <!--    spacing attribute:
             Use "normal" to get normal vertical spacing for items;
             use "compact" to get less spacing.  The default is dependent
@@ -309,7 +310,7 @@ COPYRIGHT:
   spacing (normal | compact) #IMPLIED
 >
 <!-- Ordered list (typically numbered) -->
-<!ELEMENT ol (li | %lists;)+>
+<!ELEMENT ol (li)+>
 <!--    spacing attribute:
             Use "normal" to get normal vertical spacing for items;
             use "compact" to get less spacing.  The default is dependent
