@@ -99,41 +99,36 @@ Please do not Edit!!!!!
   </xsl:template>
 
   <xsl:template name="forrest-input">
-    <xsl:comment>======= Forrest Input =========</xsl:comment>
+    <xsl:comment>======= Forrest Chain =========</xsl:comment>
    
-    <xsl:element name="component-instance">
+    <component-instance name="forrest">
       <xsl:copy-of select="component-instance[@name='chain']/@logger"/>
-      <xsl:attribute name="name">forrest</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='chain']/@class"/>
       <input-module name="request-param"/>
       <input-module name="request-attr"/>
       <input-module name="session-attr"/>
       <input-module name="defaults"/>
-    </xsl:element>
+    </component-instance>
 
     <xsl:comment>======= Defaults Model is replaced by ant using tokens =========</xsl:comment>
-    <xsl:element name="component-instance">
-      <xsl:copy-of select="component-instance[@name='defaults']/@logger"/>
-      <xsl:attribute name="name">defaults</xsl:attribute>
-      <xsl:copy-of select="component-instance[@name='defaults']/@class"/>
-      <xsl:element name="values">
-        <skin>@skin@</skin>
-        <menu-scheme>@menu-scheme@</menu-scheme>
-        <bugtracking-url>@bugtracking-url@</bugtracking-url>
-        <i18n>@i18n@</i18n>
+    <component-instance name="defaults" class="org.apache.forrest.conf.ForrestConfModule">
+      <values>
+        <skin>@project.skin@</skin>
+        <menu-scheme>@project.menu-scheme@</menu-scheme>
+        <bugtracking-url>@project.bugtracking-url@</bugtracking-url>
+        <i18n>@project.i18n@</i18n>
         <home>@forrest.home@/</home>
-        <skins-dir>@forrest.home@/context/skins/</skins-dir>
-        <stylesheets>@forrest.home@/context/resources/stylesheets</stylesheets>
-      </xsl:element>
-    </xsl:element>
+        <context>@context.home@</context>
+        <skins-dir>@context.home@/skins/</skins-dir>
+        <stylesheets>@context.home@/resources/stylesheets</stylesheets>
+      </values>
+    </component-instance>
 
     <xsl:comment>======= "Project" Defaults Model is replaced by ant using tokens =========</xsl:comment>
-    <xsl:element name="component-instance">
-      <xsl:copy-of select="component-instance[@name='defaults']/@logger"/>
-      <xsl:attribute name="name">project</xsl:attribute>
-      <xsl:copy-of select="component-instance[@name='defaults']/@class"/>
-      <xsl:element name="values">
-        <skin>@skin@</skin>
+    <component-instance name="project" class="org.apache.forrest.conf.ForrestConfModule">
+      <values>
+        <skin>@project.skin@</skin>
+        <status>@project.home@/@project.status@</status>
         <skinconf>@project.webapp@/skinconf.xml</skinconf>
         <doc>@project.home@/@project.content-dir@/</doc>
         <content>@project.home@/@project.raw-content-dir@/</content>
@@ -142,43 +137,41 @@ Please do not Edit!!!!!
         <resources.stylesheets>@project.home@/@project.stylesheets-dir@/</resources.stylesheets>
         <resources.images>@project.home@/@project.images-dir@/</resources.images>
         <skins-dir>@project.home@/@project.skins-dir@/</skins-dir>
-      </xsl:element>
-    </xsl:element>
+      </values>
+    </component-instance>
 
     <xsl:comment>======= Skinconf Defaults Model is replaced by values on the skinconf.xml file =========</xsl:comment>
-    <xsl:element name="component-instance">
+    <component-instance name="conf">
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
-      <xsl:attribute name="name">conf</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='simplemap']/@class"/>
       <input-module name="skinconf">
         <file src="skinconf.xml" reloadable="true" />
       </input-module>
       <prefix>/skinconfig/</prefix>
-    </xsl:element>
+    </component-instance>
 
-    <xsl:element name="component-instance">
+    <xsl:comment>======= For the site: scheme =========</xsl:comment>
+    <component-instance name="linkmap" >
       <xsl:copy-of select="component-instance[@name='myxml']/@logger"/>
-      <xsl:attribute name="name">linkmap</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='myxml']/@class"/>
-    </xsl:element>
+    </component-instance>
     
-    <xsl:element name="component-instance">
+    <component-instance name="skinconf">
       <xsl:copy-of select="component-instance[@name='myxml']/@logger"/>
-      <xsl:attribute name="name">skinconf</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='myxml']/@class"/>
-    </xsl:element>
+    </component-instance>
 
-    <xsl:element name="component-instance">
+    <xsl:comment>======= Links to URIs within the site =========</xsl:comment>
+    <component-instance name="site">
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
-      <xsl:attribute name="name">site</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='simplemap']/@class"/>
-    </xsl:element>
+    </component-instance>
 
-    <xsl:element name="component-instance">
+    <xsl:comment>======= Links to external URIs, as distinct from 'site' URIs =========</xsl:comment>
+    <component-instance name="ext">
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
-      <xsl:attribute name="name">ext</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='simplemap']/@class"/>
-    </xsl:element>
+    </component-instance>
   </xsl:template>
 
   <xsl:template match="source-factories">
