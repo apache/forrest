@@ -20,7 +20,7 @@ The output of this stylesheet is HTML of the form:
 
 which is then merged by site2xhtml.xsl
 
-$Id: tab2menu.xsl,v 1.4 2002/12/06 16:20:21 nicolaken Exp $
+$Id: tab2menu.xsl,v 1.5 2003/02/09 16:18:50 nicolaken Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -144,7 +144,7 @@ $Id: tab2menu.xsl,v 1.4 2002/12/06 16:20:21 nicolaken Exp $
           <xsl:with-param name="path" select="$path"/>
         </xsl:call-template>
       </xsl:attribute>
-      <font face="Arial, Helvetica, Sans-serif" size="2">
+      <font face="Arial, Helvetica, Sans-serif">
         <xsl:value-of select="@label"/>
       </font>
     </a>
