@@ -9,7 +9,7 @@
             <person name="Konstantin Piroumian" email="kpiroumian@apache.org"/>            
         </authors>
         <abstract>This How-To describes the steps necessary to configure an SSH enabled CVS connection. It's recommended to configure an SSH enabled CVS connection to work with Apache code repositories.</abstract>
-        <last-modified-content-date date="2002-05-22"/>
+        <last-modified-content-date date="2002-05-27"/>
     </header>
     <audience title="Intended audience">
         <p>This How-to is aimed at developers who have been granted committer access to CVS repositories for particular projects.</p>
@@ -18,17 +18,15 @@
         <p> 
               Using SSH to access CVS repositories is recommended for security reasons. By configuring CVS to work with remote repository using private/public SSH keys you'll be able to run CVS commands without a need to enter your password every time you need access to CVS through SSH.
         </p>
-        <fixme author="KP">Is this a correct purpose? What else to add?</fixme>        
     </purpose>
     <prerequisites title="Prerequisites">
         <ul>
-            <li>Cygwin - a Unix environment for Windows systems. You can get it <link href="http://www.redhat.com/sources/">here</link></li>
-            <li>Account on the local machine. <em>Better with local administrator priviledges.</em></li>
-            <li>Commiter access to the project(s). <em>This also imply having account on the CVS host machine.</em></li>
-            <li>A CVS GUI application, e.g. WinCVS - this one is not required, but can be very useful.</li>
+            <li>Account on the local machine.</li>
+            <li>Commiter access to the project(s). <em>This also imply having account on the CVS host machine.</em></li>        
+            <li>Cygwin - a Unix environment for Windows systems. You can get it <link href="http://www.redhat.com/software/tools/cygwin/">here</link>. <em>Not required for Linux/*nix users.</em></li>
+            <li>A CVS GUI application (for Windows users only), e.g. WinCVS. <em>It is not required, but can be very useful.</em></li>
         </ul>
-        <note>If you are behind a firewall check that you can communicate through 22 or 2401 ports.</note>
-        <fixme author="KP">Is it required to have both ports enabled?</fixme>
+        <note>If you are behind a firewall check that you can communicate through the 22 port. For anonymous access you will need 2401 one.</note>
     </prerequisites>
     <steps title="Steps">
         <p>How to proceed.</p>
@@ -38,14 +36,15 @@
 		    <dd>Secure Shell. See <link href="http://www.openssh.org">OpenSSH</link></dd>
 		    <dt>CVS</dt>
 		    <dd>Concurrent Version System See <link href="http://www.cvshome.org" >CVS Home Page</link></dd>
-	       </dl>						
+	       </dl>		       					
         </section>
+        <note><strong>$</strong> represents local, <strong>%</strong> remote machine.</note>                
         <section title="Setting up domain users">
-            <note><strong>$</strong> represents local, <strong>%</strong> remote machine.</note>
+            <note>This step is necessary only for Windows users. Linux users can happily skip this section and pass to <link href="#ssh_access">Setting up SSH access</link> section</note>
             <p>If you are a domain user then you should be added to Cygwin users list (See <code>[cygwin-dir]/etc/passwd</code>). 
             </p>
             <ul>
-            	<li>Start Cygwin, enter following commands:</li>
+            	<li>Start Cygwin, then enter following commands:</li>
             </ul>
             <source>
 $ whoami
@@ -56,15 +55,15 @@ $ exit
 		</source>
  	     <note>Replace 'userxxx' by your account name</note>		
 		<ul>
-			<li>Start Cygwin again and check that everything's Ok:</li>
+			<li>Start Cygwin/shell again and check that everything's Ok:</li>
 		</ul>
 		<source>
 $ whoami
 userxxx
             </source>
         </section>
-        <section title="Setting up SSH access">
-            <p>Start Cygwin, then enter:</p>
+        <section title="Setting up SSH access" id="ssh_access">
+            <p>Start Cygwin/shell, then enter:</p>
             <source>
 $ ssh-user-config
 	Shall I create an SSH1 RSA identity file for you? (yes/no) no
@@ -81,6 +80,7 @@ $ ssh-user-config
 		<p>
 			Now you have configured SSH on your machine. Next you have to setup access to the CVS machine.
 		</p>
+		<warning>Having an empty passphrase isn't recommended for security reasons. See <code>ssh-agent</code> documentation on how to configure automatic passphrase retaining.</warning>
         </section>
         <section title="Setting up passphrase access">
             <p>Perform the following:</p>
@@ -98,21 +98,16 @@ $ mkdir ~/.ssh
             Check that your configuration is correct:
             </p>
             <source>
-$ ssh -l userxxx -L 2401:localhost:2401 cvs.apache.org
-            </source>
-            <p>
-            or simply
-            </p>
-            <source>
 $ ssh userxxx@cvs.apache.org
             </source>
+            <note>If this command doesn't work then it can mean that you have an old version of SSH. In this case try <code>ssh -l userxxx cvs.apache.org</code>. Run <code>ssh --help</code> to get all available options.</note>
             <p>
             If now you are logged in to the to the CVS machine without entering the password then everything's Ok.
             </p>           
         </section>
         <section title="Getting the project from CVS">
-        	  <p>Now you are ready to get a project from CVS using SSH connection. You can do it either using Cygwin console, Windows command line (you should add cvs.exe directory to your system PATH) or a GUI like WinCVS.</p>
-        	  <p>E.g. how it is done using Cygwin</p>
+        	  <p>Now you are ready to get a project from CVS using SSH connection.</p>
+        	  <p>E.g. how it is done using Cygwin/shell</p>
             <source>
 $ export CVS_RSH=/bin/ssh
 $ cvs -d :ext:userxxx@cvs.apache.org:/home/cvs co xml-cocoon2            
