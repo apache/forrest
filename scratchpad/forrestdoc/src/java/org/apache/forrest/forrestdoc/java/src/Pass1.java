@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.2 2004/02/19 23:46:23 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2004/02/19 23:46:23 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.3 2004/02/20 00:14:39 nicolaken Exp $
+ * $Revision: 1.3 $
+ * $Date: 2004/02/20 00:14:39 $
  *
  * ====================================================================
  *
@@ -186,7 +186,7 @@ public class Pass1 implements FileListener {
      * @param path 
      */
     public void notify(String path) {
-        System.out.println("\t" + path);
+        printAdvancement(path);
         inputFiles.add(path);
     }
 
@@ -228,6 +228,8 @@ public class Pass1 implements FileListener {
             Hashtable packageTable = symbolTable.getPackages();
             Enumeration pEnum = packageTable.elements();
 
+            System.out.println("\nPersisting definitions...");
+            
             while (pEnum.hasMoreElements()) {
                 PackageDef pDef = (PackageDef) pEnum.nextElement();
 
@@ -269,7 +271,6 @@ public class Pass1 implements FileListener {
                 // (no longer -- this happens in Pass2 now)
                 // System.out.println("\nWriting definition HTML...");
                 // pDef.generateReferenceFiles(getOutDir());
-                System.out.println("\nPersisting definitions...");
                 pDef.persistDefinitions(getOutDir());
             }
 
