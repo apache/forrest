@@ -26,7 +26,7 @@
     <!-- header --> 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-<td align="left" valign="top"><a href="http://jakarta.apache.org/index.html"><img src="images/group-logo.gif" border="0" vspace="0" hspace="0"/></a></td><td bgcolor="#ffffff" align="left" valign="top" width="100%"><img src="common/images/project-logo.gif" align="right" border="0" vspace="0" hspace="0"/></td>
+<td align="left" valign="top"><a href="http://jakarta.apache.org/index.html"><img src="common/images/group-logo.gif" border="0" vspace="0" hspace="0"/></a></td><td bgcolor="#ffffff" align="left" valign="top" width="100%"><img src="common/images/project-logo.gif" align="right" border="0" vspace="0" hspace="0"/></td>
 </tr>
 <tr>
 <td bgcolor="#525d76" colspan="2"><span class="c1"><a href="http://www.apache.org/" class="black">www.apache.org &gt;</a><a href="http://jakarta.apache.org/" class="black">jakarta.apache.org &gt;</a></span></td>

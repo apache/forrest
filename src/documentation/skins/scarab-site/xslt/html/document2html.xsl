@@ -6,32 +6,9 @@
   <xsl:template match="document">
    <body>
     <xsl:if test="normalize-space(header/title)!=''">
-      <title><xsl:value-of select="header/title"/></title>
-            <table class="centered" align="center" width="100%">
-              <tbody>
-                <tr>
-                  <td align="center">
-                    <table class="title" cellspacing="0" cellpadding="1" border="0">
-                      <tbody>
-                        <tr>
-                          <td bgcolor="#525d76">
-                            <table class="centered" cellspacing="0" cellpadding="2" border="0" width="100%">
-                              <tbody>
-                                <tr>
-                                  <td bgcolor="#f3dd61">
-                                    <span class="title"><xsl:value-of select="header/title"/></span>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      
+       <h2><xsl:value-of select="header/title"/></h2>
+       
       </xsl:if>
       
       <xsl:if test="header/subtitle">
@@ -73,7 +50,7 @@
       <table border="0" cellpadding="2" cellspacing="0">
         <xsl:attribute name="width"><xsl:value-of select="number(100)-(1*(number($level)-1))"/>%</xsl:attribute>
         <tr>
-          <td bgcolor="#525D76">
+          <td bgcolor="#003063">
             <font color="#ffffff">
               <xsl:attribute name="size">
                 <xsl:choose>
@@ -112,25 +89,27 @@
   </xsl:template>
 
   <xsl:template match="s3">
-    <xsl:call-template name="section">
-       <xsl:with-param name="level">3</xsl:with-param>
-    </xsl:call-template>
+      <h4><xsl:value-of select="@title"/></h4>
+      <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="s4">
-    <xsl:call-template name="section">
-       <xsl:with-param name="level">4</xsl:with-param>
-    </xsl:call-template>
+      <h5><xsl:value-of select="@title"/></h5>
+      <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="br">
     <br/>
   </xsl:template>
 
-  <xsl:template match="strong|em">
-    <em><xsl:apply-templates/></em>
+  <xsl:template match="strong">
+    <strong><xsl:apply-templates/></strong>
   </xsl:template>
 
+  <xsl:template match="em">
+    <em><xsl:apply-templates/></em>
+  </xsl:template>
+  
   <xsl:template match="ul">
     <ul><xsl:apply-templates/></ul>
   </xsl:template>
