@@ -32,32 +32,88 @@
         
         <xsl:template name="feeder-css">
 #feeder {
+	width: 23%;
+	display: block;
+	margin: 10px 0 0 0;
+	padding: 0;
+	background: #E0E9E9;
+	float: right;
     color: black;
-    background: #CFDCED;
+    /*background: #CFDCED;*/
     text-align:center;
     margin-top: 5px;
 }
+.channelTitle {
+	background: #EDF2F2;
+	text-decoration: none;
+	font-size: 10pt;
+	font-family: verdana, helvetica, sans;
+  color: #000066;
+  padding: 5px;
+}
+.channelItems {
+	background: #D9E4E4;
+	text-decoration: none;
+	font-size: 10pt;
+	font-family: verdana, helvetica, sans;
+	color: #000066;
+  padding: 5px;
 }</xsl:template>
         
 	    <xsl:template name="feeder-body" >
 	      <xsl:param name="feeder"/>
-				<xsl:apply-templates select="$feeder"/>		    
+        <xsl:param name="feedConfig"/>
+        <xsl:copy-of select="$feedConfig"/>
+				<xsl:apply-templates select="$feeder/rss">
+          <xsl:with-param name="feedConfig" select="$feedConfig"/>
+				</xsl:apply-templates>		    
 			</xsl:template>
       
       <xsl:template match="rss">
+        <xsl:param name="feedConfig"/>
         <div id="feeder">
-		      <h1><xsl:value-of select="channel/title"/></h1>
-		     <p><xsl:apply-templates select="channel/item"/></p>
+		     <xsl:apply-templates select="channel">
+          <xsl:with-param name="feedConfig" select="$feedConfig"/>
+		     </xsl:apply-templates>
 		    </div>
       </xsl:template>
-      <xsl:template match="item">
-  <section>
-    <b><xsl:value-of select="title" disable-output-escaping="yes"/></b>
-    <p><a href="{link}"><xsl:value-of select="link"/></a></p>
-    <!--<p><xsl:value-of select="description" disable-output-escaping="yes"/></p>-->
-  </section>
-</xsl:template>
       
+      <xsl:template match="channel">
+        <xsl:param name="feedConfig"/>
+        <div class="channelTitle">
+          <xsl:value-of select="title"/>
+        </div>
+        <div class="channelItems">
+          <xsl:apply-templates select="item">
+            <xsl:with-param name="feedConfig" select="$feedConfig"/>
+          </xsl:apply-templates>
+        </div>
+      </xsl:template>
+      
+      <xsl:template match="item">
+        <xsl:param name="feedConfig"/>
+
+        <xsl:variable name="parse">
+          <xsl:if test="$feedConfig/feed[@position]">
+            <xsl:value-of select="position()"/><xsl:value-of select="$feedConfig/feed/@position"/>
+					</xsl:if>
+          <div class="itemTitle"><xsl:value-of select="title" disable-output-escaping="yes"/></div>
+      		<div class="itemLink"><a href="{link}">...more</a></div>
+        </xsl:variable>
+        
+        <xsl:choose>
+          <xsl:when test="$feedConfig/feed[@maxItem]">
+            <xsl:if test="position()&lt;=$feedConfig/feed/@maxItem">
+							<xsl:copy-of select="$parse"/>            
+						</xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:copy-of select="$parse"/>
+          </xsl:otherwise>
+        </xsl:choose>
+			</xsl:template>
+    
     </xsl:stylesheet>
+    
 	</forrest:template>
 </forrest:contract>
