@@ -37,8 +37,8 @@
         </h3>
       </xsl:if>
       <xsl:if test="header/authors">
-        <font size="-2">
-          <p>
+        <p>
+          <font size="-2">
             <xsl:for-each select="header/authors/person">
               <xsl:choose>
                 <xsl:when test="position()=1">by </xsl:when>
@@ -46,8 +46,8 @@
               </xsl:choose>
               <xsl:value-of select="@name"/>
             </xsl:for-each>
-          </p>
-        </font>
+          </font>
+        </p>
       </xsl:if>
       <xsl:apply-templates select="body"/>
     </td>
