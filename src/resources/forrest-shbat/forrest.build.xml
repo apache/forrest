@@ -82,6 +82,8 @@ FORREST SITE BUILDER
     <property name="project.classes-dir" value="${project.content-dir}/classes" />
 
     <property name="forrest.validate.failonerror" value="true" />
+    <property name="forrest.validate.includes" value="*.x*"/>
+    <property name="forrest.validate.excludes" value=""/>
 
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
@@ -587,7 +589,8 @@ Thanks for using Apache Forrest
   <!-- ===============================================================
        Validates all XML documents in the projects-context dir.
        =============================================================== -->
- <target name="validate" depends="init-props, examine-proj">
+ <target name="validate" depends="init-props, examine-proj"
+   description="Validates XML doc files in the project">
    <xmlvalidate failonerror="${forrest.validate.failonerror}" lenient="no" warn="yes">
       <xmlcatalog>
         <catalogfiles dir="${project.schema-dir}">
@@ -597,9 +600,9 @@ Thanks for using Apache Forrest
           <include name="catalog" />
         </catalogfiles>
       </xmlcatalog>
-      <fileset dir="${project.xdocs-dir}">
-        <include name="*.x*" />
-        <exclude name="*build.xml"/>
+      <fileset dir="${project.xdocs-dir}"
+        includes="${forrest.validate.includes}"
+        excludes="${forrest.validate.excludes}">
       </fileset>
     </xmlvalidate>
   </target>
