@@ -14,7 +14,7 @@ Example URL:  http://localhost:8888/index.xml
 Used by    :  *.html and *.pdf pipelines in sitemap.xmap
 Uses       :  content/xdocs/**.xml
 
-$Revision: 1.33 $
+$Revision: 1.34 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -240,7 +240,7 @@ $Revision: 1.33 $
       These pipelines dynamically generate the wiki.{xlex,xgrm} files used in
       the *.cwiki pipeline.  They are not used by default to avoid the overhead.
       <map:match pattern="*.xlex">
-        <map:generate                src="resources/grammars/{1}.grm"/>
+        <map:generate type="text2xml" src="resources/grammars/{1}.grm"/>
         <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
         <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
         <map:transform               src="resources/grammars/text4regex.xsl"/>
@@ -251,7 +251,7 @@ $Revision: 1.33 $
       </map:match>
 
       <map:match pattern="*.xgrm">
-        <map:generate                src="resources/grammars/{1}.grm"/>
+        <map:generate type="text2xml"  src="resources/grammars/{1}.grm"/>
         <map:transform type="lexer"  src="resources/grammars/grm.xlex"/>
         <map:transform type="parser" src="resources/grammars/grm.xgrm"/>
         <map:transform               src="resources/grammars/text4regex.xsl"/>
