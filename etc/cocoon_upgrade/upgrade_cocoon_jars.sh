@@ -181,7 +181,7 @@ bzcopy batik
 #cocoon-chaperon-block-20030311.jar
 bzcopy chaperon
 #cocoon-fop-block-20030311.jar
-bzcopy fop
+#bzcopy fop
 #cocoon-html-block-20030311.jar
 bzcopy html
 #cocoon-jfor-block-20030311.jar
