@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+ <header>
+  <title>Your Project - getting started with using Forrest</title>
+  <subtitle>Overview</subtitle>
+  <version>0.1</version>
+  <authors>
+   <person name="David Crossley" email="crossley@apache.org"/>
+  </authors>
+ </header>
+
+ <body>
+ <section>
+  <title>Goal</title>
+  <p>
+   You have your own project and you want to use Forrest to build the project
+   documentation.
+  </p>
+ </section>
+
+ <section>
+  <title>Introduction</title>
+  <p>
+   The <strong>forrestbot</strong> will automatically build and publish your
+   documentation on a regular basis. This document provides a concise overview.
+   See
+   <link href="forrestbot.html">The ForrestBot</link> for details and understand
+   <link href="forrest-contract.html">Our Contract</link>.
+  </p>
+  <p>
+   (Building the documentation for the actual Forrest project is a separate
+   issue. Use
+   <code>./build.sh clean docs</code> ... that will provide overview
+   documentation about how Forrest operates and how you can help to improve it.)
+  </p>
+ </section>
+
+ <section>
+  <title>Establish project source directory</title>
+  <p>The directory that contains our XML instances.</p>
+  <ul>
+   <li><code>PROJECT_HOME = /home/you/yourproject</code></li>
+   <li><code>SRC_DOC = $PROJECT_HOME/src/documentation</code></li>
+  </ul>
+  <p>
+   Our XML instance documents are at <code>$SRC_DOC/content/xdocs</code>
+  </p>
+ </section>
+
+ <section>
+  <title>Establish project configuration</title>
+  <p>
+<code>cp $FORREST_HOME/forrestbot.conf.xml $PROJECT_HOME/yourproject.conf.xml</code>
+   and edit it to replace the <code><![CDATA[<project>]]></code>
+   definitions with our own, i.e.
+  </p>
+<source><![CDATA[
+  <project name="yourProject-local">
+    <prepare>
+        <skin name="basic"/>
+    </prepare>
+    <get-src type="local-copy">
+      <content-dir name="/home/you/yourproject/src/documentation"/>
+    </get-src>
+    <deploy type="local-copy">
+      <destination name="/var/www/html/yourproject"/>
+    </deploy>
+  </project>
+]]></source>
+ </section>
+
+ <section>
+  <title>Run forrestbot</title>
+  <source>
+cd $FORREST_HOME
+./build.sh bot \
+-Dbot.forrestbot.xconf=$PROJECT_HOME/yourproject.conf.xml \
+-Dtemplate.echo=true
+  </source>
+ </section>
+
+ <section>
+  <title>Next Steps</title>
+  <p>Some enhancements to our local forrestbot would be ...</p>
+  <ul>
+   <li>Add our own skin at 
+   <code>$SRC_DOC/skins/yourproject</code> by copying one of the skins from
+   <code>$FORREST_HOME/src/resources/skins</code> (use basic or forrest-site)
+   </li>
+   <li>Configure another <code><![CDATA[<project>]]></code> to conduct a secure
+     copy to our public website.
+   </li>
+   <li>Get it to send us email about forrestbot activities.
+   </li>
+   <li>Send our feedback to <code>forrest-dev</code>
+   </li>
+  </ul>
+ </section>
+
+ <section>
+  <title>Other methods</title>
+  <p>The recent contribution of <strong>acorn</strong> (a simple Ant script that
+   bootstraps Forrest for a new project.
+See email discussion:
+<link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102958410525990">http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102958410525990</link>
+  </p>
+ </section>
+
+ </body>
+</document>

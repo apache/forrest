@@ -6,13 +6,27 @@
     <authors><person name="Marc Portier" email="mpo@outerthought.org"/></authors> 
     <abstract>This document explains how the Forrest project can be used to
       centrally build the HTML documentation for different projects. It also explains
-      which pieces in the Forrest distribution come to play to achieve this
+      which pieces in the Forrest distribution form this
       functionality, and how they could be extended in the future.</abstract> 
   </header> 
   <body> 
-    <note>Related to this document it might be useful to check the
-      <link href="forrest-contract.html">contract</link> that explains to which rules
-      your project should comply to when you want it to make use of Forrest.</note> 
+    <section> 
+    <title>Foreword</title> 
+    <p>This document explains how the Forrest project can be used to
+      centrally build the HTML documentation for different projects.
+      It also explains which pieces in the Forrest distribution form this
+      functionality, and how they could be extended in the future.</p> 
+    <p>See some related documents:</p>
+    <ul>
+     <li><link href="forrest-contract.html">Our Contract</link>
+      - explains the rules with which your project should comply
+     </li>
+     <li><link href="your-project.html">Your Project</link>
+      - getting started with using Forrest (concise overview of forrestbot)
+     </li>
+    </ul>
+    </section> 
+
     <section> 
       <title>Using the Forrest Bot</title> 
       <section> 
@@ -25,7 +39,7 @@
         <source>build bot -Dbot.forrestbot.xconf=myOwn.conf.xml -Dtemplate.echo=[true|false]</source> 
         <p>It is quite typical to perform this from a shell script that gets
           scheduled for execution on a regular basis.</p> 
-        <p>The actions the bot is going to take are written down in the XML
+        <p>The actions the bot is going to take are defined in the XML
           file pointed at with the <code>bot.forrestbot.xconf</code> System property. (if
           not specified with <code>-Dbot.forrest.xconf</code> the default config from the
           distribution is taken: <code>./forrestbot.conf.xml</code>) </p> 
@@ -34,7 +48,7 @@
         <title>Describing your project to the bot</title> 
         <fixme author="mpo">There is not yet a DTD for this configuration
           file.</fixme> 
-        <p>The bot's work is written down in an XML configuration file, which
+        <p>The bot's work is defined in an XML configuration file, which
           has one (optional) child-element for setting cross-project defaults followed by
           a list of project-elements that hold the configuration for the various projects
           the bot is going to work on.</p> 
@@ -85,7 +99,7 @@
         </ul> 
         <p>Inside the project element the configuration allows to set some
           parameters that get consumed in the template targets. This workstage dependant
-          configuration always takes up the following layout: an element with the name of
+          configuration always takes the following layout: an element with the name of
           one of the tasks, and an optional type-attribute with nested elements that hold
           parameter names, with required name attribute holding the actual parameter
           value. Example:</p> 
@@ -184,7 +198,7 @@
         </ul> 
         <p>What each of these templates is going to do with the parameters can
           be found in the templates.build.xml itself (at this stage) and is put out to
-          the console if the bot is ran with the <code>-Dtemplate.echo=true</code>
+          the console if the bot is run with the <code>-Dtemplate.echo=true</code>
           flag</p> 
         <section> 
           <title>Setting bot-wide defaults</title> 
