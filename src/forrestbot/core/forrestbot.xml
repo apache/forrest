@@ -38,6 +38,14 @@
 
   <target name="notify" depends="notify.local" description="FB: Notify via notify.local"/>
 
+  <target name="clean">
+    <antcall target="forrest.clean" inheritAll="false">
+      <param name="project.home" value="${build.work-dir}"/>
+      <param name="project.build-dir" value="${build.work-dir}"/>
+      <param name="project.site-dir" value="${build.site-dir}"/>
+    </antcall>
+  </target>
+
   <!-- run the workstages -->
   <target name="main" depends="getsrc, build, deploy, notify" description="FB: getsrc, build, deploy, notify"/>
 

@@ -18,7 +18,7 @@
 
   <property name="deploy.local.dir" location="sites/${ant.project.name}"/>
 
-  <target name="deploy.local" description="FB: Deploy to a local location">
+  <target name="deploy.local" unless="build.failed" description="FB: Deploy to a local location">
     <mkdir dir="${deploy.local.dir}"/>
     <echo>Deploying from ${build.site-dir} to ${deploy.local.dir}</echo>
     <copy todir="${deploy.local.dir}">
@@ -30,7 +30,7 @@
   </target>
 
   <property name="deploy.scp.dest" value=""/>
-  <target name="deploy.scp" description="FB: Deploy to a remote location via scp">
+  <target name="deploy.scp" unless="build.failed" description="FB: Deploy to a remote location via scp">
     <if>
       <not><isset property="deploy.scp.password"/></not>
       <then>
@@ -51,7 +51,7 @@
   
   <property name="deploy.cvsmodule-dir" value="work/cvsmodules-deploy/${ant.project.name}"/>
   
-  <target name="deploy.cvs" description="FB: Deploy by committing to a CVS repository">
+  <target name="deploy.cvs" unless="build.failed" description="FB: Deploy by committing to a CVS repository">
     <condition property="isUnix">
         <os family="unix"/>
     </condition>
@@ -88,7 +88,7 @@
   
   <property name="deploy.svn.svn-dir" location="work/svn-deploy/${ant.project.name}"/>
   <property name="deploy.svn.svn-filestoadd" location="work/svn-deploy/${ant.project.name}.toadd"/>
-  <target name="deploy.svn" description="FB: Deploy by committing to an SVN repository">
+  <target name="deploy.svn" unless="build.failed" description="FB: Deploy by committing to an SVN repository">
     <!-- get current SVN source -->
     <svncheckout
         repositoryurl="${deploy.svn.url}"
