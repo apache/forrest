@@ -1,0 +1,103 @@
+                            Forrest Release Process
+                          ============================
+
+
+$Id: RELEASE_PROCESS.txt,v 1.1 2003/02/13 05:25:57 jefft Exp $
+
+This file documents the steps a release manager should follow when making a new
+Forrest release.
+
+Preparations
+------------
+
+ - Edit module.xml and replace the '-dev' text with '':
+    ...
+    <project name="xml-forrest">
+        <version fix="0" major="0" minor="4" tag="-dev"/>
+
+ - Edit status.xml, remove the -dev from the current <release> tag, and set the
+   date.  Also add a new <release> for development on the next version  e.g.
+   from:
+
+    <release version="0.4-dev" date="unreleased">
+      ...
+ 
+   to:
+
+    <release version="0.5-dev" date="unreleased">
+    </release>
+    <release version="0.4" date="2002-02-13">
+      ...
+
+ - Edit src/resources/forrest-shbat/forrest.build.xml, and update the version
+   tag embedded in the Ant script:
+
+    |                 Forrest Site Builder                  |
+    |                        0.4-dev                        |
+                                ^^^^
+
+ - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
+   currently being released.  It is best to copy an earlier RELEASE-NOTES file,
+   to keep a common layout.
+   In this file, provide a summary of changes, and check for general accuracy.
+
+ - Run 'build release-dist' to generate the distributions.
+
+ - Test the distribution.
+
+ - If everything looks okay, tag CVS with 'cvs tag FORREST_xy', where 'xy' is a
+   compact form of the version (eg 04, 041, 05).  Run 'cvs log build.xml' to
+   see existing tags.
+
+ - For 0.x releases, create a maintenance branch in CVS with 'cvs tag -b
+   FORREST_xy_BRANCH'.
+
+  Note: if you realise you tagged too soon, tags can be updated with 
+  'cvs tag -F <tag>'.  See 'cvs --help tag' for more info.
+
+
+Upload and announcement
+-----------------------
+
+ - Upload the binaries **and the RELEASE-NOTES** to daedalus.  This is done by
+   bugging Steven.  Alternatively for people with daedalus access, I believe
+   the process is documented at http://cvs.apache.org/~bodewig/mirror
+
+ - Wait for the various mirrors to pick up the new file (see
+   http://www.apache.org/dyn/closer.cgi/xml/forrest/).  This has been known to
+   take up to 10 hours.  
+
+ - Send an announcement email.  Typically this is sent to
+   announcements@xml.apache.org and announcements@jakarta.apache.org, with
+   forrest-dev Cc'ed.  As for the announcement format, see previous releases:
+
+0.2:  http://marc.theaimsgroup.com/?l=xml-apache-announce&m=103746673310573&w=2
+0.3:  http://marc.theaimsgroup.com/?l=xml-apache-announce&m=104399934113331&w=2
+0.4:  http://marc.theaimsgroup.com/?l=jakarta-announce&m=104510734501302&w=2
+
+ - Ask Jeff to do the freshmeat (http://www.freshmeat.net/) announcement, or
+   add you as an admin.
+
+ - Edit xml-site/src/documentation/content/xdocs/news.xml and record the
+   announcement, and then commit the new HTML to xml-site/targets/forrest (this
+   can be done automatically from http://forrestbot.cocoondev.org).
+
+
+Cleanups
+--------
+
+ - Edit module.xml, increment the version and add a -dev tag:
+
+    <project name="xml-forrest">
+        <version fix="0" major="0" minor="5" tag="-dev"/>
+
+ - Edit src/resources/forrest-shbat/forrest.build.xml and update the version:
+
+    |                 Forrest Site Builder                  |
+    |                          0.5                          |
+
+
+
+All done!
+
+Or perhaps not.. if you think of anything, please add it here.
