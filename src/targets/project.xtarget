@@ -3,25 +3,25 @@
   <!-- =================================================================== -->
 
   <target name="run" depends="init">
-   
+
     <antcall target="runforrestrun">
       <param name="getcvsmodule.package"      value="jakarta-poi"/>
-      <param name="getcvsmodule.work.dir"     value="${build.dir}/work/forrest/cvsmodule" />      
-      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>       
+      <param name="getcvsmodule.work.dir"     value="${build.dir}/work/forrest/cvsmodule" />
+      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>
       <param name="deploy.username"           value="forrestbot"/>
       <param name="deploy.package-name"       value="jakarta-poi"/>
       <param name="deploy.data.dir"           value="${build.dir}/docs"/>
       <param name="deploy.hostname"           value="krysalis.sourceforge.net"/>
       <param name="deploy.remotedir"          value="/home/groups/k/kr/krysalis/htdocs/poi"/>
     </antcall>
-                             
+
   </target>
-  
-  <target name="runforrestrun" depends="getcvsmodule, prepare-docs, owdocs, deploy"/>    
-    
-    
-  <target name="updateforrestsite" depends="init, docs, deployforrestsite, sendlog"/>  
-  
+
+  <target name="runforrestrun" depends="getcvsmodule, prepare-docs, owdocs, deploy"/>
+
+
+  <target name="updateforrestsite" depends="init, docs, deployforrestsite, sendlog"/>
+
   <target name="deployforrestsite" depends="init, docs">
     <antcall target="deploy">
       <param name="deploy.username"     value="forrestbot"/>
@@ -29,24 +29,24 @@
       <param name="deploy.data.dir"     value="${build.dir}/docs"/>
       <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
       <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/forrest"/>
-    </antcall>                                
-  </target>      
-  
-       
+    </antcall>
+  </target>
+
+
   <!-- ================== -->
   <!-- Prepares the docs  -->
   <!-- ================== -->
-  <target name="prepare-docs" depends="init">
+  <target name="prepare-docs" depends="init, compile">
 
-    <property name="centipede.tools.cents.forrest.loglevel" value="ERROR"/> 
-    <property name="use.skin" value="forrest-site"/> 
-    
-    <property name="documentation.context.dir"  value="${resource.dir}"/>     
-    <property name="documentation.source.dir"   value="${context.dir}"/>    
-        
+    <property name="centipede.tools.cents.forrest.loglevel" value="ERROR"/>
+    <property name="use.skin" value="forrest-site"/>
+
+    <property name="documentation.context.dir"  value="${resource.dir}"/>
+    <property name="documentation.source.dir"   value="${context.dir}"/>
+
     <echo>Running docs generation from: ${documentation.source.dir}.</echo>
-    
-    <!-- define filters -->     
+
+    <!-- define filters -->
     <filter token="skin"              value="${use.skin}"/>
     <filter token="link1"             value="apache"/>
     <filter token="link1.href"        value="http://www.apache.org/"/>
@@ -56,17 +56,17 @@
     <filter token="link3.href"        value="http://xml.apache.org/forrest/"/>
     <filter token="group-logo.src"    value="images/group-logo.gif"/>
     <filter token="group-logo.href"   value="http://xml.apache.org/"/>
-    <filter token="project-logo.src"  value="images/project-logo.gif"/>                    
-    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>                    
-    <filter token="year" value="2002"/>  
-    <filter token="vendor" value="Apache Sofware Foundation"/>  
-    
-        
+    <filter token="project-logo.src"  value="images/project-logo.gif"/>
+    <filter token="project-logo.href" value="http://xml.apache.org/forrest/"/>
+    <filter token="year" value="2002"/>
+    <filter token="vendor" value="Apache Sofware Foundation"/>
+
+
     <mkdir dir="${build.context}"/>
     <mkdir dir="${build.docs}"/>
     <mkdir dir="${build.dir}/work"/>
 
-   
+
     <!-- make filtered copy of XML docs -->
     <copy todir="${build.context}" filtering="on" overwrite="true">
       <fileset dir="${documentation.source.dir}" casesensitive="no">
@@ -79,9 +79,9 @@
       <fileset dir="${documentation.source.dir}" casesensitive="no">
         <exclude name="**/*.x*"/>
       </fileset>
-    </copy>      
+    </copy>
 
-    <!-- Copy entity catalog and entities -->
+    <!-- Copy entity catalog, entities and class files -->
     <copy todir="${build.context}/resources/schema" filtering="on">
       <fileset dir="${resource.dir}/schema"/>
     </copy>
@@ -90,56 +90,62 @@
       <fileset dir="${build.context}/resources/schema">
         <include name="CatalogManager.properties"/>
       </fileset>
+      <fileset dir="${build.dest}">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${build.scratchpad.dest}">
+        <include name="**/*.class"/>
+      </fileset>
     </move>
 
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
       <fileset dir="${documentation.context.dir}/conf">
         <include name="sitemap.xmap"/>
-        <include name="cocoon.xconf"/>        
-      </fileset> 
+        <include name="cocoon.xconf"/>
+      </fileset>
     </copy>
     <copy todir="${build.context}/WEB-INF/" filtering="on">
       <fileset dir="${documentation.context.dir}/conf">
         <exclude name="sitemap.xmap"/>
-      </fileset> 
+      </fileset>
     </copy>
 
     <!-- Copy libraries -->
     <copy todir="${build.context}/library/" filtering="on">
       <fileset dir="${documentation.context.dir}/library">
 
-      </fileset> 
+      </fileset>
     </copy>
-    
+
     <!-- Copy skins -->
     <copy todir="${build.context}/skins/" filtering="on">
       <fileset dir="${documentation.context.dir}/skins">
-        <exclude name="**/images/**"/>         
-      </fileset> 
+        <exclude name="**/images/**"/>
+      </fileset>
     </copy>
     <copy todir="${build.context}/skins/" filtering="off">
       <fileset dir="${documentation.context.dir}/skins">
-        <include name="**/images/**"/>      
-      </fileset> 
+        <include name="**/images/**"/>
+      </fileset>
     </copy>
 
     <!-- Copy the project descriptor -->
     <copy todir="${build.context}" filtering="on">
       <fileset dir=".">
-        <include name="forrest.xgump"/>         
-      </fileset> 
+        <include name="forrest.xgump"/>
+      </fileset>
     </copy>
-            
+
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Prepares the docs to create a .war                                  -->
   <!-- =================================================================== -->
   <target name="webapp" depends="init, prepare-docs">
     <delete file="${build.context}/cocoon.xconf"/>
-    <war warfile="${build.dir}/${name}.war" 
-         webxml="${build.context}/WEB-INF/web.xml" 
+    <war warfile="${build.dir}/${name}.war"
+         webxml="${build.context}/WEB-INF/web.xml"
          compress="true">
 
       <fileset dir="${build.context}">
@@ -148,43 +154,44 @@
       <lib dir="lib/endorsed"/>
       <lib dir="lib/core"/>
       <lib dir="lib/optional"/>
+      <lib dir="src/scratchpad/lib"/>
       <classes dir="${build.context}/WEB-INF/classes/"/>
-    
-    </war>      
-  
+
+    </war>
+
   </target>
 
   <target name="cleandocs" depends="init" description="* Cleans the build docs directories">
     <delete dir="${build.docs}"/>
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Validate xml                                                        -->
   <!-- =================================================================== -->
   <target name="validate-docs" description="Checks that the xml files are valid and conform to the DTD.">
-    <xmlvalidate failonerror="yes" lenient="yes" warn="yes" 
+    <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
        className="org.apache.xerces.parsers.SAXParser">
-     
-       <classpath>      
+
+       <classpath>
          <fileset dir="./lib/endorsed">
            <include name="*.jar"/>
-         </fileset>  
+         </fileset>
        </classpath>
-         
-       <fileset dir="." 
-                includes="*.x*" excludes="build.xml"/>  
-                       
+
+       <fileset dir="."
+                includes="*.x*" excludes="build.xml"/>
+
      </xmlvalidate>
   </target>
-  
-    
+
+
   <!-- =================================================================== -->
   <!-- The documentation system                                            -->
   <!-- =================================================================== -->
   <target name="docs"
           depends="cleandocs, owdocs"
           description="* Generates the documentation"/>
-            
+
   <!-- =================================================================== -->
   <!-- The documentation system                                            -->
   <!-- =================================================================== -->
@@ -196,7 +203,7 @@
 
     <echo message="-------------------------------------------------------------"/>
     <echo message="  Building docs, please stand by ..."/>
-    
+
     <java classname="org.apache.cocoon.Main" fork="true" dir="${dir.containing.docs}" failonerror="true">
       <arg value="-c."/>
       <arg value="-d../docs"/>
@@ -211,7 +218,7 @@
         </fileset>
         <fileset dir="${tools.dir}">
           <include name="*/lib/*.jar"/>
-        </fileset>   
+        </fileset>
         <pathelement location="${tools.jar}"/>
         <pathelement location="${build.context}/WEB-INF/classes"/>
       </classpath>
@@ -219,9 +226,9 @@
 
     <echo message="  ...docs generated successfully in ${build.docs}"/>
     <echo message="-------------------------------------------------------------"/>
-    
+
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Creates the web site                                                -->
   <!-- =================================================================== -->
@@ -237,24 +244,24 @@
     </copy>
   </target>
 
- 
+
   <target name="getcvsmodule" depends="init">
-   
-    <property name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" /> 
-    <property name="getcvsmodule.package" value="xml-forrest" /> 
-       
+
+    <property name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />
+    <property name="getcvsmodule.package" value="xml-forrest" />
+
     <delete dir="${getcvsmodule.work.dir}"/>
     <mkdir dir="${getcvsmodule.work.dir}"/>
-     
+
     <cvspass cvsroot=":pserver:anoncvs@jakarta.apache.org:/home/cvspublic"
             password="anoncvs"
      />
-       
+
     <cvs cvsRoot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
          package="${getcvsmodule.package}"
          dest="${getcvsmodule.work.dir}"
-    />                             
-  </target>     
+    />
+  </target>
 
   <target name="deploy" unless="deploy.username, deploy.package-name
                                     deploy.data.dir, deploy.hostname, deploy.remotedir">
@@ -267,13 +274,13 @@
    -->
 
     <property name="deploy.work.dir"  value="${build.dir}/work/forrest/deploy/${deploy.package-name}"/>
-         
+
     <delete dir="${deploy.work.dir}"/>
     <mkdir dir="${deploy.work.dir}"/>
 
-    <property name="deploy.tar.fullpath" 
+    <property name="deploy.tar.fullpath"
               value="${deploy.work.dir}/${deploy.package-name}-deploy"/>
-              
+
     <tar tarfile="${deploy.tar.fullpath}.tar" basedir="${deploy.data.dir}"/>
     <gzip zipfile="${deploy.tar.fullpath}.tar.gz" src="${deploy.tar.fullpath}.tar"/>
     <delete file="${deploy.tar.fullpath}.tar"/>
@@ -312,49 +319,49 @@
       <classpath refid="classpath"/>
     </javadoc>
   </target>
-  
-  
+
+
   <target name="sendlog" depends="init" if="sendlog.to">
 
    <mail from="forrest-dev@xml.apache.org"
          tolist="${sendlog.to}"
          subject="[DO NOT REPLY] Building in the Forrest"
          files="forrestbot.log" />
-                                   
-  </target>   
-  
-  
+
+  </target>
+
+
   <target name="testpoi" depends="init, testpoicvs, testpoigen, testpoideploy"/>
-    
-    
+
+
   <target name="testpoicvs" depends="init">
-   
+
     <antcall target="getcvsmodule">
       <param name="getcvsmodule.package"  value="jakarta-poi"/>
-      <param name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />       
+      <param name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />
     </antcall>
-                          
-  </target> 
-  
+
+  </target>
+
   <target name="testpoigen" depends="init">
-   
+
     <antcall target="prepare-docs">
       <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>
     </antcall>
-    
+
     <antcall target="owdocs"></antcall>
-                          
-  </target> 
-  
+
+  </target>
+
   <target name="testpoideploy" depends="init">
-   
- 
+
+
     <antcall target="deploy">
       <param name="deploy.username"     value="forrestbot"/>
       <param name="deploy.package-name" value="jakarta-poi"/>
       <param name="deploy.data.dir"     value="${build.dir}/docs"/>
       <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
       <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/poi"/>
-    </antcall>             
-                          
-  </target>   
+    </antcall>
+
+  </target>
