@@ -8,7 +8,7 @@ Example URL:  http://localhost:8888/images/project-logo.gif
 Used by    :  sitemap.xmap
 Uses       :  resources/*, skins/*/{css,images}
 
-$Revision: 1.5 $
+$Revision: 1.6 $
 ==================================================== -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
    <map:components>
@@ -32,74 +32,149 @@ $Revision: 1.5 $
    <map:resources>
       <map:resource name="skin-read">
             <map:select type="exists">
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}">
-                  <map:read src="{project:skins-dir}{forrest:skin}/{path}" mime-type="{mime-type}" />
+              <!-- First location: project skin dir -->
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}">
+                  <map:read src="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}.xslt">
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.css.xslt">
                   <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}.xslt" />
+                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.css.xslt" />
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}">
-                  <map:read src="{forrest:home}context/skins/{forrest:skin}/{path}" mime-type="{mime-type}" />
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt">
+                  <map:call resource="pipe-svg2png-resource">
+                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt" />
+                  </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}.xslt">
+               
+              <!-- Second location: forrest skin dir -->
+               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.{ext}">
+                  <map:read src="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
+               </map:when>
+               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.css.xslt">
                   <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}.xslt" />
+                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.css.xslt" />
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:when test="{forrest:home}context/skins/common/{path}">
-                  <map:read src="{forrest:home}context/skins/common/{path}" mime-type="{mime-type}" />
+               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt">
+                  <map:call resource="pipe-svg2png-resource">
+                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
+                  </map:call>
+               </map:when>
+               
+              <!-- Third location: forrest common skin dir -->
+               <map:when test="{forrest:home}context/skins/common/{path}/{name}.{ext}">
+                  <map:read src="{forrest:home}context/skins/common/{path}/{name}.{ext}" mime-type="{mime-type}" />
+               </map:when>
+               <map:when test="{forrest:home}context/skins/common/{path}/{name}.css.xslt">
+                  <map:call resource="pipe-text-resource">
+                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.css.xslt" />
+                    <map:parameter name="mime-type" value="text/css" />
+                  </map:call>
                </map:when>
                <map:otherwise>
-                  <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}.xslt" />
-                    <map:parameter name="mime-type" value="text/css" />
+                  <map:call resource="pipe-svg2png-resource">
+                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.svg.xslt" />
+                  </map:call>
+               </map:otherwise>
+            </map:select>
+      </map:resource>
+
+       <map:resource name="read-svg2png-corner-resource">
+            <map:select type="exists">
+               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt">
+                  <map:call resource="pipe-svg2png-corner-resource">
+                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt" />
+                    <map:parameter name="orientation-tb" value="{orientation-tb}"/>
+                    <map:parameter name="orientation-lr" value="{orientation-lr}"/>
+                    <map:parameter name="size" value="{size}"/>   
+                    <map:parameter name="bg-color-name" value="{bg-color-name}"/>
+                    <map:parameter name="stroke-color-name" value="{stroke-color-name}"/>
+                    <map:parameter name="fg-color-name" value="{fg-color-name}"/>   
+                  </map:call>
+               </map:when>
+               <map:when test="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt">
+                  <map:call resource="pipe-svg2png-corner-resource">
+                    <map:parameter name="path" value="{forrest:home}context/skins/{forrest:skin}/{path}/{name}.svg.xslt" />
+                    <map:parameter name="orientation-tb" value="{orientation-tb}"/>
+                    <map:parameter name="orientation-lr" value="{orientation-lr}"/>
+                    <map:parameter name="size" value="{size}"/>   
+                    <map:parameter name="bg-color-name" value="{bg-color-name}"/>
+                    <map:parameter name="stroke-color-name" value="{stroke-color-name}"/>
+                    <map:parameter name="fg-color-name" value="{fg-color-name}"/>   
+                  </map:call>
+               </map:when>
+               <map:otherwise>
+                  <map:call resource="pipe-svg2png-corner-resource">
+                    <map:parameter name="path" value="{forrest:home}context/skins/common/{path}/{name}.svg.xslt" />
+                    <map:parameter name="orientation-tb" value="{orientation-tb}"/>
+                    <map:parameter name="orientation-lr" value="{orientation-lr}"/>
+                    <map:parameter name="size" value="{size}"/>   
+                    <map:parameter name="bg-color-name" value="{bg-color-name}"/>
+                    <map:parameter name="stroke-color-name" value="{stroke-color-name}"/>
+                    <map:parameter name="fg-color-name" value="{fg-color-name}"/>   
                   </map:call>
                </map:otherwise>
             </map:select>
       </map:resource>
       
       <map:resource name="pipe-text-resource">
-        <map:call resource="generate-xslt-resource">
+        <map:call resource="generate-resource">
            <map:parameter name="path" value="{path}" />
          </map:call>
          <map:serialize type="text" mime-type="{mime-type}"/>
       </map:resource>
-      
-      <map:resource name="generate-xslt-resource">
-        <map:generate src="{project:skinconf}" />
-        <map:transform src="{path}"/>
-      </map:resource>
-      
-      <map:resource name="generate-xml-resource">
-        <map:generate src="{project:skinconf}" />
-        <map:transform src="{path}"/>
-      </map:resource>
 
-      <map:resource name="transform-project2text">
-         <map:transform src="{forrest:stylesheets}/project2text.xsl">
-            <map:parameter name="config-file" value="{project:skinconf}"/>
-         </map:transform>      
-      </map:resource>
-      
       <map:resource name="pipe-svg2png-resource">
-         <map:call resource="generate-xml-resource">
+         <map:call resource="generate-resource">
            <map:parameter name="path" value="{path}" />
          </map:call>
          <map:call resource="transform-project2text"/>
          <map:serialize type="svg2png" />
       </map:resource>
+
+      <map:resource name="pipe-svg2png-corner-resource">
+        <map:generate src="{project:skinconf}" />
+        <map:transform src="{path}">
+            <map:parameter name="orientation-tb" 
+                         value="{orientation-tb}"/>
+            <map:parameter name="orientation-lr" 
+                         value="{orientation-lr}"/>
+            <map:parameter name="size" 
+                         value="{size}"/>
+            <map:parameter name="bg-color-name" 
+                         value="{bg-color-name}"/>
+            <map:parameter name="stroke-color-name" 
+                         value="{stroke-color-name}"/>
+            <map:parameter name="fg-color-name" 
+                         value="{fg-color-name}"/>            
+        </map:transform>
+        <map:call resource="transform-project2text"/>
+        <map:serialize type="svg2png" />
+      </map:resource>
       
+      <map:resource name="generate-resource">
+        <map:generate src="{project:skinconf}" />
+        <map:transform src="{path}"/>
+      </map:resource>
+      
+      <map:resource name="transform-project2text">
+         <map:transform src="{forrest:stylesheets}/project2text.xsl">
+            <map:parameter name="config-file" value="{project:skinconf}"/>
+         </map:transform>      
+      </map:resource>
+
    </map:resources>
    
    <map:pipelines>
        <map:pipeline>
          <map:match pattern="**skin/**.js">
             <map:call resource="skin-read">
-               <map:parameter name="path" value="scripts/{2}.js" />
+               <map:parameter name="path" value="scripts" />
+               <map:parameter name="name" value="{2}" />
+               <map:parameter name="ext" value="js" />
                <map:parameter name="mime-type" value="application/x-javascript" />
             </map:call>
          </map:match>
@@ -111,7 +186,9 @@ $Revision: 1.5 $
 
          <map:match pattern="**skin/**.css">
             <map:call resource="skin-read">
-               <map:parameter name="path" value="css/{2}.css" />
+               <map:parameter name="path" value="css" />
+               <map:parameter name="name" value="{2}" />
+               <map:parameter name="ext" value="css" />
                <map:parameter name="mime-type" value="text/css" />
             </map:call>
          </map:match>
@@ -121,10 +198,26 @@ $Revision: 1.5 $
             <map:read src="resources/css/{1}.css" mime-type="text/css" />
          </map:match>
 
-         <map:match pattern="skin/images/**.*">
+         <!-- special case cormer generator pipeline -->
+         <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.png">
+            <map:call resource="read-svg2png-corner-resource">
+               <map:parameter name="path" value="images/{1}" />
+               <map:parameter name="name" value="{2}c" />
+               <map:parameter name="orientation-tb" value="{3}"/>
+               <map:parameter name="orientation-lr" value="{4}"/>
+               <map:parameter name="size" value="{5}"/>    
+               <map:parameter name="bg-color-name" value="{6}"/>
+               <map:parameter name="stroke-color-name" value="{7}"/>
+               <map:parameter name="fg-color-name" value="{8}"/>    
+            </map:call>
+         </map:match>
+         
+         <map:match pattern="skin/images**/*.*">
             <map:call resource="skin-read">
-               <map:parameter name="path" value="images/{1}.{2}" />
-               <map:parameter name="mime-type" value="image/{2}" />
+               <map:parameter name="path" value="images/{1}" />
+               <map:parameter name="name" value="{2}" />
+               <map:parameter name="ext" value="{3}" />
+               <map:parameter name="mime-type" value="image/{3}" />
             </map:call>
          </map:match>
 
@@ -163,7 +256,9 @@ $Revision: 1.5 $
                  <!-- needed for compatibility for the standard resources/images that are now
                       in the common skin -->
                  <map:call resource="skin-read">
-                   <map:parameter name="path" value="images/{1}.png" />
+                   <map:parameter name="path" value="images" />
+                   <map:parameter name="name" value="{1}" />
+                   <map:parameter name="ext" value="png" />
                    <map:parameter name="mime-type" value="image/png" />
                  </map:call>
                </map:otherwise>
@@ -185,7 +280,9 @@ $Revision: 1.5 $
                  <!-- needed for compatibility for the standard resources/images that are now
                       in the common skin -->
                  <map:call resource="skin-read">
-                   <map:parameter name="path" value="images/{1}.{2}" />
+                   <map:parameter name="path" value="images" />
+                   <map:parameter name="name" value="{1}" />
+                   <map:parameter name="ext" value="{2}" />
                    <map:parameter name="mime-type" value="image/{2}" />
                  </map:call>
                </map:otherwise>
@@ -224,9 +321,11 @@ $Revision: 1.5 $
             </map:select>
          </map:match>
 
-         <map:match pattern="**favicon.ico">
+         <map:match pattern="**/*.ico">
             <map:call resource="skin-read">
-               <map:parameter name="path" value="images/favicon.ico" />
+               <map:parameter name="path" value="images/{1}" />
+               <map:parameter name="name" value="{2}" />
+               <map:parameter name="ext" value="ico" />
                <map:parameter name="mime-type" value="image/x-icon" />
             </map:call>
          </map:match>
