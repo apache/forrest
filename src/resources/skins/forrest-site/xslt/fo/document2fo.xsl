@@ -456,7 +456,7 @@
   </xsl:template>
 
   <xsl:template match="link">
-    <fo:basic-link external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
+    <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
   </xsl:template>
 
   <xsl:template match="figure">
