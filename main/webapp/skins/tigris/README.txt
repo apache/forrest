@@ -15,3 +15,5 @@ tigris.css
  changed: "inline-block" to "inline" at line 709 (fixes CSS validation error)
  added: .pdflink .xmllink .podlink .printlink
  added: .txtlink
+ added: .footerLogos
+
