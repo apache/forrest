@@ -27,11 +27,6 @@
         </title>
       </header>
       <xsl:apply-templates select="/*/office:body"/>
-      <!--
-      <completeDocForDebugging>
-        <xsl:copy-of select="*"/>
-      </completeDocForDebugging>
-      -->
     </document>
   </xsl:template>
   <!--+
@@ -109,13 +104,29 @@
     <img src="{@xlink:href}" alt="{@draw:name}"/>
   </xsl:template>
   <!--+
-      | Inline Source
+      | Code
       +-->
-  <xsl:template match="text:span[text:style-name='Code']">
+  <xsl:template match="text:span[@text:style-name='Forrest: Code']">
     <code>
       <xsl:value-of select="."/>
     </code>
   </xsl:template>
+  <!--+
+      | sup
+      +-->
+  <xsl:template match="text:span[@text:style-name='Forrest: Above']">
+    <sup>
+      <xsl:value-of select="."/>
+    </sup>
+  </xsl:template>
+  <!--+
+      | sub
+      +-->
+  <xsl:template match="text:span[@text:style-name='Forrest: Below']">
+    <sub>
+      <xsl:value-of select="."/>
+    </sub>
+  </xsl:template>    
   <!--+
       | line breaks 
       +-->
@@ -196,7 +207,7 @@
   <!--+
       | Source
       +-->
-  <xsl:template match="text:p[@text:style-name='Source']">
+  <xsl:template match="text:p[@text:style-name='Forrest: Source']">
     <source>
 <xsl:text>
 </xsl:text>
@@ -206,13 +217,13 @@
    
     </source>
   </xsl:template>      
-  <xsl:template match="text:p[@text:style-name='Source']/text:line-break">
+  <xsl:template match="text:p[@text:style-name='Forrest: Source']/text:line-break">
     <br/>
   </xsl:template> 
   <!--+
       | Warning
       +-->
-  <xsl:template match="text:p[@text:style-name='Warning']">
+  <xsl:template match="text:p[@text:style-name='Forrest: Warning']">
     <warning>
       <xsl:apply-templates/>
     </warning>
@@ -222,7 +233,7 @@
       | - the author attribute is ignored but this has to change with
       |   XHTML2 anyway ... (RP)
       +-->
-  <xsl:template match="text:p[@text:style-name='Fixme']">
+  <xsl:template match="text:p[@text:style-name='Forrest: Fixme']">
     <fixme>
       <xsl:apply-templates/>
     </fixme>
@@ -230,7 +241,7 @@
   <!--+
       | Note
       +-->
-  <xsl:template match="text:p[@text:style-name='Note']">
+  <xsl:template match="text:p[@text:style-name='Forrest: Note']">
     <note>
       <xsl:apply-templates/>
     </note>
