@@ -5,14 +5,18 @@ Pipeline to generate an aggregated view of all the site's docs.
 This subsitemap defines both a source (*.xml) matcher, and a
 linkmap (linkmap-*) matcher to redefine the internal links.
 
+It works by taking site.xml, transforming each page node into a
+CInclude command, and using the CInclude transformer to create
+the aggregated XML.  Some cleverness required to prevent
+duplicate 'id' attributes.
+
+Generates  :  Source XML, Linkmap
 Example URL:  Typically http://localhost:8888/site.pdf
 Used by    :  sitemap.xmap, which binds the URL to this pipeline
 Uses       :  cocoon://abs-linkmap, in linkmap.xmap
 
-$Revision: 1.4 $
+$Revision: 1.5 $
 ==================================================== -->
-
-
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>

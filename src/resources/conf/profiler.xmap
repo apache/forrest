@@ -1,4 +1,17 @@
 <?xml version="1.0"?>
+<!-- ===============================================
+'profiler' pipeline.  Shows how long each pipeline in the Forrest sitemap takes.
+
+To enable this, uncomment the 'profile-caching' pipeline in sitemap.xmap, and set:
+<map:pipes default="profile-caching">
+
+Example URL:  http://localhost:8888/profiler
+Used by    :  Forrest hackers desperate for speed
+Uses       :  Stats collected by the profile-caching pipeline.
+
+$Revision: 1.4 $
+==================================================== -->
+
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
@@ -23,7 +36,10 @@
         <map:transform src="resources/stylesheets/profile2page.xsl">
           <map:parameter name="use-request-parameters" value="true"/>
         </map:transform>
-        <map:transform src="resources/stylesheets/page2html.xsl"/>
+        <map:transform src="resources/stylesheets/complex-page2html.xsl">
+          <map:parameter name="contextPath" value="{request:contextPath}"/>
+        </map:transform>
+
         <map:serialize/>
       </map:match>
 
