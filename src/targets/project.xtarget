@@ -2,9 +2,9 @@
   <!-- Targets for this project                                            -->
   <!-- =================================================================== -->
 
-  <!-- =================================================================== -->
-  <!-- Prepares the docs                                                   -->
-  <!-- =================================================================== -->
+  <!-- ================== -->
+  <!-- Prepares the docs  -->
+  <!-- ================== -->
   <target name="prepare-docs" depends="init">
 
     <property name="centipede.tools.cents.forrest.loglevel" value="INFO"/> 
@@ -61,7 +61,7 @@
 
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
-      <fileset dir="${documentation.source.dir}/conf">
+      <fileset dir="${context.dir}/conf">
         <include name="sitemap.xmap"/>
         <include name="cocoon.xconf"/>        
       </fileset> 
@@ -69,7 +69,7 @@
 
      <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}/WEB-INF/" filtering="on">
-      <fileset dir="${documentation.source.dir}/conf">
+      <fileset dir="${context.dir}/conf">
         <exclude name="sitemap.xmap"/>
       </fileset> 
     </copy>
@@ -183,30 +183,7 @@
     </copy>
   </target>
 
-  <target name="testpoigen" depends="init">
-   
-    <antcall target="getcvsmodule">
-      <param name="getcvsmodule.package"  value="jakarta-poi"/>
-      <param name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />       
-    </antcall>
-                       
-    <antcall target="prepare-docs">
-      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi"/>
-    </antcall>
-    
-    <antcall target="owdocs"></antcall>
-    
-    <antcall target="deploy">
-      <param name="deploy.username"     value="nicolaken"/>
-      <param name="deploy.package-name" value="jakarta-poi"/>
-      <param name="deploy.data.dir"     value="${build.dir}/docs"/>
-      <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
-      <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/poi"/>
-    </antcall>             
-                          
-  </target> 
-  
-  
+ 
   <target name="getcvsmodule" depends="init">
    
     <property name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" /> 
@@ -272,30 +249,9 @@
   </target>
 
   <!-- =================================================================== -->
-  <!-- Set a variable if javadoc is already up-to-date.                    -->
-  <!-- =================================================================== -->
-  <target name="javadocs_check">
-    <uptodate property="javadocs.notrequired" targetfile="${build.javadocs}/packages.html" >
-      <srcfiles dir= "${build.src}" includes="**/*.java"/>
-    </uptodate>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- If javadoc is already up-to-date, print a message saying so.        -->
-  <!-- =================================================================== -->
-  <target name="javadocs_done" if="javadocs.notrequired">
-    <echo message="-------------------------------------------------------------"/>
-    <echo message="Not rebuilding Javadocs, as they are up-to-date:"/>
-    <echo message="  ${build.javadocs}/packages.html is more recent than"/>
-    <echo message="  ${build.src}/**/*.java"/>
-    <echo message="-------------------------------------------------------------"/>
-  </target>
-
-  <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
   <!-- =================================================================== -->
-  <target name="javadocs" depends="prepare-src, javadocs_check, javadocs_done"
-      unless="javadocs.notrequired"
+  <target name="javadocs" depends="prepare-src"
       description="* Generates the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="${packages}"
@@ -312,3 +268,42 @@
       <classpath refid="classpath"/>
     </javadoc>
   </target>
+  
+  
+  
+  
+  
+  <target name="testpoi" depends="init, testpoicvs, testpoigen, testpoideploy"/>
+    
+    
+  <target name="testpoicvs" depends="init">
+   
+    <antcall target="getcvsmodule">
+      <param name="getcvsmodule.package"  value="jakarta-poi"/>
+      <param name="getcvsmodule.work.dir" value="${build.dir}/work/forrest/cvsmodule" />       
+    </antcall>
+                          
+  </target> 
+  
+  <target name="testpoigen" depends="init">
+   
+    <antcall target="prepare-docs">
+      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi"/>
+    </antcall>
+    
+    <antcall target="owdocs"></antcall>
+                          
+  </target> 
+  
+  <target name="testpoideploy" depends="init">
+   
+ 
+    <antcall target="deploy">
+      <param name="deploy.username"     value="nicolaken"/>
+      <param name="deploy.package-name" value="jakarta-poi"/>
+      <param name="deploy.data.dir"     value="${build.dir}/docs"/>
+      <param name="deploy.hostname"     value="krysalis.sourceforge.net"/>
+      <param name="deploy.remotedir"    value="/home/groups/k/kr/krysalis/htdocs/poi"/>
+    </antcall>             
+                          
+  </target>   
