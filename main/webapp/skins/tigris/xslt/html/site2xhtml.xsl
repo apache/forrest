@@ -36,16 +36,16 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
-  
+
   <xsl:template match="site">
     <html>
       <head>
         <xsl:call-template name="html-meta"/>
         <style type="text/css">
-          /* <![CDATA[ */ 
-          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";  
-          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/quirks.css"; 
-          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/inst.css"; 
+          /* <![CDATA[ */
+          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";
+          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/quirks.css";
+          @import "]]><xsl:value-of select="$root"/><![CDATA[skin/inst.css";
          /*  ]]> */
         </style>
         <link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" />
@@ -76,19 +76,16 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           |       bottomstrip       |
           +=========================+
         -->
-        
+
         <xsl:call-template name = "topstrip" />
-
         <xsl:call-template name="centerstrip"/>
-
         <xsl:call-template name="bottomstrip"/>
-        
       </body>
     </html>
   </xsl:template>
 
   <xsl:template name="topstrip">
-    <!--   
+    <!--
         +======================================================+
         |+============+    +==============+    | search box |  |
         || group logo |    | project logo |    +============+  |
@@ -97,9 +94,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         ||tab|tab|tab|                                         |
         +======================================================+
         ||subtab|subtab|subtab|                  publish date  |
-        +======================================================+        
-    -->    
-    <div id="banner">   
+        +======================================================+
+    -->
+    <div id="banner">
       <table border="0" cellspacing="0" cellpadding="8" width="100%">
        <tr>
        <!-- ( ================= Group Logo ================== ) -->
@@ -116,12 +113,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <span class="alt"><xsl:value-of select="$config/group-name"/></span>
           </xsl:if>
         </td>
-               
-
         <!-- ( ================= Project Logo ================== ) -->
         <td align="center" >
          <xsl:if test="$config/project-url">
-           <div><!--<div id="sc">-->
+           <div>
             <xsl:call-template name="renderlogo">
               <xsl:with-param name="name" select="$config/project-name"/>
               <xsl:with-param name="url" select="$config/project-url"/>
@@ -129,9 +124,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
           </div>
-          </xsl:if>        </td>
-        
-        <!-- ( =================  Search ================== ) -->        
+          </xsl:if>
+          </td>
+        <!-- ( =================  Search ================== ) -->
 	  <td align="right" valign="top">
 	    <xsl:if test="$config/search and not($config/search/@box-location = 'alt')">
 	      <div id="login" align="right" class="right">
@@ -140,8 +135,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 		    <form method="get" action="{$root}{$lucene-search}">
 		      Search
 		      the <xsl:value-of select="$config/search/@name"/> site
-		      for 
-		      <input type="text" id="query" name="queryString" size="15"/> 
+		      for
+		      <input type="text" id="query" name="queryString" size="15"/>
 		      <input type="submit" value="Go" name="Search"/>
 		    </form>
 		  </xsl:when>
@@ -149,20 +144,19 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 		    <form method="get" action="http://www.google.com/search" target="_blank">
 		      <select name="as_sitesearch">
 			<option value="">Search...</option>
-			
 			<option value="{$config/search/@domain}">The <xsl:value-of select="$config/search/@name"/> site</option>
 			<option value="">The web</option>
-		      </select> for 
-		      <input type="text" id="query" name="as_q" size="15"/> 
+		      </select> for
+		      <input type="text" id="query" name="as_q" size="15"/>
 		      <input type="submit" value="Go" name="Search"/>
 		    </form>
 		  </xsl:otherwise>
 		</xsl:choose>
 	      </div>
 	    </xsl:if>
-	  </td>       
-       </tr>   
-      </table>  
+	  </td>
+       </tr>
+      </table>
      </div>
 
       <!-- ( ================= Tabs ================== ) -->
@@ -172,7 +166,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <tr>
           <td>
             <xsl:apply-templates select="div[@class='level2tab']"/>
-          </td> 
+          </td>
           <td>
             <div align="right">
               <script language="JavaScript" type="text/javascript"><![CDATA[<!--
@@ -181,17 +175,17 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             </div>
           </td>
         </tr>
-      </table>        
-      
+      </table>
+
   </xsl:template>
-  
+
   <xsl:template match="td[@class='tasknav']/div[@align='left']" >
     <xsl:call-template name="breadcrumbs"/>
   </xsl:template>
 
   <!-- Generates the TXT link -->
   <xsl:template match="div[@id='skinconf-txtlink']">
-    <xsl:if test="not($config/disable-txt-link) or $disable-txt-link = 'false'"> 
+    <xsl:if test="not($config/disable-txt-link) or $disable-txt-link = 'false'">
       <div class="txtlink" title="Text Format"><a href="{$filename-noext}.txt" class="dida">
         <img class="skin" src="{$skin-img-dir}/txtdoc.gif" alt="TXT -icon" /><br/>
         TXT</a>
@@ -200,7 +194,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
   <!-- Generates the PDF link -->
   <xsl:template match="div[@id='skinconf-pdflink']">
-    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
+    <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'">
       <div class="pdflink" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
         <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF -icon" /><br/>
         PDF</a>
@@ -209,7 +203,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
   <!-- Generates the XML link -->
   <xsl:template match="div[@id='skinconf-xmllink']">
-    <xsl:if test="not($config/disable-xml-link) or $disable-xml-link = 'false'"> 
+    <xsl:if test="not($config/disable-xml-link) or $disable-xml-link = 'false'">
       <div class="xmllink" title="raw XML"><a href="{$filename-noext}.xml" class="dida">
         <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
         XML</a>
@@ -218,7 +212,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
   <!-- generates the pod link -->
   <xsl:template match="div[@id='skinconf-podlink']">
-    <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'"> 
+    <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'">
       <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">
         <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" /><br/>
         POD</a>
@@ -227,7 +221,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
   <!-- Generates the "printer friendly version" link -->
   <xsl:template match="div[@id='skinconf-printlink']">
-    <xsl:if test="not($config/disable-print-link) or $disable-print-link = 'false'"> 
+    <xsl:if test="not($config/disable-print-link) or $disable-print-link = 'false'">
         <script type="text/javascript" language="Javascript">
 function printit() {
   if (window.print) {
@@ -241,17 +235,17 @@ function printit() {
 var NS = (navigator.appName == "Netscape");
 var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
-  document.write('<div class="printlink" title="Print this Page">');
-  document.write('  <a href="javascript:printit()" class="dida">');
-  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
-  document.write('    <br />');
-  document.write('  PRINT</a>');
-  document.write('</div>');
+  document.write('<div class="printlink" title="Imprimir esta página">' +
+                               '  <a href="javascript:printit()" class="dida">' +
+                               '<img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />' +
+                                '    <br />' +
+                                '  IMPRIMIR</a>' +
+                                '</div>');
 }
         </script>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template name="centerstrip" >
    <!--
      +=========+======================+
@@ -299,7 +293,7 @@ if (VERSION > 3) {
         <strong>Section</strong>
       </div>
       <xsl:apply-templates select="div[@class='menu']"/>
-      
+
       <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
         <xsl:if test="//tocitems/tocitem">
           <div class="label">
@@ -319,14 +313,14 @@ if (VERSION > 3) {
                 </xsl:choose>
               </div>
             </xsl:for-each>
-          </div>     
+          </div>
         </xsl:if>
       </xsl:if>
     </div>
 
     <!-- ( ================= end Menu items ================== ) -->
 
-    <!-- ( =================  Search ================== ) -->       
+    <!-- ( =================  Search ================== ) -->
       <xsl:if test="$config/search and ($config/search/@box-location = 'alt' or $config/search/@box-location = 'all')">
 	<xsl:choose>
 	  <!-- Lucene search -->
@@ -339,10 +333,10 @@ if (VERSION > 3) {
 		    <xsl:value-of select="$config/search/@name"/>
 		  </div>
 		  <div>
-		    <input type="text" id="query" name="queryString" size="12" /> 
+		    <input type="text" id="query" name="queryString" size="12" />
 		    <input type="submit" value="Go" name="Go" />
 		  </div>
-		</div>   
+		</div>
 	      </div>
 	    </form>
 	  </xsl:when>
@@ -359,25 +353,23 @@ if (VERSION > 3) {
 		    </select>
 		  </div>
 		  <div>
-		    <input type="text" id="query" name="as_q" size="12" /> 
+		    <input type="text" id="query" name="as_q" size="12" />
 		    <input type="submit" value="Go" name="Go" />
 		  </div>
-		</div>   
+		</div>
 	      </div>
 	    </form>
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:if>
 
-    
+
  	<xsl:if test="$filename = 'index.html' and $config/credits">
       <div id="admfun" class="toolgroup">
         <div class="label">
          <strong>Credits</strong>
         </div>
         <div class="body">
-
-        
     <table>
 		        <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
 		          <xsl:variable name="name" select="name"/>
@@ -385,7 +377,7 @@ if (VERSION > 3) {
 		          <xsl:variable name="image" select="image"/>
 		          <xsl:variable name="width" select="width"/>
 		          <xsl:variable name="height" select="height"/>
-		          <tr> 
+		          <tr>
 		            <td></td>
 		            <td colspan="4" height="5" class="logos">
 		              <a href="{$url}">
@@ -399,33 +391,34 @@ if (VERSION > 3) {
 		                </img>
 		              </a>
 		            </td>
-		          </tr> 
+		          </tr>
 		        </xsl:for-each>
-            </table>         
+            </table>
         </div>
       </div>
-    </xsl:if>      
+    </xsl:if>
   </div>
-
   </xsl:template>
- 
+
   <xsl:template name="mainarea">
       <xsl:apply-templates select="div[@class='content']"/>
   </xsl:template>
-  
+
   <xsl:template name="bottomstrip">
     <!-- ( ================= start Footer ================== ) -->
   <div id="footer">
    <table border="0" cellspacing="0" cellpadding="4">
     <tr>
-     <td><xsl:if test="$config/host-logo and not($config/host-logo = '')">
+     <xsl:if test="$config/host-logo and not($config/host-logo = '')">
+        <td>
             <xsl:call-template name="renderlogo">
               <xsl:with-param name="name" select="$config/host-name"/>
               <xsl:with-param name="url" select="$config/host-url"/>
               <xsl:with-param name="logo" select="$config/host-logo"/>
               <xsl:with-param name="root" select="$root"/>
             </xsl:call-template>
-        </xsl:if></td>
+        </td>
+    </xsl:if>
      <td>
       <xsl:choose>
         <xsl:when test="$config/copyright-link">
@@ -433,12 +426,14 @@ if (VERSION > 3) {
             <xsl:attribute name="href">
               <xsl:value-of select="$config/copyright-link"/>
             </xsl:attribute>
-          Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+          Copyright &#169; <xsl:value-of select="$config/year"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="$config/vendor"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+          Copyright &#169; <xsl:value-of select="$config/year"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="$config/vendor"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -450,16 +445,16 @@ if (VERSION > 3) {
         <xsl:call-template name="feedback"/>
       </xsl:if>
      </td>
-    <td align="right" nowrap="nowrap">
+    <td class="footerLogos" nowrap="nowrap">
           <xsl:call-template name="compliancy-logos"/>
-          <xsl:call-template name="bottom-credit-icons"/>              
+          <xsl:call-template name="bottom-credit-icons"/>
     </td>
     </tr>
    </table>
   </div>
    <!-- ( ================= end Footer ================== ) -->
   </xsl:template>
-    
+
   <xsl:template name="bottom-credit-icons">
       <!-- old place where to put credits icons-->
       <!--
