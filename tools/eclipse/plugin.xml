@@ -17,13 +17,13 @@
 <?eclipse version="3.0"?>
 <plugin
    id="org.apache.forrest.eclipse"
-   name="Forrest Plug-in"
+   name="%pluginName"
    version="0.1.0"
-   provider-name="The Apache Software Foundation"
+   provider-name="%providerName"
    class="org.apache.forrest.eclipse.ForrestPlugin">
 
    <runtime>
-      <library name="forrestplugin.jar">
+      <library name="%pluginName.jar">
          <export name="*"/>
       </library>
    </runtime>
@@ -33,10 +33,12 @@
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ant.core"/>
       <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.webbrowser"/>
    </requires>
 
 
@@ -99,5 +101,15 @@
                id="org.apache.forrest.eclipse.BuildServer"/>
       </objectContribution>
    </extension>
+  
+  <extension point="org.eclipse.ui.editors">
+    <editor id="org.eclipse.webbrowser"
+      name="%viewWebBrowserTitle"
+      icon="icons/obj16/internal_browser.gif"
+      class="org.eclipse.webbrowser.internal.WebBrowserEditor"
+      extensions="html,htm,gif,jpg,jpeg,xhtml"
+      contributorClass="org.eclipse.webbrowser.internal.WebBrowserEditorActionBarContributor"/>
+  </extension>
+   
 
 </plugin>
