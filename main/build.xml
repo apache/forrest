@@ -323,7 +323,7 @@
   <target name='expand-dtd' depends="init"
      description="Generates '-full' DTDs, with all entity refs expanded, for use with catalog-ignorant editors like IDEA">
 	<taskdef name="dtd2xml" classpathref="classpath" classname="org.cyberneko.dtd.anttasks.DTD2XML"/>
-	<property name="dtdx.dir" location="build/tmp/dtdx"/>
+	<property name="dtdx.dir" location="${build.dir}/tmp/dtdx"/>
 	<mkdir dir="${dtdx.dir}"/>
 	<!-- Generate an intermediate XML representation of each DTD -->
 	<dtd2xml classpathref="classpath" outputDir="${dtdx.dir}" preserveDirs="yes" extension=".dtdx">
@@ -339,13 +339,11 @@
 			<include name="howto-v13.dtd"/>
 			<include name="todo-v12.dtd"/>
 			<include name="todo-v13.dtd"/>
-			<include name="v20a/document-v20.dtd"/>
-			<include name="v20a/faq-v20.dtd"/>
-                        <include name="v20/document-v20.dtd"/>
-                        <include name="v20/changes-v20.dtd"/>
-                        <include name="v20/faq-v20.dtd"/>
-                        <include name="v20/howto-v20.dtd"/>
-                        <include name="v20/todo-v20.dtd"/>
+      <include name="v20/document-v20.dtd"/>
+      <include name="v20/changes-v20.dtd"/>
+      <include name="v20/faq-v20.dtd"/>
+      <include name="v20/howto-v20.dtd"/>
+      <include name="v20/todo-v20.dtd"/>
 		</fileset>
 	</dtd2xml>
 
@@ -354,7 +352,7 @@
 	<xslt basedir="${dtdx.dir}"
 		destdir="${dist-shbat.dir}/webapp/resources/schema/dtd"
 		extension="-full.dtd"
-    style="tools/dtdconverters/dtdx2dtd.xsl">
+    style="../tools/dtdconverters/dtdx2dtd.xsl">
     <include name="*.dtdx"/>
     <include name="v20a/*.dtdx"/>
   </xslt>
