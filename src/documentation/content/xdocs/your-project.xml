@@ -2,125 +2,415 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
- <header>
-  <title>Your Project - getting started with using Forrest</title>
-  <subtitle>Overview</subtitle>
-  <version>0.1</version>
-  <authors>
-   <person name="David Crossley" email="crossley@apache.org"/>
-  </authors>
- </header>
+  <header>
+    <title>Using Forrest</title>
+    <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
+    <version>0.9</version>
+    <authors>
+      <person name="Jeff Turner" email="jefft@apache.org"/>
+    </authors>
+  </header>
 
- <body>
- <section>
-  <title>Goal</title>
-  <p>
-   You have your own project and you want to use Forrest to build the project
-   documentation.
-  </p>
- </section>
+  <body>
+    <section>
+      <title>Introduction</title>
+      <p>
+        This tutorial will lead you through the process of installing Forrest, and using
+        it to create a new project, or add Forrest-based docs to an existing project.
+      </p>
+    </section>
 
- <section>
-  <title>Introduction</title>
-  <p>
-   The <strong>ForrestBot</strong> will automatically build and publish your
-   documentation on a regular basis. The versatile ForrestBot can retrieve
-   source XML instances from various type of repository (e.g. local filesystem,
-   local CVS, remote CVS), generate the documents, and copy the result to a
-   local or remote location (optionally via secure methods). It can be run
-   from the command-line as part of your documentation edit-build-review cycle,
-   it can be called from cron to automate your website update, it can operate
-   as a centralised docs-build service for a set of remote projects, it can do
-   tasks in parallel, and do even more.
-  </p>
-  <p>
-   This document provides a concise overview of one particular scenario. See
-   <link href="forrestbot.html">The ForrestBot</link> for details and understand
-   <link href="forrest-contract.html">Our Contract</link>.
-   Please send your feedback to <code>forrest-dev</code> - the ForrestBot
-   will be enhanced to meet diverse needs.
-  </p>
-  <p>
-   (Building the documentation for the actual Forrest project is a separate
-   issue. Use
-   <code>./build.sh clean docs</code> ... that will provide overview
-   documentation about how Forrest operates and how you can help to improve it.)
-  </p>
- </section>
+    <section>
+      <title>Getting the Forrest source</title>
+      <p>
+        Currently, the only way to get Forrest is through CVS. Please consult <link
+          href="primer.html#cvs">The Forrest Primer</link> for a description of what
+     this involves.</p>
+   <p>Here is how to get Forrest with a shell-based CVS client:</p>
+     <source>
+~/apache$ export CVSROOT=:pserver:anoncvs@cvs.apache.org:/home/cvspublic
+~/apache$ cvs login
+Logging in to :pserver:anoncvs@cvs.apache.org:2401/home/cvspublic
+CVS password: 
+~/apache$ cvs checkout xml-forrest
+U xml-forrest/.cvsignore
+U xml-forrest/appendcp.bat
+U xml-forrest/build-old.xml
+U xml-forrest/build.bat
+....
+     </source>
+   </section>
+   <section>
+     <title>Building and Installing Forrest</title>
+     <p>
+       To build Forrest, type <code>build dist</code> on Windows, or <code>./build.sh
+         dist</code> on Unix. If everything is successful, you should see a message
+       like this:
+     </p>
+     <source>
+  *-----------------------------------------------------------------
+  | installation notice 
+  *-----------------------------------------------------------------
+  | You have succesfully built the shell-bat distribution of forrest.
+  | Please find it at: ./build/dist/shbat
+  | Please copy the contents to the install directory of your choice
+  | Please have the environment variable FORREST_HOME point to it.
+  | It is recommended to add
+  |    unix: $FORREST_HOME/bin: to your $PATH
+  |    win: %FORREST_HOME%\bin; to your %PATH%
+  | Calling
+  |    unix: $FORREST_HOME/bin/forrest -projecthelp
+  |    win: %FORREST_HOME%\bin\forrest -projecthelp
+  | Will list options for the forrest command
+  | More help at http://xml.apache.org/forrest and forrest-dev@xml.apache.org
+  *-----------------------------------------------------------------
+     </source>
+     <p>
+       You now have the binary distribution built in <code>build/dist/shbat</code>.
+       Copy it somewhere more sensible if you like (eg
+       <code>/usr/local/forrest</code> on Unix), though if you intend to update your
+       Forrest from CVS, leaving it where it is would be best.</p>
+     <p>
+       As the message says, you need to add the distribution's <code>bin/</code>
+       ("binary") directory to your PATH variable, so the <code>forrest</code>
+       command is available everywhere:
+     </p>
+     <source>
+~/apache/xml-forrest$ export FORREST_HOME=`pwd`/build/dist/shbat
+~/apache/xml-forrest$ export PATH=$PATH:$FORREST_HOME/bin
+     </source>
+     <p>
+       To see what the forrest command can do, type 'forrest -projecthelp'
+     </p>
+     <source>
+Apache Forrest.  Run 'forrest -projecthelp' to list options
 
- <section>
-  <title>Establish project source directory</title>
-  <p>The directory that contains your XML instances.</p>
-  <ul>
-   <li><code>PROJECT_HOME = /home/you/yourproject</code></li>
-   <li><code>SRC_DOC = $PROJECT_HOME/src/documentation</code></li>
-  </ul>
-  <p>
-   Your XML instance documents are at <code>$SRC_DOC/content/xdocs</code>
-  </p>
- </section>
+Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.build.xml
 
- <section>
-  <title>Establish project configuration</title>
-  <p>
-<code>cp $FORREST_HOME/forrestbot.conf.xml $PROJECT_HOME/yourproject.conf.xml</code>
-   and edit it to replace the <code><![CDATA[<project>]]></code>
-   definitions with our own, i.e.
-  </p>
-<source><![CDATA[
-  <project name="yourProject-local">
-    <prepare>
-        <skin name="basic"/>
-    </prepare>
-    <get-src type="local-copy">
-      <project-dir name="/home/you/yourproject" />
-      <content-dir name="/home/you/yourproject/src/documentation"/>
-    </get-src>
-    <deploy type="local-copy">
-      <destination name="/var/www/html/yourproject"/>
-    </deploy>
-  </project>
-]]></source>
- </section>
+    *=======================================================*
+    |                Forrest Site Builder                   |
+    *=======================================================*
+                              by
+                  Marc Portier (mpo@apache.org)
+                  Jeff Turner (jefft@apache.org)
+  
+        Call this through the /bin/forrest command
+  
+Main targets:
 
- <section>
-  <title>Run ForrestBot</title>
-  <source>
-[you@localhost] cd $FORREST_HOME
-[you@localhost] ./build.sh clean
-[you@localhost] ./build.sh bot \
--Dbot.forrestbot.xconf=$PROJECT_HOME/yourproject.conf.xml \
--Dtemplate.echo=true
-  </source>
- </section>
+ seed    Seeds a directory with a template project doc structure
+ site    Generates a static HTML website for this project
+ war     Generates a dynamic servlet-based website (an packaged .war file)
+ webapp  Generates a dynamic servlet-based website (an unpackaged webapp)
 
- <section>
-  <title>Next Steps</title>
-  <p>Some enhancements to your local ForrestBot would be ...</p>
-  <ul>
-   <li>Add your own skin at 
-   <code>$SRC_DOC/skins/yourproject</code> by copying one of the skins from
-   <code>$FORREST_HOME/src/resources/skins</code> (use basic or forrest-site)
-   </li>
-   <li>Configure another <code><![CDATA[<project>]]></code> to conduct a secure
-     copy to your public website.
-   </li>
-   <li>Manage your XML instances with CVS and instruct ForrestBot to get
-     the source.
-   </li>
-   <li>Get it to send you email about ForrestBot activities.
-   </li>
-  </ul>
- </section>
+Default target: site
+      </source>
+      <p>
+        As 'site' is the default target, just running 'forrest' without options will
+        generate a "static HTML website". For example, typing 'forrest' in the
+       xml-forrest directory would build Forrest's own website. But we're going to be
+       building a new site, so read on.
+      </p>
+    </section>
+    <section>
+      <title>Seeding a new project</title>
+      <p>
+        'Seeding' a project is our own arborial term for adding a template
+        documentation set to your project, which you can then customize.
+      </p>
+      <p>
+        To try this out, create a completely new directory, and type 'forrest seed':
+      </p>
+      <source>
+~/apache/xml-mysite$ forrest seed
+Apache Forrest.  Run 'forrest -projecthelp' to list options
 
- <section>
-  <title>Other methods</title>
-  <p>The recent contribution of <strong>acorn</strong> (a simple Ant script that
-   bootstraps Forrest for a new project.
-See email discussion:
-<link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102958410525990">http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102958410525990</link>
-  </p>
- </section>
+Buildfile: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/bin/../forrest.build.xml
 
+init-props:
+Loading project specific properties from /home/jeff/apache/xml-mysite/forrest.properties
+
+echo-settings:
+
+check-contentdir:
+
+ensure-nocontent:
+
+seed:
+Expanding: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/fresh-site.zip into /home/jeff/apache/xml-mysite
+
+-------------------------------
+~~ Template project created! ~~
+
+Here is an outline of the generated files:
+
+/                         # /home/jeff/apache/xml-mysite
+/status.xml               # File listing project developers, todo list and change log
+/forrest.properties       # Optional file describing this site's layout to Forrest
+/src/documentation/       # Doc-specific files
+/src/documentation/skinconf.xml    # Info about your project used by the skin
+/src/documentation/content/xdocs   # XML content.
+/src/documentation/content/xdocs/index.xml  # Home page
+/src/documentation/content/xdocs/book.xml   # Navigation file defining site structure
+/src/documentation/content/xdocs/tabs.xml   # Skin-specific 'tabs' file.
+/src/documentation/resources/images         # Project images (logos, etc)
+
+
+What to do now?
+
+- Try rendering this template to HTML by typing 'forrest'. View the generated HTML
+  in a browser to make sure everything works.
+- Edit status.xml and src/documentation/skinconf.xml and customize for your project.
+- Replace src/documentation/resources/images/project-logo.gif with your project logo.
+- Start adding content in xdocs/, remembering to add new files to book.xml
+- Give any feedback you have to forrest-dev@xml.apache.org
+
+Thanks for using Apache Forrest
+-------------------------------
+    
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+      </source>
+      <note>
+        As you've probably begun to notice, we like to document things right in the
+        script, on the theory that people only read online docs when desperate :)
+      </note>
+      <p>
+        You now have a template documentation structure all set up:
+      </p>
+      <source>
+jeff@expresso:~/apache/xml-mysite$ tree
+.
+|-- forrest.properties
+|-- src
+|   `-- documentation
+|       |-- README.txt
+|       |-- content
+|       |   `-- xdocs
+|       |       |-- book.xml
+|       |       |-- index.xml
+|       |       |-- sample.xml
+|       |       `-- tabs.xml
+|       |-- resources
+|       |   `-- images
+|       |       |-- group-logo.gif
+|       |       `-- project-logo.gif
+|       `-- skinconf.xml
+`-- status.xml
+      </source>
+      <p>
+        To render this to HTML, type 'forrest'. You should have a HTML site rendered
+        into the <code>build/site</code> directory:
+      </p>
+      <figure src="images/new-project.png" height="356" width="500" alt="New project"/>
+      <section>
+        <title>Seeding an existing project</title>
+        <p>
+          In the section above, we have run 'forrest seed' in an empty directory. If you
+          have an existing codebase which you wish to add Forrest docs to, run 'forrest
+          seed' in your project base directory, and the Forrest doc structure will be
+          grafted onto your project.
+        </p>
+      </section>
+      <section>
+        <title>Customizing your project: skinconf.xml</title>
+        <p>
+          Having seeded a project with template docs, you will now want to customize it
+          to your project's needs. Most Forrest skins can be customized through a single
+          XML file, <code>src/documentation/skinconf.xml</code>, which (minus its DTD)
+          looks like this:
+        </p>
+        <source><![CDATA[
+          <?xml version="1.0"?>
+
+          <!--
+          Skin configuration file. This file contains details of your project, which will
+          be used to configure the chosen Forrest skin.
+          -->
+          <skinconfig>
+            <!-- Do we want the Google search box? -->
+            <disable-search>false</disable-search>
+
+            <project-name>MyProject</project-name>
+            <project-url>http://myproj.mygroup.org/</project-url>
+            <project-logo>images/project-logo.gif</project-logo>
+
+            <group-name>MyGroup</group-name>
+            <group-url>http://mygroup.org</group-url>
+            <group-logo>images/group-logo.gif</group-logo>
+
+            <!-- Eg, a sourceforge logo. forrest-site renders it to the bottom-left corner -->
+            <host-logo></host-logo>
+
+            <!-- The following used to construct a copyright statement -->
+            <year>2002</year>
+            <vendor>The Apache Software Foundation.</vendor>
+
+            <!-- Some skins use this to form a 'breadcrumb trail' of links. If you don't
+            want these, set the attributes to blank. The DTD purposefully requires them.
+            -->
+            <trail>
+              <link1 name="apache" href="http://www.apache.org/"/>
+              <link2 name="xml.apache" href="http://xml.apache.org/"/>
+              <link3 name="" href=""/>
+            </trail>
+
+            <!-- Credits are typically rendered as a set of small clickable images in the
+            page footer -->
+            <credits>
+              <credit>
+                <name>Built with Cocoon</name>
+                <url>http://xml.apache.org/cocoon/</url>
+                <image>skin/images/built-with-cocoon.gif</image>
+                <width>88</width>
+                <height>31</height>
+              </credit>
+              <credit>
+                <name>Krysalis Centipede</name>
+                <url>http://www.krysalis.org/centipede/</url>
+                <image>skin/images/centipede-logo-small.gif</image>
+                <width>138</width>
+                <height>31</height>
+              </credit>
+            </credits>
+          </skinconfig>
+          ]]></source>
+        <p>
+          Customise this file for your project. The <code>images/</code> directory
+          mentioned in 'project-logo' and 'group-logo' elements correspond to the
+          <code>src/documentation/resources/images</code> directory (this mapping is done
+          in the sitemap).
+        </p>
+        <p>
+          Having edited this file (and ensured it is valid XML!), re-run the 'forrest'
+          command in the site root, and the site should be updated.
+        </p>
+      </section>
+      <section>
+        <title>Adding content</title>
+        <p>
+          Now you can start adding content of your own, in
+          src/documentation/content/xdocs.
+        </p>
+        <section>
+          <title>book.xml</title>
+          <p>
+            Whenever adding a new file, you should add an entry to that directory's
+            <code>book.xml</code> file. book.xml is like a site index, and is rendered as
+            the vertical column of links in the default skin. Each directory below xdocs/
+            should have it's own book.xml, with links suitably adjusted. Have a look at
+            Forrest's own xdocs for an example.
+          </p>
+        </section>
+        <section>
+          <title>tabs.xml</title>
+          <p>
+            The <code>tabs.xml</code> file is used to produce the 'tabs' in the top-left
+            corner of the default skin. Tabs allow users to quickly just to sections of
+            your site. Again, consult Forrest's own docs for a usage example.
+          </p>
+        </section>
+        <section>
+          <title>Images</title>
+          <p>
+            Images usually go in src/documentation/resources/images/. The default sitemap
+            maps this directory to <code>images/</code>, so image tags will typically look
+            like &lt;figure src="images/project-logo.png" alt="Project Logo"/&gt; 
+          </p>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title>Advanced usage</title>
+      <p>
+        Armed with only the techniques described above, it is quite easy to generate a
+        basic Forrest site. This section deals with more advanced customizations and
+        techniques that can make Forrest development much easier.
+      </p>
+      <section>
+        <title>Creating a custom skin</title>
+        <p>TODO: add content</p>
+      </section>
+      <section>
+        <title>Changing the default layout</title>
+        <p>
+          For a simple site, Forrest's default directory layout may seem rather
+          cumbersome.  Forrest allows you to place files anywhere you want in your
+          project, so long as you tell Forrest where you have placed the major file
+          types.
+        </p>
+        <p>
+          The <code>forrest.properties</code> file is what maps from your directory
+          layout to Forrest's. If you generated your site with 'forrest seed', you
+          should have one pre-written, with all the entries commented out. The relevant
+          <code>forrest.properties</code>entries (with default values) are:
+        </p>
+        <source>
+# Properties that must be set to override the default locations
+project.status=status.xml
+project.content-dir=src/documentation
+project.conf-dir=${project.content-dir}/conf
+project.sitemap=${project.content-dir}/sitemap.xmap
+project.xdocs-dir=${project.content-dir}/content/xdocs
+project.stylesheets-dir=${project.content-dir}/resources/stylesheets
+project.images-dir=${project.content-dir}/resources/images
+project.schema-dir=${project.content-dir}/resources/schema
+project.skins-dir=${project.content-dir}/skins
+project.skinconf=${project.content-dir}/skinconf.xml
+project.lib-dir=${project.content-dir}/lib
+project.classes-dir=${project.content-dir}/classes
+       </source>
+       <p>
+         For example, if you wish to keep XML documentation in src/xdocs rather than
+         src/documentation/content/xdocs, simply change the 'project.xdocs-dir'
+         definition:
+       </p>
+       <source>
+         project.xdocs-dir=src/xdocs
+       </source>
+       <p>
+         Say we wish to emulate the nice and simple <link
+           href="http://jakarta.apache.org/turbine/maven">Maven</link> format:
+       </p>
+       <p xml:space="preserve">
+         /xdocs
+         /xdocs/images
+         /xdocs/stylesheets
+       </p>
+       <p>Here are the required property definitions:</p>
+       <source>
+project.content-dir=xdocs
+project.sitemap=${project.content-dir}/sitemap.xmap
+project.xdocs-dir=${project.content-dir}
+project.stylesheets-dir=${project.content-dir}/stylesheets
+project.images-dir=${project.content-dir}/images
+project.skinconf=${project.content-dir}/skinconf.xml
+         </source>
+         <note>
+           Internally, Forrest rearranges the specified directory into the default
+           "src/documentation/content/xdocs" structure. In the layout above, we have
+           overlapping directories, so you'll end up with duplicate files. This small
+           glitch doesn't usually cause problems; just always remember that all links
+           are resolved through the sitemap.
+         </note>
+       </section>
+
+       <section>
+         <title>"It's too slow!" Developing as a webapp</title>
+         <p>
+           In comparison to simpler tools like <link
+             href="http://jakarta.apache.org/velocity/anakia.html">Anakia</link>,
+           Cocoon's command-line mode (and hence Forrest) is painfully slow.
+         </p>
+         <p>
+           As the <link href="dreams.html">dream list</link> notes, Forrest was
+           originally intended to be used for dynamic sites, and the Cocoon crawler used
+           only to create static snapshots for mirroring. 
+         </p>
+         <p>TODO: add more content</p>
+       </section>
+     </section>
  </body>
 </document>
