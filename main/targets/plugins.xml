@@ -91,6 +91,15 @@
      </xslt>
      <move file="${forrest.plugins-dir}/input.xmap.new" 
        tofile="${forrest.plugins-dir}/input.xmap"/>
+     <xslt in="${forrest.plugins-dir}/resources.xmap"
+       out="${forrest.plugins-dir}/resources.xmap.new"
+       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin.name}"/>  
+           <param name="plugin-type" expression="resources"/>  
+     </xslt>
+     <move file="${forrest.plugins-dir}/resources.xmap.new" 
+       tofile="${forrest.plugins-dir}/resources.xmap"/>
   </target>
   
   <target name="configure-output-plugin"
@@ -173,6 +182,9 @@
     <mkdir dir="${forrest.plugins-dir}"/>
     <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/input.xmap"
+      overwrite="true"/>
+    <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
+      tofile="${forrest.plugins-dir}/resources.xmap"
       overwrite="true"/>
     <copy file="${forrest.home}/var/initial_plugins_sitemap.xmap"
       tofile="${forrest.plugins-dir}/output.xmap"

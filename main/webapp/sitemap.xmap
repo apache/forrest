@@ -667,6 +667,16 @@ $Revision: 1.12 $
       <map:match pattern="profiler">
         <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
       </map:match>
+        
+      <map:select type="exists">
+         <map:when test="{forrest:plugins}/resources.xmap">
+           <map:mount uri-prefix="" 
+                      src="{forrest:plugins}/resources.xmap" 
+                      check-reload="yes" 
+                      pass-through="true"/>
+        </map:when>  
+      </map:select>
+      
       <map:match pattern="**.js">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
       </map:match>
