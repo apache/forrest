@@ -35,9 +35,6 @@ public final class ExecuteAction extends BaseAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
 		
-		if (!checkAuthorized(request, response))
-			return mapping.findForward(Constants.FORWARD_NAME_SUCCESS);
-
 		ActionErrors errors = new ActionErrors();
 
 		String project = (String) PropertyUtils.getSimpleProperty(form, "project");
@@ -45,6 +42,9 @@ public final class ExecuteAction extends BaseAction {
 		String deploy = (String) PropertyUtils.getSimpleProperty(form, "deploy");
 
 		request.setAttribute("project", project);
+
+		if (!checkAuthorized(request, response))
+			return mapping.findForward(Constants.FORWARD_NAME_SUCCESS);
 
 		if (!Project.exists(project)) {
 			log.warn("project doesn't exist: " + project);
