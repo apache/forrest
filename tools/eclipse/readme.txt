@@ -2,10 +2,12 @@ This is a plugin for Eclipse. It provides some basic funtionality for Forrest.
 
 Currently implemented features include:
 
-- Start and Stop Forrest
+- Start Forrest and launch the index page in an internal browser 
+  svn del plu (Stop currently broken)
 - Build a Forrest site
 - Seed a new Project
 - Add a new XDoc to the project
+
 
 ============
 Installation
@@ -13,10 +15,9 @@ Installation
 
 To use the plugin you need to install it within Eclipse V3.0 or later.
 
-Although not required we recommend that you also install the Web Tools Platform
-Project (http://www.eclipse.org/webtools/index.html) which will provide many
-useful plugins such as XML and Schema editors, Browser View and much more.
-FIXME: Add Information about how to do this.
+You will also need to install IBM Web Tools Platform contribution
+(see http://www.eclipse.org/webtools/index.html).
+
 
 For Development
 ===============
