@@ -7,6 +7,49 @@
   <xsl:output doctype-public="-//APACHE//DTD Documentation V1.1//EN" doctype-system="document-v11.dtd"/>
   We should something similar, i.e. make sure the result of this transformation is validated against the v11 DTD
   -->
+  
+  <xsl:template match="/">
+    <xsl:choose>
+      <xsl:when test="document">
+        <!-- there exists a document element -->
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- no document element, presumably no header also, so I will generate one -->
+        <document>
+          <header>
+            <title><xsl:value-of select="s1[1]/@title"/></title>
+            <authors><person name="unknown" email="unknown"/></authors>
+          </header>
+          <body>
+            <xsl:choose>
+              <xsl:when test="count(s1)='1'">
+                <!-- only one s1 in the entire document, must be a hack to create a title -->
+                <xsl:choose>
+                  <xsl:when test="count(s1/s2)='1'">
+                    <!-- only one s2 inside that s1, unwrap the content of that s2 -->
+                    <xsl:apply-templates select="s1/s2/*"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <!-- in any case, we get rid of these s1/s2 elements -->
+                    <xsl:apply-templates select="s1/*"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </body>
+        </document>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- no links allowed in em anymore -->
+  <xsl:template match="em[link]">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <!-- fixes sections -->
   <xsl:template match="s1 | s2 | s3 | s4">
@@ -22,6 +65,11 @@
   <xsl:template match="connect">
     <xsl:message terminate="no">The connect element isn't supported anymore in the document-v11.dtd, please fix your document.</xsl:message>
     [[connect: <xsl:value-of select="."/> ]]
+  </xsl:template>
+
+  <xsl:template match="link/@idref">
+    <xsl:message terminate="no">The link element has no idref attribute defined in the document-v11.dtd, please fix your document.</xsl:message>
+    [[link/@idref: <xsl:value-of select="."/> ]]
   </xsl:template>
 
   <xsl:template match="link/@type | link/@actuate | link/@show |
