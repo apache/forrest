@@ -40,9 +40,14 @@ class ExecutorThread extends Thread {
 
 	public void run() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		BufferedReader brErr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
 		try {
 			String line;
+			while ((line = brErr.readLine()) != null) {
+				if (debug)
+					log.error(line);
+			}
 			while ((line = br.readLine()) != null) {
 				if (debug)
 					log.debug(line);
