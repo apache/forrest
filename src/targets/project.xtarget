@@ -2,6 +2,23 @@
   <!-- Targets for this project                                            -->
   <!-- =================================================================== -->
 
+  <target name="run" depends="init">
+   
+    <antcall target="runforrestrun">
+      <param name="getcvsmodule.package"      value="jakarta-poi"/>
+      <param name="getcvsmodule.work.dir"     value="${build.dir}/work/forrest/cvsmodule" />      
+      <param name="documentation.source.dir"  value="${build.dir}/work/forrest/cvsmodule/jakarta-poi/src/documentation"/>       
+      <param name="deploy.username"           value="forrestbot"/>
+      <param name="deploy.package-name"       value="jakarta-poi"/>
+      <param name="deploy.data.dir"           value="${build.dir}/docs"/>
+      <param name="deploy.hostname"           value="krysalis.sourceforge.net"/>
+      <param name="deploy.remotedir"          value="/home/groups/k/kr/krysalis/htdocs/poi"/>
+    </antcall>
+                             
+  </target>
+  
+  <target name="runforrestrun" depends="getcvsmodule, prepare-docs, owdocs, deploy"/>    
+    
   <!-- ================== -->
   <!-- Prepares the docs  -->
   <!-- ================== -->
@@ -10,8 +27,9 @@
     <property name="centipede.tools.cents.forrest.loglevel" value="ERROR"/> 
     <property name="use.skin" value="forrest-site"/> 
     
-    <property name="documentation.source.dir" value="${context.dir}"/>     
-    
+    <property name="documentation.context.dir"  value="${resource.dir}"/>     
+    <property name="documentation.source.dir"   value="${context.dir}"/>    
+        
     <echo>Running docs generation from: ${documentation.source.dir}.</echo>
     
     <!-- define filters -->     
@@ -39,7 +57,6 @@
     <copy todir="${build.context}" filtering="on" overwrite="true">
       <fileset dir="${documentation.source.dir}" casesensitive="no">
         <include name="**/*.x*"/>
-        <exclude name="**/conf/" />
       </fileset>
     </copy>
 
@@ -47,24 +64,9 @@
     <copy todir="${build.context}" filtering="off">
       <fileset dir="${documentation.source.dir}" casesensitive="no">
         <exclude name="**/*.x*"/>
-        <exclude name="**/conf/" />
       </fileset>
-    </copy>
-        
-<!--        
-    <copy todir="${build.context}/content/xdocs/" filtering="on" overwrite="true">
-      <fileset dir="${documentation.source.dir}/xdocs/" casesensitive="no">
-        <include name="**/*.x*"/>
-      </fileset>
-    </copy>
+    </copy>      
 
-    <copy todir="${build.context}/resources/images/" filtering="off">
-      <fileset dir="${documentation.source.dir}/images/" casesensitive="no">
-        <exclude name="**/*.x*"/>
-      </fileset>
-    </copy>
-             
--->
     <!-- Copy entity catalog and entities -->
     <copy todir="${build.context}/resources/schema" filtering="on">
       <fileset dir="${resource.dir}/schema"/>
@@ -78,32 +80,38 @@
 
     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}" filtering="on">
-      <fileset dir="${context.dir}/conf">
+      <fileset dir="${documentation.context.dir}/conf">
         <include name="sitemap.xmap"/>
         <include name="cocoon.xconf"/>        
       </fileset> 
     </copy>
-
-     <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}/WEB-INF/" filtering="on">
-      <fileset dir="${context.dir}/conf">
+      <fileset dir="${documentation.context.dir}/conf">
         <exclude name="sitemap.xmap"/>
       </fileset> 
     </copy>
 
      <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}/library/" filtering="on">
-      <fileset dir="${context.dir}/library">
+      <fileset dir="${documentation.context.dir}/library">
 
       </fileset> 
     </copy>
     
      <!-- Copy Cocoon configuration and sitemap -->
     <copy todir="${build.context}/skins/" filtering="on">
-      <fileset dir="${context.dir}/skins">
+      <fileset dir="${documentation.context.dir}/skins">
+        <exclude name="**/images/**"/>         
       </fileset> 
     </copy>
-        
+
+     <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${build.context}/skins/" filtering="off">
+      <fileset dir="${documentation.context.dir}/skins">
+        <include name="**/images/**"/>      
+      </fileset> 
+    </copy>
+            
   </target>
   
   <!-- =================================================================== -->
