@@ -73,6 +73,13 @@ Building the distribution
  - Understand how to sign releases and generate MD5 and PGP.
    http://wiki.apache.org/incubator/SigningReleases
 
+ - Create a maintenance branch in SVN with
+    svn copy -m "Create the x.y release branch from r#####" \
+    https://svn.apache.org/repos/asf/forrest/trunk \
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch
+   where 'xy' is a compact form of the version (e.g. 04, 041, 05).
+   See http://svn.apache.org/repos/asf/forrest/branches/
+
  - Test the actual distribution on various platforms.
    - Ask all developers to test (command-line, run, and webapp).
    - Each developer can do 'build dist' and test locally. Coordinate to ensure
@@ -81,15 +88,12 @@ Building the distribution
    - Use it to build some difficult sites.
    - Ensure that the compressed archives will unpack correctly.
 
- - If everything looks okay, tag SVN with 'svn copy
-   https://svn.apache.org/repos/asf/forrest/trunk
-   https://svn.apache.org/repos/asf/forrest/tags/forrest_xy', where 'xy' is a
-   compact form of the version (eg 04, 041, 05).  See 
-   http://svn.apache.org/repos/asf/forrest/tags/ for a list of existing tags.
-
- - Create a maintenance branch in SVN with 'svn copy
-   https://svn.apache.org/repos/asf/forrest/tags/forrest_xy
-   https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch'.
+ - If everything looks okay, and after the Vote has finished, tag SVN with
+    svn copy -m "Create tag forrest_xy from release branch" \
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch \
+    https://svn.apache.org/repos/asf/forrest/tags/forrest_xy
+   where 'xy' is a compact form of the version (e.g. 04, 041, 05).
+   See http://svn.apache.org/repos/asf/forrest/tags/D
 
 Upload and announcement
 -----------------------
@@ -99,6 +103,12 @@ Upload and announcement
    to www.apache.org at /www/www.apache.org/ dist/forrest/
    Each PMC member has a server account and belongs to the forrest group.
    The process is documented at http://cvs.apache.org/~bodewig/mirror.html
+
+FIXME: on server do 'svn co' in /www/www.apache.org/dist/forrest/
+HEAD.html README.html LICENSE.txt KEYS
+   For the meantime, it is a manual scp.
+
+ - Arrange stuff at the Archives site http://archive.apache.org/dist/forrest/
 
  - Edit the forrest/src/documentation/content/xdocs/mirrors.ihtml
  - Edit the Forrest home page in the "News and events" section.
@@ -141,6 +151,11 @@ Cleanups
 
  - Edit src/core/forrest.build.xml and update the version:
 
+   around line 29:
+   <property name="version" value="0.7-dev"/>  
+
+    around line 52:
+    <description>
     |                 Forrest Site Builder                  |
     |                        0.7-dev                        |
 
