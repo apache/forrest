@@ -142,6 +142,56 @@ FORREST SITE BUILDER
     <property name="forrest.basic.jvmargs" value="-Dproject.home=&quot;${project.home}&quot; -Dforrest.home=&quot;${forrest.home}&quot;"/>
     <echo>forrest.basic.jvmargs:${forrest.basic.jvmargs}</echo>
 
+    <!-- 
+    Skin aliasing for backwards compatability
+        0.5 => 0.6
+        krysalis-site => book-tab
+        forrest-site => book-tab
+        forrest-css => book-tab
+        avalon-tigris => tigris-style-1_1
+        tigris-style => tigris-style-1_1 
+    -->
+    <if>
+        <equals arg1="${project.skin}" arg2="krysalis-site"/>
+        <then>
+            <property name="project.new-skin-name" value="book-tab"/>
+        </then>
+        <elseif>
+            <equals arg1="${project.skin}" arg2="forrest-site"/>
+            <then>
+                <property name="project.new-skin-name" value="book-tab"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${project.skin}" arg2="forrest-css"/>
+            <then>
+                <property name="project.new-skin-name" value="book-tab"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${project.skin}" arg2="avalon-tigris"/>
+            <then>
+                <property name="project.new-skin-name" value="tigris-style-1_1"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${project.skin}" arg2="tigris-style"/>
+            <then>
+                <property name="project.new-skin-name" value="tigris-style-1_1"/>
+            </then>
+        </elseif>
+    </if>
+    <if>
+        <isset property="project.new-skin-name"/>
+        <then>
+<echo>
+-- Warning --
+skin ${project.skin} no longer exists, using ${project.new-skin-name} instead.  Please update forrest.properties
+</echo>
+            <var name="project.skin" value="${project.new-skin-name}"/>
+        </then>
+    </if>
+
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
   </target>
