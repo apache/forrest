@@ -18,6 +18,7 @@ package org.apache.forrest.conf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.util.Enumeration;
 import java.util.Map;
 
 import org.apache.avalon.framework.activity.Initializable;
@@ -119,9 +120,25 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         filteringProperties = loadAntPropertiesFromURI(filteringProperties,
                         defaultRorrestPropertiesStringURI);
 
+        loadSystemProperties(filteringProperties);
         ForrestConfUtils.aliasSkinProperties(filteringProperties);
         if (debugging())
             debug("Loaded project forrest.properties:" + filteringProperties);
+    }
+
+     /**
+     * Override any properties for which a system property exists
+     */
+    private void loadSystemProperties(AntProperties props) {
+        for (Enumeration e = props.propertyNames(); e.hasMoreElements();) {
+            String propName = (String)e.nextElement();
+            String systemPropValue = System.getProperty(propName);
+            if (systemPropValue != null) {
+                // AntProperties.setProperty doesn't let you override, so we have to remove the property then add it again
+                props.remove(propName);
+                props.setProperty(propName, systemPropValue);
+            }
+        }
     }
 
     /**
