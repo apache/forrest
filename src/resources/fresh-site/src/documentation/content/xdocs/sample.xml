@@ -31,17 +31,34 @@
         which offers the ability to refer to an image map.</li> 
       <li>We have elements for hyperlinking: 
         <dl> 
-          <dt><code>&lt;link href="index.html"&gt;</code></dt> 
+          <dt><code>&lt;link href="site:index"&gt;</code></dt> 
           <dd>Use this to
-            <link href="index.html" title="Example of a document via link">link</link>
-           to another document. As per normal, this will open the new document
-           in the same browser window.</dd> 
+            <link href="site:index" title="Example of a document via link">link</link>
+            to another document in the project, irrespective of where it is and
+            what it's extension will be.  The 'index' node must be defined in
+            site.xml, eg:
+            <!-- FIXME: use 'source' instead when it's allowed -->
+            <code><![CDATA[
+              <site>
+                <index label="Index" href="index.html"/>
+                ...
+                </site>
+            ]]></code>
+          </dd> 
+
+          <dt><code>&lt;link href="index.html"&gt;</code></dt> 
+          <dd>Old-style <link href="index.html" title="Example of a document via
+              link">link</link> directly to a generated file.  The
+            <code>site:</code> equivalent is preferred, as it avoids having to
+            work out <code>..</code>'s, and leaves rendition (HTML, PDF etc) up
+            to the sitemap.
+          </dd> 
 
           <dt><code>&lt;link href="#section"&gt;</code></dt> 
           <dd>Use this to
             <link href="#section" title="Example of a document via local anchor">link</link>
            to the named anchor in the current document.
-          </dd> 
+         </dd> 
 
           <dt><code>&lt;link href="sample.html#top"&gt;</code></dt> 
           <dd>Use this to
@@ -50,11 +67,27 @@
            the new document in the same browser window.
           </dd> 
 
-          <dt><code>&lt;jump href="sample.html"&gt;</code></dt> 
+         <dt><code>&lt;link href="site:sample/section"&gt;</code></dt> 
+         <dd>Same as <code>#section</code> above, <link href="site:sample/section"
+             title="Example of a document via local anchor">links</link> to a
+           named anchor in this file, except is location-independent.  Depends
+           on a site.xml definition like:
+           <!-- FIXME: use 'source' here instead -->
+           <code><![CDATA[
+             <site>
+               <sample label="Sample page" href="sample.html">
+                 <section href="#section"/>
+               </sample>
+             </site>
+             ]]>
+           </code>
+          </dd> 
+
+          <dt><code>&lt;jump href="site:sample"&gt;</code></dt> 
           <dd>Use this to
-            <jump href="sample.html" title="Example of a document via jump">jump</jump>
+            <jump href="site:sample" title="Example of a document via jump">jump</jump>
            to another document and optionally go to a named
-            <jump href="sample.html#top" title="Example of a document via jump to anchor">anchor</jump>
+           <jump href="site:sample/top" title="Example of a document via jump to anchor">anchor</jump>
            within that document. This will open the new document in the same
            browser window. So what is the difference between link and jump?
            The jump behaves differently, in that it will replace any frames
@@ -63,9 +96,9 @@
            <code>&lt;a ... target="_top"&gt;</code>
           </dd>
 
-          <dt><code>&lt;fork href="changes.html"&gt;</code></dt> 
+          <dt><code>&lt;fork href="site:changes"&gt;</code></dt> 
           <dd>Use this to
-            <fork href="changes.html" title="Example of a document via fork">fork</fork>
+            <fork href="site:changes" title="Example of a document via fork">fork</fork>
            your webbrowser to another document. This will open the document
            in a new, unnamed browser window.
            This is the equivalent of
