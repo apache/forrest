@@ -7,21 +7,30 @@
     Generates Forrestbot Ant script for a specified forrestbot.conf.xml file.
   </description>
 
-  <target name="init">
-    <property name="forrestbot.home"          location="${forrest.home}/forrestbot"/>
-    <property name="bot.work.builder.xslt"    location="${forrestbot.home}/xslt/config2work.xsl" />
-    <property name="bot.default.builder.xslt" location="${forrestbot.home}/xslt/config2defaults.xsl" />
+  <property name="forrestbot.home"          location="${forrest.home}/forrestbot"/>
+  <property name="bot.work.builder.xslt"    location="${forrestbot.home}/xslt/config2work.xsl" />
+  <property name="bot.default.builder.xslt" location="${forrestbot.home}/xslt/config2defaults.xsl" />
 
-    <echo>Sourcing ${basedir}/forrestbot.properties</echo>
-    <echo>Sourcing ${forrestbot.home}/forrestbot.properties</echo>
-    <echo>bot.work.build.xml = ${bot.work.build.xml}</echo>
-    <property file="forrestbot.properties"/>
-    <property file="${forrestbot.home}/forrestbot.properties"/>
+  <property file="forrestbot.properties"/>
+  <property file="${forrestbot.home}/forrestbot.properties"/>
 
-    <echo message="Using config file: ${bot.config}" />
+  <available property="bot.config.present" file="${bot.config}" type="file"/>
+  <echo message="Using config file: ${bot.config}" />
+
+  <target name="check-config" unless="bot.config.present">
+    <echo>
+ ---------------- Forrestbot Error -----------------
+ Forrest config file:
+   ${bot.config}
+ not found, resolved relative to:
+ ${basedir})
+ Add -Dbot.config=... to manually specify the file.
+ --------------------------------------------------
+    </echo>
+    <fail message="Forrestbot config file '${bot.config}' not found"/>
   </target>
 
-  <target name="conf2build" depends="init" >
+  <target name="conf2build" depends="check-config">
     <!-- remove previous versions to force generation again -->
     <delete file="${bot.work.build.xml}" />
     <delete file="${bot.default.parameters.xml}" />
