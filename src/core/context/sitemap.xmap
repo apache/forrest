@@ -140,6 +140,7 @@ $Revision: 1.12 $
         <doctype-public>-//W3C//DTD SVG 1.0//EN</doctype-public>
         <doctype-system>http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd</doctype-system>
       </map:serializer>
+      <map:serializer logger="sitemap.serializer.text" mime-type="text/plain" name="text" src="org.apache.cocoon.serialization.TextSerializer"/>
       
      <!--
       <map:serializer mime-type="application/x-shockwave-flash" name="swf" src="org.apache.cocoon.serialization.SWFSerializer"/>
@@ -400,6 +401,35 @@ $Revision: 1.12 $
             <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
           </map:when>
         </map:select>
+      </map:match>
+
+      <!-- Plain Old Documentation -->
+      <map:match type="regexp" pattern="^(.*?)([^/]*).pod$">
+        <map:aggregate element="site">
+          <map:part src="cocoon:/skinconf.xml"/>
+          <map:part src="cocoon:/{1}{2}.xml"/>
+        </map:aggregate>
+        <map:transform type="xinclude"/>
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.pod"/>
+        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl"/>
+        <map:select type="exists">
+          <map:when test="{project:skins-dir}{forrest:skin}/xslt/text/document2pod.xsl">
+            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/pod/document2pod.xsl">
+              <map:parameter name="docname" value="{2}"/>
+            </map:transform>
+          </map:when>
+          <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/text/document2pod.xsl">
+            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/text/document2pod.xsl">
+              <map:parameter name="docname" value="{2}"/>
+            </map:transform>
+          </map:when>
+          <map:otherwise>
+            <map:transform src="{forrest:context}/skins/common/xslt/text/document2pod.xsl">
+              <map:parameter name="docname" value="{2}"/>
+            </map:transform>
+          </map:otherwise>
+        </map:select>
+        <map:serialize type="text"/>
       </map:match>
 
       <map:match pattern="*.html">
