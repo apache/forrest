@@ -16,11 +16,22 @@
 </xsl:template>
 
 <xsl:template match="section" mode="outline">
-  <fox:outline internal-destination="{generate-id()}">
+  <fox:outline>
+    <xsl:attribute name="internal-destination">
+      <xsl:choose>
+        <xsl:when test="normalize-space(@id)!=''">
+          <xsl:value-of select="@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="generate-id()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
     <fox:label>
       <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="title"/>
+
     </fox:label>
     <xsl:apply-templates select="section" mode="outline"/>
   </fox:outline>
