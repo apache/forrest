@@ -192,39 +192,54 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <!-- Generates the PDF link -->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <a href="{$filename-noext}.pdf"><img border="0" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/> PDF</a>
+      <div class="pdflink" title="Portable Document Format"><a href="{$filename-noext}.pdf" class="dida">
+        <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF -icon" /><br/>
+        PDF</a>
+      </div>
     </xsl:if>
   </xsl:template>
-  
   <!-- Generates the XML link -->
   <xsl:template match="div[@id='skinconf-xmllink']">
-    <xsl:if test="$disable-xml-link = 'false'">
-      <a href="{$filename-noext}.xml"><img border="0" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/> xml</a>
+    <xsl:if test="not($config/disable-xml-link) or $disable-xml-link = 'false'"> 
+      <div class="xmllink" title="raw XML"><a href="{$filename-noext}.xml" class="dida">
+        <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
+        XML</a>
+      </div>
     </xsl:if>
   </xsl:template>
-  
+  <!-- generates the pod link -->
+  <xsl:template match="div[@id='skinconf-podlink']">
+    <xsl:if test="not($config/disable-pod-link) or $disable-pod-link = 'false'"> 
+      <div class="podlink" title="Plain Old Documentation"><a href="{$filename-noext}.pod" class="dida">
+        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" /><br/>
+        POD</a>
+      </div>
+    </xsl:if>
+  </xsl:template>
   <!-- Generates the "printer friendly version" link -->
   <xsl:template match="div[@id='skinconf-printlink']">
-    <xsl:if test="$disable-print-link = 'false'"> 
-<script type="text/javascript" language="Javascript">
+    <xsl:if test="not($config/disable-print-link) or $disable-print-link = 'false'"> 
+        <script type="text/javascript" language="Javascript">
 function printit() {
   if (window.print) {
     window.focus();
     window.print();
   }
 }
-</script>
+        </script>
 
-<script type="text/javascript" language="Javascript">
+        <script type="text/javascript" language="Javascript">
 var NS = (navigator.appName == "Netscape");
 var VERSION = parseInt(navigator.appVersion);
 if (VERSION > 3) {
-    document.write('  <a href="javascript:printit()">');
-    document.write('    <img border="0"  src="{$skin-img-dir}/printer.gif" alt="Print this Page"/>');
-    document.write('  print</a>');
+  document.write('<div class="printlink" title="Print this Page">');
+  document.write('  <a href="javascript:printit()" class="dida">');
+  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
+  document.write('    <br />');
+  document.write('  PRINT</a>');
+  document.write('</div>');
 }
-</script>
-
+        </script>
     </xsl:if>
   </xsl:template>
   
