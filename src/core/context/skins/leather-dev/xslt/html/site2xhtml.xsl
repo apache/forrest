@@ -200,17 +200,19 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     |end search
     +</xsl:comment> 
         </xsl:if>
+      </div>
+<div id="nav">
 <xsl:comment>+
     |start Tabs
     +</xsl:comment>
 	<ul id="nav-main">
         <xsl:apply-templates select="ul[@id='tabs']/*"/>
 	</ul>
-
+         <xsl:apply-templates select="div[@id='level2tabs']"/>
 <xsl:comment>+
     |end Tabs
     +</xsl:comment>
-      </div>
+</div>
         <div id="branding-published">
            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write("Published: " + document.lastModified);
