@@ -9,7 +9,7 @@
 <document>
   <header>
     <title>Menus and Linking</title>
-    <version>$Revision: 1.11 $</version>
+    <version>$Revision: 1.12 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
@@ -25,7 +25,7 @@
       </p>
     </section>
 
-    <section>
+    <section id="site">
       <title>site.xml</title>
       <p>
         &s; is what we'd call a 'site map' if Cocoon hadn't already claimed
@@ -151,7 +151,7 @@
       <source><![CDATA[
 <tabs ...>
     <tab id="home" label="Home" dir=""/>
-    <tab id="community" label="Community" dir="community"/>
+    <tab id="community" label="Community" dir="community" indexfile="mailLists.html"/>
     <tab id="howto" label="How-Tos" dir="community/howto"/>
 </tabs>
       ]]></source>
@@ -161,8 +161,33 @@
         <img src="images/menu2.png" alt="Community menu generated from site.xml"/>&nbsp;&nbsp;&nbsp;
         <img src="images/menu3.png" alt="Howto menu generated from site.xml"/>
       </p>
+      
+      <p>When using the <code>dir</code> attribute as above the value of the
+      <code>indexfile</code> parameter is appended to the value of the 
+      <code>dir</code> attribute (together with a preceding '/'). For example,
+      the link for the community tab above is 
+      <code>community/mailLists.html</code>. Note that <code>indexfile</code>
+      defaults to <code>index.html</code> if no value is supplied. Therefore the
+      link for the howto tab is <code>community/howto/index.html</code>.</p>
+      
+      <section id="tabs-external">
+        <title>Tabs for External Resources</title>
+        <p>You can make a tab point to an external resource by using the 
+        <code>href</code> attribute instead of the <code>dir</code> attribute.
+        The value of <code>href</code> should be the URI of the resource you wish 
+        to link to. For example:</p>
+      
+        <source><![CDATA[
+<tab id="apache" label="XML Apache" href-"http://xml.apache.org/"/>
+        ]]></source>
+        
+        <p>Unlike the <code>dir</code> attribute, the value of <code>href</code>
+        is left unmodified by Forrest unless it is root-relative and obviously 
+        specifies a directory (ends in '/'). In which case /index.html will be 
+        added</p>
+      </section>
 
-      <section>
+      <section id="selecting-entries">
         <title>Selecting menu entries</title>
         <p>Forrest decides which menu entries to display by examining the
           <code>tab</code> attributes in &s;.  All &s; entries with a
@@ -207,14 +232,14 @@
         </p>
       </section>
 
-      <section>
+      <section id="other-menu-selection">
         <title>Alternative menu selection mechanisms.</title>
         <p>
           The <code>tab</code> attribute-based scheme for selecting a menu's
           entries is not the only one, although it is the most flexible.  Here
           we describe a few alternatives.
         </p>
-        <section>
+        <section id="dir-menu-selection">
           <title>Directory-based selection</title>
           <p>In this scheme, each tab corresponds to a directory within the
             site.  All content below that directory is included in the menu.</p>
@@ -233,7 +258,7 @@
               entries.</li>
           </ul>
         </section>
-        <section>
+        <section id="book-menu-selection">
           <title>Specifying menus with book.xml</title>
           <p>
             Historically, menus in Forrest have been generated from a
@@ -247,7 +272,7 @@
         </section>
       </section>
 
-      <section>
+      <section id="tab-selection">
         <title>Selecting the current tab</title>
         <p>
           The tab selection algorithm is quite simple: the tab with the
@@ -258,7 +283,7 @@
 
     </section>
 
-    <section id="toc_generation">
+    <section id="toc-generation">
       <title>Table of Contents Generation</title>
       <p>Each page can have an automatically generated table of contents. This
       is created from the titles of each section in your xdoc. By default only
@@ -294,7 +319,7 @@
     <section id="linking">
       <title>Linking systems</title>
 
-      <section id="direct_linking">
+      <section id="direct-linking">
         <title>Direct linking</title>
         <p>
           In earlier versions of Forrest (and in similar systems), there has
@@ -338,7 +363,7 @@
           that will be sorted out by Forrest.
         </p>
 
-        <section>
+        <section id="resolve-site-uris">
           <title>Resolving site: URIs</title>
 
           <p>
@@ -374,7 +399,7 @@
           </p>
         </section>
 
-        <section>
+        <section id="resolve-ext-uris">
           <title>ext: URIs: linking to external URLs</title>
           <p>
             The <code>ext:</code> scheme was created partly to demonstrate the
@@ -416,7 +441,7 @@
           </p>
         </section>
 
-        <section>
+        <section id="source-uris">
           <title>Theory: source URIs</title>
           <p>
             <code>site:</code> URIs like <code>site:todo</code> are examples of
@@ -435,7 +460,7 @@
         </section>
 
 
-        <section>
+        <section id="future-schemes">
           <title>Future schemes</title>
           <p>
             So far, <code>site:</code> and <code>ext:</code> schemes are defined.
@@ -490,7 +515,7 @@
         </section>
       </section>
     </section>
-    <section>
+    <section id="concept">
       <title>Concept</title>
       <p>
         The <code>site:</code> scheme and associated ideas for &s; were
@@ -503,7 +528,7 @@
         gains most of the advantages of the system.
       </p>
     </section>
-    <section>
+    <section id="implementation">
       <title>Implementation</title>
       <p>Full details on the implementation of <link
         href="site:linkrewriting_impl">link rewriting</link> and <link
