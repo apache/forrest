@@ -11,10 +11,24 @@ Example URL:  http://localhost:8888/changes.xml
 Used by    :  sitemap.xmap
 Uses       :  status.xml
 
-$Revision: 1.7 $
+$Revision: 1.8 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators default="file"/>
+    <map:serializers default="html">
+      <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
+        <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
+        <encoding>ISO-8859-1</encoding>
+      </map:serializer>
+    </map:serializers>
+    <map:transformers default="xslt"/>
+    <map:readers default="resource"/>
+    <map:matchers default="wildcard"/>
+    <map:selectors default="browser"/>
+  </map:components>
 
   <map:resources>
   </map:resources>

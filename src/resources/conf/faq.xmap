@@ -12,12 +12,17 @@ Example URL:  http://localhost:8888/faq.pdf       # PDF of FAQ
 Used by    :  sitemap.xmap, which binds these generic pipelines to URLs.
 Uses       :  content/xdocs/**.xml, depending on URL binding.
 
-$Revision: 1.16 $
+$Revision: 1.17 $
 ==================================================== -->
 
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
+    <map:generators default="file"/>
+    <map:serializers default="html"/>
+    <map:transformers default="xslt"/>
+    <map:readers default="resource"/>
+    <map:matchers default="wildcard"/>
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.cocoon.acting.sourcetype.SourceTypeAction">
         <sourcetype name="faq-v10">
@@ -36,7 +41,6 @@ $Revision: 1.16 $
     </map:actions>
 
     <map:selectors default="browser">
-    <!-- FIXME JJP: This should not be here. It should be define on sitemap -->
       <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
     </map:selectors>
   </map:components>
