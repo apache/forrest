@@ -55,7 +55,7 @@
 			 <xsl:for-each select = "module/todo/actions">
 			 <h3><xsl:value-of select = "@priority"/>&#160;priority</h3>
 			 <table>
-			 <th><td>context</td><td>what</td><td>assigned to</td></th>
+			 <tr><th>context</th><th>what</th><th>assigned to</th></tr>
 			 <xsl:for-each select = "action">
 			 <tr><td><xsl:value-of select="@context" /></td>
 			     <td><xsl:value-of select="." /></td>
@@ -69,7 +69,7 @@
 			 <h3>release&#160;<xsl:value-of select = "@version"/>&#160;
 			     of date&#160;<xsl:value-of select = "@date"/></h3>
 			 <table>
-			 <th><td>type</td><td>what</td><td>developer</td></th>
+			 <tr><th>type</th><th>what</th><th>developer</th></tr>
 			 <xsl:for-each select = "action">
 			 <tr><td><xsl:value-of select="@type" /></td>
 			     <td><xsl:value-of select="." /></td>
