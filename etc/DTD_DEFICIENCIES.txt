@@ -215,6 +215,35 @@ and we can only hope ]]> does not appear in it.
 2) Would characters in the included non-XML fragment need to be escaped on rendition? Is this
 to show sourcecode fragments or to include in-place verbatim HTML...?
 3) Check what Eliotte R. Harold does w.r.t. XInclude (I remember him mentioning this once)
- 
+
+
+
+
+ 8) Restrict content of <ul> to <li>
+------------------------------------
+Submittor: Jeff Turner
+Date: 2003-02-01
+Yeas: jefft
+Nays:
+Summary:
+
+Strangely, our docv11 DTD allows lists to be nested in HTML-invalid ways:
+
+<!ENTITY % lists "ol|ul|dl">
+<!ELEMENT li (%content.mix; | %lists;)*>
+
+allowing things like:
+
+<ul>
+  <ul>
+    <ul>
+      <li>Hello</li>
+      </ul>
+   </ul>
+</ul>
+
+In document-v12.dtd, we should restrict the contents of <ul> to just <li>, as
+the HTML DTD does.
+
 -- 
-$Revision: 1.6 $ $Date: 2003/01/08 05:44:32 $
+$Revision: 1.7 $ $Date: 2003/02/01 06:46:52 $
