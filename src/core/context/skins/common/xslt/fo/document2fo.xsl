@@ -460,14 +460,24 @@
   </xsl:template>
 
   <xsl:template match="p">
-    <fo:block
-      space-before="4pt"
-      space-after="4pt"
-      font-family="serif">
-      <xsl:apply-templates/>
-    </fo:block>
+    <xsl:choose>
+      <xsl:when test="ancestor::li and not(preceding-sibling::*)">
+        <fo:block
+          space-after="4pt"
+          font-family="serif">
+          <xsl:apply-templates/>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block
+          space-before="4pt"
+          space-after="4pt"
+          font-family="serif">
+          <xsl:apply-templates/>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
-
 
   <xsl:template match="source">
     <fo:block
