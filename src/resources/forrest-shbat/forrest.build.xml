@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.3-dev                        |
-    |             $Date: 2003/01/28 04:21:57 $              |
+    |             $Date: 2003/01/29 11:39:36 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -393,8 +393,7 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-xdocs" if="xdocs.present">
-    <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false"
-      overwrite="true">
+    <copy toDir="${project.ctxt-dir}/content/xdocs" filtering="false">
       <fileset dir="${project.xdocs-dir}"/>
     </copy>
   </target>
@@ -671,6 +670,21 @@ If using JDK 1.4 or above, make sure to set the Java environment variable
 Eg, in the TOMCAT_OPTS (3.3.x) or CATALINA_OPTS (4.x) env variable.
 ---------------------------------
     </echo>
+  </target>
+
+  <!--
+  If you've been editing
+  docs in build/webapp/content/xdocs, this target copies them back to
+  src/documentation/content/xdocs/.  As 'overwrite' is false, this will not
+  clobber docs legitimately edited in src/documentation/content/xdocs/.
+
+  Hack until we get src/* webapp editing working.  
+  -->
+  <target name="backcopy" depends="init-props" description="If xdocs have been
+    edited in build/webapps, copies them back to src/*">
+    <copy toDir="${project.xdocs-dir}" filtering="false" overwrite="false">
+      <fileset dir="${project.webapp}/content/xdocs"/>
+    </copy>
   </target>
 
   <!-- ===============================================================
