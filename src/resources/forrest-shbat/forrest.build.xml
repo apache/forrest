@@ -15,7 +15,7 @@ FORREST SITE BUILDER
     *=======================================================*
     |                 Forrest Site Builder                  |
     |                        0.5-dev                        |
-    |             $Date: 2003/07/30 16:35:46 $              |
+    |             $Date: 2003/08/01 12:32:13 $              |
     *=======================================================*
   
              Call this through the 'forrest' command
@@ -805,6 +805,22 @@ Thanks for using Apache Forrest
   <target name="validate" depends="validation-props, validate-xdocs,
     validate-skinconf, validate-sitemap, validate-skins, validate-skinchoice,
     validate-stylesheets"  description="Validates XML doc files in the project"/>
+
+  <target name="validate-site" depends="validation-props" >
+    <xmlvalidate failonerror="${forrest.validate.site.failonerror}" lenient="no" warn="yes">
+      <xmlcatalog>
+        <catalogpath>
+          <pathelement
+            location="${forrest.home}/context/resources/schema/catalog.xcat"/>
+          <pathelement location="${project.catalog}"/>
+        </catalogpath>
+      </xmlcatalog>
+      <fileset dir="${project.site-dir}"
+        includes="${forrest.validate.xdocs.includes}"
+        excludes="${forrest.validate.xdocs.excludes}"/>
+    </xmlvalidate>
+    <echo message="...validated site"/>
+  </target>
 
   <target name="validate-xdocs" depends="validation-props" if="validate.xdocs">
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes">
