@@ -60,23 +60,22 @@
   <!-- fixes sections -->
   <xsl:template match="s1 | s2 | s3 | s4">
     <section>
-      <title><xsl:value-of select="@title" /></title>
-        <xsl:for-each select="@*">
-          <xsl:copy-of select="."/>
-        </xsl:for-each>
-        <xsl:apply-templates/>
-      </section>
+      <xsl:apply-templates select="@*|node()"/>
+    </section>
+  </xsl:template>
+  <xsl:template match="s1/@title | s2/@title | s3/@title | s4/@title">
+    <title><xsl:value-of select="."/></title>
   </xsl:template>
 
   <!-- dunnow what to do with connect - maybe just evaporize it? -->
   <xsl:template match="connect">
     <xsl:message terminate="no">The connect element isn't supported anymore in the document-v11.dtd, please fix your document.</xsl:message>
-    [[connect: <xsl:value-of select="."/> ]]
+    [[connect: <xsl:apply-templates/> ]]
   </xsl:template>
 
   <xsl:template match="link/@idref">
     <xsl:message terminate="no">The link element has no idref attribute defined in the document-v11.dtd, please fix your document.</xsl:message>
-    [[link/@idref: <xsl:value-of select="."/> ]]
+    [[link/@idref: <xsl:apply-templates/> ]]
   </xsl:template>
 
   <xsl:template match="link/@type | link/@actuate | link/@show |
@@ -86,10 +85,7 @@
   <!-- 'simple lists' become unordered lists -->
   <xsl:template match="sl">
     <ul>
-      <xsl:for-each select="@*">
-        <xsl:copy-of select="."/>
-      </xsl:for-each>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="@*|node()"/>
     </ul>
   </xsl:template>
         
