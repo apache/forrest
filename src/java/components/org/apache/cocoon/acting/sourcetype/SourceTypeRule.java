@@ -54,83 +54,19 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.yer.use.cli;
+package org.apache.cocoon.acting.sourcetype;
 
-import org.apache.forrest.yer.hierarchy.Entry;
-import org.apache.forrest.yer.hierarchy.HierarchyReader;
-import org.apache.forrest.yer.hierarchy.EntryFactory;
-import org.apache.forrest.sax.SAXConvenience;
+import org.apache.avalon.framework.configuration.Configurable;
 
-import org.xml.sax.ContentHandler;
-
-import javax.xml.transform.stream.StreamResult;
-import java.io.OutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.FilterOutputStream;
-
-/** Class <code>org.apache.forrest.yer.use.cli.HierarchyDump</code> ...
- * 
- * @author $Author: mpo $
- * @version CVS $Id: HierarchyDump.java,v 1.4 2003/01/09 00:06:46 mpo Exp $
+/**
+ * Interface to be implemented by all soucetype-defining rules.
+ *
+ * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
-public class HierarchyDump
+public interface SourceTypeRule extends Configurable
 {
-
-  /** Default constructor
-   * 
-   */
-  public HierarchyDump()
-  {
-  }
-
-  /** Main method for launching the logic conceived in this class.
-   *  Usage for this class:
-   *
-   * @param args array of command line arguments.
-   */
-  public static void main(String[] args)
-  {
-    //FIXME: get these form CL or sysprops.
-    String rootFactory = "org.apache.forrest.yer.impl.fs.FileEntryFactory";
-    String rootLocation = "./src/documentation";
-    OutputStream sink = System.out;
-    if (args.length > 0) {
-      String outLocation = args[0];
-      File outFile = new File(outLocation);
-      File parent = outFile.getParentFile();
-      if (parent != null && !parent.exists()) parent.mkdirs();
-      try {
-        sink = new MyOutputStream(new FileOutputStream(outFile));
-      } catch(IOException e) {
-        e.printStackTrace();
-      }
-    }
-
-    //get an implementation of a rootEntry
-    EntryFactory ef = EntryFactory.newInstance(rootFactory);
-    Entry rootEntry = ef.getRootEntry(rootLocation);
-    //get a reader
-    HierarchyReader hr = new HierarchyReader();
-    // get a listener
-    ContentHandler serializer = SAXConvenience.getSAXSink(
-        new StreamResult(sink));
-
-    // get going
-    hr.setContentHandler(serializer);
-    hr.startReading(rootEntry);
-  }
-
-  static class MyOutputStream extends FilterOutputStream{
-    MyOutputStream (OutputStream os){
-      super(os);
-    }
-
-    public void write(int i)  throws IOException {
-      super.write(i);
-      super.flush();
-      System.out.write(i);
-    }
-  }
+    /**
+     * Returns true if this rule is satisfied by the given SourceInfo.
+     */
+    public boolean matches(SourceInfo sourceInfo);
 }

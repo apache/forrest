@@ -54,17 +54,29 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.yer.libre;
+package org.apache.cocoon.acting.sourcetype;
 
-import org.apache.forrest.yer.hierarchy.EntryList;
+import org.apache.avalon.framework.configuration.*;
 
-/** Interface <code>org.apache.forrest.yer.libre.EntrySorter</code> ...
- * 
- * @author $Author: mpo $
- * @version CVS $Id: EntrySorter.java,v 1.4 2003/01/09 00:06:45 mpo Exp $
+/**
+ * Rule which checks that the public id has a certain value.
+ *
+ * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
-public interface EntrySorter
+public class DocDeclRule implements SourceTypeRule
 {
-  public EntryList sort(EntryList entries);
-}
+    protected String publicId;
 
+    public void configure(Configuration configuration) throws ConfigurationException
+    {
+        publicId = configuration.getAttribute("public-id");
+    }
+
+    public boolean matches(SourceInfo sourceInfo)
+    {
+        if (publicId.equals(sourceInfo.getPublicId()))
+            return true;
+        else
+            return false;
+    }
+}

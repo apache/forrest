@@ -54,38 +54,41 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.yer.libre;
+package org.apache.cocoon.acting.sourcetype;
 
-import org.apache.forrest.yer.hierarchy.AttributeReader;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 
-/** Interface <code>org.apache.forrest.yer.libre.LibreAttributeReader</code> ...
- * 
- * @author $Author: jefft $
- * @version CVS $Id: LibreAttributeReader.java,v 1.3 2002/11/05 05:52:41 jefft Exp $
+/**
+ * A Rule which checks the local name and namespace of the document element.
+ *
+ * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
-public interface LibreAttributeReader extends AttributeReader
+public class DocumentElementRule implements SourceTypeRule
 {
-  /**
-   * Set if the isAttribute() returnValue should be inversed or not before return
-   * @param inverse insists on inversion when true, lets normal value true when false
-   *
-   * Implementation advice to inverse your logic: Store the argument of
-   * this method as some this.inverseLogic member.  Whenever the isAttribute
-   * is actually called you simply store the normal value as some
-   * final boolean testValue and then return this.inverseLogic != testValue
-   *
-   * This approach gives you the required return table:
-   * <table>
-   * <tr><td>testValue</td><td>inverseLogic</td><td>Return (!=)</td></tr>
-   * <tr><td>      0  </td><td>         0  </td><td>        0  </td></tr>
-   * <tr><td>      1  </td><td>         0  </td><td>        1  </td></tr>
-   * <tr><td>      0  </td><td>         1  </td><td>        1  </td></tr>
-   * <tr><td>      1  </td><td>         1  </td><td>        0  </td></tr>
-   * </table>
-   */
-  public void setInverseLogic(boolean inverse);
+    protected String localName;
+    protected String namespace;
 
-  public void setOrderDescending(boolean descending);
-  public boolean isOrderDescending();
+    public void configure(Configuration configuration) throws ConfigurationException
+    {
+        localName = configuration.getAttribute("local-name", null);
+        namespace = configuration.getAttribute("namespace", null);
+        if (localName == null && namespace == null)
+            throw new ConfigurationException("Missing local-name and/or namespace attribute on document-element element at " + configuration.getLocation());
+    }
+
+    public boolean matches(SourceInfo sourceInfo)
+    {
+        if (localName != null && namespace != null
+                && localName.equals(sourceInfo.getDocumentElementLocalName())
+                && namespace.equals(sourceInfo.getDocumentElementNamespace()))
+            return true;
+        else if (localName != null && localName.equals(sourceInfo.getDocumentElementLocalName()))
+            return true;
+        else if (namespace != null && namespace.equals(sourceInfo.getDocumentElementNamespace()))
+            return true;
+        else
+            return false;
+    }
+
 }
-

@@ -54,23 +54,42 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.yer.hierarchy;
+package org.apache.cocoon.acting.sourcetype;
 
-/** Interface <code>org.apache.forrest.yer.hierarchy.HierarchyConstants</code> holds a
- *  number of constants related to the XML representation of the Hierarchy.
- * 
- * @author $Author: jefft $
- * @version CVS $Id: HierarchyConstants.java,v 1.3 2002/11/05 05:52:40 jefft Exp $
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+
+/**
+ * A Rule which checks the value of the xsi:schemaLocation and xsi:noNamespaceSchemaLocation
+ * attributes.
+ *
+ * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
-public interface HierarchyConstants
+public class XmlSchemaRule implements SourceTypeRule
 {
-  /** The namespace URI used int the XML output of the hierarchy */
-  public static final String NS_URI = "http://outerx.org/yer/hierarchy/0.1";
-  /** The namespace prefix used in the XML Output of the hierarchy */
-  public static final String NS_PREFIX = null;
-  /** The element name used for collections. */
-  public static final String COLLECTION_ELM = "collection";
-  /** The element name used for items. */
-  public static final String ITEM_ELM = "item";
-}
+    protected String schemaLocation;
+    protected String noNamespaceSchemaLocation;
 
+    public void configure(Configuration configuration) throws ConfigurationException
+    {
+        schemaLocation = configuration.getAttribute("schema-location", null);
+        noNamespaceSchemaLocation = configuration.getAttribute("no-namespace-schema-location", null);
+        if (schemaLocation == null && noNamespaceSchemaLocation == null)
+            throw new ConfigurationException("Missing schema-location and/or no-namespace-schema-location attribute on w3c-xml-schema element at " + configuration.getLocation());
+    }
+
+    public boolean matches(SourceInfo sourceInfo)
+    {
+        if (schemaLocation != null && noNamespaceSchemaLocation != null
+                && schemaLocation.equals(sourceInfo.getXsiSchemaLocation())
+                && noNamespaceSchemaLocation.equals(sourceInfo.getXsiNoNamespaceSchemaLocation()))
+            return true;
+        else if (schemaLocation != null && noNamespaceSchemaLocation == null && schemaLocation.equals(sourceInfo.getXsiSchemaLocation()))
+            return true;
+        else if (schemaLocation == null && noNamespaceSchemaLocation != null && noNamespaceSchemaLocation.equals(sourceInfo.getXsiNoNamespaceSchemaLocation()))
+            return true;
+        else
+            return false;
+    }
+
+}

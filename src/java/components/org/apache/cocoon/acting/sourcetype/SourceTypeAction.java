@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.components.sourcetype;
+package org.apache.cocoon.acting.sourcetype;
 
 import org.cyberneko.pull.XMLPullParser;
 import org.cyberneko.pull.XMLEvent;

@@ -54,7 +54,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.components.generator;
+package org.apache.cocoon.generation;
 
 import org.apache.cocoon.generation.ComposerGenerator;
 import org.apache.cocoon.ProcessingException;
@@ -101,8 +101,8 @@ import java.io.IOException;
  *   like the JaxpParser) can be built to do this.  Then the complete
  *   parser can be recycled.
  *
- * @author $Author: jefft $
- * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.6 2003/03/15 06:18:29 jefft Exp $
+ * @author $Author: stevenn $
+ * @version CVS $Id: XNIConfigurableFileGenerator.java,v 1.1 2003/04/18 06:46:09 stevenn Exp $
  */
 public class XNIConfigurableFileGenerator
 extends ComposerGenerator implements CacheableProcessingComponent, Recyclable

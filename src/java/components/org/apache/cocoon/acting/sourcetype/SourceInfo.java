@@ -54,35 +54,89 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.forrest.components.sourcetype;
+package org.apache.cocoon.acting.sourcetype;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
+import java.util.HashMap;
 
 /**
- * A rule which checks that a processing instruction with certain data is present.
+ * Contains information about an XML file. More precisely, the publicId, the processing instructions
+ * occuring before the document element, the local name and namespace of the document element, and
+ * the value of the xsi:schemaLocation and xsi:noNamespaceSchemaLocation attributes. All of these
+ * attributes can be null.
+ *
+ * @author <a href="mailto:bruno@outerthought.org">Bruno Dumon</a>
  */
-public class ProcessingInstructionRule implements SourceTypeRule
+public class SourceInfo
 {
-    protected String target;
-    protected String data;
+    protected String publicId;
+    protected String documentElementLocalName;
+    protected String documentElementNamespace;
+    protected String xsiSchemaLocation;
+    protected String xsiNoNamespaceSchemaLocation;
+    protected HashMap processingInstructions = new HashMap();
 
-    public void configure(Configuration configuration) throws ConfigurationException
+    public String getPublicId()
     {
-        target = configuration.getAttribute("target");
-        data = configuration.getAttribute("data", null);
+        return publicId;
     }
 
-    public boolean matches(SourceInfo sourceInfo)
+    public void setPublicId(String publicId)
     {
-        if (sourceInfo.hasProcessingInstruction(target))
-        {
-            if (sourceInfo.getProcessingInstructionData(target) == null && data == null)
-                return true;
-            if (sourceInfo.getProcessingInstructionData(target) != null && sourceInfo.getProcessingInstructionData(target).equals(data))
-                return true;
-        }
-        return false;
+        this.publicId = publicId;
     }
 
+    public String getDocumentElementLocalName()
+    {
+        return documentElementLocalName;
+    }
+
+    public void setDocumentElementLocalName(String documentElementLocalName)
+    {
+        this.documentElementLocalName = documentElementLocalName;
+    }
+
+    public String getDocumentElementNamespace()
+    {
+        return documentElementNamespace;
+    }
+
+    public void setDocumentElementNamespace(String documentElementNamespace)
+    {
+        this.documentElementNamespace = documentElementNamespace;
+    }
+
+    public String getXsiSchemaLocation()
+    {
+        return xsiSchemaLocation;
+    }
+
+    public void setXsiSchemaLocation(String xsiSchemaLocation)
+    {
+        this.xsiSchemaLocation = xsiSchemaLocation;
+    }
+
+    public String getXsiNoNamespaceSchemaLocation()
+    {
+        return xsiNoNamespaceSchemaLocation;
+    }
+
+    public void setXsiNoNamespaceSchemaLocation(String xsiNoNamespaceSchemaLocation)
+    {
+        this.xsiNoNamespaceSchemaLocation = xsiNoNamespaceSchemaLocation;
+    }
+
+    public void addProcessingInstruction(String target, String data)
+    {
+        processingInstructions.put(target, data);
+    }
+
+    public boolean hasProcessingInstruction(String target)
+    {
+        return processingInstructions.containsKey(target);
+    }
+
+    public String getProcessingInstructionData(String target)
+    {
+        return (String)processingInstructions.get(target);
+    }
 }
