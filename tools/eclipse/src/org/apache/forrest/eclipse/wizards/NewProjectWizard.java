@@ -15,10 +15,10 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
-import org.apache.forrest.eclipse.actions.Utilities;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -116,8 +116,13 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 				cmdString = "cmd /c forrest -Dbasedir=" + strPath + "\\" + strName
 						+ " seed";
 			}
-//			 TODO: if fhome is not set the wizard will fail
-			Utilities.RunExtCommand(cmdString);
+			try {
+				// TODO: if fhome is not set the wizard will fail
+				Runtime.getRuntime().exec(cmdString);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 			

@@ -15,9 +15,8 @@
  */
 package org.apache.forrest.eclipse.popup.actions;
 
-import org.apache.forrest.eclipse.actions.Utilities;
+import org.apache.forrest.ForrestRunner;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,7 +27,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class StopForrest 
-implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
+implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {   
 
 	private IProject activeProject;
 	
@@ -49,16 +48,8 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 	 * @see IActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
-		// TODO: Move Jetty termination code to Utilities
-		try {
-			Utilities.jetty.terminate();
-			Utilities.jetty = null;
-		} catch (DebugException e) {
-			// FIXME: Handle this exception
-			e.printStackTrace();
-		}
-
-		
+		ForrestRunner.getInstance().stop();
+		// FIXME: only provide this feedback when we *know* it has stopped
 		MessageDialog.openInformation(new Shell(), "Forrest",
 				"Forrest server stopped");
 	}

@@ -33,6 +33,9 @@ import org.eclipse.jface.viewers.*;
  */
 
 public class NewXdocPage extends WizardPage {
+    // FIXME: get these config settings from forrest.properties
+	public String projectXDocsDir = "/src/documentation/content/xdocs";
+	
 	private Text containerText;
 	private Text fileText;
 	private ISelection selection;
@@ -61,6 +64,7 @@ public class NewXdocPage extends WizardPage {
 		label.setText("&Container:");
 
 		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		containerText.setText(projectXDocsDir);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 		containerText.addModifyListener(new ModifyListener() {
