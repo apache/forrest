@@ -5,9 +5,7 @@
                 version="1.0">
 
 <xsl:template match="document" mode="outline">
-  <fox:bookmarks>
       <xsl:apply-templates select="body/section" mode="outline"/>
-  </fox:bookmarks>
 </xsl:template>
 
 <xsl:template match="section" mode="outline">
