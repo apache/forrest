@@ -34,19 +34,6 @@
       </answer>
     </faq>
 
-    <faq id="website-status">
-      <question>
-       Which version of Forrest does the website documentation relate to? 
-      </question>
-      <answer>
-        <p>
-          The documentation on the Forrest website relates to the current
-          head development version of the source repository. See
-          <link href="index.html#status">further explanation</link>.
-        </p>
-      </answer>
-    </faq>
-
     <faq id="requirements">
       <question>
         What are the system requirements for Forrest?
@@ -186,7 +173,7 @@
        </p>
        </answer>
     </faq>
-    <faq id="clickable-email-adress">
+    <faq id="clickable-email-address">
       <question>How can I generate html-pages to show a 
       'clickable' email-address (of the author-element)?</question>
        <answer>
@@ -280,17 +267,21 @@
       common filenames.
       </question>
       <answer>
-        <p>
-          Certain patterns are claimed by the default sitemaps for
+         <p>The <code>org.apache.forrest.plugin.projectInfo</code> plugin uses these
+         patterns: <code>changes, todo</code>.  See the <link href="site:plugins">plugin documentation</link>
+         for instructions on how to enable or disable this plugin.
+         </p>
+         <p>
+          Other patterns are claimed by the default sitemaps for
           special processing. These include:
-          <code>site, changes, todo, faq, images, my-images, skinconf,
+          <code>site, faq, images, my-images, skinconf,
           community, howto</code>
         </p>
         <p>
           Sometimes there are workarounds, e.g. faq.html or faq-interview.html
           would fail, but interview-faq.html would be fine.
           In future versions of Forrest we will attempt to deal with this issue
-          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link>).
+          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link> and <link href="http://issues.cocoondev.org/browse/FOR-458">FOR-458</link>).
         </p>
       </answer>
     </faq>
@@ -566,86 +557,26 @@ X [0]                       brokenlink.html     BROKEN: reason
   </part>
 
   <part id="old_faqs">
-    <title>Older versions</title>
-    <faq id="unresolved_project.home">
-      <question>When invoking Forrest 0.4 from the
-        <code>forrest.antproxy.xml</code>, the build fails because
-        <code>${project.home}</code> isn't resolved.
-      </question>
-      <answer>
-        <p>This is a bug in 0.4. The following modification to
-          <code>FORREST_HOME/forrest.antproxy.xml</code> should fix it:</p>
-        <source
-><![CDATA[--- forrest.antproxy.xml        7 Feb 2003 22:21:15 -0000       1.2
-+++ forrest.antproxy.xml        22 Feb 2003 09:39:42 -0000
-@@ -41,6 +41,7 @@
-   </path>
- 
-   <target name="forrest">
-+    <property name="project.home" location="."/>
-     <java classname="org.apache.tools.ant.Main" fork="true">
-       <classpath refid="forrest-classpath"/>
-       <jvmarg value="-Dforrest.home=${forrest.home}"/>]]></source>
-      </answer>
-    </faq>
-
-    <faq id="odd_html">
-      <question>
-        After upgrading to 0.4 my HTML looks significantly different, and table
-        widths are wrong. What happened?
+    <title>Older version: 0.6</title>
+    <faq id="old_claimed_patterns">
+      <question>Some of my files are not being processed because they use
+      common filenames.
       </question>
       <answer>
         <p>
-          Forrest now uses a HTML 4.0.1 <code>DOCTYPE</code> declaration:</p>
-          <source><![CDATA[
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">]]></source>
-        <p>
-          This causes browsers to render the page in standards-compliance mode,
-          or rather, not in "quirks" mode. For some operations (like determining
-          table column widths), quirks mode results in better looking pages.
-          For the old pre-0.4 behaviour, create a custom sitemap and remove the
-          line:</p>
-        <source><![CDATA[
-  <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>]]></source>
-      </answer>
-    </faq>
-    <faq id="validation_error-doctype_root_null">
-      <question>
-        When building my project, I get an validation error: <code>Document root
-          element "site", must match DOCTYPE root "null".</code>.
-      </question>
-      <answer>
-        <p>
-          You are probably trying to build the project with an old version of
-          Forrest (built before 2003-01-08) that is incorrectly trying to validate
-          the &s; file.  If so, please update your Forrest
-          installation.
+          Certain patterns are claimed by the default sitemaps for
+          special processing. These include:
+          <code>site, changes, todo, faq, images, my-images, skinconf,
+          community, howto</code>
         </p>
         <p>
-          Alternatively, you may be building with an up-to-date Forrest, but have
-          overridden <code>forrest.validate.xdocs.excludes</code> in
-          <code>forrest.properties</code>.  With the introduction of
-          &s;, the above property must have &s;
-          listed to prevent an attempt at DTD-based validation.
+          Sometimes there are workarounds, e.g. faq.html or faq-interview.html
+          would fail, but interview-faq.html would be fine.
+          In future versions of Forrest we will attempt to deal with this issue
+          (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link>).
         </p>
       </answer>
     </faq>
-    <faq id="building_error-custom_sitemap">
-      <question>
-        When building my project, I get any of these errors: 
-	<code>menu.xmap (The system cannot find the file specified)</code>
-	<code>static.xmap (The system cannot find the file specified)</code>
-	<code>Type 'xml-document' is not defined for 'serialize'</code>
-      </question>
-      <answer>
-        <p>
-          You are using an old version of sitemap.xmap (see the document
-          <link href="site:upgrading_05">Upgrading to Forrest 0.5</link>).
-        </p>
-      </answer>
-    </faq>
-
   </part>
 
   <part id="general">
@@ -675,7 +606,8 @@ X [0]                       brokenlink.html     BROKEN: reason
       </question>
       <answer>
         <p>
-         There are two ways. Forrest can transform the DocBook format into the
+         There are two ways. Forrest has a <code>simplified-docbook</code> plugin
+         which can transform the DocBook format into the
          Forrest "xdocs" format on-the-fly and then render that as normal
          Forrest documents.
          Be aware that the stylesheet that does this transformation is
@@ -801,8 +733,6 @@ X [0]                       brokenlink.html     BROKEN: reason
           <link href="site:contrib">Contributing to Forrest</link> page.
           It is always a good idea to check the Forrest
           <link href="site:bugs">issue tracker</link>
-          and 
-          <link href="site:todo">to do list</link>
           before diving in.
         </p>
       </answer>
