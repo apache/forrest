@@ -2,7 +2,7 @@
 
 <!-- Converts the output of the DirectoryGenerator to Forrest's book.xml
 format.  Typically this would be used to define a book.xml pipeline for a
-specific page.  Eg, in navigation.xmap, define the DirectoryGenerator:
+specific page.  Eg, in menu.xmap, define the DirectoryGenerator:
 
 <map:generators default="file">
   <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
@@ -11,10 +11,11 @@ specific page.  Eg, in navigation.xmap, define the DirectoryGenerator:
 And then define the book.xml matcher for a directory that you want to
 automatically generate a menu for (here wiki/):
 
-<map:match pattern="wiki/book-*">
-  <map:generate type="directory" src="content/xdocs/wiki">
+<map:match pattern="wiki/**book-*">
+  <map:generate type="directory" src="content/xdocs/wiki/{1}">
     <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
     <map:parameter name="depth" value="10" />
+    <map:parameter name="exclude" value="[.][^x[^m][^l]|~$|^my-images$|^book[.]xml$" />
   </map:generate>
   <map:transform src="resources/stylesheets/directory2book.xsl" />
   <map:serialize type="xml"/>
