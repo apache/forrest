@@ -14,7 +14,7 @@ absolutize-linkmap.xsl):
   </community>
 </site>
 
-if $path was 'community/', then '../' would be added to each href:
+if $path was 'community/index.html', then '../' would be added to each href:
 
 <site href="../">
   <community href="../community/">
@@ -63,7 +63,13 @@ Jeff Turner <jefft@apache.org>
           <xsl:value-of select="."/>
         </xsl:when>
 
-        <xsl:when test="contains($path, '.pdf')">
+        <!-- PDFs can handle inline images, but everything else must become an
+        external link -->
+        <xsl:when test="contains($path, '.pdf') and not(
+        contains(., '.png') or
+        contains(., '.jpeg') or
+        contains(., '.jpg') or
+        contains(., '.tif'))">
 
           <!-- Links to outside a PDF are all absolute -->
           <xsl:value-of select="concat($site-root, .)"/>
