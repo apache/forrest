@@ -59,7 +59,7 @@
       </fileset>
     </copy>
 
-    <copy todir="${project.webapp}/" filtering="true" overwrite="true">
+    <copy todir="${project.webapp}/" filtering="false" overwrite="true">
       <fileset dir="${forrest.home}/context" >
         <include name="*.xmap" />
         <include name="WEB-INF/*.xconf" />
@@ -86,13 +86,13 @@
     validate, init, bare-context, copy-sitemap, copy-conf, upgrade-skinconf, copy-status"/>
 
   <target name="copy-conf" if="conf.present">
-    <copy toDir="${project.webapp}/WEB-INF" filtering="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${conf-dir}">
         <exclude name="*-${version}.xconf"/>
       </fileset>
     </copy>
-    <copy toDir="${project.webapp}/WEB-INF" filtering="true" overwrite="true"
+    <copy toDir="${project.webapp}/WEB-INF" filtering="false" overwrite="true"
       failonerror="false">
       <fileset dir="${conf-dir}">
         <include name="*-${version}.*"/>
@@ -102,14 +102,14 @@
    </target>
 
   <target name="copy-sitemap" if="sitemap.present">
-    <copy toDir="${project.webapp}" filtering="true" overwrite="true" failonerror="false">
+    <copy toDir="${project.webapp}" filtering="false" overwrite="true" failonerror="false">
       <fileset dir="${sitemap-dir}">
         <exclude name="*-${version}.xmap"/>
         <include name="*.xmap"/>
         <include name="jtidy.properties"/>
       </fileset>
     </copy>
-    <copy toDir="${project.webapp}" filtering="true" overwrite="true">
+    <copy toDir="${project.webapp}" filtering="false" overwrite="true">
       <fileset dir="${sitemap-dir}">
         <include name="*-${version}.xmap"/>
       </fileset>

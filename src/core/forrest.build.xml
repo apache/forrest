@@ -295,7 +295,7 @@ FORREST SITE BUILDER
 
 
   <target name="run" 
-   depends="webapp-local, run_custom_jetty, run_default_jetty"/>
+   depends="init, run_custom_jetty, run_default_jetty"/>
  
   <target name="run_custom_jetty"
    if="custom_jetty_config"
@@ -317,10 +317,9 @@ FORREST SITE BUILDER
   </target>
   
   <target name="run_default_jetty"
-   description="Run Jetty with configuration file found in Forrest"
-   depends="webapp-local">
+   description="Run Jetty with configuration file found in Forrest">
     <java classname="org.mortbay.jetty.Server"
-          dir="${project.webapp}"
+          dir="${forrest.home}/context"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
           failonerror="yes">
