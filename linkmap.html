@@ -10,7 +10,7 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body onload="init()">
@@ -49,7 +49,7 @@
     +-->
 <div class="searchbox">
 <form action="http://www.google.com/search" method="get" class="roundtopsmall">
-<input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -79,7 +79,14 @@
 </div>
 </div>
 <div id="main">
-<div id="published">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
 <script type="text/javascript" language="JavaScript"><!--
               document.write("Published: " + document.lastModified);
               //  --></script>
@@ -98,7 +105,7 @@
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_1.1')" id="menu_1.1Title" class="menutitle">About</div>
+<div onclick="SwitchMenu('menu_1.1', 'skin/')" id="menu_1.1Title" class="menutitle">About</div>
 <div id="menu_1.1" class="menuitemgroup">
 <div class="menuitem">
 <a href="index.html">Index</a>
@@ -125,7 +132,7 @@
 <a href="live-sites.html">Example sites</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2')" id="menu_1.2Title" class="menutitle">Documentation</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Documentation</div>
 <div id="menu_1.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/your-project.html">Using Forrest</a>
@@ -151,7 +158,7 @@
 <div class="menuitem">
 <a href="docs/compliance.html">Standards Compliance</a>
 </div>
-<div onclick="SwitchMenu('menu_1.2.9')" id="menu_1.2.9Title" class="menutitle">Advanced Topics</div>
+<div onclick="SwitchMenu('menu_1.2.9', 'skin/')" id="menu_1.2.9Title" class="menutitle">Advanced Topics</div>
 <div id="menu_1.2.9" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/catalog.html">Using DTD Catalogs</a>
@@ -166,7 +173,7 @@
 <a href="docs/cap.html">Sourcetype Action</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2.10')" id="menu_1.2.10Title" class="menutitle">Upgrading</div>
+<div onclick="SwitchMenu('menu_1.2.10', 'skin/')" id="menu_1.2.10Title" class="menutitle">Upgrading</div>
 <div id="menu_1.2.10" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/upgrading_06.html">Upgrading to 0.6</a>
@@ -176,7 +183,7 @@
 </div>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.3')" id="menu_1.3Title" class="menutitle">SubProjects</div>
+<div onclick="SwitchMenu('menu_1.3', 'skin/')" id="menu_1.3Title" class="menutitle">SubProjects</div>
 <div id="menu_1.3" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/forrestbar.html">ForrestBar</a>
@@ -188,9 +195,9 @@
 <a href="docs/forrestbot-web-interface.html">Forrestbot Webapp</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.4')" id="menu_1.4Title" class="menutitle">Reference docs</div>
+<div onclick="SwitchMenu('menu_1.4', 'skin/')" id="menu_1.4Title" class="menutitle">Reference docs</div>
 <div id="menu_1.4" class="menuitemgroup">
-<div onclick="SwitchMenu('menu_1.4.1')" id="menu_1.4.1Title" class="menutitle">DTD documentation</div>
+<div onclick="SwitchMenu('menu_1.4.1', 'skin/')" id="menu_1.4.1Title" class="menutitle">DTD documentation</div>
 <div id="menu_1.4.1" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/dtd-docs.html">Overview</a>
@@ -214,20 +221,20 @@
 <a href="docs/faq-v13.dtdx.html">faq-v13</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.4.2')" id="menu_1.4.2Title" class="menutitle">Doc samples</div>
+<div onclick="SwitchMenu('menu_1.4.2', 'skin/')" id="menu_1.4.2Title" class="menutitle">Doc samples</div>
 <div id="menu_1.4.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/document-v13.html">document-v13</a>
 </div>
 <div class="menuitem">
-<a href="docs/wiki-sample.html">Wiki Reference</a>
+<a href="docs/wiki-sample.html">JSPWiki Reference</a>
 </div>
 <div class="menuitem">
 <a href="docs/oowriter.html">OpenOffice Writer</a>
 </div>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.5')" id="menu_1.5Title" class="menutitle">Older Docs</div>
+<div onclick="SwitchMenu('menu_1.5', 'skin/')" id="menu_1.5Title" class="menutitle">Older Docs</div>
 <div id="menu_1.5" class="menuitemgroup">
 <div class="menuitem">
 <a href="docs/primer.html">Forrest Primer</a>
@@ -239,7 +246,7 @@
 <a href="docs/dreams.html">Dream list</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.6')" id="menu_1.6Title" class="menutitle">How-To</div>
+<div onclick="SwitchMenu('menu_1.6', 'skin/')" id="menu_1.6Title" class="menutitle">How-To</div>
 <div id="menu_1.6" class="menuitemgroup">
 <div class="menuitem">
 <a href="howto/index.html">Overview</a>
@@ -254,7 +261,7 @@
 <a href="howto/howto-pdf-tab.html">Create tab PDF</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.7')" id="menu_1.7Title" class="menutitle">Getting Involved</div>
+<div onclick="SwitchMenu('menu_1.7', 'skin/')" id="menu_1.7Title" class="menutitle">Getting Involved</div>
 <div id="menu_1.7" class="menuitemgroup">
 <div class="menuitem">
 <a href="contrib.html">Contributing</a>
@@ -275,7 +282,7 @@
 <a href="forrest-issues.html">Open Issues</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.8')" id="menu_1.8Title" class="menutitle">Related projects</div>
+<div onclick="SwitchMenu('menu_1.8', 'skin/')" id="menu_1.8Title" class="menutitle">Related projects</div>
 <div id="menu_1.8" class="menuitemgroup">
 <div class="menuitem">
 <a href="http://gump.apache.org/">Apache Gump</a>
@@ -330,35 +337,35 @@
 <h2 class="underlined_10">Table of Contents</h2>
 <div class="section">
 <li>
-<a href="">Forrest</a>
+<a href="">Forrest</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>site</em>
 </li>
 <ul>
 
   
 <li>
-<a href="">About</a>
+<a href="">About</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>about</em>
 </li>
 <ul>
     
 <li>
-<a href="index.html">Index</a>
+<a href="index.html">Index</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>index</em>
 </li>
     
 <li>
-<a href="license.html">License</a>
+<a href="license.html">License</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>license</em>
 </li>
     
 <li>
-<a href="http://forrest.apache.org/mirrors.cgi">Download</a>
+<a href="http://forrest.apache.org/mirrors.cgi">Download</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>download</em>
 </li>
     
     
 <li>
-<a href="who.html">Who we are</a>
+<a href="who.html">Who we are</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>who</em>
 </li>
     
 <li>
-<a href="faq.html">FAQs</a>
+<a href="faq.html">FAQs</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>faq</em>
 </li>
 <ul>
       
@@ -369,28 +376,28 @@
 </ul>
     
 <li>
-<a href="changes.html">Changes</a>
+<a href="changes.html">Changes</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>changes</em>
 </li>
     
     
 <li>
-<a href="todo.html">Todo</a>
+<a href="todo.html">Todo</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>todo</em>
 </li>
     
 <li>
-<a href="live-sites.html">Example sites</a>
+<a href="live-sites.html">Example sites</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>live-sites</em>
 </li>
   
 </ul>
 
   
 <li>
-<a href="docs/">Documentation</a>
+<a href="docs/">Documentation</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>documentation</em>
 </li>
 <ul>
     
 <li>
-<a href="docs/your-project.html">Using Forrest</a>
+<a href="docs/your-project.html">Using Forrest</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>your-project</em>
 </li>
 <ul>
       
@@ -401,11 +408,11 @@
 </ul>
     
 <li>
-<a href="docs/validation.html">XML Validation</a>
+<a href="docs/validation.html">XML Validation</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>validation</em>
 </li>
     
 <li>
-<a href="docs/linking.html">Menus and Linking</a>
+<a href="docs/linking.html">Menus and Linking</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>linking</em>
 </li>
 <ul>
       
@@ -413,39 +420,39 @@
 </ul>
     
 <li>
-<a href="docs/searching.html">Searching</a>
+<a href="docs/searching.html">Searching</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>searching</em>
 </li>
     
 <li>
-<a href="docs/skins.html">Default Skins</a>
+<a href="docs/skins.html">Default Skins</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>skins</em>
 </li>
     
 <li>
-<a href="docs/skin-package.html">Skin Packages</a>
+<a href="docs/skin-package.html">Skin Packages</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>skin-package</em>
 </li>
     
     
 <li>
-<a href="docs/forrest-contract.html">Our Contract</a>
+<a href="docs/forrest-contract.html">Our Contract</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>forrest-contract</em>
 </li>
     
 <li>
-<a href="docs/compliance.html">Standards Compliance</a>
+<a href="docs/compliance.html">Standards Compliance</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>compliance</em>
 </li>
    
     
     
 <li>
-<a href="">Advanced Topics</a>
+<a href="">Advanced Topics</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>developers</em>
 </li>
 <ul>
       
 <li>
-<a href="docs/catalog.html">Using DTD Catalogs</a>
+<a href="docs/catalog.html">Using DTD Catalogs</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>catalog</em>
 </li>
       
 <li>
-<a href="docs/sitemap-ref.html">Sitemap Reference</a>
+<a href="docs/sitemap-ref.html">Sitemap Reference</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>sitemap-ref</em>
 </li>
 <ul>
         
@@ -456,27 +463,27 @@
 </ul>
       
 <li>
-<a href="docs/project-sitemap.html">Project sitemap</a>
+<a href="docs/project-sitemap.html">Project sitemap</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>project-sitemap</em>
 </li>
       
 <li>
-<a href="docs/cap.html">Sourcetype Action</a>
+<a href="docs/cap.html">Sourcetype Action</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>cap</em>
 </li>
     
 </ul>
     
     
 <li>
-<a href="">Upgrading</a>
+<a href="">Upgrading</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>upgrading</em>
 </li>
 <ul>
       
 <li>
-<a href="docs/upgrading_06.html">Upgrading to 0.6</a>
+<a href="docs/upgrading_06.html">Upgrading to 0.6</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>upgrading_06</em>
 </li>
       
 <li>
-<a href="docs/upgrading_05.html">Upgrading to 0.5</a>
+<a href="docs/upgrading_05.html">Upgrading to 0.5</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>upgrading_05</em>
 </li>
     
 </ul>
@@ -485,82 +492,82 @@
 
   
 <li>
-<a href="docs/">SubProjects</a>
+<a href="docs/">SubProjects</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>subprojects</em>
 </li>
 <ul>
     
 <li>
-<a href="docs/forrestbar.html">ForrestBar</a>
+<a href="docs/forrestbar.html">ForrestBar</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>forrestbar</em>
 </li>
     
 <li>
-<a href="docs/forrestbot.html">Forrestbot</a>
+<a href="docs/forrestbot.html">Forrestbot</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>forrestbot</em>
 </li>
     
 <li>
-<a href="docs/forrestbot-web-interface.html">Forrestbot Webapp</a>
+<a href="docs/forrestbot-web-interface.html">Forrestbot Webapp</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>forrestbot-web-interface</em>
 </li>
   
 </ul>
     
   
 <li>
-<a href="docs/">Reference docs</a>
+<a href="docs/">Reference docs</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>samples</em>
 </li>
 <ul>
     
 <li>
-<a href="">DTD documentation</a>
+<a href="">DTD documentation</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>dtd-docs-container</em>
 </li>
 <ul>
       
 <li>
-<a href="docs/dtd-docs.html">Overview</a>
+<a href="docs/dtd-docs.html">Overview</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>dtd-docs</em>
 </li>
       
 <li>
-<a href="docs/document-v20.dtdx.html">document-v20</a>
+<a href="docs/document-v20.dtdx.html">document-v20</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>document-v20-dtd</em>
 </li>
       
 <li>
-<a href="docs/howto-v20.dtdx.html">howto-v20</a>
+<a href="docs/howto-v20.dtdx.html">howto-v20</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>howto-v20-dtd</em>
 </li>
       
 <li>
-<a href="docs/faq-v20.dtdx.html">faq-v20</a>
+<a href="docs/faq-v20.dtdx.html">faq-v20</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>faq-v20-dtd</em>
 </li>
       
 <li>
-<a href="docs/document-v13.dtdx.html">document-v13</a>
+<a href="docs/document-v13.dtdx.html">document-v13</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>document-v13-dtd</em>
 </li>
       
 <li>
-<a href="docs/howto-v13.dtdx.html">howto-v13</a>
+<a href="docs/howto-v13.dtdx.html">howto-v13</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>howto-v13-dtd</em>
 </li>
       
 <li>
-<a href="docs/faq-v13.dtdx.html">faq-v13</a>
+<a href="docs/faq-v13.dtdx.html">faq-v13</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>faq-v13-dtd</em>
 </li>
     
 </ul>
     
 <li>
-<a href="">Doc samples</a>
+<a href="">Doc samples</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>samples-container</em>
 </li>
 <ul>
       
       
       
 <li>
-<a href="docs/document-v13.html">document-v13</a>
+<a href="docs/document-v13.html">document-v13</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>document-v13</em>
 </li>
       
 <li>
-<a href="docs/wiki-sample.html">Wiki Reference</a>
+<a href="docs/wiki-sample.html">JSPWiki Reference</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>wiki</em>
 </li>
       
 <li>
-<a href="docs/oowriter.html">OpenOffice Writer</a>
+<a href="docs/oowriter.html">OpenOffice Writer</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>oowriter</em>
 </li>    
     
 </ul>
@@ -569,88 +576,88 @@
 
   
 <li>
-<a href="docs/">Older Docs</a>
+<a href="docs/">Older Docs</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>older_documentation</em>
 </li>
 <ul>
     
 <li>
-<a href="docs/primer.html">Forrest Primer</a>
+<a href="docs/primer.html">Forrest Primer</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>primer</em>
 </li>
 <ul>
+      
+    
+</ul>
+    
+<li>
+<a href="docs/libre-intro.html">Libre</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>libre-intro</em>
+</li>
+    
+<li>
+<a href="docs/dreams.html">Dream list</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>dreams</em>
+</li>
+  
+</ul>
+
+  
+<li>
+<a href="howto/">How-To</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>howto</em>
+</li>
+<ul>
+    
+<li>
+<a href="howto/index.html">Overview</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>overview</em>
+</li>
+    
+<li>
+<a href="howto/howto-howto.html">Write a How-to</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>write-howto</em>
+</li>
+    
+<li>
+<a href="howto/howto-asf-mirror.html">Download mirror</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>asf-mirror</em>
+</li>
+    
+<li>
+<a href="howto/howto-pdf-tab.html">Create tab PDF</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>pdf-tab</em>
+</li>
+  
+</ul>
+
+
+  
+  
+<li>
+<a href="">Getting Involved</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>getting-involved</em>
+</li>
+<ul>
+    
+<li>
+<a href="contrib.html">Contributing</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>contrib</em>
+</li>
+    
+<li>
+<a href="build.html">Building Forrest</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>build</em>
+</li>
+    
+<li>
+<a class="external" href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/?root=Apache-SVN">Browse SVN</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>SVN</em>
+</li>
+    
+<li>
+<a href="mail-lists.html">Mail lists</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>mail-lists</em>
+</li>
+<ul>
+      
+      
       
     
 </ul>
     
 <li>
-<a href="docs/libre-intro.html">Libre</a>
+<a class="external" href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">Bugs and Issues</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>bugs</em>
 </li>
     
 <li>
-<a href="docs/dreams.html">Dream list</a>
-</li>
-  
-</ul>
-
-  
-<li>
-<a href="howto/">How-To</a>
-</li>
-<ul>
-    
-<li>
-<a href="howto/index.html">Overview</a>
-</li>
-    
-<li>
-<a href="howto/howto-howto.html">Write a How-to</a>
-</li>
-    
-<li>
-<a href="howto/howto-asf-mirror.html">Download mirror</a>
-</li>
-    
-<li>
-<a href="howto/howto-pdf-tab.html">Create tab PDF</a>
-</li>
-  
-</ul>
-
-
-  
-  
-<li>
-<a href="">Getting Involved</a>
-</li>
-<ul>
-    
-<li>
-<a href="contrib.html">Contributing</a>
-</li>
-    
-<li>
-<a href="build.html">Building Forrest</a>
-</li>
-    
-<li>
-<a class="external" href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/?root=Apache-SVN">Browse SVN</a>
-</li>
-    
-<li>
-<a href="mail-lists.html">Mail lists</a>
-</li>
-<ul>
-      
-      
-      
-    
-</ul>
-    
-<li>
-<a class="external" href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">Bugs and Issues</a>
-</li>
-    
-<li>
-<a href="forrest-issues.html">Open Issues</a>
+<a href="forrest-issues.html">Open Issues</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>forrest-issues</em>
 </li>
 
 
@@ -660,28 +667,28 @@
 
   
 <li>
-<a href="">Related projects</a>
+<a href="">Related projects</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>references</em>
 </li>
 <ul>
     
 <li>
-<a class="external" href="http://gump.apache.org/">Apache Gump</a>
+<a class="external" href="http://gump.apache.org/">Apache Gump</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>gump</em>
 </li>
     
 <li>
-<a class="external" href="http://cocoon.apache.org/">Apache Cocoon</a>
+<a class="external" href="http://cocoon.apache.org/">Apache Cocoon</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>cocoon</em>
 </li>
     
 <li>
-<a class="external" href="http://cocoon.apache.org/lenya/">Apache Lenya</a>
+<a class="external" href="http://cocoon.apache.org/lenya/">Apache Lenya</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>lenya</em>
 </li>
     
 <li>
-<a class="external" href="http://xml.apache.org/">Apache XML</a>
+<a class="external" href="http://xml.apache.org/">Apache XML</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>xml</em>
 </li>
     
 <li>
-<a href="http://www.apache.org/~vgritsenko/stats/">Apache Stats</a>
+<a href="http://www.apache.org/~vgritsenko/stats/">Apache Stats</a>&nbsp;&nbsp;&nbsp;_________________________&nbsp;&nbsp;<em>apache-stats</em>
 </li>
   
 </ul>

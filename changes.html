@@ -10,7 +10,7 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body onload="init()">
@@ -49,7 +49,7 @@
     +-->
 <div class="searchbox">
 <form action="http://www.google.com/search" method="get" class="roundtopsmall">
-<input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -79,7 +79,14 @@
 </div>
 </div>
 <div id="main">
-<div id="published">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
 <script type="text/javascript" language="JavaScript"><!--
               document.write("Published: " + document.lastModified);
               //  --></script>
@@ -98,8 +105,8 @@
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_selected_1.1')" id="menu_selected_1.1Title" class="menutitle">About</div>
-<div id="menu_selected_1.1" class="selectedmenuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.1', 'skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">About</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a href="index.html">Index</a>
 </div>
@@ -125,7 +132,7 @@
 <a href="live-sites.html">Example sites</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2')" id="menu_1.2Title" class="menutitle">Related projects</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Related projects</div>
 <div id="menu_1.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="http://gump.apache.org/">Apache Gump</a>
@@ -209,8 +216,21 @@
         <a href="docs/upgrading_06.html">upgrading to v0.6</a>
       (DC)</li>
 <li>
+<img class="icon" alt="add" src="images/add.jpg"> 
+        getMenu.js - fixes a path issue and the double click behaviour of pelt.
+      (TS)</li>
+<li>
+<img class="icon" alt="add" src="images/add.jpg"> 
+        Explained the usage of the extra-css element in skinconf.xml of the fresh site.
+      (TS)</li>
+<li>
 <img class="icon" alt="add" src="images/add.jpg">
-        Requesting linkmap.html Forrest now renderes the site.xml 
+        Initial Chaperon grammar for minimal MoinMoin Wiki to Forrest xdocs
+        transformation. Source documents use the *.moinwiki filename extension.
+      (DC) Thanks to Fabio Rinaldi. Fixes <a class="external" href="http://issues.cocoondev.org/browse/FOR-268">FOR-268</a>.</li>
+<li>
+<img class="icon" alt="add" src="images/add.jpg">
+        Requesting linkmap.html Forrest now renders the site.xml 
         file as a table of contents.
       (NKB)</li>
 <li>
@@ -224,12 +244,13 @@
       (NKB)</li>
 <li>
 <img class="icon" alt="add" src="images/add.jpg">
-        New project sitemap extension mechanism. Now it's possible to add
-        a project sitmap that plugs into the processing at the beginning.
+        New project sitemap extension mechanism. Now it is possible to add
+        a project sitemap that plugs into the processing at the beginning.
         If the requested url is resolved by it, it will serve the file directly.
         If the requested url with the extension changed to xml is matched, then
         Forrest will use that result as the intermediate format and render it.
-        This should make Forrest updates not collide with project-specific sitemaps.
+        This will enable project-specific sitemaps to not collide with future
+        Forrest updates.
       (NKB)</li>
 <li>
 <img class="icon" alt="add" src="images/add.jpg">
@@ -478,11 +499,12 @@
       (JJP) Fixes <a class="external" href="http://issues.cocoondev.org/browse/FOR-56">FOR-56</a>.</li>
 <li>
 <img class="icon" alt="remove" src="images/remove.jpg">
-        Skins forrest-css and avalon-tigris deleted; krysalis-site
-        renamed to "crust" and tigris-style renamed to "tigris".  Aliases
+        Skins "forrest-css" and "avalon-tigris" are deleted. The
+        "tigris-style" is renamed to "tigris". Aliases
         set in place for backward-compatibility.
-        The old "forrest-site" skin is retained for a little while longer,
-        but is deprecated, so please move to one of the other skins.
+        The old "forrest-site" and "krysalis-site" skins are retained for
+        a little while longer,
+        but are deprecated, so please move to one of the other skins.
         See notes about <a href="docs/skins.html">Default skins</a>.
       (DB) Fixes <a class="external" href="http://issues.cocoondev.org/browse/FOR-181">FOR-181</a>.</li>
 <li>
@@ -798,12 +820,25 @@
       (JJP)</li>
 <li>
 <img class="icon" alt="fix" src="images/fix.jpg">
+        Openoffice2forrest: add support for merged cells in tables.
+      (JJP) Fixes <a class="external" href="http://issues.cocoondev.org/browse/FOR-262">FOR-262</a>.</li>
+<li>
+<img class="icon" alt="fix" src="images/fix.jpg"> 
+        Fixed the domain bug of the searchbox in pelt.  
+      (TS)</li>
+<li>
+<img class="icon" alt="fix" src="images/fix.jpg"> 
+        Fixed the menu in pelt by adding getMenu.js and changing the site2xhtml.xsl. 
+        Now the chapter image will get expand again.
+      (TS)</li>
+<li>
+<img class="icon" alt="fix" src="images/fix.jpg">
         Relative URIs with absolute paths were broken in the site.xml
         linking mechanism.
       (DC) Fixes <a class="external" href="http://issues.cocoondev.org/browse/FOR-268">FOR-268</a>.</li>
 <li>
 <img class="icon" alt="fix" src="images/fix.jpg">
-        Re-write the Chaperon grammar for CWiki to address ambiguity with
+        Re-write the Chaperon grammar for JSPWiki to address ambiguity with
         paragraphs and sub-sections.
       (DC) Thanks to Fabio Rinaldi.</li>
 <li>
@@ -973,7 +1008,7 @@
 </div>
 
     
-<a name="N10405"></a><a name="version_0.5.1"></a>
+<a name="N1042B"></a><a name="version_0.5.1"></a>
 <h2 class="underlined_10">Version 0.5.1 (2003-10-06)</h2>
 <div class="section">
 <ul>
@@ -1018,7 +1053,7 @@
 </div>
 
     
-<a name="N1044B"></a><a name="version_0.5"></a>
+<a name="N10471"></a><a name="version_0.5"></a>
 <h2 class="underlined_10">Version 0.5 (2003-09-13)</h2>
 <div class="section">
 <ul>
@@ -1404,7 +1439,7 @@
 </ul>
 </div>
     
-<a name="N10656"></a><a name="version_0.4"></a>
+<a name="N1067C"></a><a name="version_0.4"></a>
 <h2 class="underlined_10">Version 0.4 (2003-02-12)</h2>
 <div class="section">
 <ul>
@@ -1490,7 +1525,7 @@
 </div>
 
     
-<a name="N106C3"></a><a name="version_0.3"></a>
+<a name="N106E9"></a><a name="version_0.3"></a>
 <h2 class="underlined_10">Version 0.3 (2003-01-30)</h2>
 <div class="section">
 <ul>
@@ -1752,7 +1787,7 @@
 </ul>
 </div>
     
-<a name="N107FE"></a><a name="version_0.2"></a>
+<a name="N10824"></a><a name="version_0.2"></a>
 <h2 class="underlined_10">Version 0.2 (2002-11-16)</h2>
 <div class="section">
 <ul>
@@ -1774,7 +1809,7 @@
 </ul>
 </div>
     
-<a name="N10816"></a><a name="version_0.2rc1"></a>
+<a name="N1083C"></a><a name="version_0.2rc1"></a>
 <h2 class="underlined_10">Version 0.2rc1 (2002-11-13)</h2>
 <div class="section">
 <ul>

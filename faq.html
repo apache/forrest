@@ -10,7 +10,7 @@
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
-<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/menu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body onload="init()">
@@ -49,7 +49,7 @@
     +-->
 <div class="searchbox">
 <form action="http://www.google.com/search" method="get" class="roundtopsmall">
-<input value="" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site:');" value="Search the site:" size="15" name="q" id="query" type="text">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -79,7 +79,14 @@
 </div>
 </div>
 <div id="main">
-<div id="published">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
 <script type="text/javascript" language="JavaScript"><!--
               document.write("Published: " + document.lastModified);
               //  --></script>
@@ -98,8 +105,8 @@
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_selected_1.1')" id="menu_selected_1.1Title" class="menutitle">About</div>
-<div id="menu_selected_1.1" class="selectedmenuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.1', 'skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">About</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a href="index.html">Index</a>
 </div>
@@ -125,7 +132,7 @@
 <a href="live-sites.html">Example sites</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.2')" id="menu_1.2Title" class="menutitle">Related projects</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Related projects</div>
 <div id="menu_1.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="http://gump.apache.org/">Apache Gump</a>
@@ -194,7 +201,7 @@
 </li>
 <li>
 <a href="#cvs">1.4. 
-        What happened to CVS?
+        The old xml-forrest CVS code repository seems to be stale. What happened?
       </a>
 </li>
 <li>
@@ -393,15 +400,15 @@
 </div>
 <a name="N10034"></a><a name="cvs"></a>
 <h4 class="faq">1.4. 
-        What happened to CVS?
+        The old xml-forrest CVS code repository seems to be stale. What happened?
       </h4>
 <div align="right">
 <a href="#cvs-menu">^</a>
 </div>
 <div style="margin-left: 15px">
 <p>
-          Forrest switched from a CVS code repository to a SVN (subversion) code repository.  The CVS 
-repository is not kept current.
+          Forrest switched from a CVS code repository to SVN (subversion)
+          code repository. The old CVS repository is not kept current.
         </p>
 </div>
 <a name="N1003C"></a><a name="svn"></a>
@@ -925,9 +932,15 @@ X [0]                       brokenlink.html     BROKEN: reason
          DTDs are shipped with Forrest and automatically handled. However, you
          will need to have the DocBook stylesheets on your system (they are
          too massive to ship with Forrest) and configure Forrest accordingly.
-         You will need to create a "sitemap" as explained in
+         You will need to create a
+         <a href="docs/project-sitemap.html">project sitemap</a>
+          as explained in
          <a href="docs/your-project.html">Using Forrest</a>
-         and add matches to handle your DocBook documents, e.g.
+         and add matches to handle your DocBook documents.
+         Here is an example. Note that you need to change it to suit your
+         situation. The match must be very specific so that only the
+         DocBook documents are matched. The rest of the documents will be
+         handled by Forrest core. Powerful regex capabilities are available.
         </p>
 <pre class="code">
 ...
@@ -952,7 +965,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          for configuration guidance.
         </p>
 </div>
-<a name="N1027B"></a><a name="version"></a>
+<a name="N1027F"></a><a name="version"></a>
 <h4 class="faq">4.3. 
         How to report which version of Forrest is being used and the
         properties that are set?
@@ -971,7 +984,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages.
         </p>
 </div>
-<a name="N1028F"></a><a name="logs"></a>
+<a name="N10293"></a><a name="logs"></a>
 <h4 class="faq">4.4. 
         Where are the log files to find more infomation about errors?
       </h4>
@@ -1000,7 +1013,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           to the standard output.
         </p>
 </div>
-<a name="N102B3"></a><a name="how_can_I_help"></a>
+<a name="N102B7"></a><a name="how_can_I_help"></a>
 <h4 class="faq">4.5. 
         How can I help?
       </h4>
