@@ -36,6 +36,19 @@
     <delete dir="${project.cocoon-work-dir}"/>
     <mkdir dir="${project.cocoon-work-dir}"/>
 
+    <echo>
+Static site will be generated at:
+${project.site-dir}
+
+Note that there are various reasons for "build failed" messages.
+* Cocoon will report the status of each document:
+  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
+* Even if only one link is broken, you will still get "failed".
+* Your site would still be generated, but some pages would be broken.
+* Please check the file:
+${project.brokenlinkfile}
+for any broken links in the generated site.
+    </echo>
     <parallel>
       <java classname="org.apache.cocoon.Main"
         fork="true"
@@ -139,22 +152,6 @@
             <exclude name="xslt/**"/>
           </fileset>
         </copy>
-        <!-- This place is our last chance to give them help messages.
-             Hopefully Cocoon won't issue messages until these tasks are done.
-         -->
-        <echo>
-Static site will be generated at:
-${project.site-dir}
-
-Note that there are various reasons for "build failed" messages.
-* Cocoon will report the status of each document:
-  - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
-* Even if only one link is broken, you will still get "failed".
-* Your site would still be generated, but some pages would be broken.
-* Please check the file:
-${project.brokenlinkfile}
-for any broken links in the generated site.
-        </echo>
       </sequential>
     </parallel>
     <echo>------------------------------
