@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
-
   <xsl:template match="site">
-    <xsl:text disable-output-escaping="yes"><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">]]></xsl:text>
     <html>
       <head>
         <title><xsl:value-of select="div[@class='content']/h2"/></title>

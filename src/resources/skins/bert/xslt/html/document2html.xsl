@@ -97,16 +97,18 @@
       </div>
     </div>
   </xsl:template>
-  <!--
-  <xsl:template match="link | jump | fork">
--->
-  <xsl:template match="link | fork">
+  <xsl:template match="link">
     <a href="{@href}">
       <xsl:apply-templates/>
     </a>
   </xsl:template>
   <xsl:template match="jump">
-    <a href="#{@href}">
+    <a href="{@href}" target="_top">
+      <xsl:apply-templates/>
+    </a>
+  </xsl:template>
+  <xsl:template match="fork">
+    <a href="{@href}" target="_blank">
       <xsl:apply-templates/>
     </a>
   </xsl:template>
