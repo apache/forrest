@@ -2,9 +2,24 @@
 <project
  name="forrestdoc" default="dist" basedir=".">
 
-   <property name="scan.dir"  value="." />
-   <property name="target.dir"  value="${scan.dir}/build/forrestdoc"/>  
+   <!-- init -->
+   <tstamp />
+   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+   
+   <property name="project.dir"  location="." />
+   <property name="target.dir"   location="${project.dir}/build/forrestdoc"/>  
+   <basename property="project.dirname"  file="${project.dir}"/>
+   <property name="project.target.dir"   location="${target.dir}/${project.dirname}"/>  
+         
+   <echo>scan dir: ${project.dir}</echo>
+   <echo>target dir: ${project.target.dir}</echo>
 
+   <condition property="ant.build.available">
+      <available file="${project.dir}/build.xml"/>
+  </condition>
+  
+   <echo>ant buildfine available: ${ant.build.available}</echo>
+     
    <property name="src.dir"           location="./src/java" />
    <property name="resources.dir"     location="./src/resources" />
    <property name="build.dir"         location="./build" />
@@ -13,13 +28,13 @@
 
    <property name="build.classes.dir" location="${build.dir}/classes" />
    
-   <property name="target.javasrc.dir" location="${target.dir}/javasrc" />
-   <property name="target.javadoc.dir" location="${target.dir}/javadoc" />
-   <property name="target.xml.dir"     location="${target.dir}/xml" />
-   <property name="target.dot.dir"     location="${target.dir}/dot" />
-   <property name="target.uml.dir"     location="${target.dir}/uml" />
-   <property name="target.jsdoc.dir"   location="${target.dir}/jsdoc" />
-   <property name="target.vizant.dir"  location="${target.dir}/vizant" />
+   <property name="target.javasrc.dir" location="${project.target.dir}/javasrc" />
+   <property name="target.javadoc.dir" location="${project.target.dir}/javadoc" />
+   <property name="target.xml.dir"     location="${project.target.dir}/xml" />
+   <property name="target.dot.dir"     location="${project.target.dir}/dot" />
+   <property name="target.uml.dir"     location="${project.target.dir}/uml" />
+   <property name="target.jsdoc.dir"   location="${project.target.dir}/jsdoc" />
+   <property name="target.vizant.dir"  location="${project.target.dir}/vizant" />
 
    <path id="lib.classpath">
       <fileset  dir="${lib.dir}">
@@ -35,13 +50,10 @@
       <pathelement path="${build.classes.dir}"/>
    </path>
 
-   <!-- init -->
-   <tstamp />
-   
    <presetdef name="fjavadoc">
      <javadoc 
            useexternalfile="true">
-       <fileset dir="${scan.dir}" defaultexcludes="yes">
+       <fileset dir="${project.dir}" defaultexcludes="yes">
         <include name="**/*.java" />
        </fileset>
     </javadoc>
@@ -77,13 +89,18 @@
            depends="all">
    </target>        
    
-   <target name="all" 
+   <target name="project" 
            description="create all possible docs for this project" 
            depends="javasrc, jsdoc, xml, uml, javadoc, vizant">
-      <copy todir="${target.dir}">
+      <copy todir="${project.target.dir}">
         <fileset dir="${resources.dir}/common" casesensitive="yes"/>
       </copy> 
    </target>    
+   
+   <target name="all" 
+           description="test this project" 
+           depends="project">
+   </target>     
    
    <!-- 
        The utility targets to run the aspects of ForrestDoc
@@ -98,7 +115,7 @@
          <sysproperty key="recurse" value="true" />
          <sysproperty  key="title" value="Java Code Documentation" />
          <sysproperty key="outdir" path="${target.javasrc.dir}" />
-         <arg value="${scan.dir}" />
+         <arg value="${project.dir}" />
          <classpath refid="task.classpath"/>
       </java>
 
@@ -110,7 +127,7 @@
          <sysproperty key="recurse" value="true" />
          <sysproperty key="title" value="Java Code Documentation" />
          <sysproperty key="outdir" path="${target.javasrc.dir}" />
-         <arg value="${scan.dir}" />
+         <arg value="${project.dir}" />
          <classpath refid="task.classpath"/>
       </java>
 
@@ -122,7 +139,7 @@
    <target name="jsdoc" depends="compile">
       <mkdir dir="${target.jsdoc.dir}" />
       <taskdef name="jsdoc" classname="org.apache.forrest.forrestdoc.js.doc.JSDocTask" classpath="./build/classes/"/>
-      <jsdoc jSDir="${scan.dir}" destDir="${target.jsdoc.dir}" />
+      <jsdoc jSDir="${project.dir}" destDir="${target.jsdoc.dir}" />
    </target>   
    
    <target name="javasrc2" depends="compile">
@@ -130,7 +147,7 @@
       <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
         <classpath refid="task.classpath"/>
       </taskdef>
-      <javasrc srcDir="${scan.dir}" destDir="${target.javasrc.dir}" />
+      <javasrc srcDir="${project.dir}" destDir="${target.javasrc.dir}" />
    </target>   
 
    <target name="uml" depends="xml, xml2dot, dot">
@@ -199,14 +216,14 @@
    </target>
 
 
-   <target name="vizant" depends="runvizant, xml2formats"/>
+   <target name="vizant" depends="runvizant, xml2formats" if="ant.build.available"/>
    
-   <target name="runvizant" depends="compile">
+   <target name="runvizant" depends="compile" if="ant.build.available">
       <mkdir dir="${target.vizant.dir}" />
       <taskdef name="vizant" classname="org.apache.forrest.forrestdoc.ant.doc.Vizant">
          <classpath refid="task.classpath"/>
       </taskdef>   
-      <vizant antfile="${scan.dir}/build.xml" 
+      <vizant antfile="${project.dir}/build.xml" 
               outfile="${target.vizant.dir}/buildgraph.xml" 
               uniqueref="true">
        <!--       
@@ -245,7 +262,7 @@
       </vizant>        
    </target>
 
-   <target name="xml2formats">
+   <target name="xml2formats" if="ant.build.available">
       <xslt in="${target.vizant.dir}/buildgraph.xml" out="${target.vizant.dir}/target.dot" style="${resources.dir}/vizant/xml2dot.xsl" />
 
       <antcall target="dot">
@@ -273,7 +290,7 @@
    </target>
 
 
-   <target name="tg">
+   <target name="tg" if="ant.build.available">
     <java classname="com.touchgraph.linkbrowser.TGLinkBrowser" fork="yes">
      <arg value="${target.vizant.dir}/buildtg.xml"/>
      <classpath>
