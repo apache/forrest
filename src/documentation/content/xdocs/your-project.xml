@@ -73,7 +73,7 @@ U xml-forrest/build.bat
        Forrest from CVS, leaving it where it is would be best.</p>
      <p>
        As the message says, you need to add the distribution's <code>bin/</code>
-       ("binary") directory to your PATH variable, so the <code>forrest</code>
+       ("binary") directory to your PATH variable, so the <code>'forrest'</code>
        command is available everywhere:
      </p>
      <source>
@@ -146,26 +146,28 @@ Expanding: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/fresh-site.zip int
 
 Here is an outline of the generated files:
 
-/                         # /home/jeff/apache/xml-mysite
-/status.xml               # File listing project developers, todo list and change log
-/forrest.properties       # Optional file describing this site's layout to Forrest
-/src/documentation/       # Doc-specific files
+/                        # /home/jeff/apache/xml-mysite
+/status.xml              # List of project developers, todo list and change log
+/forrest.properties      # Optional file describing your site layout
+/src/documentation/      # Doc-specific files
 /src/documentation/skinconf.xml    # Info about your project used by the skin
 /src/documentation/content/xdocs   # XML content.
-/src/documentation/content/xdocs/index.xml  # Home page
-/src/documentation/content/xdocs/book.xml   # Navigation file defining site structure
-/src/documentation/content/xdocs/tabs.xml   # Skin-specific 'tabs' file.
-/src/documentation/resources/images         # Project images (logos, etc)
+/src/documentation/content/xdocs/index.xml # Home page
+/src/documentation/content/xdocs/book.xml  # Navigation file for site structure
+/src/documentation/content/xdocs/tabs.xml  # Skin-specific 'tabs' file.
+/src/documentation/resources/images        # Project images (logos, etc)
 
 
 What to do now?
 
-- Try rendering this template to HTML by typing 'forrest'. View the generated HTML
-  in a browser to make sure everything works.
-- Edit status.xml and src/documentation/skinconf.xml and customize for your project.
-- Replace src/documentation/resources/images/project-logo.gif with your project logo.
+- Try rendering this template to HTML by typing 'forrest'. View the generated
+  HTML in a browser to make sure everything works.
+- Edit status.xml and src/documentation/skinconf.xml and customize for your
+  project.
+- Replace src/documentation/resources/images/project-logo.gif with your project
+  logo.
 - Start adding content in xdocs/, remembering to add new files to book.xml
-- Give any feedback you have to forrest-dev@xml.apache.org
+- Provide any feedback to forrest-dev@xml.apache.org
 
 Thanks for using Apache Forrest
 -------------------------------
@@ -222,9 +224,10 @@ jeff@expresso:~/apache/xml-mysite$ tree
       <p>
         If your project already has XML documentation, it may be easier to tell
         Forrest where the XML lives, rather than rearrange your project directories to
-        accommodate Forrest. This can be done by editing forrest.properties. Consult
-        the <link href="#Changing_the_layout">Changing the layout</link> section for
-        more details.
+        accommodate Forrest. This can be done by editing
+        <code>forrest.properties</code> (consult
+        the <link href="#Changing_the_layout">Changing the layout</link>
+        section for more details).
       </p>
     </section>
     <section>
@@ -322,7 +325,7 @@ jeff@expresso:~/apache/xml-mysite$ tree
           The <code>forrest.properties</code> file is what maps from your directory
           layout to Forrest's. If you generated your site with 'forrest seed', you
           should have one pre-written, with all the entries commented out. The relevant
-          <code>forrest.properties</code>entries (with default values) are:
+          <code>forrest.properties</code> entries (with default values) are:
         </p>
         <source>
 # Properties that must be set to override the default locations
@@ -341,7 +344,7 @@ project.classes-dir=${project.content-dir}/classes
        </source>
        <p>
          For example, if you wish to keep XML documentation in src/xdocs rather than
-         src/documentation/content/xdocs, simply change the 'project.xdocs-dir'
+         <code>src/documentation/content/xdocs</code> simply change the 'project.xdocs-dir'
          definition:
        </p>
        <source>
@@ -367,8 +370,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
          </source>
          <note>
            Internally, Forrest rearranges the specified directory into the default
-           "src/documentation/content/xdocs" structure. In the layout above, we have
-           overlapping directories, so you'll end up with duplicate files. This small
+           <code>src/documentation/content/xdocs</code> structure. In the layout above, we have
+           overlapping directories, so you will end up with duplicate files. This small
            glitch doesn't usually cause problems; just always remember that all links
            are resolved through the sitemap.
          </note>
@@ -381,17 +384,19 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <title>Adding content</title>
       <p>
         Now you can start adding content of your own, in
-        src/documentation/content/xdocs.
+        <code>src/documentation/content/xdocs</code>
       </p>
       <section>
         <title>book.xml</title>
         <p>
           Whenever adding a new file, you should add an entry to that directory's
           <code>book.xml</code> file. book.xml is like a site index, and is rendered as
-          the vertical column of links in the default skin. Each directory below xdocs/
-          should have its own book.xml, with links suitably adjusted. Have a look at
+          the vertical column of links in the default skin. Each directory below
+          <code>xdocs/</code>
+          should have its own <code>book.xml</code> with links suitably adjusted. Have a look at
           Forrest's own xdocs for an example.</p>
-        <note>Yes, we know it's a pain having to edit every directory's book.xml
+        <note>Yes, we know it is a pain having to edit every directory's
+          <code>book.xml</code>
           file when making changes. The <link href="libre-intro.html">Libre</link>
           effort will hopefully put an end to this</note>
       </section>
@@ -410,7 +415,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <section>
         <title>Images</title>
         <p>
-          Images usually go in src/documentation/resources/images/. The default sitemap
+          Images usually go in <code>src/documentation/resources/images/</code>
+          The default sitemap
           maps this directory to <code>images/</code>, so image tags will typically look
           like &lt;figure src="images/project-logo.png" alt="Project Logo"/&gt; 
         </p>
@@ -455,7 +461,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           sitemap docs</link>. The Forrest sitemap is fairly complicated, and
         partially described in <link href="primer.html#sitemap">The Forrest
           Primer</link>. Be aware that order matters; your sitemap additions should
-        be before the catch-all sitemap rules (eg &lt;map:match
+        be before the catch-all sitemap rules (e.g. &lt;map:match
         pattern="*.html"&gt;), or they won't trigger.
       </p>
       <section id="adding_new_content_type">
@@ -463,7 +469,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <note>This section will eventually be simplified by <link
             href="cap.html">Content Aware Pipelines (CAPs)</link>.</note>
         <p>
-          Say that download.xml lists downloads for a certain package. It would be
+          Say that <code>download.xml</code> lists downloads for a certain package. It would be
           best to represent download information in a custom XML format:
         </p>
         <source
@@ -547,7 +553,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
             ${project.stylesheets-dir} points).
           </p>
           <p>
-            Then in src/documentation/sitemap.xmap, add a 'matcher' like this:
+            Then in <code>src/documentation/sitemap.xmap</code> add a 'matcher' like this:
           </p>
           <source><![CDATA[
             <map:match pattern="body-download.xml">
@@ -826,7 +832,8 @@ To run in Tomcat, add this to the config file (usu. server.xml):
             ]]></source>
           <p>
             Then restart Tomcat, and point your browser at
-            http://localhost:8080/MyProject. You should see a dynamically generated
+            <code>http://localhost:8080/MyProject</code>
+            ... you should see a dynamically generated
             page identical to that produced by the Cocoon crawler.
           </p>
         </section>
@@ -834,19 +841,19 @@ To run in Tomcat, add this to the config file (usu. server.xml):
           <title>Using the webapp</title>
           <p>
             With the setup above, you can edit the XML files in
-            <code>build/webapp/content/xdocs</code>, and see the changes immediately
+            <code>build/webapp/content/xdocs</code> and see the changes immediately
             in the browser.
           </p>
           <p>
             To get the edited content back to its home directory, either copy it
-            once you've finished editing, or symlink the
+            once you have finished editing, or symlink the
             <code>src/documentation/content/xdocs</code> directory to
             <code>build/webapp/content/xdocs</code>.
           </p>
 
           <note>In the future, we are hoping that Forrest will be able to work with
             <em>in-place</em> content, eliminating the step of copying everything
-            into the build/ directory.  There are also suggestions for making
+            into the <code>build/</code> directory.  There are also suggestions for making
             webapp-based content generation the primary technique. Future
             directions like these are debated on <link
               href="mailto:forrest-dev@xml.apache.org">forrest-dev</link>; please
