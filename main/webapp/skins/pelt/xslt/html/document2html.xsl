@@ -100,7 +100,7 @@ imported document2html.xsl for details.
     <xsl:choose>
       <xsl:when test="$level=1">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>  test - 
+          <h1><xsl:value-of select="title"/></h1>
         </div>
         <div class="section">
 			<xsl:apply-templates select="*[not(self::title)]"/>
