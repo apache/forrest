@@ -1,48 +1,54 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<!--+
+    | Covert samples file to the HTML page. Uses styles/main.css stylesheet.
+    |
+    | Author: Nicola Ken Barozzi "nicolaken@apache.org"
+    | Author: Vadim Gritsenko "vgritsenko@apache.org"
+    | Author: Christian Haul "haul@apache.org"
+    | CVS $Id: page2html.xsl,v 1.2 2003/07/05 13:03:52 jefft Exp $
+    +-->
 
- <xsl:output indent="yes"/>
-  
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <xsl:param name="contextPath" select="string('/cocoon')"/>
+
  <xsl:template match="/">
   <html>
    <head>
-    <title>Apache Cocoon 2.1-dev</title>
-    <link rel="SHORTCUT ICON" href="favicon.ico"/>
-
-    <xsl:apply-templates select="page/style"/>
-    <xsl:apply-templates select="page/script"/>
+     <title>Apache Forrest</title>
+     <link rel="SHORTCUT ICON" href="favicon.ico"/>
+     <xsl:apply-templates select="document/header/style"/>
+     <xsl:apply-templates select="document/header/script"/>
    </head>
-   <body bgcolor="#ffffff" link="#0086b2" vlink="#00698c" alink="#743e75">
+   <body>
     <table border="0" cellspacing="2" cellpadding="2" align="center" width="100%">
-     <tr>
-      <td width="*"><font face="arial,helvetica,sanserif" color="#000000">The Apache Software Foundation is proud to
-present...</font></td>
-      <td width="40%" align="center"><img border="0" src="/cocoon/samples/images/cocoon.gif"/></td>
-      <td width="30%" align="center"><font face="arial,helvetica,sanserif" color="#000000"><b>version
-2.1-dev</b></font></td>
-     </tr>
-     <tr>
-      <table bgcolor="#000000" border="0" cellspacing="2" cellpadding="2" align="center" width="100%">
-       <tr>
-        <td width="90%" align="left" bgcolor="#0086b2"><font size="+1" face="arial,helvetica,sanserif"
-            color="#ffffff"><xsl:value-of select="page/@title"/></font></td>
-
-        <xsl:apply-templates select="page/tab"/>
-       </tr>
-      </table>
-     </tr>
+      <tr>
+        <td width="50%">
+          <h2><xsl:value-of select="document/header/title"/></h2>
+        </td>
+        <td width="25%">
+          <xsl:apply-templates select="document/header/tab"/>
+        </td>
+      </tr>
     </table>
 
-    <table width="100%">   
-     <xsl:apply-templates select="page/row"/>
-    </table>
-   
-    <p align="center">
-     <font size="-1">
-      Copyright &#169; 1999-2002 <a href="http://www.apache.org/">The Apache Software Foundation</a>.<br/>
+    <p>
+     <xsl:choose>
+      <xsl:when test="document/body/row">
+       <table width="100%">
+        <xsl:apply-templates select="document/body/*"/>
+       </table>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:apply-templates select="document/body/*"/>
+      </xsl:otherwise>
+     </xsl:choose>
+    </p>
+
+    <p class="copyright">
+      Copyright &#169; 1999-2003 <a href="http://www.apache.org/">The Apache Software Foundation</a>.
       All rights reserved.
-     </font>
     </p>
    </body>
   </html>
@@ -51,57 +57,90 @@ present...</font></td>
  <xsl:template match="style">
   <link type="text/css" rel="stylesheet" href="{@href}"/>
  </xsl:template>
-
+ 
  <xsl:template match="script">
   <script type="text/javascript" src="{@href}"/>
  </xsl:template>
-
+ 
  <xsl:template match="tab">
-  <td nowrap="nowrap" bgcolor="#ffffff"><a href="{@href}"><i><xsl:value-of select="@title"/></i></a></td>
+  <a href="{@href}"><i><xsl:value-of select="@title"/></i></a>&#160;
  </xsl:template>
-
+ 
  <xsl:template match="row">
   <tr>
    <xsl:apply-templates select="column"/>
   </tr>
  </xsl:template>
-
+ 
  <xsl:template match="column">
   <td valign="top">
-   <table border="0" bgcolor="#000000" cellpadding="0" cellspacing="0" width="97%">
-    <tbody>
-     <tr>
-      <td>
-
-       <table bgcolor="#000000" border="0" cellspacing="2" cellpadding="2" align="center" width="100%">
-        <tr>
-         <td bgcolor="#0086b2" width="100%" align="left">
-          <font size="+1" face="arial,helvetica,sanserif" color="#ffffff"><xsl:value-of select="@title"/></font>
-         </td>
-        </tr>
-        <tr>
-         <td width="100%" bgcolor="#ffffff" align="left">
-
-          <xsl:apply-templates/>
-
-         </td>
-        </tr>
-       </table>
-      
-      </td>
-     </tr> 
-    </tbody>
-   </table>
+   <h4 class="samplesGroup"><xsl:value-of select="@title"/></h4>
+   <p class="samplesText"><xsl:apply-templates/></p>
   </td> 
  </xsl:template>
 
- <xsl:template match="para">
-  <p align="left">
-   <i><xsl:apply-templates/></i>
+ <xsl:template match="section">
+  <xsl:choose> <!-- stupid test for the hirachy deep -->
+   <xsl:when test="../../../section">
+    <h5><xsl:value-of select="title"/></h5>
+   </xsl:when>
+   <xsl:when test="../../section">
+    <h4><xsl:value-of select="title"/></h4>
+   </xsl:when>
+   <xsl:when test="../section">
+    <h4 class="samplesGroup"><xsl:value-of select="title"/></h4>
+   </xsl:when>
+  </xsl:choose>
+  <p>
+   <xsl:apply-templates select="*[name()!='title']"/>
   </p>
  </xsl:template>
 
- <xsl:template match="@*|node()" priority="-2"><xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy></xsl:template>
- <xsl:template match="text()" priority="-1"><xsl:value-of select="."/></xsl:template>
+ <xsl:template match="source">
+  <div style="background: #b9d3ee; border: thin; border-color: black; border-style: solid; padding-left: 0.8em; 
+              padding-right: 0.8em; padding-top: 0px; padding-bottom: 0px; margin: 0.5ex 0px; clear: both;">
+  <pre>
+   <xsl:value-of select="."/>
+  </pre>
+  </div>
+ </xsl:template>
+ 
+ <xsl:template match="link">
+  <xsl:text> </xsl:text>
+  <a href="{@href}">
+   <xsl:apply-templates/>
+  </a>
+  <xsl:text> </xsl:text>
+ </xsl:template>
+ 
+ <xsl:template match="strong">
+  <xsl:text> </xsl:text>
+  <b>
+   <xsl:apply-templates/>
+  </b>
+  <xsl:text> </xsl:text>
+ </xsl:template>
+ 
+ <xsl:template match="anchor">
+  <a name="{@name}">
+   <xsl:apply-templates/>
+  </a>
+ </xsl:template>
+ 
+<!-- <xsl:template match="table">
+  <table border="1" cellspacing="3" cellpadding="3">
+   <xsl:apply-templates/>
+  </table>
+ </xsl:template> -->
+
+  <xsl:template match="para">
+   <p>
+     <xsl:apply-templates/>
+   </p>
+  </xsl:template>
+
+ <xsl:template match="*|@*|node()|text()" priority="-1">
+  <xsl:copy><xsl:apply-templates select="*|@*|node()|text()"/></xsl:copy>
+ </xsl:template>
 
 </xsl:stylesheet>
