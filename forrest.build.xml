@@ -65,11 +65,6 @@ FORREST SITE BUILDER
     <property name="project.debuglevel"  value="ERROR"                         />
     <property name="project.start-uri"   value="index.html"                    />
 
-    <!-- odd one in the list: forrest provides this, 
-         project now has a means to override it? -->
-    <property name="project.configfile"  value="${forrest.home}/WEB-INF/cocoon.xconf"/>
-    <property name="project.logkitfile"  value="${forrest.home}/WEB-INF/logkit.xconf"/>
-
     <!-- use of these property should be removed when the siteplan becomes active -->
     <property name="project.skin"        value="forrest-site" />
     <property name="project.status"      value="${project.home}/status.xml" />
@@ -240,6 +235,15 @@ FORREST SITE BUILDER
         <exclude name="skins/**/images/**" />
       </fileset>
     </copy>
+
+    <mkdir dir="${project.ctxt-dir}/WEB-INF"/>
+
+    <copy todir="${project.ctxt-dir}/WEB-INF" filtering="true">
+      <fileset dir="${forrest.home}/WEB-INF">
+        <include name="*.xconf" />
+      </fileset>
+    </copy>
+
     <!--Hack to stop the classpath definition breaking. If the project has any
     custom jars or classes, they will be added to these dirs -->
     <mkdir dir="${project.ctxt-dir}/WEB-INF/lib"/>
@@ -384,31 +388,31 @@ FORREST SITE BUILDER
        Checks if the current project contains Forrest docs, and sets
        the 'project.empty' property if no docs are found.
        =============================================================== -->
-       <target name="check-contentdir" depends="init-props">
-         <available property="project.content.present" file="${project.xdocs-dir}"
-           type="dir"/>
-       </target>
+  <target name="check-contentdir" depends="init-props">
+    <available property="project.content.present" file="${project.xdocs-dir}"
+      type="dir"/>
+  </target>
 
-       <target name="ensure-nocontent" depends="check-contentdir"
-         if="project.content.present">
-         <echo>
+  <target name="ensure-nocontent" depends="check-contentdir"
+    if="project.content.present">
+    <echo>
 ------------------------------------------------
 This project already has content in ${project.xdocs-dir}.
 ------------------------------------------------
-         </echo>
-         <fail message="Project already has content"/>
-       </target>
+    </echo>
+    <fail message="Project already has content"/>
+  </target>
 
-       <target name="ensure-content" depends="check-contentdir"
-         unless="project.content.present">
-         <echo>
+  <target name="ensure-content" depends="check-contentdir"
+    unless="project.content.present">
+    <echo>
 ------------------------------------------------
 This project has no content in ${project.xdocs-dir}.
 Use the 'seed' target to create a template project structure.
 ------------------------------------------------
-         </echo>
-         <fail message="Project has no content"/>
-       </target>
+    </echo>
+    <fail message="Project has no content"/>
+  </target>
 
   <!-- ===============================================================
        Makes the site.
@@ -437,9 +441,9 @@ Use the 'seed' target to create a template project structure.
       <arg value="-d${project.site-dir}"/>   <!-- output to be put -->
       <arg value="-w${project.work-dir}"/>   <!-- temp dir to use for e.g. cache -->
       <arg value="-u${project.debuglevel}"/> <!-- threshold for log messages -->
-      <arg value="-C${project.configfile}"/>      <!-- cocoon.xconf file to use -->
+      <arg value="-C${project.ctxt-dir}/WEB-INF/cocoon.xconf"/>      <!-- cocoon.xconf file to use -->
       <arg value="-b${project.brokenlinkfile}"/>  <!-- output list of broken links -->
-      <arg value="-k${project.logkitfile}"/>  <!-- output list of broken links -->
+      <arg value="-k${project.ctxt-dir}/WEB-INF/logkit.xconf"/>  <!-- output list of broken links -->
       <arg value="${project.start-uri}"/>              <!-- starting page -->
       <arg value="-V" />                          <!-- be verbose -->
     </java>
@@ -490,11 +494,7 @@ for any broken links in the generated site.
         <include name="classes/**"/>
       </fileset>
     </copy>
-    <copy todir="${project.webapp}/WEB-INF" filtering="true">
-      <fileset dir="${forrest.home}/WEB-INF">
-        <include name="*.xconf" />
-      </fileset>
-    </copy>
+
     <echo>
 ---------------------------------
 Webapp generated in ${project.webapp}
