@@ -15,11 +15,11 @@
  */
 package org.apache.forrest.eclipse.preference;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
 import org.apache.forrest.eclipse.ForrestPlugin;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -34,39 +34,28 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ForrestPreferences extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
-	public static final String WORKING_DIR = "WORKING_DIR";
-
 	public static final String FORREST_HOME = "FORREST_HOME";
+	
 
 	public ForrestPreferences() {
 		super(GRID);
 		setPreferenceStore(ForrestPlugin.getDefault().getPreferenceStore());
 		setDescription("Configuration for Forrest");
-		initializeDefaults();
 	}
-
-	/**
-	 * Sets the default values of the preferences.
-	 * TODO Initialise FORREST_HOME from environment variable if available
-	 */
-	private void initializeDefaults() {
-		IPreferenceStore store = getPreferenceStore();
-
-	}
-
+	
 	/**
 	 * Creates the field editors. Field editors are abstractions of the common
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new DirectoryFieldEditor(WORKING_DIR, "&Working Directory:",
-				getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(FORREST_HOME, "&Forrest Home:",
 				getFieldEditorParent()));
 
 	}
 
 	public void init(IWorkbench workbench) {
+		setPreferenceStore(ForrestPlugin.getDefault().getPreferenceStore());
 	}
+	
 }
