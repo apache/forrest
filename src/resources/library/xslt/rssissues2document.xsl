@@ -21,3 +21,5 @@
     <p><xsl:value-of select="description" disable-output-escaping="yes"/></p>
   </section>
 </xsl:template>
+
+</xsl:stylesheet>
