@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.1 2003/06/03 12:17:38 jefft Exp $
+$Id: site2xhtml.xsl,v 1.2 2003/06/03 12:35:48 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -34,6 +34,7 @@ $Id: site2xhtml.xsl,v 1.1 2003/06/03 12:17:38 jefft Exp $
       <head>
         <title><xsl:value-of select="div[@class='content']/div[@class='pagetitle']"/></title>
         <link rel="stylesheet" href="{$root}skin/page.css" type="text/css"/>
+        <link rel="alternate stylesheet" title="Krysalis" href="{$root}skin/krysalis.css" type="text/css"/>
 		 <link rel="shortcut icon" href="{$root}favicon.ico" />		 
       </head>
       <body>
