@@ -321,7 +321,34 @@ document.write("Last Published: " + document.lastModified);
       </body>
     </html>
   </xsl:template>
+<!--headings-->
+<xsl:template match="div[@class = 'skinconf-heading-1']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+      	<h3 class="underlined"><xsl:value-of select="h1"/></h3>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+	       <h3 class="boxed"><xsl:value-of select="h1"/></h3>
+      </xsl:when>
+      <xsl:otherwise>
+        <h3 class="h3"><xsl:value-of select="h1"/></h3>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
+  <xsl:template match="div[@class = 'skinconf-heading-2']">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+        <h4 class="underlined"><xsl:value-of select="h1"/></h4>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+       	<h4 class="boxed"><xsl:value-of select="h1"/></h4>
+      </xsl:when>
+      <xsl:otherwise>
+        <h4 class="h4"><xsl:value-of select="h1"/></h4>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   <!-- Add links to any standards-compliance logos -->
   <xsl:template name="compliancy-logos">
     <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
@@ -465,14 +492,17 @@ document.write("Last Published: " + document.lastModified);
       </div>
     </xsl:if>
   </xsl:template>
+  
 <xsl:template match="div[@id='skinconf-toc-page']">
     <xsl:if test="$config/toc">
       <xsl:if test="contains($minitoc-location,'page')">
         <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
-          <xsl:call-template name="minitoc">
-            <xsl:with-param name="tocroot" select="//tocitems"/>
-          </xsl:call-template>
-        </xsl:if>
+			<div id="minitoc-area">
+    			<xsl:call-template name="minitoc">
+        		    <xsl:with-param name="tocroot" select="//tocitems"/>
+	          	</xsl:call-template>
+			</div>
+	    </xsl:if>
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -483,7 +513,6 @@ document.write("Last Published: " + document.lastModified);
     
     <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
     <xsl:if test="contains($config/toc/@location,'page')"> 
-	<div id="minitoc-area">
       <ul id="minitoc">
         <xsl:for-each select="$tocroot/tocitem">
           <li>
@@ -498,10 +527,10 @@ document.write("Last Published: " + document.lastModified);
           </li>
         </xsl:for-each>
       </ul>
-	</div>
     </xsl:if>
     </xsl:if>
   </xsl:template>
+  
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>

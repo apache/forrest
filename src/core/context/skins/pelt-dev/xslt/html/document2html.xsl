@@ -26,9 +26,6 @@ imported document2html.xsl for details.
   <xsl:template match="document">
     <div id="content">
 
-      <!--xsl:call-template name="printlink"/> 
-      <xsl:call-template name="pdflink"/>
-      <xsl:call-template name="xmllink"/-->
       <div id="skinconf-pdflink"/>
 
       <xsl:if test="normalize-space(header/title)!=''">
@@ -36,7 +33,7 @@ imported document2html.xsl for details.
       </xsl:if>
 
       <xsl:if test="normalize-space(header/subtitle)!=''">
-        <h2><xsl:value-of select="header/subtitle"/></h2>
+        <h3><xsl:value-of select="header/subtitle"/></h3>
       </xsl:if>
 
       <xsl:apply-templates select="header/type"/>
@@ -54,6 +51,7 @@ imported document2html.xsl for details.
       
     </div>
   </xsl:template>
+
   <xsl:template match="body">
     <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>

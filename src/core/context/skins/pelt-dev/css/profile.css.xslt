@@ -58,11 +58,12 @@
 
 <xsl:template match="color[@name='heading']">
 .heading { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
+</xsl:template--> 
 
 <xsl:template match="color[@name='subheading']">
-.subheading { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template--> 
+.boxed { background-color: <xsl:value-of select="@value"/>;} 
+.underlined 	{border-bottom: solid 1px <xsl:value-of select="@value"/>;}
+</xsl:template> 
 <xsl:template match="color[@name='feedback']">    
 #feedback {
 	color: <xsl:value-of select="@font"/>;
