@@ -52,6 +52,76 @@
 
   <part id="technical">
     <title>Technical</title>
+    <faq id="ignoring_javadocs">
+      <question>
+        How do I stop Forrest breaking on links to external files that may not
+        exist, like javadocs?
+      </question>
+      <answer>
+        <p>
+          This can be done by overriding the <code>filterlinks.xsl</code>
+          stylesheet, and modifying it to filter out links that shouldn't be
+          traversed.
+        </p>
+        <p>
+          This means creating a directory
+          <code>src/documentation/resources/stylesheets</code> (or wherever
+          <code>${forrest.stylesheets-dir}</code> points) and copying
+          <code>$FORREST_HOME/context/resources/stylesheets/filterlinks.xsl</code>
+          to it.  Then edit filterlinks.xsl, and add extra conditions to the
+          <code>xsl:if</code> statement:
+        </p>
+        <source
+          >&lt;xsl:template match="@src|@href|@background"&gt;
+          &lt;xsl:if test="not(contains(.,'apidocs')) and not(starts-with(., 'api/'))"&gt;
+          ...</source>
+        <p>
+          This default XPath expression ignores links containing 'apidocs' or
+          starting with 'api/'.  This is just an example, and you should modify
+          it appropriately for your site.
+        </p>
+        <p>
+          A bit of background may help explain this.  Cocoon generates a static
+          version of a website by 'crawling' through the pages&mdash;that is,
+          following links to determine what else to render.  Starting with
+          <code>index.html</code>, Cocoon will:
+        </p>
+        <ol>
+          <li>render a page, say <code>index.html</code></li>
+          <li>
+            <p>
+              request the 'links view' of that page, e.g.
+              <code>index.html?cocoon-view=links</code>.
+            </p>
+            <p>
+              The concept of 'views' is explained in <link href="ext:views">the
+                Cocoon documentation</link>; briefly, Cocoon allows different
+              representations of a page, and these are called views.  The links
+              view is a simple text listing of the page's embedded links.  The
+              links view is specified in the Forrest sitemap with:
+            </p>
+            <source><![CDATA[
+              <map:view name="links" from-position="last">
+                <map:transform
+                  src="resources/stylesheets/filterlinks.xsl"/>
+                <map:serialize type="links"/>
+              </map:view>]]>
+            </source>
+            <p>
+              The XSLT transformation just before the serializer gives us an
+              opportunity to filter out any links we don't want Cocoon to
+              process.  As the link view is a separate pipeline, the normal page
+              output will be unaffected.
+            </p>
+          </li>
+          <li>
+            For each path mentioned in the link view, add it to a queue of pages
+            to render, and recursively render each in order.
+          </li>
+        </ol>
+      </answer>
+    </faq>
+
     <faq id="validation_error:doctype_root_null">
       <question>
         When building my project, I get an validation error: <code>Document root
