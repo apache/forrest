@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="org.apache.forrest.eclipse"
+   name="Forrest Plug-in"
+   version="0.1.0"
+   provider-name="The Apache Software Foundation"
+   class="org.apache.forrest.eclipse.ForrestPlugin">
+
+   <runtime>
+      <library name="application.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+   </requires>
+
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Forrest Action Set"
+            visible="true"
+            id="org.apache.forrest.actionSet.eclipse">
+         <menu
+               label="Forrest"
+               id="forrestMenu">
+            <separator
+                  name="forrestGroup">
+            </separator>
+         </menu>
+          <action
+               label="Stop Forrest"
+               icon="icons/stop.png"
+               tooltip="Stop Forrest"
+               class="org.apache.forrest.eclipse.actions.StopForrest"
+               menubarPath="forrestMenu/forrestGroup"
+               toolbarPath="forrestGroup"
+               id="org.apache.forrest.eclipse.actions.StopForrest">
+         </action>
+          <action
+               label="Start Forrest"
+               icon="icons/start.png"
+               tooltip="Start Forrest"
+               class="org.apache.forrest.eclipse.actions.StartForrest"
+               menubarPath="forrestMenu/forrestGroup"
+               toolbarPath="forrestGroup"
+               id="org.apache.forrest.eclipse.actions.StartForrest">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+      point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.apache.forrest.eclipse.preference.ForrestPreferences"
+            name="Forrest Preferences"
+            id="org.apache.forrest.eclipse.preference.ForrestPreferences"/>
+   </extension>
+
+</plugin>
