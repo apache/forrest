@@ -524,7 +524,9 @@ Revision:
             <xsl:apply-templates select="thead|tbody|tfoot"/>
       </xsl:template>
       <xsl:template match="thead">
+            <tr>
             <xsl:apply-templates select="row" mode="head"/>
+            </tr>
       </xsl:template>
       <xsl:template match="row" mode="head">
             <th>
