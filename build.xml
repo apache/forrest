@@ -16,6 +16,7 @@
                    Run the build script: build.bat or build.sh
   </description>
 
+  
   <target name="init">
     <tstamp>
       <format property="YEAR" pattern="yyyy" locale="en"/>
@@ -42,16 +43,21 @@
 
     <property name="name"                  value="${xgump.module.project.name}"/>
     <property name="packages"              value="${xgump.module.project.packages}"/>
+    <property name="version"
+      value="${xgump.module.project.version.major}.${xgump.module.project.version.minor}${xgump.module.project.version.tag}"/>
 
     <property name="resource.dir"          location="src/resources"/>
     <property name="scratchpad.src.dir"    location="src/scratchpad/src/java"/>
     <property name="build.dir"             location="build"/>
     <property name="build.docs"            location="build/docs"/>
-    <!--
+   <!--
     <property name="build.javadocs"        value="build/docs/javadocs"/>
     -->
     <property name="build.scratchpad.dir"  location="build/scratchpad"/>
     <property name="build.scratchpad.classes" location="build/scratchpad/classes"/>
+
+    <property name="dist.dir"              location="build/dist" />
+    <property name="dist-shbat.dir"        location="${dist.dir}/shbat" />
 
     <property name="tools.dir"             location="tools"/>
     <property name="tools.jar"             location="${java.home}/../lib/tools.jar"/>
@@ -65,6 +71,40 @@
 
     <mkdir dir="${build.dir}"/>
   </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="release-dist-source" depends="init"
+    description="Makes a source release distribution">
+    <mkdir dir="${dist.dir}"/>
+    <property name="release-name-src" value="${name}-${version}-src"/>
+    <zip
+      file="${dist.dir}/${release-name-src}.zip" >
+      <zipfileset dir="." prefix="${release-name-src}">
+        <exclude name="build/**"/>
+      </zipfileset>
+      <zipfileset dir="etc"  prefix="${release-name-src}" includes="RELEASE-NOTES-${version}.txt"/>
+    </zip>
+  </target>
+
+  <target name="release-dist-bin" depends="init, dist-shbat" 
+    description="Makes a binary release distribution">
+    <property name="release-name-bin" value="${name}-${version}-bin"/>
+    <zip
+      file="${dist.dir}/${release-name-bin}.zip" >
+      <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
+      <zipfileset dir="etc"  prefix="${release-name-bin}" includes="RELEASE-NOTES-${version}.txt"/>
+    </zip>
+
+  </target>
+
+  <target name="release-dist" 
+    description="Makes source and binary release distributions"
+    depends="release-dist-bin, release-dist-source"/>
+
+
 
   <!-- =================================================================== -->
   <!-- Make all known distributions                                        -->
@@ -215,9 +255,8 @@
   <!-- Make the shell-bat distribution                                     -->
   <!-- =================================================================== -->
   <target name="dist-shbat" 
-    depends="validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
+    depends="init, validate-config, fresh-site-zip, webapp-webinf, bare-context-dir" >
     <!-- TODO: decide on a better place to read/set this prop from/to -->
-    <property name="dist-shbat.dir" value="./build/dist/shbat" />
 
     <!-- fresh drop-off location for the distribution -->
     <delete dir="${dist-shbat.dir}" />
