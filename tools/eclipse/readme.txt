@@ -3,7 +3,7 @@ This is a plugin for Eclipse. It provides some basic funtionality for Forrest.
 Currently implemented features include:
 
 - Start Forrest and launch the index page in an internal browser 
-  svn del plu (Stop currently broken)
+  (Stop currently broken)
 - Build a Forrest site
 - Seed a new Project
 - Add a new XDoc to the project
@@ -13,18 +13,20 @@ Currently implemented features include:
 Installation
 ============
 
-To use the plugin you need to install it within Eclipse V3.0 or later.
+To use the plugin you need to install it within Eclipse V3.0 (V3.1M* not 
+currently supported). You will also need to ensure that you have the following 
+plugins (and their dependencies) available:
 
 You will also need to install IBM Web Tools Platform contribution
 (see http://www.eclipse.org/webtools/index.html).
-
 
 For Development
 ===============
 
 If you want to help develop this plugin you need to import it as a project in
-Eclipse, the easiest way is to use the Subclipse  SVN Browser plugin from 
-http://subclipse.tigris.org and do a "Check out as...")
+Eclipse, the easiest way is to use the Subclipse to checkout the code directly into Eclipse.
+Of course, you can also use whatever SVN client you like and import the project into your Eclipse
+workspace.
 
 Download Subclipse Plugin
 -------------------------
@@ -32,6 +34,17 @@ Download Subclipse Plugin
 - Select Help | Software updates | Find and Install | Search for new features
 
 - Add http://subclipse.tigris.org/update as URL
+
+Checkout the Plugin Project
+--------------------------
+
+- open the SVN Repository Exploring perspective
+
+- add the repository https://svn.apache.org/repos/asf/forrest/trunk
+
+- use the tree browser to find forrest/tools/eclipse
+
+- right click on the forrest/tools/eclipse folder and do a "Check out as project" 
 
 Executing the Plugin
 --------------------
