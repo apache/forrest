@@ -38,6 +38,11 @@
   <property name="deploy.svn.svn-dir"         location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.svn.svn-filestoadd"  location="build/svn-deploy.toadd"/>
   
+  <property name="build.dir"             location="build"/>
+  <property name="build.classes"         location="${build.dir}/classes"/>
+  
+  <property name="java.dir"              location="src/java"/>
+  
   
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
@@ -52,8 +57,51 @@
   </taskdef>
   
   <target name="init">
+    <tstamp>
+      <format property="YEAR" pattern="yyyy" locale="en"/>
+    </tstamp>
+    
+    <property name="build.compiler.emacs"       value="on"/>
+    <property name="build.compiler.warnings"    value="true"/>
+    <property name="build.compiler.pedantic"    value="false"/>
+    <property name="build.compiler.depend"      value="true"/>
+    <property name="build.compiler.fulldepend"  value="true"/>
+    <property name="build.compiler.debug"       value="on"/>    
+    <property name="build.compiler.optimize"    value="off"/>
+    <property name="build.compiler.deprecation" value="on"/>
+    <property name="build.compiler.nowarn"      value="on"/>    
+    <property name="build.compiler.type"        value="classic"/>
+    <property name="build.compiler.vm"          value="1.2"/>
+    
     <input message="Which plugin you which to operate on?"
            addproperty="plugin-name"/>
+           
+    <mkdir dir="${build.dir}"/>
+    
+    <buildnumber file="${build.dir}/build.number"/>
+    <echo>
+      --------------------------------------------------------------
+
+      Using ${ant.version}
+      Build file ${ant.file}
+      Use 'build.[sh|bat] -projecthelp' to see other options.
+      Build system home ${ant.home}
+      Build number ${build.number}
+      Project Name ${ant.project.name}
+      Java Version ${ant.java.version}      
+      Timestamp ${DSTAMP}${TSTAMP}
+      
+      --------------------------------------------------------------
+    </echo>
+    
+    <path id="classpath">
+      <fileset dir="${forrest.home}/lib" includes="**/*.jar"/>
+      <fileset dir="lib" includes="*.jar"/>
+      <fileset dir="lib" includes="*.zip"/>
+    </path>
+  	
+  	<available file="${java.dir}" property="java_exists" type="dir"/>
+    
   </target>
   
   <target name="clean" depends="init">
@@ -64,15 +112,18 @@
   <!-- FIXME: Forrest should really use the plugins in-place if they are available as source -->
   <target name="local-deploy"
           description="Deploy a plugin locally"
-          depends="init">
+          depends="init, jar">
           
     <echo>Locally deploying ${plugin-name}</echo>
     
     <copy toDir="${plugins.localDeploy-dir}/${plugin-name}">
       <fileset dir="${plugins.dir}/${plugin-name}">
-       <exclude name="**/build/**"/>
+        <exclude name="**/${build.dir}/**"/>
       </fileset>
     </copy>
+  	<copy toFile="${plugins.localDeploy-dir}/${plugin-name}/lib/${plugin-name}.jar"
+  	      file="${build.dir}/${plugin-name}.jar"
+  	      failonerror="false"/>
     <!-- FIXME: execute local build file -->
     <antcall target="build"/>
   </target>
@@ -150,8 +201,6 @@
   <target name="seedPlugin"
     description="Create a new plugin directory in the current working directory and seed it with initial set of files"
     depends="init">
-    <input message="What is the name of your new plugin?"
-           addproperty="plugin-name"/>
     <mkdir dir="${plugin-name}"/>
     <mkdir dir="${plugin-name}/${plugin.src.dir}"/>
     <mkdir dir="${plugin-name}/${plugin.resources.dir}"/>
@@ -171,6 +220,29 @@
           tofile="${plugin-name}/${plugin-type}.xmap"/>
   </target>
   
+  <!-- =================================================================== -->
+  <!-- Compile Cocoon java classes                                         -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="init" if="java_exists">
+    <mkdir dir="${build.classes}"/>
+    <javac srcdir=   "${java.dir}"
+      destdir=       "${build.classes}"
+      debug=         "${build.compiler.debug}"
+      optimize=      "${build.compiler.optimize}"
+      deprecation=   "${build.compiler.deprecation}"
+      nowarn=        "${build.compiler.nowarn}"
+      classpathref=  "classpath">
+    </javac>
+  </target>
+	
+  <!-- =================================================================== -->
+  <!-- Jar Cocoon classes                                                  -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="init, compile" if="java_exists">
+    <jar destfile="${build.dir}/${plugin-name}.jar"
+	     basedir="${build.classes}"/>
+  </target>
+	
   <target name="test" depends="init, clean, docs"/>
 </project>
   
