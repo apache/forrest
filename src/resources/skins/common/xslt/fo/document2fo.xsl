@@ -496,7 +496,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="figure">
+  <xsl:template match="figure|img">
     <fo:block text-align="center">
       <xsl:if test="normalize-space(@id)!=''">
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
