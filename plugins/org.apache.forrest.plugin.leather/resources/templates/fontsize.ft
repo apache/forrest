@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract name="fontsize" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  <description>
+    This function lets you change the size of the font you are using in the site with a jscript.
+  </description>
+  <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="fontsize" inputFormat="xsl" body="true" head="true" css="true">
+	 	<xsl:stylesheet version="1.1" 
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+			  <xsl:template name="fontsize-head">
+		      <script type="text/javascript" language="javascript" 
+			        src="{$root}skin/fontsize.js">&#160;</script>
+			  </xsl:template>
+			  
+        <xsl:template name="fontsize-css">
+.branding-trail {
+  position: relative; /* IE bugfix cont'd */
+  font-size: 70%;
+  text-align: right;
+  float: right;
+  margin: -10px 5px 0px 5px;
+  padding: 0;
+}</xsl:template>
+        
+			  <xsl:template name="fontsize-body">
+			      <script type="text/javascript">ndeSetTextSize();</script>
+			      <div class="branding-trail">
+			            Font size: 
+			              &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
+			              &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
+			              &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+			      </div>
+			  </xsl:template>
+			
+			</xsl:stylesheet>
+	</forrest:template>
+</forrest:contract>

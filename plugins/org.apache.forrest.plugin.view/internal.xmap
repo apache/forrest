@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+	<map:components>
+		<map:selectors>
+      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </map:selectors>
+    <map:generators default="file">
+      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.generation.JXTemplateGenerator"/>
+    </map:generators>
+    <map:transformers default="xslt">
+      <map:transformer name="cinclude"
+        src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="xinclude"
+        src="org.apache.cocoon.transformation.XIncludeTransformer"/>
+    </map:transformers>
+    <map:serializers>
+	   <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" name="xhtml" pool-grow="2" pool-max="64" pool-min="2" src="org.apache.cocoon.serialization.XMLSerializer">
+	      <!--+
+	          | You can choose from Strict, Transitional, or Frameset XHTML.
+	          | For Strict XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	          | For Transitional XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Transitional//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</doctype-system>
+	          | For Frameset XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Frameset//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd</doctype-system>
+	          |
+	          | Default XHTML doctype in Cocoon is XHTML Strict. If you want to use more than one
+	          | XHTML DTD simultaneously, you can define several XHTML serializers.
+	          +-->
+	      <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	      <encoding>UTF-8</encoding>
+	    </map:serializer>
+      <map:serializer name="txt" 
+			   src="org.apache.cocoon.serialization.TextSerializer"
+			   mime-type="text/plain" 
+			   logger="sitemap.serializer.text" 
+			 />
+    </map:serializers>
+  </map:components>
+
+<map:pipelines>
+
+<!--
+  This plugin has x components:
+  2. nuggets - delivers content that is used in the contracts
+  3. views - transforms the requested contracts (fbits) 
+     and populate them with the content (nuggets)
+  -->
+
+
+<!--
+  2. nuggets
+  This is the content producing factory.
+  -->
+<!--NOTE: 
+  The current factory uses the skin producing templates (e.g. document2xhtml.xsl).
+  It is only exchanging the last step of a skin producing pipe (site2xhtml.xsl) till now.
+  This will have to be changed in the future.
+  -->  
+  <map:pipeline>
+    <map:match pattern="*.page">
+				<map:aggregate element="site">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="cocoon://build-info"/>
+          <map:part src="cocoon://tab-{1}.html"/>
+          <map:part src="cocoon://menu-{1}.html"/>
+          <map:part src="cocoon://body-{1}.html"/>
+          <map:part src="cocoon:/prepare.view-nugget.{1}"/>
+        </map:aggregate>
+        <map:serialize type="xml"/>
+    </map:match>
+    <map:match pattern="**/*.page">
+        <map:aggregate element="site">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="cocoon://build-info"/>
+          <map:part src="cocoon://{1}/tab-{2}.html"/>
+          <map:part src="cocoon://{1}/menu-{2}.html"/>
+          <map:part src="cocoon://{1}/body-{2}.html"/>
+          <map:part src="cocoon:/prepare.view-nugget.{2}"/>
+        </map:aggregate>
+        <map:serialize type="xml"/>
+      </map:match>
+ 
+  </map:pipeline>  
+
+  
+<!-- END
+	2. nuggets
+	-->
+<!--
+  3. views
+  prepares and transforms the requested contracts (fbits) and populate them with the content (nuggets).
+  -->
+  <map:pipeline>
+  <!--
+    View config resolver
+    File specific views have priority before default ones.
+    If no views can be found in the project we use the default one of the view plugin.
+    -->
+    <map:match pattern="prepare.view.*">
+      <map:select type="exists">
+        <!--
+          Here we will have to test, whether the requested page needs a specific view.
+          This will be assumed as soon there is a .fv
+          e.g. index.xml + index.fv
+          -->
+        <map:when test="{project:content.xdocs}{1}.fv">
+          <map:generate src="{project:content.xdocs}{1}.fv"/>
+        </map:when>
+				<!--
+          If there is no file specific view then use the default.fv of the project stored in "project.conf-dir".
+          -->
+        <map:when test="{project:conf}/default.fv">
+          <map:generate src="{project:conf}/default.fv"/>
+        </map:when>
+        <!--
+          If the above not matches then get the default view of this plugin.
+          -->
+        <map:otherwise>
+          <map:generate src="src/documentation/default.fv"/>
+        </map:otherwise>
+      </map:select>
+     	<map:serialize type="xml"/>
+    </map:match>
+    
+    <!--Add nuggets to the view that the content can be used later on.-->
+    <map:match pattern="prepare.view-nugget.*">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.view.xsl">
+        <map:parameter name="view" value="{1}"/>
+      </map:transform>
+      <map:transform type="xinclude"/>
+     	<map:serialize type="xml"/>
+    </map:match>
+<!--
+  Aggregate the contract-templates requested by the view with xinclude.
+  The result is a stylesheet with all needed xsl:templates.
+  -->
+    <map:match pattern="prepare.include.*">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.include.xsl">
+	      <map:parameter name="config-file" value="{project:skinconf}"/>
+      </map:transform>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+    
+    <!--
+      Aggregate the forrest:properties requested by the *.fv.
+      The result is an aggregation of properties which defines the templates to be call.
+      -->
+    <map:match pattern="prepare.properties.*">
+      <map:generate src="cocoon:/prepare.view.{1}"/>
+      <map:transform src="resources/stylesheets/prepare.properties.xsl"/>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+    <!--
+      Aggregate all contracts-templates requested by the view.
+      Create a xsl that can be used for the last step of the transformation of the view.
+  		--> 
+    <map:match pattern="prepare.xhtml.*">
+      <map:aggregate element="forrest:filter">
+        <map:part src="cocoon://prepare.view.{1}" />
+        <map:part src="cocoon://prepare.properties.{1}" /> 
+      </map:aggregate>
+      <map:transform src="resources/stylesheets/prepare.xhtml.xsl" >
+        <map:parameter name="request" value="{1}"/>
+      </map:transform>
+      <map:transform type="xinclude"/> 
+     	<map:serialize type="xml"/>
+    </map:match>
+
+  </map:pipeline>
+ </map:pipelines>
+</map:sitemap>

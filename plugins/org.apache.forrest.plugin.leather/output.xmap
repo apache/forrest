@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+	<map:components>
+		<map:selectors>
+      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </map:selectors>
+    <map:generators default="file">
+      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.generation.JXTemplateGenerator"/>
+    </map:generators>
+    <map:transformers default="xslt">
+      <map:transformer name="cinclude"
+        src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="xinclude"
+        src="org.apache.cocoon.transformation.XIncludeTransformer"/>
+    </map:transformers>
+    <map:serializers>
+	   <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" name="xhtml" pool-grow="2" pool-max="64" pool-min="2" src="org.apache.cocoon.serialization.XMLSerializer">
+	      <!--+
+	          | You can choose from Strict, Transitional, or Frameset XHTML.
+	          | For Strict XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	          | For Transitional XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Transitional//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</doctype-system>
+	          | For Frameset XHTML set doctype to:
+	          |   <doctype-public>-//W3C//DTD XHTML 1.0 Frameset//EN</doctype-public>
+	          |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd</doctype-system>
+	          |
+	          | Default XHTML doctype in Cocoon is XHTML Strict. If you want to use more than one
+	          | XHTML DTD simultaneously, you can define several XHTML serializers.
+	          +-->
+	      <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+	      <encoding>UTF-8</encoding>
+	    </map:serializer>
+      <map:serializer name="txt" 
+			   src="org.apache.cocoon.serialization.TextSerializer"
+			   mime-type="text/plain" 
+			   logger="sitemap.serializer.text" 
+			 />
+    </map:serializers>
+  </map:components>
+<map:pipelines>
+
+  <map:pipeline>
+<!--
+  This plugin provides a skin implementation based on views
+  -->
+  
+<!--
+  common skining
+  This is the template producing factory.
+  -->
+ <map:pipeline>
+  <!--
+    Resolving factory
+    Project implementation of templates have priority before default ones.
+    If no implementation can be found we use the noFt (~ - no forrest:template) implementation.
+    -->
+  <map:match pattern="resolve.contract.*">
+    <map:select type="exists">
+      <map:when test="{project:resources}/templates/{1}.ft">
+        <map:generate src="{project:resources}/templates/{1}.ft"/>
+      </map:when>
+      <map:when test="resources/templates/{1}.ft">
+        <map:generate src="resources/templates/{1}.ft"/>
+      </map:when>
+      <map:otherwise>
+        <map:generate src="resources/templates/noFt.ft"/>
+      </map:otherwise>
+    </map:select>
+    <map:serialize type="xml"/>
+  </map:match>
+  <!--
+    Get the xsl:templates of the requested contract.
+  -->
+   <map:match pattern="get.contract.*.*">
+     <map:generate src="cocoon:/resolve.contract.{1}"/>
+     <map:transform src="resources/stylesheets/contract.xsl">
+      <!--Which output format?-->
+      <map:parameter name="format" value="{2}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+  <!--
+  Get the forrest:properties of the requested contract. 
+  This will determine which templates (css, head, body) we have to call later on
+  -->
+   <map:match pattern="get.contract-property.*">
+     <map:generate src="cocoon:/resolve.contract.{1}"/>
+     <map:transform src="resources/stylesheets/contract.property.xsl"/>
+     <map:serialize type="xml"/>
+   </map:match>
+<!-- ls.fbits 
+  list the default fbits-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts">
+		  <map:generate type="directory" src="resources/templates">
+        <map:parameter name="depth" value="1"/>
+        <!-- sorted alphabetically -->
+      	<map:parameter name="reverse" value="false"/>
+      </map:generate>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+<!-- ls.fbits 
+  list the project fbits-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.project">
+		  <map:generate type="directory" src="{project:resources}/templates/">
+        <map:parameter name="depth" value="1"/>
+        <!-- sorted alphabetically -->
+      	<map:parameter name="reverse" value="false"/>
+      </map:generate>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+<!--ls.fbits.l
+transform this dir-list and add more information 
+-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.l">
+		  <map:generate src="cocoon:/ls.contracts"/>
+      <map:transform src="resources/stylesheets/ls.contracts.xsl">
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.views"/>
+      </map:transform>
+      <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
+      <map:serialize type="xhtml"/>
+    </map:match>
+  </map:pipeline>
+<!--ls.fbits.l
+transform this dir-list of the project and add more information 
+-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.project.l">
+		  <map:generate src="cocoon:/ls.contracts.project"/>
+      <map:transform src="resources/stylesheets/ls.contracts.xsl">
+        <map:parameter name="contentDir" value="{forrest:plugins}/org.apache.forrest.plugin.views"/>
+      </map:transform>
+      <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
+      <map:serialize type="xhtml"/>
+    </map:match>
+  </map:pipeline>
+   <!--
+    Get some util-templates from the common skin.
+    -->
+   <map:match pattern="commonSite2xhtml">
+        <map:generate src="{forrest:context}/skins/common/xslt/html/site2xhtml.xsl"/>
+        <map:serialize type="xml"/>
+    </map:match>
+    <map:match pattern="dotdots">
+        <map:generate src="{forrest:context}/skins/common/xslt/html/dotdots.xsl"/>
+        <map:serialize type="xml"/>
+    </map:match>
+    <map:match pattern="pathutils">
+        <map:generate src="{forrest:context}/skins/common/xslt/html/pathutils.xsl"/>
+        <map:serialize type="xml"/>
+    </map:match>
+    <map:match pattern="renderlogo">
+        <map:generate src="{forrest:context}/skins/common/xslt/html/renderlogo.xsl"/>
+        <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+<!-- END
+  1. fbits
+  -->
+  
+  <!--
+  Last processing step. 
+  Here we are overriding the default skin generation.
+  -->   
+    <map:match pattern="*.html">
+      <map:generate src="cocoon://{1}.page"/>
+      <map:transform src="cocoon://prepare.xhtml.{1}">
+        <map:parameter name="path" value="{0}"/>
+      </map:transform>
+     	<map:serialize type="xhtml"/>
+    </map:match>
+    <map:match pattern="**/*.html">
+      <map:generate src="cocoon://{1}{2}/{3}.page"/>
+      <map:transform src="cocoon://prepare.xhtml.{1}">
+        <map:parameter name="path" value="{0}"/>
+      </map:transform>
+     	<map:serialize type="xhtml"/>
+    </map:match>
+  
+  </map:pipeline>
+</map:pipelines>
+
+</map:sitemap>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+  <forrest:contract name="xml-link" type="nugget"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0">
+    <description>
+      This functions will output the XML link with image.
+    </description>
+    
+    <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="xml-link" inputFormat="xsl" body="true" css="true">
+      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+			  <xsl:template name="xml-link-css">
+.xml-link {
+    position: relative; /* IE bugfix cont'd */
+    float: right;
+    margin: 0px 5px;
+    padding: 0;
+}
+.xml-link br {
+    margin-top: -10px;
+    padding-left: 1px;
+}
+.xml-link a {
+    display: block;
+    font-size: 70%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.xml-link img {
+    display: block;
+    height: 16px;
+    width: 16px;
+}</xsl:template>
+			  <xsl:template name="xml-link-body">
+				    <div class="xml-link" title="raw XML"><a href="{$filename-noext}.xml" class="dida">
+				      <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" /><br/>
+				      XML</a>
+				    </div>
+			  </xsl:template>
+			
+			</xsl:stylesheet>
+	</forrest:template>
+</forrest:contract>

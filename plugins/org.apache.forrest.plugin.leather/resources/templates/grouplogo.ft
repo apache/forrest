@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract name="grouplogo" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  <description>
+    This functions will output the grouplogo and link.
+  </description>
+  
+  <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="grouplogo" inputFormat="xsl" body="true" head="false" css="true">
+
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		  
+		  <xsl:template name="grouplogo-css">
+#grouplogo {
+	height: 75px;
+	width: 150px;
+	margin-left: 25px;
+	padding: 5px;
+	float: left;
+}</xsl:template>
+		  
+		  <xsl:template name="grouplogo-body">
+		      <xsl:comment>+
+    |start group Logo
+    +</xsl:comment> 
+     <div id="grouplogo">
+          <xsl:call-template name="renderlogo">
+            <xsl:with-param name="name" select="$config/group-name"/>
+            <xsl:with-param name="url" select="$config/group-url"/>
+            <xsl:with-param name="logo" select="$config/group-logo"/>
+            <xsl:with-param name="root" select="$root"/>
+            <xsl:with-param name="description" select="$config/group-description"/>
+        </xsl:call-template>
+      </div>
+<xsl:comment>+
+    |end group Logo
+    +</xsl:comment> 
+		  </xsl:template>
+		</xsl:stylesheet>
+	</forrest:template>
+</forrest:contract>

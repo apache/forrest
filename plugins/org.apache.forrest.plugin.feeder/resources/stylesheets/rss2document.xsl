@@ -23,17 +23,22 @@
       <title><xsl:value-of select="channel/title"/></title>
     </header>
     <body>
-      <xsl:apply-templates select="channel/item"/>
+      <xsl:apply-templates select="channel"/>
     </body>
   </document>
 </xsl:template>
 
-<xsl:template match="item">
+<xsl:template match="channel">
   <section>
     <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
-    <p><link href="{link}"><xsl:value-of select="link"/></link></p>
-    <p><xsl:value-of select="description" disable-output-escaping="yes"/></p>
+    <xsl:apply-templates select="item"/>
   </section>
+</xsl:template>
+
+<xsl:template match="item">
+    <p class="itemTitle"><xsl:value-of select="title" disable-output-escaping="yes"/></p>
+    <p  class="itemLink"><link href="{link}"><xsl:value-of select="link"/></link></p>
+    <p  class="itemDescription"><xsl:value-of select="description" disable-output-escaping="yes"/></p>
 </xsl:template>
 
 </xsl:stylesheet>

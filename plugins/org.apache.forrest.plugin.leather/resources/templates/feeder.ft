@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<forrest:contract name="feeder" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  <description>
+    This function will output the html feeder information.
+  </description>
+
+  <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="feeder" inputFormat="xsl" body="true" head="false" css="true">
+
+      <xsl:stylesheet version="1.1" 
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        
+        <xsl:template name="feeder-css">
+#feeder {
+	width: 23%;
+	display: block;
+	margin: 10px 0 0 0;
+	padding: 0;
+	background: #E0E9E9;
+	float: right;
+    color: black;
+    /*background: #CFDCED;*/
+    text-align:center;
+    margin-top: 5px;
+}
+.channelTitle {
+	background: #EDF2F2;
+	text-decoration: none;
+	font-size: 10pt;
+	font-family: verdana, helvetica, sans;
+  color: #000066;
+  padding: 5px;
+}
+.channelItems {
+	background: #D9E4E4;
+	text-decoration: none;
+	font-size: 10pt;
+	font-family: verdana, helvetica, sans;
+	color: #000066;
+  padding: 5px;
+}</xsl:template>
+        
+	    <xsl:template name="feeder-body" >
+	      <xsl:param name="feeder"/>
+        <xsl:param name="feedConfig"/>
+        <xsl:copy-of select="$feedConfig"/>
+				<xsl:apply-templates select="$feeder/document">
+          <xsl:with-param name="feedConfig" select="$feedConfig"/>
+				</xsl:apply-templates>		    
+			</xsl:template>
+      
+      <xsl:template match="document">
+        <xsl:param name="feedConfig"/>
+        <div id="feeder">
+		     <xsl:apply-templates select="body/section">
+          <xsl:with-param name="feedConfig" select="$feedConfig"/>
+		     </xsl:apply-templates>
+		    </div>
+      </xsl:template>
+      
+      <xsl:template match="section">
+        <xsl:param name="feedConfig"/>
+        <div class="channelTitle">
+          <xsl:value-of select="title"/>
+        </div>
+        <div class="channelItems">
+          <xsl:apply-templates select="p[@class]">
+            <xsl:with-param name="feedConfig" select="$feedConfig"/>
+          </xsl:apply-templates>
+        </div>
+      </xsl:template>
+      
+      <xsl:template match="link">
+        <a href="{@href}">...more</a>
+      </xsl:template>
+      
+      <xsl:template match="p[@class]">
+        <xsl:param name="feedConfig"/>
+        <div class="{@class}">
+          <xsl:apply-templates/>
+        </div>
+        
+<!--
+        <xsl:variable name="parse">
+          <xsl:if test="$feedConfig/feed[@position]">
+            <xsl:value-of select="position()"/><xsl:value-of select="$feedConfig/feed/@position"/>
+					</xsl:if>
+          <div class="itemTitle"><xsl:value-of select="title" disable-output-escaping="yes"/></div>
+      		<div class="itemLink"><a href="{link}">...more</a></div>
+        </xsl:variable>
+        
+        <xsl:choose>
+          <xsl:when test="$feedConfig/feed[@maxItem]">
+            <xsl:if test="position()&lt;=$feedConfig/feed/@maxItem">
+							<xsl:copy-of select="$parse"/>            
+						</xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:copy-of select="$parse"/>
+          </xsl:otherwise>
+        </xsl:choose>-->
+			</xsl:template>
+    
+    </xsl:stylesheet>
+    
+	</forrest:template>
+</forrest:contract>
