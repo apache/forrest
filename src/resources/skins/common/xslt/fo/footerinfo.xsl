@@ -28,9 +28,7 @@ with @role='pdf' is present, that is used instead.  Eg:
           select="$config/vendor"/><xsl:text> All rights reserved.</xsl:text>
       </xsl:if>
     </xsl:variable>
-    <xsl:message>## text is <xsl:value-of select="$text"/></xsl:message>
     <xsl:variable name="url" select="$pdfcredit/url"/>
-    <xsl:message>## url is <xsl:value-of select="$url"/></xsl:message>
 
     <fo:block-container font-style="italic" absolute-position="absolute"
       left="0pt" top="0pt" right="6.25in" bottom="150pt"
