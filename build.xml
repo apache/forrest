@@ -55,7 +55,7 @@
         
     <path id="classpath">
       <fileset dir="lib" includes="**/*.jar"/>
-      <fileset dir="tools/jetty" includes="servlet*.jar"/>
+      <fileset dir="${tools.dir}/jetty" includes="servlet*.jar"/>
       <pathelement location="${tools.jar}"/>
     </path>
 
@@ -203,7 +203,7 @@
     <echo message="validating stylesheets **/*.xsl ..."/>
     <jing rngfile="./src/core/context/resources/schema/relaxng/xslt.rng">
       <fileset dir="./src/core" includes="**/*.xsl"/>
-      <fileset dir="./tools" includes="**/*.xsl"/>
+      <fileset dir="${tools.dir}" includes="**/*.xsl"/>
     </jing>
     <!-- sitemap.xmap -->
     <echo message="validating **/sitemap.xmap ..."/>
@@ -252,19 +252,12 @@
       <fileset dir="./lib" includes="*/*.*"/>
     </copy>
     
-    <!-- Copy Ant jars, so the shbat distribution is self-contained -->
-    <mkdir dir="${dist-shbat.dir}/ant" />
-    <copy todir="${dist-shbat.dir}/ant">
-      <fileset dir="tools/ant" />
+    <!-- Copy all tools, so the shbat distribution is self-contained -->
+    <copy todir="${dist-shbat.dir}/tools">
+      <fileset dir="${tools.dir}" />
     </copy>
-    <copy todir="${dist-shbat.dir}/ant/lib">
+    <copy todir="${dist-shbat.dir}/tools/ant/lib">
       <fileset dir="lib/core" includes="xml-commons-resolver*.jar"/>
-    </copy>
-
-    <!-- Copy Jetty jars, so the shbat distribution is self-contained -->
-    <mkdir dir="${dist-shbat.dir}/jetty" />
-    <copy todir="${dist-shbat.dir}/jetty">
-      <fileset dir="tools/jetty" />
     </copy>
     
     <!-- Fix bin/ permissions -->
@@ -273,9 +266,9 @@
     <chmod dir="${dist-shbat.dir}/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <!-- Fix ant/bin/ permissions -->
-    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/ant/bin" includes="*.bat"/>
-    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/ant/bin" excludes="*.bat"/>
-    <chmod dir="${dist-shbat.dir}/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/tools/ant/bin" includes="*.bat"/>
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/tools/ant/bin" excludes="*.bat"/>
+    <chmod dir="${dist-shbat.dir}/tools/ant/bin" perm="ugo+rx" excludes="*.bat"/> 
 
     <echo>
   *-----------------------------------------------------------------
