@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass2.java,v 1.1 2004/02/09 11:09:18 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:18 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass2.java,v 1.2 2004/02/19 23:46:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/19 23:46:23 $
  *
  * ====================================================================
  *
@@ -111,7 +111,7 @@ public class Pass2 {
      * 
      * @return 
      */
-    public static String getOutDir() {
+    public String getOutDir() {
         return _outDir;
     }
 
@@ -120,7 +120,7 @@ public class Pass2 {
      * 
      * @param d 
      */
-    public static void setOutDir(String d) {
+    public void setOutDir(String d) {
         _outDir = d;
     }
 
@@ -129,7 +129,7 @@ public class Pass2 {
      * 
      * @return 
      */
-    public static String getTitle() {
+    public String getTitle() {
         return _title;
     }
 
@@ -138,7 +138,7 @@ public class Pass2 {
      * 
      * @param t 
      */
-    public static void setTitle(String t) {
+    public void setTitle(String t) {
         _title = t;
     }
 
@@ -147,7 +147,7 @@ public class Pass2 {
      * 
      * @return 
      */
-    public static boolean getVerbose() {
+    public boolean getVerbose() {
         return _verbose;
     }
 
@@ -156,7 +156,7 @@ public class Pass2 {
      * 
      * @param val 
      */
-    public static void setVerbose(boolean val) {
+    public void setVerbose(boolean val) {
         _verbose = val;
     }
 
@@ -979,7 +979,7 @@ public class Pass2 {
 
             createOverviewSummaryFrameExtras(pw);
 
-            pw.println("<h2>" + Pass2.getTitle() + "</h2>");
+            pw.println("<h2>" + getTitle() + "</h2>");
 
             pw.println("<table class=\"summary\">");
             pw.println("<thead>");
@@ -1045,7 +1045,7 @@ public class Pass2 {
             outdir = DEFAULT_DIR;
         }
 
-        Pass2.setOutDir(outdir);
+        setOutDir(outdir);
 
         String title = (String) System.getProperty("title");
 
@@ -1053,7 +1053,7 @@ public class Pass2 {
             title = "Pass2: " + outdir;
         }
 
-        Pass2.setTitle(title);
+        setTitle(title);
 
         boolean verbose = false;
         String verboseStr = (String) System.getProperty("verbose");
@@ -1069,7 +1069,7 @@ public class Pass2 {
             }
         }
 
-        Pass2.setVerbose(verbose);
+        setVerbose(verbose);
     }
 
     /**
@@ -1077,7 +1077,7 @@ public class Pass2 {
      * 
      * @param f 
      */
-    private static void createDirs(File f) {
+    private void createDirs(File f) {
 
         String parentDir = f.getParent();
         File directory = new File(parentDir);
@@ -1093,7 +1093,7 @@ public class Pass2 {
      * @param args 
      * @throws Exception 
      */
-    public static void main(String args[]) throws Exception {
+    public void main(String args[]) throws Exception {
 
         Pass2 p2 = new Pass2();
 
@@ -1108,13 +1108,13 @@ public class Pass2 {
     Hashtable packageClasses;
 
     /** Field _outDir */
-    private static String _outDir;
+    private String _outDir;
 
     /** Field _title */
-    private static String _title;
+    private String _title;
 
     /** Field _verbose */
-    private static boolean _verbose;
+    private boolean _verbose;
 }
 
 /**

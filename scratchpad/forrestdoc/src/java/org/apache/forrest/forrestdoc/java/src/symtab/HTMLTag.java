@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/symtab/HTMLTag.java,v 1.1 2004/02/09 11:09:12 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:12 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/symtab/HTMLTag.java,v 1.2 2004/02/19 23:46:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/19 23:46:23 $
  *
  * ====================================================================
  *
@@ -60,10 +60,10 @@
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
 
-import org.apache.forrest.forrestdoc.java.src.util.JSComparable;
-
 import java.io.File;
 import java.util.StringTokenizer;
+
+import org.apache.forrest.forrestdoc.java.src.util.JSComparable;
 
 /**
  * An occurrence of an HTML Tag in a file

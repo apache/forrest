@@ -2,29 +2,27 @@
 
 package org.apache.forrest.forrestdoc.java.src.xref;
 
-import antlr.TokenBuffer;
-import antlr.TokenStreamException;
-import antlr.TokenStreamIOException;
-import antlr.ANTLRException;
-import antlr.LLkParser;
-import antlr.Token;
-import antlr.TokenStream;
-import antlr.RecognitionException;
-import antlr.NoViableAltException;
-import antlr.MismatchedTokenException;
-import antlr.SemanticException;
-import antlr.ParserSharedInputState;
-import antlr.collections.impl.BitSet;
-import antlr.collections.AST;
-import antlr.ASTPair;
-import antlr.collections.impl.ASTArray;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
-import java.util.Vector;
-import java.io.*;
-import org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable;
-import org.apache.forrest.forrestdoc.java.src.symtab.JavaVector;
 import org.apache.forrest.forrestdoc.java.src.symtab.DummyClass;
-import org.apache.forrest.forrestdoc.java.src.util.*;
+import org.apache.forrest.forrestdoc.java.src.symtab.JavaVector;
+import org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable;
+import org.apache.forrest.forrestdoc.java.src.util.SkipCRInputStream;
+
+import antlr.ASTPair;
+import antlr.NoViableAltException;
+import antlr.ParserSharedInputState;
+import antlr.RecognitionException;
+import antlr.SemanticException;
+import antlr.Token;
+import antlr.TokenBuffer;
+import antlr.TokenStream;
+import antlr.TokenStreamException;
+import antlr.collections.AST;
+import antlr.collections.impl.ASTArray;
+import antlr.collections.impl.BitSet;
 
 public class JavaXref extends antlr.LLkParser
        implements JavaTokenTypes

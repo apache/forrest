@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLDoc.java,v 1.2 2004/02/11 19:13:59 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2004/02/11 19:13:59 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/js/doc/GenerateHTMLDoc.java,v 1.3 2004/02/19 23:46:23 nicolaken Exp $
+ * $Revision: 1.3 $
+ * $Date: 2004/02/19 23:46:23 $
  *
  * ====================================================================
  *
@@ -61,14 +61,13 @@
 
 package org.apache.forrest.forrestdoc.js.doc;
 
-import java.io.File;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * @author Mailton

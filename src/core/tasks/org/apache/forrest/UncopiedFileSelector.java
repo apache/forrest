@@ -54,13 +54,17 @@
 
 package org.apache.forrest;
 
-import org.apache.tools.ant.types.selectors.*;
-import java.io.*;
-import java.util.Set;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
-import org.apache.tools.ant.Project;
+import java.util.Set;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Parameter;
+import org.apache.tools.ant.types.selectors.BaseExtendSelector;
 
 /**
  * Ant selector that selects files listed in an external text file.  
@@ -148,7 +152,7 @@ public class UncopiedFileSelector extends BaseExtendSelector {
    */
   public void verifySettings() {
     if (configFile == null) {
-      setError("The "+this.CONFIG_KEY+" attribute is required");
+      setError("The "+UncopiedFileSelector.CONFIG_KEY+" attribute is required");
     }
   }
 

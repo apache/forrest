@@ -1,7 +1,7 @@
 /*
- * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.1 2004/02/09 11:09:18 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2004/02/09 11:09:18 $
+ * $Header: /home/fitz/forrest/xml-forrest/scratchpad/forrestdoc/src/java/org/apache/forrest/forrestdoc/java/src/Pass1.java,v 1.2 2004/02/19 23:46:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/02/19 23:46:23 $
  *
  * ====================================================================
  *
@@ -207,7 +207,7 @@ public class Pass1 implements FileListener {
             if (args.length > 0) {
                 System.out.println("outDirPath is " + getOutDir());
                 symbolTable.setOutDirPath(getOutDir());
-                System.err.println("Parsing...");
+                System.out.println("Parsing...");
 
                 // for each directory/file specified on the command line
                 for (int i = 0; i < args.length; i++) {
@@ -215,13 +215,13 @@ public class Pass1 implements FileListener {
                             getRecurse(), this);    // parse it
                 }
 
-                System.err.println("Resolving types...");
+                System.out.println("Resolving types...");
 
                 // resolve the types of all symbols in the symbol table
                 symbolTable.resolveTypes();
                 symbolTable.resolveRefs();
             } else {
-                System.err.println(USAGE);
+                System.out.println(USAGE);
             }
 
             // Iterate through each package
@@ -231,7 +231,7 @@ public class Pass1 implements FileListener {
             while (pEnum.hasMoreElements()) {
                 PackageDef pDef = (PackageDef) pEnum.nextElement();
 
-                System.out.println("Processing package " + pDef.getName());
+                printAdvancement("Processing package " + pDef.getName());
 
                 // Generate tags for each package.  We cannot do one class
                 // at a time because more than one class might be in a
@@ -761,12 +761,8 @@ public class Pass1 implements FileListener {
         t = (HTMLTag) sortedList[0];
         javaFile = t.getFile();
 
-        if (/* getVerbose() */true) {
-            System.out.println("Writing tags for file " + javaFile.toString());
-        } else {
-            System.out.print(".");
-        }
-
+        printAdvancement("Writing tags for file " + javaFile.toString());
+ 
         // Create first file
         try {
             output = createClassFile(sortedList, 0);
@@ -777,11 +773,10 @@ public class Pass1 implements FileListener {
             _currentColumn = 1;
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(1);
             System.out.println("1: Could not open file:"
                     + javaFile.getAbsolutePath());
             System.out.println("   or html file.");
-
+            System.exit(1);
             return;
         }
 
@@ -869,6 +864,13 @@ public class Pass1 implements FileListener {
         ;
     }
 
+    private void printAdvancement(String description) {
+        if ( getVerbose() ) {
+            System.out.println(description);
+        } else {
+            System.out.print(".");
+        }
+    }
     /**
      * Method main
      * 

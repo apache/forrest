@@ -19,12 +19,26 @@
    
    <target name="javasrc">
       <mkdir dir="${target.javasrc.dir}" />
+      <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
+        <classpath refid="task.classpath"/>
+      </taskdef>
+      <javasrc srcDir="${project.dir}" 
+               destDir="${target.javasrc.dir}" 
+               recurse="true"
+               title="${project.dirname}"
+               verbose="false"/>
+   </target>   
+
+
+   <target name="clijavasrc">
+      <mkdir dir="${target.javasrc.dir}" />
       <java classname="org.apache.forrest.forrestdoc.java.src.Pass1"
              fork="true"
              dir="."
              failonerror="true"
              maxmemory="256m">
          <sysproperty key="recurse" value="true" />
+         <sysproperty key="verbose" value="false" />
          <sysproperty  key="title" value="Java Code Documentation" />
          <sysproperty key="outdir" path="${target.javasrc.dir}" />
          <arg value="${project.dir}" />
@@ -37,6 +51,7 @@
             failonerror="true"
             maxmemory="256m">
          <sysproperty key="recurse" value="true" />
+         <sysproperty key="verbose" value="false" />
          <sysproperty key="title" value="Java Code Documentation" />
          <sysproperty key="outdir" path="${target.javasrc.dir}" />
          <arg value="${project.dir}" />
@@ -48,14 +63,6 @@
             filtering="off" />
    </target>
    
-   <target name="javasrc2">
-      <mkdir dir="${target.javasrc.dir}" />
-      <taskdef name="javasrc" classname="org.apache.forrest.forrestdoc.java.src.JavaSrcTask">
-        <classpath refid="task.classpath"/>
-      </taskdef>
-      <javasrc srcDir="${project.dir}" destDir="${target.javasrc.dir}" />
-   </target>   
-
    <target name="uml" depends="xml, xml2dot, dot">
        <antcall target="dot">
         <param name="dot.format" value="svg"/>
