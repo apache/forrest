@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,16 @@
  <xsl:template match="todo">
   <document>
    <header>
-    <title>Todo List</title>
+    <title>
+    <xsl:choose>
+     <xsl:when test="@title!=''">
+       <xsl:value-of select="@title"/>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:text>Todo List</xsl:text>
+     </xsl:otherwise>
+    </xsl:choose>
+    </title>
    </header>
    <body>
     <xsl:apply-templates/>
