@@ -3,8 +3,6 @@
 <xsl:preserve-space elements="*" />
   <!-- faq-v10.dtd to faq-v11.dtd transformation -->
   
-  <xsl:output doctype-public="-//APACHE//DTD FAQ V1.1//EN" doctype-system="faq-v11.dtd"/>
-  
   <xsl:template match="/">
         <xsl:apply-templates/>
   </xsl:template>

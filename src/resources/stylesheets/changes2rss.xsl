@@ -4,13 +4,6 @@
   <xsl:param name="config-file" select="'../../skinconf.xml'"/>
   <xsl:variable name="config" select="document($config-file)/skinconfig"/>
 
-  <xsl:output method = "xml"
-    version="1.0" 
-    encoding="ISO-8859-1" 
-    doctype-public="-//Netscape Communications//DTD RSS 0.91//EN"                   
-    doctype-system="http://my.netscape.com/publish/formats/rss-0.91.dtd"                   
-    />
-
   <xsl:template match="status">
 
     <xsl:variable name="changes-url"

@@ -3,12 +3,6 @@
 <!-- <xsl:preserve-space elements="*" /> -->
   <!-- document-v10.dtd to document-v11.dtd transformation -->
 
-  <!-- normally, I would include something like this:-->
-  <xsl:output 
-     doctype-public="-//APACHE//DTD Documentation V1.1//EN"
-     doctype-system="document-v11.dtd"
-      />
-     
 
   <!-- We should something similar, i.e. make sure the result of this transformation is validated against the v11 DTD
   -->

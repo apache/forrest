@@ -3,8 +3,6 @@
 <xsl:preserve-space elements="*" />
   <!-- changes-v10.dtd to changes-v11.dtd transformation -->
   
-  <xsl:output doctype-public="-//APACHE//DTD Changes V1.1//EN" doctype-system="changes-v11.dtd"/>
-  
   <xsl:template match="/">
         <xsl:apply-templates/>
   </xsl:template>
