@@ -48,29 +48,14 @@ isn't a major problem.
       <!-- No children -> must be a menu item -->
       <!-- Has children, but they are not for display -> menu item -->
       <xsl:when test="count(*) = 0 or count(*) > 0 and (not(*/@label))">
-        <menu-item label="{@label}" href="{@href}">
-          <xsl:if test="@description">
-            <xsl:attribute name="description">
-              <xsl:value-of select="@description"/>
-            </xsl:attribute>
-          </xsl:if>
+        <menu-item>
+          <xsl:copy-of select="@*"/> 
         </menu-item>
       </xsl:when>
-
       <!-- Anything else is considered a menu -->
       <xsl:otherwise>
-        <menu label="{@label}">
-          <xsl:if test="@href">
-            <xsl:attribute name="href">
-              <xsl:value-of select="@href"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:if test="@description">
-            <xsl:attribute name="description">
-              <xsl:value-of select="@description"/>
-            </xsl:attribute>
-          </xsl:if>
-
+        <menu>
+          <xsl:copy-of select="@*"/> 
           <xsl:apply-templates/>
         </menu>
       </xsl:otherwise>
