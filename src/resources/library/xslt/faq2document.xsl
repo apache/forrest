@@ -28,7 +28,10 @@
 
   <xsl:template match="part" mode="index">
     <li>
-      <link href="#part-{generate-id()}">
+      <link>
+        <xsl:attribute name="href">
+          <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
+        </xsl:attribute>
        <xsl:apply-templates select="title"/>
       </link>
        <ul>
@@ -39,16 +42,21 @@
 
   <xsl:template match="faq" mode="index">
     <li>
-      <link href="#faq-{generate-id()}">
+      <link>
+        <xsl:attribute name="href">
+          <xsl:text>#</xsl:text><xsl:call-template name="generate-id"/>
+        </xsl:attribute>
         <xsl:value-of select="question"/>
       </link>
     </li>
   </xsl:template>
 
   <xsl:template match="part">
-    <anchor id="part-{generate-id()}"/>
     <section>
-     <title>
+      <xsl:attribute name="id">
+        <xsl:call-template name="generate-id"/>
+      </xsl:attribute>
+      <title>
       <xsl:value-of select="title"/>
      </title>
       <xsl:apply-templates select="faq|part"/>
@@ -56,13 +64,27 @@
   </xsl:template>
 
   <xsl:template match="faq">
-    <anchor id="faq-{generate-id()}"/>
     <section>
+      <xsl:attribute name="id">
+        <xsl:call-template name="generate-id"/>
+      </xsl:attribute>
      <title>
       <xsl:value-of select="question"/>
      </title>
       <xsl:apply-templates/>
     </section>
+  </xsl:template>
+
+  <xsl:template name="generate-id">
+    <xsl:message>## Got node <xsl:value-of select="local-name(.)"/></xsl:message>
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat(concat(local-name(.), '-'), generate-id(.))"/>
+      </xsl:otherwise>
+  </xsl:choose>
   </xsl:template>
 
   <xsl:template match="question">
