@@ -1,0 +1,148 @@
+                            Apache Forrest 0.5.1-RC1
+                                 Release Notes
+
+                         http://xml.apache.org/forrest/
+                          ============================
+
+$Id: RELEASE-NOTES-0.5.1-RC1.txt,v 1.1 2003/09/27 15:07:02 jefft Exp $
+
+1) Introduction
+---------------
+
+This document describes the 0.5.1 release of Apache Forrest, how to get
+started, known bugs and any other issues.  Please send all feedback to
+forrest-dev@xml.apache.org
+
+2) Status
+---------
+
+Forrest 0.5.1 is a bugfix release over 0.5.  Most notably, it comes with an
+updated Cocoon which fixes a bug in the command-line where certain pages in a
+site weren't rendered (FOR-66).  For a full list of changes, see
+
+http://xml.apache.org/forrest/changes.html#version_0.5.1
+
+
+3) What is Forrest?
+-------------------
+
+Forrest is an XML standards-oriented project documentation framework based on
+Apache Cocoon, providing XSLT stylesheets and schemas, images and other
+resources. Forrest uses these to render the XML source content into a website
+via command-line, robot, or a dynamic web application.  For more details,
+please see the website at http://xml.apache.org/forrest/
+
+4) Requirements
+---------------
+
+- The Forrest binary distribution requires a Java Runtime Environment (1.2 or
+  higher) installed.  This can be obtained from
+  http://java.sun.com/j2se/downloads.html
+
+- The Forrest source distribution requires a Java Development Kit (1.2 or
+  higher) to build, obtainable from the same URL.
+
+Ant is not required: Forrest uses its own stripped-down, souped-up Ant in
+tools/ant/
+
+
+5) Installing Forrest
+---------------------
+
+Depending on which distribution you downloaded, one of these sections will
+apply to you.
+
+o 5.1) Source distribution
+  ------------------------
+
+  The source distribution contains static Forrest resources (skins, XSLTs,
+  images, schemas), source code and Forrest's own website.
+
+  - To build the Forrest binary distribution, type:
+
+    build.bat    (Windows)
+    ./build.sh   (Unix)
+
+    (if Ant 1.5+ is installed, typing 'ant' works just as well)
+
+    A binary distribution will be built in build/dist/shbat Add the path to
+    build/dist/shbat/bin to your PATH environment variable, and you have
+    Forrest installed.  Windows users (esp. 95/98) may need to set FORREST_HOME
+    to point to the build/dist/shbat directory.
+
+o 5.2) Binary distribution
+  ------------------------
+
+  The binary distribution contains a static reusable Forrest ready for use.
+  
+  - Copy somewhere permanent, like /usr/local/forrest or c:\forrest.
+    Support for installation on Windows systems into directories containing
+    spaces is very new, please report back on your success or failure.
+
+  - Windows users should set the FORREST_HOME environment variable to point to
+    where Forrest is installed.
+  - Add $FORREST_HOME/bin (Unix) or %FORREST_HOME%\bin (Windows) to the system
+    PATH environment variable.
+
+
+6) Getting Started
+------------------
+
+
+Having installed Forrest, here is a little test sequence to validate that
+everything works, and to get you started.  For more information, see
+http://xml.apache.org/forrest/your-project.html
+
+ - Type 'forrest -projecthelp'.  This should list the available Forrest
+   commands.
+   NOTE: use the 'forrest.bat' version when running under Cygwin!
+
+ - Create an empty directory somewhere, and change cd to it.
+
+   [ e.g. mkdir /tmp/mysite ; cd /tmp/mysite ]
+
+ - Type 'forrest seed'.  This will create a template site in the current
+   directory, ready for you to edit or render.
+
+ - (optional) Edit the XML content in src/documentation/content/xdocs
+   Have a look around, familiarize yourself with the structure.
+
+ - In your new project root [ e.g. /tmp/mysite ],  type 'forrest validate'.
+   This will check that all XML files are valid.  Actually Forrest does this
+   automatically for the next step, but we're proud of our validation :)
+
+ - In the project root, type 'forrest' or 'forrest site'.  This will generate
+   HTML for your project in build/site
+
+ - (optional) Type 'forrest run'.  This starts up an internal webserver
+   displaying the project contents rendered at runtime.  Point your browser at
+   http://localhost:8888/ to see your site.  Edits to files in build/webapps
+   are instantly rendered.  See the site docs for more info on how to exploit
+   this capability.
+
+
+7) Issue tracking
+-----------------
+
+If you notice what appears to be a bug, please report it on Forrest's JIRA bug
+tracking installation:
+
+  http://issues.cocoondev.org/
+
+Known issues are summarized at:
+
+  http://xml.apache.org/forrest/forrest-issues.html
+
+(a nice example of RSS syndication)
+
+
+8) Feedback
+-----------
+
+Feedback, feature suggestions, bugs and any other issues can be discussed on
+the forrest-dev@xml.apache.org mailing list.
+
+
+
+-- 
+$Revision: 1.1 $ $Date: 2003/09/27 15:07:02 $
