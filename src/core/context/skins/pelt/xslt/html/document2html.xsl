@@ -129,62 +129,6 @@ imported document2html.xsl for details.
 
   </xsl:template>  
   
-  
-  <!--xsl:template match="section"-->
-    <!-- count the number of section in the ancestor-or-self axis to compute
-         the title element name later on -
-    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
-    <a name="{generate-id()}"/>
-    <xsl:apply-templates select="@id"/-->
-    <!-- generate a title element, level 1 -> h2, level 2 -> h3 and so on... -
-    <xsl:element name="{concat('h',$sectiondepth + 1)}">
-      <xsl:value-of select="title"/>
-      <xsl:if test="$notoc='true' and $sectiondepth = 3">
-        <span style="float: right"><a href="#{@id}-menu">^</a></span>
-      </xsl:if>
-    </xsl:element>
-
-    <xsl:apply-templates select="*[not(self::title)]"/>
-  </xsl:template-->
-  
-  <!-- Generates the "printer friendly version" link -->
-  <!--xsl:template name="printlink">
-    <xsl:if test="$disable-print-link = 'false'"> 
-    <div class="printlink">
-	  <a href="javascript:void(window.print())">
-        <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/>
-	  </a>
-	</div>
-    </xsl:if>
-  </xsl:template-->
-
-  <!-- Generates the PDF link -->
-  <!--xsl:template name="pdflink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div class="printlink">
-        <a href="{$filename-noext}.pdf">
-          <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/>
-        </a>
-  	  </div>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template-->
-  
-
-  <!-- Generates the XML link -->
-  <!--xsl:template name="xmllink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="$disable-xml-link = 'false'">
-      <div class="printlink">
-        <a href="{$filename-noext}.xml">
-          <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/>
-        </a>
-      </div>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template-->
-
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div style="text-align: center;">
