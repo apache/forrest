@@ -6,14 +6,14 @@
   <header>
     <title>Using Forrest</title>
     <subtitle>A tutorial on how to use Forrest in your own projects</subtitle>
-    <version>$Revision: 1.21 $</version>
+    <version>$Revision: 1.22 $</version>
     <authors>
       <person name="Jeff Turner" email="jefft@apache.org"/>
     </authors>
   </header>
 
   <body>
-    <section>
+    <section id="intro">
       <title>Introduction</title>
       <p>
         This tutorial will lead you through the process of installing Forrest, and using
@@ -21,7 +21,7 @@
       </p>
     </section>
 
-    <section>
+    <section id="getting_from_source">
       <title>Getting the Forrest source</title>
       <p>
         Currently, the primary way to get Forrest is through CVS. Please consult <link
@@ -41,7 +41,8 @@ U xml-forrest/build.bat
 ....
      </source>
    </section>
-   <section>
+
+   <section id="installing">
      <title>Building and Installing Forrest</title>
      <p>
        To build Forrest, type <code>build dist</code> on Windows, or <code>./build.sh
@@ -114,7 +115,8 @@ Default target: site
        building a new site, so read on.
       </p>
     </section>
-    <section>
+
+    <section id="seeding_new">
       <title>Seeding a new project</title>
       <p>
         'Seeding' a project is our own arborial term for adding a template
@@ -214,7 +216,7 @@ jeff@expresso:~/apache/xml-mysite$ tree
       </p>
       <figure src="images/new-project.png" height="356" width="500" alt="New project"/>
     </section>
-    <section>
+    <section id="seeding_existing">
       <title>Seeding an existing project</title>
       <p>
         In the section above, we have run 'forrest seed' in an empty directory. If you
@@ -231,14 +233,14 @@ jeff@expresso:~/apache/xml-mysite$ tree
         section for more details).
       </p>
     </section>
-    <section>
+    <section id="customizing">
       <title>Customizing your project</title>
       <p>
         Having seeded a project with template docs, you will now want to customize it
         to your project's needs. Here we will deal with configuring the skin, and
         changing the project layout.
       </p>
-      <section>
+      <section id="skinconf.xml">
         <title>Configuring the Forrest skin: skinconf.xml</title>
 
         <p>
@@ -383,13 +385,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
      </section>
 
 
-    <section>
+    <section id="adding_content">
       <title>Adding content</title>
       <p>
         Now you can start adding content of your own, in
         <code>src/documentation/content/xdocs</code>
       </p>
-      <section>
+      <section id="book.xml">
         <title>book.xml</title>
         <p>
           Whenever adding a new file, you should add an entry to that directory's
@@ -403,7 +405,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           file when making changes. The <link href="site:libre-intro">Libre</link>
           effort will hopefully put an end to this</note>
       </section>
-      <section>
+      <section id="tabs.xml">
         <title>tabs.xml</title>
         <p>
           The <code>tabs.xml</code> file is used to produce the 'tabs' in the top-left
@@ -415,7 +417,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           Forrest's own docs for a usage example.
         </p>
       </section>
-      <section>
+      <section id="images">
         <title>Images</title>
         <p>
           Images usually go in <code>src/documentation/resources/images/</code>
@@ -427,7 +429,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
     </section>
 
 
-    <section>
+    <section id="sitemap.xmap">
       <title>Advanced customizations: sitemap.xmap</title>
       <p>
         The Cocoon sitemap is a set of rules for generating content (HTML, PDFs etc)
@@ -612,7 +614,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
               subdirectories or with different names. Follow the syntax from 
               the other sitemap rules to do so.
             </p>
-            <section>
+            <section id="new_dtd">
               <title>Registering a new DTD</title>
               <p>
                  By default, Forrest requires that all XML files be valid: ie
@@ -639,7 +641,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
                </p>
             </section>
           </section>
-          <section>
+          <section id="integrating_rss">
             <title>Example: integrating external RSS content</title>
             <p>
               Using the same idea described in the previous section, we can do things
@@ -656,7 +658,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
 </map:match>
               ]]></source>
           </section>
-        <section>
+        <section id="png_from_svg">
           <title>Example: Generating PNG from SVG</title>
           <p>
             <link href="http://www.w3.org/TR/SVG/">SVG</link> (Scalar Vector
@@ -739,7 +741,7 @@ PUBLIC "-//Acme//DTD Download Documentation V1.0//EN" "downloads.dtd">
         </section>
       </section>
 
-      <section>
+      <section id="skins">
         <title>Forrest skins</title>
         <p>
           As Forrest separates content from presentation, we can plug in different
@@ -758,7 +760,7 @@ project.skin=forrest-site
           The mechanism for defining which skin to use will change in the future from
           Ant @token@ values to Cocoon input module values.
         </note>
-        <section>
+        <section id="new_skin">
           <title>Defining a new skin</title>
           <p>
             Projects can define their own skin, in the
@@ -796,7 +798,7 @@ project.skin=forrest-site
         </section>
       </section>
 
-      <section>
+      <section id="webapp">
         <title>Forrest webapps: developing docs faster</title>
         <p>
           In comparison to simpler tools like <link
@@ -808,7 +810,7 @@ project.skin=forrest-site
           developing with a "live" Forrest webapp instance, Forrest-based doc
           development can be faster and easier than comparable tools.
         </p>
-        <section>
+        <section id="servlet_engine">
           <title>Installing a servlet engine</title>
           <p>
             To run a "live" forrest, you'll need a servlet container, like <link
@@ -819,7 +821,7 @@ project.skin=forrest-site
             restarts much faster than 4.x, and handles context reloads well.
           </p>
         </section>
-        <section>
+        <section id="generate_webapp">
           <title>Generating a site webapp</title>
           <p>
             To generate a webapp rather than a static HTML site, run <code>forrest
@@ -857,7 +859,7 @@ To run in Tomcat, add this to the config file (usu. server.xml):
             page identical to that produced by the Cocoon crawler.
           </p>
         </section>
-        <section>
+        <section id="using_webapp">
           <title>Using the webapp</title>
           <p>
             With the setup above, you can edit the XML files in
@@ -881,7 +883,7 @@ To run in Tomcat, add this to the config file (usu. server.xml):
           </note>
         </section>
       </section>
-      <section>
+      <section id="invoking_from_ant">
         <title>Invoking Forrest from Ant</title>
         <p>
           Established Java projects which use Ant will typically wish to subsume
