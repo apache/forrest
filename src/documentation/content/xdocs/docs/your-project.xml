@@ -102,8 +102,8 @@ Default target: site
       <p>
         As 'site' is the default target, just running 'forrest' without options will
         generate a "static HTML website". For example, typing 'forrest' in the
-       top-level "forrest" directory would build Forrest's own website. But we're going to be
-       building a new site, so read on.
+       top-level "forrest" directory would build Forrest's own website.
+       But we're going to be building a new site for your project, so read on.
       </p>
     </section>
 
@@ -114,18 +114,20 @@ Default target: site
         documentation set to your project, which you can then customize.
       </p>
       <p>
-        To try this out, create a completely new directory, and type 'forrest seed':
+        To try this out, create a completely new directory, change directory
+        to it, and do 'forrest seed':
       </p>
       <source>
-~/apache/xml-mysite$ forrest seed
+[/home/me/forrest/my-test]$ forrest seed
+
 Apache Forrest.  Run 'forrest -projecthelp' to list options
 
-Buildfile: /home/..../xml-forrest/build/dist/shbat/bin/../forrest.build.xml
+Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
 
 init-props:
 Loading project specific properties from
-/home/jeff/apache/xml-mysite/forrest.properties
-
+ /home/me/forrest/my-test/forrest.properties
+...
 echo-settings:
 
 check-contentdir:
@@ -133,15 +135,14 @@ check-contentdir:
 ensure-nocontent:
 
 seed:
-Expanding: /home/jeff/apache/xml/xml-forrest/build/dist/shbat/fresh-site.zip
-           into /home/jeff/apache/xml-mysite
+Copying 41 files to /home/me/forrest/my-test
 
 -------------------------------
 ~~ Template project created! ~~
 
 Here is an outline of the generated files:
 
-/                        # /home/jeff/apache/xml-mysite
+/                        # /home/me/forrest/my-test
 /status.xml              # List of project developers, todo list and change log
 /forrest.properties      # Optional file describing your site layout
 /src/documentation/      # Doc-specific files
@@ -151,52 +152,66 @@ Here is an outline of the generated files:
 /src/documentation/content/xdocs/index.xml # Home page
 /src/documentation/content/xdocs/site.xml  # Navigation file for site structure
 /src/documentation/content/xdocs/tabs.xml  # Skin-specific 'tabs' file.
-/src/documentation/content/*.html,pdf      # Static content files
-/src/documentation/resources/images        # Project images (logos, etc)
+/src/documentation/content/*.html,pdf # Static content files, may have subdirs
+/src/documentation/resources/images   # Project images (logos, etc)
+# you can create other directories as needed (see forrest.properties)
 
 
 What to do now?
 
-- Try rendering this template to HTML by typing 'forrest'. View the generated
-  HTML in a browser to make sure everything works.
-- Edit status.xml and src/documentation/skinconf.xml and customize for your
-  project.
-- Start adding content in xdocs/, remembering to add new files to site.xml
-- Provide any feedback to forrest-dev@xml.apache.org
+- Render this template to static HTML by typing 'forrest'.
+  View the generated HTML in a browser to make sure everything works.
+- Alternatively 'forrest run' and browse to http://localhost:8888/ live demo.
+- Edit status.xml and src/documentation/skinconf.xml
+  to customize for your project.
+- Start adding content in xdocs/ remembering to declare new files in site.xml
+- Follow the document http://forrest.apache.org/docs/your-project.html
+- Provide any feedback to dev@forrest.apache.org
 
 Thanks for using Apache Forrest
 -------------------------------
-    
 
 BUILD SUCCESSFUL
-Total time: 8 seconds
+Total time: 5 seconds
       </source>
       <note>
-        As you've probably begun to notice, we like to document things right in the
+        As you have probably noticed, we like to document things right in the
         script, on the theory that people only read online docs when desperate :)
       </note>
       <p>
         You now have a template documentation structure all set up:
       </p>
       <source>
-jeff@expresso:~/apache/xml-mysite$ tree
+[/home/me/forrest/my-test]$ tree
 .
-|-- forrest-targets.ent
+|-- build
+|   `-- tmp
+|       `-- projfilters.properties
 |-- forrest.properties
 |-- src
 |   `-- documentation
 |       |-- README.txt
+|       |-- classes
+|       |   `-- CatalogManager.properties
 |       |-- content
 |       |   |-- hello.pdf
 |       |   |-- test1.html
 |       |   |-- test2.html
 |       |   `-- xdocs
+|       |       |-- images
+|       |       |   |-- group-logo.gif
+|       |       |   |-- group.svg
+|       |       |   |-- icon.png
+|       |       |   |-- project-logo.gif
+|       |       |   `-- project.svg
 |       |       |-- index.xml
 |       |       |-- samples
-|       |       |   |-- ehtml-sample.ehtml
+|       |       |   |-- ascii-art.xml
+|       |       |   |-- cocoon-pyramid.aart
 |       |       |   |-- faq.xml
 |       |       |   |-- ihtml-sample.ihtml
 |       |       |   |-- index.xml
+|       |       |   |-- openoffice-writer.sxw
 |       |       |   |-- sample.xml
 |       |       |   |-- sample2.xml
 |       |       |   |-- sdocbook.xml
@@ -206,15 +221,22 @@ jeff@expresso:~/apache/xml-mysite$ tree
 |       |       |   `-- wiki-sample.cwiki
 |       |       |-- site.xml
 |       |       `-- tabs.xml
-|       |-- resources
-|       |   `-- images
-|       |       |-- group-logo.gif
-|       |       |-- group.svg
-|       |       |-- icon.png
-|       |       |-- project-logo.gif
-|       |       `-- project.svg
-|       `-- skinconf.xml
-`-- status.xml
+|       |-- skinconf.xml
+|       `-- translations
+|           |-- langcode.xml
+|           |-- languages_en.xml
+|           |-- languages_es.xml
+|           |-- menu.xml
+|           |-- menu_af.xml
+|           |-- menu_de.xml
+|           |-- menu_es.xml
+|           |-- menu_it.xml
+|           |-- menu_no.xml
+|           |-- menu_ru.xml
+|           |-- menu_sk.xml
+|           |-- tabs.xml
+|           `-- tabs_es.xml
+|-- status.xml
       </source>
       <p>
         To render this to HTML, type 'forrest'. You should have a HTML site rendered
