@@ -378,18 +378,27 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         </tr>
       </xsl:if>
  	  
-          <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
- 	     <tr>
-               <td></td>
- 	       <td class="search">
-             <table class="dialog" cellspacing="0" cellpadding="0" border="0" width="100%"> 
+       <xsl:if test="$filename = 'index.html' and //skinconfig/credits">
+        <tr>
+          <td></td>
+          <td>
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr>
                   <td class="border top-left"></td>
                   <td class="border"></td>
                   <td class="border top-right"></td>
-                </tr>     
+                </tr>   
+            </table>
+          </td>      
+        </tr>
+ 	     <tr>
+           <td></td>
+ 	       <td class="search">
+             <table class="dialog" cellspacing="0" cellpadding="0" border="0" width="100%"> 
+                 <tr>
                   <td class="border" ></td>
                   <td colspan="2" class="border" height="10"><b>Credits</b></td>
+                </tr>
                 <tr>
                   <td colspan="3" height="8"></td>
                 </tr>
@@ -419,15 +428,21 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 <tr>
                   <td colspan="3" height="7"></td>
                 </tr>
-
-                <tr>
-                  <td class="border bottom-left"></td>
-                  <td class="border bottomborder"></td>
-                  <td class="border bottom-right"></td>
-                </tr>       
             </table> 
           </td>
         </tr> 
+      <tr>
+        <td></td>
+        <td>
+          <table cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td class="border bottom-left"></td>
+              <td class="border bottomborder"></td>
+              <td class="border bottom-right" ></td>
+            </tr>
+          </table>
+        </td>      
+      </tr>
       </xsl:if>      
 
     </table>
