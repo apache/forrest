@@ -21,7 +21,7 @@
       	<target name="echoskins">
       	<echo>Available skins:
 Forrest provides some default skins which should meet most needs.
-crust, pelt-dev, tigris
+crust, pelt, tigris
 See http://forrest.apache.org/docs/skins.html
 
 Additional skins which are maintained by other people are available from
