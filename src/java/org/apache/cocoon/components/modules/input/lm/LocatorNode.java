@@ -90,7 +90,7 @@ public final class LocatorNode extends AbstractNode {
         try {
             m_baseLocation = VariableResolverFactory.getResolver(base,super.m_manager);
         } catch (PatternException e) {
-            final String message = "Illegal pattern syntax for locator attribute 'base' " +                "at " + configuration.getLocation(); 
+            final String message = "Illegal pattern syntax for locator attribute 'base' " +                "at " + configuration.getLocation(); 
             throw new ConfigurationException(message);
         }
         final Configuration[] children = configuration.getChildren();

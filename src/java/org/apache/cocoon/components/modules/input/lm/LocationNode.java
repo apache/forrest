@@ -83,7 +83,7 @@ public class LocationNode extends AbstractNode {
             m_src = VariableResolverFactory.getResolver(
                 configuration.getAttribute("src"),super.m_manager);
         } catch (PatternException e) {
-            final String message = "Illegal pattern syntax at for location attribute 'src' " +                "at " + configuration.getLocation();
+            final String message = "Illegal pattern syntax at for location attribute 'src' " +                "at " + configuration.getLocation();
             throw new ConfigurationException(message,e);
         }
 
