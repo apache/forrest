@@ -8,7 +8,7 @@
 <xsl:template match="site">
 <html>
  <head>
-  <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
+  <title><xsl:value-of select="div[@class='header']/h1"/></title>
   <link rel="stylesheet" href="skin/style.css" type="text/css"/>
  </head>
  <body>
