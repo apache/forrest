@@ -25,13 +25,42 @@
     |                        to match the mime type 
     |                        (e.g. text/html->.html)
     |
-    | CVS: $Id: cli.xconf,v 1.2 2003/10/22 06:56:53 nicolaken Exp $
+    |  Note: Whilst using an xconf file to configure the Cocoon 
+    |        Command Line gives access to more features, the use of 
+    |        command line parameters is more stable, as there are 
+    |        currently plans to improve the xconf format to allow 
+    |        greater flexibility. If you require a stable and
+    |        consistent method for accessing the CLI, it is recommended 
+    |        that you use the command line parameters to configure 
+    |        the CLI.</note>
+    |
+    | CVS: $Id: cli.xconf,v 1.3 2003/11/10 08:10:59 crossley Exp $
     +-->
     
 <cocoon verbose="true"  
         follow-links="true" 
         precompile-only="false" 
         confirm-extensions="false">
+
+   <!--+
+       |  The context directory is usually the webapp directory
+       |  containing the sitemap.xmap file.
+       |
+       |  The config file is the cocoon.xconf file.
+       |
+       |  The work directory is used by Cocoon to store temporary
+       |  files and cache files.
+       |  
+       |  The destination directory is where generated pages will
+       |  be written (assuming the 'simple' mapper is used, see 
+       |  below)
+       +-->
+   <context-dir>.</context-dir>
+   <config-file>WEB-INF/cocoon.xconf</config-file>
+   <work-dir>../tmp/cocoon-work</work-dir>
+   <!-- Overridden in forrest.build.xml 
+   <dest-dir>../docs</dest-dir>
+   -->
 
    <!--+
        | Broken link reporting options:
@@ -41,14 +70,12 @@
        |     <broken-links type="xml" report="filename"/>
        |   Ignore broken links (default):
        |     <broken-links type="none"/>
-       |   When a page includes an error, should a page be generated?
-       |     
+       |
        |   Two attributes to this node specify whether a page should
-       |   be generated when an error occured. 'generate' specifies 
+       |   be generated when an error has occured. 'generate' specifies 
        |   whether a page should be generated (default: true) and
        |   extension specifies an extension that should be appended
        |   to the generated page's filename (default: none)
-       |     <broken-links generate="true" extension=".error.txt"/>
        |
        +-->
    <broken-links type="xml" 
@@ -70,25 +97,6 @@
        |
        +-->
    <!-- <logging log-kit="WEB-INF/logkit.xconf" logger="cli" level="ERROR" /> -->
-
-   <!--+
-       |  The context directory is usually the webapp directory
-       |  containing the sitemap.xmap file.
-       |
-       |  The config file is the cocoon.xconf file.
-       |
-       |  The work directory is used by Cocoon to store temporary
-       |  files and cache files.
-       |  
-       |  The destination directory is where generated pages will
-       |  be written (assuming the 'simple' mapper is used)
-       +-->
-   <context-dir>.</context-dir>
-   <config-file>WEB-INF/cocoon.xconf</config-file>
-   <work-dir>../tmp/cocoon-work</work-dir>
-   <!-- Overridden in forrest.build.xml 
-   <dest-dir>../docs</dest-dir>
-   -->
 
    <!--+
        | Specifies the filename to be appended to URIs that
@@ -120,25 +128,45 @@
        |
        |   <uri>documents/index.html</uri>
        |
-       |  Append: append the generated page's URI to the end of the 
-       |  source URI:
+       |  The "type" attribute specifies one of (append|replace|insert):
+       |
+       |  append:
+       |  Append the generated page's URI to the end of the source URI:
        |
        |   <uri type="append" src-prefix="documents/" src="index.html"
        |   dest="build/dest/"/>
        |
-       |  Replace: Completely ignore the generated page's URI - just 
+       |  This means that 
+       |   (1) the "documents/index.html" page is generated
+       |   (2) the file will be written to "build/dest/documents/index.html"
+       |
+       |  replace:
+       |  Completely ignore the generated page's URI - just 
        |  use the destination URI:
        |
        |   <uri type="replace" src-prefix="documents/" src="index.html" 
        |   dest="build/dest/docs.html"/>
+       |  
+       |  This means that 
+       |   (1) the "documents/index.html" page is generated
+       |   (2) the result is written to "build/dest/docs.html"
+       |   (3) this works only for "single" pages - and not when links
+       |       are followed
        |
-       |  Insert: Insert generated page's URI into the destination 
+       |  insert:
+       |  Insert generated page's URI into the destination 
        |  URI at the point marked with a * (example uses fictional 
        |  zip protocol)
        |
        |   <uri type="insert" src-prefix="documents/" src="index.html" 
        |   dest="zip://*.zip/page.html"/>
        |
+       |  This means that 
+       |   (1)
+       |
+       |  In any of these scenarios, if the dest attribute is omitted,
+       |  the value provided globally using the <dest-dir> node will 
+       |  be used instead.
        +-->
 
    <!-- Includes and excludes can be used to limit which URLs are rendered -->
@@ -153,8 +181,7 @@
    <uri src="favicon.ico"/>
 
    <!--+
-       |  File containing URIs (plain text, one per
-       |  line).
+       |  File containing URIs (plain text, one per line).
        +-->
    <!--
    <uri-file></uri-file>
