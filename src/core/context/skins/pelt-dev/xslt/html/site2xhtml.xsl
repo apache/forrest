@@ -304,18 +304,9 @@ document.write("Last Published: " + document.lastModified);
               </xsl:call-template>
             </div>
           </xsl:if>
-		<xsl:if test="$config/feedback and not($config/feedback = '')">
-		  <div id="feedback">
-            <xsl:value-of select="$config/feedback"/>
-            <a id="feedbackto">
-              <xsl:attribute name="href">
-                <xsl:value-of select="$config/feedback/@href"/>
-                <xsl:value-of select="$path"/>
-              </xsl:attribute>
-              <xsl:value-of select="$config/feedback/@to"/>
-            </a>
-          </div>
-		</xsl:if>
+          <xsl:if test="$config/feedback">
+            <xsl:call-template name="feedback"/>
+          </xsl:if>
 <xsl:comment>+
     |end bottomstrip
     +</xsl:comment>

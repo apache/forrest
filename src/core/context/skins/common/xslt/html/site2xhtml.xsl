@@ -320,6 +320,26 @@ if (VERSION > 3) {
     </meta>
   </xsl:template>
 
+  <xsl:template name="feedback">  
+    <div id="feedback">
+      <xsl:value-of select="$config/feedback"/>
+      <xsl:choose>
+        <xsl:when test="$config/feedback/@href and not($config/feedback/@href='')">
+          <a id="feedbackto">
+            <xsl:attribute name="href">
+              <xsl:value-of select="$config/feedback/@href"/>
+              <xsl:value-of select="$path"/>
+            </xsl:attribute>
+            <xsl:value-of select="$config/feedback/@to"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$config/feedback/@to"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </xsl:template>
+
   <xsl:template match="node()|@*" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
