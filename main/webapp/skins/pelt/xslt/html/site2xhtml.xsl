@@ -57,6 +57,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   +-->
             <title>
                 <xsl:value-of select="div[@id='content']/h1"/>
+                <xsl:if test="$config/motd-title">
+                  <xsl:text> (</xsl:text>
+                  <xsl:value-of select="$config/motd-title"/>
+                  <xsl:text>)</xsl:text>
+                </xsl:if>
             </title>
 <!--+
   |stylesheets
@@ -308,7 +313,6 @@ document.write("Last Published: " + document.lastModified);
                   </a>
                 </xsl:for-each>
               </xsl:if>
-             
             </div>
           </xsl:if>
           <xsl:if test="$config/host-logo and not($config/host-logo = '')">
@@ -410,6 +414,22 @@ document.write("Last Published: " + document.lastModified);
                     </img>
                   </a>
                 </xsl:for-each>
+              </xsl:if>
+              <xsl:if test="$config/motd-page">
+                <xsl:if test="$config/motd-page/@location='alt' or $config/motd-page/@location='both'">
+                  <hr />
+                  <xsl:value-of select="$config/motd-page"/>
+                  <xsl:if test="$config/motd-page-url">
+                    <xsl:text> (</xsl:text>
+                      <a>
+                        <xsl:attribute name="href">
+                          <xsl:value-of select="$config/motd-page-url"/>
+                        </xsl:attribute>
+                        <xsl:text>More</xsl:text>
+                      </a>
+                    <xsl:text> ...)</xsl:text>
+                  </xsl:if>
+                </xsl:if>
               </xsl:if>
 		</div>
         <div id="roundbottom">
@@ -568,7 +588,26 @@ if (VERSION > 3) {
       </div>
     </xsl:if>
   </xsl:template>
+
   <xsl:template match="div[@id='skinconf-toc-page']">
+    <xsl:if test="$config/motd-page">
+      <xsl:if test="$config/motd-page/@location='page' or $config/motd-page/@location='both'">
+        <div id="motd-area">
+           <xsl:value-of select="$config/motd-page"/>
+          <xsl:if test="$config/motd-page-url">
+            <xsl:text> (</xsl:text>
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:value-of select="$config/motd-page-url"/>
+                </xsl:attribute>
+                <xsl:text>More</xsl:text>
+              </a>
+            <xsl:text> ...)</xsl:text>
+          </xsl:if>
+        </div>
+      </xsl:if>
+    </xsl:if>
+
     <xsl:if test="$config/toc">
       <xsl:if test="contains($minitoc-location,'page')">
         <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
