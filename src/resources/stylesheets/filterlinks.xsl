@@ -15,8 +15,14 @@ paths in the page that Forrest will try to recursively render.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
 
+  <xsl:param name="ctxbasedir"/>
+
   <xsl:template match="@src|@href|@background">
-    <xsl:if test="not(contains(.,'apidocs')) and not(starts-with(., 'api/'))">
+    <!-- The ctxbasedir condition prevents the absolute image paths used in PDFs
+    from being rendered. It will go away when FOP improves -->
+    <xsl:if test="not(starts-with(., $ctxbasedir)) and
+                  not(contains(.,'apidocs')) and
+                  not(starts-with(., 'api/'))">
       <xsl:copy>
         <xsl:apply-templates select="."/>
       </xsl:copy>
