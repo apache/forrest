@@ -10,6 +10,8 @@
    <map:generator  name="file"        src="org.apache.cocoon.generation.FileGenerator" label="content"/>
    <map:generator  name="directory"   src="org.apache.cocoon.generation.DirectoryGenerator" label="content"/>
    <map:generator  name="html"        src="org.apache.cocoon.generation.HTMLGenerator" label="content"/>
+   <!-- SN: temporarily added to test libre, the book.xml nuker -->
+   <map:generator  name="libre"       src="org.outerj.yer.use.cocoon.HierarchyGenerator" label="content"/>
    <!-- FIXME: Change this once better view handling is implemented -->
    <map:generator  name="file-nolabel" src="org.apache.cocoon.generation.FileGenerator"/>
   </map:generators>
@@ -85,6 +87,7 @@
   <map:resource name="skinit">
    <map:transform src="skins/@skin@/xslt/html/{type}.xsl">
      <map:parameter name="isfaq" value="{isfaq}"/>
+     <map:parameter name="resource" value="{resource}"/>
    </map:transform>
    <map:serialize/>
   </map:resource>
@@ -135,10 +138,19 @@
      <map:serialize type="xml"/>
    </map:match>
 
+   <map:match pattern="**tab-**.xml">
+     <map:generate src="content/xdocs/tabs.xml"/>
+     <map:call resource="skinit">
+      <map:parameter name="type" value="tab2menu"/>
+      <map:parameter name="resource" value="{1}"/>
+     </map:call>         
+   </map:match>
+
    <map:match pattern="**book-**.xml">
      <map:generate src="content/xdocs/{1}book.xml"/>
      <map:call resource="skinit">
       <map:parameter name="type" value="book2menu"/>
+      <map:parameter name="resource" value="{2}"/>
      </map:call>         
    </map:match>
 
@@ -240,6 +252,7 @@
    <map:match pattern="*.html">
     <map:aggregate element="site">
      <map:part src="cocoon:/book-{1}.xml"/>
+     <map:part src="cocoon:/tab-{1}.xml"/>
      <map:part src="cocoon:/body-{1}.xml" label="content"/>
     </map:aggregate>
     <map:call resource="skinit">
@@ -250,12 +263,22 @@
    <map:match pattern="**/*.html">
     <map:aggregate element="site">
      <map:part src="cocoon:/{1}/book-{1}/{2}.xml"/>
+     <map:part src="cocoon:/{1}/tab-{1}/{2}.xml"/>
      <map:part src="cocoon:/body-{1}/{2}.xml" label="content"/>
     </map:aggregate>
      <map:call resource="skinit">
       <map:parameter name="type" value="site2xhtml"/>
      </map:call>
    </map:match>
+   
+   <!-- ================  Libre   =========================== -->
+   
+   <map:match pattern="libre">
+     <map:generate type="libre" src="content/xdocs" >
+	    <map:parameter name="depth" value="-1" />
+	   </map:generate>
+	   <map:serialize type="xml"/>
+	 </map:match>
 
    <!-- ================  Static  =========================== -->
 

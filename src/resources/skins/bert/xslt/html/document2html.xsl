@@ -4,9 +4,9 @@
   <xsl:template match="document">
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
-        <h2>
+        <h1>
           <xsl:value-of select="header/title"/>
-        </h2>
+        </h1>
       </xsl:if>
       <xsl:if test="normalize-space(header/subtitle)!=''">
         <h3>
@@ -35,14 +35,14 @@
         <xsl:for-each select="section">
           <li>
             <a href="#{generate-id()}">
-              <xsl:value-of select="@title"/>
+              <xsl:value-of select="title"/>
             </a>
             <xsl:if test="section">
               <ul class="minitoc">
                 <xsl:for-each select="section">
                   <li>
                     <a href="#{generate-id()}">
-                      <xsl:value-of select="@title"/>
+                      <xsl:value-of select="title"/>
                     </a>
                   </li>
                 </xsl:for-each>
@@ -57,7 +57,7 @@
   <!--  section handling
         - <a name/> anchors are added if the id attribute is specified
         - generated anchors are still included for the TOC - what should we do about this?
-        - FIXME: provide a generic facility to process section irrelevant to their 
+        - FIXME: provide a generic facility to process section irrelevant to their
           nesting depth
   -->
   <xsl:template match="section">
@@ -66,7 +66,7 @@
       <a name="{@id}"/>
     </xsl:if>
     <h3>
-      <xsl:value-of select="@title"/>
+      <xsl:value-of select="title"/>
     </h3>
     <xsl:apply-templates/>
   </xsl:template>
@@ -76,7 +76,7 @@
       <a name="{@id}"/>
     </xsl:if>
     <h4>
-      <xsl:value-of select="@title"/>
+      <xsl:value-of select="title"/>
     </h4>
     <xsl:apply-templates/>
   </xsl:template>
