@@ -348,6 +348,30 @@
 
 
   <!-- =================================================================== -->
+  <!-- Generate DTD documentation                                          -->
+  <!-- =================================================================== -->
+  
+  <!-- caution: unfinished work! -->
+  
+  <!-- part one: NekoDTD + resolver.jar support -->
+  <target name="nekodtd" description="Transforms DTDs in the DTDx format." depends="init, compile">
+    <java classname="org.apache.forrest.XNIWriter" fork="true" failonerror="true">
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="build/scratchpad/classes"/>
+        <pathelement location="src/resources/schema"/>
+      </classpath>
+      <arg line="-p org.cyberneko.dtd.DTDConfiguration"/>
+      <arg line="-o ${build.context}/document-v11.dtdx.xml"/>
+      <arg line="-cat src/resources/schema/catalog"/>
+      <arg value="src/resources/schema/dtd/document-v11.dtd"/>
+    </java>
+  </target>
+  
+  <!-- part two (TBD): producing HTML output -->
+
+
+  <!-- =================================================================== -->
   <!-- The documentation system                                            -->
   <!-- =================================================================== -->
   <target name="docs"
