@@ -16,7 +16,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </div>
 </site>
 
-$Id: site2xhtml.xsl,v 1.14 2002/11/17 00:45:41 jefft Exp $
+$Id: site2xhtml.xsl,v 1.15 2002/11/29 12:25:14 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -85,8 +85,7 @@ $Id: site2xhtml.xsl,v 1.14 2002/11/17 00:45:41 jefft Exp $
           <xsl:if test="not($config/disable-search) or
             $config/disable-search='false' and $config/searchsite-domain and
             $config/searchsite-name">
-            <form method="get" action="http://www.google.com/search"
-              onsubmit="q.value = query.value + 'site:{$config/searchsite-domain}'" target="_blank">
+            <form method="get" action="http://www.google.com/search" target="_blank">
               <table bgcolor="{$menu-border}" cellpadding="0" cellspacing="0" border="0" summary="search">
                 <tr>
                   <td colspan="3"><img src="{$spacer}" alt="" width="1" height="10" /></td>
@@ -94,8 +93,8 @@ $Id: site2xhtml.xsl,v 1.14 2002/11/17 00:45:41 jefft Exp $
                 <tr>
                   <td><img src="{$spacer}" alt="" width="1" height="1" /></td>
                   <td nowrap="nowrap">
-                    <input type="hidden" name="q"/>
-                    <input type="text" id="query" size="15"/>
+                    <input type="hidden" name="sitesearch" value="{$config/searchsite-domain}"/>
+                    <input type="text" id="query" name="q" size="15"/>
                     <img src="{$spacer}" alt="" width="5" height="1" />
                     <input type="submit" value="Search" name="Search"/>
                     <br />
