@@ -10,7 +10,7 @@ ext: return the last extension of the filename in a path
 filename-noext: return the file part of a path without its last extension
 
 @author Jeff Turner <jefft@apache.org>
-$Id: pathutils.xsl,v 1.2 2002/11/22 11:36:38 jefft Exp $
+$Id: pathutils.xsl,v 1.2.2.1 2003/01/04 12:09:53 jefft Exp $
 -->
 
 <!-- Returns the directory part of a path.  Equivalent to Unix 'dirname'.
@@ -27,6 +27,18 @@ Examples:
         select="substring-after($path, '/')" />
     </xsl:call-template>
   </xsl:if>
+</xsl:template>
+
+<!-- Normalized (..'s eliminated) version of 'dirname' -->
+<xsl:template name="dirname-nz">
+  <xsl:param name="path" />
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="path">
+      <xsl:call-template name="dirname">
+        <xsl:with-param name="path" select="$path" />
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 
@@ -111,27 +123,79 @@ Examples:
   <xsl:value-of select="substring($path, 1, string-length($path) - string-length($ext))"/>
 </xsl:template>
 
+<!-- Normalized (..'s eliminated) version of 'path-noext' -->
+<xsl:template name="path-noext-nz">
+  <xsl:param name="path" />
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="path">
+      <xsl:call-template name="path-noext">
+        <xsl:with-param name="path" select="$path" />
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+
+<!-- Normalizes a path, converting '/' to '\' and eliminating ..'s
+Examples:
+'foo/bar/../baz/index.html' -> foo/baz/index.html'
+-->
+<xsl:template name="normalize">
+  <xsl:param name="path"/>
+  <xsl:variable name="path-" select="translate($path, '\', '/')"/>
+  <xsl:choose>
+    <xsl:when test="contains($path-, '/../')">
+
+      <xsl:variable name="pa" select="substring-before($path-, '/../')"/>
+      <xsl:variable name="th" select="substring-after($path-, '/../')"/>
+      <xsl:variable name="pa-">
+        <xsl:call-template name="dirname">
+          <xsl:with-param name="path" select="$pa"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="pa-th" select="concat($pa-, $th)"/>
+      <xsl:call-template name="normalize">
+        <xsl:with-param name="path" select="$pa-th"/>
+      </xsl:call-template>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:value-of select="$path-"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
+</xsl:template>
+
 <!--
 Uncomment this to test.
 Usage: saxon pathutils.xsl pathutils.xsl path=foo/bar
 
-<xsl:param name="path" select="'/foo/bar/index.html'"/>
+<xsl:param name="path" select="'/foo/bar/../baz/index.html'"/>
 <xsl:template match="/">
   <xsl:message>
-    path= <xsl:value-of select="$path"/>
-    dirname= <xsl:call-template name="dirname">
+    path           = <xsl:value-of select="$path"/>
+    normalize      = <xsl:call-template name="normalize">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
-    filename= <xsl:call-template name="filename">
+    dirname        = <xsl:call-template name="dirname">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
-    ext= <xsl:call-template name="ext">
+    dirname-nz     = <xsl:call-template name="dirname-nz">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
-    filename-noext= <xsl:call-template name="filename-noext">
+    filename       = <xsl:call-template name="filename">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
-    path-noext= <xsl:call-template name="path-noext">
+    ext            = <xsl:call-template name="ext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+    filename-noext = <xsl:call-template name="filename-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+    path-noext     = <xsl:call-template name="path-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+    path-noext-nz  = <xsl:call-template name="path-noext-nz">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:message>

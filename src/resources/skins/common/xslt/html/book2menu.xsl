@@ -6,7 +6,7 @@ book2menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
   </div>
 which is then merged with other HTML by site2xhtml.xsl
 
-$Id: book2menu.xsl,v 1.7 2002/11/28 14:22:34 jefft Exp $
+$Id: book2menu.xsl,v 1.7.2.1 2003/01/04 12:09:53 jefft Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -66,9 +66,17 @@ $Id: book2menu.xsl,v 1.7 2002/11/28 14:22:34 jefft Exp $
       </xsl:call-template>
     </xsl:variable>
 
+    <xsl:variable name="actual-path">
+      <xsl:call-template name="normalize">
+        <xsl:with-param name="path" select="concat($dirname, $href-noext)"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:message>## Checking <xsl:value-of select="$actual-path"/> against <xsl:value-of select="$path-noext"/></xsl:message>
+
     <xsl:choose>
       <!-- Compare with extensions stripped -->
-      <xsl:when test="concat($dirname, $href-noext) = $path-noext">
+      <xsl:when test="$actual-path = $path-noext">
         <xsl:choose>
           <xsl:when test="contains(@href, '#')">
             <xsl:call-template name="selected-anchor"/>
