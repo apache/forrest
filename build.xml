@@ -7,7 +7,7 @@
   <!ENTITY import-antipede  SYSTEM "./tools/antipede/build.xtarget"> 
                    
 ]>
-<project default="docs" basedir="." name="project build file">
+<project default="interactive" basedir="." name="project build file">
 
 <description>
                    * ===================================== *
@@ -20,7 +20,7 @@
                    
                    
                    For a simple interactive build, simply 
-                   run the build script (build.bar or build.sh)
+                   run the build script (build.bat or build.sh)
 </description>
 
   <path id="classpath">
@@ -89,6 +89,49 @@
     </antcall>
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Interactive build                                                   -->
+  <!-- =================================================================== -->
+  <target name="interactive" description="Interactive Build" depends="-init">          
+    <echo> 
+    --------------------------------------------------------------
+
+          ${xgump.module.project.name} ${xgump.module.project.version.major}.${xgump.module.project.version.minor}   [${YEAR}]
+
+    --------------------------------------------------------------
+     Using ${ant.version}
+     Build file ${ant.file}
+    --------------------------------------------------------------   
+     These are the most common build targets.   
+     You can also invoke them directly; see build.xml for more info. 
+     Builds will be in /build directory, distributions in /dist.        
+        
+   
+     compile ---------- compiles the source code      
+     test ------------- performs the jUnit tests       
+     jar -------------- create the jar files
+     docs ------------- generates the html docs - clean not needed        
+     javadocs --------- generates the API documentation   
+     site ------------- generates the html site (docs+reports)    
+     clean ------------ cleans the build directory    
+     dist ------------- creates src and bin distributions    
+     scratchpad ------- build-run scratchpad code       
+     contrib ---------- build-run contributed code    
+   
+
+    </echo>
+    <property name="input.selection" value="docs"/>        
+    <centipede-user-input name="input.selection">Please select a target </centipede-user-input>   
+    
+    <antcall target="call-cent">
+      <param name="cent-name"   value="centipede"/> 
+      <param name="cent-target" value="splash"/> 
+    </antcall>
+ 
+    <antcall target="${input.selection}"/>
+    
+  </target>
+
 
   <!-- ================================== -->
   <!--              Compile               -->
@@ -104,6 +147,17 @@
     
   </target>             
   
+  <!-- ================================== -->
+  <!--              Scratchpad               -->
+  <!-- ================================== -->
+
+  <target  name="scratchpad"   depends="-init"
+           description="Execute scratchpad targets">
+           
+    <ant antfile="${xlayout.source.scratchpad.targets.dir}/scratchpad.xml"/>
+    
+  </target>  
+    
   <!-- ================== -->
   <!-- Prepares the docs  -->
   <!-- ================== -->

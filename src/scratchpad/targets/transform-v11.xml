@@ -2,7 +2,7 @@
   undergoing testing. When ready they can be moved into the main build.xml -->
 
 <!DOCTYPE project [
-<!ENTITY xmlcatalog-include SYSTEM "../../../build/xml-forrest/src/resources/schema/catalog-ant.xcat">
+<!ENTITY xmlcatalog-include SYSTEM "../../../build/src/resources/schema/catalog-ant.xcat">
 ]>
 
 <project default="transform2v11" basedir="."
@@ -23,13 +23,13 @@
   <xslt basedir="${v10.dir}"
     destdir="${v11.dir}"
     extension=".xml"
-    style="${resource.dir}/library/xslt/docv10todocv11.xsl"
+    style="${xlayout.source.resources.dir}/library/xslt/docv10todocv11.xsl"
     includes="**/*.xml"
     excludes="css/**, drafts/**, faq/faq**.xml, book.xml, **/book.xml, plan/changes-doc.xml"
   >
     <xmlcatalog refid="forrest-schema">
       <classpath>
-        <pathelement location="${resource.dir}/schema" />
+        <pathelement location="${xlayout.source.resources.dir}/schema" />
       </classpath>
     </xmlcatalog>
   </xslt> 
@@ -39,13 +39,13 @@
   <xslt basedir="src/testcases/c2/v10/faq"
     destdir="src/testcases/c2/v11/faq"
     extension=".xml" 
-    style="src/resources/library/xslt/faqv10tofaqv11.xsl"
+    style="${xlayout.source.resources.dir}/library/xslt/faqv10tofaqv11.xsl"
     includes="*.xml"
     excludes="book.xml, index.xml"
   >
     <xmlcatalog refid="forrest-schema">
       <classpath>
-        <pathelement location="${resource.dir}/schema" />
+        <pathelement location="${xlayout.source.resources.dir}/schema" />
       </classpath>
     </xmlcatalog>
   </xslt> 
@@ -55,12 +55,12 @@
   <xslt basedir="src/testcases/c2/v10"
     destdir="src/testcases/c2/v11"
     extension=".xml" 
-    style="src/resources/library/xslt/bookv10.xsl"
+    style="${xlayout.source.resources.dir}/library/xslt/bookv10.xsl"
     includes="book.xml, **/book.xml"
   >
     <xmlcatalog refid="forrest-schema">
       <classpath>
-        <pathelement location="${resource.dir}/schema" />
+        <pathelement location="${xlayout.source.resources.dir}/schema" />
       </classpath>
     </xmlcatalog>
   </xslt> 
@@ -70,12 +70,12 @@
   <xslt basedir="src/testcases/c2/v10/plan"
     destdir="src/testcases/c2/v11/plan"
     extension=".xml" 
-    style="src/resources/library/xslt/changesv10tochangesv11.xsl"
+    style="${xlayout.source.resources.dir}/library/xslt/changesv10tochangesv11.xsl"
     includes="changes-doc.xml"
   >
     <xmlcatalog refid="forrest-schema">
       <classpath>
-        <pathelement location="${resource.dir}/schema" />
+        <pathelement location="${xlayout.source.resources.dir}/schema" />
       </classpath>
     </xmlcatalog>
   </xslt> 
