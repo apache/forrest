@@ -195,10 +195,13 @@ public class StartForrest implements IWorkbenchWindowActionDelegate,
 			workingCopy.setAttribute(ATTR_DEFAULT_CLASSPATH, false);
 
 			// specify working diretory
-			workingCopy.setAttribute(ATTR_WORKING_DIRECTORY, wdir);
+			File workingDir = workingDirectory.append("build").append("webapp")
+								.toFile();
+						workingCopy.setAttribute(ATTR_WORKING_DIRECTORY, workingDir
+								.getAbsolutePath());
 			
-			workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-Dproject.home=\"" + wdir.toString() + "\"");
-			workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-Dforrest.home=\"" + fhome.toString() + "\"");
+			workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-Dproject.home=\"" + wdir + "\"" 
+					+ " -Dforrest.home=\"" + fhome + "\"");
 
 			ILaunchConfiguration configuration = workingCopy.doSave();
 			IProgressMonitor monitor = new NullProgressMonitor();
