@@ -51,16 +51,17 @@
 package org.apache.cocoon.transformation;
 
 import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.cocoon.ProcessingException;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
+import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.NOPValidity;
+import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
-import org.apache.cocoon.caching.Cacheable;
-import org.apache.cocoon.caching.CacheValidity;
-import org.apache.cocoon.caching.NOPCacheValidity;
+import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.util.HashUtil;
 
@@ -121,7 +122,7 @@ import java.util.Stack;
  */
 public class IdGeneratorTransformer
     extends AbstractDOMTransformer
-    implements Cacheable, Configurable
+    implements CacheableProcessingComponent, Configurable, Disposable
 {
 
     /** XPath Processor */
@@ -193,8 +194,8 @@ public class IdGeneratorTransformer
             newDoc = addIds(doc, elementXPath, idXPath);
         } catch (SAXException se) {
             // Really ought to be able to propagate these to caller
-            getLogger().error("Error when transforming XML", se);
-            throw new RuntimeException("Error transforming XML. See error log for details: "+se);
+            getLogger().error("Error when transforming XML: "+se.getMessage(), se.getException());
+            throw new RuntimeException("Error transforming XML. See error log for details: "+se.getMessage()+". Nested exception: "+se.getException().getMessage());
         }
         return newDoc;
     }
@@ -211,7 +212,7 @@ public class IdGeneratorTransformer
             try {
               id = processor.evaluateAsString(sect, idXPath);
             } catch (Exception e) {
-                throw new RuntimeException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e);
+                throw new SAXException("'id' XPath expression '"+idXPath+"' does not return a text node: "+e, e);
             }
             getLogger().info("## Got id "+id);
             if (!sect.hasAttribute(this.idAttr)) {
@@ -251,19 +252,21 @@ public class IdGeneratorTransformer
      * @return A hash of the element and id parameters, thus uniquely
      * identifying this IdGenerator amongst it's peers.
      */
-    public long generateKey() {
-        return HashUtil.hash(this.elementXPath+this.idXPath);
+    public Serializable generateKey() {
+        return ""+HashUtil.hash(this.elementXPath+this.idXPath);
     }
+
 
     /**
      * Generate the validity object.
      *
-     * @return An "always valid" CacheValidity object. This transformer has no
+     * @return An "always valid" SourceValidity object. This transformer has no
      * inputs other than the incoming SAX events.
      */
-    public CacheValidity generateValidity() {
-        return new NOPCacheValidity();
+    public SourceValidity generateValidity() {
+        return new NOPValidity();
     }
+
 
     /**
      * Recycle the component.

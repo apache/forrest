@@ -121,7 +121,7 @@ import java.util.Stack;
  * So <code>manual/Introduction</code> would return the first chapter.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Id: XPathTransformer.java,v 1.3 2003/03/15 06:11:43 jefft Exp $
+ * @version CVS $Id: XPathTransformer.java,v 1.4 2003/03/15 11:02:52 jefft Exp $
  */
 public class XPathTransformer
     extends AbstractDOMTransformer
@@ -382,7 +382,7 @@ public class XPathTransformer
     /**
      * Generate the validity object.
      *
-     * @return An "always valid" CacheValidity object. This transformer has no
+     * @return An "always valid" SourceValidity object. This transformer has no
      * inputs other than the incoming SAX events.
      */
     public SourceValidity generateValidity() {
