@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +25,8 @@
     <abstract>This How-To describes the steps necessary to build a plugin for 
     Forrest. Forrest uses plugins to add new input formats, output formats
     and to change its default behaviour. Since plugins are downloaded when
-    needed and can be hosted at any location plugin code can be developed 
-    independantly of Apache Forrest. This how-to describes each of the major
+    needed and can be hosted at any location, plugin code can be developed 
+    independently of Apache Forrest. This how-to describes each of the major
     steps in creating a plugin and then works through some examples of 
     plugin creation in order to illustrate the materials.</abstract>
 
@@ -35,7 +35,7 @@
 
   <audience title="Intended Audience">
     <p>Users needing to add additional input formats or output formats or
-    to change the way Forrest internals work.</p>
+    to change the operation of the Forrest internals.</p>
     
     <warning>The Plugin Infrastructure is still at an early stage of design 
     and implementation, consequently this How-To <em>may</em> be out of date
@@ -75,7 +75,7 @@
       
     </section>
     
-    <section>
+    <section id="ant">
     	<title>Make ant Available on the Command Line</title>
     	<p>
     		The following instructions rely heavily on
@@ -92,7 +92,7 @@
     	</p>
     </section>
     
-    <section>
+    <section id="seed">
       <title>Seed a New Plugin</title>
       <p>Regardless of the type of plugin you are building, the directory
       structure is almost identical, as are most of the requried
@@ -113,24 +113,24 @@
       
       <note>Although you can name your project anything you like we do have 
       some <a href="site:documentation/developers/pluginInfrastructure">naming 
-      coventions</a> that we recomend you follow.</note> 
+      coventions</a> that we recommend you follow.</note> 
       
       <note>If you plan on building your plugin elsewhere you can copy the
       <code>build.xml</code> build file to your own plugin work directory and 
       use it there.</note>
       
       <p>See 
-      <a href="site:documentation/developers/pluginInfrastructure">What Does 
-      a Forrest Plugin Look Like?</a> for more information on the plugin
+      <a href="site:documentation/developers/pluginInfrastructure">Plugin
+      Infrastructure</a> for more information about the plugin
       directory structure and configuration files.</p>
     
-      <section>
+      <section id="edit-template">
         <title>Edit the Plugin Template</title>
         <p>You now have a skeleton plugin project. However, it doesn't do 
         anything useful yet. Now is a good time to edit some of the files
         provided. For example:</p>
         
-        <section>
+        <section id="status">
           <title>status.xml</title>
           <p>This file is used to track changes to the plugin
           project and to manage lists of things that still need to be done.
@@ -143,7 +143,7 @@
           plugin.</p>
         </section>
         
-        <section>
+        <section id="forrest-properties">
           <title>forrest.properties</title>
           
           <p>This file defines many configuration parameters for Forrest. It
@@ -151,7 +151,7 @@
           for more details.</p>
         </section>
         
-        <section>
+        <section id="skinconf">
           <title>src/documentation/skinconf.xml</title>
           <p>This configures the skin for your plugins documentation. There
           are some items that need to be configured in here, for example, the
@@ -159,7 +159,7 @@
           best to read through it, changing what you need to.</p>
         </section>
         
-        <section>
+        <section id="doc">
           <title>Documentation</title>
           <p>It is also a good idea to start writing the documentation at this
           stage. The above process created a very simple plugin documentation
@@ -168,8 +168,8 @@
       </section>
     </section>
     
-    <section>
-      <title>Edit the Plugin XMap file(s)</title>
+    <section id="edit-sitemap">
+      <title>Edit the Plugin sitemap file(s)</title>
       <p>The plugin <code>xmap</code> file is a Cocoon sitemap that is mounted
       at a strategic place in the Forrest pipeline. It is in this file
       that you will instruct Forrest how to operate. An input plugin
@@ -187,47 +187,47 @@
       for some hints and tips on creating plugin sitemaps. In addition, as with
       all development work on Forrest, you will find
       the <a href="ext:forrest/mail-lists/forrest-dev">developer mailing list</a>
-      a very doog resource (check the archives before posting, please).</p>
+      a very good resource (check the archives before posting, please).</p>
       
-      <section>
+      <section id="components">
         <title>Components, Actions and Resources</title>
         <p>If your plugin uses any components (i.e. generators, transformers or
         serializers), actions or resources they must
-        be defined in either the plugins xmap or one of its parents. The parents
+        be defined in either the xmap for this plugin or one of its parents. The parents
         of an <code>input.xmap</code> are <code>sitemap.xmap</code> and
         <code>forrest.xmap</code>, whilst the parent of both 
         <code>output.xmap</code> and <code>internal.xmap</code> are 
-        <code>sitemap.xmap</code>.</p>
+        <code>sitemap.xmap</code></p>
         <p>If you want to use the realpath where the sitemap.xmap of your plugin 
-        resides then you have to use 
+        resides then you need to use 
         <code>{forrest:plugins}/PLUGIN_NAME</code> instead of <code>{realpath:/}</code>.
         </p>
         <p>See the examples below for more details.</p>
       </section>
     </section>
     
-    <section>
+    <section id="resources">
       <title>Create the Necessary Resource Files</title>
       <fixme author="rdg">Discuss the XSL files and other such resources</fixme>
     </section>
     
-    <section>
+    <section id="samples">
       <title>Create Samples in the Documentation</title>
       <p>Plugin documentation should provide (as a minimum) an
       index page that provides an overview and a set of samples that demonstrate
-      the functionlaity of the plugin. Typically these samples will be
+      the functionality of the plugin. Typically these samples will be
       provided in a <code>samples</code> subdirectory in the plugin 
       documentation and will be referenced from both <code>site.xml</code>
-      and <code>tabs.xml</code>.</p>
+      and <code>tabs.xml</code> configuration files.</p>
       
       <p>Try to provide a sample for all the major functions of your plugin
       and document any configuration that is available.</p>
     </section>
     
-    <section>
+    <section id="test">
       <title>Testing a Plugin</title>
       <p>Since your documentation for the plugin illustrates all of its 
-      functionality you can use that site for testing the plugin. However, you
+      functionality, you can use that site for testing the plugin. However, you
       must first deploy in your local install of Forrest. Each plugin contains
       a buildfile that includes a <code>test</code> target. This target, by
       default, builds the documtantion for your plugin.</p>
@@ -243,25 +243,25 @@
       
       <p>It is also a really good idea to build proper tests for your 
       plugins using a suitable testing framework, for example, 
-      <a href="http://webtest.canoo.com/">WebTest</a>. We recomend that you
+      <a href="http://webtest.canoo.com/">WebTest</a>. We recommend that you
       extend the <code>test</code> target in your plugins build file because
       this target is also used when performing integration tests on Forrest.
-      In addition, we recomend that you use the samples in your documentation 
+      In addition, we recommend that you use the samples in your documentation 
       for your tests, this way you are documenting your plugin at the same time 
       as writing your tests.</p>
     </section>
     
-    <section>
+    <section id="release">
       <title>Releasing a Plugin</title>
     
-      <section>
+      <section id="register">
         <title>Register the Plugin with Apache Forrest</title>
         <fixme author="rdg">Describe the plugins.xml file</fixme>
         <fixme author="rdg">Describe making a request of Forrest devs for 
         inclusion</fixme>
       </section>
       
-      <section>
+      <section id="deploy">
         <title>Deploying the Plugin</title>
         <p>To deploy the plugin so that others can use it, it must be made 
         available as a zip from the URL indicated in the 
@@ -272,7 +272,7 @@
         <code>ant deploy</code> from within the plugin directory.</p>
         
         <p>This command will, by default, deploy to the Apache Forrest web site.
-        In order to do this you need write access to Forrest. If you want to
+        In order to do this you need commit access to Forrest. If you want to
         deploy your plugin to a different location you 
         can build the zip of your plugin with <code>ant dist</code>
         and then copy the zip file from <code>build/dist</code> to wherever
@@ -281,7 +281,7 @@
         <note>Running this command on any plugin will also deploy any
         changes to the <code>plugins.xml</code> file. If you are deploying to
         your own website you will have to request changes to the 
-        <code>plugins.xml</code> and have a Forrest committer publish the new
+        <code>plugins.xml</code> and ask the Forrest committers to publish the new
         document.</note>
         
         <warning>Running the <code>deploy</code> or <code>dist</code> targets
@@ -292,21 +292,21 @@
       </section>
     </section>
     
-    <section>
+    <section id="examples">
       <title>Examples</title>
       <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-        <section>
+        <section id="input">
           <title>Input Plugin</title>
           <fixme author="RDG">Discuss OpenOffice.org plugin here</fixme>
         </section>
         
-        <section>
+        <section id="output">
           <title>Output Plugin</title>
           <fixme author="RDG">Discuss s5 plugin here</fixme>
         </section>
         
-        <section>
+        <section id="internal">
           <title>Internal Plugin</title>
           <fixme author="RDG">Discuss IMSManifest plugin here</fixme>
         </section>
