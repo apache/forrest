@@ -58,16 +58,14 @@
     <xsl:apply-templates select="store"/>
     <xsl:apply-templates select="persistent-store"/>
     <xsl:apply-templates select="store-janitor"/>
-    <xsl:apply-templates select="i18n-bundles"/>
     <xsl:apply-templates select="classloader"/>
     <xsl:apply-templates select="xml-serializer"/>
     <xsl:apply-templates select="xml-deserializer"/>
-    <xsl:apply-templates select="monitor"/>
     </xsl:copy>
   </xsl:template>
 
   <!-- Whole elements trees that need to be copied as is -->
-  <xsl:template match="sitemap|component-instance|source-factories|xml-parser|xslt-processor|xpath-processor|classloader|xml-serializer|xml-deserializer|monitor">
+  <xsl:template match="sitemap|component-instance|xml-parser|xslt-processor|xpath-processor|classloader|xml-serializer|xml-deserializer">
     <xsl:copy>
     <xsl:copy-of select="@*"/>
     <!-- FIXME: remove comment() elements -->
@@ -150,6 +148,18 @@
     </xsl:element>
 
     <xsl:element name="component-instance">
+      <xsl:copy-of select="component-instance[@name='myxml']/@logger"/>
+      <xsl:attribute name="name">linkmap</xsl:attribute>
+      <xsl:copy-of select="component-instance[@name='myxml']/@class"/>
+    </xsl:element>
+    
+    <xsl:element name="component-instance">
+      <xsl:copy-of select="component-instance[@name='myxml']/@logger"/>
+      <xsl:attribute name="name">skinconf</xsl:attribute>
+      <xsl:copy-of select="component-instance[@name='myxml']/@class"/>
+    </xsl:element>
+
+    <xsl:element name="component-instance">
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
       <xsl:attribute name="name">site</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='simplemap']/@class"/>
@@ -159,6 +169,14 @@
       <xsl:copy-of select="component-instance[@name='simplemap']/@logger"/>
       <xsl:attribute name="name">ext</xsl:attribute>
       <xsl:copy-of select="component-instance[@name='simplemap']/@class"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="source-factories">
+    <xsl:element name="source-factories">
+      <!-- Needed for the OO source -->
+      <component-instance class="org.apache.cocoon.components.source.impl.ZipSourceFactory" name="zip"/>
+      <xsl:copy-of select="component-instance"/>
     </xsl:element>
   </xsl:template>
 
@@ -178,14 +196,5 @@
       <parser mime-type="text/html" role="org.apache.excalibur.xml.sax.SAXParser/HTML"/>
     </xsl:element>
   </xsl:template>
-  <xsl:template match="i18n-bundles">
-    <xsl:copy>
-      <xsl:copy-of select="@*"/>
-      <catalogue-name>messages</catalogue-name>
-      <catalogue-location>i18n/translations</catalogue-location>
-      <cache-at-startup>true</cache-at-startup>
-    </xsl:copy>
-  </xsl:template>
-
 
 </xsl:stylesheet>
