@@ -77,8 +77,16 @@
     <a href="{@href}"><xsl:apply-templates/></a>
   </xsl:template>
   
+  <xsl:template match="jump">
+    <a href="#{@href}"><xsl:apply-templates/></a>
+  </xsl:template>
+  
   <xsl:template match="source">
     <pre class="code"><xsl:apply-templates/></pre>
+  </xsl:template>
+
+  <xsl:template match="anchor">
+    <a name="{@id}"/>
   </xsl:template>
 
   <xsl:template match="icon">
