@@ -94,13 +94,11 @@ public class AntProperties extends Properties
     }
 
     public synchronized void putAll(Map arg0) {
-        Set keys = arg0.keySet();
-        Iterator i = keys.iterator();
+        Iterator i = arg0.entrySet().iterator();
         while (i.hasNext()) {
-            String currentKey = i.next().toString();
-            this.put(currentKey, arg0.get(currentKey));
+            Map.Entry me = (Map.Entry)i.next();
+            this.put(me.getKey(), me.getValue());
         }
-
     }
 
     public synchronized Object setProperty(String name, String value) {
@@ -152,25 +150,18 @@ public class AntProperties extends Properties
 
         void increment() {
             currentState++;
-            if (currentState > 3)
+            if (currentState > 3) {
                 currentState = 0;
+            }
 
         }
 
         boolean isStringToFilter() {
-            if (currentState == STRING_TO_FILTER) {
-                return true;
-            } else {
-                return false;
-            }
+            return (currentState == STRING_TO_FILTER);
         }
 
         boolean isStringNOTToFilter() {
-            if (currentState == STRING_NOT_TO_FILTER) {
-                return true;
-            } else {
-                return false;
-            }
+            return (currentState == STRING_NOT_TO_FILTER);
         }
     }
 
