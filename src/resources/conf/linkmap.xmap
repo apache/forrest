@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!-- =================================================
-'linkmap' pipelines.  A linkmap is a map from abstract ('site:index') to
+'linkmap' pipeline.  A linkmap is a map from abstract ('site:index') to
 physical ('../index.html') links for the current page.
 
 Example URL:  http://localhost:8888/community/linkmap-index.html (links for community/index.html)
 Used by    :  The linkrewriter transformer
 Uses       :  content/xdocs/site.xml
 
-$Revision: 1.10 $
+$Revision: 1.11 $
 ==================================================== -->
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -30,16 +30,6 @@ $Revision: 1.10 $
         <map:serialize type="xml" />
       </map:match>
 
-      <!-- Special linkmap for pages containing aggregated content.  Links to aggregated content should be internal
-      (fragment identifiers), and other links should be regular hrefs.  The 'split' between these two types is decided
-      by the stylesheet. -->
-      <map:match pattern="**linkmap-site.*">
-        <map:generate src="cocoon://abs-linkmap" />
-        <map:transform src="resources/stylesheets/aggregates/relativize-split-linkmap.xsl">
-          <map:parameter name="path" value="{1}site.{2}" />
-        </map:transform>
-        <map:serialize type="xml"/>
-      </map:match>
 
       <!-- Linkmap for regular pages -->
       <map:match pattern="**linkmap-*">

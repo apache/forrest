@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
+<!-- ===============================================
+Pipeline to generate an aggregated view of all the site's docs.
 
-<!-- Subsitemap generating aggregated views of multiple XML docs -->
+This subsitemap defines both a source (*.xml) matcher, and a
+linkmap (linkmap-*) matcher to redefine the internal links.
+
+Example URL:  Typically http://localhost:8888/site.pdf
+Used by    :  sitemap.xmap, which binds the URL to this pipeline
+Uses       :  cocoon://abs-linkmap, in linkmap.xmap
+
+$Revision: 1.3 $
+==================================================== -->
+
+
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
@@ -17,12 +29,7 @@
   <map:pipelines>
     <map:pipeline>
       <!-- Aggregation of all XML in the site -->
-      <map:match pattern="site.xml">
-        <!--
-        <map:generate src="cocoon://book-index.html"/>
-        <map:generate src="cocoon://community/howto/abs-menulinks-index.html"/>
-        <map:generate src="cocoon://abs-menulinks-faq.html"/>
-        -->
+      <map:match pattern="*.xml">
         <map:generate src="cocoon://abs-linkmap"/>
         <map:transform src="resources/stylesheets/site2book.xsl" />
         <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
@@ -35,6 +42,23 @@
         <map:serialize type="xml"/>
       </map:match>
 
+
+      <!-- Special linkmap for pages containing aggregated content.  Links to aggregated content should be internal
+      (fragment identifiers), and other links should be regular hrefs.  The 'split' between these two types is decided
+      by the stylesheet. -->
+
+      <map:match pattern="linkmap-*.*">
+        <map:generate src="cocoon://abs-linkmap" />
+
+        <map:transform src="resources/stylesheets/aggregates/relativize-split-linkmap.xsl">
+          <map:parameter name="path" value="{1}.{2}" />
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+
+
     </map:pipeline>
+
+
   </map:pipelines>
 </map:sitemap>

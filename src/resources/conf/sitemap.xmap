@@ -3,7 +3,7 @@
 Default Forrest sitemap, defining the whole site.
 Delegates to the other *.xmap files.
 
-$Revision: 1.106 $
+$Revision: 1.107 $
 ==================================================== -->
 
 
@@ -177,18 +177,26 @@ $Revision: 1.106 $
           <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
         </map:match>
 
-        <map:match pattern="**.xml">
-          <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
-        </map:match>
+        <!-- Default source types -->
+        <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
+
       </map:match>
 
       <!-- Menu content -->
-      <map:match pattern="**menulinks*">
+      <map:match pattern="**menulinks-*">
         <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
       </map:match>
 
-      <!-- Link mappings -->
-      <map:match pattern="**linkmap*">
+      <!-- Link maps -->
+      <map:match pattern="abs-linkmap">
+        <map:mount uri-prefix="" src="linkmap.xmap"/>
+      </map:match>
+
+      <map:match pattern="**linkmap-*">
+        <map:match pattern="linkmap-site.*">
+          <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
+        </map:match>
+
         <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" />
       </map:match>
 
