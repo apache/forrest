@@ -43,7 +43,7 @@ FDIST=$FORREST/build/dist/shbat
 
 ## Determines where to copy new jars to:
 
-if [ "$UPGRADE_TYPE" = "real" ]; then
+if [ "$UPGRADE_TYPE" = "real" -o "$UPGRADE_TYPE" = "real_with_cvs" ]; then
   FLIB=$FORREST/lib/core
   FLIB_ENDORSED=$FORREST/lib/endorsed
 elif [ "$UPGRADE_TYPE" = "testing" ]; then
