@@ -451,16 +451,23 @@ which will be used to configure the chosen Forrest skin.
       <section id="Changing_the_layout">
         <title>Changing the layout: forrest.properties</title>
         <p>
-          For a simple site, Forrest's default directory layout may seem rather
-          cumbersome.  Forrest allows you to place files anywhere you want in your
-          project, so long as you tell Forrest where you have placed the major file
-          types.
+          Forrest allows you to place files anywhere you want in your
+          project, so long as you tell Forrest where you have placed the
+          major file types.
         </p>
         <p>
-          The <code>forrest.properties</code> file is what maps from your directory
+          The <code>forrest.properties</code> file maps from your directory
           layout to Forrest's. If you generated your site with 'forrest seed', you
-          should have one pre-written, with all the entries commented out. The relevant
-          <code>forrest.properties</code> entries (with default values) are:
+          will have one pre-written, with all the entries commented out.
+        </p>
+        <note>
+         You only need to un-comment entries if you are going to change them
+         to something different.
+         If you keep in synchronisation with the 'forrest seed' defaults,
+         then it is easy to diff each time that you update.
+        </note>
+        <p>
+          The main entries (with default values) are:
         </p>
         <source>
 # Properties that must be set to override the default locations
@@ -491,7 +498,7 @@ which will be used to configure the chosen Forrest skin.
          project.xdocs-dir=src/xdocs
        </source>
        <p>
-         Say we wish to emulate the nice and simple 
+         For example, to emulate the simple 
          <link href="http://maven.apache.org/">Maven</link> format:
        </p>
        <p xml:space="preserve">
@@ -508,6 +515,7 @@ project.stylesheets-dir=${project.content-dir}/stylesheets
 project.images-dir=${project.content-dir}/images
 project.skinconf=${project.content-dir}/skinconf.xml
          </source>
+<!-- Does anyone know what this note means? -->
          <note>
            Internally, Forrest rearranges the specified directory into the default
            <code>src/documentation/content/xdocs</code> structure. In the layout above, we have
@@ -519,7 +527,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
 
      </section>
 
-
     <section id="adding_content">
       <title>Adding content</title>
       <p>
@@ -529,33 +536,31 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <section id="site.xml">
         <title>site.xml</title>
         <p>
-          Whenever adding a new file, you should add an entry to the project's
-          <code>site.xml</code> file. site.xml is like a site index, and is rendered as
-          the vertical column of links in the default skin.  Have a look at Forrest's own
+          When adding a new xml document, you would add an entry to the project's
+          <code>site.xml</code> file. This site.xml is like a site index, and is rendered as
+          the vertical column of links in the default skin.  Look at Forrest's own
           xdocs for an example.  More detailed info about site.xml is provided in 
-          <link href="site:linking">Menus and Linking</link>.
+          the document <link href="site:linking">Menus and Linking</link>.
         </p>
       </section>
       <section id="tabs.xml">
         <title>tabs.xml</title>
         <p>
-          The <code>tabs.xml</code> file is used to produce the 'tabs' in the top-left
-          corner of the default skin.
-        </p>
-        <figure src="images/tabs.png" alt="Tabs"/>
-        <p>
-          Tabs allow users to quickly jump to sections of your site.  See the
+          The <code>tabs.xml</code> file is used to produce the 'tabs'.
+          which enable users to quickly jump to sections of your site.
+          See the
           <link href="site:menu_generation">menu generation</link> documentation
           for more details, and again, consult Forrest's own docs for a usage
           example.
         </p>
+        <figure src="images/tabs.png" alt="Tabs"/>
         <p>You can have one or two levels of tabs. The images above show a 
         single level. However, you can create a second level that
         will only be displayed when its parent tab is selected. For example,
         the <code>tabs.xml</code> snippet below will display either one or
         two rows of tabs, depending on which of the top level tabs is selected.
-        The first row will have two tabs, one labelled <code>How-Tos</code>, the
-        other labelled <code>Apache XML Projects</code>. When the 
+        The first row will have two tabs: one labelled <code>How-Tos</code>
+        and the other labelled <code>Apache XML Projects</code>. When the 
         <code>How-Tos</code> tab is selected there will
         be no second row of tabs. However, when the <code>Apache XML
         Projects</code> tab is selected, a second row of tabs will be displayed
@@ -578,7 +583,6 @@ project.skinconf=${project.content-dir}/skinconf.xml
         </p>
       </section>
     </section>
-
 
     <section id="sitemap.xmap">
       <title>Advanced customizations: sitemap.xmap</title>
