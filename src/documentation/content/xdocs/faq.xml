@@ -599,15 +599,19 @@ X [0]                       brokenlink.html     BROKEN: reason
          DocBook documents are matched. The rest of the documents will be
          handled by Forrest core. Powerful regex capabilities are available.
         </p>
-        <source><![CDATA[
-...
-  <map:match pattern="**/resolver-*.html">
-    <map:generate src="content/xdocs/{1}/resolver-{2}.xml"/>
-    <map:transform
-      src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/>
-    <map:serialize/>
-  </map:match>
-...]]>
+        <source><![CDATA[<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+ <map:pipelines>
+  <map:pipeline>
+    <map:match pattern="**/resolver-*.html">
+      <map:generate src="{project:content.xdocs}{1}/resolver-{2}.xml"/>
+      <map:transform
+          src="file:///usr/share/sgml/docbook/xsl/xhtml/docbook.xsl"/>
+      <map:serialize/>
+   </map:match>
+  </map:pipeline>
+ </map:pipelines>
+</map:sitemap>]]>
         </source>
         <p>
          You can also use a mixture of the two methods, some handled
