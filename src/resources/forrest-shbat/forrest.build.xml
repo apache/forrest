@@ -52,12 +52,12 @@ FORREST SITE BUILDER
     <!-- people should use forrest.properties to override following defaults  -->
     <property name="forrest.home"        location="." />
     <property name="project.name"        value="my-project"    />
-    <property name="project.site-dir"    value="${project.home}/build/site"    />
-    <property name="project.war" value="${project.home}/build/${project.name}.war" />
-    <property name="project.webapp"      value="${project.home}/build/webapp" />
-    <property name="project.siteplan"    value="${project.home}/siteplan.xml"  />
+    <property name="project.build-dir"    value="${project.home}/build"    />
+    <property name="project.site-dir"    value="${project.build-dir}/site"    />
+    <property name="project.war"   location="${project.build-dir}/${project.name}.war" />
+    <property name="project.webapp"      location="${project.build-dir}/webapp" />
 
-    <property name="project.temp-dir"    value="${project.home}/build/tmp"     />
+    <property name="project.temp-dir"    value="${project.build-dir}/tmp"     />
     <property name="project.work-dir"    value="${project.temp-dir}/work"      />
     <property name="project.ctxt-dir"    value="${project.temp-dir}/context"   />
 
@@ -88,19 +88,6 @@ FORREST SITE BUILDER
     <!-- checks for presence of required classes and/or resources -->
     <property name="tools.jar"           location="${java.home}/../lib/tools.jar"/>
     <available file="${tools.jar}"       property="tools.jar.present"/>
-
-    <!-- validation of certain key files using RELAX NG -->
- <!-- FIXME: Still testing -->
-    <echo message=" "/>
-    <echo message="Conducting RELAX NG validation of skinconf.xml"/>
-    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
-     <classpath>
-      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
-     </classpath>
-    </taskdef>
-    <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
-     <fileset dir="${project.content-dir}" includes="**/skinconf.xml"/>
-    </jing>
 
     <!-- echo settings in -Dforrest.echo=true mode -->
     <antcall target="echo-settings" />
@@ -145,8 +132,6 @@ FORREST SITE BUILDER
       | project.site-dir    = ${project.site-dir} 
       | //uri to start crawling/generation process
       | project.start-uri   = ${project.start-uri}
-      | //masterplan for building site (dreamware)
-      | project.siteplan    = ${project.siteplan} 
       | //cocoon.xconf location
       | project.configfile  = ${project.configfile}
       | //logkit.xconf location
@@ -177,7 +162,8 @@ FORREST SITE BUILDER
   <!-- ===============================================================
        Set class-path.
        =============================================================== -->
-  <target name="prepare-classpath" depends="prepare-context" >
+  <target name="prepare-classpath" depends="prepare-context, -prepare-classpath"/>
+  <target name="-prepare-classpath">
     <path id="forrest.cp">
       <pathelement location="${project.ctxt-dir}/WEB-INF/classes"/>
       <fileset dir="${project.ctxt-dir}/WEB-INF/lib" includes="*.jar"/>
@@ -229,11 +215,7 @@ FORREST SITE BUILDER
     <filter token="project-logo.href" value="${skinconfig.project-url}"/>
     <filter token="project-logo.alt"  value="${skinconfig.project-name} logo"/>
 
-    <!-- NOW: filter-copy the empty-forrest-context -->
-    <!-- WITH SitePlan: smaller empty-context, 1 unfiltered copy
-                        + generate more stuff from siteplan -->
-
-    <copy toDir="${project.ctxt-dir}/" filtering="off">
+    <copy todir="${project.ctxt-dir}/" filtering="off">
       <fileset dir="${forrest.home}/context" >
         <exclude name="sitemap.xmap" />
         <exclude name="skins/**" />
@@ -243,7 +225,7 @@ FORREST SITE BUILDER
       </fileset>
     </copy>
 
-    <copy toDir="${project.ctxt-dir}/" filtering="on">
+    <copy todir="${project.ctxt-dir}/" filtering="on">
     <!-- everything in the skins, except the images , and the sitemap -->
       <fileset dir="${forrest.home}/context" >
         <include name="sitemap.xmap" />
@@ -273,11 +255,14 @@ FORREST SITE BUILDER
          (now: copy stuff from param ${project.content-dir}
           with siteplan: based on that plan; should allow more different parts)
        param: location to find the content ${project.content-dir}(now)
-       param: location of siteplan ${project.siteplan} (future)
        param: location to find project descriptors == ${project.home} 
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
-  <target name="project-context" depends="init, bare-context, examine-proj, copy-conf, copy-sitemap,
+  <target name="project-context-bot" depends="init, examine-proj, copy-conf, copy-sitemap,
+    copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
+    copy-classes, copy-skins, copy-skinconf, copy-status"/>
+
+  <target name="project-context" depends="ensure-content, validate, init, bare-context, examine-proj, copy-conf, copy-sitemap,
     copy-xdocs, copy-stylesheets, copy-images, copy-schema, copy-lib, 
     copy-classes, copy-skins, copy-skinconf, copy-status"/>
 
@@ -322,14 +307,13 @@ FORREST SITE BUILDER
   </target>
 
   <target name="copy-images" if="images.present">
-    <copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
+<copy toDir="${project.ctxt-dir}/resources/images" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${project.images-dir}"/>
     </copy>
   </target>
 
   <target name="copy-schema" if="schema.present">
-    <echo>Copying schemas..</echo>
     <copy toDir="${project.ctxt-dir}/resources/schema" filtering="false"
       overwrite="true" failonerror="false">
       <fileset dir="${project.schema-dir}"/>
@@ -386,7 +370,6 @@ FORREST SITE BUILDER
             with siteplan: e.g. sitemap and catalog)
        param: name of the skin to use ${project.skin} (now)
        param: location to find the content ${project.content-dir}(now)
-       param: location of siteplan ${project.siteplan} (future)
        param: location to make temporary context-dir ${project.ctxt-dir} 
        =============================================================== -->
   <target name="prepare-context" depends="init, bare-context, project-context" />
@@ -434,23 +417,28 @@ Use the 'seed' target to create a template project structure.
        Makes the site.
        param: name of the skin to use ${project.skin} (now)
        param: location to find the content ${project.content-dir}(now)
-       param: location of siteplan ${project.siteplan} (future)
        param: location to make temporary context-dir ${project.ctxt-dir} 
        param: location to make temporary work-dir ${project.content-dir}
        param: debuglevel for logging ${project.debuglevel}
        param: location of log-file ${project.logkitfile}
-       =============================================================== -->
- <target name="site" depends="ensure-content, validate, init, prepare-context, clean-site, prepare-classpath"
-   if="project.content.present"
-         description="Generates a static HTML website for this project">
+       ===============================================================
+   -->
+
+   <target name="site" depends="prepare-context, clean-site, -site"
+     if="project.content.present"
+     description="Generates a static HTML website for this project"/>
+
+   <target name="-site" depends="init, -prepare-classpath">
     <!-- clean out the temp space, if we don't cocoon fails on this
          actually clears the cache, not yet clear why it is really needed? -->
     <delete dir="${project.work-dir}"/>
     <mkdir dir="${project.work-dir}"/>
-    <java classname="org.apache.cocoon.Main" fork="true"
-          dir="." failonerror="true"
-          classpathref="forrest.cp"
-          >
+
+    <java classname="org.apache.cocoon.Main"
+      fork="true"
+      dir="."
+      failonerror="true"
+      classpathref="forrest.cp">
       <jvmarg
         value="-Djava.endorsed.dirs=${forrest.home}/lib/endorsed${path.separator}${java.endorsed.dirs}"/>
       <arg value="-c${project.ctxt-dir}"/>   <!-- input to the process -->
@@ -619,6 +607,17 @@ Thanks for using Apache Forrest
         excludes="${forrest.validate.excludes}">
       </fileset>
     </xmlvalidate>
+    <!-- validation of certain key files using RELAX NG -->
+    <echo message=" "/>
+    <echo message="Conducting RELAX NG validation of skinconf.xml"/>
+    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
+     <classpath>
+      <fileset dir="${forrest.home}/WEB-INF/lib" includes="*.jar" />
+     </classpath>
+    </taskdef>
+    <jing rngfile="${forrest.home}/context/resources/schema/relax/skinconf-v10.rng">
+     <fileset dir="${project.content-dir}" includes="**/skinconf.xml"/>
+    </jing>
   </target>
 
 </project>
