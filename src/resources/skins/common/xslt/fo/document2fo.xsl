@@ -437,7 +437,10 @@
       border-color="#D00000"
       background-color="#D00000"
       color="#ffffff">
-      Warning: <xsl:value-of select="title"/>
+      <xsl:choose>
+        <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+        <xsl:otherwise>Note: </xsl:otherwise>
+      </xsl:choose><xsl:value-of select="title"/>       
     </fo:block>
     <fo:block
       margin-left="0.25in"
@@ -472,7 +475,10 @@
       border-end-style="solid"
       border-color="#A0C9F5"
       background-color="#A0C9F5">
-      Note: <xsl:value-of select="title"/>
+      <xsl:choose>
+        <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+        <xsl:otherwise>Note: </xsl:otherwise>
+      </xsl:choose><xsl:value-of select="title"/>
     </fo:block>
     <fo:block
       margin-left="0.25in"

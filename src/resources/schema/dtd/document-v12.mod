@@ -241,11 +241,13 @@ COPYRIGHT:
 <!-- Note Paragraph (normally shown encapsulated) -->
 <!ELEMENT note (%content.mix;)*>
 <!ATTLIST note
+  label CDATA #IMPLIED
   %common.att; 
 >
 <!-- Warning Paragraph (normally shown with eye-catching colors) -->
 <!ELEMENT warning (%content.mix;)*>
 <!ATTLIST warning
+  label CDATA #IMPLIED
   %common.att; 
 >
 <!-- Fixme Paragraph (normally not shown) -->

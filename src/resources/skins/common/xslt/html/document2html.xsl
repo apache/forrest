@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.31 2003/09/09 20:44:29 nicolaken Exp $
+$Id: document2html.xsl,v 1.32 2003/09/12 10:25:55 stevenn Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -202,6 +202,7 @@ if (VERSION > 3) {
     <div class="frame {local-name()}">
       <div class="label">
         <xsl:choose>
+          <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
           <xsl:when test="local-name() = 'note'">Note</xsl:when>
           <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
           <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
