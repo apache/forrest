@@ -46,7 +46,7 @@
           
   <!-- private -->        
                 
-  <target name="init-plugins" depends="init-props, check-plugin, fetch-plugin, unpack-plugins"/>   
+  <target name="init-plugins" depends="init-props, check-plugin, fetch-plugin, unpack-plugins, configure-plugins"/>   
 
   <target name="plugin-unavailable">   
     <property name="plugin.unavailable" value="true"/>
@@ -78,6 +78,21 @@
         </fileset>
      </delete>
   </target>  
+  
+  <target name="configure-plugins">
+     <!-- add the snippet to plugins/sitemap.xmap that will mount the plugin
+          specific sitemap -->
+     <xslt in="${forrest.plugins-dir}/sitemap.xmap"
+       out="${forrest.plugins-dir}/sitemap.xmap.new"
+       style="${forrest.home}/var/pluginMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin.name}"/>  
+     </xslt>
+     <move file="${forrest.plugins-dir}/sitemap.xmap" 
+       tofile="${forrest.plugins-dir}/sitemap.xmap.old"/>
+     <move file="${forrest.plugins-dir}/sitemap.xmap.new" 
+       tofile="${forrest.plugins-dir}/sitemap.xmap"/>
+  </target>
 
   <target name="fetch-plugins-descriptors" if="plugin.unavailable">
     <delete>
@@ -112,10 +127,9 @@
           <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>      
           <param name="forrest-version" expression="${version}"/>   
        </xslt>  
-       <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/>
+       <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/> 
       </sequential>
     </for>
-    <echo>FIXME: Still need to enable the plugin by adding snippet to plugins.xml</echo>
   </target>    
   
 </project>
