@@ -72,9 +72,15 @@
     <mkdir dir="${build.dir}"/>
   </target>
 
-  <target name="clean">
+  <target name="clean" description="Delete all generated files">
     <delete dir="${build.dir}"/>
   </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Make release distributions                                          -->
+  <!-- =================================================================== -->
+
 
   <target name="release-dist-src" depends="init"
     description="Makes a source release distribution">
@@ -116,6 +122,28 @@
       <zipfileset prefix="${release-name-src}" dir="${tmp-scripts}"/>
       <zipfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
     </zip>
+
+    <tar longfile="gnu"
+      compression="gzip"
+      destfile="${dist.dir}/${release-name-src}.tar.gz" >
+      <tarfileset dir="." prefix="${release-name-src}" username="forrest" group="forrest">
+        <exclude name="build/**"/>
+        <patternset refid="noscripts"/>
+      </tarfileset>
+      <tarfileset prefix="${release-name-src}" dir="${tmp-scripts}"
+        mode="755" username="forrest" group="forrest">
+        <include name="**/*.sh"/>
+        <include name="**/ant"/>
+        <include name="**/forrest"/>
+      </tarfileset>
+      <tarfileset prefix="${release-name-src}" dir="${tmp-scripts}"
+        username="forrest" group="forrest">
+        <exclude name="**/*.sh"/>
+        <exclude name="**/ant"/>
+        <exclude name="**/forrest"/>
+      </tarfileset>
+      <tarfileset prefix="${release-name-src}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
+    </tar>
   </target>
 
 
@@ -127,7 +155,23 @@
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
       <zipfileset dir="etc"  prefix="${release-name-bin}" includes="RELEASE-NOTES-${version}.txt"/>
     </zip>
+    <tar longfile="gnu" compression="gzip"
+      destfile="${dist.dir}/${release-name-bin}.tar.gz" >
 
+      <tarfileset prefix="${release-name-bin}" dir="${dist-shbat.dir}"
+        username="forrest" group="forrest">
+        <exclude name="**/*.sh"/>
+        <exclude name="**/ant"/>
+        <exclude name="**/forrest"/>
+      </tarfileset>
+      <tarfileset prefix="${release-name-bin}" dir="${dist-shbat.dir}"
+        mode="755" username="forrest" group="forrest">
+        <include name="**/*.sh"/>
+        <include name="**/ant"/>
+        <include name="**/forrest"/>
+      </tarfileset>
+      <tarfileset prefix="${release-name-bin}" dir="etc" includes="RELEASE-NOTES-${version}.txt"/>
+    </tar>
   </target>
 
   <target name="release-dist" 
