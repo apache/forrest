@@ -15,7 +15,7 @@
 -->
 <!-- ===================================================================
 
-     Apache Todos module (Version 1.0)
+     Apache Todos module (Version 2.0)
 
 PURPOSE:
   This DTD was developed to create a simple yet powerful document

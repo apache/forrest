@@ -15,7 +15,7 @@
 -->
 <!-- ===================================================================
 
-     Apache Changes Module (Version 1.1)
+     Apache Changes Module (Version 2.0)
 
 PURPOSE:
   This DTD was developed to create a simple yet powerful document

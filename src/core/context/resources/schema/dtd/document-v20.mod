@@ -15,7 +15,7 @@
 -->
 <!-- ===================================================================
 
-     Apache Common Documentation elements (Version 2.0a)
+     Apache Common Documentation elements (Version 2.0)
 
 PURPOSE:
   This DTD was developed to create a simple yet powerful document
