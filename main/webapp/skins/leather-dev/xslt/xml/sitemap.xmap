@@ -54,7 +54,6 @@
 
  <map:pipelines>
   <map:pipeline>
-
    <map:match pattern="">
      <map:generate src="fct-bits/c-fontsize-fct.xml"/>
      <map:transform src="contract.xsl">
@@ -62,15 +61,28 @@
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
+  </map:pipeline>  
 
-   <!-- ======================== Automount =============================== -->
-
-   <map:match pattern="*/**">
-     <map:mount uri-prefix="{1}" src="{1}/" check-reload="yes"/>
-   </map:match>
-
-  </map:pipeline>
-  
+ <!-- 
+1. check all aviable fct
+2. check which fct are needed
+3. check where to place them
+4. output the xhtml
+-->
+<!-- 
+1. check all aviable fct 
+output e.g.
+<contracts>
+  <content>
+    <contract file-name="c-fontsize-fct.xml" css="fontsize" name="fontsize-fct">
+      <description>
+        This functions lets you change the size of the font you are using in the site with a jscript.
+      </description>
+      <realpath>/home/thorsten/apache/cocoon-2.1.5.1/build/webapp/leather/fct-bits/c-fontsize-fct.xml</realpath>
+    </contract>
+  </content>
+</contracts>
+-->
   <map:pipeline>
     <map:match pattern="contracts.xml">
 		  <map:generate type="directory" src="fct-bits">
@@ -84,6 +96,15 @@
       <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-
+  
+  <map:pipeline>
+    <map:match pattern="ft">
+		   <map:generate src="ft-leather.xml"/>
+       <map:transform src="ft2xhtml.xsl">
+          <map:parameter name="contextPath" value="{request:contextPath}"/>
+       </map:transform>
+       <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
  </map:pipelines>
 </map:sitemap>
