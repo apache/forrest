@@ -59,6 +59,41 @@
 
   </target>
   
+  <!-- =================================================================== -->
+  <!-- Prepares the docs to create a .war                                  -->
+  <!-- =================================================================== -->
+  <target name="prepare-webapp" depends="init, prepare-docs">
+
+    <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${build.context}" filtering="on">
+      <fileset dir="${context.dir}/conf"/>
+    </copy>
+
+     <!-- Copy Cocoon configuration and sitemap -->
+    <copy todir="${build.context}/WEB-INF/" filtering="on">
+      <fileset dir="${context.dir}/conf"/>
+    </copy>
+
+  </target>
+ 
+  <!-- =================================================================== -->
+  <!-- Prepares the docs to create a .war                                  -->
+  <!-- =================================================================== -->
+  <target name="webapp" depends="init, prepare-webapp">
+    <war warfile="${build.dir}/${name}.war" 
+         webxml="${build.context}/WEB-INF/web.xml" 
+         compress="true">
+
+      <fileset dir="${build.context}"/>
+      <lib dir="lib/endorsed"/>
+      <lib dir="lib/core"/>
+      <lib dir="lib/optional"/>
+      <classes dir="${build.context}/WEB-INF/classes/"/>
+    
+    </war>      
+  
+  </target>
+
   <target name="cleandocs" depends="init" description="* Cleans the build docs directories">
     <delete dir="${build.docs}"/>
   </target>
