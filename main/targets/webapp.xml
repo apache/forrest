@@ -115,6 +115,15 @@
       </fileset>
     </copy>
 
+    <!-- Copy custom plugin jars -->
+    <for list="${project.required.plugins}" param="name">
+      <sequential>
+        <copy file="${forrest.plugins-dir}/lib/@{name}.jar"
+	        todir="${project.webapp}/WEB-INF/lib"
+	        failonerror="false"/>
+      </sequential>
+    </for>
+    
    <!-- 
     | Copy all non-xdocs content across to the webapp
    -->
