@@ -14,7 +14,7 @@
 
   <!-- Section depth at which we stop numbering and just indent -->
   <xsl:param name="numbering-max-depth" select="'3'"/>
-  <xsl:param name="ctxbasedir" select="."/>
+  <xsl:param name="imagesdir" select="."/>
   <xsl:param name="xmlbasedir"/>
   <xsl:include href="pdfoutline.xsl"/>
   <xsl:include href="footerinfo.xsl"/>
@@ -556,12 +556,12 @@
       <xsl:variable name="imgpath">
       <xsl:choose>
         <xsl:when test="starts-with(string(@src), 'images/') or contains(string(@src), '../images')">
-          <xsl:value-of select="concat($ctxbasedir, 'resources/images/' , substring-after(@src, 'images'))"/>
+          <xsl:value-of select="concat($imagesdir, substring-after(@src, 'images'))"/>
         </xsl:when>
         <xsl:when test="starts-with(string(@src), 'http') ">
           <xsl:value-of select="@src"/>
         </xsl:when>
-        <xsl:otherwise><xsl:value-of select="concat($ctxbasedir, $xmlbasedir, @src)"/></xsl:otherwise>
+        <xsl:otherwise><xsl:value-of select="concat($imagesdir, $xmlbasedir, @src)"/></xsl:otherwise>
       </xsl:choose>
       </xsl:variable>
       <fo:external-graphic src="{$imgpath}">
