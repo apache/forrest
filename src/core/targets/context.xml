@@ -42,28 +42,12 @@
     <echo>____________________________________</echo>
     <echo>Using skin ${project.skin}</echo>
     <echo>____________________________________</echo>
-    <filter token="skin"              value="${project.skin}" />
-    <filter token="menu-scheme"       value="${project.menu-scheme}" />
-    <filter token="bugtracking-url"   value="${project.bugtracking-url}" />
-    <filter token="local-catalog"     value="${catalog}" />
-    <filter token="catalog-verbosity" value="${forrest.catalog.verbosity}" />
-    <filter token="i18n"              value="${project.i18n}" />
 
-    <copy todir="${project.webapp}/" >
-      <fileset dir="${forrest.home}/context" >
-        <exclude name="*.xmap" />
-        <exclude name="skins/**" />
-        <exclude name="resources/**" />        
-        <exclude name="WEB-INF/*.xconf" />
-        <exclude name="jettyconf.xml" />
-      </fileset>
-    </copy>
+    <mkdir dir="${project.webapp}"/>
 
     <copy todir="${project.webapp}/" filtering="false" overwrite="true">
       <fileset dir="${forrest.home}/context" >
-        <include name="*.xmap" />
-        <include name="WEB-INF/*.xconf" />
-        <exclude name="WEB-INF/cocoon-live.xconf"/>
+        <include name="**" />
       </fileset>
     </copy>
 

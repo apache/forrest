@@ -119,6 +119,9 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         forrestHome = getSystemProperty("forrest.home");
         projectHome = getSystemProperty("project.home");
         if(projectHome.equals(defaultHome)) {
+            projectHome = defaultHome + SystemUtils.FILE_SEPARATOR + "/project";
+        }
+        if(forrestHome.equals(defaultHome)) {
             contextHome = defaultHome;            
         }else {
             contextHome = forrestHome + SystemUtils.FILE_SEPARATOR + "/context"; 
@@ -143,7 +146,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
         
         // get default-forrest.properties and load the values
-        String defaultRorrestPropertiesStringURI = forrestHome
+        String defaultRorrestPropertiesStringURI = contextHome
                         + SystemUtils.FILE_SEPARATOR
                         + "default-forrest.properties";
 
