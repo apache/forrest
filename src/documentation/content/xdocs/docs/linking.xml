@@ -72,66 +72,63 @@
           More on this below.</dd>
       </dl>
       <p>
-        Here is a sample &s; ... a stripped-down version from Forrest's
+        Here is a sample &s; ... a modified version from Forrest's
         own <link href="ext:forrest">website</link>:
       </p>
       <source><![CDATA[
-        <?xml version="1.0"?>
-        <site label="Forrest" href="" tab="home"
-          xmlns="http://apache.org/forrest/linkmap/1.0">
+<?xml version="1.0"?>
+<site label="Forrest" href="" tab="home"
+  xmlns="http://apache.org/forrest/linkmap/1.0">
 
-          <about label="About">
-            <index label="Index" href="index.html"/>
-            <license label="License" href="license.html"/>
-            <your-project label="Using Forrest" href="your-project.html">
-              <new_content_type href="#adding_new_content_type"/>
-            </your-project>
-            <linking label="Linking" href="linking.html"/>
-            <changes label="Changes" href="changes.html"/>
-            <todo label="Todo" href="todo.html"/>
-            <live-sites label="Live sites" href="live-sites.html"/>
-          </about>
+  <about label="About">
+    <index label="Index" href="index.html"/>
+    <license label="License" href="license.html"/>
+    <your-project label="Using Forrest" href="your-project.html">
+      <new_content_type href="#adding_new_content_type"/>
+    </your-project>
+    <linking label="Linking" href="linking.html"/>
+    <changes label="Changes" href="changes.html"/>
+    <todo label="Todo" href="todo.html"/>
+    <live-sites label="Live sites" href="live-sites.html"/>
+  </about>
 
-          <community label="Community" href="community/" tab="community">
-            <index label="About" href="index.html"/>
-            <howto-samples label="How-To Samples" href="howto/" tab="howto">
-              <overview label="Overview" href="index.html"/>
-              <single-page label="Single Page" href="v10/howto-v10.html"/>
-              <multi-page label="Multi-Page" href="multi/">
-                <intro label="Intro" href="howto-multi.html"/>
-                <step1 label="Step 1" href="step1.html"/>
-                <step2 label="Step 2" href="step2.html"/>
-              </multi-page>
-            </howto-samples>
-          </community>
+  <community label="Community" href="community/" tab="community">
+    <index label="About" href="index.html"/>
+    <howto-samples label="How-To Samples" href="howto/" tab="howto">
+      <overview label="Overview" href="index.html"/>
+      <single-page label="Single Page" href="v10/howto-v10.html"/>
+      <multi-page label="Multi-Page" href="multi/">
+        <intro label="Intro" href="howto-multi.html"/>
+        <step1 label="Step 1" href="step1.html"/>
+        <step2 label="Step 2" href="step2.html"/>
+      </multi-page>
+    </howto-samples>
+  </community>
 
-          <references label="References">
-            <gump label="Apache Gump" href="http://jakarta.apache.org/gump/"/>
-            <cocoon label="Apache Cocoon" href="http://xml.apache.org/cocoon/"/>
-          </references>
+  <references label="References">
+    <gump label="Apache Gump" href="http://gump.apache.org/"/>
+    <cocoon label="Apache Cocoon" href="http://cocoon.apache.org/"/>
+  </references>
 
-          <external-refs>
-            <mail-archive href="http://marc.theaimsgroup.com"/>
-            <xml.apache.org href="http://xml.apache.org/">
-              <cocoon href="cocoon/">
-                <ml href="mail-lists.html"/>
-                <actions href="userdocs/concepts/actions.html"/>
-              </cocoon>
-              <forrest href="forrest/"/>
-              <xindice href="xindice/"/>
-              <fop href="fop/"/>
-            </xml.apache.org>
+  <external-refs>
+    <mail-archive href="http://marc.theaimsgroup.com"/>
+    <xml.apache.org href="http://xml.apache.org/">
+      <commons href="commons/">
+        <resolver href="components/resolver/"/>
+      </commons>
+      <fop href="fop/"/>
+      <batik href="batik/"/>
+    </xml.apache.org>
 
-            <mail>
-              <semantic-linking href="http://marc.theaimsgroup.com/?l=forrest-dev
-                &amp;m=103097808318773&amp;w=2"/>
-            </mail>
-            <cool-uris href="www.w3.org/Provider/Style/URI.html"/>
-            <uri-rfc href="http://zvon.org/tmRFC/RFC2396/Output/index.html"/>
+    <mail>
+      <semantic-linking href="http://marc.theaimsgroup.com/?l=forrest-dev
+        &amp;m=103097808318773&amp;w=2"/>
+    </mail>
+    <cool-uris href="www.w3.org/Provider/Style/URI.html"/>
+    <uri-rfc href="http://zvon.org/tmRFC/RFC2396/Output/index.html"/>
 
-          </external-refs>
-
-        </site>
+  </external-refs>
+</site>
         ]]></source>
       <p>As you can see, things are quite free-form. The rules are as follows:</p>
       <ul>
@@ -148,18 +145,18 @@
         <li>Elements without <code>label</code> attributes (and their children)
           are not displayed in the menu.</li>
         <li>Elements below <code>external-refs</code> are mapped to the
-          "<code>ext:</code>" scheme.  So "<code>ext:cocoon/ml</code>" becomes
-          "<code>http://xml.apache.org/cocoon/mail-lists.html</code>"</li>
+          "<code>ext:</code>" scheme.  So "<code>ext:commons/resolver/</code>" becomes
+          "<code>http://xml.apache.org/commons/resolver/</code>"</li>
       </ul>
     </section>
 
     <section id="menu_generation">
       <title>Generating Menus</title>
       <p>
-        Two files are used to define a site's tabs and menu; &s; and
-        <code>tabs.xml</code>.  Both files are located in
-        <code>src/documentation/content/xdocs/</code>.</p>
-      <p>Assume that our <code>tabs.xml</code> looked as follows:</p>
+        Two files are used to define a site's tabs and menu (&s; and
+        <code>tabs.xml</code>).  Both files are located in
+        <code>src/documentation/content/xdocs/</code></p>
+      <p>Assume that our <code>tabs.xml</code> looks like this:</p>
       <source><![CDATA[
 <tabs ...>
     <tab id="home" label="Home" dir=""/>
@@ -180,11 +177,11 @@
       the link for the community tab above is 
       <code>community/mailLists.html</code>. Note that "<code>indexfile</code>"
       defaults to "<code>index.html</code>" if no value is supplied. Therefore the
-      link for the howto tab is <code>community/howto/index.html</code>.</p>
+      link for the howto tab is <code>community/howto/index.html</code></p>
       
       <section id="tabs-external">
         <title>Tabs for External Resources</title>
-        <p>You can make a tab point to an external resource by using the 
+        <p>A tab can refer to an external resource by using the 
         "<code>href</code>" attribute instead of the "<code>dir</code>" attribute.
         The value of "<code>href</code>" should be the URI of the resource you wish 
         to link to. For example:</p>
@@ -201,10 +198,10 @@
 
       <section id="selecting-entries">
         <title>Selecting menu entries</title>
-        <p>Forrest decides which menu entries to display by examining the
+        <p>Forrest decides which menu entries to display, by examining the
           "<code>tab</code>" attributes in the &s; file. All &s; entries with a
-          "<code>tab</code>" equal to that of the current page are put in the
-          menu.</p>
+          "<code>tab</code>" which is equal to that of the current page, are
+          added to the menu.</p>
         <p>Consider our &s; example:</p>
           <source>
 &lt;site label="Forrest" href="" <strong>tab="home"</strong>
@@ -290,8 +287,8 @@
           The tab selection algorithm is quite simple: the tab with the
           "<code>id</code>" which matches that of the current <code>site.xml</code>
           node is "selected". If you experience any problems, try to add a 
-          <code>&lt;foo label="Foo" href="index.html"/&gt;</code> to 
-          <code>site.xml</code>
+          <code>&lt;foo label="Foo" href="index.html"/&gt;</code> to the
+          <code>site.xml</code> configuration.
         </p>
       </section>
 
@@ -312,8 +309,8 @@
       
       <ul>
         <li><strong><code>level</code></strong> - is the depth to which you
-        want your table of contents to go. Setting it to 3 will therefore 
-        include sections nested to 3 levels. Setting this to 0 will result in
+        want your table of contents to go. Setting it to "3" will therefore 
+        include sections nested to 3 levels. Setting this to "0" will result in
         no table of contents being generated.</li>
         <li><strong><code>location</code></strong> - indicates where you
         want the table of contents to be rendered. It can be set to one of
@@ -367,7 +364,7 @@
             [<link href="ext:uri-rfc">rfc2396</link>].  The semantics of "site" are
             "this identifier locates something in the site's XML sources".</dd>
           <dt>todo</dt>
-          <dd>identifies the content in <code>todo.xml</code>, by reference to a
+          <dd>identifies the content in <code>todo.xml</code> by reference to a
             "node" of content declared in &s;</dd>
         </dl>
         <p>
@@ -381,13 +378,13 @@
           <title>Resolving site: URIs</title>
 
           <p>
-            How exactly does "<code>site:todo</code>" get resolved?  A full answer
+            So how does "<code>site:todo</code>" get resolved?  A full answer
             is provided in the <link href="#implementation">implementation</link>
             section.  Essentially, the "<code>todo</code>" part has
             "<code>/site//</code>" prepended, and "<code>/@href</code>" appended, to
             form the string "<code>/site//todo/@href</code>".  This is
             then used as an XPath expression in &s; to identify the string
-            replacement, in this case <code>todo.html</code>
+            replacement, in this case "<code>todo.html</code>"
           </p>
           <p>
             Thus by modifying the XPath prefix and suffix, almost any XML
@@ -425,28 +422,22 @@
           </p>
           <p>Here is a &s; snippet illustrating "<code>external-refs</code>":</p>
           <source><![CDATA[
-            <site>
-              ...
-              <external-refs>
-                <mail-archive href="http://marc.theaimsgroup.com"/>
-                <xml.apache.org href="http://xml.apache.org/">
-                  <cocoon href="cocoon/">
-                    <ml href="mail-lists.html"/>
-                    <actions href="userdocs/concepts/actions.html"/>
-                  </cocoon>
-                </xml.apache.org>
-                <forrest href="forrest/"/>
-                <xindice href="xindice/"/>
-                <fop href="fop/"/>
-
-                ...
-              </external-refs>
-            </site>
-            ]]></source>
+<site>
+  ...
+  <external-refs>
+    <mail-archive href="http://marc.theaimsgroup.com"/>
+    <xml.apache.org href="http://xml.apache.org/">
+      <commons href="commons/">
+        <resolver href="components/resolver/"/>
+      </commons>
+    </xml.apache.org>
+    ...
+  </external-refs>
+</site>]]></source>
           <p>
-            As an example, &lt;link href="ext:cocoon/ml"&gt;
+            As an example, &lt;link href="ext:commons/resolver"&gt;
             generates the link
-            <link href="ext:cocoon/ml">http://xml.apache.org/cocoon/mail-lists.html</link>
+            <link href="ext:commons/resolver">http://xml.apache.org/components/resolver/</link>
           </p>
           <p>
             The general rules of &s; and "<code>site:</code>" linking apply.
@@ -479,7 +470,7 @@
           <p>
             So far, the "<code>site:</code>" and "<code>ext:</code>" schemes are defined.
             To give you some ideas on other things we'd like to implement (and
-            we'd welcome help implementing), here are a few possibilities.
+            wouldd welcome help to implement) here are a few possibilities.
           </p>
           <table>
             <tr><th>Scheme</th><th>Example "From"</th><th>Example "To"</th><th>Description</th></tr>
