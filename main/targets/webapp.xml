@@ -130,6 +130,25 @@
     <copy toDir="${project.webapp}/project/build/tmp"
       file="${project.temp-dir}/build-info.xml"/>
 
+    <!-- Grab the plugin xmaps as these are no longer in the
+         plugins-dir.
+
+         During the build, the plugin information is copied during the
+         init-plugins task.  However, those are not sufficient when
+         creating a deployable war file.  That is because the
+         properties used for "project.webapp", "project.home" etc.
+         have different values when being built and when being run as
+         a war file.
+
+         The value of "todir" below corresponds to 
+         {project:temp-dir} when running as a web application. -->
+
+    <copy todir="${project.webapp}/project/build/tmp">
+     <fileset dir="${project.temp-dir}">
+       <include name="*.xmap"/>
+     </fileset>
+    </copy>
+
     <loadfile  property="webapp-generated-message" 
       srcFile="${forrest.core}/var/webapp-generated-message.txt">
         <filterchain><expandproperties/></filterchain>
