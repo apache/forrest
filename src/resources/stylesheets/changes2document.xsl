@@ -5,8 +5,10 @@
     version="1.0">
 
  <xsl:import href="copyover.xsl"/>
+ 
+ <xsl:param name="bugtracking-url"/>
 
- <xsl:variable name="bugtracking-url" select="document('../../WEB-INF/cocoon.xconf')/cocoon/input-modules/component-instance/values/bugtracking-url"/>
+ <!-- FIXME (JJP):  bugzilla is hardwired -->
  <xsl:variable name="bugzilla" select="'http://nagoya.apache.org/bugzilla/'"/>
  <xsl:variable name="buglist" select="concat($bugzilla, 'buglist.cgi?bug_id=')"/>
 
