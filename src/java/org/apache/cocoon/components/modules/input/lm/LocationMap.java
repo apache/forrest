@@ -94,9 +94,9 @@ public final class LocationMap extends AbstractLogEnabled {
     
     /** 
      * The locationmap namespace: 
-     * <code>http://apache.org/cocoon/locationmap/1.0</code>
+     * <code>http://apache.org/forrest/locationmap/1.0</code>
      */
-    public static final String URI = "http://apache.org/cocoon/locationmap/1.0";
+    public static final String URI = "http://apache.org/forrest/locationmap/1.0";
     
     /**
      * Name of the special anchor map passed into the VariableContext.
@@ -106,7 +106,7 @@ public final class LocationMap extends AbstractLogEnabled {
      * inside the locationmap definition.
      * </p>
      * <p>
-     * Special locationmap parameters are available thru this anchor map.
+     * Special locationmap parameters are available through this anchor map.
      * For instance the hint parameter defined below can be accessed in 
      * the locationmap definition as follows: <code>{#lm:hint}</code>
      * </p>
@@ -130,7 +130,8 @@ public final class LocationMap extends AbstractLogEnabled {
      */
     public static final String HINT_PARAM = "#" + ANCHOR_NAME + ":" + HINT_KEY;
     
-    
+    // Component manager containing the locationmap components
+    // as declared in the components section.
     private LocationMapComponentManager m_manager;
     
     // default matcher as configured in the components section
@@ -142,49 +143,58 @@ public final class LocationMap extends AbstractLogEnabled {
     // the list of LocatorNodes
     private LocatorNode[] m_locatorNodes;
     
+    
     public LocationMap(ComponentManager manager) {
         m_manager = new LocationMapComponentManager(manager);
     }
     
+    /**
+     * Build the LocationMap by creating the components and recursively building
+     * the LocatorNodes.
+     */
     public void build(final Configuration configuration) throws ConfigurationException {
         
         // components
         final Configuration components = configuration.getChild("components");
         
         // matchers
-        final DefaultComponentSelector matcherSelector = new DefaultComponentSelector();
-        Configuration child = components.getChild("matchers",true);
-        m_defaultMatcher = child.getAttribute("default");
-        final Configuration[] matchers = child.getChildren("matcher");
-        for (int i = 0; i < matchers.length; i++) {
-            String name = matchers[i].getAttribute("name");
-            String src  = matchers[i].getAttribute("src");
-            Matcher matcher = (Matcher) createComponent(src,matchers[i]);
-            matcherSelector.put(name,matcher);
+        Configuration child = components.getChild("matchers",false);
+        if (child != null) {
+            final DefaultComponentSelector matcherSelector = new DefaultComponentSelector();
+            m_defaultMatcher = child.getAttribute("default");
+            final Configuration[] matchers = child.getChildren("matcher");
+            for (int i = 0; i < matchers.length; i++) {
+                String name = matchers[i].getAttribute("name");
+                String src  = matchers[i].getAttribute("src");
+                Matcher matcher = (Matcher) createComponent(src,matchers[i]);
+                matcherSelector.put(name,matcher);
+            }
+            matcherSelector.makeReadOnly();
+            if (!matcherSelector.hasComponent(m_defaultMatcher)) {
+                throw new ConfigurationException("Default matcher is not defined.");
+            }
+            m_manager.put(Matcher.ROLE+"Selector",matcherSelector);
         }
-        matcherSelector.makeReadOnly();
-        if (!matcherSelector.hasComponent(m_defaultMatcher)) {
-            throw new ConfigurationException("Default matcher is not defined.");
-        }
-        m_manager.put(Matcher.ROLE+"Selector",matcherSelector);
         
         // selectors
-        final DefaultComponentSelector selectorSelector = new DefaultComponentSelector();
-        child = components.getChild("selectors");
-        m_defaultSelector = child.getAttribute("default");
-        final Configuration[] selectors = child.getChildren("selector");
-        for (int i = 0; i < selectors.length; i++) {
-            String name = selectors[i].getAttribute("name");
-            String src  = selectors[i].getAttribute("src");
-            Selector selector = (Selector) createComponent(src,selectors[i]);
-            selectorSelector.put(name,selector);
+        child = components.getChild("selectors",false);
+        if (child != null) {
+            final DefaultComponentSelector selectorSelector = new DefaultComponentSelector();
+            m_defaultSelector = child.getAttribute("default");
+            final Configuration[] selectors = child.getChildren("selector");
+            for (int i = 0; i < selectors.length; i++) {
+                String name = selectors[i].getAttribute("name");
+                String src  = selectors[i].getAttribute("src");
+                Selector selector = (Selector) createComponent(src,selectors[i]);
+                selectorSelector.put(name,selector);
+            }
+            selectorSelector.makeReadOnly();
+            if (!selectorSelector.hasComponent(m_defaultSelector)) {
+                throw new ConfigurationException("Default selector is not defined.");
+            }
+            m_manager.put(Selector.ROLE+"Selector",selectorSelector);
+            m_manager.makeReadOnly();
         }
-        selectorSelector.makeReadOnly();
-        if (!selectorSelector.hasComponent(m_defaultSelector)) {
-            throw new ConfigurationException("Default selector is not defined.");
-        }
-        m_manager.put(Selector.ROLE+"Selector",selectorSelector);
-        m_manager.makeReadOnly();
         
         // locators
         final Configuration[] children = configuration.getChildren("locator");
@@ -196,6 +206,15 @@ public final class LocationMap extends AbstractLogEnabled {
         }
     }
     
+    /**
+     * Creates a LocationMap component.
+     * <p>
+     *  supported component creation lifecycles that are:
+     *  - LogEnabled
+     *  - Configurable
+     *  - Initializable
+     * </p>
+     */
     private Object createComponent(String src, Configuration config) throws ConfigurationException {
         Object component = null;
         try {
@@ -221,6 +240,11 @@ public final class LocationMap extends AbstractLogEnabled {
         m_locatorNodes = null;
     }
     
+    /**
+     * Loop through the list of locator nodes invoking
+     * the <code>locate()</code> method on each and return
+     * the first non-null result.
+     */
     public String locate(String hint, Map om) throws Exception {
         
         String location = null;
@@ -241,21 +265,33 @@ public final class LocationMap extends AbstractLogEnabled {
             }
         }
         
-        //context.popMap();
-        //context.reset();
         context.dispose();
+        
+        if (getLogger().isDebugEnabled() && location == null) {
+            getLogger().debug("No location matched request with hint " + hint);
+        }
         
         return location;
     }
     
+    /**
+     * Expose the default Matcher to LocatorNodes
+     */
     String getDefaultMatcher() {
         return m_defaultMatcher;
     }
     
+    /**
+     * Expose the default Selector to LocatorNodes
+     */
     String getDefaultSelector() {
         return m_defaultSelector;
     }
     
+    /**
+     * Overide DefaultComponentManager to access the list of all
+     * components.
+     */
     private static class LocationMapComponentManager extends DefaultComponentManager {
         
         LocationMapComponentManager(ComponentManager parent) {
@@ -265,6 +301,5 @@ public final class LocationMap extends AbstractLogEnabled {
         Iterator getComponents() {
             return super.getComponentMap().values().iterator();
         }
-        
     }
 }

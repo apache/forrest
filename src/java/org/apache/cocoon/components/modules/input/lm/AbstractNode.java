@@ -94,7 +94,7 @@ public abstract class AbstractNode extends AbstractLogEnabled {
      * <code>null</code> if the configuration contained no parameters.
      * @throws ConfigurationException
      */
-    protected final Map getParameters(final Configuration configuration) 
+    private final Map getParameters(final Configuration configuration) 
         throws ConfigurationException {
         
         final Configuration[] children = configuration.getChildren("parameter");

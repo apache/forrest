@@ -65,7 +65,7 @@ import org.apache.cocoon.selection.Selector;
 
 
 /**
- * LocationMap node representing a Selector.
+ * Locationmap select statement.
  * 
  * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
@@ -131,7 +131,6 @@ public final class SelectNode extends AbstractNode {
         }
         m_nodes = (AbstractNode[]) nodes.toArray(new AbstractNode[nodes.size()]);
     }
-    
     
     public String locate(Map om, InvokeContext context) throws Exception {
         

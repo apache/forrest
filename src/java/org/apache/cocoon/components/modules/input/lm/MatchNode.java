@@ -64,7 +64,22 @@ import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 
 /**
- * LocationMap node representing a Matcher.
+ * Locationmap match statement.
+ * 
+ * <p>
+ * The &lt;match&gt; element has one required <code>pattern</code> attribute
+ * which identifies the pattern the associated Matcher should match
+ * against and one optional <code>type</code> attribute that identifies
+ * the Matcher that is to do the matching.
+ * </p>
+ * 
+ * Match statements can contain <code>&lt;match&gt;</code>,
+ * <code>&lt;select&gt;</code> and <code>&lt;location&gt;</code>
+ * child statements.
+ * 
+ * <p>
+ * Match nodes can be parametrized using <code>&lt;parameter&gt;</code> child elements.
+ * </p>
  * 
  * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
@@ -143,7 +158,7 @@ public final class MatchNode extends AbstractNode {
         Map substitutions = m_matcher.match(m_pattern,om,parameters);
         if (substitutions != null) {
             if (getLogger().isDebugEnabled()) {
-                getLogger().debug("matched " + m_pattern);
+                getLogger().debug("matched: " + m_pattern);
             }
             context.pushMap(null,substitutions);
             for (int i = 0; i < m_nodes.length; i++) {

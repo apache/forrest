@@ -62,7 +62,13 @@ import org.apache.cocoon.sitemap.PatternException;
 import org.apache.excalibur.source.SourceUtil;
 
 /**
- * LocationMap node representing a location.
+ * locationmap leaf statement identifying a location.
+ * 
+ * <p>
+ *  The <code>&lt;location&gt;</code> element has one
+ *  required attribute <code>src</code> that contains the
+ *  location string.
+ * </p>
  * 
  * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
@@ -89,6 +95,9 @@ public class LocationNode extends AbstractNode {
 
     }
     
+    /**
+     * Resolve the location string against the InvokeContext.
+     */
     public String locate(Map om, InvokeContext context) throws Exception {
         
         String src = m_src.resolve(context,om);
@@ -104,7 +113,6 @@ public class LocationNode extends AbstractNode {
         }
         
         return src;
-        
     }
 
 }

@@ -90,6 +90,11 @@ public class LocationMapModule extends AbstractLogEnabled
     private SourceValidity m_srcVal;
     private LocationMap m_lm;
     
+    // ---------------------------------------------------- lifecycle
+    
+    public LocationMapModule() {
+    }
+    
     public void compose(ComponentManager manager) throws ComponentException {
         m_manager = manager;
         m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
@@ -173,6 +178,12 @@ public class LocationMapModule extends AbstractLogEnabled
         return configuration;
     }
     
+    // ---------------------------------------------------- Module implementation
+    
+    /**
+     * Execute the current request against the locationmap returning the
+     * resulting string.
+     */
     public Object getAttribute(
         final String name,
         final Configuration modeConf,
@@ -193,7 +204,7 @@ public class LocationMapModule extends AbstractLogEnabled
     
     /**
      * The possibilities are endless. No way to enumerate them all.
-     * Therefore returns an empty Iterator.
+     * Therefore returns null.
      */
     public Iterator getAttributeNames(Configuration modeConf, Map objectModel)
         throws ConfigurationException {

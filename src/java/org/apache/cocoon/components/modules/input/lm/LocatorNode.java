@@ -65,7 +65,17 @@ import org.apache.cocoon.sitemap.PatternException;
 
 
 /**
- * LocationMap node for containing a set <code>MatchNode</code>s.
+ * Top level locate statement containing 
+ * <code>MatchNode</code>s and <code>SelectNode</code>s.
+ * 
+ * <p>
+ * A locator defines a common location context for its
+ * contained location statements. Location strings resolved within
+ * the context of a given locator will be prefixed with the
+ * locator's base location. This base location is specified
+ * using the <code>base</code> attribute on the <code>&lt;locator&gt;</code>
+ * element and defaults to <code>.</code>.
+ * </p>
  * 
  * @author <a href="mailto:unico@hippo.nl">Unico Hommes</a>
  */
@@ -77,7 +87,7 @@ public final class LocatorNode extends AbstractNode {
     // location base resolver
     private VariableResolver m_baseLocation;
     
-    // the contained MatchNodes
+    // the contained Match- and SelectNodes
     private AbstractNode[] m_nodes;
     
     public LocatorNode(final LocationMap lm, final ComponentManager manager) {
@@ -115,6 +125,11 @@ public final class LocatorNode extends AbstractNode {
         m_nodes = (AbstractNode[]) nodes.toArray(new AbstractNode[nodes.size()]);
     }
     
+    /**
+     * Loop over the list of match and select nodes and call their
+     * respective <code>locate()</code> methods returning the first
+     * non-null result.
+     */
     public String locate(Map om, InvokeContext context) throws Exception {
         
         // resolve the base location and put it in the anchor map
