@@ -3,7 +3,7 @@
 <!--+
     | Transforms TextGenerator output to document format.
     |
-    | CVS $Id: text2document.xsl,v 1.1 2003/07/18 00:17:23 cheche Exp $
+    | CVS $Id: text2document.xsl,v 1.2 2003/07/22 05:24:42 cheche Exp $
     +-->
 
 <xsl:stylesheet version="1.0"
@@ -26,7 +26,8 @@
       </header>
       <body>
         <source>
-          <xsl:value-of select="node()"/>
+          <!-- &#13; is System.getProperty("line.separator") -->
+	  <xsl:value-of select="translate(node(),'&#13;',' ')"/>
         </source>
       </body>
     </document>
