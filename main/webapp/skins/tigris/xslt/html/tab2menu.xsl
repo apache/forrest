@@ -39,7 +39,7 @@ which is then merged by site2xhtml.xsl
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../../../common/xslt/html/tab2menu.xsl"/>
-  
+
   <xsl:template match="tabs">
     <div class="tabs" id="toptabs">
      <table cellpadding="4" cellspacing="0" border="0">
@@ -47,31 +47,24 @@ which is then merged by site2xhtml.xsl
           <xsl:call-template name="base-tabs"/>
         </tr>
       </table>
-    </div>  
+    </div>
     <xsl:if test="tab[@dir=$longest-dir]/tab">
       <div class="level2tab">
         <xsl:call-template name="level2tabs"/>
       </div>
-    </xsl:if>          
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template name="pre-separator">
+  <xsl:template name="pre-separator"/>
+  <xsl:template name="post-separator"/>
+  <xsl:template name="separator"/>
+  <xsl:template name="level2-pre-separator"/>
+  <xsl:template name="level2-post-separator"/>
+
+  <xsl:template name="level2-separator">
+    <xsl:text> | </xsl:text>
   </xsl:template>
 
-  <xsl:template name="post-separator">
-  </xsl:template>
-
-  <xsl:template name="separator">
-  </xsl:template>
-
-  <xsl:template name="level2-pre-separator">
-  </xsl:template>
-
-  <xsl:template name="level2-post-separator">
-  </xsl:template>
-
-  <xsl:template name="level2-separator">&#160;|&#160;</xsl:template>
-  
   <xsl:template name="selected">
     <th>
       <xsl:call-template name="base-selected"/>
@@ -79,7 +72,7 @@ which is then merged by site2xhtml.xsl
   </xsl:template>
 
   <xsl:template name="not-selected">
-    <td>        
+    <td>
       <xsl:call-template name="base-selected"/>
     </td>
   </xsl:template>
@@ -89,7 +82,7 @@ which is then merged by site2xhtml.xsl
   </xsl:template>
 
   <xsl:template name="level2-not-selected">
-     <xsl:call-template name="base-not-selected"/> 
+     <xsl:call-template name="base-not-selected"/>
   </xsl:template>
-  
+
 </xsl:stylesheet>
