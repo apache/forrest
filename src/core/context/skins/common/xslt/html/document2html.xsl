@@ -13,7 +13,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 Section handling
   - <a name/> anchors are added if the id attribute is specified
 
-$Id: document2html.xsl,v 1.2 2003/12/28 22:54:16 nicolaken Exp $
+$Id: document2html.xsl,v 1.3 2003/12/30 00:00:06 nicolaken Exp $
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -245,7 +245,7 @@ if (VERSION > 3) {
        </xsl:when>
        <xsl:when test="not($disable-external-link-image='true') and contains(@href, ':') and not(contains(@href, $config/group-url)) and not(contains(@href, $config/project-url))">
           <a href="{@href}">
-            <xsl:apply-templates/>&#160;<img src="{$skin-img-dir}/external-link.gif" border="0" alt="links outside of this site"/>&#160;
+            <xsl:apply-templates/>&#160;<img src="{$skin-img-dir}/external-link.gif" border="0" alt=" -> "/>&#160;
           </a>
        </xsl:when>       
        <xsl:otherwise>
