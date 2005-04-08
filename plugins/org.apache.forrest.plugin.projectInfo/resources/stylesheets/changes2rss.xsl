@@ -39,7 +39,7 @@
               <xsl:text> </xsl:text>
               <xsl:value-of select="@type" />
 
-              <xsl:if test="@type='fix' and @fixes-bug">
+              <xsl:if test="@fixes-bug">
                 (bug <xsl:value-of select="@fixes-bug" />)
               </xsl:if>
 
@@ -53,7 +53,7 @@
               <xsl:value-of select="@type" />
               by 
               <xsl:value-of select="@dev" />
-              <xsl:if test="@type='fix' and @fixes-bug">
+              <xsl:if test="@fixes-bug">
                 (fixes bug <xsl:value-of select="@fixes-bug" />)
               </xsl:if>
               :
