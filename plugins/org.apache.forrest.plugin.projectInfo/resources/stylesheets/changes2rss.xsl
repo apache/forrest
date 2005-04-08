@@ -17,21 +17,18 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:param name="config-file"/>
-  <xsl:variable name="config" select="document($config-file)/skinconfig"/>
-
   <xsl:template match="status">
 
     <xsl:variable name="changes-url"
-      select="concat($config/project-url, 'changes.html')"/>
+      select="concat(../skinconfig/project-url, 'changes.html')"/>
 
     <rss version="0.91">
       <channel>
-        <title><xsl:value-of select="$config/project-name"/> Changes</title>
+        <title><xsl:value-of select="../skinconfig/project-name"/> Changes</title>
 
         <link><xsl:value-of select="$changes-url"/></link>
 
-        <description><xsl:value-of select="$config/project-name"/> Changes</description>
+        <description><xsl:value-of select="../skinconfig/project-name"/> Changes</description>
 
         <language>en-us</language>
 
@@ -68,5 +65,7 @@
       </channel>
     </rss>
   </xsl:template>
+
+  <xsl:template match="skinconfig"/>
 </xsl:stylesheet>
 

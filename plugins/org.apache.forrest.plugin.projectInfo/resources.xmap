@@ -30,10 +30,11 @@
     <map:pipeline>
 
       <map:match pattern="**changes.rss">
-        <map:generate src="{project:status}" />
-        <map:transform src="resources/stylesheets/changes2rss.xsl">
-          <map:parameter name="config-file" value="{project:skinconf}"/>
-        </map:transform>      
+        <map:aggregate element="agg">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="{project:status}"/>
+        </map:aggregate>
+        <map:transform src="resources/stylesheets/changes2rss.xsl"/>
         <map:serialize type="rss091" />
       </map:match>
 
