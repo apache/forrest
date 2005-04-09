@@ -18,177 +18,73 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document> 
   <header> 
-    <title>Welcome to the org.apache.forrest.plugin.views Plugin</title> 
+    <title>forrest:views - x formats, one config</title>
+    <abstract>This plugin depends on a ViewHelper and a BusinessHelper implementation.</abstract> 
   </header> 
   <body> 
     <section>
-      <title>Apache Forrest - org.apache.forrest.plugin.views Plugin</title>
-      <source>
-How it works 
-************
-
-(taken from SOME comments of the output.xmap of views)
-
-This plugin has three components:
-  1. fbits - delivers contracts in form of xsl:templates
-  2. nuggets - delivers content that is used in the contracts
-  3. views - prepares and transforms the requested contracts (fbits) 
-     and populate them with the content (nuggets)
-
-1. fbits
-  This is the template producing factory.
-
-a. <![CDATA[<map:match pattern="resolve.contract.*">]]> -> Resolving factory
-Project implementation of templates have priority before default ones.
-If no implementation can be found we use the noFt (~ - no
-forrest:template) implementation.
-
-b. <![CDATA[<map:match pattern="get.contract.*.*">]]>
-Get the xsl:templates of the requested contract and specific format.
-
-c. <![CDATA[<map:match pattern="get.contract-property.*">]]>
-Get the forrest:properties of the requested contract. 
-This will determine which templates (css, head, body) we have to call
-later on
-
-GENERAL:
-Contracts are stored in forrest:templates ({contract-name}.ft) please
-have look on
-plugins/org.apache.forrest.plugin.views/resources/templates/*.ft do get
-an idea how your own implementation have to look like.
-
-
-2. nuggets
-  This is the content producing factory.
-
-NOTE: <![CDATA[<map:match pattern="*.page">]]>
-The current factory uses the skin producing templates (e.g.
-document2xhtml.xsl).
-It is only exchanging the last step of a skin producing pipe
-(site2xhtml.xsl) till now.
-This will have to be changed in the future.
-
-
-3. views
-  prepares and transforms the requested contracts (fbits) and populate
-them with the content (nuggets).
-
-a.  <![CDATA[<map:match pattern="prepare.view.*">]]> -> View config resolver
-File specific views have priority before default ones.
-If no view can be found in the project we use the default one of the
-views plugin.
-
-b.  <![CDATA[<map:match pattern="prepare.include.*"> ]]>
-Aggregate the contract-templates requested by the view with xinclude.
-The result is a stylesheet with all needed xsl:templates.
-
-c. <![CDATA[<map:match pattern="prepare.properties.*">]]>
-Aggregate the forrest:properties requested by the *.fv.
-The result is an aggregation of properties which defines the templates
-to be call.
-
-d. <![CDATA[<map:match pattern="prepare.xhtml.*">]]>
-Aggregate all contracts-templates requested by the view.
-Create a xsl that can be used for the last step of the transformation of
-the view.
-
-e. <![CDATA[<map:match pattern="*.html"> ]]>-> Last processing step. 
-Here we are overriding the default skin generation.
-
-GENERAL:
-Views are stored in forrest:view ({file-name}.fv) please have look on
-plugins/org.apache.forrest.plugin.views/src/documentation/default.fv do
-get an idea how your own implementation have to look like.
-
-Known issues
-************
-- The generation of the linking is not working.
-- Menu /innermenu templates are added directly. Add support for
-additional templates support.
-- Uses resources of leather (document2html.xsl defines the pdf/xml/...
-link this have to be done by the template).
-- The views are only working for html so far
-- The css support and implementation is VERY basic
-- Only first level files are working
-- ...
-
-Resume
-******
-The views plugin can be seen as prototype for the next generation
-skinning of forrest. It is still in early stage but with the cleanup I
-hope to make it easier for all devs (not only committer) to get the idea
-and help to enhance it.
-
-Some basic and simple hints:
-a) If you want another implementation of a contract then create a folder
-"templates" in ${project.resources-dir} and it will be matched before
-the standard implementation. 
-
-e.g. feedback contract:
-<![CDATA[
-<forrest:contract name="feedback" type="nugget"
+      <title>view</title>
+      <p>Together with the ViewHelper and the BusinessHelper (to be implemented) 
+        plugin this plugin is following the <a href="ext:sun/j2ee/patterns/dispatcherView">DispatcherView pattern</a> 
+        and building the final view which will be delivered to the client. This implementation follows exactly the pattern shown on 
+          <a href="ext:corej2eepatterns/patterns/dispatcherView">corej2eepatterns.com</a>
+        </p><p>
+        A view will be configured by a config file 
+        which basically contains three tags (it is in a really early stage): </p>
+<source><![CDATA[<forrest:view type="xhtml">
+  <forrest:contract name="meta"/>
+  <forrest:hook name="container">
+   <forrest:contract name="feedback"/>
+  </forrest:hook />
+</forrest:view>]]></source>
+<p>The view tag's @type determines the final output format. The idea is to
+configure different output formats via a forrest:views. That means a forrest:views 
+can contain n different forrest:view for n different formats. <br/>
+In short: x formats, one config. :)</p>
+<source><![CDATA[<forrest:views
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
-<description>
-This function will output the html feedback information.
-</description>
-
-<forrest:template
-xmlns:forrest="http://apache.org/forrest/templates/1.0"
-format="xhtml" name="feedback" inputFormat="xsl" body="true"
-head="false" css="true">
-
-<xsl:stylesheet version="1.1" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-
-<xsl:template name="feedback-css">
-#feedback {
-    color: black;
-    background: #CFDCED;
-    text-align:center;
-    margin-top: 5px;
-}
-#feedback #feedbackto {
-    font-size: 90%;
-    color: black;
-}</xsl:template>
-
-<xsl:template name="feedback-body">
-<div id="feedback"> Modified project implementation
-<xsl:value-of select="$config/feedback"/>
-<xsl:choose>
-<xsl:when test="$config/feedback/@href and
-not($config/feedback/@href='')">
-  <a id="feedbackto">
-    <xsl:attribute name="href">
-      <xsl:value-of select="$config/feedback/@href"/>
-      <xsl:value-of select="$path"/>
-    </xsl:attribute>
-    <xsl:value-of select="$config/feedback/@to"/>
-  </a>
-</xsl:when>
-<xsl:otherwise>
-  <xsl:value-of select="$config/feedback/@to"/>
-</xsl:otherwise>
-</xsl:choose>
-</div>
-</xsl:template>
-</xsl:stylesheet>
-</forrest:template>
-</forrest:contract>
-]]>
-The @attributes (body="true" head="false" css="true") of the 
-forrest:template defining which parts of the html page (head, head-css
-and body) we have to render. The xsl:templates are following the simple
-naming convention {@name}-(css|head|body).
-
-
-b. If you want a default view for your project then copy the default.fv
-from the plugin to your ${project.conf-dir} and modify this file. When
-you want another view for a specific file (e.g. index.html) then copy
-the default.fv to your ${project.xdocs-dir} and renamed it to e.g.
-index.fv.
-      </source>
+<forrest:view type="xhtml">
+  <forrest:contract name="meta"/>
+  <forrest:hook name="container">
+   <forrest:contract name="feedback"/>
+  </forrest:hook />
+</forrest:view>
+<forrest:view type="fo">
+  <forrest:hook name="container">
+   <forrest:contract name="feedback"/>
+  </forrest:hook />
+</forrest:view>
+/forrest:views>]]></source>
+</section>
+<section>
+  <title>ViewHelper </title>
+  <p>
+Each forrest:hook will be transformed into a <![CDATA[<div/>]]> tag (in html
+output [only format that has an implementation]). 
+This tags are designed to help web-designers to freely move
+around and group contracts into design container.
+</p>
+<p>Each forrest:contract will dispatch a xml file (ViewHelper) that contains
+xsl:stylesheets for the different output formats, a contract can
+implement. For html, the only format that we have implemented so far, we
+have three different kind of templates:</p><p>
+<![CDATA[<xsl:templates name="{contract/@name}-css/>]]><br/>
+Here the contract specific css will be stored.
+</p><p>
+<![CDATA[<xsl:templates name="{contract/@name}-head/>]]><br/>
+Here goes everything that belongs in the html head. e.g. scripts.
+</p><p>
+<![CDATA[<xsl:templates name="{contract/@name}-body/>]]><br/>
+Everything that belongs into the body.
+  </p>
+  </section>
+  <section>
+    <title>BusinessHelper </title>
+  <p>Right now it is implemented for the forrest way of producing the models
+for the view but we will create an independent BusinessHelper to
+access all BusinessServices you may have in your application. </p><p>
+With other words the BusinessHelper we are using right now are in the core. 
+We need to extract them into BusinessHelper classes.</p>
     </section>
   </body>
 </document>

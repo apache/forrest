@@ -64,16 +64,16 @@
 
 <!--
   This plugin has x components:
-  2. nuggets - delivers content that is used in the contracts
-  3. views - transforms the requested contracts (fbits) 
-     and populate them with the content (nuggets)
+  2. businessHelper - delivers content that is used in the contracts
+  3. views - transforms the requested contracts (viewHelper) 
+     and populate them with the content (businessHelper)
   -->
 
 
 
 <!--
   3. views
-  prepares and transforms the requested contracts (fbits) and populate them with the content (nuggets).
+  prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
   -->
   <map:pipeline>
   <!--
@@ -101,13 +101,13 @@
           If the above not matches then get the default view of this plugin.
           -->
         <map:otherwise>
-          <map:generate src="src/documentation/default.fv"/>
+          <map:generate src="resources/views/default.fv"/>
         </map:otherwise>
       </map:select>
      	<map:serialize type="xml"/>
     </map:match>
     
-    <!--Add nuggets to the view that the content can be used later on.-->
+    <!--Add businessHelper to the presentation model that the content can be used later on.-->
     <map:match pattern="prepare.view-nugget.**">
       <map:generate src="cocoon:/prepare.view.{1}"/>
       <map:transform src="resources/stylesheets/prepare.view.xsl">
@@ -169,12 +169,12 @@
   </map:pipeline>
   
   <!--
-  2. nuggets
+  2. businessHelper
   This is the content producing factory.
   -->
 <!--NOTE: 
-  The current factory uses the skin producing templates (e.g. document2xhtml.xsl).
-  It is only exchanging the last step of a skin producing pipe (site2xhtml.xsl) till now.
+  The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).
+  It is only exchanging the last model of the models the skin is producing (site2xhtml.xsl) till now.
   This will have to be changed in the future.
   -->  
   <map:pipeline>
@@ -201,26 +201,11 @@
         <map:serialize type="xml"/>
       </map:match>
       
-       <map:match pattern="**.js">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>
-      <map:match pattern="**.css">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>
-      <map:match pattern="**images**">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>
-      <map:match pattern="**.png">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match>
-     <map:match pattern="**.ico">
-        <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match> 
   </map:pipeline>  
 
   
-<!-- END
-	2. nuggets
+<!-- 
+	2. businessHelper
 	-->
   
  </map:pipelines>

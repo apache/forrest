@@ -18,60 +18,52 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document> 
   <header> 
-    <title>Welcome to the org.apache.forrest.plugin.views Plugin</title> 
+    <title>forrest:views - x formats, one config</title>
+    <abstract>This plugin depends on a ViewHelper and a BusinessHelper implementation.</abstract> 
   </header> 
   <body> 
     <section>
-      <title>Apache Forrest - org.apache.forrest.plugin.views Plugin</title>
+      <title>How it works </title>
       <source>
-How it works 
-************
-
-(taken from SOME comments of the output.xmap of views)
-
 This plugin has three components:
-  1. fbits - delivers contracts in form of xsl:templates
-  2. nuggets - delivers content that is used in the contracts
-  3. views - prepares and transforms the requested contracts (fbits) 
-     and populate them with the content (nuggets)
+  1. viewHelper - delivers contracts in form of xsl:templates
+  2. businessHelper - delivers content that is used in the contracts
+  3. views - prepares and transforms the requested contracts (viewHelper) 
+     and populate them with the content (businessHelper)
 
-1. fbits
+1. viewHelper
   This is the template producing factory.
 
 a. <![CDATA[<map:match pattern="resolve.contract.*">]]> -> Resolving factory
 Project implementation of templates have priority before default ones.
 If no implementation can be found we use the noFt (~ - no
-forrest:template) implementation.
+forrest:template) implementation.-> this match is implemented in the viewHelper plugin
 
-b. <![CDATA[<map:match pattern="get.contract.*.*">]]>
+b. <![CDATA[<map:match pattern="get.contract.*.*">]]>-> this match is implemented in the viewHelper plugin
 Get the xsl:templates of the requested contract and specific format.
 
-c. <![CDATA[<map:match pattern="get.contract-property.*">]]>
+c. <![CDATA[<map:match pattern="get.contract-property.*">]]>-> this match is implemented in the viewHelper plugin
 Get the forrest:properties of the requested contract. 
 This will determine which templates (css, head, body) we have to call
 later on
 
 GENERAL:
 Contracts are stored in forrest:templates ({contract-name}.ft) please
-have look on
-plugins/org.apache.forrest.plugin.views/resources/templates/*.ft do get
+have a look on the templates/*.ft that the viewHelper implementation contain to get
 an idea how your own implementation have to look like.
 
 
-2. nuggets
+2. businessHelper
   This is the content producing factory.
 
 NOTE: <![CDATA[<map:match pattern="*.page">]]>
-The current factory uses the skin producing templates (e.g.
-document2xhtml.xsl).
-It is only exchanging the last step of a skin producing pipe
-(site2xhtml.xsl) till now.
-This will have to be changed in the future.
-
+  The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).
+  It is only exchanging the last model of the models the skin is producing (site2xhtml.xsl) till now.
+  This will have to be changed in the future.
 
 3. views
-  prepares and transforms the requested contracts (fbits) and populate
-them with the content (nuggets).
+  prepares the requested contracts viewHelper and dispatches
+the corresponding businessHelper.
 
 a.  <![CDATA[<map:match pattern="prepare.view.*">]]> -> View config resolver
 File specific views have priority before default ones.
@@ -93,31 +85,23 @@ Create a xsl that can be used for the last step of the transformation of
 the view.
 
 e. <![CDATA[<map:match pattern="*.html"> ]]>-> Last processing step. 
-Here we are overriding the default skin generation.
+Here we are overriding the default skin generation. 
+-> this match is implemented in the viewHelper plugin
 
 GENERAL:
 Views are stored in forrest:view ({file-name}.fv) please have look on
 plugins/org.apache.forrest.plugin.views/src/documentation/default.fv do
 get an idea how your own implementation have to look like.
 
-Known issues
-************
-- The generation of the linking is not working.
-- Menu /innermenu templates are added directly. Add support for
-additional templates support.
-- Uses resources of leather (document2html.xsl defines the pdf/xml/...
-link this have to be done by the template).
-- The views are only working for html so far
-- The css support and implementation is VERY basic
-- Only first level files are working
-- ...
-
-Resume
-******
+      </source>
+    </section>
+    <section>
+      <title>Resume</title>
+      <source>
 The views plugin can be seen as prototype for the next generation
-skinning of forrest. It is still in early stage but with the cleanup I
+skinning of forrest. It is still in early stage but with extracting the businessHelper we
 hope to make it easier for all devs (not only committer) to get the idea
-and help to enhance it.
+and enable them to enhance the design of this plugin and their implementation.
 
 Some basic and simple hints:
 a) If you want another implementation of a contract then create a folder
@@ -184,11 +168,10 @@ naming convention {@name}-(css|head|body).
 
 
 b. If you want a default view for your project then copy the default.fv
-from the plugin to your ${project.conf-dir} and modify this file. When
-you want another view for a specific file (e.g. index.html) then copy
-the default.fv to your ${project.xdocs-dir} and renamed it to e.g.
-index.fv.
-      </source>
+from the viewHelper implementation to your ${project.conf-dir} and modify this file. When
+you want another view for a specific file (e.g. ${project.xdocs-dir}/index.html) then copy
+the default.fv to your ${project.xdocs-dir} and renamed it to 
+${project.xdocs-dir}/index.fv.</source>
     </section>
   </body>
 </document>
