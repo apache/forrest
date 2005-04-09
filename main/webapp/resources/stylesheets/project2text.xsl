@@ -28,8 +28,22 @@
   <xsl:variable name="config" select="//skinconfig"/>
 
   <xsl:template match="for:*">
-    <xsl:variable name="tmp" select="local-name()"/>
-    <xsl:value-of select="$config/*[local-name() = $tmp]"/>
+    <xsl:param name="ancestorpath" select="''"/>
+    <xsl:choose>
+      <xsl:when test="*">
+        <xsl:apply-templates>
+          <xsl:with-param name="ancestorpath"
+            select="concat($ancestorpath,'/',local-name())"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="tmp"
+          select="concat($ancestorpath, '/', local-name())"/>
+        <xsl:value-of
+          select="$config//*[concat($ancestorpath, '/', local-name()) = $tmp]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 
 </xsl:stylesheet>
