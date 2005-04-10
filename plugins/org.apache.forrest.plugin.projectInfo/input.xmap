@@ -29,7 +29,7 @@
   <map:pipelines>
     <map:pipeline>
     
-      <map:match pattern="changes.xml">
+      <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
         <map:generate type="file" src="{project:status}" />
         <map:transform src="resources/stylesheets/changes2document.xsl" >
           <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
@@ -37,7 +37,7 @@
         <map:serialize type="xml-document"/>
       </map:match>
 
-      <map:match pattern="todo.xml">
+      <map:match type="regexp" pattern="^(.*?)([^/]*)todo.xml$">
         <map:generate type="file" src="{project:status}" />
         <map:transform src="resources/stylesheets/todo2document.xsl" />
         <map:serialize type="xml-document"/>
