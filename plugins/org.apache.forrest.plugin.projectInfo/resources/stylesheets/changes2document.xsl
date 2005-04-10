@@ -20,6 +20,16 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0"> 
 
+  <xsl:param name="path"/>
+  <xsl:include href="dotdots.xsl"/> <!-- FIXME: howto include from forrest core -->
+
+  <!-- Calculate path to site root, eg '../../' -->
+  <xsl:variable name="root">
+    <xsl:call-template name="dotdots">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
  <!-- FIXME (JJP):  bugzilla is hardwired -->
  <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
 
@@ -44,7 +54,7 @@
    </title>
    </header>
    <body>
-    <p><link href="changes.rss"><img src="images/rss.png" alt="RSS"/></link></p>    
+    <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>    
     <xsl:apply-templates/>
    </body>
   </document>
@@ -67,7 +77,7 @@
 
  <xsl:template match="action">
   <li>
-   <icon src="images/{@type}.jpg" alt="{@type}"/>
+   <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
    <xsl:apply-templates/>
    <xsl:text>(</xsl:text><xsl:value-of select="@dev"/><xsl:text>)</xsl:text>
 
