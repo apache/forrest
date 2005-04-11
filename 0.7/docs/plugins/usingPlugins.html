@@ -1,0 +1,427 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<meta-data></meta-data>
+<title>Extending Forrest with Plugins (v0.7)</title>
+<link type="text/css" href="../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../skin/profile.css" rel="stylesheet">
+<script src="../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<!--+
+    |header
+    +-->
+<div class="header">
+<!--+
+    |start group logo
+    +-->
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<!--+
+    |end group logo
+    +-->
+<!--+
+    |start Project Logo
+    +-->
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<!--+
+    |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google:');" value="Search the site with google:" size="25" name="q" id="query" type="text">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
+    +-->
+<!--+
+    |start Tabs
+    +-->
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../contrib.html">Project</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../../docs/index.html">0.7 Docs</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../docs/howto/index.html">0.7 How-To</a>
+</li>
+</ul>
+<!--+
+    |end Tabs
+    +-->
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs">
+<a class="base-not-selected" href="../..">Core</a> | <a class="base-not-selected" href="../..">ForrestBot</a> | <a class="base-not-selected" href="../..">ForrestBar</a>
+</div>
+<!--+
+    |end Endtabs
+    +-->
+<script type="text/javascript" language="JavaScript"><!--
+              document.write("Published: " + document.lastModified);
+              //  --></script>
+</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<!--+
+    |start Menu, mainarea
+    +-->
+<!--+
+    |start Menu
+    +-->
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">Documentation</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a title="" href="../../docs/index.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/faq.html">FAQs</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/changes.html">Changes</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/todo.html">Todo</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/your-project.html">Using Forrest</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/validation.html">XML Validation</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/linking.html">Menus and Linking</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/searching.html">Searching</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/skins.html">Default Skins</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/skin-package.html">Skin Packages</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">Plugins</div>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/views.html">Views-dev</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/forrest-contract.html">Our Contract</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/compliance.html">Standards Compliance</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.15', '../../skin/')" id="menu_1.1.15Title" class="menutitle">Advanced Topics</div>
+<div id="menu_1.1.15" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/build.html">Building Forrest</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/catalog.html">Using DTD Catalogs</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/sitemap-ref.html">Sitemap Reference</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/project-sitemap.html">Project sitemap</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/plugins/pluginInfrastructure.html">Plugin Infrastructure</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/cap.html">Sourcetype Action</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.16', '../../skin/')" id="menu_1.1.16Title" class="menutitle">Other versions</div>
+<div id="menu_1.1.16" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="http://forrest.apache.org/docs/../0.8/">0.8-dev</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/index.html">0.7 (current)</a>
+</div>
+<div class="menuitem">
+<a title="" href="http://forrest.apache.org/docs/../0.6/">0.6</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.17', '../../skin/')" id="menu_1.1.17Title" class="menutitle">Upgrading</div>
+<div id="menu_1.1.17" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/upgrading_07.html">Upgrading to 0.7</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/upgrading_06.html">Upgrading to 0.6</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.18', '../../skin/')" id="menu_1.1.18Title" class="menutitle">SubProjects</div>
+<div id="menu_1.1.18" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/forrestbar.html">ForrestBar</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/forrestbot.html">Forrestbot</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/forrestbot-web-interface.html">Forrestbot Webapp</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.19', '../../skin/')" id="menu_1.1.19Title" class="menutitle">Reference docs</div>
+<div id="menu_1.1.19" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.19.1', '../../skin/')" id="menu_1.1.19.1Title" class="menutitle">DTD documentation</div>
+<div id="menu_1.1.19.1" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/dtd-docs.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/document-v20.dtdx.html">document-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto-v20.dtdx.html">howto-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/faq-v20.dtdx.html">faq-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/document-v13.dtdx.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto-v13.dtdx.html">howto-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/faq-v13.dtdx.html">faq-v13</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.19.2', '../../skin/')" id="menu_1.1.19.2Title" class="menutitle">Doc samples</div>
+<div id="menu_1.1.19.2" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/document-v13.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/document-v20.html">document-v20</a>
+</div>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.20', '../../skin/')" id="menu_1.1.20Title" class="menutitle">Older Docs</div>
+<div id="menu_1.1.20" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../../docs/primer.html">Forrest Primer</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/libre-intro.html">Libre</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/dreams.html">Dream list</a>
+</div>
+</div>
+</div>
+<div id="credit">
+<hr>
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<!--+
+  |alternative credits
+  +-->
+</div>
+<!--+
+    |end Menu
+    +-->
+<!--+
+    |start content
+    +-->
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="usingPlugins.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>Extending Forrest with Plugins</h1>
+<div id="motd-area">
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#overview">Overview</a>
+<ul class="minitoc">
+<li>
+<a href="#What+plugins+are+available%3F">What plugins are available?</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#How+is+a+Plugin+Installed%3F">How is a Plugin Installed?</a>
+<ul class="minitoc">
+<li>
+<a href="#Upgrading+from+a+Version+of+Forrest+Without+Plugins">Upgrading from a Version of Forrest Without Plugins</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Avoiding+Plugin+Conflicts">Avoiding Plugin Conflicts</a>
+</li>
+<li>
+<a href="#Further+Reading">Further Reading</a>
+</li>
+</ul>
+</div>
+    
+<a name="N1000D"></a><a name="overview"></a>
+<h2 class="underlined_10">Overview</h2>
+<div class="section">
+<p>Forrest provides the core functionality for generating documentation
+      in various output formats from a range of input formats. However, it
+      does not end there. Forrest can be extended through the addition of
+      plugins. This document serves as an introduction to the Forrest
+      plugin mechanism.</p>
+<a name="N10016"></a><a name="What+plugins+are+available%3F"></a>
+<h3 class="underlined_5">What plugins are available?</h3>
+<p>You can run the command <span class="codefrag">forrest available-plugins</span> to get
+        a list of the known plugins for Forrest.</p>
+<p>If you would like to have your own plugin added to this list then
+        contact the <a href="http://forrest.apache.org/mail-lists.html">developer mailing list</a>.</p>
+</div>
+        
+    
+<a name="N1002B"></a><a name="How+is+a+Plugin+Installed%3F"></a>
+<h2 class="underlined_10">How is a Plugin Installed?</h2>
+<div class="section">
+<p>If a site requires one or more plugins then the site designer will 
+      have named them in the <span class="codefrag">project.required.plugins</span> property 
+      in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
+      builds the site it will automatically discover the plugin and install 
+      it. In otherwords, the user need do nothing. For example, 
+      <span class="codefrag">project.required.plugins=org.apache.forrest.plugin.OpenOffice.org,simplified-docbook</span>
+      will cause Forrest to load the plugins called "org.apache.forrest.plugin.OpenOffice.org" and
+      "simplified-docbook".</p>
+<p>By default a new forrest project includes plugins to generate 
+      PDF output from your source documents.</p>
+<a name="N10040"></a><a name="Upgrading+from+a+Version+of+Forrest+Without+Plugins"></a>
+<h3 class="underlined_5">Upgrading from a Version of Forrest Without Plugins</h3>
+<p>The plugin functionality was introduced in version 0.7 of Forrest.
+        At this time some of the functionality previously in Forrest was
+        extracted into a plugin. However, we have not broken backward 
+        compatability with earlier versions. In the absence of a
+        <span class="codefrag">project.required.plugins</span> property in the projects 
+        <span class="codefrag">forrest.properties</span> file all plugins that contain 
+        functionality previously part of Forrest itself will be loaded
+        automatically. Unless you intend to use new functionality provided
+        by a plugin you will not need to make any changes top your project.</p>
+<p>If you do require additional plugin functionality, be sure to
+        include all required plugins in the 
+        <span class="codefrag">project.required.plugins</span> property in the project's
+        <span class="codefrag">forrest.properties</span>. You can view
+        <span class="codefrag">main/webapp/default-forrest.properties</span>
+        to see the names of plugins that provide previously core 
+        functionality.</p>
+<p>It is also worth noting that there is a small performance 
+        improvement if you remove plugins that are not in use. Therefore,
+        if you do not use one or more of the plugins named in the 
+        <span class="codefrag">project.required.plugins</span> property of 
+        <span class="codefrag">main/webapp/default-forrest.properties</span>
+        it is recomended that you override this value in your project's
+        <span class="codefrag">forrest.properties</span> file.</p>
+</div>
+    
+    
+<a name="N10069"></a><a name="Avoiding+Plugin+Conflicts"></a>
+<h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
+<div class="section">
+<p>Clashes between plugins can occur. For example, the simplified-docbook 
+      and full docbook plugins may try and process the same files. In this 
+      instance the one that is mounted first will take precedence. Plugins 
+      are mounted in the order they appear in the 
+      <span class="codefrag">project.required.plugins</span> property, therefore the mounting 
+      order and therefore processing precedence is under user control.</p>
+</div>
+    
+    
+<a name="N10076"></a><a name="Further+Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<ul>
+        
+<li>
+<a href="../../docs/plugins/pluginInfrastructure.html">Plugin Infrastructure</a>
+</li>
+        
+<li>
+<a href="../../docs/howto/howto-buildPlugin.html">How to build a Plugin</a>
+</li>
+      
+</ul>
+</div>
+  
+</div>
+<!--+
+    |end content
+    +-->
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<!--+
+    |start bottomstrip
+    +-->
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("Last Published: " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+ Copyright &copy; 2002-2005 The Apache Software Foundation.</div>
+<!--+
+    |end bottomstrip
+    +-->
+</div>
+</body>
+</html>

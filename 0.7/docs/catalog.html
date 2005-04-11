@@ -1,0 +1,579 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<meta-data></meta-data>
+<title>Using Catalog Entity Resolver for local DTDs (v0.7)</title>
+<link type="text/css" href="../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../skin/profile.css" rel="stylesheet">
+<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<!--+
+    |header
+    +-->
+<div class="header">
+<!--+
+    |start group logo
+    +-->
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<!--+
+    |end group logo
+    +-->
+<!--+
+    |start Project Logo
+    +-->
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<!--+
+    |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google:');" value="Search the site with google:" size="25" name="q" id="query" type="text">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
+    +-->
+<!--+
+    |start Tabs
+    +-->
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../contrib.html">Project</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../docs/index.html">0.7 Docs</a>
+</li>
+<li>
+<a class="base-not-selected" href="../docs/howto/index.html">0.7 How-To</a>
+</li>
+</ul>
+<!--+
+    |end Tabs
+    +-->
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs">
+<a class="base-not-selected" href="..">Core</a> | <a class="base-not-selected" href="..">ForrestBot</a> | <a class="base-not-selected" href="..">ForrestBar</a>
+</div>
+<!--+
+    |end Endtabs
+    +-->
+<script type="text/javascript" language="JavaScript"><!--
+              document.write("Published: " + document.lastModified);
+              //  --></script>
+</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<!--+
+    |start Menu, mainarea
+    +-->
+<!--+
+    |start Menu
+    +-->
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Documentation</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a title="" href="../docs/index.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/faq.html">FAQs</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/changes.html">Changes</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/todo.html">Todo</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/your-project.html">Using Forrest</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/validation.html">XML Validation</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/linking.html">Menus and Linking</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/searching.html">Searching</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/skins.html">Default Skins</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/skin-package.html">Skin Packages</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/plugins/usingPlugins.html">Plugins</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/views.html">Views-dev</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/forrest-contract.html">Our Contract</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/compliance.html">Standards Compliance</a>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.1.15', '../skin/')" id="menu_selected_1.1.15Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Advanced Topics</div>
+<div id="menu_selected_1.1.15" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a title="" href="../docs/build.html">Building Forrest</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">Using DTD Catalogs</div>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/sitemap-ref.html">Sitemap Reference</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/project-sitemap.html">Project sitemap</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/plugins/pluginInfrastructure.html">Plugin Infrastructure</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/cap.html">Sourcetype Action</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.16', '../skin/')" id="menu_1.1.16Title" class="menutitle">Other versions</div>
+<div id="menu_1.1.16" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="http://forrest.apache.org/docs/../0.8/">0.8-dev</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/index.html">0.7 (current)</a>
+</div>
+<div class="menuitem">
+<a title="" href="http://forrest.apache.org/docs/../0.6/">0.6</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.17', '../skin/')" id="menu_1.1.17Title" class="menutitle">Upgrading</div>
+<div id="menu_1.1.17" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs/upgrading_07.html">Upgrading to 0.7</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/upgrading_06.html">Upgrading to 0.6</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.18', '../skin/')" id="menu_1.1.18Title" class="menutitle">SubProjects</div>
+<div id="menu_1.1.18" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs/forrestbar.html">ForrestBar</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/forrestbot.html">Forrestbot</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/forrestbot-web-interface.html">Forrestbot Webapp</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.19', '../skin/')" id="menu_1.1.19Title" class="menutitle">Reference docs</div>
+<div id="menu_1.1.19" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.19.1', '../skin/')" id="menu_1.1.19.1Title" class="menutitle">DTD documentation</div>
+<div id="menu_1.1.19.1" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs/dtd-docs.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/document-v20.dtdx.html">document-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/howto-v20.dtdx.html">howto-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/faq-v20.dtdx.html">faq-v20</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/document-v13.dtdx.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/howto-v13.dtdx.html">howto-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/faq-v13.dtdx.html">faq-v13</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.19.2', '../skin/')" id="menu_1.1.19.2Title" class="menutitle">Doc samples</div>
+<div id="menu_1.1.19.2" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs/document-v13.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/document-v20.html">document-v20</a>
+</div>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.20', '../skin/')" id="menu_1.1.20Title" class="menutitle">Older Docs</div>
+<div id="menu_1.1.20" class="menuitemgroup">
+<div class="menuitem">
+<a title="" href="../docs/primer.html">Forrest Primer</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/libre-intro.html">Libre</a>
+</div>
+<div class="menuitem">
+<a title="" href="../docs/dreams.html">Dream list</a>
+</div>
+</div>
+</div>
+<div id="credit">
+<hr>
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<!--+
+  |alternative credits
+  +-->
+</div>
+<!--+
+    |end Menu
+    +-->
+<!--+
+    |start content
+    +-->
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="catalog.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>Using Catalog Entity Resolver for local DTDs</h1>
+<div id="motd-area">
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#overview">Overview</a>
+</li>
+<li>
+<a href="#config">General configuration notes</a>
+</li>
+<li>
+<a href="#tools">Configuring specific tools</a>
+<ul class="minitoc">
+<li>
+<a href="#system">Operating system catalog</a>
+</li>
+<li>
+<a href="#xmllint">xmllint validating parser</a>
+</li>
+<li>
+<a href="#vim">Vim</a>
+</li>
+<li>
+<a href="#emacs">Emacs</a>
+</li>
+<li>
+<a href="#onsgmls">onsgmls validating parser</a>
+</li>
+<li>
+<a href="#jedit">jEdit - Open Source programmer's text editor</a>
+</li>
+<li>
+<a href="#oxygenxml">oXygen XML Editor</a>
+</li>
+<li>
+<a href="#xmlspy">xmlspy</a>
+</li>
+<li>
+<a href="#xxe">XMLmind XML Editor (XXE)</a>
+<ul class="minitoc">
+<li>
+<a href="#XXE+v2.5p2+or+older">XXE v2.5p2 or older</a>
+</li>
+<li>
+<a href="#XXE+v2.5p3%2B">XXE v2.5p3+</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#info">Further information and resources</a>
+</li>
+</ul>
+</div>
+    
+<a name="N1000D"></a><a name="overview"></a>
+<h2 class="underlined_10">Overview</h2>
+<div class="section">
+<p>
+        This is a collection of notes for configuring the Catalog Entity
+        Resolver with your favourite XML tools (validating parsers and
+        editors).
+      </p>
+<p>
+        All XML documents declare their ruleset - the Document Type Definition
+        (DTD). When Forrest processes the documents, it uses the Resolver to
+        find Forrest's local copies of the DTDs, rather than trundling out
+        onto the network.
+      </p>
+<p>
+        Many Java-based XML tools already have an entity resolver, probably
+        the same one that Forrest uses. Many non-Java tools also have an
+        entity resolver. To use these tools with documents based on the
+        Forrest DTDs, you need to configure the tools.
+      </p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+        The information provided here is not intended to endorse any
+        particular tool.
+      </div>
+</div>
+<p>
+        If you have any other configuration tips for a particular tool, then
+        please send them to the forrest-dev mailing list.
+      </p>
+</div>
+
+    
+<a name="N10023"></a><a name="config"></a>
+<h2 class="underlined_10">General configuration notes</h2>
+<div class="section">
+<p>
+        The Forrest DTDs and supporting resources are in the Forrest
+        distribution at <span class="codefrag">main/webapp/resources/schema/</span>
+      
+</p>
+<p>
+        Usually all that is required is to direct your tool to the "catalog"
+        supplied by Forrest at either:
+        <span class="codefrag">$FORREST_HOME/main/webapp/resources/schema/catalog.xcat</span>
+        (for XML Catalog) or
+        <span class="codefrag">$FORREST_HOME/main/webapp/resources/schema/catalog</span>
+        (for TR 9401 Catalog).
+      </p>
+</div>
+
+    
+<a name="N10039"></a><a name="tools"></a>
+<h2 class="underlined_10">Configuring specific tools</h2>
+<div class="section">
+<a name="N1003F"></a><a name="system"></a>
+<h3 class="underlined_5">Operating system catalog</h3>
+<p>
+          Some operating systems already provide a system-wide catalog that
+          is used by many tools. This is usually located at
+          <span class="codefrag">/etc/xml/catalog</span> or at
+          <span class="codefrag">/usr/share/sgml/catalog</span> files.
+        </p>
+<p>
+          For an XML Catalog, add this line:
+        </p>
+<pre class="code">
+&lt;nextCatalog
+catalog="/usr/local/svn/forrest/main/webapp/resources/schema/catalog.xcat"/&gt;
+        </pre>
+<p>
+          For a TR 9401 Catalog, add this line:
+        </p>
+<pre class="code">
+CATALOG \
+"/usr/local/svn/forrest/main/webapp/resources/schema/catalog"
+        </pre>
+<p>
+          Actually you probably do not want to touch that system catalog,
+          so rather create your own catalog file in your home directory
+          which refers to both the Forrest catalog and your system catalog.
+        </p>
+<a name="N10060"></a><a name="xmllint"></a>
+<h3 class="underlined_5">xmllint validating parser</h3>
+<p>
+          "xmllint" is part of the "libxml2" package.
+          It is very fast and powerful, with are many facilities. It can
+          validate whole directories of files at once.
+          Set the SGML_CATALOG_FILES environment variable.
+        </p>
+<pre class="code">
+export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
+$FORREST_HOME/main/webapp/resources/schema/catalog
+xmllint --valid --catalogs --noout mydoc.xml
+        </pre>
+<a name="N1006E"></a><a name="vim"></a>
+<h3 class="underlined_5">Vim</h3>
+<p>
+            The following .vimrc entries are useful:
+          </p>
+<pre class="code">
+au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
+au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
+        </pre>
+<a name="N1007C"></a><a name="emacs"></a>
+<h3 class="underlined_5">Emacs</h3>
+<p>See 
+        <a href="http://www.thaiopensource.com/nxml-mode/">nXML mode</a>
+        and 
+        <a href="http://www.dpawson.co.uk/relaxng/nxml/">FAQ</a>.
+        </p>
+<a name="N1008E"></a><a name="onsgmls"></a>
+<h3 class="underlined_5">onsgmls validating parser</h3>
+<p>
+          "onsgmls" is part of the "Open SP" package.
+          You need to also tell it where to find an "SGML declaration".
+          The easiest way is to create your own little "my-catalog" file,
+          containing this:
+        </p>
+<pre class="code">
+SGMLDECL "/usr/share/sgml/xml.dcl"
+CATALOG \
+"/usr/local/svn/forrest/main/webapp/resources/schema/catalog"
+        </pre>
+<p>
+          Then point the parser at it:
+        </p>
+<pre class="code">
+onsgmls -c path/to/my-catalog -wall -wxml -s mydoc.xml
+        </pre>
+<a name="N100A3"></a><a name="jedit"></a>
+<h3 class="underlined_5">jEdit - Open Source programmer's text editor</h3>
+<pre class="code">
+Select the menu:
+Utilities &gt; Global Options &gt; Plugins:XML &gt; Catalogs
+Select the "+" button, and use the "File System Browser"
+to specify the TR9401 Catalog file:
+"forrest/main/webapp/resources/schema/catalog"
+        </pre>
+<pre class="code">
+On version 4.2. Select the menu:
+Plugins &gt; Plugins Options &gt; Plugins:XML &gt; Catalogs
+Select the "+" button, and use the "File System Browser"
+to specify the TR9401 Catalog file:
+"forrest/main/webapp/resources/schema/catalog"
+        </pre>
+<a name="N100B2"></a><a name="oxygenxml"></a>
+<h3 class="underlined_5">oXygen XML Editor</h3>
+<pre class="code">
+Select the menu:
+External Tools &gt; Preferences &gt; XML Catalog
+Specify the XML Catalog file:
+"forrest/main/webapp/resources/schema/catalog.xcat"
+        </pre>
+<a name="N100BD"></a><a name="xmlspy"></a>
+<h3 class="underlined_5">xmlspy</h3>
+<pre class="code">
+Add the following entry to the file CustomCatalog.xml
+(located in XMLSpy install directory):
+
+&lt;nextCatalog
+catalog="file://localhost/C:/apache/forrest/main/webapp/
+resources/schema/catalog.xcat"/&gt;
+        </pre>
+<a name="N100C8"></a><a name="xxe"></a>
+<h3 class="underlined_5">XMLmind XML Editor (XXE)</h3>
+<a name="N100CE"></a><a name="XXE+v2.5p2+or+older"></a>
+<h4>XXE v2.5p2 or older</h4>
+<pre class="code">
+Select the menu:
+Options &gt; Options &gt; Schema &gt; Add File
+Specify the XML Catalog file:
+"forrest/main/webapp/resources/schema/catalog.xcat"
+        </pre>
+<a name="N100D9"></a><a name="XXE+v2.5p3%2B"></a>
+<h4>XXE v2.5p3+</h4>
+<p>XXE supports catalogs by automatic detection via configuration files.  
+            Download the <a target="_blank" href="http://www.splike.com/howtos/xxe_forrest.html">XXE 
+            Forrest Config</a> files from splike.com; this also add support for WYSIWYG 
+            editing of forrest documents.
+            Note: This configuration suite has recently been added to the
+            Forrest scratchpad.
+            </p>
+</div>
+
+    
+<a name="N100E9"></a><a name="info"></a>
+<h2 class="underlined_10">Further information and resources</h2>
+<div class="section">
+<p>
+        Forrest and Cocoon use the
+        <a href="http://xml.apache.org/commons/components/resolver/">Catalog
+        Entity Resolver</a>
+        that is provided by the
+        <a href="http://xml.apache.org/commons/">Apache XML Commons</a>
+        project. The resolver is packaged with the Forrest distribution at
+        <span class="codefrag">lib/core/xml-commons-resolver-x.y.jar</span>
+      
+</p>
+<p>
+        Other Forrest documentation has some notes about configuring the
+        entity resolver for your own DTDs. See
+        <a href="../docs/validation.html">XML Validation</a>.
+      </p>
+<p>
+        Cocoon has extensive documentation about the entity resolver. See
+        <a href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
+      </p>
+</div>
+
+</div>
+<!--+
+    |end content
+    +-->
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<!--+
+    |start bottomstrip
+    +-->
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("Last Published: " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+ Copyright &copy; 2002-2005 The Apache Software Foundation.</div>
+<!--+
+    |end bottomstrip
+    +-->
+</div>
+</body>
+</html>
