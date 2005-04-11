@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<meta-data></meta-data>
+<title>How to run Forrest from within Maven (v0.7)</title>
+<link type="text/css" href="../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../skin/profile.css" rel="stylesheet">
+<script src="../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<!--+
+    |header
+    +-->
+<div class="header">
+<!--+
+    |start group logo
+    +-->
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<!--+
+    |end group logo
+    +-->
+<!--+
+    |start Project Logo
+    +-->
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<!--+
+    |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google:');" value="Search the site with google:" size="25" name="q" id="query" type="text">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
+    +-->
+<!--+
+    |start Tabs
+    +-->
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../contrib.html">Project</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../docs/index.html">0.7 Docs</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../../docs/howto/index.html">0.7 How-To</a>
+</li>
+</ul>
+<!--+
+    |end Tabs
+    +-->
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
+<script type="text/javascript" language="JavaScript"><!--
+              document.write("Published: " + document.lastModified);
+              //  --></script>
+</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<!--+
+    |start Menu, mainarea
+    +-->
+<!--+
+    |start Menu
+    +-->
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">How-To</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a title="" href="../../docs/howto/index.html">Overview</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-howto.html">Write a How-to</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-asf-mirror.html">Download mirror</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-pdf-tab.html">Create tab PDF</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-editcss.html">Edit CSS (WYSIWYG)</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-corner-images.html">CSS corner SVG</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">Maven Integration</div>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-buildPlugin.html">Build a Plugin</a>
+</div>
+<div class="menuitem">
+<a title="" href="../../docs/howto/howto-custom-html-source.html">Custom html source</a>
+</div>
+</div>
+<div id="credit">
+<hr>
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<!--+
+  |alternative credits
+  +-->
+</div>
+<!--+
+    |end Menu
+    +-->
+<!--+
+    |start content
+    +-->
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="howto-forrest-from-maven.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+	        Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>How to run Forrest from within Maven</h1>
+<div class="abstract">This How-To describes how to run Forrest from within
+    Maven.</div>
+<div id="motd-area">
+    This is documentation for current release v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Intended Audience">Intended Audience</a>
+</li>
+<li>
+<a href="#Purpose">Purpose</a>
+</li>
+<li>
+<a href="#Prerequisites">Prerequisites</a>
+</li>
+<li>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#set-maven-home">Set the FORREST_HOME environment variable</a>
+</li>
+<li>
+<a href="#define-ant-environment-prop">Initialize an Ant environment property at the top of
+      maven.xml</a>
+</li>
+<li>
+<a href="#add-forrest-goal-to-maven-xml">Add forrest goal to maven.xml</a>
+</li>
+<li>
+<a href="#Alternative+file">Alternative file</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Feedback">Feedback</a>
+</li>
+</ul>
+</div>
+  
+<header>
+    
+<title>How to run Forrest from within Maven</title>
+
+    
+<a name="N10016"></a><a name="Overview"></a>
+<h2 class="underlined_10">Overview</h2>
+<div class="section">
+<p>This How-To describes how to run Forrest from within
+    Maven.</p>
+</div>
+
+    
+<last-modified-content-date date="2004-11-12"></last-modified-content-date>
+  
+</header>
+
+  
+<a name="N10021"></a><a name="Intended Audience"></a>
+<h2 class="underlined_10">Intended Audience</h2>
+<div class="section">
+<p>Users who want to run Forrest from within Maven.</p>
+</div>
+
+  
+<a name="N1002A"></a><a name="Purpose"></a>
+<h2 class="underlined_10">Purpose</h2>
+<div class="section">
+<p>One may want to generate their project's documentation and/or website
+    using Forrest in lieu of Maven's site plugin.</p>
+</div>
+
+  
+<a name="N10033"></a><a name="Prerequisites"></a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<ul>
+      
+<li>Understand how to add goals to <a href="http://maven.apache.org/reference/user-guide.html#maven_xml">maven.xml</a>.</li>
+    
+</ul>
+</div>
+
+  
+<a name="N10043"></a><a name="Steps"></a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<p>The procedure outlined below describes how to add a goal to your
+    project's maven.xml that will invoke Forrest's <span class="codefrag">site</span>
+    target.</p>
+<a name="N1004E"></a><a name="set-maven-home"></a>
+<h3 class="underlined_5">Set the FORREST_HOME environment variable</h3>
+<p>Make sure the FORREST_HOME environment variable points to your
+      Forrest home directory (i.e. the directory that contains
+      <span class="codefrag">forrest.build.xml</span>) (e.g. C:\opt\apache-forrest-0.7)</p>
+<a name="N1005B"></a><a name="define-ant-environment-prop"></a>
+<h3 class="underlined_5">Initialize an Ant environment property at the top of
+      maven.xml</h3>
+<p>Paste the following line at the top of your maven.xml:</p>
+<pre class="code">
+&lt;property environment="env" /&gt;
+      </pre>
+<a name="N10069"></a><a name="add-forrest-goal-to-maven-xml"></a>
+<h3 class="underlined_5">Add forrest goal to maven.xml</h3>
+<p>Paste the following goal into your project's maven.xml:</p>
+<pre class="code">
+&lt;goal name="forrest" description="runs Forrest"&gt;
+  &lt;property name="forrest.home" location="${env.FORREST_HOME}" /&gt;
+  &lt;property name="forrest.ant.home" location="${forrest.home}/tools/ant" /&gt;
+  &lt;java classname="org.apache.tools.ant.Main" fork="true" failonerror="true" maxmemory="128M"&gt;
+    &lt;classpath&gt;
+      &lt;fileset dir="${forrest.ant.home}/lib"&gt;
+        &lt;include name="*.jar" /&gt;
+      &lt;/fileset&gt;
+      &lt;pathelement path="${java.home}/../lib/tools.jar" /&gt;
+    &lt;/classpath&gt;
+    &lt;sysproperty key="ant.home" value="${forrest.ant.home}" /&gt;
+    &lt;sysproperty key="forrest.home" value="${forrest.home}" /&gt;
+    &lt;sysproperty key="basedir" value="${basedir}" /&gt;
+    &lt;sysproperty key="java.endorsed.dirs" value="${forrest.home}/lib/endorsed" /&gt;
+    &lt;arg line="-f ${forrest.home}/main/forrest.build.xml" /&gt;
+  &lt;/java&gt;
+&lt;/goal&gt;      
+      </pre>
+<p>It is necessary to fork a separate java process because Maven 1.0
+      embeds Ant 1.5.2, but Forrest's forrest.build.xml requires Ant 1.6. The
+      goal makes use of the copy of Ant 1.6 that is bundled with Forrest, so
+      it's not even necessary to have Ant 1.6 installed separately.</p>
+<a name="N1007A"></a><a name="Alternative+file"></a>
+<h3 class="underlined_5">Alternative file</h3>
+<p>Under <span class="codefrag">$FORREST_HOME/tools/targets/maven.xml</span>
+</p>
+</div>
+
+  
+<a name="N10087"></a><a name="Feedback"></a>
+<h2 class="underlined_10">Feedback</h2>
+<div class="section">
+<p>Please provide feedback about this document via the <a href="http://forrest.apache.org/mail-lists.html">mailing lists</a>.<!-- Original author: Ian Springer (ips AT apache DOT org) --></p>
+</div>
+
+</div>
+<!--+
+    |end content
+    +-->
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<!--+
+    |start bottomstrip
+    +-->
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("Last Published: " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+ Copyright &copy; 2002-2005 The Apache Software Foundation.</div>
+<!--+
+    |end bottomstrip
+    +-->
+</div>
+</body>
+</html>
