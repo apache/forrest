@@ -37,7 +37,7 @@ Installing
   * Open XXE
   * select Options > Options > Schema > Add File
   * Specify the XML Catalog file:
-  * "[FORREST_HOME]/context/resources/schema/catalog.xcat" (where [FORREST_HOME] is the value of your FORREST_HOME environment variable)
+  * "[FORREST_HOME]/main/webapp/resources/schema/catalog.xcat" (where [FORREST_HOME] is the value of your FORREST_HOME environment variable)
 
 Building
 ========
