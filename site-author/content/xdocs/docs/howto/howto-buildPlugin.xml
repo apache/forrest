@@ -30,7 +30,7 @@
     steps in creating a plugin and then works through some examples of 
     plugin creation in order to illustrate the materials.</abstract>
 
-    <last-modified-content-date date="2005-03-03" />
+    <last-modified-content-date date="2005-04-12" />
   </header>
 
   <audience title="Intended Audience">
@@ -42,7 +42,7 @@
     and/or incomplete. If you are having problems with any of the steps 
     described, please ask for help on the developers mailing list (and then
     provide patches for this document).</warning>
-    <warning>Please make sure that you are using forrest 0.7-dev if you want use 
+    <warning>Please make sure that you are using forrest 0.7 if you want use 
     plugins. Forrest 0.6 will not work!!!</warning>
   </audience>
 
@@ -57,6 +57,9 @@
     <ul>
       <li>a basic knowledge of XML, XSLT and Cocoon pipelines</li>
       <li>a clear use-case for extending Forrest</li>
+      <li>read
+        <a href="site:documentation/developers/pluginInfrastructure">Plugin Infrastructure</a>
+      </li>
       <li>verified with the Apache Forrest developer community that the
       requried functionality does not already exist</li>
     </ul>
@@ -76,22 +79,28 @@
     </section>
     
     <section id="ant">
-    	<title>Make ant Available on the Command Line</title>
-    	<p>
-    		The following instructions rely heavily on
-    		<a href="http://ant.apache.org/">ant</a>
-    		to automate some steps in the process. Since ant
-    		is distributed as part of Forrest, all you need to do
-    		is add the ant executable directory to your system path. The
-    		name of this directory is <code>tools\ant\bin</code>
-    		in your Forrest program directory.
-    	</p>
-    	<p>
-    		Alternatively you can prefix all calls to ant in
-    		the following instructions with the full path of the ant binary directory.
-    	</p>
+      <title>Make ant available on the command-line</title>
+      <p>
+        The following instructions rely heavily on
+        <a href="http://ant.apache.org/">Apache Ant</a>
+        to automate some steps in the process. Since ant
+        is distributed as part of Forrest, all you need to do
+        is add the ant executable directory to your system path. The
+        name of this directory is <code>tools\ant\bin</code>
+        in your Forrest program directory.
+        (Alternatively you can prefix all calls to ant in
+        the following instructions with the full path of the ant binary directory.)
+        Also clear the ANT_HOME environment variable.
+      </p>
+      <p>
+        If instead you really want to use your own version of Ant,
+        then you will need to copy
+        forrest/lib/core/xml-commons-resolver.jar
+        to $ANT_HOME/lib directory, otherwise your plugins will go across
+        the network to get the DTDs on every parse.
+      </p>
     </section>
-    
+
     <section id="seed">
       <title>Seed a New Plugin</title>
       <p>Regardless of the type of plugin you are building, the directory
@@ -113,7 +122,8 @@
       
       <note>Although you can name your project anything you like we do have 
       some <a href="site:documentation/developers/pluginInfrastructure">naming 
-      coventions</a> that we recommend you follow.</note> 
+      coventions</a> that we recommend you follow. Plugins intended to be
+      held at forrest.apache.org must follow the naming convention.</note> 
       
       <note>If you plan on building your plugin elsewhere you can copy the
       <code>build.xml</code> build file to your own plugin work directory and 
@@ -128,7 +138,15 @@
         <title>Edit the Plugin Template</title>
         <p>You now have a skeleton plugin project. However, it doesn't do 
         anything useful yet. Now is a good time to edit some of the files
-        provided. For example:</p>
+        provided.</p>
+
+        <note>
+          For plugins intended to be held at forrest.apache.org please
+          adjust the skinconf.xml etc to be in accordance with the other
+          forrest plugins.
+        </note>
+
+        <p>Here are some general notes:</p>
         
         <section id="status">
           <title>status.xml</title>
