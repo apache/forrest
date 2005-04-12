@@ -682,7 +682,7 @@
 </div>
 <div style="margin-left: 15px">
 <p>You would override <span class="codefrag">
-       src/core/context/skins/common/xslt/html/document2html.xsl</span>
+       $FORREST_HOME/main/webapp/skins/common/xslt/html/document2html.xsl</span>
        and edit the "headers/authors" template.
        </p>
 </div>
@@ -901,8 +901,15 @@
 <p>
           This means creating a directory <span class="codefrag">src/documentation/conf</span>
           (or wherever <span class="codefrag">${forrest.conf-dir}</span> points) and copying
-          <span class="codefrag">$FORREST_HOME/context/WEB-INF/cli.xconf</span> to it.  Then edit
-          cli.xconf, and add any exclude sections you require at the end.  The
+          <span class="codefrag">$FORREST_HOME/main/webapp/WEB-INF/cli.xconf</span> to it.
+          Declare the location of this file in the forrest.properties
+          configuration, e.g.
+          <span class="codefrag">project.configfile=${project.home}/src/documentation/conf/cli.xconf</span>
+        
+</p>
+<p>
+          Then edit
+          cli.xconf, and add any exclude sections that you require. The
           default cli.xconf ignores directory links and links containing
           'apidocs' or starting with 'api/':
         </p>
@@ -929,7 +936,7 @@
         </div>
 </div>
 </div>
-<a name="N10208"></a><a name="claimed_patterns"></a>
+<a name="N1020E"></a><a name="claimed_patterns"></a>
 <h4 class="faq">3.4. Some of my files are not being processed because they use
       common filenames.
       </h4>
@@ -951,7 +958,7 @@
           (<a href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N1021A"></a><a name="build_msg_a"></a>
+<a name="N10220"></a><a name="build_msg_a"></a>
 <h4 class="faq">3.5. What do the symbols and numbers mean when Forrest lists each
         document that it has built?
       </h4>
@@ -975,7 +982,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          Column 4 is the page size.
         </p>
 </div>
-<a name="N10226"></a><a name="headless_operation"></a>
+<a name="N1022C"></a><a name="headless_operation"></a>
 <h4 class="faq">3.6. 
         When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
       </h4>
@@ -994,7 +1001,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <a href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</a>.
         </p>
 </div>
-<a name="N10242"></a><a name="catalog"></a>
+<a name="N10248"></a><a name="catalog"></a>
 <h4 class="faq">3.7. 
         How do i configure my favourite XML editor or parser to find the
         local Forrest DTDs?
@@ -1009,7 +1016,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           local DTDs</a>.
         </p>
 </div>
-<a name="N1024E"></a><a name="skin"></a>
+<a name="N10254"></a><a name="skin"></a>
 <h4 class="faq">3.8. 
         How to make the site look better and change its skin?
       </h4>
@@ -1030,7 +1037,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         <a href="../docs/your-project.html#new_skin">own skin</a>.
         </p>
 </div>
-<a name="N10265"></a><a name="xsp"></a>
+<a name="N1026B"></a><a name="xsp"></a>
 <h4 class="faq">3.9. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -1044,13 +1051,15 @@ X [0]                       brokenlink.html     BROKEN: reason
           
 <li>Download 
           <a href="http://cvs.apache.org/viewcvs.cgi/*checkout*/cocoon-2.1/lib/optional/jdtcore-2.1.0.jar?rev=1.1&content-type=application/java">jdtcore-2.1.0.jar</a>,
-            and copy it to the $FORREST_HOME/context/WEB-INF/lib directory
+            and copy it to the $FORREST_HOME/main/webapp/WEB-INF/lib directory
             (or lib/core/ directory in the source
             distribution).</li>
           
 <li>
-<p>Override sitemap.xmap in your local project (copy $FORREST_HOME/context/sitemap.xmap to
-              src/documentation/), and add the following generator definition in the map:generators section:</p>
+<p>
+              Add the following generator definition in the map:generators section
+              of your <a href="../docs/project-sitemap.html">project sitemap</a>
+</p>
             
 <pre class="code">
   &lt;map:generator name="serverpages"
@@ -1077,7 +1086,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p>See also the 
         <a href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</a> Wiki page.</p>
 </div>
-<a name="N1029A"></a><a name="breadcrumbs"></a>
+<a name="N102A3"></a><a name="breadcrumbs"></a>
 <h4 class="faq">3.10. How do breadcrumbs work?  Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -1099,7 +1108,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       in <span class="codefrag">skinconf.xml</span>.
       </p>
 </div>
-<a name="N102AF"></a><a name="run_port"></a>
+<a name="N102B8"></a><a name="run_port"></a>
 <h4 class="faq">3.11. How do I make forrest run listen on a different port?</h4>
 <div align="right">
 <a href="#run_port-menu">^</a>
@@ -1108,14 +1117,14 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p>
 <span class="codefrag">forrest run -Dforrest.jvmargs="-Djetty.port=80"</span>
 </p>
-<p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
+<p>Or copy Forrest's main/webapp/jettyconf.xml file to your project's src/documentation
       directory and set the port number in that file.  Then do <span class="codefrag">forrest run</span>
       
 </p>
 </div>
-<a name="N102C1"></a><a name="old_faqs"></a>
+<a name="N102CA"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">4. Older version: 0.6</h3>
-<a name="N102C5"></a><a name="old_claimed_patterns"></a>
+<a name="N102CE"></a><a name="old_claimed_patterns"></a>
 <h4 class="faq">4.1. Some of my files are not being processed because they use
       common filenames.
       </h4>
@@ -1137,9 +1146,9 @@ X [0]                       brokenlink.html     BROKEN: reason
           (<a href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N102D7"></a><a name="general"></a>
+<a name="N102E0"></a><a name="general"></a>
 <h3 class="underlined_5">5. General</h3>
-<a name="N102DB"></a><a name="generating_menus"></a>
+<a name="N102E4"></a><a name="generating_menus"></a>
 <h4 class="faq">5.1. What is the relationship between site.xml and
         book.xml?
       </h4>
@@ -1158,7 +1167,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           See <a href="../docs/linking.html">Menus and Linking</a>.
       </p>
 </div>
-<a name="N102F6"></a><a name="docbook"></a>
+<a name="N102FF"></a><a name="docbook"></a>
 <h4 class="faq">5.2. 
         How do I use DocBook as the xml documentation format?
       </h4>
@@ -1217,7 +1226,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          for configuration guidance.
         </p>
 </div>
-<a name="N1031A"></a><a name="version"></a>
+<a name="N10323"></a><a name="version"></a>
 <h4 class="faq">5.3. 
         How to report which version of Forrest is being used and the
         properties that are set?
@@ -1236,7 +1245,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages.
         </p>
 </div>
-<a name="N1032E"></a><a name="logs"></a>
+<a name="N10337"></a><a name="logs"></a>
 <h4 class="faq">5.4. 
         Where are the log files to find more infomation about errors?
       </h4>
@@ -1254,7 +1263,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           mode (which is generally easiest for debugging errors) then see the
           <span class="codefrag">build/webapp/WEB-INF/logkit.xconf</span> file.
           If you are generating a static site (with command-line 'forrest')
-          then copy <span class="codefrag">$FORREST_HOME/context/WEB-INF/logkit.xconf</span>
+          then copy <span class="codefrag">$FORREST_HOME/main/webapp/WEB-INF/logkit.xconf</span>
           to your project at
           <span class="codefrag">src/documentation/content/conf/logkit.xconf</span>
           and modify it. See more information and efficiency tips with
@@ -1265,7 +1274,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           to the standard output.
         </p>
 </div>
-<a name="N10352"></a><a name="how_can_I_help"></a>
+<a name="N1035B"></a><a name="how_can_I_help"></a>
 <h4 class="faq">5.5. 
         How to help?
       </h4>
@@ -1275,14 +1284,14 @@ X [0]                       brokenlink.html     BROKEN: reason
 <div style="margin-left: 15px">
 <p>
           Join one of the Forrest project
-          <a href="http://forrest.apache.org/mail-lists.html">mailing lists</a>
+          <a href="../mail-lists.html">mailing lists</a>
           and tell us what you would like to see improved.  We regard all feedback
           as valuable, particularly from newcomers&mdash;often, close proximity
           blinds software developers to faults that are obvious to everyone
           else. Don't be shy!
         </p>
 </div>
-<a name="N1035E"></a><a name="patch"></a>
+<a name="N10367"></a><a name="patch"></a>
 <h4 class="faq">5.6. 
         How to contribute a patch?
       </h4>
