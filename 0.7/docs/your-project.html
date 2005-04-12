@@ -403,14 +403,15 @@
      </p>
 <p>In Unix/Linux:</p>
 <pre class="code">
-~/apache-forrest-0.6$ export FORREST_HOME=`pwd`/src/core
-~/apache-forrest-0.6$ export PATH=$PATH:$FORREST_HOME/bin
+change directory to the top-level of the forrest distribution and do ...
+~/apache-forrest-0.7$ export FORREST_HOME=`pwd`
+~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin
      </pre>
 <p>In Windows:</p>
 <pre class="code">
 Go to "My Computer", "Properties", "Advanced", "Environment Variables"
 and add:
-<span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.6\src\core</span>
+<span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
 <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
      
 </pre>
@@ -425,16 +426,19 @@ Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
 
     *=======================================================*
     |                 Forrest Site Builder                  |
-    |                        0.6-dev                        |
+    |                        X.Y-dev                        |
     *=======================================================*
   
              Call this through the 'forrest' command
   
 Main targets:
 
+ available-plugins     What plugins are available?
  available-skins       What skins are available?
  clean                 * Clean all directories and files generated during
                         the build
+ init-plugins          Ensure the required plugins are available locally,
+                       if any are not, download them automatically
  install-skin          Install the needed skin from the remote repository
  package-skin          Make a package of an existing skin
  run                   * Run Jetty (instant live webapp)
@@ -659,8 +663,8 @@ which will be used to configure the chosen Forrest skin.
 --&gt;
 
  &lt;!DOCTYPE skinconfig PUBLIC
-        "-//APACHE//DTD Skin Configuration V0.6-2//EN"
-        "skinconfig-v06-2.dtd"&gt;
+        "-//APACHE//DTD Skin Configuration V0.6-3//EN"
+        "skinconfig-v06-3.dtd"&gt;
 
 &lt;skinconfig&gt;
   &lt;!-- To enable lucene search add provider="lucene"
