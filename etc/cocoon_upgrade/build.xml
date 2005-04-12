@@ -24,8 +24,9 @@
   <!-- ===============================================================
        Set properties
        =============================================================== -->
-       <property name="cocoon.home"              location="../../../cocoon"/>
-       <property name="forrest.home"             location="../../"/>
+       <property environment="env" />
+       <property name="cocoon.home"    location="${env.COCOON_HOME}" />
+       <property name="forrest.home"   location="${env.FORREST_HOME}" />
   </target>
 
   <target name="import-cocoon-xconf" depends="init">
@@ -41,6 +42,13 @@
   <target name="local-build-cocoon" depends="init">
      <copy todir="${cocoon.home}">
         <fileset dir="." includes="local.*.properties"/>
+     </copy>
+     <exec dir="${cocoon.home}" executable="${cocoon.home}/build.sh" />
+     <copy todir="${forrest.home}/lib/core">
+        <fileset dir="${cocoon.home}/build/cocoon-2.2.0-dev/">
+          <include name="blocks/blocks-*.jar"/>
+          <include name="cocoon.jar"/>
+        </fileset>
      </copy>
   </target>
 
