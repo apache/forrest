@@ -142,7 +142,7 @@
       </section><section id="clickable-email-address"><title>2.4. How can I generate html-pages to show a 
       'clickable' email-address (of the author-element)?</title>
        <p>You would override <code>
-       src/core/context/skins/common/xslt/html/document2html.xsl</code>
+       $FORREST_HOME/main/webapp/skins/common/xslt/html/document2html.xsl</code>
        and edit the "headers/authors" template.
        </p>
        </section><section id="link_raw"><title>2.5. How do I link to raw files such as config.txt and brochure.pdf?
@@ -297,8 +297,14 @@
         <p>
           This means creating a directory <code>src/documentation/conf</code>
           (or wherever <code>${forrest.conf-dir}</code> points) and copying
-          <code>$FORREST_HOME/context/WEB-INF/cli.xconf</code> to it.  Then edit
-          cli.xconf, and add any exclude sections you require at the end.  The
+          <code>$FORREST_HOME/main/webapp/WEB-INF/cli.xconf</code> to it.
+          Declare the location of this file in the forrest.properties
+          configuration, e.g.
+          <code>project.configfile=${project.home}/src/documentation/conf/cli.xconf</code>
+        </p>
+        <p>
+          Then edit
+          cli.xconf, and add any exclude sections that you require. The
           default cli.xconf ignores directory links and links containing
           'apidocs' or starting with 'api/':
         </p>
@@ -399,11 +405,12 @@ X [0]                       brokenlink.html     BROKEN: reason
         <ol>
           <li>Download 
           <link href="http://cvs.apache.org/viewcvs.cgi/*checkout*/cocoon-2.1/lib/optional/jdtcore-2.1.0.jar?rev=1.1&amp;content-type=application/java">jdtcore-2.1.0.jar</link>,
-            and copy it to the $FORREST_HOME/context/WEB-INF/lib directory
+            and copy it to the $FORREST_HOME/main/webapp/WEB-INF/lib directory
             (or lib/core/ directory in the source
             distribution).</li>
-          <li><p>Override sitemap.xmap in your local project (copy $FORREST_HOME/context/sitemap.xmap to
-              src/documentation/), and add the following generator definition in the map:generators section:</p>
+          <li><p>
+              Add the following generator definition in the map:generators section
+              of your <link href="site:project-sitemap">project sitemap</link></p>
             <source xml:space="preserve">
   &lt;map:generator name="serverpages"
      pool-grow="2" pool-max="32" pool-min="4"
@@ -439,7 +446,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       </p>
       </section><section id="run_port"><title>3.11. How do I make <code>forrest run</code> listen on a different port?</title>
       <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
-      <p>Or copy Forrest's src/core/context/jettyconf.xml file to your project's src/documentation
+      <p>Or copy Forrest's main/webapp/jettyconf.xml file to your project's src/documentation
       directory and set the port number in that file.  Then do <code>forrest run</code>
       </p>
       </section></section><section id="old_faqs"><title>4. Older version: 0.6</title><section id="old_claimed_patterns"><title>4.1. Some of my files are not being processed because they use
@@ -548,7 +555,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           mode (which is generally easiest for debugging errors) then see the
           <code>build/webapp/WEB-INF/logkit.xconf</code> file.
           If you are generating a static site (with command-line 'forrest')
-          then copy <code>$FORREST_HOME/context/WEB-INF/logkit.xconf</code>
+          then copy <code>$FORREST_HOME/main/webapp/WEB-INF/logkit.xconf</code>
           to your project at
           <code>src/documentation/content/conf/logkit.xconf</code>
           and modify it. See more information and efficiency tips with
@@ -563,7 +570,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       </title>
         <p>
           Join one of the Forrest project
-          <link href="ext:mail-lists">mailing lists</link>
+          <link href="site:mail-lists">mailing lists</link>
           and tell us what you would like to see improved.  We regard all feedback
           as valuable, particularly from newcomers&#8212;often, close proximity
           blinds software developers to faults that are obvious to everyone

@@ -301,22 +301,22 @@
 <a href="#clean">Run a clean target after upgrade</a>
 </li>
 <li>
+<a href="#home">New location of $FORREST_HOME</a>
+</li>
+<li>
+<a href="#jdk14">Java JDK 1.4 is required</a>
+</li>
+<li>
+<a href="#tips">General upgrade tips</a>
+</li>
+<li>
 <a href="#plugin">Plugin architecture</a>
 </li>
 <li>
 <a href="#configure-plugin">Configure plugins</a>
 </li>
 <li>
-<a href="#jdk14">Java JDK 1.4 is required</a>
-</li>
-<li>
-<a href="#raw">Including raw content</a>
-</li>
-<li>
-<a href="#tips">General upgrade tips</a>
-</li>
-<li>
-<a href="#home">New location of $FORREST_HOME</a>
+<a href="#raw">Including raw un-processed content</a>
 </li>
 <li>
 <a href="#To+be+continued...">To be continued...</a>
@@ -331,8 +331,8 @@
       This page describes some changes to Apache Forrest that affect people who are
       upgrading to the 0.7 version.
       If you have other issues, then please discuss on either the
-      <a href="http://forrest.apache.org/mail-lists.html#forrest-dev">dev</a> or
-      <a href="http://forrest.apache.org/mail-lists.html#forrest-user">user</a>
+      <a href="../mail-lists.html#forrest-dev">dev</a> or
+      <a href="../mail-lists.html#forrest-user">user</a>
       mailing lists.
       As more experience is gained, this document will be updated.  
       </p>
@@ -348,7 +348,7 @@
 <h2 class="underlined_10">New Features</h2>
 <div class="section">
 <p>
-        The following list shows some of the key new features for Forrest 0.7
+        The following list shows some of the key new features
         (for the full list of changes, see the
         <a href="../docs/changes.html">change log</a>).
       </p>
@@ -376,36 +376,17 @@
 </div>
 
     
-<a name="N1004D"></a><a name="plugin"></a>
-<h2 class="underlined_10">Plugin architecture</h2>
+<a name="N1004D"></a><a name="home"></a>
+<h2 class="underlined_10">New location of $FORREST_HOME</h2>
 <div class="section">
 <p>
-        See
-        <a href="../docs/plugins/pluginInfrastructure.html">Plugin Infrastructure</a>
-        and
-        <a href="../docs/plugins/usingPlugins.html">Extending Forrest with Plugins</a>
-        and for developing new plugins see
-        <a href="../docs/howto/howto-buildPlugin.html">How to Build a Plugin</a>.
+      $FORREST_HOME is now the top-level of the distribution.
+      Also make sure $PATH gets updated to use the new $FORREST_HOME/bin
       </p>
 </div>
 
     
-<a name="N10063"></a><a name="configure-plugin"></a>
-<h2 class="underlined_10">Configure plugins</h2>
-<div class="section">
-<p>
-       Some functionality has been moved out of the forrest core and into
-       plugins. You will need to declare any plugins that are used by
-       your project, e.g. if you use projectInfo (status, changes, todo)
-       and PDF output, then declare the following in forrest.properties
-      </p>
-<pre class="code">
-project.required.plugins=org.apache.forrest.plugin.projectInfo,org.apache.forrest.plugin.pdf-output
-      </pre>
-</div>
-
-    
-<a name="N10071"></a><a name="jdk14"></a>
+<a name="N10057"></a><a name="jdk14"></a>
 <h2 class="underlined_10">Java JDK 1.4 is required</h2>
 <div class="section">
 <p>Java JDK 1.4 is required.
@@ -413,27 +394,7 @@ project.required.plugins=org.apache.forrest.plugin.projectInfo,org.apache.forres
 </div>
 
     
-<a name="N1007B"></a><a name="raw"></a>
-<h2 class="underlined_10">Including raw content</h2>
-<div class="section">
-<p>The method for including "raw content" has changed.
-      </p>
-<p>
-        In 0.6 version, the raw content was placed in the
-        src/documentation/content directory and potential sub-directories.
-        Any file with .html extension was not processed and not adorned with
-        Forrest skin and navigation menus.
-      </p>
-<p>
-        In 0.7 version, all content (whether processed or raw) goes in
-        src/documentation/content/xdocs directory.
-        Any file with .html extension is now processed and is adorned with
-        Forrest skin and navigation menus.
-      </p>
-</div>
-
-    
-<a name="N1008B"></a><a name="tips"></a>
+<a name="N10061"></a><a name="tips"></a>
 <h2 class="underlined_10">General upgrade tips</h2>
 <div class="section">
 <p>
@@ -452,22 +413,75 @@ project.required.plugins=org.apache.forrest.plugin.projectInfo,org.apache.forres
 </div>
 
     
-<a name="N1009B"></a><a name="home"></a>
-<h2 class="underlined_10">New location of $FORREST_HOME</h2>
+<a name="N10071"></a><a name="plugin"></a>
+<h2 class="underlined_10">Plugin architecture</h2>
 <div class="section">
 <p>
-      $FORREST_HOME is now the top-level of the distribution.
-      Also make sure $PATH gets updated to use the new $FORREST_HOME/bin
+        See
+        <a href="../docs/plugins/pluginInfrastructure.html">Plugin Infrastructure</a>
+        and
+        <a href="../docs/plugins/usingPlugins.html">Extending Forrest with Plugins</a>
+        and for developing new plugins see
+        <a href="../docs/howto/howto-buildPlugin.html">How to Build a Plugin</a>.
       </p>
 </div>
 
     
-<a name="N100A5"></a><a name="To+be+continued..."></a>
+<a name="N10087"></a><a name="configure-plugin"></a>
+<h2 class="underlined_10">Configure plugins</h2>
+<div class="section">
+<p>
+       Some functionality has been moved out of the forrest core and into
+       plugins. You will need to declare any plugins that are used by
+       your project, e.g. if you use projectInfo (status, changes, todo)
+       and PDF output, then declare the following in forrest.properties
+      </p>
+<pre class="code">
+project.required.plugins=org.apache.forrest.plugin.projectInfo,org.apache.forrest.plugin.pdf-output
+      </pre>
+</div>
+
+    
+<a name="N10095"></a><a name="raw"></a>
+<h2 class="underlined_10">Including raw un-processed content</h2>
+<div class="section">
+<p>The method for including "raw un-processed content" has changed.
+      </p>
+<p>
+        In 0.6 version, the raw content was placed in the
+        src/documentation/content/ directory and potential sub-directories.
+        In the generated site, these links would automatically function.
+        Any linked file with .html extension was not processed and not
+        adorned with Forrest skin and navigation menus.
+      </p>
+<p>
+        In 0.7 version, any file that is linked to, needs to be placed in
+        the content/xdocs/ directory structure.
+        Any linked file with .html extension is now processed and is
+        adorned with Forrest skin and navigation menus.
+      </p>
+<p>
+        If you need to include files that are not linked to,
+        then place them in the src/documentation/content/ directories
+        as with the 0.6 version.
+      </p>
+<p>
+        If you need to link to html files but want them to be un-processed,
+        then place them in the src/documentation/content/ directories and
+        add an entry to conf/cli.xconf to exclude them from processing.
+        An FAQ describes the use of Cocoon's
+        <a href="faq.html#ignoring_javadocs">cli.xconf</a>
+      
+</p>
+</div>
+
+    
+<a name="N100AF"></a><a name="To+be+continued..."></a>
 <h2 class="underlined_10">To be continued...</h2>
 <div class="section">
 <p>...as more issues are discovered/remembered :)  Please send feedback
       to the
-      <a href="http://forrest.apache.org/mail-lists.html#forrest-dev">mailing list</a>.</p>
+      <a href="../mail-lists.html#forrest-dev">mailing list</a>.</p>
 </div>
   
 </div>
