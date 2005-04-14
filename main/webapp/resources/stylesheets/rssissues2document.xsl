@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +20,10 @@
 <xsl:template match="rss">
   <document>
     <header>
-      <title>Open issues for the upcoming release</title>
+      <title>Issues for this release</title>
     </header>
     <body>
-      <note>These are the open issues for our upcoming release listed in our
+      <note>These are the issues for this release that are scheduled in our
        <link href="http://issues.cocoondev.org/secure/BrowseProject.jspa?id=10000">issue tracking system</link>
        (see 
        <link href="http://issues.cocoondev.org/secure/IssueNavigator.jspa?pid=10000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
