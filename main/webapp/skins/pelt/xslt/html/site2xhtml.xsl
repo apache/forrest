@@ -483,7 +483,19 @@ document.write("Last Published: " + document.lastModified);
 
           <xsl:choose>
             <xsl:when test="a">
-              <div class="menuitem"><a href="{a/@href}" title="{a/@title}"><xsl:value-of select="a" /></a></div>
+              <div class="menuitem">
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="a/@href"/>
+                  </xsl:attribute>
+                  <xsl:if test="a/@title!=''">
+                    <xsl:attribute name="title">
+                      <xsl:value-of select="a/@title"/>
+                    </xsl:attribute>
+                  </xsl:if>
+                  <xsl:value-of select="a"/>
+                </a>
+              </div>
             </xsl:when>
             <xsl:when test="div/@class='current'">
               <div class="menupage">
