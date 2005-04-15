@@ -427,7 +427,7 @@ document.write("Last Published: " + document.lastModified);
                         </xsl:attribute>
                         <xsl:text>More</xsl:text>
                       </a>
-                    <xsl:text> ...)</xsl:text>
+                    <xsl:text>)</xsl:text>
                   </xsl:if>
                 </xsl:if>
               </xsl:if>
@@ -616,7 +616,7 @@ if (VERSION > 3) {
                 </xsl:attribute>
                 <xsl:text>More</xsl:text>
               </a>
-            <xsl:text> ...)</xsl:text>
+            <xsl:text>)</xsl:text>
           </xsl:if>
         </div>
       </xsl:if>
