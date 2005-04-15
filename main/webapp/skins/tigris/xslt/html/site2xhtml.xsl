@@ -295,7 +295,9 @@ if (VERSION > 3) {
       </div>
       <xsl:apply-templates select="div[@class='menu']"/>
 
-      <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
+      <xsl:if test="$config/toc/@max-depth > 0
+          and contains($minitoc-location,'menu')
+          and count(//tocitems/tocitem) >= $config/toc/@min-sections">
         <xsl:if test="//tocitems/tocitem">
           <div class="label">
              <strong>Page</strong>

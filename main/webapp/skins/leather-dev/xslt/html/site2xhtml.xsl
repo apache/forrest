@@ -131,7 +131,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <xsl:when test="div/@class='current'">
               <li class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="div" /></div>
-                <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
+                <xsl:if test="$config/toc/@max-depth&gt;0
+                    and contains($minitoc-location,'menu')
+                    and count(//tocitems/tocitem) >= $config/toc/@min-sections">
                   <li class="menupageitemgroup">
                       <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
