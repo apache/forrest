@@ -59,7 +59,7 @@
     </section>
   </xsl:template>
   
-  <xsl:template match="purpose | prerequisites | audience | steps | extension  | faqs | tips | references | feedback ">
+  <xsl:template match="purpose | prerequisites | audience | steps | extension | tips | references | feedback">
     <xsl:variable name="title">
       <xsl:choose>
         <xsl:when test="normalize-space(@title)!=''">
@@ -76,27 +76,81 @@
      <xsl:apply-templates/>
     </section>
   </xsl:template>
-  
-  <xsl:template match="faq">
-    <section>
-     <title>
-      <xsl:value-of select="question"/>
-     </title>
-      <xsl:apply-templates select="answer" />
+
+  <!-- new faqs format - mostly borrowed from other sections -->
+  <xsl:template match="faqs">
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="normalize-space(title)!=''">
+          <xsl:apply-templates select="title"/>
+        </xsl:when>
+        <xsl:when test="normalize-space(@title)!=''">
+          <xsl:value-of select="@title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="name()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <section id="{$title}">
+      <title><xsl:value-of select="$title"/></title>
+      <xsl:apply-templates select="faq"/>
+      <xsl:apply-templates select="faqsection"/>
     </section>
   </xsl:template>
+
+  <!-- an actual faq is composed of a question and answer -->
+  <xsl:template match="faq">
+    <section>
+      <xsl:apply-templates select="question"/>
+      <xsl:apply-templates select="answer"/>
+    </section>
+  </xsl:template>
+
+  <!-- numbering a faqsection and adding to the title
+    FIXME: maybe an ID should be written out -->
+  <xsl:template match="faqsection">
+    <section>
+      <title>
+        <xsl:number count="faqsection" level="multiple" format="1.1.1 "/>
+        <xsl:value-of select="normalize-space(title)"/>
+      </title>
+      <xsl:apply-templates select="faq"/>
+      <xsl:apply-templates select="faqsection"/>
+    </section>
+  </xsl:template>
+
+  <!-- numbering the question
+    FIXME: maybe an ID of questnnn should be written out -->
+  <xsl:template match="question">
+    <title>
+      <xsl:number count="faqsection" level="multiple" format="1.1.1."/>
+      <xsl:number count="faq" level="single" format="1 "/>
+      <xsl:value-of select="normalize-space(.)"/>
+    </title>
+    <xsl:apply-templates select="answer"/>
+  </xsl:template>
   
-   <xsl:template match="answer">
-      <xsl:copy-of select="."/>
-    </xsl:template>
-    
-   <xsl:template match="question">
-    </xsl:template>
+  <!-- borrowed from the current faqs stylesheet -->
+  <xsl:template match="answer">
+    <xsl:if test="count(p)>0"> 
+      <xsl:apply-templates/>
+    </xsl:if>
+    <xsl:if test="count(p)=0"> 
+      <p>
+        <xsl:apply-templates/>
+      </p>
+    </xsl:if>
+  </xsl:template>
   
   <xsl:template match="revisions">
     <section id="revisions">
      <title>Revisions</title>
-    <p>Find a problem with this document? Consider contacting the mailing lists or submitting your own revision. For instructions, read the How To Submit a Revision.</p>
+    <p>
+      Find a problem with this document? Consider contacting the mailing lists or
+      submitting your own revision. For instructions, read the How To Submit a Revision.
+    </p>
       <xsl:if test="revision">
         <ul>
          <xsl:apply-templates select="revision"/>
