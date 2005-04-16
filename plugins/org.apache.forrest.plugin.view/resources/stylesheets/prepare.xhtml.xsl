@@ -16,124 +16,86 @@
   limitations under the License.
 -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0"  
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias"
-  >
-  <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
-  <xsl:param name="request"/>
-  <xsl:template match="/">
-    <alias:stylesheet version="1.0">
-      <alias:import href="cocoon://commonSite2xhtml"/>
-      <alias:import href="cocoon://dotdots"/>
-		  <alias:import href="cocoon://pathutils"/>
-		  <alias:import href="cocoon://renderlogo"/>
-      <alias:include href="cocoon://prepare.include.{$request}"/>
-			<alias:param name="path"/>
-      <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
-			<alias:template name="getHead">
-			  <xsl:for-each select="/*/forrest:properties/*[@head='true']">
-		      <alias:call-template name="{@name}-head" />
-			  </xsl:for-each>
-		   </alias:template>
-	    <!--<xsl:comment>All xhtml css elements requested by the forrest:template</xsl:comment>
-			<alias:template name="getCss">
-			  <xsl:for-each select="/*/forrest:properties/*[@css='true']">
-		      <alias:call-template name="{@name}-css" />
-			  </xsl:for-each>
-		   </alias:template>-->
-		   	   
-       <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
-			 <alias:template name="getBody">
-          <xsl:apply-templates select="/*/forrest:view"/>
-		   </alias:template>
-       
-       <alias:template match="site">
-        <xhtml>
-      		<head>
-    				<alias:call-template name="getHead"/>
-            <!--<style type="text/css">
-body {
-	text-align:center;
-	font-family: verdana, helvetica, sans;
-	font-size: 8pt;
-}
-img {border:0;}
-hr {border:0px; height: 1px; background-color:#ddd;}
-
-/*============Container and branding=============*/
-#container {
-	width: 750px;
-	text-align:left;
-	margin: 0 auto 12px auto;
-}
-#branding {
-	padding: 0;
-	height: 75px;
-	max-height: 75px;
-	background: url(images/header-background.gif) transparent;
-	background-repeat: no-repeat;
-	position: relative;
-}
-h1 {font-size: 36pt}
-h2 {color: blue}
-p {margin-left: 50px}
-#spacer {
-    clear:both;
-}
-<alias:call-template name="getCss"/>
-</style>-->
-            <link rel="stylesheet" type="text/css" >
-              <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
-            </link>
-             <link rel="stylesheet" type="text/css" >
-              <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
-            </link>
-						<title>
-                <alias:value-of select="div[@id='content']/h1"/>
-            </title>
-          </head>
-          <body onload="init()">
-            <alias:call-template name="getBody"/>
-          </body>
-         </xhtml>
-       </alias:template>
-      
-		</alias:stylesheet>
-	</xsl:template>
-	
-  <xsl:template match="forrest:view">
-    <xsl:apply-templates/>
-  </xsl:template>
-	
-	<xsl:template match="forrest:hook">
-    <div id="{@name}">
-      <xsl:apply-templates/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="forrest:contract">
-    <xsl:variable name="name" select="@name"/>
-    
-    <!--Test whether there is a body template needed-->
-    <xsl:if test="/*/forrest:properties/*[@body='true' and @name=$name]">
-      <!--If next son is not forrest:properties go on-->
-      <xsl:choose>
-        <xsl:when test="not(forrest:properties[@contract=$name])">
-          <xsl:apply-templates/>
-          <alias:call-template name="{@name}-body" />
-        </xsl:when>
-        <xsl:when test="forrest:properties[@contract=$name]">
-          <alias:call-template name="{@name}-body" >
-          <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-            <alias:with-param name="{@name}" select=".//forrest:properties[@contract='{$name}']/forrest:property[@name='{@name}']" />
-          </xsl:for-each>
-          </alias:call-template>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:if>
-  </xsl:template>
-
+<xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
+    <xsl:param name="request"/>
+    <xsl:template match="/">
+        <alias:stylesheet version="1.0">
+            <alias:import href="cocoon://commonSite2xhtml"/>
+            <alias:import href="cocoon://dotdots"/>
+            <alias:import href="cocoon://pathutils"/>
+            <alias:import href="cocoon://renderlogo"/>
+            <alias:include href="cocoon://prepare.include.{$request}"/>
+            <alias:param name="path"/>
+            <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
+            <alias:template name="getHead">
+                <xsl:for-each select="/*/forrest:properties/*[@head='true']">
+                    <alias:call-template name="{@name}-head"/>
+                </xsl:for-each>
+            </alias:template>
+            <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
+            <alias:template name="getBody">
+                <xsl:apply-templates select="/*/forrest:view"/>
+            </alias:template>
+            <alias:template match="site">
+                <xhtml>
+                    <head>
+                        <alias:call-template name="getHead"/>
+                        <link rel="stylesheet" type="text/css">
+                            <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
+                        </link>
+                        <link rel="stylesheet" type="text/css">
+                            <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
+                        </link>
+                        <xsl:apply-templates select="/*/forrest:view/forrest:css"/>
+                        <title>
+                            <alias:value-of select="div[@id='content']/h1"/>
+                        </title>
+                    </head>
+                    <body onload="init()">
+                        <alias:call-template name="getBody"/>
+                    </body>
+                </xhtml>
+            </alias:template>
+        </alias:stylesheet>
+    </xsl:template>
+    <xsl:template match="forrest:view">
+        <xsl:apply-templates/>
+    </xsl:template>
+    <xsl:template match="forrest:hook[@name]">
+        <div id="{@name}">
+            <xsl:apply-templates/>
+        </div>
+    </xsl:template>
+    <xsl:template match="forrest:hook[@class]">
+        <div class="{@class}">
+            <xsl:apply-templates/>
+        </div>
+    </xsl:template>
+    <xsl:template match="forrest:css[@url]">
+        <link rel="stylesheet" type="text/css">
+            <xsl:attribute name="href">{$root}skin/<xsl:value-of select="@url"/>
+            </xsl:attribute>
+        </link>
+    </xsl:template>
+    <xsl:template match="forrest:contract">
+        <xsl:variable name="name" select="@name"/>
+        <!--Test whether there is a body template needed-->
+        <xsl:if test="/*/forrest:properties/*[@body='true' and @name=$name]">
+            <!--If next son is not forrest:properties go on-->
+            <xsl:choose>
+                <xsl:when test="not(forrest:properties[@contract=$name])">
+                    <xsl:apply-templates/>
+                    <alias:call-template name="{@name}-body"/>
+                </xsl:when>
+                <xsl:when test="forrest:properties[@contract=$name]">
+                    <alias:call-template name="{@name}-body">
+                        <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
+                            <alias:with-param name="{@name}" select=".//forrest:properties[@contract='{$name}']/forrest:property[@name='{@name}']"/>
+                        </xsl:for-each>
+                    </alias:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>

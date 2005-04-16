@@ -64,23 +64,23 @@ $Revision: 1.13 $
       <map:resource name="skin-read">
             <map:select type="exists">
               <!-- First location: project skin dir -->
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.css">
+               <map:when test="{project:skins-dir}{path}/{name}.css">
 		         <map:call resource="read-linked-text">
-		           <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.css" />
+		           <map:parameter name="path" value="{project:skins-dir}{path}/{name}.css" />
 		         </map:call>
                </map:when>
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}">
-                  <map:read src="{project:skins-dir}{forrest:skin}/{path}/{name}.{ext}" mime-type="{mime-type}" />
+               <map:when test="{project:skins-dir}{path}/{name}.{ext}">
+                  <map:read src="{project:skins-dir}{path}/{name}.{ext}" mime-type="{mime-type}" />
                </map:when>
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.css.xslt">
+               <map:when test="{project:skins-dir}{path}/{name}.css.xslt">
                   <map:call resource="pipe-text-resource">
-                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.css.xslt" />
+                    <map:parameter name="path" value="{project:skins-dir}{path}/{name}.css.xslt" />
                     <map:parameter name="mime-type" value="text/css" />
                   </map:call>
                </map:when>
-               <map:when test="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt">
+               <map:when test="{project:skins-dir}{path}/{name}.svg.xslt">
                   <map:call resource="pipe-transformed-svg2png-resource">
-                    <map:parameter name="path" value="{project:skins-dir}{forrest:skin}/{path}/{name}.svg.xslt" />
+                    <map:parameter name="path" value="{project:skins-dir}{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
                
