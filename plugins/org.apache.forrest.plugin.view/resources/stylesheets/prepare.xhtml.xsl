@@ -60,7 +60,7 @@
         </alias:stylesheet>
     </xsl:template>
     <xsl:template match="forrest:view">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="forrest:hook|forrest:contract"/>
     </xsl:template>
     <xsl:template match="forrest:hook[@name]">
         <div id="{@name}">
