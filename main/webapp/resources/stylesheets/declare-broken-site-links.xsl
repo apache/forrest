@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +17,15 @@
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <!-- Change the site: and ext: links in the output so that Forrest
-             understands that they are broken -->
-             
-<!-- nicolaken: commenting out because it breaks the linkmap stuff.
-                Just including even the same link at this point makes
-                Cocoon use that link as a relative link.
-                For example, if in xdocs/samples I have ext:dtd-docs, the below
-                template with concat('', .) will make Cocoon search for
-                samples/ext:dtd-docs, which of course does not exist.
-                
+
+<!-- This is a workaround for FOR-284 "link rewriting broken when
+  linking to xml source views which contain site: links"
+
+  Prepend "error:" to any legitimate broken "site:" or "ext:" links.
+  The remaining ones are the bogus ones caused by FOR-284 which are
+  then excluded by cli.xconf
+-->
+
   <xsl:template match="@*">
     <xsl:attribute name="{name(.)}">
       <xsl:choose>
@@ -39,21 +38,11 @@
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-		
-	<xsl:template match="/ | * | comment() | processing-instruction() | text()"> 
-		<xsl:copy> 
-			<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
-		</xsl:copy> 
-	</xsl:template> 
--->
 
-    
-    <!-- Identity transformation template -->			
-    <xsl:template match="/ | @* | * | comment() | processing-instruction() | text()"> 
-    	<xsl:copy> 
-    		<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
-    	</xsl:copy> 
-    </xsl:template> 
-        
-  
+  <xsl:template match="/ | * | comment() | processing-instruction() | text()"> 
+    <xsl:copy> 
+      <xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
+    </xsl:copy> 
+  </xsl:template> 
+
 </xsl:stylesheet>
