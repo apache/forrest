@@ -286,13 +286,18 @@
       <link href="site:your-project"> Using Forrest</link> document.</p>
       <p>This technique could also be used for a modification date with
       $Date: 2004/01/15 08:52:47 $</p>
-      </section><section id="ignoring_javadocs"><title>3.3. 
-        How do I stop Forrest breaking on links to external files that may not
-        exist, like javadocs?
+      </section><section id="cli-xconf"><title>3.3. 
+        How to control the processing of URIs by Cocoon, e.g. exclude
+        certain URIs, include other additional ones.
       </title>
         <p>
-          This can be done by overriding the <code>cli.xconf</code> config file,
-          and defining patterns for URLs to exclude.
+          Forrest uses a configuration file to control the processing
+          done by the Apache Cocoon command-line called cli.xconf
+        </p>
+        <p>
+          Your project can supply its own <code>cli.xconf</code>
+          and define patterns for URIs to exclude. There are also
+          other powerful configuration features.
         </p>
         <p>
           This means creating a directory <code>src/documentation/conf</code>
@@ -327,7 +332,16 @@
           <code>foo/bar</code>, but not <code>foo/bar/baz</code>
            &#8212; use <strong>foo/**</strong> to match that.
         </note>
-      </section><section id="claimed_patterns"><title>3.4. Some of my files are not being processed because they use
+      </section><section id="ignoring_javadocs"><title>3.4. 
+        How do I stop Forrest breaking on links to external files that may not
+        exist, like javadocs?
+      </title>
+        <p>
+          This can be done by overriding the 
+          <link href="#cli-xconf"><code>cli.xconf</code></link>
+          Cocoon config file, and defining patterns for URLs to exclude.
+        </p>
+      </section><section id="claimed_patterns"><title>3.5. Some of my files are not being processed because they use
       common filenames.
       </title>
         <p>
@@ -342,7 +356,7 @@
           In future versions of Forrest we will attempt to deal with this issue
           (<link href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</link>).
         </p>
-      </section><section id="build_msg_a"><title>3.5. What do the symbols and numbers mean when Forrest lists each
+      </section><section id="build_msg_a"><title>3.6. What do the symbols and numbers mean when Forrest lists each
         document that it has built?
       </title>
         <source xml:space="preserve">
@@ -360,7 +374,7 @@ X [0]                       brokenlink.html     BROKEN: reason
          Column 3 is the time taken.
          Column 4 is the page size.
         </p>
-      </section><section id="headless_operation"><title>3.6. 
+      </section><section id="headless_operation"><title>3.7. 
         When generating PNG images from SVG, I get an error: Can't connect to X11 window server using ':0.0' as the value of the DISPLAY variable.
       </title>
         <p>
@@ -373,7 +387,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           See also
           <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>.
         </p>
-      </section><section id="catalog"><title>3.7. 
+      </section><section id="catalog"><title>3.8. 
         How do i configure my favourite XML editor or parser to find the
         local Forrest DTDs?
       </title>
@@ -382,7 +396,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <link href="site:catalog">Using Catalog Entity Resolver for
           local DTDs</link>.
         </p>
-      </section><section id="skin"><title>3.8. 
+      </section><section id="skin"><title>3.9. 
         How to make the site look better and change its skin?
       </title>
         <p>
@@ -397,7 +411,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         Some projects may have special needs and can define their
         <link href="site:your-project/new-skin">own skin</link>.
         </p>
-      </section><section id="xsp"><title>3.9. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+      </section><section id="xsp"><title>3.10. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
         <p>First consider whether your needs would be better met by Cocoon itself, rather than Forrest.
         </p>
         <p>That said, there are valid reasons for wanting programmatically generated content, so here is how to enable
@@ -428,7 +442,7 @@ X [0]                       brokenlink.html     BROKEN: reason
         </ol>
         <p>See also the 
         <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
-      </section><section id="breadcrumbs"><title>3.10. How do breadcrumbs work?  Why don't they work locally?</title>
+      </section><section id="breadcrumbs"><title>3.11. How do breadcrumbs work?  Why don't they work locally?</title>
       <p>Breadcrumbs begin with up to three URLs specified in
       <code>skinconf.xml</code>.  Here is what the Forrest site uses:</p>
       <source xml:space="preserve">
@@ -444,7 +458,7 @@ X [0]                       brokenlink.html     BROKEN: reason
       there will be no extra breadcrumbs, only the ones that are specified
       in <code>skinconf.xml</code>.
       </p>
-      </section><section id="run_port"><title>3.11. How do I make <code>forrest run</code> listen on a different port?</title>
+      </section><section id="run_port"><title>3.12. How do I make <code>forrest run</code> listen on a different port?</title>
       <p><code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code></p>
       <p>Or copy Forrest's main/webapp/jettyconf.xml file to your project's src/documentation
       directory and set the port number in that file.  Then do <code>forrest run</code>
