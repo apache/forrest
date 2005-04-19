@@ -333,6 +333,20 @@ if (VERSION > 3) {
     </meta>
   </xsl:template>
 
+  <!-- meta information from v 2.0 documents
+       FIXME: the match is really inefficient -->
+  <xsl:template name="meta-data">
+    <xsl:for-each select="//meta-data/meta">
+      <xsl:element name="meta">
+        <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
+        <xsl:attribute name="content"><xsl:value-of select="."/></xsl:attribute>
+        <xsl:if test="@xml:lang">
+          <xsl:attribute name="lang"><xsl:value-of select="@xml:lang"/></xsl:attribute>          
+        </xsl:if>
+      </xsl:element>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="feedback">
     <div id="feedback">
       <xsl:value-of select="$config/feedback"/>

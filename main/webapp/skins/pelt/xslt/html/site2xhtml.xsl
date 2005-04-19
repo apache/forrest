@@ -50,8 +50,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <!--+
   |generator meta
   +-->
+            <!-- Add some Forrest-specific metadata -->
             <xsl:call-template name="html-meta"/>
-            <xsl:apply-templates select="//meta-data"/>
+            <!-- Add any metadata from the documents -->
+            <xsl:call-template name="meta-data"/>
 <!--+
   |title
   +-->
