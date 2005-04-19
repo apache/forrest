@@ -96,7 +96,7 @@
     <section id="{$title}">
       <title><xsl:value-of select="$title"/></title>
       <xsl:apply-templates select="faq"/>
-      <xsl:apply-templates select="faqsection"/>
+      <xsl:apply-templates select="faqsection | part"/>
     </section>
   </xsl:template>
 
@@ -110,14 +110,14 @@
 
   <!-- numbering a faqsection and adding to the title
     FIXME: maybe an ID should be written out -->
-  <xsl:template match="faqsection">
+  <xsl:template match="faqsection | part">
     <section>
       <title>
-        <xsl:number count="faqsection" level="multiple" format="1.1.1 "/>
+        <xsl:number count="faqsection | part" level="multiple" format="1.1.1 "/>
         <xsl:value-of select="normalize-space(title)"/>
       </title>
       <xsl:apply-templates select="faq"/>
-      <xsl:apply-templates select="faqsection"/>
+      <xsl:apply-templates select="faqsection | part"/>
     </section>
   </xsl:template>
 
@@ -125,7 +125,7 @@
     FIXME: maybe an ID of questnnn should be written out -->
   <xsl:template match="question">
     <title>
-      <xsl:number count="faqsection" level="multiple" format="1.1.1."/>
+      <xsl:number count="faqsection | part" level="multiple" format="1.1.1."/>
       <xsl:number count="faq" level="single" format="1 "/>
       <xsl:value-of select="normalize-space(.)"/>
     </title>
