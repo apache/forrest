@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,19 +21,19 @@
   <header>
     <title>Generate an ASF mirrors page using interactive web form</title>
 
-    <abstract>Use ihtml (interpreted html) to include html form elements
+    <abstract>Include html form elements
     into a forrest-generated html page. For example, this enables building
     automated download mirror pages for ASF project websites.
     </abstract>
 
-    <last-modified-content-date date="2004-07-19" />
+    <last-modified-content-date date="2005-04-20" />
   </header>
 
   <audience title="Intended Audience">
     <ul>
       <li>Any Apache project that uses Forrest to generate their website
         will need to have a mirrors page.</li>
-      <li>Also anyone interested in the use of ihtml to embed html form
+      <li>Also anyone interested in the use of embedding html form
         elements into a generated Forrest page.</li>
     </ul>
   </audience>
@@ -43,11 +43,11 @@
     which determine the closest mirror and provide an interactive list of
     the current alternative mirrors.
     This HowTo describes the procedure to generate the template page
-    that is utilised by the mirrors.cgi script. The processed page
-    includes html "form" elements that are not included in the xdocs DTDs.
+    that is utilised by the mirrors.cgi script.
     </p>
-    <p>This process has many exciting applications, beyond the scope of
-     this document.
+    <p>The mirrors.cgi and mirrors.html are "extra" documents,
+    i.e. have no links from anywhere in the site. So we explain
+    how to process additional files.
     </p>
   </purpose>
 
@@ -73,12 +73,12 @@
       <p>Utilising the Forrest concept of raw un-processed content,
        add the file as <code>src/documentation/mirrors.cgi</code>
        (copy the Forrest project's
-        <link href="http://svn.apache.org/repos/asf/forrest/trunk/src/documentation/content/mirrors.cgi">mirrors.cgi</link>)
+        <link href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/mirrors.cgi">mirrors.cgi</link>)
       </p>
     </section>
 
-    <section id="ihtml">
-      <title>Add the mirrors.ihtml to xdocs directory</title>
+    <section id="html">
+      <title>Add the mirrors.html to xdocs directory</title>
       <p>This file contains the html content of your mirror page, including
         the html form elements which drive the mirror selection. It also
         contains the specific tokens that are interpreted by the mirrors.cgi
@@ -87,7 +87,7 @@
       <p>
         Add the file as <code>src/documentation/xdocs/mirrors.html</code>
         (Use the Forrest project's
-        <link href="http://svn.apache.org/repos/asf/forrest/trunk/src/documentation/content/xdocs/mirrors.ihtml">mirrors.html</link>
+        <link href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/mirrors.html">mirrors.html</link>
         as a template and edit it to suit.)
       </p>
     </section>
@@ -106,7 +106,7 @@
     </section>
 
     <section id="link">
-      <title>Cause the mirrors.ithml to be processed as an extra file</title>
+      <title>Cause the mirrors.html to be processed as an extra file</title>
       <p>Forrest gathers the links that are to be crawled, by reading site.xml
         and by finding any other internal links in the actual documents.
         There is no link to mirrors.html because it is an extra file that needs
@@ -133,16 +133,12 @@
         there. Run the '<code>forrest</code>' command. The mirrors.html page
         will be generated with the skin applied.
       </p>
-    </section>
-
-    <section id="explain">
-      <title>Explanation of the process</title>
-      <p>Forrest automatically reads ihtml files and transforms the html source
-      to the forrest xdocs intermediate format. It mainly detects heading
-      elements (h1, h2, etc.) and converts them to "sections". The remainder
-      of the html elements are copied over as-is. With this technique the
-      html form elements are copied over to the output.
-      </p>
+<note>
+Due to Issue
+<link href="http://issues.cocoondev.org/browse/FOR-480">FOR-480</link>,
+the generated mirror.html will end up in forrest/main/site/mirrors.html
+rather than in the project's build directory.
+</note>
     </section>
   </steps>
 </howto>
