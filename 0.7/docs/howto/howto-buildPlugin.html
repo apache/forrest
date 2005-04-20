@@ -5,7 +5,6 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.7-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<meta-data></meta-data>
 <title>How to Build a Plugin (v0.7)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
@@ -141,7 +140,7 @@
 </div>
 <div id="credit">
 <hr>
-    This is documentation for current release v0.7
+    This is documentation for development version v0.7
    (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -175,7 +174,7 @@
     steps in creating a plugin and then works through some examples of 
     plugin creation in order to illustrate the materials.</div>
 <div id="motd-area">
-    This is documentation for current release v0.7
+    This is documentation for development version v0.7
    (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -407,11 +406,11 @@
 <div class="content">
           For plugins intended to be held at forrest.apache.org please
           adjust the skinconf.xml etc to be in accordance with the other
-          forrest plugins.
+          forrest plugins. See <a href="#hosted">notes</a> below.
         </div>
 </div>
 <p>Here are some general notes:</p>
-<a name="N100C2"></a><a name="status"></a>
+<a name="N100C6"></a><a name="status"></a>
 <h5>status.xml</h5>
 <p>This file is used to track changes to the plugin
           project and to manage lists of things that still need to be done.
@@ -421,23 +420,31 @@
 <p>As you work on the plugin you should record all major changes in
           this file so that it can then be used as a changelog for your
           plugin.</p>
-<a name="N100D2"></a><a name="forrest-properties"></a>
+<a name="N100D6"></a><a name="forrest-properties"></a>
 <h5>forrest.properties</h5>
 <p>This file defines many configuration parameters for Forrest. It
           does not need to be customised in most cases. However, see
           for more details.</p>
-<a name="N100DC"></a><a name="skinconf"></a>
+<a name="N100E0"></a><a name="skinconf"></a>
 <h5>src/documentation/skinconf.xml</h5>
 <p>This configures the skin for your plugins documentation. There
           are some items that need to be configured in here, for example, the
           copyright information. The file is heavily commented so probably
           best to read through it, changing what you need to.</p>
-<a name="N100E6"></a><a name="doc"></a>
+<a name="N100EA"></a><a name="doc"></a>
 <h5>Documentation</h5>
 <p>It is also a good idea to start writing the documentation at this
           stage. The above process created a very simple plugin documentation
           site for you. All you have to do is add the content.</p>
-<a name="N100F2"></a><a name="edit-sitemap"></a>
+<a name="N100F4"></a><a name="hosted"></a>
+<h5>Style notes for plugins hosted at forrest.apapche.org</h5>
+<p>
+            After seeding a new plugin, copy the configuration from an
+            exisiting plugin (e.g. org.apache.forrest.plugin.input.projectInfo).
+            Copy src/documentation/skinconf.xml and 
+            src/documentation/content/xdocs/images/project-logo.gif
+          </p>
+<a name="N10100"></a><a name="edit-sitemap"></a>
 <h3 class="underlined_5">Edit the Plugin sitemap file(s)</h3>
 <p>The plugin <span class="codefrag">xmap</span> file is a Cocoon sitemap that is mounted
       at a strategic place in the Forrest pipeline. It is in this file
@@ -456,7 +463,7 @@
       all development work on Forrest, you will find
       the <a href="../../mail-lists.html#forrest-dev">developer mailing list</a>
       a very good resource (check the archives before posting, please).</p>
-<a name="N10119"></a><a name="components"></a>
+<a name="N10127"></a><a name="components"></a>
 <h4>Components, Actions and Resources</h4>
 <p>If your plugin uses any components (i.e. generators, transformers or
         serializers), actions or resources they must
@@ -471,13 +478,13 @@
         <span class="codefrag">{forrest:plugins}/PLUGIN_NAME</span> instead of <span class="codefrag">{realpath:/}</span>.
         </p>
 <p>See the examples below for more details.</p>
-<a name="N10141"></a><a name="resources"></a>
+<a name="N1014F"></a><a name="resources"></a>
 <h3 class="underlined_5">Create the Necessary Resource Files</h3>
 <div class="frame fixme">
 <div class="label">Fixme (rdg)</div>
 <div class="content">Discuss the XSL files and other such resources</div>
 </div>
-<a name="N1014C"></a><a name="samples"></a>
+<a name="N1015A"></a><a name="samples"></a>
 <h3 class="underlined_5">Create Samples in the Documentation</h3>
 <p>Plugin documentation should provide (as a minimum) an
       index page that provides an overview and a set of samples that demonstrate
@@ -487,7 +494,7 @@
       and <span class="codefrag">tabs.xml</span> configuration files.</p>
 <p>Try to provide a sample for all the major functions of your plugin
       and document any configuration that is available.</p>
-<a name="N10162"></a><a name="test"></a>
+<a name="N10170"></a><a name="test"></a>
 <h3 class="underlined_5">Testing a Plugin</h3>
 <p>Since your documentation for the plugin illustrates all of its 
       functionality, you can use that site for testing the plugin. However, you
@@ -513,9 +520,9 @@
       as writing your tests.</p>
 <p>Ensure that your sitemaps are robust and handle matches for files
       in sub-directories, as well as those at the root level.</p>
-<a name="N10190"></a><a name="release"></a>
+<a name="N1019E"></a><a name="release"></a>
 <h3 class="underlined_5">Releasing a Plugin</h3>
-<a name="N10196"></a><a name="register"></a>
+<a name="N101A4"></a><a name="register"></a>
 <h4>Register the Plugin with Apache Forrest</h4>
 <div class="frame fixme">
 <div class="label">Fixme (rdg)</div>
@@ -526,7 +533,7 @@
 <div class="content">Describe making a request of Forrest devs for 
         inclusion</div>
 </div>
-<a name="N101A5"></a><a name="deploy"></a>
+<a name="N101B3"></a><a name="deploy"></a>
 <h4>Deploying the Plugin</h4>
 <p>To deploy the plugin so that others can use it, it must be made 
         available as a zip from the URL indicated in the 
@@ -555,29 +562,29 @@
         that your only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</div>
 </div>
-<a name="N101D8"></a><a name="examples"></a>
+<a name="N101E6"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-<a name="N101E1"></a><a name="input"></a>
+<a name="N101EF"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="frame fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss OpenOffice.org plugin here</div>
 </div>
-<a name="N101EC"></a><a name="output"></a>
+<a name="N101FA"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="frame fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss s5 plugin here</div>
 </div>
-<a name="N101F7"></a><a name="internal"></a>
+<a name="N10205"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="frame fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss IMSManifest plugin here</div>
 </div>
-<a name="N10203"></a><a name="extension"></a>
+<a name="N10211"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -588,7 +595,7 @@
 <a href="../../docs/plugins/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N10219"></a><a name="summarise"></a>
+<a name="N10227"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="frame fixme">
 <div class="label">Fixme (rdg)</div>
