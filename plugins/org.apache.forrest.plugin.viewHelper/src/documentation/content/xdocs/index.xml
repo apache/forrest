@@ -23,21 +23,49 @@
   </header> 
   <body> 
 <section>
-  <title>ViewHelper </title>
-<p>Each forrest:contract of a forrest:view will dispatch a xml file (ViewHelper) that contains
-xsl:stylesheets for the different output formats, a contract can
-implement. For html, the only format that we have implemented so far, we
-have three different kind of templates:</p><p>
-<![CDATA[<xsl:templates name="{contract/@name}-css/>]]><br/>
-Here the contract specific css will be stored.
-</p><p>
-<![CDATA[<xsl:templates name="{contract/@name}-head/>]]><br/>
-Here goes everything that belongs in the html head. e.g. scripts.
-</p><p>
-<![CDATA[<xsl:templates name="{contract/@name}-body/>]]><br/>
-Everything that belongs into the body.
-  </p>
-  <p>You can find sample implementations in {this.plugins.path}/resources/templates/.</p>
+  <title>How to create your own implementation </title>
+	<p>Diwaker Gupta wrote: "Of course, we can have a good debate on whats the best way to
+generate XHTML content for the tabs to make it "most amenable" to CSS
+skinning. Personally, I would just output each tab in its own div
+element, with class attributes denoting the selected tab. One can then
+use CSS to structure/color them appropriately."</p>
+<note>All following explanations/steps assume you use the default
+configuration of forrest.</note>
+	<p>Ok, you may want to try another feature that is coming with
+forrest:views.</p>
+<section>
+	<title>Create your own contract implementation</title>
+		<ol>
+		<li>Create in src/documentation the folder resources/templates. ...or
+more generally speaking create ${project.resources-dir}/templates.</li>
+		<li>Copy
+{this.plugins.path}/resources/templates/nav-main.ft to this folder.
+</li>
+		<li>Add after the <![CDATA[<xsl:template name="nav-main-body"/>]]> something like 
+</li>
+		<source><![CDATA[<xsl:template match="ul[@id='nav-main']">
+<div id="nav-main">
+  <xsl:apply-templates select="li"/>
+</div>
+</xsl:template>
+<xsl:template match="li[not(@class)]">
+<div class="base-not-selected">
+  <xsl:apply-templates/>
+</div>
+</xsl:template>
+<xsl:template match="li[@class='current']">
+<div class="current">
+  <xsl:apply-templates/>
+</div>
+</xsl:template>]]></source>
+<li>Change the css in <![CDATA[<xsl:template name="nav-main-css">]]>. I tried but
+the result is not nice. If you succeed please change the name of the
+contract to "nav-main-div", add the patch to the issue-tracker and I add
+the new contract to the viewHelper plugin. ;-)</li>
+	</ol>
+</section>
+	
+  <p>You can find more implementations in {this.plugins.path}/resources/templates/.</p>
   </section>
   </body>
 </document>

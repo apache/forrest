@@ -20,6 +20,7 @@
     <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
     <xsl:param name="request"/>
     <xsl:template match="/">
+    	<!--Create the final stylesheet (alias:)-->
         <alias:stylesheet version="1.0">
             <alias:import href="cocoon://commonSite2xhtml"/>
             <alias:import href="cocoon://dotdots"/>
@@ -37,17 +38,28 @@
             <alias:template name="getBody">
                 <xsl:apply-templates select="/*/forrest:view"/>
             </alias:template>
+        	<!--default entry point into the presentation model 'site'-->
             <alias:template match="site">
                 <xhtml>
                     <head>
                         <alias:call-template name="getHead"/>
-                        <link rel="stylesheet" type="text/css">
-                            <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
-                        </link>
-                        <link rel="stylesheet" type="text/css">
-                            <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
-                        </link>
-                        <xsl:apply-templates select="/*/forrest:view/forrest:css"/>
+                    	<!--Test whether there is an own css implemention requested by the view-->
+                    	<!--*No* forrest:css found in the view-->
+                        <xsl:if test="not(/*/forrest:view/forrest:css)">
+                            <link rel="stylesheet" type="text/css">
+                                <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
+                            </link>
+                            <link rel="stylesheet" type="text/css">
+                                <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
+                            </link>
+                            <link rel="stylesheet" type="text/css">
+                                <xsl:attribute name="href">{$root}skin/profiling.css</xsl:attribute>
+                            </link>
+                        </xsl:if>
+                    	<!-- forrest:css *found* in the view-->
+                        <xsl:if test="/*/forrest:view/forrest:css">
+                            <xsl:apply-templates select="/*/forrest:view/forrest:css"/>
+                        </xsl:if>
                         <title>
                             <alias:value-of select="div[@id='content']/h1"/>
                         </title>
@@ -60,7 +72,7 @@
         </alias:stylesheet>
     </xsl:template>
     <xsl:template match="forrest:view">
-        <xsl:apply-templates select="forrest:hook|forrest:contract"/>
+        <xsl:apply-templates select="*[local-name()!='css']"/>
     </xsl:template>
     <xsl:template match="forrest:hook[@name]">
         <div id="{@name}">

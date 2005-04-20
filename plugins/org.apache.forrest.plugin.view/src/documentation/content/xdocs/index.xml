@@ -18,7 +18,7 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document> 
   <header> 
-    <title>forrest:views - x formats, one config</title>
+    <title>forrest:views - x output formats, one config</title>
     <abstract>This plugin depends on a ViewHelper and a BusinessHelper implementation.</abstract> 
   </header> 
   <body> 
@@ -30,20 +30,22 @@
           <a href="ext:corej2eepatterns/patterns/dispatcherView">corej2eepatterns.com</a>
         </p><p>
         A view will be configured by a config file 
-        which basically contains three tags (it is in a really early stage): </p>
+        which basically contains the following tags (it is still evolving): </p>
 <source><![CDATA[<forrest:view type="xhtml">
+  <forrest:css url="default.css"/>
   <forrest:contract name="meta"/>
   <forrest:hook name="container">
    <forrest:contract name="feedback"/>
   </forrest:hook />
 </forrest:view>]]></source>
 <p>The view tag's @type determines the final output format. The idea is to
-configure different output formats via a forrest:views. That means a forrest:views 
-can contain n different forrest:view for n different formats. <br/>
+configure different output formats within a forrest:views. That means a forrest:views 
+can contain n different "forrest:view" configurations for n different formats. <br/>
 In short: x formats, one config. :)</p>
 <source><![CDATA[<forrest:views
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
 <forrest:view type="xhtml">
+  <forrest:css url="default.css"/>
   <forrest:contract name="meta"/>
   <forrest:hook name="container">
    <forrest:contract name="feedback"/>
@@ -57,16 +59,32 @@ In short: x formats, one config. :)</p>
 /forrest:views>]]></source>
 </section>
 <section>
-  <title>ViewHelper </title>
-  <p>
+  <title>viewHelper</title>
+  <p>viewHelper class/implementation - a class/implementation which will
+access the presentation model and transform its models. In other words
+it is a presentation producing factory.
+</p>
+<note>The <![CDATA[<forrest:contract name="nav-main"/>]]> expects a certain model
+(now produced by leather-dev - tab2menu.xsl) to transform it. In the
+future this dependency will be on a businessHelper implementation that
+has to be defined in the view. For now it depends on leather-dev. I
+guess leather-dev is still not dead till the businessHelper plugin comes
+(which will implement the businessHelper of leather-dev). ;-)</note>
+<p>
+Each forrest:css will be transformed into a <![CDATA[<link rel="stylesheet" type="text/css" url="{$root}skin/{url}">]]> tag (in html
+output [only format that has an implementation]). 
+This tags are designed to help <strong>web-designers</strong> to freely implemend their own css-implementations for a view.
+</p>
+<p>
 Each forrest:hook will be transformed into a <![CDATA[<div/>]]> tag (in html
 output [only format that has an implementation]). 
-This tags are designed to help web-designers to freely move
+This tags are designed to help <strong>web-designers</strong> to freely move
 around and group contracts into design container.
 </p>
 <p>Each forrest:contract will dispatch a xml file (ViewHelper) that contains
-xsl:stylesheets for the different output formats, a contract can
-implement. For html, the only format that we have implemented so far, we
+xsl:stylesheets (for now, but other implementations to transform the presentation
+ model are/should be possible) for the different output formats of a contract.
+  For html, the only format that we have implemented so far, we
 have three different kind of templates:</p><p>
 <![CDATA[<xsl:templates name="{contract/@name}-css/>]]><br/>
 Here the contract specific css will be stored.
@@ -80,11 +98,27 @@ Everything that belongs into the body.
   </section>
   <section>
     <title>BusinessHelper </title>
+    <p><strong>businessHelper class/implementation </strong>- a class/implementation which will
+access businessServices to produce models for the presentation model. In
+other word it is a data producing factory.
+</p>
+<note>Right now we are using the default forrest businessHelper (defined
+by the skin you are using). There are contracts that depend on a
+businessHelper implementation of leather-dev (tab2menu.xsl, site2xhtml.xsl,...). 
+We will create a businessHelper plugin to overcome this problem.</note>
   <p>Right now it is implemented for the forrest way of producing the models
 for the view but we will create an independent BusinessHelper to
-access all BusinessServices you may have in your application. </p><p>
-With other words the BusinessHelper we are using right now are in the core. 
-We need to extract them into BusinessHelper classes.</p>
+access all BusinessServices you may have in your application. </p>
+    </section>
+    <section>
+      <title>links</title>
+      <note>There are/were lots of mails on the dev-list. Please, search the list</note>
+      <p>Background mailings around the views concept</p>
+      <ul>
+        <li><a href="ext:mailings/dev/pInfra">[RT] plugin infrastructure</a> </li>
+        <li><a href="ext:mailings/dev/ftLeather">[RT] Forrest templates for second generation skining - towards Corium</a> </li>
+      </ul>
+
     </section>
   </body>
 </document>
