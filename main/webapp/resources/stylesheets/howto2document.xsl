@@ -27,7 +27,7 @@
     <document>
       <xsl:copy-of select="header"/>
       <body>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="*[not(name()='header')]"/>
       </body>
     </document>
   </xsl:template>
