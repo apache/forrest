@@ -1,21 +1,34 @@
 AddDefaultCharset UTF-8
 
-RedirectMatch ^/mail-archives(.*) http://forrest.apache.org/0.6/mail-lists$1
-RedirectMatch ^/mail-lists(.*) http://forrest.apache.org/0.6/mail-lists$1
+# Some old documents were completely removed.
+RedirectMatch ^/mail-archives(.*) http://forrest.apache.org/mail-lists$1
 
-# some special docs need to point to the development version
+# Some special docs need to point to the development version.
 RedirectMatch ^/proposal-asf-(.*) http://forrest.apache.org/0.7/proposal-asf-$1
 RedirectMatch ^/live-sites(.*) http://forrest.apache.org/0.7/live-sites$1
 RedirectMatch ^/forrest-issues(.*) http://forrest.apache.org/0.7/forrest-issues$1
+RedirectMatch ^/guidelines(.*) http://forrest.apache.org/0.7/guidelines$1
+RedirectMatch ^/who(.*) http://forrest.apache.org/0.7/who$1
 RedirectMatch ^/docs\.(.*) http://forrest.apache.org/0.7/docs.$1
 RedirectMatch ^/changes(.*) http://forrest.apache.org/0.7/docs/changes$1
 RedirectMatch ^/todo(.*) http://forrest.apache.org/0.7/docs/todo$1
 
 Redirect /docs/plugins http://forrest.apache.org/0.7/docs/plugins
 
-# change these to 0.7 after release
+# Change these to 0.7 after its release.
 Redirect /docs http://forrest.apache.org/0.6/docs
 Redirect /howto http://forrest.apache.org/0.6/howto
+
+# Other top-level documents go to the current release.
+# We need specific matches because mirrors.cgi and mirrors.html
+# need to remain at the top-level.
+RedirectMatch ^/build(.*) http://forrest.apache.org/0.6/build$1
+RedirectMatch ^/contrib(.*) http://forrest.apache.org/0.6/contrib$1
+RedirectMatch ^/faq(.*) http://forrest.apache.org/0.6/faq$1
+RedirectMatch ^/flyer(.*) http://forrest.apache.org/0.6/flyer$1
+RedirectMatch ^/index(.*) http://forrest.apache.org/0.6/index$1
+RedirectMatch ^/license(.*) http://forrest.apache.org/0.6/license$1
+RedirectMatch ^/mail-lists(.*) http://forrest.apache.org/0.6/mail-lists$1
 
 # handle all DTDs etc.
 <Files ~ "\.(dtd|mod)$">
