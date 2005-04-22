@@ -63,10 +63,10 @@
               required Forrest plugin as described below.
               
               A further possibility is that Forrest may be unable to connect to 
-              the plugin distribution server, again the solution is to maually 
+              the plugin distribution server. Again the solution is to manually 
               install the plugin.
               
-              To manually install a plugin download the plugin zip file from
+              To manually install a plugin, download the plugin zip file from
               <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
               extract it into to <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></fail>
             <echo>Plugin "<xsl:value-of select="$plugin-name" />" correctly installed.</echo>
