@@ -47,11 +47,20 @@
 
 		<map:pipeline>
 			<map:match pattern="**.xml">
-				<map:generate type="request"/>
-				<map:transform src="resources/stylesheets/repoRequest2doc.xsl">
-					<map:parameter name="documentID" value="{1}"/>
-				</map:transform>
-				<map:serialize type="xml" />
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}{0}">
+            <!-- Do nothing as we want to use the local file -->
+            <!-- FIXME: this requires that this plgin goes last in the processing chain
+                 this goeas against the recomendations for building Forrest Plugins -->
+          </map:when>
+          <map:otherwise>
+            <map:generate type="request"/>
+            <map:transform src="resources/stylesheets/repoRequest2doc.xsl">
+              <map:parameter name="documentID" value="{1}"/>
+            </map:transform>
+            <map:serialize type="xml" />
+          </map:otherwise>
+        </map:select>
 			</map:match>
 		</map:pipeline>
 	</map:pipelines>
