@@ -24,6 +24,11 @@
 			</map:generator>
 			<map:generator name="request" src="org.apache.cocoon.generation.RequestGenerator"/>
 		</map:generators>
+    
+    <map:selectors>
+      <map:selector logger="sitemap.selector.request-parameter" name="request-parameter" src="org.apache.cocoon.selection.RequestParameterSelector"/>
+    </map:selectors>
+    
 	</map:components>
 
 	<map:pipelines>
@@ -48,35 +53,26 @@
 
 		<map:pipeline>
 			<map:match pattern="*.xml">
-        <map:select type="exists">
-          <map:when test="{project:content.xdocs}{0}">
-            <!-- Do nothing as we want to use the local file -->
-            <!-- FIXME: this requires that this plgin goes last in the processing chain
-                 this goeas against the recomendations for building Forrest Plugins -->
-          </map:when>
-          <map:otherwise>
+        <map:select type="request-parameter">
+          <map:parameter name="parameter-name" value="repositoryType"/>
+          <map:when test="daisy-wiki">
             <map:generate type="request"/>
             <map:transform src="resources/stylesheets/repoRequest2doc.xsl"/>
             <map:serialize type="xml" />
-          </map:otherwise>
+          </map:when>
         </map:select>
 			</map:match>
 		</map:pipeline>
 
 		<map:pipeline>
 			<map:match pattern="**/*.xml">
-        <map:select type="exists">
-          <map:when test="{project:content.xdocs}{0}">
-            <!-- Do nothing as we want to use the local file -->
-            <!-- FIXME: this requires that this plgin goes last in the processing chain
-                 this goeas against the recomendations for building Forrest Plugins.
-                 Can we select on the request parameters instead? -->
-          </map:when>
-          <map:otherwise>
+        <map:select type="request-parameter">
+          <map:parameter name="parameter-name" value="repositoryType"/>
+          <map:when test="daisy-wiki">
             <map:generate type="request"/>
             <map:transform src="resources/stylesheets/repoRequest2doc.xsl"/>
             <map:serialize type="xml" />
-          </map:otherwise>
+          </map:when>
         </map:select>
 			</map:match>
 		</map:pipeline>
