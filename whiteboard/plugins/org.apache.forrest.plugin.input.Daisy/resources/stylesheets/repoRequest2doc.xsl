@@ -22,17 +22,16 @@
   <xsl:param name="documentID"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='documentID']/req:value"/></xsl:param>
   <xsl:param name="repositoryURL"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryURL']/req:value"/></xsl:param>
 	<xsl:param name="repositoryPort"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryPort']/req:value"/></xsl:param>
-	<xsl:param name="repositoryType"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryType']/req:value"/></xsl:param>
-  <xsl:param name="repositoryCollection"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryCollection']/req:value"/></xsl:param>
+	<xsl:param name="repositoryCollection"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryCollection']/req:value"/></xsl:param>
 	
   <xsl:template match="req:request">      
 			<xsl:choose>
 				<xsl:when test="$repositoryPort">
-					<xsl:variable name="document">cocoon:/do/getRepositoryData/<xsl:value-of select="$repositoryType"/>/<xsl:value-of select="$repositoryURL"/>/port/<xsl:value-of select="$repositoryPort"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
+					<xsl:variable name="document">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/port/<xsl:value-of select="$repositoryPort"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
 		      <xsl:apply-templates select="document($document)"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:variable name="document">cocoon:/do/getRepositoryData/<xsl:value-of select="$repositoryType"/>/<xsl:value-of select="$repositoryURL"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
+					<xsl:variable name="document">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
 		      <xsl:apply-templates select="document($document)"/>
 				</xsl:otherwise>
 		</xsl:choose>
@@ -46,7 +45,7 @@
           <xsl:when test="starts-with(@href, 'http://') or starts-with(@href, 'mailto:')">
             <xsl:value-of select="@href"/>
           </xsl:when>
-          <xsl:otherwise><xsl:value-of select="@href"/>?repositoryURL=<xsl:value-of select="$repositoryURL"/>&amp;repositoryCollection=<xsl:value-of select="$repositoryCollection"/>&amp;repositoryPort=<xsl:value-of select="$repositoryPort"/>&amp;repositoryType=<xsl:value-of select="$repositoryType"/>&amp;documentID=<xsl:value-of select="@href"/></xsl:otherwise>
+          <xsl:otherwise><xsl:value-of select="@href"/>?repositoryURL=<xsl:value-of select="$repositoryURL"/>&amp;repositoryCollection=<xsl:value-of select="$repositoryCollection"/>&amp;repositoryPort=<xsl:value-of select="$repositoryPort"/>&amp;documentID=<xsl:value-of select="@href"/></xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
       <xsl:apply-templates select="node()[not(@href)]"/>
