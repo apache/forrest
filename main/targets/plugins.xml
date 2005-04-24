@@ -68,6 +68,25 @@
             <include name="${plugin.name}.zip"/>
           </fileset>
        </delete>
+
+       <!-- add to the entity catalog -->
+       <copy file="${forrest.core}/var/initial_catalog.xcat"
+         tofile="${forrest.plugins-dir}/catalog.xcat"
+         overwrite="false"/>
+       <if>
+         <available file="${forrest.plugins-dir}/${plugin.name}/resources/schema/catalog.xcat"/>
+         <then>
+           <xslt in="${forrest.plugins-dir}/catalog.xcat"
+               out="${forrest.plugins-dir}/catalog.xcat.new"
+               style="${forrest.core}/var/catalogMountSnippet.xsl"
+               force="true">
+             <param name="plugin-catalog-path"
+               expression="${forrest.plugins-dir}/${plugin.name}/resources/schema/catalog.xcat"/>
+           </xslt>
+           <move file="${forrest.plugins-dir}/catalog.xcat.new" 
+             tofile="${forrest.plugins-dir}/catalog.xcat"/>
+         </then>
+       </if>
      </then>
      <else>
        <echo>
@@ -242,7 +261,7 @@ and ensure that the locations indicated by that value are accessible
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${project.temp-dir}/internal.xmap"
       overwrite="true"/>
-    
+
       <for list="${project.required.plugins}" param="name">
       <sequential>
         <echo>Installing plugin: @{name}</echo>

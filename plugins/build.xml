@@ -120,9 +120,29 @@
         <exclude name="build/**"/>
       </fileset>
     </copy>
-  	<copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
-  	      file="${build.dir}/${plugin-name}.jar"
-  	      failonerror="false"/>
+    <copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
+       file="${build.dir}/${plugin-name}.jar"
+       failonerror="false"/>
+
+    <!-- add to the entity catalog -->
+    <copy file="${forrest.core}/var/initial_catalog.xcat"
+       tofile="${plugins.localDeploy-dir}/catalog.xcat"
+       overwrite="false"/>
+    <if>
+      <available file="${plugins.localDeploy-dir}/${plugin-name}/resources/schema/catalog.xcat"/>
+      <then>
+        <xslt in="${plugins.localDeploy-dir}/catalog.xcat"
+            out="${plugins.localDeploy-dir}/catalog.xcat.new"
+            style="${forrest.core}/var/catalogMountSnippet.xsl"
+            force="true">
+          <param name="plugin-catalog-path"
+            expression="${plugin-name}/resources/schema/catalog.xcat"/>
+        </xslt>
+        <move file="${plugins.localDeploy-dir}/catalog.xcat.new"
+          tofile="${plugins.localDeploy-dir}/catalog.xcat"/>
+      </then>
+    </if>
+
     <antcall target="build"/>
   </target>
   
