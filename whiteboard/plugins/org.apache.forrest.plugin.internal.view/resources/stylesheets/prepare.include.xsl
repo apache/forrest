@@ -24,10 +24,12 @@
     <xsl:namespace-alias 
          stylesheet-prefix="alias" result-prefix="xsl"/>
 
+	<xsl:param name="format"/>
+
   <xsl:template match="/">
     <alias:stylesheet version="1.0">
-	    <xsl:for-each select="forrest:view//forrest:contract">
-	      <xi:include href="cocoon://get.contract.{@name}.xhtml"/>
+	    <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
+	      <xi:include href="cocoon://get.contract.{$format}.{@name}"/>
 	    </xsl:for-each>
     </alias:stylesheet>
   </xsl:template>

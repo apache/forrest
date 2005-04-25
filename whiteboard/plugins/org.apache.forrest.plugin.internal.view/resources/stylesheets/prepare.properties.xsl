@@ -22,11 +22,12 @@
   xmlns:xi="http://www.w3.org/2001/XInclude"
   >
 
+	<xsl:param name="format"/>
 
   <xsl:template match="/">
     <forrest:properties >
-	    <xsl:for-each select="forrest:view//forrest:contract">
-	      <xi:include href="cocoon://get.contract-property.{@name}"/>
+	    <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
+	      <xi:include href="cocoon://get.contract-property.{$format}.{@name}"/>
 	    </xsl:for-each>
     </forrest:properties>
   </xsl:template>

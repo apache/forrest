@@ -20,12 +20,14 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   
+  <xsl:param name="format"/>
+  
   <xsl:template match="/">
     <xsl:apply-templates select="//forrest:template"/>
   </xsl:template>
 
-	<xsl:template match="forrest:template">
-    <forrest:property body="{@body}" 
+	<xsl:template match="forrest:template[@format=$format]">
+    <forrest:property body="{@body}" format="{@format}"
       head="{@head}"
       css="{@css}"
       name="{@name}"/>

@@ -101,10 +101,10 @@
     Get the xsl:templates of the requested contract.
   -->
    <map:match pattern="get.contract.*.*">
-     <map:generate src="cocoon:/resolve.contract.{1}"/>
+     <map:generate src="cocoon:/resolve.contract.{2}"/>
      <map:transform src="resources/stylesheets/contract.xsl">
       <!--Which output format?-->
-      <map:parameter name="format" value="{2}"/>
+      <map:parameter name="format" value="{1}"/>
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
@@ -112,9 +112,12 @@
   Get the forrest:properties of the requested contract. 
   This will determine which templates (css, head, body) we have to call later on
   -->
-   <map:match pattern="get.contract-property.*">
-     <map:generate src="cocoon:/resolve.contract.{1}"/>
-     <map:transform src="resources/stylesheets/contract.property.xsl"/>
+   <map:match pattern="get.contract-property.*.*">
+     <map:generate src="cocoon:/resolve.contract.{2}"/>
+     <map:transform src="resources/stylesheets/contract.property.xsl">
+      <!--Which output format?-->
+      <map:parameter name="format" value="{1}"/>
+     </map:transform>
      <map:serialize type="xml"/>
    </map:match>
   <!--

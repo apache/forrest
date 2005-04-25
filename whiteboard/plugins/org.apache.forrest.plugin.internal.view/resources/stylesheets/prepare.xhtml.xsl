@@ -26,7 +26,7 @@
             <alias:import href="cocoon://dotdots"/>
             <alias:import href="cocoon://pathutils"/>
             <alias:import href="cocoon://renderlogo"/>
-            <alias:include href="cocoon://prepare.include.{$request}"/>
+            <alias:include href="cocoon://prepare.include.xhtml.{$request}"/>
             <alias:param name="path"/>
             <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
             <alias:template name="getHead">
@@ -36,7 +36,7 @@
             </alias:template>
             <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
             <alias:template name="getBody">
-                <xsl:apply-templates select="/*/forrest:view"/>
+                <xsl:apply-templates select="/*/forrest:views/forrest:view"/>
             </alias:template>
         	<!--default entry point into the presentation model 'site'-->
             <alias:template match="site">
@@ -45,7 +45,7 @@
                         <alias:call-template name="getHead"/>
                     	<!--Test whether there is an own css implemention requested by the view-->
                     	<!--*No* forrest:css found in the view-->
-                        <xsl:if test="not(/*/forrest:view/forrest:css)">
+                        <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
                             <link rel="stylesheet" type="text/css">
                                 <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
                             </link>
@@ -57,8 +57,8 @@
                             </link>
                         </xsl:if>
                     	<!-- forrest:css *found* in the view-->
-                        <xsl:if test="/*/forrest:view/forrest:css">
-                            <xsl:apply-templates select="/*/forrest:view/forrest:css"/>
+                        <xsl:if test="/*/forrest:views/forrest:view/forrest:css">
+                            <xsl:apply-templates select="/*/forrest:views/forrest:view/forrest:css"/>
                         </xsl:if>
                         <title>
                             <alias:value-of select="div[@id='content']/h1"/>

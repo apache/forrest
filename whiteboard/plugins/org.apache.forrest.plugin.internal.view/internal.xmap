@@ -120,10 +120,12 @@
   Aggregate the contract-templates requested by the view with xinclude.
   The result is a stylesheet with all needed xsl:templates.
   -->
-    <map:match pattern="prepare.include.**">
-      <map:generate src="cocoon:/prepare.view.{1}"/>
+    <map:match pattern="prepare.include.*.**">
+      <map:generate src="cocoon:/prepare.view.{2}"/>
       <map:transform src="resources/stylesheets/prepare.include.xsl">
 	      <map:parameter name="config-file" value="{project:skinconf}"/>
+        <!--Which output format?-->
+        <map:parameter name="format" value="{1}"/>
       </map:transform>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
@@ -133,9 +135,12 @@
       Aggregate the forrest:properties requested by the *.fv.
       The result is an aggregation of properties which defines the templates to be call.
       -->
-    <map:match pattern="prepare.properties.**">
-      <map:generate src="cocoon:/prepare.view.{1}"/>
-      <map:transform src="resources/stylesheets/prepare.properties.xsl"/>
+    <map:match pattern="prepare.properties.*.**">
+      <map:generate src="cocoon:/prepare.view.{2}"/>
+      <map:transform src="resources/stylesheets/prepare.properties.xsl">
+        <!--Which output format?-->
+        <map:parameter name="format" value="{1}"/>
+      </map:transform>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
     </map:match>
@@ -143,13 +148,13 @@
       Aggregate all contracts-templates requested by the view.
       Create a xsl that can be used for the last step of the transformation of the view.
   		--> 
-    <map:match pattern="prepare.xhtml.**">
+    <map:match pattern="prepare.*.**">
       <map:aggregate element="forrest:filter">
-        <map:part src="cocoon://prepare.view.{1}" />
-        <map:part src="cocoon://prepare.properties.{1}" /> 
+        <map:part src="cocoon://prepare.view.{2}" />
+        <map:part src="cocoon://prepare.properties.{1}.{2}" /> 
       </map:aggregate>
-      <map:transform src="resources/stylesheets/prepare.xhtml.xsl" >
-        <map:parameter name="request" value="{1}"/>
+      <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
+        <map:parameter name="request" value="{2}"/>
       </map:transform>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
@@ -160,7 +165,7 @@
     <map:match pattern="skin/contracts-**.css">
       <map:aggregate element="forrest:css">
         <map:part src="cocoon://skinconf.xml" />
-        <map:part src="cocoon://prepare.properties.{1}" /> 
+        <map:part src="cocoon://prepare.properties.xhtml.{1}" /> 
       </map:aggregate>
       <map:transform src="resources/stylesheets/prepare.css.xsl" />
       <map:transform type="xinclude"/> 
