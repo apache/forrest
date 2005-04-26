@@ -283,10 +283,28 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 document.write("Last Published: " + document.lastModified);
 //  -->]]></script></div>
 
-          <div class="copyright">
- Copyright &#169;<xsl:text> </xsl:text><xsl:value-of select="$config/year"/><xsl:text> </xsl:text><xsl:value-of select="$config/vendor"/>
-          </div>
-          
+      <div class="copyright">
+        Copyright &#169;
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$config/year"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$config/copyright-link">
+            <a>
+              <xsl:attribute name="href">
+                <xsl:value-of select="$config/copyright-link"/>
+              </xsl:attribute>
+            <xsl:value-of select="$config/vendor"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$config/year"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$config/vendor"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+
           <xsl:if test="$filename = 'index.html'">
             <div id="logos" >
             <xsl:if test="$config/disable-compliance-links/@align">
