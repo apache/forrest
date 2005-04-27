@@ -25,12 +25,15 @@
          stylesheet-prefix="alias" result-prefix="xsl"/>
 
 	<xsl:param name="format"/>
-
+  <xsl:key name="contract-name" match="forrest:contract" use="@name" />
+  
   <xsl:template match="/">
     <alias:stylesheet version="1.0">
-	    <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
-	      <xi:include href="cocoon://get.contract.{$format}.{@name}"/>
-	    </xsl:for-each>
+      <xsl:for-each 
+        select="forrest:views/forrest:view[@type=$format]//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
+        <xsl:sort select="@name" />
+        <xi:include href="cocoon://get.contract.{$format}.{@name}"/>
+      </xsl:for-each>
     </alias:stylesheet>
   </xsl:template>
 
