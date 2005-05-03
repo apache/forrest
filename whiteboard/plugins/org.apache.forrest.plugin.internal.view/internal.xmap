@@ -116,6 +116,7 @@
       <map:transform type="xinclude"/>
      	<map:serialize type="xml"/>
     </map:match>
+    
 <!--
   Aggregate the contract-templates requested by the view with xinclude.
   The result is a stylesheet with all needed xsl:templates.
@@ -144,11 +145,16 @@
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
     </map:match>
+    <!--FIXME
+      This has to be an interface and not an implementation
+      
+      An interface will only generate cocoon protocol matches and serialize them!
+      An implementation will deliver the actual match (including transformation)-->
     <!--
       Aggregate all contracts-templates requested by the view.
       Create a xsl that can be used for the last step of the transformation of the view.
   		--> 
-    <map:match pattern="prepare.*.**">
+    <map:match pattern="getStylesheet.*.**">
       <map:aggregate element="forrest:filter">
         <map:part src="cocoon://prepare.view.{2}" />
         <map:part src="cocoon://prepare.properties.{1}.{2}" /> 
@@ -175,7 +181,7 @@
   
   <!--
   2. businessHelper
-  This is the content producing factory.
+  This is the model producing factory.
   -->
 <!--NOTE: 
   The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).

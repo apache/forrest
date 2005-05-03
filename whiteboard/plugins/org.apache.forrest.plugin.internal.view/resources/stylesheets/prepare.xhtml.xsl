@@ -40,7 +40,7 @@
             </alias:template>
         	<!--default entry point into the presentation model 'site'-->
             <alias:template match="site">
-                <xhtml>
+                <html>
                     <head>
                         <alias:call-template name="getHead"/>
                     	<!--Test whether there is an own css implemention requested by the view-->
@@ -67,7 +67,7 @@
                     <body onload="init()">
                         <alias:call-template name="getBody"/>
                     </body>
-                </xhtml>
+                </html>
             </alias:template>
         </alias:stylesheet>
     </xsl:template>

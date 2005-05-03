@@ -82,8 +82,8 @@
     Resolving factory
     Project implementation of templates have priority before default ones.
     If no implementation can be found we use the noFt (~ - no forrest:template) implementation.
-    -->
-  <map:match pattern="resolve.contract.*">
+    {1} name of the contract-->
+  <map:match pattern="resolve.contract.xhtml.*">
     <map:select type="exists">
       <map:when test="{project:resources}/templates/{1}.ft">
         <map:generate src="{project:resources}/templates/{1}.ft"/>
@@ -97,34 +97,51 @@
     </map:select>
     <map:serialize type="xml"/>
   </map:match>
-  <!--
+  
+   <!-- <!-#-INTERFACE
     Get the xsl:templates of the requested contract.
-  -->
+  {1} format to deliver
+  {2} contract name-#->
    <map:match pattern="get.contract.*.*">
      <map:generate src="cocoon:/resolve.contract.{2}"/>
      <map:transform src="resources/stylesheets/contract.xsl">
-      <!--Which output format?-->
+      <!-#-Which output format?-#->
       <map:parameter name="format" value="{1}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>-->
+  
+  <!--IMPLEMENTATION
+    Get the xsl:templates of the requested contract.
+  {html} format to deliver
+  {2} contract name-->
+   <map:match pattern="get.contract.*.xhtml">
+     <map:generate src="cocoon:/resolve.contract.xhtml.{1}"/>
+     <map:transform src="resources/stylesheets/contract.xsl">
+      <!--Which output format?-->
+      <map:parameter name="format" value="xhtml"/>
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
   <!--
   Get the forrest:properties of the requested contract. 
   This will determine which templates (css, head, body) we have to call later on
+  {1} format to deliver
+  {2} contract name
   -->
-   <map:match pattern="get.contract-property.*.*">
-     <map:generate src="cocoon:/resolve.contract.{2}"/>
+   <map:match pattern="get.contract-property.*.xhtml">
+     <map:generate src="cocoon:/resolve.contract.xhtml.{1}"/>
      <map:transform src="resources/stylesheets/contract.property.xsl">
       <!--Which output format?-->
-      <map:parameter name="format" value="{1}"/>
+      <map:parameter name="format" value="xhtml"/>
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
   <!--
-  Get the css of the requested contract. 
+  Get the css of the requested contract {1}. 
   -->
    <map:match pattern="get.contract-css.*">
-     <map:generate src="cocoon:/resolve.contract.{1}"/>
+     <map:generate src="cocoon:/resolve.contract.xhtml.{1}"/>
      <map:transform src="resources/stylesheets/contract.css.xsl"/>
      <map:serialize type="txt"/>
    </map:match>
@@ -216,14 +233,14 @@ transform this dir-list of the project and add more information
   -->   
     <map:match pattern="*.html">
       <map:generate src="cocoon://{1}.page"/>
-      <map:transform src="cocoon://prepare.xhtml.{1}">
+      <map:transform src="cocoon://getStylesheet.xhtml.{1}">
         <map:parameter name="path" value="{0}"/>
       </map:transform>
      	<map:serialize type="xhtml"/>
     </map:match>
     <map:match pattern="**/*.html">
       <map:generate src="cocoon://{1}/{2}.page"/>
-      <map:transform src="cocoon://prepare.xhtml.{1}/{2}">
+      <map:transform src="cocoon://getStylesheet.xhtml.{1}/{2}">
         <map:parameter name="path" value="{0}"/>
       </map:transform>
      	<map:serialize type="xhtml"/>

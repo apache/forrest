@@ -22,11 +22,15 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0" 
   >
   
+  <xsl:key name="contract-name" match="forrest:properties" use="@name" />
+  
   <xsl:template match="/">
-		  <xsl:for-each select="//forrest:properties/*[@css='true']">
-	      <xi:include href="cocoon://get.contract-css.{@name}" />
-		  </xsl:for-each>
-      <xsl:apply-templates select="//extra-css"/>
+    <xsl:for-each 
+      select="//forrest:properties/*[count(. | key('contract-name', @name)[1]) = 1 and @css='true']">
+      <xsl:sort select="@name" />
+      <xi:include href="cocoon://get.contract-css.{@name}" />
+    </xsl:for-each>
+    <xsl:apply-templates select="//extra-css"/>
   </xsl:template>
   <xsl:template match="extra-css">
     <xsl:value-of select="."/>

@@ -27,7 +27,7 @@
   <xsl:template match="/">
     <forrest:properties >
 	    <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
-	      <xi:include href="cocoon://get.contract-property.{$format}.{@name}"/>
+	      <xi:include href="cocoon://get.contract-property.{@name}.{$format}"/>
 	    </xsl:for-each>
     </forrest:properties>
   </xsl:template>

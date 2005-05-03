@@ -29,10 +29,13 @@
   
   <xsl:template match="/">
     <alias:stylesheet version="1.0">
+      <!--NOTE:
+        contracts are allowed only to be importet once! Thx to
+        http://www.jenitennison.com/xslt/grouping/muenchian.html-->
       <xsl:for-each 
         select="forrest:views/forrest:view[@type=$format]//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
         <xsl:sort select="@name" />
-        <xi:include href="cocoon://get.contract.{$format}.{@name}"/>
+        <xi:include href="cocoon://get.contract.{@name}.{$format}"/>
       </xsl:for-each>
     </alias:stylesheet>
   </xsl:template>
