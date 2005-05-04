@@ -201,8 +201,25 @@
       <question> How can I change the default file name that Forrest will look for when I request a
         URL like <code>http://myserver</code> or <code>http://myserver/mydir/</code>? </question>
       <answer>
-        <p>Change the setting <![CDATA[<default-filename>index.html</default-filename>]]> in
-          cli.xconf.</p>
+        <p>To change the default file name from 'index.html' (default) to 'overview.htm' you need to
+          make the following changes:</p>
+        <ol>
+          <li> Find and open the file 'cli.xconf' in your forrest program directory tree </li>
+          <li> Replace 'index.html' in <![CDATA[<default-filename>index.html</default-filename>]]>
+            with 'overview.html'. </li>
+          <li> Save the changes. </li>
+          <li> Open the file 'sitemap.xmap' in your project's 'src'-directory. </li>
+          <li> Add the following code just before the end of the pipelines-element:<![CDATA[
+        <map:pipeline>
+          <map:match type="regexp" pattern="^.+/$">
+>>           <map:redirect-to uri="overview.html"/>
+>>       </map:match>
+        </map:pipeline>
+          ]]></li>
+          <li> Save the changes. </li>
+        </ol>
+        <note>Please note that parts of these changes are global and will effect all your Forrests
+          run from this program directory. </note>
       </answer>
     </faq>
     <faq id="defaultStartPage">
