@@ -389,13 +389,20 @@
       <xsl:value-of select="14-number($level)"/>
     </xsl:variable>
 
+    <xsl:variable name="heading-color" select="//skinconfig/colors/color[@name='subheading']/@value"/>
+    <xsl:variable name="heading-type" select="//skinconfig/headings/@type"/>
+
     <fo:block
       font-family="serif"
       font-size="{$size}pt"
       font-weight="bold"
       space-before="12pt"
       space-after="4pt">
-
+      <xsl:if test="$heading-type = 'boxed'">
+        <xsl:attribute name="background-color">
+          <xsl:value-of select="$heading-color"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:attribute name="id">
         <xsl:choose>
           <xsl:when test="normalize-space(@id)!=''">
@@ -421,6 +428,14 @@
 
       <xsl:value-of select="title"/>
     </fo:block>
+    <xsl:if test="$heading-type = 'underlined'">
+      <!-- The non-breaking space in this block is required, otherwise
+      the block won't be rendered at all. --> 
+      <fo:block
+        font-family="serif"
+        font-size="{10 div (number($level) +1 )}pt"
+        background-color="{$heading-color}">&#160;</fo:block>
+    </xsl:if>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
@@ -485,10 +500,11 @@
   </xsl:template>
 
   <xsl:template match="source">
+    <xsl:variable name="color" select="//skinconfig/colors/color[@name='code']/@value"/>
     <fo:block
       font-family="monospace"
       font-size="10pt"
-      background-color="#f0f0f0"
+      background-color="{$color}"
       white-space-collapse="false"
       linefeed-treatment="preserve"
       white-space-treatment="preserve"
@@ -604,6 +620,7 @@
   </xsl:template>
 
   <xsl:template match="warning">
+    <xsl:variable name="color" select="//skinconfig/colors/color[@name='warning']/@value"/>
     <fo:block
       margin-left="0.25in"
       margin-right="0.25in"
@@ -614,8 +631,8 @@
       border-before-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#D00000"
-      background-color="#D00000"
+      border-color="{$color}"
+      background-color="{$color}"
       color="#ffffff">
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
@@ -630,7 +647,7 @@
       border-after-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#D00000"
+      border-color="{$color}"
       background-color="#fff0f0"
       padding-start="3pt"
       padding-end="3pt"
@@ -642,6 +659,7 @@
   </xsl:template>
 
   <xsl:template match="note">
+    <xsl:variable name="color" select="//skinconfig/colors/color[@name='note']/@value"/>
     <fo:block
       margin-left="0.25in"
       margin-right="0.25in"
@@ -653,8 +671,8 @@
       border-before-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#A0C9F5"
-      background-color="#A0C9F5">
+      border-color="{$color}"
+      background-color="{$color}">
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
         <!-- insert i18n stuff here -->
@@ -670,7 +688,7 @@
       border-after-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#A0C9F5"
+      border-color="{$color}"
       background-color="#F0F0FF"
       padding-start="3pt"
       padding-end="3pt"
@@ -681,6 +699,7 @@
   </xsl:template>
 
   <xsl:template match="fixme">
+    <xsl:variable name="color" select="//skinconfig/colors/color[@name='fixme']/@value"/>
     <fo:block
       margin-left="0.25in"
       margin-right="0.25in"
@@ -692,8 +711,8 @@
       border-before-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#C6C650"
-      background-color="#C6C650">
+      border-color="{$color}"
+      background-color="{$color}">
       <!-- insert i18n stuff here -->
       FIXME (<xsl:value-of select="@author"/>): <xsl:value-of select="title"/>
     </fo:block>
@@ -706,7 +725,7 @@
       border-after-style="solid"
       border-start-style="solid"
       border-end-style="solid"
-      border-color="#C6C650"
+      border-color="{$color}"
       background-color="#FFF0F0"
       padding-start="3pt"
       padding-end="3pt"
@@ -716,15 +735,16 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="link">
+  <xsl:template match="link|fork|jump|a">
+    <xsl:variable name="color" select="//skinconfig/colors/color[@name = 'body']/@link"/>
     <xsl:choose>
       <xsl:when test="starts-with(@href, '#')">
-        <fo:basic-link color="blue" text-decoration="underline" internal-destination="{substring(@href,2)}">
+        <fo:basic-link color="{$color}" text-decoration="underline" internal-destination="{substring(@href,2)}">
           <xsl:apply-templates/>
         </fo:basic-link>
       </xsl:when>
       <xsl:otherwise>
-        <fo:basic-link color="blue" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
+        <fo:basic-link color="{$color}" text-decoration="underline" external-destination="{@href}"><xsl:apply-templates/></fo:basic-link>
         <xsl:if test="$show-external-urls = 'true' and @href != string(.)">
           (<xsl:value-of select="@href"/>)
         </xsl:if>
@@ -833,12 +853,16 @@
   </xsl:template>
 
   <xsl:template match="th">
+      <xsl:variable name="border-color" select="//skinconfig/colors/color[@name = 'table']/@value"/>
+      <xsl:variable name="background-color" select="$border-color"/>
       <fo:table-cell
         padding-before="4pt"
         padding-after="4pt"
         padding-start="4pt"
         padding-end="4pt"
-        background-color="#A0C9F5">
+        color="#FFFFFF"
+        background-color="{$background-color}"
+        border="1pt solid {$border-color}">
         <xsl:attribute name="number-columns-spanned">
           <xsl:value-of select="@colspan"/>
         </xsl:attribute>
@@ -853,12 +877,15 @@
   </xsl:template>
 
   <xsl:template match="td">
+    <xsl:variable name="border-color" select="//skinconfig/colors/color[@name = 'table']/@value"/>
+    <xsl:variable name="background-color" select="//skinconfig/colors/color[@name = 'table-cell']/@value"/>
     <fo:table-cell
       padding-before="4pt"
       padding-after="4pt"
       padding-start="4pt"
       padding-end="4pt"
-      border="1pt solid #A0C9F5">
+      background-color="{$background-color}"
+      border="1pt solid {$border-color}">
       <xsl:attribute name="number-columns-spanned">
           <xsl:value-of select="@colspan"/>
         </xsl:attribute>
