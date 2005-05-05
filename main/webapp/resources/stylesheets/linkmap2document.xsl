@@ -39,15 +39,17 @@
 
      <xsl:template match="*">
         <xsl:if test="@label">
-          <li><a href="{@href}"><xsl:value-of select="@label" /></a>&#160;&#160;&#160;_________________________&#160;&#160;<em><xsl:value-of select="name(.)" /></em></li>
+          <ul>
+            <li><a href="{@href}"><xsl:value-of select="@label" /></a>&#160;&#160;&#160;_________________________&#160;&#160;<em><xsl:value-of select="name(.)" /></em></li>
+
+            <xsl:if test="*">
+              <ul> 
+                <xsl:apply-templates/>        
+              </ul>
+            </xsl:if>
+          </ul>
         </xsl:if>
-        
-        <xsl:if test="*">
-         <ul> 
-	     <xsl:apply-templates/>        
-         </ul>
-        </xsl:if>
-        
+            
      </xsl:template>
 
 </xsl:stylesheet>
