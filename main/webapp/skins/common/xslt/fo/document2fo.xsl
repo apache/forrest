@@ -735,7 +735,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="link|fork|jump|a">
+  <xsl:template match="link|fork|jump">
     <xsl:variable name="color" select="//skinconfig/colors/color[@name = 'body']/@link"/>
     <xsl:choose>
       <xsl:when test="starts-with(@href, '#')">
