@@ -197,7 +197,21 @@
     <td>
       <xsl:apply-templates select="text:p" mode="in-element"/>
     </td>
+  </xsl:template> 
+  <!-- cells spanning several columns look like this: 
+  <table:table-cell table:number-columns-spanned="2" -->  
+  <xsl:template match="table:table-cell[@table:number-columns-spanned]">
+
+	<td>
+      <xsl:attribute name="colspan">
+		<xsl:value-of select="@table:number-columns-spanned" />
+	  </xsl:attribute>
+	  <xsl:apply-templates select="table:sub-table" />
+	  <xsl:apply-templates select="text:p" mode="in-element"/>
+    </td>
   </xsl:template>
+
+
   
   <!--+
       | Links
