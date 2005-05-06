@@ -345,7 +345,7 @@
 </li>
 <li>
 <a href="#defaultFileName">2.8.  How can I change the default file name that Forrest will look for when I request a
-        URL like http://myserver or http://myserver/mydir/? </a>
+        URL like http://myserver or http://myserver/mydir/ ? </a>
 </li>
 <li>
 <a href="#defaultStartPage">2.9.  How can I use a start-up-page other than index.html? </a>
@@ -661,42 +661,34 @@
 </div>
 <a name="N10144"></a><a name="defaultFileName"></a>
 <h4 class="faq">2.8.  How can I change the default file name that Forrest will look for when I request a
-        URL like http://myserver or http://myserver/mydir/? </h4>
+        URL like http://myserver or http://myserver/mydir/ ? </h4>
 <div align="right">
 <a href="#defaultFileName-menu">^</a>
 </div>
 <div style="margin-left: 15px">
-<p>To change the default file name from 'index.html' (default) to 'overview.htm' you need to
+<p>To change the default file name from 'index.html' (default) to 'overview.html' you need to
           make the following changes:</p>
 <ol>
           
-<li> Find and open the file 'cli.xconf' in your forrest program directory tree </li>
+<li> Create a '<a href="#cli-xconf">cli.xconf</a>' file for your project </li>
           
-<li> Replace 'index.html' in &lt;default-filename&gt;index.html&lt;/default-filename&gt;
+<li> Edit that file to replace 'index.html' in
+            &lt;default-filename&gt;index.html&lt;/default-filename&gt;
             with 'overview.html'. </li>
           
-<li> Save the changes. </li>
-          
-<li> Open the file 'sitemap.xmap' in your project's 'src'-directory. </li>
+<li> Edit your project's <a href="../docs/project-sitemap.html">sitemap.xmap</a> file. </li>
           
 <li> Add the following code just before the end of the pipelines-element:
         &lt;map:pipeline&gt;
           &lt;map:match type="regexp" pattern="^.+/$"&gt;
-&gt;&gt;           &lt;map:redirect-to uri="overview.html"/&gt;
-&gt;&gt;       &lt;/map:match&gt;
+             &lt;map:redirect-to uri="overview.html"/&gt;
+         &lt;/map:match&gt;
         &lt;/map:pipeline&gt;
           </li>
-          
-<li> Save the changes. </li>
         
 </ol>
-<div class="frame note">
-<div class="label">Note</div>
-<div class="content">Please note that parts of these changes are global and will effect all your Forrests
-          run from this program directory. </div>
 </div>
-</div>
-<a name="N1016A"></a><a name="defaultStartPage"></a>
+<a name="N10169"></a><a name="defaultStartPage"></a>
 <h4 class="faq">2.9.  How can I use a start-up-page other than index.html? </h4>
 <div align="right">
 <a href="#defaultStartPage-menu">^</a>
@@ -704,13 +696,13 @@
 <div style="margin-left: 15px">
 <p>Forrest by default assumes that the first page (home page) of your site is named
           index.html. Which is good because most web servers are configured to look for index.html
-          when you call a url like http://myserver.</p>
+          when you call a url like http://myserver</p>
 <p>Like most settings in Forrest however this can be changed, for example when you want your
           start-up-page for a CD-based documentation project to be named 'start.html'. </p>
 <p>To change the start page of a site:</p>
 <ol>
           
-<li>Open the file 'sitemap.xmap' in your project's src-directory.</li>
+<li>Edit your project's <a href="../docs/project-sitemap.html">sitemap.xmap</a> file.</li>
           
 <li>Add the following code just before the end of the pipelines-element:
         &lt;map:pipeline&gt;
@@ -722,11 +714,11 @@
           
 <li>Name the uri-attribute whatever you'd like your start page to be.</li>
           
-<li>Don't forget to create that page and refer to it in your site.xml!</li>
+<li>Don't forget to create that page and refer to it in your site.xml</li>
         
 </ol>
 </div>
-<a name="N10187"></a><a name="label-entity"></a>
+<a name="N1018A"></a><a name="label-entity"></a>
 <h4 class="faq">2.10.  How to use special characters in the labels of the site.xml file? </h4>
 <div align="right">
 <a href="#label-entity-menu">^</a>
@@ -738,7 +730,7 @@
 </p>
 <p> See the <a href="http://www.w3.org/TR/xhtml-modularization/dtd_module_defs.html#a_xhtml_character_entities">XHTML Character Entities</a> and see more discussion at <a href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</a>. </p>
 </div>
-<a name="N101A0"></a><a name="encoding"></a>
+<a name="N101A3"></a><a name="encoding"></a>
 <h4 class="faq">2.11. Does Forrest handle accents for non-English languages?</h4>
 <div align="right">
 <a href="#encoding-menu">^</a>
@@ -785,7 +777,7 @@
             Schlabach</a> and <a href="http://www.alanwood.net/unicode/">Alan Wood's Unicode
             resources</a>. </p>
 </div>
-<a name="N101F2"></a><a name="cleanSite"></a>
+<a name="N101F5"></a><a name="cleanSite"></a>
 <h4 class="faq">2.12.  How can I make Forrest properly clean up the build/site-directory? </h4>
 <div align="right">
 <a href="#cleanSite-menu">^</a>
@@ -797,9 +789,9 @@
 <p>To ensure a clean build call 'forrest clean site' instead of just 'forrest' so Forrest
           will delete all build directories before creating new content. </p>
 </div>
-<a name="N101FD"></a><a name="technical"></a>
+<a name="N10200"></a><a name="technical"></a>
 <h3 class="underlined_5">3. Technical</h3>
-<a name="N10201"></a><a name="proxy_config"></a>
+<a name="N10204"></a><a name="proxy_config"></a>
 <h4 class="faq">3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</h4>
 <div align="right">
@@ -810,7 +802,7 @@
             <span class="codefrag">proxy.host</span> and <span class="codefrag">proxy.port</span> accordingly (the port will default
           to port 80).</p>
 </div>
-<a name="N10212"></a><a name="CVS_revison_tags"></a>
+<a name="N10215"></a><a name="CVS_revison_tags"></a>
 <h4 class="faq">3.2. How can I generate html-pages to show the revision tag of cvs?</h4>
 <div align="right">
 <a href="#CVS_revison_tags-menu">^</a>
@@ -823,7 +815,7 @@
 <p>This technique could also be used for a modification date with $Date: 2004/01/15 08:52:47
           $</p>
 </div>
-<a name="N10224"></a><a name="cli-xconf"></a>
+<a name="N10227"></a><a name="cli-xconf"></a>
 <h4 class="faq">3.3.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
         other additional ones. </h4>
 <div align="right">
@@ -861,7 +853,7 @@
           <strong>foo/**</strong> to match that. </div>
 </div>
 </div>
-<a name="N10261"></a><a name="ignoring_javadocs"></a>
+<a name="N10264"></a><a name="ignoring_javadocs"></a>
 <h4 class="faq">3.4.  How do I stop Forrest breaking on links to external files that may not exist, like
         javadocs? </h4>
 <div align="right">
@@ -872,7 +864,7 @@
             <span class="codefrag">cli.xconf</span>
           </a> Cocoon config file, and defining patterns for URLs to exclude. </p>
 </div>
-<a name="N10270"></a><a name="claimed_patterns"></a>
+<a name="N10273"></a><a name="claimed_patterns"></a>
 <h4 class="faq">3.5. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#claimed_patterns-menu">^</a>
@@ -888,7 +880,7 @@
           with this issue (<a href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N10282"></a><a name="build_msg_a"></a>
+<a name="N10285"></a><a name="build_msg_a"></a>
 <h4 class="faq">3.6. What do the symbols and numbers mean when Forrest lists each document that it has
         built? </h4>
 <div align="right">
@@ -908,7 +900,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           number of links that were gathered from that page. Column 3 is the time taken. Column 4 is
           the page size. </p>
 </div>
-<a name="N1028E"></a><a name="headless_operation"></a>
+<a name="N10291"></a><a name="headless_operation"></a>
 <h4 class="faq">3.7.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
         server using ':0.0' as the value of the DISPLAY variable. </h4>
 <div align="right">
@@ -921,7 +913,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <pre class="code">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</pre>
 <p> See also <a href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</a>. </p>
 </div>
-<a name="N102AA"></a><a name="catalog"></a>
+<a name="N102AD"></a><a name="catalog"></a>
 <h4 class="faq">3.8.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </h4>
 <div align="right">
@@ -931,7 +923,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> Notes are provided for various tools at <a href="../docs/catalog.html">Using Catalog Entity
             Resolver for local DTDs</a>. </p>
 </div>
-<a name="N102B6"></a><a name="skin"></a>
+<a name="N102B9"></a><a name="skin"></a>
 <h4 class="faq">3.9.  How to make the site look better and change its skin? </h4>
 <div align="right">
 <a href="#skin-menu">^</a>
@@ -943,7 +935,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> See notes about <a href="../docs/your-project.html#skins">configuration</a> of the skins.
           Some projects may have special needs and can define their <a href="../docs/your-project.html#new_skin">own skin</a>. </p>
 </div>
-<a name="N102CD"></a><a name="xsp"></a>
+<a name="N102D0"></a><a name="xsp"></a>
 <h4 class="faq">3.10. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -991,7 +983,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 </ol>
 <p>See also the <a href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</a> Wiki page.</p>
 </div>
-<a name="N10308"></a><a name="breadcrumbs"></a>
+<a name="N1030B"></a><a name="breadcrumbs"></a>
 <h4 class="faq">3.11. How do breadcrumbs work? Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -1010,7 +1002,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           are viewing the site locally, there is no domain and so there will be no extra
           breadcrumbs, only the ones that are specified in <span class="codefrag">skinconf.xml</span>. </p>
 </div>
-<a name="N1031D"></a><a name="run_port"></a>
+<a name="N10320"></a><a name="run_port"></a>
 <h4 class="faq">3.12. How do I make forrest run listen on a different port?</h4>
 <div align="right">
 <a href="#run_port-menu">^</a>
@@ -1026,9 +1018,9 @@ X [0]                       brokenlink.html     BROKEN: reason
         
 </p>
 </div>
-<a name="N10331"></a><a name="old_faqs"></a>
+<a name="N10334"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">4. Older version: 0.6</h3>
-<a name="N10335"></a><a name="old_claimed_patterns"></a>
+<a name="N10338"></a><a name="old_claimed_patterns"></a>
 <h4 class="faq">4.1. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#old_claimed_patterns-menu">^</a>
@@ -1044,9 +1036,9 @@ X [0]                       brokenlink.html     BROKEN: reason
           with this issue (<a href="http://issues.cocoondev.org/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N10347"></a><a name="general"></a>
+<a name="N1034A"></a><a name="general"></a>
 <h3 class="underlined_5">5. General</h3>
-<a name="N1034B"></a><a name="generating_menus"></a>
+<a name="N1034E"></a><a name="generating_menus"></a>
 <h4 class="faq">5.1. What is the relationship between site.xml and book.xml? </h4>
 <div align="right">
 <a href="#generating_menus-menu">^</a>
@@ -1060,7 +1052,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <span class="codefrag">site.xml</span>-generated menus aren't appropriate. See <a href="../docs/linking.html">Menus and
             Linking</a>. </p>
 </div>
-<a name="N10366"></a><a name="docbook"></a>
+<a name="N10369"></a><a name="docbook"></a>
 <h4 class="faq">5.2.  How do I use DocBook as the xml documentation format? </h4>
 <div align="right">
 <a href="#docbook-menu">^</a>
@@ -1101,7 +1093,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           different DTDs, then see <a href="../docs/your-project.html#new_dtd">Using Forrest</a> for
           configuration guidance. </p>
 </div>
-<a name="N1038A"></a><a name="version"></a>
+<a name="N1038D"></a><a name="version"></a>
 <h4 class="faq">5.3.  How to report which version of Forrest is being used and the properties that are
         set? </h4>
 <div align="right">
@@ -1114,7 +1106,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           watch the build messages. Doing <span class="codefrag">'forrest -v'</span> will provide verbose build
           messages. </p>
 </div>
-<a name="N1039E"></a><a name="logs"></a>
+<a name="N103A1"></a><a name="logs"></a>
 <h4 class="faq">5.4.  Where are the log files to find more infomation about errors? </h4>
 <div align="right">
 <a href="#logs-menu">^</a>
@@ -1133,7 +1125,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages to the standard
           output. </p>
 </div>
-<a name="N103C2"></a><a name="how_can_I_help"></a>
+<a name="N103C5"></a><a name="how_can_I_help"></a>
 <h4 class="faq">5.5.  How to help? </h4>
 <div align="right">
 <a href="#how_can_I_help-menu">^</a>
@@ -1144,7 +1136,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           particularly from newcomers&mdash;often, close proximity blinds software developers to
           faults that are obvious to everyone else. Don't be shy! </p>
 </div>
-<a name="N103CE"></a><a name="patch"></a>
+<a name="N103D1"></a><a name="patch"></a>
 <h4 class="faq">5.6.  How to contribute a patch? </h4>
 <div align="right">
 <a href="#patch-menu">^</a>

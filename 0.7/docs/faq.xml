@@ -127,35 +127,32 @@
     &lt;map:redirect-to uri="manual/Introduction.html"/&gt;
   &lt;/map:match&gt;</source>
       </section><section id="defaultFileName"><title>2.8.  How can I change the default file name that Forrest will look for when I request a
-        URL like <code>http://myserver</code> or <code>http://myserver/mydir/</code>? </title>
-        <p>To change the default file name from 'index.html' (default) to 'overview.htm' you need to
+        URL like <code>http://myserver</code> or <code>http://myserver/mydir/</code> ? </title>
+        <p>To change the default file name from 'index.html' (default) to 'overview.html' you need to
           make the following changes:</p>
         <ol>
-          <li> Find and open the file 'cli.xconf' in your forrest program directory tree </li>
-          <li> Replace 'index.html' in &lt;default-filename&gt;index.html&lt;/default-filename&gt;
+          <li> Create a '<link href="#cli-xconf">cli.xconf</link>' file for your project </li>
+          <li> Edit that file to replace 'index.html' in
+            &lt;default-filename&gt;index.html&lt;/default-filename&gt;
             with 'overview.html'. </li>
-          <li> Save the changes. </li>
-          <li> Open the file 'sitemap.xmap' in your project's 'src'-directory. </li>
+          <li> Edit your project's <link href="site:project-sitemap">sitemap.xmap</link> file. </li>
           <li> Add the following code just before the end of the pipelines-element:
         &lt;map:pipeline&gt;
           &lt;map:match type="regexp" pattern="^.+/$"&gt;
-&gt;&gt;           &lt;map:redirect-to uri="overview.html"/&gt;
-&gt;&gt;       &lt;/map:match&gt;
+             &lt;map:redirect-to uri="overview.html"/&gt;
+         &lt;/map:match&gt;
         &lt;/map:pipeline&gt;
           </li>
-          <li> Save the changes. </li>
         </ol>
-        <note>Please note that parts of these changes are global and will effect all your Forrests
-          run from this program directory. </note>
       </section><section id="defaultStartPage"><title>2.9.  How can I use a start-up-page other than index.html? </title>
         <p>Forrest by default assumes that the first page (home page) of your site is named
           index.html. Which is good because most web servers are configured to look for index.html
-          when you call a url like http://myserver.</p>
+          when you call a url like http://myserver</p>
         <p>Like most settings in Forrest however this can be changed, for example when you want your
           start-up-page for a CD-based documentation project to be named 'start.html'. </p>
         <p>To change the start page of a site:</p>
         <ol>
-          <li>Open the file 'sitemap.xmap' in your project's src-directory.</li>
+          <li>Edit your project's <link href="site:project-sitemap">sitemap.xmap</link> file.</li>
           <li>Add the following code just before the end of the pipelines-element:
         &lt;map:pipeline&gt;
           &lt;map:match pattern=""&gt;
@@ -164,7 +161,7 @@
         &lt;/map:pipeline&gt;
           </li>
           <li>Name the uri-attribute whatever you'd like your start page to be.</li>
-          <li>Don't forget to create that page and refer to it in your site.xml!</li>
+          <li>Don't forget to create that page and refer to it in your site.xml</li>
         </ol>
       </section><section id="label-entity"><title>2.10.  How to use special characters in the labels of the site.xml file? </title>
         <p> Use the numeric values for character entities. For example, rather than using
