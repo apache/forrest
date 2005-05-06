@@ -120,6 +120,7 @@
         <exclude name="build/**"/>
       </fileset>
     </copy>
+
     <copy toFile="${plugins.localDeploy-dir}/lib/${plugin-name}.jar"
        file="${build.dir}/${plugin-name}.jar"
        failonerror="false"/>
@@ -159,7 +160,52 @@
     <svncommit
         target="${deploy.svn.svn-dir}"
         repositoryurl="${deploy.svn.url}"
-        commitmessage="Deployment plugins descriptor file (plugins.xml) (deployed by 'deploy-plugins.xml' target of plugin build script)"
+        commitmessage="Deployment plugins descriptor file plugins.xml (deployed by 'deploy-plugins.xml' target of plugin build script)"
+    />
+  </target>
+	
+  <target name="deploy-docs"
+		  description="Deploy the plugin documentation"
+		  depends="clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
+    <echo>Deploying plugin documentation to the web server</echo>
+
+  	<!-- Copy plugin docs into sandbox -->
+  	<copy todir="${deploy.docs.sandbox.dir}/${plugin-name}" 
+  	      overwrite="true">
+  		<fileset dir="${build.docs}"/>
+  	</copy>
+    <!-- Fix inconsitent line endings -->
+    <fixcrlf srcdir="${deploy.docs.sandbox.dir}/${plugin-name}" eol="unix">
+      <include name="**/*.html"/>
+      <include name="**/*.xml"/>
+      <include name="**/*.css"/>
+    </fixcrlf>
+  	
+    <!-- add new files to SVN -->
+    <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
+    <exec executable="svn" dir="${deploy.docs.svn-dir}" output="${deploy.docs.svn-filestoadd}" failonerror="true">
+      <arg value="status"/>
+    </exec>
+    <!-- the status columns make all lines invalid filenames
+      we remove the status columns for the new files so the only valid
+      filenames in the list are new files
+    -->
+    <replace file="${deploy.docs.svn-filestoadd}" token="?      " value=""/>
+    <replace file="${deploy.docs.svn-filestoadd}" token="M      " value=""/>
+    <!-- don't fail on error here because
+      1) the targets file might have 'bad' filenames but we should continue
+      2) we would've already failed if the svn executable wasn't found
+    -->
+    <exec executable="svn" dir="${deploy.docs.svn-dir}">
+      <arg value="add"/>
+      <arg value="--targets"/>
+      <arg value="${deploy.docs.svn-filestoadd}"/>
+    </exec>
+    <!-- check in to SVN -->
+  	<svncommit
+        target="${deploy.docs.svn-dir}"
+        repositoryurl="${deploy.plugins.svn.url}"
+        commitmessage="Deployment of docs for ${plugin-name} plugin (deployed by 'deploy-docs' target of plugin build script)"
     />
   </target>
           
