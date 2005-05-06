@@ -298,6 +298,11 @@ $Revision: 1.13 $
             <map:read src="{project:content.xdocs}{1}my-images/{2}.{3}" mime-type="image/{3}" />
          </map:match>
 
+        <map:match type="regexp" pattern="^(.*?)([^/]*).svg$">
+          <map:generate src="{project:content.xdocs}/{1}{2}.svg"/>
+          <map:serialize type="xml"/>
+        </map:match>
+
          <map:match pattern="images/**.png">
             <map:select type="exists">
                <map:when test="{project:content.xdocs}/images/{1}.svg">
