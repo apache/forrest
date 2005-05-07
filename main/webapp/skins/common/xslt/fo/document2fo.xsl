@@ -355,6 +355,7 @@
       width="7.5in"
       font-family="serif"
       font-style="italic">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -370,6 +371,7 @@
       border-bottom="0.25pt solid"
       padding-before="6pt"
       padding-after="6pt">
+      <xsl:call-template name="insertPageBreaks"/>
       <!-- insert i18n stuff here -->
       NOTICE: <xsl:apply-templates/>
     </fo:block>
@@ -398,6 +400,9 @@
       font-weight="bold"
       space-before="12pt"
       space-after="4pt">
+      
+      <xsl:call-template name="insertPageBreaks"/>
+    
       <xsl:if test="$heading-type = 'boxed'">
         <xsl:attribute name="background-color">
           <xsl:value-of select="$heading-color"/>
@@ -439,15 +444,6 @@
     <xsl:apply-templates>
       <xsl:with-param name="level" select="number($level)+1"/>
     </xsl:apply-templates>
-
-    <!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
-    <xsl:if test="@class='pageBreakBefore' and $page-break-top-sections and preceding-sibling::node()">
-        <fo:block break-before="page"/>
-    </xsl:if>
-    <!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
-    <xsl:if test="@class='pageBreakAfter' and $page-break-top-sections and following-sibling::node()">
-        <fo:block break-after="page"/>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="title">
@@ -461,6 +457,7 @@
     <fo:block
       font-weight="bold"
       font-size="{$size}pt">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -470,6 +467,7 @@
       space-before="20pt"
       font-weight="bold"
       font-size="9pt">
+      <xsl:call-template name="insertPageBreaks"/>
       <!-- insert i18n stuff here -->
       by
       <xsl:for-each select="person">
@@ -485,6 +483,7 @@
         <fo:block
           space-after="4pt"
           font-family="serif">
+          <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
         </fo:block>
       </xsl:when>
@@ -493,6 +492,7 @@
           space-before="4pt"
           space-after="4pt"
           font-family="serif">
+          <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
         </fo:block>
       </xsl:otherwise>
@@ -510,6 +510,7 @@
       white-space-treatment="preserve"
       wrap-option="wrap"
       text-align="start">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -634,6 +635,7 @@
       border-color="{$color}"
       background-color="{$color}"
       color="#ffffff">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
         <xsl:otherwise>Warning: </xsl:otherwise>
@@ -673,6 +675,7 @@
       border-end-style="solid"
       border-color="{$color}"
       background-color="{$color}">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:choose>
         <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
         <!-- insert i18n stuff here -->
@@ -713,6 +716,7 @@
       border-end-style="solid"
       border-color="{$color}"
       background-color="{$color}">
+      <xsl:call-template name="insertPageBreaks"/>
       <!-- insert i18n stuff here -->
       FIXME (<xsl:value-of select="@author"/>): <xsl:value-of select="title"/>
     </fo:block>
@@ -754,6 +758,7 @@
 
   <xsl:template match="figure|img">
     <fo:block text-align="center">
+      <xsl:call-template name="insertPageBreaks"/>
       <xsl:if test="normalize-space(@id)!=''">
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
       </xsl:if>
@@ -913,6 +918,7 @@
     <xsl:if test="$toc-max-depth > 0">
       <fo:block font-family="serif" font-size="14pt" font-weight="bold"
       space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
+      <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
       </fo:block>
@@ -977,8 +983,20 @@
      space-after="4pt"
      background-color="#f0f0f0"
      font-family="monospace">
+     <xsl:call-template name="insertPageBreaks"/>
      <xsl:apply-templates/>
    </fo:block>
+ </xsl:template>
+ 
+ <xsl:template name="insertPageBreaks">
+      <!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
+      <xsl:if test="contains(@class, 'pageBreakBefore') and preceding-sibling::node()">
+          <xsl:attribute name="break-before">page</xsl:attribute>
+      </xsl:if>
+      <!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
+      <xsl:if test="contains(@class, 'pageBreakAfter') and following-sibling::node()">
+          <xsl:attribute name="break-after">page</xsl:attribute>
+      </xsl:if>
  </xsl:template>
 
 <!-- ====================================================================== -->
