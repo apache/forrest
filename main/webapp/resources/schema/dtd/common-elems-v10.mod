@@ -38,6 +38,7 @@ FIXME:
 CHANGE HISTORY:
 [Version 1.0]
   20020611 Initial version. (SN)
+  20050509 Added importance attribute. (JJP)
 
 ==================================================================== -->
 
@@ -47,6 +48,7 @@ CHANGE HISTORY:
 
 <!ENTITY % types "add|remove|update|fix">
 <!ENTITY % contexts "build|docs|code|admin|design">
+<!ENTITY % importances "high|medium|low">
 
 <!-- =============================================================== -->
 <!-- Common elements -->
@@ -60,6 +62,7 @@ CHANGE HISTORY:
           dev  IDREF  #REQUIRED
           type (%types;)  #IMPLIED
           context (%contexts;) #IMPLIED
+          importance (%importances;) "medium"
           due-to CDATA #IMPLIED
           due-to-email CDATA #IMPLIED
           fixes-bug CDATA #IMPLIED>
