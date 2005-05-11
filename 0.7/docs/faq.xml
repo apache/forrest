@@ -73,8 +73,10 @@
         <p>Page breaks do not make a great deal of sense in HTML documents intended for display on a
           screen. However, PDF documents are intended for printing and therefore page breaks can be
           important.</p>
-        <p>To insert a page break in a PDF document simply add <em>pageBreakBefore</em> or
-            <em>pageBreakAfter</em> to the class attribute of a section.</p>
+        <p>To insert a page break in a PDF document simply add <em>pageBreakBefore</em> and/or
+            <em>pageBreakAfter</em> to the class attribute of the block you wish to force a
+            page break on. All the common block grouping elements support this class, for example, 
+            note, warning, p and so on.</p>
         <p>If you want these classes to be processed in your HTML documents as well you should add
           the following to the <code>extra-css</code> element in your projects
           <code>skinconf.xml</code>
@@ -136,13 +138,13 @@
             &lt;default-filename&gt;index.html&lt;/default-filename&gt;
             with 'overview.html'. </li>
           <li> Edit your project's <link href="site:project-sitemap">sitemap.xmap</link> file. </li>
-          <li> Add the following code just before the end of the pipelines-element:
-        &lt;map:pipeline&gt;
-          &lt;map:match type="regexp" pattern="^.+/$"&gt;
-             &lt;map:redirect-to uri="overview.html"/&gt;
-         &lt;/map:match&gt;
-        &lt;/map:pipeline&gt;
-          </li>
+          <li> Add the following code just before the end of the pipelines-element:<source xml:space="preserve">
+  &lt;map:pipeline&gt;
+    &lt;map:match type="regexp" pattern="^.+/$"&gt;
+       &lt;map:redirect-to uri="overview.html"/&gt;
+    &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+          </source></li>
         </ol>
       </section><section id="defaultStartPage"><title>2.9.  How can I use a start-up-page other than index.html? </title>
         <p>Forrest by default assumes that the first page (home page) of your site is named
@@ -153,13 +155,13 @@
         <p>To change the start page of a site:</p>
         <ol>
           <li>Edit your project's <link href="site:project-sitemap">sitemap.xmap</link> file.</li>
-          <li>Add the following code just before the end of the pipelines-element:
-        &lt;map:pipeline&gt;
-          &lt;map:match pattern=""&gt;
-            &lt;map:redirect-to uri="start.html" /&gt;
-           &lt;/map:match&gt;
-        &lt;/map:pipeline&gt;
-          </li>
+          <li>Add the following code just before the end of the pipelines-element:<source xml:space="preserve">
+  &lt;map:pipeline&gt;
+    &lt;map:match pattern=""&gt;
+      &lt;map:redirect-to uri="start.html" /&gt;
+    &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+          </source></li>
           <li>Name the uri-attribute whatever you'd like your start page to be.</li>
           <li>Don't forget to create that page and refer to it in your site.xml</li>
         </ol>
