@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "document-v13.dtd">
 <document><header><title>History of Changes</title></header><body><p><link href="changes.rss"><img alt="RSS" src="../images/rss.png"/></link></p>
     <section id="version_0.7-dev"><title>Version 0.7-dev (not yet released)</title><ul><li><icon alt="add" src="../images/add.jpg"/>
+      Added importance attribute to actions on status.dtd
+      (JJP) Fixes <link href="http://issues.cocoondev.org/browse/FOR-487">FOR-487</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
 <!-- Please keep this action at the top -->
         Added document to facilitate
         <link href="site:upgrading_07">upgrading to v0.7</link>
@@ -31,7 +33,7 @@
       (TS)</li><li><icon alt="add" src="../images/add.jpg"/>
       Added 
       <link href="site:howto/custom-html-source">How to customize
-      processing of html source</link>.
+      processing of html source</link>
       (DC) Thanks to Ferdinand Soethe. Fixes <link href="http://issues.cocoondev.org/browse/FOR-446">FOR-446</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added rudimentary Message of the Day facility.
         See skinconf.xml from a "seed" site for configuration details.
@@ -98,6 +100,10 @@
       (JJP)</li><li><icon alt="remove" src="../images/remove.jpg"/> 
       Merge xdocs and raw files in the same directory src/document/content/xdocs
       (JJP)</li><li><icon alt="update" src="../images/update.jpg"/>
+        Added ability to add page breaks to output. See <link href="site:faq/pageBreaks">Page Breaks FAQ</link>
+      (RDG)</li><li><icon alt="update" src="../images/update.jpg"/>
+        Allow the serving of raw SVG files to allow clients to render locally.
+      (RDG) Fixes <link href="http://issues.cocoondev.org/browse/FOR-185">FOR-185</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Plugin docs are now upated automatically when a plugin is deployed.
         Alternatively you can update the docs independantly by running the 
         deploy-docs target in the plugin directory.
@@ -175,11 +181,7 @@
         Fixed some public identifiers (for DTD-v2.0) which were still pointing
         to old versions of DTDs.
       (DC)</li></ul></section>
-    <section id="version_0.6"><title>Version 0.6 (2004-10-15)</title><ul><li><icon alt="add" src="../images/add.jpg"/>
-      <!-- Please keep this action at the top -->
-        Added document to facilitate
-        <link href="site:upgrading_06">upgrading to v0.6</link>
-      (DC)</li><li><icon alt="add" src="../images/add.jpg"/> 
+    <section id="version_0.6"><title>Version 0.6 (2004-10-15)</title><ul><li><icon alt="add" src="../images/add.jpg"/> 
         getMenu.js - fixes a path issue and the double click behaviour of pelt.
       (TS)</li><li><icon alt="add" src="../images/add.jpg"/> 
         Explained the usage of the extra-css element in skinconf.xml of the fresh site.
@@ -475,7 +477,7 @@
        Removed xml2xhtml.xsl import in profile2page.xsl that was not used (file not present).
       (RDG) Thanks to <link href="mailto:cheche@apache.org">Juan Jose Pablos</link>. Fixes <link href="http://issues.cocoondev.org/browse/FOR-59">FOR-59</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         New build target to build a webapp that can be distributed.
-        "war" target depends on "webapp" which will produce an deployable webapp,
+        "war" target depends on "code" which will produce an deployable webapp,
         "run" target depends on "webapp-local" which leaves many files in the project
         directory to ease editing (e.g. src, resources and skins)
       (RDG) Fixes <link href="http://issues.cocoondev.org/browse/FOR-98">FOR-98</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
@@ -643,7 +645,7 @@
         site2book.xsl handle all menu-item and menu attributes
       (JJP) Fixes <link href="http://issues.cocoondev.org/browse/FOR-69">FOR-69</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Proper table around 'graphic' in simplified docbook.
-      (DPB) Thanks to Rob Exley. Fixes <link href="http://issues.cocoondev.org/browse/FOR-115">FOR-115</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+      (DB) Thanks to Rob Exley. Fixes <link href="http://issues.cocoondev.org/browse/FOR-115">FOR-115</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Replace document() function to get skinconf values and use "//skinconfig".
         Fix order so it can validate skinconf.
         Use <code>&lt;search/&gt;</code> instead of
@@ -911,6 +913,9 @@
       (JT)</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Get the Wiki syntax support working again.
       (JT)</li><li><icon alt="fix" src="../images/fix.jpg"/>
+        Fixed rendering of images in PDF for images not located in the
+        resources/images dir.
+      (SN)</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Add automatic (doctype-triggered) handling of todo and changes XML
         files, regardless of file name or location in the directory tree.  The
         root changes.html and todo.html files are still generated from
@@ -942,10 +947,7 @@
       (JT)</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Fix a bug with forrest.antproxy.xml introduced in 0.4, which caused
         unresolved '${project.home}' variables.
-      (JT)</li><li><icon alt="hack" src="../images/hack.jpg"/>
-        Fixed rendering of images in PDF for images not located in the
-        resources/images dir.
-      (SN)</li></ul></section>
+      (JT)</li></ul></section>
     <section id="version_0.4"><title>Version 0.4 (2003-02-12)</title><ul><li><icon alt="add" src="../images/add.jpg"/>
         Added a minimal template skin.
       (JT)</li><li><icon alt="update" src="../images/update.jpg"/>
@@ -996,7 +998,7 @@
         Added &lt;acronym&gt; tag.
       (JT)</li><li><icon alt="add" src="../images/add.jpg"/>
         Added a means to override the check for existing content: 
-        <source><![CDATA[forrest seed -Dskip.contentcheck=yes]]></source>
+        <code>forrest seed -Dskip.contentcheck=yes</code>
         Thanks to Tom Klaasen.
       (JT)</li><li><icon alt="add" src="../images/add.jpg"/>
         Added the possibility to use svg files instead png images.
@@ -1035,17 +1037,13 @@
         Forrest-specific.
       (JT)</li><li><icon alt="update" src="../images/update.jpg"/>
         Lots of FAQ improvements:
-        <ul>
-          <li>
-            Improved URI space by using <code>@id</code> attributes as the
+        -Improved URI space by using <code>@id</code> attributes as the
             #fragment-identifier for &lt;faq&gt; and &lt;part&gt; elements.
-          </li>
-          <li>Number FAQ entries and categories</li>
-          <li>Added back-links from FAQ entries to the menu</li>
-          <li>Process tags in &lt;question&gt; in menu entries</li>
-          <li>Indent FAQ text</li>
-          <li>FAQ sample added to seed project</li>
-        </ul>
+        -Number FAQ entries and categories
+        -Added back-links from FAQ entries to the menu
+        -Process tags in &lt;question&gt; in menu entries
+        -Indent FAQ text
+        -FAQ sample added to seed project
         Thanks to Joerg Pietschmann and Ralf Hauser for the suggestions.
       (JT)</li><li><icon alt="update" src="../images/update.jpg"/>
         On avalon-tigris skin it's now possible to add a mysite.css file
