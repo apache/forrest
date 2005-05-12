@@ -31,7 +31,7 @@
             Plugins are a way of extending Forrest to
             satisfy site-specific needs. For more
             information on plugins see
-            <a href="usingPlugins.html">
+            <a href="http://forrest.apache.org/docs/plugins/usingPlugins.html">
               Extending Forrest with Plugins
             </a>
             .
