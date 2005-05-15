@@ -775,38 +775,186 @@ No navigation is provided and no rendering of graphics is attempted.
       <xsl:with-param name="level" select="$level"/>
     </xsl:apply-templates>
 
-    <xsl:text>[Link to: </xsl:text>
-    <xsl:value-of select="@href"/>
-    <xsl:text>]</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat('[Link: ', @href, ']')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="icon">
+  <xsl:template match="link|jump|fork|a" mode="in-list">
     <xsl:param name="level" select="'1'"/>
+    <xsl:apply-templates mode="in-list">
+      <xsl:with-param name="level" select="$level"/>
+    </xsl:apply-templates>
+
     <xsl:text> </xsl:text>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat('[Link: ', @href, ']')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="icon|img">
+    <xsl:param name="level" select="'1'"/>
+
+    <xsl:variable name="type">
+      <xsl:choose>
+        <xsl:when test="local-name()='icon'">Icon: </xsl:when>
+        <xsl:when test="local-name()='img'">Image: </xsl:when>
+        <xsl:otherwise>Unknown: </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="value">
+      <xsl:choose>
+        <xsl:when test="local-name()='icon'">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:when test="local-name()='img'">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="local-name()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:text> </xsl:text>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat('[', $type, $value, ']')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+
+  </xsl:template>
+
+  <xsl:template match="icon|img" mode="in-list">
+    <xsl:param name="level" select="'1'"/>
+
+    <xsl:variable name="type">
+      <xsl:choose>
+        <xsl:when test="local-name()='icon'">Icon: </xsl:when>
+        <xsl:when test="local-name()='img'">Image: </xsl:when>
+        <xsl:otherwise>Unknown: </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="value">
+      <xsl:choose>
+        <xsl:when test="local-name()='icon'">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:when test="local-name()='img'">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="local-name()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:text> </xsl:text>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat('[', $type, $value, ']')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+
+  </xsl:template>
+
+  <xsl:template match="acronym">
+    <xsl:param name="level" select="'1'"/>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="$level"/>
     </xsl:apply-templates>
 
-    <xsl:value-of select="concat('[Icon: ', @alt, '] ')"/>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat(' (',@title,')')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="img">
+  <xsl:template match="acronym" mode="in-list">
     <xsl:param name="level" select="'1'"/>
-    <xsl:text> </xsl:text>
     <xsl:apply-templates>
       <xsl:with-param name="level" select="$level"/>
     </xsl:apply-templates>
 
-    <xsl:text>[Image: </xsl:text>
-    <xsl:value-of select="@alt"/>
-    <xsl:text>]</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="acronym/@title">
-    <xsl:param name="level" select="'1'"/>
-    <xsl:attribute name="title">
-      <xsl:value-of select="normalize-space(.)"/>
-    </xsl:attribute>
+    <xsl:call-template name="wrap-text">
+      <xsl:with-param name="text" select="concat(' (',@title,')')"/>
+      <xsl:with-param name="indent" select="$level * $indent-per-level"/>
+      <xsl:with-param name="width"
+          select="$document-width - ($level * $indent-per-level)"/>
+    </xsl:call-template>
+      
+    <xsl:choose>
+      <xsl:when test="starts-with(following-sibling::text(),' ')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:when test="starts-with(following-sibling::text(),'&#xa;')">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="version">
