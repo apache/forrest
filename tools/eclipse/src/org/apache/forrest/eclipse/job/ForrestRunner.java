@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2004 The Apache Software Foundation or its licensors,
+ * Copyright 1999-2005 The Apache Software Foundation or its licensors,
  * as applicable.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
+import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
 import org.apache.log4j.Logger;
 import org.burrokeet.servletEngine.Jetty;
@@ -33,107 +34,146 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.webbrowser.WebBrowser;
 import org.eclipse.webbrowser.WebBrowserEditorInput;
 
-
 /**
  * Run a version of Forrest
  */
-public class ForrestRunner extends ForrestJob implements IJavaLaunchConfigurationConstants{
-	/**
-	 * Logger for this class
-	 */
-	protected static final Logger logger = Logger.getLogger(ForrestRunner.class);
-	
-	private static final int EXCEPTION_UNABLE_TO_START = 2010;
-	
-	private String workingDir;
+public class ForrestRunner extends ForrestJob implements
+        IJavaLaunchConfigurationConstants {
+    /**
+     * Logger for this class
+     */
+    protected static final Logger logger = Logger
+            .getLogger(ForrestRunner.class);
 
-	private static final int BROWSER_ERROR = 200;
+    private static final int EXCEPTION_UNABLE_TO_START = 2010;
 
-	private static final int IO_EXCEPTION = 300;
+    private String workingDir;
 
-	/**
-	 * Create a Forrest runner that will run a Jetty server on a given directory
-	 * @param workingDir - the working directory for the command
-	 */
-	protected ForrestRunner(String workingDir) {
-		super("Forrest Runner");
-		
-		this.workingDir = workingDir;
-	}
-	
-	/* Run the Forrest server in a separate thread and return that thread to the Forrest manager.
-	 * @see java.lang.Runnable#run()
-	 * @refactor lots of potential to tidy up this code, for example extract a few methods, move relevant code to ForrestManager
-	 */
-	public IStatus run(IProgressMonitor monitor) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("run(IProgressMonitor) - start");
-		}
-		
-		monitor.subTask("Initialising project");
-		IStatus status = Status.OK_STATUS;
-		String fhome = ForrestPlugin.getDefault().getPluginPreferences()
-		  .getString(ForrestPreferences.FORREST_HOME);
-		StringBuffer sb = new StringBuffer("-Dproject.home=");
-		sb.append(workingDir);
-		sb.append(" -Dbasedir=");
-		sb.append(fhome + File.separatorChar + "main");
-		sb.append(" ");
-		sb.append("init");		
-		status = runAnt(monitor, sb.toString());
-			
-		monitor.subTask("Starting Server");
-		if(status.isOK()) {
-			ForrestManager forrestManager = ForrestManager.getInstance();
-			String confPath = ForrestManager.FORREST_CORE_WEBAPP + File.separatorChar + "jettyconf.xml";
-			try {
-				Server jetty = new Jetty(confPath, 
-					  			  ForrestManager.FORREST_CORE_WEBAPP, 
-								  ForrestManager.FORREST_ENDORSED_LIB,
-								  forrestManager.getProperties(workingDir),
-								  ForrestManager.getClasspathFiles());
-				status = jetty.start(monitor);
-				if (status.isOK()) {
-					ForrestManager.setServerLaunch(jetty.getLaunch());
-				} else {
-					ForrestManager.setServerLaunch(null);
-				}
-			} catch (IOException e) {
-				logger.error("run(IProgressMonitor)", e);
-				status = new Status(Status.ERROR,ForrestPlugin.ID, IO_EXCEPTION, "Unable to start Jetty server", e);
-			}
-		}
-		
-		// FIXME: only open the browser once JETTY has fully started
-		if ( status.isOK() & ! openBrowser(monitor)) {
-			status = new Status(Status.WARNING, ForrestPlugin.ID, BROWSER_ERROR, "Unable to open browser", null);
-		}
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug("run(IProgressMonitor) - end");
-		}
-		return status;
-	}
+    private static final int BROWSER_ERROR = 200;
 
-	/**
-	 * Open a web browser on the index page.
-	 * @param monitor - the progress monitor for this job
-	 * @return boolean - true if browser opened OK
-	 */
-	private boolean openBrowser(IProgressMonitor monitor) {
+    private static final int IO_EXCEPTION = 300;
 
-		monitor.subTask("Open index page");
-		URL url;
-		try {
-			url = new URL("http://localhost:8888");
-			WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url, WebBrowserEditorInput.SHOW_ALL);
-			WebBrowser.openURL(browserInput);
-		} catch (MalformedURLException e1) {
-			// Should never be thrown
-			logger.error("openBrowser(IProgressMonitor)", e1);
-			return false;
-		}		
-		monitor.worked(3);
-		return true;
-	}
+    /**
+     * Create a Forrest runner that will run a Jetty server on a given directory
+     * 
+     * @param workingDir -
+     *            the working directory for the command
+     */
+    protected ForrestRunner(String workingDir) {
+        super("Forrest Runner");
+
+        this.workingDir = workingDir;
+    }
+
+    /*
+     * Run the Forrest server in a separate thread and return that thread to the
+     * Forrest manager.
+     * 
+     * @see java.lang.Runnable#run() @refactor lots of potential to tidy up this
+     *      code, for example extract a few methods, move relevant code to
+     *      ForrestManager
+     */
+    public IStatus run(IProgressMonitor monitor) {
+        IStatus status = Status.OK_STATUS;
+        // FIXME: PORT should be retrieved from properties
+        int port = 8888;
+
+        if (Utilities.isPortFree(port)) {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("run(IProgressMonitor) - start");
+            }
+
+            monitor.subTask("Initialising project");
+            String fhome = ForrestPlugin.getDefault().getPluginPreferences()
+                    .getString(ForrestPreferences.FORREST_HOME);
+            StringBuffer sb = new StringBuffer("-Dproject.home=");
+            sb.append(workingDir);
+            sb.append(" -Dbasedir=");
+            sb.append(fhome + File.separatorChar + "main");
+            sb.append(" ");
+            sb.append("init");
+            status = runAnt(monitor, sb.toString());
+
+            monitor.subTask("Starting Server");
+            if (status.isOK()) {
+                ForrestManager forrestManager = ForrestManager.getInstance();
+                String confPath = ForrestManager.FORREST_CORE_WEBAPP
+                        + File.separatorChar + "jettyconf.xml";
+                try {
+                    Server jetty = new Jetty(confPath,
+                            ForrestManager.FORREST_CORE_WEBAPP,
+                            ForrestManager.FORREST_ENDORSED_LIB, forrestManager
+                                    .getProperties(workingDir), ForrestManager
+                                    .getClasspathFiles());
+                    status = jetty.start(monitor);
+                    if (status.isOK()) {
+                        ForrestManager.setServerLaunch(jetty.getLaunch());
+                    } else {
+                        ForrestManager.setServerLaunch(null);
+                    }
+                } catch (IOException e) {
+                    logger.error("run(IProgressMonitor)", e);
+                    status = new Status(Status.ERROR, ForrestPlugin.ID,
+                            IO_EXCEPTION, "Unable to start Jetty server", e);
+                }
+            } else {
+                return status;
+            }
+
+            // FIXME: Timeout delay should be a preference
+            long endTime = System.currentTimeMillis() + (1000 * 30);
+            while (Utilities.isPortFree(port) && endTime < System.currentTimeMillis()) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    // no problem (I think ;-))
+                }
+            }
+            
+            if (! Utilities.isPortFree(port)) {
+                status = new Status(Status.WARNING, ForrestPlugin.ID,
+                        EXCEPTION_UNABLE_TO_START, "Server did not start within specified timeout period, have not tried to open browser.", null);
+                return status;
+            }
+
+            if (!openBrowser(monitor)) {
+                status = new Status(Status.WARNING, ForrestPlugin.ID,
+                    BROWSER_ERROR, "Unable to open browser", null);
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("run(IProgressMonitor) - end");
+            }
+        } else {
+            status = new Status(Status.WARNING, ForrestPlugin.ID,
+                   EXCEPTION_UNABLE_TO_START, "Unable to start Forrest, port " + port + " already in use", null);
+        }
+        return status;
+    }
+
+    /**
+     * Open a web browser on the index page.
+     * 
+     * @param monitor -
+     *            the progress monitor for this job
+     * @return boolean - true if browser opened OK
+     */
+    private boolean openBrowser(IProgressMonitor monitor) {
+
+        monitor.subTask("Open index page");
+        URL url;
+        try {
+            url = new URL("http://localhost:8888");
+            WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url,
+                    WebBrowserEditorInput.SHOW_ALL);
+            WebBrowser.openURL(browserInput);
+        } catch (MalformedURLException e1) {
+            // Should never be thrown
+            logger.error("openBrowser(IProgressMonitor)", e1);
+            return false;
+        }
+        monitor.worked(3);
+        return true;
+    }
 }
