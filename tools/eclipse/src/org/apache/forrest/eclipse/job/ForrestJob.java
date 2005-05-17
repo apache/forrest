@@ -48,6 +48,8 @@ public abstract class ForrestJob extends Job {
 	private static final String CONCURRENT_ANT_BUILDS = "Concurrent Ant builds are possible if you specify to build in a separate JRE.";
 
 	private static final String VALIDATION_ERROR_MESSAGE = "Could not validate document";
+	
+	private static final String PLUGIN_INSTALL_FAILURE = "Unable to install required plugins";
 
 	/**
 	 * Logger for this class
@@ -118,6 +120,10 @@ public abstract class ForrestJob extends Job {
 							ForrestRunner.EXCEPTION_VALIDATION, userMsg, e);
 				} else if (errMsg.endsWith(CONCURRENT_ANT_BUILDS)) {
 					userMsg = "Can only run one Site operation at a time";
+					status = new Status(Status.ERROR, ForrestPlugin.ID,
+							EXCEPTION_ANT_RUNNING, userMsg, e);
+				} else if (errMsg.indexOf(PLUGIN_INSTALL_FAILURE) >= 0) {
+					userMsg = "Unable to install required server plugins";
 					status = new Status(Status.ERROR, ForrestPlugin.ID,
 							EXCEPTION_ANT_RUNNING, userMsg, e);
 				} else {
