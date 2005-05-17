@@ -100,7 +100,16 @@ FORREST SITE BUILDER
     <property name="build.plugins-dir"     value="build/plugins"/>
     <property name="forrest.skins-dir"     location="${forrest.core.webapp}/skins"/>
     <property name="forrest.plugins-dir"   location="${forrest.home}/${build.plugins-dir}"/>
-    <property name="project.site-dir"      location="${project.build-dir}/site"    />
+    <!-- If the user wants to build i18n in diferent locations this is one way to implemented it--> 
+    <if>
+        <equals arg1="${project.i18n}" arg2="true"/>
+        <then>
+          <property name="project.site-dir"      location="${project.build-dir}/site/${env.LANG}"    />
+        </then>
+        <else>
+          <property name="project.site-dir"      location="${project.build-dir}/site"    />
+        </else>
+    </if>
     <property name="project.war"           location="${project.build-dir}/${project.name}.war" />
     <property name="project.webapp"        location="${project.build-dir}/webapp" />
 
