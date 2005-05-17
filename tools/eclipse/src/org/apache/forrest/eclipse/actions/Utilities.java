@@ -20,7 +20,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -64,6 +67,25 @@ public class Utilities {
 
 		return result;
 	}
+	
+	/**
+	 * Checks to see if the port is available. 
+	 * @return true if the port is available
+	 */ 
+	static public boolean isPortFree(int portNumber) {
+		try {
+			Socket echoSocket = new Socket("localhost", portNumber);
+			echoSocket.close();
+			return false;
+		} catch (UnknownHostException e) {
+			return true;
+			
+		} catch (IOException e) {
+			return true;
+			
+		}	
+		
+	}; 
 
 	/**
 	 * @param cmdString
