@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="import-cocoon-xconf" basedir="." name="import-cocoon">
+<project default="local-build-cocoon" basedir="." name="import-cocoon">
 
   <!-- ===============================================================
        Import latest version of cocoon
@@ -26,6 +26,8 @@
        =============================================================== -->
        <property environment="env" />
        <property name="cocoon.home"    location="${env.COCOON_HOME}" />
+       <property name="cocoon.version" value="2.2.0-dev"/>
+       <property name="cocoon.revision" value="-r170580"/>
        <property name="forrest.home"   location="${env.FORREST_HOME}" />
   </target>
 
@@ -34,20 +36,32 @@
        <outputproperty name="indent" value="yes"/>
     </xslt>
   </target>
-  <target name="fix-endorsed-libs-problem" depends="init">
-     <move todir="${forrest.home}/lib/endorsed">
-        <fileset dir="${forrest.home}/lib/core" includes="jakarta-*.jar"/>
-     </move>
+  <target name="copy-endorsed-libs" depends="init">
+     <copy todir="${forrest.home}/lib/endorsed" preservelastmodified="true" >
+        <fileset dir="${cocoon.home}/lib/endorsed" includes="*.jar"/>
+     </copy>
   </target>
   <target name="local-build-cocoon" depends="init">
      <copy todir="${cocoon.home}">
         <fileset dir="." includes="local.*.properties"/>
      </copy>
+     <!-- FIXME: This only works within unix -->
      <exec dir="${cocoon.home}" executable="${cocoon.home}/build.sh" />
-     <copy todir="${forrest.home}/lib/core">
-        <fileset dir="${cocoon.home}/build/cocoon-2.2.0-dev/">
-          <include name="blocks/blocks-*.jar"/>
+  </target>
+  <target name="copy-cocoon" depends="init">
+     <delete> 
+      <fileset dir="${forrest.home}/lib/core" includes="cocoon-*.jar"/>
+     </delete> 
+     <copy todir="${forrest.home}/lib/core" >
+        <mapper type="glob" from="*.jar" to="*-${cocoon.version}${cocoon.revision}.jar"/>
+        <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}">
           <include name="cocoon.jar"/>
+        </fileset>
+     </copy>
+     <copy todir="${forrest.home}/lib/core" >
+        <mapper type="glob" from="*.jar" to="cocoon-*-${cocoon.version}${cocoon.revision}.jar"/>
+        <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}/blocks">
+          <include name="*-block.jar"/>
         </fileset>
      </copy>
   </target>
