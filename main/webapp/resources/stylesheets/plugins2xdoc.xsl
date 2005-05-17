@@ -19,7 +19,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
 
-  <xsl:template match="/plugins">
+  <xsl:template match="pluginList">
     <document>
       <header>
         <title>Plugins Index</title>
@@ -33,59 +33,91 @@
             information on plugins see
             <a href="http://forrest.apache.org/docs/plugins/usingPlugins.html">
               Extending Forrest with Plugins
-            </a>
-            .
+            </a>.
           </p>
           <p>
             This page lists all plugins that have been
-            recognised by the Apache Forrest project. Any
-            plugins on this page have been verified as
-            working in the versions of Forrest specified
-            here.
+            recognised by the Apache Forrest project. There are two
+            sections to this page, the first is the released plugins,
+            The second is the whiteboard plugins. Any
+            plugins in the released section have been verified as
+            working in the versions of Forrest specified. However,
+            this verification does not imply that the plugins are mature,
+            merely that they work as documented. See the plugin 
+            documentation for how mature they are and the features they 
+            support.
           </p>
-          <p class="note">
-            If you have created a plugin that is not listed
-            here please let us know.
-          </p>
-
+          
+          <p>The second section lists plugins in the whiteboard, that is
+          plugins that may change considerably in how they work before
+          their first official release. These plugins may not be fully
+          funcitonal, in most cases they are usable, but use them with
+          caution as they are not considered stable.</p>
+          
+          <div class="frame note">
+            <div class="label">Note</div>
+            <div class="content">If you have created a plugin that is not listed
+            here please let us know.</div>
+          </div>
+          
           <section>
-            <title>Input Plugins</title>
-            <p>
-              Input plugins enable Forrest to work with
-              source documents in different formats.
-            </p>
-            <xsl:apply-templates
-              select="plugin[@type='input']">
-              <xsl:sort select="@name" />
-            </xsl:apply-templates>
+            <title>Released Plugins</title>
+            <xsl:apply-templates select="plugins[@type='released']"/>
           </section>
-
+          
           <section>
-            <title>Output Plugins</title>
-            <p>
-              Output plugins enable Forrest to produce
-              documents in different formats.
-            </p>
-            <xsl:apply-templates
-              select="plugin[@type='output']">
-              <xsl:sort select="@name" />
-            </xsl:apply-templates>
-          </section>
-
-          <section>
-            <title>Internal Plugins</title>
-            <p>
-              Internal plugins change the core behaviour
-              of Forrest.
-            </p>
-            <xsl:apply-templates
-              select="plugin[@type='internal']">
-              <xsl:sort select="@name" />
-            </xsl:apply-templates>
+            <title>Whiteboard Plugins</title>
+            
+            <div class="frame warning">
+              <div class="label">Warning</div>
+              <div class="content">Plugins in this section may not automatically
+              deploy when you run Forrest as they are still in development.
+              You may need to perform some manual installation steps to use 
+              them. See the plugin documentation for more details.</div>
+            </div>
+            <xsl:apply-templates select="plugins[@type='whiteboard']"/>
           </section>
         </section>
       </body>
     </document>
+  </xsl:template>
+  
+  <xsl:template match="plugins">
+    <section>
+      <title>Input Plugins</title>
+      <p>
+        Input plugins enable Forrest to work with
+        source documents in different formats.
+      </p>
+      <xsl:apply-templates
+        select="plugin[@type='input']">
+        <xsl:sort select="@name" />
+      </xsl:apply-templates>
+    </section>
+
+    <section>
+      <title>Output Plugins</title>
+      <p>
+        Output plugins enable Forrest to produce
+        documents in different formats.
+      </p>
+      <xsl:apply-templates
+        select="plugin[@type='output']">
+        <xsl:sort select="@name" />
+      </xsl:apply-templates>
+    </section>
+
+    <section>
+      <title>Internal Plugins</title>
+      <p>
+        Internal plugins change the core behaviour
+        of Forrest.
+      </p>
+      <xsl:apply-templates
+        select="plugin[@type='internal']">
+        <xsl:sort select="@name" />
+      </xsl:apply-templates>
+    </section>
   </xsl:template>
 
   <xsl:template match="plugin">

@@ -327,7 +327,10 @@ $Revision: 1.12 $
       <map:match pattern="**.xml">
 
         <map:match pattern="docs/plugins/index.xml">
-          <map:generate src="{forrest:plugins-src}/plugins.xml"/>
+          <map:aggregate element="pluginList">
+            <map:part src="{forrest:plugins-src}/plugins.xml"/>
+            <map:part src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml"/>
+          </map:aggregate>
           <map:transform src="{forrest:stylesheets}/plugins2xdoc.xsl"/>
           <map:serialize type="xml"/>
         </map:match>
