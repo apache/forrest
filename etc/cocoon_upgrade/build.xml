@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project default="local-build-cocoon" basedir="." name="import-cocoon">
+<project default="build-cocoon" basedir="." name="import-cocoon">
 
   <!-- ===============================================================
        Import latest version of cocoon
@@ -27,21 +27,43 @@
        <property environment="env" />
        <property name="cocoon.home"    location="${env.COCOON_HOME}" />
        <property name="cocoon.version" value="2.2.0-dev"/>
-       <property name="cocoon.revision" value="-r170580"/>
+       <property name="cocoon.revision" value="-r170045"/>
        <property name="forrest.home"   location="${env.FORREST_HOME}" />
   </target>
 
   <target name="import-cocoon-xconf" depends="init">
+     <!-- FIXME: This needs more testing  do not use it yet-->
      <xslt force="true" in="${cocoon.home}/src/webapp/WEB-INF/xconf/cocoon-core.xconf" out="${forrest.home}/main/webapp/WEB-INF/xconf/forrest-core.xconf" style="./upgrade-cocoon-xconf.xsl" >
        <outputproperty name="indent" value="yes"/>
     </xslt>
   </target>
+<target name="copy-optional-libs" depends="init">
+     <!-- FIXME:  jing-*.jar comes from iso-relax.sf.net -->
+     <copy todir="${forrest.home}/lib/core" >
+        <fileset dir="${cocoon.home}/lib/optional">
+          <include name="batik-all-*.jar"/>
+          <include name="fop-*.jar"/>
+          <include name="lucene-*.jar"/>
+          <include name="jtidy-*.jar"/>
+          <include name="nekopull-*.jar"/>
+        </fileset>
+     </copy>
+  </target>
+<target name="copy-plugins-libs" depends="init">
+     <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.wiki/lib" >
+     <fileset dir="${cocoon.home}/lib/optional" includes="chaperon-*.jar" />
+     </copy>
+     <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib" >
+     <fileset dir="${cocoon.home}/lib/optional" includes="nekodtd-*.jar" />
+     </copy>
+  </target>
+
   <target name="copy-endorsed-libs" depends="init">
      <copy todir="${forrest.home}/lib/endorsed" preservelastmodified="true" >
         <fileset dir="${cocoon.home}/lib/endorsed" includes="*.jar"/>
      </copy>
   </target>
-  <target name="local-build-cocoon" depends="init">
+  <target name="build-cocoon" depends="init">
      <copy todir="${cocoon.home}">
         <fileset dir="." includes="local.*.properties"/>
      </copy>
