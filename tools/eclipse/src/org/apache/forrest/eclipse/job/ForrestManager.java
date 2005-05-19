@@ -39,17 +39,25 @@ import org.eclipse.debug.core.ILaunch;
  * Manages instances of Forrest that are running on the local server.
  */
 public class ForrestManager {
-	/**
+    /** Name of the skin to use for building the site without navigation */ 
+	private static final String SKIN_PLAIN = "plain-dev";
+    /**
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(ForrestManager.class);
 
+	/** The command for building the static site */
 	public static final String COMMAND_BUILD = "site";
 
+	/** The command for running the site server */
 	public static final String COMMAND_START = "run";
 
+	/** The command for stopping the site server */
 	public static final String COMMAND_STOP = "stop";
 
+	/** The command for building the site in HTML with no navigation */
+	public static final String COMMAND_BUILD_PLAIN = "buildPlain";
+	
 	private static final int UNKOWN_COMMAND = 0;
 
 	private static final int BUILD = 1;
@@ -167,6 +175,8 @@ public class ForrestManager {
 			theJob = new ForrestRunner(workingDir);
 		} else if (cmd.equals(COMMAND_BUILD)) {
 			theJob = new ForrestBuilder(workingDir);
+		} else if (cmd.equals(COMMAND_BUILD_PLAIN)) {
+			theJob = new ForrestBuilder(workingDir, SKIN_PLAIN);
 		} else {
 			theJob = null;
 		}

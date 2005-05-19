@@ -33,17 +33,29 @@ public class ForrestBuilder extends ForrestJob  {
 	 * Logger for this class
 	 */
 	protected static final Logger logger = Logger.getLogger(ForrestBuilder.class);
+	/** The name of the skin to use. If null, the value in forrest.properties will be used. */
+    private String skinName;
 	
 	/**
-	 * Create a Forrest runner that will run a JEtty server on a given directory
+	 * Create a Forrest builder that will build the default
+	 * site configuration.
 	 * @param workingDir - the working directory for the command
 	 */
 	protected ForrestBuilder(String workingDir) {
 		super("Forrest Runner");
-		
 		this.workingDir = workingDir;
 	}
-	
+
+	/**
+	 * Create a Forrest builder that will build the 
+	 * site using the indicated skin.
+	 * @param workingDir - the working directory for the command
+	 */
+	protected ForrestBuilder(String workingDir, String skinName) {
+		super("Forrest Runner");
+		this.workingDir = workingDir;
+		this.skinName = skinName;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
@@ -59,6 +71,10 @@ public class ForrestBuilder extends ForrestJob  {
 		sb.append(workingDir);
 		sb.append(" -Dbasedir=");
 		sb.append(fhome + File.separatorChar + "main");
+		if (this.skinName != null) {
+			sb.append(" -Dproject.skin=");
+			sb.append("plain-dev");
+		}
 		sb.append(" site");
         status = runAnt(monitor, sb.toString());
 		return status;
