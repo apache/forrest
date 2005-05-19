@@ -31,8 +31,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
-import org.eclipse.webbrowser.WebBrowser;
-import org.eclipse.webbrowser.WebBrowserEditorInput;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.wst.internet.webbrowser.internal.Trace;
+import org.eclipse.wst.internet.webbrowser.internal.WebBrowserUIPlugin;
 
 /**
  * Run a version of Forrest
@@ -123,23 +126,28 @@ public class ForrestRunner extends ForrestJob implements
 
             // FIXME: Timeout delay should be a preference
             long endTime = System.currentTimeMillis() + (1000 * 30);
-            while (Utilities.isPortFree(port) && endTime < System.currentTimeMillis()) {
+            while (Utilities.isPortFree(port)
+                    && endTime < System.currentTimeMillis()) {
                 try {
                     Thread.sleep(250);
                 } catch (InterruptedException e) {
                     // no problem (I think ;-))
                 }
             }
-            
-            if (! Utilities.isPortFree(port)) {
-                status = new Status(Status.WARNING, ForrestPlugin.ID,
-                        EXCEPTION_UNABLE_TO_START, "Server did not start within specified timeout period, have not tried to open browser.", null);
+
+            if (!Utilities.isPortFree(port)) {
+                status = new Status(
+                        Status.WARNING,
+                        ForrestPlugin.ID,
+                        EXCEPTION_UNABLE_TO_START,
+                        "Server did not start within specified timeout period, have not tried to open browser.",
+                        null);
                 return status;
             }
 
             if (!openBrowser(monitor)) {
                 status = new Status(Status.WARNING, ForrestPlugin.ID,
-                    BROWSER_ERROR, "Unable to open browser", null);
+                        BROWSER_ERROR, "Unable to open browser", null);
             }
 
             if (logger.isDebugEnabled()) {
@@ -147,7 +155,8 @@ public class ForrestRunner extends ForrestJob implements
             }
         } else {
             status = new Status(Status.WARNING, ForrestPlugin.ID,
-                   EXCEPTION_UNABLE_TO_START, "Unable to start Forrest, port " + port + " already in use", null);
+                    EXCEPTION_UNABLE_TO_START, "Unable to start Forrest, port "
+                            + port + " already in use", null);
         }
         return status;
     }
@@ -162,17 +171,25 @@ public class ForrestRunner extends ForrestJob implements
     private boolean openBrowser(IProgressMonitor monitor) {
 
         monitor.subTask("Open index page");
-        URL url;
-        try {
-            url = new URL("http://localhost:8888");
-            WebBrowserEditorInput browserInput = new WebBrowserEditorInput(url,
-                    WebBrowserEditorInput.SHOW_ALL);
-            WebBrowser.openURL(browserInput);
-        } catch (MalformedURLException e1) {
-            // Should never be thrown
-            logger.error("openBrowser(IProgressMonitor)", e1);
-            return false;
-        }
+        // FIXME: port should come from the config files
+        Display.getDefault().syncExec(new Runnable() {
+            public void run() {
+                URL url;
+                try {
+                    url = new URL("http://localhost:8888");
+                    IWorkbenchBrowserSupport browserSupport = WebBrowserUIPlugin
+                            .getInstance().getWorkbench().getBrowserSupport();
+                    IWebBrowser browser = browserSupport.createBrowser(
+                            IWorkbenchBrowserSupport.LOCATION_BAR
+                                    | IWorkbenchBrowserSupport.NAVIGATION_BAR,
+                            null, null, null);
+                    browser.openURL(url);
+                } catch (Exception e) {
+                    Trace.trace(Trace.SEVERE, "Error opening browser", e);
+                }
+            }
+        });
+
         monitor.worked(3);
         return true;
     }

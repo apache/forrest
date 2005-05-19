@@ -13,9 +13,9 @@ Currently implemented features include:
 Installation
 ============
 
-To use the plugin you need to install it within Eclipse V3.0 (V3.1M* not 
-currently supported) and Apache Forrest. You will also need to ensure that 
-you have the reqruied plugins for Eclipse.
+To use the plugin you need to install it within Eclipse V3.0 
+and Apache Forrest. You will also need to ensure that 
+you have the required plugins for Eclipse.
 
 Getting Forrest
 ---------------
@@ -54,8 +54,7 @@ as good as your existing environement yet (I'd love to know what is good/bad
 about it so I can feed it back to the WTP project at Eclipse). If you don't 
 use eclipse for XML editing at present then just use your normal installation.
 
-- download Eclipse 3.0 (you need the full SDK) 
-  - NOTE: 3.1 Milestone releases are not currently supported
+- download Eclipse 3.* (you need the full SDK) 
 
 - Extract the complete tree it into a new directory
   (we named it forrestEclipse)
@@ -99,25 +98,18 @@ Installing Required Plugins
   - If any are disabled then enable them by selecting them and clicking "Enable"
     in the right pane
   
-- install the IBM code drop for the WTP project (this is the pre-alpha stuff)
-  - download http://download.eclipse.org/webtools/downloads/initial-contributions/ibm.zip
-  - extract the zip to a temp directory (we named it tmp)
-  - In the extracted tree you will find another archive
-    tmp/com.ibm.wtp.sdk-I-200407201920.zip extract its to the tmp directory
-  - copy or move the contents of tmp/eclipse to your forrestEclipse directory
+- install the the WTP project
+  - download page is http://download.eclipse.org/webtools/downloads/drops/S-1.0M4-200504292037/
+  - extract the zip into forestEclipse
   
 - restart forrestEclipse using the command "eclipse.exe -clean" (this will 
   reload all the plugin descriptors, you do not need the "-clean" flag in 
   subsequent restarts
   
-- verify that the IBM plugins have been installed
-  - Help -> Software Updates -> Manage Configuration
-  - ensure com.ibm.wtp.sdk.6.0.0 is listed and does not have a little red "disabled" flag on the icon
-
 Export Forrest Eclipse Plugin
 -----------------------------
 
-To work with the Forrest Eclipse plugin you need to first need to make it
+To work with the Forrest Eclipse plugin you first need to make it
 available in your wokspace. Here's how:
 
 Import the Forrest Eclipse plugin code into you workspace
@@ -148,7 +140,7 @@ re-initialise its plugin database.
   
 NOTE - if you intend to help develop the Forrest Eclipse plugin (please do) 
 then you should be familar with using Eclipse for Plugin Development. A good
-startiung point is http://www.eclipse.org/articles/index.html
+starting point is http://www.eclipse.org/articles/index.html
 
 ===============
 Getting Started
@@ -176,8 +168,6 @@ Start Forrest
 -------------
 - right click on Forrest project
 - select site -> stop
-
-(NOTE: currently broken - you will have to manually kill the java process I'm afraid)
 
 Build Site
 ----------

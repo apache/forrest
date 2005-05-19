@@ -132,6 +132,7 @@ public class ForrestPlugin extends AbstractUIPlugin {
 			store.setDefault(ForrestPreferences.FORREST_HOME, (String)envVariables.get(ForrestPreferences.FORREST_HOME));
 		}
 	}
+	
 	/**
 	 * Set the preference value for Forrest Home.
 	 * @param forrestHome
