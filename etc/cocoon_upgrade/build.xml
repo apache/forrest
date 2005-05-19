@@ -16,77 +16,113 @@
   limitations under the License.
 -->
 <project default="build-cocoon" basedir="." name="import-cocoon">
-
-  <!-- ===============================================================
+<!-- ===============================================================
        Import latest version of cocoon
        =============================================================== -->
-  <target name="init" >
+  <target name="init">
   <!-- ===============================================================
        Set properties
        =============================================================== -->
-       <property environment="env" />
-       <property name="cocoon.home"    location="${env.COCOON_HOME}" />
-       <property name="cocoon.version" value="2.2.0-dev"/>
-       <property name="cocoon.revision" value="-r170045"/>
-       <property name="forrest.home"   location="${env.FORREST_HOME}" />
+    <property environment="env"/>
+    <property name="cocoon.home" location="${env.COCOON_HOME}"/>
+    <property name="cocoon.version" value="2.2.0-dev"/>
+    <property name="svn.revision" value="-r164112"/>
+    <property name="forrest.home" location="${env.FORREST_HOME}"/>
   </target>
 
   <target name="import-cocoon-xconf" depends="init">
-     <!-- FIXME: This needs more testing  do not use it yet-->
-     <xslt force="true" in="${cocoon.home}/src/webapp/WEB-INF/xconf/cocoon-core.xconf" out="${forrest.home}/main/webapp/WEB-INF/xconf/forrest-core.xconf" style="./upgrade-cocoon-xconf.xsl" >
-       <outputproperty name="indent" value="yes"/>
+  <!-- ===============================================================
+       import cocoon-xconf tries to import just the mimimun that is needed
+       by forrest
+       FIXME: This needs more testing  do not use it yet
+       =============================================================== -->
+    <xslt force="true" style="./upgrade-cocoon-xconf.xsl"
+    in="${cocoon.home}/src/webapp/WEB-INF/xconf/cocoon-core.xconf" 
+    out="${forrest.home}/main/webapp/WEB-INF/xconf/forrest-core.xconf" >
+      <outputproperty name="indent" value="yes"/>
     </xslt>
   </target>
-<target name="copy-optional-libs" depends="init">
-     <!-- FIXME:  jing-*.jar comes from iso-relax.sf.net -->
-     <copy todir="${forrest.home}/lib/core" >
-        <fileset dir="${cocoon.home}/lib/optional">
-          <include name="batik-all-*.jar"/>
-          <include name="fop-*.jar"/>
-          <include name="lucene-*.jar"/>
-          <include name="jtidy-*.jar"/>
-          <include name="nekopull-*.jar"/>
-        </fileset>
-     </copy>
+
+  <target name="copy-core-libs" depends="init">
+  <!-- ===============================================================
+       Copy all the libraries that belong to cocoon core.
+       FIXME:  use sync task so you can ensure than removed libs from cocoon
+               are remove from forrest
+       =============================================================== -->
+    <copy todir="${forrest.home}/lib/core">
+      <fileset dir="${cocoon.home}/lib/core" defaultexcludes="yes">
+        <exclude name="commons-jxpath-*.jar"/>
+      </fileset>
+    </copy>
   </target>
-<target name="copy-plugins-libs" depends="init">
-     <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.wiki/lib" >
-     <fileset dir="${cocoon.home}/lib/optional" includes="chaperon-*.jar" />
-     </copy>
-     <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib" >
-     <fileset dir="${cocoon.home}/lib/optional" includes="nekodtd-*.jar" />
-     </copy>
+  
+  <target name="copy-optional-libs" depends="init">
+  <!-- ===============================================================
+       Some optional libraries are core to forrest
+       FIXME:  jing-*.jar comes from iso-relax.sf.net so maybe we need to 
+               have a copy-extermal-libs target
+       =============================================================== -->
+    <copy todir="${forrest.home}/lib/core">
+      <fileset dir="${cocoon.home}/lib/optional">
+        <include name="batik-all-*.jar"/>
+        <include name="fop-*.jar"/>
+        <include name="lucene-*.jar"/>
+        <include name="jtidy-*.jar"/>
+        <include name="nekopull-*.jar"/>
+<!-- FIXME: Chaperon requiered by core #FOR501 -->
+        <include name="chaperon-*.jar"/>
+      </fileset>
+    </copy>
   </target>
 
-  <target name="copy-endorsed-libs" depends="init">
-     <copy todir="${forrest.home}/lib/endorsed" preservelastmodified="true" >
-        <fileset dir="${cocoon.home}/lib/endorsed" includes="*.jar"/>
-     </copy>
+  <target name="copy-plugins-libs" depends="init">
+  <!-- ===============================================================
+       Some optional libraries are copied to plugins within forrest
+       =============================================================== -->
+    <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib">
+      <fileset dir="${cocoon.home}/lib/optional" includes="nekodtd-*.jar"/>
+    </copy>
   </target>
+  
+  <target name="copy-endorsed-libs" depends="init">  
+  <!-- ===============================================================
+       Endorsed libraries need to go to the endorsed directory
+       =============================================================== -->
+    <copy todir="${forrest.home}/lib/endorsed" preservelastmodified="true">
+      <fileset dir="${cocoon.home}/lib/endorsed" includes="*.jar"/>
+    </copy>
+  </target>
+  
   <target name="build-cocoon" depends="init">
-     <copy todir="${cocoon.home}">
-        <fileset dir="." includes="local.*.properties"/>
-     </copy>
-     <!-- FIXME: This only works within unix -->
-     <exec dir="${cocoon.home}" executable="${cocoon.home}/build.sh" />
+  <!-- ===============================================================
+       Copy local settings and build cocoon
+       =============================================================== -->
+    <copy todir="${cocoon.home}">
+      <fileset dir="." includes="local.*.properties"/>
+    </copy>
+<!-- FIXME: This only works within unix -->
+    <exec dir="${cocoon.home}" executable="${cocoon.home}/build.sh"/>
   </target>
+  
   <target name="copy-cocoon" depends="init">
-     <delete> 
+  <!-- ===============================================================
+       Copy a fresh build from cocoon
+       =============================================================== -->
+    <delete>
       <fileset dir="${forrest.home}/lib/core" includes="cocoon-*.jar"/>
-     </delete> 
-     <copy todir="${forrest.home}/lib/core" >
-        <mapper type="glob" from="*.jar" to="*-${cocoon.version}${cocoon.revision}.jar"/>
-        <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}">
-          <include name="cocoon.jar"/>
-        </fileset>
-     </copy>
-     <copy todir="${forrest.home}/lib/core" >
-        <mapper type="glob" from="*.jar" to="cocoon-*-${cocoon.version}${cocoon.revision}.jar"/>
-        <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}/blocks">
-          <include name="*-block.jar"/>
-        </fileset>
-     </copy>
+    </delete>
+    <copy todir="${forrest.home}/lib/core">
+      <mapper type="glob" from="*.jar" to="*-${cocoon.version}${svn.revision}.jar"/>
+      <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}">
+        <include name="cocoon.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${forrest.home}/lib/core">
+      <mapper type="glob" from="*.jar" 
+       to="cocoon-*-${cocoon.version}${svn.revision}.jar"/>
+      <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}/blocks">
+        <include name="*-block.jar"/>
+      </fileset>
+    </copy>
   </target>
-
-
 </project>
