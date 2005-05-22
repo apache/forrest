@@ -453,6 +453,7 @@ document.write("Last Published: " + document.lastModified);
 <!--credits-->
 	<div id="credit">
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
+           <hr />
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                   <xsl:variable name="name" select="name"/>
                   <xsl:variable name="url" select="url"/>
