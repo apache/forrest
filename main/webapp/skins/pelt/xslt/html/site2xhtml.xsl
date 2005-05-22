@@ -412,6 +412,44 @@ document.write("Last Published: " + document.lastModified);
         <!--
 			<xsl:apply-templates select="div[@id='menu']/*" />
 		-->
+
+<!-- Search box: alternative location -->
+        <xsl:if 
+            test="$config/search and $config/search/@box-location='alt'">
+<xsl:comment>+
+    |start Search
+    +</xsl:comment> 
+            <div class="searchbox">
+             <hr />
+             <xsl:choose>
+              <xsl:when test="$config/search/@provider = 'lucene'">
+                <!-- Lucene search -->
+                <form method="get" action="{$root}{$lucene-search}">
+                  <input type="text" id="query" name="queryString" size="18"
+                    value="Search with {$config/search/@provider}:"
+                    onFocus="getBlank (this, 'Search with {$config/search/@provider}:');"/>
+		  &#160;
+		  <input type="submit" value="Search" name="Search"/>
+		 </form>
+	      </xsl:when>
+	      <xsl:otherwise>
+                <form method="get" action="http://www.google.com/search"> 
+		  &#160;
+                  <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/> 
+                  <input type="text" id="query" name="q" size="18"
+                    value="Search with {$config/search/@provider}:"
+                    onFocus="getBlank (this, 'Search with {$config/search/@provider}:');"/>
+                  &#160; 
+                  <input type="submit" value="Search" name="Search"/>
+                </form>
+        </xsl:otherwise>
+</xsl:choose>
+            </div>
+<xsl:comment>+
+    |end search
+    +</xsl:comment> 
+        </xsl:if>
+
 <!--credits-->
 	<div id="credit">
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
@@ -435,6 +473,8 @@ document.write("Last Published: " + document.lastModified);
                   </a>
                 </xsl:for-each>
               </xsl:if>
+
+<!-- Message of the day -->
               <xsl:if test="$config/motd-page">
                 <xsl:if test="$config/motd-page/@location='alt' or $config/motd-page/@location='both'">
                   <hr />
@@ -452,12 +492,14 @@ document.write("Last Published: " + document.lastModified);
                 </xsl:if>
               </xsl:if>
 		</div>
+
         <div id="roundbottom">
             <img 
                 src="{$skin-img-dir}/rc-b-l-15-1body-2menu-3menu.png" 
                 alt="" width="15" height="15" class="corner" 
                 style="display: none" />
         </div>
+
         <xsl:comment>+
   |alternative credits
   +</xsl:comment>
