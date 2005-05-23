@@ -54,7 +54,7 @@ as good as your existing environement yet (I'd love to know what is good/bad
 about it so I can feed it back to the WTP project at Eclipse). If you don't 
 use eclipse for XML editing at present then just use your normal installation.
 
-- download Eclipse 3.* (you need the full SDK) 
+- download Eclipse 3.1M7 (you need the full SDK) 
 
 - Extract the complete tree it into a new directory
   (we named it forrestEclipse)
