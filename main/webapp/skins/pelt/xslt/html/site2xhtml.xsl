@@ -312,25 +312,27 @@ document.write("Last Published: " + document.lastModified);
             </xsl:if>
               <!-- W3C logos style="text-align: center;"-->
               <xsl:call-template name="compliancy-logos"/>
-              <xsl:if test="$filename = 'index.html' and $config/credits and not ($config/credits/credit/@box-location = 'alt')">
+              <xsl:if test="$filename = 'index.html' and $config/credits">
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
-                  <xsl:variable name="name" select="name"/>
-                  <xsl:variable name="url" select="url"/>
-                  <xsl:variable name="image" select="image"/>
-                  <xsl:variable name="width" select="width"/>
-                  <xsl:variable name="height" select="height"/>
-                  <a href="{$url}">
-                    <img alt="{$name} - logo" title="{$name}" border="0">
-                      <xsl:attribute name="src">
-                        <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
-                        <xsl:value-of select="$image"/>
-                      </xsl:attribute>
-                      <xsl:attribute name="style">
-                        <xsl:if test="$width">width: <xsl:value-of select="$width"/>px;</xsl:if>
-                        <xsl:if test="$height">height: <xsl:value-of select="$height"/>px;</xsl:if>
-                      </xsl:attribute>
-                    </img>
-                  </a>
+                  <xsl:if test="not(@box-location = 'alt') and not(@box-location = 'alt2')">
+                    <xsl:variable name="name" select="name"/>
+                    <xsl:variable name="url" select="url"/>
+                    <xsl:variable name="image" select="image"/>
+                    <xsl:variable name="width" select="width"/>
+                    <xsl:variable name="height" select="height"/>
+                    <a href="{$url}">
+                      <img alt="{$name} - logo" title="{$name}" border="0">
+                        <xsl:attribute name="src">
+                          <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+                          <xsl:value-of select="$image"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="style">
+                          <xsl:if test="$width">width: <xsl:value-of select="$width"/>px;</xsl:if>
+                          <xsl:if test="$height">height: <xsl:value-of select="$height"/>px;</xsl:if>
+                        </xsl:attribute>
+                      </img>
+                    </a>
+                  </xsl:if>
                 </xsl:for-each>
               </xsl:if>
             </div>
@@ -450,11 +452,12 @@ document.write("Last Published: " + document.lastModified);
     +</xsl:comment> 
         </xsl:if>
 
-<!--credits-->
+<!--credits in alternative location-->
 	<div id="credit">
 	 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
            <hr />
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+                  <xsl:if test="@box-location = 'alt'">
                   <xsl:variable name="name" select="name"/>
                   <xsl:variable name="url" select="url"/>
                   <xsl:variable name="image" select="image"/>
@@ -472,6 +475,7 @@ document.write("Last Published: " + document.lastModified);
                       </xsl:attribute>
                     </img>
                   </a>
+                  </xsl:if>
                 </xsl:for-each>
               </xsl:if>
 
@@ -501,9 +505,36 @@ document.write("Last Published: " + document.lastModified);
                 style="display: none" />
         </div>
 
+<!--credits in alternative location #2-->
         <xsl:comment>+
   |alternative credits
   +</xsl:comment>
+
+	<div id="credit2">
+	  <xsl:if test="$config/credits and ($config/credits/credit/@box-location = 'alt2')">
+            <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
+              <xsl:if test="@box-location = 'alt2'">
+                <xsl:variable name="name" select="name"/>
+                <xsl:variable name="url" select="url"/>
+                <xsl:variable name="image" select="image"/>
+                <xsl:variable name="width" select="width"/>
+                <xsl:variable name="height" select="height"/>
+                <a href="{$url}">
+                  <img alt="{$name} - logo" title="{$name}" border="0">
+                    <xsl:attribute name="src">
+                      <xsl:if test="not(starts-with($image, 'http://'))"><xsl:value-of select="$root"/></xsl:if>
+                      <xsl:value-of select="$image"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="style">
+                      <xsl:if test="$width">width: <xsl:value-of select="$width"/>px;</xsl:if>
+                      <xsl:if test="$height">height: <xsl:value-of select="$height"/>px;</xsl:if>
+                    </xsl:attribute>
+                  </img>
+                </a>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:if>
+        </div>
       </div>
 <xsl:comment>+
     |end Menu
