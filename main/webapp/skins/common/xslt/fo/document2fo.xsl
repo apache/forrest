@@ -391,6 +391,7 @@
       <xsl:value-of select="14-number($level)"/>
     </xsl:variable>
 
+    <xsl:variable name="background-color" select="//skinconfig/colors/color[@name='body']/@value"/>
     <xsl:variable name="heading-color" select="//skinconfig/colors/color[@name='subheading']/@value"/>
     <xsl:variable name="heading-type" select="//skinconfig/headings/@type"/>
 
@@ -441,9 +442,12 @@
         font-size="{10 div (number($level) +1 )}pt"
         background-color="{$heading-color}">&#160;</fo:block>
     </xsl:if>
-    <xsl:apply-templates>
-      <xsl:with-param name="level" select="number($level)+1"/>
-    </xsl:apply-templates>
+    <fo:block
+        background-color="{$background-color}">
+      <xsl:apply-templates>
+        <xsl:with-param name="level" select="number($level)+1"/>
+      </xsl:apply-templates>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="title">
