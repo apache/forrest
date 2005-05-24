@@ -5,7 +5,6 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.7-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<meta-data></meta-data>
 <title>How to create a PDF document for each tab (v0.6)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
@@ -109,13 +108,13 @@
 <div onclick="SwitchMenu('menu_selected_1.1', '../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">How-To</div>
 <div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
-<a title="" href="../howto/index.html">Overview</a>
+<a href="../howto/index.html">Overview</a>
 </div>
 <div class="menuitem">
-<a title="" href="../howto/howto-howto.html">Write a How-to</a>
+<a href="../howto/howto-howto.html">Write a How-to</a>
 </div>
 <div class="menuitem">
-<a title="" href="../howto/howto-asf-mirror.html">Download mirror</a>
+<a href="../howto/howto-asf-mirror.html">Download mirror</a>
 </div>
 <div class="menupage">
 <div class="menupagetitle">Create tab PDF</div>
@@ -124,12 +123,15 @@
 <div id="credit">
 <hr>
     This is documentation for past release v0.6
-   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+   (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
 <!--+
   |alternative credits
   +-->
+<div id="credit2">
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+</div>
 </div>
 <!--+
     |end Menu
@@ -154,7 +156,7 @@
   </div>
 <div id="motd-area">
     This is documentation for past release v0.6
-   (<a href="http://forrest.apache.org/docs.html">More</a> ...)</div>
+   (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
@@ -197,25 +199,7 @@
 </li>
 </ul>
 </div>
- 
-<header>
-  
-<title>How to create a PDF document for each tab</title>
-  
-<a name="N10016"></a><a name="Overview"></a>
-<h2 class="underlined_10">Overview</h2>
-<div class="section">
-<p>This How-To describes the generation of a PDF document for each
-    group of documents that is defined by a tab. 
-  </p>
-</div>
-  
-<last-modified-content-date date="2004-07-19"></last-modified-content-date>
- 
-</header>
-
-  
-<a name="N10021"></a><a name="Intended Audience"></a>
+<a name="N10010"></a><a name="Intended Audience"></a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
 <p>
@@ -223,9 +207,7 @@
       group of documents.
     </p>
 </div>
-  
-  
-<a name="N1002A"></a><a name="Purpose"></a>
+<a name="N10018"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
@@ -236,9 +218,7 @@
       certain parts of the site.
     </p>
 </div>
-
-  
-<a name="N10033"></a><a name="Prerequisites"></a>
+<a name="N10020"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
@@ -248,9 +228,7 @@
     
 </ul>
 </div>
-
-  
-<a name="N10043"></a><a name="Steps"></a>
+<a name="N1002F"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <p>The procedure outlined below will define a project
@@ -258,7 +236,7 @@
       <span class="codefrag">pdf-tab.xmap</span> based on the <span class="codefrag">aggregate.xmap</span>
     
 </p>
-<a name="N10054"></a><a name="sitemap"></a>
+<a name="N10040"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Create your project's main sitemap.xmap</h3>
 <p>
       Simply copy the sitemap.xmap from the Forrest sitemaps at
@@ -266,13 +244,13 @@
       <span class="codefrag">src/documentation</span> directory (or wherever
       ${project.sitemap-dir} points to).
     </p>
-<a name="N10064"></a><a name="aggregator"></a>
+<a name="N10050"></a><a name="aggregator"></a>
 <h3 class="underlined_5">Create the aggregator sitemap pdf-tab.xmap</h3>
 <p>
     Copy the aggregate.xmap from Forrest sitemaps into your
     ${project.sitemap-dir} and rename it to pdf-tab.xmap
     </p>
-<a name="N1006E"></a><a name="workaround-202"></a>
+<a name="N1005A"></a><a name="workaround-202"></a>
 <h3 class="underlined_5">Edit project sitemap.xmap</h3>
 <div class="frame note">
 <div class="label">Note</div>
@@ -295,7 +273,7 @@
 &lt;/map:pipeline
 --&gt;
     </pre>
-<a name="N10082"></a><a name="mount"></a>
+<a name="N1006E"></a><a name="mount"></a>
 <h3 class="underlined_5">Edit project sitemap.xmap to mount pdf-tab.xmap</h3>
 <p>
       Insert the following lines after the
@@ -309,7 +287,7 @@
 &lt;/map:match&gt;
 ...
     </pre>
-<a name="N10093"></a><a name="edit-aggregator"></a>
+<a name="N1007F"></a><a name="edit-aggregator"></a>
 <h3 class="underlined_5">Edit the file pdf-tab.xmap</h3>
 <p>
       The <span class="codefrag">&lt;map:match pattern="*.xml"&gt;</span> element
@@ -333,7 +311,7 @@
   &lt;map:serialize type="xml"/&gt;
 &lt;/map:match&gt;
     </pre>
-<a name="N100A6"></a><a name="edit-site"></a>
+<a name="N10092"></a><a name="edit-site"></a>
 <h3 class="underlined_5">Edit your site.xml</h3>
 <p>Add the following entry to your site.xml in the
       <span class="codefrag">&lt;about&gt;</span> element
@@ -374,7 +352,7 @@
 	 as the child (will cause a <span class="codefrag">stack overflow</span> if you do)!!!
 	</div>
 </div>
-<a name="N100D6"></a><a name="explain"></a>
+<a name="N100C2"></a><a name="explain"></a>
 <h3 class="underlined_5">Explanation of the operation</h3>
 <p>
       Line 4 of our example
@@ -440,9 +418,7 @@
     </div>
 </div>
 </div>
-
-  
-<a name="N10121"></a><a name="Feedback and further development of this How-To"></a>
+<a name="N1010C"></a><a name="Feedback and further development of this How-To"></a>
 <h2 class="underlined_10">Feedback and further development of this How-To</h2>
 <div class="section">
 <p>
@@ -460,7 +436,6 @@
     </div>
 </div>
 </div>
-
 </div>
 <!--+
     |end content
@@ -477,7 +452,9 @@ document.write("Last Published: " + document.lastModified);
 //  --></script>
 </div>
 <div class="copyright">
- Copyright &copy; 2002-2004 The Apache Software Foundation.</div>
+        Copyright &copy;
+         2002-2004 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
 <!--+
     |end bottomstrip
     +-->
