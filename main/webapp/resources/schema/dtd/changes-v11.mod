@@ -62,10 +62,14 @@ CHANGE HISTORY:
 <!ELEMENT changes (title?, devs?, release+)>
 <!ATTLIST changes %common.att;>
 
-    <!ELEMENT release (action+)>
+    <!ELEMENT release (notes?, action+)>
     <!ATTLIST release %common.att;
                       version  CDATA  #REQUIRED
                       date     CDATA  #REQUIRED>
+                      
+    <!-- Notea section for release notes -->
+    <!ELEMENT notes (%blocks;)*>
+    <!ATTLIST notes %common.att;> 
 
 <!-- =============================================================== -->
 <!-- End of DTD -->
