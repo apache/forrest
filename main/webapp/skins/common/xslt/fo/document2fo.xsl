@@ -272,6 +272,7 @@
       <!-- don't list page number on first page if it's contents is just the TOC -->
       <xsl:if test="not($toc-max-depth > 0 and $page-break-top-sections)">
       <fo:block
+        font-size="70%"
         text-align="start">
           <!-- insert i18n stuff here -->
         Page <fo:page-number/>
@@ -282,6 +283,7 @@
 
     <fo:static-content flow-name="even-header">
       <fo:block
+        font-size="70%"
         text-align="end"
         font-style="italic">
         <xsl:value-of select="header/title"/>
@@ -296,6 +298,7 @@
         <xsl:apply-templates select="footer"/>
       </fo:block>
       <fo:block
+        font-size="70%"
         text-align="end">
         <!-- insert i18n stuff here -->
         Page <fo:page-number/>
@@ -305,6 +308,7 @@
 
     <fo:static-content flow-name="odd-header">
       <fo:block
+        font-size="70%"
         text-align="start"
         font-style="italic">
         <xsl:value-of select="header/title"/>
@@ -319,6 +323,7 @@
         <xsl:apply-templates select="footer"/>
       </fo:block>
       <fo:block
+        font-size="70%"
         text-align="start">
         <!-- insert i18n stuff here -->
         Page <fo:page-number/>
@@ -531,6 +536,9 @@
 
   <xsl:template match="ol/li">
     <fo:list-item>
+      <xsl:if test="not(following-sibling::li[1])">
+        <xsl:attribute name="space-after">6pt"</xsl:attribute>
+      </xsl:if>
       <fo:list-item-label
         end-indent="label-end()">
         <fo:block>
@@ -564,6 +572,9 @@
 
   <xsl:template match="ul/li">
     <fo:list-item>
+      <xsl:if test="not(following-sibling::li[1])">
+        <xsl:attribute name="space-after">6pt</xsl:attribute>
+      </xsl:if>
       <fo:list-item-label end-indent="label-end()">
         <fo:block>&#x2022;</fo:block>
       </fo:list-item-label>
