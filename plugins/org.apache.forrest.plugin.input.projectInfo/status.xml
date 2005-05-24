@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE status PUBLIC "-//APACHE//DTD Status V1.3//EN" "http://forrest.apache.org/dtd/status-v13.dtd">
+<!DOCTYPE status PUBLIC "-//APACHE//DTD Status V1.3//EN" "status-v13.dtd">
 <status>
 
   <developers>
@@ -25,10 +25,20 @@
   <changes>
     <!-- Add new releases here -->
     <release version="0.1" date="unreleased">
-      <action context="xsl" type="fix" dev="DC">
+      <action context="code" type="add" dev="RDG" importance="high">
+        Added automatic generation of release notes by requesting  **/releaseNotes_VERSION-NUMBER.xml
+      </action>
+      <action context="design" type="add" dev="RDG" importance="high">
+        Added optional "notes" element to "release" element of status 1.3 DTD. This 
+        will be inserted into the release notes for that version.
+      </action>
+      <action context="code" type="add" dev="RDG" importance="high">
+        Enable the generation of changes for a specific version by requesting **/changes_VERSION-NUMBER.xml
+      </action>
+      <action context="docs" type="fix" dev="DC">
         Use relative location of images directory.
       </action>
-      <action dev="DC" type="add" context="xmap">
+      <action dev="DC" type="add" context="design">
        Added better sitemap match using regexp to deal
        with sub-directories too.
       </action>
@@ -36,12 +46,12 @@
         Replace use of document() function in changes2rss.xml with
         sitemap aggregation.
       </action>
-      <action dev="DC" type="fix" context="xsl"
+      <action dev="DC" type="fix" context="code"
        fixes-bug="FOR-455" due-to="Cyriaque Dupoirieux">
        Use the "title" attribute of "changes" and "todo" tags if it exists,
        otherwise use the hard-coded values.
       </action>
-      <action context="code" type="update" dev="RDG">
+      <action context="code" type="update" dev="RDG" importance="high">
         Move ToDo and Changes pipelines to this plugin, from core.
       </action>
       <action dev="RDG" type="add" context="admin">

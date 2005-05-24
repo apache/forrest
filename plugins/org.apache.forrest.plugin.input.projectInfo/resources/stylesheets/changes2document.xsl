@@ -21,6 +21,7 @@
     version="1.0"> 
 
   <xsl:param name="path"/>
+  <xsl:param name="versionNumber"/>
   <xsl:include href="dotdots.xsl"/> <!-- FIXME: howto include from forrest core -->
 
   <!-- Calculate path to site root, eg '../../' -->
@@ -48,14 +49,22 @@
        <xsl:value-of select="@title"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:text>History of Changes</xsl:text>
+       <xsl:text>History of Changes</xsl:text> <xsl:value-of select="$versionNumber"/>
      </xsl:otherwise>
     </xsl:choose>
    </title>
    </header>
    <body>
-    <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>    
-    <xsl:apply-templates/>
+    
+    <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
+    <xsl:choose>
+      <xsl:when test="$versionNumber">
+        <xsl:apply-templates select="release[@version=$versionNumber]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
    </body>
   </document>
  </xsl:template>
@@ -63,15 +72,56 @@
  <xsl:template match="release">
   <section id="version_{@version}">
    <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
-   <ul>
-     <!-- To sort types by add,remove,update,fix. Look nicer -->
-     <xsl:apply-templates select="action[@type='add']"/>
-     <xsl:apply-templates select="action[@type='remove']"/>
-     <xsl:apply-templates select="action[@type='update']"/>
-     <xsl:apply-templates select="action[@type='fix']"/>
-     <xsl:apply-templates select="action[@type='hack']"/>
-     <xsl:apply-templates select="action[@type!='add' and @type!='remove' and @type!='update' and @type!='fix' and @type!='hack']"/>
-   </ul>
+     <xsl:if test="action[@context='code']">
+       <section>
+         <title>Changes to Code Base</title>
+         <ul>
+          <xsl:apply-templates select="action[@context='code']">
+            <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+         </ul>
+       </section>
+     </xsl:if>
+     <xsl:if test="action[@context='docs']">
+       <section>
+         <title>Changes to Documentation</title>
+         <ul>
+          <xsl:apply-templates select="action[@context='docs']">
+            <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+        </ul>
+       </section>
+     </xsl:if>
+     <xsl:if test="action[@context='admin']">
+       <section>
+         <title>Changes to Project Administration</title>
+         <ul>
+           <xsl:apply-templates select="action[@context='admin']">
+            <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+         </ul>
+       </section>
+     </xsl:if>
+     <xsl:if test="action[@context='design']">
+       <section>
+         <title>Changes to Design</title>
+         <ul>
+          <xsl:apply-templates select="action[@context='design']">
+            <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+         </ul>
+       </section>
+     </xsl:if>
+     <xsl:if test="action[@context='build']">
+       <section>
+         <title>Changes to Build</title>
+         <ul>
+           <xsl:apply-templates select="action[@context='build']">
+            <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+         </ul>
+       </section>
+     </xsl:if>
   </section>
  </xsl:template>
 
