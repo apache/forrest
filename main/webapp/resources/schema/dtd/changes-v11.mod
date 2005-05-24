@@ -68,7 +68,7 @@ CHANGE HISTORY:
                       date     CDATA  #REQUIRED>
                       
     <!-- Notea section for release notes -->
-    <!ELEMENT notes (%blocks;)*>
+    <!ELEMENT notes (%sections;)*>
     <!ATTLIST notes %common.att;> 
 
 <!-- =============================================================== -->
