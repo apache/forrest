@@ -165,8 +165,6 @@ public class NewXDoc extends Wizard implements INewWizard {
 		sb.append(" ");
 		sb.append("-Dresource.name=");
 		sb.append(fileName);
-		sb.append(" ");
-		sb.append("-verbose");
 		runner.setArguments(sb.toString());
 		runner.run(monitor);
 	    resource.refreshLocal(IProject.DEPTH_INFINITE, monitor);
