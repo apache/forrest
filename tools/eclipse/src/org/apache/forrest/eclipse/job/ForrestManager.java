@@ -110,6 +110,10 @@ public class ForrestManager {
 	public static final String FORREST_PLUGINS = FORREST_HOME
 			+ File.separator + "build" + File.separator + "plugins" + File.separator;
 
+    public static final String FORREST_PLUGINS_LIB = FORREST_HOME
+            + File.separator + "build" + File.separator + "plugins"
+            + File.separator + "lib" + File.separator;
+
 	private static final String FORREST_DEFAULT_PROPERTIES_FILE = FORREST_CORE_WEBAPP
 	+ File.separatorChar + "default-forrest.properties";
 	
@@ -203,6 +207,8 @@ public class ForrestManager {
 			vctFiles.addAll(getLibFiles(FORREST_ENDORSED_LIB));
 			//			 add optional libs
 			vctFiles.addAll(getLibFiles(FORREST_OPTIONAL_LIB));
+            //           add plugin libs
+            vctFiles.addAll(getLibFiles(FORREST_PLUGINS_LIB));
 		} catch (FileNotFoundException e) {
 			logger.error("getClasspathFiles()", e);
 
