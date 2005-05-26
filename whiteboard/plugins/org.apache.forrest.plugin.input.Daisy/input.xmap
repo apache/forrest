@@ -39,14 +39,16 @@
 			<map:match
 				pattern="do/getRepositoryData/daisy/*/port/*/collection/*/doc/**.xml">
 				<map:generate type="html" src="http://{1}:{2}/{3}/{4}?navigationType=none" />
+        <map:transform src="{project:resources.stylesheets}/daisyFilter.xsl"/>
 				<map:transform src="{forrest:stylesheets}/html2document.xsl" />
 				<map:serialize type="xml" />
 			</map:match>
       
 			<map:match
-				pattern="do/getRepositoryData/daisy/*/collection/*/doc/**.xml">
+				pattern="do/getRepositoryData/daisy/**/collection/*/doc/**.xml">
 				<map:generate type="html" src="http://{1}/{2}/{3}?navigationType=none" />
-				<map:transform src="{forrest:stylesheets}/html2document.xsl" />
+        <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+				<map:transform src="{project:resources.stylesheets}/daisyFilter.xsl"/>
 				<map:serialize type="xml" />
 			</map:match>
 		</map:pipeline>
