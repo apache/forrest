@@ -19,23 +19,39 @@
 				xmlns:req="http://apache.org/cocoon/request/2.0"
 				version="1.0">
 
+  <xsl:param name="localURL"/>
   <xsl:param name="documentID"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='documentID']/req:value"/></xsl:param>
   <xsl:param name="repositoryURL"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryURL']/req:value"/></xsl:param>
 	<xsl:param name="repositoryPort"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryPort']/req:value"/></xsl:param>
 	<xsl:param name="repositoryCollection"><xsl:value-of select="req:request/req:requestParameters/req:parameter[@name='repositoryCollection']/req:value"/></xsl:param>
 	
-  <xsl:template match="req:request">      
+  <xsl:template match="req:request">   
 			<xsl:choose>
 				<xsl:when test="$repositoryPort">
-					<xsl:variable name="document">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/port/<xsl:value-of select="$repositoryPort"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
-		      <xsl:apply-templates select="document($document)"/>
+          <xsl:call-template name="processDocument">
+					  <xsl:with-param name="remoteURL">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/port/<xsl:value-of select="$repositoryPort"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/></xsl:with-param>
+          </xsl:call-template>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:variable name="document">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/>.xml</xsl:variable>
-		      <xsl:apply-templates select="document($document)"/>
+          <xsl:call-template name="processDocument">
+					  <xsl:with-param name="remoteURL">cocoon:/do/getRepositoryData/daisy/<xsl:value-of select="$repositoryURL"/>/collection/<xsl:value-of select="$repositoryCollection"/>/doc/<xsl:value-of select="$documentID"/></xsl:with-param>
+          </xsl:call-template>
 				</xsl:otherwise>
 		</xsl:choose>
-
+  </xsl:template>
+  
+  <xsl:template name="processDocument">
+    <xsl:param name="remoteURL"/>
+    <xsl:choose>
+      <xsl:when test="contains($localURL, '.source.xml')">
+        <xsl:variable name="document"><xsl:value-of select="$remoteURL"/>.source.xml</xsl:variable>
+        <xsl:apply-templates select="document($document)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="document"><xsl:value-of select="$remoteURL"/>.xml</xsl:variable>
+        <xsl:apply-templates select="document($document)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>  
     
   <xsl:template match="link">

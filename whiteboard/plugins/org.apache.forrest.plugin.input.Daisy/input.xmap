@@ -37,18 +37,32 @@
 		<!-- ============================================================== -->
 		<map:pipeline>
 			<map:match
+				pattern="do/getRepositoryData/daisy/*/port/*/collection/*/doc/**.source.xml">
+				<map:generate type="html" src="http://{1}:{2}/{3}/{4}?navigationType=none" />
+				<map:serialize type="xml" />
+			</map:match>
+      
+			<map:match
 				pattern="do/getRepositoryData/daisy/*/port/*/collection/*/doc/**.xml">
 				<map:generate type="html" src="http://{1}:{2}/{3}/{4}?navigationType=none" />
-        <map:transform src="{project:resources.stylesheets}/daisyFilter.xsl"/>
+        <map:transform src="{project:resources.stylesheets}/daisy/preFilter.xsl"/>
 				<map:transform src="{forrest:stylesheets}/html2document.xsl" />
+        <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
+				<map:serialize type="xml" />
+			</map:match>
+      
+			<map:match
+				pattern="do/getRepositoryData/daisy/**/collection/*/doc/**.source.xml">
+				<map:generate type="html" src="http://{1}/{2}/{3}?navigationType=none" />
 				<map:serialize type="xml" />
 			</map:match>
       
 			<map:match
 				pattern="do/getRepositoryData/daisy/**/collection/*/doc/**.xml">
 				<map:generate type="html" src="http://{1}/{2}/{3}?navigationType=none" />
+				<map:transform src="{project:resources.stylesheets}/daisy/preFilter.xsl"/>
         <map:transform src="{forrest:stylesheets}/html2document.xsl" />
-				<map:transform src="{project:resources.stylesheets}/daisyFilter.xsl"/>
+        <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
 				<map:serialize type="xml" />
 			</map:match>
 		</map:pipeline>
@@ -59,7 +73,9 @@
           <map:parameter name="parameter-name" value="repositoryType"/>
           <map:when test="daisy-wiki">
             <map:generate type="request"/>
-            <map:transform src="resources/stylesheets/repoRequest2doc.xsl"/>
+            <map:transform src="resources/stylesheets/repoRequest2doc.xsl">
+              <map:parameter name="localURL" value="{1}.xml"/>
+            </map:transform>
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -72,7 +88,9 @@
           <map:parameter name="parameter-name" value="repositoryType"/>
           <map:when test="daisy-wiki">
             <map:generate type="request"/>
-            <map:transform src="resources/stylesheets/repoRequest2doc.xsl"/>
+            <map:transform src="resources/stylesheets/repoRequest2doc.xsl">
+              <map:parameter name="localURL" value="{1}/{2}.xml"/>
+            </map:transform>
             <map:serialize type="xml" />
           </map:when>
         </map:select>
