@@ -29,6 +29,7 @@
    <xsl:call-template name="aural"/>
    <xsl:call-template name="a-external"/>
    <xsl:apply-templates/>
+   <xsl:call-template name="add-extra-css"/>
   </xsl:template>
 
   <xsl:template match="colors">
@@ -74,8 +75,9 @@ a.external  {
 }
   </xsl:template>
   
-  <xsl:template match="extra-css">
-    <xsl:value-of select="."/>
+  <xsl:template name="add-extra-css">
+    <xsl:text>/* extra-css */</xsl:text>
+    <xsl:value-of select="extra-css"/>
   </xsl:template>
   
   <xsl:template match="*"></xsl:template>
