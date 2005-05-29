@@ -99,6 +99,48 @@
           browser. </p>
       </answer>
     </faq>
+    <faq id="site-xml">
+      <question>
+        How to use the <code>site.xml</code> configuration file for menus and linking.
+      </question>
+      <answer>
+        <p>
+          The <code>site.xml</code> configuration file is used for two different purposes:
+          defining the left-hand navigation menus, and as a method for defining references
+          to be used when linking between documents.
+          This file is fully explained in
+          <link href="site:linking">Menus and Linking</link>. Here is a precis:
+        </p>
+        <p>
+          Use unique element names. The labels can be whatever text you want.
+        </p>
+        <source><![CDATA[<faq label="FAQs" href="faq.html">
+  <tech label="Technical" href="faq-tech.html">
+    <docbook href="#docbook"/>
+    <ignoring_javadocs href="#ignoring_javadocs"/>
+  </tech>
+  <user label="User" href="faq-user.html">
+</faq>]]></source>
+        <p>
+          That will create a menu like this with three links:
+        </p>
+        <source>FAQs
+   Technical
+   User</source>
+
+        <p>
+          These documents can be linked to from other documents, like this:
+        </p>
+        <source><![CDATA[<a href="site:faq/tech"> link to the top of the Tech FAQs
+<a href="site:faq/tech/docbook"> link to the DocBook FAQ in the Tech FAQs]]></source>
+
+        <p>
+          If that "docbook" entry was a unique name in your site.xml then you
+          can shorten that latter link:
+        </p>
+        <source><![CDATA[<a href="site:docbook"> link to the DocBook FAQ in the Tech FAQs]]></source>
+      </answer>
+    </faq>
     <faq id="PDF-output">
       <question>How can I generate one pdf-file out of the whole site or selected pages of the site?</question>
       <answer>
