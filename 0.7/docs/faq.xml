@@ -55,7 +55,45 @@
           stucture is consistent. Forrest can also use "html" as the source format, in which case
           you can use text editors or "html editors" such as the one provided with the Mozilla web
           browser. </p>
-      </section><section id="PDF-output"><title>2.2. How can I generate one pdf-file out of the whole site or selected pages of the site?</title>
+      </section><section id="site-xml"><title>2.2. 
+        How to use the <code>site.xml</code> configuration file for menus and linking.
+      </title>
+        <p>
+          The <code>site.xml</code> configuration file is used for two different purposes:
+          defining the left-hand navigation menus, and as a method for defining references
+          to be used when linking between documents.
+          This file is fully explained in
+          <link href="site:linking">Menus and Linking</link>. Here is a precis:
+        </p>
+        <p>
+          Use unique element names. The labels can be whatever text you want.
+        </p>
+        <source xml:space="preserve">&lt;faq label="FAQs" href="faq.html"&gt;
+  &lt;tech label="Technical" href="faq-tech.html"&gt;
+    &lt;docbook href="#docbook"/&gt;
+    &lt;ignoring_javadocs href="#ignoring_javadocs"/&gt;
+  &lt;/tech&gt;
+  &lt;user label="User" href="faq-user.html"&gt;
+&lt;/faq&gt;</source>
+        <p>
+          That will create a menu like this with three links:
+        </p>
+        <source xml:space="preserve">FAQs
+   Technical
+   User</source>
+
+        <p>
+          These documents can be linked to from other documents, like this:
+        </p>
+        <source xml:space="preserve">&lt;a href="site:faq/tech"&gt; link to the top of the Tech FAQs
+&lt;a href="site:faq/tech/docbook"&gt; link to the DocBook FAQ in the Tech FAQs</source>
+
+        <p>
+          If that "docbook" entry was a unique name in your site.xml then you
+          can shorten that latter link:
+        </p>
+        <source xml:space="preserve">&lt;a href="site:docbook"&gt; link to the DocBook FAQ in the Tech FAQs</source>
+      </section><section id="PDF-output"><title>2.3. How can I generate one pdf-file out of the whole site or selected pages of the site?</title>
         <p>Add the following entries to your site.xml file:</p>
         <source xml:space="preserve">
   &lt;about tab="home" label="About" href=""&gt;
@@ -69,7 +107,7 @@
           tab</link>.) </p>
         <p> This assumes that you use the <link href="site:linking">site.xml</link> method for your
           site structure and navigation, rather than the old book.xml method. </p>
-      </section><section id="pageBreaks"><title>2.3. How do I insert page breaks into documents?</title>
+      </section><section id="pageBreaks"><title>2.4. How do I insert page breaks into documents?</title>
         <p>Page breaks do not make a great deal of sense in HTML documents intended for display on a
           screen. However, PDF documents are intended for printing and therefore page breaks can be
           important.</p>
@@ -83,16 +121,16 @@
         </p>
         <source xml:space="preserve"> .pageBreakBefore { margin-bottom: 0; page-break-before: always; } .pageBreakAfter {
           margin-bottom: 0; page-break-after: always; } </source>
-      </section><section id="clickable-email-address"><title>2.4. How can I generate html-pages to show a 'clickable' email-address (of the
+      </section><section id="clickable-email-address"><title>2.5. How can I generate html-pages to show a 'clickable' email-address (of the
         author-element)?</title>
         <p>You would override <code>
             $FORREST_HOME/main/webapp/skins/common/xslt/html/document2html.xsl</code> and edit the
           "headers/authors" template. </p>
-      </section><section id="link_raw"><title>2.5. How do I link to raw files such as config.txt and brochure.pdf? </title>
+      </section><section id="link_raw"><title>2.6. How do I link to raw files such as config.txt and brochure.pdf? </title>
         <p>Handling of raw files was significantly changed in Forrest 0.7. See 
           <link href="site:upgrading_07/raw">Upgrading to Apache Forrest 0.7</link> for
           all the details.</p>
-      </section><section id="pdf_images"><title>2.6. Images don't display in PDFs. How do I fix this?</title>
+      </section><section id="pdf_images"><title>2.7. Images don't display in PDFs. How do I fix this?</title>
         <p> Forrest uses <link href="http://xml.apache.org/fop/">Apache FOP</link> for rendering
           PDFs. FOP cannot handle all image types natively, and requires third-party jars to be
           added. FOP natively handles BMP, GIF, JPG, TIFF and EPS (with a few limitations). FOP can
@@ -109,7 +147,7 @@
           http://java.sun.com/products/java-media/jai). For more info, see <link href="http://xml.apache.org/fop/graphics.html#packages">FOP Graphics Packages</link>
         </p>
         <note>Due to Sun's licensing, we cannot redistribute Jimi or JAI with Forrest.</note>
-      </section><section id="index.html"><title>2.7.  The tab link in my site incorrectly assumes that 'index.html' is present in the
+      </section><section id="index.html"><title>2.8.  The tab link in my site incorrectly assumes that 'index.html' is present in the
         linked-to directory. How do I fix this? </title>
         <p> In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing '/'. Which
           file to serve is then a concern of the sitemap. For example, if the "User Manual" tab
@@ -122,7 +160,7 @@
   &lt;map:match pattern="manual"&gt;
     &lt;map:redirect-to uri="manual/Introduction.html"/&gt;
   &lt;/map:match&gt;</source>
-      </section><section id="defaultFileName"><title>2.8.  How can I change the default file name that Forrest will look for when I request a
+      </section><section id="defaultFileName"><title>2.9.  How can I change the default file name that Forrest will look for when I request a
         URL like <code>http://myserver</code> or <code>http://myserver/mydir/</code> ? </title>
         <p>To change the default file name from 'index.html' (default) to 'overview.html' you need to
           make the following changes:</p>
@@ -140,7 +178,7 @@
   &lt;/map:pipeline&gt;
           </source></li>
         </ol>
-      </section><section id="defaultStartPage"><title>2.9.  How can I use a start-up-page other than index.html? </title>
+      </section><section id="defaultStartPage"><title>2.10.  How can I use a start-up-page other than index.html? </title>
         <p>Forrest by default assumes that the first page (home page) of your site is named
           index.html. Which is good because most web servers are configured to look for index.html
           when you call a url like http://myserver</p>
@@ -159,12 +197,12 @@
           <li>Name the uri-attribute whatever you'd like your start page to be.</li>
           <li>Don't forget to create that page and refer to it in your site.xml</li>
         </ol>
-      </section><section id="label-entity"><title>2.10.  How to use special characters in the labels of the site.xml file? </title>
+      </section><section id="label-entity"><title>2.11.  How to use special characters in the labels of the site.xml file? </title>
         <p> Use the numeric values for character entities. For example, rather than using
             <code>&amp;ouml;</code> use <code>&amp;#246;</code>
         </p>
         <p> See the <link href="http://www.w3.org/TR/xhtml-modularization/dtd_module_defs.html#a_xhtml_character_entities">XHTML Character Entities</link> and see more discussion at <link href="http://issues.cocoondev.org/browse/FOR-244">Issue FOR-244</link>. </p>
-      </section><section id="encoding"><title>2.11. Does Forrest handle accents for non-English languages?</title>
+      </section><section id="encoding"><title>2.12. Does Forrest handle accents for non-English languages?</title>
         <p>Yes, Forrest can process text in any language, so you can include:</p>
         <ul>
           <li>accents: á é í ó ú</li>
@@ -201,7 +239,7 @@
         <p>Here are some references which explain further: <link href="http://orixo.com/events/gt2004/bios.html#torsten">GT2004 presentation by Torsten
             Schlabach</link> and <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode
             resources</link>. </p>
-      </section><section id="cleanSite"><title>2.12.  How can I make Forrest properly clean up the build/site-directory? </title>
+      </section><section id="cleanSite"><title>2.13.  How can I make Forrest properly clean up the build/site-directory? </title>
         <p>Forrest for performance reasons doesn't clean out the build/site-directory each time you
           compile your project. This usually doesn't matter during development but might become a
           problem in a production environment.</p>
@@ -282,17 +320,31 @@ X [0]                       brokenlink.html     BROKEN: reason
             <code>-Djava.awt.headless=true</code>, like this: </p>
         <source xml:space="preserve">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
         <p> See also <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>. </p>
-      </section><section id="catalog"><title>3.8.  How do i configure my favourite XML editor or parser to find the local Forrest
+      </section><section id="project-logo-svg"><title>3.8.  
+        The project logo that is generated from SVG is truncating my project name.
+      </title>
+        <p>
+          In a 'forrest seed site' the project and the group logo are generated from a
+          Scalable Vector Graphics (SVG) file, using the text from the
+          <code>&lt;project-name&gt;</code> and
+          <code>&lt;group-name&gt;</code> elements of the <code>skinconf.xml</code> file.
+          If you have a long project-name then you may need to adjust the width of the image.
+          Perhaps you want to change the colours too. Edit the file at
+          <code>src/documentation/content/xdocs/images/project.svg</code> and adjust the "width"
+          attribute of the &lt;svg&gt; element. For further details see
+          <link href="http://www.w3.org/Graphics/SVG/">SVG</link> resources.
+        </p>
+      </section><section id="catalog"><title>3.9.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </title>
         <p> Notes are provided for various tools at <link href="site:catalog">Using Catalog Entity
             Resolver for local DTDs</link>. </p>
-      </section><section id="skin"><title>3.9.  How to make the site look better and change its skin? </title>
+      </section><section id="skin"><title>3.10.  How to make the site look better and change its skin? </title>
         <p> There are <link href="site:skins">default skins</link> provided, which are configurable
           and so should meet the needs of most projects. The aim is to provide many capabilities so
           that extra skins are not needed. </p>
         <p> See notes about <link href="site:your-project/skins">configuration</link> of the skins.
           Some projects may have special needs and can define their <link href="site:your-project/new-skin">own skin</link>. </p>
-      </section><section id="xsp"><title>3.10. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+      </section><section id="xsp"><title>3.11. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
         <p>First consider whether your needs would be better met by Cocoon itself, rather than
           Forrest. </p>
         <p>That said, there are valid reasons for wanting programmatically generated content, so
@@ -322,7 +374,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           </li>
         </ol>
         <p>See also the <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
-      </section><section id="breadcrumbs"><title>3.11. How do breadcrumbs work? Why don't they work locally?</title>
+      </section><section id="breadcrumbs"><title>3.12. How do breadcrumbs work? Why don't they work locally?</title>
         <p>Breadcrumbs begin with up to three URLs specified in <code>skinconf.xml</code>. Here is
           what the Forrest site uses:</p>
         <source xml:space="preserve">
@@ -335,7 +387,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           the URL for the current page and makes a link for each directory after the domain. If you
           are viewing the site locally, there is no domain and so there will be no extra
           breadcrumbs, only the ones that are specified in <code>skinconf.xml</code>. </p>
-      </section><section id="run_port"><title>3.12. How do I make <code>forrest run</code> listen on a different port?</title>
+      </section><section id="run_port"><title>3.13. How do I make <code>forrest run</code> listen on a different port?</title>
         <p>
           <code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code>
         </p>
