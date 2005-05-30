@@ -130,9 +130,14 @@
         <exclude name="build/**"/>
       </fileset>
     </copy>
-  	<copy toFile="${forrest.plugins.localDeploy.dir}/lib/${plugin-name}.jar"
-  	      file="${build.dir}/${plugin-name}.jar"
-  	      failonerror="false"/>
+    <if>
+      <available file="${build.dir}/${plugin-name}.jar"/>
+      <then>
+        <copy toFile="${forrest.plugins.localDeploy.dir}/lib/${plugin-name}.jar"
+            file="${build.dir}/${plugin-name}.jar"
+            failonerror="false"/>
+       </then>
+     </if>
 
      <!-- add to the entity catalog -->
      <copy file="${forrest.core}/var/initial_catalog.xcat"
@@ -152,12 +157,16 @@
            tofile="${forrest.plugins.localDeploy.dir}/catalog.xcat"/>
        </then>
      </if>
-            
-  	<copy toDir="${forrest.plugins.localDeploy.dir}/lib"
-      failonerror="false">
-  	    <fileset dir="lib"/>
-    </copy>
-    
+
+    <if>
+      <available file="lib"/>
+      <then>
+        <copy toDir="${forrest.plugins.localDeploy.dir}/lib" failonerror="false">
+          <fileset dir="lib"/>
+        </copy>
+       </then>
+     </if>
+
     <antcall target="build"/>
   </target>
   
