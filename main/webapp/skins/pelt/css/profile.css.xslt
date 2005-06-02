@@ -19,7 +19,7 @@
 
   <xsl:import href="../../common/css/forrest.css.xslt"/>
 
-  <!-- This is not used by Forrest but makes it possible to debug the 
+  <!-- xsl:output is not used by Forrest but makes it possible to debug the 
        stylesheet in standalone editors -->
   <xsl:output method = "text"  omit-xml-declaration="yes"  />
   
