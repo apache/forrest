@@ -69,12 +69,14 @@ Instructions for use:
 
     Otherwise, copy the relavent license.txt file from $COCOON_HOME/legal.
 
-9.  cd $FORREST_HOME/main
+9.  Keep our Cocoon config files synchronised at main/webapp/WEB-INF/
 
-10. Build a regular forrest distribution and test, test test.
+10. cd $FORREST_HOME/main
+
+11. Build a regular forrest distribution and test, test test.
 
     The testing should consist of doing a "forrest site", "forrest run"
     and "forrest war" against existing forrest projects and also against
     new "forrest seed" sites.
 
-11. Update the cocoon "svn info" at the top of this README.txt
+12. Update the cocoon "svn info" at the top of this README.txt
