@@ -298,8 +298,6 @@ document.write("Last Published: " + document.lastModified);
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="$config/year"/>
-            <xsl:text> </xsl:text>
             <xsl:value-of select="$config/vendor"/>
           </xsl:otherwise>
         </xsl:choose>
