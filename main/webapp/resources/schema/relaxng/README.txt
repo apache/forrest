@@ -22,6 +22,10 @@ used here *.rnx files):
 Jing RELAX NG validator in Java:
 	http://www.thaiopensource.com/relaxng/
 
+Trang Multi-format XML schema converter based on RELAX NG
+Trang converts between different schema languages for XML.
+	http://www.thaiopensource.com/relaxng/trang.html
+
 To run an XML file against a .rng schema using Jing, see the
 "validate-config" target in xml-forrest/build.xml or do this:
 
