@@ -40,40 +40,59 @@
       the locationmap however the leaf does not identify a pipeline but instead identifies
       a location string.</p>
     </section>
-
-    <section id="examples">
-      <title>Locationmap Examples</title>
-      <section>
-        <title>Link Rewriting</title>
-        <p>The locationmap can be used to rewrite URLs when the page is generated.</p>
-        <source>&lt;a href="lm:somefile"&gt;This leads somewhere else&lt;/a&gt;</source>
-        <p>Is translated to the following:</p>
-        <source>&lt;a href="lm:source/somefile.html"&gt;This leads somewhere&lt;/a&gt;</source>
-        <p>When the locationmap has:</p>
-        <source>
-&lt;locator&gt;
- &lt;match pattern="**"&gt;
-   &lt;location src="/somewhereelse/{1}.html" /&gt;
- &lt;/match&gt;
-&lt;/locator&gt;
-        </source>
-        <p>Like this: <a href="lm:somefile">This leads somewhere else</a>.</p>
-      </section>
       
       <section>
         <title>Generating from a Different Location</title>
         
-        <warning>This does not work yet, some experimentation still reqruied.</warning>
         
         <p>Normally files are generated from <code>{project:content.xdocs}</code>.
         Using the Locationmap it is possible to make these files come from elsewhere.
         This is useful if you want to pull files from different directory structures,
         oe even remote repositories.</p>
         
-        <p>The target of <a href="/locationmap/demo.xml">this link</a> is generated from
-        outside the normal documentation directory structure.</p>
-      
+        <p>The target of <a href="/remoteDemo/index.html">href="/remoteDemo/index.html"</a>
+        is generated from a source retrieved from the Forrest SVN via viewSVN.</p>
         
+        <note>Because the above link retrieves the source file from viewSVN it will
+        only work if you are online.</note>
+        
+        <p>The locationmap matcher for the link above is:</p>
+        
+        <source>
+ &lt;match pattern="remoteDemo/**.xml"&gt;
+   &lt;location src="http://svn.apache.org/viewcvs.cgi/*checkout*/forrest/trunk/site-author/content/xdocs/{1}.xml" /&gt;
+ &lt;/match&gt;
+        </source>
+      
+        <p>Note that because this is a wildcard matcher you can request any page
+        from viewsSVN simply by requesting 
+        <code>/remoteDemo/PATH/TO/FILE/FILENAME.html</code>. In addition, we
+        can request any other output format available via FOrrest plugins.</p>
+        
+        <p>When including resources from remote repositories one hs to
+        be careful about things like <code>site</code> and <code>ext</code>
+        linking. If the targets are not defined in the local 
+        <code>site.xml</code> file then these links will be broken.</p>
+        
+        <warning>Because of the above limitation many of the links in the
+        page generated from the above example are broken.</warning>
+        
+      </section>
+
+    <section id="examples">
+      <title>Locationmap Examples</title>
+      <section>
+        <title>Link Rewriting</title>
+        <p>The locationmap can be used to rewrite URLs when the page is generated.
+        For example, when the locationmap has:</p>
+        <source>
+ &lt;match pattern="rewriteDemo/**"&gt;
+   &lt;location src="http://www.burrokeet.org/{1}.xml" /&gt;
+ &lt;/match&gt;
+        </source>
+        <p><a href="lm:rewriteDemo/index">This link leads is rewritten to
+        an offsite address</a> not
+        specified in the link, which has <code>href="lm:rewriteDemo/index"</code>.</p>
       </section>
     </section>
   </body>
