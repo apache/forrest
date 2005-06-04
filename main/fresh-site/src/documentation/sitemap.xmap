@@ -18,6 +18,36 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
  <map:pipelines>
   <map:pipeline>
+    <!-- Emulate the behaviour of version 0.6
+         You do not need this if you are not using raw HTML files
+         or if you are not upgrading from 0.6 
+         
+         Note you can use modfications of the matching patterns to
+         handle different types of HTML content differently, that
+         is some could be skinned, whilst some could be served
+         un-processed.
+         -->
+    <map:match pattern="**.html">
+     <map:select type="exists">
+      <map:when test="{project:content}{0}">
+        <map:read src="{project:content}/{0}" mime-type="text/html"/>
+        <!--
+          Use this instead if you want JTidy to clean up your HTML
+          <map:generate type="html" src="{project:content}/{0}" />
+          <map:serialize type="html"/>
+        -->
+      </map:when>
+      <map:when test="{project:content.xdocs}{0}">
+        <map:read src="{project:content.xdocs}/{0}" mime-type="text/html"/>
+        <!--
+          Use this instead if you want JTidy to clean up your HTML
+          <map:generate type="html" src="{project:content.xdocs}/{0}" />
+          <map:serialize type="html"/>
+        -->
+      </map:when>
+     </map:select>
+   </map:match>
+  
    <map:match pattern="**custom.xml">
     <map:generate src="{project:content.xdocs}{1}custom.xml" />
     <map:transform src="{project:resources.stylesheets}/hello2document.xsl" />

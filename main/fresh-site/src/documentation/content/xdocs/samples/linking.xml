@@ -56,14 +56,19 @@
     <section id="resource-space">
       <title>Mapping the local resource space to the final URI space</title>
       <p>
-       For the generated files, the top-level of the
+       For both generated and raw (un-processed) files, the top-level of the
        URI space corresponds to the "<code>content/xdocs/</code>" directory,
        i.e. the location of the "<code>site.xml</code>" configuration file.
       </p>
-      <p>
-       For the raw un-processed content, the top-level of the URI space
-       corresponds to the "<code>content/</code>" directory.
-      </p>
+      <note>
+        In versions prior to 0.7 raw un-processed content was stored in
+        the "<code>content/</code>" directory. In 0.7 onwards, raw
+        un-processed data is stored alongside the xdocs. In addition,
+        in 0.6 and earlier HTML documents could be stored in the xdocs
+        directory and served without processing. If you 
+        you wish to emulate the behaviour of 0.6 and earlier see the 
+        next section.
+      </note>
       <p>
         A diagram will help.
       </p>
@@ -84,16 +89,25 @@ Raw un-processed content ...
  content/xdocs/subdir/hello.sxw                subdir/hello.sxw
 ]]></source>
 
-<note>By using <a href="/docs/plugins/index.html">Forrest Input Plugins</a>
-you can process some file formats, such as
-OpenOffice.org documents and produce processed content from them. For example,
-content/xdocs/hello.sxw can be used to produce a skinned version of the
-document at hello.html. Similarly, you can use 
-<a href="/docs/plugins/index.html">Forrest Output Plugins</a> to
-create different output formats such as PDF, in this case content/xdocs/hello.sxw
-can produce hello.pdf</note>
-
-      <p>Now for some examples ...</p>
+  <section>
+    <title>How Plugins May Affect The URI Space</title>
+      <p>By using <a href="/docs/plugins/index.html">Forrest Input Plugins</a>
+      you can process some file formats, such as
+      OpenOffice.org documents and produce processed content from them. For example,
+      the file <code>content/xdocs/hello.sxw</code> can be used to produce a 
+      skinned version of the document at with the name <code>hello.html</code>.
+      Similarly, you can use <a href="/docs/plugins/index.html">Forrest Output 
+      Plugins</a> to #create different output formats such as PDF, in this 
+      case <code>content/xdocs/hello.sxw</code> can produce 
+      <code>hello.pdf</code>.</p>
+      
+      <p>However, this does not affect the handling of raw content. That is, you 
+      can still retrieve the raw un-processed version with, for example, 
+      <code>hello.sxw</code>. If you want to prevent the user retrieving the 
+      un-processed version you will have to create matchers that intercept
+      these requests within your projects sitemap.</p>
+      </section>
+  
     </section>
 
     <section id="generated">
@@ -133,6 +147,76 @@ can produce hello.pdf</note>
       <code>content/hello.pdf</code> ...
       </p>
       <source><![CDATA[<a href="../hello.pdf">]]><a href="../hello.pdf">../hello.pdf</a><![CDATA[</a>]]></source>
+      
+      <section>
+        <title>Emulating the Behaviour of pre 0.7 Versions of Forrest</title>
+        
+        <p>In versions prior to 0.7 raw un-processed content was stored in
+        the "<code>content/</code>" directory. In 0.7 onwards, raw
+        un-processed data is stored alongside the xdocs. In addition
+        in 0.6 and earlier HTML files could be stored in the xdocs 
+        directory and they would be served without further processing.
+        As described above, this is not the case in 0.7 where HTML files
+        are, by default, skinned by Forrest.</p>
+        
+        <p>If you 
+        you wish to emulate the behaviour of 0.6 and earlier then you
+        must add the following to your projects sitemap.</p>
+        
+        <source>
+&lt;map:match pattern="**.html"&gt;
+ &lt;map:select type="exists"&gt;
+  &lt;map:when test="{project:content}{0}"&gt;
+    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+  &lt;map:when test="{project:content.xdocs}{0}"&gt;
+    &lt;map:read src="{project:content.xdocs}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content.xdocs}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+ &lt;/map:select&gt;
+&lt;/map:match&gt;
+        </source>
+        
+        <p>This allows us to create links to un-processed skinned files stored
+        in the <code>{project:content}</code> directory. For example:  
+        <a href="/test1.html">href="/test1.html"</a> and 
+        <a href="/test2.html">href="/test2.html"</a>.</p>
+        
+        <p>We can also create links to un-processed skinned files stored
+        in the <code>{project:content.xdocs}</code> directory. For example:  
+        <a href="test3.html">href="test3.html"</a> and 
+        <a href="subdir/test4.html">subdir/test4.html</a>.</p>
+        
+        <p>Note that you can change the matchers above to selectively serve some
+        content as raw un-processed content, whilst still serving other content
+        as skinned documents. For example, the following snippet would allow
+        you to serve the content of an old, deprecated site without processing
+        from Forrest whilst still allowing all other content to be processed 
+        by Forrest in the normal way:</p>
+        
+        <source>
+&lt;map:match pattern="old_site/**.html"&gt;
+ &lt;map:select type="exists"&gt;
+  &lt;map:when test="{project:content}{0}"&gt;
+    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+&lt;/map:match&gt;
+        </source>
+      </section>
     </section>
 
     <section id="url">
