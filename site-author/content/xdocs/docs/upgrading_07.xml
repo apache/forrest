@@ -139,23 +139,46 @@ project.required.plugins=org.apache.forrest.plugin.input.projectInfo,org.apache.
         Any linked file with .html extension was not processed and not
         adorned with Forrest skin and navigation menus.
       </p>
+      <p>It was also possible to place HTML content in the XDocs directory
+      where it would be copied across if it were linked from the main
+      content.</p>
       <p>
         In 0.7 version, any file that is linked to, needs to be placed in
         the content/xdocs/ directory structure.
         Any linked file with .html extension is now processed and is
         adorned with Forrest skin and navigation menus.
-      </p>
+      </p>        
+      <p>If you 
+        you wish to emulate the behaviour of 0.6 and earlier then you
+        must add the following to your projects sitemap.</p>
+        
+        <source>
+&lt;map:match pattern="**.html"&gt;
+ &lt;map:select type="exists"&gt;
+  &lt;map:when test="{project:content}{0}"&gt;
+    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+  &lt;map:when test="{project:content.xdocs}{0}"&gt;
+    &lt;map:read src="{project:content.xdocs}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content.xdocs}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+ &lt;/map:select&gt;
+&lt;/map:match&gt;
+        </source>
+        
       <p>
         If you need to include files that are not linked to,
         then place them in the src/documentation/content/ directories
-        as with the 0.6 version.
-      </p>
-      <p>
-        If you need to link to html files but want them to be un-processed,
-        then place them in the src/documentation/content/ directories and
-        add an entry to conf/cli.xconf to exclude them from processing.
-        An FAQ describes the use of Cocoon's
-        <a href="faq.html#cli-xconf">cli.xconf</a>
+        as with the 0.6 version. 
       </p>
     </section>
 
