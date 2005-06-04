@@ -29,6 +29,13 @@
         src="org.apache.cocoon.transformation.CIncludeTransformer"/>
       <map:transformer name="xinclude"
         src="org.apache.cocoon.transformation.XIncludeTransformer"/>
+      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+	      <catalogues default="contracts">
+	        <catalogue id="other" name="OtherMessages" location="messages"/>
+	        <catalogue id="contracts" name="ContractsMessages" location="messages"/>
+	      </catalogues>
+	      <cache-at-startup>true</cache-at-startup>
+	    </map:transformer>
     </map:transformers>
     <map:serializers>
 	   <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" name="xhtml" pool-grow="2" pool-max="64" pool-min="2" src="org.apache.cocoon.serialization.XMLSerializer">
@@ -120,6 +127,9 @@
      <map:transform src="resources/stylesheets/contract.xsl">
       <!--Which output format?-->
       <map:parameter name="format" value="xhtml"/>
+     </map:transform>
+     <map:transform type="i18n">
+       <map:parameter name="locale" value="{request:locale}"/>
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
