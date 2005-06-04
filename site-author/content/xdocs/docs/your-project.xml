@@ -40,76 +40,108 @@
        if you want to try the development version, then
        <link href="site:developers/build">build Forrest</link> from source.
      </p>
-     <p>
-     After downloading and extracting forrest, you need to add environment variables.
-     </p>
-     <p>In Unix/Linux:</p>
-     <source>
-change directory to the top-level of the forrest distribution and do ...
-~/apache-forrest-0.7$ export FORREST_HOME=`pwd`
-~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin
-     </source>
-     <p>In Windows:</p>
-     <source>
-Go to "My Computer", "Properties", "Advanced", "Environment Variables"
-and add:
-<code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.7</code>
-<code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code>
-     </source>
-     <p>
-       To see what the 'forrest' command can do, type 'forrest -projecthelp'.
-       The build targets that are marked with * are the commonly used ones.
+     
+     <section>
+       <title>Setting up the Environment</title>
+       <p>
+       After downloading and extracting forrest, you need to add environment variables.
        </p>
-     <source>
-Apache Forrest.  Run 'forrest -projecthelp' to list options
-
-Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
-
-    *=======================================================*
-    |                 Forrest Site Builder                  |
-    |                        X.Y-dev                        |
-    *=======================================================*
+       
+       <section>
+         <title>In Unix/Linux:</title>
+         <p class="instruction">change directory to the top-level of the forrest distribution and do ...</p>
+         <p class="instruction">~/apache-forrest-0.7$ export FORREST_HOME=`pwd`</p>
+         <p class="instruction">~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin</p>
+       
+         <section>
+           <title>Permanently Setting The Environment Variables for Linux/Unix</title>
+           <p>Export only changes the variables during that terminal session for that 
+           user, this is useful for testing. To permanently add the variable edit either 
+           <code>/etc/bash.bashrc</code> (for all users) or <code>~/.bash_profile</code>
+           (for individual users). Add these lines to the end of the file you edit:</p>
+         
+           <source>
+      FORREST_HOME=/full/path/to/forrest
+      export FORREST_HOME
+      
+      PATH=$PATH:$FORREST_HOME/bin
+      export PATH
+          </source>
+        </section>
+      </section>
+     
+       <section>
+         <title>Windows 2000</title>
+         <p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
+         <p class="instruction">add a new variable <code>FORREST_HOME</code> as <code>C:\full\path\to\apache-forrest-0.7</code></p>
+         <p class="instruction">edit <code>PATH</code> as <code>%PATH%;%FORREST_HOME%\bin</code></p>
+       </section>
+       
+       <section>
+         <title>In Windows XP:</title>
+         <p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
+         <p class="instruction">Create a New variable with name: FORREST_HOME value: C:\full\path\to\apache-forrest-0.7</p>
+         <p class="instruction">Edit PATH by adding ;%FORREST_HOME%\bin to the end of the current value.</p>
+       </section>
+     </section>
+   </section>
+   
+   <section>
+     <title>The 'forrest' Command</title>
+       <p>
+         To see what the 'forrest' command can do, type 'forrest -projecthelp'.
+         The build targets that are marked with * are the commonly used ones.
+         </p>
+       <source>
+  Apache Forrest.  Run 'forrest -projecthelp' to list options
   
-             Call this through the 'forrest' command
+  Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
   
-Main targets:
-
- available-plugins     What plugins are available?
- available-skins       What skins are available?
- clean                 * Clean all directories and files generated during
-                        the build
- init-plugins          Ensure the required plugins are available locally,
-                       if any are not, download them automatically
- install-skin          Install the needed skin from the remote repository
- package-skin          Make a package of an existing skin
- run                   * Run Jetty (instant live webapp)
- run_custom_jetty      Run Jetty with configuration file found in the project
- run_default_jetty     Run Jetty with configuration file found in Forrest
- seed                  * Seeds a directory with a template project doc structure
- site                  * Generates a static HTML website for this project
- validate              Validate all: xdocs, skins, sitemap, etc
- validate-sitemap      Validate the project sitemaps
- validate-skinchoice   Validate skin choice
- validate-skinconf     Validate skinconf
- validate-skins        Validate skins
- validate-stylesheets  Validate XSL files
- validate-xdocs        Validate the project xdocs
- war                   * Generates a dynamic servlet-based website
-                         (a packaged .war file)
- webapp                Generates a dynamic servlet-based website
-                         (an unpackaged webapp).
- webapp-local          Generates a dynamic servlet-based website
-                         (an unpackaged webapp). Note this webapp is suitable
-                         for local execution only, use the 'war' or 'webapp'
-                         target if you wish to deploy remotely.
-Default target: site
-     </source>
-      <p>
-        As 'site' is the default target, just running 'forrest' without options will
-        generate a "static HTML website". For example, typing 'forrest' in the
-       top-level "forrest" directory would build Forrest's own website.
-       But we're going to be building a new site for your project, so read on.
-      </p>
+      *=======================================================*
+      |                 Forrest Site Builder                  |
+      |                        X.Y-dev                        |
+      *=======================================================*
+    
+               Call this through the 'forrest' command
+    
+  Main targets:
+  
+   available-plugins     What plugins are available?
+   available-skins       What skins are available?
+   clean                 * Clean all directories and files generated during
+                          the build
+   init-plugins          Ensure the required plugins are available locally,
+                         if any are not, download them automatically
+   install-skin          Install the needed skin from the remote repository
+   package-skin          Make a package of an existing skin
+   run                   * Run Jetty (instant live webapp)
+   run_custom_jetty      Run Jetty with configuration file found in the project
+   run_default_jetty     Run Jetty with configuration file found in Forrest
+   seed                  * Seeds a directory with a template project doc structure
+   site                  * Generates a static HTML website for this project
+   validate              Validate all: xdocs, skins, sitemap, etc
+   validate-sitemap      Validate the project sitemaps
+   validate-skinchoice   Validate skin choice
+   validate-skinconf     Validate skinconf
+   validate-skins        Validate skins
+   validate-stylesheets  Validate XSL files
+   validate-xdocs        Validate the project xdocs
+   war                   * Generates a dynamic servlet-based website
+                           (a packaged .war file)
+   webapp                Generates a dynamic servlet-based website
+                           (an unpackaged webapp).
+   webapp-local          Generates a dynamic servlet-based website
+                           (an unpackaged webapp). Note this webapp is suitable
+                           for local execution only, use the 'war' or 'webapp'
+                           target if you wish to deploy remotely.
+  Default target: site
+       </source>
+        <p>
+          As 'site' is the default target, just running 'forrest' without options will
+          generate a "static HTML website". For example, typing 'forrest' in the
+         top-level "forrest" directory would build Forrest's own website.
+         But we're going to be building a new site for your project, so read on.
+        </p>
     </section>
 
     <section id="seeding_new">
