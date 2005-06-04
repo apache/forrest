@@ -45,8 +45,7 @@ $Revision: 1.12 $
       <map:generator name="text2xml" logger="sitemap.generator.textgenerator"
                      src="org.apache.cocoon.generation.TextGenerator">
        <parameter name="localizable" value="true"/>
-      </map:generator>        
-
+      </map:generator>
     </map:generators>
 
     <map:transformers default="xslt">
@@ -129,7 +128,13 @@ $Revision: 1.12 $
     <parameter name="recovery" value="true"/>
     <parameter name="localizable" value="true"/>
    </map:transformer>
-    </map:transformers>
+   <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+    <catalogues default="common">
+      <catalogue id="common" name="CommonMessages" location="skins/common/messages"/>
+    </catalogues>
+    <cache-at-startup>true</cache-at-startup>
+  </map:transformer>
+ </map:transformers>
 
     <map:readers default="resource">
       <map:reader name="resource" src="org.apache.cocoon.reading.ResourceReader"/>
@@ -228,6 +233,9 @@ $Revision: 1.12 $
             </map:transform>
           </map:otherwise>
         </map:select>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}"/>
+	      </map:transform>
       <map:serialize/>
     </map:resource>
 

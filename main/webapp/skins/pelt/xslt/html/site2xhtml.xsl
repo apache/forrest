@@ -34,7 +34,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
 
   <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
 <!--+
@@ -188,18 +189,22 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
              <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
                 <!-- Lucene search -->
-                <form method="get" action="{$root}{$lucene-search}">
-                  <input type="text" id="query" name="queryString" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>
-		  &#160;
-		  <input type="submit" value="Search" name="Search"/>
+                <form method="get" action="{$root}{$lucene-search}"><i18n:text >Search the site with </i18n:text>&#160;
+                  <input type="text" id="query" name="queryString" size="25" onFocus="getBlank (this, '{$config/search/@provider}');">
+                    <xsl:attribute name="value"><xsl:value-of select="$config/search/@provider"/></xsl:attribute>
+                  </input>&#160;
+		  <input type="submit" value="Search" name="Search" i18n:attr="value"/>
 		 </form>
 	      </xsl:when>
 	      <xsl:otherwise>
                 <form class="roundtopsmall" method="get" action="http://www.google.com/search"> 
                     <input type="hidden" 
                     name="sitesearch" value="{$config/search/@domain}"/> 
-                    <input type="text" id="query" name="q" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>&#160; 
-                    <input type="submit" value="Search" name="Search"/> </form>
+                    <i18n:text >Search the site with </i18n:text>&#160;
+                    <input type="text" id="query" name="q" size="25" onFocus="getBlank (this, '{$config/search/@provider}');">
+                      <xsl:attribute name="value"><xsl:value-of select="$config/search/@provider"/></xsl:attribute>
+                    </input>&#160; 
+                    <input type="submit" value="Search" name="Search" i18n:attr="value"/> </form>
         </xsl:otherwise>
 </xsl:choose>
             <!--div id="roundbottomsmall">
@@ -236,9 +241,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |end Endtabs
     +</xsl:comment>
-            <script language="JavaScript" type="text/javascript"><![CDATA[<!--
-              document.write("Published: " + document.lastModified);
-              //  -->]]></script>
+            <xsl:call-template name="last-published"/>
         </div>
 
 <xsl:comment>+
@@ -279,9 +282,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:comment>+
     |start bottomstrip
     +</xsl:comment>
-  <div class="lastmodified"><script type="text/javascript"><![CDATA[<!--
-document.write("Last Published: " + document.lastModified);
-//  -->]]></script></div>
+  <div class="lastmodified"><xsl:call-template name="last-published"/> </div>
 
       <div class="copyright">
         Copyright &#169;
@@ -357,6 +358,11 @@ document.write("Last Published: " + document.lastModified);
       </body>
     </html>
   </xsl:template>
+  <xsl:template name="last-published">
+    <script type="text/javascript"><![CDATA[<!--
+document.write("]]><i18n:text >Last Published:</i18n:text>&#160;<![CDATA[ " + document.lastModified);
+//  -->]]></script>
+  </xsl:template>
 <!--headings-->
 <xsl:template match="div[@class = 'skinconf-heading-1']">
     <xsl:choose>
@@ -424,23 +430,21 @@ document.write("Last Published: " + document.lastModified);
              <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
                 <!-- Lucene search -->
-                <form method="get" action="{$root}{$lucene-search}">
-                  <input type="text" id="query" name="queryString" size="18"
-                    value="Search with {$config/search/@provider}:"
-                    onFocus="getBlank (this, 'Search with {$config/search/@provider}:');"/>
-		  &#160;
-		  <input type="submit" value="Search" name="Search"/>
+                <form method="get" action="{$root}{$lucene-search}"><i18n:text >Search the site with </i18n:text>&#160;
+                  <input type="text" id="query" name="queryString" size="18" onFocus="getBlank (this, '{$config/search/@provider}');">
+                    <xsl:attribute name="value"><xsl:value-of select="$config/search/@provider"/></xsl:attribute>
+                  </input>&#160;
+		  <input type="submit" value="Search" name="Search" i18n:attr="value"/>
 		 </form>
 	      </xsl:when>
 	      <xsl:otherwise>
-                <form method="get" action="http://www.google.com/search"> 
-		  &#160;
+                <form method="get" action="http://www.google.com/search"> <i18n:text >Search the site with </i18n:text>&#160;
                   <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/> 
                   <input type="text" id="query" name="q" size="18"
-                    value="Search with {$config/search/@provider}:"
-                    onFocus="getBlank (this, 'Search with {$config/search/@provider}:');"/>
-                  &#160; 
-                  <input type="submit" value="Search" name="Search"/>
+                    onFocus="getBlank (this, '{$config/search/@provider}');">
+                    <xsl:attribute name="value"><xsl:value-of select="$config/search/@provider"/></xsl:attribute>
+                  </input>&#160; 
+                  <input type="submit" value="Search" name="Search" i18n:attr="value"/>
                 </form>
         </xsl:otherwise>
 </xsl:choose>
@@ -687,7 +691,7 @@ if (VERSION > 3) {
   <xsl:template match="div[@id='disable-font-script']">
     <xsl:if test="$disable-font-script = 'false'">
 	  <div class="trail">
-	        Font size: 
+	         <i18n:text >Font size:</i18n:text> 
 	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
 	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
 	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
