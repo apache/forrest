@@ -21,35 +21,16 @@
     This functions will output the TXT link with image and print link.
   </description>
   
-  <forrest:template
-  xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="txt-link" inputFormat="xsl" body="true" head="false">
-
-    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  
-		  <xsl:template name="txt-link-body">
-	      <script type="text/javascript" language="Javascript">
-	function printit() {
-	  if (window.print) {
-	    window.focus();
-	    window.print();
-	  }
-	}
-	        </script>
-	
-	        <script type="text/javascript" language="Javascript">
-	var NS = (navigator.appName == "Netscape");
-	var VERSION = parseInt(navigator.appVersion);
-	if (VERSION > 3) {
-	  document.write('<div class="txt" title="Print this Page">');
-	  document.write('  <a href="javascript:printit()" class="dida">');
-	  document.write('    <img class="skin" src="{$skin-img-dir}/printer.gif" alt="print - icon" />');
-	  document.write('    <br />');
-	  document.write('  PRINT</a>');
-	  document.write('</div>');
-	}
-	        </script>
-		  </xsl:template>
-		</xsl:stylesheet>
-	</forrest:template>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+    format="xhtml" name="txt-link" inputFormat="xsl" body="true" head="false">
+    <xsl:stylesheet version="1.1" 
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:template name="txt-link-body">
+        <div class="podlink" title="Plain Text Documentation">
+          <a href="{$filename-noext}.txt" class="dida"> <img class="skin" 
+            src="{$skin-img-dir}/txtdoc.png" alt="TXT - icon" /><br/> TXT</a>
+        </div>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
 </forrest:contract>
