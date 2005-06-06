@@ -143,5 +143,21 @@ imported document2html.xsl for details.
       </img>
     </div>
   </xsl:template>
-
+  <xsl:template match="note | warning | fixme">
+    <xsl:apply-templates select="@id"/>
+    <div class="frame {local-name()}">
+      <div class="label">
+        <xsl:choose>
+          <!-- FIXME: i18n Transformer here -->
+          <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+          <xsl:when test="local-name() = 'note'">Note</xsl:when>
+          <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
+          <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
+        </xsl:choose>
+      </div>
+      <div class="content">
+        <xsl:apply-templates/>
+      </div>
+    </div>
+  </xsl:template>
 </xsl:stylesheet>

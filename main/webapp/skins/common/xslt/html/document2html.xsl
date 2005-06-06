@@ -137,7 +137,7 @@ Section handling
 
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
-    <div class="frame-{local-name()}">
+    <div class="frame {local-name()}">
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
