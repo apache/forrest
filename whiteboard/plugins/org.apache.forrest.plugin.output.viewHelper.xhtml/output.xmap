@@ -27,6 +27,10 @@
       <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
     </map:selectors>
     <map:generators default="file">
+      <map:generator name="html"      
+                     src="org.apache.cocoon.generation.HTMLGenerator">
+        <jtidy-config>jtidy.properties</jtidy-config>
+      </map:generator>
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
       <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.generation.JXTemplateGenerator"/>
     </map:generators>
@@ -63,6 +67,7 @@
 	      <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
 	      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
 	      <encoding>UTF-8</encoding>
+        <indent>yes</indent>
 	    </map:serializer>
       <map:serializer name="txt" 
 			   src="org.apache.cocoon.serialization.TextSerializer"
@@ -73,7 +78,6 @@
   </map:components>
 <map:pipelines>
 
-  <map:pipeline>
 <!--
   This plugin provides a skin implementation based on views
   -->
@@ -242,7 +246,18 @@ transform this dir-list of the project and add more information
         <map:serialize type="xml"/>
     </map:match>
   </map:pipeline>
-
+  <map:pipeline>
+<!--
+  Debug pipes - JTidy output
+  -->
+		<map:match pattern="*.tidy">
+      <map:generate type="html" src="cocoon:/{1}.html"/>
+     	<map:serialize type="xhtml"/>
+    </map:match>
+    <map:match pattern="**/*.tidy">
+      <map:generate type="html" src="cocoon:/{1}/{2}.html"/>
+     	<map:serialize type="xhtml"/>
+    </map:match>
   <!--
   Last processing step. 
   Here we are overriding the default skin generation.
