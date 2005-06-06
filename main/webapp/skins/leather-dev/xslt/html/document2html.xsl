@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,8 +26,6 @@ imported document2html.xsl for details.
 
   <xsl:template match="document">
     <div id="content">
-
-      <div id="skinconf-pdflink"/>
 
       <xsl:if test="normalize-space(header/title)!=''">
         <h1><xsl:value-of select="header/title"/></h1>
@@ -54,9 +53,9 @@ imported document2html.xsl for details.
           <xsl:value-of select="header/abstract"/>
         </div>
       </xsl:if>
-
+<div id="content-main">
       <xsl:apply-templates select="body"/>
-
+</div>
       <xsl:if test="header/authors">
         <p align="right">
           <font size="-2">
@@ -82,9 +81,14 @@ imported document2html.xsl for details.
   <xsl:template match="@id">
     <xsl:apply-imports/>
   </xsl:template>
-
+  <!-- Generate a <a name="..."> tag for an @id -->
+  <xsl:template match="@id">
+    <xsl:if test="normalize-space(.)!=''">
+      <a name="{.}">&#160;</a>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="section">
-    <a name="{generate-id()}"/>
+    <a name="{generate-id()}">&#160;</a>
     <xsl:apply-templates select="@id"/>
 
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
@@ -126,62 +130,6 @@ imported document2html.xsl for details.
 
   </xsl:template>  
   
-  
-  <!--xsl:template match="section"-->
-    <!-- count the number of section in the ancestor-or-self axis to compute
-         the title element name later on -
-    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
-    <a name="{generate-id()}"/>
-    <xsl:apply-templates select="@id"/-->
-    <!-- generate a title element, level 1 -> h2, level 2 -> h3 and so on... -
-    <xsl:element name="{concat('h',$sectiondepth + 1)}">
-      <xsl:value-of select="title"/>
-      <xsl:if test="$notoc='true' and $sectiondepth = 3">
-        <span style="float: right"><a href="#{@id}-menu">^</a></span>
-      </xsl:if>
-    </xsl:element>
-
-    <xsl:apply-templates select="*[not(self::title)]"/>
-  </xsl:template-->
-  
-  <!-- Generates the "printer friendly version" link -->
-  <!--xsl:template name="printlink">
-    <xsl:if test="$disable-print-link = 'false'"> 
-    <div class="printlink">
-	  <a href="javascript:void(window.print())">
-        <img class="skin" src="{$skin-img-dir}/printer.gif" alt="Print this Page"/>
-	  </a>
-	</div>
-    </xsl:if>
-  </xsl:template-->
-
-  <!-- Generates the PDF link -->
-  <!--xsl:template name="pdflink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'"> 
-      <div class="printlink">
-        <a href="{$filename-noext}.pdf">
-          <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" alt="PDF"/>
-        </a>
-  	  </div>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template-->
-  
-
-  <!-- Generates the XML link -->
-  <!--xsl:template name="xmllink">
-    <xsl:if test="$dynamic-page='false'">
-      <xsl:if test="$disable-xml-link = 'false'">
-      <div class="printlink">
-        <a href="{$filename-noext}.xml">
-          <img class="skin" src="{$skin-img-dir}/xmldoc.gif" alt="xml"/>
-        </a>
-      </div>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template-->
-
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div style="text-align: center;">
