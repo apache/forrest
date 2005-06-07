@@ -19,99 +19,211 @@
 
 <howto>
  <header>
-  <title>How to write a view:contract?</title>
+  <title>How to write a forrest:contract?</title>
   <abstract>
-    This How-To has to be written soon.
+    This How-To will explain how we wrote the contracts for views and hope afterwards you will be able to do the same.
   </abstract>
   <last-modified-content-date date="2005-06-06"/>
  </header>
 
-  <!--<audience title="Intended Audience">
+  <audience title="Intended Audience">
     <p>
-      Users/devs who wants to get started with view development.
-      This setup guide is valid for both user and devs.
+      Devs and skin developer that wants to get started with forrest:contract development. 
+      To really understand this how-to you need basic and sometimes advanced understanding of 
+      the "old fashion" skin development process.
     </p>
   </audience>
   
   <purpose title="Purpose">
     <p>
-      To help user installing views. This is the "getting started" setup-guide.
+      This setup guide will explain how to create a forrest:contract from scratch and 
+      how this forrest:contract work with the core parts of forrest.
     </p>
   </purpose>
 
   <prerequisites title="Prerequisites">
     <ul>
-      <li>You have to use the trunk version of forrest for using views because it is in an early stage</li>
+      <li>
+        You have a ready-to-go new seed based on views (like described in <a href="site:howto/view/install">Install views</a>). 
+      </li>
+      <li>
+        Reading that how-to is as well a good idea to understand the used dir-structure in this how-to.
+      </li>
     </ul>
   </prerequisites>
 
+
   <steps title="Steps">
+    <note>The following content is from many mails around the topic, this how-to tries to be the 
+      consolidation of this thread. It is mainly based on the [RT] Why using views - 
+      in comparison with "old fashion" skins - usecase i18n</note>
     <p>
-      The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
-      Some of the instructions has to be modified with your local settings.
+      By working on the i18n integration for "pelt" we crossed again the whys for using views. ;-)
+      The maintainment problem was to change the captions of the skin features (contracts) to enable
+      support for i18n. The case is that the <code>site2xhtml.xsl</code> has a lot of repeating code. 
     </p>
-    <section id="localBuild">
-      <title>Build the view and the viewHelper plugins</title>
+    <p>
+      For example the "last-publish"-contract could be found 2 times in the code.  
+      This is not the only contract that was (is) double in the code. The problem with that is that 
+      we needed to search the code for each caption and senseless repeat the following 
+      maintainment step of adding the <![CDATA[<i18n:text/>]]>-tags.
+    </p>
+    <source>
+<![CDATA[
+- <script language="JavaScript"
+- type="text/javascript">document.write("Published: " + document.lastModified);</script>
+
++ <script type="text/javascript">document.write("<i18n:text >Last
++ Published:</i18n:text>&#160;" + document.lastModified);
+]]>
+    </source>
+    <section id="enhanceMaintainment">
+      <title>Enhance the maintainment</title>
+      <p>Now we can enhance the maintainment for the future and we started to
+give this code snippets contracts names. This naming enables us to keep
+the contract separate from the position code itself. In xsl you would
+simply do:
+      </p>
+      <ol>
+        <li>replace the script by <![CDATA[<xsl:call-template name="last-published"/>]]></li>
+        <li>and add:</li>
+      </ol>
+      
+      <source><![CDATA[<xsl:template name="last-published">
+ <script type="text/javascript">
+  document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
+ </script>
+</xsl:template>]]>
+      </source>
       <p>
-        The first step is to build the view and the viewHelper plugins. Change to a console of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an update and after this 
-        deploy both plugins locally.
+        This allows us in a next maintainment just change the code of
+        <![CDATA[<xsl:template name="last-published"/>]]> and apply it in any position where
+        it is placed.  
+      </p>
+      <note>
+        Now this refactoring of the site2xhtml.xsl is exactly what we doing in creating contracts for views.
+      </note>
+    </section>
+    <section id="blankContract">
+      <title>Explaining the blank forrest:contract</title>
+      <p>
+        To start a new forrest:contract you can copy the "blank.ft" from
+        <code>org.apache.forrest.plugin.output.viewHelper.xhtml/resources/templates</code>. 
+        It is a simple xml file with the following code which you can use to base new contracts on:
       </p>
       <source>
-cd {forrest-trunk}
-svn up
-cd whiteboard/plugins/org.apache.forrest.plugin.internal.view/
-ant local-deploy
-cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
-ant local-deploy
+<![CDATA[<forrest:contract 
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="blank" type="nugget">
+  
+  <!--NOTE: 
+    When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
+  
+  <description>
+    {contract-name} contract. This functions will output {contract-funtion}.
+  </description>
+  
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    format="xhtml" name="blank" inputFormat="xsl" body="false" head="false">
+    <xsl:stylesheet version="1.1" 
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <!--Add here the needed templates-->
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>
+]]>
+      </source>
+      <p>
+        The most important is the name of the contract <code><![CDATA[<forrest:contract name="blank"/>]]></code>. 
+        This name is the same as the file name of the contract (without file extension) <code>blank.ft</code>. 
+      </p>
+      <note>This is a <strong>naming convention</strong> that you have
+        to always met. All @name has to be file name of the contract without file extension!
+      </note>
+      <p>
+        The <code><![CDATA[<description/>]]></code> tag is self explaining. 
+        Here we have to explain what this contract is doing.
+      </p>
+      <p>
+        <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
+        That leads to the template attribute @body="true" and
+				@head="false". In xhtml a contract can add content to the <![CDATA[<body/>]]> or/and
+				<![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. This values have to be change when adding an actual template.
+      </p>
+      <note>
+        It is possible to use contracts in different in/output-formats. 
+        We are focusing for now on format="xhtml" as ouput and the inputFormat="xsl".
+      </note>
+      <p>
+        A <![CDATA[<forrest:template />]]> has the son <![CDATA[<xsl:stylesheet/>]]> where we can create 
+        templates for the html-head and html-body. For adding content into the body of the final 
+        document change @body="true" and add:
+      </p>
+      <source>
+<![CDATA[<xsl:stylesheet version="1.1" 
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ <!--Add here the needed templates-->
+ <xsl:template name="blank-body"/>
+</xsl:stylesheet>]]>        
       </source>
     </section>
-    <section id="newSeed">
-      <title>Seed a new project</title>
+    <section id="newContract">
+      <title>Create a new contract</title>
+      <fixme author="thorsten">
+        We need to explain basic naming convention for contracts. Like
+        "naming do not say about layout position but functionality of the contract.".
+      </fixme>
       <p> 
-				Go to the dir where you want to seed a new project and seed it. 
-        Then we have to prepare a default.fv directory in project.conf-dir (forrest.properties) 
-        of the fresh seed. That will be needed as soon you modify the default view of your project.
+				Now lets pick up the example we started with and create a "last-publish-howTo" contract.
+        Save the blank.ft to <code>{project.home}/src/documentation/resources/templates/last-publish-howTo.ft</code>.
+      </p>
+      <p>
+        Now the maintainment optimized code (xpath="/html/body/*") was:
       </p>
       <source>
-cd ~/src/newSeed
-forrest seed
-mkdir src/documentation/conf
+<![CDATA[<xsl:template name="last-published">
+ <script type="text/javascript">
+  document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
+ </script>
+</xsl:template>]]></source>
+      <ul>
+        <li>Search and replace "blank" with "last-publish-howTo"</li>
+        <li>Add description of the contract</li>
+        <li>Set @body="true"</li>
+      </ul>
+      <p>
+        The forrest:template after search/replace should look like:
+      </p>
+      <source><![CDATA[<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="false" head="false">
+  <xsl:stylesheet version="1.1" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <!--Add here the needed templates-->
+  </xsl:stylesheet>
+</forrest:template>]]>
+      </source>
+      <p>
+        Now copy the maintainment optimized code after the comment and rename the template 
+        regarding the naming conventions. As the result your code should look like this:
+      </p>
+      <source><![CDATA[<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="true" head="false">
+  <xsl:stylesheet version="1.1" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <!--Add here the needed templates-->
+    <xsl:template name="last-publish-howTo-body">
+     <script type="text/javascript">
+      document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
+     </script>
+    </xsl:template>
+  </xsl:stylesheet>
+</forrest:template>]]>
       </source>
     </section>
-    <section id="forrestProperties">
-      <title>Modifying forrest.properties</title>
-      <p>
-        Now we have to tell forrest that we are planing to use the view plugins. We will do that
-        by editing to the forrest.properties to add the plugins:
-      </p>
-      <source>
-project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
-      </source>
-      <p>
-	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
-       not independend form the "old fashion skins".  
-      </p>
-      <note>We exchanging only
-	     site2xhtml.xsl of leather-dev skin by the plugins and some contracts are based
-	     on e.g. document2html.xsl output of leather-dev.</note>
-     <source>
-project.skin=leather-dev
-      </source>
-    </section>
-    <section id="testing">
-      <title>Test your new view based project</title>
-      <p> 
-        Now you have finished the preparation and the setup to finally try
-      </p>
-      <source>
-forrest run
-      </source>
-      <p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view based skin.</p>
-      <note>When developing styles with views 'forrest run' is the quickest
-way. You will see you do not have to build your project to see the
-changes on your pages when working with *.fv. </note>
+    <section id="viewContract">
+      <title>Activating the contract</title>
+      <fixme author="thorsten">Link to DSL now. I will give more example after DSL-howto is finished</fixme>
     </section>
   </steps>
   <extension title="Further Reading">
@@ -129,5 +241,5 @@ changes on your pages when working with *.fv. </note>
       Please provide feedback about this document via the
       <a href="site:mail-lists">mailing lists</a>.
     </p>
-  </feedback>-->
+  </feedback>
 </howto>
