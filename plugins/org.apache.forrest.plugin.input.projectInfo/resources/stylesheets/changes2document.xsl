@@ -69,59 +69,32 @@
   </document>
  </xsl:template>
 
+ <xsl:key name="contextes" match="changes/release/action" use="concat(../@version, '_', @context)"/>
+
  <xsl:template match="release">
   <section id="version_{@version}">
-   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
-     <xsl:if test="action[@context='code']">
-       <section>
-         <title>Changes to Code Base</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='code']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='docs']">
-       <section>
-         <title>Changes to Documentation</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='docs']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-        </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='admin']">
-       <section>
-         <title>Changes to Project Administration</title>
-         <ul>
-           <xsl:apply-templates select="action[@context='admin']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='design']">
-       <section>
-         <title>Changes to Design</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='design']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='build']">
-       <section>
-         <title>Changes to Build</title>
-         <ul>
-           <xsl:apply-templates select="action[@context='build']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
+   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title> 
+   <xsl:for-each select="action[generate-id()=generate-id(key('contextes',concat(../@version, '_', @context)))]">
+    <xsl:sort select="@context"/>
+    <section>
+    <xsl:variable name="context" select="@context"/>
+    <title>
+    <xsl:choose>
+      <xsl:when test="//contexts/context[@id=$context]">
+       <xsl:value-of select="//contexts/context[@id=$context]/@title"/>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="@context"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    </title>
+     <ul>
+      <xsl:apply-templates select="key('contextes',concat(../@version, '_', @context) )">
+       <xsl:sort select="@type"/>
+      </xsl:apply-templates>
+     </ul>
+    </section>
+   </xsl:for-each>
   </section>
  </xsl:template>
 

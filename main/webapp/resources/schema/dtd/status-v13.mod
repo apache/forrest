@@ -39,10 +39,15 @@ TYPICAL INVOCATION:
 <!-- =============================================================== -->
 <!-- Document Type Definition -->
 <!-- =============================================================== -->
-<!ELEMENT status (developers, changes, todo)>
+<!ELEMENT status (developers, contexts?, changes, todo)>
 
 <!ELEMENT developers (person+)>
 <!ATTLIST developers %common.att;>
+
+<!ELEMENT contexts (context+)>
+<!ELEMENT context EMPTY>
+<!ATTLIST context %common-idreq.att;
+                  %title.att;>
 
 <!-- =============================================================== -->
 <!-- End of DTD -->

@@ -47,7 +47,6 @@ CHANGE HISTORY:
 <!-- =============================================================== -->
 
 <!ENTITY % types "add|remove|update|fix">
-<!ENTITY % contexts "build|docs|code|admin|design">
 <!ENTITY % importances "high|medium|low">
 
 <!-- =============================================================== -->
@@ -61,7 +60,7 @@ CHANGE HISTORY:
 <!ATTLIST action %common.att;
           dev  IDREF  #REQUIRED
           type (%types;)  #IMPLIED
-          context (%contexts;) #IMPLIED
+          context  IDREF  #REQUIRED
           importance (%importances;) "medium"
           due-to CDATA #IMPLIED
           due-to-email CDATA #IMPLIED
