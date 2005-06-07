@@ -40,9 +40,11 @@
       the locationmap however the leaf does not identify a pipeline but instead identifies
       a location string.</p>
     </section>
-      
+    
+    <section id="examples">
+      <title>Locationmap Examples</title>
       <section>
-        <title>Generating from a Different Location</title>
+        <title>Retrieving an XDoc via HTTP</title>
         
         
         <p>Normally files are generated from <code>{project:content.xdocs}</code>.
@@ -69,7 +71,7 @@
         <code>/remoteDemo/PATH/TO/FILE/FILENAME.html</code>. In addition, we
         can request any other output format available via FOrrest plugins.</p>
         
-        <p>When including resources from remote repositories one hs to
+        <p>When including resources from remote repositories one has to
         be careful about things like <code>site</code> and <code>ext</code>
         linking. If the targets are not defined in the local 
         <code>site.xml</code> file then these links will be broken.</p>
@@ -78,9 +80,83 @@
         page generated from the above example are broken.</warning>
         
       </section>
+      
+      <section>
+        <title>Retrieving HTML from Lenya</title>
+        
+        <p><a href="http://lenya.apache.org">Apache Lenya</a> is a Java Open-Source Content Management System based 
+        on open standards such as XML and XSLT and the Apache Software Stack, in particular the XML publishing 
+        framework Apache Cocoon. Apache Forrest can retrieve an publish content from an Apache Lenya CMS.</p>
+        
+        <p>For example, the following locationmap matcher will instruct Forrest to retrieve content from
+        <code>http://lenya.zones.apache.org:8888/default/live/*.html?raw=true</code>, whenever a local URL of
+        <code>lenya/**</code> is encountered.</p>
+        
+        <source>
+ &lt;match pattern="lenya/**.xml"&gt;
+   &lt;location src="http://lenya.zones.apache.org:8888/default/live/{1}.html?raw=true" /&gt;
+ &lt;/match&gt;
+        </source>
+        
+        <p>However, since the source returned by this match is HTML and not XDoc we also neet to convert this
+        to our internal XDoc format. We do this by adding the match below to our projects <code>sitemap.xmap</code>
+        file.</p>
+        
+        <source>
+&lt;map:match pattern="lenya/**.xml"&gt;
+  &lt;map:generate type="html" src="{lm:{0}}" /&gt;
+  &lt;map:transform src="{forrest:stylesheets}/html2document.xsl" /&gt;
+  &lt;map:serialize type="xml"/&gt;
+&lt;/map:match&gt;
+        </source>
+        
+        <p>Since this snippet uses the HTML generator you must also ensure that your sitemap has the HTML generator
+        component defined. That is, your sitemap must also include:</p>
+        
+        <source>
+&lt;map:components&gt;
+  &lt;map:generators default="file"&gt;
+    &lt;map:generator name="html"
+      src="org.apache.cocoon.generation.HTMLGenerator"&gt;
+      &lt;jtidy-config&gt;WEB-INF/jtidy.properties&lt;/jtidy-config&gt;
+    &lt;/map:generator&gt;
+  &lt;/map:generators&gt;
+&lt;/map:components&gt;
+        </source>
+        
+        <p>Since the HTML generator uses JTidy we need to make available a JTidy configuration file.
+        This is placed in <code>PROJECT_HOME/src/documentation/WEB-INF/jtidy.properties</code> (the
+        location can be changed in the above sitemap snippet). A sample config file is given below:</p>
+        
+        <source>
+indent=yes
+indent-spaces=8
+wrap=72
+markup=no
+output-xml=no
+input-xml=no
+show-warnings=yes
+numeric-entities=yes
+quote-marks=yes
+quote-nbsp=yes
+quote-ampersand=yes
+break-before-br=yes
+uppercase-tags=no
+uppercase-attributes=no
+char-encoding=latin1
+        </source>
+                
+        <note>This requirement to add items to your project sitemap will be removed in a future version either by Lenya
+        outputting XDoc or by Forrest switching to using XHTMl as its internal format (whichever comes
+        first.</note>
+        
+        <p>Here is the <a href="/lenya/index.html">index page</a> from that location.</p>
+        
+        <warning>This functionality is still under development. It does not work fully yet. For exammple, absolute URLs
+        in the source document need to be rewritten to ensure that they are matched by the locationmap.</warning>
+        
+      </section>
 
-    <section id="examples">
-      <title>Locationmap Examples</title>
       <section>
         <title>Link Rewriting</title>
         <p>The locationmap can be used to rewrite URLs when the page is generated.
