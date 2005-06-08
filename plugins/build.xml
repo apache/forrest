@@ -17,10 +17,10 @@
 -->
 <project default="local-deploy" basedir="." name="Forrest_Plugins_build_file">
   <property environment="env"/>
-  <!-- The version of Forrest under which docs should be published -->
+  <!-- The minimum version of Forrest a plugin is known to work -->
   <!-- This should be overridden in the plugin build file when necessary
        i.e. when the plugin is being developed for a different Forrest version -->
-  <property name="forrest.docs.version"					      value="0.7"/>
+  <property name="forrest.version"					          value="0.7"/>
   <property name="forrest.home"                       location="${env.FORREST_HOME}"/>   
   <property name="forrest.core"                       location="${env.FORREST_HOME}/main" />  
   <property name="forrest.ant.lib.dir"                location="${forrest.home}/tools/ant/lib"/>  
@@ -42,7 +42,7 @@
   <property name="deploy.svn.user"            value=""/>
   <property name="deploy.svn.password"        value=""/>
   <property name="deploy.plugins.svn.url"     value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
-  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/${forrest.docs.version}/docs/plugins"/>
+  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/${forrest.version}/docs/plugins"/>
   <property name="deploy.plugins.svn-dir"     location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.docs.svn-dir"        location="${forrest.build.dir}/svn-plugin-docs-deploy"/>
   <property name="deploy.plugins.svn-filestoadd"  location="build/svn-plugin.deploy.toadd"/>
@@ -238,7 +238,7 @@
   </target>
           
   <target name="deploy"
-          description="Deploy the plugin to SVN"
+          description="Deploy the plugin to the website SVN"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
     <echo>Deploying ${plugin-name} to the web server</echo>
 	
@@ -320,6 +320,12 @@
   <target name="seedPlugin"
     description="Create a new plugin directory in the current working directory and seed it with initial set of files"
     depends="init">
+    
+    <input message="Provide a brief description of what the plugin does"
+           addproperty="plugin-desc"/>
+    <input message="What type of plugin do you wish to create? "
+           validargs="input,output,internal"
+           addproperty="plugin-type"/>
     <mkdir dir="${plugin-name}"/>
     <mkdir dir="${plugin-name}/${plugin.src.dir}"/>
     <mkdir dir="${plugin-name}/${plugin.resources.dir}"/>
@@ -328,15 +334,16 @@
           filtering="true">
       <fileset dir="${forrest.plugins.template.dir}"/>
       <filterset>
+        <filter token="forrest-version" value="${forrest.version}"/>
         <filter token="plugin-name" value="${plugin-name}"/>
+        <filter token="plugin-type" value="${plugin-type}"/>
+        <filter token="plugin-desc" value="${plugin-desc}"/>
       </filterset>
     </copy>
     
-    <input message="What type of plugin do you wish to create? "
-           validargs="input,output,internal"
-           addproperty="plugin-type"/>
     <move file="${plugin-name}/sitemap.xmap"
           tofile="${plugin-name}/${plugin-type}.xmap"/>
+          
   </target>
   
   <!-- =================================================================== -->
