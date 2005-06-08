@@ -183,13 +183,17 @@
     <copy todir="${deploy.plugins.svn-dir}" 
           overwrite="true"
           file="${forrest.plugins.descriptor.file}"/>
-  	
+  	<!-- ================================================ -->
+    <!-- FIXME: RE-ENABLE CHECKING                        -->
+    <!-- ================================================ -->
     <!-- check in to SVN -->
+    <!--
     <svncommit
         target="${deploy.plugins.svn-dir}"
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment plugins descriptor file plugins.xml (deployed by 'deploy-plugins.xml' target of plugin build script)"
     />
+    -->
   </target>
 	
   <target name="deploy-docs"
@@ -229,23 +233,28 @@
       <arg value="--targets"/>
       <arg value="${deploy.docs.svn-filestoadd}"/>
     </exec>
+    <!-- ================================================ -->
+    <!-- FIXME: RE-ENABLE CHECKING                        -->
+    <!-- ================================================ -->
     <!-- check in to SVN -->
+    <!--
   	<svncommit
         target="${deploy.docs.svn-dir}"
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment of docs for ${plugin-name} plugin (deployed by 'deploy-docs' target of plugin build script)"
     />
+    -->
   </target>
           
   <target name="deploy"
-          description="Deploy the plugin to the website SVN"
+          description="Deploy the plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
     <echo>Deploying ${plugin-name} to the web server</echo>
 	
     <!-- copy new plugin files into sandbox -->
-    <copy todir="${deploy.plugins.svn-dir}" 
+    <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
-          file="${forrest.plugins.dist.dir}/${plugin-name}.zip"/>
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
      
     <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
@@ -306,12 +315,11 @@
     </ant>    
   </target>
   
-  <!-- FIXME: needs to append plugin version number to filename -->
   <target name="dist"
           description="Build the distribution archive for all the plugins"
           depends="init">
-    <mkdir dir="${forrest.plugins.dist.dir}"/>  
-    <zip destfile="${forrest.plugins.dist.dir}/${plugin-name}.zip"
+    <mkdir dir="${forrest.plugins.dist.dir}/${forrest.version}"/>  
+    <zip destfile="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"
        basedir="${forrest.plugins.dir}/${plugin-name}"
        includes="**"
        excludes="**/build/**"/>
