@@ -14,8 +14,11 @@ Preparations
  - Ensure that there are no copyright issues. The committers and PMC would
    have been continually monitoring this. There are some tools to assist
    with scanning for issues, e.g.
-   svn://committers/relicense/src/perl/relicense.txt
-   svn://committers/tools/
+   svn:committers/relicense/src/perl/relicense.txt
+   svn:committers/tools/
+
+ - Ensure that the line-endings and svn:eol-style property are correct
+   for all files. See svn:committers/tools/
 
  - Announce the release plan to the dev list. Define when the code freeze
    commences, when the vote ends etc.
@@ -85,10 +88,14 @@ Building the distribution
 
  - Run 'build release-dist' to generate the distributions on a UNIX machine.
    - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
-
+   - Ignore the *.zip archive.
  - Repeat that on a Windows machine.
-   - Use the .tar.gz from the UNIX machine and .zip from the Windows machine.
-   - In that way, SVN will ensure correct line-endings on all text files.
+   - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
+   - Ignore the *.tar.gz archive.
+ Note: The reason for creating two separate archives is the line-endings
+ dilemma between Windows and UNIX. SVN ensures correct line-endings
+ on each operating system (as long as committers have been diligent when
+ adding/updating the repository).
 
  - Understand how to sign releases and generate MD5 and PGP.
    http://wiki.apache.org/incubator/SigningReleases
@@ -97,11 +104,13 @@ Building the distribution
     svn copy -m "Create the x.y release branch from r#####" \
     https://svn.apache.org/repos/asf/forrest/trunk \
     https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch
-   where 'xy' is a compact form of the version (e.g. 04, 041, 05).
+   where 'xy' is a compact form of the version (e.g. 04, 041, 05)
+   and 'r#####' is the SVN revision number that the branch was created from.
    See http://svn.apache.org/repos/asf/forrest/branches/
 
  - Test the actual distribution on various platforms.
    - Upload the release candidates and signatures to a committer's webspace.
+     Use the .tar.gz from the UNIX machine and .zip from the Windows machine.
    - Ask all developers to test (command-line, run, and webapp).
    - Each developer can do 'build release-dist' and test locally.
      Coordinate to ensure that each is using the same SVN revision
