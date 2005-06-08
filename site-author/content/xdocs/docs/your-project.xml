@@ -691,6 +691,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <section id="adding_new_content_type">
         <title>Example: Adding a new content type</title>
         <p>
+          There are two methods for detecting types of documents
+          and doing special handling. The more complete solution is
+          <link href="#adding_new_content_type_2">described</link>
+          in the advanced section below. However, this basic method
+          is also worth understanding.
+        </p>
+        <p>
           Follow this worked example. In a fresh directory do 'forrest seed'
           then follow the steps described in this section.
         </p>
@@ -855,8 +862,20 @@ project.skinconf=${project.content-dir}/skinconf.xml
               The simple user sitemap in the previous example is fine for
               simple situations. For a complete solution to the "Download DTD"
               issue we need a more advanced sitemap which will do different
-              processing depending on the version of the document type
-              declaration. Let us show the sitemap and then explain it.
+              processing depending on the type of the source document.
+            </p>
+            <p>
+              We need to digress and explain the powerful 
+              <link href="site:cap">SourceTypeAction (content aware pipelines)</link>.
+              It is a Cocoon sitemap component that peeks at the top-part of
+              a document to look for hints about the type of the document.
+              It has four methods: document-declaration, document-element and
+              namespace, processing-instruction, w3c-xml-schema.
+            </p>
+            <p>
+             Now to return to our specific example which uses SourceTypeAction
+             to detect the Document Type Declaration. Let us show the sitemap
+             and then explain it.
             </p>
             <source><![CDATA[<?xml version="1.0"?>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
@@ -910,7 +929,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
               added similar handling to our project sitemap. Basically, this
               uses the <link href="site:cap">SourceTypeAction (content aware pipelines)</link>
               to detect the doctype. The new document-v11.dtd needs to be also
-              added to your project Catalog.
+              added to your project Catalog as
+              <link href="#new_dtd">described above</link>.
             </p>
             <p>
               Note that any sitemap component must be declared before it
