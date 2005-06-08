@@ -24,43 +24,29 @@
 
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="feedback-dyn" inputFormat="xsl" body="true" head="false" css="true">
+  format="xhtml" name="feedback-dyn" inputFormat="xsl" body="true" head="false">
 
       <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
         
-        <xsl:template name="feedback-dyn-css">
-#feedback {
-    color: black;
-    background: #CFDCED;
-    text-align:center;
-    margin-top: 5px;
-}
-#feedback #feedbackto {
-    font-size: 90%;
-    color: black;
-}</xsl:template>
-        
 	    <xsl:template name="feedback-dyn-body">
 	      <xsl:param name="main"/>
-		    <div id="feedback"> 
-		      <xsl:value-of select="$main/feedback"/>
-		      <xsl:choose>
-		        <xsl:when test="$main/feedback/@href and not($main/feedback/@href='')">
-		          <a id="feedbackto">
-		            <xsl:attribute name="href">
-		              <xsl:value-of select="$main/feedback/@href"/>
-		              <xsl:value-of select="$path"/>
-		            </xsl:attribute>
-		            <xsl:value-of select="$main/feedback/@to"/>
-		          </a>
-		        </xsl:when>
-		        <xsl:otherwise>
-		          <xsl:value-of select="$config/feedback/@to"/>
-		        </xsl:otherwise>
-		      </xsl:choose>
-		    </div>
+	      <xsl:value-of select="$main/feedback"/>
+	      <xsl:choose>
+	        <xsl:when test="$main/feedback/@href and not($main/feedback/@href='')">
+	          <a id="feedbackto">
+	            <xsl:attribute name="href">
+	              <xsl:value-of select="$main/feedback/@href"/>
+	              <xsl:value-of select="$path"/>
+	            </xsl:attribute>
+	            <xsl:value-of select="$main/feedback/@to"/>
+	          </a>
+	        </xsl:when>
+	        <xsl:otherwise>
+	          <xsl:value-of select="$config/feedback/@to"/>
+	        </xsl:otherwise>
+	      </xsl:choose>
 			</xsl:template>
     </xsl:stylesheet>
 	</forrest:template>

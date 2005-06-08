@@ -24,52 +24,46 @@
   <forrest:template
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="searchbox" inputFormat="xsl" body="true" head="false" css="true">
+  format="xhtml" name="searchbox" inputFormat="xsl" body="true" head="false">
 
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  
-		  <xsl:template name="searchbox-css">
-#searchbox {
-	padding: 8px;
-	float: right;
-	font-family: verdana, helvetica, sans;
-	font-size: 8pt;
-	font-weight: bold;
-	color: #ddddff;
-}
-#searchbox input {
-	font-size: 8pt;
-	font-family: verdana, helvetica, sans;
-}</xsl:template>
-		  
+		  <!--FIXME: IMO each search provider should provide a form. This form should be refactored into
+        a meta-search from-->
 		  <xsl:template name="searchbox-body">
-<div id="searchbox">
 <xsl:comment>+
     |start Search
     +</xsl:comment> 
-             <div class="searchbox-input">
+           <div class="searchbox-input">
              <xsl:choose>
               <xsl:when test="$config/search/@provider = 'lucene'">
                 <!-- Lucene search -->
                 <form method="get" action="{$root}{$lucene-search}">
-                  <input type="text" id="query" name="queryString" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>
-		  &#160;
-		  <input type="submit" value="Search" name="Search" i18n:attr="value"/>
-		 </form>
-	      </xsl:when>
-	      <xsl:otherwise>
-                <form class="roundtopsmall" method="get" action="http://www.google.com/search"> 
-                    <input type="hidden" 
-                    name="sitesearch" value="{$config/search/@domain}"/> 
-                    <input type="text" id="query" name="q" size="25"/>&#160; 
-                   <input type="submit" value="Search" name="Search" i18n:attr="value"/> </form>
-        </xsl:otherwise>
-</xsl:choose>
+                  <div id="search-field">
+                   <input type="text" id="query" name="queryString" size="25" value="Search the site with {$config/search/@provider}:" onFocus="getBlank (this, 'Search the site with {$config/search/@provider}:');"/>
+									  &#160;</div>
+							      <div id="search-submit">
+										  <input type="submit" value="Search" name="Search" i18n:attr="value"/>
+						      </div>
+	 							</form>
+     					</xsl:when>
+      				<xsl:otherwise>
+              	<form method="get" action="http://www.google.com/search"> 
+	            		<div id="search-hidden">
+	                	<input type="hidden" name="sitesearch" value="{$config/search/@domain}"/> 
+	              	</div>
+	              	<div id="search-field">
+	                  <input type="text" id="query" name="q" size="25"/>
+	              	</div>
+	              	<div id="search-submit">
+	                  <input type="submit" value="Search" name="Search" i18n:attr="value"/> 
+	              	</div>
+	              </form>
+        			</xsl:otherwise>
+						</xsl:choose>
             </div>
 <xsl:comment>+
     |end search
     +</xsl:comment>
-    </div>
 		  </xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>
