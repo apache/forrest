@@ -39,6 +39,7 @@ CHANGE HISTORY:
 [Version 1.0]
   20020611 Initial version. (SN)
   20050509 Added importance attribute. (JJP)
+  20050606 Remove context an entity list. #FOR-514 (JJP)
 
 ==================================================================== -->
 
