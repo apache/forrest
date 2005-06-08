@@ -17,7 +17,10 @@
 -->
 <project default="local-deploy" basedir="." name="Forrest_Plugins_build_file">
   <property environment="env"/>
-  <property name="forrest.version"					  value="0.7"/>
+  <!-- The version of Forrest under which docs should be published -->
+  <!-- This should be overridden in the plugin build file when necessary
+       i.e. when the plugin is being developed for a different Forrest version -->
+  <property name="forrest.docs.version"					      value="0.7"/>
   <property name="forrest.home"                       location="${env.FORREST_HOME}"/>   
   <property name="forrest.core"                       location="${env.FORREST_HOME}/main" />  
   <property name="forrest.ant.lib.dir"                location="${forrest.home}/tools/ant/lib"/>  
@@ -39,7 +42,7 @@
   <property name="deploy.svn.user"            value=""/>
   <property name="deploy.svn.password"        value=""/>
   <property name="deploy.plugins.svn.url"     value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
-  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/${forrest.version}/docs/plugins"/>
+  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/${forrest.docs.version}/docs/plugins"/>
   <property name="deploy.plugins.svn-dir"     location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.docs.svn-dir"        location="${forrest.build.dir}/svn-plugin-docs-deploy"/>
   <property name="deploy.plugins.svn-filestoadd"  location="build/svn-plugin.deploy.toadd"/>
