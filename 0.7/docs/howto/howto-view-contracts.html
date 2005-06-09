@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<title>How to write a forrest:contract? (v0.7)</title>
+<link type="text/css" href="../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../skin/profile.css" rel="stylesheet">
+<script src="../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<!--+
+    |header
+    +-->
+<div class="header">
+<!--+
+    |start group logo
+    +-->
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<!--+
+    |end group logo
+    +-->
+<!--+
+    |start Project Logo
+    +-->
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<!--+
+    |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
+    +-->
+<!--+
+    |start Tabs
+    +-->
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../contrib.html">Project</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../docs/index.html">0.7 Docs</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../../docs/howto/index.html">0.7 How-To</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../docs/plugins/index.html">0.7 Plugins</a>
+</li>
+</ul>
+<!--+
+    |end Tabs
+    +-->
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs"></div>
+<!--+
+    |end Endtabs
+    +-->
+<script type="text/javascript"><!--
+document.write("Last Published:  " + document.lastModified);
+//  --></script>
+</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<!--+
+    |start Menu, mainarea
+    +-->
+<!--+
+    |start Menu
+    +-->
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">How-To</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../../docs/howto/index.html">Overview</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-howto.html">Write a How-to</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-asf-mirror.html">Download mirror</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-pdf-tab.html">Create tab PDF</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-editcss.html">Edit CSS (WYSIWYG)</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-corner-images.html">CSS corner SVG</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-forrest-from-maven.html">Maven Integration</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-buildPlugin.html">Build a Plugin</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-custom-html-source.html">Custom html source</a>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.1.10', '../../skin/')" id="menu_selected_1.1.10Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">views</div>
+<div id="menu_selected_1.1.10" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../../docs/howto/howto-view-install.html">Install views</a>
+</div>
+<div class="menuitem">
+<a href="../../docs/howto/howto-view-dsl.html">forrest:view DSL</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">contract implementations</div>
+</div>
+</div>
+</div>
+<div id="credit">
+<hr>
+    This is documentation for development version v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<!--+
+  |alternative credits
+  +-->
+<div id="credit2">
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+</div>
+</div>
+<!--+
+    |end Menu
+    +-->
+<!--+
+    |start content
+    +-->
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="howto-view-contracts.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>How to write a forrest:contract?</h1>
+<div class="abstract">
+    This How-To will explain how we wrote the contracts for views and hope afterwards you will be able to do the same.
+  </div>
+<div id="motd-area">
+    This is documentation for development version v0.7
+   (<a href="http://forrest.apache.org/docs.html">More</a>)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Intended Audience">Intended Audience</a>
+</li>
+<li>
+<a href="#Purpose">Purpose</a>
+</li>
+<li>
+<a href="#Prerequisites">Prerequisites</a>
+</li>
+<li>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#enhanceMaintainment">Enhance the maintainment</a>
+</li>
+<li>
+<a href="#blankContract">Explaining the blank forrest:contract</a>
+</li>
+<li>
+<a href="#newContract">Create a new contract</a>
+</li>
+<li>
+<a href="#viewContract">Activating the contract</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Further Reading">Further Reading</a>
+</li>
+<li>
+<a href="#Feedback">Feedback</a>
+</li>
+</ul>
+</div>
+<a name="N10010"></a><a name="Intended Audience"></a>
+<h2 class="underlined_10">Intended Audience</h2>
+<div class="section">
+<p>
+      Devs and skin developer that wants to get started with forrest:contract development. 
+      To really understand this how-to you need basic and sometimes advanced understanding of 
+      the "old fashion" skin development process.
+    </p>
+</div>
+<a name="N10018"></a><a name="Purpose"></a>
+<h2 class="underlined_10">Purpose</h2>
+<div class="section">
+<p>
+      This setup guide will explain how to create a forrest:contract from scratch and 
+      how this forrest:contract work with the core parts of forrest.
+    </p>
+</div>
+<a name="N10020"></a><a name="Prerequisites"></a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<ul>
+      
+<li>
+        You have a ready-to-go new seed based on views (like described in <a href="../../docs/howto/howto-view-install.html">Install views</a>). 
+      </li>
+      
+<li>
+        Reading that how-to is as well a good idea to understand the used dir-structure in this how-to.
+      </li>
+    
+</ul>
+</div>
+<a name="N10032"></a><a name="Steps"></a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">The following content is from many mails around the topic, this how-to tries to be the 
+      consolidation of this thread. It is mainly based on the [RT] Why using views - 
+      in comparison with "old fashion" skins - usecase i18n</div>
+</div>
+<p>
+      By working on the i18n integration for "pelt" we crossed again the whys for using views. ;-)
+      The maintainment problem was to change the captions of the skin features (contracts) to enable
+      support for i18n. The case is that the <span class="codefrag">site2xhtml.xsl</span> has a lot of repeating code. 
+    </p>
+<p>
+      For example the "last-publish"-contract could be found 2 times in the code.  
+      This is not the only contract that was (is) double in the code. The problem with that is that 
+      we needed to search the code for each caption and senseless repeat the following 
+      maintainment step of adding the &lt;i18n:text/&gt;-tags.
+    </p>
+<pre class="code">
+
+- &lt;script language="JavaScript"
+- type="text/javascript"&gt;document.write("Published: " + document.lastModified);&lt;/script&gt;
+
++ &lt;script type="text/javascript"&gt;document.write("&lt;i18n:text &gt;Last
++ Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
+
+    </pre>
+<a name="N10047"></a><a name="enhanceMaintainment"></a>
+<h3 class="underlined_5">Enhance the maintainment</h3>
+<p>Now we can enhance the maintainment for the future and we started to
+give this code snippets contracts names. This naming enables us to keep
+the contract separate from the position code itself. In xsl you would
+simply do:
+      </p>
+<ol>
+        
+<li>replace the script by &lt;xsl:call-template name="last-published"/&gt;</li>
+        
+<li>and add:</li>
+      
+</ol>
+<pre class="code">&lt;xsl:template name="last-published"&gt;
+ &lt;script type="text/javascript"&gt;
+  document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
+ &lt;/script&gt;
+&lt;/xsl:template&gt;
+      </pre>
+<p>
+        This allows us in a next maintainment just change the code of
+        &lt;xsl:template name="last-published"/&gt; and apply it in any position where
+        it is placed.  
+      </p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+        Now this refactoring of the site2xhtml.xsl is exactly what we doing in creating contracts for views.
+      </div>
+</div>
+<a name="N10064"></a><a name="blankContract"></a>
+<h3 class="underlined_5">Explaining the blank forrest:contract</h3>
+<p>
+        To start a new forrest:contract you can copy the "blank.ft" from
+        <span class="codefrag">org.apache.forrest.plugin.output.viewHelper.xhtml/resources/templates</span>. 
+        It is a simple xml file with the following code which you can use to base new contracts on:
+      </p>
+<pre class="code">
+&lt;forrest:contract 
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="blank" type="nugget"&gt;
+  
+  &lt;!--NOTE: 
+    When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!--&gt;
+  
+  &lt;description&gt;
+    {contract-name} contract. This functions will output {contract-funtion}.
+  &lt;/description&gt;
+  
+  &lt;forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    format="xhtml" name="blank" inputFormat="xsl" body="false" head="false"&gt;
+    &lt;xsl:stylesheet version="1.1" 
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+        &lt;!--Add here the needed templates--&gt;
+    &lt;/xsl:stylesheet&gt;
+  &lt;/forrest:template&gt;
+&lt;/forrest:contract&gt;
+
+      </pre>
+<p>
+        The most important is the name of the contract <span class="codefrag">&lt;forrest:contract name="blank"/&gt;</span>. 
+        This name is the same as the file name of the contract (without file extension) <span class="codefrag">blank.ft</span>. 
+      </p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">This is a <strong>naming convention</strong> that you have
+        to always met. All @name has to be file name of the contract without file extension!
+      </div>
+</div>
+<p>
+        The <span class="codefrag">&lt;description/&gt;</span> tag is self explaining. 
+        Here we have to explain what this contract is doing.
+      </p>
+<p>
+        
+<span class="codefrag">&lt;forrest:template name="blank" body="false" head="false"&gt; </span> 
+        That leads to the template attribute @body="true" and
+				@head="false". In xhtml a contract can add content to the &lt;body/&gt; or/and
+				&lt;head/&gt; part of &lt;html/&gt;. This values have to be change when adding an actual template.
+      </p>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+        It is possible to use contracts in different in/output-formats. 
+        We are focusing for now on format="xhtml" as ouput and the inputFormat="xsl".
+      </div>
+</div>
+<p>
+        A &lt;forrest:template /&gt; has the son &lt;xsl:stylesheet/&gt; where we can create 
+        templates for the html-head and html-body. For adding content into the body of the final 
+        document change @body="true" and add:
+      </p>
+<pre class="code">
+&lt;xsl:stylesheet version="1.1" 
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+ &lt;!--Add here the needed templates--&gt;
+ &lt;xsl:template name="blank-body"/&gt;
+&lt;/xsl:stylesheet&gt;        
+      </pre>
+<a name="N1009A"></a><a name="newContract"></a>
+<h3 class="underlined_5">Create a new contract</h3>
+<div class="frame fixme">
+<div class="label">Fixme (thorsten)</div>
+<div class="content">
+        We need to explain basic naming convention for contracts. Like
+        "naming do not say about layout position but functionality of the contract.".
+      </div>
+</div>
+<p> 
+				Now lets pick up the example we started with and create a "last-publish-howTo" contract.
+        Save the blank.ft to <span class="codefrag">{project.home}/src/documentation/resources/templates/last-publish-howTo.ft</span>.
+      </p>
+<p>
+        Now the maintainment optimized code (xpath="/html/body/*") was:
+      </p>
+<pre class="code">
+&lt;xsl:template name="last-published"&gt;
+ &lt;script type="text/javascript"&gt;
+  document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
+ &lt;/script&gt;
+&lt;/xsl:template&gt;</pre>
+<ul>
+        
+<li>Search and replace "blank" with "last-publish-howTo"</li>
+        
+<li>Add description of the contract</li>
+        
+<li>Set @body="true"</li>
+      
+</ul>
+<p>
+        The forrest:template after search/replace should look like:
+      </p>
+<pre class="code">&lt;forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="false" head="false"&gt;
+  &lt;xsl:stylesheet version="1.1" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+    &lt;!--Add here the needed templates--&gt;
+  &lt;/xsl:stylesheet&gt;
+&lt;/forrest:template&gt;
+      </pre>
+<p>
+        Now copy the maintainment optimized code after the comment and rename the template 
+        regarding the naming conventions. As the result your code should look like this:
+      </p>
+<pre class="code">&lt;forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="true" head="false"&gt;
+  &lt;xsl:stylesheet version="1.1" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+    &lt;!--Add here the needed templates--&gt;
+    &lt;xsl:template name="last-publish-howTo-body"&gt;
+     &lt;script type="text/javascript"&gt;
+      document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
+     &lt;/script&gt;
+    &lt;/xsl:template&gt;
+  &lt;/xsl:stylesheet&gt;
+&lt;/forrest:template&gt;
+      </pre>
+<a name="N100CC"></a><a name="viewContract"></a>
+<h3 class="underlined_5">Activating the contract</h3>
+<div class="frame fixme">
+<div class="label">Fixme (thorsten)</div>
+<div class="content">Link to DSL now. I will give more example after DSL-howto is finished</div>
+</div>
+</div>
+<a name="N100D7"></a><a name="Further Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<p>
+      Congratulations you are now able to work with views. 
+      From here we recommend to read the following How-To's:
+    </p>
+<ul>
+      
+<li>
+<a href="../../docs/howto/howto-view-dsl.html">Getting started with forrest:view DSL</a> 
+</li>
+      
+<li>
+<a href="../../docs/howto/howto-view-contracts.html">Create your own contract implementation</a> 
+</li>
+    
+</ul>
+</div>
+<a name="N100EE"></a><a name="Feedback"></a>
+<h2 class="underlined_10">Feedback</h2>
+<div class="section">
+<p>
+      Please provide feedback about this document via the
+      <a href="../../mail-lists.html">mailing lists</a>.
+    </p>
+</div>
+</div>
+<!--+
+    |end content
+    +-->
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<!--+
+    |start bottomstrip
+    +-->
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("Last Published:  " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2002-2005 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+<!--+
+    |end bottomstrip
+    +-->
+</div>
+</body>
+</html>
