@@ -40,6 +40,7 @@ CHANGE HISTORY:
   20020611 Initial version. (SN)
   20050509 Added importance attribute. (JJP)
   20050606 Remove context an entity list. #FOR-514 (JJP)
+  20050609 action@type is required. (JJP)
 
 ==================================================================== -->
 
@@ -60,7 +61,7 @@ CHANGE HISTORY:
 <!ELEMENT action (%content.mix;)*>
 <!ATTLIST action %common.att;
           dev  IDREF  #REQUIRED
-          type (%types;)  #IMPLIED
+          type (%types;)  #REQUIRED
           context  IDREF  #REQUIRED
           importance (%importances;) "medium"
           due-to CDATA #IMPLIED
