@@ -258,6 +258,31 @@
           problem in a production environment.</p>
         <p>To ensure a clean build call 'forrest clean site' instead of just 'forrest' so Forrest
           will delete all build directories before creating new content. </p>
+      </section><section id="i18n"><title>2.15. How can I internationalise (i18n) my content?</title>
+        <p>The i18n features of Forrest are still under development (as of 0.7) however there are
+        some features available. For example, navigation menus can be i18n'd (see fresh-site for an
+        example). Currently, <link href="http://issues.apache.org/jira/browse/FOR-506">work is underway</link> to 
+        i18n skins</p>
+        
+        <p>All internationalistation of tokens in, for example, the skins and the menus, is carried out
+        by the <link href="http://cocoon.apache.org/2.1/userdocs/transformers/i18n-transformer.html">Cocoon i18n 
+        Transformer</link>. You can see an example of how it works in the above linked issue.</p>
+      </section><section id="rawTML"><title>2.16. How can I include HTML content that is not to be skinned by Forrest?</title>
+        <p>To server, for example, a legacy HTML site add something like the following 
+        to your projects sitemap:</p>
+        <source xml:space="preserve">
+&lt;map:match pattern="old_site/**.html"&gt;
+ &lt;map:select type="exists"&gt;
+  &lt;map:when test="{project:content}{0}"&gt;
+    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+&lt;/map:match&gt;
+        </source>
       </section></section><section id="technical"><title>3. Technical</title><section id="proxy_config"><title>3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</title>
         <p>You can configure the proxy in the <code>forrest.properties</code> file. Set the
