@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
@@ -49,7 +49,7 @@
     +-->
 <div class="searchbox">
 <form action="http://www.google.com/search" method="get" class="roundtopsmall">
-<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google:');" value="Search the site with google:" size="25" name="q" id="query" type="text">&nbsp; 
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -92,9 +92,9 @@
 <!--+
     |end Endtabs
     +-->
-<script type="text/javascript" language="JavaScript"><!--
-              document.write("Published: " + document.lastModified);
-              //  --></script>
+<script type="text/javascript"><!--
+document.write("Last Published:  " + document.lastModified);
+//  --></script>
 </div>
 <!--+
     |breadtrail
@@ -278,8 +278,7 @@
 <a class="dida" href="your-project.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
-<div class="trail">
-	        Font size: 
+<div class="trail">Font size: 
 	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
@@ -296,6 +295,25 @@
 </li>
 <li>
 <a href="#installing">Installing Forrest</a>
+<ul class="minitoc">
+<li>
+<a href="#Setting+up+the+Environment">Setting up the Environment</a>
+<ul class="minitoc">
+<li>
+<a href="#In+Unix%2FLinux%3A">In Unix/Linux:</a>
+</li>
+<li>
+<a href="#Windows+2000">Windows 2000</a>
+</li>
+<li>
+<a href="#In+Windows+XP%3A">In Windows XP:</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#The+%27forrest%27+Command">The 'forrest' Command</a>
 </li>
 <li>
 <a href="#seeding_new">Seeding a new project</a>
@@ -397,81 +415,105 @@
        if you want to try the development version, then
        <a href="../docs/build.html">build Forrest</a> from source.
      </p>
+<a name="N1002B"></a><a name="Setting+up+the+Environment"></a>
+<h3 class="underlined_5">Setting up the Environment</h3>
 <p>
-     After downloading and extracting forrest, you need to add environment variables.
-     </p>
-<p>In Unix/Linux:</p>
-<pre class="code">
-change directory to the top-level of the forrest distribution and do ...
-~/apache-forrest-0.7$ export FORREST_HOME=`pwd`
-~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin
-     </pre>
-<p>In Windows:</p>
-<pre class="code">
-Go to "My Computer", "Properties", "Advanced", "Environment Variables"
-and add:
-<span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
-<span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
-     
-</pre>
-<p>
-       To see what the 'forrest' command can do, type 'forrest -projecthelp'.
-       The build targets that are marked with * are the commonly used ones.
+       After downloading and extracting forrest, you need to add environment variables.
        </p>
+<a name="N10034"></a><a name="In+Unix%2FLinux%3A"></a>
+<h4>In Unix/Linux:</h4>
+<p class="instruction">change directory to the top-level of the forrest distribution and do ...</p>
+<p class="instruction">~/apache-forrest-0.7$ export FORREST_HOME=`pwd`</p>
+<p class="instruction">~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin</p>
+<a name="N10046"></a><a name="Permanently+Setting+The+Environment+Variables+for+Linux%2FUnix"></a>
+<h5>Permanently Setting The Environment Variables for Linux/Unix</h5>
+<p>Export only changes the variables during that terminal session for that 
+           user, this is useful for testing. To permanently add the variable edit either 
+           <span class="codefrag">/etc/bash.bashrc</span> (for all users) or <span class="codefrag">~/.bash_profile</span>
+           (for individual users). Add these lines to the end of the file you edit:</p>
 <pre class="code">
-Apache Forrest.  Run 'forrest -projecthelp' to list options
-
-Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
-
-    *=======================================================*
-    |                 Forrest Site Builder                  |
-    |                        X.Y-dev                        |
-    *=======================================================*
-  
-             Call this through the 'forrest' command
-  
-Main targets:
-
- available-plugins     What plugins are available?
- available-skins       What skins are available?
- clean                 * Clean all directories and files generated during
-                        the build
- init-plugins          Ensure the required plugins are available locally,
-                       if any are not, download them automatically
- install-skin          Install the needed skin from the remote repository
- package-skin          Make a package of an existing skin
- run                   * Run Jetty (instant live webapp)
- run_custom_jetty      Run Jetty with configuration file found in the project
- run_default_jetty     Run Jetty with configuration file found in Forrest
- seed                  * Seeds a directory with a template project doc structure
- site                  * Generates a static HTML website for this project
- validate              Validate all: xdocs, skins, sitemap, etc
- validate-sitemap      Validate the project sitemaps
- validate-skinchoice   Validate skin choice
- validate-skinconf     Validate skinconf
- validate-skins        Validate skins
- validate-stylesheets  Validate XSL files
- validate-xdocs        Validate the project xdocs
- war                   * Generates a dynamic servlet-based website
-                         (a packaged .war file)
- webapp                Generates a dynamic servlet-based website
-                         (an unpackaged webapp).
- webapp-local          Generates a dynamic servlet-based website
-                         (an unpackaged webapp). Note this webapp is suitable
-                         for local execution only, use the 'war' or 'webapp'
-                         target if you wish to deploy remotely.
-Default target: site
-     </pre>
+      FORREST_HOME=/full/path/to/forrest
+      export FORREST_HOME
+      
+      PATH=$PATH:$FORREST_HOME/bin
+      export PATH
+          </pre>
+<a name="N1005B"></a><a name="Windows+2000"></a>
+<h4>Windows 2000</h4>
+<p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
+<p class="instruction">add a new variable <span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
+</p>
+<p class="instruction">edit <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
+</p>
+<a name="N10078"></a><a name="In+Windows+XP%3A"></a>
+<h4>In Windows XP:</h4>
+<p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
+<p class="instruction">Create a New variable with name: FORREST_HOME value: C:\full\path\to\apache-forrest-0.7</p>
+<p class="instruction">Edit PATH by adding ;%FORREST_HOME%\bin to the end of the current value.</p>
+</div>
+   
+   
+<a name="N1008D"></a><a name="The+%27forrest%27+Command"></a>
+<h2 class="underlined_10">The 'forrest' Command</h2>
+<div class="section">
 <p>
-        As 'site' is the default target, just running 'forrest' without options will
-        generate a "static HTML website". For example, typing 'forrest' in the
-       top-level "forrest" directory would build Forrest's own website.
-       But we're going to be building a new site for your project, so read on.
-      </p>
+         To see what the 'forrest' command can do, type 'forrest -projecthelp'.
+         The build targets that are marked with * are the commonly used ones.
+         </p>
+<pre class="code">
+  Apache Forrest.  Run 'forrest -projecthelp' to list options
+  
+  Buildfile: /usr/local/svn/forrest/src/core/bin/../forrest.build.xml
+  
+      *=======================================================*
+      |                 Forrest Site Builder                  |
+      |                        X.Y-dev                        |
+      *=======================================================*
+    
+               Call this through the 'forrest' command
+    
+  Main targets:
+  
+   available-plugins     What plugins are available?
+   available-skins       What skins are available?
+   clean                 * Clean all directories and files generated during
+                          the build
+   init-plugins          Ensure the required plugins are available locally,
+                         if any are not, download them automatically
+   install-skin          Install the needed skin from the remote repository
+   package-skin          Make a package of an existing skin
+   run                   * Run Jetty (instant live webapp)
+   run_custom_jetty      Run Jetty with configuration file found in the project
+   run_default_jetty     Run Jetty with configuration file found in Forrest
+   seed                  * Seeds a directory with a template project doc structure
+   site                  * Generates a static HTML website for this project
+   validate              Validate all: xdocs, skins, sitemap, etc
+   validate-sitemap      Validate the project sitemaps
+   validate-skinchoice   Validate skin choice
+   validate-skinconf     Validate skinconf
+   validate-skins        Validate skins
+   validate-stylesheets  Validate XSL files
+   validate-xdocs        Validate the project xdocs
+   war                   * Generates a dynamic servlet-based website
+                           (a packaged .war file)
+   webapp                Generates a dynamic servlet-based website
+                           (an unpackaged webapp).
+   webapp-local          Generates a dynamic servlet-based website
+                           (an unpackaged webapp). Note this webapp is suitable
+                           for local execution only, use the 'war' or 'webapp'
+                           target if you wish to deploy remotely.
+  Default target: site
+       </pre>
+<p>
+          As 'site' is the default target, just running 'forrest' without options will
+          generate a "static HTML website". For example, typing 'forrest' in the
+         top-level "forrest" directory would build Forrest's own website.
+         But we're going to be building a new site for your project, so read on.
+        </p>
 </div>
 
     
-<a name="N10053"></a><a name="seeding_new"></a>
+<a name="N1009E"></a><a name="seeding_new"></a>
 <h2 class="underlined_10">Seeding a new project</h2>
 <div class="section">
 <p>
@@ -623,7 +665,7 @@ Total time: 5 seconds
       </p>
 </div>
     
-<a name="N10089"></a><a name="seeding_existing"></a>
+<a name="N100D4"></a><a name="seeding_existing"></a>
 <h2 class="underlined_10">Seeding an existing project</h2>
 <div class="section">
 <p>
@@ -643,7 +685,7 @@ Total time: 5 seconds
       </p>
 </div>
     
-<a name="N1009D"></a><a name="customizing"></a>
+<a name="N100E8"></a><a name="customizing"></a>
 <h2 class="underlined_10">Customizing your project</h2>
 <div class="section">
 <p>
@@ -651,7 +693,7 @@ Total time: 5 seconds
         to your project's needs. Here we will deal with configuring the skin, and
         changing the project layout.
       </p>
-<a name="N100A6"></a><a name="skinconf.xml"></a>
+<a name="N100F1"></a><a name="skinconf.xml"></a>
 <h3 class="underlined_5">Configuring the Forrest skin: skinconf.xml</h3>
 <p>
           Most Forrest skins can be customized through a single XML file,
@@ -828,7 +870,7 @@ which will be used to configure the chosen Forrest skin.
           Having edited this file (and ensured it is valid XML), re-run the 'forrest'
           command in the site root, and the site would be updated.
         </p>
-<a name="N100C3"></a><a name="Changing_the_layout"></a>
+<a name="N1010E"></a><a name="Changing_the_layout"></a>
 <h3 class="underlined_5">Changing the layout: forrest.properties</h3>
 <p>
           Forrest allows you to place files anywhere you want in your
@@ -909,7 +951,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 
     
-<a name="N10102"></a><a name="adding_content"></a>
+<a name="N1014D"></a><a name="adding_content"></a>
 <h2 class="underlined_10">Adding content</h2>
 <div class="section">
 <p>
@@ -917,7 +959,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <span class="codefrag">src/documentation/content/xdocs</span>
       
 </p>
-<a name="N1010E"></a><a name="site.xml"></a>
+<a name="N10159"></a><a name="site.xml"></a>
 <h3 class="underlined_5">site.xml</h3>
 <p>
           When adding a new xml document, you would add an entry to the project's
@@ -926,7 +968,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           xdocs for an example.  More detailed info about site.xml is provided in 
           the document <a href="../docs/linking.html">Menus and Linking</a>.
         </p>
-<a name="N1011F"></a><a name="tabs.xml"></a>
+<a name="N1016A"></a><a name="tabs.xml"></a>
 <h3 class="underlined_5">tabs.xml</h3>
 <p>
           The <span class="codefrag">tabs.xml</span> file is used to produce the 'tabs'.
@@ -956,7 +998,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
     &lt;tab label="Xerces" href="http://xml.apache.org/xerces"/&gt;
   &lt;/tab&gt;
 </pre>
-<a name="N1014A"></a><a name="images"></a>
+<a name="N10195"></a><a name="images"></a>
 <h3 class="underlined_5">Images</h3>
 <p>
           Images usually go in the <span class="codefrag">content/xdocs/images/</span> directory.
@@ -968,7 +1010,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 
     
-<a name="N1015E"></a><a name="sitemap.xmap"></a>
+<a name="N101A9"></a><a name="sitemap.xmap"></a>
 <h2 class="underlined_10">Advanced customizations: sitemap.xmap</h2>
 <div class="section">
 <p>
@@ -1039,8 +1081,15 @@ project.skinconf=${project.content-dir}/skinconf.xml
         default sitemap.
       </div>
 </div>
-<a name="N101C3"></a><a name="adding_new_content_type"></a>
+<a name="N1020E"></a><a name="adding_new_content_type"></a>
 <h3 class="underlined_5">Example: Adding a new content type</h3>
+<p>
+          There are two methods for detecting types of documents
+          and doing special handling. The more complete solution is
+          <a href="#adding_new_content_type_2">described</a>
+          in the advanced section below. However, this basic method
+          is also worth understanding.
+        </p>
 <p>
           Follow this worked example. In a fresh directory do 'forrest seed'
           then follow the steps described in this section.
@@ -1177,7 +1226,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
             will handle the aggregation with navigation menus etc. and will
             apply the normal skin.
           </p>
-<a name="N10205"></a><a name="new_dtd"></a>
+<a name="N10257"></a><a name="new_dtd"></a>
 <h4>Registering a new DTD</h4>
 <p>
                  By default, Forrest requires that all XML files be valid, i.e.
@@ -1208,14 +1257,26 @@ project.skinconf=${project.content-dir}/skinconf.xml
                  for the complete description for those steps.
                </div>
 </div>
-<a name="N1022D"></a><a name="adding_new_content_type_2"></a>
+<a name="N1027F"></a><a name="adding_new_content_type_2"></a>
 <h3 class="underlined_5">Example: Adding a new content type (advanced)</h3>
 <p>
               The simple user sitemap in the previous example is fine for
               simple situations. For a complete solution to the "Download DTD"
               issue we need a more advanced sitemap which will do different
-              processing depending on the version of the document type
-              declaration. Let us show the sitemap and then explain it.
+              processing depending on the type of the source document.
+            </p>
+<p>
+              We need to digress and explain the powerful 
+              <a href="../docs/cap.html">SourceTypeAction (content aware pipelines)</a>.
+              It is a Cocoon sitemap component that peeks at the top-part of
+              a document to look for hints about the type of the document.
+              It has four methods: document-declaration, document-element and
+              namespace, processing-instruction, w3c-xml-schema.
+            </p>
+<p>
+             Now to return to our specific example which uses SourceTypeAction
+             to detect the Document Type Declaration. Let us show the sitemap
+             and then explain it.
             </p>
 <pre class="code">&lt;?xml version="1.0"?&gt;
 &lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
@@ -1269,14 +1330,15 @@ project.skinconf=${project.content-dir}/skinconf.xml
               added similar handling to our project sitemap. Basically, this
               uses the <a href="../docs/cap.html">SourceTypeAction (content aware pipelines)</a>
               to detect the doctype. The new document-v11.dtd needs to be also
-              added to your project Catalog.
+              added to your project Catalog as
+              <a href="#new_dtd">described above</a>.
             </p>
 <p>
               Note that any sitemap component must be declared before it
               can be used, because the project sitemap is the first sitemap
               to be consulted.
             </p>
-<a name="N10248"></a><a name="integrating_rss"></a>
+<a name="N102A8"></a><a name="integrating_rss"></a>
 <h3 class="underlined_5">Example: integrating external RSS content</h3>
 <p>Similar to the previous example, we can integrate RSS into our
               site simply by providing a match in our project sitemap.xmap ...
@@ -1309,7 +1371,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 
       
-<a name="N10263"></a><a name="skins"></a>
+<a name="N102C3"></a><a name="skins"></a>
 <h2 class="underlined_10">Forrest skins</h2>
 <div class="section">
 <p>
@@ -1329,7 +1391,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           many capabilities so that extra skins are not needed.
         </div>
 </div>
-<a name="N1027C"></a><a name="skin-configuration"></a>
+<a name="N102DC"></a><a name="skin-configuration"></a>
 <h3 class="underlined_5">Configuration of skins</h3>
 <p>
           All configuration is done via your project
@@ -1337,7 +1399,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           It contains many comments to describe each capability.
           Please read those, there is no point repeating here.
           </p>
-<a name="N10289"></a><a name="new_skin"></a>
+<a name="N102E9"></a><a name="new_skin"></a>
 <h3 class="underlined_5">Defining a new skin</h3>
 <p>Consider discussing your needs on the mailing lists. There may
           be planned enhancements to the core skins. Also consider contributing
@@ -1411,7 +1473,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 
     
-<a name="N102D0"></a><a name="webapp"></a>
+<a name="N10330"></a><a name="webapp"></a>
 <h2 class="underlined_10">Interactive Forrest: faster turnaround when developing your docs</h2>
 <div class="section">
 <p>
@@ -1425,7 +1487,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         a "live" Forrest webapp instance, the Forrest-based documentation
         development can be faster and easier than with comparable tools.
       </p>
-<a name="N102E1"></a><a name="forrest_run"></a>
+<a name="N10341"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
           Type '<span class="codefrag">forrest run</span>' in your project root to start Forrest's
@@ -1437,7 +1499,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           servlet container, type <span class="codefrag">forrest webapp</span> to build an open
           webapp in <span class="codefrag">build/webapp/</span>)
         </p>
-<a name="N102FA"></a><a name="using_webapp"></a>
+<a name="N1035A"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
@@ -1446,7 +1508,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
 </div>
     
-<a name="N10309"></a><a name="invoking_from_ant"></a>
+<a name="N10369"></a><a name="invoking_from_ant"></a>
 <h2 class="underlined_10">Invoking Forrest from Ant</h2>
 <div class="section">
 <p>
@@ -1503,7 +1565,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
     +-->
 <div class="lastmodified">
 <script type="text/javascript"><!--
-document.write("Last Published: " + document.lastModified);
+document.write("Last Published:  " + document.lastModified);
 //  --></script>
 </div>
 <div class="copyright">

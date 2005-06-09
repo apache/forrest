@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
@@ -49,7 +49,7 @@
     +-->
 <div class="searchbox">
 <form action="http://www.google.com/search" method="get" class="roundtopsmall">
-<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google:');" value="Search the site with google:" size="25" name="q" id="query" type="text">&nbsp; 
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
                     <input name="Search" value="Search" type="submit">
 </form>
 </div>
@@ -92,9 +92,9 @@
 <!--+
     |end Endtabs
     +-->
-<script type="text/javascript" language="JavaScript"><!--
-              document.write("Published: " + document.lastModified);
-              //  --></script>
+<script type="text/javascript"><!--
+document.write("Last Published:  " + document.lastModified);
+//  --></script>
 </div>
 <!--+
     |breadtrail
@@ -278,8 +278,7 @@
 <a class="dida" href="faq.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
-<div class="trail">
-	        Font size: 
+<div class="trail">Font size: 
 	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
@@ -371,6 +370,12 @@
 </li>
 <li>
 <a href="#cleanSite">2.14.  How can I make Forrest properly clean up the build/site-directory? </a>
+</li>
+<li>
+<a href="#i18n">2.15. How can I internationalise (i18n) my content?</a>
+</li>
+<li>
+<a href="#rawTML">2.16. How can I include HTML content that is not to be skinned by Forrest?</a>
 </li>
 </ul>
 </li>
@@ -866,9 +871,45 @@
 <p>To ensure a clean build call 'forrest clean site' instead of just 'forrest' so Forrest
           will delete all build directories before creating new content. </p>
 </div>
-<a name="N1022E"></a><a name="technical"></a>
+<a name="N1022E"></a><a name="i18n"></a>
+<h4 class="faq">2.15. How can I internationalise (i18n) my content?</h4>
+<div align="right">
+<a href="#i18n-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>The i18n features of Forrest are still under development (as of 0.7) however there are
+        some features available. For example, navigation menus can be i18n'd (see fresh-site for an
+        example). Currently, <a href="http://issues.apache.org/jira/browse/FOR-506">work is underway</a> to 
+        i18n skins</p>
+<p>All internationalistation of tokens in, for example, the skins and the menus, is carried out
+        by the <a href="http://cocoon.apache.org/2.1/userdocs/transformers/i18n-transformer.html">Cocoon i18n 
+        Transformer</a>. You can see an example of how it works in the above linked issue.</p>
+</div>
+<a name="N10241"></a><a name="rawTML"></a>
+<h4 class="faq">2.16. How can I include HTML content that is not to be skinned by Forrest?</h4>
+<div align="right">
+<a href="#rawTML-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>To server, for example, a legacy HTML site add something like the following 
+        to your projects sitemap:</p>
+<pre class="code">
+&lt;map:match pattern="old_site/**.html"&gt;
+ &lt;map:select type="exists"&gt;
+  &lt;map:when test="{project:content}{0}"&gt;
+    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+    &lt;!--
+      Use this instead if you want JTidy to clean up your HTML
+      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:serialize type="html"/&gt;
+    --&gt;
+  &lt;/map:when&gt;
+&lt;/map:match&gt;
+        </pre>
+</div>
+<a name="N1024D"></a><a name="technical"></a>
 <h3 class="underlined_5">3. Technical</h3>
-<a name="N10232"></a><a name="proxy_config"></a>
+<a name="N10251"></a><a name="proxy_config"></a>
 <h4 class="faq">3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</h4>
 <div align="right">
@@ -879,7 +920,7 @@
             <span class="codefrag">proxy.host</span> and <span class="codefrag">proxy.port</span> accordingly (the port will default
           to port 80).</p>
 </div>
-<a name="N10243"></a><a name="CVS_revison_tags"></a>
+<a name="N10262"></a><a name="CVS_revison_tags"></a>
 <h4 class="faq">3.2. How can I generate html-pages to show the revision tag of cvs?</h4>
 <div align="right">
 <a href="#CVS_revison_tags-menu">^</a>
@@ -892,7 +933,7 @@
 <p>This technique could also be used for a modification date with $Date: 2004/01/15 08:52:47
           $</p>
 </div>
-<a name="N10255"></a><a name="cli-xconf"></a>
+<a name="N10274"></a><a name="cli-xconf"></a>
 <h4 class="faq">3.3.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
         other additional ones. </h4>
 <div align="right">
@@ -930,7 +971,7 @@
           <strong>foo/**</strong> to match that. </div>
 </div>
 </div>
-<a name="N10292"></a><a name="ignoring_javadocs"></a>
+<a name="N102B1"></a><a name="ignoring_javadocs"></a>
 <h4 class="faq">3.4.  How do I stop Forrest breaking on links to external files that may not exist, like
         javadocs? </h4>
 <div align="right">
@@ -941,7 +982,7 @@
             <span class="codefrag">cli.xconf</span>
           </a> Cocoon config file, and defining patterns for URLs to exclude. </p>
 </div>
-<a name="N102A1"></a><a name="claimed_patterns"></a>
+<a name="N102C0"></a><a name="claimed_patterns"></a>
 <h4 class="faq">3.5. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#claimed_patterns-menu">^</a>
@@ -957,7 +998,7 @@
           with this issue (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N102B3"></a><a name="build_msg_a"></a>
+<a name="N102D2"></a><a name="build_msg_a"></a>
 <h4 class="faq">3.6. What do the symbols and numbers mean when Forrest lists each document that it has
         built? </h4>
 <div align="right">
@@ -977,7 +1018,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           number of links that were gathered from that page. Column 3 is the time taken. Column 4 is
           the page size. </p>
 </div>
-<a name="N102BF"></a><a name="headless_operation"></a>
+<a name="N102DE"></a><a name="headless_operation"></a>
 <h4 class="faq">3.7.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
         server using ':0.0' as the value of the DISPLAY variable. </h4>
 <div align="right">
@@ -990,7 +1031,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <pre class="code">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</pre>
 <p> See also <a href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</a>. </p>
 </div>
-<a name="N102DB"></a><a name="project-logo-svg"></a>
+<a name="N102FA"></a><a name="project-logo-svg"></a>
 <h4 class="faq">3.8.  
         The project logo that is generated from SVG is truncating my project name.
       </h4>
@@ -1010,7 +1051,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <a href="http://www.w3.org/Graphics/SVG/">SVG</a> resources.
         </p>
 </div>
-<a name="N102F3"></a><a name="catalog"></a>
+<a name="N10312"></a><a name="catalog"></a>
 <h4 class="faq">3.9.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </h4>
 <div align="right">
@@ -1020,7 +1061,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> Notes are provided for various tools at <a href="../docs/catalog.html">Using Catalog Entity
             Resolver for local DTDs</a>. </p>
 </div>
-<a name="N102FF"></a><a name="skin"></a>
+<a name="N1031E"></a><a name="skin"></a>
 <h4 class="faq">3.10.  How to make the site look better and change its skin? </h4>
 <div align="right">
 <a href="#skin-menu">^</a>
@@ -1032,7 +1073,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> See notes about <a href="../docs/your-project.html#skins">configuration</a> of the skins.
           Some projects may have special needs and can define their <a href="../docs/your-project.html#new_skin">own skin</a>. </p>
 </div>
-<a name="N10316"></a><a name="xsp"></a>
+<a name="N10335"></a><a name="xsp"></a>
 <h4 class="faq">3.11. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -1080,7 +1121,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 </ol>
 <p>See also the <a href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</a> Wiki page.</p>
 </div>
-<a name="N10351"></a><a name="breadcrumbs"></a>
+<a name="N10370"></a><a name="breadcrumbs"></a>
 <h4 class="faq">3.12. How do breadcrumbs work? Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -1099,7 +1140,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           are viewing the site locally, there is no domain and so there will be no extra
           breadcrumbs, only the ones that are specified in <span class="codefrag">skinconf.xml</span>. </p>
 </div>
-<a name="N10366"></a><a name="run_port"></a>
+<a name="N10385"></a><a name="run_port"></a>
 <h4 class="faq">3.13. How do I make forrest run listen on a different port?</h4>
 <div align="right">
 <a href="#run_port-menu">^</a>
@@ -1115,9 +1156,9 @@ X [0]                       brokenlink.html     BROKEN: reason
         
 </p>
 </div>
-<a name="N1037A"></a><a name="old_faqs"></a>
+<a name="N10399"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">4. Older version: 0.6</h3>
-<a name="N1037E"></a><a name="old_claimed_patterns"></a>
+<a name="N1039D"></a><a name="old_claimed_patterns"></a>
 <h4 class="faq">4.1. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#old_claimed_patterns-menu">^</a>
@@ -1133,9 +1174,9 @@ X [0]                       brokenlink.html     BROKEN: reason
           with this issue (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N10390"></a><a name="general"></a>
+<a name="N103AF"></a><a name="general"></a>
 <h3 class="underlined_5">5. General</h3>
-<a name="N10394"></a><a name="generating_menus"></a>
+<a name="N103B3"></a><a name="generating_menus"></a>
 <h4 class="faq">5.1. What is the relationship between site.xml and book.xml? </h4>
 <div align="right">
 <a href="#generating_menus-menu">^</a>
@@ -1149,7 +1190,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           <span class="codefrag">site.xml</span>-generated menus aren't appropriate. See <a href="../docs/linking.html">Menus and
             Linking</a>. </p>
 </div>
-<a name="N103AF"></a><a name="docbook"></a>
+<a name="N103CE"></a><a name="docbook"></a>
 <h4 class="faq">5.2.  How do I use DocBook as the xml documentation format? </h4>
 <div align="right">
 <a href="#docbook-menu">^</a>
@@ -1190,7 +1231,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           different DTDs, then see <a href="../docs/your-project.html#new_dtd">Using Forrest</a> for
           configuration guidance. </p>
 </div>
-<a name="N103D3"></a><a name="version"></a>
+<a name="N103F2"></a><a name="version"></a>
 <h4 class="faq">5.3.  How to report which version of Forrest is being used and the properties that are
         set? </h4>
 <div align="right">
@@ -1203,7 +1244,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           watch the build messages. Doing <span class="codefrag">'forrest -v'</span> will provide verbose build
           messages. </p>
 </div>
-<a name="N103E7"></a><a name="logs"></a>
+<a name="N10406"></a><a name="logs"></a>
 <h4 class="faq">5.4.  Where are the log files to find more infomation about errors? </h4>
 <div align="right">
 <a href="#logs-menu">^</a>
@@ -1222,7 +1263,7 @@ X [0]                       brokenlink.html     BROKEN: reason
 <p> Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages to the standard
           output. </p>
 </div>
-<a name="N1040B"></a><a name="how_can_I_help"></a>
+<a name="N1042A"></a><a name="how_can_I_help"></a>
 <h4 class="faq">5.5.  How to help? </h4>
 <div align="right">
 <a href="#how_can_I_help-menu">^</a>
@@ -1233,7 +1274,7 @@ X [0]                       brokenlink.html     BROKEN: reason
           particularly from newcomers&mdash;often, close proximity blinds software developers to
           faults that are obvious to everyone else. Don't be shy! </p>
 </div>
-<a name="N10417"></a><a name="patch"></a>
+<a name="N10436"></a><a name="patch"></a>
 <h4 class="faq">5.6.  How to contribute a patch? </h4>
 <div align="right">
 <a href="#patch-menu">^</a>
@@ -1257,7 +1298,7 @@ X [0]                       brokenlink.html     BROKEN: reason
     +-->
 <div class="lastmodified">
 <script type="text/javascript"><!--
-document.write("Last Published: " + document.lastModified);
+document.write("Last Published:  " + document.lastModified);
 //  --></script>
 </div>
 <div class="copyright">
