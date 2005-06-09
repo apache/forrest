@@ -363,7 +363,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   </xsl:template>
   <xsl:template name="last-published">
     <script type="text/javascript"><![CDATA[<!--
-document.write("]]><i18n:text >Last Published:</i18n:text>&#160;<![CDATA[ " + document.lastModified);
+document.write("]]><i18n:text >Last Published:</i18n:text><![CDATA[ " + document.lastModified);
 //  -->]]></script>
   </xsl:template>
 <!--headings-->
