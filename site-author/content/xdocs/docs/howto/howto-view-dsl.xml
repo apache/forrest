@@ -34,10 +34,10 @@
   </audience>
   
   <purpose title="Purpose">
+    
     <p>
       This how-to will show you how to write a forrest:view from ground on. 
-      We will focus on html as output format. 
-      As well it will show how to add your own css implementation to the view.
+      We will focus on html as output format. As well it will show how to add your own css implementation to the view.
     </p>
   </purpose>
 
@@ -47,78 +47,97 @@
     </ul>
   </prerequisites>
 
- <!-- <steps title="Steps">
+  <steps title="Steps">
     <p>
-    
-    Views allow us to define the order in which contracts appear, and also to group them using forrest:hooks.
-    
-      The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
-      Some of the instructions has to be modified with your local settings.
+      We developed forrest:view to let the user decide where to place elements in e.g. html-pages.
+      We started this work with the <code>skinconf.xml</code> where you could configure certain elements and
+      their positions. This elements was known under certain names. It was up to the skin-designer to support 
+      this configuration and the elements.
     </p>
-    <section id="localBuild">
-      <title>Build the view and the viewHelper plugins</title>
-      <p>
-        The first step is to build the view and the viewHelper plugins. Change to a console of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an update and after this 
-        deploy both plugins locally.
-      </p>
-      <source>
-cd {forrest-trunk}
-svn up
-cd whiteboard/plugins/org.apache.forrest.plugin.internal.view/
-ant local-deploy
-cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
-ant local-deploy
+    <p>
+     The work started with grouping elements (the ones from skinconf). We used css-contracts that 
+     we added as @attributes e.g. <code><![CDATA[<div id="content-main"/>]]> </code>. That made it 
+     possible to use the same elements in different skins. For the full list refer to the
+      <a href="http://svn.apache.org/viewcvs.cgi/*checkout*/forrest/trunk/main/webapp/skins/leather-dev/contracts.inicial.txt">
+        inicial contract list
+      </a>
+    </p>
+    <p>
+     Around this contracts we developed a configuration Domain Specific Language and called it forrest:view.
+     forrest:view's allows us to define the order in which forrest:contract's appear, and also to group
+     them using forrest:hook's.
+    </p>
+    <p>
+     forrest:hook's are container that are only used for layout reasons. They <strong>do not</strong> add 
+     any content nor functionality to the output. They add <strong>only</strong> layout information to 
+     the output.
+    </p>
+    <p>
+     forrest:contract's are functionality or extra content that a skin can use to display the requested
+     document (content-main). Sometimes a contact delivers format specific markup, other times it delivers
+     a format-independent string.
+    </p>
+    <section id="emptyView">
+      <title>Empty view file</title>
+      <source><![CDATA[<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" >
+  <forrest:view type="xhtml">    
+  </forrest:view>  
+</forrest:views>]]>
       </source>
-    </section>
-    <section id="newSeed">
-      <title>Seed a new project</title>
-      <p> 
-				Go to the dir where you want to seed a new project and seed it. 
-        Then we have to prepare a default.fv directory in project.conf-dir (forrest.properties) 
-        of the fresh seed. That will be needed as soon you modify the default view of your project.
+      <p>
+        forrest:view is designed to be open for any format that can use forrest:view as configuration file.
+	The only format we implemented is xhtml for now. This is as well true for the delivered contracts.
       </p>
-      <source>
+      <p>
+        Now lets start to skin our site. :)
+      </p>
+    </section>
+    <section id="usingContracts">
+    <title>Using contracts</title>
+    <p> 
+     To start your skin you need to know which contracts you can use. 
+    </p>
+    <source>
 cd ~/src/newSeed
 forrest seed
 mkdir src/documentation/conf
-      </source>
-    </section>
-    <section id="forrestProperties">
-      <title>Modifying forrest.properties</title>
-      <p>
-        Now we have to tell forrest that we are planing to use the view plugins. We will do that
-        by editing to the forrest.properties to add the plugins:
-      </p>
-      <source>
+</source>
+</section><!--
+<section id="forrestProperties">
+<title>Modifying forrest.properties</title>
+<p>
+Now we have to tell forrest that we are planing to use the view plugins. We will do that
+by editing to the forrest.properties to add the plugins:
+</p>
+<source>
 project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
-      </source>
-      <p>
-	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
-       not independend form the "old fashion skins".  
-      </p>
-      <note>We exchanging only
-	     site2xhtml.xsl of leather-dev skin by the plugins and some contracts are based
-	     on e.g. document2html.xsl output of leather-dev.</note>
-     <source>
+</source>
+<p>
+     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
+not independend form the "old fashion skins".  
+</p>
+<note>We exchanging only
+     site2xhtml.xsl of leather-dev skin by the plugins and some contracts are based
+     on e.g. document2html.xsl output of leather-dev.</note>
+<source>
 project.skin=leather-dev
-      </source>
-    </section>
-    <section id="testing">
-      <title>Test your new view based project</title>
-      <p> 
-        Now you have finished the preparation and the setup to finally try
-      </p>
-      <source>
+</source>
+</section>
+<section id="testing">
+<title>Test your new view based project</title>
+<p> 
+Now you have finished the preparation and the setup to finally try
+</p>
+<source>
 forrest run
-      </source>
-      <p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view based skin.</p>
-      <note>When developing styles with views 'forrest run' is the quickest
+</source>
+<p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
+view based skin.</p>
+<note>When developing styles with views 'forrest run' is the quickest
 way. You will see you do not have to build your project to see the
 changes on your pages when working with *.fv. </note>
-    </section>
-  </steps>
+</section>-->
+  </steps><!--
   <extension title="Further Reading">
     <p>
       Congratulations you are now able to work with views. 

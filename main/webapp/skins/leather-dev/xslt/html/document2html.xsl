@@ -84,11 +84,11 @@ imported document2html.xsl for details.
   <!-- Generate a <a name="..."> tag for an @id -->
   <xsl:template match="@id">
     <xsl:if test="normalize-space(.)!=''">
-      <a name="{.}">&#160;</a>
+      <a name="{.}"><xsl:text> </xsl:text></a>
     </xsl:if>
   </xsl:template>
   <xsl:template match="section">
-    <a name="{generate-id()}">&#160;</a>
+    <a name="{generate-id()}"><xsl:text> </xsl:text></a>
     <xsl:apply-templates select="@id"/>
 
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
