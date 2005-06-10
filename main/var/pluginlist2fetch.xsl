@@ -19,6 +19,7 @@
    <xsl:output method="xml" indent="yes" />
 
    <xsl:param name="plugin-name" />
+   <xsl:param name="plugin-version" />
    <xsl:param name="plugin-dir"/>
    <xsl:param name="forrest-version" />
 
@@ -29,15 +30,17 @@
          <target name="fetchplugin" depends="fetch-versioned-plugin, fetch-unversioned-plugin, final-check"/>
 
          <target name="fetch-versioned-plugin">
-            <echo>Trying to get "<xsl:value-of select="$plugin-name" />" plugin version 
-                  <xsl:value-of select="$forrest-version" />...</echo>
-            <get verbose="true" usetimestamp="true" ignoreerrors="true">
-               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />-<xsl:value-of select="$forrest-version" />.zip</xsl:attribute>
-               <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-            </get>
-            <available property="versioned-plugin.present">
-               <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-            </available>
+            <xsl:if test="$plugin-version">
+              <echo>Trying to get "<xsl:value-of select="$plugin-name" />" plugin, version <xsl:value-of select="$plugin-version" />
+for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
+              <get verbose="true" usetimestamp="true" ignoreerrors="true">
+                 <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$forrest-version" />/<xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
+                 <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
+              </get>
+              <available property="versioned-plugin.present">
+                 <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
+              </available>
+            </xsl:if>
          </target>
 
          <target name="fetch-unversioned-plugin" unless="versioned-plugin.present">
@@ -49,12 +52,30 @@
          </target>
 
          <target name="final-check">
-            <available property="plugin.present">
-               <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+            <available property="desired.plugin.present">
+              <xsl:choose>
+                <xsl:when test="$plugin-version">
+                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
             </available>
-            <fail unless="plugin.present">
+            <if>
+              <isset property="desired.plugin.present"/>
+              <then>
+                <echo><xsl:value-of select="$plugin-name" /> downloaded, ready to install</echo>
+              </then>
+              <else>
+                <available property="unversioned.plugin.present">
+                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                </available>
+                <fail unless="unversioned.plugin.present">
   Unable to download the 
   "<xsl:value-of select="$plugin-name" />" plugin
+  <xsl:if test="$plugin-version">version <xsl:value-of select="$plugin-version"/></xsl:if>
+  or an equivalent unversioned plugin
   from <xsl:value-of select="plugin[@name=$plugin-name]/@url" />
   There are a number of possible causes for this:
 
@@ -70,7 +91,10 @@
   <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
   extract it into
   <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></fail>
-            <echo>Plugin "<xsl:value-of select="$plugin-name" />" correctly installed.</echo>
+                <echo>Desired version (<xsl:value-of select="$plugin-version" />) of <xsl:value-of select="$plugin-name" /> unavailable,
+  downloaded unversioned instead, ready to install</echo>
+              </else>
+            </if>
          </target>
       </project>
          </xsl:when>
