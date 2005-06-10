@@ -69,7 +69,14 @@
   <map:pipelines>
     <map:pipeline >
       <map:match pattern="**tab-*.html">
-        <map:generate src="{project:content.xdocs}tabs.xml"/>
+			 <map:select type="exists">
+				 <map:when test="{project:content.xdocs}tabs.xml">
+				  <map:generate src="{project:content.xdocs}tabs.xml"/>
+			  </map:when>
+				<map:when test="{lm:tabs.xml}">
+					<map:generate src="{lm:tabs.xml}"/>
+				</map:when>
+		 	</map:select>
         <map:transform type="xinclude"/>
         <map:select type="config">
           <map:parameter name="value" value="{defaults:i18n}"/>
