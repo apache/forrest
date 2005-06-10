@@ -83,8 +83,7 @@
     <property name="build.compiler.type"        value="classic"/>
     <property name="build.compiler.vm"          value="1.2"/>
     
-    <input message="Which plugin do you wish to operate on (plugin-name)?"
-           addproperty="plugin-name"/>
+    <fail unless="plugin-name" message="You must plugin build targets from within the plugin directory."/>
            
     <mkdir dir="${build.dir}"/>
     
@@ -183,17 +182,13 @@
     <copy todir="${deploy.plugins.svn-dir}" 
           overwrite="true"
           file="${forrest.plugins.descriptor.file}"/>
-  	<!-- ================================================ -->
-    <!-- FIXME: RE-ENABLE CHECKING                        -->
-    <!-- ================================================ -->
+          
     <!-- check in to SVN -->
-    <!--
     <svncommit
         target="${deploy.plugins.svn-dir}"
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment plugins descriptor file plugins.xml (deployed by 'deploy-plugins.xml' target of plugin build script)"
     />
-    -->
   </target>
 	
   <target name="deploy-docs"
@@ -233,26 +228,27 @@
       <arg value="--targets"/>
       <arg value="${deploy.docs.svn-filestoadd}"/>
     </exec>
-    <!-- ================================================ -->
-    <!-- FIXME: RE-ENABLE CHECKING                        -->
-    <!-- ================================================ -->
     <!-- check in to SVN -->
-    <!--
   	<svncommit
         target="${deploy.docs.svn-dir}"
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment of docs for ${plugin-name} plugin (deployed by 'deploy-docs' target of plugin build script)"
     />
-    -->
   </target>
           
   <target name="deploy"
           description="Deploy the plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Deploying ${plugin-name} to the web server</echo>
+    <echo>Deploying ${plugin-name} to the download server</echo>
 	
     <!-- copy new plugin files into sandbox -->
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+    <!-- FIXME: remove this duplication of content. It is here to allow a fallback to an
+         unversioned plugin, but the plugin install system should be intelligent enough to know
+         which to download as a fallback. -->
+    <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
      
