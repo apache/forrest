@@ -42,7 +42,7 @@ public class AntProperties extends Properties
 
     public AntProperties(Properties arg0) {
         super(arg0);
-        putAll(arg0);
+        putAllProperties(arg0);
     }
 
     public synchronized void load(InputStream arg0) throws IOException {
@@ -93,7 +93,7 @@ public class AntProperties extends Properties
         return null;
     }
 
-    public synchronized void putAll(Map arg0) {
+    public synchronized void putAllProperties(Map arg0) {
         Iterator i = arg0.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry me = (Map.Entry)i.next();
