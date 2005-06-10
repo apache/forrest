@@ -16,23 +16,23 @@
   limitations under the License.
 -->
 <forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="minitoc" type="nugget">
+  name="content-minitoc" type="nugget">
   <description>
-    minitoc - Template will output the minitoc. 
+    content-minitoc - Template will output the mini-toc (toc-table of content). 
   </description>
-  
+  <usage><![CDATA[<forrest:contract name="content-minitoc"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="minitoc" inputFormat="xsl" body="true" head="false">
+    format="xhtml" name="content-minitoc" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="minitoc-body" match="div[@id='content']/div[@id='skinconf-toc-page']">
+	    <xsl:template name="content-minitoc-body" match="div[@id='content']/div[@id='skinconf-toc-page']">
 	<xsl:comment>+
-	    |start minitoc
+	    |start content-minitoc
 	    +</xsl:comment>
 		
 		    <xsl:if test="$config/toc">
 		      <xsl:if test="contains($minitoc-location,'page')">
 		        <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
-					<div id="minitoc-area">
+					<div id="content-minitoc-area">
 		    			<xsl:call-template name="minitoc">
 		        		    <xsl:with-param name="tocroot" select="//tocitems"/>
 			          	</xsl:call-template>

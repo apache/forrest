@@ -16,31 +16,33 @@
   limitations under the License.
 -->
 
-<forrest:contract name="feeder" type="nugget"
+<forrest:contract name="content-feeder" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This function will output the html feeder information.
+    content-feeder will output the html information retrieved by the feeder plugin (needs to be installed!). 
   </description>
-
+	<usage><![CDATA[ <!--Fixme: add usage of properties-->
+<forrest:contract name="content-feeder" nugget="get.nugget.feeder">
+</forrest:contract>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="feeder" inputFormat="xsl" body="true" head="false">
+  format="xhtml" name="content-feeder" inputFormat="xsl" body="true" head="false">
 
       <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         
-	    <xsl:template name="feeder-body" >
-	      <xsl:param name="feeder"/>
+	    <xsl:template name="content-feeder-body" >
+	      <xsl:param name="content-feeder"/>
         <xsl:param name="feedConfig"/>
         <xsl:copy-of select="$feedConfig"/>
-				<xsl:apply-templates select="$feeder/document">
+				<xsl:apply-templates select="$content-feeder/document">
           <xsl:with-param name="feedConfig" select="$feedConfig"/>
 				</xsl:apply-templates>		    
 			</xsl:template>
       
       <xsl:template match="document">
         <xsl:param name="feedConfig"/>
-        <div id="feeder">
+        <div id="content-feeder">
 		     <xsl:apply-templates select="body/section">
           <xsl:with-param name="feedConfig" select="$feedConfig"/>
 		     </xsl:apply-templates>

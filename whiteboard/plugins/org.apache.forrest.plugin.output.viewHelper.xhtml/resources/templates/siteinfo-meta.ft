@@ -15,33 +15,28 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="grouplogo" type="nugget"
+<forrest:contract name="siteinfo-meta" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This functions will output the grouplogo and link.
+    This functions will output the html meta information. Implemented forrest version/skin name.
   </description>
-  
+  <usage><![CDATA[<forrest:contract name="siteinfo-meta"/>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="grouplogo" inputFormat="xsl" body="true" head="false">
-
+  format="xhtml" name="siteinfo-meta" inputFormat="xsl" body="false" head="true">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  <xsl:template name="grouplogo-body">
-		      <xsl:comment>+
-    |start group Logo
-    +</xsl:comment> 
-     <div id="grouplogo">
-          <xsl:call-template name="renderlogo">
-            <xsl:with-param name="name" select="$config/group-name"/>
-            <xsl:with-param name="url" select="$config/group-url"/>
-            <xsl:with-param name="logo" select="$config/group-logo"/>
-            <xsl:with-param name="root" select="$root"/>
-            <xsl:with-param name="description" select="$config/group-description"/>
-        </xsl:call-template>
-      </div>
-<xsl:comment>+
-    |end group Logo
-    +</xsl:comment> 
+		  <xsl:template name="siteinfo-meta-head">
+		    <meta name="Generator" content="Apache Forrest"/>
+		    <meta name="Forrest-version">
+		      <xsl:attribute name="content">
+		        <xsl:value-of select="//info/forrest-version"/>
+		      </xsl:attribute>
+		    </meta>
+		    <meta name="Forrest-skin-name">
+		      <xsl:attribute name="content">
+		        <xsl:value-of select="//info/project-skin"/>
+		      </xsl:attribute>
+		    </meta>
 		  </xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>
