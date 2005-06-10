@@ -1,0 +1,48 @@
+Because plugin versions are managed by Forrest automatically it is possible 
+to deploy and/or release individual plugins independantly of Forrest and 
+other plugins. Before we discuss this process lets first look at the difference
+between releasing a plugin and deploying a plugin.
+
+Deploy or Release?
+------------------
+
+Plugins are automatically downloaded and installed whenever they are needed by a 
+Forrest project. In order for this to happen it is necessary to deploy the
+plugin to a download server. Plugins may be deployed at any time during their
+development cycle, that is a developer may choose to deploy a plugin that has not
+yet been fully tested. This enables the plugin to be tested "in the field", by
+its users.
+
+Since users are able to opt to use a specfic version of a plugin those working in
+production environments can ensure that these interim test deployments do not 
+affect their work.
+
+Releasing a plugin is the act of deploying a fully tested plugin available for use.
+This process will generally be more than just making the plugin available via a 
+download site, it will usually involve making public announcements, tagging the 
+source tree, incrementing version numbers and other such maintenance tasks.
+
+Deploying a Plugin
+------------------
+
+By convention a plugin that has not been fully tested will have '-dev' appended 
+to the version number in the plugins build.xml file.
+
+To deploy on the Apache Forrest download server you will need to be a committer.
+Simply change directory to the plugin home directory and do "ant deploy". The
+build system will take care of everything else for you.
+
+Releasing a Plugin
+------------------
+
+The only difference between deploying and releasing a plugin from the point of
+view of making the download available is that the plugin version number will
+have the '-dev' postfix removed in build.xml before the "ant deploy" target is
+run.
+
+Once the deployment is complete the version number should be increased and the 
+'-dev' postfix will be appended.
+
+TODO: announcement emails
+TODO: tagging source tree
+
