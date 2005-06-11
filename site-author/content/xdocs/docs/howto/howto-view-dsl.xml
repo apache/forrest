@@ -208,26 +208,34 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
     </section>
     <section id="cssView">
       <title>CSS in views</title>
-      <fixme author="thorsten">This section is next to write</fixme>
-      <!--<p>
-        We will use now the first time a <code><![CDATA[<forrest:hook name="layoutId"/>]]></code>.
-        Hooks in views are the styling side of views. We can imitate arbitrary html skeleton 
-        with their help. Before we explain how to use your own css in views we will use the default css.
-        In the default.css we can find 
+      <p>
+        We know now how to place contracts and hooks in our view, till this stage we only used the default.css. 
+        CSS-support of views is as easy as placing contracts/hooks. To override the default.css
+        stylesheet we use another tag within our view <code><![CDATA[<forrest:hook name="default.css"/>]]></code>.
+      </p>
+      <p>
+        We will now create a file in <code><![CDATA[{project:skins-dir}{path}/{name}.css]]></code>. In our case
+        we will save a file called howTo.css in newSeed/src/documentation/skins/css/howTo.css containing only 
+        the following css:
       </p>
       <source>/* menu */
 #leftbar {
     width: 25%;
     float: left;
     background: #eae8e3;
-    border: thin dashed #565248;
+    border: thin solid #000000;
 }
       </source>
       <p>
-        With this information we know to use <code><![CDATA[<forrest:hook name="leftbar"/>]]></code> 
-        to add contracts into that container. If we want to put a contract into the side position
-        of the site we need to place the contract into that hook. Like:
+        We just changed the border-style to 'solid' and the color to '#000000'. In our we we have to add
+        a new tag to tell that we want to override the default.css. We are doing this by adding the tag 
+        <code><![CDATA[<forrest:hook name="howTo.css"/>]]></code> to our view.
       </p>  
+      <note>
+        <code><![CDATA[<forrest:hook name="howTo.css"/>]]></code> has to be direct son of 
+        <code><![CDATA[<forrest:view type="xhtml">]]></code>!!!
+      </note>
+      <fixme author="thorsten">This section is next to be writen</fixme> <!--
       <source><![CDATA[<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" >
   <forrest:view type="xhtml">
     <forrest:hook name="leftbar">
