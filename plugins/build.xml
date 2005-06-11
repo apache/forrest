@@ -83,7 +83,7 @@
     <property name="build.compiler.type"        value="classic"/>
     <property name="build.compiler.vm"          value="1.2"/>
     
-    <fail unless="plugin-name" message="You must plugin build targets from within the plugin directory."/>
+    <fail unless="plugin-name" message="You must run plugin build targets from within the plugin directory."/>
            
     <mkdir dir="${build.dir}"/>
     
@@ -322,8 +322,11 @@
   </target>
   
   <target name="seedPlugin"
-    description="Create a new plugin directory in the current working directory and seed it with initial set of files"
-    depends="init">
+    description="Create a new plugin directory in the current working directory and seed it with initial set of files">
+    
+    <input message="What is the name of the plugin you wish to creaate?"
+           addproperty="plugin-name"/>
+    <antcall target="init"/>
     
     <input message="Provide a brief description of what the plugin does"
            addproperty="plugin-desc"/>
