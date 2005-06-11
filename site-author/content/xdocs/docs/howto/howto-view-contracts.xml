@@ -87,16 +87,16 @@ This HowTo is a good start but still needs proof-reading.
     <section id="enhanceMaintainment">
       <title>Enhance the maintainment</title>
       <p>Now we can enhance the maintainment for the future and we started to
-give this code snippets contracts names. This naming enables us to keep
+give this code snippets contracts names (based on their functionality). This naming enables us to keep
 the contract separate from the position code itself. In xsl you would
 simply do:
       </p>
       <ol>
-        <li>replace the script by <![CDATA[<xsl:call-template name="last-published"/>]]></li>
+        <li>replace the script by <![CDATA[<xsl:call-template name="siteinfo-last-published"/>]]></li>
         <li>and add:</li>
       </ol>
       
-      <source><![CDATA[<xsl:template name="last-published">
+      <source><![CDATA[<xsl:template name="siteinfo-last-published">
  <script type="text/javascript">
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
@@ -104,7 +104,7 @@ simply do:
       </source>
       <p>
         This allows us in a next maintainment just change the code of
-        <![CDATA[<xsl:template name="last-published"/>]]> and apply it in any position where
+        <![CDATA[<xsl:template name="siteinfo-last-published"/>]]> and apply it in any position where
         it is placed.  
       </p>
       <note>
@@ -116,7 +116,8 @@ simply do:
       <p>
         To start a new forrest:contract you can copy the "blank.ft" from
         <code>org.apache.forrest.plugin.output.viewHelper.xhtml/resources/templates</code>. 
-        It is a simple xml file with the following code which you can use to base new contracts on:
+        It is a simple xml file with the following code which you can use to base new contracts 
+        on (note to close the CDATA element before the <code><![CDATA[</usage>]]></code>!):
       </p>
       <source>
 <![CDATA[<forrest:contract 
@@ -128,9 +129,9 @@ simply do:
     When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
   
   <description>
-    {contract-name} contract. This functions will output {contract-funtion}.
+    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
   </description>
-  
+  <usage><![CDATA[<forrest:contract name="doNotUseJustDummy"/>]] ></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="xhtml" name="blank" inputFormat="xsl" body="false" head="false">
     <xsl:stylesheet version="1.1" 
@@ -151,6 +152,10 @@ simply do:
       <p>
         The <code><![CDATA[<description/>]]></code> tag is self explaining. 
         Here we have to explain what this contract is doing.
+      </p>
+      <p>
+        The <code><![CDATA[<usage/>]]></code> tag is self explaining. 
+        Here we have to explain how the designer can use the contract in his view.
       </p>
       <p>
         <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
@@ -189,13 +194,13 @@ simply do:
         Now the maintainment optimized code (xpath="/html/body/*") was:
       </p>
       <source>
-<![CDATA[<xsl:template name="last-published">
+<![CDATA[<xsl:template name="siteinfo-last-published">
  <script type="text/javascript">
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
 </xsl:template>]]></source>
       <ul>
-        <li>Search and replace "blank" with "last-publish-howTo"</li>
+        <li>Search and replace "blank" with "siteinfo-last-publish-howTo"</li>
         <li>Add description of the contract</li>
         <li>Set @body="true"</li>
       </ul>
@@ -235,12 +240,11 @@ simply do:
   </steps>
   <extension title="Further Reading">
     <p>
-      Congratulations you are now able to work with views. 
+      Congratulations you are now able to work with view contracts. 
       From here we recommend to read the following How-To's:
     </p>
     <ul>
       <li><a href="site:howto/view/DSL">Getting started with forrest:view DSL</a> </li>
-      <li><a href="site:howto/view/contracts">Create your own contract implementation</a> </li>
     </ul>
   </extension>
   <feedback title="Feedback">
