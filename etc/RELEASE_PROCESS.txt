@@ -106,8 +106,17 @@ FIXME:   e.g. J2SDK 1.4.0
    ensure that it unpacks okay, configure, and do the usual tests.
 
  - Understand how to sign releases and generate MD5 and PGP.
-   http://wiki.apache.org/incubator/SigningReleases
-   Create the *.md5 and *.asc files.
+   Not going to try to explain, but here is some info:
+    http://wiki.apache.org/incubator/SigningReleases
+    http://forrest.apache.org/mirrors.cgi#verify
+   Create the *.md5 and *.asc files. Here is one example:
+   gpg --recv-key <myKey>
+   gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
+       --detach-sig --armor apache-forrest-0.7.tar.gz
+   gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
+       apache-forrest-0.7.tar.gz
+   openssl dgst -md5 -out crossley-apache-forrest-0.7.tar.gz.md5 \
+       apache-forrest-0.7.tar.gz
 
  - Create a maintenance branch in SVN with
     svn copy -m "Create the x.y release branch from r#####" \
