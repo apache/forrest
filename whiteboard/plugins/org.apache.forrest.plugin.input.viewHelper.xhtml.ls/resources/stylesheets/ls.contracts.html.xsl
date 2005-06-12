@@ -24,44 +24,33 @@
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
     >
 
-<xsl:param name="contentDir" select="'default/path'"/>
-
   <!--
       Create row for each document.  Information about the document is
       extracted from the document itself using the document()
       function.
   -->
   <xsl:template match="/">
-      <forrest:contracts xmlns:forrest="http://apache.org/forrest/templates/1.0">
-        <xsl:apply-templates select="//dir:file"/>                    
-      </forrest:contracts>
+   <document>
+    	<header>
+        <title>ls.contracts</title>
+    	</header>
+    	<body>
+        <xsl:apply-templates/>
+    	</body>
+  	</document>
   </xsl:template>
-
-<xsl:template match="dir:file">
-  <xsl:variable name="fct-bit-file">
-    <xsl:value-of select="$contentDir"/>
-    <xsl:text>/resources/templates/</xsl:text>
-    <xsl:value-of select="@name"/>
-  </xsl:variable>
-  <xsl:variable name="fct-bit-title">
-    <xsl:value-of select="document($fct-bit-file)//forrest:contract/@name"/>
-  </xsl:variable>
-  <xsl:variable name="fct-bit-type">
-    <xsl:value-of select="document($fct-bit-file)/forrest:contract/@type"/>
-  </xsl:variable>
-  <xsl:variable name="fct-bit-description">
-    <xsl:value-of select="document($fct-bit-file)/forrest:contract/description"/>
-  </xsl:variable>
-
-    <forrest:contract name="{$fct-bit-title}" css="{$fct-bit-type}" file-name="{@name}">
-      <description>
-        <xsl:value-of select="$fct-bit-description"/>
-      </description>
-      <realpath>  
-        <xsl:value-of select="$fct-bit-file"/>
-      </realpath>
-    </forrest:contract>
-
+<xsl:template match="forrest:contracts">
+  <xsl:apply-templates/>
+</xsl:template>
+<xsl:template match="forrest:contract">
+  <section>
+  <title><xsl:value-of select="@name" /></title>
+<p class="file"><strong>file-name:</strong> <br/><xsl:value-of select="@file-name" /></p>
+<p class="description"><strong>description:</strong> <br/><xsl:value-of select="./description" /></p>
+<p class="usage"><strong>usage:</strong></p>
+<source><xsl:value-of select="./usage" /></source>
+<p class="path"><strong>realpath:</strong> <br/><xsl:value-of select="./realpath" /></p>
+</section>
 </xsl:template>
 
 </xsl:stylesheet>

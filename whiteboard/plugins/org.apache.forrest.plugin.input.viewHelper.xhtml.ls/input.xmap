@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+<map:pipelines>
+
+   <!--ls.fbits.l
+transform this dir-list and add more information 
+-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.xml">
+		  <map:generate src="cocoon://ls.contracts"/>
+      <map:transform src="resources/stylesheets/ls.contracts.xsl">
+        <map:parameter name="contractDir" value="{forrest:plugins}/org.apache.forrest.plugin.output.viewHelper.xhtml"/>
+      </map:transform>
+      <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
+      <map:transform src="resources/stylesheets/strip_namespaces.xsl"/>
+      <map:serialize type="xml" mime-type="UTF-8"/>
+    </map:match>
+  </map:pipeline>
+<!--ls.fbits.l
+transform this dir-list of the project and add more information 
+-->
+  <map:pipeline>
+    <map:match pattern="ls.contracts.project.xml">
+		  <map:generate src="cocoon:/ls.contracts.project"/>
+      <map:transform src="resources/stylesheets/ls.contracts.xsl">
+        <map:parameter name="contentDir" value="{project:resources}/templates/"/>
+      </map:transform>
+      <map:transform src="resources/stylesheets/ls.contracts.html.xsl"/>
+      <map:serialize type="xml"/>
+    </map:match>
+  </map:pipeline>
+</map:pipelines>
+
+</map:sitemap>

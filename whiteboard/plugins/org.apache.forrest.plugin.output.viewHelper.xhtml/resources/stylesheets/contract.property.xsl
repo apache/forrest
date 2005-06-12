@@ -27,9 +27,9 @@
   </xsl:template>
 
 	<xsl:template match="forrest:template[@format=$format]">
-    <forrest:property body="{@body}" format="{@format}"
+    <forrest:property format="{@format}"
+      body="{@body}"
       head="{@head}"
-      css="{@css}"
       name="{@name}"/>
 	</xsl:template>
 </xsl:stylesheet>

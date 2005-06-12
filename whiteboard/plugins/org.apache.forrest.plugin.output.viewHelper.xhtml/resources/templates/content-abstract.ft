@@ -15,14 +15,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="noFt" type="nugget">
+<forrest:contract 
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="content-abstract" type="nugget">
   <description>
-    Error 440 - Template not found. This functions is a fallback when no ft is found. 
-    This is just a dummy, it will output *nothing*.
+    content-abstract will output the abstract of the content. 
   </description>
-  <usage><![CDATA[<forrest:contract name="doNotUseJustDummy"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="content-abstract"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="noFt" inputFormat="xsl" body="false" head="false" css="false">
+    format="xhtml" name="content-abstract" inputFormat="xsl" body="true" head="false">
+     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	    <xsl:template name="content-abstract-body">
+	<xsl:comment>+
+	    |start content-abstract
+	    +</xsl:comment>
+			  <xsl:copy-of select="div[@id='content']/div[@class='abstract']"/>
+<xsl:comment>+
+    |end content-abstract
+    +</xsl:comment>
+		  </xsl:template>
+	  </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

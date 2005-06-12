@@ -16,77 +16,40 @@
   limitations under the License.
 -->
 
-<forrest:contract name="feeder" type="nugget"
+<forrest:contract name="content-feeder" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This function will output the html feeder information.
+    content-feeder will output the html information retrieved by the feeder plugin (needs to be installed!). 
   </description>
-
+	<usage><![CDATA[<forrest:contract name="feeder">
+    <forrest:properties contract="feeder">
+      <forrest:property name="feeder" nugget="get.nugget.feeder">
+        <url>/feeds/somefeed.xml</url>
+      </forrest:property>
+    </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="feeder" inputFormat="xsl" body="true" head="false" css="true">
-
-      <xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-        
-        <xsl:template name="feeder-css">
-#feeder {
-	width: 23%;
-	display: block;
-	margin: 10px 0 0 0;
-	padding: 0;
-	background: #E0E9E9;
-	float: right;
-    color: black;
-    /*background: #CFDCED;*/
-    text-align:center;
-    margin-top: 5px;
-}
-.channelTitle {
-	background: #EDF2F2;
-	text-decoration: none;
-	font-size: 10pt;
-	font-family: verdana, helvetica, sans;
-  color: #000066;
-  padding: 5px;
-}
-.channelItems {
-	background: #D9E4E4;
-	text-decoration: none;
-	font-size: 10pt;
-	font-family: verdana, helvetica, sans;
-	color: #000066;
-  padding: 5px;
-}</xsl:template>
-        
-	    <xsl:template name="feeder-body" >
-	      <xsl:param name="feeder"/>
-        <xsl:param name="feedConfig"/>
-        <xsl:copy-of select="$feedConfig"/>
-				<xsl:apply-templates select="$feeder/document">
-          <xsl:with-param name="feedConfig" select="$feedConfig"/>
-				</xsl:apply-templates>		    
+  format="xhtml" name="content-feeder" inputFormat="xsl" body="true" head="false">
+    <xsl:stylesheet version="1.1" 
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	    <xsl:template name="content-feeder-body" >
+	      <xsl:param name="content-feeder"/>
+				<xsl:apply-templates select="$content-feeder/document"/>		    
 			</xsl:template>
       
       <xsl:template match="document">
-        <xsl:param name="feedConfig"/>
-        <div id="feeder">
-		     <xsl:apply-templates select="body/section">
-          <xsl:with-param name="feedConfig" select="$feedConfig"/>
-		     </xsl:apply-templates>
+        <div id="content-feeder">
+		     <xsl:apply-templates select="body/section"/>
 		    </div>
       </xsl:template>
       
       <xsl:template match="section">
-        <xsl:param name="feedConfig"/>
         <div class="channelTitle">
           <xsl:value-of select="title"/>
         </div>
         <div class="channelItems">
-          <xsl:apply-templates select="p[@class]">
-            <xsl:with-param name="feedConfig" select="$feedConfig"/>
-          </xsl:apply-templates>
+          <xsl:apply-templates select="p[@class]"/>
         </div>
       </xsl:template>
       
@@ -95,7 +58,6 @@
       </xsl:template>
       
       <xsl:template match="p[@class]">
-        <xsl:param name="feedConfig"/>
         <div class="{@class}">
           <xsl:apply-templates/>
         </div>

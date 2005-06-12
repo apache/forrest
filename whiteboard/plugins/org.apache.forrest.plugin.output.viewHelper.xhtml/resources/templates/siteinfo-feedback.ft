@@ -16,44 +16,30 @@
   limitations under the License.
 -->
 
-<forrest:contract name="feedback-dyn" type="nugget"
+<forrest:contract name="siteinfo-feedback" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    This function will output the html feedback-dyn information.
+    This function will output the html siteinfo-feedback information.
   </description>
-
+  <usage><![CDATA[<forrest:contract name="siteinfo-feedback"/>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="feedback-dyn" inputFormat="xsl" body="true" head="false" css="true">
+  format="xhtml" name="siteinfo-feedback" inputFormat="xsl" body="true" head="false">
 
       <xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         
-        <xsl:template name="feedback-dyn-css">
-#feedback {
-    color: black;
-    background: #CFDCED;
-    text-align:center;
-    margin-top: 5px;
-}
-#feedback #feedbackto {
-    font-size: 90%;
-    color: black;
-}</xsl:template>
-        
-	    <xsl:template name="feedback-dyn-body">
-	        <xsl:param name="main"/>
-		    <div id="feedback"> 
-		      <xsl:value-of select="$main/feedback"/>
+	    <xsl:template name="siteinfo-feedback-body">
+		    <div id="siteinfo-feedback">
+		      <xsl:value-of select="$config/feedback"/>
 		      <xsl:choose>
-		        <xsl:when test="$main/feedback/@href and not($main/feedback/@href='')">
+		        <xsl:when test="$config/feedback/@href and not($config/feedback/@href='')">
 		          <a id="feedbackto">
 		            <xsl:attribute name="href">
-		              <xsl:value-of select="$main/feedback/@href"/>
+		              <xsl:value-of select="$config/feedback/@href"/>
 		              <xsl:value-of select="$path"/>
 		            </xsl:attribute>
-		            <xsl:value-of select="$main/feedback/@to"/>
+		            <xsl:value-of select="$config/feedback/@to"/>
 		          </a>
 		        </xsl:when>
 		        <xsl:otherwise>

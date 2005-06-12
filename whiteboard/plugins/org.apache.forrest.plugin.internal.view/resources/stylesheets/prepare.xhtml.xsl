@@ -47,13 +47,7 @@
                     	<!--*No* forrest:css found in the view-->
                         <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
                             <link rel="stylesheet" type="text/css">
-                                <xsl:attribute name="href">{$root}skin/basic.css</xsl:attribute>
-                            </link>
-                            <link rel="stylesheet" type="text/css">
-                                <xsl:attribute name="href">{$root}skin/contracts-<xsl:value-of select="$request"/>.css</xsl:attribute>
-                            </link>
-                            <link rel="stylesheet" type="text/css">
-                                <xsl:attribute name="href">{$root}skin/profiling.css</xsl:attribute>
+                                <xsl:attribute name="href">{$root}skin/default.css</xsl:attribute>
                             </link>
                         </xsl:if>
                     	<!-- forrest:css *found* in the view-->
