@@ -60,10 +60,14 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   +-->
             <title>
                 <xsl:value-of select="div[@id='content']/h1"/>
-                <xsl:if test="$config/motd-title">
-                  <xsl:text> (</xsl:text>
-                  <xsl:value-of select="$config/motd-title"/>
-                  <xsl:text>)</xsl:text>
+                <xsl:if test="$config/motd">
+                  <xsl:for-each select="$config/motd/motd-option">
+                    <xsl:if test="contains($path, @pattern)">
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="motd-title"/>
+                      <xsl:text>)</xsl:text>
+                    </xsl:if>
+                  </xsl:for-each>
                 </xsl:if>
             </title>
 <!--+
@@ -489,21 +493,25 @@ document.write("]]><i18n:text >Last Published:</i18n:text><![CDATA[ " + document
               </xsl:if>
 
 <!-- Message of the day -->
-              <xsl:if test="$config/motd-page">
-                <xsl:if test="$config/motd-page/@location='alt' or $config/motd-page/@location='both'">
-                  <hr />
-                  <xsl:value-of select="$config/motd-page"/>
-                  <xsl:if test="$config/motd-page-url">
-                    <xsl:text> (</xsl:text>
-                      <a>
-                        <xsl:attribute name="href">
-                          <xsl:value-of select="$config/motd-page-url"/>
-                        </xsl:attribute>
-                        <xsl:text>More</xsl:text>
-                      </a>
-                    <xsl:text>)</xsl:text>
+              <xsl:if test="$config/motd">
+                <xsl:for-each select="$config/motd/motd-option">
+                  <xsl:if test="contains($path, @pattern)">
+                    <xsl:if test="motd-page/@location='alt' or motd-page/@location='both'">
+                      <hr />
+                      <xsl:value-of select="motd-page"/>
+                      <xsl:if test="motd-page-url">
+                        <xsl:text> (</xsl:text>
+                        <a>
+                          <xsl:attribute name="href">
+                            <xsl:value-of select="motd-page-url"/>
+                          </xsl:attribute>
+                          <xsl:text>More</xsl:text>
+                        </a>
+                        <xsl:text>)</xsl:text>
+                      </xsl:if>
+                    </xsl:if>
                   </xsl:if>
-                </xsl:if>
+                </xsl:for-each>
               </xsl:if>
 		</div>
 
@@ -707,22 +715,26 @@ if (VERSION > 3) {
   </xsl:template>
 
   <xsl:template match="div[@id='skinconf-toc-page']">
-    <xsl:if test="$config/motd-page">
-      <xsl:if test="$config/motd-page/@location='page' or $config/motd-page/@location='both'">
-        <div id="motd-area">
-           <xsl:value-of select="$config/motd-page"/>
-          <xsl:if test="$config/motd-page-url">
-            <xsl:text> (</xsl:text>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:value-of select="$config/motd-page-url"/>
-                </xsl:attribute>
-                <xsl:text>More</xsl:text>
-              </a>
-            <xsl:text>)</xsl:text>
+    <xsl:if test="$config/motd">
+      <xsl:for-each select="$config/motd/motd-option">
+        <xsl:if test="contains($path, @pattern)">
+          <xsl:if test="motd-page/@location='page' or motd-page/@location='both'">
+            <div id="motd-area">
+              <xsl:value-of select="motd-page"/>
+              <xsl:if test="motd-page-url">
+                <xsl:text> (</xsl:text>
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="motd-page-url"/>
+                  </xsl:attribute>
+                  <xsl:text>More</xsl:text>
+                </a>
+                <xsl:text>)</xsl:text>
+              </xsl:if>
+            </div>
           </xsl:if>
-        </div>
-      </xsl:if>
+        </xsl:if>
+      </xsl:for-each>
     </xsl:if>
 
     <xsl:if test="$config/toc">
