@@ -99,6 +99,10 @@
          <toc level="2" location="page"/>
       </xsl:if>
 
+    <xsl:if test="not(pdf/page-numbering-format)">
+        <pdf><page-numbering-format>Page 1</page-numbering-format></pdf>
+    </xsl:if>
+
     <xsl:if test="not(pdf/show-external-urls)">
         <pdf><show-external-urls>true</show-external-urls></pdf>
     </xsl:if>

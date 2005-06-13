@@ -66,6 +66,9 @@
   <!-- page breaks after TOC and each page if an aggregate document -->
   <xsl:variable name="page-break-top-sections" select="'true'"/>
 
+  <!-- page numbering format -->
+  <xsl:variable name="page-numbering-format" select="string(//skinconfig/pdf/page-numbering-format)"/>
+
   <!-- Section depth at which we stop numbering and just indent -->
   <xsl:param name="numbering-max-depth" select="'3'"/>
   <xsl:param name="imagesdir" select="."/>
@@ -271,12 +274,9 @@
       </fo:block>
       <!-- don't list page number on first page if it's contents is just the TOC -->
       <xsl:if test="not($toc-max-depth > 0 and $page-break-top-sections)">
-      <fo:block
-        font-size="70%"
-        text-align="start">
-          <!-- insert i18n stuff here -->
-        Page <fo:page-number/>
-      </fo:block>
+        <xsl:call-template name="insertPageNumber">
+          <xsl:with-param name="text-align">start</xsl:with-param>
+        </xsl:call-template>
       </xsl:if>
       <xsl:call-template name="info"/>
     </fo:static-content>
@@ -297,12 +297,9 @@
         text-align="center">
         <xsl:apply-templates select="footer"/>
       </fo:block>
-      <fo:block
-        font-size="70%"
-        text-align="end">
-        <!-- insert i18n stuff here -->
-        Page <fo:page-number/>
-      </fo:block>
+      <xsl:call-template name="insertPageNumber">
+        <xsl:with-param name="text-align">end</xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="info"/>
     </fo:static-content>
 
@@ -322,12 +319,9 @@
         text-align="center">
         <xsl:apply-templates select="footer"/>
       </fo:block>
-      <fo:block
-        font-size="70%"
-        text-align="start">
-        <!-- insert i18n stuff here -->
-        Page <fo:page-number/>
-      </fo:block>
+      <xsl:call-template name="insertPageNumber">
+        <xsl:with-param name="text-align">start</xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="info"/>
     </fo:static-content>
 
@@ -348,6 +342,10 @@
         padding-after="18pt">
         <xsl:apply-templates/>
       </fo:block>
+      
+      <!-- Total number of pages calculation... -->
+      <fo:block id="term"/>
+
     </fo:flow>
   </xsl:template>
 
@@ -1014,6 +1012,31 @@
       </xsl:if>
  </xsl:template>
 
+ <!-- Display the document numerotation -->
+ <xsl:template name="insertPageNumber">
+   <xsl:param name="text-align" select="'start'"/>
+     <xsl:variable name="prefixe" select="substring-before($page-numbering-format,'1')"/>
+     <xsl:variable name="sep" select="substring-before(substring-after($page-numbering-format,'1'),'1')"/>
+     <xsl:variable name="postfixe">
+       <xsl:choose>
+         <xsl:when test="contains(substring-after($page-numbering-format,'1'),'1')">
+           <xsl:value-of select="substring-after(substring-after($page-numbering-format,'1'),'1')"/>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:value-of select="substring-after($page-numbering-format,'1')"/>
+         </xsl:otherwise>
+       </xsl:choose>
+     </xsl:variable>
+     
+     <!-- if 'page-numbering-format' contains 1 digits, the page number is displayed in the footer -->
+     <xsl:if test="contains($page-numbering-format,'1')">
+       <fo:block font-size="70%" text-align="{$text-align}">
+          <!-- if the separator is not found, the total page number is skipped -->
+          <xsl:value-of select="$prefixe"/><fo:page-number/><xsl:if test="$sep != ''"><xsl:value-of select="$sep"/><fo:page-number-citation ref-id="term"/></xsl:if><xsl:value-of select="$postfixe"/>
+      </fo:block>
+    </xsl:if>
+ </xsl:template>
+ 
 <!-- ====================================================================== -->
 <!-- Temporary section - subject to change on short notice  -->
 <!-- ====================================================================== -->
