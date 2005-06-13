@@ -1,5 +1,5 @@
-                            Forrest Release Process
-                          ============================
+Forrest Release Process
+============================
 
 
 This file documents the steps a release manager should follow when making a new
@@ -8,76 +8,103 @@ Forrest release.
 Preparations
 ------------
 
- - Ensure that as many PMC members as possible have their PGP keys in
-   the KEYS file.
+- Ensure that as many PMC members as possible have their PGP keys in
+  the KEYS file.
 
- - Ensure that there are no copyright issues. The committers and PMC would
-   have been continually monitoring this. There are some tools to assist
-   with scanning for issues, e.g.
-   svn:committers/relicense/src/perl/relicense.txt
-   svn:committers/tools/
+- Ensure that there are no copyright issues. The committers and PMC would
+  have been continually monitoring this. There are some tools to assist
+  with scanning for issues, e.g.
+  svn:committers/relicense/src/perl/relicense.txt
+  svn:committers/tools/
 
- - Ensure that the line-endings and svn:eol-style property are correct
-   for all files. See svn:committers/tools/
+- Ensure that the line-endings and svn:eol-style property are correct
+  for all files. See svn:committers/tools/
 
- - Announce the release plan to the dev list. Define when the code freeze
-   commences, when the vote ends etc. See email templates at end-of-file.
-   Send a reminder when the code-freeze commences.
+- Discuss which Java-Version to use for compliling the release.
+  Downloading and installing that version should be done well 
+  ahead of time to avoid delays.
+
+- Announce the release plan to the dev list. Define when the code freeze
+  commences, when the vote ends etc. Use the last release plan as template:
+  http://www.mail-archive.com/dev@forrest.apache.org/msg02310.html
+
+- Check out a fresh copy from SVN to make sure you have no local modifications,
+  especially those that might be hidden by svn:ignore settings.  
+
+      1. Create a new empty directory 'Forrest_Release'
+      2. svn co https://svn.apache.org/repos/asf/forrest/trunk
+  
+          NOTE: This will take quite a while if you are on a dial-up connection.
+          See alternatives below.
+  
+      3. Wait for the check-out to finish
+
+  Alternatively:
+
+      1. run 'svn st --no-ignore'
+      2. Delete any extra files that you might have 
+          added/changed in your local copy. They must not be packed with
+          the release. It must be a pristine copy of the current trunk.
+
+- Send a reminder when the code-freeze commences.
+
+================ CODE FREEZE ==============================================
 
 Building the distribution
 -------------------------
- Note: You can practice the following steps (as far as creating the branch)
- without committing anything. This ensures a good release candidate.
+Note: You can practice the following steps (as far as creating the branch)
+without committing anything. This ensures a good release candidate.
 
- - Check out a fresh copy from SVN to make sure you have no local modifications,
-   especially those that might be hidden by svn:ignore settings.  Alternatively,
-   run 'svn st --no-ignore' and delete any extra files that you might have 
-   added/changed in your local copy. They must not be packed with
-   the release. It must be a pristine copy of the current trunk.
 
- - Do 'build test'. Fix any major problems.
 
- - Update the version numbers at various places, i.e. do this ...
+- Update your release checkout to reflect last minute changes
 
- - Edit build.xml and replace the '-dev' text with '' i.e. nothing:
-   around line 45:
-   <property name="version" value="0.7-dev"/>  
-   to:
-   <property name="version" value="0.7"/>  
+    1. cd to the 'Forrest_Release'-directory
+    2. svn up
+    3. Wait for the update to finish
 
- - Edit status.xml, remove the -dev from the current <release> tag,
-   and set the release date.  Also add a new <release> for development
-   on the next version  e.g. from:
 
-    <release version="0.7-dev" date="not yet released">
-      ...
-   to:
-    <release version="0.8-dev" date="not yet released">
-    </release>
-    <release version="0.7" date="2002-02-13">
-      ...
+- Update the version numbers at various places.
 
- - Edit main/forrest.build.xml to update the version tag to remove "-dev".
-   There are two occurences:
-   around line 32:
-   <property name="version" value="0.7-dev"/>  
-                                      ^^^^
+    = Edit main\build.xml and replace the '-dev' text with '' i.e. nothing:
+        around line 45:
+        <property name="forrest.version" value="0.7-dev"/>
+        to:
+        <property name="forrest.version" value="0.7"/>
 
-    around line 60:
-    <description>
-    |                 Forrest Site Builder                  |
-    |                        0.7-dev                        |
-                                ^^^^
+    = Edit site-author\status.xml, remove the -dev from the current <release> tag,
+        and set the release date.  Also add a new <release> for development
+        on the next version  e.g. from:
+        
+        <release version="0.7-dev" date="not yet released">
+        ...
+        to:
+        <release version="0.8-dev" date="not yet released">
+        </release>
+        <release version="0.7" date="2002-02-13">
+        ...
 
- - Edit plugins/build.xml and increase the docs version number to the next major release:
-   around line 23:
-   <property name="forrest.version" value="0.7"/>  
-   to:
-   <property name="forrest.version" value="0.8"/>
-   
-   NOTE: This is deliberately a major version up. It is assumed that plugins will be 
-   developed against the next version of Forrest. Individual plugins can override this
-   property in their own build files.
+    = Edit main/forrest.build.xml to update the version tag to remove "-dev".
+        There are two occurences:
+        around line 32:
+        <property name="forrest.version" value="0.7-dev"/>
+        ^^^^
+        
+        around line 60:
+        <description>
+        |                 Forrest Site Builder                  |
+        |                        0.7-dev                        |
+        ^^^^
+
+      = Edit plugins/build.xml and increase the docs version number to the next major release:
+          around line 23:
+          <property name="forrest.version" value="0.7"/>  
+          to:
+          <property name="forrest.version" value="0.8"/>
+          
+          NOTE: This is deliberately a major version up. It is assumed that plugins will be 
+          developed against the next version of Forrest. Individual plugins can override this
+          property in their own build files.
                                 
  - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
    currently being released.  It is best to copy an earlier RELEASE-NOTES file,
@@ -88,6 +115,11 @@ Building the distribution
 
  - Set your Java version to be the lowest specified of our supported versions.
 FIXME:   e.g. J2SDK 1.4.0
+   
+   On Windows you have to set the environment variable JAVA_HOME to the 
+   path of the Java version to use. 
+   Note: If you change the setting in the system properties, you have to logout and login 
+   again for the changes to become effective.
 
  - Run 'build release-dist' to generate the distributions on a UNIX machine.
    - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
