@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "http://forrest.apache.org/dtd/document-v12.dtd">
+<document> 
+  <header> 
+    <title>Upgrading to Apache Forrest 0.6</title> 
+  </header> 
+  <body> 
+    <section id="introduction">
+      <title>Introduction</title>
+      <p>
+      This page describes changes to Apache Forrest that affect people who are
+      upgrading to the 0.6 version.
+      If you have other issues, then please discuss on either the
+      <link href="site:mail-lists/forrest-dev">dev</link> or
+      <link href="site:mail-lists/forrest-user">user</link>
+      mailing lists.
+      As more experience is gained, this document will be updated.  
+      </p>
+      
+    </section>
+
+    <section id="new">
+      <title>New Features</title>
+      <p>
+        The following list shows some of the key new features for Forrest 0.6
+      </p>
+      <ul>
+        <li>Copyless, so now used in place.</li>
+        <li>Project sitemaps take precedence.</li>
+        <li>Now using Subversion (SVN) for source control.</li>
+        <li>New skinconf capabilities and new external skinconf DTD.</li>
+        <li>New skins use CSS instead of tables. Old skins deprecated.</li>
+        <li>Forrestbot.</li>
+      </ul>
+    </section>
+
+    <section id="clean">
+      <title>Run a clean target after upgrade</title>
+      <p>To avoid any issue with old classes being loaded, run a
+        '<code>forrest clean</code>' in your project directory, after you
+        upgraded to this version.
+      </p>
+    </section>
+
+    <section id="sync">
+      <title>General upgrade tips</title>
+      <p>
+      Synchronise your project's skinconf.xml and forrest.properties files.
+      </p>
+      <p>
+      Take advantage of the separation of concerns. In a new workspace,
+      create a fresh
+      '<code>forrest seed</code>' site, then tweak its forrest.properties
+      and skinconf.xml until it reflects your old site.
+      When it is ready, replace your project's skinconf.xml and
+      forrest.properties files.
+      Any remaining issues would concern other aspects of your configuration,
+      such as site.xml and your actual content.
+      </p>
+    </section>
+
+    <section id="home">
+      <title>New location of $FORREST_HOME</title>
+      <p>
+      To use the new Forrest, run 'build.sh' or 'build.bat' as normal,
+      then change the FORREST_HOME environment variable to point to
+      forrest/src/core instead of the old forrest-0.5 location
+      (.../build/dist/shbat). Also make sure PATH gets updated to use the new 
+      $FORREST_HOME/bin
+      </p>
+    </section>
+
+    <section id="copyless">
+      <title>Copyless</title>
+      <p>
+      In essence, Forrest does not create a dist anymore, and uses 
+      itself in place. No more useless copying to a separate build space,
+      no more backcopying of your changes, all is used live.
+      </p>
+      <p>
+      It improves the build process a lot. Development turnaround time is
+      excellent. You can even tweak the main forrest core stylesheets and
+      see changes immediately.
+      </p>
+    </section>
+
+    <section id="sitemap">
+      <title>Project sitemaps take precedence.</title>
+
+      <p>With Forrest 0.6 it is now possible for projects to "plugin" 
+      to our sitemaps, without needing to copy the main sitemaps and keep
+      them synchonised. This will enable hassle-free update to
+      future Forrest versions.</p>
+
+      <p>
+        If your old project did not use any customised <code>*.xmap</code> 
+        files, then your upgrade process will be easy (you can safely skip this
+        section).</p>
+        
+      <p>If your project did use custom <code>*.xmaps</code>, with matchers for 
+        special circumstances (for example special doctypes that you 
+        were handling) then you will need to be prepared to make some changes. 
+        Hopefully with the new functionality of Forrest, you can do away with 
+        your customisations altogether and just use the Forrest default 
+        sitemaps. Try that first. If not, then read on...</p>
+        
+      <p>Prior to 0.6 it was possible to replace *any* of the xmaps by placing 
+      your own versions in your project directory, these were then copied over 
+      to replace
+      the Forrest ones at build time. However, with the move to 
+      <link href="#copyless">copyless</link> this no longer happens, instead 
+      there is now an extension mechanism for the sitemap (as opposed to 
+      a replacement mechanism).</p>
+
+      <p>When upgrading to Forrest 0.6 you need to copy customised matchers 
+      in any of your projects <code>*.xmap</code> files into your projects 
+      <code>sitemap.xmap</code> file. Any matchers in your project 
+      <code>*.xmap</code> files that duplicate ones in Forrests own 
+      <code>*.xmaps</code> can now be removed. This will ensure that future 
+      enhancements to these matchers in Forrest will automatically be included 
+      in your project.</p>
+
+      <p>Move your old sitemap out of the way, copy a default one from a fresh
+      'forrest seed', and add the specific matches that you require.</p>
+      
+      <p>The good news is that this process makes upgrading to future versions
+      of Forrest much simpler, because your project <code>*.xmap</code> files will 
+      contain only your customisations. As a result there will no longer be a
+      need to merge your custom xmaps with the updated ones in upcoming versions of 
+      Forrest.</p>
+      
+      <p>See <link href="site:v0.60//project-sitemap">Using project 
+      sitemaps</link> for more details.</p>
+        
+    </section>
+
+    <section id="skin-config-1">
+      <title>Private skins might need changes to document2html.xsl</title>
+      <p>
+      Moved all references to //skinconfig out of the document2html.xsl
+      into the site2xhtml.xsl file. If you have your own skins that were
+      referencing "$config" or "//skinconfig" in the document2html.xsl
+      then you need to make similar changes.
+      For further information, see Issue
+      <link href="http://issues.apache.org/jira/secure/ViewIssue.jspa?key=FOR-146">FOR-146</link>.
+      </p>
+    </section>
+
+    <section id="skin-config-2">
+      <title>Various additions to skin configuration and new external DTD</title>
+      <p>
+      Various capabilities have been added to the skinconfig.
+      See the new descriptions in the 
+      '<code>forrest seed</code>' site
+      <code>src/documentation/skinconf.xml</code> and synchronise yours.
+      </p>
+      <p>For example, to use different colors (e.g. the light blue of the old
+      krysalis skin), CSS colors can be specified in skinconf.xml
+      </p>
+      <p>
+      There is now an external DTD which makes it much easier to keep your
+      skinconf.xml synchronised.
+      </p>
+    </section>
+    
+    <section id="antproxy">
+      <title>forrest.antproxy.xml is obsolete in favor of Ant's &lt;import&gt; task</title>
+      <p>
+      Projects that use <code>forrest.antproxy.xml</code> via an Ant build
+      task to invoke Forrest, will receive
+      an error message directing them to this document.
+      Please see the <link href="site:v0.60//your-project/invoking_from_ant">Invoking
+      Forrest from Ant</link> documentation for instructions on how to use
+      the &lt;import&gt; task to integrate Forrest with your build system.
+      </p>
+    </section>
+
+    <section id="ehtml">
+      <title>Deprecation of .ehtml and .ihtml</title>
+      <p>
+      The .ehtml input file format has been deprecated and will likely be
+      removed in the next release.
+      Please convert all .ehtml files to .html files.
+      If you do '<code>forrest seed</code>' there is a sample html source file.
+      </p>
+    </section>
+
+    <section id="jspwiki">
+      <title>Deprecation of .cwiki filename extension to become .jspwiki</title>
+      <p>
+      Use the .jspwiki filename extension rather than old .cwiki extension.
+      Clarifies that the purpose is the JSPWiki source format.
+      </p>
+    </section>
+
+    <section id="forrestbot">
+      <title>New forrestbot</title>
+      <p>
+      The forrestbot and the forrestbot web interface have been completely
+      rewritten.  There is no
+      direct way to convert old configurations to new configurations.
+      Please see the <link href="site:forrestbot">forrestbot
+      documentation</link> for instructions to create buildfiles that work
+      with the new forrestbot.
+      </p>
+    </section>
+    
+    <section id="dtd">
+      <title>New DTDs</title>
+      <p>
+      Updated all v1.2 DTDs to become v1.3 DTDs (forward compatibility:
+      v1.2 docs will work fine as V1.3). The main change is the addition
+      of a @class attribute to every element, which enables the "extra-css"
+      section in the skinconf to be put to good use.
+      </p>
+      <p>
+      Updated the v2.0a DTDs to become v2.0 DTDs (forward incompatibility:
+      v1.2/1.3 docs are not forward-compatible as V2.0).
+      </p>
+      <source><![CDATA[
+Changes from V1.2 to V1.3
+=========================
+document      - Addition of class attribute all elements
+faq           - Addition of class attribute all elements
+changes       - Addition of class attribute all elements
+howto         - Addition of class attribute all elements
+todo          - Addition of class attribute all elements
+ 
+Changes from V2.0a to V2.0
+==========================
+document      - Addition of class attribute, all elements
+              - Addition of label attribute to note and
+                warning elements (consistent with v1.2/1.3)
+faq           - Class attribute, all elements
+changes       - New DTD
+howto         - New DTD
+todo          - New DTD
+
+Changes from V1.3 to V2.0
+=========================
+document      - Renamed <link> to <a>
+              - Removed <fork> and <jump>.
+faq           - Renamed <part> to <faqsection>
+              - @title attribute on <faqs> is now a nested
+                <title> element 
+              - Same changes as in document between 1.3 and 2.0
+changes       - Same changes as in document between 1.3 and 2.0
+howto         - Same changes as in document between 1.3 and 2.0
+todo          - Same changes as in document between 1.3 and 2.0
+]]></source>
+    </section>
+
+    <section id="catalog">
+      <title>SystemIdentifiers for DTDs changed to forrest.apache.org</title>
+      <p>
+        Everyone should still continue to use the
+        <link href="site:v0.60//catalog">Catalog Entity Resolver</link>
+        and that certainly still operates at the core of Forrest using the
+        well-defined PublicIdentifiers.
+        However, some impoverished XML tools do not, so they need to be able
+        to get the DTDs from the website. Some other tools rely on the System
+        Identifier rather than the Public Identifer. See Forrest Issue
+        <link href="http://issues.apache.org/jira/secure/ViewIssue.jspa?key=FOR-107">FOR-107</link>.
+      </p>
+      <p>
+        In previous versions of Forrest, and maybe in your application if
+        you copied the fresh-site xdocs, there were inconsistent
+        SystemIdentifiers. Some used local filenames, others used
+        apache.org/forrest/dtd/ URIs. In v0.6 we changed to use
+        System Identifiers at forrest.apache.org/dtd/ as resource URLs.
+        You do not need to change them because you are using the entity
+        resolver, but to remain consistent, it probably is best.
+      </p>
+      <p>
+        Beware if you have a catalog where the mapping is not declared properly.
+        The Catalog Entity Resolver will miss the local mapping and happily
+        go to the network to get the DTDs. That would cause Forrest to appear
+        to be slow for you, yet it will still operate properly. While we are
+        on that topic, if you use the XSLT document() function - there is a 
+        <link href="http://issues.apache.org/bugzilla/show_bug.cgi?id=28341">Xalan bug 28341</link>
+        for DTD resolution via document() - please help to fix it.
+        Also see the 
+        <link href="http://cocoon.apache.org/2.1/faq/faq-xslt.html">Cocoon FAQ</link>.
+      </p>
+    </section>
+
+    <section id="local-catalog">
+      <title>Projects can use a local CatalogManager.properties</title>
+      <p>
+      You can add a local CatalogManager.properties to your 
+      project.classes-dir (usually src/documentation/classes/)
+      to define your additional catalogs for DTDs and other entities.
+      Copy a default file from a fresh 'forrest seed site'.
+      </p>
+      <p>
+      If you do not add such a configuration file, then there will be a
+      harmless message on startup "CatalogManager.properties not found".
+      </p>
+    </section>
+
+    <section id="skin-names">
+      <title>Skins renamed and deleted</title>
+      <p>Skins now have a naming convention. The default skins are
+      <link href="skins.html">described</link>.</p>
+      <p>The old skin names are automatically mapped to the new names. You
+      should change your forrest.properties to use the new names.</p>
+      <p>The following skins were renamed (the old names still work, but may not in future releases).</p>
+      <table>
+        <tr><th>0.5 Name</th><th>0.6 Name</th></tr>
+        <tr><td>krysalis-site</td><td>crust</td></tr>
+        <tr><td>tigris-style</td><td>tigris</td></tr>
+      </table>
+      <p>The following skins were deleted (the old names still work, but may not in future releases).</p>
+      <table>
+        <tr><th>0.5 Name</th><th>0.6 Alias</th></tr>
+        <tr><td>forrest-css</td><td>crust</td></tr>
+        <tr><td>avalon-tigris</td><td>tigris</td></tr>
+      </table>
+      <p>The old "forrest-site" skin is retained for a little while longer,
+        but is deprecated, so please move to one of the other skins.</p>
+    </section>
+
+    <section id="wholesite">
+      <title>Wholesite.html/pdf</title>
+      <p>Instead of using names "site.html/pdf" to create an aggregate page
+       of your entire site, use "wholesite.html/pdf". The old names are still
+       supported for backwards compatibility but they may not be in the
+       future.</p>
+    </section>
+
+    <section>
+      <title>To be continued...</title>
+      <p>...as more issues are discovered/remembered :)  Please send feedback
+      to the
+      <link href="site:mail-lists/forrest-dev">mailing list</link>.</p>
+    </section>
+  </body>
+</document>

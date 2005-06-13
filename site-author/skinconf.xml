@@ -21,7 +21,7 @@ Skin configuration file. This file contains details of your project,
 which will be used to configure the chosen Forrest skin.
 -->
 
-<!DOCTYPE skinconfig PUBLIC "-//APACHE//DTD Skin Configuration V0.6-3//EN" "http://forrest.apache.org/dtd/skinconfig-v06-3.dtd">
+<!DOCTYPE skinconfig PUBLIC "-//APACHE//DTD Skin Configuration V0.7-1//EN" "http://forrest.apache.org/dtd/skinconfig-v07-1.dtd">
 <skinconfig>
   <!-- To enable lucene search add provider="lucene"
     Add box-location="alt" to move the search box to an alternate location
@@ -111,7 +111,11 @@ which will be used to configure the chosen Forrest skin.
   <!-- Heading types can be clean|underlined|boxed  -->
   <headings type="underlined"/>
 
-  <!-- Optional message of the day.
+  <!-- Optional message of the day (MOTD).
+    Note: This is only implemented in the pelt skin.
+    If the optional <motd> element is used, then messages will be appended
+    depending on the URI string pattern.
+    motd-option : Specifies a pattern to match and provides small text content.
     motd-title : This text will be added in brackets after the <html><title>
     motd-page : This text will be added in a panel on the face of the page,
     with the "motd-page-url" being the hyperlink "More".
@@ -120,11 +124,29 @@ which will be used to configure the chosen Forrest skin.
       alt : at the bottom of the left-hand navigation panel
       both : both
     -->
-  <motd-title>v0.7</motd-title>
-  <motd-page location="both">
-    This is documentation for development version v0.7
-  </motd-page>
-  <motd-page-url>http://forrest.apache.org/docs.html</motd-page-url>
+  <motd>
+    <motd-option pattern="docs_0_80">
+      <motd-title>v0.8-dev</motd-title>
+      <motd-page location="both">
+        This is documentation for development version v0.8
+      </motd-page>
+      <motd-page-url>/versions/index.html</motd-page-url>
+    </motd-option>
+    <motd-option pattern="docs_0_70">
+      <motd-title>v0.7</motd-title>
+      <motd-page location="both">
+        This is documentation for current version v0.7
+      </motd-page>
+      <motd-page-url>/versions/index.html</motd-page-url>
+    </motd-option>
+    <motd-option pattern="docs_0_60">
+      <motd-title>v0.6</motd-title>
+      <motd-page location="both">
+        This is documentation for past version v0.6
+      </motd-page>
+      <motd-page-url>/versions/index.html</motd-page-url>
+    </motd-option>
+  </motd>
 
   <extra-css>
 #footer a { color: #0F3660; }
