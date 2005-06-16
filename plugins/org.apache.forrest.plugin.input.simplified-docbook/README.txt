@@ -1,4 +1,4 @@
-org.apache.forrest.plugin.input.simplified-docbook Plugin
+org.apache.forrest.plugin.input.simplifiedDocbook Plugin
 =========================
 
 This plugin supports a Simplified Docbook. Although it does not support the
