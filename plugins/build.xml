@@ -42,7 +42,7 @@
   <property name="deploy.svn.user"            value=""/>
   <property name="deploy.svn.password"        value=""/>
   <property name="deploy.plugins.svn.url"     value="https://svn.apache.org/repos/asf/forrest/site/plugins"/>
-  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/${forrest.version}/docs/plugins"/>
+  <property name="deploy.plugin.docs.svn.url" value="https://svn.apache.org/repos/asf/forrest/site/pluginDocs"/>
   <property name="deploy.plugins.svn-dir"     location="${forrest.build.dir}/svn-plugins-deploy"/>
   <property name="deploy.docs.svn-dir"        location="${forrest.build.dir}/svn-plugin-docs-deploy"/>
   <property name="deploy.plugins.svn-filestoadd"  location="build/svn-plugin.deploy.toadd"/>
@@ -195,14 +195,34 @@
 		  description="Deploy the plugin documentation"
 		  depends="clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
     <echo>Deploying plugin documentation to the web server</echo>
+    
+    <if>
+      <contains string="${forrest.version}" substring="0.7"/>
+      <then>
+        <property name="docsVersion" value="0_70"/>
+      </then>
+      <else>
+        <if>
+          <contains string="${forrest.version}" substring="0.8"/>
+          <then>
+            <property name="docsVersion" value="0_80"/>
+          </then>
+          <else>
+            <!-- FIXME: the docs version number should be derived programmatically from the forrest.version in use 
+                 (see http://issues.apache.org/jira/browse/FOR-535) -->
+            <fail message="Trying to deploy plugin docs to an unkown version of Forrest. Please update the plugins build file."/>
+          </else>
+        </if>
+      </else>
+     </if>
 
   	<!-- Copy plugin docs into sandbox -->
-  	<copy todir="${deploy.docs.sandbox.dir}/${plugin-name}" 
+  	<copy todir="${deploy.docs.sandbox.dir}/plugins_${docsVersion}/${plugin-name}" 
   	      overwrite="true">
   		<fileset dir="${build.docs}"/>
   	</copy>
     <!-- Fix inconsitent line endings -->
-    <fixcrlf srcdir="${deploy.docs.sandbox.dir}/${plugin-name}" eol="unix">
+    <fixcrlf srcdir="${deploy.docs.sandbox.dir}/plugins_${docsVersion}/${plugin-name}" eol="unix">
       <include name="**/*.html"/>
       <include name="**/*.xml"/>
       <include name="**/*.css"/>
@@ -230,7 +250,7 @@
     </exec>
     <!-- check in to SVN -->
   	<svncommit
-        target="${deploy.docs.svn-dir}"
+        target="${deploy.docs.svn-dir}/plugins_${docsVersion}"
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment of docs for ${plugin-name} plugin (deployed by 'deploy-docs' target of plugin build script)"
     />
@@ -281,14 +301,14 @@
   </target>
 	   
   <target name="checkout-deployed-docs" 
-	      description="Retrieve the currently deployed plugin files">    
-	<!-- get current plugins directory from SVN -->
+	      description="Retrieve the currently deployed plugin files">  
+	  <!-- get current plugins directory from SVN -->
     <svncheckout
         repositoryurl="${deploy.plugin.docs.svn.url}"
         username="${deploy.svn.user}"
         password="${deploy.svn.password}"
         destination="${deploy.docs.svn-dir}"
-        failonerror="true"
+        failonerror="false"
     />
   </target>
    
