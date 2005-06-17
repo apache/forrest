@@ -15,26 +15,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "http://forrest.apache.org/dtd/document-v13.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document> 
   <header> 
-    <title>The Apache Forrest xdocs document-v1.3 DTD</title> 
+    <title>The Apache Forrest xdocs document-v2.0 DTD</title> 
     <notice>The content of this document doesn't make any sense at all.</notice>
     <abstract>This is a demonstration document using all possible elements in
-      the current Apache Forrest xdocs <code>document-v13.dtd</code>
+      the current Apache Forrest xdocs <code>document-v20.dtd</code>
     </abstract> 
   </header> 
   <body> 
     <note>
       This is a demonstration document using all possible elements in the
-      current Apache Forrest xdocs <code>document-v13.dtd</code>
-      (See the <link href="#changes">DTD changes</link> section at the bottom.)
+      current Apache Forrest xdocs <code>document-v20.dtd</code>
+      (See the <a href="#changes">DTD changes</a> section at the bottom.)
     </note>
     <section id="sample">
       <title>Sample Content</title>
       <p><strong>Hint:</strong> See the xml source to see how the various
       elements are used and see the
-      <link href="site:v0.70//dtd-docs">DTD reference documentation</link>.
+      <a href="site:dtd-docs">DTD reference documentation</a>.
       </p>
       <section id="block-inline">
         <title>Block and inline elements</title>
@@ -79,45 +79,27 @@
           which offers the ability to refer to an image map.</li> 
         <li>We have elements for hyperlinking: 
           <dl> 
-            <dt><code>&lt;link href="faq.html"&gt;</code></dt> 
+            <dt><code>&lt;a href="../index.html"&gt;</code></dt> 
             <dd>Use this to
-              <link href="faq.html" title="Example of a document via link">link</link>
+              <a href="../index.html" title="Example of a document via link">link</a>
               to another document. As per normal, this will open the new document
               in the same browser window.</dd> 
 
-            <dt><code>&lt;link href="#section"&gt;</code></dt> 
+            <dt><code>&lt;a href="#section"&gt;</code></dt> 
             <dd>Use this to
-              <link href="#section" title="Example of a document via local anchor">link</link>
+              <a href="#section" title="Example of a document via local anchor">link</a>
               to the named anchor in the current document.
             </dd> 
 
-            <dt><code>&lt;link href="faq.html#overview"&gt;</code></dt> 
+            <dt><code>&lt;a href="../index.html#History"&gt;</code></dt> 
             <dd>Use this to
-              <link href="faq.html#overview" title="Example of a document via link and anchor">link</link>
+              <a href="../index.html#History" title="Example of a document via link and anchor">link</a>
               to another document and go to the named anchor. This will open
               the new document in the same browser window.
             </dd> 
-
-            <dt><code>&lt;jump href="faq.html"&gt;</code></dt> 
-            <dd>Use this to
-              <jump href="faq.html" title="Example of a document via jump">jump</jump>
-              to another document and optionally go to a named
-              <jump href="faq.html#overview" title="Example of a document via jump to anchor">anchor</jump>
-              within that document. This will open the new document in the same
-              browser window. So what is the difference between link and jump?
-              The jump behaves differently, in that it will replace any frames
-              in the current window.
-              This is the equivalent of
-              <code>&lt;a ... target="_top"&gt;</code>
-            </dd>
-
-            <dt><code>&lt;fork href="faq.html"&gt;</code></dt> 
-            <dd>Use this to
-              <fork href="faq.html" title="Example of a document via fork">fork</fork>
-              your webbrowser to another document. This will open the document
-              in a new, unnamed browser window.
-              This is the equivalent of
-              <code>&lt;a ... target="_blank"&gt;</code>
+            <dt>Targetted window control with jump and fork.</dt> 
+            <dd>See demonstration
+             <a href="#link-class">using class attribute on links</a>.
             </dd> 
         </dl></li> 
 
@@ -160,7 +142,7 @@
       <section id="presentations">
         <title>Various presentation formats</title>
 
-        <p>This sample document, written in document-v13 XML can be presented
+        <p>This sample document, written in document-v20 XML can be presented
         via Forrest in a number of different formats. The links in the
         following list show this document in each of the currently available
         formats.</p>
@@ -180,7 +162,7 @@
           </tr>
 
           <tr>
-            <td><link href="document-v13.html">HTML</link></td>
+            <td><a href="document-v20.html">HTML</a></td>
 
             <td>This document in HTML format. </td>
 
@@ -188,7 +170,7 @@
           </tr>
 
           <tr>
-            <td><link href="document-v13.xml">XML</link></td>
+            <td><a href="document-v20.xml">XML</a></td>
 
             <td>This document in its raw XML format.</td>
 
@@ -197,7 +179,7 @@
           </tr>
 
           <tr>
-            <td><link href="document-v13.pdf">PDF</link></td>
+            <td><a href="document-v20.pdf">PDF</a></td>
 
             <td>This document as Adobe PDF</td>
 
@@ -215,7 +197,7 @@
           </tr>
 
           <tr>
-            <td><link href="document-v13.pod">POD</link></td>
+            <td><a href="document-v20.pod">POD</a></td>
 
             <td>This document as Perl POD (Plain Old Documentation). Text with
             minimal formatting directives. If on a *nix system with perl
@@ -321,15 +303,59 @@ public class FirstApplet extends Applet {
         </p>
         <figure src="images/project-logo.png" alt="The fine Forrest logo" width="220" height="65"/>	
       </section>
+      <section id="link-class">
+        <title>Using class attribute on links</title>
+
+        <p>The document-v13 had elements &lt;fork&gt; and &lt;jump&gt;. In
+        document-v20, those elements no longer exist but the functionality can
+        be duplicated by using the @class attribute.
+        Even though the opening of separate windows should be under the
+        control of the user, these techniques can still be employed.</p>
+
+        <table>
+          <tr>
+            <th><p>Document V1.3</p></th>
+
+            <th><p>Document V2.0</p></th>
+          </tr>
+
+          <tr>
+            <td><p>&lt;fork href="../index.html"&gt;</p></td>
+
+            <td><a class="fork" href="../index.html">&lt;a class="fork"
+            href="../index.html"&gt;</a></td>
+          </tr>
+
+          <tr>
+            <td><p>&lt;jump href="../index.html"&gt;</p></td>
+
+            <td><p><a class="jump" href="../index.html">&lt;a class="jump"
+            href="../index.html"&gt;</a></p></td>
+          </tr>
+        </table>
+      </section>
     </section>
 
     <section id="changes">
       <title>DTD changes</title>
       <p>See the generated
-        <link href="site:v0.70//dtd-docs">DTD reference documentation</link>.
+        <a href="site:dtd-docs">DTD reference documentation</a>.
       </p>
+      <section id="changes-20">
+        <title>Changes between document-v13 and document-v20</title>
+        <ul>
+          <li>Renamed <strong>&lt;link&gt;</strong>
+             to <strong>&lt;a&gt;</strong>
+          </li>
+          <li>Removed <strong>&lt;fork&gt;</strong>
+             and <strong>&lt;jump&gt;</strong> in favour of the
+             <strong>&lt;a&gt;</strong> element. See demonstration
+             <a href="#link-class">using class attribute on links</a>.
+          </li>
+        </ul>
+      </section>
       <section id="changes-13">
-        <title>Changes since document-v12</title>
+        <title>Changes between document-v12 and document-v13</title>
         <p>
           All v1.2 docs will work fine as v1.3 DTD. The main change is the
           addition of a @class attribute to every element, which enables the
@@ -337,7 +363,7 @@ public class FirstApplet extends Applet {
         </p>
       </section>
       <section id="changes-12">
-        <title>Changes since document-v11</title>
+        <title>Changes between document-v11 and document-v12</title>
         <p>
           doc-v12 enhances doc-v11 by relaxing various restrictions that were
           found to be unnecessary.
