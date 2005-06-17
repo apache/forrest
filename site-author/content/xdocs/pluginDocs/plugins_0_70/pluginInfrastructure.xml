@@ -64,6 +64,13 @@
                      (**.xml)         (**.html, **.pdf etc.) 
 </source>
         
+      
+        <p>The name of the sitemap will reflect the type of plugin in use.
+        That is, an internal plugin will have a sitemap called <code>internal.xmap</code>,
+        an output plugin has <code>output.xmap</code> and an input plugin has
+        <code>input.xmap</code>. In addition, an input plugin can optionally provide a
+        <code>resources.xmap</code>.</p>
+      
         <section id="inputPlugins">
           <title>Input Plugins</title>
           <p>Input plugins provide a new source format. For example, the
@@ -198,7 +205,7 @@
 <source>
 org.apache.forrest.plugin.internal.IMSManifest
   |
-  |-- sitemap.xmap
+  |-- internal.xmap
   |
   |-- resources
       |
@@ -210,7 +217,7 @@ org.apache.forrest.plugin.internal.IMSManifest
                     |- repositoryUtils.xsl
 </source>
 
-      <p>The sitemap.xmap file will override the default behaviour for the 
+      <p>The internal.xmap file will override the default behaviour for the 
       navigation generation matchers in Forrest, for example, it contains 
       a matcher as follows:</p>
 
@@ -246,13 +253,14 @@ org.apache.forrest.plugin.internal.IMSManifest
     <title>How does Installation work?</title>
     <p>When Forrest installs a plugin it downloads a zip of the plugin code and 
     extracts it into the <code>plugins</code> directory of Forrest and an entry is made 
-    in <code>src/plugins/sitemap.xmap</code>. For example, installing the 
+    in <code>src/plugins/[input|internal|output].xmap</code> (recall the actual sitemap
+    name is dependant on the type of plugin it belongs to. For example, installing the 
     IMSManifest plugin described above will result in the following entry 
     being added to the plugin sitemap:</p>
 
   <source><![CDATA[
 <map:select type="exists">
-  <map:when test="sitemap.xmap">
+  <map:when test="input.xmap">
     <map:mount uri-prefix="" 
       src="sitemap.xmap" 
       check-reload="yes" 
@@ -262,7 +270,7 @@ org.apache.forrest.plugin.internal.IMSManifest
   ]]></source>
   
       <p>Installed plugins are managed by the
-      FORREST_INSTALL_DIR/plugins/sitemap.xmap file. This file is mounted
+      FORREST_INSTALL_DIR/build/plugins/sitemap.xmap file. This file is mounted
       by the main Forrest sitemap with the following code:</p>
   
   <source><![CDATA[
@@ -274,7 +282,7 @@ org.apache.forrest.plugin.internal.IMSManifest
         </map:pipeline>
   ]]></source>
       
-      <note>The plugin sitemap.xmap file is automatically managed by Forrest, the 
+      <note>The above plugin sitemap.xmap file is automatically managed by Forrest, the 
       end user need never edit this file.</note>
     </section>
 
