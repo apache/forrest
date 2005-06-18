@@ -118,7 +118,7 @@
           <link href="site:v0.70//linking">Menus and Linking</link>. Here is a precis:
         </p>
         <p>
-          Use unique element names. The labels can be whatever text you want.
+          The labels can be whatever text you want.
         </p>
         <source><![CDATA[<faq label="FAQs" href="faq.html">
   <tech label="Technical" href="faq-tech.html">
@@ -235,7 +235,7 @@
         <note>Due to Sun's licensing, we cannot redistribute Jimi or JAI with Forrest.</note>
       </answer>
     </faq>
-    <faq id="index.html">
+    <faq id="tab-index">
       <question> The tab link in my site incorrectly assumes that 'index.html' is present in the
         linked-to directory. How do I fix this? </question>
       <answer>
@@ -250,6 +250,14 @@
   <map:match pattern="manual">
     <map:redirect-to uri="manual/Introduction.html"/>
   </map:match>]]></source>
+      </answer>
+    </faq>
+    <faq id="tab-site">
+      <question>I need help with the interaction between tabs.xml and site.xml </question>
+      <answer>
+        <p>
+          See the <link href="site:v0.70//linking/tab-site">tips</link>.
+        </p>
       </answer>
     </faq>
     <faq id="defaultFileName">
@@ -476,18 +484,20 @@
       <question>What do the symbols and numbers mean when Forrest lists each document that it has
         built? </question>
       <answer>
-        <source><![CDATA[
-* [56/0]     6.281s 23.0Kb  index.html
-* [0/0]      0.0060s 4.0Kb   images/project-logo.gif
+        <source><![CDATA[...
+* [212/166] [0/0]  1.16s  62.4Kb  docs_0_60/your-project.pdf
+X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
+* [213/164] [0/0]  0.391s 29.2Kb  docs_0_70/howto/howto-buildPlugin.pdf
 ^                           apidocs/index.html
-* [50/0]     1.582s 18.7Kb  todo.html
-X [0]                       brokenlink.html     BROKEN: reason
-* [50/0]     1.222s 20.2Kb  dreams.html
-* [0/0]      0.535s 11.1Kb  dreams.pdf
+* [214/170] [7/66] 1.476s 45.5Kb  docs_0_60/sitemap-ref.html
 ...]]></source>
-        <p> Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped). Column 2 is the
-          number of links that were gathered from that page. Column 3 is the time taken. Column 4 is
-          the page size. </p>
+        <ul>
+          <li>Column 1 is the page build status (*=okay X=brokenLink ^=pageSkipped).</li>
+          <li>Column 2 is the page count - the number of pages processed and the number remaining. The latter will change because during processing one page, Cocoon will discover more.</li>
+          <li>Column 3 is the number of links that were gathered from that page.</li>
+          <li>Column 4 is the time taken.</li>
+          <li>Column 5 is the page size.</li>
+        </ul>
       </answer>
     </faq>
     <faq id="headless_operation">
@@ -639,7 +649,7 @@ X [0]                       brokenlink.html     BROKEN: reason
     <faq id="docbook">
       <question> How do I use DocBook as the xml documentation format? </question>
       <answer>
-        <p> There are two ways. Forrest has a <code>simplified-docbook</code> plugin which can
+        <p> There are two ways. Forrest has a <code>simplifiedDocbook</code> plugin which can
           transform the DocBook format into the Forrest "xdocs" format on-the-fly and then render
           that as normal Forrest documents. Be aware that the stylesheet that does this
           transformation is deliberately very limited and does not attempt to deal with all DocBook

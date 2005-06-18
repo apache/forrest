@@ -130,7 +130,7 @@ $Revision: 1.12 $
    </map:transformer>
    <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
     <catalogues default="common">
-      <catalogue id="common" name="CommonMessages" location="skins/common/messages"/>
+      <catalogue id="common" name="CommonMessages" location="skins/common/translations"/>
     </catalogues>
     <cache-at-startup>true</cache-at-startup>
   </map:transformer>
@@ -179,12 +179,15 @@ $Revision: 1.12 $
     </map:matchers>
 
     <map:selectors>
-      <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
-   <map:selector logger="sitemap.selector.exception" name="exception"
-                 src="org.apache.cocoon.selection.ExceptionSelector">
-     <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
-     <exception class="java.lang.Throwable" unroll="true"/>
-   </map:selector>
+      <map:selector name="exists" logger="sitemap.selector.exists"  
+                    src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+      <map:selector name="exception" logger="sitemap.selector.exception" 
+                    src="org.apache.cocoon.selection.ExceptionSelector">
+       <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
+       <exception class="java.lang.Throwable" unroll="true"/>
+     </map:selector>
+     <map:selector name="config" logger="sitemap.selector.config" 
+                   src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
 
     <map:pipes default="caching">
@@ -233,9 +236,17 @@ $Revision: 1.12 $
             </map:transform>
           </map:otherwise>
         </map:select>
-        <map:transform type="i18n">
-          <map:parameter name="locale" value="{request:locale}"/>
-        </map:transform>
+        <map:select type="config">
+          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:when test="true">	
+            <map:transform type="i18n">
+              <map:parameter name="locale" value="{request:locale}"/>
+            </map:transform>
+	  </map:when>
+        </map:select>
+      <!--
+        FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
+      -->
         <map:transform src="{forrest:context}/skins/common/xslt/html/strip_namespaces.xsl"/>
 
       <map:serialize/>
@@ -336,7 +347,7 @@ $Revision: 1.12 $
       <!-- Body content -->
       <map:match pattern="**.xml">
 
-        <map:match pattern="docs/plugins/index.xml">
+        <map:match pattern="pluginDocs/plugins_*/index.xml">
           <map:aggregate element="pluginList">
             <map:part src="{forrest:plugins-src}/plugins.xml"/>
             <map:part src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml"/>

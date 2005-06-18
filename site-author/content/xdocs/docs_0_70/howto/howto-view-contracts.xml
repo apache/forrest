@@ -51,7 +51,10 @@ This HowTo is a good start but still needs proof-reading.
   <prerequisites title="Prerequisites">
     <ul>
       <li>
-        You have a ready-to-go new seed based on views (like described in <a href="site:v0.70//howto/view/install">Install views</a>). 
+        You have a ready-to-go new seed (newSeed) based on views like described in <a href="site:howto/view/install">Install views</a>.
+      </li>
+      <li>
+      	This includes as well all additional plugins that are mentioned in <a href="site:howto/view/install">Install views</a>.
       </li>
       <li>
         Reading that how-to is as well a good idea to understand the used dir-structure in this how-to.
@@ -86,17 +89,17 @@ This HowTo is a good start but still needs proof-reading.
     </source>
     <section id="enhanceMaintainment">
       <title>Enhance the maintainment</title>
-      <p>Now we can enhance the maintainment for the future and we started to
-give this code snippets contracts names. This naming enables us to keep
+      <p>Now we can enhance the maintainment for the future and we give this code snippets 
+        contracts names (based on their functionality). This naming enables us to keep
 the contract separate from the position code itself. In xsl you would
 simply do:
       </p>
       <ol>
-        <li>replace the script by <![CDATA[<xsl:call-template name="last-published"/>]]></li>
+        <li>replace the script by <![CDATA[<xsl:call-template name="siteinfo-last-published"/>]]></li>
         <li>and add:</li>
       </ol>
       
-      <source><![CDATA[<xsl:template name="last-published">
+      <source><![CDATA[<xsl:template name="siteinfo-last-published">
  <script type="text/javascript">
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
@@ -104,7 +107,7 @@ simply do:
       </source>
       <p>
         This allows us in a next maintainment just change the code of
-        <![CDATA[<xsl:template name="last-published"/>]]> and apply it in any position where
+        <![CDATA[<xsl:template name="siteinfo-last-published"/>]]> and apply it in any position where
         it is placed.  
       </p>
       <note>
@@ -114,13 +117,16 @@ simply do:
     <section id="blankContract">
       <title>Explaining the blank forrest:contract</title>
       <p>
-        To start a new forrest:contract you can copy the "blank.ft" from
+        To start a new forrest:contract you can copy the 'blank.ft' from
         <code>org.apache.forrest.plugin.output.viewHelper.xhtml/resources/templates</code>. 
-        It is a simple xml file with the following code which you can use to base new contracts on:
+        The exact file system path can be looked up at <code>http://localhost:8888/ls.contracts.html</code>.
+      </p>
+      <p>
+        The 'blank.ft' is a simple xml file with the following code which you can use to base new contracts 
+        on:
       </p>
       <source>
 <![CDATA[<forrest:contract 
-  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="blank" type="nugget">
   
@@ -128,9 +134,9 @@ simply do:
     When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
   
   <description>
-    {contract-name} contract. This functions will output {contract-funtion}.
+    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
   </description>
-  
+  <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="blank"/>]]>]]&gt;<![CDATA[</usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="xhtml" name="blank" inputFormat="xsl" body="false" head="false">
     <xsl:stylesheet version="1.1" 
@@ -149,14 +155,27 @@ simply do:
         to always met. All @name has to be file name of the contract without file extension!
       </note>
       <p>
-        The <code><![CDATA[<description/>]]></code> tag is self explaining. 
-        Here we have to explain what this contract is doing.
+        The <code><![CDATA[<description/>]]></code> tag needs to be filled in with some information
+        that is explaining the contract to the webdesigner. The better explained the more efficient
+        for the webdesigner to pick the right contract.
       </p>
+      <source><![CDATA[<description>
+  siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
+</description>]]>
+      </source>
+      <p>
+        In the <code><![CDATA[<usage/>]]></code> tag we have to explain how the designer can use 
+        the contract in his view.
+      </p>
+      <source><![CDATA[<usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]>]]&gt;<![CDATA[</usage>]]>
+      </source>
       <p>
         <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
         That leads to the template attribute @body="true" and
 				@head="false". In xhtml a contract can add content to the <![CDATA[<body/>]]> or/and
 				<![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. This values have to be change when adding an actual template.
+        Besides this a xsl-template has to indicate this in the naming. A template that add content to the 
+        html body has to end with "<code>-body</code>"!!!
       </p>
       <note>
         It is possible to use contracts in different in/output-formats. 
@@ -182,65 +201,87 @@ simply do:
         "naming do not say about layout position but functionality of the contract.".
       </fixme>
       <p> 
-				Now lets pick up the example we started with and create a "last-publish-howTo" contract.
-        Save the blank.ft to <code>{project.home}/src/documentation/resources/templates/last-publish-howTo.ft</code>.
+				Now lets pick up the example we started with and create a "siteinfo-last-published-howto" contract.
+        Save the blank.ft to <code>{project.home}/src/documentation/resources/templates/siteinfo-last-published-howto.ft</code>.
       </p>
       <p>
         Now the maintainment optimized code (xpath="/html/body/*") was:
       </p>
       <source>
-<![CDATA[<xsl:template name="last-published">
+<![CDATA[<xsl:template name="siteinfo-last-published">
  <script type="text/javascript">
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
 </xsl:template>]]></source>
+			<p>
+        In this code we have to do the following steps to use it in our contract:
+			</p>
       <ul>
-        <li>Search and replace "blank" with "last-publish-howTo"</li>
-        <li>Add description of the contract</li>
-        <li>Set @body="true"</li>
+        <li>Search and replace "siteinfo-last-published" with "siteinfo-last-publish-howto-body"</li>
+        <li>Add a "debug string - " to the template</li>
       </ul>
       <p>
-        The forrest:template after search/replace should look like:
+        The contract after this steps should look like:
       </p>
-      <source><![CDATA[<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="false" head="false">
-  <xsl:stylesheet version="1.1" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <!--Add here the needed templates-->
-  </xsl:stylesheet>
-</forrest:template>]]>
-      </source>
+      <source>
+<![CDATA[<xsl:template name="siteinfo-last-publish-howto-body">
+debug string - 
+ <script type="text/javascript">
+  document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
+ </script>
+</xsl:template>]]></source>
+			<p>Now we have to do some last steps in the siteinfo-last-publish-howto.ft</p>
+      <ul>
+        <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
+        <li>Add description and usage of the contract</li>
+        <li>Set @body="true"</li>
+        <li>Copy the maintainment optimized code to the contract.</li>
+      </ul>
       <p>
-        Now copy the maintainment optimized code after the comment and rename the template 
-        regarding the naming conventions. As the result your code should look like this:
+        As the result your code should look like this:
       </p>
-      <source><![CDATA[<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="last-publish-howTo" inputFormat="xsl" body="true" head="false">
-  <xsl:stylesheet version="1.1" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <!--Add here the needed templates-->
-    <xsl:template name="last-publish-howTo-body">
-     <script type="text/javascript">
-      document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
-     </script>
-    </xsl:template>
-  </xsl:stylesheet>
-</forrest:template>]]>
+      <source><![CDATA[<forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="siteinfo-last-published-howto" type="nugget">
+  <description>
+    siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
+  </description>
+  <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]>]]&gt;<![CDATA[</usage>
+  <forrest:template 
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    format="xhtml" name="siteinfo-last-published-howto" inputFormat="xsl" body="true" head="false">
+    <xsl:stylesheet version="1.1" 
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:template name="siteinfo-last-published-howto-body">
+          debug string - 
+          <script type="text/javascript">document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);</script>
+        </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>]]>
       </source>
     </section>
     <section id="viewContract">
       <title>Activating the contract</title>
-      <fixme author="thorsten">Link to DSL now. I will give more example after DSL-howto is finished</fixme>
+      <p>
+        To see whether the new contract works we need to add it to our view.
+        The contract usage contains the contract-tag <code><![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]></code>
+        Please see <a href="site:howto/view/DSL">Getting started with forrest:view DSL</a> for more details.
+      </p>
+ 			<fixme author="thorsten">
+        Let us now look into advanced features of views. 
+        I will write a how-to for advanced contracts soon. :)
+      </fixme>
     </section>
   </steps>
   <extension title="Further Reading">
     <p>
-      Congratulations you are now able to work with views. 
+      Congratulations you are now able to work with view contracts. 
       From here we recommend to read the following How-To's:
     </p>
     <ul>
-      <li><a href="site:v0.70//howto/view/DSL">Getting started with forrest:view DSL</a> </li>
-      <li><a href="site:v0.70//howto/view/contracts">Create your own contract implementation</a> </li>
+      <li><a href="site:howto/view/DSL">Getting started with forrest:view DSL</a> </li>
     </ul>
   </extension>
   <feedback title="Feedback">

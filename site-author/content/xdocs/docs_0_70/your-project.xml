@@ -671,7 +671,9 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <p>
         You can add pre-processing sitemaps to your project
         <code>src/documentation</code> directory (or wherever
-        <code>${project.sitemap-dir}</code> points to). Any match that
+        <code>${project.sitemap-dir}</code> points to). Get a copy of a simple
+        sitemap.xmap from a 'forrest seed site'. </p>
+      <p>Any match that
         is not handled, passes through to be handled by the default Forrest
         sitemaps - obviously extremely powerful. The capability is described
         in 
@@ -1112,7 +1114,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
      <!-- FORREST_HOME must be set as an environment variable -->
      <property environment="env"/>
      <property name="forrest.home" value="${env.FORREST_HOME}"/>
-     <import file="${env.FORREST_HOME}/forrest.build.xml"/>
+     <import file="${env.FORREST_HOME}/main/forrest.build.xml"/>
 
      <!-- 'site' is a target imported from forrest.build.xml -->
      <target name="post-build" depends="site">
@@ -1120,6 +1122,15 @@ project.skinconf=${project.content-dir}/skinconf.xml
      </target>
 </project>
         ]]></source>
+        
+      <warning>There is a bug in the plugin download mechanism in
+      Forrest 0.7 that may prevent
+      your plugins being installed correctly when calling Forrest from ANT. You
+      can work around this bug by either ensuring a version number is 
+      defined for the plugin in forrest.properties or by manually 
+      installing the required plugins.
+      </warning>
+        
       <p>Because you are using your own version
       of Ant to do Forrest's work, you will need to provide the
       supporting catalog entity resolver:

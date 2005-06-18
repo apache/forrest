@@ -19,6 +19,7 @@
 <!ENTITY a '<code>index.xml</code>'>
 <!ENTITY b '<code>todo.xml</code>'>
 <!ENTITY s '<code>site.xml</code>'>
+<!ENTITY t '<code>tabs.xml</code>'>
 ]>
 
 <document>
@@ -295,11 +296,65 @@
         <title>Selecting the current tab</title>
         <p>
           The tab selection algorithm is quite simple: the tab with the
-          "<code>id</code>" which matches that of the current <code>site.xml</code>
-          node is "selected". If you experience any problems, try to add a 
-          <code>&lt;foo label="Foo" href="index.html"/&gt;</code> to the
-          <code>site.xml</code> configuration.
+          "<code>id</code>" which matches that of the current &s;
+          node is "selected". However the interaction of &t; and &s;
+          while powerful, can be complex to establish.
         </p>
+      </section>
+
+      <section id="tab-site">
+        <title>Configuring the interaction between tabs.xml and site.xml</title>
+        <p>
+          This is a collection of tips to assist with getting your menus and tabs
+          to properly display.
+        </p>
+        <ul>
+          <li>
+            View your site's 
+            <link href="../abs-menulinks">abs-menulinks</link> pipeline in a
+            browser. This is part of the internal Cocoon machinery, but like
+            other sitemap resources, it is useful to view them to assist with
+            debugging.
+          </li>
+          <li>
+            The Forrest website also accompanies your software release
+            in the <code>site-author</code> directory, so
+            inspect its &t; and &s; to see how it is done. Also see the
+            'forrest seed site' example. It is not as complex as the Forrest website.
+          </li>
+          <li>
+            When you are fiddling with your attributes, change one thing at a time
+            and document what you have changed.</li>
+          <li>
+            The value of the tab @id attribute cannot begin with a digit.
+            Likewise, element names in &t; and &s; cannot begin with a digit.
+          </li>
+          <li>
+            Add label attributes to &s; elements to make the menus show.
+            With nested elements in &s; if the outer element does not have a label
+            attribute then the inner elements will not be displayed.
+          </li>
+          <li>
+            To cause tabs and menu items to be highlighted, there need to be
+            corresponding elements in &s; that have href attributes which match
+            the relevant path.
+          </li>
+          <li>
+            When the tab points to a directory, then to make the tab highlighted
+            when selected, you need an element which matches index.html within the
+            group of elements that define the menus for this tab in the &s;
+            file. That element can be without a label attribute, so that it doesn't
+            display as a menu item. However doing that causes that tab's menus
+            to be collapsed.
+          </li>
+          <li>
+            Q: The tab link in my site assumes that 'index.html'
+            is present in the linked-to directory. How do I fix this?
+            A: In &t; use @href instead of @dir attribute and omit the trailing '/'.
+            Which file to serve is then a concern of the sitemap.
+            See more at the <link href="site:v0.70//faq/tab-index">FAQ</link>.
+          </li>
+        </ul>
       </section>
 
     </section>

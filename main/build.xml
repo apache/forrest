@@ -199,19 +199,40 @@
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
     
-    <!-- copy all Forrest -->
+    <echo>Copy Forrest core files from ${forrest.home}</echo>
     <copy todir="${dist-shbat.dir}">
       <fileset dir="${forrest.home}" >
         <exclude name="build/**"/>
         <exclude name="whiteboard/**"/>
+        <exclude name="plugins/**"/>
       </fileset>
     </copy>
-     <copy todir="${dist-shbat.dir}">
+    
+    <echo>Copy plugin related files from ${plugins.dir}</echo>
+    <copy todir="${dist-shbat.dir}/plugins">
+       <fileset dir="${plugins.dir}" >
+        <include name="plugins.xml"/>
+        <include name="build.xml"/>
+        <include name="pluginTemplate/**"/>
+        <include name="org.apache.forrest.plugin.output.pdf/**"/>
+      </fileset>
+    </copy>
+    
+    <echo>Copy whiteboard plugin related files</echo>
+    <copy todir="${dist-shbat.dir}/whiteboard/plugins">
+       <fileset dir="${forrest.home}/whiteboard/plugins" >
+        <include name="whiteboard-plugins.xml"/>
+        <include name="build.xml"/>
+      </fileset>
+    </copy>
+    
+    <echo>Copy forrest.jar</echo>
+    <copy todir="${dist-shbat.dir}">
        <fileset dir="${forrest.home}" >
         <include name="build/xml-forrest.jar"/>
       </fileset>
     </copy>
-        
+    
     <!-- Fix bin/ permissions -->
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/bin" includes="*.bat"/>
     <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/bin" excludes="*.bat"/>

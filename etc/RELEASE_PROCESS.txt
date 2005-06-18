@@ -56,7 +56,6 @@ Note: You can practice the following steps (as far as creating the branch)
 without committing anything. This ensures a good release candidate.
 
 
-
 - Update your release checkout to reflect last minute changes
 
     1. cd to the 'Forrest_Release'-directory
@@ -123,6 +122,8 @@ without committing anything. This ensures a good release candidate.
    Note: If you change the setting in the system properties, you have to logout and login 
    again for the changes to become effective.
 
+ - Take note of the SVN revision number of your trunk.
+
  - Change to directory main and run 'build release-dist' to generate the
    distributions on a UNIX machine.
    - Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip
@@ -145,14 +146,19 @@ without committing anything. This ensures a good release candidate.
    Not going to try to explain, but here is some info:
     http://wiki.apache.org/incubator/SigningReleases
     http://forrest.apache.org/mirrors.cgi#verify
-   Create the *.md5 and *.asc files. Here is one example:
+   Create the *.asc and *.md5 files. Here is one example:
+
    gpg --recv-key <myKey>
-   gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
-       --detach-sig --armor apache-forrest-0.7.tar.gz
+   gpg --output apache-forrest-0.7rc1.tar.gz.asc \
+       --detach-sig --armor apache-forrest-0.7rc1.tar.gz
    gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-       apache-forrest-0.7.tar.gz
-   openssl dgst -md5 -out crossley-apache-forrest-0.7.tar.gz.md5 \
-       apache-forrest-0.7.tar.gz
+       apache-forrest-0.7rc1.tar.gz
+   ... should say "Good signature from ..."
+
+   openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
+       apache-forrest-0.7rc1.tar.gz
+   md5sum apache-forrest-0.7rc1.tar.gz
+   ... output should match that of the md5 file.
 
  - Create a maintenance branch in SVN with
     svn copy -m "Create the x.y release branch from r#####" \
@@ -162,6 +168,8 @@ without committing anything. This ensures a good release candidate.
    and 'r#####' is the SVN revision number that the branch was created from
    which was the revision that the release candidates were generated from.
    See http://svn.apache.org/repos/asf/forrest/branches/
+   If someone has done a commit before you get to do it, then specify
+   the revision number with -r
 
  - Test the actual distribution on various platforms.
    - Upload the release candidates and signatures to a committer's webspace.
@@ -172,6 +180,12 @@ without committing anything. This ensures a good release candidate.
      at README.txt and index.html
    - Use it to build some difficult sites.
    - Ensure that the compressed archives will unpack correctly.
+
+ - If necessary, build the second release candidate and ask people to test again.
+ - Ask people to vote on the final release candidate.
+
+ - If there have been changes to the trunk since the branch was created,
+   then merge trunk to branch.
 
  - If everything looks okay, and after the Vote has finished, tag SVN with
     svn copy -m "Create tag forrest_xy from release branch" \
@@ -188,7 +202,7 @@ Upload and announcement
    to www.apache.org at /www/www.apache.org/ dist/forrest/
    Each PMC member has a server account and belongs to the forrest group.
    The process is documented at http://www.apache.org/~bodewig/mirror.html
-   Ensure correct file permissions: chgrp forrest; chmod 664
+   Ensure correct file permissions: chgrp forrest *; chmod 664 *
    Leave the previous dist there as well, until after the announcement.
 
    Note: The other files there (HEAD.html README.html LICENSE.txt KEYS)
