@@ -808,18 +808,21 @@ project.skinconf=${project.content-dir}/skinconf.xml
             Reference</link> provides details about how the sitemap works.
           </note>
           <p>
-            Add the following as the file
+            Add the following match to the file
             <code>src/documentation/sitemap.xmap</code> ...
           </p>
           <source><![CDATA[<?xml version="1.0"?>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
  <map:pipelines>
-  <map:pipeline>
+  <map:pipeline>]]>
+  ...
+  <strong><![CDATA[
    <map:match pattern="**download.xml">
     <map:generate src="{project:content.xdocs}{1}download.xml" />
     <map:transform src="{project:resources.stylesheets}/download2document.xsl" />
     <map:serialize type="xml"/>
    </map:match>
+]]></strong><![CDATA[
   </map:pipeline>
  </map:pipelines>
 </map:sitemap>
