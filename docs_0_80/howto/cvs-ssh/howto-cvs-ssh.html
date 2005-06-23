@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<title>CVS through SSH (v0.8-dev)</title>
+<link type="text/css" href="../../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../../skin/profile.css" rel="stylesheet">
+<script src="../../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<div class="header">
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input attr="value" name="Search" value="Search" type="submit">
+</form>
+</div>
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../../../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../../contrib.html">Project</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../../versions/index.html">Versioned Docs</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../../pluginDocs/index.html">Plugins</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../../tools/index.html">Tools</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<div id="level2tabs"></div>
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<div id="menu">
+<div onclick="SwitchMenu('menu_1.1', '../../../skin/')" id="menu_1.1Title" class="menutitle">How-To Samples</div>
+<div id="menu_1.1" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../../docs_0_80/howto/index.html">Overview</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.2', '../../../skin/')" id="menu_selected_1.2Title" class="menutitle" style="background-image: url('../../../skin/images/chapter_open.gif');">Committers</div>
+<div id="menu_selected_1.2" class="selectedmenuitemgroup" style="display: block;">
+<div class="menupage">
+<div class="menupagetitle">CVS through SSH</div>
+</div>
+</div>
+<div id="credit">
+<hr>
+        This is documentation for development version v0.8
+       (<a href="/versions/index.html">More</a>)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<div id="credit2">
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+</div>
+</div>
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="howto-cvs-ssh.pdf"><img alt="PDF -icon" src="../../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+<text>Font size:</text> 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>CVS through SSH</h1>
+<div class="abstract">This How-To describes the steps necessary to configure an SSH enabled CVS connection. It is recommended to configure an SSH enabled CVS connection to work with Apache code repositories.</div>
+<div id="motd-area">
+        This is documentation for development version v0.8
+       (<a href="/versions/index.html">More</a>)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Intended audience">Intended audience</a>
+</li>
+<li>
+<a href="#Purpose">Purpose</a>
+</li>
+<li>
+<a href="#Prerequisites">Prerequisites</a>
+</li>
+<li>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#Terms">Terms</a>
+</li>
+<li>
+<a href="#Setting+up+domain+users">Setting up domain users</a>
+</li>
+<li>
+<a href="#ssh_access">Setting up SSH access</a>
+</li>
+<li>
+<a href="#Setting+up+passphrase+access">Setting up passphrase access</a>
+</li>
+<li>
+<a href="#Getting+the+project+from+CVS">Getting the project from CVS</a>
+</li>
+<li>
+<a href="#How+to+setup+WinCVS">How to setup WinCVS</a>
+</li>
+<li>
+<a href="#References">References</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<a name="N10013"></a><a name="Intended audience"></a>
+<h2 class="underlined_10">Intended audience</h2>
+<div class="section">
+<p>This How-to is aimed at developers who have been granted committer access to CVS repositories for particular projects.</p>
+</div>
+<a name="N1001B"></a><a name="Purpose"></a>
+<h2 class="underlined_10">Purpose</h2>
+<div class="section">
+<p> 
+              Using SSH to access CVS repositories is recommended for security reasons. By configuring CVS to work with remote repository using private/public SSH keys you'll be able to run CVS commands without a need to enter your password every time you need access to CVS through SSH.
+        </p>
+</div>
+<a name="N10023"></a><a name="Prerequisites"></a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<ul>
+            
+<li>Account on the local machine.</li>
+            
+<li>Commiter access to the project(s). <em>This also imply having account on the CVS host machine.</em>
+</li>        
+            
+<li>Cygwin - a Unix environment for Windows systems. You can get it <a href="http://www.redhat.com/software/tools/cygwin/">here</a>. <em>Not required for Linux/*nix users.</em>
+</li>
+            
+<li>A CVS GUI application (for Windows users only), e.g. WinCVS. <em>It is not required, but can be very useful.</em>
+</li>
+        
+</ul>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">If you are behind a firewall check that you can communicate through the 22 port. For anonymous access you will need 2401 one.</div>
+</div>
+</div>
+<a name="N10044"></a><a name="Steps"></a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<p>How to proceed.</p>
+<a name="N1004C"></a><a name="Terms"></a>
+<h3 class="underlined_5">Terms</h3>
+<dl>
+        
+<dt>SSH</dt>
+        
+<dd>Secure Shell. See <a href="http://www.openssh.org">OpenSSH</a>
+</dd>
+        
+<dt>CVS</dt>
+        
+<dd>Concurrent Version System See <a href="http://www.cvshome.org">CVS Home Page</a>
+</dd>
+         
+</dl>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">
+<strong>$</strong> represents local, <strong>%</strong> remote machine.</div>
+</div>
+<a name="N10070"></a><a name="Setting+up+domain+users"></a>
+<h3 class="underlined_5">Setting up domain users</h3>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">This step is necessary only for Windows users. Linux users can happily skip this section and pass to <a href="#ssh_access">Setting up SSH access</a> section</div>
+</div>
+<p>If you are a domain user then you should be added to Cygwin users list (See <span class="codefrag">[cygwin-dir]/etc/passwd</span>). 
+            </p>
+<ul>
+              
+<li>Start Cygwin, then enter following commands:</li>
+            
+</ul>
+<pre class="code">
+$ whoami
+administrator
+$ mkgroup -d &gt; /etc/group
+$ mkpasswd -d | grep 'userxxx' &gt;&gt; /etc/passwd
+$ exit
+    </pre>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">Replace 'userxxx' by your account name</div>
+</div>
+<ul>
+      
+<li>Start Cygwin/shell again and check that everything's Ok:</li>
+    
+</ul>
+<pre class="code">
+$ whoami
+userxxx
+            </pre>
+<a name="N1009B"></a><a name="ssh_access"></a>
+<h3 class="underlined_5">Setting up SSH access</h3>
+<p>Start Cygwin/shell, then enter:</p>
+<pre class="code">
+$ ssh-user-config
+  Shall I create an SSH1 RSA identity file for you? (yes/no) no
+  Shall I create an SSH2 RSA identity file for you? (yes/no)  (yes/no) no
+  Shall I create an SSH2 DSA identity file for you? (yes/no)  (yes/no) yes
+  Generating /home/userxxx/.ssh/id_dsa
+  Enter passphrase (empty for no passphrase):
+  Enter same passphrase again:
+  Do you want to use this identity to login to this machine? (yes/no) yes
+  Adding to /home/userxxx/.ssh/authorized_keys2
+  
+  Configuration finished. Have fun!
+    </pre>
+<p>
+      Now you have configured SSH on your machine. Next you have to setup access to the CVS machine.
+    </p>
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">Having an empty passphrase isn't recommended for security reasons. See <span class="codefrag">ssh-agent</span> documentation on how to configure automatic passphrase retaining.</div>
+</div>
+<a name="N100B2"></a><a name="Setting+up+passphrase+access"></a>
+<h3 class="underlined_5">Setting up passphrase access</h3>
+<p>Perform the following:</p>
+<pre class="code">
+$ scp ~/.ssh/id_dsa.pub userxxx@cvs.apache.org:.
+$ ssh -l userxxx -L 2401:localhost:2401 cvs.apache.org
+% mkdir ~/.ssh
+% chmod 700 ~/.ssh
+% cat ~/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys2
+% rm ~/id_dsa.pub
+% chmod 600 ~/.ssh/*
+% exit            
+            </pre>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">Note, that the account name on CVS machine can differ from your local account name.</div>
+</div>
+<p>
+            Check that your configuration is correct:
+            </p>
+<pre class="code">
+$ ssh userxxx@cvs.apache.org
+            </pre>
+<div class="frame note">
+<div class="label">Note</div>
+<div class="content">If this command doesn't work then it can mean that you have an old version of SSH. In this case try <span class="codefrag">ssh -l userxxx cvs.apache.org</span>. Run <span class="codefrag">ssh --help</span> to get all available options.</div>
+</div>
+<p>
+            If now you are logged in to the to the CVS machine without entering the password then everything's Ok.
+            </p>
+<a name="N100D6"></a><a name="Getting+the+project+from+CVS"></a>
+<h3 class="underlined_5">Getting the project from CVS</h3>
+<p>Now you are ready to get a project from CVS using SSH connection.</p>
+<p>E.g. how it is done using Cygwin/shell</p>
+<pre class="code">
+$ export CVS_RSH=/bin/ssh
+$ cvs -d :ext:userxxx@cvs.apache.org:/home/cvs co xml-cocoon2            
+            </pre>
+<a name="N100E7"></a><a name="How+to+setup+WinCVS"></a>
+<h3 class="underlined_5">How to setup WinCVS</h3>
+<ul>
+                
+<li>Add ssh.exe directory to your system PATH environment variable. Say: <br>
+                
+<span class="codefrag">C:\&gt;set PATH=%PATH%;C:\cygwin\bin</span>
+</li>
+                
+<li>Add <span class="codefrag">CVS_RSH=ssh</span> environment variable</li>
+            
+</ul>
+<p>
+            Start WinCVS, then:
+            </p>
+<ul>
+                
+<li>From the main menu select <strong>Admin</strong>
+</li>
+                
+<li>Then select <strong>Preferences</strong>
+</li>
+                
+<li>In the dialog that comes up: <br>
+                Set the CVSROOT to <span class="codefrag">userxxx@cvs.apache.org:/home/cvs</span>
+</li>
+                
+<li>Set the Authentication to SSH Server</li>                
+                
+<li>Click Ok</li>
+            
+</ul>
+<a name="N1011B"></a><a name="References"></a>
+<h3 class="underlined_5">References</h3>
+<p>
+                You can find more on CVS, SSH and WinCVS here:
+            </p>
+<ul>
+                
+<li>
+<a href="http://www.cvshome.org">CVS Home Page</a>
+</li>            
+                
+<li>
+<a href="http://www.openssh.org">OpenSSH</a>
+</li>            
+                
+<li>
+<a href="http://www.redhat.com/software/tools/cygwin/">Cygwin Home Page</a>
+</li>            
+                
+<li>
+<a href="http://odin.himinbi.org/wincvs-over-ssh/">WinCVS over SSH</a>
+</li>
+            
+</ul>
+</div>
+</div>
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2002-2005 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+</div>
+</body>
+</html>
