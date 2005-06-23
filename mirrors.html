@@ -152,8 +152,19 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <h2 class="underlined_10">Current official release (closest mirror site selected automatically)</h2>
 <div class="section">
 <p>You are currently using <strong>[preferred]</strong>. If you encounter a problem with this mirror, then please select another. If all mirrors are failing, there are backup mirrors at the end of the list. See <a href="http://www.apache.org/mirrors/">status</a> of mirrors.</p>
-<form action="[location]">
-<a name="SelectMirror"></a>Other mirrors: <select name="Preferred"><option value="[http]">[http]</option><option value="[ftp]">[ftp]</option><option value="[backup]">[backup] (backup)</option></select> <input type="submit" value="Change">
+<form action="[location]" method="get" id="SelectMirror">
+Other mirrors: <select name="Preferred">
+<!--[if-any http] [for http]-->
+<option value="[http]">[http]</option>
+<!--[end] [end]-->
+<!--[if-any ftp] [for ftp]-->
+<option value="[ftp]">[ftp]</option>
+<!--[end] [end]-->
+<!--[if-any backup] [for backup]-->
+<option value="[backup]">[backup] (backup)</option>
+<!--[end] [end]-->
+</select>
+<input type="submit" value="Change" />     
 </form>
 <p>The current release is Apache Forrest 0.7 (see the <a href="[preferred]/forrest/RELEASE-NOTES-0.7.txt">release notes</a>).</p>
 <ul>
