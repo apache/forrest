@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<title>Extending Forrest with Plugins (v0.7)</title>
+<link type="text/css" href="../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../skin/profile.css" rel="stylesheet">
+<script src="../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<div class="header">
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input attr="value" name="Search" value="Search" type="submit">
+</form>
+</div>
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="../../index.html">Welcome</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../contrib.html">Project</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../versions/index.html">Versioned Docs</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../pluginDocs/index.html">Plugins</a>
+</li>
+<li>
+<a class="base-not-selected" href="../../tools/index.html">Tools</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<div id="level2tabs">
+<a class="base-selected" href="../../pluginDocs/plugins_0_70/index.html">0.70 (current)</a> | <a class="base-not-selected" href="../../pluginDocs/plugins_0_80/index.html">0.80-dev (under development)</a>
+</div>
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">0.70 Plugins</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../../pluginDocs/plugins_0_70/index.html">Index</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">Using Plugins</div>
+</div>
+<div class="menuitem">
+<a href="../../pluginDocs/plugins_0_70/pluginInfrastructure.html">Plugin Infrastructure</a>
+</div>
+</div>
+<div id="credit">
+<hr>
+        This is documentation for current version v0.7
+       (<a href="/pluginDocs/index.html">More</a>)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<div id="credit2">
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+</div>
+</div>
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="usingPlugins.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+<text>Font size:</text> 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>Extending Forrest with Plugins</h1>
+<div id="motd-area">
+        This is documentation for current version v0.7
+       (<a href="/pluginDocs/index.html">More</a>)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#overview">Overview</a>
+<ul class="minitoc">
+<li>
+<a href="#What+plugins+are+available%3F">What plugins are available?</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#How+is+a+Plugin+Installed%3F">How is a Plugin Installed?</a>
+<ul class="minitoc">
+<li>
+<a href="#Upgrading+from+a+Version+of+Forrest+Without+Plugins">Upgrading from a Version of Forrest Without Plugins</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Avoiding+Plugin+Conflicts">Avoiding Plugin Conflicts</a>
+</li>
+<li>
+<a href="#Further+Reading">Further Reading</a>
+</li>
+</ul>
+</div>
+    
+<a name="N1000D"></a><a name="overview"></a>
+<h2 class="underlined_10">Overview</h2>
+<div class="section">
+<p>Forrest provides the core functionality for generating documentation
+      in various output formats from a range of input formats. However, it
+      does not end there. Forrest can be extended through the addition of
+      plugins. This document serves as an introduction to the Forrest
+      plugin mechanism.</p>
+<a name="N10016"></a><a name="What+plugins+are+available%3F"></a>
+<h3 class="underlined_5">What plugins are available?</h3>
+<p>You can run the command <span class="codefrag">forrest available-plugins</span> to get
+        a list of the known plugins for Forrest.</p>
+<p>If you would like to have your own plugin added to this list then
+        contact the <a href="../../mail-lists.html">developer mailing list</a>.</p>
+</div>
+        
+    
+<a name="N1002B"></a><a name="How+is+a+Plugin+Installed%3F"></a>
+<h2 class="underlined_10">How is a Plugin Installed?</h2>
+<div class="section">
+<p>If a site requires one or more plugins then the site designer will 
+      have named them in the <span class="codefrag">project.required.plugins</span> property 
+      in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
+      builds the site it will automatically discover the plugin and install 
+      it. In otherwords, the user need do nothing. For example, 
+      <span class="codefrag">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</span>
+      will cause Forrest to load the plugins called "org.apache.forrest.plugin.input.OpenOffice.org" and
+      "org.apache.forrest.plugin.input.simplifiedDocbook".</p>
+<p>In the absence of a version number for the plugin (as is the case in the examples above)
+      the most recent version that is applicabe to your release of Forrest will be used. This
+      may result in unexpected behaviour if a new version of the plugin has been released that
+      is incompatible with your current site. To force Forrest into using a specific version of 
+      a plugin you shuld add "-VERSION_NUMBER" to the end of the plugin name. For example,
+      to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
+      <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span> If you define a version of the
+      plugin that does not exist then it will fall back to using the most recent version avialable.
+      This feature is useful when 
+      developing a new site as you can quickly force a plugin upgrade by deleting all installed 
+      plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
+      of an in-development plugin, therefore in a production environment you should always specify
+      a known working version.</p>
+<p>By default a new forrest project includes plugins to generate 
+      PDF output from your source documents.</p>
+<a name="N10046"></a><a name="Upgrading+from+a+Version+of+Forrest+Without+Plugins"></a>
+<h3 class="underlined_5">Upgrading from a Version of Forrest Without Plugins</h3>
+<p>The plugin functionality was introduced in version 0.7 of Forrest.
+        At this time some of the functionality previously in Forrest was
+        extracted into a plugin. However, we have not broken backward 
+        compatability with earlier versions. In the absence of a
+        <span class="codefrag">project.required.plugins</span> property in the projects 
+        <span class="codefrag">forrest.properties</span> file all plugins that contain 
+        functionality previously part of Forrest itself will be loaded
+        automatically. Unless you intend to use new functionality provided
+        by a plugin you will not need to make any changes top your project.</p>
+<p>If you do require additional plugin functionality, be sure to
+        include all required plugins in the 
+        <span class="codefrag">project.required.plugins</span> property in the project's
+        <span class="codefrag">forrest.properties</span>. You can view
+        <span class="codefrag">main/webapp/default-forrest.properties</span>
+        to see the names of plugins that provide previously core 
+        functionality.</p>
+<p>It is also worth noting that there is a small performance 
+        improvement if you remove plugins that are not in use. Therefore,
+        if you do not use one or more of the plugins named in the 
+        <span class="codefrag">project.required.plugins</span> property of 
+        <span class="codefrag">main/webapp/default-forrest.properties</span>
+        it is recomended that you override this value in your project's
+        <span class="codefrag">forrest.properties</span> file.</p>
+</div>
+    
+    
+<a name="N1006F"></a><a name="Avoiding+Plugin+Conflicts"></a>
+<h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
+<div class="section">
+<p>Clashes between plugins can occur. For example, the simplified-docbook 
+      and full docbook plugins may try and process the same files. In this 
+      instance the one that is mounted first will take precedence. Plugins 
+      are mounted in the order they appear in the 
+      <span class="codefrag">project.required.plugins</span> property, therefore the mounting 
+      order and therefore processing precedence is under user control.</p>
+</div>
+    
+    
+<a name="N1007C"></a><a name="Further+Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<ul>
+        
+<li>
+<a href="../../pluginDocs/plugins_0_80/pluginInfrastructure.html">Plugin Infrastructure</a>
+</li>
+        
+<li>
+<a href="../../docs_0_70/howto/howto-buildPlugin.html">How to build a Plugin</a>
+</li>
+      
+</ul>
+</div>
+  
+</div>
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2002-2005 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+</div>
+</body>
+</html>
