@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7">
+<meta name="Forrest-skin-name" content="pelt">
+<title>Java Logging API</title>
+<link type="text/css" href="skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
+<link type="text/css" href="skin/profile.css" rel="stylesheet">
+<script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<div class="breadtrail">
+<a href="http://forrest.apache.org/">Apache Forrest</a> &gt; <a href="http://forrest.apache.org/docs/plugins/">Plugins</a> &gt; <a href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.input.logs/">org.apache.forrest.plugin.input.logs</a><script src="skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<div class="header">
+<div class="grouplogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Apache Forrest" src="images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<div class="projectlogo">
+<a href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.input.logs/"><img class="logoImage" alt="Plugin: Logs input" src="images/project.png" title="org.apache.forrest.plugin.input.logs plugin for Apache Forrest"></a>
+</div>
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="mydomain" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input attr="value" name="Search" value="Search" type="submit">
+</form>
+</div>
+<ul id="tabs">
+<li class="current">
+<a class="base-selected" href="index.html">Home</a>
+</li>
+<li>
+<a class="base-not-selected" href="samples/javaLogAPI.html">Samples</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<div id="level2tabs"></div>
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<div id="menu">
+<div onclick="SwitchMenu('menu_1.1', 'skin/')" id="menu_1.1Title" class="menutitle">About</div>
+<div id="menu_1.1" class="menuitemgroup">
+<div class="menuitem">
+<a href="index.html" title="Welcome to org.apache.forrest.plugin.logs">Index</a>
+</div>
+<div class="menuitem">
+<a href="changes.html" title="History of Changes">Changes</a>
+</div>
+<div class="menuitem">
+<a href="todo.html" title="Todo List">Todo</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Samples</div>
+<div id="menu_1.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="samples/javaLogAPI.html">Java Logger API</a>
+</div>
+</div>
+<div id="credit"></div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<div id="credit2"></div>
+</div>
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="javaLogAPI.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+<text>Font size:</text> 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>Java Logging API</h1>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Integrating+Java+Logs+in+a+Forrest+Site">Integrating Java Logs in a Forrest Site</a>
+</li>
+</ul>
+</div> 
+    
+<p>The Java Logging API is part the 
+    <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/package-summary.html">J2SE 
+    API Specification</a> an overview of the  key elements of this API is
+    <a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html">available</a>.</p>
+    
+    
+<a name="N10018"></a><a name="Integrating+Java+Logs+in+a+Forrest+Site"></a>
+<h2 class="underlined_10">Integrating Java Logs in a Forrest Site</h2>
+<div class="section">
+<p>If you have the log file available, simply place it in your projects 
+      xdoc directory and link to it as normal. For example, the following file
+      is stored within this projects xdocs directory in a <span class="codefrag">samples</span>
+      subfolder.</p>
+<pre class="code">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;
+&lt;!DOCTYPE log SYSTEM "logger.dtd"&gt;
+&lt;log&gt;
+&lt;record&gt;
+  &lt;date&gt;2000-08-23 19:21:05&lt;/date&gt;
+  &lt;millis&gt;967083665789&lt;/millis&gt;
+  &lt;sequence&gt;1256&lt;/sequence&gt;
+  &lt;logger&gt;kgh.test.fred&lt;/logger&gt;
+  &lt;level&gt;INFO&lt;/level&gt;
+  &lt;class&gt;kgh.test.XMLTest&lt;/class&gt;
+  &lt;method&gt;writeLog&lt;/method&gt;
+  &lt;thread&gt;10&lt;/thread&gt;
+  &lt;message&gt;Hello world!&lt;/message&gt;
+&lt;/record&gt;
+&lt;record&gt;
+  &lt;date&gt;2000-08-23 19:21:10&lt;/date&gt;
+  &lt;millis&gt;967083665789&lt;/millis&gt;
+  &lt;sequence&gt;1265&lt;/sequence&gt;
+  &lt;logger&gt;kgh.test.fred&lt;/logger&gt;
+  &lt;level&gt;INFO&lt;/level&gt;
+  &lt;class&gt;kgh.test.XMLTest&lt;/class&gt;
+  &lt;method&gt;writeLog&lt;/method&gt;
+  &lt;thread&gt;10&lt;/thread&gt;
+  &lt;message&gt;I'm the third log message (but recorded second in the file)&lt;/message&gt;
+&lt;/record&gt;
+&lt;record&gt;
+  &lt;date&gt;2000-08-23 19:21:06&lt;/date&gt;
+  &lt;millis&gt;967083665789&lt;/millis&gt;
+  &lt;sequence&gt;1260&lt;/sequence&gt;
+  &lt;logger&gt;kgh.test.fred&lt;/logger&gt;
+  &lt;level&gt;INFO&lt;/level&gt;
+  &lt;class&gt;kgh.test.XMLTest&lt;/class&gt;
+  &lt;method&gt;writeLog&lt;/method&gt;
+  &lt;thread&gt;10&lt;/thread&gt;
+  &lt;message&gt;This is the second log message in terms of time, but the third in the log file.&lt;/message&gt;
+&lt;/record&gt;
+&lt;record&gt;
+  &lt;date&gt;2000-08-23 19:21:15&lt;/date&gt;
+  &lt;millis&gt;967083665789&lt;/millis&gt;
+  &lt;sequence&gt;1270&lt;/sequence&gt;
+  &lt;logger&gt;kgh.test.fred&lt;/logger&gt;
+  &lt;level&gt;INFO&lt;/level&gt;
+  &lt;class&gt;kgh.test.XMLTest&lt;/class&gt;
+  &lt;method&gt;destroy&lt;/method&gt;
+  &lt;thread&gt;10&lt;/thread&gt;
+  &lt;message&gt;Goodbye world!&lt;/message&gt;
+&lt;/record&gt;
+&lt;/log&gt;
+      </pre>
+<p>To view this document as an HTML page you would use the following 
+      link <a href="samples/javaLogAPI.html">&lt;a href="samples/javaLogAPI.html&gt;</a>.</p>
+<p>If the log file is not available to you, but instead is available at
+      a given URL then you need to tell the plugin where to find the log
+      file, it will then retrieve the file and include it as if it were 
+      local. To do this you make a request the URL 
+      <span class="codefrag">/do/view/log.FORMAT</span>, where <span class="codefrag">FORMAT</span> is any 
+      extension that your Forrest project recognises (e.g. html, pdf etc). In
+      addition you need to pass some parameters in the URL so that the
+      plugin can find your log file:</p>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+        
+<tr>
+          
+<th colspan="1" rowspan="1">Parameter</th>
+          <th colspan="1" rowspan="1">Description</th>
+        
+</tr>
+        
+<tr>
+          
+<td colspan="1" rowspan="1">location</td>
+          <td colspan="1" rowspan="1">The location of the log file</td>
+        
+</tr>
+        
+<tr>
+          
+<td colspan="1" rowspan="1">protocol</td>
+          <td colspan="1" rowspan="1">The protocol to use when retrieving the log file</td>
+        
+</tr>
+      
+</table>
+<p>For example, to retrieve a log file from a location on your local 
+      hard drive you would construct an URL something like this (to
+      view the html page):</p>
+<pre class="code">
+        &lt;a href="/do/view/log.html?protocol=file&amp;location=path\to\file\file.log"&gt;View Log&lt;/&gt;
+      </pre>
+<p>or to view the PDF version of the log file:</p>
+<pre class="code">
+        &lt;a href="/do/view/log.pdf?protocol=file&amp;location=path\to\file\file.log"&gt;View Log&lt;/&gt;
+      </pre>
+</div>
+  
+</div>
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2004-2005 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+</div>
+</body>
+</html>
