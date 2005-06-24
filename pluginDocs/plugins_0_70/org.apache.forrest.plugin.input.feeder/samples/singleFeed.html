@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.7">
+<meta name="Forrest-skin-name" content="pelt">
+<title>Feeder Plugin - Single Feed Example (v0.7)</title>
+<link type="text/css" href="../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../skin/profile.css" rel="stylesheet">
+<script src="../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<div class="breadtrail">
+<a href="http://forrest.apache.org/">Apache Forrest</a> &gt; <a href="http://forrest.apache.org/pluginDocs/">Plugins</a><script src="../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<div class="header">
+<div class="grouplogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Apache Forrest" src="../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<div class="projectlogo">
+<a href=""><img class="logoImage" alt="Plugin: Feeder input" src="../images/project.png" title="org.apache.forrest.plugin.input.feeder plugin for Apache Forrest"></a>
+</div>
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="mydomain" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input attr="value" name="Search" value="Search" type="submit">
+</form>
+</div>
+<ul id="tabs">
+<li>
+<a class="base-not-selected" href="http://forrest.apache.org/pluginDocs">Forrest Plugins</a>
+</li>
+<li>
+<a class="base-not-selected" href="../index.html">Home</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../samples/index.html">Samples</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<div id="level2tabs"></div>
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="breadtrail">
+             
+             &nbsp;
+           </div>
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Samples</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../samples/index.html" title="An index of the available samples">Index</a>
+</div>
+<div class="menupage">
+<div class="menupagetitle">Single Feed</div>
+</div>
+<div class="menuitem">
+<a href="../samples/aggregateFeed.html" title="An example of an aggregate feed in a Forrest page">Aggregate Feed</a>
+</div>
+</div>
+<div id="credit">
+<hr>
+        This is documentation for current version v0.7
+       (<a href="http://forrest.apache.org/versions/index.html">More</a>)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<div id="credit2"></div>
+</div>
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="singleFeed.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">
+<text>Font size:</text> 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>Feeder Plugin - Single Feed Example</h1>
+<div id="motd-area">
+        This is documentation for current version v0.7
+       (<a href="http://forrest.apache.org/versions/index.html">More</a>)</div> 
+    
+    
+<p>This sample shows how a single RSS feed can be converted to an XDoc and
+    included in a Forrest site. In order to do this you must first create a
+    <span class="codefrag">feedDescriptor</span> file. This describes all the feeds that your
+    project knows about. A simple example is:</p>
+      
+    
+<pre class="code">
+&lt;feedDescriptor&gt;
+  &lt;feed id="BBCSport_UK"&gt;
+    &lt;url&gt;http://news.bbc.co.uk/rss/sportonline_uk_edition/front_page/rss.xml&lt;/url&gt;
+  &lt;/feed&gt;
+&lt;/feedDescriptor&gt;
+    </pre>
+      
+    
+<p>In order to embed the data from the <span class="codefrag">planetApache</span> feed
+    you create a link in the following form:</p>
+    
+    
+<pre class="code">&lt;a href="PATH_TO_FEED_DESCRIPTOR/feeder/FEED_DESCRIPTOR_NAME.EXTENSION&gt;</pre>
+    
+    
+<p>In this URL you must replace <span class="codefrag">PATH_TO_FEED_DESCRIPTOR</span>
+    with the directory path to your feed descriptor file, 
+    <span class="codefrag">FEED_DESCRIPTOR_NAME</span> with the name of the descriptor file,
+    and <span class="codefrag">EXTENSION</span> with the extension indicating the format you
+    want the feed to be delivered in (i.e. html, pdf etc.)</p>
+    
+    
+<p>For example <a href="/samples/feeder/feedDescriptor.html">/samples/feeder/feedDescriptor.html</a>
+    will display the feed shown above.</p>
+    
+    
+<div class="frame warning">
+<div class="label">Warning</div>
+<div class="content">The way URLs are structured is due to change in the near future,
+    use at your own risk (see Forrest mailing lists for discussion).</div>
+</div>
+  
+</div>
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("<text>Last Published:</text> " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2004-2005 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+</div>
+</body>
+</html>
