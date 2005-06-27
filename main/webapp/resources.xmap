@@ -126,6 +126,11 @@ $Revision: 1.13 $
                     <map:parameter name="path" value="{forrest:context}/skins/common/{path}/{name}.svg.xslt" />
                   </map:call>
                </map:when>
+               
+               <!-- Fourth location: locationmap -->
+               <map:when test="{lm:{path}/{name}.{ext}}">
+               	<map:read src="{lm:{path}/{name}.{ext}}"/>
+               </map:when>
                <map:otherwise>
                    <!-- this should always fail; it is used so the error has the correct filename and extension -->
                   <map:read src=".../{path}/{name}.{ext}" mime-type="{mime-type}" />
@@ -295,12 +300,27 @@ $Revision: 1.13 $
 
          <!-- handles images local to a contributor directory -->
          <map:match pattern="**my-images/**.*">
-            <map:read src="{project:content.xdocs}{1}my-images/{2}.{3}" mime-type="image/{3}" />
+				<map:select type="exists">
+						<map:when test="{project:content.xdocs}{1}my-images/{2}.{3}">
+            			<map:read src="{project:content.xdocs}{1}my-images/{2}.{3}" mime-type="image/{3}" />
+						</map:when>
+						<map:otherwise>         
+							<map:read src="{lm:{1}my-images/{2}.{3}}"/>
+            		</map:otherwise>
+            </map:select>
          </map:match>
 
         <map:match type="regexp" pattern="^(.*?)([^/]*).svg$">
-          <map:generate src="{project:content.xdocs}/{1}{2}.svg"/>
-          <map:serialize type="xml"/>
+        		<map:select type="exists">
+        			<map:when test="{project:content.xdocs}/{1}{2}.svg">
+			          <map:generate src="{project:content.xdocs}/{1}{2}.svg"/>
+			          <map:serialize type="xml"/> 
+        			</map:when>
+        			<map:otherwise>
+			          <map:generate src="{lm:/{1}{2}.svg}"/>
+			          <map:serialize type="xml"/> 
+        			</map:otherwise>
+        		</map:select>
         </map:match>
 
          <map:match pattern="images/**.png">
@@ -329,16 +349,21 @@ $Revision: 1.13 $
                <map:when test="{project:resources.images}/{1}.png">
                   <map:read src="{project:resources.images}/{1}.png" mime-type="image/png" />
                </map:when>
-               <map:otherwise>
-                 <!-- needed for compatibility for the standard resources/images that are now
-                      in the common skin -->
-                 <map:call resource="skin-read">
-                   <map:parameter name="path" value="images" />
-                   <map:parameter name="name" value="{1}" />
-                   <map:parameter name="ext" value="png" />
-                   <map:parameter name="mime-type" value="image/png" />
-                 </map:call>
-               </map:otherwise>
+               <map:when test="{lm:/images/{1}.svg}">
+                  <map:call resource="pipe-aggregate-svg2png-resource">
+                    <map:parameter name="path" value="{lm:/images/{1}.svg}" />
+                  </map:call>               	
+					</map:when>
+					<map:otherwise>
+					  <!-- needed for compatibility for the standard resources/images that are now
+							 in the common skin -->
+					  <map:call resource="skin-read">
+						 <map:parameter name="path" value="images" />
+						 <map:parameter name="name" value="{1}" />
+						 <map:parameter name="ext" value="png" />
+						 <map:parameter name="mime-type" value="image/png" />
+       				</map:call>
+					</map:otherwise>
             </map:select>
          </map:match>
          
@@ -353,16 +378,16 @@ $Revision: 1.13 $
                <map:when test="{project:resources.images}/{1}.{2}">
                   <map:read src="{project:resources.images}/{1}.{2}" mime-type="image/{2}" />
                </map:when>
-               <map:otherwise>
-                 <!-- needed for compatibility for the standard resources/images that are now
-                      in the common skin -->
-                 <map:call resource="skin-read">
-                   <map:parameter name="path" value="images" />
-                   <map:parameter name="name" value="{1}" />
-                   <map:parameter name="ext" value="{2}" />
-                   <map:parameter name="mime-type" value="image/{2}" />
-                 </map:call>
-               </map:otherwise>
+					<map:otherwise>
+					  <!-- needed for compatibility for the standard resources/images that are now
+							 in the common skin -->
+					  <map:call resource="skin-read">
+						 <map:parameter name="path" value="images" />
+						 <map:parameter name="name" value="{1}" />
+						 <map:parameter name="ext" value="{2}" />
+						 <map:parameter name="mime-type" value="image/{2}" />
+					  </map:call>								
+              </map:otherwise>
             </map:select>
          </map:match>
 
@@ -374,9 +399,12 @@ $Revision: 1.13 $
                <map:when test="resources/images/{2}.{3}">
                   <map:read src="resources/images/{2}.{3}" mime-type="image/{3}" />
                </map:when>
-               <map:otherwise>
+					<map:when test="{project:resources.images}/{2}.{3}">
                   <map:read src="{project:resources.images}/{2}.{3}" mime-type="image/{3}" />
-               </map:otherwise>
+					</map:when>
+					<map:otherwise>
+						<map:read src="{lm:{1}/images/{2}.{3}}"/>
+					</map:otherwise>
             </map:select>
          </map:match>
 
@@ -392,10 +420,20 @@ $Revision: 1.13 $
                   <map:call resource="transform-project2text"/>
                   <map:serialize type="svg2png" />
                </map:when>
-               <map:otherwise>
-                  <map:read src="{project:content.xdocs}/{1}.png" mime-type="image/png" />
-               </map:otherwise>
-            </map:select>
+               <map:when test="{project:content.xdocs}/{1}.png">
+	                  <map:read src="{project:content.xdocs}/{1}.png" mime-type="image/png" />               
+               </map:when>
+           		<map:when test="{lm:{1}.svg}">
+           		   <map:call resource="pipe-aggregate-svg2png-resource">
+					        <map:parameter name="path" value="{lm:{1}.svg}" />
+                  </map:call>
+           		</map:when>
+           		<map:otherwise>
+           		   <map:call resource="pipe-aggregate-svg2png-resource">
+	                  <map:read src="{lm:{1}.png}" mime-type="image/png" />
+                  </map:call>
+           		</map:otherwise>
+             </map:select>
          </map:match>
 
          <map:match pattern="**.ico">
@@ -404,12 +442,12 @@ $Revision: 1.13 $
                   <map:read src="{project:content.xdocs}/{1}.ico" mime-type="image/x-icon" />
                </map:when>
                <map:otherwise>
-                 <map:call resource="skin-read">
-                   <map:parameter name="path" value="images" />
-                   <map:parameter name="name" value="{1}" />
-                   <map:parameter name="ext" value="ico" />
-                   <map:parameter name="mime-type" value="image/x-icon" />
-                 </map:call>
+               <map:call resource="skin-read">
+						 <map:parameter name="path" value="images" />
+						 <map:parameter name="name" value="{1}" />
+						 <map:parameter name="ext" value="ico" />
+						 <map:parameter name="mime-type" value="image/x-icon" />
+					  </map:call>
                </map:otherwise>
             </map:select>
          </map:match>
