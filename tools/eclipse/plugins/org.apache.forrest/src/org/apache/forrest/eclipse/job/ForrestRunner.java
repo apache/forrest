@@ -18,15 +18,14 @@ package org.apache.forrest.eclipse.job;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
+import org.apache.forrest.eclipse.servletEngine.Jetty;
+import org.apache.forrest.eclipse.servletEngine.Server;
 import org.apache.log4j.Logger;
-import org.burrokeet.servletEngine.Jetty;
-import org.burrokeet.servletEngine.Server;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -94,6 +93,9 @@ public class ForrestRunner extends ForrestJob implements
             sb.append(workingDir);
             sb.append(" -Dbasedir=");
             sb.append(fhome + File.separatorChar + "main");
+            sb.append(" ");
+            sb.append(" -Dforrest.home=");
+            sb.append(fhome);
             sb.append(" ");
             sb.append("init");
             status = runAnt(monitor, sb.toString());
