@@ -31,7 +31,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * The main plugin class to be used in the desktop.
  */
 public class ForrestPlugin extends AbstractUIPlugin {
-	public final static String ID = "org.apache.forrest.eclipse";
+	public final static String ID = "org.apache.forrest";
 	//The shared instance.
 	private static ForrestPlugin plugin;
 

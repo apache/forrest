@@ -71,6 +71,9 @@ public class ForrestBuilder extends ForrestJob  {
 		sb.append(workingDir);
 		sb.append(" -Dbasedir=");
 		sb.append(fhome + File.separatorChar + "main");
+        sb.append(" ");
+        sb.append(" -Dforrest.home=");
+        sb.append(fhome);
 		if (this.skinName != null) {
 			sb.append(" -Dproject.skin=");
 			sb.append("plain-dev");
