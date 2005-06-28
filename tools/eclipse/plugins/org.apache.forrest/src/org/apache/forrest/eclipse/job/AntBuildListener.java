@@ -16,16 +16,9 @@
 */
 package org.apache.forrest.eclipse.job;
 
-import java.net.URL;
-
-import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
 
 /**
  * A listener for Ant Builds, all events are logged to the standard logger.
@@ -42,9 +35,6 @@ public class AntBuildListener implements BuildListener{
 	 */
 	public AntBuildListener() {
 		super();
-		Bundle bundle = Platform.getBundle(ForrestPlugin.ID);
-		URL log4jConf = Platform.find(bundle, new Path("conf/log4j.xml"));
-		DOMConfigurator.configure(log4jConf);
 	}
 
 	/* (non-Javadoc)
