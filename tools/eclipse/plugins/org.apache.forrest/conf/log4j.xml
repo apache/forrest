@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+<!--        
+  <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.SimpleLayout"/>
+  </appender>
+-->     
+
+  <appender name="FileAppender" class="org.apache.log4j.FileAppender">
+    <param name="File" value="forrestEclipse.log"/>
+    <param name="Append" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %p - %m%n"/>
+    </layout>
+  </appender>
+
+<!-- 
+	<appender name="XMLOutFormat" class="org.apache.log4j.FileAppender">
+	    <param name="File" value="forrestEclipse.log.xml"/>
+	    <param name="append" value="false"/>
+	    <layout class="org.apache.log4j.xml.XMLLayout"/>
+	</appender>
+-->
+
+	<appender name="SocketAppender" class="org.apache.log4j.net.SocketAppender">
+	    <param name="RemoteHost" value="localhost"/>
+	    <param name="Port" value="4445"/>
+	    <param name="LocationInfo" value="true"/>
+	</appender>
+
+  <root>
+    <priority value ="debug" />
+    <appender-ref ref="FileAppender"/>
+    <appender-ref ref="SocketAppender"/>
+  </root>
+
+</log4j:configuration> 
+    

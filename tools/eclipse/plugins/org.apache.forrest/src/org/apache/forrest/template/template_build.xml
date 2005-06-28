@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 1999-2004 The Apache Software Foundation or its licensors,
+ as applicable.
+  
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project default="newXDoc" basedir="." 
+  name="Forrest Eclipse Plugin Resource Management">
+
+  <description>
+    Targets for the creation and management of Forrest site resources.
+  </description>
+  	
+  <property name="resource.dir" value=""/>
+  <property name="resource.name" value=""/>
+
+  <property name="title" value="New XDoc"/>
+  
+  <target name="_initFilterTokens_newXDoc"
+  	description="Initialise the filter tokens for creating a new XDoc file">
+  	<filter token="title" value="${title}"/>
+  </target>
+	
+  <!-- ============================================ -->
+  <!-- Create a new XDoc                            -->
+  <!-- ============================================ -->
+  <target name="newXDoc"
+  	description="Create a new XDoc in the resource directory"
+  	depends="_initFilterTokens_newXDoc">
+  	<mkdir dir="${resource.dir}"/>
+  	<copy file="new_xdoc.xml" 
+  		  tofile="${resource.dir}/${resource.name}" 
+  		  filtering="yes"/>
+  </target>
+</project>
