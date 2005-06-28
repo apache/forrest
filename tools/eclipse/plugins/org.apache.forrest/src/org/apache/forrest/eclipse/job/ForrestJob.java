@@ -50,6 +50,8 @@ public abstract class ForrestJob extends Job {
 	private static final String VALIDATION_ERROR_MESSAGE = "Could not validate document";
 	
 	private static final String PLUGIN_INSTALL_FAILURE = "Unable to install required plugins";
+    
+    private static final String BUILD_FORREST_ERROR_MESSAGE = "You must build forrest before you can run it.";
 
 	/**
 	 * Logger for this class
@@ -61,6 +63,8 @@ public abstract class ForrestJob extends Job {
 	public static final int EXCEPTION_VALIDATION = 1010;
 
 	public static final int EXCEPTION_ANT_RUNNING = 1020;
+    
+    public static final int EXCEPTION_FORREST = 1030;
 	
 	protected String workingDir;
 
@@ -72,10 +76,13 @@ public abstract class ForrestJob extends Job {
 		super(name);
 
 		ForrestPlugin plugin = ForrestPlugin.getDefault();
-		URL urlPluginDir = plugin.getBundle().getEntry("/");
-		Bundle bundle = Platform.getBundle(ForrestPlugin.ID);
-		URL log4jConf = Platform.find(bundle, new Path("conf/log4j.xml"));
-		DOMConfigurator.configure(log4jConf);
+		URL urlPluginDir = plugin.getBundle().getEntry("/conf/log4j.xml");		
+        try {
+            URL log4jConf = Platform.resolve(urlPluginDir);
+            DOMConfigurator.configure(log4jConf);
+        } catch (IOException e) {
+            // Unable to get log4j config continue anyway
+        }
 	}
 
 	/**
@@ -126,8 +133,12 @@ public abstract class ForrestJob extends Job {
 					userMsg = "Unable to install required server plugins";
 					status = new Status(Status.ERROR, ForrestPlugin.ID,
 							EXCEPTION_ANT_RUNNING, userMsg, e);
-				} else {
-					userMsg = "Forrest Server Exception";
+				} else if (errMsg.contains(BUILD_FORREST_ERROR_MESSAGE)) {
+                    userMsg = "Your installation of Forrest, at " + fhome + ", has not been correctly built.";
+                    status = new Status(Status.ERROR, ForrestPlugin.ID,
+                            ForrestRunner.EXCEPTION_FORREST, userMsg, e);
+                } else {
+        			userMsg = "Forrest Server Exception";
 					status = new Status(Status.ERROR, ForrestPlugin.ID,
 							ForrestRunner.EXCEPTION_UNIDENTIFIED, userMsg, e);
 				}
@@ -166,7 +177,7 @@ public abstract class ForrestJob extends Job {
 			vctURLs.add(classURL);
 			
 			// Add Plugin jars
-			URL installURL = Platform.getBundle(ForrestPlugin.ID).getEntry("/");
+			URL installURL = ForrestPlugin.getDefault().getBundle().getEntry("/");
 			String location = Platform.resolve(installURL).getFile();
 			fileList = ForrestManager.getLibFiles(location);
 			itr = fileList.listIterator();
