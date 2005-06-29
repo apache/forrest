@@ -37,6 +37,7 @@ export CLASSPATH
 
 echo "Using classpath: $CLASSPATH"
 "$PWD/../tools/ant/bin/ant" -logger org.apache.tools.ant.NoBannerLogger -emacs  $@
+status=$?
 
 unset CLASSPATH
 
@@ -49,3 +50,4 @@ export ANT_HOME
 unset OLD_ANT_HOME
 unset CP
 
+exit $status
