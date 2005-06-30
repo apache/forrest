@@ -81,7 +81,7 @@ public class Jetty implements IJavaLaunchConfigurationConstants, Server {
 	}
 
 	/**
-	 * Statr an instance of Jetty using the config file at the indicated path
+	 * Start an instance of Jetty using the config file at the indicated path
 	 * 
 	 * @param jettyConfPath
 	 * @param monitor
