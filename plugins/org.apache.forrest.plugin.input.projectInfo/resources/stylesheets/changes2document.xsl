@@ -59,7 +59,14 @@
     <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
     <xsl:choose>
       <xsl:when test="$versionNumber">
-        <xsl:apply-templates select="release[@version=$versionNumber]"/>
+        <xsl:choose>
+          <xsl:when test="$versionNumber='current'">
+            <xsl:apply-templates select="//release[1]"/>
+          </xsl:when>
+          <xsl:otherwise>            
+            <xsl:apply-templates select="//release[@version=$versionNumber]"/>
+          </xsl:otherwise>    
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>

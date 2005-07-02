@@ -30,6 +30,18 @@
     </xsl:call-template>
   </xsl:variable>
 
+  <!-- versionNumber: detect the value "current" or use the number that was supplied -->
+  <xsl:variable name="realVersionNumber">
+    <xsl:choose>
+      <xsl:when test="$versionNumber='current'">
+        <xsl:value-of select="//release[1]/@version"/>
+      </xsl:when>
+      <xsl:otherwise>            
+        <xsl:value-of select="$versionNumber"/>
+      </xsl:otherwise>    
+    </xsl:choose>
+  </xsl:variable>
+
  <!-- FIXME (JJP):  bugzilla is hardwired -->
  <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
 
@@ -54,17 +66,17 @@
    </title>
    </header>
    <body>    
-     <xsl:if test="contains($versionNumber, 'dev')">
-       <warning>Version <xsl:value-of select="$versionNumber"/> is a development release, 
+     <xsl:if test="contains($realVersionNumber, 'dev')">
+       <warning>Version <xsl:value-of select="$realVersionNumber"/> is a development release, 
        these notes are therefore not complete, they are intended to be an indicator
        of the major features that are so far included in this version.</warning>
      </xsl:if>
      
-     <xsl:if test="release[@version=$versionNumber]/notes">
-         <xsl:apply-templates select="release[@version=$versionNumber]/notes"/>
+     <xsl:if test="release[@version=$realVersionNumber]/notes">
+         <xsl:apply-templates select="release[@version=$realVersionNumber]/notes"/>
      </xsl:if>
      
-     <xsl:apply-templates select="release[@version=$versionNumber]"/>
+     <xsl:apply-templates select="release[@version=$realVersionNumber]"/>
    </body>
   </document>
  </xsl:template>
