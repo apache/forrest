@@ -18,7 +18,7 @@
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0"> 
+    version="1.0">
 
   <xsl:param name="path"/>
   <xsl:param name="versionNumber"/>
@@ -39,7 +39,7 @@
  <xsl:template match="/">
   <xsl:apply-templates select="//changes"/>
  </xsl:template>
- 
+
  <xsl:template match="changes">
   <document>
    <header>
@@ -55,7 +55,7 @@
    </title>
    </header>
    <body>
-    
+
     <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
     <xsl:choose>
       <xsl:when test="$versionNumber">
@@ -63,9 +63,9 @@
           <xsl:when test="$versionNumber='current'">
             <xsl:apply-templates select="//release[1]"/>
           </xsl:when>
-          <xsl:otherwise>            
+          <xsl:otherwise>
             <xsl:apply-templates select="//release[@version=$versionNumber]"/>
-          </xsl:otherwise>    
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
@@ -80,7 +80,7 @@
 
  <xsl:template match="release">
   <section id="version_{@version}">
-   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title> 
+   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
    <xsl:for-each select="action[generate-id()=generate-id(key('contextes',concat(../@version, '_', @context)))]">
     <xsl:sort select="@context"/>
     <section>

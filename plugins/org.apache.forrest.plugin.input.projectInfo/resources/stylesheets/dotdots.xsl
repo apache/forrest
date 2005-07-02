@@ -22,7 +22,7 @@ directory traversals to get back to the source directory. Handles both '/' and
 '\' directory separators.
 
 Examples:
-  Input                           Output 
+  Input                           Output
     index.html                    ""
     dir/index.html                "../"
     dir/subdir/index.html         "../../"
@@ -49,15 +49,15 @@ work.
        o Adds a trailing character to the path. This prevents us having to deal
          with the special case of ending with '/'
        o Translates all directory separators to ' ', and normalize spaces,
-		 cunningly eliminating duplicate '//'s. We also translate any real
-		 spaces into _ to preserve them.
+         cunningly eliminating duplicate '//'s. We also translate any real
+         spaces into _ to preserve them.
     -->
     <xsl:variable name="remainder" select="substring-after($dirs, ' ')"/>
     <xsl:if test="$remainder">
       <xsl:text>../</xsl:text>
       <xsl:call-template name="dotdots">
         <xsl:with-param name="path" select="translate($remainder, ' ', '/')"/>
-		<!-- Translate back to /'s because that's what the template expects. -->
+        <!-- Translate back to /'s because that's what the template expects. -->
       </xsl:call-template>
     </xsl:if>
   </xsl:template>

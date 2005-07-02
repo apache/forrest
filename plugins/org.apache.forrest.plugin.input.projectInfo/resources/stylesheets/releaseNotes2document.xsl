@@ -18,7 +18,7 @@
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0"> 
+    version="1.0">
 
   <xsl:param name="versionNumber"/>
   <xsl:include href="changes2document.xsl"/>
@@ -36,9 +36,9 @@
       <xsl:when test="$versionNumber='current'">
         <xsl:value-of select="//release[1]/@version"/>
       </xsl:when>
-      <xsl:otherwise>            
+      <xsl:otherwise>
         <xsl:value-of select="$versionNumber"/>
-      </xsl:otherwise>    
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -50,7 +50,7 @@
  <xsl:template match="/">
   <xsl:apply-templates select="//changes"/>
  </xsl:template>
- 
+
  <xsl:template match="changes">
   <document>
    <header>
@@ -65,17 +65,17 @@
     </xsl:choose>
    </title>
    </header>
-   <body>    
+   <body>
      <xsl:if test="contains($realVersionNumber, 'dev')">
-       <warning>Version <xsl:value-of select="$realVersionNumber"/> is a development release, 
+       <warning>Version <xsl:value-of select="$realVersionNumber"/> is a development release,
        these notes are therefore not complete, they are intended to be an indicator
        of the major features that are so far included in this version.</warning>
      </xsl:if>
-     
+
      <xsl:if test="release[@version=$realVersionNumber]/notes">
          <xsl:apply-templates select="release[@version=$realVersionNumber]/notes"/>
      </xsl:if>
-     
+
      <xsl:apply-templates select="release[@version=$realVersionNumber]"/>
    </body>
   </document>
@@ -84,7 +84,7 @@
  <xsl:template match="release">
   <section id="version_{@version}">
    <title>Major Changes in Version <xsl:value-of select="@version"/></title>
-   <note>This is not a complete list of changes, a 
+   <note>This is not a complete list of changes, a
    full list of changes in this release
    <a href="changes_{$versionNumber}.html">is available</a>.</note>
      <xsl:if test="action[@context='code' and @importance='high']">

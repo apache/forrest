@@ -51,14 +51,14 @@
               <xsl:value-of select="@context" />
               <xsl:text> </xsl:text>
               <xsl:value-of select="@type" />
-              by 
+              by
               <xsl:value-of select="@dev" />
               <xsl:if test="@fixes-bug">
                 (fixes bug <xsl:value-of select="@fixes-bug" />)
               </xsl:if>
               :
               <xsl:value-of select="." />
-              <xsl:if test="@due-to"> Thanks to <xsl:value-of select="@due-to" />.</xsl:if> 
+              <xsl:if test="@due-to"> Thanks to <xsl:value-of select="@due-to" />.</xsl:if>
             </description>
           </item>
         </xsl:for-each>
