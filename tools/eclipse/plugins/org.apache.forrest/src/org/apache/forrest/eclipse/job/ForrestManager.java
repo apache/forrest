@@ -49,7 +49,10 @@ public class ForrestManager {
 
     /** The command for building the static site */
     public static final String COMMAND_BUILD = "site";
-
+    
+    /** The command for building the static site */
+    public static final String COMMAND_BUILD_WAR = "war";
+   
     /** The command for running the site server */
     public static final String COMMAND_START = "run";
 
@@ -187,6 +190,8 @@ public class ForrestManager {
             theJob = new ForrestRunner(workingDir);
         } else if (cmd.equals(COMMAND_BUILD)) {
             theJob = new ForrestBuilder(workingDir);
+        } else if (cmd.equals(COMMAND_BUILD_WAR)) {
+            theJob = new ForrestWARBuilder(workingDir);
         } else if (cmd.equals(COMMAND_BUILD_PLAIN)) {
             theJob = new ForrestBuilder(workingDir, SKIN_PLAIN);
         } else {
