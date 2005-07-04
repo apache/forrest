@@ -306,7 +306,7 @@ $Revision: 1.13 $
 						</map:when>
 						<map:otherwise>         
 							<map:read src="{lm:{1}my-images/{2}.{3}}"/>
-            		</map:otherwise>
+            </map:otherwise>
             </map:select>
          </map:match>
 
@@ -316,8 +316,12 @@ $Revision: 1.13 $
 			          <map:generate src="{project:content.xdocs}/{1}{2}.svg"/>
 			          <map:serialize type="xml"/> 
         			</map:when>
+              <map:when test="{lm:/{1}{2}.svg}">
+                <map:generate src="{lm:/{1}{2}.svg}"/>
+                <map:serialize type="xml"/> 
+              </map:when>
         			<map:otherwise>
-			          <map:generate src="{lm:/{1}{2}.svg}"/>
+                <map:generate src="{project:content.xdocs}/{1}{2}.svg"/>
 			          <map:serialize type="xml"/> 
         			</map:otherwise>
         		</map:select>

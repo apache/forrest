@@ -56,11 +56,9 @@
     </xsl:template>
         
     <xsl:template match="meta">
-      <xsl:text disable-output-escaping = "yes"><![CDATA[ <!-- ]]></xsl:text>
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
-      <xsl:text disable-output-escaping = "yes"><![CDATA[ --> ]]></xsl:text> 
     </xsl:template>  
     
     <!--infer structure from sibling headings-->

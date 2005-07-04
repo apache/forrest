@@ -65,8 +65,11 @@ $Revision: 1.2 $
 				  <map:when test="{project:content.xdocs}site.xml">
 				    <map:generate src="{project:content.xdocs}site.xml"/>
 			    </map:when>
+          <map:when test="{lm:site.xml}">
+            <map:generate src="{lm:site.xml}"/>
+          </map:when>
 				  <map:otherwise>
-					  <map:generate src="{lm:site.xml}"/>
+            <map:generate src="{project:content.xdocs}site.xml"/>
 				  </map:otherwise>
         </map:select>
         <map:transform type="xinclude"/>
@@ -78,12 +81,15 @@ $Revision: 1.2 $
 
       <map:match pattern="**menulinks-*">
         <map:select type="exists">
-				  <map:when test="{project:content.xdocs}site.xml">
-				    <map:generate src="{project:content.xdocs}site.xml"/>
-			  	</map:when>
-					<map:otherwise>
-						<map:generate src="{lm:site.xml}"/>
-					</map:otherwise>
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml"/>
+          </map:when>
+          <map:when test="{lm:site.xml}">
+            <map:generate src="{lm:site.xml}"/>
+          </map:when>
+          <map:otherwise>
+            <map:generate src="{project:content.xdocs}site.xml"/>
+          </map:otherwise>
         </map:select>
         <map:transform type="xinclude"/>
         <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
