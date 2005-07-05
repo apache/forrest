@@ -63,9 +63,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 <xsl:if test="$config/motd">
                   <xsl:for-each select="$config/motd/motd-option">
                     <xsl:if test="contains($path, @pattern)">
-                      <xsl:text> (</xsl:text>
-                      <xsl:value-of select="motd-title"/>
-                      <xsl:text>)</xsl:text>
+                      <xsl:if test="motd-tile != ''">
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="motd-title"/>
+                        <xsl:text>)</xsl:text>
+                      </xsl:if>
                     </xsl:if>
                   </xsl:for-each>
                 </xsl:if>
