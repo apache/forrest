@@ -29,12 +29,39 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+
+
 /**
  * 
  * Some handy utilities for working with plugins.
  */
 public class Utilities {
+	   
+	private static final Logger logger = Logger
+       .getLogger(Utilities.class);
+	
+    /**
+     * Retrieve the relative path to the XDocs directory.
+     * @retuen platform specific path to XDocs directory
+     */
+	public static String getPathToXDocs() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPathToXDocs() - start");
+        }
 
+        // FIXME: get this value from the package config file (forrest.properties)
+        String path = "src" + java.io.File.separator + "documentation"
+                + java.io.File.separator + "content" + java.io.File.separator
+                + "xdocs";
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPathToXDocs() - end");
+        }
+        return path;
+    }
+     
 	/**
 	 * @param directory
 	 * @return @throws
