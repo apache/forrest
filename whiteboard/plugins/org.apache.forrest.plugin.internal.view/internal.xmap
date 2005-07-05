@@ -22,6 +22,13 @@
       <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
     </map:selectors>
     <map:generators default="file">
+      <map:generator 
+        name="traverse" 
+        src="org.apache.cocoon.generation.TraversableGenerator" 
+        logger="sitemap.generator.traverse" 
+        label="content" 
+        pool-max="16"
+      />
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
       <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.generation.JXTemplateGenerator"/>
     </map:generators>
@@ -76,35 +83,33 @@
   prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
   -->
   <map:pipeline>
+    <!--Refactor for dir-->
+    <map:match pattern="viewLocationmap.xml">
+      <map:generate type="traverse" src="{project:content.xdocs}">
+        <map:parameter name="depth" value="100"/>
+        <map:parameter name="exclude" value="[\w]*.svn"/>
+        <!--<map:parameter name="include" value="[\w]*.fv"/>-->
+      </map:generate>
+      <map:transform src="resources/stylesheets/viewLocationmap.xsl"/>
+    	<map:serialize type="xml"/>
+    </map:match>
+    
+
   <!--
     View config resolver
     File specific views have priority before default ones.
     If no views can be found in the project we use the default one of the view plugin.
     -->
     <map:match pattern="prepare.view.**">
-      <map:select type="exists">
-        <!--
-          Here we will have to test, whether the requested page needs a specific view.
-          This will be assumed as soon there is a .fv
-          e.g. index.xml + index.fv
-          -->
-        <map:when test="{project:content.xdocs}{1}.fv">
-          <map:generate src="{project:content.xdocs}{1}.fv"/>
-        </map:when>
-				<!--
-          If there is no file specific view then use the default.fv of the project stored in "project.conf-dir".
-          -->
-        <map:when test="{project:conf}/default.fv">
-          <map:generate src="{project:conf}/default.fv"/>
-        </map:when>
-        <!--
-          If the above not matches then get the default view of this plugin.
-          -->
-        <map:otherwise>
-          <map:generate src="resources/views/default.fv"/>
-        </map:otherwise>
-      </map:select>
-     	<map:serialize type="xml"/>
+      <map:generate src="cocoon:/viewLocationmap.xml"/>
+      <map:transform src="resources/stylesheets/viewLocationmap2path.xsl"/>
+      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
+        <map:parameter value="{1}" name="path"/>
+        <map:parameter value="{project:content.xdocs}" name="root"/>
+        <map:parameter value="resources/views/default.fv" name="viewFallback"/>
+      </map:transform>
+      <map:transform type="xinclude"/>
+    	<map:serialize type="xml"/>
     </map:match>
     
     <!--Add businessHelper to the presentation model that the content can be used later on.-->
