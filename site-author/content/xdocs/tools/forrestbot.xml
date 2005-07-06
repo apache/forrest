@@ -26,17 +26,14 @@
     <section>
       <title>Overview</title>
 
-      <p>Forrestbot lets you automate building &amp; deploying websites. There
-      are implementations to get source from various locations, build it, then
-      deploy it somewhere. It can notify you afterwards, and it keeps a log of
-      the build process. Each workstage has multiple implementations; you can
-      use one or more of each.</p>
+      <p>Forrestbot lets you automate building and deploying websites. The whole process gets the source docs, builds it, then deploys the site where you want it to go.  It can also notify you afterwards, and it keeps a log of the build process.  To accomplish these tasks Forrestbot uses four "workstages" (getsrc, build, deploy, notify) that are comprised of "implementations" and have various properties that may be set, depending upon the implementations chosen.</p>
+	  <fixme author="AB">Need a better term than comprised of?  Trying give a sense of the building blocks used and how they relate to each other.</fixme>
     </section>
 
     <section>
       <title>Using Forrestbot</title>
 
-      <p>Simply execute:</p>
+      <p>You need to create a customized buildfile directing Forrestbot's work and then simply execute:</p>
 
       <source>forrest -f mybuildfile.xml</source>
 
@@ -46,7 +43,13 @@
     <section>
       <title>Creating a buildfile</title>
 
-      <p>A sample buildfile:</p>
+			  
+	  
+      <p>Within the new buildfile you need to first set properties needed by the workstages you are going to use and then specify what implementations will be used by each workstage.</p>
+	  <fixme author="AB">This seems backwards since the properties are dependent on the implementations - no?</fixme>
+
+      <p>This sample buildfile can be used as a base from which to customize your own buildfile.  The file starts with the project name and default workstage target, then sets the specific properties we will need to get the source, set up notification and indicate the deploy location.  It then specifies which implementations we will use and finishes up with importing the forrestbot.xml file.</p>
+	  <fixme author="AB">Is "default workstage target" the correct term for default="main"?</fixme>
 
       <source>&lt;project name="mysampleproject" default="main"&gt;
 	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
@@ -74,10 +77,9 @@
 
 </source>
 
-      <p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and getsrc.cvs.
-      Next, specify what implementations will be used by each workstage.</p>
-
+	<section>
+		<title>Workstages</title>
+	<p>It is only necessary to include the specific target implementations in the buildfile if we want to override the default implementations.  The following tables show the various workstages and which implementations may be used for each and which is the default.</p>
       <table>
         <tr>
           <th>Workstage</th>
@@ -135,22 +137,22 @@
       name="main" depends="getsrc, build, deploy, notify"/&gt;</code>, create
       your own implementation of a workstage, or use any other ant tasks to do
       additional work.</p>
-
+	  <fixme author="AB">How do you create your own implementation?  Can you create a different default target than main - how do you override the default?</fixme> 
       <p></p>
-
-      <p>Many workstages use usernames and passwords. You may want to keep them
-      out of your project's xml file (especially if you store that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
-      my-settings.xml) that just sets those properties (don't include it in
-      CVS/SVN!). Then in your project buildfile, have <code>&lt;import
-      file="my-settings.xml"/&gt;</code>.</p>
-
+	  </section>
       <section>
         <title>Workstage Properties</title>
 
         <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
+		
+	  <p>Many workstage properties use usernames and passwords. You may want to keep them
+      out of your project's xml buildfile (especially if you store that file in CVS
+      or SVN). A nice way to do this is make a simple buildfile (e.g.
+      my-settings.xml) that just sets those properties (don't include it in
+      CVS/SVN!). Then in your project buildfile, have <code>&lt;import
+      file="my-settings.xml"/&gt;</code>.</p>
 
         <section>
           <title>Misc Properties</title>
@@ -364,7 +366,7 @@
           </table>
         </section>
 
-        <section id="deploy.scp">
+        <section id="deploy.local">
           <title>deploy.local</title>
 
           <table>
@@ -381,7 +383,7 @@
             <tr>
               <td>deploy.local.dir</td>
 
-              <td>Path to deploy site to. Relative paths will be relative to
+              <td>Path to deploy site to - the dir that would be the equivalant of build/site dir.  Relative paths will be relative to
               ${bot.home}</td>
 
               <td>sites/${ant.project.name}</td>
@@ -391,7 +393,7 @@
           </table>
         </section>
 
-        <section id="deploy.local">
+        <section id="deploy.scp">
           <title>deploy.scp</title>
 
           <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
@@ -718,14 +720,15 @@
               </ul></li>
           </ul></li>
       </ul>
-
+	  
       <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or other
+      other workstage buildfiles can implement reporting, deployment, or other
       post-build activities.</p>
 
       <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
+	  <fixme author="AB">Which of these (Your buildfile/workstage buildfile) is the "project buildfile" referred to elsewhere on this page, if any?  If it is "Your buildfile" can I also create workstage buildfiles?  If so, how?</fixme>
     </section>
   </body>
 </document>
