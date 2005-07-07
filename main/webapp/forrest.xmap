@@ -305,6 +305,18 @@ $Revision: 1.8 $
           </map:call>
           <map:serialize type="xml-document"/>
        </map:match>
+       
+       <map:match pattern="**.xml">
+         <map:select type="exists">
+           <map:when test="{lm:{0}}">
+             <map:generate src="{lm:{0}}"/>
+           </map:when>
+           <map:otherwise>
+             <map:generate src="{project:content.xdocs}{0}"/>
+           </map:otherwise>
+         </map:select>
+         <map:serialize type="xml"/>
+       </map:match>
      </map:match>
       
   </map:pipeline>
