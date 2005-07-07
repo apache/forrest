@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2004 The Apache Software Foundation or its licensors,
+ * Copyright 1999-2005 The Apache Software Foundation or its licensors,
  * as applicable.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,54 +27,72 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.forrest.eclipse.actions.Utilities;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Menu;
+
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+
 import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- * This sample class demonstrates how to plug-in a new workbench view. The view
- * shows data obtained from the model. The sample creates a dummy model on the
- * fly, but a real implementation would connect to the model available either in
- * this or another plug-in (e.g. the workspace). The view is connected to the
- * model using a content provider.
- * <p>
- * The view uses a label provider to define how model objects should be
- * presented in the view. Each view can present the same model objects using
- * different labels and icons, if needed. Alternatively, a single label provider
- * can be shared between views in order to ensure that objects of the same type
- * are presented in the same way everywhere.
- * <p>
- */
 
+
+/**
+ * A tree view for site.xml files. The view handles drag and
+ * drop from the navigator and supports a number of context 
+ * menus for editing. 
+ */
 public class SiteXMLView extends ViewPart implements IMenuListener,
 		ISelectionListener {
-	private TreeViewer viewer;
-
-	private IProject activeProject;
+	private TreeViewer treeViewer;
 
 	private DocumentBuilder parser;
 
 	private Document document;
+	
+	private String projectName;
+		
+	private IStructuredSelection treeSelection;
+	
+	private Action AddElement;
+	
+	private Action RemoveElement;
+	
+	protected IProject activeProject;
+	
+	protected Composite parent;
+	
+	
 
 	/*
 	 * The content provider class is responsible for providing objects to the
@@ -84,9 +102,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 	 * example).
 	 */
 
-	class NameSorter extends ViewerSorter {
-	}
-
+	
 	/**
 	 * The constructor.
 	 */
@@ -98,15 +114,14 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		getSite().setSelectionProvider(viewer);
-		viewer.setContentProvider(new ITreeContentProvider() {
+		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		getSite().setSelectionProvider(treeViewer);
+		int operations = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] types = new Transfer[] { FileTransfer.getInstance()};
+		treeViewer.addDropSupport(operations, types, new SiteDropListener(projectName ,document, treeViewer));
+		treeViewer.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
 				ArrayList ch = new ArrayList();
-				NamedNodeMap atrs = ((Node) element).getAttributes();
-				if (atrs != null)
-					for (int i = 0; i < atrs.getLength(); i++)
-						ch.add(atrs.item(i));
 				NodeList nl = ((Node) element).getChildNodes();
 				for (int i = 0; i < nl.getLength(); i++)
 					if (nl.item(i).getNodeType() == Node.ELEMENT_NODE)
@@ -134,10 +149,10 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			}
 		});
 
-		viewer.setLabelProvider(new LabelProvider() {
+		treeViewer.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof Attr)
-					return "@" + ((Attr) element).getNodeName();
+					return "@" + ((Attr) element).getNodeName() + " " +((Attr) element).getNodeValue();
 				else
 					return ((Node) element).getNodeName();
 			}
@@ -160,22 +175,25 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			e.printStackTrace();
 		}
 		getViewSite().getPage().addSelectionListener(this);
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				Text text = null;
-				// if the selection is empty clear the label
-				if (event.getSelection().isEmpty()) {
-					text.setText("");
-					return;
-				}
-				if (event.getSelection() instanceof IStructuredSelection) {
+		
+		
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		
+		public void selectionChanged(SelectionChangedEvent event) {
+					if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection selection = (IStructuredSelection) event
 							.getSelection();
-
+					treeSelection = selection;
+					
+					
 				}
 			}
 		});
-		// viewer.setInput(document);
+	
+		//System.out.println(document.toString());
+		treeViewer.setInput(document);
+		makeActions();
+		hookContextMenu();
 	}
 
 	public void setFocus() {
@@ -188,12 +206,14 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 
 	}
 
+	
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
 			IResource resource = (IResource) first;
 			if (resource instanceof IProject) {
 				activeProject = (IProject) resource;
+				String projectName = activeProject.getProject().getName();
 				String path = (activeProject.getProject().getLocation()
 						.toString()
 						+ java.io.File.separator
@@ -208,12 +228,67 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				viewer.setInput(document);
-
+				treeViewer.setInput(document);
+	
 			}
 		}
 
 	}
 
+		private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+            SiteXMLView.this.fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+		treeViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, treeViewer);
+	}
+
+
+
+	private void fillContextMenu(IMenuManager manager) {
+		manager.add(AddElement);
+		manager.add(RemoveElement);
+		// Other plug-ins can contribute there actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
 	
+
+	private void makeActions() {
+		AddElement = new Action() {
+			public void run() {
+				if (treeSelection != null) {
+				//TODO: Code to add Element goes here
+				}
+			}
+		};
+		AddElement.setText("Add Element");
+		AddElement.setToolTipText("Add Element tooltip");
+		AddElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+		RemoveElement = new Action() {
+			public void run() {
+				if (treeSelection != null) {
+					//TODO: Code to remove Element does here.
+					}
+			}
+		};
+		RemoveElement.setText("DeleteElement");
+		RemoveElement.setToolTipText("Delete Element");
+		RemoveElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+	}
+
+	private void showMessage(String message) {
+		MessageDialog.openInformation(
+			treeViewer.getControl().getShell(),
+			"Sample View",
+			message);
+	}
+
 }
