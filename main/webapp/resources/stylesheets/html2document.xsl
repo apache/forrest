@@ -56,31 +56,16 @@
     </xsl:template>
         
     <xsl:template match="meta">
-      <xsl:text disable-output-escaping = "yes"><![CDATA[ <!-- ]]></xsl:text>
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
-      <xsl:text disable-output-escaping = "yes"><![CDATA[ --> ]]></xsl:text> 
     </xsl:template>  
     
     <!--infer structure from sibling headings-->
     <xsl:template match="body">
        <body>
-         <xsl:choose>
-           <xsl:when test="h1">
-             <xsl:call-template name="process_h1"/>
-           </xsl:when>
-           <xsl:otherwise>
-             <section>
-               <xsl:if test="a/@name">
-                 <xsl:attribute name="id"><xsl:value-of select="a/@name"/></xsl:attribute>
-               </xsl:if>
-               <title/>
-               <xsl:apply-templates/>
-               <xsl:call-template name="process_h1"/>
-             </section>
-           </xsl:otherwise>
-         </xsl:choose>
+          <xsl:apply-templates select="*[1]" mode="next"/>
+          <xsl:call-template name="process_h1"/>
        </body>
     </xsl:template>
     
@@ -128,7 +113,7 @@
          </section>
        </xsl:for-each>
     </xsl:template>
-
+    
     <!--process each sibling in order until the next heading level-->
 
     <xsl:template match="*" mode="next">
