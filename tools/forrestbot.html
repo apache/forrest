@@ -78,6 +78,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="../tools/forrestbot-web-interface.html">Forrestbot Webapp</a>
 </div>
 <div class="menuitem">
+<a href="../tools/eclipse.html">Eclipse Plugin</a>
+</div>
+<div class="menuitem">
 <a href="../tools/xxe.html">XXE-Editor</a>
 </div>
 </div>
@@ -112,6 +115,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#Creating+a+buildfile">Creating a buildfile</a>
 <ul class="minitoc">
 <li>
+<a href="#Workstages">Workstages</a>
+</li>
+<li>
 <a href="#Workstage+Properties">Workstage Properties</a>
 <ul class="minitoc">
 <li>
@@ -133,10 +139,10 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#build.forrest">build.forrest</a>
 </li>
 <li>
-<a href="#deploy.scp">deploy.local</a>
+<a href="#deploy.local">deploy.local</a>
 </li>
 <li>
-<a href="#deploy.local">deploy.scp</a>
+<a href="#deploy.scp">deploy.scp</a>
 </li>
 <li>
 <a href="#deploy.cvs">deploy.cvs</a>
@@ -166,37 +172,66 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a name="N1000D"></a><a name="Overview"></a>
 <h2 class="underlined_10">Overview</h2>
 <div class="section">
-<p>Forrestbot lets you automate building &amp; deploying websites. There
-      are implementations to get source from various locations, build it, then
-      deploy it somewhere. It can notify you afterwards, and it keeps a log of
-      the build process. Each workstage has multiple implementations; you can
-      use one or more of each.</p>
+<p>Forrestbot lets you automate building and deploying websites. The 
+        whole process gets the source docs, builds it, then deploys the site
+        where you want it to go. It can also notify you afterwards, and it
+        keeps a log of the build process. To accomplish these tasks Forrestbot 
+        uses four "workstages" (getsrc, build, deploy, notify) that are
+        comprised of "implementations" and 
+        have various properties that may be set, depending upon the 
+        implementations chosen.</p>
+<div class="frame fixme">
+<div class="label">Fixme (AB)</div>
+<div class="content">Need a better term than comprised of?  Trying give a 
+sense of the building blocks used and how they relate to each other.</div>
+</div>
 </div>
 
     
-<a name="N10017"></a><a name="Using+Forrestbot"></a>
+<a name="N1001B"></a><a name="Using+Forrestbot"></a>
 <h2 class="underlined_10">Using Forrestbot</h2>
 <div class="section">
-<p>Simply execute:</p>
+<p>You need to create a customized buildfile directing Forrestbot's work 
+        and then simply execute:</p>
 <pre class="code">forrest -f mybuildfile.xml</pre>
 <p>The next section explains how to create your buildfile.</p>
 </div>
 
     
-<a name="N10028"></a><a name="Creating+a+buildfile"></a>
+<a name="N1002C"></a><a name="Creating+a+buildfile"></a>
 <h2 class="underlined_10">Creating a buildfile</h2>
 <div class="section">
-<p>A sample buildfile:</p>
+<p>Within the new buildfile you need to first set properties needed by 
+        the workstages you are going to use and then specify what 
+        implementations will be used by each workstage.</p>
+<div class="frame fixme">
+<div class="label">Fixme (AB)</div>
+<div class="content">This seems backwards since the properties are dependent 
+on the implementations - no?</div>
+</div>
+<p>This sample buildfile can be used as a base from which to customize 
+        your own buildfile.  The file starts with the project name and default 
+        workstage target, then sets the specific properties we will need to get 
+        the source, set up notification and indicate the deploy location.  It then 
+        specifies which implementations we will use and finishes up with 
+        importing the forrestbot.xml file.</p>
+<div class="frame fixme">
+<div class="label">Fixme (AB)</div>
+<div class="content">Is "default workstage target" the correct term for 
+default="main"?</div>
+</div>
 <pre class="code">&lt;project name="mysampleproject" default="main"&gt;
 	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
 	&lt;property name="notify.email.to" value="me@domain.com"/&gt;
-	&lt;property name="notify.administrator" value="Your Name &amp;lt;me@domain.com&gt;"/&gt;
+	&lt;property name="notify.administrator" value="Your Name 
+&amp;lt;me@domain.com&gt;"/&gt;
 	&lt;property name="getsrc.cvs.user" value="anoncvs"/&gt;
 	&lt;property name="getsrc.cvs.password" value="anoncvs"/&gt;
 	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
 	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
 	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
-	&lt;property name="deploy.scp.dest" value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
+	&lt;property name="deploy.scp.dest" 
+value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
 
 	&lt;!-- here we specify to use two notification implementations --&gt;
 	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
@@ -204,17 +239,23 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 	&lt;!-- here we specify to deploy with the scp implementation --&gt;
 	&lt;target name="deploy" depends="deploy.scp"/&gt;
 
-	&lt;!-- the default implementation for getsrc is getsrc.cvs, which is what we want --&gt;
+	&lt;!-- the default implementation for getsrc is getsrc.cvs, which is 
+what we want --&gt;
 
-	&lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
+	&lt;!-- assumes FORREST_HOME has been set as an environment variable 
+--&gt;
 	&lt;property environment="env"/&gt;
-	&lt;import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
+	&lt;import 
+file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 &lt;/project&gt;
 
 </pre>
-<p>First, set properties needed by the workstages you are going to use.
-      Here, we set properties that will be used by notify.email and getsrc.cvs.
-      Next, specify what implementations will be used by each workstage.</p>
+<a name="N10044"></a><a name="Workstages"></a>
+<h3 class="underlined_5">Workstages</h3>
+<p>It is only necessary to include the specific target implementations in 
+      the buildfile if we want to override the default implementations.  The 
+      following tables show the various workstages and which implementations
+      may be used for each and which is the default.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
 <tr>
@@ -326,19 +367,26 @@ document.write("<text>Last Published:</text> " + document.lastModified);
       name="main" depends="getsrc, build, deploy, notify"/&gt;</span>, create
       your own implementation of a workstage, or use any other ant tasks to do
       additional work.</p>
+<div class="frame fixme">
+<div class="label">Fixme (AB)</div>
+<div class="content">How do you create your own implementation?  Can you 
+create a different default target than main - how do you override the 
+default?</div>
+</div>
 <p></p>
-<p>Many workstages use usernames and passwords. You may want to keep them
-      out of your project's xml file (especially if you store that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
-      my-settings.xml) that just sets those properties (don't include it in
-      CVS/SVN!). Then in your project buildfile, have <span class="codefrag">&lt;import
-      file="my-settings.xml"/&gt;</span>.</p>
-<a name="N100C5"></a><a name="Workstage+Properties"></a>
+<a name="N100D9"></a><a name="Workstage+Properties"></a>
 <h3 class="underlined_5">Workstage Properties</h3>
 <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
-<a name="N100CE"></a><a name="Misc+Properties"></a>
+<p>Many workstage properties use usernames and passwords. You may want to 
+      keep them out of your project's xml buildfile (especially if you store
+      that file in CVS
+      or SVN). A nice way to do this is make a simple buildfile (e.g.
+      my-settings.xml) that just sets those properties (don't include it in
+      CVS/SVN). Then in your project buildfile, have <span class="codefrag">&lt;import
+      file="my-settings.xml"/&gt;</span>.</p>
+<a name="N100E8"></a><a name="Misc+Properties"></a>
 <h4>Misc Properties</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -369,13 +417,13 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10105"></a><a name="getsrc.clean-workdir"></a>
+<a name="N1011F"></a><a name="getsrc.clean-workdir"></a>
 <h4>getsrc.clean-workdir</h4>
 <p>This should be executed before a getsrc implementation is executed.
           For example, <span class="codefrag">&lt;target name="getsrc"
           depends="getsrc.clean-workdir, getsrc.svn"/&gt;</span>
 </p>
-<a name="N10111"></a><a name="getsrc.local"></a>
+<a name="N1012B"></a><a name="getsrc.local"></a>
 <h4>getsrc.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -397,7 +445,8 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <td colspan="1" rowspan="1">getsrc.local.root-dir</td>
 
               <td colspan="1" rowspan="1">Absolute path to the project's root directory on the local
-              computer.  Use <strong>location=</strong> instead of <strong>value=</strong> for this &lt;property&gt;</td>
+              computer.  Use <strong>location=</strong> instead of 
+              <strong>value=</strong> for this &lt;property&gt;</td>
 
               <td colspan="1" rowspan="1"></td>
 
@@ -406,7 +455,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N1014E"></a><a name="getsrc.cvs"></a>
+<a name="N10168"></a><a name="getsrc.cvs"></a>
 <h4>getsrc.cvs</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -502,7 +551,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N101F6"></a><a name="getsrc.svn"></a>
+<a name="N10210"></a><a name="getsrc.svn"></a>
 <h4>getsrc.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -546,7 +595,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10244"></a><a name="build.forrest"></a>
+<a name="N1025E"></a><a name="build.forrest"></a>
 <h4>build.forrest</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -589,7 +638,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10293"></a><a name="deploy.scp"></a>
+<a name="N102AD"></a><a name="deploy.local"></a>
 <h4>deploy.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -610,7 +659,8 @@ document.write("<text>Last Published:</text> " + document.lastModified);
               
 <td colspan="1" rowspan="1">deploy.local.dir</td>
 
-              <td colspan="1" rowspan="1">Path to deploy site to. Relative paths will be relative to
+              <td colspan="1" rowspan="1">Path to deploy site to - the dir that would be the equivalant 
+              of build/site dir.  Relative paths will be relative to
               ${bot.home}</td>
 
               <td colspan="1" rowspan="1">sites/${ant.project.name}</td>
@@ -620,7 +670,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N102CB"></a><a name="deploy.local"></a>
+<a name="N102E5"></a><a name="deploy.scp"></a>
 <h4>deploy.scp</h4>
 <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
           you should manually make an ssh connection to the host if you never
@@ -667,7 +717,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N1031B"></a><a name="deploy.cvs"></a>
+<a name="N10335"></a><a name="deploy.cvs"></a>
 <h4>deploy.cvs</h4>
 <p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -764,7 +814,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N103C7"></a><a name="deploy.svn"></a>
+<a name="N103E1"></a><a name="deploy.svn"></a>
 <h4>deploy.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -834,7 +884,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10441"></a><a name="notify"></a>
+<a name="N1045B"></a><a name="notify"></a>
 <h4>notify</h4>
 <p>These settings are used by all notify implementations.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -932,10 +982,10 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </tr>
           
 </table>
-<a name="N104EB"></a><a name="notify.local"></a>
+<a name="N10505"></a><a name="notify.local"></a>
 <h4>notify.local</h4>
 <p>No properties.</p>
-<a name="N104F5"></a><a name="notify.email"></a>
+<a name="N1050F"></a><a name="notify.email"></a>
 <h4>notify.email</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -994,7 +1044,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </div>
 
     
-<a name="N1055D"></a><a name="Forrestbot+design"></a>
+<a name="N10577"></a><a name="Forrestbot+design"></a>
 <h2 class="underlined_10">Forrestbot design</h2>
 <div class="section">
 <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
@@ -1020,10 +1070,16 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </ul>
 <p>The workstage buildfiles set up the properties and files so that the
       main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstages buildfiles can implement reporting, deployment, or other
+      other workstage buildfiles can implement reporting, deployment, or other
       post-build activities.</p>
 <p>Your buildfile can specify which workstages you want to use, set
       properties for them, and do any additional pre- and post-processing.</p>
+<div class="frame fixme">
+<div class="label">Fixme (AB)</div>
+<div class="content">Which of these (Your buildfile/workstage buildfile) is 
+the "project buildfile" referred to elsewhere on this page, if any?  If it is 
+"Your buildfile" can I also create workstage buildfiles?  If so, how?</div>
+</div>
 </div>
   
 </div>
