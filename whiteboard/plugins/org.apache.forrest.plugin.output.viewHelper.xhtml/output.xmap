@@ -115,6 +115,19 @@
     <map:serialize type="xml"/>
   </map:match>
   
+  <!--This activates forrest:call-templates includes into the view.-->
+    <map:match pattern="prepare.view-templates.**">
+      <map:select type="exists">
+      <map:when test="{project:resources}/templates/{1}.vt.xml">
+        <map:generate src="{project:resources}/templates/{1}.vt.xml"/>
+      </map:when>
+      <map:when test="resources/templates/{1}.vt.xml">
+        <map:generate src="resources/templates/{1}.vt.xml"/>
+      </map:when>
+      </map:select>
+      <map:serialize type="xml"/>
+    </map:match>
+  
    <!-- <!-#-INTERFACE
     Get the xsl:templates of the requested contract.
   {1} format to deliver
