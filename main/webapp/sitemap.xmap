@@ -63,8 +63,9 @@ $Revision: 1.12 $
       <!-- See http://forrest.apache.org/docs/sitemap-ref.html#linkrewriting_impl -->
       <map:transformer name="linkrewriter" logger="sitemap.transformer.linkrewriter" src="org.apache.cocoon.transformation.LinkRewriterTransformer">
         <link-attrs>href src</link-attrs>
-        <schemes>site ext</schemes>
+        <schemes>site ext lm</schemes>
 
+        <input-module name="lm"/>
         <input-module name="site">
           <input-module name="linkmap">
             <file src="{src}" reloadable="true" />
@@ -353,6 +354,11 @@ $Revision: 1.12 $
             <map:part src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml"/>
           </map:aggregate>
           <map:transform src="{forrest:stylesheets}/plugins2xdoc.xsl"/>
+          <map:serialize type="xml"/>
+        </map:match>
+   
+        <map:match pattern="locationmap.xml">
+          <map:generate src="{project:content}/locationmap.xml" />
           <map:serialize type="xml"/>
         </map:match>
 

@@ -75,6 +75,15 @@ public class SourceExistsSelector extends AbstractLogEnabled
     /** Return true if Source 'uri' resolves and exists. */
     public boolean select(String uri, Map objectModel, Parameters parameters) {
         Source src = null;
+        
+        // The locationmap module will return null if there is no match for
+        // the supplied hint, without the following the URI will be resolved to
+        // the context root, which always exists, but does not contain a valid
+        // resource.
+        if (uri == null || uri == "") {
+           return false; 
+        }
+        
         try {
             src = resolver.resolveURI(uri);
             if (src.exists()) {
