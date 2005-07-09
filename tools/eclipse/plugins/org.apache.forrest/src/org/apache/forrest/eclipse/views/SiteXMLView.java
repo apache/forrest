@@ -23,6 +23,14 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.forrest.eclipse.actions.Utilities;
 import org.eclipse.core.resources.IProject;
@@ -39,7 +47,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -60,6 +67,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -74,23 +82,19 @@ import org.xml.sax.SAXException;
  */
 public class SiteXMLView extends ViewPart implements IMenuListener,
 		ISelectionListener {
-	private TreeViewer treeViewer;
-
+private TreeViewer treeViewer;
 	private DocumentBuilder parser;
-
 	private Document document;
-	
 	private String projectName;
-		
+	private String path;
 	private IStructuredSelection treeSelection;
-	
 	private Action AddElement;
-	
 	private Action RemoveElement;
+	private Action SaveDocument;
 	
 	protected IProject activeProject;
+
 	
-	protected Composite parent;
 	
 	
 
@@ -213,14 +217,19 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			IResource resource = (IResource) first;
 			if (resource instanceof IProject) {
 				activeProject = (IProject) resource;
-				String projectName = activeProject.getProject().getName();
-				String path = (activeProject.getProject().getLocation()
+				projectName = activeProject.getProject().getName();
+				path = (activeProject.getProject().getLocation()
 						.toString()
 						+ java.io.File.separator
 						+ Utilities.getPathToXDocs()
 						+ java.io.File.separator + "site.xml");
 				try {
-					document = parser.parse(new File(path));
+					
+					Document newDocument = parser.parse(new File(path));
+					if ((document != (newDocument))) {
+							document = newDocument;
+							treeViewer.setInput(document);
+					}
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -228,7 +237,8 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				treeViewer.setInput(document);
+				
+				
 	
 			}
 		}
@@ -250,19 +260,27 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 
 
 
-	private void fillContextMenu(IMenuManager manager) {
-		manager.add(AddElement);
-		manager.add(RemoveElement);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+		private void fillContextMenu(IMenuManager manager) {
+			manager.add(AddElement);
+			manager.add(RemoveElement);
+			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+			manager.add(SaveDocument);
+		}
 	
 
-	private void makeActions() {
+
+		private void makeActions() {
 		AddElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
 				//TODO: Code to add Element goes here
+				Node insertionElement = (Element) treeSelection.getFirstElement();	
+				Node element = document.createElement("NewElement");
+				
+				insertionElement.appendChild(element);
+				
+				//showMessage(element.atoString());
+				treeViewer.refresh();
 				}
 			}
 		};
@@ -275,14 +293,43 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			public void run() {
 				if (treeSelection != null) {
 					//TODO: Code to remove Element does here.
-					}
+					Node deletionElement = (Element) treeSelection.getFirstElement();	
+					Node deletionParent = deletionElement.getParentNode();
+					deletionParent.removeChild(deletionElement);
+					treeViewer.refresh();
+					
+				}
 			}
 		};
 		RemoveElement.setText("DeleteElement");
 		RemoveElement.setToolTipText("Delete Element");
 		RemoveElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+		SaveDocument = new Action() {
+			public void run() {
+				SaveXmlFile(document,path);
+			}
+		};
+		
+		SaveDocument.setText("Save");
+		SaveDocument.setToolTipText("Save XML Document");
+		SaveDocument.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 	}
+
+	 public static void SaveXmlFile(Document document, String filename) {
+	        try {
+	           
+	            Source source = new DOMSource(document);
+	            File file = new File(filename);
+	            Result result = new StreamResult(file);
+	            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	            transformer.transform(source, result);
+	        } catch (TransformerConfigurationException e) {
+	        } catch (TransformerException e) {
+	        }
+	    }
 
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
