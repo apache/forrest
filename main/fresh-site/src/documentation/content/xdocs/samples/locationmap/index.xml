@@ -52,22 +52,25 @@
         This is useful if you want to pull files from different directory structures,
         oe even remote repositories.</p>
         
-        <p>The target of "/remoteDemo/index.html"
-        is generated from a source retrieved from the Forrest SVN via viewSVN.</p>
+        <p>The target of "/remoteDemo/*.html"
+        is generated from a source retrieved from the Forrest SVN.</p>
         
-        <note>Because the above URL retrieves the source file from viewSVN it will
-        only work if you are online. For this reason we have not enabled this link as it would stop you building this site offline. However, if you are online you can enter the URL into the browesr and it will work (however, note the surrent limitations regarding the site: and ext: protocols).</note>
+        <note>Because the above URL retrieves the source file from SVN it will
+        only work if you are online. For this reason we have not enabled this link
+        as it would stop you building this site offline. However, if you are online 
+        you can enter the URL into the browesr and it will work (however, note the 
+        current limitations, described below, regarding the site: and ext: protocols).</note>
         
         <p>The locationmap matcher for the link above is:</p>
         
         <source>
  &lt;match pattern="remoteDemo/**.xml"&gt;
-   &lt;location src="http://svn.apache.org/viewcvs.cgi/*checkout*/forrest/trunk/site-author/content/xdocs/{1}.xml" /&gt;
+   &lt;location src="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/{1}.xml" /&gt;
  &lt;/match&gt;
         </source>
       
         <p>Note that because this is a wildcard matcher you can request any page
-        from viewsSVN simply by requesting 
+        from SVN simply by requesting 
         <code>/remoteDemo/PATH/TO/FILE/FILENAME.html</code>. In addition, we
         can request any other output format available via Forrest plugins.</p>
         
