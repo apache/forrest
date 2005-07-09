@@ -16,6 +16,7 @@
  */
 package org.apache.forrest.eclipse.views;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,14 +50,27 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
@@ -75,6 +89,8 @@ import org.xml.sax.SAXException;
 
 
 
+
+
 /**
  * A tree view for site.xml files. The view handles drag and
  * drop from the navigator and supports a number of context 
@@ -82,7 +98,7 @@ import org.xml.sax.SAXException;
  */
 public class SiteXMLView extends ViewPart implements IMenuListener,
 		ISelectionListener {
-private TreeViewer treeViewer;
+	private TreeViewer treeViewer;
 	private DocumentBuilder parser;
 	private Document document;
 	private String projectName;
@@ -91,6 +107,13 @@ private TreeViewer treeViewer;
 	private Action AddElement;
 	private Action RemoveElement;
 	private Action SaveDocument;
+	private Text elementText;
+	private Text hrefText;
+	private Text locationText;
+	private Text labelText;
+	private Text descriptionText;
+	
+	
 	
 	protected IProject activeProject;
 
@@ -225,6 +248,7 @@ private TreeViewer treeViewer;
 						+ java.io.File.separator + "site.xml");
 				try {
 					
+				
 					Document newDocument = parser.parse(new File(path));
 					if ((document != (newDocument))) {
 							document = newDocument;
@@ -273,14 +297,7 @@ private TreeViewer treeViewer;
 		AddElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-				//TODO: Code to add Element goes here
-				Node insertionElement = (Element) treeSelection.getFirstElement();	
-				Node element = document.createElement("NewElement");
-				
-				insertionElement.appendChild(element);
-				
-				//showMessage(element.atoString());
-				treeViewer.refresh();
+				insertElementDialog();
 				}
 			}
 		};
@@ -338,4 +355,62 @@ private TreeViewer treeViewer;
 			message);
 	}
 
+	private void insertElementDialog () {
+		
+			
+			Shell shell = treeViewer.getControl().getShell();
+			shell.open ();
+			
+			final Shell dialog = new Shell (shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+			GridData data = new GridData();
+			
+			dialog.setLayout(new GridLayout(2, true));
+			dialog.setText("Add Element");
+			dialog.setSize(300,150);
+			Label elementLabel = new Label (dialog, SWT.FLAT);
+			elementLabel.setText ("Element Name");
+			elementText = new Text (dialog, SWT.FILL);
+			
+			Label descriptionLabel = new Label (dialog, SWT.FLAT);
+			descriptionLabel.setText ("Description");
+			descriptionText = new Text (dialog, SWT.FILL);
+			
+			Label hrefLabel = new Label (dialog, SWT.FLAT);
+			hrefLabel.setText ("Href");
+			hrefText = new Text (dialog, SWT.FILL);
+			
+			Label labelLabel = new Label (dialog, SWT.FLAT);
+			labelLabel.setText ("Label");
+			labelText = new Text (dialog, SWT.FILL);
+			
+			final Button ok = new Button (dialog, SWT.PUSH);
+			ok.setText ("Ok");
+			Button cancel = new Button (dialog, SWT.PUSH);
+			cancel.setText ("Cancel");
+			
+			ok.addListener(SWT.Selection, new Listener() {
+			      public void handleEvent(Event event) {
+			    	  Node insertionElement = (Element) treeSelection.getFirstElement();	
+					  
+			    	  Element element = document.createElement(elementText.getText());
+			    	  element.setAttribute("href", hrefText.getText());
+			    	  element.setAttribute("description", descriptionText.getText());
+			    	  element.setAttribute("label", labelText.getText());
+			    	  insertionElement.appendChild(element);
+	  
+					  treeViewer.refresh();
+				      dialog.close();
+			      }
+			    });
+
+			 cancel.addListener(SWT.Selection, new Listener() {
+			      public void handleEvent(Event event) {
+			       dialog.close();
+			      }
+			    });
+			
+			dialog.open ();
+		
+		
+		}
 }
