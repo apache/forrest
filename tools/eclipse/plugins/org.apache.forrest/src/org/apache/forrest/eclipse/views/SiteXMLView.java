@@ -50,39 +50,29 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
-
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-
 import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -116,19 +106,6 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 	
 	
 	protected IProject activeProject;
-
-	
-	
-	
-
-	/*
-	 * The content provider class is responsible for providing objects to the
-	 * view. It can wrap existing objects in adapters or simply return objects
-	 * as-is. These objects may be sensitive to the current input of the view,
-	 * or ignore it and always show the same content (like Task List, for
-	 * example).
-	 */
-
 	
 	/**
 	 * The constructor.
@@ -233,7 +210,12 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 
 	}
 
-	
+	/**
+     * When the selection in the navigator view is changed 
+     * we look to see if the new selection is an IProject.
+     * If it is then we load the site.xml file into this
+     * SiteXMLView.
+	 */
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
@@ -269,7 +251,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 
 	}
 
-		private void hookContextMenu() {
+    private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -355,6 +337,10 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			message);
 	}
 
+    /**
+     * Create and display a dialog in which the user can enter a new
+     * elements attributes when it is created.
+     */
 	private void insertElementDialog () {
 		
 			
