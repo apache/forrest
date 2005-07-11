@@ -30,7 +30,7 @@
       <ul>
         <li>Provide a more powerful means for semantic linking.</li>
         <li>Enable Forrest with a standard configuration override mechanism.</li>
-        <li>decouple the conceptual source space used by Cocoon from
+        <li>Decouple the conceptual source space used by Cocoon from
         the concrete source space, so that a change in the concrete sources
         does not impact on the sitemap</li>
       </ul>
@@ -40,15 +40,15 @@
         <code>PROJECT_HOME/src/documentation/content/locationmap.xml</code> file. The
         advantage of this is that the URL seen by the user need bear no relation to the location
         of the source document, thus Forrest can separate the client URL space from the source
-        docuement URL space. Thus, using the locationmap it is possible to pull together
+        document URL space. Thus, using the locationmap it is possible to pull together
         documents from many different locations into a single uniform site.</p>
         
-        <p>In addition, since the user URL space is now unconnected to the source URL space
+        <p>In addition, since the user URL space is now not connected to the source URL space
         it is possible to move source documents without breaking any existing user links.</p>
 
-      <p>The syntax of a locationmap resembles that of the sitemap in that it also makes use
+      <p>The syntax of a locationmap resembles that of the sitemap, in that it also makes use
       of Matchers and Selectors to traverse a tree of nodes towards a leaf. In the case of
-      the locationmap however the leaf does not identify a pipeline but instead identifies
+      the locationmap however the leaf does not identify a pipeline, but instead identifies
       a location string.</p>
       
       <p>Apache Forrest looks in the standard location for the source file first (by default
@@ -68,18 +68,19 @@
         Using the Locationmap it is possible to make these files come from elsewhere.
         This is useful if you want to pull files from different directory structures,
         or even remote repositories. For example, the following location match 
-        will match any request for a document delow "remoteDemo" and will retrieve
-        the source file from forrests SVN repository via the viewCVS interface. This
-        is an ideal way of ensuring your published docs are always up to date.</p>        
+        will match any request for a document below "remoteDemo" and will retrieve
+        the source file from the Apache Forrest SVN repository (directly from the
+        ASF's SVN webserver). This
+        is an ideal way to ensure that your published docs are always up-to-date.</p>
         
         <source>
  &lt;match pattern="remoteDemo/**.xml"&gt;
-   &lt;location src="http://svn.apache.org/viewcvs.cgi/*checkout*/forrest/trunk/site-author/content/xdocs/{1}.xml" /&gt;
+   &lt;location src="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/{1}.xml" /&gt;
  &lt;/match&gt;
         </source>
       
         <p>Note that because this is a wildcard matcher you can request any page
-        from viewsSVN simply by requesting 
+        from the svn server simply by requesting 
         <code>/remoteDemo/PATH/TO/FILE/FILENAME.html</code>. In addition, we
         can request any other output format available via Forrest plugins.</p>
         
@@ -96,7 +97,8 @@
       <section>
         <title>Retrieving HTML from a CMS</title>
         
-        <p>Using the locationmap you can use Forrest to retrieve data from a CMS, wither local or remote.
+        <p>Using the locationmap you can use Forrest to retrieve data from a 
+        Content Management System (CMS), wither local or remote.
         As an example we will consider Apache Lenya.</p> 
         
         <p><a href="http://lenya.apache.org">Apache Lenya</a> is a Java Open-Source Content Management System based 
@@ -115,7 +117,7 @@
         
         <p>However, since the source returned by this match is HTML and not XDoc we must convert this
         to our internal XDoc format before we can use it. We do this by adding the match below to our 
-        projects <code>sitemap.xmap</code> file.</p>
+        project's <code>sitemap.xmap</code> file.</p>
         
         <source>
 &lt;map:match pattern="lenya/**.xml"&gt;
@@ -162,10 +164,10 @@ char-encoding=latin1
         </source>
                 
         <note>This requirement to add items to your project sitemap will be removed in a future version either by Lenya
-        outputting XDoc, by Forrest switching to using XHTML as its internal format or through the development of a
+        outputting XDoc, or by Forrest switching to using XHTML as its internal format, or through the development of a
         plugin for Lenya that will include the necessary processing (whichever comes first).</note>
                 
-        <warning>This demo is an example only, it does not work fully work at this time. For exammple, absolute URLs
+        <warning>This demo is an example only, it does not work fully work at this time. For example, absolute URLs
         in the source document need to be rewritten to ensure that they are matched by the locationmap.</warning>
         
       </section>
