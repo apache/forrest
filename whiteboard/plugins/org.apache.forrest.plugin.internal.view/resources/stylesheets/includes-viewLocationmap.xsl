@@ -22,6 +22,7 @@
   
   <xsl:param name="defaultView" select="'default.fv'"/>
   <xsl:param name="rootElement" select="'/xdocs/'"/>
+  <xsl:param name="viewExtension" select="'.fv'"/>
   <xsl:param name="path" select="'.'"/>
   <xsl:param name="root" select="'xdocs'"/>
   <xsl:param name="viewFallback" select="'resources/views/default.fv'"/>
@@ -29,7 +30,8 @@
    <!--
     *viewSelector* project-xdocs
     will return which view is responsible for the requested path.
-    If no view (choice|fallback) could be found the template will return the viewFallback.
+    If no view (choice|fallback) could be found the template will return the 
+    viewFallback (resources/views/default.fv).
     
     ex.: 
     1.request: index 
@@ -66,7 +68,7 @@
     </xsl:comment>-->
     <xsl:variable name="view2response">
       <xsl:call-template name="viewSelector">
-	      <xsl:with-param name="request" select="concat($path,'.fv')"/>
+	      <xsl:with-param name="request" select="concat($path,$viewExtension)"/>
 	      <xsl:with-param name="rest" select="''"/>
 	    </xsl:call-template>
     </xsl:variable>
