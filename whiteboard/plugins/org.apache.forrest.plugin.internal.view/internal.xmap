@@ -103,12 +103,24 @@
     <map:match pattern="prepare.view.**">
       <map:generate src="cocoon:/viewLocationmap.xml"/>
       <map:transform src="resources/stylesheets/viewLocationmap2path.xsl"/>
-      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
-        <map:parameter value="{project:defaultView}" name="defaultView"/>
-        <map:parameter value="{1}" name="path"/>
-        <map:parameter value="{project:content.xdocs}" name="root"/>
-        <map:parameter value="resources/views/default.fv" name="viewFallback"/>
-      </map:transform>
+      <map:select type="exists">
+      	<map:when test="resources/views/{project:defaultView}">
+		      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
+		        <map:parameter value="{project:defaultView}" name="defaultView"/>
+		        <map:parameter value="{1}" name="path"/>
+		        <map:parameter value="{project:content.xdocs}" name="root"/>
+		        <map:parameter value="resources/views/{project:defaultView}" name="viewFallback"/>
+		      </map:transform>
+        </map:when>
+        <map:otherwise>
+		      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
+		        <map:parameter value="{project:defaultView}" name="defaultView"/>
+		        <map:parameter value="{1}" name="path"/>
+		        <map:parameter value="{project:content.xdocs}" name="root"/>
+		        <map:parameter value="resources/views/default.fv" name="viewFallback"/>
+		      </map:transform>
+        </map:otherwise>
+      </map:select>
       <map:transform type="xinclude"/>
       <map:transform src="resources/stylesheets/prepare.include.templates.xsl"/>
       <map:transform type="xinclude"/>
