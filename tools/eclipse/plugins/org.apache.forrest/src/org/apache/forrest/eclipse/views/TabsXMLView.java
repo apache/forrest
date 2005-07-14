@@ -21,7 +21,7 @@ package org.apache.forrest.eclipse.views;
 import java.util.ArrayList;
 
 import org.apache.forrest.eclipse.actions.Utilities;
-import org.apache.forrest.eclipse.wizards.NewSiteElement;
+import org.apache.forrest.eclipse.wizards.NewTabElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
@@ -58,14 +58,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * A tree view for site.xml files. The view handles drag and
+ * A tree view for tabs.xml files. The view handles drag and
  * drop from the navigator and supports a number of context 
  * menus for editing. 
  */
-public class SiteXMLView extends ViewPart implements IMenuListener,
+public class TabsXMLView extends ViewPart implements IMenuListener,
 		ISelectionListener {
-	private TreeViewer treeViewer;
-	private Document document;
+	private TreeViewer tree;
+	private Document tabsDocument;
 	private String projectName;
 	private String path;
 	private IStructuredSelection treeSelection;
@@ -74,24 +74,22 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 	private Action SaveDocument;
 	
 	protected IProject activeProject;
-	
 	/**
 	 * The constructor.
 	 */
-	public SiteXMLView() {
+	public TabsXMLView() {
 	}
-
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		getSite().setSelectionProvider(treeViewer);
+		tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		getSite().setSelectionProvider(tree);
 		int operations = DND.DROP_COPY | DND.DROP_MOVE;
 		Transfer[] types = new Transfer[] { FileTransfer.getInstance()};
-		treeViewer.addDropSupport(operations, types, new SiteDropListener(projectName ,document, treeViewer));
-		treeViewer.setContentProvider(new ITreeContentProvider() {
+		//tree.addDropSupport(operations, types, new SiteDropListener(projectName ,tabsDocument, tree));
+		tree.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
 				ArrayList ch = new ArrayList();
 				NodeList nl = ((Node) element).getChildNodes();
@@ -120,8 +118,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 					Object new_input) {
 			}
 		});
-
-		treeViewer.setLabelProvider(new LabelProvider() {
+		tree.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof Attr)
 					return "@" + ((Attr) element).getNodeName() + " " +((Attr) element).getNodeValue();
@@ -130,10 +127,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			}
 		});
 		getViewSite().getPage().addSelectionListener(this);
-		
-		
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-		
+		tree.addSelectionChangedListener(new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
 					if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection selection = (IStructuredSelection) event
@@ -144,7 +138,8 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 		});
 	
 		//System.out.println(document.toString());
-		treeViewer.setInput(document);
+		if (path != null) { tabsDocument = DOMUtilities.loadDOM(path);}
+		tree.setInput(tabsDocument);
 		makeActions();
 		hookContextMenu();
 	}
@@ -162,8 +157,8 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 	/**
      * When the selection in the navigator view is changed 
      * we look to see if the new selection is an IProject.
-     * If it is then we load the site.xml file into this
-     * SiteXMLView.
+     * If it is then we load the tabs.xml file into this
+     * TabsXMLView.
 	 */
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
@@ -176,9 +171,12 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 						.toString()
 						+ java.io.File.separator
 						+ Utilities.getPathToXDocs()
-						+ java.io.File.separator + "site.xml");
-				document = DOMUtilities.loadDOM(path);
-				treeViewer.setInput(document);
+						+ java.io.File.separator + "tabs.xml");
+				
+				tabsDocument = DOMUtilities.loadDOM(path);
+				tree.setInput(tabsDocument);
+				
+	
 			}
 		}
 
@@ -189,13 +187,15 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-            SiteXMLView.this.fillContextMenu(manager);
+            TabsXMLView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
-		treeViewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, treeViewer);
+		Menu menu = menuMgr.createContextMenu(tree.getControl());
+		tree.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, tree);
 	}
+
+
 
 		private void fillContextMenu(IMenuManager manager) {
 			manager.add(AddElement);
@@ -208,11 +208,11 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 		AddElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-				NewSiteElement elementCreation_ = new NewSiteElement(treeSelection,document);
-				elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
-				WizardDialog dialog = new WizardDialog(treeViewer.getControl().getShell(), elementCreation_);
-				dialog.open(); // This opens a dialog
-				treeViewer.refresh();
+					NewTabElement elementCreation_ = new NewTabElement(treeSelection,tabsDocument);
+					elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
+					WizardDialog dialog = new WizardDialog(tree.getControl().getShell(), elementCreation_);
+					dialog.open();
+				tree.refresh();
 				}
 			}
 		};
@@ -228,7 +228,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 					Node deletionElement = (Element) treeSelection.getFirstElement();	
 					Node deletionParent = deletionElement.getParentNode();
 					deletionParent.removeChild(deletionElement);
-					treeViewer.refresh();
+					tree.refresh();
 					
 				}
 			}
@@ -240,7 +240,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 		
 		SaveDocument = new Action() {
 			public void run() {
-				DOMUtilities.SaveDOM(document,path);
+				DOMUtilities.SaveDOM(tabsDocument,path);
 			}
 		};
 		
@@ -252,7 +252,7 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
-			treeViewer.getControl().getShell(),
+			tree.getControl().getShell(),
 			"Sample View",
 			message);
 	}
