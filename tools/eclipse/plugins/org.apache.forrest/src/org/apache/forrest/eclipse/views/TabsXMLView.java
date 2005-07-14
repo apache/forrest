@@ -20,17 +20,13 @@ package org.apache.forrest.eclipse.views;
 
 import java.util.ArrayList;
 
-import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.wizards.NewTabElement;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -45,14 +41,10 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -62,18 +54,11 @@ import org.w3c.dom.NodeList;
  * drop from the navigator and supports a number of context 
  * menus for editing. 
  */
-public class TabsXMLView extends ViewPart implements IMenuListener,
-		ISelectionListener {
-	private TreeViewer tree;
-	private Document tabsDocument;
-	private String projectName;
-	private String path;
-	private IStructuredSelection treeSelection;
+public class TabsXMLView extends NavigationView {
 	private Action AddElement;
 	private Action RemoveElement;
 	private Action SaveDocument;
-	
-	protected IProject activeProject;
+    
 	/**
 	 * The constructor.
 	 */
@@ -84,12 +69,12 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		tree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		getSite().setSelectionProvider(tree);
+		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		getSite().setSelectionProvider(treeViewer);
 		int operations = DND.DROP_COPY | DND.DROP_MOVE;
 		Transfer[] types = new Transfer[] { FileTransfer.getInstance()};
 		//tree.addDropSupport(operations, types, new SiteDropListener(projectName ,tabsDocument, tree));
-		tree.setContentProvider(new ITreeContentProvider() {
+		treeViewer.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
 				ArrayList ch = new ArrayList();
 				NodeList nl = ((Node) element).getChildNodes();
@@ -118,7 +103,7 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 					Object new_input) {
 			}
 		});
-		tree.setLabelProvider(new LabelProvider() {
+		treeViewer.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof Attr)
 					return "@" + ((Attr) element).getNodeName() + " " +((Attr) element).getNodeValue();
@@ -127,7 +112,7 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 			}
 		});
 		getViewSite().getPage().addSelectionListener(this);
-		tree.addSelectionChangedListener(new ISelectionChangedListener() {
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
 					if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection selection = (IStructuredSelection) event
@@ -138,8 +123,8 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 		});
 	
 		//System.out.println(document.toString());
-		if (path != null) { tabsDocument = DOMUtilities.loadDOM(path);}
-		tree.setInput(tabsDocument);
+		if (path != null) { document = DOMUtilities.loadDOM(path);}
+		treeViewer.setInput(document);
 		makeActions();
 		hookContextMenu();
 	}
@@ -154,34 +139,6 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 
 	}
 
-	/**
-     * When the selection in the navigator view is changed 
-     * we look to see if the new selection is an IProject.
-     * If it is then we load the tabs.xml file into this
-     * TabsXMLView.
-	 */
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			Object first = ((IStructuredSelection) selection).getFirstElement();
-			IResource resource = (IResource) first;
-			if (resource instanceof IProject) {
-				activeProject = (IProject) resource;
-				projectName = activeProject.getProject().getName();
-				path = (activeProject.getProject().getLocation()
-						.toString()
-						+ java.io.File.separator
-						+ Utilities.getPathToXDocs()
-						+ java.io.File.separator + "tabs.xml");
-				
-				tabsDocument = DOMUtilities.loadDOM(path);
-				tree.setInput(tabsDocument);
-				
-	
-			}
-		}
-
-	}
-
     private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -190,9 +147,9 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
             TabsXMLView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(tree.getControl());
-		tree.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, tree);
+		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+		treeViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, treeViewer);
 	}
 
 
@@ -208,11 +165,11 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 		AddElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-					NewTabElement elementCreation_ = new NewTabElement(treeSelection,tabsDocument);
+					NewTabElement elementCreation_ = new NewTabElement(treeSelection,document);
 					elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
-					WizardDialog dialog = new WizardDialog(tree.getControl().getShell(), elementCreation_);
+					WizardDialog dialog = new WizardDialog(treeViewer.getControl().getShell(), elementCreation_);
 					dialog.open();
-				tree.refresh();
+				treeViewer.refresh();
 				}
 			}
 		};
@@ -228,7 +185,7 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 					Node deletionElement = (Element) treeSelection.getFirstElement();	
 					Node deletionParent = deletionElement.getParentNode();
 					deletionParent.removeChild(deletionElement);
-					tree.refresh();
+					treeViewer.refresh();
 					
 				}
 			}
@@ -240,7 +197,7 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 		
 		SaveDocument = new Action() {
 			public void run() {
-				DOMUtilities.SaveDOM(tabsDocument,path);
+				DOMUtilities.SaveDOM(document,path);
 			}
 		};
 		
@@ -252,11 +209,19 @@ public class TabsXMLView extends ViewPart implements IMenuListener,
 
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
-			tree.getControl().getShell(),
+			treeViewer.getControl().getShell(),
 			"Sample View",
 			message);
 	}
 
-   
+    /**
+     * Get the name of the file this editor view represents.
+     * This name does not include the path. For example.
+     * 'site.xml' or 'tabs.xml'
+     * @return the name (without pat) of the document to view
+     */
+    protected String getFilename() {
+        return "tabs.xml";
+    }
 	
 }

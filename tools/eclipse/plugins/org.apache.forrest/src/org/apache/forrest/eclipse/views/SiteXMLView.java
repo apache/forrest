@@ -20,17 +20,13 @@ package org.apache.forrest.eclipse.views;
 
 import java.util.ArrayList;
 
-import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.wizards.NewSiteElement;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -45,14 +41,10 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -62,18 +54,10 @@ import org.w3c.dom.NodeList;
  * drop from the navigator and supports a number of context 
  * menus for editing. 
  */
-public class SiteXMLView extends ViewPart implements IMenuListener,
-		ISelectionListener {
-	private TreeViewer treeViewer;
-	private Document document;
-	private String projectName;
-	private String path;
-	private IStructuredSelection treeSelection;
+public class SiteXMLView extends NavigationView {
 	private Action AddElement;
 	private Action RemoveElement;
 	private Action SaveDocument;
-	
-	protected IProject activeProject;
 	
 	/**
 	 * The constructor.
@@ -149,41 +133,6 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 		hookContextMenu();
 	}
 
-	public void setFocus() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void menuAboutToShow(IMenuManager manager) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-     * When the selection in the navigator view is changed 
-     * we look to see if the new selection is an IProject.
-     * If it is then we load the site.xml file into this
-     * SiteXMLView.
-	 */
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			Object first = ((IStructuredSelection) selection).getFirstElement();
-			IResource resource = (IResource) first;
-			if (resource instanceof IProject) {
-				activeProject = (IProject) resource;
-				projectName = activeProject.getProject().getName();
-				path = (activeProject.getProject().getLocation()
-						.toString()
-						+ java.io.File.separator
-						+ Utilities.getPathToXDocs()
-						+ java.io.File.separator + "site.xml");
-				document = DOMUtilities.loadDOM(path);
-				treeViewer.setInput(document);
-			}
-		}
-
-	}
-
     private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -256,6 +205,17 @@ public class SiteXMLView extends ViewPart implements IMenuListener,
 			"Sample View",
 			message);
 	}
+
+
+    /**
+     * Get the name of the file this editor view represents.
+     * This name does not include the path. For example.
+     * 'site.xml' or 'tabs.xml'
+     * @return the name (without pat) of the document to view
+     */
+    protected String getFilename() {
+        return "site.xml";
+    }
 
    
 	
