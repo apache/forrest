@@ -23,7 +23,7 @@
   <abstract>
     This How-To will explain how we wrote the contracts for views and hope afterwards you will be able to do the same.
   </abstract>
-  <last-modified-content-date date="2005-06-06"/>
+  <last-modified-content-date date="2005-07-17"/>
  </header>
 
   <audience title="Intended Audience">
@@ -31,7 +31,7 @@
 <warning>
 "Views" are new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs proof-reading.
+This HowTo is a good start but still needs more work.
 </warning>
 
     <p>
@@ -57,7 +57,7 @@ This HowTo is a good start but still needs proof-reading.
       	This includes as well all additional plugins that are mentioned in <a href="site:howto/view/install">Install views</a>.
       </li>
       <li>
-        Reading that how-to is as well a good idea to understand the used dir-structure in this how-to.
+        Reading that how-to is as well a good idea to understand the used directory structure in this how-to.
       </li>
     </ul>
   </prerequisites>
@@ -65,18 +65,18 @@ This HowTo is a good start but still needs proof-reading.
 
   <steps title="Steps">
     <note>The following content is from many mails around the topic, this how-to tries to be the 
-      consolidation of this thread. It is mainly based on the [RT] Why using views - 
+      consolidation of this thread. It is mainly based on the thread "[RT] Why using views" - 
       in comparison with "old fashion" skins - usecase i18n</note>
     <p>
-      By working on the i18n integration for "pelt" we crossed again the whys for using views. ;-)
-      The maintainment problem was to change the captions of the skin features (contracts) to enable
+      By working on the i18n integration for "pelt" we again encountered the reasons for using views. ;-)
+      The maintenance problem was to change the captions of the skin features (contracts) to enable
       support for i18n. The case is that the <code>site2xhtml.xsl</code> has a lot of repeating code. 
     </p>
     <p>
       For example the "last-publish"-contract could be found 2 times in the code.  
-      This is not the only contract that was (is) double in the code. The problem with that is that 
-      we needed to search the code for each caption and senseless repeat the following 
-      maintainment step of adding the <![CDATA[<i18n:text/>]]>-tags.
+      This is not the only contract that was (is) doubled in the code. The problem with that is that 
+      we needed to search the code for each caption and senselessly repeat the following 
+      maintenance step of adding the <![CDATA[<i18n:text/>]]>-tags.
     </p>
     <source>
 <![CDATA[
@@ -87,9 +87,9 @@ This HowTo is a good start but still needs proof-reading.
 + Published:</i18n:text>&#160;" + document.lastModified);
 ]]>
     </source>
-    <section id="enhanceMaintainment">
-      <title>Enhance the maintainment</title>
-      <p>Now we can enhance the maintainment for the future and we give this code snippets 
+    <section id="enhanceMaintenance">
+      <title>Enhance the maintenance</title>
+      <p>Now we can enhance the maintenance for the future and we give these code snippets 
         contracts names (based on their functionality). This naming enables us to keep
 the contract separate from the position code itself. In xsl you would
 simply do:
@@ -106,7 +106,7 @@ simply do:
 </xsl:template>]]>
       </source>
       <p>
-        This allows us in a next maintainment just change the code of
+        This allows us in a next maintenance to just change the code of
         <![CDATA[<xsl:template name="siteinfo-last-published"/>]]> and apply it in any position where
         it is placed.  
       </p>
@@ -131,10 +131,12 @@ simply do:
   name="blank" type="nugget">
   
   <!--NOTE: 
-    When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
+    When using the blank template as copy-and-paste master,
+    just search and replace 'blank' by the {contract-name}!-->
   
   <description>
-    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
+    {contract-name} will output {contract-funtion}.
+    This is just a blank contract, it will output *nothing*.
   </description>
   <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="blank"/>]]>]]&gt;<![CDATA[</usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -151,8 +153,8 @@ simply do:
         The most important is the name of the contract <code><![CDATA[<forrest:contract name="blank"/>]]></code>. 
         This name is the same as the file name of the contract (without file extension) <code>blank.ft</code>. 
       </p>
-      <note>This is a <strong>naming convention</strong> that you have
-        to always met. All @name has to be file name of the contract without file extension!
+      <note>This is a <strong>naming convention</strong> that you need
+        to always meet. All @name attributes must be the file name of the contract without file extension.
       </note>
       <p>
         The <code><![CDATA[<description/>]]></code> tag needs to be filled in with some information
@@ -173,16 +175,16 @@ simply do:
         <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
         That leads to the template attribute @body="true" and
 				@head="false". In xhtml a contract can add content to the <![CDATA[<body/>]]> or/and
-				<![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. This values have to be change when adding an actual template.
-        Besides this a xsl-template has to indicate this in the naming. A template that add content to the 
-        html body has to end with "<code>-body</code>"!!!
+				<![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. These values need to be changed when adding an actual template.
+        Besides this, a xsl-template needs to indicate this in the naming. A template that adds content to the 
+        html body needs to end with "<code>-body</code>"!!!
       </p>
       <note>
-        It is possible to use contracts in different in/output-formats. 
-        We are focusing for now on format="xhtml" as ouput and the inputFormat="xsl".
+        It is possible to use contracts in different in/output formats. 
+        We are focussing for now on format="xhtml" as output and the inputFormat="xsl".
       </note>
       <p>
-        A <![CDATA[<forrest:template />]]> has the son <![CDATA[<xsl:stylesheet/>]]> where we can create 
+        A <![CDATA[<forrest:template />]]> has the child <![CDATA[<xsl:stylesheet/>]]> where we can create 
         templates for the html-head and html-body. For adding content into the body of the final 
         document change @body="true" and add:
       </p>
@@ -198,14 +200,14 @@ simply do:
       <title>Create a new contract</title>
       <fixme author="thorsten">
         We need to explain basic naming convention for contracts. Like
-        "naming do not say about layout position but functionality of the contract.".
+        "naming does not say anything about layout position, but functionality of the contract.".
       </fixme>
       <p> 
-				Now lets pick up the example we started with and create a "siteinfo-last-published-howto" contract.
+				Now let us pick up the example we started with and create a "siteinfo-last-published-howto" contract.
         Save the blank.ft to <code>{project.home}/src/documentation/resources/templates/siteinfo-last-published-howto.ft</code>.
       </p>
       <p>
-        Now the maintainment optimized code (xpath="/html/body/*") was:
+        Now the maintenance-optimized code (xpath="/html/body/*") was:
       </p>
       <source>
 <![CDATA[<xsl:template name="siteinfo-last-published">
@@ -235,7 +237,7 @@ debug string -
         <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
         <li>Add description and usage of the contract</li>
         <li>Set @body="true"</li>
-        <li>Copy the maintainment optimized code to the contract.</li>
+        <li>Copy the maintenance optimized code to the contract.</li>
       </ul>
       <p>
         As the result your code should look like this:
