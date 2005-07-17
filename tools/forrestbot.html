@@ -151,6 +151,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#deploy.svn">deploy.svn</a>
 </li>
 <li>
+<a href="#deploy.ftp">deploy.ftp</a>
+</li>
+<li>
 <a href="#notify">notify</a>
 </li>
 <li>
@@ -334,6 +337,10 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 <li>
 <a href="#deploy.svn">deploy.svn</a>
 </li>
+              
+<li>
+<a href="#deploy.ftp">deploy.ftp</a>
+</li>
             
 </ul>
 </td>
@@ -374,7 +381,7 @@ create a different default target than main - how do you override the
 default?</div>
 </div>
 <p></p>
-<a name="N100D9"></a><a name="Workstage+Properties"></a>
+<a name="N100DE"></a><a name="Workstage+Properties"></a>
 <h3 class="underlined_5">Workstage Properties</h3>
 <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
@@ -386,7 +393,7 @@ default?</div>
       my-settings.xml) that just sets those properties (don't include it in
       CVS/SVN). Then in your project buildfile, have <span class="codefrag">&lt;import
       file="my-settings.xml"/&gt;</span>.</p>
-<a name="N100E8"></a><a name="Misc+Properties"></a>
+<a name="N100ED"></a><a name="Misc+Properties"></a>
 <h4>Misc Properties</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -417,13 +424,13 @@ default?</div>
 </tr>
           
 </table>
-<a name="N1011F"></a><a name="getsrc.clean-workdir"></a>
+<a name="N10124"></a><a name="getsrc.clean-workdir"></a>
 <h4>getsrc.clean-workdir</h4>
 <p>This should be executed before a getsrc implementation is executed.
           For example, <span class="codefrag">&lt;target name="getsrc"
           depends="getsrc.clean-workdir, getsrc.svn"/&gt;</span>
 </p>
-<a name="N1012B"></a><a name="getsrc.local"></a>
+<a name="N10130"></a><a name="getsrc.local"></a>
 <h4>getsrc.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -455,7 +462,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10168"></a><a name="getsrc.cvs"></a>
+<a name="N1016D"></a><a name="getsrc.cvs"></a>
 <h4>getsrc.cvs</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -551,7 +558,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10210"></a><a name="getsrc.svn"></a>
+<a name="N10215"></a><a name="getsrc.svn"></a>
 <h4>getsrc.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -595,7 +602,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N1025E"></a><a name="build.forrest"></a>
+<a name="N10263"></a><a name="build.forrest"></a>
 <h4>build.forrest</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -638,7 +645,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N102AD"></a><a name="deploy.local"></a>
+<a name="N102B2"></a><a name="deploy.local"></a>
 <h4>deploy.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -670,7 +677,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N102E5"></a><a name="deploy.scp"></a>
+<a name="N102EA"></a><a name="deploy.scp"></a>
 <h4>deploy.scp</h4>
 <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
           you should manually make an ssh connection to the host if you never
@@ -717,7 +724,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10335"></a><a name="deploy.cvs"></a>
+<a name="N1033A"></a><a name="deploy.cvs"></a>
 <h4>deploy.cvs</h4>
 <p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -814,7 +821,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N103E1"></a><a name="deploy.svn"></a>
+<a name="N103E6"></a><a name="deploy.svn"></a>
 <h4>deploy.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -884,7 +891,77 @@ default?</div>
 </tr>
           
 </table>
-<a name="N1045B"></a><a name="notify"></a>
+<a name="N10460"></a><a name="deploy.ftp"></a>
+<h4>deploy.ftp</h4>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+            
+<tr>
+              
+<th colspan="1" rowspan="1">Property</th>
+
+              <th colspan="1" rowspan="1">Description</th>
+
+              <th colspan="1" rowspan="1">Default Value</th>
+
+              <th colspan="1" rowspan="1">Required?</th>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.ftp.server</td>
+
+              <td colspan="1" rowspan="1">FTP server to upload files to</td>
+
+              <td colspan="1" rowspan="1">localhost</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.ftp.user</td>
+
+              <td colspan="1" rowspan="1">FTP username to use for authenticating with the server</td>
+
+              <td colspan="1" rowspan="1">anonymous</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.ftp.password</td>
+
+              <td colspan="1" rowspan="1">Password for the FTP user</td>
+
+              <td colspan="1" rowspan="1">forrestbot@</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.ftp.remotedir</td>
+
+              <td colspan="1" rowspan="1">The directory to upload to (this can be an absolute path or
+                relative to the FTP user's default directory)</td>
+
+              <td colspan="1" rowspan="1">incoming</td>
+
+              <td colspan="1" rowspan="1">No</td>
+            
+</tr>
+          
+</table>
+<a name="N104DD"></a><a name="notify"></a>
 <h4>notify</h4>
 <p>These settings are used by all notify implementations.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -982,10 +1059,10 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10505"></a><a name="notify.local"></a>
+<a name="N10587"></a><a name="notify.local"></a>
 <h4>notify.local</h4>
 <p>No properties.</p>
-<a name="N1050F"></a><a name="notify.email"></a>
+<a name="N10591"></a><a name="notify.email"></a>
 <h4>notify.email</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1044,7 +1121,7 @@ default?</div>
 </div>
 
     
-<a name="N10577"></a><a name="Forrestbot+design"></a>
+<a name="N105F9"></a><a name="Forrestbot+design"></a>
 <h2 class="underlined_10">Forrestbot design</h2>
 <div class="section">
 <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
