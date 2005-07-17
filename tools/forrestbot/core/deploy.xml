@@ -30,6 +30,31 @@
     <property name="notify.deploy-location" value="${deploy.local.dir}"/>
   </target>
 
+
+  <!-- ================================================================= -->
+  <!-- The deploy.ftp target                                             -->
+  <!-- ================================================================= -->
+  <!-- properties for deploy.ftp -->
+  <property name="deploy.ftp.server" value="localhost"/>
+  <property name="deploy.ftp.user" value="anonymous"/>
+  <property name="deploy.ftp.password" value="forrestbot@"/>
+  <property name="deploy.ftp.remotedir" value="incoming"/>
+  <property name="deploy.ftp.verbose" value="yes"/>
+  <property name="deploy.ftp.newer" value="yes"/>
+
+  <!-- target definition for deploy.ftp -->
+  <target name="deploy.ftp" unless="build.failed" description="Forrestbot:
+    Deploy via FTP">
+    <ftp server="${deploy.ftp.server}" remotedir="${deploy.ftp.remotedir}"
+      userid="${deploy.ftp.user}" password="${deploy.ftp.password}"
+      newer="${deploy.ftp.newer}" verbose="${deploy.ftp.verbose}">
+      <fileset dir="${build.site-dir}">
+        <modified/>
+      </fileset>
+    </ftp>
+  </target>
+  <!-- ================================================================= -->
+
   <property name="deploy.scp.dest" value=""/>
   <target name="deploy.scp" unless="build.failed" description="FB: Deploy to a remote location via scp">
     <if>
@@ -132,5 +157,4 @@
     />
     
   </target>
-
 </project>
