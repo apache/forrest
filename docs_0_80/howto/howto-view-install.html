@@ -312,7 +312,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <div class="content">
 "Views" are new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs proof-reading.
+This HowTo is a good start but still needs more work.
 </div>
 </div>
 <p>
@@ -333,17 +333,20 @@ This HowTo is a good start but still needs proof-reading.
 <ul>
       
 <li>You have to use the trunk version of forrest for using views because it is in an early stage</li>
+      
+<li>Read <a href="../../docs_0_80/howto/howto-buildPlugin.html">How to Build a Plugin</a>
+        especially the section about using Forrest's own Ant.</li>
     
 </ul>
 </div>
-<a name="N1002E"></a><a name="Steps"></a>
+<a name="N10035"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <p>
       The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
       Some of the instructions has to be modified with your local settings.
     </p>
-<a name="N10036"></a><a name="localBuild"></a>
+<a name="N1003D"></a><a name="localBuild"></a>
 <h3 class="underlined_5">Build the view and the viewHelper plugins</h3>
 <p>
         The first step is to build the view and the viewHelper plugins. Change to a console of your choice
@@ -358,57 +361,57 @@ ant local-deploy
 cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
 ant local-deploy
       </pre>
-<a name="N10044"></a><a name="newSeed"></a>
+<a name="N1004B"></a><a name="newSeed"></a>
 <h3 class="underlined_5">Seed a new project</h3>
 <p> 
-				Go to the dir where you want to seed a new project and seed it. 
+	Go to the directory where you want to seed a new project and seed it. 
       </p>
 <pre class="code">
 cd ~/src/newSeed
 forrest seed
       </pre>
-<a name="N10052"></a><a name="forrestProperties"></a>
+<a name="N10059"></a><a name="forrestProperties"></a>
 <h3 class="underlined_5">Modifying forrest.properties</h3>
 <p>
-        Now we have to tell forrest that we are planing to use the view plugins. We will do that
-        by editing to the forrest.properties to add the plugins:
+        Now we have to tell forrest that we are planning to use the view plugins. We will do that
+        by editing the forrest.properties to add the plugins:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
       </pre>
 <p>
 	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
-       not independend form the "old fashion skins".  
+       not independent from the "old fashion skins".  
       </p>
 <div class="frame note">
 <div class="label">Note</div>
-<div class="content">We exchanging only
-	     site2xhtml.xsl of leather-dev skin by the plugins and some contracts are based
+<div class="content">We are exchanging only
+	     site2xhtml.xsl of leather-dev skin with the plugins, and some contracts are based
 	     on e.g. document2html.xsl output of leather-dev.</div>
 </div>
 <pre class="code">
 project.skin=leather-dev
       </pre>
-<a name="N1006A"></a><a name="testing"></a>
+<a name="N10071"></a><a name="testing"></a>
 <h3 class="underlined_5">Test your new view based project</h3>
 <p> 
-        Now you have finished the preparation and the setup to finally try
+        Now you have finished the preparation and the setup to finally do
       </p>
 <pre class="code">
 forrest run
       </pre>
 <p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view based skin.</p>
+        view-based skin.</p>
 <div class="frame note">
 <div class="label">Note</div>
-<div class="content">When developing styles with views 'forrest run' is the quickest
-way. You will see you do not have to build your project to see the
+<div class="content">When developing styles with views, 'forrest run' is the quickest
+way. You will see that you do not have to build your project to see the
 changes on your pages when working with *.fv. </div>
 </div>
-<a name="N10082"></a><a name="availableContracts"></a>
+<a name="N10089"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
 <p> 
-	     To start working with views you need to know which contracts you can use. 
+	     To start working with views, you need to know which contracts you can use. 
 	     For this we will install another plugin <span class="codefrag">org.apache.forrest.plugin.input.viewHelper.xhtml.ls</span>.
 	     The setup is:
 	    </p>
@@ -419,10 +422,10 @@ cd whiteboard/plugins/org.apache.forrest.plugin.input.viewHelper.xhtml.ls/
 ant local-deploy
 </pre>
 <p>
-        The newly installed plugin will show the available contracts as html page.
-        First we have to tell forrest that we are planing to use the new plugin. We will do that
+        The newly installed plugin will show the available contracts as html pages.
+        First we have to tell forrest that we are planning to use the new plugin. We will do that
         by editing the forrest.properties of the <a href="../../docs_0_80/howto/howto-view-install.html">newSeed</a> 
-        to <strong>add</strong> the plugin:
+        to add the plugin:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
@@ -432,7 +435,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
         On this page you will find all contracts that you can use in your project.
       </p>
 </div>
-<a name="N100A7"></a><a name="Further Reading"></a>
+<a name="N100AB"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
@@ -451,7 +454,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
     
 </ul>
 </div>
-<a name="N100BE"></a><a name="Feedback"></a>
+<a name="N100C2"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>

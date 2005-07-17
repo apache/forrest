@@ -280,7 +280,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#enhanceMaintainment">Enhance the maintainment</a>
+<a href="#enhanceMaintenance">Enhance the maintenance</a>
 </li>
 <li>
 <a href="#blankContract">Explaining the blank forrest:contract</a>
@@ -309,7 +309,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <div class="content">
 "Views" are new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs proof-reading.
+This HowTo is a good start but still needs more work.
 </div>
 </div>
 <p>
@@ -340,7 +340,7 @@ This HowTo is a good start but still needs proof-reading.
       </li>
       
 <li>
-        Reading that how-to is as well a good idea to understand the used dir-structure in this how-to.
+        Reading that how-to is as well a good idea to understand the used directory structure in this how-to.
       </li>
     
 </ul>
@@ -351,19 +351,19 @@ This HowTo is a good start but still needs proof-reading.
 <div class="frame note">
 <div class="label">Note</div>
 <div class="content">The following content is from many mails around the topic, this how-to tries to be the 
-      consolidation of this thread. It is mainly based on the [RT] Why using views - 
+      consolidation of this thread. It is mainly based on the thread "[RT] Why using views" - 
       in comparison with "old fashion" skins - usecase i18n</div>
 </div>
 <p>
-      By working on the i18n integration for "pelt" we crossed again the whys for using views. ;-)
-      The maintainment problem was to change the captions of the skin features (contracts) to enable
+      By working on the i18n integration for "pelt" we again encountered the reasons for using views. ;-)
+      The maintenance problem was to change the captions of the skin features (contracts) to enable
       support for i18n. The case is that the <span class="codefrag">site2xhtml.xsl</span> has a lot of repeating code. 
     </p>
 <p>
       For example the "last-publish"-contract could be found 2 times in the code.  
-      This is not the only contract that was (is) double in the code. The problem with that is that 
-      we needed to search the code for each caption and senseless repeat the following 
-      maintainment step of adding the &lt;i18n:text/&gt;-tags.
+      This is not the only contract that was (is) doubled in the code. The problem with that is that 
+      we needed to search the code for each caption and senselessly repeat the following 
+      maintenance step of adding the &lt;i18n:text/&gt;-tags.
     </p>
 <pre class="code">
 
@@ -374,9 +374,9 @@ This HowTo is a good start but still needs proof-reading.
 + Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
 
     </pre>
-<a name="N10051"></a><a name="enhanceMaintainment"></a>
-<h3 class="underlined_5">Enhance the maintainment</h3>
-<p>Now we can enhance the maintainment for the future and we give this code snippets 
+<a name="N10051"></a><a name="enhanceMaintenance"></a>
+<h3 class="underlined_5">Enhance the maintenance</h3>
+<p>Now we can enhance the maintenance for the future and we give these code snippets 
         contracts names (based on their functionality). This naming enables us to keep
 the contract separate from the position code itself. In xsl you would
 simply do:
@@ -395,7 +395,7 @@ simply do:
 &lt;/xsl:template&gt;
       </pre>
 <p>
-        This allows us in a next maintainment just change the code of
+        This allows us in a next maintenance to just change the code of
         &lt;xsl:template name="siteinfo-last-published"/&gt; and apply it in any position where
         it is placed.  
       </p>
@@ -422,10 +422,12 @@ simply do:
   name="blank" type="nugget"&gt;
   
   &lt;!--NOTE: 
-    When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!--&gt;
+    When using the blank template as copy-and-paste master,
+    just search and replace 'blank' by the {contract-name}!--&gt;
   
   &lt;description&gt;
-    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
+    {contract-name} will output {contract-funtion}.
+    This is just a blank contract, it will output *nothing*.
   &lt;/description&gt;
   &lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="blank"/&gt;]]&gt;&lt;/usage&gt;
   &lt;forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -444,8 +446,8 @@ simply do:
       </p>
 <div class="frame note">
 <div class="label">Note</div>
-<div class="content">This is a <strong>naming convention</strong> that you have
-        to always met. All @name has to be file name of the contract without file extension!
+<div class="content">This is a <strong>naming convention</strong> that you need
+        to always meet. All @name attributes must be the file name of the contract without file extension.
       </div>
 </div>
 <p>
@@ -468,19 +470,19 @@ simply do:
 <span class="codefrag">&lt;forrest:template name="blank" body="false" head="false"&gt; </span> 
         That leads to the template attribute @body="true" and
 				@head="false". In xhtml a contract can add content to the &lt;body/&gt; or/and
-				&lt;head/&gt; part of &lt;html/&gt;. This values have to be change when adding an actual template.
-        Besides this a xsl-template has to indicate this in the naming. A template that add content to the 
-        html body has to end with "<span class="codefrag">-body</span>"!!!
+				&lt;head/&gt; part of &lt;html/&gt;. These values need to be changed when adding an actual template.
+        Besides this, a xsl-template needs to indicate this in the naming. A template that adds content to the 
+        html body needs to end with "<span class="codefrag">-body</span>"!!!
       </p>
 <div class="frame note">
 <div class="label">Note</div>
 <div class="content">
-        It is possible to use contracts in different in/output-formats. 
-        We are focusing for now on format="xhtml" as ouput and the inputFormat="xsl".
+        It is possible to use contracts in different in/output formats. 
+        We are focussing for now on format="xhtml" as output and the inputFormat="xsl".
       </div>
 </div>
 <p>
-        A &lt;forrest:template /&gt; has the son &lt;xsl:stylesheet/&gt; where we can create 
+        A &lt;forrest:template /&gt; has the child &lt;xsl:stylesheet/&gt; where we can create 
         templates for the html-head and html-body. For adding content into the body of the final 
         document change @body="true" and add:
       </p>
@@ -497,15 +499,15 @@ simply do:
 <div class="label">Fixme (thorsten)</div>
 <div class="content">
         We need to explain basic naming convention for contracts. Like
-        "naming do not say about layout position but functionality of the contract.".
+        "naming does not say anything about layout position, but functionality of the contract.".
       </div>
 </div>
 <p> 
-				Now lets pick up the example we started with and create a "siteinfo-last-published-howto" contract.
+				Now let us pick up the example we started with and create a "siteinfo-last-published-howto" contract.
         Save the blank.ft to <span class="codefrag">{project.home}/src/documentation/resources/templates/siteinfo-last-published-howto.ft</span>.
       </p>
 <p>
-        Now the maintainment optimized code (xpath="/html/body/*") was:
+        Now the maintenance-optimized code (xpath="/html/body/*") was:
       </p>
 <pre class="code">
 &lt;xsl:template name="siteinfo-last-published"&gt;
@@ -542,7 +544,7 @@ debug string -
         
 <li>Set @body="true"</li>
         
-<li>Copy the maintainment optimized code to the contract.</li>
+<li>Copy the maintenance optimized code to the contract.</li>
       
 </ul>
 <p>
