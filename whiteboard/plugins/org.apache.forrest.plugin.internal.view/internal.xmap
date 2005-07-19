@@ -18,6 +18,12 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
 
 	<map:components>
+	<map:pipes default="caching">
+	   <map:pipe name="caching"
+	    src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
+	   <map:pipe name="noncaching"
+	    src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
+	  </map:pipes>
 		<map:selectors>
       <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
     </map:selectors>
@@ -82,7 +88,7 @@
   3. views
   prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
   -->
-  <map:pipeline>
+  <map:pipeline type="noncaching">
     <!--Refactor for dir-->
     <map:match pattern="viewLocationmap.xml">
       <map:generate type="traverse" src="{project:content.xdocs}">
@@ -181,6 +187,7 @@
       </map:aggregate>
       <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
         <map:parameter name="request" value="{2}"/>
+	<map:parameter name="forrestContext" value="{forrest:context}"/>
       </map:transform>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>

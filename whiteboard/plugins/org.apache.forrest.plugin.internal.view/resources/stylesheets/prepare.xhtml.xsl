@@ -19,13 +19,14 @@
 <xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
     <xsl:param name="request"/>
+    <xsl:param name="forrestContext" select="'test'"/>
     <xsl:template match="/">
     	<!--Create the final stylesheet (alias:)-->
         <alias:stylesheet version="1.0">
-            <alias:import href="cocoon://commonSite2xhtml"/>
-            <alias:import href="cocoon://dotdots"/>
-            <alias:import href="cocoon://pathutils"/>
-            <alias:import href="cocoon://renderlogo"/>
+            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site2xhtml.xsl"/> 
+            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/dotdots.xsl"/>
+            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/pathutils.xsl"/>
+            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/renderlogo.xsl"/>
             <alias:include href="cocoon://prepare.include.xhtml.{$request}"/>
             <alias:param name="path"/>
             <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>

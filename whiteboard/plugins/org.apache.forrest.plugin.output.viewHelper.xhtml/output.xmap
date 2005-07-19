@@ -124,6 +124,7 @@
       <map:when test="resources/templates/{1}.vt.xml">
         <map:generate src="resources/templates/{1}.vt.xml"/>
       </map:when>
+      <!-- otherwiser no view Tiles not found -->
       </map:select>
       <map:transform src="{defaults:view-internal}/resources/stylesheets/prepare.include.templates.xsl"/>
       <map:transform type="xinclude"/>
@@ -172,6 +173,7 @@
      </map:transform>
      <map:serialize type="xml"/>
    </map:match>
+   </map:pipeline>
   <!--
   Get the css of the requested contract {1}. 
   -->
@@ -214,28 +216,6 @@
     </map:match>
   </map:pipeline>
 
-  <!--FIXME:END-->
-  
-   <!--
-    Get some util-templates from the common skin.
-    -->
-   <map:match pattern="commonSite2xhtml">
-        <map:generate src="{forrest:context}/skins/common/xslt/html/site2xhtml.xsl"/>
-        <map:serialize type="xml"/>
-    </map:match>
-    <map:match pattern="dotdots">
-        <map:generate src="{forrest:context}/skins/common/xslt/html/dotdots.xsl"/>
-        <map:serialize type="xml"/>
-    </map:match>
-    <map:match pattern="pathutils">
-        <map:generate src="{forrest:context}/skins/common/xslt/html/pathutils.xsl"/>
-        <map:serialize type="xml"/>
-    </map:match>
-    <map:match pattern="renderlogo">
-        <map:generate src="{forrest:context}/skins/common/xslt/html/renderlogo.xsl"/>
-        <map:serialize type="xml"/>
-    </map:match>
-  </map:pipeline>
   <map:pipeline>
 <!--
   Debug pipes - JTidy output
