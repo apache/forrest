@@ -174,6 +174,7 @@ public final class LocationMap extends AbstractLogEnabled {
      * <p>
      *  supported component creation lifecycles that are:
      *  - LogEnabled
+     *  - Serviceable
      *  - Configurable
      *  - Initializable
      * </p>
@@ -183,6 +184,7 @@ public final class LocationMap extends AbstractLogEnabled {
         try {
             component = Class.forName(src).newInstance();
             ContainerUtil.enableLogging(component,getLogger());
+            ContainerUtil.service(component, m_manager);
             if (config != null) {
                 ContainerUtil.configure(component, config);
             }
