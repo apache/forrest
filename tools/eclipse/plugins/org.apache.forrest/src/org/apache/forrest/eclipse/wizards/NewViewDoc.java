@@ -39,28 +39,29 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
- * Create a new file XDoc
+ * Create a new View
  * resource in the provided container. If the container resource
  * (a folder or a project) is selected in the workspace 
  * when the wizard is opened, it will accept it as the target
  * container. The wizard creates one file with the extension
- * "xml". When created the file is opened in the default editor.
+ * "fv". When created the file is opened in the default editor.
  */
 
-public class NewXDoc extends Wizard implements INewWizard {
-	protected NewXdocPage page;
+public class NewViewDoc extends Wizard implements INewWizard {
+	protected NewViewDocPage page;
 	protected ISelection selection;
-	protected String resourceAntScript = "/src/org/apache/forrest/template/template_build.xml";
+	protected String resourceAntScript = "/src/org/apache/forrest/template/view_build.xml";
 
 	/**
-	 * Constructor for NewXDoc.
+	 * Constructor for NewViewDoc.
 	 */
-	public NewXDoc() {
+	public NewViewDoc() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -69,7 +70,7 @@ public class NewXDoc extends Wizard implements INewWizard {
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		page = new NewXdocPage(selection);
+		page = new NewViewDocPage(selection);
 		addPage(page);
 	}
 

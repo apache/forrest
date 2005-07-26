@@ -16,7 +16,6 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
-import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

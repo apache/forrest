@@ -17,8 +17,11 @@
 package org.apache.forrest.eclipse.actions;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -62,6 +65,24 @@ public class Utilities {
         return path;
     }
      
+	/**
+     * Retrieve the relative path to the Content directory.
+     * @retuen platform specific path to Content directory
+     */
+	public static String getPathToContent() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPathToContent() - start");
+        }
+
+        // FIXME: get this value from the package config file (forrest.properties)
+        String path = "src" + java.io.File.separator + "documentation"
+                + java.io.File.separator + "content" ;
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPathToContent() - end");
+        }
+        return path;
+    }
 	/**
 	 * @param directory
 	 * @return @throws
@@ -113,6 +134,60 @@ public class Utilities {
 		}	
 		
 	}; 
+	
+	
+	/**
+	 * Sets a property as active in a .properties file. 
+	 * @return true if the port is available
+	 */ 
+	static public void activateForrestProperty(String path, String property){
+		 try {
+		       BufferedReader in = new BufferedReader(new FileReader(path));
+		       String str;
+		       String outFile = null;
+		       while ((str = in.readLine()) != null) {
+		           if (str.startsWith("#" + property)) {
+		    	   outFile = outFile + property + System.getProperty( "line.separator" );
+		    	   }
+		           else
+		           {
+		           outFile = outFile + str + System.getProperty( "line.separator" );
+		           }
+		       }
+		        in.close();
+		        BufferedWriter out = new BufferedWriter(new FileWriter(path));
+		        out.write(outFile);
+		        out.close();
+		       } catch (IOException e) {
+		    }
+		
+	}
+	/**
+	 * Adds a new plugin to the plugin property in forrest.properties 
+	 * 
+	 */ 
+	static public void addForrestPluginProperty(String path, String pluginName){
+		 try {
+		       BufferedReader in = new BufferedReader(new FileReader(path));
+		       String str;
+		       String outFile = null;
+		       while ((str = in.readLine()) != null) {
+		           String[] tokens = str.split("=");
+		           if (tokens[0].startsWith("project.required.plugins")) {
+		    	   outFile = outFile + str + "," + pluginName+ System.getProperty( "line.separator" );
+		    	   }
+		           else
+		           {
+		           outFile = outFile + str + System.getProperty( "line.separator" );
+		           }
+		        }
+		        in.close();
+		        BufferedWriter out = new BufferedWriter(new FileWriter(path));
+		        out.write(outFile);
+		        out.close();
+		       } catch (IOException e) {
+		    }	
+	}
 
 	/**
 	 * @param cmdString

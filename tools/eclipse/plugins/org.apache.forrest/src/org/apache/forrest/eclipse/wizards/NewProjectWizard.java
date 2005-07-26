@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
+import org.apache.forrest.eclipse.actions.Utilities;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -33,11 +34,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
@@ -53,6 +60,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			.getLogger(NewProjectWizard.class);
 
 	private WizardNewProjectCreationPage page;
+	
+	private ActivatePluginsPage pluginPage; 
+	
+	private String projectPath;
 
 	/**
 	 * Constructor for ContentPackageWizard.
@@ -72,6 +83,11 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		page.setTitle("New");
 		page.setDescription("Create a new Content Package.");
 		addPage(page);
+		pluginPage = new ActivatePluginsPage();
+		pluginPage.setTitle("Activate Plugins");
+		pluginPage.setDescription("Activate Plugins");
+		addPage(pluginPage);
+		
 	}
 
 	/**
@@ -124,10 +140,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			
 			if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
 				cmdString = "forrest -Dbasedir=" + strPath + "/" + strName
-						+ " seed";
+						+ " seedTestBusiness";
 			} else if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
 				cmdString = "cmd /c forrest -Dbasedir=" + strPath + "\\" + strName
-						+ " seed";
+						+ " seedTestBusiness";
 			}
 			
 			try {
@@ -147,18 +163,18 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 			
+			if (pluginPage.getActivateViewValue()) {
+				Utilities.activateForrestProperty(strPath + "\\" + strName +  "\\forrest.properties" ,"project.skin=leather-dev");
+				Utilities.addForrestPluginProperty(strPath + "\\" + strName +  "\\forrest.properties","org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view");
+			}
+			
+			
 			// TODO: configure your page / nature
-	
+			
 			// TODO: change to the perspective specified in the plugin.xml			
 		} finally {
 			monitor.done();
 		}
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status =
-			new Status(IStatus.ERROR, "org.burrokeet.application", IStatus.OK, message, null);
-		throw new CoreException(status);
 	}
 
 	/**
@@ -168,4 +184,8 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 	}
+
+	
+
+	
 }

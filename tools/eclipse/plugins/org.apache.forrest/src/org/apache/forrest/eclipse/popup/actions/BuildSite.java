@@ -31,7 +31,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -41,7 +40,8 @@ implements IObjectActionDelegate, IJavaLaunchConfigurationConstants {
 	private IProject activeProject;
 	
 	/**
-	 * Constructor for Action1.
+	 * Constructor for Build Site Action. This action builds a static
+     * version of th site bu calling "forrest site".
 	 */
 	public BuildSite() {
 		super();

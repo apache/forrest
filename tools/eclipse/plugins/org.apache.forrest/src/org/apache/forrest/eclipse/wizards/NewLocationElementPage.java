@@ -16,6 +16,7 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -31,12 +32,9 @@ import org.eclipse.swt.widgets.Text;
  * 
  */
 
-public class NewSiteElementPage extends WizardPage {
+public class NewLocationElementPage extends WizardPage {
     
-	private Text hrefText;
-	private Text descriptionText;
-	private Text labelText;
-	private Text elementName;
+	private Text locationText;
 	
 
 	/**
@@ -45,10 +43,10 @@ public class NewSiteElementPage extends WizardPage {
 	 * @param selection 
 	 * @param pageName
 	 */
-	public NewSiteElementPage() {
+	public NewLocationElementPage() {
 		super("wizardPage");
-		setTitle("New Site Element");
-		setDescription("This wizard creates a new element in site.xml.");
+		setTitle("New Location Element");
+		setDescription("This wizard creates a new Location element in locationmap.xml.");
 		
 	}
 
@@ -62,49 +60,21 @@ public class NewSiteElementPage extends WizardPage {
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&HREF:");
+		label.setText("Location Source:");
 
-		hrefText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		locationText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		hrefText.setLayoutData(gd);
+		locationText.setLayoutData(gd);
 				
-		label = new Label(container, SWT.NULL);
-		label.setText("&Description:");
 
-		descriptionText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		descriptionText.setLayoutData(gd);
-		
-		label = new Label(container, SWT.NULL);
-		label.setText("&Label:");
-
-		labelText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		labelText.setLayoutData(gd);
-
-		label = new Label(container, SWT.NULL);
-		label.setText("&Element Name:");
-
-		elementName = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		elementName.setLayoutData(gd);
 		setControl(container);
 	}
 	
-	public String getElementName() {
-		return elementName.getText();
-	}
 	
-	public String getDescription() {
-		return descriptionText.getText();
-	}
 	
-	public String getLabel() {
-		return labelText.getText();
-	}
 	
-	public String getHref() {
-		return hrefText.getText();
+	public String getLocation() {
+		return locationText.getText();
 	}
 	
 }

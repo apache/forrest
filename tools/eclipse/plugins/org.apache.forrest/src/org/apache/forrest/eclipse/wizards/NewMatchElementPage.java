@@ -16,6 +16,7 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,19 +26,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * The "New Element" wizard page allows you to insert a 
- * new element into the site.xml file and specify the element
+ * The "New Match Element" wizard page allows you to insert a 
+ * new Match element into the locationmap.xml file and specify the element
  * name, location, path and descriotion.
  * 
  */
 
-public class NewSiteElementPage extends WizardPage {
+public class NewMatchElementPage extends WizardPage {
     
-	private Text hrefText;
-	private Text descriptionText;
-	private Text labelText;
-	private Text elementName;
-	
+	private Text patternText;
+		
 
 	/**
 	 * Create the new page.
@@ -45,10 +43,10 @@ public class NewSiteElementPage extends WizardPage {
 	 * @param selection 
 	 * @param pageName
 	 */
-	public NewSiteElementPage() {
+	public NewMatchElementPage() {
 		super("wizardPage");
-		setTitle("New Site Element");
-		setDescription("This wizard creates a new element in site.xml.");
+		setTitle("New Match Element");
+		setDescription("This wizard creates a new Match element in locationmap.xml.");
 		
 	}
 
@@ -62,49 +60,17 @@ public class NewSiteElementPage extends WizardPage {
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&HREF:");
+		label.setText("&Pattern:");
 
-		hrefText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		patternText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		hrefText.setLayoutData(gd);
-				
-		label = new Label(container, SWT.NULL);
-		label.setText("&Description:");
-
-		descriptionText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		descriptionText.setLayoutData(gd);
-		
-		label = new Label(container, SWT.NULL);
-		label.setText("&Label:");
-
-		labelText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		labelText.setLayoutData(gd);
-
-		label = new Label(container, SWT.NULL);
-		label.setText("&Element Name:");
-
-		elementName = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		elementName.setLayoutData(gd);
+		patternText.setLayoutData(gd);
 		setControl(container);
 	}
 	
-	public String getElementName() {
-		return elementName.getText();
+	public String getPattern() {
+		return patternText.getText();
 	}
 	
-	public String getDescription() {
-		return descriptionText.getText();
-	}
-	
-	public String getLabel() {
-		return labelText.getText();
-	}
-	
-	public String getHref() {
-		return hrefText.getText();
-	}
 	
 }

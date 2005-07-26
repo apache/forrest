@@ -131,7 +131,7 @@ public abstract class ForrestJob extends Job {
 					userMsg = "Unable to install required server plugins";
 					status = new Status(Status.ERROR, ForrestPlugin.ID,
 							EXCEPTION_ANT_RUNNING, userMsg, e);
-				} else if (errMsg.contains(BUILD_FORREST_ERROR_MESSAGE)) {
+				} else if (errMsg.equalsIgnoreCase(BUILD_FORREST_ERROR_MESSAGE)) {
                     userMsg = "Your installation of Forrest, at " + fhome + ", has not been correctly built.";
                     status = new Status(Status.ERROR, ForrestPlugin.ID,
                             ForrestRunner.EXCEPTION_FORREST, userMsg, e);

@@ -40,6 +40,7 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
     protected Document document;
     protected String projectName;
     protected String path;
+    protected String xDocPath;
     protected IStructuredSelection treeSelection;
     protected IProject activeProject;
 
@@ -93,11 +94,10 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
             if (resource instanceof IProject) {
                 activeProject = (IProject) resource;
                 projectName = activeProject.getProject().getName();
-                path = (activeProject.getProject().getLocation()
+                xDocPath = (activeProject.getProject().getLocation()
                         .toString()
-                        + java.io.File.separator
-                        + Utilities.getPathToXDocs()
-                        + java.io.File.separator + getFilename());
+                        + java.io.File.separator);
+                path = xDocPath + getFilename();
                 document = DOMUtilities.loadDOM(path);
                 treeViewer.setInput(document);
             }
@@ -105,10 +105,12 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
     }
 
     /**
-     * Get the name of the file this editor view represents.
+     * Get the anme and path of the file this editor view represents.
      * This name does not include the path. For example.
      * 'site.xml' or 'tabs.xml'
      * @return the name (without pat) of the document to view
      */
     protected abstract String getFilename();
+    
+   
 }

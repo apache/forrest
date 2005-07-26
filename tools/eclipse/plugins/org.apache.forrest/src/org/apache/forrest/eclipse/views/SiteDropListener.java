@@ -24,27 +24,24 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.widgets.Display;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * Handles dropping of files onto the siteXMLView.
  *
  */
-public class SiteDropListener implements DropTargetListener {
+public class SiteDropListener extends SiteXMLView implements DropTargetListener {
 
 
-    TreeViewer treeViewer;
 
-    Document document;
-    
-    String projectName;
-    
+    protected NavigationView view;
+    protected Document activeDocument;
     final Display display = Display.getDefault();
     
-    public SiteDropListener(String projectName, Document document, TreeViewer treeViewer) {
+    public SiteDropListener() {
         // TODO Auto-generated constructor stub
-        this.treeViewer = treeViewer;
-        this.document = document;
-        this.projectName = projectName;
+    	activeDocument = document; 
     }
 
     public void dragEnter(DropTargetEvent event) {
@@ -75,19 +72,20 @@ public class SiteDropListener implements DropTargetListener {
             String[] files = (String[]) event.data;
             File strFilename;
             String filePath = null;
-            String localItemPath;
-            String itemPath;
+            String relativePath = null;
             for (int i = 0; i < files.length; i++) {
                 strFilename = new File(files[i]);
                 filePath = strFilename.getPath();
-                localItemPath = filePath.substring(filePath
-                        .indexOf("xdocs")
-                        + "xdocs".length() + 1);
-                itemPath = filePath.substring(Utilities
-                        .getPathToXDocs().length() + 2);
-                //TODO: Code to add element from drag and drop goes here
-       
-                
+                strFilename = new File(files[i]);
+                filePath = strFilename.getPath();
+                Node insertionElement = (Element) event.item.getData();	
+		        Element element = activeDocument.createElement("NewElement");
+		        relativePath = filePath.substring(xDocPath.length());  
+		        element.setAttribute("href", relativePath);
+		    	element.setAttribute("description", relativePath);
+		    	element.setAttribute("label", relativePath);
+		    	insertionElement.appendChild(element);
+		    	treeViewer.refresh();
             }
         }
     }

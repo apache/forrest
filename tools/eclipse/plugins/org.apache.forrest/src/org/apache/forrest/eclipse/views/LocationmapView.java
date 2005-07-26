@@ -21,13 +21,17 @@ package org.apache.forrest.eclipse.views;
 import java.util.ArrayList;
 
 import org.apache.forrest.eclipse.actions.Utilities;
-import org.apache.forrest.eclipse.wizards.NewTabElement;
+import org.apache.forrest.eclipse.wizards.NewLocationElement;
+import org.apache.forrest.eclipse.wizards.NewMatchElement;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -42,28 +46,41 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * A tree view for tabs.xml files. The view handles drag and
+ * A tree view for locationmap.xml files. The view handles drag and
  * drop from the navigator and supports a number of context 
  * menus for editing. 
  */
-public class TabsXMLView extends NavigationView {
-	private Action AddElement;
+public class LocationmapView extends ViewPart implements IMenuListener,
+        ISelectionListener {
+    protected TreeViewer treeViewer;
+    protected Document document;
+    protected String projectName;
+    protected String path;
+    protected String contentPath;
+    protected IStructuredSelection treeSelection;
+    protected IProject activeProject;
+	private Action AddMatch;
+	private Action AddLocation;
 	private Action RemoveElement;
 	private Action SaveDocument;
     
 	/**
 	 * The constructor.
 	 */
-	public TabsXMLView() {
+	public LocationmapView() {
 	}
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
@@ -72,9 +89,6 @@ public class TabsXMLView extends NavigationView {
 	public void createPartControl(Composite parent) {
 		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		getSite().setSelectionProvider(treeViewer);
-		int operations = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] types = new Transfer[] { FileTransfer.getInstance()};
-		//tree.addDropSupport(operations, types, new SiteDropListener(projectName ,tabsDocument, tree));
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
 				ArrayList ch = new ArrayList();
@@ -119,6 +133,18 @@ public class TabsXMLView extends NavigationView {
 					IStructuredSelection selection = (IStructuredSelection) event
 							.getSelection();
 					treeSelection = selection;
+					Element element = (Element) selection.getFirstElement();
+					AddLocation.setEnabled(false);
+					AddMatch.setEnabled(false);
+					if (element.getNodeName().equals("locator")){
+						AddLocation.setEnabled(false);
+						AddMatch.setEnabled(true);
+					} 
+					if (element.getNodeName().equals("match")){
+						AddLocation.setEnabled(true);
+						AddMatch.setEnabled(false);		
+					}
+					
 				}
 			}
 		});
@@ -145,7 +171,7 @@ public class TabsXMLView extends NavigationView {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-            TabsXMLView.this.fillContextMenu(manager);
+            LocationmapView.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
@@ -156,17 +182,19 @@ public class TabsXMLView extends NavigationView {
 
 
 		private void fillContextMenu(IMenuManager manager) {
-			manager.add(AddElement);
+			manager.add(AddMatch);
+			manager.add(AddLocation);
+			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			manager.add(RemoveElement);
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			manager.add(SaveDocument);
 		}
 	
 		private void makeActions() {
-		AddElement = new Action() {
+		AddMatch = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-					NewTabElement elementCreation_ = new NewTabElement(treeSelection,document);
+					NewMatchElement elementCreation_ = new NewMatchElement(treeSelection,document);
 					elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
 					WizardDialog dialog = new WizardDialog(treeViewer.getControl().getShell(), elementCreation_);
 					dialog.open();
@@ -174,9 +202,27 @@ public class TabsXMLView extends NavigationView {
 				}
 			}
 		};
-		AddElement.setText("Add Element");
-		AddElement.setToolTipText("Add Element tooltip");
-		AddElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+		AddMatch.setText("Add Match");
+		AddMatch.setToolTipText("Add Element tooltip");
+		AddMatch.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+			
+		
+		AddLocation = new Action() {
+			public void run() {
+				if (treeSelection != null) {
+					NewLocationElement elementCreation_ = new NewLocationElement(treeSelection,document);
+					elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
+					WizardDialog dialog = new WizardDialog(treeViewer.getControl().getShell(), elementCreation_);
+					dialog.open();
+				treeViewer.refresh();
+				}
+			}
+		};
+		AddLocation.setText("Add Location");
+		AddLocation.setToolTipText("Add Element tooltip");
+		AddLocation.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 		
 		RemoveElement = new Action() {
@@ -222,7 +268,31 @@ public class TabsXMLView extends NavigationView {
      * @return the name (without pat) of the document to view
      */
     protected String getFilename() {
-    	return Utilities.getPathToXDocs() + java.io.File.separator + "tabs.xml";
+        return "locationmap.xml";
+    }
+    /**
+     * When the selection in the navigator view is changed 
+     * we look to see if the new selection is an IProject.
+     * If it is then we load the locationmap.xml file into this
+     * LocationmapView.
+     */
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+        if (selection instanceof IStructuredSelection) {
+            Object first = ((IStructuredSelection) selection).getFirstElement();
+            IResource resource = (IResource) first;
+            if (resource instanceof IProject) {
+                activeProject = (IProject) resource;
+                projectName = activeProject.getProject().getName();
+                contentPath = (activeProject.getProject().getLocation()
+                        .toString()
+                        + java.io.File.separator
+                        + Utilities.getPathToContent()
+                        + java.io.File.separator) ;
+                path = contentPath + getFilename();
+                document = DOMUtilities.loadDOM(path);
+                treeViewer.setInput(document);
+            }
+        }
     }
 	
 }

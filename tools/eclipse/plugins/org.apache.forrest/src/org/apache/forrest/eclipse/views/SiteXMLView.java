@@ -16,10 +16,10 @@
  */
 package org.apache.forrest.eclipse.views;
 
-
-
+import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.wizards.NewSiteElement;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -37,9 +37,15 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -50,15 +56,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * A tree view for site.xml files. The view handles drag and
- * drop from the navigator and supports a number of context 
- * menus for editing. 
+ * A tree view for site.xml files. The view handles drag and drop from the
+ * navigator and supports a number of context menus for editing.
  */
 public class SiteXMLView extends NavigationView {
 	private Action AddElement;
+
 	private Action RemoveElement;
+
 	private Action SaveDocument;
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -70,11 +77,65 @@ public class SiteXMLView extends NavigationView {
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL);
 		getSite().setSelectionProvider(treeViewer);
 		int operations = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] types = new Transfer[] { FileTransfer.getInstance()};
-		treeViewer.addDropSupport(operations, types, new SiteDropListener(projectName ,document, treeViewer));
+		Transfer[] types = new Transfer[] { FileTransfer.getInstance() };
+
+		treeViewer.addDropSupport(operations, types, new DropTargetListener() {
+
+			public void dragEnter(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragLeave(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragOperationChanged(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragOver(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			/**
+			 * Handle files that are dropped into the site tree.
+			 */
+			public void drop(DropTargetEvent event) {
+				if (event.data instanceof String[]) {
+					String[] files = (String[]) event.data;
+					File strFilename;
+					String filePath = null;
+					String relativePath = null;
+					for (int i = 0; i < files.length; i++) {
+						strFilename = new File(files[i]);
+						filePath = strFilename.getPath();
+						Node insertionElement = (Element) event.item.getData();
+						Element element = document.createElement("NewElement");
+						relativePath = filePath.substring(xDocPath.length());
+						element.setAttribute("href", relativePath);
+						element.setAttribute("description", relativePath);
+						element.setAttribute("label", relativePath);
+						insertionElement.appendChild(element);
+						treeViewer.refresh();
+					}
+				}
+			}
+
+			public void dropAccept(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
 				ArrayList ch = new ArrayList();
@@ -108,37 +169,38 @@ public class SiteXMLView extends NavigationView {
 		treeViewer.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof Attr)
-					return "@" + ((Attr) element).getNodeName() + " " +((Attr) element).getNodeValue();
+					return "@" + ((Attr) element).getNodeName() + " "
+							+ ((Attr) element).getNodeValue();
 				else
 					return ((Node) element).getNodeName();
 			}
 		});
 		getViewSite().getPage().addSelectionListener(this);
 		
-		
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-		
-		public void selectionChanged(SelectionChangedEvent event) {
-					if (event.getSelection() instanceof IStructuredSelection) {
+
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection selection = (IStructuredSelection) event
 							.getSelection();
 					treeSelection = selection;
+
 				}
 			}
 		});
-	
-		//System.out.println(document.toString());
+
+		// System.out.println(document.toString());
 		treeViewer.setInput(document);
 		makeActions();
 		hookContextMenu();
 	}
 
-    private void hookContextMenu() {
+	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-            SiteXMLView.this.fillContextMenu(manager);
+				SiteXMLView.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
@@ -146,77 +208,81 @@ public class SiteXMLView extends NavigationView {
 		getSite().registerContextMenu(menuMgr, treeViewer);
 	}
 
-		private void fillContextMenu(IMenuManager manager) {
-			manager.add(AddElement);
-			manager.add(RemoveElement);
-			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-			manager.add(SaveDocument);
-		}
-	
-		private void makeActions() {
+	private void fillContextMenu(IMenuManager manager) {
+		manager.add(AddElement);
+		manager.add(RemoveElement);
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		manager.add(SaveDocument);
+	}
+
+	private void makeActions() {
 		AddElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-				NewSiteElement elementCreation_ = new NewSiteElement(treeSelection,document);
-				elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes the wizard
-				WizardDialog dialog = new WizardDialog(treeViewer.getControl().getShell(), elementCreation_);
-				dialog.open(); // This opens a dialog
-				treeViewer.refresh();
+					NewSiteElement elementCreation_ = new NewSiteElement(
+							treeSelection, document);
+					elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes
+																			// the
+																			// wizard
+					WizardDialog dialog = new WizardDialog(treeViewer
+							.getControl().getShell(), elementCreation_);
+					dialog.open(); // This opens a dialog
+					treeViewer.refresh();
 				}
 			}
 		};
 		AddElement.setText("Add Element");
 		AddElement.setToolTipText("Add Element tooltip");
-		AddElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-		
+		AddElement.setImageDescriptor(PlatformUI.getWorkbench()
+				.getSharedImages().getImageDescriptor(
+						ISharedImages.IMG_OBJS_INFO_TSK));
+
 		RemoveElement = new Action() {
 			public void run() {
 				if (treeSelection != null) {
-					//TODO: Code to remove Element does here.
-					Node deletionElement = (Element) treeSelection.getFirstElement();	
+					// TODO: Code to remove Element does here.
+					Node deletionElement = (Element) treeSelection
+							.getFirstElement();
 					Node deletionParent = deletionElement.getParentNode();
 					deletionParent.removeChild(deletionElement);
 					treeViewer.refresh();
-					
+
 				}
 			}
 		};
 		RemoveElement.setText("DeleteElement");
 		RemoveElement.setToolTipText("Delete Element");
-		RemoveElement.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-		
+		RemoveElement.setImageDescriptor(PlatformUI.getWorkbench()
+				.getSharedImages().getImageDescriptor(
+						ISharedImages.IMG_OBJS_INFO_TSK));
+
 		SaveDocument = new Action() {
 			public void run() {
-				DOMUtilities.SaveDOM(document,path);
+				DOMUtilities.SaveDOM(document, path);
 			}
 		};
-		
+
 		SaveDocument.setText("Save");
 		SaveDocument.setToolTipText("Save XML Document");
-		SaveDocument.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		SaveDocument.setImageDescriptor(PlatformUI.getWorkbench()
+				.getSharedImages().getImageDescriptor(
+						ISharedImages.IMG_OBJS_INFO_TSK));
 	}
 
 	private void showMessage(String message) {
-		MessageDialog.openInformation(
-			treeViewer.getControl().getShell(),
-			"Sample View",
-			message);
+		MessageDialog.openInformation(treeViewer.getControl().getShell(),
+				"Sample View", message);
 	}
 
+	/**
+	 * Get the name of the file this editor view represents. This name does not
+	 * include the path. For example. 'site.xml' or 'tabs.xml'
+	 * 
+	 * @return the name (without pat) of the document to view
+	 */
 
-    /**
-     * Get the name of the file this editor view represents.
-     * This name does not include the path. For example.
-     * 'site.xml' or 'tabs.xml'
-     * @return the name (without pat) of the document to view
-     */
-    protected String getFilename() {
-        return "site.xml";
-    }
+	protected String getFilename() {
+		return Utilities.getPathToXDocs() + java.io.File.separator + "site.xml";
+	}
 
-   
-	
 }
