@@ -90,7 +90,7 @@
                 <xsl:when test="forrest:properties[@contract=$name]">
                     <alias:call-template name="{@name}-body">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-                            <alias:with-param name="{@name}" select=".//forrest:properties[@contract='{$name}']/forrest:property[@name='{@name}']"/>
+                            <alias:with-param name="{@name}" select="'{.}'"/>
                         </xsl:for-each>
                     </alias:call-template>
                 </xsl:when>
