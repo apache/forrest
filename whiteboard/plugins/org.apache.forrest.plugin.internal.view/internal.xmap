@@ -187,22 +187,10 @@
       </map:aggregate>
       <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
         <map:parameter name="request" value="{2}"/>
-	<map:parameter name="forrestContext" value="{forrest:context}"/>
+	      <map:parameter name="forrestContext" value="{forrest:context}"/>
       </map:transform>
       <map:transform type="xinclude"/> 
      	<map:serialize type="xml"/>
-    </map:match>
-    <!--
-      Aggregate all contracts-css requested by the view.
-  		--> 
-    <map:match pattern="skin/contracts-**.css">
-      <map:aggregate element="forrest:css">
-        <map:part src="cocoon://skinconf.xml" />
-        <map:part src="cocoon://prepare.properties.xhtml.{1}" /> 
-      </map:aggregate>
-      <map:transform src="resources/stylesheets/prepare.css.xsl" />
-      <map:transform type="xinclude"/> 
-     	<map:serialize type="text" mime-type="text/css"/>
     </map:match>
   </map:pipeline>
   
