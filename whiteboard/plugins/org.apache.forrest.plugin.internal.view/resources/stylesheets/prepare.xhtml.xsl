@@ -18,6 +18,8 @@
 
 <xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
+    <!--Include forrest:hook matchers-->
+    <xsl:include href="hooksMatcher.xsl"/>
     <xsl:param name="request"/>
     <xsl:param name="forrestContext" select="'test'"/>
     <xsl:template match="/">
@@ -68,16 +70,6 @@
     </xsl:template>
     <xsl:template match="forrest:view">
         <xsl:apply-templates select="*[local-name()!='css']"/>
-    </xsl:template>
-    <xsl:template match="forrest:hook[@name]">
-        <div id="{@name}">
-            <xsl:apply-templates/>
-        </div>
-    </xsl:template>
-    <xsl:template match="forrest:hook[@class]">
-        <div class="{@class}">
-            <xsl:apply-templates/>
-        </div>
     </xsl:template>
     <xsl:template match="forrest:css[@url]">
         <link rel="stylesheet" type="text/css">
