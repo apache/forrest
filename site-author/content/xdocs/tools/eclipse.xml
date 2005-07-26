@@ -17,36 +17,147 @@
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
-  <header>
-    <title>Apache Forrest: Eclipse Plugin</title>
-  </header>
-  <body>
-    <section id="overview">
-      <title>Eclipse Plugin</title>
-      <p>
-        The Forrest plugin for Eclipse is new and under rapid development.
-        See the 
-      </p>
-      <note>
-        You need to separately download the <code>activation.jar</code>
-        (its licensing means that we cannot distribute it).
-      </note>
-      <p>
-        Get it from
-        <a href="http://java.sun.com/products/javabeans/glasgow/jaf.html">http://java.sun.com/products/javabeans/glasgow/jaf.html</a>
-        - Download the JAF 1.0.2 ZIP, extract activation.jar, and copy it to
-        <code>tools/eclipse/plugins/org.apache.forrest.eclipse.servletEngine/lib/</code>
-        directory.
-      </p>
-    </section>
-
-    <section id="install">
-      <title>Installation notes</title>
-      <p>
-        To get you started while the documentation is being developed,
-        see this forrest-dev mail thread:
-        <a href="http://marc.theaimsgroup.com/?t=112059632000001">[eclipse] How to install?</a>.
-      </p>
-    </section>
-  </body>
+<header>
+        <title>
+          Apache Forrest: Eclipse Plugin
+        </title>
+      </header>
+<body>
+<section id="overview">
+        <title>
+          Eclipse Plugin
+        </title>
+        <warning>
+          The Forrest plugin for Eclipse is new and under rapid development. For up to the minute
+          details of available features see the dev list archives.
+        </warning>
+      </section>
+<section id="install">
+        <title>
+          Installation notes
+        </title>
+        <p>
+          To get you started while the documentation is being developed, see this forrest-dev mail thread:
+          <a href="http://marc.theaimsgroup.com/?t=112059632000001">
+            [eclipse] How to install?
+          </a>
+          .
+        </p>
+      </section>
+<section id="siteXMLEditor">
+        <title>
+          site.xml Editor
+        </title>
+        <p>
+          First, you need to activate the Site.xml view. This can be done by:
+          <code>
+            Window -> Show View -> Other... -> Forrest -> SiteXML -> OK
+          </code>
+          Now you will see the the view open up in Eclipse. To view a tree, click on the project you are working and you should see the structure of the site.xml as a tree in the view.
+        </p>
+        <p>
+          There are two ways to add the note to the site.xml file.
+        </p>
+          <ol>
+            <li>
+              Drag a document from the Package Explorer to the tree. This will create a new element called NewElement which will allow with references to that new object
+            </li>
+            <li>
+              Right click on an element in the site.xml tree and select "Add Element". A wizard will come up which will allow you to enter the HREF, Description, Label and Element name for the new element that is being added.
+            </li>
+          </ol>
+        <p>
+          To delete an element, right click on the element in the tree and click on "Delete Element".
+        </p>
+        <warning>
+          For the changes to show up when you run a test site for your project, you must save the changes. Right click on the tree and select
+		  "Save". In a later version of the plugin this step will not be necessary.
+        </warning>
+        <fixme author="Anil Ramnanan">
+          Currently there is no easy way to edit an existing element. The element will be linked to the Properties View in Eclipse to allow for easy editing
+        </fixme>
+      </section>
+<section id="tabsXMLEditor">
+        <title>
+          tabs.xml Editor
+        </title>
+        <p>
+          First, you need to activate the Tab.xml view. This can be done by:
+          <code>
+            Window -> Show View -> Other... -> Forrest -> TabXML -> OK
+          </code>
+          Now you will see the the view open up in Eclipse. To view a tree, click on the project you are working and you should see the structure of the tabs.xml as a tree in the view.
+        </p>
+        <p>
+          To add a new element to the tabs.xml file right click on an element in the tabs.xml tree and select "Add Element". 
+            A wizard will come up which will allow you to enter the Id, Dir, Label and Index File for the new tab
+            element that is being added.
+        </p>
+        <p>
+          To delete an element, right click on the element in the tree and click on Delete Element
+        </p>
+        <warning>
+          For the changes to show up when you run a test site for your project, you must save the changes. Right
+          click on the tree and select "Save". In a later version of the plugin this step will not be necessary.
+        </warning>
+        <fixme author="Anil Ramnanan">
+          Currently there is no easy way to edit an element. The element will be linked to the Properties View in Eclipse to allow for easy editing
+        </fixme>
+      </section>
+	
+	<section id="LocationmapEditor">
+        <title>
+          Locationmap.xml Editor
+        </title>
+        <p>
+          First, you need to activate the Locationmap view. This can be done by:
+        </p>
+        <p>
+          Window ->  Show View ->  Other... -> Forrest -> Locationmap -> OK
+        </p>
+        <p>
+          Now you will see the the view open up in Eclipse. To view a tree, click on the 
+          project you are working and you should see the structure of the Locationmap.xml 
+          as a tree in the view.
+        </p>
+        <p>
+          To add a match, you must rich click on the locater element and click on
+		      "Add Match". A wizard will come up asking you to enter the Pattern or the Match.
+        </p>
+        <p>
+          Right click on the match you just created and click on "Add Location". This will allow you to enter the Location Source.
+        </p>
+        <p>
+          To delete an element, right click on the element in the tree and click on Delete Element
+        </p>
+        <p>
+          For the changes to show up when you run a test site for your project, you must save the changes. Right click on the tree and select
+		  "Save".
+        </p>
+        <fixme author="Anil Ramnanan">
+          Currently there is no easy way to edit an element. The element will be linked to the Properties View in Eclipse to allow for easy editing
+        </fixme>
+      </section>
+<section id="Forrest:Views">
+        <title>
+          Activate Forrest:Views for a project
+        </title>
+        <p>
+          To activate views when seeding a new project:
+        </p>
+        <p >
+          File ->  New -> Project -> Forrest -> Seed New Project -> Next
+        </p>
+        <p>
+          Type in the name of the project and click on Next. To Activate views for the new project, check off
+		      "Activate Views"  and click on Finish. When "Activate Views" is selected, the new project has 
+          project.skin=leather-dev uncommented and the relevant plugins for views are added to 
+          project.required.plugins
+        </p>
+        <p>
+	       To add a new View doc (*.fv), click on New -> Other ->  Forrest -> View Doc. Enter the file name of 
+         the view document and click on Finish.
+        </p>
+      </section>
+</body>    
 </document>
