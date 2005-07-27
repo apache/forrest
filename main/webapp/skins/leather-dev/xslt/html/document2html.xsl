@@ -145,7 +145,7 @@ imported document2html.xsl for details.
   </xsl:template>
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
-    <div class="frame {local-name()}">
+    <div class="{local-name()}">
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
