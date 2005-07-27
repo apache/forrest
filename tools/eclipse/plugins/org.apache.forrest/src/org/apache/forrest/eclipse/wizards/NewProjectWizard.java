@@ -16,8 +16,6 @@
  */
 package org.apache.forrest.eclipse.wizards;
 
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,26 +23,19 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.forrest.eclipse.ForrestPlugin;
 import org.apache.forrest.eclipse.actions.Utilities;
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
@@ -140,10 +131,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			
 			if (System.getProperty("os.name").toLowerCase().startsWith("linux")) {
 				cmdString = "forrest -Dbasedir=" + strPath + "/" + strName
-						+ " seedTestBusiness";
+						+ " seed";
 			} else if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
 				cmdString = "cmd /c forrest -Dbasedir=" + strPath + "\\" + strName
-						+ " seedTestBusiness";
+						+ " seed";
 			}
 			
 			try {
@@ -167,9 +158,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 				Utilities.activateForrestProperty(strPath + "\\" + strName +  "\\forrest.properties" ,"project.skin=leather-dev");
 				Utilities.addForrestPluginProperty(strPath + "\\" + strName +  "\\forrest.properties","org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view");
 			}
-			
-			
-			// TODO: configure your page / nature
+			Utilities.addForrestPluginProperty(strPath + "\\" + strName +  "\\forrest.properties", pluginPage.getSelectedPlugins());
 			
 			// TODO: change to the perspective specified in the plugin.xml			
 		} finally {

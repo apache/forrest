@@ -163,8 +163,10 @@ public class Utilities {
 		
 	}
 	/**
-	 * Adds a new plugin to the plugin property in forrest.properties 
-	 * 
+	 * Adds a plugin or plugins to the project.required.plugins property in forrest.properties 
+     * @param path - path to the forrest.properties file
+     * @param pluginName - a comma separated list of plugins to add
+     *  
 	 */ 
 	static public void addForrestPluginProperty(String path, String pluginName){
 		 try {
@@ -174,11 +176,9 @@ public class Utilities {
 		       while ((str = in.readLine()) != null) {
 		           String[] tokens = str.split("=");
 		           if (tokens[0].startsWith("project.required.plugins")) {
-		    	   outFile = outFile + str + "," + pluginName+ System.getProperty( "line.separator" );
-		    	   }
-		           else
-		           {
-		           outFile = outFile + str + System.getProperty( "line.separator" );
+		    	     outFile = outFile + str + "," + pluginName + System.getProperty( "line.separator" );
+		    	   } else {
+		             outFile = outFile + str + System.getProperty( "line.separator" );
 		           }
 		        }
 		        in.close();

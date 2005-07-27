@@ -41,11 +41,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -117,12 +113,13 @@ public class SiteXMLView extends NavigationView {
 					for (int i = 0; i < files.length; i++) {
 						strFilename = new File(files[i]);
 						filePath = strFilename.getPath();
+						File file = new File(filePath);
 						Node insertionElement = (Element) event.item.getData();
-						Element element = document.createElement("NewElement");
+						Element element = document.createElement(file.getName());
 						relativePath = filePath.substring(xDocPath.length());
 						element.setAttribute("href", relativePath);
-						element.setAttribute("description", relativePath);
-						element.setAttribute("label", relativePath);
+						element.setAttribute("description", file.getName());
+						element.setAttribute("label", file.getName());
 						insertionElement.appendChild(element);
 						treeViewer.refresh();
 					}
