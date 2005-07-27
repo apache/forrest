@@ -105,6 +105,7 @@
     View config resolver
     File specific views have priority before default ones.
     If no views can be found in the project we use the default one of the view plugin.
+    {1} - requested url
     -->
     <map:match pattern="prepare.view.**">
       <map:generate src="cocoon:/viewLocationmap.xml"/>
@@ -133,7 +134,9 @@
     	<map:serialize type="xml"/>
     </map:match>
     
-    <!--Add businessHelper to the presentation model that the content can be used later on.-->
+    <!--Add businessHelper to the presentation model that the content can be used later on.
+        {1} - requested url-->
+    
     <map:match pattern="prepare.view-nugget.**">
       <map:generate src="cocoon:/prepare.view.{1}"/>
       <map:transform src="resources/stylesheets/prepare.view.xsl">
@@ -146,6 +149,8 @@
 <!--
   Aggregate the contract-templates requested by the view with xinclude.
   The result is a stylesheet with all needed xsl:templates.
+  {1} - format
+  {2} - requested url
   -->
     <map:match pattern="prepare.include.*.**">
       <map:generate src="cocoon:/prepare.view.{2}"/>
@@ -161,6 +166,8 @@
     <!--
       Aggregate the forrest:properties requested by the *.fv.
       The result is an aggregation of properties which defines the templates to be call.
+      {1} - format
+  		{2} - requested url
       -->
     <map:match pattern="prepare.properties.*.**">
       <map:generate src="cocoon:/prepare.view.{2}"/>
@@ -179,6 +186,8 @@
     <!--
       Aggregate all contracts-templates requested by the view.
       Create a xsl that can be used for the last step of the transformation of the view.
+      {1} - format
+      {2} - requested url
   		--> 
     <map:match pattern="getStylesheet.*.**">
       <map:aggregate element="forrest:filter">
