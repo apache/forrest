@@ -27,8 +27,22 @@
   </components>
   
   <locator>
-   <match pattern="daisy/**.xml">
-     <location src="http://www.cocoondev.org/daisy/{1}.html?navigationType=none" />
-   </match>
+   
+     <match pattern="index.xml">
+         <location src="cocoon://654.daisy.xml" />
+     </match>
+   
+     <match pattern="*.daisy.source">
+         <location src="http://cocoon.zones.apache.org:9263/publisher/documentPage?documentId={1}&amp;includeNavigation=false&amp;locale=en_US&amp;version=live" />
+     </match>
+   
+     <match pattern="*.daisy.img">
+         <location src="http://cocoon.zones.apache.org:9263/publisher/blob?documentId={1}&amp;version=live&amp;partType=3" />
+     </match>
+   
+     <match pattern="*.daisy.navigation">
+         <location src="http://cocoon.zones.apache.org:9263/publisher/blob?documentId={1}&amp;version=live&amp;partType=1" />
+     </match>
+ 
   </locator>
 </locationmap>
