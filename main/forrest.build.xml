@@ -50,6 +50,7 @@ FORREST SITE BUILDER
   <import file="targets/skins.xml"/>
   <import file="targets/plugins.xml"/>
   <import file="targets/context.xml"/>
+  <import file="targets/seed.xml"/>
 
   <description>
     *=======================================================*
@@ -400,33 +401,6 @@ The skin that most likely resembles these ones is called 'pelt'.
     <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
   <target name="clean-site" depends="clean"/>
-
-
-<!-- ***************************************************************** -->
-<!-- ***************************************************************** -->
-<!-- **                                                             ** -->
-<!-- **                                                             ** -->
-<!-- **          PROJECT-TEMPLATE BUILDING ACTIONS                  ** -->
-<!-- **                                                             ** -->
-<!-- **                                                             ** -->
-<!-- ***************************************************************** -->
-<!-- ***************************************************************** -->
-
-
-  <!-- ===============================================================
-        Copies a template structure over to your project dir.
-       =============================================================== -->
-  <target name="seed" depends="ensure-nocontent"
-    description="* Seeds a directory with a template project doc structure">
-     <copy todir="${project.home}" overwrite="false">
-        <fileset dir="${forrest.core}/fresh-site"/>
-     </copy>
-     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message.txt">
-        <filterchain><expandproperties/></filterchain>
-    </loadfile>
-    <echo>${template-project-created-message}</echo>
-  </target>
-
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
