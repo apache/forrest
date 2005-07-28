@@ -16,7 +16,6 @@
  */
 package org.apache.forrest.eclipse.views;
 
-import org.apache.forrest.eclipse.actions.Utilities;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IMenuListener;

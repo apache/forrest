@@ -18,8 +18,6 @@ package org.apache.forrest.eclipse.views;
 
 import java.io.File;
 
-import org.apache.forrest.eclipse.actions.Utilities;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.widgets.Display;
