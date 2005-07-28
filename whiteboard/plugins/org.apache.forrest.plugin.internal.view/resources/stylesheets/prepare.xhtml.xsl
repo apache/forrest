@@ -73,7 +73,7 @@
     <xsl:template match="forrest:view">
         <xsl:apply-templates select="*[local-name()!='css']"/>
     </xsl:template>
-    <xsl:template match="forrest:css[@url and count(. | key('css-includes', @name)[1]) = 1]">
+    <xsl:template match="forrest:css[@url and count(. | key('css-includes', @url)[1]) = 1]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">{$root}skin/<xsl:value-of select="@url"/>
             </xsl:attribute>
