@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta content="Apache Forrest" name="Generator" />
+<meta name="Forrest-version" content="0.7" />
+<meta name="Forrest-skin-name" content="leather-dev" />
+<link href="skin/default.css" rel="stylesheet" type="text/css" />
+<title>forrest:views - x output formats, one config</title>
+</head>
+<body onload="init()">
+<div id="container">
+<div id="header">
+<div id="branding-tagline-name">new seed</div>
+<div id="branding-tagline-tagline">powered by forrest:views</div>
+<div id="nav-main-hook">
+<div id="tabs">
+<ul id="nav-main">
+<li class="current">
+<a class="base-selected" href="index.html">Home</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="page">
+<div id="leftbar">
+<div id="nav-section">
+<ul>
+<li class="pagegroup">
+<strong>About</strong>
+<ul>
+<li class="menupage">
+<div class="menupagetitle">Index</div>
+</li>
+<li>
+<a href="howItWork.html">howItWorks</a>
+</li>
+<li>
+<a href="changes.html">Changes</a>
+</li>
+<li>
+<a href="todo.html">Todo</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="search-input">
+<form action="http://www.google.com/search" method="get">
+<div id="search-hidden">
+<input value="mydomain" name="sitesearch" type="hidden" />
+</div>
+<div id="search-field">
+<input size="25" name="q" id="query" type="text" />
+</div>
+<div id="search-submit">
+<input name="Search" value="Search" type="submit" />
+</div>
+</form>
+</div>
+</div>
+<div id="export-link" />
+<div id="content">
+<h1>forrest:views - x output formats, one config</h1>
+<div class="abstract">This plugin depends on a ViewHelper and a BusinessHelper implementation.</div>
+<div id="content-minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#view">view</a>
+</li>
+<li>
+<a href="#viewHelper">viewHelper</a>
+</li>
+<li>
+<a href="#BusinessHelper">BusinessHelper </a>
+</li>
+<li>
+<a href="#links">links</a>
+</li>
+</ul>
+</div>
+<div id="skinconf-toc-page" />
+<a name="N10010"> </a>
+<a name="view"> </a>
+<div class="skinconf-heading-1">
+<h1>view</h1>
+</div>
+<div class="section">
+<p>Together with the ViewHelper and the BusinessHelper (to be implemented) 
+        plugin this plugin is following the <a href="http://java.sun.com/j2ee/patterns/DispatcherView.html">DispatcherView pattern</a> 
+        and building the final view which will be delivered to the client. This implementation follows exactly the pattern shown on 
+          <a href="http://corej2eepatterns.com/Patterns2ndEd/DispatcherView.htm">corej2eepatterns.com</a>
+        </p>
+<p>
+        A view will be configured by a config file 
+        which basically contains the following tags (it is still evolving): </p>
+<pre class="code">&lt;forrest:view type="xhtml"&gt;
+  &lt;forrest:css url="default.css"/&gt;
+  &lt;forrest:contract name="meta"/&gt;
+  &lt;forrest:hook name="container"&gt;
+   &lt;forrest:contract name="feedback"/&gt;
+  &lt;/forrest:hook /&gt;
+&lt;/forrest:view&gt;</pre>
+<p>The view tag's @type determines the final output format. The idea is to
+configure different output formats within a forrest:views. That means a forrest:views 
+can contain n different "forrest:view" configurations for n different formats. <br />
+In short: x formats, one config. :)</p>
+<pre class="code">&lt;forrest:views
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"&gt;
+&lt;forrest:view type="xhtml"&gt;
+  &lt;forrest:css url="default.css"/&gt;
+  &lt;forrest:contract name="meta"/&gt;
+  &lt;forrest:hook name="container"&gt;
+   &lt;forrest:contract name="feedback"/&gt;
+  &lt;/forrest:hook /&gt;
+&lt;/forrest:view&gt;
+&lt;forrest:view type="fo"&gt;
+  &lt;forrest:hook name="container"&gt;
+   &lt;forrest:contract name="feedback"/&gt;
+  &lt;/forrest:hook /&gt;
+&lt;/forrest:view&gt;
+/forrest:views&gt;</pre>
+</div>
+<a name="N10031"> </a>
+<a name="viewHelper"> </a>
+<div class="skinconf-heading-1">
+<h1>viewHelper</h1>
+</div>
+<div class="section">
+<p>viewHelper class/implementation - a class/implementation which will
+access the presentation model and transform its models. In other words
+it is a presentation producing factory.
+</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">The &lt;forrest:contract name="nav-main"/&gt; expects a certain model
+(now produced by leather-dev - tab2menu.xsl) to transform it. In the
+future this dependency will be on a businessHelper implementation that
+has to be defined in the view. For now it depends on leather-dev. I
+guess leather-dev is still not dead till the businessHelper plugin comes
+(which will implement the businessHelper of leather-dev). ;-)</div>
+</div>
+<p>
+Each forrest:css will be transformed into a &lt;link rel="stylesheet" type="text/css" url="{$root}skin/{url}"&gt; tag (in html
+output [only format that has an implementation]). 
+This tags are designed to help <strong>web-designers</strong> to freely implemend their own css-implementations for a view.
+</p>
+<p>
+Each forrest:hook will be transformed into a &lt;div/&gt; tag (in html
+output [only format that has an implementation]). 
+This tags are designed to help <strong>web-designers</strong> to freely move
+around and group contracts into design container.
+</p>
+<p>Each forrest:contract will dispatch a xml file (ViewHelper) that contains
+xsl:stylesheets (for now, but other implementations to transform the presentation
+ model are/should be possible) for the different output formats of a contract.
+  For html, the only format that we have implemented so far, we
+have three different kind of templates:</p>
+<p>
+&lt;xsl:templates name="{contract/@name}-css/&gt;<br />
+Here the contract specific css will be stored.
+</p>
+<p>
+&lt;xsl:templates name="{contract/@name}-head/&gt;<br />
+Here goes everything that belongs in the html head. e.g. scripts.
+</p>
+<p>
+&lt;xsl:templates name="{contract/@name}-body/&gt;<br />
+Everything that belongs into the body.
+  </p>
+</div>
+<a name="N10059"> </a>
+<a name="BusinessHelper"> </a>
+<div class="skinconf-heading-1">
+<h1>BusinessHelper </h1>
+</div>
+<div class="section">
+<p>
+<strong>businessHelper class/implementation </strong>- a class/implementation which will
+access businessServices to produce models for the presentation model. In
+other word it is a data producing factory.
+</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">Right now we are using the default forrest businessHelper (defined
+by the skin you are using). There are contracts that depend on a
+businessHelper implementation of leather-dev (tab2menu.xsl, site2xhtml.xsl,...). 
+We will create a businessHelper plugin to overcome this problem.</div>
+</div>
+<p>Right now it is implemented for the forrest way of producing the models
+for the view but we will create an independent BusinessHelper to
+access all BusinessServices you may have in your application. </p>
+</div>
+<a name="N1006B"> </a>
+<a name="links"> </a>
+<div class="skinconf-heading-1">
+<h1>links</h1>
+</div>
+<div class="section">
+<div class="note">
+<div class="label">Note</div>
+<div class="content">There are/were lots of mails on the dev-list. Please, search the list</div>
+</div>
+<p>Background mailings around the views concept</p>
+<ul>
+        <li>
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=110019697426791&amp;w=2">[RT] plugin infrastructure</a> </li>
+        <li>
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=109959086204887&amp;w=2">[RT] Forrest templates for second generation skining - towards Corium</a> </li>
+      </ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="siteinfo-feedback" />
+<script type="text/javascript">document.write("Last Published: " + document.lastModified);</script>
+</div>
+</body>
+</html>
