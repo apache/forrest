@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta content="Apache Forrest" name="Generator" />
+<meta name="Forrest-version" content="0.7" />
+<meta name="Forrest-skin-name" content="leather-dev" />
+<link href="skin/default.css" rel="stylesheet" type="text/css" />
+<title>forrest:views - x formats, one config</title>
+</head>
+<body onload="init()">
+<div id="container">
+<div id="header">
+<div id="branding-tagline-name">new seed</div>
+<div id="branding-tagline-tagline">powered by forrest:views</div>
+<div id="nav-main-hook">
+<div id="tabs">
+<ul id="nav-main">
+<li class="current">
+<a class="base-selected" href="index.html">Home</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="page">
+<div id="leftbar">
+<div id="nav-section">
+<ul>
+<li class="pagegroup">
+<strong>About</strong>
+<ul>
+<li>
+<a href="index.html">Index</a>
+</li>
+<li class="menupage">
+<div class="menupagetitle">howItWorks</div>
+</li>
+<li>
+<a href="changes.html">Changes</a>
+</li>
+<li>
+<a href="todo.html">Todo</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="search-input">
+<form action="http://www.google.com/search" method="get">
+<div id="search-hidden">
+<input value="mydomain" name="sitesearch" type="hidden" />
+</div>
+<div id="search-field">
+<input size="25" name="q" id="query" type="text" />
+</div>
+<div id="search-submit">
+<input name="Search" value="Search" type="submit" />
+</div>
+</form>
+</div>
+</div>
+<div id="export-link" />
+<div id="content">
+<h1>forrest:views - x formats, one config</h1>
+<div class="abstract">This plugin depends on a ViewHelper and a BusinessHelper implementation.</div>
+<div id="content-minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#How+it+works">How it works </a>
+</li>
+<li>
+<a href="#Resume">Resume</a>
+</li>
+</ul>
+</div>
+<div id="skinconf-toc-page" />
+<a name="N10010"> </a>
+<a name="How+it+works"> </a>
+<div class="skinconf-heading-1">
+<h1>How it works </h1>
+</div>
+<div class="section">
+<pre class="code">
+This plugin has three components:
+  1. viewHelper - delivers contracts in form of xsl:templates
+  2. businessHelper - delivers content that is used in the contracts
+  3. views - prepares and transforms the requested contracts (viewHelper) 
+     and populate them with the content (businessHelper)
+
+1. viewHelper
+  This is the template producing factory.
+
+a. &lt;map:match pattern="resolve.contract.*.*"&gt; -&gt; Resolving factory
+Project implementation of templates have priority before default ones.
+If no implementation can be found we use the noFt (~ - no
+forrest:template) implementation.-&gt; this match is implemented in the viewHelper plugin
+
+b. &lt;map:match pattern="get.contract.*.*"&gt;-&gt; this match is implemented in the viewHelper plugin
+Get the xsl:templates of the requested contract and specific format.
+
+c. &lt;map:match pattern="get.contract-property.*"&gt;-&gt; this match is implemented in the viewHelper plugin
+Get the forrest:properties of the requested contract. 
+This will determine which templates (css, head, body) we have to call
+later on
+
+GENERAL:
+Contracts are stored in forrest:templates ({contract-name}.ft) please
+have a look on the templates/*.ft that the viewHelper implementation contain to get
+an idea how your own implementation have to look like.
+
+
+2. businessHelper
+  This is the content producing factory.
+
+NOTE: &lt;map:match pattern="*.page"&gt;
+  The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).
+  It is only exchanging the last model of the models the skin is producing (site2xhtml.xsl) till now.
+  This will have to be changed in the future.
+
+3. views
+  prepares the requested contracts viewHelper and dispatches
+the corresponding businessHelper.
+
+a.  &lt;map:match pattern="prepare.view.*"&gt; -&gt; View config resolver
+File specific views have priority before default ones.
+If no view can be found in the project we use the default one of the
+views plugin.
+
+b.  &lt;map:match pattern="prepare.include.*.**"&gt; 
+Aggregate the contract-templates requested by the view with xinclude.
+The result is a stylesheet with all needed xsl:templates.
+
+c. &lt;map:match pattern="prepare.properties.*.*"&gt;
+Aggregate the forrest:properties requested by the *.fv.
+The result is an aggregation of properties which defines the templates
+to be call.
+
+d. &lt;map:match pattern="prepare.xhtml.*"&gt;
+Aggregate all contracts-templates requested by the view.
+Create a xsl that can be used for the last step of the transformation of
+the view.
+
+e. &lt;map:match pattern="*.html"&gt; -&gt; Last processing step. 
+Here we are overriding the default skin generation. 
+-&gt; this match is implemented in the viewHelper plugin
+
+GENERAL:
+Views are stored in forrest:view ({file-name}.fv) please have look on
+plugins/org.apache.forrest.plugin.internal.views/src/documentation/default.fv do
+get an idea how your own implementation have to look like.
+
+      </pre>
+</div>
+<a name="N1001B"> </a>
+<a name="Resume"> </a>
+<div class="skinconf-heading-1">
+<h1>Resume</h1>
+</div>
+<div class="section">
+<pre class="code">
+The views plugin can be seen as prototype for the next generation
+skinning of forrest. It is still in early stage but with extracting the businessHelper we
+hope to make it easier for all devs (not only committer) to get the idea
+and enable them to enhance the design of this plugin and their implementation.
+
+Some basic and simple hints:
+a) If you want another implementation of a contract then create a folder
+"templates" in ${project.resources-dir} and it will be matched before
+the standard implementation. 
+
+e.g. feedback contract:
+
+&lt;forrest:contract name="feedback" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"&gt;
+&lt;description&gt;
+This function will output the html feedback information.
+&lt;/description&gt;
+
+&lt;forrest:template
+xmlns:forrest="http://apache.org/forrest/templates/1.0"
+format="xhtml" name="feedback" inputFormat="xsl" body="true"
+head="false" css="true"&gt;
+
+&lt;xsl:stylesheet version="1.1" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+
+&lt;xsl:template name="feedback-css"&gt;
+#feedback {
+    color: black;
+    background: #CFDCED;
+    text-align:center;
+    margin-top: 5px;
+}
+#feedback #feedbackto {
+    font-size: 90%;
+    color: black;
+}&lt;/xsl:template&gt;
+
+&lt;xsl:template name="feedback-body"&gt;
+&lt;div id="feedback"&gt; Modified project implementation
+&lt;xsl:value-of select="$config/feedback"/&gt;
+&lt;xsl:choose&gt;
+&lt;xsl:when test="$config/feedback/@href and
+not($config/feedback/@href='')"&gt;
+  &lt;a id="feedbackto"&gt;
+    &lt;xsl:attribute name="href"&gt;
+      &lt;xsl:value-of select="$config/feedback/@href"/&gt;
+      &lt;xsl:value-of select="$path"/&gt;
+    &lt;/xsl:attribute&gt;
+    &lt;xsl:value-of select="$config/feedback/@to"/&gt;
+  &lt;/a&gt;
+&lt;/xsl:when&gt;
+&lt;xsl:otherwise&gt;
+  &lt;xsl:value-of select="$config/feedback/@to"/&gt;
+&lt;/xsl:otherwise&gt;
+&lt;/xsl:choose&gt;
+&lt;/div&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+&lt;/forrest:template&gt;
+&lt;/forrest:contract&gt;
+
+The @attributes (body="true" head="false" css="true") of the 
+forrest:template defining which parts of the html page (head, head-css
+and body) we have to render. The xsl:templates are following the simple
+naming convention {@name}-(css|head|body).
+
+
+b. If you want a default view for your project then copy the default.fv
+from the viewHelper implementation to your ${project.conf-dir} and modify this file. When
+you want another view for a specific file (e.g. ${project.xdocs-dir}/index.html) then copy
+the default.fv to your ${project.xdocs-dir} and renamed it to 
+${project.xdocs-dir}/index.fv.</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="siteinfo-feedback" />
+<script type="text/javascript">document.write("Last Published: " + document.lastModified);</script>
+</div>
+</body>
+</html>
