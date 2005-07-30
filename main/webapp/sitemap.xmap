@@ -134,7 +134,7 @@ $Revision: 1.12 $
       <catalogue id="common" name="CommonMessages" location="skins/common/translations"/>
     </catalogues>
     <cache-at-startup>true</cache-at-startup>
-  </map:transformer>
+   </map:transformer>
  </map:transformers>
 
     <map:readers default="resource">
@@ -303,6 +303,10 @@ $Revision: 1.12 $
            </map:select>
       </map:pipeline>     
       
+      <!-- 
+          This is the Plugin Sitemap that is responsible for calling
+          all the configured plug-ins before default processing takes place.              
+      -->  
       <map:pipeline internal-only="false">
         <map:select type="exists">
           <map:when test="{project:temp-dir}/internal.xmap">
@@ -312,6 +316,10 @@ $Revision: 1.12 $
       </map:pipeline>
       
       <map:pipeline internal-only="false">
+
+         <!-- 
+          Delivers skin configuration information in a usable form            
+         -->  
          <map:match pattern="skinconf.xml">
            <map:generate src="{project:skinconf}" />
            <map:transform src="{forrest:stylesheets}/strip-doctype.xsl"/>
@@ -463,7 +471,7 @@ $Revision: 1.12 $
       </map:match>
 
       <!-- Default matches -->
-      <!-- (HTML rendered from doc-v11 intermediate format -->
+      <!-- (HTML rendered from doc-v13 intermediate format -->
       <map:match pattern="**body-*.html">
         <map:generate src="cocoon:/{1}{2}.xml"/>
         <map:transform type="idgen"/>
