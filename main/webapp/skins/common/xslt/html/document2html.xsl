@@ -368,8 +368,13 @@ Section handling
   <!-- End of "toc" mode templates -->
 
   <xsl:template match="node()|@*" priority="-1">
+    <!-- id processing will create its own a-element so processing has to 
+         happen outside the copied element 
+    -->
+    <xsl:apply-templates select="@id"/>
     <xsl:copy>
-      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="@*[name(.) != 'id']"/>
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
