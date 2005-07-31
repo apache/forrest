@@ -100,8 +100,16 @@
     <copy todir="${cocoon.home}">
       <fileset dir="." includes="local.*.properties"/>
     </copy>
-<!-- FIXME: This only works within unix -->
-    <exec dir="${cocoon.home}" executable="${cocoon.home}/build.sh"/>
+  	<condition property="build.script" value="build.bat">
+  	    <os family="windows"/>
+    </condition>
+  	<condition property="build.script" value="build.sh">
+      <not>
+        <os family="windows"/>
+      </not>
+    </condition>
+
+    <exec dir="${cocoon.home}" executable="${cocoon.home}/${build.script}"/>
   </target>
   
   <target name="copy-cocoon" depends="init">
