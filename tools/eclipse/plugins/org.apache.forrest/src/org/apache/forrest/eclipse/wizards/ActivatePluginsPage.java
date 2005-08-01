@@ -242,6 +242,10 @@ public class ActivatePluginsPage extends WizardPage {
 		    pluginList= (pluginList + iterator.next().toString() + ",");
 		  } 
 		}
-		return pluginList.substring(0,(pluginList.length()-1)); 
+		if (pluginList != "") {  
+		  return pluginList.substring(0,(pluginList.length()-1)); 
+        } else {
+		  return null; 
+        }
 	}	 
 }

@@ -181,8 +181,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 										+ "\\forrest.properties",
 								"org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view");
 			}
-			Utilities.addForrestPluginProperty(strPath + "\\" + strName
+			if (pluginPage.getSelectedPlugins() != null ) {
+			  Utilities.addForrestPluginProperty(strPath + "\\" + strName
 					+ "\\forrest.properties", pluginPage.getSelectedPlugins());
+            }
 			updateConfig(strPath + "/" + strName + "/");
 		} finally {
 			monitor.done();
