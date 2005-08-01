@@ -37,6 +37,9 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 
@@ -56,6 +59,7 @@ public class ActivatePluginsPage extends WizardPage {
 	private ListViewer selectedPluginsListViewer;
 	private IStructuredSelection selection ;
 	private Vector selectedPlugins;
+	
 	
 	/**
 	 * Create the new page.
@@ -126,13 +130,8 @@ public class ActivatePluginsPage extends WizardPage {
 	    activateViewPosition.bottom =  new FormAttachment(59, 1000, 0);
 	    activateView.setLayoutData(activateViewPosition);
 	    activateView.setSelection(false);
-	   
-	   
-	   
 	    selectedPlugins = new Vector();
-	    
 	    availablePluginsListViewer = new ListViewer(container);
-	    
 	    availablePluginsListViewer.setContentProvider(new IStructuredContentProvider() {
 	        public Object[] getElements(Object inputElement) {
 	          Vector v = (Vector)inputElement;
@@ -231,7 +230,7 @@ public class ActivatePluginsPage extends WizardPage {
 	    selectedPluginsListViewer.getControl().setLayoutData(selectedPluginsListViewerPosition);
 		selectedPluginsListViewer.setInput(selectedPlugins);
 	    setControl(container);
-
+	 
 	}
 	
 	public boolean getActivateViewValue() {
@@ -247,6 +246,5 @@ public class ActivatePluginsPage extends WizardPage {
 		  } 
 		}
 		return pluginList.substring(0,(pluginList.length()-1)); 
-		
 	}	 
 }

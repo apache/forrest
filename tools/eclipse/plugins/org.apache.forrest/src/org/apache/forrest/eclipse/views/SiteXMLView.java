@@ -46,6 +46,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -192,6 +194,17 @@ public class SiteXMLView extends NavigationView {
 		hookContextMenu();
 	}
 
+	  /* (non-Javadoc)
+     * Method declared on IAdaptable
+     */
+    public Object getAdapter(Class adapter) {
+       
+        if (adapter.equals(IPropertySheetPage.class)) {
+            return getPropertySheet();
+        }
+        return super.getAdapter(adapter);
+    }
+	
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -281,5 +294,9 @@ public class SiteXMLView extends NavigationView {
 	protected String getFilename() {
 		return Utilities.getPathToXDocs() + java.io.File.separator + "site.xml";
 	}
+	
+	protected IPropertySheetPage getPropertySheet() {
+	        return new PropertySheetPage();
+	    }
 
 }
