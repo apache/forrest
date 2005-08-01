@@ -83,22 +83,26 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
     /**
      * When the selection in the navigator view is changed 
      * we look to see if the new selection is an IProject.
-     * If it is then we load the site.xml file into this
-     * SiteXMLView.
-     */
+     * If it is then we load the relevant navigation
+     * configuration file.
+     */    
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             Object first = ((IStructuredSelection) selection).getFirstElement();
             IResource resource = (IResource) first;
-            if (resource instanceof IProject) {
-                activeProject = (IProject) resource;
-                projectName = activeProject.getProject().getName();
-                xDocPath = (activeProject.getProject().getLocation()
+            if (resource != null) {
+            	 IProject newActiveProject = resource.getProject();
+            	 if (newActiveProject != activeProject){
+                     // TODO: only attempt to load config file if this is a Forrest project
+            		 activeProject = newActiveProject;
+            		 projectName = activeProject.getProject().getName();
+            		xDocPath = (activeProject.getProject().getLocation()
                         .toString()
                         + java.io.File.separator);
-                path = xDocPath + getFilename();
-                document = DOMUtilities.loadDOM(path);
-                treeViewer.setInput(document);
+            		path = xDocPath + getFilename();
+            		document = DOMUtilities.loadDOM(path);
+            		treeViewer.setInput(document);
+                 }
             }
         }
     }
