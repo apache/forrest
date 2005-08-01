@@ -19,24 +19,39 @@ package org.apache.forrest.eclipse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.forrest.eclipse.preference.ForrestPreferences;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
  */
 public class ForrestPlugin extends AbstractUIPlugin {
 	public final static String ID = "org.apache.forrest";
+
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger
+            .getLogger(ForrestPlugin.class);
 	//The shared instance.
 	private static ForrestPlugin plugin;
 
 	//Resource bundle.
 	private ResourceBundle resourceBundle;
+
+    private static final String LOG_PROPERTIES_FILE = "/conf/log4j.xml";
 
 	/**
 	 * The constructor.
@@ -141,4 +156,25 @@ public class ForrestPlugin extends AbstractUIPlugin {
 		IPreferenceStore store = getPreferenceStore();
 		store.setDefault(ForrestPreferences.FORREST_HOME, forrestHome);
 	}
+
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        configureLog();
+    }
+
+    private void configureLog() {
+        URL configURL = getBundle().getEntry(LOG_PROPERTIES_FILE);      
+        try {
+            URL log4jConf = Platform.resolve(configURL);
+            DOMConfigurator.configure(log4jConf);
+        } catch (IOException e) {
+            String message = "Error while initializing log properties." +
+                             e.getMessage();
+            IStatus status = new Status(IStatus.ERROR,
+              getDefault().getBundle().getSymbolicName(),
+              IStatus.ERROR, message, e);
+            getLog().log(status);
+            // having logged this problem we will continue without log4j logging
+         }
+    }
 }
