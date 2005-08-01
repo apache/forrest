@@ -104,9 +104,11 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
     }
 
     /**
-     * Get the anme and path of the file this editor view represents.
-     * This name does not include the path. For example.
-     * 'site.xml' or 'tabs.xml'
+     * Get the name and path of the file this editor view represents.
+     * This name does not include the full path, it is the path
+     * relative to the project root. For example.
+     * 'src/documentation/content/xdocs/site.xml'
+     * 
      * @return the name (without pat) of the document to view
      */
     protected abstract String getFilename();

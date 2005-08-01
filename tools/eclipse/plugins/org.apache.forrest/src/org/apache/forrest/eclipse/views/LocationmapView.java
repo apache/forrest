@@ -23,15 +23,12 @@ import java.util.ArrayList;
 import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.wizards.NewLocationElement;
 import org.apache.forrest.eclipse.wizards.NewMatchElement;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -46,11 +43,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -60,15 +54,8 @@ import org.w3c.dom.NodeList;
  * drop from the navigator and supports a number of context 
  * menus for editing. 
  */
-public class LocationmapView extends ViewPart implements IMenuListener,
+public class LocationmapView extends NavigationView implements IMenuListener,
         ISelectionListener {
-    protected TreeViewer treeViewer;
-    protected Document document;
-    protected String projectName;
-    protected String path;
-    protected String contentPath;
-    protected IStructuredSelection treeSelection;
-    protected IProject activeProject;
 	private Action AddMatch;
 	private Action AddLocation;
 	private Action RemoveElement;
@@ -265,31 +252,7 @@ public class LocationmapView extends ViewPart implements IMenuListener,
      * @return the name (without pat) of the document to view
      */
     protected String getFilename() {
-        return "locationmap.xml";
-    }
-    /**
-     * When the selection in the navigator view is changed 
-     * we look to see if the new selection is an IProject.
-     * If it is then we load the locationmap.xml file into this
-     * LocationmapView.
-     */
-    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            Object first = ((IStructuredSelection) selection).getFirstElement();
-            IResource resource = (IResource) first;
-            if (resource instanceof IProject) {
-                activeProject = (IProject) resource;
-                projectName = activeProject.getProject().getName();
-                contentPath = (activeProject.getProject().getLocation()
-                        .toString()
-                        + java.io.File.separator
-                        + Utilities.getPathToContent()
-                        + java.io.File.separator) ;
-                path = contentPath + getFilename();
-                document = DOMUtilities.loadDOM(path);
-                treeViewer.setInput(document);
-            }
-        }
+        return Utilities.getPathToContent() + java.io.File.separator + "locationmap.xml";
     }
 	
 }

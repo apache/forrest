@@ -54,9 +54,7 @@ public class Utilities {
             logger.debug("getPathToXDocs() - start");
         }
 
-        // FIXME: get this value from the package config file (forrest.properties)
-        String path = "src" + java.io.File.separator + "documentation"
-                + java.io.File.separator + "content" + java.io.File.separator
+        String path = getPathToContent() + java.io.File.separator
                 + "xdocs";
 
         if (logger.isDebugEnabled()) {
