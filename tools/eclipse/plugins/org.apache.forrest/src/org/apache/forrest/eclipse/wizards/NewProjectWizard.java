@@ -107,8 +107,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(false, true, op);
 		} catch (InvocationTargetException e) {
-			return false; // TODO: should open error dialog and log
+            logger.error("Failed to correctly setup the project", e);
+			return false; // FIXME: report this error to the user
 		} catch (InterruptedException e) {
+            logger.debug("Project setup appears to have been cancelled", e);
 			return false; // canceled
 		}
 		return true;
