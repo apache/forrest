@@ -37,6 +37,7 @@ FORREST SITE BUILDER
   <property name="forrest.optional.lib-dir"   location="${forrest.lib-dir}/optional"/>
 
   <property name="forrest.ant.lib-dir"        location="${forrest.home}/tools/ant/lib"/>
+  <property name="forrest.anttasks"           location="${forrest.home}/tools/anttasks"/>
   <property name="forrest.jetty.lib-dir"      location="${forrest.home}/tools/jetty"/>
 
   <property name="forrest.build.lib-dir"      location="${forrest.home}/build"/>
@@ -61,6 +62,8 @@ FORREST SITE BUILDER
              Call this through the 'forrest' command
   </description>
 
+  <taskdef name="xpatch" classname="XConfToolTask"
+           classpath="${forrest.anttasks}"/>
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
       <fileset dir="${forrest.core.lib-dir}" includes="jing*.jar" />
@@ -351,6 +354,7 @@ The skin that most likely resembles these ones is called 'pelt'.
          <pathelement location="${forrest.core.webapp}/WEB-INF/classes"/>
          <pathelement location="${forrest.build.lib-dir}/xml-forrest.jar"/>
          <pathelement location="${project.classes-dir}"/>
+         <pathelement location="${project.build-dir}"/>
          <fileset dir="${forrest.plugins-dir}" casesensitive="no">
            <include name="**/lib/*.jar"/>
            <include name="**/lib/*.zip"/>

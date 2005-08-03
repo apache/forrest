@@ -143,7 +143,8 @@ to be installed again unless you delete them or wish to upgrade them.
    </if>
   </target>
   
-  <target name="configure-plugin" 
+  <target name="configure-plugin"
+    depends="configure-cocoon"
     unless="plugin.unavailable">
     <if>
       <available file="${forrest.plugins-dir}/${versioned.name}"/>
@@ -326,6 +327,11 @@ to be installed again unless you delete them or wish to upgrade them.
     
     <mkdir dir="${forrest.plugins-dir}"/>
     <mkdir dir="${project.temp-dir}"/>
+        <mkdir dir="${project.webapp}/conf"/>
+
+    <copy file="${forrest.core}/var/plugins.xconf"
+      tofile="${project.build-dir}/plugins.xconf"
+      overwrite="true"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${project.temp-dir}/input.xmap"
       overwrite="true"/>
@@ -368,6 +374,23 @@ to be installed again unless you delete them or wish to upgrade them.
         </antcall>
       </sequential>
     </for>
+  </target>
+  
+  <target name="configure-cocoon" unless="plugin.unavailable">
+    <!--  set up the xconf files -->
+    <copy todir="${project.build-dir}"
+		  failonerror="false">
+      <fileset dir="${forrest.plugins-dir}/${plugin.name}/conf">
+        <exclude name="*.xconf"/>
+      </fileset>
+    </copy>
+
+    <xpatch file="${project.build-dir}/plugins.xconf" 
+      srcdir="${forrest.plugins-dir}/${plugin.name}"
+      addcomments="true">
+      <include name="conf/*.xconf"/>
+    </xpatch>
+	
   </target>
   
 </project>
