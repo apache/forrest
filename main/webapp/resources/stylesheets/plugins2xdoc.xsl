@@ -29,8 +29,12 @@
           <title>Plugins Index</title>
           <p>
             Plugins are a way of extending Forrest to
-            satisfy site-specific needs. For more
-            information on plugins see
+            satisfy site-specific needs. If a site requires one or 
+            more plugins then the site designer will 
+            have named them in the <code>project.required.plugins</code> property 
+            in the projects <code>forrest.properties</code> file. When Forrest 
+            builds the site it will automatically discover the plugin and install 
+            it.For more information on how to use plugins see
             <a href="http://forrest.apache.org/pluginDocs/plugins_0_70/usingPlugins.html">
               Extending Forrest with Plugins
             </a>.
