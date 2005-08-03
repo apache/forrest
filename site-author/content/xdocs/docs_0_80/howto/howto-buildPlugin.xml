@@ -20,7 +20,7 @@
   <header>
     <title>How to Build a Plugin</title>
 
-    <version>0.1</version>
+    <version>0.2</version>
 
     <abstract>This How-To describes the steps necessary to build a plugin for 
     Forrest. Forrest uses plugins to add new input formats, output formats
@@ -116,7 +116,8 @@
       ant seedPlugin
       </source>      
       
-      <p>The above ant target will ask you the name of the plugin and will
+      <p>The above ant target will ask you the name of the plugin and some
+      additional information such as a breif description and will
       build a minimal plugin directory structure and configuration. You will 
       need to customise these files to build your plugin.</p>
       
@@ -139,12 +140,6 @@
         <p>You now have a skeleton plugin project. However, it doesn't do 
         anything useful yet. Now is a good time to edit some of the files
         provided.</p>
-
-        <note>
-          For plugins intended to be held at forrest.apache.org please
-          adjust the skinconf.xml etc to be in accordance with the other
-          forrest plugins. See <a href="#hosted">notes</a> below.
-        </note>
 
         <p>Here are some general notes:</p>
         
@@ -182,6 +177,15 @@
           <p>It is also a good idea to start writing the documentation at this
           stage. The above process created a very simple plugin documentation
           site for you. All you have to do is add the content.</p>
+        </section>
+        
+        <section id="componentConfig">
+          <title>Component Configuraiton</title>
+          <p>If your plugin needs to provide additional Cocoon configuration
+          in the form of an <code>xconf</code>, or if some of the components
+          you are using need a configuraiton file (such as a JTidy config)
+          you should place them in a <code>conf</code> directory in the root
+          of your plugin.</p>
         </section>
         
         <section id="hosted">
@@ -254,6 +258,7 @@
     
     <section id="test">
       <title>Testing a Plugin</title>
+            
       <p>Since your documentation for the plugin illustrates all of its 
       functionality, you can use that site for testing the plugin. However, you
       must first deploy in your local install of Forrest. Each plugin contains
@@ -280,6 +285,22 @@
 
       <p>Ensure that your sitemaps are robust and handle matches for files
       in sub-directories, as well as those at the root level.</p>
+      
+      <section>
+        <title>Testing During Development</title>
+        <p>In the current plugin system plugins are not used from their
+        src directories, they must first be deployed locally. To do this
+        run the command <code>ant local-deploy</code>.</p>
+        
+        <note>The test target will do this deployment auotmatically for you.
+        You need only run it manually if you wish to test the plugin whilst
+        editing content in a live Forrest instance.</note>
+        
+        <p>In most cases you can locally deploy a plugin without having to 
+        restart Forrest. However, if your plugin changes any configuration
+        files in the <code>conf</code> directory you will, most likely, have 
+        to restart Forrest to see these changes.</p>
+      </section>
     </section>
     
     <section id="release">
