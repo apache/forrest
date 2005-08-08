@@ -46,12 +46,15 @@
   <target name="copy-core-libs" depends="init">
   <!-- ===============================================================
        Copy all the libraries that belong to cocoon core.
-       FIXME:  use sync task so you can ensure than removed libs from cocoon
-               are remove within forrest
+       FIXME:  use sync task so you can ensure that removed libs from cocoon
+               are removed within forrest
        =============================================================== -->
     <copy todir="${forrest.home}/lib/core">
       <fileset dir="${cocoon.home}/lib/core" defaultexcludes="yes">
-        <!-- FIXME: why jxpath upgrade has to be ignored?? -->
+        <!-- FIXME: The jxpath upgrade cannot be done.
+          See issues FOR-405 and FOR-303 and dev mail list.
+          commons-jxpath-1.2 causes errors with "site:" links
+        -->
         <exclude name="commons-jxpath-*.jar"/>
         <!-- servlet.jar goes under tools/jetty -->
         <exclude name="servlet-*.jar"/>
