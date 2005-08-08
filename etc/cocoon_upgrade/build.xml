@@ -26,7 +26,7 @@
     <property environment="env"/>
     <property name="cocoon.home" location="${env.COCOON_HOME}"/>
     <property name="cocoon.version" value="2.2.0-dev"/>
-    <property name="svn.revision" value="-r164112"/>
+    <property name="svn.revision" value="-r230820"/>
     <property name="forrest.home" location="${env.FORREST_HOME}"/>
   </target>
 
@@ -47,11 +47,14 @@
   <!-- ===============================================================
        Copy all the libraries that belong to cocoon core.
        FIXME:  use sync task so you can ensure than removed libs from cocoon
-               are remove from forrest
+               are remove within forrest
        =============================================================== -->
     <copy todir="${forrest.home}/lib/core">
       <fileset dir="${cocoon.home}/lib/core" defaultexcludes="yes">
+        <!-- FIXME: why jxpath upgrade has to be ignored?? -->
         <exclude name="commons-jxpath-*.jar"/>
+        <!-- servlet.jar goes under tools/jetty -->
+        <exclude name="servlet-*.jar"/>
       </fileset>
     </copy>
   </target>
