@@ -47,11 +47,12 @@ public class ModifyPluginsWizard extends Wizard implements INewWizard {
      * @param activeProject
      */
     public ModifyPluginsWizard(String newPath) {
-        super();
-        setWindowTitle("Modify Plugin Selection");
-        path = newPath;
-        setNeedsProgressMonitor(true);
-    }
+		super();
+		setWindowTitle("Modify Plugin Selection");
+		path = newPath;
+		setNeedsProgressMonitor(true);
+	}
+
 
     /**
      * Adding the page to the wizard.
@@ -59,7 +60,7 @@ public class ModifyPluginsWizard extends Wizard implements INewWizard {
 
     public void addPages() {
 
-        pluginPage = new ActivatePluginsPage();
+        pluginPage = new ActivatePluginsPage(path);
         pluginPage.setTitle("Modify Plugin Selection");
         pluginPage.setDescription("Modify Plugin Selectiion");
         addPage(pluginPage);
@@ -87,11 +88,7 @@ public class ModifyPluginsWizard extends Wizard implements INewWizard {
         return true;
     }
 
-    /**
-     * This updated a configuration file based on the settings in siteconfig.xml
-     * 
-     */
-
+    
     /**
      * We will accept the selection in the workbench to see if we can initialize
      * from it.

@@ -17,9 +17,19 @@
 package org.apache.forrest.eclipse.wizards;
 
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
+import org.apache.forrest.eclipse.ForrestPlugin;
+import org.apache.forrest.eclipse.actions.Utilities;
+import org.apache.forrest.eclipse.preference.ForrestPreferences;
+import org.apache.forrest.eclipse.views.DOMUtilities;
+import org.eclipse.ant.core.AntRunner;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -37,8 +47,9 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-
-
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * The "Activate Plugin" wizard page allows you to select Plugins that  
@@ -56,65 +67,83 @@ public class ActivatePluginsPage extends WizardPage {
 	private ListViewer selectedPluginsListViewer;
 	private IStructuredSelection selection ;
 	private Vector selectedPlugins;
-	
+	private Document document;
+	protected String xDocPath;
+    protected IProject activeProject;
 	
 	/**
 	 * Create the new page.
+	 * @param path 
 	 * @param selection 
 	 * @param selection 
 	 * @param pageName
 	 */
-	public ActivatePluginsPage() {
+	public ActivatePluginsPage(String path) {
 		super("wizardPage");
 		setTitle("ActivatePlugins");
 		setDescription("This allows you to activate plugins for your new Forrest Project.");
-		
+		System.out.println(path);
+		xDocPath = path;
 	}
 
 	/**
-	 * Returns a list of plugins available for use with Forrest 
-	 * 
-	 */ 
-	 private Vector getAvailablePlugins() {
+	 * Retrieve a list of plugin descriptor files used by this site.
+	 * @return an array of URLs pointing to plugin descriptor files
+	 */
+	public List getPluginDescriptorURLs(){
+		String forrestHome = ForrestPlugin.getDefault().getPluginPreferences()
+        .getString(ForrestPreferences.FORREST_HOME);
+		List URLs = null;
+		String descriptorPath = xDocPath + "/forrest.properties";
+		String descriptors = Utilities.getProperty(descriptorPath,"forrest.plugins.descriptors");
+		if (descriptors == null) {
+			descriptorPath = forrestHome + "/main/webapp/default-forrest.properties";
+			descriptors = Utilities.getProperty(descriptorPath,"forrest.plugins.descriptors");	
+			
+		}
+		if (descriptors != null){
+	    URLs = Arrays.asList( descriptors.split(",") );}
+		return URLs;
 		
-		Vector availablePlugins = new Vector();
-		availablePlugins.add("org.apache.forrest.plugin.input.dtdx");
-		availablePlugins.add("org.apache.forrest.plugin.input.excel");
-		availablePlugins.add("org.apache.forrest.plugin.input.feeder");
-		availablePlugins.add("org.apache.forrest.plugin.input.listLocations");
-		availablePlugins.add("org.apache.forrest.plugin.input.OpenOffice.org");
-		availablePlugins.add("org.apache.forrest.plugin.input.PhotoGallery");
-		availablePlugins.add("org.apache.forrest.plugin.input.projectInfo");
-		availablePlugins.add("org.apache.forrest.plugin.input.simplifiedDocbook");
-		availablePlugins.add("org.apache.forrest.plugin.input.wiki");
-		availablePlugins.add("org.rblasch.forrest.plugin.input.pod");
-		availablePlugins.add("org.apache.forrest.plugin.output.pdf");
-		availablePlugins.add("s5");
-		availablePlugins.add("org.apache.forrest.plugin.internal.IMSManifest");
-		availablePlugins.add("org.apache.forrest.plugin.input.Daisy");
-		availablePlugins.add("org.apache.forrest.plugin.input.logs");
-		availablePlugins.add("org.apache.forrest.plugin.output.Chart");
-		availablePlugins.add("org.apache.forrest.plugin.output.htmlArea");
-		availablePlugins.add("org.apache.forrest.plugin.internal.view");
-	    return availablePlugins;
-	
 	}
+	 /**
+		 * Returns a list of plugins available for use with Forrest 
+		 * It checks a source online first and if that fails, it checks a local
+		 * list of plugins
+		 */ 
+		 private Vector getAvailablePlugins() {
+			 List pluginDescriptors = getPluginDescriptorURLs();
+			 Vector availablePlugins = new Vector();
+			 for (int x = 0; x < pluginDescriptors.size(); x++) {
+		     document = DOMUtilities.loadXMLFromURL(pluginDescriptors.get(x).toString());
+			if (document != null) {
+			
+			NodeList nl = document.getElementsByTagName("plugin");
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element plugin = (Element) nl.item(i);
+				availablePlugins.add(plugin.getAttribute("name"));
+			}}
+			
+			}
+			return availablePlugins;
+	
+		}
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
-		parent.setSize(593, 364);
+		
 		Composite container = new Composite(parent, SWT.NULL);
 		FormLayout containerLayout = new FormLayout();
 	    container.setLayout(containerLayout);
 		activateLabel = new Label(container, SWT.NULL);
 		FormData activateLabelPosition = new FormData();
 		activateLabelPosition.width = 73;
-		activateLabelPosition.height = 13;
-		activateLabelPosition.left =  new FormAttachment(9, 1000, 0);
-		activateLabelPosition.right =  new FormAttachment(132, 1000, 0);
-		activateLabelPosition.top =  new FormAttachment(17, 1000, 0);
-		activateLabelPosition.bottom =  new FormAttachment(53, 1000, 0);
+		activateLabelPosition.height = 15;
+		activateLabelPosition.left =  new FormAttachment(7, 1000, 0);
+		activateLabelPosition.right =  new FormAttachment(130, 1000, 0);
+		activateLabelPosition.top =  new FormAttachment(18, 1000, 0);
+		activateLabelPosition.bottom =  new FormAttachment(55, 1000, 0);
 		activateLabel.setLayoutData(activateLabelPosition);
 		activateLabel.setText("Activate Views ");
 		activateView = new Button (container, SWT.CHECK);
@@ -143,25 +172,25 @@ public class ActivatePluginsPage extends WizardPage {
 			}
 		
 	      });
-	    
+	      
 	    FormData availablePluginsListViewerPosition = new FormData();
-	    availablePluginsListViewerPosition.width = 235;
-	    availablePluginsListViewerPosition.height = 305;
+	    availablePluginsListViewerPosition.width = 247;
+	    availablePluginsListViewerPosition.height = 308;
 	    availablePluginsListViewerPosition.left =  new FormAttachment(17, 1000, 0);
-	    availablePluginsListViewerPosition.right =  new FormAttachment(419, 1000, 0);
-	    availablePluginsListViewerPosition.top =  new FormAttachment(86, 1000, 0);
-	    availablePluginsListViewerPosition.bottom =  new FormAttachment(924, 1000, 0);
+	    availablePluginsListViewerPosition.right =  new FormAttachment(439, 1000, 0);
+	    availablePluginsListViewerPosition.top =  new FormAttachment(85, 1000, 0);
+	    availablePluginsListViewerPosition.bottom =  new FormAttachment(851, 1000, 0);
 	    availablePluginsListViewer.getControl().setLayoutData(availablePluginsListViewerPosition);
 	    availablePluginsListViewer.setInput(getAvailablePlugins());
 		
 	    Button addButton = new Button(container, SWT.PUSH);
 		FormData addButtonPosition = new FormData();
-		addButtonPosition.width = 42;
-		addButtonPosition.height = 23;
-		addButtonPosition.left =  new FormAttachment(466, 1000, 0);
-		addButtonPosition.right =  new FormAttachment(537, 1000, 0);
-		addButtonPosition.top =  new FormAttachment(199, 1000, 0);
-		addButtonPosition.bottom =  new FormAttachment(262, 1000, 0);
+		addButtonPosition.width = 62;
+		addButtonPosition.height = 26;
+		addButtonPosition.left =  new FormAttachment(454, 1000, 0);
+		addButtonPosition.right =  new FormAttachment(559, 1000, 0);
+		addButtonPosition.top =  new FormAttachment(190, 1000, 0);
+		addButtonPosition.bottom =  new FormAttachment(254, 1000, 0);
 		addButton.setLayoutData(addButtonPosition);
 		addButton.setText("Add->");
 		addButton.addSelectionListener(new SelectionAdapter() {
@@ -179,12 +208,12 @@ public class ActivatePluginsPage extends WizardPage {
 		
 		removeButton = new Button(container, SWT.PUSH | SWT.CENTER);
 		FormData removeButtonPosition = new FormData();
-		removeButtonPosition.width = 62;
-		removeButtonPosition.height = 23;
-		removeButtonPosition.left =  new FormAttachment(447, 1000, 0);
-		removeButtonPosition.top =  new FormAttachment(314, 1000, 0);
-		removeButtonPosition.right =  new FormAttachment(552, 1000, 0);
-		removeButtonPosition.bottom =  new FormAttachment(377, 1000, 0);
+		removeButtonPosition.width = 65;
+		removeButtonPosition.height = 25;
+		removeButtonPosition.left =  new FormAttachment(451, 1000, 0);
+		removeButtonPosition.top =  new FormAttachment(312, 1000, 0);
+		removeButtonPosition.right =  new FormAttachment(560, 1000, 0);
+		removeButtonPosition.bottom =  new FormAttachment(374, 1000, 0);
 		removeButton.setLayoutData(removeButtonPosition);
 		removeButton.setText("Remove ");
 		removeButton.addSelectionListener(new SelectionAdapter() {
@@ -195,12 +224,15 @@ public class ActivatePluginsPage extends WizardPage {
 		        selectedPluginsListViewer.refresh();
 		      }
 		    });
-		
 		availablePluginsListViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 	        public void selectionChanged(SelectionChangedEvent event) {
 	          selection = (IStructuredSelection)event.getSelection();
+	         
+	          	
+				
 	          }
 	      });
+	
 	    
 		selectedPluginsListViewer = new ListViewer(container);
 	    selectedPluginsListViewer.setContentProvider(new IStructuredContentProvider() {
@@ -218,16 +250,16 @@ public class ActivatePluginsPage extends WizardPage {
 	      });
 	    
 	    FormData selectedPluginsListViewerPosition = new FormData();
-	    selectedPluginsListViewerPosition.width = 224;
-	    selectedPluginsListViewerPosition.height = 303;
+	    selectedPluginsListViewerPosition.width = 238;
+	    selectedPluginsListViewerPosition.height = 311;
 	    selectedPluginsListViewerPosition.left =  new FormAttachment(570, 1000, 0);
-	    selectedPluginsListViewerPosition.right =  new FormAttachment(953, 1000, 0);
-	    selectedPluginsListViewerPosition.top =  new FormAttachment(72, 1000, 0);
-	    selectedPluginsListViewerPosition.bottom =  new FormAttachment(905, 1000, 0);
+	    selectedPluginsListViewerPosition.right =  new FormAttachment(977, 1000, 0);
+	    selectedPluginsListViewerPosition.top =  new FormAttachment(70, 1000, 0);
+	    selectedPluginsListViewerPosition.bottom =  new FormAttachment(844, 1000, 0);
 	    selectedPluginsListViewer.getControl().setLayoutData(selectedPluginsListViewerPosition);
 		selectedPluginsListViewer.setInput(selectedPlugins);
 	    setControl(container);
-	 
+
 	}
 	
 	public boolean getActivateViewValue() {
@@ -248,4 +280,7 @@ public class ActivatePluginsPage extends WizardPage {
 		  return null; 
         }
 	}	 
-}
+	
+	
+	}
+

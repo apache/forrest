@@ -65,6 +65,27 @@ public class DOMUtilities {
 	}
 
 	/**
+	 * This loads the XML file from a URL
+	 * 
+	 */
+	public static Document loadXMLFromURL (String url) {
+	     try {
+	       DocumentBuilderFactory documentBuilderFactory =
+	DocumentBuilderFactory.newInstance();
+	       documentBuilderFactory.setNamespaceAware(true);
+	       documentBuilderFactory.setIgnoringElementContentWhitespace(false);
+	       DocumentBuilder documentBuilder =
+	documentBuilderFactory.newDocumentBuilder();
+	       return documentBuilder.parse(url);
+	     }
+	     catch (Exception e) {
+	       //FIXME: Log the error when a host is not found
+	       return null;
+	     }
+	   } 
+	
+	
+	/**
 	 * This writes the DOM to an XML file
 	 * 
 	 */

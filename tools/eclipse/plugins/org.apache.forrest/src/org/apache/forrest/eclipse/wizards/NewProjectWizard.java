@@ -80,12 +80,13 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		page = new WizardNewProjectCreationPage("NewProjectCreationWizard");
 		page.setTitle("New");
 		page.setDescription("Create a new Content Package.");
+		String projectPath = page.getLocationPath().toOSString();
 		addPage(page);
 		siteOptionsPage = new SiteOptionsPage();
 		siteOptionsPage.setTitle("Site Options");
 		siteOptionsPage.setDescription("Site Options ");
 		addPage(siteOptionsPage);
-		pluginPage = new ActivatePluginsPage();
+		pluginPage = new ActivatePluginsPage(projectPath);
 		pluginPage.setTitle("Activate Plugins");
 		pluginPage.setDescription("Activate Plugins");
 		addPage(pluginPage);
