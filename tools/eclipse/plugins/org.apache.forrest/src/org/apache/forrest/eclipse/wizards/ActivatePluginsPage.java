@@ -128,6 +128,21 @@ public class ActivatePluginsPage extends WizardPage {
 			return availablePlugins;
 	
 		}
+		 
+		 /**
+			 * Returns a list of plugins that have already been set for this project 
+			 * 
+			 */ 
+			 private Vector getSetPlugins() {
+				String propertiesPath = xDocPath + "/forrest.properties";
+				String setPlugins = Utilities.getProperty(propertiesPath,"project.required.plugins"); 
+				String[] pluginList = setPlugins.split(",");
+				Vector v = new Vector (pluginList.length);
+				for (int i=0; i < pluginList.length; i++)
+				    v.addElement (pluginList[i]); 
+				return  v;
+		
+			}
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
@@ -257,7 +272,8 @@ public class ActivatePluginsPage extends WizardPage {
 	    selectedPluginsListViewerPosition.top =  new FormAttachment(70, 1000, 0);
 	    selectedPluginsListViewerPosition.bottom =  new FormAttachment(844, 1000, 0);
 	    selectedPluginsListViewer.getControl().setLayoutData(selectedPluginsListViewerPosition);
-		selectedPluginsListViewer.setInput(selectedPlugins);
+		selectedPlugins = getSetPlugins();
+	    selectedPluginsListViewer.setInput(selectedPlugins);
 	    setControl(container);
 
 	}
