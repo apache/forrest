@@ -35,8 +35,11 @@
             <alias:param name="path"/>
             <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
             <alias:template name="getHead">
-                <xsl:for-each select="/*/forrest:properties/*[@head='true' and count(. | key('head-template', @name)[1]) = 1]">
-                    <alias:call-template name="{@name}-head"/>
+                <xsl:for-each 
+                  select="/*/forrest:properties/*[@head='true' and count(. | key('head-template', @name)[1]) = 1]">
+                  <xsl:variable name="name" select="@name"/>
+                  <xsl:apply-templates mode="head"
+                    select="//forrest:contract[@name=$name]"/>
                 </xsl:for-each>
             </alias:template>
             <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
@@ -79,6 +82,24 @@
             </xsl:attribute>
         </link>
     </xsl:template>
+    <xsl:template match="forrest:contract" mode="head">
+      <xsl:variable name="name" select="@name"/>
+      <xsl:if test="/*/forrest:properties/*[@head='true' and @name=$name]">
+            <!--If next son is not forrest:properties go on-->
+            <xsl:choose>
+                <xsl:when test="not(forrest:properties[@contract=$name])">
+                    <alias:call-template name="{@name}-head"/>
+                </xsl:when>
+                <xsl:when test="forrest:properties[@contract=$name]">
+                    <alias:call-template name="{@name}-head">
+                        <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
+                            <alias:with-param name="{@name}" select="'{.}'"/>
+                        </xsl:for-each>
+                    </alias:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:template>
     <xsl:template match="forrest:contract">
         <xsl:variable name="name" select="@name"/>
         <!--Test whether there is a body template needed-->
@@ -98,5 +119,6 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:if>
+        
     </xsl:template>
 </xsl:stylesheet>
