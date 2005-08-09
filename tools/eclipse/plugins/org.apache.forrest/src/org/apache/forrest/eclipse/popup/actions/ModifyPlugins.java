@@ -39,7 +39,7 @@ public class ModifyPlugins implements IObjectActionDelegate,
 
     protected String projectName;
 
-    protected String xDocPath;
+    protected String projectPath;
 
     /**
      * Constructor for Action1.
@@ -59,7 +59,7 @@ public class ModifyPlugins implements IObjectActionDelegate,
      * @see IActionDelegate#run(IAction)
      */
     public void run(IAction action) {
-        ModifyPluginsWizard elementCreation_ = new ModifyPluginsWizard(xDocPath);
+        ModifyPluginsWizard elementCreation_ = new ModifyPluginsWizard(projectPath);
         elementCreation_.init(PlatformUI.getWorkbench(), null); // initializes
         // the
         // wizard
@@ -78,7 +78,7 @@ public class ModifyPlugins implements IObjectActionDelegate,
                 // project
                 activeProject = newActiveProject;
                 projectName = activeProject.getProject().getName();
-                xDocPath = (activeProject.getProject().getLocation().toString() + java.io.File.separator);
+                projectPath = (activeProject.getProject().getLocation().toString() + java.io.File.separator);
             }
         }
     }
