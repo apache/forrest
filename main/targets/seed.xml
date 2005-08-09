@@ -34,11 +34,26 @@
         Copies a template structure over to your project dir.
        =============================================================== -->
   <target name="seed" depends="ensure-nocontent"
-    description="* Seeds a directory with a template project doc structure">
+    description="deprecated - use 'seed-sample' instead * Seeds a directory with a template project doc structure">
      <copy todir="${project.home}" overwrite="false">
         <fileset dir="${forrest.core}/fresh-site"/>
      </copy>
-     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message.txt">
+     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-sample.txt">
+        <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${template-project-created-message}</echo>
+  </target>
+  
+  <target name="seed-sample" description="* Seeds a directory with a template project doc structure">
+    <antcall target="seed"/>
+  </target>
+  
+  <target name="seed-basic" depends="ensure-nocontent"
+    description="* Seeds a basic example (1 file) and structure">
+     <copy todir="${project.home}" overwrite="false">
+        <fileset dir="${forrest.core}/template-sites/basic"/>
+     </copy>
+     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-blank.txt">
         <filterchain><expandproperties/></filterchain>
     </loadfile>
     <echo>${template-project-created-message}</echo>
