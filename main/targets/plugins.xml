@@ -263,6 +263,7 @@ to be installed again unless you delete them or wish to upgrade them.
     </delete>
   
     <var name="plugin-counter" value="1"/>
+    <echo>Using Plugins Descriptors: ${forrest.plugins.descriptors}</echo>
     <for list="${forrest.plugins.descriptors}" param="url">
       <sequential>
         <echo>Fetching plugins descriptor: @{url}</echo>
@@ -377,20 +378,33 @@ to be installed again unless you delete them or wish to upgrade them.
   </target>
   
   <target name="configure-cocoon" unless="plugin.unavailable">
-    <!--  set up the xconf files -->
-    <copy todir="${project.build-dir}"
-		  failonerror="false">
-      <fileset dir="${forrest.plugins-dir}/${plugin.name}/conf">
-        <exclude name="*.xconf"/>
-      </fileset>
-    </copy>
-
-    <xpatch file="${project.build-dir}/plugins.xconf" 
-      srcdir="${forrest.plugins-dir}/${plugin.name}"
-      addcomments="true">
-      <include name="conf/*.xconf"/>
-    </xpatch>
-	
+    <if>
+      <available file="${forrest.plugins-dir}/${plugin.name}/conf" type="dir"/>
+      <then>
+        <!--  set up the xconf files -->
+        <copy todir="${project.build-dir}/conf"
+          failonerror="false">
+          <fileset dir="${forrest.plugins-dir}/${plugin.name}/conf"/>
+        </copy>
+        
+        <for param="xconf-name">
+         <fileset dir="${project.build-dir}/conf">
+           <filename name="*.xconf"/>
+         </fileset>
+         <sequential>
+           <echo>Adding @{xconf-name} to plugins.xconf</echo>
+           <xslt in="${project.build-dir}/plugins.xconf"
+             out="${project.build-dir}/plugins.xconf.new"
+             style="${forrest.core}/var/pluginXConfSnippet.xsl"
+             force="true"> 
+                 <param name="xconf-name" expression="@{xconf-name}"/>  
+           </xslt>
+           <move file="${project.build-dir}/plugins.xconf.new" 
+             tofile="${project.build-dir}/plugins.xconf"/>
+         </sequential>
+        </for>
+      </then>
+    </if>
   </target>
   
 </project>
