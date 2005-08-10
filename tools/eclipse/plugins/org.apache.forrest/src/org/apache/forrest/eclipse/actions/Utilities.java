@@ -187,33 +187,7 @@ public class Utilities {
 		    }	
 	}
 
-	/**
-	 * Retrieves the value of a property in the forrest.properties file 
-     * @param path - path to the forrest.properties file
-     * @param property - property to get the value from
-     *  
-	 */ 
-	static public String getProperty(String path, String property){
-		 String str = null; 
-		 File file = new File(path); 
-		 if (file.exists()) {
-		 try {
-		       
-			   BufferedReader in = new BufferedReader(new FileReader(path));
-		       while ((str = in.readLine()) != null) {
-		           String[] tokens = str.split("=");
-		           if (tokens[0].endsWith(property)) {
-		        	   str = tokens[1];
-		        	   return str;	
-		           }
-		        }
-		        in.close();
-		       } catch (IOException e) {
-		    }
-		 }
-		return str;	
-	}
-	/**
+    /**
 	 * @param cmdString
 	 */
 	static public void RunExtCommand(final String cmdString) {

@@ -17,19 +17,14 @@
 package org.apache.forrest.eclipse.wizards;
 
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.forrest.eclipse.ForrestPlugin;
-import org.apache.forrest.eclipse.actions.Utilities;
-import org.apache.forrest.eclipse.preference.ForrestPreferences;
+import org.apache.forrest.ForrestProperties;
 import org.apache.forrest.eclipse.views.DOMUtilities;
-import org.eclipse.ant.core.AntRunner;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -68,8 +63,9 @@ public class ActivatePluginsPage extends WizardPage {
 	private IStructuredSelection selection ;
 	private Vector selectedPlugins;
 	private Document document;
-	protected String xDocPath;
+	protected String projectPath;
     protected IProject activeProject;
+    private ForrestProperties forrestProperties;
 	
 	/**
 	 * Create the new page.
@@ -83,7 +79,7 @@ public class ActivatePluginsPage extends WizardPage {
 		setTitle("ActivatePlugins");
 		setDescription("This allows you to activate plugins for your new Forrest Project.");
 		System.out.println(path);
-		xDocPath = path;
+		forrestProperties = new ForrestProperties(path);
 	}
 
 	/**
@@ -91,16 +87,8 @@ public class ActivatePluginsPage extends WizardPage {
 	 * @return an array of URLs pointing to plugin descriptor files
 	 */
 	public List getPluginDescriptorURLs(){
-		String forrestHome = ForrestPlugin.getDefault().getPluginPreferences()
-        .getString(ForrestPreferences.FORREST_HOME);
 		List URLs = null;
-		String descriptorPath = xDocPath + "/forrest.properties";
-		String descriptors = Utilities.getProperty(descriptorPath,"forrest.plugins.descriptors");
-		if (descriptors == null) {
-			descriptorPath = forrestHome + "/main/webapp/default-forrest.properties";
-			descriptors = Utilities.getProperty(descriptorPath,"forrest.plugins.descriptors");	
-			
-		}
+		String descriptors = forrestProperties.getProperty("forrest.plugins.descriptors");
 		if (descriptors != null){
 	    URLs = Arrays.asList( descriptors.split(",") );}
 		return URLs;
@@ -134,8 +122,7 @@ public class ActivatePluginsPage extends WizardPage {
 			 * 
 			 */ 
 			 private Vector getSetPlugins() {
-				String propertiesPath = xDocPath + "/forrest.properties";
-				String setPlugins = Utilities.getProperty(propertiesPath,"project.required.plugins"); 
+				String setPlugins = forrestProperties.getProperty("project.required.plugins"); 
 				String[] pluginList = setPlugins.split(",");
 				Vector v = new Vector (pluginList.length);
 				for (int i=0; i < pluginList.length; i++)
