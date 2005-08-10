@@ -78,7 +78,6 @@ public class ActivatePluginsPage extends WizardPage {
 		super("wizardPage");
 		setTitle("ActivatePlugins");
 		setDescription("This allows you to activate plugins for your new Forrest Project.");
-		System.out.println(path);
 		forrestProperties = new ForrestProperties(path);
 	}
 
