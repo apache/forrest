@@ -74,10 +74,10 @@ CHANGE HISTORY:
 <!-- Sets of symbols. e.g. for string replacements -->
 <!-- =============================================================== -->
 
-<!ENTITY % symbols-core
-      PUBLIC "-//Apache Forrest//ENTITIES Symbols Core v1.0//EN"
-      "symbols-core-v10.ent">
-  %symbols-core;
+<!ENTITY % symbols-core PUBLIC
+    "-//Apache Forrest//ENTITIES Symbols Core v1.0//EN"
+    "../entity/symbols-core-v10.ent">
+ %symbols-core;
 
 <!-- =============================================================== -->
 <!-- End of DTD -->
