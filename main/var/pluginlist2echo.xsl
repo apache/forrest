@@ -21,8 +21,8 @@
       <project default="echoplugins">
       	<target name="echoplugins">
       	<echo>Available plugins:
-Forrest provides basic functionlaity for creating documentation in various
-formats froma range of source formats. However, additional functionlaity
+Forrest provides basic functionality for creating documentation in various
+formats from a range of source formats. However, additional functionlaity
 can be provided through plugins.
 
 Plugins may be maintained by other people and be available from
