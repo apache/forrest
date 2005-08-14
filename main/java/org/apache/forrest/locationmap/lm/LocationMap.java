@@ -104,7 +104,10 @@ public final class LocationMap extends AbstractLogEnabled {
     
     /** list of LocatorNodes */
     private LocatorNode[] m_locatorNodes;
-    
+
+    /** list of MountNodes */
+    private MountNode[] m_mountNodes;
+   
     
     public LocationMap(ServiceManager manager) {
         m_manager = new LocationMapServiceManager(manager);
@@ -118,6 +121,16 @@ public final class LocationMap extends AbstractLogEnabled {
 
         // components
         final Configuration components = configuration.getChild("components");
+
+        // mount
+        final Configuration[] mountChildren = configuration.getChildren("mount");
+        m_mountNodes = new MountNode[mountChildren.length];
+
+        for (int i = 0; i < mountChildren.length; i++) {
+            m_mountNodes[i] = new MountNode(m_manager);
+            m_mountNodes[i].enableLogging(getLogger());
+            m_mountNodes[i].build(mountChildren[i]);
+        }
 
         // matchers
         Configuration child = components.getChild("matchers",false);
@@ -223,6 +236,15 @@ public final class LocationMap extends AbstractLogEnabled {
         final Map anchorMap = new HashMap(2);
         anchorMap.put(HINT_KEY,hint);
         context.pushMap(ANCHOR_NAME,anchorMap);
+
+        //mounted locations first
+        for (int i = 0; i < m_mountNodes.length; i++) {
+        	location = m_mountNodes[i].locate(om,context);
+        	if (location !=null) {
+        		ContainerUtil.dispose(context);
+        		return location;
+        	}
+        }
 
         for (int i = 0; i < m_locatorNodes.length; i++) {
             location = m_locatorNodes[i].locate(om,context);
