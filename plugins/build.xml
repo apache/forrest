@@ -129,6 +129,7 @@
     <copy toDir="${forrest.plugins.localDeploy.dir}/${plugin-name}">
       <fileset dir="${forrest.plugins.dir}/${plugin-name}">
         <exclude name="lib/**"/>
+        <exclude name="templates/**"/>
         <exclude name="build/**"/>
       </fileset>
     </copy>
@@ -165,6 +166,15 @@
       <then>
         <copy toDir="${forrest.plugins.localDeploy.dir}/lib" failonerror="false">
           <fileset dir="lib"/>
+        </copy>
+       </then>
+     </if>
+
+    <if>
+      <available file="templates"/>
+      <then>
+        <copy toDir="${forrest.plugins.localDeploy.dir}/templates" failonerror="false">
+          <fileset dir="templates"/>
         </copy>
        </then>
      </if>
