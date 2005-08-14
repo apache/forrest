@@ -32,7 +32,7 @@
         <jtidy-config>jtidy.properties</jtidy-config>
       </map:generator>
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
-      </map:generators>
+    </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude"
         src="org.apache.cocoon.transformation.CIncludeTransformer"/>
@@ -101,11 +101,17 @@
     {1} name of the contract-->
   <map:match pattern="resolve.contract.xhtml.*">
     <map:select type="exists">
+      <map:when test="{project:resources}/templates/{project:theme}/{1}.ft">
+        <map:generate src="{project:resources}/templates/{project:theme}/{1}.ft"/>
+      </map:when>
       <map:when test="{project:resources}/templates/{1}.ft">
         <map:generate src="{project:resources}/templates/{1}.ft"/>
       </map:when>
       <map:when test="{forrest:plugins}/templates/{1}.ft">
         <map:generate src="{forrest:plugins}/templates/{1}.ft"/>
+      </map:when>
+      <map:when test="resources/templates/{project:theme}/{1}.ft">
+        <map:generate src="resources/templates/{project:theme}/{1}.ft"/>
       </map:when>
       <map:when test="resources/templates/{1}.ft">
         <map:generate src="resources/templates/{1}.ft"/>
@@ -120,8 +126,14 @@
   <!--This activates forrest:call-templates includes into the view.-->
     <map:match pattern="prepare.view-templates.**">
       <map:select type="exists">
+      <map:when test="{project:resources}/templates/{project:theme}/{1}.vt.xml">
+        <map:generate src="{project:resources}/templates/{project:theme}/{1}.vt.xml"/>
+      </map:when>
       <map:when test="{project:resources}/templates/{1}.vt.xml">
         <map:generate src="{project:resources}/templates/{1}.vt.xml"/>
+      </map:when>
+      <map:when test="resources/templates/{project:theme}/{1}.vt.xml">
+        <map:generate src="resources/templates/{project:theme}/{1}.vt.xml"/>
       </map:when>
       <map:when test="resources/templates/{1}.vt.xml">
         <map:generate src="resources/templates/{1}.vt.xml"/>
