@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 1999-2004 The Apache Software Foundation or its licensors,
+  Copyright 1999-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
     | After the serializer, result is an OpenOffice Impress document (sxi).
     |
     | @author <a href="mailto:vgritsenko@apache.org>Vadim Gritsenko</a>
-    | @version CVS $Id: page2sxi.xsl 36239 2004-08-11 18:28:06Z vgritsenko $
+    | @version CVS $Id: page2sxi.xsl 36239 2005-08-11 18:28:06Z vgritsenko $
     +-->
 
 <xsl:stylesheet version="1.0"

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,7 +81,7 @@
        <host-logo/>
      </xsl:if>
      <xsl:if test="not(year)">
-       <year>2004</year>
+       <year>2005</year>
      </xsl:if>
      <xsl:if test="not(vendor)">
        <vendor>The Acme Software Foundation.</vendor>

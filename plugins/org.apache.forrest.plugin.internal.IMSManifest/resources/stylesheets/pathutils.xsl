@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ filename: return the file part of a path
 ext: return the last extension of the filename in a path
 filename-noext: return the file part of a path without its last extension
 
-$Id: pathutils.xsl,v 1.1 2004/09/21 14:10:24 rgardler Exp $
+$Id: pathutils.xsl,v 1.1 2005/09/21 14:10:24 rgardler Exp $
 -->
 
 <!-- Returns the directory part of a path.  Equivalent to Unix 'dirname'.
