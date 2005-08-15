@@ -77,9 +77,28 @@
         <xsl:apply-templates select="*[local-name()!='css']"/>
     </xsl:template>
     <xsl:template match="forrest:css[@url and count(. | key('css-includes', @url)[1]) = 1]">
-        <link rel="stylesheet" type="text/css">
+        <link type="text/css">
+            <xsl:choose>
+              <xsl:when test="@rel">
+                <xsl:attribute name="rel"><xsl:value-of select="@rel"/></xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="rel">stylesheet</xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="@title">
+                <xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="title"><xsl:value-of select="@url"/></xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
             <xsl:attribute name="href">{$root}skin/<xsl:value-of select="@url"/>
             </xsl:attribute>
+            <xsl:if test="@media">
+              <xsl:attribute name="media"><xsl:value-of select="@media"/></xsl:attribute>
+            </xsl:if>
         </link>
     </xsl:template>
     <xsl:template match="forrest:contract" mode="head">
