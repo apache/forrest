@@ -33,8 +33,6 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.wst.internet.webbrowser.internal.Trace;
-import org.eclipse.wst.internet.webbrowser.internal.WebBrowserUIPlugin;
 
 /**
  * Run a version of Forrest
@@ -179,15 +177,14 @@ public class ForrestRunner extends ForrestJob implements
                 URL url;
                 try {
                     url = new URL("http://localhost:8888");
-                    IWorkbenchBrowserSupport browserSupport = WebBrowserUIPlugin
-                            .getInstance().getWorkbench().getBrowserSupport();
+                    IWorkbenchBrowserSupport browserSupport = ForrestPlugin.getDefault().getWorkbench().getBrowserSupport();
                     IWebBrowser browser = browserSupport.createBrowser(
                             IWorkbenchBrowserSupport.LOCATION_BAR
                                     | IWorkbenchBrowserSupport.NAVIGATION_BAR,
                             null, null, null);
                     browser.openURL(url);
                 } catch (Exception e) {
-                    Trace.trace(Trace.SEVERE, "Error opening browser", e);
+                    logger.error("Error opening browser", e);
                 }
             }
         });
