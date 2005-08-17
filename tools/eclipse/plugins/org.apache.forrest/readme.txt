@@ -38,13 +38,14 @@ Now you need to checkout the Forrest Project:
 
 - open the SVN Repository Exploring perspective
 
-- add the repository https://svn.apache.org/repos/asf/forrest/trunk
+- add the repository http://svn.apache.org/repos/asf/forrest/trunk
+  (devs use https: instead)
 
 - use the tree browser to find forrest
 
 - right click on the forrest folder and do a "Check out as project" 
 
-Settoing Up Eclipse
+Setting Up Eclipse
 -------------------
 
 If you do not already have eclipse you can get started by downloading the WST "All in one" 
@@ -68,8 +69,8 @@ have installed correctly.
   - Help -> Software Updates -> Manage Configuration
   - Ensure the configuration dialog is set to display disabled features
     - third button from left in the toolbar should be depressed
-  - You should see the following features enabled (i.e. they do not have a little 
-    red no-entry sign on their icon
+  - You should see all the features enabled (i.e. none have a little 
+    red no-entry sign on their icon)
   - If any are disabled then enable them by selecting them and clicking "Enable"
     in the right pane
   
@@ -121,7 +122,7 @@ You need to check out all of these out using subclipse:
   - User: blank
   - password: blank
 
-- click finosh
+- click finish
 
 - expand the tree to tools/eclipse/plugins
 
