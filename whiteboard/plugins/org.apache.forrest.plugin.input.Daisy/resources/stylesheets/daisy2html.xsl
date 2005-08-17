@@ -25,11 +25,32 @@
   <xsl:template match="/">
     <html>
       <head>
-        <title><xsl:value-of select="//ns:document/@name"/></title>
-        <xsl:apply-templates select="//p:preparedDocument/ns:document/ns:fields/ns:field"/>
+        <xsl:choose>
+          <xsl:when test="//ns:document">
+            <title><xsl:value-of select="//ns:document/@name"/></title>
+            <xsl:apply-templates select="//p:preparedDocument/ns:document/ns:fields/ns:field"/>
+          </xsl:when>
+          <xsl:when test="html">
+            <title>FIXME: get the title of the document</title>
+          </xsl:when>
+          <xsl:otherwise>
+            <title>Daisy Error</title>
+          </xsl:otherwise>
+        </xsl:choose>
       </head>
       <body>
-        <xsl:apply-templates select="p:page/p:publishedDocument/p:preparedDocument[@id='1']"/>
+        <xsl:choose>
+          <xsl:when test="p:page">
+            <xsl:apply-templates select="p:page/p:publishedDocument/p:preparedDocument[@id='1']"/>
+          </xsl:when>
+          <xsl:when test="html">
+            <xsl:apply-templates select="//body"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <h1>Daisy Error</h1>
+            <p>Unable to transform the daisy document.</p>
+          </xsl:otherwise>
+        </xsl:choose>
       </body>
     </html>
   </xsl:template>
@@ -154,12 +175,14 @@
     <xsl:choose>
       <xsl:when test="starts-with(@src, 'daisy:')">
         <img>
+          <xsl:apply-templates select="@*"/>
           <xsl:attribute name="src"><xsl:value-of select="substring-after(@src, 'daisy:')"/>.daisy.img</xsl:attribute>
           <xsl:apply-templates/>
         </img>
       </xsl:when>
       <xsl:otherwise>
         <img>
+          <xsl:apply-templates select="@*"/>
           <xsl:attribute name="src"><xsl:value-of select="@src"/></xsl:attribute>
           <xsl:apply-templates/>
         </img>
