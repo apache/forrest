@@ -156,7 +156,17 @@
     <xsl:choose>
       <xsl:when test="starts-with(@href, 'daisy:')">
         <a>
-          <xsl:attribute name="href"><xsl:value-of select="substring-after(@href, 'daisy:')"/>.daisy.html</xsl:attribute>
+          <xsl:variable name="url"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
+          <xsl:choose>
+            <xsl:when test="contains($url, '#')">
+              <xsl:variable name="pageURL"><xsl:value-of select="substring-before($url, '#')"/></xsl:variable>
+              <xsl:variable name="anchor"><xsl:value-of select="substring-after(@href, '#')"/></xsl:variable>
+              <xsl:attribute name="href"><xsl:value-of select="$pageURL"/>.daisy.html#<xsl:value-of select="$anchor"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="href"><xsl:value-of select="$url"/>.daisy.html</xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:attribute name="description"><xsl:value-of select="@daisyDocumentName"/></xsl:attribute>
           <xsl:apply-templates/>
         </a>
