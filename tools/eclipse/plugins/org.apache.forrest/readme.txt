@@ -44,51 +44,26 @@ Now you need to checkout the Forrest Project:
 
 - right click on the forrest folder and do a "Check out as project" 
 
-Getting Eclipse
----------------
+Settoing Up Eclipse
+-------------------
 
-If you use Eclipse and an XML plugin as your usual editing environemnt I 
-recomend that you have a completely separate installation for this work. 
-The reason being there is a pre-alpha XML editor in there and it may not be 
-as good as your existing environement yet (I'd love to know what is good/bad 
-about it so I can feed it back to the WTP project at Eclipse). If you don't 
-use eclipse for XML editing at present then just use your normal installation.
+If you do not already have eclipse you can get started by downloading the WST "All in one" 
+release from http://www.eclipse.org/webtools/index.html
 
-- download Eclipse 3.1M7 (you need the full SDK) 
-
-- Extract the complete tree it into a new directory
-  (we named it forrestEclipse)
-  
-- Run forrestEclipse/eclipse.exe
+If you already use Eclipse then you need to install the WST project as folloes:
 
 Installing Required Plugins
----------------------------
+...........................
 
-- Help -> Software Updates... -> Find and Install
-  - select "Search for new features to install"
-  - check the selection box for "Eclipse.org update site"
-  - expand the "Eclipse.org update site" tree node
-  - ensure that the following  options are checked
-    - EMF SDK 2.0.1
-    - GEF SDK 3.0.1
-    - JEM
-  - click "Next"
-  - wait while eclipse checks for updates
-  - check (at least) the following updates
-    - Eclipse Modelling Framework
-    - EMF SDK
-    - EMF Service Data Objects
-    - Graphical Editing Framework
-    - XSD Sxhema Infoset Model
-  - click "Next"
-  - accept the license aggreement (after reading it of course)
-  - click "Next"
-  - click "Finish"
-  - you will be asked if you want to install various plugins, just 
-    click "Install"
-  - this will take a while, especially if you are on a slow connection
-  - once all plugins are installed you will need to restart forrestEclipse
-    
+Install WST and all its prerequisites from the Web Tools Project at Eclipse.
+See http://www.eclipse.org/webtools/index.html.
+
+Verifying the Installation
+..........................
+
+If you get into trouble at any point you can use the following steps to verify the plugins 
+have installed correctly.
+
 - Check the plugins are all installed correctly
   - Help -> Software Updates -> Manage Configuration
   - Ensure the configuration dialog is set to display disabled features
@@ -98,78 +73,109 @@ Installing Required Plugins
   - If any are disabled then enable them by selecting them and clicking "Enable"
     in the right pane
   
-- install the the WTP project
-  - download page is http://download.eclipse.org/webtools/downloads/drops/S-1.0M4-200504292037/
-  - extract the zip into forestEclipse
-  
-- restart forrestEclipse using the command "eclipse.exe -clean" (this will 
-  reload all the plugin descriptors, you do not need the "-clean" flag in 
-  subsequent restarts
-  
-Export Forrest Eclipse Plugin
------------------------------
+Getting the Plugin Sources
+--------------------------
 
-To work with the Forrest Eclipse plugin you first need to make it
-available in your wokspace. Here's how:
+Pur sources are held in an SVN repository so you will need the Subclipse plugin. DO the following:
 
-Import the Forrest Eclipse plugin code into you workspace
-  - File -> Import -> Existing Project into Workspace
-  - Click Next
-  - Click Browse and point to the "tools/eclipse" directory of your Forrest installation
-  - Click Finish
+- Help -> software updates -> find and install
 
-If you found the right directory, "forrestplugin" will show as "Project Name"
+- Select "search for new features to install" and click next
 
-Now export the plugin
-  - File -> Export -> Deployable Plugins and Fragments
+- click the "new remote site" button
+
+- Add the subclipse site: http://subclipse.tigris.org/update
+
+- click Finish
+
+- select subclips (the book is optional, but recomended)
+
+- click next
+
+- accept the license terms (after reading htem)
+
+- click next
+
+- review and click finish when happy
+
+The plugin will now be installed
+
+Now that you have subclipse you can get the Forrest Eclipse plugin sources 
+from our SVN.
+
+There are currently two plugins that make up the Forrest Eclipse feature:
+
+tools/eclipse/plugins/org.apache.forrest - the main plugin
+tools/eclipse/plugins/org.apache.forrest.eclipse.servletEngine - a helper plugin for starting and stopping Jetty
+
+The feature itself is defined in tools/eclipse/features/org.apache.forrest.eclipse.feature
+
+You need to check out all of these out using subclipse:
+
+- Window -> Open Perspective -> SVN repository Exploer
+
+- right click in the SVN Repository view, select New - Add a repository
+
+- enter the following info:
+  - Url: http://svn.apache.org/repos/asf/forrest/trunk/
+  - User: blank
+  - password: blank
+
+- click finosh
+
+- expand the tree to tools/eclipse/plugins
+
+- right click on org.apache.forrest, select Check out as project
+
+- right click on org.apache.forrest.eclipse.servletEngine, select Check out as project
+
+- expand the tree to tools/eclipse/features
+
+- right click on org.apache.forrest.eclipse.servletEngine, select Check out as project
+
+- right click on org.apache.forrest.eclipse.feature, select Check out as project
+
+[FIXME: create a project set for the checkouts]
+
+Running in the Development Environment
+--------------------------------------
+
+To run this plugins in a development environemnt:
+
+- right click on te forrestplugin project and select Run...
+
+- select Eclipse Application and click the New button
+
+- give the new configuration a sensible name and click Run
+
+A new instance of Eclipse will start.
+
+There is currently no Forrest perspective, so you will need 
+to tell the Eclipse app that you want to open the relevant views
+(Window -> show view -> Other... Forrest -> ...)
+
+[FIXME: add a forrest perspective to open these views automatically)
+
+(after you have done this the first time you will not need to do it
+again, just click the run button).
+
+Exporting Forrest Plugins
+-------------------------
+
+If you want to have the plugins available in your normal instance of Eclipse
+you will need to deploy the plugins. To do this:
+
+  - File -> Export -> Deployable Features
   - click Next
-  - ensure org.apache.forrest.eclipse is checked in the "Available Plugins and Fragments List"
-  - in the "Export Options" section select "Deploy as a directory structure"
-  - in the destination section browse to your forrestEclipse installation directory
+  - ensure org.apache.forrest.eclipse.feature is checked in the "Available Features" List
+  - in the "Export Destination" section enter the directory of your Eclipse instance
   - click Finish
   
 - Restart Eclipse
   
-Ensure Forrest eclipse plugin is installed
-  - Help -> About -> Plug-in Details
-  - look for org.apache.forrest.eclipse in the list of installed plugins
-  
-If you cannot see the Forrest plugin in the list you many need to start
-forrestEclipse with the "-clean" command line flag. This forces Eclipse to
-re-initialise its plugin database.
-  
-NOTE - if you intend to help develop the Forrest Eclipse plugin (please do) 
-then you should be familar with using Eclipse for Plugin Development. A good
-starting point is http://www.eclipse.org/articles/index.html
 
 ===============
 Getting Started
 ===============
 
-Create a project
-----------------
-- File -> New -> Project
-- Forrest -> Seed New Project
-  Currently you cannot use whitespace in the project directory name.
-  This should change in a future version, see http://issues.cocoondev.org/browse/FOR-398
-
-Create new XDoc
----------------
-- File -> New -> XDoc
-
-Start Forrest
--------------
-- right click on Forrest project
-- select site -> start
-
-(index page will open in embedded browser automatically)
-
-Start Forrest
--------------
-- right click on Forrest project
-- select site -> stop
-
-Build Site
-----------
-- right click on Forrest project
-- select site -> build
+See the online documentation at http://forrest.apache.org/tools/eclipse.html
