@@ -70,6 +70,18 @@ public class FallbackResolverAction extends ServiceableAction implements
         return map;
     }
 
+/**
+ * prepare(Parameters parameters, String src)
+ *
+ *  <map:parameter value="{1}" name="request"/><br/>
+ *  <map:parameter value="{project:theme}" name="projectFallback"/><br/>
+ *  <map:parameter value="{project:theme-ext}" name="projectExtension"/><br/>
+ *  <map:parameter value="{project:content.xdocs}" name="projectDir"/><br/>
+ *  <map:parameter value="{defaults:view-themes}" name="defaultDir"/><br/>
+ *  <map:parameter value="{defaults:theme}" name="defaultFallback"/><br/>
+ *  <map:parameter value="{defaults:theme-ext}" name="defaultExtension"/>
+ *
+ */
     public void prepare(Parameters parameters, String src) {
         fallbackHelper.setRequest(parameters.getParameter("request", src));
         fallbackHelper.setProjectFallback(parameters.getParameter(
