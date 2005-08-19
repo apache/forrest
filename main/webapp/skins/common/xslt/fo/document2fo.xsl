@@ -947,6 +947,7 @@
   </xsl:template>
 
   <xsl:template match="section" mode="toc">
+    <!-- FIXME: see bug FOR-640>
     <xsl:param name="depth" select="'1'"/>
     <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em" text-indent=".5em">
       <fo:inline>
