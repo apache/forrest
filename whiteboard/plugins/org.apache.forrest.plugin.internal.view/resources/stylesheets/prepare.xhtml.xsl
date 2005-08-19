@@ -112,7 +112,7 @@
                 <xsl:when test="forrest:properties[@contract=$name]">
                     <alias:call-template name="{@name}-head">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-                            <alias:with-param name="{@name}" select="'{.}'"/>
+                            <alias:with-param name="{@name}" select="'{normalize-space(.)}'"/>
                         </xsl:for-each>
                     </alias:call-template>
                 </xsl:when>
@@ -132,7 +132,7 @@
                 <xsl:when test="forrest:properties[@contract=$name]">
                     <alias:call-template name="{@name}-body">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-                            <alias:with-param name="{@name}" select="'{.}'"/>
+                            <alias:with-param name="{@name}" select="'{normalize-space(.)}'"/>
                         </xsl:for-each>
                     </alias:call-template>
                 </xsl:when>

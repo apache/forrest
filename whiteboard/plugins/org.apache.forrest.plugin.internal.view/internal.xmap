@@ -70,6 +70,10 @@
 			   logger="sitemap.serializer.text" 
 			 />
     </map:serializers>
+    <map:actions>
+      <map:action name="fallbackResolverAction" 
+        src="org.apache.forrest.plugin.internal.view.acting.FallbackResolverAction"/>
+    </map:actions>
   </map:components>
 
 <map:pipelines>
@@ -87,6 +91,7 @@
   3. views
   prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
   -->
+  <!--FIXME: We should refactor this pipeline when we want to use it-->
   <map:pipeline type="noncaching">
     <!--Refactor for dir-->
     <map:match pattern="viewLocationmap.xml">
@@ -107,30 +112,20 @@
     {1} - requested url
     -->
     <map:match pattern="prepare.view.**">
-      <map:generate src="cocoon:/viewLocationmap.xml"/>
-      <map:transform src="resources/stylesheets/viewLocationmap2path.xsl"/>
-      <map:select type="exists">
-      	<map:when test="resources/views/{project:defaultView}">
-		      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
-		        <map:parameter value="{project:defaultView}" name="defaultView"/>
-		        <map:parameter value="{1}" name="path"/>
-		        <map:parameter value="{project:content.xdocs}" name="root"/>
-		        <map:parameter value="resources/views/{project:defaultView}" name="viewFallback"/>
-		      </map:transform>
-        </map:when>
-        <map:otherwise>
-		      <map:transform src="resources/stylesheets/includes-viewLocationmap.xsl">
-		        <map:parameter value="{project:defaultView}" name="defaultView"/>
-		        <map:parameter value="{1}" name="path"/>
-		        <map:parameter value="{project:content.xdocs}" name="root"/>
-		        <map:parameter value="resources/views/default.fv" name="viewFallback"/>
-		      </map:transform>
-        </map:otherwise>
-      </map:select>
-      <map:transform type="xinclude"/>
-      <map:transform src="resources/stylesheets/prepare.include.templates.xsl"/>
-      <map:transform type="xinclude"/>
-    	<map:serialize type="xml"/>
+      <map:act type="fallbackResolverAction">
+        <map:parameter value="{1}" name="request"/>
+        <map:parameter value="{project:theme}" name="projectFallback"/>
+        <map:parameter value="{project:theme-ext}" name="projectExtension"/>
+        <map:parameter value="{project:content.xdocs}" name="projectDir"/>
+        <map:parameter value="{defaults:view-themes}" name="defaultDir"/>
+        <map:parameter value="{defaults:theme}" name="defaultFallback"/>
+        <map:parameter value="{defaults:theme-ext}" name="defaultExtension"/>
+      	
+        <map:generate src="file:/{uri}"/>
+        <map:transform src="resources/stylesheets/prepare.include.templates.xsl"/>
+        <map:transform type="xinclude"/>
+        <map:serialize type="xml"/>
+      </map:act>
     </map:match>
     
     <!--Add businessHelper to the presentation model that the content can be used later on.
