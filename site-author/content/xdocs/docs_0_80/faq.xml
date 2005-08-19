@@ -407,8 +407,8 @@
     <faq id="rawTML">
       <question>How can I include HTML content that is not to be skinned by Forrest?</question>
       <answer>
-        <p>To server, for example, a legacy HTML site add something like the following 
-        to your projects sitemap:</p>
+        <p>To serve, for example a legacy HTML site, add something like the following 
+        to your project's sitemap:</p>
         <source>
 &lt;map:match pattern="old_site/**.html"&gt;
  &lt;map:select type="exists"&gt;
@@ -422,6 +422,29 @@
   &lt;/map:when&gt;
 &lt;/map:match&gt;
         </source>
+      </answer>
+    </faq>
+
+    <faq id="javascript">
+      <question>How to include additional Javascript and CSS files?</question>
+      <answer>
+        <p>
+          Place various resources (e.g. javascript, css) into the
+          "project skins" directory. The default forrest.properties
+          has this at src/documentation/skins/$skin-name/
+          Javascript files would go in a "scripts" subdirectory.
+          CSS files would go in a "css" subdirectory.
+        </p>
+        <p>
+          Then refer to those from your source documents with
+          URIs like /skin/blah.js and /skin/foo.css
+        </p>
+        <p>
+          See how this is handled in the core sitemap
+          called forrest/main/webapp/resources.xmap
+          Search for "javascript" then follow to the 
+          &lt;map:resource name="skin-read"&gt; section.
+        </p>
       </answer>
     </faq>
   </part>
