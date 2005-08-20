@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN"
+  "http://forrest.apache.org/dtd/howto-v20.dtd">
+<howto>
+  <header>
+    <title>How be a Forrest developer</title>
+
+    <version>0.1</version>
+
+    <abstract>
+      This How-To provides some tips and procedures for being a
+      Forrest developer.
+    </abstract>
+
+    <last-modified-content-date date="2005-07-24" />
+  </header>
+  <audience title="Intended Audience">
+<warning>
+This document is under initial development.
+</warning>
+    <p>
+      People who are ready to go beyond the basics of using Forrest.
+      This might be to utilise Forrest for your advanced needs, debugging,
+      creating a new plugin, enhancing an existing plugin, enhancing the core
+      capabilities, contributing such enhancements back to the Apache Forrest
+      project, etc. In all cases, this is what we mean by "developer".
+    </p>
+    <p>
+      Actually, users will also find that some parts of this document are
+      useful. For example, the section about debugging and the section about
+      editing content.
+    </p>
+    <p>
+      See also the companion document "How to be a committer".
+    </p>
+  </audience>
+
+  <purpose title="Purpose">
+    <p>
+      This How-To provides some tips and procedures for being
+      an Apache Forrest developer. Ideally a developer would
+      also contribute back to the project, so these notes assume that.
+      Various key development tasks are used as worked examples.
+    </p>
+  </purpose>
+
+  <prerequisites title="Prerequisites">
+    <ul>
+      <li>
+        You have achieved the basic level of using Forrest. You have Forrest
+        installed and can create a new site with 'forrest seed'.
+        You have followed at least the first parts of the 
+        <a href="site:v0.80//documentation/your-project">Using Forrest</a>
+        document.
+      </li>
+      <li>
+        You will enventually see that understanding of the Cocoon
+        <a href="site:v0.80//documentation/developers/sitemap-ref">sitemap</a>
+        is important. For the initial examples below, you can do without that.
+        However please explore the sitemap soon.
+      </li>
+    </ul>
+  </prerequisites>
+
+  <steps title="Development techniques and scenarios">
+    <p>
+      Various scenarios are utilised to describe aspects of development.
+      Bear in mind that there are many
+      ways to do things. Each developer has different tools and habits,
+      and different operating systems are used. So you will need to glean
+      the principles and apply them to your own situation.
+    </p>
+
+    <p>
+      This document assumes that you intend to contribute some parts of
+      your work back to the project. Techniques for network-based collaborative
+      development are encouraged.
+    </p>
+
+    <section id="svn">
+      <title>Using Subversion</title>
+      <p>
+        The Subversion source control system is used for all ASF projects.
+        You can leverage this to ease your own development.
+      </p>
+
+      <p>
+        The "trunk" is where all new development and bugfixing happens.
+        We aim to keep the trunk usable at all times.
+      </p>
+
+      <p>
+        Each version release is a "branch", such as "forrest_07_branch".
+        Crucial bugfixes are also applied to the relevant release branch.
+      </p>
+
+      <p>
+        Branches are also used for developing
+        complex new code which would otherwise disrupt the trunk. When the new
+        work is suitable, then that branch is merged back to the trunk as soon
+        as possible.
+      </p>
+
+      <p>
+        To get started, see the
+        <a href="site:v0.80//documentation/developers/build">instructions</a>
+        for obtaining the Apache Forrest sources via SVN.
+      </p>
+
+      <section id="multiple">
+        <title>Multiple working copies</title>
+        <p>
+          Most developers would have a number of separate SVN working copies.
+          Hopefully you are brave enough to use the trunk for all your sites.
+          Sometimes that is not possible, for example when you are
+          co-operativley managing a site with other people who are not so
+          brave, so you need to use a specific release. However consider using
+          the SVN release branch, rather than the release archive (tar or zip).
+          This enables you to easily keep up with bugfixes. You can also easily
+          see what local changes that you have made by using 'svn status; svn diff'.
+        </p>
+        <p>
+          Here is one layout ...
+        </p>
+        <source>
+[localhost]$ ls /svn/asf
+forrest_07_branch
+forrest-trunk
+        </source>
+      </section>
+
+      <section id="svn-email">
+        <title>Watch email notifications for svn differences</title>
+        <p>
+          Either subscribe to the project's
+          <a href="site:mail-lists/forrest-svn">svn mailing list</a>
+          or monitor it via one of the mail archives. This enables you
+          to be immediately up-to-date with changes to the repositories.
+          The svn differences (diffs) are automatically sent whenever
+          a committer makes some changes.
+        </p>
+      </section>
+
+      <section id="tips-svn">
+        <title>Tips</title>
+        <ul>
+          <li>
+            Keep a copy of this book, or the online version, close at hand:
+            <a href="http://svnbook.red-bean.com/">Version Control with Subversion</a>
+            - the opensource SVN book.
+          </li>
+          <li>
+            See all available branches and other repositories:
+            <a href="http://svn.apache.org/repos/asf/forrest/">http://svn.apache.org/repos/asf/forrest/</a>
+          </li>
+          <li>
+            Use online repository browsers to quickly see past activity for
+            the files that you are working on:
+            <a href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/">http://svn.apache.org/viewcvs.cgi/forrest/trunk/</a>
+          </li>
+          <li>
+            Use 'svn log foo.xsl' for a summary of recent activity and to
+            see dates and revision numbers for changes.
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <section id="edit">
+      <title>Editing content</title>
+      <p>
+        See the 
+        <a href="site:v0.80//documentation/faq/edit-content">FAQ</a>.
+        Basically any editor can
+        be used, because Forrest treats the editing of content as a separate
+        concern. Be sure to configure the editor to find local copies of DTDs.
+      </p>
+
+      <section id="code-style">
+        <title>Code style guidelines</title>
+        <p>
+          Consistent code makes everyone's life easier.
+          See the 
+          <a href="http://cocoon.apache.org/community/committer.html">Apache Cocoon tips</a>.
+          We don't get too hung up on style, but a few basic things are important.
+        </p>
+      </section>
+
+      <section id="whitespace">
+        <title>Whitespace</title>
+        <p>
+          Use spaces instead of tabs (java files have four-space indentation,
+          xml files and other text files have two-space indentation).
+          Don't let your editor automatically change the whitespace.
+        </p>
+        <p>
+          We know that many files in SVN do not have consistent whitespace.
+          This issue is continually being addressed. Please don't attempt
+          to rectify whitespace mixed up with other changes. This makes the
+          important changes difficult to see. Occasionally committers will
+          rectify whitespace for a set of files.
+        </p>
+      </section>
+
+      <section id="line-length">
+        <title>Line length</title>
+        <p>
+          If each paragraph of an xml source document is one enourmous long
+          line, then it is extremely difficult to know the changes with the
+          SVN diffs. Developers and especially committers, need to be able to
+          efficiently review the changes. Fold long lines to a sensible
+          line-length (normally 80-characters wide but not more than 120 characters).
+        </p>
+      </section>
+
+      <section id="review">
+        <title>Use 'forrest run' for immediate gratification</title>
+        <p>
+          Edit content and immediately view it in the browser.
+          When you are satisifed, then do 'forrest site' to ensure that the
+          whole documentation set hangs together and there are no broken
+          references.
+        </p>
+        <p>
+          In the dynamic 'forrest run' mode, you will get some feedback
+          about some xml validation errors. However, it is better to treat
+          validation as a separate concern. Use an xml editor or command-line
+          tools such as "xmllint". As a last resort, you can use
+          'forrest validate-xdocs'.
+        </p>
+      </section>
+
+      <section id="tips-edit">
+        <title>Tips</title>
+
+        <ul>
+          <li>
+####
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <section id="debug">
+      <title>Debugging techniques</title>
+      <p>
+        This <a href="site:v0.80//documentation/faq/logs">FAQ</a>
+        describes the location of the Cocoon logfiles and their
+        configuration.
+      </p>
+
+      <section id="debug-links">
+        <title>Finding broken internal links</title>
+        <p>
+          Do 'forrest site' to produce the whole documentation set.
+          Cocoon will report its progress and reveal any problems.
+          This <a href="site:v0.80//documentation/faq/build_msg_a">FAQ</a>
+          explains the messages that Cocoon sends to standard output.
+          Broken links are also reported to a special file, which also shows
+          the source file containing the break. The location
+          of this file is reported when Cocoon starts.
+        </p>
+        <p>
+          Broken links are also reported in 'forrest run' mode.
+          Use your mouse to point to each link. The browser status bar
+          will show "error:..." instead of the actual URL.
+        </p>
+        <p>
+          The most common cause is that the entry is missing in the site.xml
+          configuration file or the link in your source document is not
+          using the correct name for the "site:..." value.
+        </p>
+      </section>
+
+      <section id="tips-debug">
+        <title>Tips</title>
+        <ul>
+          <li>
+            Doing 'forrest -v' will provide verbose build messages to the
+            standard output.
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <section id="find">
+      <title>Finding the relevant sources</title>
+      <p>
+        You will need to be able to find which sources, sitemaps, stylesheets
+        are responsible for certain processing.
+      </p>
+      <section id="find-scenario-1">
+        <title>Scenario: How does i18n work</title>
+        <p>
+          We will do a search for "i18n" to start with, then refine that after
+          exploring some of the sources.
+        </p>
+        <p>
+          The UNIX tools find, grep, and sed are very powerful. We need a
+          helper script, otherwise 'find' is going to report matches for
+          the hidden .svn files and also files in /build/ directories.
+        </p>
+
+        <source>
+echo "sed '/\.svn/d;/\/build\//d;/\/work\//d'" > ~/bin/exclude-find-svn
+chmod +x ~/bin/exclude-find-svn</source>
+        <p>
+          Now we will run find, use grep to search for the pattern in each
+          file and list the filenames. However, there is a stack of
+          forrest.properties files from the plugins, and there is i18n:text
+          being used in the viewHelper plugin, and some DTDs.
+          So weed them out ...
+        </p>
+
+        <source>
+cd /svn/asf/forrest-trunk
+find . -type f | xargs grep -l "i18n" | ~/bin/exclude-find-svn \
+ | grep -v "forrest.properties" | grep -v viewHelper | grep -v "\/schema\/"</source>
+
+        <p>
+          The list of files shows that there is an FAQ about i18n, there are
+          various sitemaps in main/webapp/, some stylesheets in
+          main/webapp/skins/common/ and pelt, some other stylesheets in
+          main/webapp/resources/stylesheets/ ... we will look at the sitemaps
+          first. Use grep to list the actual matches and the filenames.
+        </p>
+        <source>
+cd main/webapp
+grep i18n *.*</source>
+        <p>
+          Shows that five sitemaps are involved in some way. Always start with
+          sitemap.xamp and forrest.xmap as they do initial processing and
+          then delegate to other sitemaps. Open each file in your editor,
+          and search within for each "i18n" match. See that the xslt transformer 
+          is declared to use i18n, then further down the page the "skinit"
+          pipeline uses the i18n transformer only if i18n is switched on.
+        </p>
+      </section>
+
+      <section id="tips-find">
+        <title>Tips</title>
+        <ul>
+          <li>
+####
+          </li>
+        </ul>
+      </section>
+    </section>
+
+<!-- template
+    <section id="foo">
+      <title>Foo</title>
+      <p>
+####
+      </p>
+      <section id="foo-1">
+        <title>foo</title>
+        <p>
+####
+        </p>
+      </section>
+
+      <section id="tips-foo">
+        <title>Tips</title>
+        <ul>
+          <li>
+####
+          </li>
+        </ul>
+      </section>
+    </section>
+-->
+
+  </steps>
+
+  <extension title="Extension">
+    <p>
+####
+    </p>
+  </extension>
+
+  <faqs id="faqs">
+    <title>Frequently Asked Questions</title>
+    <faqsection id="faq-general">
+      <title>General issues</title>
+      <faq id="faq-difference">
+        <question>FAQ 1
+        </question>
+
+        <answer>
+          <p>
+####
+          </p>
+        </answer>
+      </faq>
+    </faqsection>
+
+    <faqsection id="faq-other">
+      <title>Other issues</title>
+      <faq id="faq-2-1">
+        <question>FAQ 2.1</question>
+
+        <answer>
+          <p>
+###
+          </p>
+        </answer>
+      </faq>
+    </faqsection>
+  </faqs>
+
+  <tips title="Tips">
+    <p>
+      This is a collection of general tips that do not fit in the sections above. 
+    </p>
+
+    <section id="tip-1">
+      <title>Tip 1</title>
+
+      <p>
+###
+      </p>
+    </section>
+  </tips>
+
+  <references title="References">
+    <p>
+      These are some other documents that are useful for developers.
+    </p>
+
+    <ul>
+      <li>
+###
+      </li>
+    </ul>
+  </references>
+</howto>
