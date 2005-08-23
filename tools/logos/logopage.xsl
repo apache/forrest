@@ -26,9 +26,8 @@
    <html>
       <body bgcolor="#999999">
         <h1>Apache Project Logos</h1>
-        <p>The CVS module that contains these logos and the code to 
-          make them is in the committers module under 'apachelogos'.
-          This site is a checkout of the build dir of that module.
+        <p>The SVN module that contains these logos and the code to 
+          make them is in the forrest repository under 'tools/logos'.
          If you need a new logo, or want to change some params, look 
           at the others for examples, change the projects.xml file 
           accordingly, then run 'ant'.
