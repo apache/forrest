@@ -183,6 +183,10 @@ public class SiteXMLView extends NavigationView {
 					IStructuredSelection selection = (IStructuredSelection) event
 							.getSelection();
 					treeSelection = selection;
+					Element element = (Element) selection.getFirstElement();
+					ForrestPropertiesView.setElement(element);
+					ForrestPropertiesView.refreshTree();
+					
 
 				}
 			}

@@ -20,9 +20,14 @@ package org.apache.forrest.eclipse.views;
 
 import java.util.ArrayList;
 
+
 import org.apache.forrest.eclipse.actions.Utilities;
 import org.apache.forrest.eclipse.wizards.NewLocationElement;
 import org.apache.forrest.eclipse.wizards.NewMatchElement;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -38,12 +43,28 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -60,12 +81,16 @@ public class LocationmapView extends NavigationView implements IMenuListener,
 	private Action AddLocation;
 	private Action RemoveElement;
 	private Action SaveDocument;
+	protected PropertySheetPage propertySheetPage;
+	
     
 	/**
 	 * The constructor.
 	 */
 	public LocationmapView() {
+		
 	}
+	 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
@@ -118,6 +143,8 @@ public class LocationmapView extends NavigationView implements IMenuListener,
 							.getSelection();
 					treeSelection = selection;
 					Element element = (Element) selection.getFirstElement();
+					ForrestPropertiesView.setElement(element);
+					ForrestPropertiesView.refreshTree();
 					AddLocation.setEnabled(false);
 					AddMatch.setEnabled(false);
 					if (element.getNodeName().equals("locator")){
@@ -133,12 +160,55 @@ public class LocationmapView extends NavigationView implements IMenuListener,
 			}
 		});
 	
-		//System.out.println(document.toString());
+		int operations = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		
+		treeViewer.addDropSupport(operations, types, new DropTargetListener() {
+
+			public void dragEnter(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragLeave(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragOperationChanged(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void dragOver(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+			/**
+			 * Handle files that are dropped into the site tree.
+			 */
+			public void drop(DropTargetEvent event) {
+				
+				System.out.println(event.data);	
+			}
+
+			public void dropAccept(DropTargetEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+		
 		if (path != null) { document = DOMUtilities.loadDOM(path);}
 		treeViewer.setInput(document);
 		makeActions();
 		hookContextMenu();
+		
 	}
+
+	
+
 
 	public void setFocus() {
 		// TODO Auto-generated method stub
@@ -254,5 +324,7 @@ public class LocationmapView extends NavigationView implements IMenuListener,
     protected String getFilename() {
         return Utilities.getPathToContent() + java.io.File.separator + "locationmap.xml";
     }
-	
+ 
 }
+
+

@@ -96,7 +96,7 @@ public abstract class NavigationView extends ViewPart implements IMenuListener,
                      // TODO: only attempt to load config file if this is a Forrest project
             		 activeProject = newActiveProject;
             		 projectName = activeProject.getProject().getName();
-            		xDocPath = (activeProject.getProject().getLocation()
+            		 xDocPath = (activeProject.getProject().getLocation()
                         .toString()
                         + java.io.File.separator);
             		path = xDocPath + getFilename();
