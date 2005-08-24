@@ -1,13 +1,13 @@
 /*
  * Copyright 1999-2004 The Apache Software Foundation or its licensors,
  * as applicable.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,35 +43,35 @@ import org.xml.sax.SAXException;
 /**
  * Resolves a request against a LocationMap.
  */
-public class LocationMapModule extends AbstractLogEnabled 
+public class LocationMapModule extends AbstractLogEnabled
     implements InputModule, Serviceable, Configurable, Disposable, ThreadSafe {
-    
+
     private static final Iterator ATTNAMES = Collections.EMPTY_LIST.iterator();
-    
+
     private ServiceManager m_manager;
     private SourceResolver m_resolver;
     private String m_src;
     private SourceValidity m_srcVal;
     private LocationMap m_lm;
-    
+
     // ---------------------------------------------------- lifecycle
-    
+
     public LocationMapModule() {
     }
-    
+
     public void service(ServiceManager manager) throws ServiceException {
         m_manager = manager;
         m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
     }
-    
+
     public void configure(Configuration configuration) throws ConfigurationException {
         m_src = configuration.getChild("file").getAttribute("src");
     }
-    
+
     public void dispose() {
         m_lm.dispose();
     }
-    
+
     private LocationMap getLocationMap() throws Exception {
         Source source = null;
         try {
@@ -114,13 +114,13 @@ public class LocationMapModule extends AbstractLogEnabled
         }
         return m_lm;
     }
-    
+
     private Configuration loadConfiguration(Source source) throws ConfigurationException {
         Configuration configuration = null;
         SAXParser parser = null;
         try {
             parser = (SAXParser) m_manager.lookup(SAXParser.ROLE);
-            NamespacedSAXConfigurationHandler handler = 
+            NamespacedSAXConfigurationHandler handler =
                 new NamespacedSAXConfigurationHandler();
             parser.parse(new InputSource(source.getInputStream()),handler);
             configuration = handler.getConfiguration();
@@ -141,9 +141,9 @@ public class LocationMapModule extends AbstractLogEnabled
         }
         return configuration;
     }
-    
+
     // ---------------------------------------------------- Module implementation
-    
+
     /**
      * Execute the current request against the locationmap returning the
      * resulting string.
@@ -153,7 +153,7 @@ public class LocationMapModule extends AbstractLogEnabled
         final Configuration modeConf,
         final Map objectModel)
         throws ConfigurationException {
-        
+
         try {
             return getLocationMap().locate(name,objectModel);
         }
@@ -165,17 +165,17 @@ public class LocationMapModule extends AbstractLogEnabled
         }
         return null;
     }
-    
+
     /**
      * The possibilities are endless. No way to enumerate them all.
      * Therefore returns null.
      */
     public Iterator getAttributeNames(Configuration modeConf, Map objectModel)
         throws ConfigurationException {
-        
+
         return null;
     }
-    
+
     /**
      * Always returns only one value. Use getAttribute() instead.
      */
@@ -184,7 +184,7 @@ public class LocationMapModule extends AbstractLogEnabled
         Configuration modeConf,
         Map objectModel)
         throws ConfigurationException {
-        
+
         return new Object[] {getAttribute(name,modeConf,objectModel)};
     }
 
