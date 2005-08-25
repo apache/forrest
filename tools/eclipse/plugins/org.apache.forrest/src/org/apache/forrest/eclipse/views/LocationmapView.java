@@ -190,7 +190,17 @@ public class LocationmapView extends NavigationView implements IMenuListener,
 			 */
 			public void drop(DropTargetEvent event) {
 				
-				System.out.println(event.data);	
+				String[] dropElements = event.data.toString().split(",");
+				Node insertionElement = (Element) event.item.getData();	
+				if (insertionElement.getNodeName().equals("locator")){
+					Element matchElement = document.createElement("match");
+					matchElement.setAttribute("pattern", dropElements[0] + "/" + dropElements[1]);
+					insertionElement.appendChild(matchElement);
+					Element locationElement = document.createElement("location");
+					locationElement.setAttribute("src", dropElements[2]);
+					matchElement.appendChild(locationElement);
+				}
+				treeViewer.refresh();
 			}
 
 			public void dropAccept(DropTargetEvent event) {
