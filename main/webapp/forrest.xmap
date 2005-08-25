@@ -37,55 +37,6 @@ $Revision: 1.8 $
 
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
-  <!-- FIXME (JJP): This should not be here. Should be define on sitemap -->
-  <map:generators default="file">
-      <map:generator name="html"      src="org.apache.cocoon.generation.HTMLGenerator">
-        <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
-      </map:generator>
-      <map:generator name="text2xml" logger="sitemap.generator.textgenerator"
-                     src="org.apache.cocoon.generation.TextGenerator">
-       <parameter name="localizable" value="true"/>
-      </map:generator>
-      <map:generator name="exception"
-                  src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
-                  
-    </map:generators>
-    <map:serializers default="html"/>
-    <map:matchers default="wildcard">
-    <map:matcher name="i18n" src="org.apache.cocoon.matching.LocaleMatcher">
-    <negotiate>true</negotiate>
-    <use-locales>false</use-locales>
-    <use-blank-locale>true</use-blank-locale>
-    <default-locale language="en" country="US"/>
-    </map:matcher>
-    </map:matchers>
-
-
-    <map:transformers default="xslt">
-	   <map:transformer name="pattern" 
-	                    src="org.apache.cocoon.transformation.PatternTransformer" 
-	                    logger="sitemap.transformer.pattern">
-	    <parameter name="groups" value="true"/>
-	   </map:transformer>
-	   <map:transformer name="lexer" 
-	                    src="org.apache.cocoon.transformation.LexicalTransformer" 
-	                    logger="sitemap.transformer.lexer">
-	    <parameter name="localizable" value="true"/>
-	   </map:transformer>
-	   <map:transformer name="parser" 
-	                    src="org.apache.cocoon.transformation.ParserTransformer" 
-	                    logger="sitemap.transformer.parser">
-	    <parameter name="flatten" value="true"/>
-	    <parameter name="recovery" value="true"/>
-	    <parameter name="localizable" value="true"/>
-	   </map:transformer>
-	
-	   <map:transformer name="extparser"
-	                    src="org.apache.cocoon.transformation.ExtendedParserTransformer"
-	                    logger="sitemap.transformer.extendedparser">
-	   </map:transformer>
-    </map:transformers>
-
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
         <sourcetype name="document-v10">

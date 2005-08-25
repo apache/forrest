@@ -23,29 +23,24 @@ http://forrest.apache.org/docs/sitemap-ref.html
 $Revision: 1.12 $
 ==================================================== -->
 
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
-      <map:generator name="file"      src="org.apache.cocoon.generation.FileGenerator" />
-      <map:generator name="html"      
-                     src="org.apache.cocoon.generation.HTMLGenerator">
+      <map:generator name="file"  src="org.apache.cocoon.generation.FileGenerator" />
+      <map:generator name="html"  src="org.apache.cocoon.generation.HTMLGenerator">
         <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
       </map:generator>
+      
       <map:generator name="exception"
                   src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
-      <!--
-      <map:generator name="html"      src="org.apache.cocoon.generation.HTMLGenerator">
-        <jtidy-config>jtidy.properties</jtidy-config>
-      </map:generator>
-      <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
-      -->
+      
       <map:generator name="notifier" src="org.apache.cocoon.sitemap.NotifyingGenerator" />
       
       <map:generator name="text2xml" logger="sitemap.generator.textgenerator"
                      src="org.apache.cocoon.generation.TextGenerator">
        <parameter name="localizable" value="true"/>
       </map:generator>
+
     </map:generators>
 
     <map:transformers default="xslt">
@@ -112,16 +107,24 @@ $Revision: 1.12 $
       <map:transformer name="xinclude" src="org.apache.cocoon.transformation.XIncludeTransformer" logger="sitemap.transformer.xinclude" pool-grow="2" pool-max="16" pool-min="2" />
 
       <map:transformer name="cinclude" pool-grow="2" pool-max="16" pool-min="2" src="org.apache.cocoon.transformation.CIncludeTransformer" logger="sitemap.transformer.cinclude"/>
-   <map:transformer name="pattern" 
-                    src="org.apache.cocoon.transformation.PatternTransformer" 
-                    logger="sitemap.transformer.pattern">
-    <parameter name="groups" value="true"/>
-   </map:transformer>
+   
+     <map:transformer name="pattern" 
+       src="org.apache.cocoon.transformation.PatternTransformer" 
+       logger="sitemap.transformer.pattern">
+       <parameter name="groups" value="true"/>
+     </map:transformer>
+     
+      <map:transformer name="extparser"
+        src="org.apache.cocoon.transformation.ExtendedParserTransformer"
+        logger="sitemap.transformer.extendedparser">
+      </map:transformer>
+
    <map:transformer name="lexer" 
                     src="org.apache.cocoon.transformation.LexicalTransformer" 
                     logger="sitemap.transformer.lexer">
     <parameter name="localizable" value="true"/>
    </map:transformer>
+
    <map:transformer name="parser" 
                     src="org.apache.cocoon.transformation.ParserTransformer" 
                     logger="sitemap.transformer.parser">
@@ -129,6 +132,10 @@ $Revision: 1.12 $
     <parameter name="recovery" value="true"/>
     <parameter name="localizable" value="true"/>
    </map:transformer>
+
+   
+
+
    <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
     <catalogues default="common">
       <catalogue id="common" name="CommonMessages" location="skins/common/translations"/>
@@ -177,6 +184,12 @@ $Revision: 1.12 $
     <map:matchers default="wildcard">
       <map:matcher name="wildcard" src="org.apache.cocoon.matching.WildcardURIMatcher"/>
       <map:matcher name="regexp" src="org.apache.cocoon.matching.RegexpURIMatcher"/>
+      <map:matcher name="i18n" src="org.apache.cocoon.matching.LocaleMatcher">
+        <negotiate>true</negotiate>
+        <use-locales>false</use-locales>
+        <use-blank-locale>true</use-blank-locale>
+        <default-locale language="en" country="US"/>
+      </map:matcher>
     </map:matchers>
 
     <map:selectors>
