@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -116,6 +116,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="../docs_0_80/howto/howto-howto.html">Write a How-to</a>
 </div>
 <div class="menuitem">
+<a href="../docs_0_80/howto/howto-dev.html">Be a developer</a>
+</div>
+<div class="menuitem">
 <a href="../docs_0_80/howto/howto-asf-mirror.html">Download mirror</a>
 </div>
 <div class="menuitem">
@@ -136,8 +139,8 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <div class="menuitem">
 <a href="../docs_0_80/howto/howto-custom-html-source.html">Custom html source</a>
 </div>
-<div onclick="SwitchMenu('menu_1.1.15.10', '../skin/')" id="menu_1.1.15.10Title" class="menutitle">Multipage HowTo</div>
-<div id="menu_1.1.15.10" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.15.11', '../skin/')" id="menu_1.1.15.11Title" class="menutitle">Multipage HowTo</div>
+<div id="menu_1.1.15.11" class="menuitemgroup">
 <div class="menuitem">
 <a href="../docs_0_80/howto/multi/howto-multi.html">Introduction</a>
 </div>
@@ -151,8 +154,8 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="../docs_0_80/howto/multi/step3.html">Step 3</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.1.15.11', '../skin/')" id="menu_1.1.15.11Title" class="menutitle">Views</div>
-<div id="menu_1.1.15.11" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.15.12', '../skin/')" id="menu_1.1.15.12Title" class="menutitle">Views</div>
+<div id="menu_1.1.15.12" class="menuitemgroup">
 <div class="menuitem">
 <a href="../docs_0_80/howto/howto-view-install.html">Install views</a>
 </div>
@@ -358,6 +361,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </li>
 <li>
 <a href="#rawTML">2.18. How can I include HTML content that is not to be skinned by Forrest?</a>
+</li>
+<li>
+<a href="#javascript">2.19. How to include additional Javascript and CSS files?</a>
 </li>
 </ul>
 </li>
@@ -907,8 +913,8 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#rawTML-menu">^</a>
 </div>
 <div style="margin-left: 15px">
-<p>To server, for example, a legacy HTML site add something like the following 
-        to your projects sitemap:</p>
+<p>To serve, for example a legacy HTML site, add something like the following 
+        to your project's sitemap:</p>
 <pre class="code">
 &lt;map:match pattern="old_site/**.html"&gt;
  &lt;map:select type="exists"&gt;
@@ -923,9 +929,33 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 &lt;/map:match&gt;
         </pre>
 </div>
-<a name="N1026A"></a><a name="technical"></a>
+<a name="N1026A"></a><a name="javascript"></a>
+<h4 class="faq">2.19. How to include additional Javascript and CSS files?</h4>
+<div align="right">
+<a href="#javascript-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>
+          Place various resources (e.g. javascript, css) into the
+          "project skins" directory. The default forrest.properties
+          has this at src/documentation/skins/$skin-name/
+          Javascript files would go in a "scripts" subdirectory.
+          CSS files would go in a "css" subdirectory.
+        </p>
+<p>
+          Then refer to those from your source documents with
+          URIs like /skin/blah.js and /skin/foo.css
+        </p>
+<p>
+          See how this is handled in the core sitemap
+          called forrest/main/webapp/resources.xmap
+          Search for "javascript" then follow to the 
+          &lt;map:resource name="skin-read"&gt; section.
+        </p>
+</div>
+<a name="N10278"></a><a name="technical"></a>
 <h3 class="underlined_5">3. Technical</h3>
-<a name="N1026E"></a><a name="proxy_config"></a>
+<a name="N1027C"></a><a name="proxy_config"></a>
 <h4 class="faq">3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</h4>
 <div align="right">
@@ -936,7 +966,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
             <span class="codefrag">proxy.host</span> and <span class="codefrag">proxy.port</span> accordingly (the port will default
           to port 80).</p>
 </div>
-<a name="N1027F"></a><a name="CVS_revison_tags"></a>
+<a name="N1028D"></a><a name="CVS_revison_tags"></a>
 <h4 class="faq">3.2. How can I generate html-pages to show the revision tag of cvs?</h4>
 <div align="right">
 <a href="#CVS_revison_tags-menu">^</a>
@@ -949,7 +979,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <p>This technique could also be used for a modification date with $Date: 2004/01/15 08:52:47
           $</p>
 </div>
-<a name="N10291"></a><a name="cli-xconf"></a>
+<a name="N1029F"></a><a name="cli-xconf"></a>
 <h4 class="faq">3.3.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
         other additional ones. </h4>
 <div align="right">
@@ -987,7 +1017,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
           <strong>foo/**</strong> to match that. </div>
 </div>
 </div>
-<a name="N102CE"></a><a name="ignoring_javadocs"></a>
+<a name="N102DC"></a><a name="ignoring_javadocs"></a>
 <h4 class="faq">3.4.  How do I stop Forrest breaking on links to external files that may not exist, like
         javadocs? </h4>
 <div align="right">
@@ -998,7 +1028,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
             <span class="codefrag">cli.xconf</span>
           </a> Cocoon config file, and defining patterns for URLs to exclude. </p>
 </div>
-<a name="N102DD"></a><a name="claimed_patterns"></a>
+<a name="N102EB"></a><a name="claimed_patterns"></a>
 <h4 class="faq">3.5. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#claimed_patterns-menu">^</a>
@@ -1014,7 +1044,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
           with this issue (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N102EF"></a><a name="build_msg_a"></a>
+<a name="N102FD"></a><a name="build_msg_a"></a>
 <h4 class="faq">3.6. What do the symbols and numbers mean when Forrest lists each document that it has
         built? </h4>
 <div align="right">
@@ -1047,7 +1077,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
       
 </p>
 </div>
-<a name="N1030B"></a><a name="headless_operation"></a>
+<a name="N10319"></a><a name="headless_operation"></a>
 <h4 class="faq">3.7.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
         server using ':0.0' as the value of the DISPLAY variable. </h4>
 <div align="right">
@@ -1060,7 +1090,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
 <pre class="code">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</pre>
 <p> See also <a href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</a>. </p>
 </div>
-<a name="N10327"></a><a name="project-logo-svg"></a>
+<a name="N10335"></a><a name="project-logo-svg"></a>
 <h4 class="faq">3.8.  
         The project logo that is generated from SVG is truncating my project name.
       </h4>
@@ -1080,7 +1110,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <a href="http://www.w3.org/Graphics/SVG/">SVG</a> resources.
         </p>
 </div>
-<a name="N1033F"></a><a name="catalog"></a>
+<a name="N1034D"></a><a name="catalog"></a>
 <h4 class="faq">3.9.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </h4>
 <div align="right">
@@ -1090,7 +1120,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
 <p> Notes are provided for various tools at <a href="../docs_0_80/catalog.html">Using Catalog Entity
             Resolver for local DTDs</a>. </p>
 </div>
-<a name="N1034B"></a><a name="skin"></a>
+<a name="N10359"></a><a name="skin"></a>
 <h4 class="faq">3.10.  How to make the site look better and change its skin? </h4>
 <div align="right">
 <a href="#skin-menu">^</a>
@@ -1102,7 +1132,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
 <p> See notes about <a href="../docs_0_80/your-project.html#skins">configuration</a> of the skins.
           Some projects may have special needs and can define their <a href="../docs_0_80/your-project.html#new_skin">own skin</a>. </p>
 </div>
-<a name="N10362"></a><a name="xsp"></a>
+<a name="N10370"></a><a name="xsp"></a>
 <h4 class="faq">3.11. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -1150,7 +1180,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
 </ol>
 <p>See also the <a href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</a> Wiki page.</p>
 </div>
-<a name="N1039D"></a><a name="breadcrumbs"></a>
+<a name="N103AB"></a><a name="breadcrumbs"></a>
 <h4 class="faq">3.12. How do breadcrumbs work? Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -1169,7 +1199,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           are viewing the site locally, there is no domain and so there will be no extra
           breadcrumbs, only the ones that are specified in <span class="codefrag">skinconf.xml</span>. </p>
 </div>
-<a name="N103B2"></a><a name="run_port"></a>
+<a name="N103C0"></a><a name="run_port"></a>
 <h4 class="faq">3.13. How do I make forrest run listen on a different port?</h4>
 <div align="right">
 <a href="#run_port-menu">^</a>
@@ -1185,9 +1215,9 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         
 </p>
 </div>
-<a name="N103C6"></a><a name="old_faqs"></a>
+<a name="N103D4"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">4. Older version: 0.6</h3>
-<a name="N103CA"></a><a name="old_claimed_patterns"></a>
+<a name="N103D8"></a><a name="old_claimed_patterns"></a>
 <h4 class="faq">4.1. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#old_claimed_patterns-menu">^</a>
@@ -1203,9 +1233,9 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           with this issue (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N103DC"></a><a name="general"></a>
+<a name="N103EA"></a><a name="general"></a>
 <h3 class="underlined_5">5. General</h3>
-<a name="N103E0"></a><a name="generating_menus"></a>
+<a name="N103EE"></a><a name="generating_menus"></a>
 <h4 class="faq">5.1. What is the relationship between site.xml and book.xml? </h4>
 <div align="right">
 <a href="#generating_menus-menu">^</a>
@@ -1219,7 +1249,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <span class="codefrag">site.xml</span>-generated menus aren't appropriate. See <a href="../docs_0_80/linking.html">Menus and
             Linking</a>. </p>
 </div>
-<a name="N103FB"></a><a name="docbook"></a>
+<a name="N10409"></a><a name="docbook"></a>
 <h4 class="faq">5.2.  How do I use DocBook as the XML documentation format? </h4>
 <div align="right">
 <a href="#docbook-menu">^</a>
@@ -1265,7 +1295,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           different DTDs, then see <a href="../docs_0_80/your-project.html#new_dtd">Using Forrest</a> for
           configuration guidance. </p>
 </div>
-<a name="N10429"></a><a name="version"></a>
+<a name="N10437"></a><a name="version"></a>
 <h4 class="faq">5.3.  How to report which version of Forrest is being used and the properties that are
         set? </h4>
 <div align="right">
@@ -1278,7 +1308,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           watch the build messages. Doing <span class="codefrag">'forrest -v'</span> will provide verbose build
           messages. </p>
 </div>
-<a name="N1043D"></a><a name="logs"></a>
+<a name="N1044B"></a><a name="logs"></a>
 <h4 class="faq">5.4.  Where are the log files to find more infomation about errors? </h4>
 <div align="right">
 <a href="#logs-menu">^</a>
@@ -1297,7 +1327,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
 <p> Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages to the standard
           output. </p>
 </div>
-<a name="N10461"></a><a name="how_can_I_help"></a>
+<a name="N1046F"></a><a name="how_can_I_help"></a>
 <h4 class="faq">5.5.  How to help? </h4>
 <div align="right">
 <a href="#how_can_I_help-menu">^</a>
@@ -1308,7 +1338,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           particularly from newcomers&mdash;often, close proximity blinds software developers to
           faults that are obvious to everyone else. Don't be shy! </p>
 </div>
-<a name="N1046D"></a><a name="patch"></a>
+<a name="N1047B"></a><a name="patch"></a>
 <h4 class="faq">5.6.  How to contribute a patch? </h4>
 <div align="right">
 <a href="#patch-menu">^</a>

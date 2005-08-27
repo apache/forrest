@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,7 +111,7 @@
         <p>Add the following entries to your site.xml file:</p>
         <source xml:space="preserve">
   &lt;about tab="home" label="About" href=""&gt;
- &#9;  ...
+ 	  ...
     &lt;all_site label="Full HTML" href="wholesite.html"/&gt;    
     &lt;all_sitePDF label="Full PDF" href="wholesite.pdf"/&gt;  
      ...
@@ -290,8 +290,8 @@
         by the <link href="http://cocoon.apache.org/2.1/userdocs/transformers/i18n-transformer.html">Cocoon i18n 
         Transformer</link>. You can see an example of how it works in the above linked issue.</p>
       </section><section id="rawTML"><title>2.18. How can I include HTML content that is not to be skinned by Forrest?</title>
-        <p>To server, for example, a legacy HTML site add something like the following 
-        to your projects sitemap:</p>
+        <p>To serve, for example a legacy HTML site, add something like the following 
+        to your project's sitemap:</p>
         <source xml:space="preserve">
 &lt;map:match pattern="old_site/**.html"&gt;
  &lt;map:select type="exists"&gt;
@@ -305,6 +305,24 @@
   &lt;/map:when&gt;
 &lt;/map:match&gt;
         </source>
+      </section><section id="javascript"><title>2.19. How to include additional Javascript and CSS files?</title>
+        <p>
+          Place various resources (e.g. javascript, css) into the
+          "project skins" directory. The default forrest.properties
+          has this at src/documentation/skins/$skin-name/
+          Javascript files would go in a "scripts" subdirectory.
+          CSS files would go in a "css" subdirectory.
+        </p>
+        <p>
+          Then refer to those from your source documents with
+          URIs like /skin/blah.js and /skin/foo.css
+        </p>
+        <p>
+          See how this is handled in the core sitemap
+          called forrest/main/webapp/resources.xmap
+          Search for "javascript" then follow to the 
+          &lt;map:resource name="skin-read"&gt; section.
+        </p>
       </section></section><section id="technical"><title>3. Technical</title><section id="proxy_config"><title>3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</title>
         <p>You can configure the proxy in the <code>forrest.properties</code> file. Set the

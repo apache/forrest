@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "document-v13.dtd">
 <document><header><title>History of Changes</title></header><body><p><link href="changes.rss"><img alt="RSS" src="images/rss.png"/></link></p>
     <section id="version_0.8-dev"><title>Version 0.8-dev (not yet released)</title><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="images/add.jpg"/>
+        Refactored the view resolver code of the internal.view plugin. Created an action that
+        is doing the same as before the combination of sitemap+xsl. <br/>Added 2 java classes to package
+        org.apache.forrest.plugin.internal.view.acting:<br/>
+        1.FallbackResolverAction.java<br/>2.FallbackResolverHelper.java
+      (TS)</li><li><icon alt="add" src="images/add.jpg"/>
+       Removed project.view-defaultView properties and added project.theme-extension instead. The combination
+       of project.theme-extension and project.theme is equal to project.view-defaultView.
+      (TS)</li><li><icon alt="add" src="images/add.jpg"/>
+       Added new elements to org.apache.forrest.conf.ForrestConfModule name="defaults":
+       <br/> view-themes<br/>theme-ext<br/>theme<br/>
+      (TS)</li><li><icon alt="add" src="images/add.jpg"/>
+       Removed "defaultView" and added new element to org.apache.forrest.conf.ForrestConfModule name="project":
+       <br/>theme-ext
+      (TS)</li><li><icon alt="add" src="images/add.jpg"/>
+       normalize-space() the forrest:properties before parsing them to the pipe
+      (TS)</li><li><icon alt="add" src="images/add.jpg"/>
         Use sets of symbols as xml entities for character replacement.
         There is a core set and each project can define a set.
         For example, use "<code>&amp;myp-t;</code>" to represent the
@@ -138,7 +154,7 @@
       Merge xdocs and raw files in the same directory src/document/content/xdocs
       (JJP)</li><li><icon alt="update" src="images/update.jpg"/>
           Config check for the i8n attribute for i18n transformer
-&#9;  so it is used only when necessary.
+	  so it is used only when necessary.
        (JJP) Fixes <link href="http://issues.apache.org/jira/browse/FOR-18">FOR-18</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         Enhanced the Message of the Day (MOTD) facility.
         See skinconf.xml from a "seed" site for configuration details.
@@ -401,7 +417,7 @@
            property.
       (NKB)</li><li><icon alt="add" src="images/add.jpg"/>
           Patch facility to be used by any contributor (From Ant's project).
-&#9;  To use it run "build.[sh|bat] patch".
+	  To use it run "build.[sh|bat] patch".
       (JJP) Thanks to <link href="mailto:Jan.Materne@rzf.fin-nrw.de">Jan Materne</link>.</li><li><icon alt="add" src="images/add.jpg"/>
         Skins can now be packaged, downloaded and automatically installed.
         See <link href="site:v0.70//skin-package">documentation</link>.
@@ -411,9 +427,9 @@
         Integrate Lucene on Forrest. Check the bug report for more info.
       (JJP) Thanks to <link href="mailto:rprades@porcelanosa.com">Ramón Prades</link>. Fixes <link href="http://issues.apache.org/jira/browse/FOR-9">FOR-9</link>.</li><li><icon alt="add" src="images/add.jpg"/>
         Added XSP support.
-&#9;For old sitemap.xmap add this tag:
-&#9;&lt;map:generator name="serverpages" 
-&#9;src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;
+	For old sitemap.xmap add this tag:
+	&lt;map:generator name="serverpages" 
+	src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;
       (JJP) Fixes <link href="http://issues.apache.org/jira/browse/FOR-56">FOR-56</link>.</li><li><icon alt="fix" src="images/fix.jpg"/>
         docbook2document.xsl: remove unnecessary / from template matches.
       (JJP) Thanks to Sean Wheller. Fixes <link href="http://issues.apache.org/jira/browse/FOR-317">FOR-317</link>.</li><li><icon alt="fix" src="images/fix.jpg"/>
@@ -526,7 +542,7 @@
           custom skins in the project source dir from working.
       (NKB) Thanks to <link href="mailto:sb@sebastian-bergmann.de">Sebastian Bergmann</link>.</li><li><icon alt="fix" src="images/fix.jpg"/>
           Added default translation for menu on fresh-site so it is used 
-&#9;  when the user locale can not be found.
+	  when the user locale can not be found.
           Synchronized some I18n labels after a modification on fresh-site.
       (JJP)</li><li><icon alt="fix" src="images/fix.jpg"/>
           Patched directory2book.xsl to be able to serve raw documents from the 
@@ -639,11 +655,11 @@
         directory to ease editing (e.g. src, resources and skins)
       (RDG) Fixes <link href="http://issues.apache.org/jira/browse/FOR-98">FOR-98</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         Upgrade to cocoon 2.1.3
-&#9;nekodtd 0.1.9
-&#9;remove excalibur-concurrent-20020820.jar
-&#9;remove excalibur-cli-1.0.jar
-&#9;remove excalibur-datasource-vm12-20021121.jar
-&#9;remove jakarta-oro-2.0.6.jar 
+	nekodtd 0.1.9
+	remove excalibur-concurrent-20020820.jar
+	remove excalibur-cli-1.0.jar
+	remove excalibur-datasource-vm12-20021121.jar
+	remove jakarta-oro-2.0.6.jar 
       (JJP)</li><li><icon alt="update" src="images/update.jpg"/>
         Instead of forrest-targets.ent with Ant 1.6 Forrest can now also be used with
         the new import facility: &lt;import file="forrest-targets.xml"/&gt;
@@ -718,13 +734,13 @@
           This reduces Forrest build time from 53 to 19 seconds on my system.
       (NKB)</li><li><icon alt="update" src="images/update.jpg"/>
           Added support for docbook version 4.1.2. Allows importing files
-&#9;  from various editors (Open office, Abiword).
+	  from various editors (Open office, Abiword).
       (JJP)</li><li><icon alt="update" src="images/update.jpg"/>
           Added German Translation for menu in fresh-site example seed.
       (JJP) Thanks to <link href="mailto:Jan.Materne@rzf.fin-nrw.de">Jan Materne</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         Added creation of TOC support on PDF files.
-&#9;Improved so it uses value from skinconfig.xml.
-&#9;Improve algoritm to define font size for section/subsection/...
+	Improved so it uses value from skinconfig.xml.
+	Improve algoritm to define font size for section/subsection/...
       (JJP) Thanks to <link href="mailto:eburghar@free.fr">Eric Burghard</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         In the generated "changes" document, add "version_" to section@id
         as required by document-v12.

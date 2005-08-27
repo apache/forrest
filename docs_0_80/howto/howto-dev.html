@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -115,6 +115,9 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-howto.html">Write a How-to</a>
 </div>
+<div class="menupage">
+<div class="menupagetitle">Be a developer</div>
+</div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-asf-mirror.html">Download mirror</a>
 </div>
@@ -129,9 +132,6 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-forrest-from-maven.html">Maven Integration</a>
-</div>
-<div class="menupage">
-<div class="menupagetitle">Be a developer</div>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-buildPlugin.html">Build a Plugin</a>
@@ -281,18 +281,65 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#Prerequisites">Prerequisites</a>
 </li>
 <li>
-<a href="#Steps">Steps</a>
+<a href="#Development techniques and scenarios">Development techniques and scenarios</a>
 <ul class="minitoc">
 <li>
-<a href="#step-1">Step-1</a>
+<a href="#svn">Using Subversion</a>
+<ul class="minitoc">
+<li>
+<a href="#multiple">Multiple working copies</a>
 </li>
 <li>
-<a href="#step-2">Step-2</a>
+<a href="#svn-email">Watch email notifications for svn differences</a>
+</li>
+<li>
+<a href="#tips-svn">Tips</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#Extension">Extension</a>
+<a href="#edit">Editing content</a>
+<ul class="minitoc">
+<li>
+<a href="#code-style">Code style guidelines</a>
+</li>
+<li>
+<a href="#whitespace">Whitespace</a>
+</li>
+<li>
+<a href="#line-length">Line length</a>
+</li>
+<li>
+<a href="#review">Use 'forrest run' for immediate gratification</a>
+</li>
+<li>
+<a href="#tips-edit">Tips</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#debug">Debugging techniques</a>
+<ul class="minitoc">
+<li>
+<a href="#debug-links">Finding broken internal links</a>
+</li>
+<li>
+<a href="#tips-debug">Tips</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#find">Finding the relevant sources</a>
+<ul class="minitoc">
+<li>
+<a href="#find-scenario-1">Scenario: How does i18n work</a>
+</li>
+<li>
+<a href="#tips-find">Tips</a>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 <li>
 <a href="#Frequently Asked Questions">Frequently Asked Questions</a>
@@ -306,7 +353,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </ul>
 </li>
 <li>
-<a href="#2+Style+issues">2 Style issues</a>
+<a href="#2+Other+issues">2 Other issues</a>
 <ul class="minitoc">
 <li>
 <a href="#2.1+FAQ+2.1">2.1 FAQ 2.1</a>
@@ -319,7 +366,7 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 <a href="#Tips">Tips</a>
 <ul class="minitoc">
 <li>
-<a href="#tip-1">Tip 1</a>
+<a href="#tip-howto">Explanations about howto topics on the mailing lists</a>
 </li>
 </ul>
 </li>
@@ -328,9 +375,15 @@ document.write("<text>Last Published:</text> " + document.lastModified);
 </li>
 </ul>
 </div>
-<a name="N10013"></a><a name="Intended Audience"></a>
+<a name="N10010"></a><a name="Intended Audience"></a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+This document is under initial development.
+</div>
+</div>
 <p>
       People who are ready to go beyond the basics of using Forrest.
       This might be to utilise Forrest for your advanced needs, debugging,
@@ -340,81 +393,352 @@ document.write("<text>Last Published:</text> " + document.lastModified);
     </p>
 <p>
       Actually, users will also find that some parts of this document are
-      useful. For example, the section about debugging.
+      useful. For example, the section about debugging and the section about
+      editing content.
+    </p>
+<p>
+      See also the companion document "How to be a committer".
     </p>
 </div>
-<a name="N1001E"></a><a name="Purpose"></a>
+<a name="N10021"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      This How-To provides some tips and procedures for being a
-      Forrest developer.
+      This How-To provides some tips and procedures for being
+      an Apache Forrest developer. Ideally a developer would
+      also contribute back to the project, so these notes assume that.
+      Various key development tasks are used as worked examples.
     </p>
 </div>
-<a name="N10026"></a><a name="Prerequisites"></a>
+<a name="N10029"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
       
 <li>
-####
+        You have achieved the basic level of using Forrest. You have Forrest
+        installed and can create a new site with 'forrest seed'.
+        You have followed at least the first parts of the 
+        <a href="../../docs_0_80/your-project.html">Using Forrest</a>
+        document.
+      </li>
+      
+<li>
+        You will enventually see that understanding of the Cocoon
+        <a href="../../docs_0_80/sitemap-ref.html">sitemap</a>
+        is important. For the initial examples below, you can do without that.
+        However please explore the sitemap soon.
       </li>
     
 </ul>
 </div>
-<a name="N10031"></a><a name="Steps"></a>
-<h2 class="underlined_10">Steps</h2>
-<div class="section">
-<p>Here is how to proceed.</p>
-<a name="N10039"></a><a name="step-1"></a>
-<h3 class="underlined_5">Step-1</h3>
-<p>
-####
-      </p>
-<a name="N10043"></a><a name="step-2"></a>
-<h3 class="underlined_5">Step-2</h3>
-<p>
-####
-      </p>
-</div>
-<a name="N1004D"></a><a name="Extension"></a>
-<h2 class="underlined_10">Extension</h2>
+<a name="N1003F"></a><a name="Development techniques and scenarios"></a>
+<h2 class="underlined_10">Development techniques and scenarios</h2>
 <div class="section">
 <p>
-####
+      Various scenarios are utilised to describe aspects of development.
+      Bear in mind that there are many
+      ways to do things. Each developer has different tools and habits,
+      and different operating systems are used. So you will need to glean
+      the principles and apply them to your own situation.
     </p>
+<p>
+      This document assumes that you intend to contribute some parts of
+      your work back to the project. Techniques for network-based collaborative
+      development are encouraged.
+    </p>
+<a name="N1004A"></a><a name="svn"></a>
+<h3 class="underlined_5">Using Subversion</h3>
+<p>
+        The Subversion source control system is used for all ASF projects.
+        You can leverage this to ease your own development.
+      </p>
+<p>
+        The "trunk" is where all new development and bugfixing happens.
+        We aim to keep the trunk usable at all times.
+      </p>
+<p>
+        Each version release is a "branch", such as "forrest_07_branch".
+        Crucial bugfixes are also applied to the relevant release branch.
+      </p>
+<p>
+        Branches are also used for developing
+        complex new code which would otherwise disrupt the trunk. When the new
+        work is suitable, then that branch is merged back to the trunk as soon
+        as possible.
+      </p>
+<p>
+        To get started, see the
+        <a href="../../docs_0_80/build.html">instructions</a>
+        for obtaining the Apache Forrest sources via SVN.
+      </p>
+<a name="N10063"></a><a name="multiple"></a>
+<h4>Multiple working copies</h4>
+<p>
+          Most developers would have a number of separate SVN working copies.
+          Hopefully you are brave enough to use the trunk for all your sites.
+          Sometimes that is not possible, for example when you are
+          co-operativley managing a site with other people who are not so
+          brave, so you need to use a specific release. However consider using
+          the SVN release branch, rather than the release archive (tar or zip).
+          This enables you to easily keep up with bugfixes. You can also easily
+          see what local changes that you have made by using 'svn status; svn diff'.
+        </p>
+<p>
+          Here is one layout ...
+        </p>
+<pre class="code">
+[localhost]$ ls /svn/asf
+forrest_07_branch
+forrest-trunk
+        </pre>
+<a name="N10074"></a><a name="svn-email"></a>
+<h4>Watch email notifications for svn differences</h4>
+<p>
+          Either subscribe to the project's
+          <a href="../../mail-lists.html#forrest-svn">svn mailing list</a>
+          or monitor it via one of the mail archives. This enables you
+          to be immediately up-to-date with changes to the repositories.
+          The svn differences (diffs) are automatically sent whenever
+          a committer makes some changes.
+        </p>
+<a name="N10082"></a><a name="tips-svn"></a>
+<h4>Tips</h4>
+<ul>
+          
+<li>
+            Keep a copy of this book, or the online version, close at hand:
+            <a href="http://svnbook.red-bean.com/">Version Control with Subversion</a>
+            - the opensource SVN book.
+          </li>
+          
+<li>
+            See all available branches and other repositories:
+            <a href="http://svn.apache.org/repos/asf/forrest/">http://svn.apache.org/repos/asf/forrest/</a>
+          
+</li>
+          
+<li>
+            Use online repository browsers to quickly see past activity for
+            the files that you are working on:
+            <a href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/">http://svn.apache.org/viewcvs.cgi/forrest/trunk/</a>
+          
+</li>
+          
+<li>
+            Use 'svn log foo.xsl' for a summary of recent activity and to
+            see dates and revision numbers for changes.
+          </li>
+        
+</ul>
+<a name="N100A5"></a><a name="edit"></a>
+<h3 class="underlined_5">Editing content</h3>
+<p>
+        See the 
+        <a href="../../docs_0_80/faq.html#edit-content">FAQ</a>.
+        Basically any editor can
+        be used, because Forrest treats the editing of content as a separate
+        concern. Be sure to configure the editor to find local copies of DTDs.
+      </p>
+<a name="N100B2"></a><a name="code-style"></a>
+<h4>Code style guidelines</h4>
+<p>
+          Consistent code makes everyone's life easier.
+          See the 
+          <a href="http://cocoon.apache.org/community/committer.html">Apache Cocoon tips</a>.
+          We don't get too hung up on style, but a few basic things are important.
+        </p>
+<a name="N100C0"></a><a name="whitespace"></a>
+<h4>Whitespace</h4>
+<p>
+          For new file, use spaces instead of tabs (java files have four-space indentation,
+          xml files and other text files have two-space indentation).
+        </p>
+<p>
+          Don't let your editor automatically change the whitespace for existing
+          files.
+        </p>
+<p>
+          We know that many files in SVN do not have consistent whitespace.
+          This issue is continually being addressed. Please don't attempt
+          to rectify whitespace mixed up with other changes. This makes the
+          important changes difficult to see. Occasionally committers will
+          rectify whitespace for a set of files, when they know that no-one
+          else is working on that set.
+        </p>
+<div class="fixme">
+<div class="label">Fixme (open)</div>
+<div class="content">
+          The issues of whitespace and line endings needs to be very clearly described.
+          See some
+          <a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=112450886218545">mail discussion</a>
+          references.
+        </div>
 </div>
-<a name="N10055"></a><a name="Frequently Asked Questions"></a>
+<a name="N100D8"></a><a name="line-length"></a>
+<h4>Line length</h4>
+<p>
+          If each paragraph of an xml source document is one enourmous long
+          line, then it is extremely difficult to know the changes with the
+          SVN diffs. Developers and especially committers, need to be able to
+          efficiently review the changes. Fold long lines to a sensible
+          line-length (normally 80-characters wide but not more than 120 characters).
+        </p>
+<a name="N100E2"></a><a name="review"></a>
+<h4>Use 'forrest run' for immediate gratification</h4>
+<p>
+          Edit content and immediately view it in the browser.
+          When you are satisifed, then do 'forrest site' to ensure that the
+          whole documentation set hangs together and there are no broken
+          references.
+        </p>
+<p>
+          In the dynamic 'forrest run' mode, you will get some feedback
+          about some xml validation errors. However, it is better to treat
+          validation as a separate concern. Use an xml editor or command-line
+          tools such as "xmllint". As a last resort, you can use
+          'forrest validate-xdocs'.
+        </p>
+<a name="N100EF"></a><a name="tips-edit"></a>
+<h4>Tips</h4>
+<ul>
+          
+<li>
+####
+          </li>
+        
+</ul>
+<a name="N100FD"></a><a name="debug"></a>
+<h3 class="underlined_5">Debugging techniques</h3>
+<p>
+        This <a href="../../docs_0_80/faq.html#logs">FAQ</a>
+        describes the location of the Cocoon logfiles and their
+        configuration.
+      </p>
+<a name="N1010A"></a><a name="debug-links"></a>
+<h4>Finding broken internal links</h4>
+<p>
+          Do 'forrest site' to produce the whole documentation set.
+          Cocoon will report its progress and reveal any problems.
+          This <a href="../../docs_0_80/faq.html#build_msg_a">FAQ</a>
+          explains the messages that Cocoon sends to standard output.
+          Broken links are also reported to a special file, which also shows
+          the source file containing the break. The location
+          of this file is reported when Cocoon starts.
+        </p>
+<p>
+          Broken links are also reported in 'forrest run' mode.
+          Use your mouse to point to each link. The browser status bar
+          will show "error:..." instead of the actual URL.
+        </p>
+<p>
+          The most common cause is that the entry is missing in the site.xml
+          configuration file or the link in your source document is not
+          using the correct name for the "site:..." value.
+        </p>
+<a name="N1011E"></a><a name="tips-debug"></a>
+<h4>Tips</h4>
+<ul>
+          
+<li>
+            Doing 'forrest -v' will provide verbose build messages to the
+            standard output.
+          </li>
+        
+</ul>
+<a name="N1012C"></a><a name="find"></a>
+<h3 class="underlined_5">Finding the relevant sources</h3>
+<p>
+        You will need to be able to find which sources, sitemaps, stylesheets
+        are responsible for certain processing.
+      </p>
+<a name="N10135"></a><a name="find-scenario-1"></a>
+<h4>Scenario: How does i18n work</h4>
+<p>
+          We will do a search for "i18n" to start with, then refine that after
+          exploring some of the sources.
+        </p>
+<p>
+          The UNIX tools find, grep, and sed are very powerful. We need a
+          helper script, otherwise 'find' is going to report matches for
+          the hidden .svn files and also files in /build/ directories.
+        </p>
+<pre class="code">
+echo "sed '/\.svn/d;/\/build\//d;/\/work\//d'" &gt; ~/bin/exclude-find-svn
+chmod +x ~/bin/exclude-find-svn</pre>
+<p>
+          Now we will run find, use grep to search for the pattern in each
+          file and list the filenames. However, there is a stack of
+          forrest.properties files from the plugins, and there is i18n:text
+          being used in the viewHelper plugin, and some DTDs.
+          So weed them out ...
+        </p>
+<pre class="code">
+cd /svn/asf/forrest-trunk
+find . -type f | xargs grep -l "i18n" | ~/bin/exclude-find-svn \
+ | grep -v "forrest.properties" | grep -v viewHelper | grep -v "\/schema\/"</pre>
+<p>
+          The list of files shows that there is an FAQ about i18n, there are
+          various sitemaps in main/webapp/, some stylesheets in
+          main/webapp/skins/common/ and pelt, some other stylesheets in
+          main/webapp/resources/stylesheets/ ... we will look at the sitemaps
+          first. Use grep to list the actual matches and the filenames.
+        </p>
+<pre class="code">
+cd main/webapp
+grep i18n *.*</pre>
+<p>
+          Shows that five sitemaps are involved in some way. Always start with
+          sitemap.xamp and forrest.xmap as they do initial processing and
+          then delegate to other sitemaps. Open each file in your editor,
+          and search within for each "i18n" match. See that the xslt transformer 
+          is declared to use i18n, then further down the page the "skinit"
+          pipeline uses the i18n transformer only if i18n is switched on.
+        </p>
+<a name="N10157"></a><a name="tips-find"></a>
+<h4>Tips</h4>
+<ul>
+          
+<li>
+####
+          </li>
+        
+</ul>
+</div>
+<a name="N10167"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10059"></a><a name="1+General+issues"></a>
+<a name="N1016B"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N1005D"></a><a name="1.1+FAQ+1"></a>
+<a name="N1016F"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N10065"></a><a name="2+Style+issues"></a>
-<h3 class="underlined_5">2 Style issues</h3>
-<a name="N10069"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N10177"></a><a name="2+Other+issues"></a>
+<h3 class="underlined_5">2 Other issues</h3>
+<a name="N1017B"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N10071"></a><a name="Tips"></a>
+<a name="N10183"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N10079"></a><a name="tip-1"></a>
-<h3 class="underlined_5">Tip 1</h3>
+<a name="N1018B"></a><a name="tip-howto"></a>
+<h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
-###
+        Often there are useful discussions on the mailing lists which explain
+        how to do certain tasks. If you don't have time to summarise that and
+        add to this howto document, then please consider just adding a tip
+        which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N10083"></a><a name="References"></a>
+<a name="N10195"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
