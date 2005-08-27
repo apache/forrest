@@ -20,10 +20,6 @@ package org.apache.forrest.repository.daisy;
 import java.util.Locale;
 import java.util.Vector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-
 import org.apache.forrest.repository.daisy.preferences.DaisyPreferences;
 import org.outerj.daisy.repository.Credentials;
 import org.outerj.daisy.repository.Repository;
