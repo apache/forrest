@@ -137,7 +137,7 @@ public class SkinconfTransformer
                 else{   
                     vlink="#ffffff";
                 }
-                newAttributes.addAttribute("","vlink","vlink","",link);
+                newAttributes.addAttribute("","vlink","vlink","",vlink);
             }   
             
             if(hlink==null){
@@ -147,7 +147,7 @@ public class SkinconfTransformer
                 else{   
                     hlink="#6587ff";
                 }
-                newAttributes.addAttribute("","hlink","hlink","",link);
+                newAttributes.addAttribute("","hlink","hlink","",hlink);
             }   
             
             outAttributes = newAttributes;
