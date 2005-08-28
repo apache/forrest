@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>XXE Forrest Configuration</title>
+<title>Plan: Internal structure is XHTML2</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
@@ -36,8 +36,8 @@
 <li>
 <a class="base-not-selected" href="../index.html">Welcome</a>
 </li>
-<li>
-<a class="base-not-selected" href="../contrib.html">Project</a>
+<li class="current">
+<a class="base-selected" href="../contrib.html">Project</a>
 </li>
 <li>
 <a class="base-not-selected" href="../versions/index.html">Versioned Docs</a>
@@ -45,8 +45,8 @@
 <li>
 <a class="base-not-selected" href="../pluginDocs/index.html">Plugins</a>
 </li>
-<li class="current">
-<a class="base-selected" href="../tools/index.html">Tools</a>
+<li>
+<a class="base-not-selected" href="../tools/index.html">Tools</a>
 </li>
 </ul>
 </div>
@@ -63,25 +63,49 @@ document.write("Last Published: " + document.lastModified);
              &nbsp;
            </div>
 <div id="menu">
-<div onclick="SwitchMenu('menu_selected_1.1', '../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Tools</div>
+<div onclick="SwitchMenu('menu_selected_1.1', '../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Getting Involved</div>
 <div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
-<a href="../tools/index.html">Index</a>
+<a href="../contrib.html">Contributing</a>
 </div>
 <div class="menuitem">
-<a href="../tools/forrestbar.html">ForrestBar</a>
+<a href="http://svn.apache.org/viewcvs.cgi/forrest/trunk/">Browse SVN</a>
 </div>
 <div class="menuitem">
-<a href="../tools/forrestbot.html">Forrestbot</a>
+<a href="../mail-lists.html">Mail lists</a>
 </div>
 <div class="menuitem">
-<a href="../tools/forrestbot-web-interface.html">Forrestbot Webapp</a>
+<a href="../issues.html">Bugs and Issues</a>
 </div>
 <div class="menuitem">
-<a href="../tools/eclipse.html">Eclipse Plugin</a>
+<a href="../forrest-issues.html">Open Issues</a>
+</div>
+<div class="menuitem">
+<a href="../gump.html">Gump Integration</a>
+</div>
+<div class="menuitem">
+<a href="../guidelines.html">Project guidelines</a>
+</div>
+<div class="menuitem">
+<a href="../committed.html">Being committed</a>
+</div>
+<div class="menuitem">
+<a href="../forrest-tuesday.html" title="ForrestTuesday monthly get-together">ForrestTuesday</a>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.1.10', '../skin/')" id="menu_selected_1.1.10Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Planning notes</div>
+<div id="menu_selected_1.1.10" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../plan/index.html">Overview</a>
 </div>
 <div class="menupage">
-<div class="menupagetitle">XXE-Editor</div>
+<div class="menupagetitle">Internal XHTML</div>
+</div>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.2', '../skin/')" id="menu_1.2Title" class="menutitle">Proposals</div>
+<div id="menu_1.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="../proposal-asf-forrestbot.html">ASF Forrestbot</a>
 </div>
 </div>
 <div id="credit"></div>
@@ -93,7 +117,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="xxe.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="internal-xhtml.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -101,93 +125,56 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>XXE Forrest Configuration</h1>
+<h1>Plan: Internal structure is XHTML2</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
-<a href="#Upgrade">Upgrade</a>
+<a href="#overview">Overview</a>
 </li>
 <li>
-<a href="#Install">Install</a>
-</li>
-<li>
-<a href="#Developer+Instructions">Developer Instructions</a>
+<a href="#tasks">Tasks</a>
 </li>
 </ul>
 </div>
     
-<div class="note">
-<div class="label">Note</div>
-<div class="content">This requires XXE version 2.5p3 or higher</div>
-</div>
-    
-<div class="note">
-<div class="label">Note</div>
-<div class="content">This is not a particular endorsement of XXE over other xml editors.
-      It is just that we provide this tool to take advantage of XXE.</div>
-</div>
-
-    
+<a name="N1000D"></a><a name="overview"></a>
+<h2 class="underlined_10">Overview</h2>
+<div class="section">
 <p>
-<a href="http://www.xmlmind.com/xmleditor/">XMLmind XML Editor</a>
-    is a validating XML editor featuring a word processor-like view. We support
-    the Forrest plugin for XXE only, please direct all XXE-related questions to
-    XXE support or mailing lists.</p>
-
-    
-<a name="N10019"></a><a name="Upgrade"></a>
-<h2 class="underlined_10">Upgrade</h2>
-<div class="section">
-<ol>
-        
-<li>Delete the <span class="codefrag">forrest</span> directory from the XXE application
-        config directory. (e.g. <span class="codefrag">D:\Program
-        Files\XMLmind_XML_Editor\config</span>)</li>
-
-        
-<li>Install normally</li>
-      
-</ol>
+        The internal document structure currently uses document-v13
+        and this is due to become XHTML2.
+      </p>
+<p>
+        See
+        <a href="http://issues.apache.org/jira/browse/FOR-184">FOR-184</a>.
+      </p>
 </div>
 
     
-<a name="N1002F"></a><a name="Install"></a>
-<h2 class="underlined_10">Install</h2>
+<a name="N1001E"></a><a name="tasks"></a>
+<h2 class="underlined_10">Tasks</h2>
 <div class="section">
-<ol>
+<p>
+        The first job is to define what needs to happen ...
+      </p>
+<p>
+        When this mail discussion
+        (<a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=112512727827172">Re: Planning the move to XHTML2</a>)
+        has finished, then add the items to the list below.
+      </p>
+<ul>
         
-<li>Extract into the XXE application config directory (e.g.
-        <span class="codefrag">D:\Program Files\XMLmind_XML_Editor\config</span>)</li>
-      
-</ol>
-</div>
-
-    
-<a name="N1003F"></a><a name="Developer+Instructions"></a>
-<h2 class="underlined_10">Developer Instructions</h2>
-<div class="section">
-<p>To build the configuration:</p>
-<ol>
+<li>
         
-<li>Make sure the FORREST_HOME environment variable is set</li>
-
-        
-<li>Change directory to <span class="codefrag">forrest/tools/xxe</span>
 </li>
-
         
-<li>Run <span class="codefrag">ant</span> in this directory</li>
+<li>
+        
+</li>
       
-</ol>
-<p>To work directly with the SVN version, check out
-      http://svn.apache.org/repos/asf/forrest/trunk/tools/xxe/ into the
-      <span class="codefrag">forrest</span> folder in the XXE <span class="codefrag">config</span> folder. Run the
-      build there to copy the DTDs</p>
-<p>
-<a href="http://www.xmlmind.com/xmleditor/_distrib/docs/configure/index.html">XXE
-      Custom Configuration Info</a>
-</p>
+</ul>
 </div>
+
   
 </div>
 <div class="clearboth">&nbsp;</div>
