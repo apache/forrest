@@ -65,7 +65,7 @@ public final class ActNode extends AbstractNode {
         // get the selector
         m_type = configuration.getAttribute("type",m_ln.getDefaultAction());
         try {
-            final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Selector.ROLE + "Selector");
+            final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Action.ROLE + "Selector");
             m_action = (Action) selectors.select(m_type);
         } catch (ServiceException e) {
             final String message = "Unable to get Selector of type " + m_type;

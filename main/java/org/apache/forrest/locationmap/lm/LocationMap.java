@@ -190,7 +190,7 @@ public final class LocationMap extends AbstractLogEnabled {
             if (!actionSelector.isSelectable(m_defaultAction)) {
                 throw new ConfigurationException("Default action is not defined.");
             }
-            m_manager.put(Selector.ROLE+"Selector",actionSelector);
+            m_manager.put(Action.ROLE+"Selector",actionSelector);
         }
 
         m_manager.makeReadOnly();

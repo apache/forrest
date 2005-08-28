@@ -86,6 +86,9 @@ public final class LocatorNode extends AbstractNode {
             else if (children[i].getName().equals("select")) {
                 node = new SelectNode(this, super.m_manager);
             }
+            else if (children[i].getName().equals("act")) {
+                node = new ActNode(this, super.m_manager);
+            }
             else {
                 final String message = "Illegal locator node child: " 
                     + children[i].getName();
