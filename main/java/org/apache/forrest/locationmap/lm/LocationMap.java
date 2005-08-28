@@ -32,6 +32,7 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 import org.apache.cocoon.selection.Selector;
+import org.apache.cocoon.acting.*;
 
 /**
  * A LocationMap defines a mapping from requests to locations.
@@ -98,6 +99,9 @@ public final class LocationMap extends AbstractLogEnabled {
     
     /** default matcher */
     private String m_defaultMatcher;
+    
+    /** default action */
+    private String m_defaultAction;
     
     /** default selector */
     private String m_defaultSelector;
@@ -168,6 +172,25 @@ public final class LocationMap extends AbstractLogEnabled {
                 throw new ConfigurationException("Default selector is not defined.");
             }
             m_manager.put(Selector.ROLE+"Selector",selectorSelector);
+        }
+        
+        // actions
+        child = components.getChild("actions",false);
+        if (child != null) {
+            final DefaultServiceSelector actionSelector = new DefaultServiceSelector();
+            m_defaultAction = child.getAttribute("default");
+            final Configuration[] actions = child.getChildren("action");
+            for (int i = 0; i < actions.length; i++) {
+                String name = actions[i].getAttribute("name");
+                String src  = actions[i].getAttribute("src");
+                Action action = (Action) createComponent(src,actions[i]);
+                actionSelector.put(name,action);
+            }
+            actionSelector.makeReadOnly();
+            if (!actionSelector.isSelectable(m_defaultAction)) {
+                throw new ConfigurationException("Default action is not defined.");
+            }
+            m_manager.put(Selector.ROLE+"Selector",actionSelector);
         }
 
         m_manager.makeReadOnly();
@@ -292,4 +315,10 @@ public final class LocationMap extends AbstractLogEnabled {
 
     }
 
+    /**
+     * Expose the default Action to LocatorNodes
+     */
+    String getDefaultAction() {
+        return m_defaultAction;
+    }
 }

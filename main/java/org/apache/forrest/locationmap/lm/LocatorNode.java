@@ -138,5 +138,9 @@ public final class LocatorNode extends AbstractNode {
     String getDefaultSelector() {
         return m_lm.getDefaultSelector();
     }
+
+    String getDefaultAction() {
+        return  m_lm.getDefaultAction();
+    }
     
 }

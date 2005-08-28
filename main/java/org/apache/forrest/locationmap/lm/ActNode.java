@@ -26,29 +26,34 @@ import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceSelector;
+import org.apache.cocoon.acting.Action;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
+import org.apache.cocoon.environment.Redirector;
 import org.apache.cocoon.selection.Selector;
+import org.apache.cocoon.environment.SourceResolver;
 
 
 /**
  * Locationmap select statement.
  */
-public final class SelectNode extends AbstractNode {
+public final class ActNode extends AbstractNode {
     
     // the containing LocatorNode
     private final LocatorNode m_ln;
     
-    // the selector that does the work
-    private Selector m_selector;
+    // the action that does the work
+    private Action m_action;
     
-    // the type of selector for this node
+    // the type of action for this node
     private String m_type;
     
     // the locations to test against
     private AbstractNode[] m_nodes;
+
+    private SourceResolver resolver;
     
     
-    public SelectNode(LocatorNode ln, ServiceManager manager) {
+    public ActNode(LocatorNode ln, ServiceManager manager) {
         super(manager);
         m_ln = ln;
     }
@@ -58,10 +63,10 @@ public final class SelectNode extends AbstractNode {
         super.build(configuration);
         
         // get the selector
-        m_type = configuration.getAttribute("type",m_ln.getDefaultSelector());
+        m_type = configuration.getAttribute("type",m_ln.getDefaultAction());
         try {
             final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Selector.ROLE + "Selector");
-            m_selector = (Selector) selectors.select(m_type);
+            m_action = (Action) selectors.select(m_type);
         } catch (ServiceException e) {
             final String message = "Unable to get Selector of type " + m_type;
             throw new ConfigurationException(message,e);
@@ -97,19 +102,45 @@ public final class SelectNode extends AbstractNode {
         }
         m_nodes = (AbstractNode[]) nodes.toArray(new AbstractNode[nodes.size()]);
     }
-    
-    public String locate(Map om, InvokeContext context) throws Exception {
-        
-        Parameters parameters = resolveParameters(context,om);
-        for (int i = 0; i < m_nodes.length; i++) {
-            String location = m_nodes[i].locate(om,context);
-            if (m_selector.select(location,om,parameters)) {
-                if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("selected: " + location);
-                }
-                return location;
+    public void service(ServiceManager manager) throws ServiceException {
+        this.resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+    }
+    /* (non-Javadoc)
+     * @see org.apache.forrest.locationmap.lm.AbstractNode#locate(java.util.Map, org.apache.cocoon.components.treeprocessor.InvokeContext)
+     */
+    public String locate(Map objectModel, InvokeContext context) throws Exception {
+        Parameters parameters = resolveParameters(context,objectModel);
+        Redirector redirector = context.getRedirector();
+        String source = "";
+        Map substitutions = m_action.act(redirector, resolver, objectModel, source, parameters);
+        if (substitutions != null) {
+            if (getLogger().isDebugEnabled()) {
+             //   getLogger().debug("matched: " + m_pattern);
             }
+            context.pushMap(null,substitutions);
+            for (int i = 0; i < m_nodes.length; i++) {
+                String location = m_nodes[i].locate(objectModel,context);
+                if (location != null) {
+                    return location;
+                }
+            }
+            context.popMap();
         }
         return null;
     }
+    
+//    public String locate(Map om, InvokeContext context) throws Exception {
+//        
+//        Parameters parameters = resolveParameters(context,om);
+//        for (int i = 0; i < m_nodes.length; i++) {
+//            String location = m_nodes[i].locate(om,context);
+//            if (m_action.act().select(location,om,parameters)) {
+//                if (getLogger().isDebugEnabled()) {
+//                    getLogger().debug("selected: " + location);
+//                }
+//                return location;
+//            }
+//        }
+//        return null;
+//    }
 }
