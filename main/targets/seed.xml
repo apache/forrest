@@ -58,7 +58,18 @@
     </loadfile>
     <echo>${template-project-created-message}</echo>
   </target>
-  
+
+  <target name="seed-benchmark" depends="ensure-nocontent"
+    description="* Seeds a site to use for benchmarking measurements">
+     <copy todir="${project.home}" overwrite="false">
+      <fileset dir="${forrest.core}/template-sites/benchmark"/>
+     </copy>
+     <loadfile property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-basic.txt">
+      <filterchain><expandproperties/></filterchain>
+    </loadfile>
+    <echo>${template-project-created-message}</echo>
+  </target>
+
   <target name="seedTestBusiness"  depends="ensure-nocontent"
     description="A test business site">
     
