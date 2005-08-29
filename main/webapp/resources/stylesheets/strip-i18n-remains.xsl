@@ -25,4 +25,6 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="@i18n:*"/>
+
 </xsl:stylesheet>
