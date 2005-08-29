@@ -198,12 +198,22 @@ ISelectionListener {
 	private void makeActions() {
 		action1 = new Action() {
 			public void run() {
+				DocumentBuilder builder;
 				try {
-					RepositoryInterface.SearchRepository(document);
+					builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+					 document = builder.newDocument();
+					 RepositoryInterface.SearchRepository(document);
+				} catch (ParserConfigurationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (FactoryConfigurationError e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				treeViewer.setInput(document);
 				showMessage("Document List refreshed");
 			}
 		};
