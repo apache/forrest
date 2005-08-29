@@ -181,7 +181,7 @@ public class ForrestRunner extends ForrestJob implements
                     IWebBrowser browser = browserSupport.createBrowser(
                             IWorkbenchBrowserSupport.LOCATION_BAR
                                     | IWorkbenchBrowserSupport.NAVIGATION_BAR,
-                            null, null, null);
+                            ForrestPlugin.ID, null, null);
                     browser.openURL(url);
                 } catch (Exception e) {
                     logger.error("Error opening browser", e);
