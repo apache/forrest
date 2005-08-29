@@ -82,6 +82,9 @@ public final class SelectNode extends AbstractNode {
             else if (name.equals("select")) {
                 node = new SelectNode(m_ln, super.m_manager);
             }
+            else if (name.equals("mount")) {
+                node = new MountNode(super.m_manager);
+            }
             else if (name.equals("act")) {
                 node = new ActNode(m_ln, super.m_manager);
             }
