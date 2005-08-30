@@ -107,7 +107,7 @@
   
   <xsl:template match="resume:job">
     <section>
-      <title><xsl:value-of select="jobtitle"/></title>
+      <title><xsl:value-of select="resume:jobtitle"/></title>
       <table class="job">
         <tr>
           <th width="10%">Employer:</th>
@@ -196,7 +196,7 @@
   <xsl:template match="resume:skillset">
     <section>
       <xsl:apply-templates select="resume:title"/>
-      <table>
+      <table class="skillset">
         <tr>
           <th>Skill</th>
           <th width="{$table.levelWidth}">Level</th>
