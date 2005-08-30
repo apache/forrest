@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators>
+      <map:generator name="xpathdirectory" src="org.apache.cocoon.generation.XPathDirectoryGenerator" />
+    </map:generators>
+    <map:actions>
+      <map:action name="request" src="org.apache.cocoon.acting.RequestParamAction"/>
+    </map:actions>
+  </map:components>
+
+
+<map:pipelines>
+  <map:pipeline>
+  
+  <!-- for testing to get a "raw" look at the xpathdirectory generators xml -->
+    <map:match pattern="blog/raw.xml">
+      <map:generate type="xpathdirectory" src="{project:content.xdocs}/blog">
+         <map:parameter name="depth" value="99"/>
+         <map:parameter name="xpath" value="/document/header[meta='{request-param:category}']/title"/>
+         <!--<map:parameter name="dateFormat" value="EEE, MMM d, ''yy"/>-->
+         <map:parameter name="sort" value="lastmodified"/>
+         <map:parameter name="reverse" value="true"/>
+      </map:generate>
+      <map:serialize type="xml"/>      
+    </map:match>
+     
+     <map:match pattern="blog/*/index.xml">
+        <map:generate type="xpathdirectory" src="{project:content.xdocs}/blog">
+           <map:parameter name="depth" value="99"/>
+           <map:parameter name="xpath" value="/document/header[meta='{1}']/title"/>
+           <!--<map:parameter name="dateFormat" value="EEE, MMM d, ''yy"/>-->
+           <map:parameter name="sort" value="lastmodified"/>
+           <map:parameter name="reverse" value="true"/>
+        </map:generate>
+
+       <map:transform src="resources/stylesheets/directory2xdoc.xsl">
+        <map:parameter name="category" value="{1}"/>
+       </map:transform>
+      
+       <map:serialize type="xml"/>
+   </map:match>
+   
+   <map:match pattern="blog/index.xml">
+      <map:generate type="xpathdirectory" src="{project:content.xdocs}/blog">
+         <map:parameter name="depth" value="99"/>
+         <map:parameter name="xpath" value="/document/header[meta='{request-param:category}']/title"/>
+         <!--<map:parameter name="dateFormat" value="EEE, MMM d, ''yy"/>-->
+         <map:parameter name="sort" value="lastmodified"/>
+         <map:parameter name="reverse" value="true"/>
+      </map:generate>
+       
+     <map:transform src="resources/stylesheets/directory2xdoc.xsl">
+      <map:parameter name="category" value="{request-param:category}"/>
+     </map:transform>
+     <map:serialize type="xml"/>
+   </map:match>
+   
+  </map:pipeline>
+</map:pipelines>
+
+</map:sitemap>
