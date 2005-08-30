@@ -161,7 +161,7 @@
       <xsl:if test="resume:url">
         <p>
           <a>
-            <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select="resume:url"/></xsl:attribute>
             More information...
           </a>
         </p>
