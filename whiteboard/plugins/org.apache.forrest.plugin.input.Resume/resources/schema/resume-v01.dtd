@@ -53,7 +53,7 @@ $Id: resume.dtd,v 1.52 2002/11/20 08:45:42 brandondoyle Exp $
 <!ENTITY % inlines "#PCDATA | emphasis | citation | url | link">
 
 <!-- Sections of a resume -->
-<!ENTITY % sections "(objective|history|academics|skillareas|skillarea|pubs|misc|referees|keywords|memberships|interests|clearances|awards)">
+<!ENTITY % sections "(objective|availability|history|academics|skillareas|skillarea|pubs|misc|referees|keywords|memberships|interests|clearances|awards)">
 
 <!-- A collection of resumes -->
 <!ELEMENT resumes (resume*)>
@@ -146,6 +146,10 @@ in a future version. -->
 <!ELEMENT objective (para+)>
 <!ATTLIST objective id ID #IMPLIED>
 
+<!-- Your availability for work. -->
+<!ELEMENT availability (para+)>
+<!ATTLIST availability id ID #IMPLIED>
+
 <!-- Your previous employment history. -->
 <!ELEMENT history (job+)>
 <!ELEMENT job (jobtitle, employer, location?, (date|period), description?, projects?, achievements?)>
@@ -200,7 +204,7 @@ chance to remove it from their resumes. It was deprecated in version 1.4.0. -->
 <!ELEMENT skill (%inlines;)*>
 <!ATTLIST skill
     id ID #IMPLIED
-    level CDATA #IMPLIED>
+    level (Basic | Advanced | Intermediate ) #REQUIRED>
 
 <!-- Have you published anything? -->
 <!ELEMENT pubs (pub+)>
