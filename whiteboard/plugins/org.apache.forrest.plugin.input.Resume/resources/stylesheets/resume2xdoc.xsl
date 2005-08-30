@@ -31,9 +31,55 @@
     <document>
         <xsl:apply-templates select="resume:header"/>
       <body>
+        <xsl:apply-templates select="resume:header/resume:address"/>
+        <xsl:apply-templates select="resume:header/resume:contact"/>
         <xsl:apply-templates select="*[name(.) != 'header']"/>
       </body>
     </document>
+  </xsl:template>
+  
+  <xsl:template match="resume:address">
+    <div id="resume-address">
+      <section>
+        <title>Address</title>
+        <p>
+          <xsl:value-of select="resume:street"/><br/>
+          <xsl:value-of select="resume:suburb"/><br/>
+          <xsl:value-of select="resume:city"/><br/>
+          <xsl:value-of select="resume:postalCode"/><br/>
+          <xsl:value-of select="resume:country"/><br/>
+        </p>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:contact">
+    <div id="resume-contact">
+      <section>
+        <title>Contact Details</title>
+        <p>
+          <xsl:apply-templates select="resume:phone"/>
+          <xsl:apply-templates select="resume:email"/>
+          <xsl:apply-templates select="resume:instantMessage"/>
+        </p>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:phone">
+    Phone <xsl:value-of select="@location"/>: <xsl:value-of select="."/><br/>
+  </xsl:template>
+  
+  <xsl:template match="resume:email">
+    EMail: 
+    <a>
+      <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
+      <xsl:value-of select="."/>
+    </a><br/>
+  </xsl:template>
+  
+  <xsl:template match="resume:instantMessage">
+    Instant Message (<xsl:value-of select="@service"/>): <xsl:value-of select="."/><br/>
   </xsl:template>
   
   <xsl:template match="resume:header">
