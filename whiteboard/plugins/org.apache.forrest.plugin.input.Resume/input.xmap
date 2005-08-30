@@ -26,6 +26,13 @@
     <map:transformers>
       <map:transformer name="cinclude" src="org.apache.cocoon.transformation.CIncludeTransformer"/>
     </map:transformers>
+    <map:actions>
+      <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+        <sourcetype name="resume-v1.5.1">
+          <document-declaration public-id="-//Sean Kelly//DTD Resume 1.5.1//EN" />
+        </sourcetype>
+      </map:action>
+    </map:actions>
   </map:components>
   
   <map:resources>
@@ -43,12 +50,36 @@
         </map:when>
      </map:select>
    </map:resource>
+   
+    <map:resource name="transform-to-document">
+      <map:act type="sourcetype" src="{src}">
+        <map:select type="parameter">
+          <map:parameter name="parameter-selector-test" value="{sourcetype}" />
+
+          <map:when test="resume-v1.5.1">
+             <map:generate src="{project:content.xdocs}{../../1}.xml"/>
+             <map:transform src="resources/stylesheets/resume2xdoc.xsl" />
+             <map:serialize type="xml"/>
+          </map:when>
+        </map:select>
+      </map:act>
+    </map:resource>
  </map:resources>
 
 <map:pipelines>
 
    
     <map:pipeline>
+      <map:match pattern="**.xml">
+        <map:call resource="transform-to-document">
+          <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
+        </map:call>
+      </map:match>
+      <map:match pattern="**.source.xml">
+     <map:call resource="source-file-resolver">
+       <map:parameter name="uri" value="{1}"/>
+     </map:call>
+      </map:match>
    
       <map:match pattern="team/all.source.xml">
         <map:generate type="directory" src="{project:content.xdocs}/team/resume">
@@ -93,12 +124,6 @@
      <map:transform src="resources/stylesheets/resumes2xdoc.xsl">
          <map:parameter name="candidateSkill" value="{1}"/>
      </map:transform>
-     <map:serialize type="xml"/>
-   </map:match>
-   
-   <map:match pattern="team/resume/**.xml">
-     <map:generate src="cocoon:/team/resume/{1}.source.xml"/>
-     <map:transform src="resources/stylesheets/resume2xdoc.xsl" />
      <map:serialize type="xml"/>
    </map:match>
    
