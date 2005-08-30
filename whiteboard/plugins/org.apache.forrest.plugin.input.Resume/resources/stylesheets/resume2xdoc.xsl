@@ -183,6 +183,13 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template match="resume:skillareas">
+    <section>
+      <title>Skills</title>
+      <xsl:apply-templates/>
+    </section>
+  </xsl:template>
+  
   <xsl:template match="resume:skillarea">
     <section>
       <xsl:apply-templates/>
