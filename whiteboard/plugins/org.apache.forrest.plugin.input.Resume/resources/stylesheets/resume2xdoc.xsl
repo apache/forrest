@@ -100,7 +100,7 @@
       <p>
         <xsl:value-of select="resume:institution"/> 
         <xsl:if test="resume:date"> (<xsl:value-of select="resume:date"/>)</xsl:if>
-        <xsl:if test="resume:annotation"><xsl:value-of select="resume:annotation"/></xsl:if>
+        <xsl:if test="resume:annotation"> <xsl:value-of select="resume:annotation"/></xsl:if>
       </p>
     </section>
   </xsl:template>
