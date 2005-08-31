@@ -95,10 +95,12 @@
   </xsl:template>
   
   <xsl:template match="resume:objective">
-    <section>
-      <title>Objective</title>
-      <xsl:apply-templates/>
-    </section>
+    <div id="resume-objective">
+      <section>
+        <title>Objective</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:availability">
