@@ -113,10 +113,12 @@
   </xsl:template>
   
   <xsl:template match="resume:history">
-    <section>
-      <title>Employment History</title>
-      <xsl:apply-templates/>
-    </section>
+    <div id="resume-history">
+      <section>
+        <title>Employment History</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:academics">
