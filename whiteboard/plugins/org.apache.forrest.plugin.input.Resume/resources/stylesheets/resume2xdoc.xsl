@@ -104,10 +104,12 @@
   </xsl:template>
   
   <xsl:template match="resume:availability">
-    <section>
-      <title>Availability</title>
-      <xsl:apply-templates/>
-    </section>
+    <div id="resume-availability">
+      <section>
+        <title>Availability</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:history">
