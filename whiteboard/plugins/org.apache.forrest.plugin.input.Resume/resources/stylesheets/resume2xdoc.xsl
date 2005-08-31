@@ -248,6 +248,23 @@
     </div>
   </xsl:template>
   
+  <xsl:template match="resume:referees">
+    <div id="resume-referees">
+      <section>
+        <title>Referees</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:referee">
+    <section>
+      <title><xsl:apply-templates select="resume:name"/></title>
+      <p><xsl:apply-templates select="resume:title"/> <xsl:apply-templates select="resume:organization"/></p>
+      <p>Contact details provided upon request.</p>
+    </section>
+  </xsl:template>
+  
   <xsl:template match="resume:skillarea">
     <section>
       <xsl:apply-templates/>
