@@ -240,7 +240,7 @@
   </xsl:template>
   
   <xsl:template match="resume:skillareas">
-    <div id="skillareas">
+    <div id="resume-skillareas">
       <section>
         <title>Skills</title>
         <xsl:apply-templates/>
