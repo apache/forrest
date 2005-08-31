@@ -84,14 +84,8 @@
   
   <xsl:template match="resume:header">
     <header>
-      <title>          
-          <xsl:apply-templates select="resume:name"/>
-      </title>
+      <title>CV for <xsl:value-of select="resume:name/resume:firstname"/><xsl:text> </xsl:text><xsl:value-of select="resume:name/resume:surname"/></title>
     </header>
-  </xsl:template>
-  
-  <xsl:template match="resume:name">
-     <xsl:value-of select="resume:surname"/>, <xsl:value-of select="resume:firstname"/>
   </xsl:template>
   
   <xsl:template match="resume:objective">
@@ -140,10 +134,12 @@
   </xsl:template>
   
   <xsl:template match="resume:interest">
-    <section>
-      <title><xsl:value-of select="resume:title"/></title>
-      <xsl:apply-templates/>
-    </section>
+    <div class="resume-interest">
+      <section>
+        <title><xsl:value-of select="resume:title"/></title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:degrees">
@@ -151,79 +147,65 @@
   </xsl:template>
   
   <xsl:template match="resume:degree">
-    <section>
-      <title><xsl:value-of select="resume:major"/> (<xsl:value-of select="resume:level"/>)</title>
-      <p>
-        <xsl:value-of select="resume:institution"/> 
-        <xsl:if test="resume:date"> (<xsl:value-of select="resume:date"/>)</xsl:if>
-        <xsl:if test="resume:annotation"> <xsl:value-of select="resume:annotation"/></xsl:if>
-      </p>
-    </section>
+    <div class="resume-academic">
+      <section>
+        <title><xsl:value-of select="resume:major"/> (<xsl:value-of select="resume:level"/>)</title>
+        <p>
+          <xsl:value-of select="resume:institution"/> 
+          <xsl:if test="resume:date"> (<xsl:value-of select="resume:date"/>)</xsl:if>
+          <xsl:if test="resume:annotation"><xsl:text> </xsl:text><xsl:value-of select="resume:annotation"/></xsl:if>
+        </p>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:job">
     <section>
-      <title><xsl:value-of select="resume:jobtitle"/></title>
-      <table class="job">
-        <tr>
-          <th width="10%">Employer:</th>
-          <td><xsl:value-of select="resume:employer"/></td>
-        </tr>
-        <tr>
-          <th>Period:</th>
-          <td><xsl:apply-templates select="resume:period"/></td>
-        </tr>
-        <tr>
-          <th colspan='2'>Job Description</th>
-        </tr>
-        <tr>
-          <td colspan='2'><xsl:apply-templates select="resume:description"/></td>
-        </tr>
+      <title><xsl:value-of select="resume:jobtitle"/>, <xsl:value-of select="resume:employer"/>, <xsl:apply-templates select="resume:period"/></title>
+      <div class="resume-job">
+        <section>.
+          <title>Job Description</title>
+          <p><xsl:apply-templates select="resume:description"/></p>
+        </section>
         <xsl:apply-templates select="resume:achievements"/>
         <xsl:apply-templates select="resume:projects"/>
-      </table>
+      </div>
     </section>
   </xsl:template>
   
   <xsl:template match="resume:achievements">
-    <tr>
-      <th colspan='2'>Achievements</th>
-    </tr>
-    <xsl:apply-templates select="resume:achievement"/>
+    <section>
+      <title>Achievements</title>
+      <xsl:apply-templates select="resume:achievement"/>
+    </section>
   </xsl:template>
   
   <xsl:template match="resume:achievement">
-    <tr>
-      <td colspan='2'>
-        <xsl:apply-templates select="text()"/>
-      </td>
-    </tr>
+      <p><xsl:apply-templates select="text()"/></p>
   </xsl:template>
   
   <xsl:template match="resume:projects">
-    <tr>
-      <th colspan='2'>Significant Projects</th>
-    </tr>
-    <xsl:apply-templates select="resume:project"/>
+    <section>
+      <title>Significant Projects</title>>
+      <xsl:apply-templates select="resume:project"/>
+    </section>
   </xsl:template>
   
   <xsl:template match="resume:project">
-    <tr>
-      <th colspan="2"><xsl:value-of select="@title"/></th>
-    </tr>
-    <tr>
-      <td colspan="2">
+    <section>
+      <title><xsl:value-of select="@title"/></title>
       <p><xsl:value-of select="text()"/></p>
       <xsl:if test="resume:url">
-        <p>
-          <a>
-            <xsl:attribute name="href"><xsl:value-of select="resume:url"/></xsl:attribute>
-            More information...
-          </a>
-        </p>
+        <div class="resume-project-moreInformationLink">
+          <p>More information is available from 
+            <a>
+              <xsl:attribute name="href"><xsl:value-of select="resume:url"/></xsl:attribute>
+              <xsl:value-of select="resume:url"/>
+            </a>
+          </p>
+        </div>
       </xsl:if>
-      </td>
-    </tr>
+    </section>
   </xsl:template>
   
   <xsl:template match="resume:period">
@@ -258,17 +240,18 @@
   </xsl:template>
   
   <xsl:template match="resume:referee">
-    <section>
-      <title><xsl:apply-templates select="resume:name"/></title>
-      <p><xsl:apply-templates select="resume:title"/> <xsl:apply-templates select="resume:organization"/></p>
-      <p>Contact details provided upon request.</p>
-    </section>
+    <div class="resume-referee">
+      <section>
+        <title><xsl:apply-templates select="resume:name"/></title>
+        <p><xsl:apply-templates select="resume:title"/> <xsl:apply-templates select="resume:organization"/> <em> (Contact details provided upon request)</em></p>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:skillarea">
-    <section>
+    <div class="resume-skillArea">
       <xsl:apply-templates/>
-    </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:title">
@@ -276,23 +259,21 @@
   </xsl:template>
   
   <xsl:template match="resume:skillset">
-    <section>
-      <xsl:apply-templates select="resume:title"/>
-      <table class="skillset">
-        <tr>
-          <th>Skill</th>
-          <th width="{$table.levelWidth}">Level</th>
-        </tr>
-        <xsl:apply-templates select="resume:skill"/>
-      </table>
-    </section>
+    <div class="resume-skillset">
+      <section>
+        <xsl:apply-templates select="resume:title"/>
+        <ul>
+          <xsl:apply-templates select="resume:skill"/>
+        </ul>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:skill">
-    <tr>
-      <td><xsl:value-of select="."/></td>
-      <td width="{$table.levelWidth}"><xsl:value-of select="@level"/></td>
-    </tr>
+    <div class="resume-skill">
+      <li><strong><xsl:value-of select="."/></strong> 
+      <xsl:if test="@level"> (<xsl:value-of select="@level"/>)</xsl:if></li>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:para">
