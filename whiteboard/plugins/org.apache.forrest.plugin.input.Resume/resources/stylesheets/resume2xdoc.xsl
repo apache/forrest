@@ -131,10 +131,12 @@
   </xsl:template>
   
   <xsl:template match="resume:interests">
-    <section>
-      <title>Interests</title>
-      <xsl:apply-templates/>
-    </section>
+    <div id="resume-history">
+      <section>
+        <title>Interests</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:interest">
@@ -238,10 +240,12 @@
   </xsl:template>
   
   <xsl:template match="resume:skillareas">
-    <section>
-      <title>Skills</title>
-      <xsl:apply-templates/>
-    </section>
+    <div id="skillareas">
+      <section>
+        <title>Skills</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
   </xsl:template>
   
   <xsl:template match="resume:skillarea">
