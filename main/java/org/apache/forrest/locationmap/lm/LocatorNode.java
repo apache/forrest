@@ -117,6 +117,7 @@ public final class LocatorNode extends AbstractNode {
         	}
     	}
 
+      if (m_nodes != null) {
         for (int i = 0; i < m_nodes.length; i++) {
             String location = m_nodes[i].locate(om, context);
             if (location != null) {
@@ -131,6 +132,7 @@ public final class LocatorNode extends AbstractNode {
                 return location;
             }
         }
+      }
         return null;
     }
     
