@@ -36,6 +36,9 @@
       <xsl:when test="$versionNumber='current'">
         <xsl:value-of select="//release[1]/@version"/>
       </xsl:when>
+      <xsl:when test="$versionNumber=''">
+        <xsl:value-of select="//release[1]/@version"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$versionNumber"/>
       </xsl:otherwise>
