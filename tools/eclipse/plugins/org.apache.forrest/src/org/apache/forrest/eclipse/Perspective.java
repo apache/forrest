@@ -16,6 +16,10 @@
  */
 package org.apache.forrest.eclipse;
 
+import org.apache.forrest.eclipse.views.ForrestPropertiesView;
+import org.apache.forrest.eclipse.views.LocationmapView;
+import org.apache.forrest.eclipse.views.SiteXMLView;
+import org.apache.forrest.eclipse.views.TabsXMLView;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
@@ -29,18 +33,29 @@ public class Perspective implements IPerspectiveFactory  {
 	
 	
 
-	public void createInitialLayout(IPageLayout layout) {
+	private static final String ID_PERSPECTIVE = "org.apache.forrest.perspective.ContentObject";
+
+    public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
-		layout.setEditorAreaVisible(false);
-		layout.setFixed(true);
-		IFolderLayout top=layout.createFolder("top",IPageLayout.TOP,0.7f,editorArea);
-		top.addView("SiteXML");
-		top.addView("TabsXML");
-		IFolderLayout bottom=layout.createFolder("bottom",IPageLayout.BOTTOM,0.7f,editorArea);
-		bottom.addView("Locationmap");
-		//FIXME: The views and menues that are needed for the RCP have to be properly defined
 		
+        IFolderLayout topLeft = layout.createFolder("left", IPageLayout.LEFT, 
+                0.25f, editorArea);
+        topLeft.addView(IPageLayout.ID_RES_NAV);
+                
+        IFolderLayout bottomLeft = layout.createFolder("topLeft", IPageLayout.BOTTOM, 
+                0.5f, "left");
+		bottomLeft.addView(SiteXMLView.ID_VIEW);
+		bottomLeft.addView(TabsXMLView.ID_VIEW);
+        bottomLeft.addView(LocationmapView.ID_VIEW);
+        
+        IFolderLayout bottom = layout.createFolder("bottom",IPageLayout.BOTTOM,0.7f,editorArea);
+        // FIXME: Forrest specific properties editor should be replaced with: bottom.addView(IPageLayout.ID_PROP_SHEET);
+        bottom.addView(ForrestPropertiesView.ID_VIEW);
+        bottom.addView(IPageLayout.ID_TASK_LIST);
 		
+        //FIXME: The views and menus that are needed for the RCP have to be properly defined
+
+        layout.addPerspectiveShortcut(ID_PERSPECTIVE);
 	}
 
 }
