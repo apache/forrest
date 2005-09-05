@@ -58,7 +58,9 @@ import org.w3c.dom.NodeList;
  * navigator and supports a number of context menus for editing.
  */
 public class SiteXMLView extends NavigationView {
-	private Action AddElement;
+	public static String ID_VIEW = "org.apache.forrest.view.siteXML";
+
+    private Action AddElement;
 
 	private Action RemoveElement;
 
@@ -283,12 +285,7 @@ public class SiteXMLView extends NavigationView {
 						ISharedImages.IMG_OBJS_INFO_TSK));
 	}
 
-	private void showMessage(String message) {
-		MessageDialog.openInformation(treeViewer.getControl().getShell(),
-				"Sample View", message);
-	}
-
-	/**
+    /**
 	 * Get the name of the file this editor view represents. This name does not
 	 * include the path. For example. 'site.xml' or 'tabs.xml'
 	 * 

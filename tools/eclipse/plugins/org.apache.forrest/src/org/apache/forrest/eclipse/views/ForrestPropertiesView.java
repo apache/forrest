@@ -45,7 +45,8 @@ import org.w3c.dom.NamedNodeMap;
  */
 public class ForrestPropertiesView extends NavigationView {
 	
-	private Table table;
+	public static final String ID_VIEW = "org.apache.forrest.view.propertiesEditor";
+    private Table table;
 	public static TableViewer tableViewer;
 	public static Element editorElement;
 	
@@ -57,8 +58,7 @@ public class ForrestPropertiesView extends NavigationView {
 
 
 	// Set column names
-	private String[] columnNames = new String[] { 
-			 
+	private String[] columnNames = new String[] { 			 
 			PROPERTY_NAME_COLUMN,
 			PROPERTY_VALUE_COLUMN
 			
@@ -98,8 +98,6 @@ public class ForrestPropertiesView extends NavigationView {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
 					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
-		
-
 		table = new Table(parent, style);
 		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -109,7 +107,6 @@ public class ForrestPropertiesView extends NavigationView {
 					
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-
 		
 		// 1st column with Property
 		TableColumn column = new TableColumn(table, SWT.LEFT, 0);
@@ -123,7 +120,6 @@ public class ForrestPropertiesView extends NavigationView {
 			}
 		});
 
-
 		// 2nd column with Value
 		column = new TableColumn(table, SWT.LEFT, 1);
 		column.setText("VALUE");
@@ -135,10 +131,9 @@ public class ForrestPropertiesView extends NavigationView {
 				
 			}
 		});
-
-		
 	}
-	 public static  Vector getContent(Element element){
+
+    public static  Vector getContent(Element element){
 		 Vector objectList =  new Vector(); 
 		 if (element != null) {
 		 NamedNodeMap atrs = element.getAttributes();

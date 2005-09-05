@@ -62,7 +62,8 @@ import org.w3c.dom.NodeList;
  */
 public class LocationmapView extends NavigationView implements IMenuListener,
         ISelectionListener {
-	private Action AddMatch;
+	public static final String ID_VIEW = "org.apache.forrest.view.locationmap";
+    private Action AddMatch;
 	private Action AddLocation;
 	private Action RemoveElement;
 	private Action SaveDocument;
@@ -301,13 +302,6 @@ public class LocationmapView extends NavigationView implements IMenuListener,
 		SaveDocument.setToolTipText("Save XML Document");
 		SaveDocument.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-	}
-
-	private void showMessage(String message) {
-		MessageDialog.openInformation(
-			treeViewer.getControl().getShell(),
-			"Sample View",
-			message);
 	}
 
     /**

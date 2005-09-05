@@ -56,7 +56,8 @@ import org.w3c.dom.NodeList;
  * menus for editing. 
  */
 public class TabsXMLView extends NavigationView {
-	private Action AddElement;
+	public static final String ID_VIEW = "org.apache.forrest.view.tabsXML";
+    private Action AddElement;
 	private Action RemoveElement;
 	private Action SaveDocument;
     
@@ -135,7 +136,7 @@ public class TabsXMLView extends NavigationView {
 
 	public void setFocus() {
 		// TODO Auto-generated method stub
-
+	    
 	}
 
 	public void menuAboutToShow(IMenuManager manager) {
@@ -209,13 +210,6 @@ public class TabsXMLView extends NavigationView {
 		SaveDocument.setToolTipText("Save XML Document");
 		SaveDocument.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-	}
-
-	private void showMessage(String message) {
-		MessageDialog.openInformation(
-			treeViewer.getControl().getShell(),
-			"Sample View",
-			message);
 	}
 
     /**
