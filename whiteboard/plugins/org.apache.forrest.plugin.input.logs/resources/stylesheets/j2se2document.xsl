@@ -15,16 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!--
-A prototype Docbook-to-Forrest stylesheet.
-Volunteers are needed to improve this!
-
-Support for the range of Docbook tags is very patchy. If you need real
-Docbook support, then use Norm Walsh's stylesheets - see Forrest FAQ.
-
-Credit: original from the jakarta-avalon project
-
--->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:template match="/">
