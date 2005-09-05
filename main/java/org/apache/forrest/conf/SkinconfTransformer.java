@@ -135,7 +135,7 @@ public class SkinconfTransformer
                     vlink="#4242a5";
                 }
                 else{   
-                    vlink="#ffffff";
+                    vlink="#009999";
                 }
                 newAttributes.addAttribute("","vlink","vlink","",vlink);
             }   
