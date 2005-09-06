@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- Default Forrest locationmap -->
+
+<locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
+
+  <components>
+    <matchers default="lm">
+      <matcher name="lm" 
+        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
+    </matchers>
+    <selectors default="exists">
+      <selector name="exists" 
+        src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </selectors>
+    <actions default="RecursiveDirectoryTraversalAction">
+      <action name="RecursiveDirectoryTraversalAction" 
+        src="org.apache.forrest.plugin.internal.view.acting.RecursiveDirectoryTraversalAction"/>
+    </actions>
+  </components>
+  
+  <locator>
+    
+    <match pattern="test">
+        <location src="test" />
+    </match>
+     
+    <match pattern="getView/**">
+      <select type="exists">
+        <!-- File-based - project -->
+        <location src="{1}{project:theme-ext}" />
+	      <act type="RecursiveDirectoryTraversalAction">
+	        <parameter value="{1}" name="request"/>
+	        <parameter value="{project:theme}" name="projectFallback"/>
+	        <parameter value="{project:theme-ext}" name="projectExtension"/>
+	        <parameter value="{project:content.xdocs}" name="projectDir"/>
+          <!-- Directory-based / Parent-directory based (recursively) - project -->
+	        <location src="{uri}" />
+	      </act>
+        <!-- Theme based - default -->
+        <location 
+        src="{defaults:view-themes}/{project:theme}{project:theme-ext}" />
+        <!-- Default theme based - default -->
+        <location 
+        src="{defaults:view-themes}/{defaults:theme}{defaults:theme-ext}" />
+      </select>
+    </match>
+    
+  </locator>
+</locationmap>
