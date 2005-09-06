@@ -51,7 +51,9 @@ public final class ActNode extends AbstractNode {
     private String m_type;
     
     // the src of action for this node
-    private VariableResolver m_src;
+    private String m_src;
+    
+    private VariableResolver m_varResolver;
     
     // the locations to test against
     private AbstractNode[] m_nodes;
@@ -70,6 +72,14 @@ public final class ActNode extends AbstractNode {
         
         // get the selector
         m_type = configuration.getAttribute("type",m_ln.getDefaultAction());
+        try
+        {
+                m_varResolver = VariableResolverFactory.getResolver(
+                    configuration.getAttribute("src"), super.m_manager);
+        }
+        catch (PatternException e) {
+            throw new ConfigurationException("unable to resolve action 'src' attribute");
+        }
 //        try {
 //            m_src = VariableResolverFactory.getResolver(
 //                    configuration.getAttribute("src"), super.m_manager);
@@ -117,17 +127,19 @@ public final class ActNode extends AbstractNode {
         m_nodes = (AbstractNode[]) nodes.toArray(new AbstractNode[nodes.size()]);
     }
     public void service(ServiceManager manager) throws ServiceException {
+        //FIXME: Determine whether this is really necessary anymore.
         this.resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
     }
     /* (non-Javadoc)
      * @see org.apache.forrest.locationmap.lm.AbstractNode#locate(java.util.Map, org.apache.cocoon.components.treeprocessor.InvokeContext)
      */
     public String locate(Map objectModel, InvokeContext context) throws Exception {
+        this.resolver = (SourceResolver)m_manager.lookup(SourceResolver.ROLE);
         Parameters parameters = resolveParameters(context,objectModel);
         Redirector redirector = context.getRedirector();
-        String source;
-        source="";
-        Map substitutions = m_action.act(redirector, resolver, objectModel, source, parameters);
+        m_src = m_varResolver.resolve(context,objectModel);
+        
+        Map substitutions = m_action.act(redirector, resolver, objectModel, m_src, parameters);
         if (substitutions != null) {
             if (getLogger().isDebugEnabled()) {
              //   getLogger().debug("matched: " + m_pattern);
