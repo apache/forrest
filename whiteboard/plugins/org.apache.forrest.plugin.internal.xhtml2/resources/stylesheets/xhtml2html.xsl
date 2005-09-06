@@ -29,10 +29,11 @@
   - ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
   - ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
-<xsl:stylesheet version="1.0" exclude-result-prefixes="xhtml"
+<xsl:stylesheet version="1.0" 
+  xmlns="http://www.w3.org/2002/06/xhtml2" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xhtml="http://www.w3.org/2002/06/xhtml2">
-
+  xmlns:html="http://www.w3.org/2002/06/xhtml2"
+  >
   <!-- If imported into another stylesheet, allow the first level heading
     -  depth to be configured -->
   <xsl:param name="xhtml-heading" select="1"/>
@@ -49,12 +50,12 @@
   </xsl:template>
 
   <!-- Do not process elements and attributes by default -->
-  <xsl:template match="xhtml:*"/>
-  <xsl:template match="xhtml:*/@*" priority="0"/>
-  <xsl:template match="xhtml:*/@*" mode="insdel" priority="0"/>
-  <xsl:template match="xhtml:*/@*" mode="image" priority="0"/>
-  <xsl:template match="xhtml:*/@*" mode="quote" priority="0"/>
-  <xsl:template match="xhtml:*/@*" mode="link" priority="0"/>
+  <xsl:template match="html:*"/>
+  <xsl:template match="html:*/@*" priority="0"/>
+  <xsl:template match="html:*/@*" mode="insdel" priority="0"/>
+  <xsl:template match="html:*/@*" mode="image" priority="0"/>
+  <xsl:template match="html:*/@*" mode="quote" priority="0"/>
+  <xsl:template match="html:*/@*" mode="link" priority="0"/>
 
   <!--
     - XHTML Attribute Collections
@@ -117,7 +118,7 @@
   <xsl:template match="@src" mode="image">
    <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
-  <xsl:template match="xhtml:link/@type" mode="link">
+  <xsl:template match="html:link/@type" mode="link">
    <xsl:attribute name="type"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
@@ -551,9 +552,9 @@
         <xsl:value-of select="$class"/>
        </xsl:attribute>
       </xsl:if>
-      <xsl:if test="count(xhtml:summary)">
+      <xsl:if test="count(html:summary)">
        <xsl:attribute name="summary">
-        <xsl:value-of select="xhtml:summary"/>
+        <xsl:value-of select="html:summary"/>
        </xsl:attribute>
       </xsl:if>
       <xsl:apply-templates select="@*">
@@ -753,7 +754,7 @@
     - XHTML Structure Module
     -->
   <!-- Add our Subversion/CVS Id to the root element -->
-  <xsl:template match="xhtml:html">
+  <xsl:template match="html:html">
    <xsl:comment> $Id: xhtml2html.xslt 127 2004-11-14 03:06:21Z etherealwake $ </xsl:comment>
    <html>
     <xsl:apply-templates select="@*"/>
@@ -761,22 +762,22 @@
    </html>
   </xsl:template>
   <!-- Specify namespace for metadata (if not using schema.X links) -->
-  <xsl:template match="xhtml:html/@profile">
+  <xsl:template match="html:html/@profile">
    <xsl:attribute name="profile"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
   <!-- Add a generator tag to the head section -->
-  <xsl:template match="xhtml:head">
+  <xsl:template match="html:head">
    <head>
     <xsl:apply-templates select="@*"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <xsl:apply-templates/>
-    <xsl:if test="count(xhtml:meta[@name='generator'])=0">
+    <xsl:if test="count(html:meta[@name='generator'])=0">
      <meta name="generator" content="Ethereal Wake XHTML2 to XHTML1 XSLT"/>
     </xsl:if>
    </head>
   </xsl:template>
   <!-- <title> and <body> are pretty much copied as is -->
-  <xsl:template match="xhtml:title|xhtml:body">
+  <xsl:template match="html:title|html:body">
    <xsl:element name="{local-name()}">
     <xsl:apply-templates select="@*"/>
     <xsl:apply-templates/>
@@ -787,18 +788,18 @@
     - XHTML Block Text Module
     -->
   <!-- Handle the elements practically unchanged since XHTML 1.0 -->
-  <xsl:template match="xhtml:address|xhtml:blockquote|xhtml:div|xhtml:hr
-    |xhtml:pre|xhtml:hr">
+  <xsl:template match="html:address|html:blockquote|html:div|html:hr
+    |html:pre|html:hr">
    <xsl:call-template name="block">
     <xsl:with-param name="element" select="local-name(.)"/>
    </xsl:call-template>
   </xsl:template>
   <!-- In XHTML 2.0, paragraphs are a bit more sophisticated than in 1.X -->
-  <xsl:template match="xhtml:p">
+  <xsl:template match="html:p">
    <xsl:choose>
     <!-- If we have XHTML 1.0 block children, make us a div -->
-    <xsl:when test="count(xhtml:ul|xhtml:ol|xhtml:nl|xhtml:dl|xhtml:blockcode
-      |xhtml:blockquote|xhtml:pre|xhtml:table)&gt;0">
+    <xsl:when test="count(html:ul|html:ol|html:nl|html:dl|html:blockcode
+      |html:blockquote|html:pre|html:table)&gt;0">
      <xsl:call-template name="block">
       <xsl:with-param name="element" select="'div'"/>
       <xsl:with-param name="class" select="'p'"/>
@@ -813,17 +814,17 @@
    </xsl:choose>
   </xsl:template>
   <!-- We will treat sections as simple <div>s of class section -->
-  <xsl:template match="xhtml:section">
+  <xsl:template match="html:section">
    <xsl:call-template name="block">
     <xsl:with-param name="element" select="'div'"/>
     <xsl:with-param name="class" select="'section'"/>
    </xsl:call-template>
   </xsl:template>
   <!-- <h> gets mapped to a h# based on how many parent sections -->
-  <xsl:template match="xhtml:h">
+  <xsl:template match="html:h">
    <!-- Count the number of sections -->
    <xsl:variable name="levelbase">
-    <xsl:value-of select="count(ancestor::xhtml:section)+$xhtml-heading"/>
+    <xsl:value-of select="count(ancestor::html:section)+$xhtml-heading"/>
    </xsl:variable>
    <!-- Limit the heading element to h6 -->
    <xsl:variable name="level">
@@ -842,21 +843,21 @@
     - XHTML Inline Text Module
     -->
   <!-- Handle the elements practically unchanged since XHTML 1.0 -->
-  <xsl:template match="xhtml:abbr|xhtml:cite|xhtml:code|xhtml:dfn|xhtml:em
-    |xhtml:kbd|xhtml:samp|xhtml:span|xhtml:strong|xhtml:sub|xhtml:sup
-    |xhtml:var">
+  <xsl:template match="html:abbr|html:cite|html:code|html:dfn|html:em
+    |html:kbd|html:samp|html:span|html:strong|html:sub|html:sup
+    |html:var">
    <xsl:call-template name="inline">
     <xsl:with-param name="element" select="local-name()"/>
    </xsl:call-template>
   </xsl:template>
   <!-- quote maps to the 'q' element from XHTML 1.0 -->
-  <xsl:template match="xhtml:quote">
+  <xsl:template match="html:quote">
    <xsl:call-template name="inline">
     <xsl:with-param name="element" select="'q'"/>
    </xsl:call-template>
   </xsl:template>
   <!-- <l> is a more complex version of HTML's <br> -->
-  <xsl:template match="xhtml:l">
+  <xsl:template match="html:l">
    <xsl:call-template name="inline">
     <xsl:with-param name="element" select="'br'"/>
    </xsl:call-template>
@@ -865,12 +866,12 @@
   <!--
     - XHTML Hypertext Module
     -->
-  <xsl:template match="xhtml:a">
+  <xsl:template match="html:a">
    <xsl:call-template name="inline">
     <xsl:with-param name="element" select="'a'"/>
    </xsl:call-template>
   </xsl:template>
-  <xsl:template match="xhtml:a/@id" mode="link">
+  <xsl:template match="html:a/@id" mode="link">
    <xsl:attribute name="id"><xsl:value-of select="."/></xsl:attribute>
    <xsl:attribute name="name"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
@@ -878,12 +879,12 @@
   <!--
     - XHTML List Module
     -->
-  <xsl:template match="xhtml:ul|xhtml:ol|xhtml:dl">
+  <xsl:template match="html:ul|html:ol|html:dl">
    <xsl:call-template name="list">
     <xsl:with-param name="element" select="local-name(.)"/>
    </xsl:call-template>
   </xsl:template>
-  <xsl:template match="xhtml:li|xhtml:dt|xhtml:dd">
+  <xsl:template match="html:li|html:dt|html:dd">
    <xsl:call-template name="listitem">
     <xsl:with-param name="element" select="local-name(.)"/>
    </xsl:call-template>
@@ -892,26 +893,26 @@
   <!--
     - XHTML Linking Module
     -->
-  <xsl:template match="xhtml:link">
+  <xsl:template match="html:link">
    <link><xsl:apply-templates select="@*" mode="link"/></link>
   </xsl:template>
-  <xsl:template match="xhtml:link/@media" mode="link">
+  <xsl:template match="html:link/@media" mode="link">
    <xsl:attribute name="media"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
-  <xsl:template match="xhtml:link/@xml:lang" mode="link">
+  <xsl:template match="html:link/@xml:lang" mode="link">
    <xsl:attribute name="hreflang"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
   <!--
     - XHTML Metainformation Module
     -->
-  <xsl:template match="xhtml:meta">
+  <xsl:template match="html:meta">
    <meta>
     <xsl:apply-templates select="@*"/>
     <xsl:attribute name="content"><xsl:value-of select="."/></xsl:attribute>
    </meta>
   </xsl:template>
-  <xsl:template match="xhtml:meta/@name">
+  <xsl:template match="html:meta/@name">
    <xsl:attribute name="name"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
@@ -927,13 +928,13 @@
   <!--
     - XHTML Style Sheet Module
     -->
-  <xsl:template match="xhtml:style">
+  <xsl:template match="html:style">
    <style>
     <xsl:apply-templates select="@*"/>
     <xsl:apply-templates/>
    </style>
   </xsl:template>
-  <xsl:template match="xhtml:style/@media">
+  <xsl:template match="html:style/@media">
    <xsl:attribute name="media"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
 
@@ -941,32 +942,32 @@
     - XHTML Tables Module
     -->
   <!-- Some table elements are pretty much left unchanged -->
-  <xsl:template match="xhtml:caption|xhtml:col|xhtml:colgroup|xhtml:thead
-    |xhtml:tfoot|xhtml:tbody|xhtml:tr">
+  <xsl:template match="html:caption|html:col|html:colgroup|html:thead
+    |html:tfoot|html:tbody|html:tr">
    <xsl:element name="{local-name()}">
     <xsl:apply-templates select="@*"/>
     <xsl:apply-templates/>
    </xsl:element>
   </xsl:template>
-  <xsl:template match="xhtml:col/@span|xhtml:colspan/@span">
+  <xsl:template match="html:col/@span|html:colspan/@span">
    <xsl:attribute name="span"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
   <!-- td and th are pretty much as they were -->
-  <xsl:template match="xhtml:td|xhtml:th">
+  <xsl:template match="html:td|html:th">
    <xsl:call-template name="listitem">
     <xsl:with-param name="element" select="local-name()"/>
    </xsl:call-template>
   </xsl:template>
-  <xsl:template match="xhtml:td/@abbr|xhtml:td/@axis|xhtml:td/@colspan
-    |xhtml:td/@headers|xhtml:td/@rowspan|xhtml:td/@scope|xhtml:th/@abbr
-    |xhtml:th/@axis|xhtml:th/@colspan|xhtml:th/@headers|xhtml:th/@rowspan
-    |xhtml:th/@scope">
+  <xsl:template match="html:td/@abbr|html:td/@axis|html:td/@colspan
+    |html:td/@headers|html:td/@rowspan|html:td/@scope|html:th/@abbr
+    |html:th/@axis|html:th/@colspan|html:th/@headers|html:th/@rowspan
+    |html:th/@scope">
    <xsl:attribute name="{local-name()}">
     <xsl:value-of select="."/>
    </xsl:attribute>
   </xsl:template>
   <!-- The table element acts a lot like a list -->
-  <xsl:template match="xhtml:table">
+  <xsl:template match="html:table">
    <xsl:call-template name="list">
     <xsl:with-param name="element" select="'table'"/>
    </xsl:call-template>
