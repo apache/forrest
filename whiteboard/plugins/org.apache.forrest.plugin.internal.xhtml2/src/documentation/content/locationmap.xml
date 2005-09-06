@@ -32,6 +32,65 @@
     <actions default="RecursiveDirectoryTraversalAction">
       <action name="RecursiveDirectoryTraversalAction" 
         src="org.apache.forrest.plugin.internal.view.acting.RecursiveDirectoryTraversalAction"/>
+      <action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+        <sourcetype name="document-v10">
+          <document-declaration public-id="-//APACHE//DTD Documentation V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="howto-v10">
+          <document-declaration public-id="-//APACHE//DTD How-to V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v10">
+          <document-declaration public-id="-//APACHE//DTD Todo V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v10">
+          <document-declaration public-id="-//APACHE//DTD Changes V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="document-v11">
+          <document-declaration public-id="-//APACHE//DTD Documentation V1.1//EN" />
+        </sourcetype>
+        <sourcetype name="howto-v11">
+          <document-declaration public-id="-//APACHE//DTD How-to V1.1//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v11">
+          <document-declaration public-id="-//APACHE//DTD Todo V1.1//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v11">
+          <document-declaration public-id="-//APACHE//DTD Changes V1.1//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v12">
+          <document-declaration public-id="-//APACHE//DTD Todo V1.2//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v12">
+          <document-declaration public-id="-//APACHE//DTD Changes V1.2//EN" />
+        </sourcetype>
+        <sourcetype name="howto-v12">
+          <document-declaration public-id="-//APACHE//DTD How-to V1.2//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v13">
+          <document-declaration public-id="-//APACHE//DTD Todo V1.3//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v13">
+          <document-declaration public-id="-//APACHE//DTD Changes V1.3//EN" />
+        </sourcetype>
+        <sourcetype name="howto-v13">
+          <document-declaration public-id="-//APACHE//DTD How-to V1.3//EN" />
+        </sourcetype>
+        <sourcetype name="document-v20a">
+          <document-declaration public-id="-//APACHE//DTD Documentation V2.0a//EN" />
+        </sourcetype>
+        <sourcetype name="document-v20">
+          <document-declaration public-id="-//APACHE//DTD Documentation V2.0//EN" />
+        </sourcetype>
+        <sourcetype name="todo-v20">
+          <document-declaration public-id="-//APACHE//DTD Todo V2.0//EN" />
+        </sourcetype>
+        <sourcetype name="changes-v20">
+          <document-declaration public-id="-//APACHE//DTD Changes V2.0//EN" />
+        </sourcetype>
+        <sourcetype name="howto-v20">
+          <document-declaration public-id="-//APACHE//DTD How-to V2.0//EN" />
+        </sourcetype>
+      </action>
     </actions>
   </components>
   
@@ -45,6 +104,10 @@
       <select type="exists">
         <!-- File-based - project -->
         <location src="{1}{project:theme-ext}" />
+        <act type="sourcetype" src="{1}.xml">
+          <!-- Sourcetype-based -->
+          <location src="{project:theme-sourcetypeDir}{sourcetype}{project:theme-ext}" />
+        </act>
 	      <act type="RecursiveDirectoryTraversalAction">
 	        <parameter value="{1}" name="request"/>
 	        <parameter value="{project:theme}" name="projectFallback"/>
