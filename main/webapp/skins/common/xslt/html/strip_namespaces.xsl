@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 1999-2004 The Apache Software Foundation or its licensors,
+  Copyright 1999-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,12 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <!-- Fixes FOR-555. This might not be the best solution though, but it sure works -->
+  <xsl:template match="comment()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+    </xsl:copy>
+  </xsl:template>
     <xsl:template match="*">
       <!-- remove element prefix (if any) -->
       <xsl:element name="{local-name()}">
