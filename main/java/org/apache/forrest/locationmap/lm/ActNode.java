@@ -28,8 +28,11 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceSelector;
 import org.apache.cocoon.acting.Action;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
+import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
+import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.cocoon.selection.Selector;
+import org.apache.cocoon.sitemap.PatternException;
 import org.apache.cocoon.environment.SourceResolver;
 
 
@@ -46,6 +49,9 @@ public final class ActNode extends AbstractNode {
     
     // the type of action for this node
     private String m_type;
+    
+    // the src of action for this node
+    private VariableResolver m_src;
     
     // the locations to test against
     private AbstractNode[] m_nodes;
@@ -64,6 +70,14 @@ public final class ActNode extends AbstractNode {
         
         // get the selector
         m_type = configuration.getAttribute("type",m_ln.getDefaultAction());
+//        try {
+//            m_src = VariableResolverFactory.getResolver(
+//                    configuration.getAttribute("src"), super.m_manager);
+//        } catch (PatternException e) {
+//            final String message = "Illegal pattern syntax at for location attribute 'src'" +
+//                    " at " + configuration.getLocation();
+//            throw new ConfigurationException(message,e);
+//        }
         try {
             final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Action.ROLE + "Selector");
             m_action = (Action) selectors.select(m_type);
@@ -111,7 +125,8 @@ public final class ActNode extends AbstractNode {
     public String locate(Map objectModel, InvokeContext context) throws Exception {
         Parameters parameters = resolveParameters(context,objectModel);
         Redirector redirector = context.getRedirector();
-        String source = "";
+        String source;
+        source="";
         Map substitutions = m_action.act(redirector, resolver, objectModel, source, parameters);
         if (substitutions != null) {
             if (getLogger().isDebugEnabled()) {
