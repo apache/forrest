@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.plugin.internal.view.acting;
+package org.apache.forrest.acting;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

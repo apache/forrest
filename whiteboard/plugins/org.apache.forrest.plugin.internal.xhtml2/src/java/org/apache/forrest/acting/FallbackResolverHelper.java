@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.forrest.plugin.internal.view.acting;
+package org.apache.forrest.acting;
 
 public class FallbackResolverHelper {
     private String request, projectFallback, projectExtension, projectDir,
