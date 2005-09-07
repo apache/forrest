@@ -16,7 +16,12 @@
   limitations under the License.
 -->
 
-<xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+  xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+  xmlns:xi="http://www.w3.org/2001/XInclude" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xhtml2="http://www.w3.org/2002/06/xhtml2">
     <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
     <!--Include forrest:hook matchers-->
     <xsl:include href="hooksMatcher.xsl"/>
@@ -47,7 +52,7 @@
                 <xsl:apply-templates select="/*/forrest:views/forrest:view"/>
             </alias:template>
         	<!--default entry point into the presentation model 'site'-->
-            <alias:template match="site">
+            <alias:template match="xhtml2:html">
                 <html>
                     <head>
                         <alias:call-template name="getHead"/>
