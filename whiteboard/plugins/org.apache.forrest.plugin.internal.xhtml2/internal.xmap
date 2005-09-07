@@ -20,12 +20,26 @@
 <map:pipelines>
 
   <map:pipeline>    
-  
+    <!-- forrest:views -->
+    <!--<map:mount uri-prefix="" src="structurer.xmap" check-reload="yes" />-->
+    
+    <!-- special matchers (reserved by Forrest) -->
+    <map:match pattern="locationmap.xml">
+      <map:generate src="{forrest:locationmap}" />
+      <map:serialize type="xml"/>
+    </map:match>
+        
+    <!-- Source matchers -->
+    <map:match pattern="**.xml">
+      <map:generate src="{lm:{0}}"/>
+      <map:serialize type="xml"/>
+    </map:match>
+    
     <!-- TEMPORARY PIPELINES -->
     <!-- Pipelines below this section are for testing purposes only -->
     <!-- They should be removed before merging with trunk -->
     <map:match pattern="**.html">
-      <map:generate src="{lm:{1}.xml}"/>
+      <map:generate src="cocoon:/{1}.xml"/>
       <!-- apply the view here -->
       <map:transform src="{lm:transform.xslt.xhtml2.html}"/>
       <map:serialize/>
