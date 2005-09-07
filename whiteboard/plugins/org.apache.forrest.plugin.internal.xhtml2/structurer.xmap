@@ -120,9 +120,10 @@
           <map:when test="resources/templates/{1}.vt.xml">
             <map:generate src="resources/templates/{1}.vt.xml"/>
           </map:when>
-      <!-- otherwiser no view Tiles not found -->
+          <!-- FIXME: otherwiser no view Tiles not found, this gives an error because there would be a trasform without a generate -->
         </map:select>
         <map:transform src="{defaults:view-internal}/resources/stylesheets/prepare.include.templates.xsl"/>
+        <!-- XInclude cannot be cached, can we use the CINCLUDE instead? -->
         <map:transform type="xinclude"/>
         <map:serialize type="xml"/>
       </map:match>
@@ -238,7 +239,7 @@
       </map:match>
 
       <map:match pattern="**/*.html">
-        <map:generate src="cocoon://{1}/{2}.page"/>
+        <map:generate src="cocoon://{1}/{2}.xml"/>
         <map:transform src="cocoon://getStylesheet.xhtml.{1}/{2}">
           <map:parameter name="path" value="{0}"/>
         </map:transform>
