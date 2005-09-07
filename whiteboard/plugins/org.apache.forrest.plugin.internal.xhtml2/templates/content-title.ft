@@ -18,9 +18,11 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:xhtml2="http://www.w3.org/2002/06/xhtml2"
   name="content-title" type="nugget">
   <description>
     content-title - Template will output the title (first h1 of the content). 
+    FIXME: in XHTML2 the title may be the heading of the first section
   </description>
   <usage><![CDATA[<forrest:contract name="content-title"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -30,7 +32,8 @@
 	<xsl:comment>+
 	    |start content-title
 	    +</xsl:comment>
-			  <xsl:copy-of select="div[@id='content']/h1[position()=1]"/>
+        <!-- FIXME: this doesn't work yet (namespace issue?)-->
+			  <xsl:copy-of select="xhtml2:div[@id='content']/xhtml2:h1[position()=1]"/>
 <xsl:comment>+
     |end content-title
     +</xsl:comment>
