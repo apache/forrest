@@ -1,0 +1,82 @@
+
+Location Resolution
+-----------------------
+These are notes from a discussion on using URN-type names instead of filenames for locationmap
+resolution.  This is a summary of the the relevant pieces of the IRC discussion below.  
+As a part of the making deeper use of Locationmaps in the core Sitemaps with a goal of 
+letting locationmaps do all location resolution and letting sitemaps stick to the pipeline
+processing.  For those that are familiar with name resolution servers or the Handles Service, 
+it might be easier to think of the locationmap as a name resolution module or sort of a
+handle resolution module in that it accepts "names" or whatever you desire to call these
+"hints" and returns the location.  The thought is that by using file name "looking" hints
+it disguises what locationmaps are really doing for us.  By using URN-style names, we are
+truly disassociating the name/hint form the physical location.  
+
+For example, here is a locationmap entry based purely on filename:
+
+      <map:transform src="{lm:xhtml2html.xsl}"/>
+
+and now below is that same entry using a "name" style.  One implies a certain physical location
+where as the one below is truly a name that needs to be resolved to a physical location.
+      
+      <map:transform src="{lm:transform.xslt.xhtml2.html}"/>
+
+The format is essentially:
+resource-type(dot)transform-type(dot)from-format(dot)to-format
+resource-type(dot)type(dot)name
+
+Examples of these two:
+transform.xslt.xthml2.html
+graphic.png.project-logo
+
+
+
+twilliams_ i've been thinking lately about using URN's for locationmap resolution to totally separate the physicall locations.  I realize you're wanting to get stuff done but maybe just think about it
+* rgardler has quit (Remote closed the connection)
+* rgardler (n=rgardler@ip-213-92-134-135.aramiska-arc.aramiska.net) has joined #for-s
+twilliams_ was wondering if you broke it and took the rest of the night of;)
+rgardler No, it was the wireless going down again, so I took a wlk to the sea. Bacl for another hour (I only paid for wireless until midnight GMT)
+rgardler So, you've been thinking of URN's for locationmap resolving - tell me more
+twilliams_ did your latest commit's work on your machine?
+rgardler Yes (I think ;-)
+twilliams_ for some sources, it's necessary to pass the path as matched in; for others like the ones we'll find ourselves doing more of in the near future will be for named "things"
+rgardler OK
+twilliams_ i'm just thinking it' look cleaner if the named things weren't {lm:mystylesheet.xsl} but were a standard scheme of some sort
+rgardler Sounds good...
+twilliams_ true urns won't work I think because of the ":"
+rgardler (about the plugin - I have broken the index.xml page because it is not an XHTML2 page, but the sample works)
+rgardler I'm listening regarding the URNs idea...
+twilliams_ but we could do "." instead (e.g. {lm:graphic.project.logo} or something
+twilliams_ okay, i was only trying the index page
+twilliams_ i didn't see .xml on the lm matches though
+twilliams_ e.g. <location src="{project:content.xdocs}{0}.xml" />
+rgardler It's there (straight after the <!-- source files --> comment
+twilliams_ I've got:          <location src="{project:content.xdocs}/{0}" /> (no .xml)  am i missing something?
+twilliams_ the xml isn't included in {0}
+rgardler {0} means all of the pattern (i.e. including the .xml) 
+twilliams_ ok i goofed locally 
+twilliams_ essentially, instead of having a bunch of filenames in {lm:}'s it'd be some named resources.  Stylesheets aren't so clean though
+rgardler I just turned the index page into an XHTML page so it works as well now (svn up)
+rgardler So, tell me more about the URN idea
+rgardler What advantage does it give us over a defined URL space?
+twilliams_ looks better and not associated with a physical location (ie filename)
+twilliams_ may be cosmetic i suppose but it makes sense that we're going through the work of separating locations from pipeline processing might as well take it one step further
+rgardler Ok, I don't see it as a filename, rather a hint
+twilliams_ stylesheets don't fit very well obviously
+rgardler however, I agree it *looks* like a filename
+twilliams_ technically it is a hint
+twilliams_ but, when a user sees xthml2html.xsl -- they don't think hint
+rgardler so lets make it *not* look like a filename
+twilliams_ that's essentially what i'm saying
+rgardler :-) Damned IRC - we have the same thoughts but can't communicate them fast enough
+rgardler So, what would you suggest in place of xhtml2html.xl?
+twilliams_ not sure, stylesheets present the problem because it's not a simple name, we're conveying a lot of meaning in there
+rgardler I would be tempted to do something like
+twilliams_ transform.xhtml2.html would work if documented that the syntax was resource-type(dot)from-format(dot)to-format
+twilliams_ where resource-type could be: transform, style, graphic, etc.
+rgardler Looks good (close to what I was going to suggest)...
+rgardler The problem I see is that it does not indicate what type of transformer it is...
+rgardler i.e. XSLT, chaperon etc...
+rgardler We could add a "tranformation type" in there?
+twilliams_ yeah, transform.xslt.xhtml.html  that's almost long enough to become offensive;)
+rgardler Yes, the length is a problem, but it does convey the meaning we need.
