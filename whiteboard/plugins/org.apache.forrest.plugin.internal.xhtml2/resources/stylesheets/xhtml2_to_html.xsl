@@ -38,11 +38,11 @@
     -  depth to be configured -->
   <xsl:param name="xhtml-heading" select="1"/>
 
-  <!-- Use XHTML 1.0 as the output schema -->
+  <!-- Use XHTML 1.0 as the output schema 
   <xsl:output method="html" version="1.0" encoding="utf-8"
     omit-xml-declaration="yes" media-type="text/html"
     doctype-public="-//W3C//DTD HTML 4.01//EN"
-    doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>
+    doctype-system="http://www.w3.org/TR/html4/strict.dtd"/>-->
 
   <!-- Copy elements by default -->
   <xsl:template match="comment()">
@@ -755,18 +755,33 @@
     -->
   <!-- Add our Subversion/CVS Id to the root element -->
   <xsl:template match="html:html">
-   <xsl:comment> $Id: xhtml2html.xslt 127 2004-11-14 03:06:21Z etherealwake $ </xsl:comment>
-   <html>
+  <!-- most of this template is placeholder stuff to get it to look like 
+      the resultant document2html so that I can see if I'm going down
+      the correct path
+      -->
+   <tocitems>
+     <tocitem level="1" href="#welcome" title="Welcome"></tocitem>
+    </tocitems>
+   <meta-data></meta-data>
+   <div id="content">
+    <div id="skinconf-printlink"></div>
+    <div id="skinconf-xmllink"></div>
+    <div id="skinconf-podlink"></div>
+    <div id="skinconf-txtlink"></div>
+    <div id="skinconf-pdflink"></div>
+    <div id="disable-font-script"></div>
+
     <xsl:apply-templates select="@*"/>
     <xsl:apply-templates/>
-   </html>
+   
+   </div>
   </xsl:template>
   <!-- Specify namespace for metadata (if not using schema.X links) -->
   <xsl:template match="html:html/@profile">
    <xsl:attribute name="profile"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
   <!-- Add a generator tag to the head section -->
-  <xsl:template match="html:head">
+  <xsl:template match="html:headDISABLED">
    <head>
     <xsl:apply-templates select="@*"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -777,7 +792,7 @@
    </head>
   </xsl:template>
   <!-- <title> and <body> are pretty much copied as is -->
-  <xsl:template match="html:title|html:body">
+  <xsl:template match="html:title|html:bodyDISABLE">
    <xsl:element name="{local-name()}">
     <xsl:apply-templates select="@*"/>
     <xsl:apply-templates/>
@@ -814,7 +829,7 @@
    </xsl:choose>
   </xsl:template>
   <!-- We will treat sections as simple <div>s of class section -->
-  <xsl:template match="html:section">
+  <xsl:template match="html:section|html:body">
    <xsl:call-template name="block">
     <xsl:with-param name="element" select="'div'"/>
     <xsl:with-param name="class" select="'section'"/>
