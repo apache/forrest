@@ -225,10 +225,12 @@
         <map:generate type="html" src="cocoon:/{1}/{2}.html"/>
         <map:serialize type="xhtml"/>
       </map:match>
-  <!--
-  Last processing step. 
-  Here we are overriding the default skin generation.
-  -->
+    
+    
+      <!--
+      Output format
+      FIXME: REFACTOR: These .html matchers should go into an html output plugin 
+      -->
       <map:match pattern="*.html">
         <!-- FIXME: should be <map:generate src="cocoon://{1}/{2}.xml"/> -->
         <map:generate src="{project:content.xdocs}/{1}.xml"/>
@@ -240,7 +242,10 @@
         <map:transform src="cocoon://getStylesheet.xhtml.{1}">
           <map:parameter name="path" value="{0}"/>
         </map:transform>
-        <map:transform src="resources/stylesheets/strip_namespaces.xsl"/>
+        <map:transform src="{lm:transform.xslt.xhtml2.html}"/>
+        <!--
+          FIXME: this transformation was in the original views plugin - do we need it here?
+          <map:transform src="resources/stylesheets/strip_namespaces.xsl"/>-->
         <map:serialize type="xhtml"/>
       </map:match>
 
@@ -255,7 +260,10 @@
         <map:transform src="cocoon://getStylesheet.xhtml.{1}/{2}">
           <map:parameter name="path" value="{0}"/>
         </map:transform>
-        <map:transform src="resources/stylesheets/strip_namespaces.xsl"/>
+        <map:transform src="{lm:transform.xslt.xhtml2.html}"/>
+        <!--
+          FIXME: this transformation was in the original views plugin - do we need it here?
+          <map:transform src="resources/stylesheets/strip_namespaces.xsl"/>-->
         <map:serialize type="xhtml"/>
       </map:match>
     </map:pipeline>
