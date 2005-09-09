@@ -53,28 +53,28 @@
             </alias:template>
         	<!--default entry point into the presentation model 'site'-->
             <alias:template match="xhtml2:html">
-                <html>
-                    <head>
+                <xhtml2:html>
+                    <xhtml2:head>
                         <alias:call-template name="getHead"/>
                     	<!--Test whether there is an own css implemention requested by the view-->
                     	<!--*No* forrest:css found in the view-->
                         <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
-                            <link rel="stylesheet" type="text/css">
+                            <xhtml2:link rel="stylesheet" type="text/css">
                                 <xsl:attribute name="href">{$root}skin/default.css</xsl:attribute>
-                            </link>
+                            </xhtml2:link>
                         </xsl:if>
                     	<!-- forrest:css *found* in the view-->
                         <xsl:if test="/*/forrest:views/forrest:view/forrest:css">
                             <xsl:apply-templates select="/*/forrest:views/forrest:view/forrest:css"/>
                         </xsl:if>
-                        <title>
+                        <xhtml2:title>
                             <alias:value-of select="div[@id='content']/h1"/>
-                        </title>
-                    </head>
-                    <body onload="init()">
+                        </xhtml2:title>
+                    </xhtml2:head>
+                    <xhtml2:body onload="init()">
                         <alias:call-template name="getBody"/>
-                    </body>
-                </html>
+                    </xhtml2:body>
+                </xhtml2:html>
             </alias:template>
         </alias:stylesheet>
     </xsl:template>
@@ -82,7 +82,7 @@
         <xsl:apply-templates select="*[local-name()!='css']"/>
     </xsl:template>
     <xsl:template match="forrest:css[@url and count(. | key('css-includes', @url)[1]) = 1]">
-        <link type="text/css">
+        <xhtml2:link type="text/css">
             <xsl:choose>
               <xsl:when test="@rel">
                 <xsl:attribute name="rel"><xsl:value-of select="@rel"/></xsl:attribute>
@@ -104,7 +104,7 @@
             <xsl:if test="@media">
               <xsl:attribute name="media"><xsl:value-of select="@media"/></xsl:attribute>
             </xsl:if>
-        </link>
+        </xhtml2:link>
     </xsl:template>
     <xsl:template match="forrest:contract" mode="head">
       <xsl:variable name="name" select="@name"/>
