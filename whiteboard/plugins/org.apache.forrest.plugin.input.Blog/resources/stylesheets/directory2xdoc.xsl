@@ -27,7 +27,15 @@
         <title>Category: <xsl:value-of select="$category"/></title> 
       </header> 
       <body> 
+        <section id="overview">
+          <title>
+            My thoughts on <xsl:value-of select="$category"/>
+          </title> 
+   
           <xsl:apply-templates select="//dir:file"/>
+         
+        </section>
+
       </body>
     </document>
   </xsl:template>
@@ -42,7 +50,6 @@
     -->
       <xsl:for-each select="ancestor::dir:directory"><xsl:if test="position() > 0"><xsl:value-of select="./@name"/>/</xsl:if></xsl:for-each>
     </xsl:variable>
-
     <p>
       <strong>
         <xsl:element name="a">
