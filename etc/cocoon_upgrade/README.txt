@@ -22,11 +22,19 @@ Instructions for use:
 
 4. cd $FORREST_HOME/etc/cocoon_upgrade
 
-5. ant build-cocoon 
+5. edit build.xml and modify new revision
+   ant build-cocoon
 
-6. ant copy-cocoon
+6. cd $FORREST_HOME/lib
 
-7.  cd $FORREST_HOME/lib
+7a. For each cocoon-{name}-{cocoon.version}-{cocoon.revision}.jar
+
+svn mv cocoon-{name}-{cocoon.version}-{cocoon.OLDrevision}.jar 
+cocoon-{name}-{cocoon.version}-{cocoon.NEWrevision}.jar
+ 
+svn ci -m "prework for upgrade to {cocoon.NEWrevision}" 
+
+7b.  ant copy-cocoon
 
 8.  We need to make sure there is a license.txt file for each of the
     jars that we have in the lib/* directories.
