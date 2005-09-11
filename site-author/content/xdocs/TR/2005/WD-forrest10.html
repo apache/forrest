@@ -18,7 +18,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
-	<TITLE>Forrest 1.0</TITLE>
+	<TITLE>Apache Forrest 1.0 specification (Working Draft)</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Win32)">
 	<META NAME="CREATED" CONTENT="20041116;13330320">
 	<META NAME="CHANGEDBY" CONTENT="Nicola Ken Barozzi">
@@ -40,16 +40,16 @@
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR" STYLE="border: none; padding: 0in">
-<H1>Forrest 1.0 - Working Draft</H1>
+<H1>Apache Forrest 1.0 - Working Draft</H1>
 <H2><A NAME="abstract"></A>Abstract</H2>
-<P>Forrest 1.0 is the first specification of Forrest (the product),
+<P>Apache Forrest 1.0 is the first specification of Apache Forrest (the product),
 intended to be the reference point for developers and users in the
-road to making a first stable Forrest release.</P>
+road to making a first stable Apache Forrest release.</P>
 <H2><A NAME="status"></A>Status of this Document</H2>
 <P><EM>This section describes the status of this document at the time
-of its publication. Other documents may supersede this document.</EM></P>
+of its publication. Other documents may supercede this document.</EM></P>
 <P>This document is under development, and will not be considered
-final until Forrest 1.0 is released.</P>
+final until Apache Forrest 1.0 is released.</P>
 <P>This is the <A HREF="http://www.w3.org/2004/02/Process-20040205/tr.html#first-wd">First
 Public Working Draft</A> of the Forrest 1.0 specification. This
 document has been produced by the Apache Forrest Project developer
@@ -61,7 +61,8 @@ be updated, replaced or obsoleted by other documents at any time. It
 is inappropriate to cite this document as other than work in
 progress.</P>
 <P>Comments on this document are welcome. Please send issues to the
-public mailing list dev@forrest.apache.org (link to archive). It is
+public developers
+<A HREF="http://forrest.apache.org/mail-lists.html">mailing list</A>. It is
 appropriate to send discussion email to this address. Please note
 that comments that you make will be <STRONG>publicly</STRONG>
 archived and available, do not send information you would not want to
@@ -128,7 +129,7 @@ for example as part of the Candidate Recommendation phase.</P>
 <P>None recorded.</P>
 <P><BR><BR>
 </P>
-<H2>Forrest Core</H2>
+<H2>Apache Forrest Core</H2>
 <TABLE WIDTH=748 BORDER=1 CELLPADDING=2 CELLSPACING=3>
 	<COL WIDTH=366>
 	<COL WIDTH=363>
@@ -154,17 +155,17 @@ for example as part of the Candidate Recommendation phase.</P>
 	</TR>
 </TABLE>
 <H3>Processing pipeline</H3>
-<P>This is the conceptual processing pipeline offered by Forrest.</P>
-<P>All references to actual source dirs and internal or external
+<P>This is the conceptual processing pipeline offered by Apache Forrest.</P>
+<P>All references to actual source directories and internal or external
 formats is generic and are specified elsewhere in this spec. 
 </P>
 <H4>Step 1: Resolution (content)</H4>
 <P>Forrest has a single conceptual source space, that can initially
-be thought of as a single directory, the current xdocs dir. Every
-file that is outside of this directory has to be resolved by a
+be thought of as a single directory, the current xdocs directory. Every
+file that is outside of this directory needs to be resolved by a
 locationmap, so that Forrest sees it all as a single directory in any
 case.</P>
-<P>This source space contains files that a filename and an extension.
+<P>This source space contains files that have a filename and an extension.
 There should be only one file with a certain name in a certain
 directory, which will be the main source of our transformation. 
 </P>
@@ -190,7 +191,7 @@ myfile.html </PRE><H4>
 Step 3: Filtering (content)</H4>
 <P>This is a new step, that adds navigation, metadata, extra content,
 functionality and transformations to the content stream.</P>
-<P>The filtering stages should use different filtering files to not
+<P>The filtering stages should use different filtering files, so as to not
 produce markup that is not needed by the view.</P>
 <P>Navigation is the addition of the 'tab' and 'linkmap' information
 to the stream. 
@@ -200,8 +201,8 @@ to the stream.
 <P>Nuggets of information can be added based on the URL and on the
 contents of the main source. For example, newsfeeds about the page
 being processed.</P>
-<P>Fbits should be insert only as placeholder that the view can
-populate them with the actual functionality</P>
+<P>Fbits should be inserted only as placeholders that the view can
+populate with the actual functionality</P>
 <P>Filtering on the main content can be done, like the automatic
 creation of links based on the site.xml linkmap or footnote
 processing.</P>
@@ -209,7 +210,7 @@ processing.</P>
 plugins). 
 </P>
 <H4>Step 4: Viewing (presentation)</H4>
-<P>Based on the view specified, the content is transformed in a
+<P>Based on the view specified, the content is transformed into a
 format that contains presentation information. Example formats are
 html, fo (formatting objects) and svg.</P>
 <P>Note that this part adds functionality implementation to the
@@ -225,18 +226,18 @@ selector, etc.</P>
 <P>This new templating language will be forrest:templates, which
 contains forrest:view and forrest:template.</P>
 <H4>Step 5: Theming (presentation)</H4>
-<P>The view is creating the html-skelleton that is used for <EM>theming</EM>.
-Themes are view dependend but e.g. you can write <EM>one</EM> theme
-for <EM>x</EM> view derivatives. Theming adds colors and general
-appearance info. In html it's css files for example, or the skinconf
+<P>The view is creating the html-skeleton that is used for <EM>theming</EM>.
+Themes are view-dependent but e.g. you can write <EM>one</EM> theme
+for <EM>many</EM> view derivatives. Theming adds colors and general
+appearance information. In html it is css files for example, or the skinconf
 color information.</P>
 <H4>Step 6: Serializing (presentation)</H4>
 <P>The presentation is transformed to the actual final format with
-output plugins. For example a fo presentation can be outputted as
+output plugins. For example a fo presentation can be output as
 xhtml, pdf, rtf, doc, ps, etc. 
 </P>
 <H3>Forrest:templates</H3>
-<P>Forrest:templates or short f:t is a templating language to create
+<P>Forrest:templates (or short f:t) is a templating language to create
 views on forrest input-data.</P>
 <P><B>Definition - Forrest-View:</B> View = content (nuggets) +
 functionality (fbit) + design (style) 
@@ -244,11 +245,11 @@ functionality (fbit) + design (style)
 <P>We will refer to incoming content as nuggets. Nuggets are pure
 content (without any information about fct., style,...). 
 </P>
-<P>fbits can (but do not have to) use nuggets to implemend (or
+<P>fbits can (but do not need to) use nuggets to implement (or
 populate) the actual functionality needed in the requested view. 
 </P>
 <DL>
-	<DD STYLE="margin-bottom: 0.2in">fbit containing nuggets (I mean it
+	<DD STYLE="margin-bottom: 0.2in">fbit containing nuggets (it
 	contains e.g. captions -&gt;i18n nuggets) &lt;forrest:fbit
 	name=&quot;fontsize&quot;/&gt; 
 	</DD></DL>
@@ -267,7 +268,7 @@ used to create the overall design in different media (xhtml, fo,...)
 of the document. 
 </P>
 <P>This design state should only use registered contracts for fbits
-and nuggets but still have absolute controll over the style.</P>
+and nuggets but still have absolute control over the style.</P>
 <H2><A NAME="dt"></A>A Schemas for Forrest 1.0 config files</H2>
 <P><EM>To be added.</EM></P>
 <H2><A NAME="references"></A>B References</H2>
@@ -378,7 +379,7 @@ like this:</SPAN></EM></P>
 	<LI><P><EM><SPAN STYLE="font-style: normal">for single files one can
 	ask for myfile.<B>source.</B><SPAN STYLE="font-weight: medium">extension</SPAN></SPAN></EM></P>
 	<LI><P><EM><SPAN STYLE="font-weight: medium"><SPAN STYLE="font-style: normal">for
-	whole dirs, the thing has to be declared in some sitewide metadata</SPAN></SPAN></EM></P>
+	whole directories, the thing has to be declared in some sitewide metadata</SPAN></SPAN></EM></P>
 </UL>
 <H4><A HREF="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=110172138119333&amp;w=2">[RT]
 Directory structure and configuration</A>   
