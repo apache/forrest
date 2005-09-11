@@ -157,6 +157,8 @@ for example as part of the Candidate Recommendation phase.</P>
         </DD>
         <DT>Review the "Processing pipeline" section.
         </DT>
+        <DT>Review the "Forrest:templates" section.
+        </DT>
         <DT>Define the scheam for config files.
         </DT>
         <DT>Don't number the sections below until later.
@@ -166,13 +168,13 @@ for example as part of the Candidate Recommendation phase.</P>
   </TR>
 </TABLE>
 
-<H2>Apache Forrest Core</H2>
-<H3>Processing pipeline</H3>
+<H2><A NAME="core"></A>Apache Forrest Core</H2>
+<H3><A NAME="pipeline"></A>Processing pipeline</H3>
 <P>This is the conceptual processing pipeline offered by Apache Forrest.</P>
 <P>All references to actual source directories and internal or external
 formats is generic and are specified elsewhere in this spec. 
 </P>
-<H4>Step 1: Resolution (content)</H4>
+<H4><A NAME="resolver"></A>Step 1: Resolver (content)</H4>
 <P>Forrest has a single conceptual source space, that can initially
 be thought of as a single directory, the current xdocs directory. Every
 file that is outside of this directory needs to be resolved by a
@@ -185,8 +187,8 @@ directory, which will be the main source of our transformation.
 <P>For each URL that is requested, there shall be only one source
 file resolved, which will be our main source. 
 </P>
-<H4>Step 2: Format Transformation (content) 
-</H4>
+
+<H4><A NAME="xifier"></A>Step 2: Xifier (content)</H4>
 <P>Transform the main source to the intermediate format, XHTML2.</P>
 <P>The various input formats and handled by specific input plugins, all transforming
 to XHTML2. Input plugins for HTML and XHTML are available by default.
@@ -198,10 +200,12 @@ asked will be in the following manner.
 Example:</P>
 <PRE>myfile.content.html 
 myfile.javadocs.html 
-myfile.html </PRE><H4>
-Step 3: Filtering (content)</H4>
-<P>This is a new step, that adds navigation, metadata, extra content,
-functionality and transformations to the content stream.</P>
+myfile.html </PRE>
+
+<H4><A NAME="filter"></A>Step 3: Filter (content)</H4>
+<P>Adds navigation, metadata, extra content,
+functionality, and transformations to the content stream.
+</P>
 <P>The filtering stages should use different filtering files, so as to not
 produce markup that is not needed by the view.</P>
 <P>Navigation is the addition of the 'tab' and 'linkmap' information
@@ -212,15 +216,21 @@ to the stream.
 <P>Nuggets of information can be added, based on the URL and on the
 contents of the main source. For example, newsfeeds about the page
 being processed.</P>
-<P>Fbits should be inserted only as placeholders that the view can
-populate with the actual functionality</P>
-<P>Filtering on the main content can be done, like the automatic
-creation of links based on the site.xml linkmap or footnote
+<P>Stucture is being built, nuggets are being placed, and hooks are being provided.</P>
+<P>Fbits (defined below) should be inserted only as placeholders that the view can
+populate with the actual functionality.</P>
+<P>Filtering on the main content can be done, such as automatic
+creation of links based on the site.xml linkmap; or footnote
 processing.</P>
-<P>These filtering steps are to be done by plugins (filtering
+<P>These filtering steps are done by plugins (filtering
 plugins). 
 </P>
-<H4>Step 4: Viewing (presentation)</H4>
+
+<H4><A NAME="windower"></A>Step 4: Windower (presentation)</H4>
+<P>A particular window defines the visual organisation of the xml stream.
+The actual look-and-feel of that window is dependent on a subsequent theme.
+</P>
+<P>At this stage, output plugins start to operate.</p>
 <P>Based on the view specified, the content is transformed into a
 format that contains presentation information. Example formats are
 html, fo (formatting objects) and svg.</P>
@@ -230,33 +240,57 @@ be used. These are fbits, or functionality bits, and are different
 from nuggets, which are extra content. 
 </P>
 <P>Note that fbits are view-dependent, so that a view can decide to
-implement them or not. The configuration of these bits are to be done
-with the new generic skinconf format and a new templating language.</P>
-<P>Example of current fbits are the search pane, the page format
+implement them or not.</P>
+<P>Examples of current fbits are the search pane, the page format
 selector, etc.</P>
-<P>This new templating language will be forrest:templates, which
-contains forrest:view and forrest:template.</P>
-<H4>Step 5: Theming (presentation)</H4>
-<P>The view is creating the html-skeleton that is used for <EM>theming</EM>.
+
+<P>The configuration of these bits are done
+with the new generic skin-configuration format and a new templating language.</P>
+
+<H4><A NAME="resolver"></A>Step 5: Themer (presentation)</H4>
+<P>The structure and content is now ready for a theme to be applied.
+Theming adds colors and general
+appearance information. In html it is css files for example, or the
+color information from the skin configuration.
+</P>
+<P>
 Themes are view-dependent but e.g. you can write <EM>one</EM> theme
-for <EM>many</EM> view derivatives. Theming adds colors and general
-appearance information. In html it is css files for example, or the skinconf
-color information.</P>
-<H4>Step 6: Serializing (presentation)</H4>
+for <EM>many</EM> view derivatives.
+</P>
+
+<H4><A NAME="serializer"></A>Step 6: Serializer (presentation)</H4>
 <P>The presentation is transformed to the actual final format with
 output plugins. For example a fo presentation can be output as
 xhtml, pdf, rtf, doc, ps, etc. 
 </P>
-<H3>Forrest:templates</H3>
+
+<H3><A NAME="templates"></A>Forrest:templates</H3>
+<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+  <TR VALIGN=TOP>
+    <TD WIDTH=50%>
+      <P ALIGN=LEFT><B>Editorial note:</B> tempates</P>
+    </TD>
+    <TD WIDTH=50%>
+      <P ALIGN=RIGHT>&nbsp;</P>
+    </TD>
+  </TR>
+  <TR>
+    <TD COLSPAN=2 VALIGN=TOP>
+      <P ALIGN=LEFT>Review this section.
+      </P>
+    </TD>
+  </TR>
+</TABLE>
+
 <P>Forrest:templates (or f:t for short) is a templating language to create
-views on forrest input-data.</P>
+views.</P>
 <P><B>Definition - Forrest-View:</B> View = content (nuggets) +
 functionality (fbit) + design (style) 
 </P>
-<P>We will refer to incoming content as nuggets. Nuggets are pure
+<P>Nuggets are the incoming content. They are pure items of
 content (without any information about fct., style,...). 
 </P>
-<P>fbits can (but do not need to) use nuggets to implement (or
+<P>The fbits can (but do not need to) use nuggets to implement (or
 populate) the actual functionality needed in the requested view. 
 </P>
 <DL>
