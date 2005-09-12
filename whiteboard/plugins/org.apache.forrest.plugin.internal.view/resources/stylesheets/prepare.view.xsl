@@ -16,17 +16,15 @@
   limitations under the License.
 -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0"  
-  xmlns:xi="http://www.w3.org/2001/XInclude"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+  xmlns:xi="http://www.w3.org/2001/XInclude" 
   xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias">
-    <xsl:namespace-alias 
-         stylesheet-prefix="alias" result-prefix="xsl"/>
-<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
+
+  <xsl:namespace-alias stylesheet-prefix="alias" result-prefix="xsl"/>
   <xsl:strip-space elements="forrest:property"/>
-  
- <xsl:param name="view"/>
+
+  <xsl:param name="view"/>
 
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -37,17 +35,17 @@
       <xsl:attribute name="name">
         <xsl:value-of select="@name"/>
       </xsl:attribute>
-       <xsl:element name="xi:include">
-        <xsl:attribute name="href">cocoon://<xsl:value-of select="url/text()"/></xsl:attribute>
-       </xsl:element>
-	  </xsl:element>
+      <xsl:element name="xi:include">
+        <xsl:attribute name="href">cocoon://<xsl:value-of 
+          select="url/text()"/></xsl:attribute>
+      </xsl:element>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
-      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+      <xsl:apply-templates 
+        select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
-  
-
 </xsl:stylesheet>

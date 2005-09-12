@@ -17,49 +17,55 @@ limitations under the License.
 -->
 
 <forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" >
-    <forrest:view type="xhtml">
-        <forrest:css url="default.css"/>
-        <forrest:contract name="siteinfo-meta"/>
-        <forrest:hook name="container">
-            <forrest:hook name="header">
-              <forrest:contract name="branding-tagline">
-		            <forrest:properties contract="branding-tagline">
-								  <forrest:property name="branding-tagline-name">new seed</forrest:property>
-		              <forrest:property name="branding-tagline-tagline">powered by forrest:views</forrest:property>
-								 </forrest:properties>
-		          </forrest:contract>
-              <forrest:hook name="nav-main-hook">
-                <forrest:contract name="nav-main"/>
-              	<forrest:contract name="nav-main-sub"/>
-              </forrest:hook>
-            </forrest:hook>
-            <forrest:hook name="page">
-                <forrest:hook name="leftbar">
-                    <forrest:contract name="nav-section"/>
-                    <forrest:contract name="search-input"/>
-                </forrest:hook>
-                <!-- You can group elements to a template and call it from any view.
-	                e.g.
-	                <forrest:hook name="export-link">
-	                  <forrest:contract name="content-xml-link"/>
-	                  <forrest:contract name="content-pdf-link"/>
-	                </forrest:hook>
-	                can be called as <forrest:call-template name="export-link"/>
-	                when saved as {project:resources}/templates/export-link.vt.xml 
-	              -->
-                <forrest:call-template name="export-link"/>
-                
-                <forrest:hook name="content">
-                    <forrest:contract name="content-title"/>
-                    <forrest:contract name="content-abstract"/>
-                    <forrest:contract name="content-minitoc"/>
-                    <forrest:contract name="content-main"/>
-                </forrest:hook>
-            </forrest:hook>
+  <forrest:view type="xhtml">
+    <forrest:css url="default.css"/>
+    <forrest:contract name="siteinfo-meta">
+      <forrest:properties contract="siteinfo-meta">
+        <forrest:property name="siteinfo-meta" nugget="get.build.info">
+          <url>build-info</url>
+        </forrest:property>
+      </forrest:properties>
+    </forrest:contract>
+    <forrest:hook name="container">
+      <forrest:hook name="header">
+        <forrest:contract name="branding-tagline">
+          <forrest:properties contract="branding-tagline">
+            <forrest:property name="branding-tagline-name">new seed</forrest:property>
+            <forrest:property name="branding-tagline-tagline">powered by forrest:views</forrest:property>
+          </forrest:properties>
+        </forrest:contract>
+        <forrest:hook name="nav-main-hook">
+          <forrest:contract name="nav-main"/>
+          <forrest:contract name="nav-main-sub"/>
         </forrest:hook>
-        <forrest:hook name="footer">
-            <forrest:contract name="siteinfo-feedback"/>
-            <forrest:contract name="siteinfo-last-published"/>
+      </forrest:hook>
+      <forrest:hook name="page">
+        <forrest:hook name="leftbar">
+          <forrest:contract name="nav-section"/>
+          <forrest:contract name="search-input"/>
         </forrest:hook>
-    </forrest:view>
+<!-- 
+ You can group elements to a template and call it from any view. e.g.
+<forrest:hook name="export-link">
+  <forrest:contract name="content-xml-link"/>
+  <forrest:contract name="content-pdf-link"/>
+</forrest:hook>
+ can be called as <forrest:call-template name="export-link"/>
+ when saved as {project:resources}/templates/export-link.vt.xml 
+-->
+        <forrest:call-template name="export-link"/>
+
+        <forrest:hook name="content">
+          <forrest:contract name="content-title"/>
+          <forrest:contract name="content-abstract"/>
+          <forrest:contract name="content-minitoc"/>
+          <forrest:contract name="content-main"/>
+        </forrest:hook>
+      </forrest:hook>
+    </forrest:hook>
+    <forrest:hook name="footer">
+      <forrest:contract name="siteinfo-feedback"/>
+      <forrest:contract name="siteinfo-last-published"/>
+    </forrest:hook>
+  </forrest:view>
 </forrest:views>

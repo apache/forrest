@@ -36,6 +36,8 @@
         pool-max="16"
       />
       <map:generator name="directory" src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <!--FIXME: type="jx" -->
+      <!-- <map:generator label="content" logger="sitemap.generator.jx" name="jx" pool-max="16" src="org.apache.cocoon.template.JXTemplateGenerator"/> -->
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude"
@@ -105,7 +107,7 @@
     </map:match>
     
 
-  <!--
+  <!--FIXME: type="jx" 
     View config resolver
     File specific views have priority before default ones.
     If no views can be found in the project we use the default one of the view plugin.
@@ -208,27 +210,25 @@
   -->  
   <map:pipeline>
     <map:match pattern="*.page">
-				<map:aggregate element="site">
-          <map:part src="cocoon://skinconf.xml"/>
-          <map:part src="cocoon://build-info"/>
-          <map:part src="cocoon://tab-{1}.html"/>
-          <map:part src="cocoon://menu-{1}.html"/>
-          <map:part src="cocoon://body-{1}.html"/>
-          <map:part src="cocoon:/prepare.view-nugget.{1}"/>
-        </map:aggregate>
-        <map:serialize type="xml"/>
+      <map:aggregate element="site">
+        <map:part src="cocoon://skinconf.xml"/>
+        <map:part src="cocoon://tab-{1}.html"/>
+        <map:part src="cocoon://menu-{1}.html"/>
+        <map:part src="cocoon://body-{1}.html"/>
+        <map:part src="cocoon:/prepare.view-nugget.{1}"/>
+      </map:aggregate>
+      <map:serialize type="xml"/>
     </map:match>
     <map:match pattern="**/*.page">
-        <map:aggregate element="site">
-          <map:part src="cocoon://skinconf.xml"/>
-          <map:part src="cocoon://build-info"/>
-          <map:part src="cocoon://{1}/tab-{2}.html"/>
-          <map:part src="cocoon://{1}/menu-{2}.html"/>
-          <map:part src="cocoon://{1}/body-{2}.html"/>
-          <map:part src="cocoon:/prepare.view-nugget.{1}/{2}"/>
-        </map:aggregate>
-        <map:serialize type="xml"/>
-      </map:match>
+      <map:aggregate element="site">
+        <map:part src="cocoon://skinconf.xml"/>
+        <map:part src="cocoon://{1}/tab-{2}.html"/>
+        <map:part src="cocoon://{1}/menu-{2}.html"/>
+        <map:part src="cocoon://{1}/body-{2}.html"/>
+        <map:part src="cocoon:/prepare.view-nugget.{1}/{2}"/>
+      </map:aggregate>
+      <map:serialize type="xml"/>
+    </map:match>
       
   </map:pipeline>  
 

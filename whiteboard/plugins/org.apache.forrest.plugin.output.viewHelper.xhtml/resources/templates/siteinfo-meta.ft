@@ -20,24 +20,40 @@
   <description>
     This functions will output the html meta information. Implemented forrest version/skin name.
   </description>
-  <usage><![CDATA[<forrest:contract name="siteinfo-meta"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="siteinfo-meta">
+    <forrest:properties contract="siteinfo-meta">
+      <forrest:property name="siteinfo-meta" nugget="get.build.info">
+        <url>build-info</url>
+      </forrest:property>
+    </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   format="xhtml" name="siteinfo-meta" inputFormat="xsl" body="false" head="true">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		  <xsl:template name="siteinfo-meta-head">
+        <xsl:param name="siteinfo-meta" select="'test'"/>
 		    <meta name="Generator" content="Apache Forrest"/>
 		    <meta name="Forrest-version">
 		      <xsl:attribute name="content">
-		        <xsl:value-of select="//info/forrest-version"/>
+		        <xsl:value-of select="$siteinfo-meta/info/forrest-version"/>
 		      </xsl:attribute>
 		    </meta>
 		    <meta name="Forrest-skin-name">
 		      <xsl:attribute name="content">
-		        <xsl:value-of select="//info/project-skin"/>
+		        <xsl:value-of select="$siteinfo-meta/info/project-skin"/>
 		      </xsl:attribute>
 		    </meta>
 		  </xsl:template>
+       <!--<xsl:template name="siteinfo-meta-body">
+        <xsl:param name="siteinfo-meta" select="'test'"/>
+        <xsl:copy-of select="$siteinfo-meta"/>xx
+        <p name="Forrest-skin-name">
+		      <xsl:attribute name="content">
+		        <xsl:value-of select="$siteinfo-meta/project-skin"/>
+		      </xsl:attribute>
+		    </p>
+        </xsl:template>-->
 		</xsl:stylesheet>
 	</forrest:template>
 </forrest:contract>
