@@ -20,8 +20,6 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:resume="http://xmlresume.sourceforge.net/resume/0.0"
     version="1.0">
-
-  <xsl:param name="table.levelWidth">20%</xsl:param>
   
   <xsl:template match="/">
     <xsl:apply-templates select="resume:resume"/>
@@ -64,6 +62,66 @@
         </p>
       </section>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:awards">
+    <div id="resume-awards">
+      <section>
+        <xsl:apply-templates/>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:award">
+    <div class="resume-award">
+      <section>
+        <title><xsl:value-of select="resume:title"/></title>
+        <p>Awarding by <xsl:value-of select="resume:organization"/>
+           (<xsl:value-of select="resume:period"/>).</p>
+        <p>Description: <xsl:value-of select="resume:description"/></p>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:pubs">
+    <div id="resume-pubs">
+      <section>
+        <title>Publications</title>
+        <xsl:apply-templates/>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:pub">
+      <li class="resume-pub">
+        <xsl:value-of select="resume:artTitle"/>
+        <xsl:value-of select="resume:bookTitle"/>,
+        <xsl:value-of select="resume:publisher"/>.
+        <xsl:value-of select="resume:date"/>
+      </li>
+  </xsl:template>
+  
+  <xsl:template match="resume:memberships">
+    <div id="resume-memberships">
+      <section>
+        <xsl:apply-templates/>
+      </section>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="resume:membership">
+      <section class="resume-membership">
+        <title><xsl:value-of select="resume:organization"/></title>
+        <xsl:apply-templates/>
+      </section>
+  </xsl:template>
+  
+  <xsl:template match="resume:misc">
+      <div class="resume-misc">
+        <section>
+          <xsl:apply-templates/>
+        </section>
+      </div>
   </xsl:template>
   
   <xsl:template match="resume:phone">
@@ -224,7 +282,7 @@
   <xsl:template match="resume:skillareas">
     <div id="resume-skillareas">
       <section>
-        <title>Skills</title>
+        <title>Skills Summary</title>
         <xsl:apply-templates/>
       </section>
     </div>
