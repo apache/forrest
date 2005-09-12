@@ -215,9 +215,12 @@
 
           <td>
             <xsl:if test="position() != last()">
-              <a href="profile.xml?key={$key}&amp;result={$result}&amp;component={@index}&amp;fragmentonly=true">[XML]</a>
+              <!-- FIXME: hard-coded filename -->
+              <a href="cprofile.xml?key={$key}&amp;result={$result}&amp;component={@index}&amp;fragmentonly=true">[XML]</a>
+<!-- Forrest doesn't enable this cocoon-view
               &#160;&#160;
               <a href="profile.xml?key={$key}&amp;result={$result}&amp;component={@index}&amp;fragmentonly=true&amp;cocoon-view=pretty-content">[XML as HTML]</a>
+-->
             </xsl:if>
           </td>
         </tr>

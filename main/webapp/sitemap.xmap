@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,8 +225,11 @@ $Revision: 1.12 $
       <map:pipe name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
 
       <!-- profiling pipes -->
-      <!-- See FOR-572 and when you want to do profiling, then
-        replace the standards pipes above -->
+      <!-- When you want to do profiling, then replace the
+        standard map:pipes above.
+        See docs/howto/howto-dev.html#debug-cocoon-profiler
+        See FOR-572
+      -->
       <!--
       <map:pipe name="caching" src="org.apache.cocoon.components.profiler.ProfilingCachingProcessingPipeline"/>
       <map:pipe name="noncaching" src="org.apache.cocoon.components.profiler.ProfilingNonCachingProcessingPipeline"/>
@@ -297,6 +300,12 @@ $Revision: 1.12 $
 
   <!-- =========================== Pipelines ================================= -->
   <map:pipelines>
+    <!-- Cocoon sitemap profiler -->
+    <map:pipeline internal-only="false">
+      <map:match pattern="cprofile.*">
+        <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
+      </map:match>
+    </map:pipeline>
 
   <map:pipeline type="caching" internal-only="true">
  
@@ -557,9 +566,6 @@ $Revision: 1.12 $
     </map:pipeline>
 
     <map:pipeline internal-only="false">
-      <map:match pattern="profile.html">
-        <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
-      </map:match>
 
 <!--pipeline that "marries" the docs in the root dir with the skin to produce html-->
       <map:match pattern="*.html">

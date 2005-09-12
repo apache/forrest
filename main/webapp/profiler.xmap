@@ -21,9 +21,10 @@
 To enable this, edit sitemap.xmap and switch to use the "profiling pipes"
 as described. Do 'forrest run' then do a few requests of the pipeline that
 you want to profile (e.g. localhost:8888/index.html) then look at
-the profiler http://localhost:8888/profile.html
+the profiler http://localhost:8888/cprofile.html
 
-See more notes at http://cocoon.apache.org/2.1/userdocs/concepts/profiler.html
+See more notes at
+http://cocoon.apache.org/2.1/userdocs/concepts/profiler.html
 
 Used by    :  Forrest hackers desperate for speed
 Uses       :  Stats collected by the profile-caching pipeline.
@@ -44,7 +45,7 @@ $Revision: 1.2 $
 
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="profile.html">
+      <map:match pattern="cprofile.html">
         <map:generate type="profiler"/>
         <map:transform src="{forrest:stylesheets}/profile2html.xsl">
           <map:parameter name="use-request-parameters" value="true"/>
@@ -52,7 +53,7 @@ $Revision: 1.2 $
         <map:serialize type="html"/>
       </map:match>
 
-      <map:match pattern="profile.xml">
+      <map:match pattern="cprofile.xml">
         <map:generate type="profiler"/>
         <map:serialize type="xml"/>
       </map:match>
