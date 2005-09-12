@@ -266,12 +266,43 @@ forrest-trunk
     </section>
 
     <section id="debug">
-      <title>Debugging techniques</title>
+      <title>Debugging and profiling techniques</title>
       <p>
         This <a href="site:v0.80//documentation/faq/logs">FAQ</a>
         describes the location of the Cocoon logfiles and their
         configuration.
       </p>
+
+      <section id="debug-cocoon-profiler">
+        <title>Using the Cocoon sitemap profiler</title>
+        <p>
+          Cocoon provides a simple profiler to analyse itself.
+          This enables us to list the various sitemap pipelines and
+          components that are being used, how much time was used
+          by each, whether each component uses the Cocoon cache,
+          and show the actual xml data.
+        </p>
+        <p>
+          Note that the profiler is not used by default. To switch
+         it on, edit <code>main/webapp/sitemap.xmap</code> and search
+         for "profiler". Follow the instructions there to replace the
+          standard "map:pipe" components with the profiling pipes.
+        </p>
+        <p>
+          Now start your application as normal using 'forrest run'
+          and request localhost:8888/index.html three or four times
+          to populate the profiler with data.
+        </p>
+        <p>
+          Now request the special uri localhost:8888/cprofile.html
+          to see the results. Start at the "index.html" request,
+          then follow the processing.
+        </p>
+        <p>
+          NOTE: Do not forget to turn off the profiler in 
+          <code>main/webapp/sitemap.xmap</code> when finished.
+        </p>
+      </section>
 
       <section id="debug-links">
         <title>Finding broken internal links</title>
