@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +19,9 @@
 'profiler' pipeline.  Shows how long each pipeline in the Forrest sitemap takes.
 
 To enable this, edit sitemap.xmap and switch to use the "profiling pipes"
-as described. Do 'forrest run' then do a few request of the pipeline that
-you want to profile (e.g. localhost:8888/body-index.html) then look at
-the profiler http://localhost:8888/profiler.html
+as described. Do 'forrest run' then do a few requests of the pipeline that
+you want to profile (e.g. localhost:8888/index.html) then look at
+the profiler http://localhost:8888/profile.html
 
 See more notes at http://cocoon.apache.org/2.1/userdocs/concepts/profiler.html
 
@@ -50,6 +50,11 @@ $Revision: 1.2 $
           <map:parameter name="use-request-parameters" value="true"/>
         </map:transform>
         <map:serialize type="html"/>
+      </map:match>
+
+      <map:match pattern="profile.xml">
+        <map:generate type="profiler"/>
+        <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
 
