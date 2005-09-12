@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Welcome to the org.apache.forrest.plugin.input.ecs Plugin</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Apache Forrest - org.apache.forrest.plugin.input.ecs Plugin</title>
+      <p>Takes responses from Amaqzons Web Services (ECS) and renders them within a Forrest site.</p>
+    </section>
+
+    <section id="usage">
+      <title>Usage</title>
+      <p>Unfortunately Amazon does not serve content with a doctypue identifier. This
+      makes it impossible for Forrest to work out which transformations need to be 
+      applied. Consequently, we need to use a naming convention to inform Forrest
+      when a file is a an Amazon file. You can use the Locationmap to hide this
+      naming structure from your users. However, in this document and the enclosed
+      samples we will using the requried naming convention.</p>
+
+      <p>All requests to be processed by this plugin must have an *.ecs.* filename.
+      The first wildcard is the requested file, the second is the requested 
+      format. The source files themselve must be named *.ecs.amazon.xml for the
+      Amazon response file. In addition you can provide an *.ecs.local.xml that defines
+      additional local information, such as your own editoriak review.</p>
+
+      <p>You can retrieve the original ECS response by requesting *.ecs.source.xml.</p>
+    </section>
+    
+    <section>
+      <title>Layout</title>
+      <p>All elements are enclosed within <code>&lt;div&gt;</code> elements
+      to enable the site designer to control the laout of their page using CSS.
+      This table below indicates the names of these section for various parts
+      of the webpage.</p>
+      
+      <table>
+        <tr>
+          <th>Page Element</th>
+          <th>div @id</th>
+        </tr>
+        <tr>
+          <td>Item Attributes</td>
+          <td>ecs_itemAttributes</td>
+        </tr>
+        <tr>
+          <td>Batteries Information</td>
+          <td>ecs_batteries</td>
+        </tr>
+        <tr>
+          <td>Manufacturer Information</td>
+          <td>ecs_manufacturer</td>
+        </tr>
+        <tr>
+          <td>Pricing Information</td>
+          <td>ecs_price</td>
+        </tr>
+        <tr>
+          <td>More details link</td>
+          <td>ecs_moreDetails</td>
+        </tr>
+        <tr>
+          <td>Small Image</td>
+          <td>ecs_smallImage</td>
+        </tr>
+        <tr>
+          <td>Medium Image</td>
+          <td>ecs_mediumImage</td>
+        </tr>
+        <tr>
+          <td>Large Image</td>
+          <td>ecs_largeImage</td>
+        </tr>
+        <tr>
+          <td>Editorial Reviews</td>
+          <td>ecs_editorialReviews</td>
+        </tr>
+        <tr>
+          <td>Customer Reviews</td>
+          <td>ecs_customerReviews</td>
+        </tr>
+        <tr>
+          <td>Summary of Customer Reviews</td>
+          <td>ecs_customerReviewsSummary</td>
+        </tr>
+      </table>
+      
+      <p>There are a couple of exceptions to this rule. Items such as customer reviews
+      and editorial reviews sometimes recur for multiple values. In this case we cannot
+      use the id attribute, so we assing a class to the div instead. The table below
+      describes the class name, this name will have the element number at the
+      end (in place of the asterisk in the table).</p>
+      
+      
+      <table>
+        <tr>
+          <th>Page Element</th>
+          <th>div @class</th>
+        </tr>
+        <tr>
+          <td>Editorial Review</td>
+          <td>ecs_editorailReview_*</td>
+        </tr>
+        <tr>
+          <td>Customer Review</td>
+          <td>ecs_customerReview_*</td>
+        </tr>
+        <tr>
+          <td>Additional Small Images</td>
+          <td>ecs_smallImage_*</td>
+        </tr>
+        <tr>
+          <td>Additional Medium Images</td>
+          <td>ecs_mediumImage_*</td>
+        </tr>
+        <tr>
+          <td>Additional Large Images</td>
+          <td>ecs_largeImage_*</td>
+        </tr>
+      </table>
+      
+      <p>You can find examples of how to use this CSS to control the display of
+      your product page in the plugins skinconf.xml file.</p>
+    </section>
+          
+
+    <section>
+      <title>Status</title>
+      <p>Support of item lookups is fairly complete, but support of 
+      the search results is minimal.</p>
+    </section>
+
+    <section id="samples">
+      <title>Samples</title>
+      <p>This section includes links to a number of samples using this plugin. The
+      plugin is intended to be self documenting through these samples. If you 
+      require further help please ask on the user mailing list.</p>
+
+      <ul>
+        <li>
+          <a href="sample/itemLookup1.ecs.html">An Item Lookup</a>
+        </li>
+        <li>
+          <a href="sample/itemSearch1.ecs.html">An Item Search</a>
+        </li>
+      </ul>
+
+      <note>The more samples included here the easier it is for users to
+      understand this plugin. If you can provide additional samples please
+      do so.</note>
+    </section>
+  </body>
+</document>
