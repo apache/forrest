@@ -6,9 +6,15 @@ version of Cocoon.
 
 Instructions for use:
 
+NOTE:
+Make sure that you have set $COCOON_HOME like e.g.:
+#COCOON_HOME
+export COCOON_HOME=/home/thorsten/apache/cocoon-trunk/
+
 1. cd $FORREST_HOME/etc/cocoon_upgrade
 
-2. Copy all cocoon libraries.
+Step 2 and 3 can be done with "./build.sh 0"
+2. Copy all cocoon libraries to forrest.
     ant copy-core-libs
     ant copy-endorsed-libs
     ant copy-optional-libs
@@ -22,6 +28,7 @@ Instructions for use:
 
 4. cd $FORREST_HOME/etc/cocoon_upgrade
 
+Steps 5 and 6 can be done with "./build.sh 1" it will create an ant property file, so you do not need to edit the build.xml.
 5. edit build.xml and modify new revision
    ant build-cocoon
 
