@@ -34,6 +34,27 @@
     |  (stuff like XML parsers or XSLT processors).
     +-->
 
+<!--+
+    | cocoon-template and cocoon-template-expression block
+    | config - start
+    +-->
+    <component role="org.apache.cocoon.template.script.ScriptManager" class="org.apache.cocoon.template.script.DefaultScriptManager"/>
+    <component role="org.apache.cocoon.template.script.InstructionFactory" class="org.apache.cocoon.template.script.DefaultInstructionFactory"/>
+    <component role="org.apache.cocoon.template.expression.JXTExpressionCompiler" class="org.apache.cocoon.template.expression.DefaultJXTExpressionCompiler"/>
+
+     <!-- Include roles -->
+  <include src="resource://org/apache/cocoon/components/expression/expression.roles"/>
+
+  <expression-factory/>
+  <expression-compilers>
+    <component-instance class="org.apache.cocoon.components.expression.jxpath.JXPathCompiler" name="default"/>
+    <component-instance class="org.apache.cocoon.components.expression.jexl.JexlCompiler" name="jexl"/>
+    <component-instance class="org.apache.cocoon.components.expression.jxpath.JXPathCompiler" name="jxpath"/>
+  </expression-compilers>
+<!--+
+    | cocoon-template and cocoon-template-expression block
+    | config - end
+    +-->
 <!-- =========================== Sitemap =============================== -->
 
   <!--+
