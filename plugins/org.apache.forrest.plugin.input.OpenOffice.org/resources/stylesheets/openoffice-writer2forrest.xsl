@@ -72,31 +72,62 @@
     </sub>
   </xsl:template>    
   
-  <!--+
-      | Source
-      +-->
-  <xsl:template match="text:p[@text:style-name='Forrest: Source']">
+<!--+
+     | Source
+     +-->
+  <xsl:template match="text:p[@text:style-name='Forrest: Source' and (preceding-sibling::node()[1]/@text:style-name='Forrest: Source')]">
+	  <!-- Two subsequnt paragraphs should be considered a single source section -->
+  </xsl:template>
+
+
+
+  <xsl:template name="forrest-source" match="text:p[@text:style-name='Forrest: Source' and not (preceding-sibling::node()[1]/@text:style-name='Forrest: Source')]">
     <source>
-<xsl:text>
-</xsl:text>
-      <xsl:apply-templates/>
-<xsl:text>
-</xsl:text>
-   
+      <xsl:text>
+      </xsl:text>
+      <xsl:apply-templates />
+      <xsl:for-each select="following-sibling::*[1][@text:style-name='Forrest: Source']">
+        <xsl:call-template name="forrest-source-output" />
+      </xsl:for-each>
+      <xsl:text>
+      </xsl:text>
     </source>
-  </xsl:template>      
+  </xsl:template>     
+
   <xsl:template match="text:p[@text:style-name='Forrest: Source']/text:line-break">
     <br/>
   </xsl:template> 
-  
-  <!--+
-      | Warning
-      +-->
-  <xsl:template match="text:p[@text:style-name='Forrest: Warning']">
-    <warning>
-      <xsl:apply-templates/>
-    </warning>
+
+  <!-- When the indentation is formed by spaces -->
+  <xsl:template match="text:p[@text:style-name='Forrest: Source']/text:s">
+	  <xsl:call-template name="forrest-source-indent">
+		  <xsl:with-param name="len"><xsl:value-of select="@text:c" /></xsl:with-param>
+	  </xsl:call-template>
   </xsl:template>
+
+  <!-- When the indentation is formed by tab-stops -->
+  <xsl:template match="text:p[@text:style-name='Forrest: Source']/text:tab-stop">
+    <xsl:call-template name="forrest-source-indent">
+      <xsl:with-param name="len">4</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="forrest-source-indent">
+    <xsl:param name="len"></xsl:param>
+    <!-- Limited to 100 indents, but it works!-->
+    <xsl:variable name="padding">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xsl:variable>
+    <xsl:value-of select="substring($padding,1,$len)" />
+  </xsl:template>
+
+
+  <xsl:template name="forrest-source-output">
+    <xsl:text>
+    </xsl:text>
+    <xsl:apply-templates />
+    <xsl:for-each select="following-sibling::*[1][@text:style-name='Forrest: Source']">
+      <xsl:call-template name="forrest-source-output" />
+    </xsl:for-each>
+  </xsl:template> 
   
   <!--+
       | Fixme
