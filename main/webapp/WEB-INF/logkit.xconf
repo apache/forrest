@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,6 +61,14 @@
       <filename>${context-root}/WEB-INF/logs/linkrewriter.log</filename>
       <format type="cocoon">
         %7.7{priority} (%{uri}): %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
+    <cocoon id="locationmap">
+      <filename>${context-root}/WEB-INF/logs/locationmap.log</filename>
+      <format type="cocoon">
+        %7.7{priority} [%{category}] (%{uri}): %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -179,6 +187,10 @@
         </category>
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
+      </category>
+
+      <category name="modules.mapper.lm" log-level="INFO">
+        <log-target id-ref="locationmap"/>
       </category>
 
       <log-target id-ref="core"/>
