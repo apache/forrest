@@ -60,7 +60,7 @@
     <cocoon id="linkrewriter">
       <filename>${context-root}/WEB-INF/logs/linkrewriter.log</filename>
       <format type="cocoon">
-        %7.7{priority} (%{uri}): %{message}\n%{throwable}
+        %7.7{priority} [%{category}] (%{uri}): %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -189,8 +189,13 @@
         <log-target id-ref="error"/>
       </category>
 
+      <category name="modules.mapper.link" log-level="INFO">
+        <log-target id-ref="linkrewriter"/>
+      </category>
+
       <category name="modules.mapper.lm" log-level="INFO">
         <log-target id-ref="locationmap"/>
+        <log-target id-ref="linkrewriter"/>
       </category>
 
       <log-target id-ref="core"/>

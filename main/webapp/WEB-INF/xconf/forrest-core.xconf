@@ -196,12 +196,18 @@
     <!-- For the site: scheme -->
     <component-instance
       class="org.apache.cocoon.components.modules.input.XMLFileModule"
-      logger="core.modules.xml" name="linkmap"/>
+      logger="core.modules.mapper.link" name="linkmap">
+    </component-instance>
 
     <!-- Links to URIs within the site -->
     <component-instance
       class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
-      logger="core.modules.mapper" name="site"/>
+      logger="core.modules.mapper.link" name="site"/>
+
+    <!-- Links to external URIs, as distinct from 'site' URIs -->
+    <component-instance
+      class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
+      logger="core.modules.mapper.link" name="ext"/>
       
     <!-- LocationMap is used to map one URL to another, allowing content to be stored anywhere -->
     <component-instance 
@@ -209,11 +215,6 @@
       logger="core.modules.mapper.lm" name="lm">
       <file src="cocoon://locationmap.xml"/>
     </component-instance>
-
-    <!-- Links to external URIs, as distinct from 'site' URIs -->
-    <component-instance
-      class="org.apache.cocoon.components.modules.input.SimpleMappingMetaModule"
-      logger="core.modules.mapper" name="ext"/>
 
 </input-modules>
 
