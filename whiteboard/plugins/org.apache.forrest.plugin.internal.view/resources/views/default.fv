@@ -16,7 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" >
+<forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
   <forrest:view type="xhtml">
     <forrest:css url="default.css"/>
     <forrest:contract name="siteinfo-meta">
@@ -35,13 +37,31 @@ limitations under the License.
           </forrest:properties>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
-          <forrest:contract name="nav-main"/>
-          <forrest:contract name="nav-main-sub"/>
+          <forrest:contract name="nav-main">
+            <forrest:properties contract="nav-main">
+              <forrest:property name="nav-main" nugget="get.navigation">
+                <url>${cocoon.parameters.getRequest}.navigation.xml</url>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
+          <forrest:contract name="nav-main-sub">
+					  <forrest:properties contract="nav-main-sub">
+					    <forrest:property name="nav-main-sub" nugget="get.navigation">
+					      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
         </forrest:hook>
       </forrest:hook>
       <forrest:hook name="page">
         <forrest:hook name="leftbar">
-          <forrest:contract name="nav-section"/>
+          <forrest:contract name="nav-section">
+					  <forrest:properties contract="nav-section">
+					    <forrest:property name="nav-section" nugget="get.navigation">
+					      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
           <forrest:contract name="search-input"/>
         </forrest:hook>
 <!-- 
