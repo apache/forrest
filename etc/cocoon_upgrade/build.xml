@@ -123,7 +123,10 @@
        Copy a fresh build from cocoon
        =============================================================== -->
     <delete>
-      <fileset dir="${forrest.home}/lib/core" includes="cocoon-*.jar"/>
+      <fileset dir="${forrest.home}/lib/core" includes="cocoon-*.jar">
+        <!-- FIXME: this is a temporal block until is official in cocoon-->
+        <exclude name="cocoon-validation-block-2.2.0-dev.jar"/>
+      </fileset>
     </delete>
     <copy todir="${forrest.home}/lib/core">
       <mapper type="glob" from="*.jar" to="*-${cocoon.version}.jar"/>
@@ -138,7 +141,6 @@
         <include name="*-block.jar"/>
         <!-- servlet.jar has been added within jetty-->
         <exclude name="servlet-*.jar"/>
-        <exclude name="cocoon-validation-*.jar"/>
       </fileset>
     </copy>
   </target>
