@@ -58,12 +58,11 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         String attributeValue = this.getAttributeValues(name, modeConf,
                         objectModel)[0].toString();
 
-        if (debugging())
+        if (debugging()) {
             debug(" - Requested:" + name);
-        if (debugging())
             debug(" - Unfiltered:" + original);
-        if (debugging())
             debug(" - Given:" + attributeValue);
+        }
 
         return attributeValue;
     }
