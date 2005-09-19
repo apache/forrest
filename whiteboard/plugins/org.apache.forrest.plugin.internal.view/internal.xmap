@@ -84,9 +84,10 @@
   <map:resources>
     <map:resource name="skinit">
       <map:select type="exists">
-        <map:when test="{project:skins-dir}/xslt/html/{type}.xsl">
+        <map:when 
+          test="{project:skins-dir}{project:theme}/xslt/html/{type}.xsl">
           <map:transform 
-            src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+            src="{project:skins-dir}{project:theme}/xslt/html/{type}.xsl">
             <map:parameter name="notoc" value="{notoc}"/>
             <!-- FIXME: do we need this anymore? -->
             <!-- For backwards-compat with 0.2 - 0.4 skins -->
@@ -243,9 +244,7 @@
       <map:match pattern="*.page">
         <map:aggregate element="site">
           <map:part src="cocoon://skinconf.xml"/>
-          <!--<map:part src="cocoon://tab-{1}.html"/>
-        <map:part src="cocoon://menu-{1}.html"/>-->
-          <map:part src="cocoon://body-{1}.html"/>
+          <map:part src="cocoon:/{1}.body.xml"/>
           <map:part src="cocoon:/prepare.view-nugget.{1}"/>
         </map:aggregate>
         <map:serialize/>
@@ -253,9 +252,7 @@
       <map:match pattern="**/*.page">
         <map:aggregate element="site">
           <map:part src="cocoon://skinconf.xml"/>
-          <!--<map:part src="cocoon://{1}/tab-{2}.html"/>
-        <map:part src="cocoon://{1}/menu-{2}.html"/>-->
-          <map:part src="cocoon://{1}/body-{2}.html"/>
+          <map:part src="cocoon:/{1}{2}.body.xml"/>
           <map:part src="cocoon:/prepare.view-nugget.{1}/{2}"/>
         </map:aggregate>
         <map:serialize/>
@@ -265,6 +262,48 @@
   2. businessHelper
   -->
     <map:pipeline>
+      <map:match pattern="**body.html">
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}{1}{2}.ehtml">
+            <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
+            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
+            <map:transform type="linkrewriter" 
+              src="cocoon:/{1}linkmap-{2}.html"/>
+            <map:transform 
+              src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
+            <map:serialize/>
+          </map:when>
+        </map:select>
+      </map:match>
+      <!--intermediate format link rewritten-->
+      <map:match pattern="**.source.rewritten.xml">
+        <map:generate src="cocoon://{1}{2}.xml"/>
+        <map:transform type="idgen"/>
+        <map:transform type="xinclude"/>
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
+        <map:transform 
+          src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
+        <map:serialize/>
+      </map:match>
+      <!-- (HTML rendered from intermediate format -->
+      <map:match pattern="**.body.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2html"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+      <!--TOC from source.rewritten-->
+      <map:match pattern="**.toc.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2toc"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+      <!--navigation for the current request -->
       <map:match pattern="*.navigation.xml">
         <map:aggregate element="navigation">
           <map:part src="cocoon:/tab-{1}.html" element="tab"/>
@@ -279,13 +318,13 @@
         </map:aggregate>
         <map:serialize/>
       </map:match>
+      <!--navigation for the current request PART menu-->
       <map:match pattern="**book-*.html">
         <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
       </map:match>
       <map:match pattern="**menu-*.html">
         <map:generate src="cocoon:/{1}book-{2}.html"/>
         <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
-        <!--<map:serialize/>-->
         <map:transform 
           src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
         <map:call resource="skinit">
@@ -293,6 +332,7 @@
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
       </map:match>
+      <!--navigation for the current request PART tab-->
       <map:match pattern="**tab-*.html">
         <map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" />
       </map:match>

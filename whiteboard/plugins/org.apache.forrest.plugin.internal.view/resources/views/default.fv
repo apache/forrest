@@ -78,7 +78,17 @@ limitations under the License.
         <forrest:hook name="content">
           <forrest:contract name="content-title"/>
           <forrest:contract name="content-abstract"/>
-          <forrest:contract name="content-minitoc"/>
+          <forrest:contract name="content-minitoc">
+            <forrest:properties contract="content-minitoc">
+              <forrest:property name="content-minitoc-toc" nugget="get.toc">
+                <url>#{$cocoon/parameters/getRequest}.toc.xml</url>
+              </forrest:property>
+              <forrest:property name="content-minitoc-conf" >
+                <toc max-depth="2" 
+                min-sections="1" location="page"/>
+              </forrest:property>
+            </forrest:properties>
+					</forrest:contract>
           <forrest:contract name="content-main"/>
         </forrest:hook>
       </forrest:hook>
