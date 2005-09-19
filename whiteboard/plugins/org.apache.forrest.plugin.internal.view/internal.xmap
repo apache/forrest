@@ -16,45 +16,43 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
-<map:components>
-  <map:pipes default="caching">
-    <map:pipe name="caching"
-      src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
-    <map:pipe name="noncaching"
-      src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
-  </map:pipes>
-  <map:selectors>
-    <map:selector logger="sitemap.selector.exists" name="exists" src="org.apache.forrest.sourceexists.SourceExistsSelector" />
-  </map:selectors>
-  <map:generators default="file">
-    <map:generator name="traverse" 
-      src="org.apache.cocoon.generation.TraversableGenerator" 
-      logger="sitemap.generator.traverse" label="content" pool-max="16" />
-    <map:generator name="directory" 
-      src="org.apache.cocoon.generation.DirectoryGenerator" />
-    <map:generator name="jx"
-        logger="sitemap.generator.jx"
-        src="org.apache.cocoon.template.JXTemplateGenerator"
-        label="content,data"
-        pool-max="16">
-    </map:generator>
-  </map:generators>
-  <map:transformers default="xslt">
-    <map:transformer logger="sitemap.transformer.jx" name="jx" pool-max="16" 
-      src="org.apache.cocoon.transformation.JXTemplateTransformer"/>
-    <map:transformer logger="sitemap.transformer.jpath" name="jpath" 
-      src="org.apache.cocoon.transformation.JPathTransformer"/>
-    <map:transformer name="cinclude" 
-      src="org.apache.cocoon.transformation.CIncludeTransformer"/>
-    <map:transformer name="xinclude" 
-      src="org.apache.cocoon.transformation.XIncludeTransformer"/>
-  </map:transformers>
-  <map:serializers default="xml">
-    <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
-      name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
-      src="org.apache.cocoon.serialization.XMLSerializer">
-      <!--+
+  <map:components>
+    <map:pipes default="caching">
+      <map:pipe name="caching" 
+        src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline"/>
+      <map:pipe name="noncaching" 
+        src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline"/>
+    </map:pipes>
+    <map:selectors>
+      <map:selector logger="sitemap.selector.exists" name="exists" 
+        src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </map:selectors>
+    <map:generators default="file">
+      <map:generator name="traverse" 
+        src="org.apache.cocoon.generation.TraversableGenerator" 
+        logger="sitemap.generator.traverse" label="content" pool-max="16" />
+      <map:generator name="directory" 
+        src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator name="jx" logger="sitemap.generator.jx" 
+        src="org.apache.cocoon.template.JXTemplateGenerator" 
+        label="content,data" pool-max="16">
+      </map:generator>
+    </map:generators>
+    <map:transformers default="xslt">
+      <map:transformer logger="sitemap.transformer.jx" name="jx" pool-max="16" 
+        src="org.apache.cocoon.transformation.JXTemplateTransformer"/>
+      <map:transformer logger="sitemap.transformer.jpath" name="jpath" 
+        src="org.apache.cocoon.transformation.JPathTransformer"/>
+      <map:transformer name="cinclude" 
+        src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="xinclude" 
+        src="org.apache.cocoon.transformation.XIncludeTransformer"/>
+    </map:transformers>
+    <map:serializers default="xml">
+      <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
+        name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
+        src="org.apache.cocoon.serialization.XMLSerializer">
+        <!--+
             | You can choose from Strict, Transitional, or Frameset XHTML.
             | For Strict XHTML set doctype to:
             |   <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
@@ -69,27 +67,26 @@
             | Default XHTML doctype in Cocoon is XHTML Strict. If you want to use more than one
             | XHTML DTD simultaneously, you can define several XHTML serializers.
             +-->
-      <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
-      <doctype-system>
-        http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
-      <encoding>UTF-8</encoding>
-    </map:serializer>
-    <map:serializer name="text" 
-        src="org.apache.cocoon.serialization.TextSerializer"
-        mime-type="text/plain" 
-        logger="sitemap.serializer.text" 
-      />
-  </map:serializers>
-  <map:actions>
-    <map:action name="fallbackResolverAction" 
+        <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+        <doctype-system> 
+          http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+        <encoding>UTF-8</encoding>
+      </map:serializer>
+      <map:serializer name="text" 
+        src="org.apache.cocoon.serialization.TextSerializer" 
+        mime-type="text/plain" logger="sitemap.serializer.text" />
+    </map:serializers>
+    <map:actions>
+      <map:action name="fallbackResolverAction" 
         src="org.apache.forrest.plugin.internal.view.acting.FallbackResolverAction"/>
-  </map:actions>
-</map:components>
+    </map:actions>
+  </map:components>
   <map:resources>
     <map:resource name="skinit">
       <map:select type="exists">
         <map:when test="{project:skins-dir}/xslt/html/{type}.xsl">
-          <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
+          <map:transform 
+            src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
             <map:parameter name="notoc" value="{notoc}"/>
             <!-- FIXME: do we need this anymore? -->
             <!-- For backwards-compat with 0.2 - 0.4 skins -->
@@ -113,199 +110,192 @@
       <map:serialize/>
     </map:resource>
   </map:resources>
-
-<map:pipelines>
-  <!--
+  <map:pipelines>
+    <!--
   This plugin has x components:
   2. businessHelper - delivers content that is used in the contracts
   3. views - transforms the requested contracts (viewHelper) 
      and populate them with the content (businessHelper)
   -->
-  <!--
+    <!--
   3. views
   prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
   -->
-  <!--FIXME: We should refactor this pipeline when we want to use it-->
-  <map:pipeline type="noncaching">
-    <!--Refactor for dir-->
-    <map:match pattern="viewLocationmap.xml">
-      <map:generate type="traverse" src="{project:content.xdocs}">
-        <map:parameter name="depth" value="100"/>
-        <map:parameter name="exclude" value="[\w]*.svn"/>
-        <!--<map:parameter name="include" value="[\w]*.fv"/>-->
-      </map:generate>
-      <map:transform src="resources/stylesheets/viewLocationmap.xsl"/>
-      <map:serialize/>
-    </map:match>
-    <!--FIXME: type="jx" 
+    <!--FIXME: We should refactor this pipeline when we want to use it-->
+    <map:pipeline type="noncaching">
+      <!--Refactor for dir-->
+      <map:match pattern="viewLocationmap.xml">
+        <map:generate type="traverse" src="{project:content.xdocs}">
+          <map:parameter name="depth" value="100"/>
+          <map:parameter name="exclude" value="[\w]*.svn"/>
+          <!--<map:parameter name="include" value="[\w]*.fv"/>-->
+        </map:generate>
+        <map:transform src="resources/stylesheets/viewLocationmap.xsl"/>
+        <map:serialize/>
+      </map:match>
+      <!--FIXME: type="jx" 
     View config resolver
     File specific views have priority before default ones.
     If no views can be found in the project we use the default one of the view plugin.
     {1} - requested url
     -->
-    <map:match pattern="prepare.jxWorkaround.**">
-      <map:act type="fallbackResolverAction">
-        <map:parameter value="{1}" name="request"/>
-        <map:parameter value="{project:theme}" name="projectFallback"/>
-        <map:parameter value="{project:theme-ext}" name="projectExtension"/>
-        <map:parameter value="{project:content.xdocs}" name="projectDir"/>
-        <map:parameter value="{defaults:view-themes}" name="defaultDir"/>
-        <map:parameter value="{defaults:theme}" name="defaultFallback"/>
-        <map:parameter value="{defaults:theme-ext}" name="defaultExtension"/>
-        <map:generate src="{uri}"/>
-        <map:transform 
-          src="resources/stylesheets/prepare.include.templates.xsl"/>
+      <map:match pattern="prepare.jxWorkaround.**">
+        <map:act type="fallbackResolverAction">
+          <map:parameter value="{1}" name="request"/>
+          <map:parameter value="{project:theme}" name="projectFallback"/>
+          <map:parameter value="{project:theme-ext}" name="projectExtension"/>
+          <map:parameter value="{project:content.xdocs}" name="projectDir"/>
+          <map:parameter value="{defaults:view-themes}" name="defaultDir"/>
+          <map:parameter value="{defaults:theme}" name="defaultFallback"/>
+          <map:parameter value="{defaults:theme-ext}" name="defaultExtension"/>
+          <map:generate src="{uri}"/>
+          <map:transform 
+            src="resources/stylesheets/prepare.include.templates.xsl"/>
+          <map:transform type="xinclude"/>
+          <map:serialize/>
+        </map:act>
+      </map:match>
+      <map:match pattern="prepare.view.**">
+        <map:generate type="jx" src="cocoon:/prepare.jxWorkaround.{1}">
+          <map:parameter name="lenient-xpath" value="true"/>
+          <map:parameter name="getRequest" value="{1}"/>
+        </map:generate>
+        <map:serialize/>
+      </map:match>
+      <!--Add businessHelper to the presentation model that the content can be used later on.
+        {1} - requested url-->
+      <map:match pattern="prepare.view-nugget.**">
+        <map:generate src="cocoon:/prepare.view.{1}">
+          <map:parameter name="lenient-xpath" value="true"/>
+          <map:parameter name="getRequest" value="{1}"/>
+        </map:generate>
+        <map:transform src="resources/stylesheets/prepare.view.xsl">
+          <map:parameter name="view" value="{1}"/>
+        </map:transform>
         <map:transform type="xinclude"/>
         <map:serialize/>
-      </map:act>
-    </map:match>
-    <map:match pattern="prepare.view.**">
-      <map:generate type="jx" src="cocoon:/prepare.jxWorkaround.{1}">
-        <map:parameter name="lenient-xpath" value="true"/>
-        <map:parameter name="getRequest" value="{1}"/>
-      </map:generate>
-      <map:serialize/>
-    </map:match>
-    <!--Add businessHelper to the presentation model that the content can be used later on.
-        {1} - requested url-->
-    <map:match pattern="prepare.view-nugget.**">
-      <map:generate src="cocoon:/prepare.view.{1}">
-        <map:parameter name="lenient-xpath" value="true"/>
-        <map:parameter name="getRequest" value="{1}"/>
-      </map:generate>
-      <map:transform src="resources/stylesheets/prepare.view.xsl">
-        <map:parameter name="view" value="{1}"/>
-      </map:transform>
-      <map:transform type="xinclude"/>
-      <map:serialize/>
-    </map:match>
-    <!--
+      </map:match>
+      <!--
   Aggregate the contract-templates requested by the view with xinclude.
   The result is a stylesheet with all needed xsl:templates.
   {1} - format
   {2} - requested url
   -->
-    <map:match pattern="prepare.include.*.**">
-      <map:generate src="cocoon:/prepare.view.{2}"/>
-      <map:transform src="resources/stylesheets/prepare.include.xsl">
-        <map:parameter name="config-file" value="{project:skinconf}"/>
-        <!--Which output format?-->
-        <map:parameter name="format" value="{1}"/>
-      </map:transform>
-      <map:transform type="xinclude"/>
-      <map:serialize/>
-    </map:match>
-    <!--
+      <map:match pattern="prepare.include.*.**">
+        <map:generate src="cocoon:/prepare.view.{2}"/>
+        <map:transform src="resources/stylesheets/prepare.include.xsl">
+          <map:parameter name="config-file" value="{project:skinconf}"/>
+          <!--Which output format?-->
+          <map:parameter name="format" value="{1}"/>
+        </map:transform>
+        <map:transform type="xinclude"/>
+        <map:serialize/>
+      </map:match>
+      <!--
       Aggregate the forrest:properties requested by the *.fv.
       The result is an aggregation of properties which defines the templates to be call.
       {1} - format
       {2} - requested url
       -->
-    <map:match pattern="prepare.properties.*.**">
-      <map:generate src="cocoon:/prepare.view.{2}"/>
-      <map:transform src="resources/stylesheets/prepare.properties.xsl">
-        <!--Which output format?-->
-        <map:parameter name="format" value="{1}"/>
-      </map:transform>
-      <map:transform type="xinclude"/>
-      <map:serialize/>
-    </map:match>
-    <!--FIXME
+      <map:match pattern="prepare.properties.*.**">
+        <map:generate src="cocoon:/prepare.view.{2}"/>
+        <map:transform src="resources/stylesheets/prepare.properties.xsl">
+          <!--Which output format?-->
+          <map:parameter name="format" value="{1}"/>
+        </map:transform>
+        <map:transform type="xinclude"/>
+        <map:serialize/>
+      </map:match>
+      <!--FIXME
       This has to be an interface and not an implementation
       
       An interface will only generate cocoon protocol matches and serialize them!
       An implementation will deliver the actual match (including transformation)-->
-    <!--
+      <!--
       Aggregate all contracts-templates requested by the view.
       Create a xsl that can be used for the last step of the transformation of the view.
       {1} - format
       {2} - requested url
       -->
-    <map:match pattern="getStylesheet.*.**">
-      <map:aggregate element="filter">
-        <map:part src="cocoon://prepare.view-nugget.{2}" />
-        <map:part src="cocoon://prepare.properties.{1}.{2}" />
-      </map:aggregate>
-      <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
-        <map:parameter name="request" value="{2}"/>
-        <map:parameter name="forrestContext" value="{forrest:context}"/>
-      </map:transform>
-      <map:transform type="xinclude"/>
-      <map:serialize/>
-    </map:match>
-  </map:pipeline>
-  <!--
+      <map:match pattern="getStylesheet.*.**">
+        <map:aggregate element="filter">
+          <map:part src="cocoon://prepare.view-nugget.{2}" />
+          <map:part src="cocoon://prepare.properties.{1}.{2}" />
+        </map:aggregate>
+        <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
+          <map:parameter name="request" value="{2}"/>
+          <map:parameter name="forrestContext" value="{forrest:context}"/>
+        </map:transform>
+        <map:transform type="xinclude"/>
+        <map:serialize/>
+      </map:match>
+    </map:pipeline>
+    <!--
   2. businessHelper
   This is the model producing factory.
   -->
-  <!--NOTE: 
+    <!--NOTE: 
   The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).
   It is only exchanging the last model of the models the skin is producing (site2xhtml.xsl) till now.
   This will have to be changed in the future.
   -->
-  <map:pipeline>
-    <map:match pattern="*.page">
-      <map:aggregate element="site">
-        <map:part src="cocoon://skinconf.xml"/>
-        <!--<map:part src="cocoon://tab-{1}.html"/>
+    <map:pipeline>
+      <map:match pattern="*.page">
+        <map:aggregate element="site">
+          <map:part src="cocoon://skinconf.xml"/>
+          <!--<map:part src="cocoon://tab-{1}.html"/>
         <map:part src="cocoon://menu-{1}.html"/>-->
-        <map:part src="cocoon://body-{1}.html"/>
-        <map:part src="cocoon:/prepare.view-nugget.{1}"/>
-      </map:aggregate>
-      <map:serialize/>
-    </map:match>
-    <map:match pattern="**/*.page">
-      <map:aggregate element="site">
-        <map:part src="cocoon://skinconf.xml"/>
-        <!--<map:part src="cocoon://{1}/tab-{2}.html"/>
+          <map:part src="cocoon://body-{1}.html"/>
+          <map:part src="cocoon:/prepare.view-nugget.{1}"/>
+        </map:aggregate>
+        <map:serialize/>
+      </map:match>
+      <map:match pattern="**/*.page">
+        <map:aggregate element="site">
+          <map:part src="cocoon://skinconf.xml"/>
+          <!--<map:part src="cocoon://{1}/tab-{2}.html"/>
         <map:part src="cocoon://{1}/menu-{2}.html"/>-->
-        <map:part src="cocoon://{1}/body-{2}.html"/>
-        <map:part src="cocoon:/prepare.view-nugget.{1}/{2}"/>
-      </map:aggregate>
-      <map:serialize/>
-    </map:match>
-  </map:pipeline>
-  <!-- 
+          <map:part src="cocoon://{1}/body-{2}.html"/>
+          <map:part src="cocoon:/prepare.view-nugget.{1}/{2}"/>
+        </map:aggregate>
+        <map:serialize/>
+      </map:match>
+    </map:pipeline>
+    <!-- 
   2. businessHelper
   -->
-  <map:pipeline>
-    <map:match pattern="*.navigation.xml">
-      <map:aggregate element="navigation">
-        <map:part src="cocoon:/tab-{1}.html" element="tab"/>
-        <map:part src="cocoon:/menu-{1}.html" element="menu"/>
-      </map:aggregate>
-      <map:serialize/>
-    </map:match>
-
-    <map:match pattern="**/*.navigation.xml">
-      <map:aggregate element="navigation">
-	      <map:part src="cocoon:/{1}/tab-{2}.html" element="tab"/>
-        <map:part src="cocoon:/{1}/menu-{2}.html" element="menu"/>
-      </map:aggregate>
-      <map:serialize/>
-    </map:match>
-
+    <map:pipeline>
+      <map:match pattern="*.navigation.xml">
+        <map:aggregate element="navigation">
+          <map:part src="cocoon:/tab-{1}.html" element="tab"/>
+          <map:part src="cocoon:/menu-{1}.html" element="menu"/>
+        </map:aggregate>
+        <map:serialize/>
+      </map:match>
+      <map:match pattern="**/*.navigation.xml">
+        <map:aggregate element="navigation">
+          <map:part src="cocoon:/{1}/tab-{2}.html" element="tab"/>
+          <map:part src="cocoon:/{1}/menu-{2}.html" element="menu"/>
+        </map:aggregate>
+        <map:serialize/>
+      </map:match>
       <map:match pattern="**book-*.html">
         <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
       </map:match>
-
-    <map:match pattern="**menu-*.html">
-	    <map:generate src="cocoon:/{1}book-{2}.html"/>
-
-	    <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
-	    <!--<map:serialize/>-->
-
-        <map:transform src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
+      <map:match pattern="**menu-*.html">
+        <map:generate src="cocoon:/{1}book-{2}.html"/>
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
+        <!--<map:serialize/>-->
+        <map:transform 
+          src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
         <map:call resource="skinit">
           <map:parameter name="type" value="book2menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
-</map:match>
-
-<map:match pattern="**tab-*.html">
+      </map:match>
+      <map:match pattern="**tab-*.html">
         <map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" />
-</map:match>
-
-  </map:pipeline>
-</map:pipelines>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
 </map:sitemap>

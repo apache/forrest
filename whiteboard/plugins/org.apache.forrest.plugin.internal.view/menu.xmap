@@ -29,13 +29,13 @@ See http://forrest.apache.org/docs/sitemap-ref.html#menu_xml_generation
 
 $Revision: 1.2 $
 ==================================================== -->
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file"/>
     <map:serializers default="html"/>
     <map:transformers default="xslt">
-      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+      <map:transformer name="i18n" 
+        src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="menu">
           <catalogue id="menu" name="menu" location="{project:translations}"/>
         </catalogues>
@@ -46,39 +46,37 @@ $Revision: 1.2 $
     </map:transformers>
     <map:matchers default="wildcard"/>
     <map:selectors>
-      <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
+      <map:selector logger="sitemap.selector.config" name="config" 
+        src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
     <map:actions>
       <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
     </map:actions>
   </map:components>
-
   <map:pipelines>
-
     <!-- ============================================================ -->
     <!-- SOURCE FORMATS                                               -->
     <!-- ============================================================ -->
-
     <map:pipeline internal-only="false">
       <map:match pattern="abs-menulinks">
-			  <map:select type="exists">
-				  <map:when test="{project:content.xdocs}site.xml">
-				    <map:generate src="{project:content.xdocs}site.xml"/>
-			    </map:when>
+        <map:select type="exists">
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml"/>
+          </map:when>
           <map:when test="{lm:site.xml}">
             <map:generate src="{lm:site.xml}"/>
           </map:when>
-				  <map:otherwise>
+          <map:otherwise>
             <map:generate src="{project:content.xdocs}site.xml"/>
-				  </map:otherwise>
+          </map:otherwise>
         </map:select>
         <map:transform type="xinclude"/>
         <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
-        <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+        <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" 
+          />
         <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
         <map:serialize type="xml"/>
       </map:match>
-
       <map:match pattern="**menulinks-*">
         <map:select type="exists">
           <map:when test="{project:content.xdocs}site.xml">
@@ -93,61 +91,50 @@ $Revision: 1.2 $
         </map:select>
         <map:transform type="xinclude"/>
         <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
-
         <map:select type="config">
           <map:parameter name="value" value="{defaults:menu-scheme}"/>
-
           <map:when test="tab_attributes">
-            <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+            <map:transform 
+              src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
             <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
             <map:transform src="{forrest:stylesheets}/site2site-selectnode.xsl">
               <map:parameter name="path" value="{1}{2}"/>
             </map:transform>
           </map:when>
-
           <map:when test="directories">
             <map:transform type="xpath">
               <map:parameter name="include" value="//*[@href='{1}']" />
             </map:transform>
           </map:when>
-
-          </map:select>
-
+        </map:select>
         <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}{2}" />
         </map:transform>
         <map:serialize type="xml" />
       </map:match>
     </map:pipeline>
-
     <!-- ============================================================ -->
     <!-- INTERMEDIATE FORMATS                                         -->
     <!-- ============================================================ -->
-
     <map:pipeline>
       <map:match pattern="**book-*">
-
         <map:select type="exists">
-
           <map:when test="{project:content.xdocs}{1}book.xml">
             <!-- If a hand-created book.xml exists, use it -->
-            <map:parameter name="url" value="{project:content.xdocs}{1}book.xml" />
+            <map:parameter name="url" 
+              value="{project:content.xdocs}{1}book.xml" />
             <map:generate src="{project:content.xdocs}{1}book.xml" />
           </map:when>
-
           <map:otherwise>
             <!-- If no book.xml, generate it from the linkmap. -->
             <map:generate src="cocoon:/{1}menulinks-{2}" />
             <!-- The above generates the subset of the linkmap relevant to our directory. -->
             <map:transform src="{forrest:stylesheets}/site2book.xsl" />
           </map:otherwise>
-
         </map:select>
-
         <map:select type="config">
           <map:parameter name="value" value="{defaults:i18n}"/>
           <map:when test="true">
-
             <map:act type="locale">
               <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
               <map:transform type="i18n">
@@ -157,16 +144,10 @@ $Revision: 1.2 $
                 <map:parameter name="locale" value="{request:locale}"/>
               </map:transform>
             </map:act>
-
           </map:when>
         </map:select>
-
         <map:serialize type="xml"/>
-
       </map:match>
-
     </map:pipeline>
-
-
   </map:pipelines>
 </map:sitemap>
