@@ -36,7 +36,17 @@
     <!-- forrest:contract name="siteinfo-meta-icon"/ -->
 
     <forrest:hook name="container">
-      <forrest:contract name="branding-breadcrumbs"/>
+      <forrest:contract name="branding-breadcrumbs">
+			  <forrest:properties contract="branding-breadcrumbs">
+			    <forrest:property name="branding-breadcrumbs">
+			      <trail>
+			        <link1 name="Apache Forrest" href="http://forrest.apache.org/"/>
+			        <link2 name="Plugins" href="http://forrest.apache.org/docs/plugins/"/>
+			        <link3 name="org.apache.forrest.plugin.output.viewHelper" href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.output.viewHelper/"/>
+			      </trail>
+			    </forrest:property>
+			  </forrest:properties>
+			</forrest:contract>
       <forrest:hook name="header">
         <forrest:contract name="branding-tagline">
           <forrest:properties contract="branding-tagline">
@@ -58,17 +68,45 @@
           </forrest:properties>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
-          <forrest:contract name="nav-main"/>
+          <forrest:contract name="nav-main">
+            <forrest:properties contract="nav-main">
+              <forrest:property name="nav-main" nugget="get.navigation">
+                <url>${cocoon.parameters.getRequest}.navigation.xml</url>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:hook name="publishedStrip">
-            <forrest:contract name="nav-main-sub"/>
+            <forrest:contract name="nav-main-sub">
+						  <forrest:properties contract="nav-main-sub">
+						    <forrest:property name="nav-main-sub" nugget="get.navigation">
+						      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+						    </forrest:property>
+						  </forrest:properties>
+						</forrest:contract>
             <forrest:contract name="siteinfo-current-time"/>
           </forrest:hook>
         </forrest:hook>
       </forrest:hook>
       <forrest:hook name="page">
-        <forrest:contract name="branding-breadcrumbs"/>
+        <forrest:contract name="branding-breadcrumbs">
+				  <forrest:properties contract="branding-breadcrumbs">
+				    <forrest:property name="branding-breadcrumbs">
+				      <trail>
+				        <link1 name="Apache Forrest" href="http://forrest.apache.org/"/>
+				        <link2 name="Plugins" href="http://forrest.apache.org/docs/plugins/"/>
+				        <link3 name="org.apache.forrest.plugin.output.viewHelper" href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.output.viewHelper/"/>
+				      </trail>
+				    </forrest:property>
+				  </forrest:properties>
+				</forrest:contract>
         <forrest:hook name="leftbar">
-          <forrest:contract name="nav-section"/>
+          <forrest:contract name="nav-section">
+					  <forrest:properties contract="nav-section">
+					    <forrest:property name="nav-section" nugget="get.navigation">
+					      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
           <!-- FIXME - hr contract should disappear and be replaced by a top-separator contract argument just like
                        siteinfo-credits -->
           <forrest:contract name="hr"/>

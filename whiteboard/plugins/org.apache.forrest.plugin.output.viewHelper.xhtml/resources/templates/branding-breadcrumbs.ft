@@ -22,7 +22,17 @@
   <description>
     branding-breadcrumbs will output the breadcrumbs.
   </description>
-  <usage><![CDATA[<forrest:contract name="branding-breadcrumbs"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="branding-breadcrumbs">
+  <forrest:properties contract="branding-breadcrumbs">
+    <forrest:property name="branding-breadcrumbs">
+      <trail>
+        <link1 name="Apache Forrest" href="http://forrest.apache.org/"/>
+        <link2 name="Plugins" href="http://forrest.apache.org/docs/plugins/"/>
+        <link3 name="org.apache.forrest.plugin.output.viewHelper" href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.output.viewHelper/"/>
+      </trail>
+    </forrest:property>
+  </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template 
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -31,14 +41,28 @@
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         <xsl:template name="branding-breadcrumbs-body">
+          <xsl:param name="branding-breadcrumbs"/>
   <!--breadcrumbs org location-->
 <xsl:comment>+
     |breadtrail
     +</xsl:comment>
       <div class="breadtrail">
-        <xsl:if test="(//skinconfig/trail/link1/@name)and(//skinconfig/trail/link1/@name!='')"><a href="{//skinconfig/trail/link1/@href}"><xsl:value-of select="//skinconfig/trail/link1/@name"/></a></xsl:if>
-        <xsl:if test="(//skinconfig/trail/link2/@name)and(//skinconfig/trail/link2/@name!='')"> &gt; <a href="{//skinconfig/trail/link2/@href}">  <xsl:value-of select="//skinconfig/trail/link2/@name"/></a> </xsl:if>
-        <xsl:if test="(//skinconfig/trail/link3/@name)and(//skinconfig/trail/link3/@name!='')"> &gt; <a href="{//skinconfig/trail/link3/@href}">  <xsl:value-of select="//skinconfig/trail/link3/@name"/></a> </xsl:if>
+        <xsl:if 
+          test="($branding-breadcrumbs/trail/link1/@name)and($branding-breadcrumbs/trail/link1/@name!='')">
+          <a href="{$branding-breadcrumbs/trail/link1/@href}">
+            <xsl:value-of select="$branding-breadcrumbs/trail/link1/@name"/>
+          </a>
+        </xsl:if>
+        <xsl:if 
+          test="($branding-breadcrumbs/trail/link2/@name)and($branding-breadcrumbs/trail/link2/@name!='')">
+           &gt; <a href="{$branding-breadcrumbs/trail/link2/@href}"> 
+          <xsl:value-of select="$branding-breadcrumbs/trail/link2/@name"/></a> 
+          </xsl:if>
+        <xsl:if 
+          test="($branding-breadcrumbs/trail/link3/@name)and($branding-breadcrumbs/trail/link3/@name!='')">
+           &gt; <a href="{$branding-breadcrumbs/trail/link3/@href}"> 
+          <xsl:value-of select="$branding-breadcrumbs/trail/link3/@name"/></a> 
+          </xsl:if>
         <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js">&#160;</script>
       </div>
         </xsl:template>
