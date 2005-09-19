@@ -15,17 +15,25 @@
 * limitations under the License.
 */
 /**
- * This script, when included in a html file and called from a form text field, will set the value of this field to ""
+ * getBlank script - when included in a html file and called from a form text field, will set the value of this field to ""
  * if the text value is still the standard value.
+ * getPrompt script - when included in a html file and called from a form text field, will set the value of this field to the prompt
+ * if the text value is empty.
  *
  * Typical usage:
  * <script type="text/javascript" language="JavaScript" src="getBlank.js"></script>
- * <input type="text" id="query" value="Search the site:" onFocus="getBlank (this, 'Search the site:');"/>
+ * <input type="text" id="query" value="Search the site:" onFocus="getBlank (this, 'Search the site:');" onBlur="getPrompt (this, 'Search the site:');"/>
  */
 <!--
 function getBlank (form, stdValue){
 if (form.value == stdValue){
 	form.value = '';
+	}
+return true;
+}
+function getPrompt (form, stdValue){
+if (form.value == ''){
+	form.value = stdValue;
 	}
 return true;
 }
