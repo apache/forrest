@@ -76,8 +76,36 @@ limitations under the License.
         <forrest:call-template name="export-link"/>
 
         <forrest:hook name="content">
+          <forrest:contract name="content-motd-page">
+					  <forrest:properties contract="content-motd-page">
+					    <forrest:property name="content-motd-page">
+					      <motd>
+					        <motd-option pattern="index.html">
+					          <motd-title>sample</motd-title>
+					          <motd-page location="both">
+					            This is an example of a Message of the day (MOTD).
+					          </motd-page>
+					          <motd-page-url>index.html</motd-page-url>
+					        </motd-option>
+					        <!--<motd-option pattern="samples/faq.html">
+					          <motd-title></motd-title>
+					          <motd-page location="both">
+					            How to enable this MOTD is on this page.
+					          </motd-page>
+					          <motd-page-url>#motd</motd-page-url>
+					        </motd-option>-->
+					      </motd>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
           <forrest:contract name="content-title"/>
-          <forrest:contract name="content-abstract"/>
+          <forrest:contract name="content-abstract">
+					  <forrest:properties contract="content-abstract">
+					    <forrest:property name="content-abstract" nugget="get.abstract">
+					      <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
           <forrest:contract name="content-minitoc">
             <forrest:properties contract="content-minitoc">
               <forrest:property name="content-minitoc-toc" nugget="get.toc">
@@ -89,7 +117,13 @@ limitations under the License.
               </forrest:property>
             </forrest:properties>
 					</forrest:contract>
-          <forrest:contract name="content-main"/>
+          <forrest:contract name="content-main">
+					  <forrest:properties contract="content-main">
+					    <forrest:property name="content-main" nugget="get.body">
+					      <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+					    </forrest:property>
+					  </forrest:properties>
+					</forrest:contract>
         </forrest:hook>
       </forrest:hook>
     </forrest:hook>

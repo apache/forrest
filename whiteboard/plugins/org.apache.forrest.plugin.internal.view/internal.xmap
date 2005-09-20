@@ -275,7 +275,7 @@
           </map:when>
         </map:select>
       </map:match>
-      <!--intermediate format link rewritten-->
+      <!-- intermediate format link rewritten-->
       <map:match pattern="**.source.rewritten.xml">
         <map:generate src="cocoon://{1}{2}.xml"/>
         <map:transform type="idgen"/>
@@ -294,7 +294,7 @@
           <map:parameter name="notoc" value="false"/>
         </map:call>
       </map:match>
-      <!--TOC from source.rewritten-->
+      <!-- TOC from source.rewritten-->
       <map:match pattern="**.toc.xml">
         <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
         <map:call resource="skinit">
@@ -303,7 +303,25 @@
           <map:parameter name="notoc" value="false"/>
         </map:call>
       </map:match>
-      <!--navigation for the current request -->
+       <!-- abstract from source.rewritten-->
+      <map:match pattern="**.abstract.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2abstract"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+       <!-- authors from source.rewritten-->
+      <map:match pattern="**.authors.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2authors"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+      <!-- navigation for the current request -->
       <map:match pattern="*.navigation.xml">
         <map:aggregate element="navigation">
           <map:part src="cocoon:/tab-{1}.html" element="tab"/>
@@ -318,7 +336,7 @@
         </map:aggregate>
         <map:serialize/>
       </map:match>
-      <!--navigation for the current request PART menu-->
+      <!-- navigation for the current request PART menu-->
       <map:match pattern="**book-*.html">
         <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
       </map:match>
@@ -332,7 +350,7 @@
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
       </map:match>
-      <!--navigation for the current request PART tab-->
+      <!-- navigation for the current request PART tab-->
       <map:match pattern="**tab-*.html">
         <map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" />
       </map:match>

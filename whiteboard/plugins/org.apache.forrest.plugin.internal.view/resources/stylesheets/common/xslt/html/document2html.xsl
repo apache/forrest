@@ -259,14 +259,16 @@ Section handling
   </xsl:template>
 
   <xsl:template match="header/authors">
-    <xsl:for-each select="person">
-      <xsl:choose>
-        <xsl:when test="position()=1">by</xsl:when>
-        <xsl:otherwise>,</xsl:otherwise>
-      </xsl:choose>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="@name"/>
-    </xsl:for-each>
+    <xsl:if test="person">
+      <div id="content-authors">
+        <xsl:for-each select="person">
+          <div class="author">
+            <div class="name"><xsl:value-of select="@name"/></div>
+            <div class="email"><xsl:value-of select="@email"/></div>
+          </div>
+		    </xsl:for-each>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="version">

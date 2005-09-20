@@ -15,43 +15,55 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet
-    version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    xmlns:dir="http://apache.org/cocoon/directory/2.0"
-    xmlns:session="http://apache.org/cocoon/session/1.0"
-    xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    >
-
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xhtml="http://www.w3.org/1999/xhtml" 
+  xmlns:dir="http://apache.org/cocoon/directory/2.0" 
+  xmlns:session="http://apache.org/cocoon/session/1.0" 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0" >
   <!--
       Create row for each document.  Information about the document is
       extracted from the document itself using the document()
       function.
   -->
   <xsl:template match="/">
-   <document>
-    	<header>
+    <document>
+      <header>
         <title>ls.contracts</title>
-    	</header>
-    	<body>
+      </header>
+      <body>
         <xsl:apply-templates/>
-    	</body>
-  	</document>
+      </body>
+    </document>
   </xsl:template>
-<xsl:template match="forrest:contracts">
-  <xsl:apply-templates/>
-</xsl:template>
-<xsl:template match="forrest:contract">
-  <section>
-  <title><xsl:value-of select="@name" /></title>
-<p class="file"><strong>file-name:</strong> <br/><xsl:value-of select="@file-name" /></p>
-<p class="description"><strong>description:</strong> <br/><xsl:value-of select="./description" /></p>
-<p class="usage"><strong>usage:</strong></p>
-<source><xsl:value-of select="./usage" /></source>
-<p class="path"><strong>realpath:</strong> <br/><xsl:value-of select="./realpath" /></p>
-</section>
-</xsl:template>
-
+  <xsl:template match="forrest:contracts">
+    <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="forrest:contract">
+    <section>
+      <title>
+        <xsl:value-of select="@name" />
+      </title>
+      <p class="file">
+        <strong>file-name:</strong>
+        <br/>
+        <xsl:value-of select="@file-name" />
+      </p>
+      <p class="description">
+        <strong>description:</strong>
+        <br/>
+        <xsl:copy-of select="./description" />
+      </p>
+      <p class="usage">
+        <strong>usage:</strong>
+      </p>
+      <source>
+        <xsl:value-of select="./usage" />
+      </source>
+      <p class="path">
+        <strong>realpath:</strong>
+        <br/>
+        <xsl:value-of select="./realpath" />
+      </p>
+    </section>
+  </xsl:template>
 </xsl:stylesheet>
-

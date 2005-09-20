@@ -22,19 +22,23 @@
   <description>
     content-main - Template will output the content-main.
   </description>
-  <usage><![CDATA[<forrest:contract name="content-main"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="content-main">
+  <forrest:properties contract="content-main">
+    <forrest:property name="content-main" nugget="get.body">
+      <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+    </forrest:property>
+  </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="xhtml" name="content-main" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="content-main-body" >
-	<xsl:comment>+
-	    |start content-main
-	    +</xsl:comment>
-      <xsl:apply-templates select="div[@id='content']/div[@id='content-main']/*"/>
-<xsl:comment>+
-    |end content-main
-    +</xsl:comment>
-		  </xsl:template>
+      <xsl:template name="content-main-body" >
+        <xsl:param name="content-main"/>
+        <xsl:comment>+ |start content-main +</xsl:comment>
+        <xsl:apply-templates 
+          select="$content-main/div[@id='content']/div[@id='content-main']/*"/>
+        <xsl:comment>+ |end content-main +</xsl:comment>
+      </xsl:template>
 		  <!--headings-->
       <xsl:template match="div[@class = 'skinconf-heading-1']">
        <xsl:choose>
@@ -49,7 +53,6 @@
          </xsl:otherwise>
        </xsl:choose>
      </xsl:template>
-     <xsl:template match="div[@id = 'skinconf-toc-page']"/>
 	  </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

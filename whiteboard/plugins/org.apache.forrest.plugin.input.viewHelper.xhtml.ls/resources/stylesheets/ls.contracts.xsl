@@ -43,26 +43,27 @@
     <xsl:text>/resources/templates/</xsl:text>
     <xsl:value-of select="@name"/>
   </xsl:variable>
+  <xsl:variable name="contract" select="document($realpath)"/>
   <xsl:variable name="contract-title">
-    <xsl:value-of select="document($realpath)//forrest:contract/@name"/>
+    <xsl:value-of select="$contract//forrest:contract/@name"/>
   </xsl:variable>
   <xsl:variable name="contract-type">
-    <xsl:value-of select="document($realpath)/forrest:contract/@type"/>
+    <xsl:value-of select="$contract/forrest:contract/@type"/>
   </xsl:variable>
-  <xsl:variable name="contract-description">
-    <xsl:value-of select="document($realpath)/forrest:contract/description"/>
+  <xsl:variable name="contract-description" 
+    select="$contract/forrest:contract/description">
   </xsl:variable>
-  <xsl:variable name="contract-usage" select="document($realpath)/forrest:contract/usage"/>
+  <xsl:variable name="contract-usage" 
+    select="$contract/forrest:contract/usage"/>
   <forrest:contract name="{$contract-title}" file-name="{@name}">
-      <description>
-        <xsl:value-of select="$contract-description"/>
-      </description>
-      <usage><xsl:value-of select="$contract-usage"/></usage>
-      <realpath>  
-        <xsl:value-of select="$realpath"/>
-      </realpath>
-    </forrest:contract>
-
+    <xsl:copy-of select="$contract-description"/>
+    <usage>
+      <xsl:value-of select="$contract-usage"/>
+    </usage>
+    <realpath>
+      <xsl:value-of select="$realpath"/>
+    </realpath>
+  </forrest:contract>
 </xsl:template>
 
 </xsl:stylesheet>
