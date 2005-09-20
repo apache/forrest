@@ -2,7 +2,7 @@
              --------------------------
 
 This directory contains files to help upgrade Cocoon to whatever is the latest
-version of Cocoon.
+stable version of Cocoon trunk.
 
 Instructions for use:
 
@@ -11,15 +11,18 @@ Make sure that you have set $COCOON_HOME like e.g.:
 #COCOON_HOME
 export COCOON_HOME=/home/thorsten/apache/cocoon-trunk/
 
-1. cd $FORREST_HOME/etc/cocoon_upgrade
+0. cd $FORREST_HOME/etc/cocoon_upgrade
+
+1. Keep our local.*.properties files sychronised with Cocoon's.
+   Make sure to exclude any new blocks that we don't need.
 
 Step 2 and 3 can be done with "./build.sh 0"
-2. Copy all cocoon libraries to forrest.
+2. Copy the cocoon libraries to forrest (See ./build.xml where some are excluded).
     ant copy-core-libs
     ant copy-endorsed-libs
     ant copy-optional-libs
 
-3. Verify that all there is not two versions of libraries within same directory:
+3. Verify that there are not two versions of libraries within the same directory:
 
    cd $FORREST_HOME/lib/endorsed
    svn st
@@ -28,12 +31,18 @@ Step 2 and 3 can be done with "./build.sh 0"
 
 4. cd $FORREST_HOME/etc/cocoon_upgrade
 
-Steps 5 and 6 can be done with "./build.sh 1" it will create an ant property file, so you do not need to edit the build.xml.
-5. edit build.xml and modify new revision
+Steps 5 and 6 can be done with "./build.sh 1" it will create an ant property file,
+so you do not need to edit the build.xml.
+
+5. Edit build.xml and modify new revision
+(FIXME: we don't need svn.revision anymore, so probably don't need ./build.sh either)
+   Then build cocoon:
+
    ant build-cocoon
 
 6. cd $FORREST_HOME/lib
 
+(FIXME: we don't need this 7a anymore.)
 7a. For each cocoon-{name}-{cocoon.version}-{cocoon.revision}.jar
 
 svn mv cocoon-{name}-{cocoon.version}-{cocoon.OLDrevision}.jar 
@@ -53,16 +62,19 @@ svn ci -m "prework for upgrade to {cocoon.NEWrevision}"
 
       svn revert some.jar.license.txt
 
-    Otherwise, copy the relavent license.txt file from $COCOON_HOME/legal.
+    Otherwise, copy the relevant license.txt file from $COCOON_HOME/legal.
 
-9.  Keep our Cocoon config files synchronised at main/webapp/WEB-INF/
+9.  Keep our Cocoon config files and sitemaps synchronised at main/webapp/WEB-INF/
 
 10. cd $FORREST_HOME/main
 
 11. Build a regular forrest distribution and test, test test.
 
+    At least do a 'build test'.
+
     The testing should consist of doing a "forrest site", "forrest run"
     and "forrest war" against existing forrest projects and also against
     new "forrest seed" sites.
 
-12. Update the cocoon "svn info" at the top of this README.txt
+12. Now do 'svn commit' for the changed/new files in forrest/lib
+    and use the Cocoon SVN revision number in your log message.
