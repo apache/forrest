@@ -23,7 +23,7 @@ This script should help you to update cocoon for forrest.
 NOTE: 
 Please read README.txt *before* using this script. 
 ###################################################
-It is devided in mutliple steps because you need to controll the outcome of the script manually. Read the README.txt
+It is divided in multiple steps because you need to control the outcome of the script manually. Read the README.txt
 
 Usage:
 ./build.sh -h -> shows this help
