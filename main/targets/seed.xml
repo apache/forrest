@@ -85,14 +85,16 @@
     <property name="search.provider" value="google"/>
     <property name="search.box.location" value="default"/>
     
+    <property name="seed-template" value="business"/>
     <antcall target="-copyTemplate"/>
   </target>
-  
+
   <target name="seed-business"  depends="ensure-nocontent, getProperties"
     description="A typical business site">
+    <property name="seed-template" value="business"/>
     <antcall target="-copyTemplate"/>
   </target>
-  
+
   <target name="getProperties" 
     depends="getProjectProperties, getGroupProperties, getSearchProperties"/>
   
@@ -133,7 +135,7 @@
   
   <target name="-copyTemplate">
      <copy todir="${project.home}" overwrite="false" filtering="true">
-        <fileset dir="${forrest.core}/template-sites/business"/>
+        <fileset dir="${forrest.core}/template-sites/${seed-template}"/>
         <filterset>
           <!-- Project properties -->
           <filter token="project.display.name" value="${project.display.name}"/>
