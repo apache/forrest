@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Defining Views Terminology (Draft - feature planned for 0.8)</title>
+  </header>
+  <body>
+    <warning>This document is under development</warning>
+    <section id="whatIsfv">
+      <title>What *is* forrest:views (f:v)?</title>
+      <p> forrest:views is the codename for a forrest based implementation of 
+        the Core J2EE Pattern - <a 
+        href="site:v0.80//java-blueprints-pattern">Dispatcher View</a>. The 
+        following explanation is from [1] with their equivalent implementation 
+        in forrest:views. </p>
+    </section>
+    <section id="skinProblems">
+      <title>Problems which we have with old fashion skins (html)</title>
+      <p> The problem is a combination of the problems solved by the Front 
+        Controller and View Helper patterns in the presentation tier. There is 
+        no centralized component for managing access control, content retrieval 
+        or view management, and there is duplicate control code scattered 
+        throughout various views. Additionally, business logic and presentation 
+        formatting logic are intermingled within these views, making the system 
+        less flexible, less reusable, and generally less resilient to change. 
+        </p>
+      <p> In our case an old fashion skin are build by 4 different view helper 
+        (book2menu.xsl, document2html.xsl, site2xhtml.xsl and tab2menu.xsl). In 
+        this different files we have typically non modularized presentation 
+        formatting logic. Which makes it hard to reuse certain components in a 
+        flexible way. Some recent usecases wanted e.g. to generate a certain 
+        menu independent from our site.xml. Till now the menu is produced by 
+        book2menu.xsl, if you want to override it you need to create a new 
+        skin. </p>
+    </section>
+    <section id="Solution">
+      <title>Solution</title>
+      <p>Combine a controller and dispatcher with views and helpers to handle 
+        client requests and prepare a dynamic presentation as the response. 
+        Controllers do not delegate content retrieval to helpers, because these 
+        activities are deferred to the time of view processing. A dispatcher is 
+        responsible for view management and navigation and can be encapsulated 
+        either within a controller, a view, or a separate component. </p>
+      <p> Our basic prototype (codename: forrest:views) is implementing the 
+        following components to achieve above written. </p>
+      <section id="dispatcher">
+        <title>dispatcher - match="prepare.view.**"</title>
+        <p> The dispatcher is ATM within the internal.xmap of the internal.view 
+          plugin (i.v-p). The match="prepare.view.**" is responsible to 
+          dispatch the right view to process for the current request. </p>
+      </section>
+      <section id="view">
+        <title>view - default.fv </title>
+        <p> A view represents and displays information to the client. The 
+          information that is used in a display is retrieved from a model. 
+          Helpers (forrest:contracts, forrest:hooks and forrest:properties) 
+          support views by encapsulating and adapting a model for use in a 
+          display. </p>
+      </section>
+      <section id="helper">
+        <title>helper - forrest:contracts, forrest:hooks and 
+          forrest:properties</title>
+        <p> A helper is responsible for helping a view or controller complete 
+          its processing. Thus, helpers have numerous responsibilities, 
+          including gathering data required by the view (done by 
+          forrest:properties) and storing this intermediate model, in which 
+          case the helper is sometimes referred to as a value bean. 
+          Additionally, helpers may adapt this data model for use by the view 
+          (done by forrest:contracts). Helpers can service requests for data 
+          from the view by simply providing access to the raw data or by 
+          formatting the data as Web content. </p>
+      </section>
+      <section id="businessService">
+        <title>businessService - input plugins </title>
+        <p> The business service is a role that is fulfilled by the service the 
+          client is seeking to access. Typically, the business service is 
+          accessed via a business delegate. The business delegate's role is to 
+          provide control and protection for the business service (see 
+          "Business Delegate" on page 248). </p>
+      </section>
+    </section>
+    <!--
+      Copy n' paste template:
+      
+      <section id="leather">
+        <title>leather-dev</title>
+        <p>
+        </p>
+      </section>
+    -->
+    <section id="info">
+      <title>Further information</title>
+      <p> See the various How-to documents about views, starting with <a 
+        href="site:v0.80//howto/view/install">installing views</a>. </p>
+    </section>
+  </body>
+</document>
