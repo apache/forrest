@@ -20,12 +20,17 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-main" type="nugget">
   <description>
-    content-main - Template will output the content-main.
+    <p>content-main <br/>Template will output the content-main.</p>
+    <p> properties:<br/> &lt;headings type="boxed"/> - Heading types can be 
+      clean|underlined|boxed</p>
   </description>
   <usage><![CDATA[<forrest:contract name="content-main">
   <forrest:properties contract="content-main">
     <forrest:property name="content-main" nugget="get.body">
       <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+    </forrest:property>
+    <forrest:property name="content-main-conf">
+      <headings type="boxed"/>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
@@ -34,18 +39,23 @@
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:template name="content-main-body" >
         <xsl:param name="content-main"/>
+        <xsl:param name="content-main-conf"/>
         <xsl:comment>+ |start content-main +</xsl:comment>
         <xsl:apply-templates 
-          select="$content-main/div[@id='content']/div[@id='content-main']/*"/>
+          select="$content-main/div[@id='content']/div[@id='content-main']/*">
+          <xsl:with-param name="content-main-conf" 
+                  select="$content-main-conf"/>
+        </xsl:apply-templates>
         <xsl:comment>+ |end content-main +</xsl:comment>
       </xsl:template>
 		  <!--headings-->
       <xsl:template match="div[@class = 'skinconf-heading-1']">
+        <xsl:param name="content-main-conf"/>
        <xsl:choose>
-         <xsl:when test="//skinconfig/headings/@type='underlined'">
+         <xsl:when test="$content-main-conf/headings/@type='underlined'">
          	<h2 class="underlined_10"><xsl:value-of select="h1"/></h2>
          </xsl:when>
-         <xsl:when test="//skinconfig/headings/@type='boxed'">
+         <xsl:when test="$content-main-conf/headings/@type='boxed'">
    	       <h2 class="boxed"><xsl:value-of select="h1"/></h2>
          </xsl:when>
          <xsl:otherwise>

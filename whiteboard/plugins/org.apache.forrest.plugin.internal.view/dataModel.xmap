@@ -15,22 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
-<!-- forrest:structurer
-***********************
-The structuring of the assembled page where all content is in place
-and structured with forrest:hooks to provide hooks for theming.
-
-It is the job of a forrest:structurer to define this structure. The
-structurer uses for this a couple of helper classes forrest:contracts,
-forrest:hooks and forrest:properties. But there is more to a
-forrest:structurer than just structure. 
-
-The structurer is not limited to a document but can request and
-structure the content from multiple input sources. Far more actually
-because it provides as well logical conditions for presentation formatting logic
--->
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:pipes default="caching">
@@ -51,7 +35,8 @@ because it provides as well logical conditions for presentation formatting logic
         src="org.apache.cocoon.generation.DirectoryGenerator" />
       <!--map:generator name="jx" logger="sitemap.generator.jx" 
         src="org.apache.cocoon.template.JXTemplateGenerator" 
-        label="content,data" pool-max="16"-->
+        label="content,data" pool-max="16">
+      </map:generator-->
       <map:generator name="jx" logger="sitemap.generator.jx" 
         src="org.apache.cocoon.generation.JXTemplateGenerator" 
         label="content,data" pool-max="16">
@@ -131,117 +116,90 @@ because it provides as well logical conditions for presentation formatting logic
     </map:resource>
   </map:resources>
   <map:pipelines>
-    <map:pipeline>
-      <!-- businessHelper -->
-      <map:mount uri-prefix="" src="dataModel.xmap" check-reload="yes" 
-        pass-through="true"/>
-    </map:pipeline>
-   
-<!--
-  structurer
-  prepares and transforms the requested contracts (viewHelper) and populate them with the content (businessHelper).
-  -->
-    <map:pipeline>
-<!--FIXME: 
-  type="jx" and move to lm
   
-    View config resolver
-    File specific views have priority before default ones.
-    If no views can be found in the project we use the default one of the view plugin.
-    {1} - requested url
-    -->
-      <map:match pattern="prepare.jxWorkaround.**">
-        <map:act type="fallbackResolverAction">
-          <map:parameter value="{1}" name="request"/>
-          <map:parameter value="{project:theme}" name="projectFallback"/>
-          <map:parameter value="{project:theme-ext}" name="projectExtension"/>
-          <map:parameter value="{project:content.xdocs}" name="projectDir"/>
-          <map:parameter value="{defaults:view-themes}" name="defaultDir"/>
-          <map:parameter value="{defaults:theme}" name="defaultFallback"/>
-          <map:parameter value="{defaults:theme-ext}" name="defaultExtension"/>
-          <map:generate src="{uri}"/>
-          <map:transform 
-            src="resources/stylesheets/prepare.include.templates.xsl"/>
-          <map:transform type="xinclude"/>
-          <map:serialize/>
-        </map:act>
-      </map:match>
-      
-      <map:match pattern="prepare.view.**">
-        <map:generate type="jx" src="cocoon:/prepare.jxWorkaround.{1}">
-          <map:parameter name="lenient-xpath" value="true"/>
-          <map:parameter name="getRequest" value="{1}"/>
-        </map:generate>
-        <map:serialize/>
-      </map:match>
-    
-      <!--
-        Add businessHelper to the presentation model that the content can be used later on.
-        {1} - requested url -->
-      <map:match pattern="prepare.view-nugget.**">
-        <map:generate src="cocoon:/prepare.view.{1}">
-          <map:parameter name="lenient-xpath" value="true"/>
-          <map:parameter name="getRequest" value="{1}"/>
-        </map:generate>
-        <map:transform src="resources/stylesheets/prepare.view.xsl">
-          <map:parameter name="view" value="{1}"/>
-        </map:transform>
-        <map:transform type="xinclude"/>
-        <map:serialize/>
-      </map:match>
-      <!--
-  Aggregate the contract-templates requested by the view with xinclude.
-  The result is a stylesheet with all needed xsl:templates.
-  {1} - format
-  {2} - requested url
+    <!--
+  businessHelper
+  This is the model producing factory.
   -->
-      <map:match pattern="prepare.include.*.**">
-        <map:generate src="cocoon:/prepare.view.{2}"/>
-        <map:transform src="resources/stylesheets/prepare.include.xsl">
-          <map:parameter name="config-file" value="{project:skinconf}"/>
-          <!--Which output format?-->
-          <map:parameter name="format" value="{1}"/>
-        </map:transform>
+    <map:pipeline>
+      <!-- intermediate format link rewritten-->
+      <map:match pattern="**.source.rewritten.xml">
+        <map:generate src="cocoon://{1}{2}.xml"/>
+        <map:transform type="idgen"/>
         <map:transform type="xinclude"/>
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
+        <map:transform 
+          src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
         <map:serialize/>
       </map:match>
-      <!--
-      Aggregate the forrest:properties requested by the *.fv.
-      The result is an aggregation of properties which defines the templates to be call.
-      {1} - format
-      {2} - requested url
-      -->
-      <map:match pattern="prepare.properties.*.**">
-        <map:generate src="cocoon:/prepare.view.{2}"/>
-        <map:transform src="resources/stylesheets/prepare.properties.xsl">
-          <!--Which output format?-->
-          <map:parameter name="format" value="{1}"/>
-        </map:transform>
-        <map:transform type="xinclude"/>
-        <map:serialize/>
+      <!-- HTML rendered from intermediate format -->
+      <map:match pattern="**.body.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2html"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
       </map:match>
-      <!--FIXME
-      This has to be an interface and not an implementation. Use lm to do it.
-      
-      An interface will only generate cocoon protocol matches and serialize them!
-      An implementation will deliver the actual match (including transformation)-->
-      <!--
-      Aggregate all contracts-templates requested by the view.
-      Create a xsl that can be used for the last step of the transformation of the view.
-      {1} - format
-      {2} - requested url
-      -->
-      <map:match pattern="getStylesheet.*.**">
-        <map:aggregate element="filter">
-          <map:part src="cocoon://prepare.view-nugget.{2}" />
-          <map:part src="cocoon://prepare.properties.{1}.{2}" />
+      <!-- TOC from source.rewritten-->
+      <map:match pattern="**.toc.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2toc"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+       <!-- abstract from source.rewritten-->
+      <map:match pattern="**.abstract.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2abstract"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+       <!-- authors from source.rewritten-->
+      <map:match pattern="**.authors.xml">
+        <map:generate src="cocoon:/{1}{2}.source.rewritten.xml"/>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="document2authors"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="notoc" value="false"/>
+        </map:call>
+      </map:match>
+      <!-- navigation for the current request -->
+      <map:match pattern="*.navigation.xml">
+        <map:aggregate element="navigation">
+          <map:part src="cocoon:/tab-{1}.html" element="tab"/>
+          <map:part src="cocoon:/menu-{1}.html" element="menu"/>
         </map:aggregate>
-        <map:transform src="resources/stylesheets/prepare.{1}.xsl" >
-          <map:parameter name="request" value="{2}"/>
-          <map:parameter name="forrestContext" value="{forrest:context}"/>
-        </map:transform>
-        <map:transform type="xinclude"/>
         <map:serialize/>
+      </map:match>
+      <map:match pattern="**/*.navigation.xml">
+        <map:aggregate element="navigation">
+          <map:part src="cocoon:/{1}/tab-{2}.html" element="tab"/>
+          <map:part src="cocoon:/{1}/menu-{2}.html" element="menu"/>
+        </map:aggregate>
+        <map:serialize/>
+      </map:match>
+      <!-- navigation for the current request PART menu-->
+      <map:match pattern="**book-*.html">
+        <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
+      </map:match>
+      <map:match pattern="**menu-*.html">
+        <map:generate src="cocoon:/{1}book-{2}.html"/>
+        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.html"/>
+        <map:transform 
+          src="{forrest:stylesheets}/declare-broken-site-links.xsl" />
+        <map:call resource="skinit">
+          <map:parameter name="type" value="book2menu"/>
+          <map:parameter name="path" value="{1}{2}.html"/>
+        </map:call>
+      </map:match>
+      <!-- navigation for the current request PART tab-->
+      <map:match pattern="**tab-*.html">
+        <map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" />
       </map:match>
     </map:pipeline>
   </map:pipelines>

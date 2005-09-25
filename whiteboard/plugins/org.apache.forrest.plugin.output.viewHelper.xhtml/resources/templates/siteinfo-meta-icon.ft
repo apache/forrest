@@ -20,10 +20,17 @@
   name="siteinfo-meta-icon"
   type="nugget">
   <description>
-    siteinfo-meta-icon will output the html additional shortcut icon in head element.
-    This icon is generally displayed by browser at the beginning of the URL.
+    <p><strong>siteinfo-meta-icon</strong> <br/>will output the html 
+      additional shortcut icon in head element. This icon is generally 
+      displayed by browser at the beginning of the URL. </p>
   </description>
-  <usage><![CDATA[<forrest:contract name="siteinfo-meta-icon"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="siteinfo-meta-icon">
+  <forrest:properties contract="siteinfo-meta-icon">
+    <forrest:property name="siteinfo-meta-icon">
+      <favicon-url></favicon-url>
+    </forrest:property>
+  </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template 
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -32,13 +39,15 @@
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:template name="siteinfo-meta-icon-head">
+        <xsl:param name="siteinfo-meta-icon"/>
 <!--+
   |favicon
   +-->
-        <xsl:if test="//skinconfig/favicon-url">
+        <xsl:if test="$siteinfo-meta-icon/favicon-url">
           <link rel="shortcut icon">
             <xsl:attribute name="href">
-              <xsl:value-of select="concat($root,//skinconfig/favicon-url)"/>
+              <xsl:value-of 
+                select="concat($root,$siteinfo-meta-icon/favicon-url)"/>
             </xsl:attribute>
           </link>
         </xsl:if>

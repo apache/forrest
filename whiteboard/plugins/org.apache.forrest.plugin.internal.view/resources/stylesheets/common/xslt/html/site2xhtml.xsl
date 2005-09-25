@@ -36,25 +36,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:variable name="config" select="//skinconfig"/>
-  <!-- If true, a txt link for this page will not be generated -->
-  <xsl:variable name="disable-txt-link" select="//skinconfig/disable-txt-link"/>
-  <!-- If true, a PDF link for this page will not be generated -->
-  <xsl:variable name="disable-pdf-link" select="//skinconfig/disable-pdf-link"/>
-  <!-- If true, a "print" link for this page will not be generated -->
-  <xsl:variable name="disable-print-link" select="//skinconfig/disable-print-link"/>
-  <!-- If true, an XML link for this page will not be generated -->
-  <xsl:variable name="disable-xml-link" select="//skinconfig/disable-xml-link"/>
-  <!-- If true, a POD link for this page will not be generated -->
-  <xsl:variable name="disable-pod-link" select="//skinconfig/disable-pod-link"/>
-  <!-- Get the location where to generate the minitoc -->
-  <xsl:variable name="minitoc-location" select="//skinconfig/toc/@location"/>
-
   <xsl:param name="path"/>
-
-  <xsl:include href="dotdots.xsl"/>
-  <xsl:include href="pathutils.xsl"/>
-  <xsl:include href="renderlogo.xsl"/>
 
   <!-- Path (..'s) to the root directory -->
   <xsl:variable name="root">
@@ -79,23 +61,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:call-template>
   </xsl:variable>
 
-  <!-- Whether to obfuscate email links -->
-  <xsl:variable name="obfuscate-mail-links" select="//skinconfig/obfuscate-mail-links"/>
- <!-- If true, the font size script will not be rendered -->
-  <xsl:variable name="disable-font-script" select="//skinconfig/disable-font-script"/>
-  <!-- If true, an the images on all external links will not be added -->
-  <xsl:variable name="disable-external-link-image" select="//skinconfig/disable-external-link-image"/>
-  <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
-  <xsl:variable name="spacer" select="concat($root, 'skin/images/spacer.gif')"/>
-
-  <xsl:template name="breadcrumbs">
-    <xsl:if test="(//skinconfig/trail/link1/@name)and(//skinconfig/trail/link1/@name!='')"><a href="{//skinconfig/trail/link1/@href}"><xsl:value-of select="//skinconfig/trail/link1/@name"/></a></xsl:if>
-    <xsl:if test="(//skinconfig/trail/link2/@name)and(//skinconfig/trail/link2/@name!='')"> &gt; <a href="{//skinconfig/trail/link2/@href}">  <xsl:value-of select="//skinconfig/trail/link2/@name"/></a> </xsl:if>
-    <xsl:if test="(//skinconfig/trail/link3/@name)and(//skinconfig/trail/link3/@name!='')"> &gt; <a href="{//skinconfig/trail/link3/@href}">  <xsl:value-of select="//skinconfig/trail/link3/@name"/></a> </xsl:if>
-    <script type="text/javascript" language="JavaScript" src="{$root}skin/breadcrumbs.js"/>
-  </xsl:template>
-
-  <xsl:template match="site">
+<!--  <xsl:template match="site">
     <html>
       <head>
         <title><xsl:value-of select="div[@class='content']/table/tr/td/h1"/></title>
@@ -151,9 +117,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:otherwise>
         </xsl:choose>
         All rights reserved.
-        <script language="JavaScript" type="text/javascript"><![CDATA[<!--
+        <script language="JavaScript" type="text/javascript"><![CDATA[<!-#-
           document.write(" - "+"Last Published: " + document.lastModified);
-          //  -->]]></script>
+          //  -#->]]></script>
         <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
           <a href="{//skinconfig/host-url}">
             <xsl:call-template name="renderlogo">
@@ -183,7 +149,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </html>
   </xsl:template>
 
-  <!-- Add links to any standards-compliance logos -->
+  <!-#- Add links to any standards-compliance logos -#->
   <xsl:template name="compliancy-logos">
     <xsl:if test="$filename = 'index.html' and //skinconfig/disable-compliance-links = 'false'">
       <a href="http://validator.w3.org/check/referer"><img class="logoImage"
@@ -196,7 +162,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
-  <!-- Generates the PDF link -->
+  <!-#- Generates the PDF link -#->
   <xsl:template match="div[@id='skinconf-pdflink']">
     <xsl:if test="not($config/disable-pdf-link) or $disable-pdf-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pdf" class="dida">
@@ -206,7 +172,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
-  <!-- Generates the TXT link -->
+  <!-#- Generates the TXT link -#->
   <xsl:template match="div[@id='skinconf-txtlink']">
     <xsl:if test="$disable-txt-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.txt" class="dida">
@@ -216,7 +182,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
-  <!-- Generates the POD link -->
+  <!-#- Generates the POD link -#->
   <xsl:template match="div[@id='skinconf-podlink']">
     <xsl:if test="$disable-pod-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.pod" class="dida">
@@ -226,7 +192,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
-  <!-- Generates the XML link -->
+  <!-#- Generates the XML link -#->
   <xsl:template match="div[@id='skinconf-xmllink']">
     <xsl:if test="$disable-xml-link = 'false'">
       <td align="center" width="40" nowrap="nowrap"><a href="{$filename-noext}.xml" class="dida">
@@ -236,7 +202,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </xsl:if>
   </xsl:template>
 
-  <!-- Generates the "printer friendly version" link -->
+  <!-#- Generates the "printer friendly version" link -#->
   <xsl:template match="div[@id='skinconf-printlink']">
     <xsl:if test="$disable-print-link = 'false'">
 <script type="text/javascript" language="Javascript">
@@ -261,7 +227,7 @@ if (VERSION > 3) {
     </xsl:if>
   </xsl:template>
 
-  <!-- handle all obfuscating mail links and disabling external link images -->
+  <!-#- handle all obfuscating mail links and disabling external link images -#->
   <xsl:template match="a">
     <xsl:choose>
       <xsl:when test="$obfuscate-mail-links='true' and starts-with(@href, 'mailto:') and contains(@href, '@')">
@@ -278,8 +244,8 @@ if (VERSION > 3) {
           </a>
        </xsl:when>
        <xsl:otherwise>
-        <!-- xsl:copy-of makes sure we copy <a href> as well as <a name>
-             or any other <a ...> forms -->
+        <!-#- xsl:copy-of makes sure we copy <a href> as well as <a name>
+             or any other <a ...> forms -#->
         <xsl:copy-of select="."/>
       </xsl:otherwise>
     </xsl:choose>
@@ -333,8 +299,8 @@ if (VERSION > 3) {
     </meta>
   </xsl:template>
 
-  <!-- meta information from v 2.0 documents
-       FIXME: the match is really inefficient -->
+  <!-#- meta information from v 2.0 documents
+       FIXME: the match is really inefficient -#->
   <xsl:template name="meta-data">
     <xsl:for-each select="//meta-data/meta">
       <xsl:element name="meta">
@@ -372,6 +338,6 @@ if (VERSION > 3) {
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </xsl:copy>
-  </xsl:template>
+  </xsl:template>-->
 
 </xsl:stylesheet>

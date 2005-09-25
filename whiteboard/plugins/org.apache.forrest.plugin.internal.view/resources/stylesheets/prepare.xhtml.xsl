@@ -47,7 +47,7 @@
                 <xsl:apply-templates select="/*/forrest:views/forrest:view"/>
             </alias:template>
         	<!--default entry point into the presentation model 'site'-->
-            <alias:template match="site">
+            <alias:template match="/">
                 <html>
                     <head>
                         <alias:call-template name="getHead"/>
@@ -113,7 +113,6 @@
                     <alias:call-template name="{@name}-head"  xmlns:forrest="http://apache.org/forrest/templates/1.0">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
                           <xsl:variable name="xpath">
-                            <xsl:value-of select="'/site'"/>
                             <xsl:call-template name="generateXPath"/>
                           </xsl:variable>
                           <alias:with-param name="{@name}" select="{normalize-space($xpath)}"/>
@@ -138,7 +137,6 @@
                     <alias:call-template name="{@name}-body">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
                           <xsl:variable name="xpath">
-                            <xsl:value-of select="'/site'"/>
                             <xsl:call-template name="generateXPath"/>
                           </xsl:variable>
                           <alias:with-param name="{@name}" select="{normalize-space($xpath)}" />

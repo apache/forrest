@@ -33,13 +33,19 @@
     </forrest:contract>
     <forrest:contract name="siteinfo-meta-navigation"/>
     <!-- FIXME - Cocoon problem with favicon.ico -->
-    <!-- forrest:contract name="siteinfo-meta-icon"/ -->
-
+    <!--<forrest:contract name="siteinfo-meta-icon">
+      <forrest:properties contract="siteinfo-meta-icon">
+        <forrest:property name="siteinfo-meta-icon">
+          <favicon-url></favicon-url>
+        </forrest:property>
+      </forrest:properties>
+    </forrest:contract>-->
+  
     <forrest:hook name="container">
       <forrest:contract name="branding-breadcrumbs">
         <forrest:properties contract="branding-breadcrumbs">
           <forrest:property name="branding-breadcrumbs">
-            <trail>
+            <trail>  
               <link1 name="Apache Forrest" href="http://forrest.apache.org/"/>
               <link2 name="Plugins" href="http://forrest.apache.org/docs/plugins/"/>
               <link3 name="org.apache.forrest.plugin.output.viewHelper" href="http://forrest.apache.org/docs/plugins/org.apache.forrest.plugin.output.viewHelper/"/>
@@ -87,6 +93,9 @@
         <forrest:contract name="search-input">
           <forrest:properties contract="search-input">
             <forrest:property name="input-size">25</forrest:property>
+            <forrest:property name="search-input">
+              <search name="MyProject" domain="mydomain" provider="google"/>
+            </forrest:property>
           </forrest:properties>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
@@ -129,51 +138,68 @@
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
-          <!-- FIXME - hr contract should disappear and be replaced by a top-separator contract argument just like
-                       siteinfo-credits -->
-          <forrest:contract name="hr"/>
+          <forrest:contract name="genericMarkup">
+            <forrest:properties contract="genericMarkup">
+              <forrest:property name="genericMarkup">
+                <hr/>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:contract name="search-input">
             <forrest:properties contract="search-input">
               <forrest:property name="input-size">18</forrest:property>
+              <forrest:property name="search-input">
+                <search name="MyProject" domain="mydomain" provider="google"/>
+              </forrest:property>
             </forrest:properties>
           </forrest:contract>
           <forrest:contract name="siteinfo-credits">
             <forrest:properties contract="siteinfo-credits">
               <forrest:property name="box-location">credit</forrest:property>
               <forrest:property name="top-separator">true</forrest:property>
+              <forrest:property name="siteinfo-credits">
+                <credits>
+                  <credit>
+                    <name>Built with Apache Forrest</name>
+                    <url>http://forrest.apache.org/</url>
+                    <image>images/built-with-forrest-button.png</image>
+                    <width>88</width>
+                    <height>31</height>
+                  </credit>
+                </credits>
+              </forrest:property>
             </forrest:properties>
           </forrest:contract>
-          <!-- FIXME - hr contract should disappear and be replaced by a top-separator contract argument just like
-                       siteinfo-credits -->
-          <forrest:contract name="hr"/>
+          <forrest:contract name="genericMarkup">
+            <forrest:properties contract="genericMarkup">
+              <forrest:property name="genericMarkup">
+                <hr/>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:contract name="content-motd-page">
-					  <forrest:properties contract="content-motd-page">
-					    <forrest:property name="content-motd-page">
-					      <motd>
-					        <motd-option pattern="index.html">
-					          <motd-title>sample</motd-title>
-					          <motd-page location="both">
-					            This is an example of a Message of the day (MOTD).
-					          </motd-page>
-					          <motd-page-url>index.html</motd-page-url>
-					        </motd-option>
-					        <motd-option pattern="samples/faq.html">
-					          <motd-title></motd-title>
-					          <motd-page location="both">
-					            How to enable this MOTD is on this page.
-					          </motd-page>
-					          <motd-page-url>#motd</motd-page-url>
-					        </motd-option>
-					      </motd>
-					    </forrest:property>
-					  </forrest:properties>
-					</forrest:contract>
-          <forrest:contract name="nav-section-round-bottom"/>
-          <forrest:contract name="siteinfo-credits">
-            <forrest:properties contract="siteinfo-credits">
-              <forrest:property name="box-location">credit2</forrest:property>
+            <forrest:properties contract="content-motd-page">
+              <forrest:property name="content-motd-page">
+                <motd>
+                  <motd-option pattern="index.html">
+                    <motd-title>sample</motd-title>
+                    <motd-page location="both">
+                      This is an example of a Message of the day (MOTD).
+                    </motd-page>
+                    <motd-page-url>index.html</motd-page-url>
+                  </motd-option>
+                  <motd-option pattern="samples/faq.html">
+                    <motd-title></motd-title>
+                    <motd-page location="both">
+                      How to enable this MOTD is on this page.
+                    </motd-page>
+                    <motd-page-url>#motd</motd-page-url>
+                  </motd-option>
+                </motd>
+              </forrest:property>
             </forrest:properties>
           </forrest:contract>
+          <forrest:contract name="nav-section-round-bottom"/>
         </forrest:hook>
         <forrest:call-template name="export-link"/>
         <forrest:hook name="content">
@@ -181,15 +207,20 @@
           <!--<forrest:hook class="trail">
             <forrest:contract name="branding-fontsize"/>
           </forrest:hook>-->
-          <forrest:contract name="content-title"/>
+          <forrest:contract name="content-title">
+            <forrest:properties contract="content-title">
+              <forrest:property name="content-title" nugget="get.body">
+                <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:contract name="content-abstract">
-					  <forrest:properties contract="content-abstract">
-					    <forrest:property name="content-abstract" nugget="get.abstract">
-					      <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
-					    </forrest:property>
-					  </forrest:properties>
-					</forrest:contract>
-          <!--<forrest:contract name="content-motd-page"/>-->
+            <forrest:properties contract="content-abstract">
+              <forrest:property name="content-abstract" nugget="get.abstract">
+                <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:contract name="content-minitoc">
             <forrest:properties contract="content-minitoc">
               <forrest:property name="content-minitoc-toc" nugget="get.toc">
@@ -200,29 +231,68 @@
                 min-sections="1" location="page"/>
               </forrest:property>
             </forrest:properties>
-					</forrest:contract>
+          </forrest:contract>
           <forrest:contract name="content-main">
-					  <forrest:properties contract="content-main">
-					    <forrest:property name="content-main" nugget="get.body">
-					      <url>#{$cocoon/parameters/getRequest}.body.xml</url>
-					    </forrest:property>
-					  </forrest:properties>
-					</forrest:contract>
+            <forrest:properties contract="content-main">
+              <forrest:property name="content-main" nugget="get.body">
+                <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+              </forrest:property>
+              <forrest:property name="content-main-conf">
+                <headings type="underlined"/>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
           <forrest:contract name="content-authors">
-					  <forrest:properties contract="content-authors">
-					    <forrest:property name="content-authors" nugget="get.authors">
-					      <url>#{$cocoon/parameters/getRequest}.authors.xml</url>
-					    </forrest:property>
-					  </forrest:properties>
-					</forrest:contract>
+            <forrest:properties contract="content-authors">
+              <forrest:property name="content-authors" nugget="get.authors">
+                <url>#{$cocoon/parameters/getRequest}.authors.xml</url>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
         </forrest:hook>
       </forrest:hook>
       <forrest:hook name="footer">
-        <forrest:contract name="siteinfo-copyright"/>
+        <forrest:hook class="copyright">
+          <forrest:contract name="siteinfo-copyright">
+            <forrest:properties contract="siteinfo-copyright">
+              <forrest:property name="siteinfo-copyright">
+                <copyright>
+                  <year>2005</year>
+                  <vendor>The Acme Software Foundation.</vendor>
+                </copyright>
+              </forrest:property>
+            </forrest:properties>
+          </forrest:contract>
+        </forrest:hook>
         <forrest:contract name="siteinfo-compliance-links"/>
-        <forrest:contract name="siteinfo-credits"/>
+        <forrest:contract name="siteinfo-credits">
+          <forrest:properties contract="siteinfo-credits">
+            <forrest:property name="box-location">credit</forrest:property>
+            <forrest:property name="top-separator">true</forrest:property>
+            <forrest:property name="siteinfo-credits">
+              <credits>
+                <credit>
+                  <name>Built with Apache Forrest</name>
+                  <url>http://forrest.apache.org/</url>
+                  <image>images/built-with-forrest-button.png</image>
+                  <width>88</width>
+                  <height>31</height>
+                </credit>
+              </credits>
+            </forrest:property>
+          </forrest:properties>
+        </forrest:contract>
         <forrest:contract name="siteinfo-last-published"/>
-        <forrest:contract name="siteinfo-feedback"/>
+        <forrest:contract name="siteinfo-feedback">
+          <forrest:properties contract="siteinfo-feedback">
+            <forrest:property name="siteinfo-feedback">
+              <feedback to="webmaster@foo.com"
+                href="mailto:webmaster@foo.com?subject=Feedback&#160;" >
+                Send feedback about the website to:
+              </feedback>
+            </forrest:property>
+          </forrest:properties>
+        </forrest:contract>
       </forrest:hook>
     </forrest:hook>
   </forrest:view>

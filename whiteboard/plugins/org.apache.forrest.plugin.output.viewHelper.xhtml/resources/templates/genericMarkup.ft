@@ -17,16 +17,23 @@
 -->
 <forrest:contract 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="hr" type="nugget">
+  name="genericMarkup" type="nugget">
   <description>
-    hr - Template will output a horizontal line <hr/>. 
+    <p>genericMarkup - Template will output generic markup.</p>
   </description>
-  <usage><![CDATA[<forrest:contract name="hr"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="genericMarkup">
+  <forrest:properties contract="genericMarkup">
+    <forrest:property name="genericMarkup">
+      <hr/>
+    </forrest:property>
+  </forrest:properties>
+</forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="hr" inputFormat="xsl" body="true" head="false">
+    format="xhtml" name="genericMarkup" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="hr-body">
-<hr/>
+	    <xsl:template name="genericMarkup-body">
+        <xsl:param name="genericMarkup"/>
+        <xsl:copy-of select="$genericMarkup"/>
 		  </xsl:template>
 	  </xsl:stylesheet>
   </forrest:template>
