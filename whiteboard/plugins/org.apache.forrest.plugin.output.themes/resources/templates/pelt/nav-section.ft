@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract name="nav-section" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  <description>
+    nav-section will output the navigation to pages within the current site section AKA menu
+  </description>
+  <usage><![CDATA[<forrest:contract name="nav-section">
+  <forrest:properties contract="nav-section">
+    <forrest:property name="nav-section" nugget="get.navigation">
+      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+    </forrest:property>
+  </forrest:properties>
+</forrest:contract>]]></usage>
+  <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="xhtml" name="nav-section" inputFormat="xsl" body="true" head="true">
+
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		  <xsl:template name="nav-section-head">
+		      <script type="text/javascript" language="javascript" 
+			        src="{$root}skin/menu.js">&#160;</script>
+		  </xsl:template>
+      
+		  <xsl:template name="nav-section-body">
+        <xsl:param name="nav-section" select="'test'"/>
+<xsl:comment>+
+    |start menu
+    +</xsl:comment>
+            <xsl:if test="$nav-section/navigation/menu/div[@id='menu']/ul/li">
+              <xsl:call-template name="menu">
+                <xsl:with-param name="root" select="$nav-section/navigation/menu"/>
+              </xsl:call-template>
+            </xsl:if>
+<xsl:comment>+
+    |end menu
+    +</xsl:comment>
+		  </xsl:template>
+      <xsl:template name="menu">
+        <xsl:param name="root" value="'test'"/>
+<xsl:comment>+
+    |start Menu
+    +</xsl:comment>
+   	<div id="nav-section">
+			<ul>
+<!--menu - inner-->	
+        <xsl:for-each select = "$root/div[@id='menu']/ul/li">
+          <xsl:call-template name = "innermenuli" >
+              <xsl:with-param name="id" select="concat('1.', position())"/>
+          </xsl:call-template>
+        </xsl:for-each>
+			</ul>
+		</div>
+	</xsl:template>  
+  
+  <xsl:template name="innermenuli">   
+    <xsl:param name="id"/>
+    <xsl:variable name="tagid">
+      <xsl:choose>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="concat('menu_',concat(font,$id))"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="whichGroup">
+      <xsl:choose>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">selectedmenuitemgroup</xsl:when>
+        <xsl:otherwise>menuitemgroup</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <li class="pagegroup" id="{$tagid}Title"><span onclick="SwitchMenu('{$tagid}', '{$root}skin/')"><xsl:value-of select="h1"/></span>
+      <ul class="{$whichGroup}" id="{$tagid}">
+        <xsl:for-each select= "ul/li">
+
+          <xsl:choose>
+            <xsl:when test="a">
+              <li class="menuitem"><a href="{a/@href}" title="{a/@title}"><xsl:value-of select="a" /></a></li>
+            </xsl:when>
+            <xsl:when test="div/@class='current'">
+              <li class="menupage">
+                <div class="menupagetitle"><xsl:value-of select="div" /></div>
+                <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
+                  <ul>
+                    <li class="menupageitemgroup">
+                      <xsl:for-each select = "//tocitems/tocitem">
+                        <div class="menupageitem">
+                          <xsl:choose>
+                            <xsl:when test="string-length(normalize-space(@title))>15">
+                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of 
+                                select="substring(@title,0,20)" />...</a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <a href="{@href}" title="{normalize-space(@title)}">
+                                <xsl:value-of select="@title" />
+                              </a>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </div>
+                      </xsl:for-each>
+                    </li>
+                  </ul>
+                </xsl:if>
+              </li>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name = "innermenuli">
+                 <xsl:with-param name="id" select="concat($id, '.', position())"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+
+        </xsl:for-each>
+      </ul></li>
+      <script>SwitchMenu('<xsl:value-of select="$tagid"/>', '<xsl:value-of select="$root"/>skin/')</script>
+  		</xsl:template>
+		</xsl:stylesheet>
+	</forrest:template>
+</forrest:contract>
