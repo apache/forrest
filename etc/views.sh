@@ -56,8 +56,8 @@ if [ -z "$FORREST_HOME" ] ; then
 fi
 
 cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.view/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.input.viewHelper.xhtml.ls
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
