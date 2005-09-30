@@ -22,23 +22,19 @@
   <description>
     content-abstract will output the abstract of the content. 
   </description>
-  <usage><![CDATA[<forrest:contract name="content-abstract">
-  <forrest:properties contract="content-abstract">
-    <forrest:property name="content-abstract" nugget="get.body">
-      <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
-    </forrest:property>
-  </forrest:properties>
-</forrest:contract>]]></usage>
+  <usage><![CDATA[<forrest:contract name="content-abstract"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="xhtml" name="content-abstract" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-abstract-body">
-        <xsl:param name="content-abstract"/>
-        <xsl:comment>+ |start content-abstract +</xsl:comment>
-        <xsl:copy-of 
-          select="$content-abstract/div[@class='abstract']"/>
-        <xsl:comment>+ |end content-abstract +</xsl:comment>
-      </xsl:template>
+	    <xsl:template name="content-abstract-body">
+	<xsl:comment>+
+	    |start content-abstract
+	    +</xsl:comment>
+			  <xsl:copy-of select="div[@id='content']/div[@class='abstract']"/>
+<xsl:comment>+
+    |end content-abstract
+    +</xsl:comment>
+		  </xsl:template>
 	  </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

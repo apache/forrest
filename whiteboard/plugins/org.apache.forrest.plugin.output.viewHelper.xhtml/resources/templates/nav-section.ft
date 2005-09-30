@@ -20,13 +20,7 @@
   <description>
     nav-section will output the navigation to pages within the current site section AKA menu
   </description>
-  <usage><![CDATA[<forrest:contract name="nav-section">
-  <forrest:properties contract="nav-section">
-    <forrest:property name="nav-section" nugget="get.navigation">
-      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
-    </forrest:property>
-  </forrest:properties>
-</forrest:contract>]]></usage>
+  <usage><![CDATA[<forrest:contract name="nav-section"/>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   format="xhtml" name="nav-section" inputFormat="xsl" body="true" head="false">
@@ -34,28 +28,24 @@
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		  
 		  <xsl:template name="nav-section-body">
-        <xsl:param name="nav-section" select="'test'"/>
 <xsl:comment>+
     |start menu
     +</xsl:comment>
-            <xsl:if test="$nav-section/navigation/menu/div[@id='menu']/ul/li">
-              <xsl:call-template name="menu">
-                <xsl:with-param name="root" select="$nav-section/navigation/menu"/>
-              </xsl:call-template>
+            <xsl:if test="div[@id='menu']/ul/li">
+              <xsl:call-template name="menu"/>
             </xsl:if>
 <xsl:comment>+
     |end menu
     +</xsl:comment>
 		  </xsl:template>
       <xsl:template name="menu">
-        <xsl:param name="root" value="'test'"/>
 <xsl:comment>+
     |start Menu
     +</xsl:comment>
    	<div id="nav-section">
 			<ul>
 <!--menu - inner-->	
-        <xsl:for-each select = "$root/div[@id='menu']/ul/li">
+        <xsl:for-each select = "div[@id='menu']/ul/li">
           <xsl:call-template name = "innermenuli" >
               <xsl:with-param name="id" select="concat('1.', position())"/>
           </xsl:call-template>
@@ -96,10 +86,10 @@
                         <div class="menupageitem">
                           <xsl:choose>
                             <xsl:when test="string-length(@title)>15">
-                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of select="substring(normalize-space(@title),0,20)" />...</a>
+                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
                             </xsl:when>
                             <xsl:otherwise>
-                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of select="normalize-space(@title)" /></a>
+                              <a href="{@href}"><xsl:value-of select="@title" /></a>
                             </xsl:otherwise>
                           </xsl:choose>
                         </div>

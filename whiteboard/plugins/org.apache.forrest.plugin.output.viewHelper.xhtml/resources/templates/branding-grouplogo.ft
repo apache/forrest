@@ -15,19 +15,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="nav-main-sub" type="nugget"
+<forrest:contract name="branding-grouplogo" type="nugget"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    nav-main-sub will output the secondary navigation AKA level2.
+    branding-grouplogo will output the grouplogo defined in the skinconf.
   </description>
-  <usage><![CDATA[<forrest:contract name="nav-main-sub"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="branding-grouplogo"/>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="xhtml" name="nav-main-sub" inputFormat="xsl" body="true" head="false">
+  format="xhtml" name="branding-grouplogo" inputFormat="xsl" body="true" head="false">
 
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  <xsl:template name="nav-main-sub-body">
-		     <xsl:apply-templates select="div[@id='nav-main-sub']/*"/>
+		  <xsl:template name="branding-grouplogo-body">
+<xsl:comment>+
+    |start group Logo
+    +</xsl:comment> 
+        <xsl:call-template name="renderlogo">
+          <xsl:with-param name="name" select="$config/group-name"/>
+          <xsl:with-param name="url" select="$config/group-url"/>
+          <xsl:with-param name="logo" select="$config/group-logo"/>
+          <xsl:with-param name="root" select="$root"/>
+          <xsl:with-param name="description" select="$config/group-description"/>
+      </xsl:call-template>
+<xsl:comment>+
+    |end group Logo
+    +</xsl:comment> 
 		  </xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>

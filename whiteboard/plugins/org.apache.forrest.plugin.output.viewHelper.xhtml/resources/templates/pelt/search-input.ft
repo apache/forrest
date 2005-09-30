@@ -23,9 +23,6 @@
   <usage><![CDATA[<forrest:contract name="search-input">
   <forrest:properties contract="search-input">
    <forrest:property name="input-size">25</forrest:property>
-   <forrest:property name="search-input">
-      <search name="MyProject" domain="mydomain" provider="google"/>
-    </forrest:property>
   </forrest:properties>]
 </forrest:contract>]]></usage>
   
@@ -43,7 +40,6 @@
 
       <xsl:template name="search-input-body">
         <xsl:param name="input-size">25</xsl:param>
-        <xsl:param name="search-input"/>
 <xsl:comment>+ 
   |start Search 
   +</xsl:comment>
@@ -54,12 +50,12 @@
                 <!-- Form prompt -->
                 <xsl:variable name="search-prompt">
                   <i18n:text>Search the site with</i18n:text>
-                  <xsl:value-of select="$search-input/search/@provider"/>
+                  <xsl:value-of select="$config/search/@provider"/>
                 </xsl:variable>
                 <!-- Form action -->
                 <xsl:variable name="search-action">
                   <xsl:choose>
-                    <xsl:when test="$search-input/search/@provider = 'lucene'">
+                    <xsl:when test="$config/search/@provider = 'lucene'">
                       <xsl:value-of select="$root"/>
                       <xsl:value-of select="$lucene-search"/>
                     </xsl:when>
@@ -69,7 +65,7 @@
                 <!-- Form query field -->
                 <xsl:variable name="search-query">
                   <xsl:choose>
-                    <xsl:when test="$search-input/search/@provider = 'lucene'">
+                    <xsl:when test="$config/search/@provider = 'lucene'">
                       queryString</xsl:when>
                     <xsl:otherwise>q</xsl:otherwise>
                   </xsl:choose>
@@ -78,7 +74,7 @@
                 <form method="get" action="{$search-action}">
                   <div class="search-hidden">
                     <input type="hidden" name="sitesearch" 
-                      value="{$search-input/search/@domain}"/>
+                      value="{$config/search/@domain}"/>
                   </div>
                   <div class="search-field">
                     <input type="text" name="{$search-query}" 

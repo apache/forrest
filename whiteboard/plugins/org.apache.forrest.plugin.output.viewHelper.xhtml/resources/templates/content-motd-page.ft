@@ -18,24 +18,35 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="content-abstract" type="nugget">
+  name="content-motd-page" type="nugget">
   <description>
-    content-abstract will output the abstract of the content. 
+    content-motd-page - Template will output the motd-page. Used by forrest to link to dev-version docu.
   </description>
-  <usage><![CDATA[<forrest:contract name="content-abstract"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="content-motd-page"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="content-abstract" inputFormat="xsl" body="true" head="false">
+    format="xhtml" name="content-motd-page" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="content-abstract-body">
-<xsl:comment>+
-	    |start content-abstract
+	    <xsl:template name="content-motd-page-body" match="div[@id='content']/div[@id='skinconf-toc-page']">
+	<xsl:comment>+
+	    |start content-motd-page
 	    +</xsl:comment>
-            <!-- FIXME - Suppress the following test when empty div problem is solved -->
-		    <xsl:if test="normalize-space(div[@id='content']/div[@class='abstract'])">
-		      <xsl:copy-of select="div[@id='content']/div[@class='abstract']"/>
-	      </xsl:if>
+			  <xsl:if test="$config/motd-page">
+		      <xsl:if test="$config/motd-page/@location='page' or $config/motd-page/@location='both'">
+ 	            <xsl:value-of select="$config/motd-page"/>
+		          <xsl:if test="$config/motd-page-url">
+		            <xsl:text> (</xsl:text>
+		              <a>
+		                <xsl:attribute name="href">
+		                  <xsl:value-of select="$config/motd-page-url"/>
+		                </xsl:attribute>
+		                <xsl:text><i18n:text >More</i18n:text></xsl:text>
+		              </a>
+		            <xsl:text>)</xsl:text>
+		          </xsl:if>
+		      </xsl:if>
+		    </xsl:if>
 <xsl:comment>+
-    |end content-abstract
+    |end content-motd-page
     +</xsl:comment>
 		  </xsl:template>
 	  </xsl:stylesheet>
