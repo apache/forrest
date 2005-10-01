@@ -289,7 +289,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon US 2005" alt="ApacheCon US 2005 - logo" src="http://httpd.apache.org/images/apachecon_2005us.jpg" style="width: 135px;height: 59px;"></a>
 </div>
 </div>
 <!--+
@@ -361,8 +361,18 @@ document.write("Last Published: " + document.lastModified);
         elements into a generated Forrest page.</li>
     
 </ul>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+Due to issue
+<a href="http://issues.apache.org/jira/browse/FOR-555">FOR-555</a>
+the html comments that the CGI script depends upon are stripped before
+the output stage. You need to manually add those comments.
+This is fixed in forrest_07_branch of SVN.
 </div>
-<a name="N1001E"></a><a name="Purpose"></a>
+</div>
+</div>
+<a name="N10025"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>All Apache projects use dynamically generated download pages
@@ -376,7 +386,7 @@ document.write("Last Published: " + document.lastModified);
     how to process additional files.
     </p>
 </div>
-<a name="N10029"></a><a name="Prerequisites"></a>
+<a name="N10030"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
@@ -394,10 +404,10 @@ document.write("Last Published: " + document.lastModified);
     
 </ul>
 </div>
-<a name="N10042"></a><a name="Steps"></a>
+<a name="N10049"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
-<a name="N10047"></a><a name="cgi"></a>
+<a name="N1004E"></a><a name="cgi"></a>
 <h3 class="underlined_5">Add the mirrors.cgi as a raw file</h3>
 <p>As explained in the mirrors document, there will be a two-line CGI
       wrapper script at the top-level of your website called
@@ -408,7 +418,7 @@ document.write("Last Published: " + document.lastModified);
        (copy the Forrest project's
         <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/mirrors.cgi">mirrors.cgi</a>)
       </p>
-<a name="N1005D"></a><a name="html"></a>
+<a name="N10064"></a><a name="html"></a>
 <h3 class="underlined_5">Add the mirrors.html to xdocs directory</h3>
 <p>This file contains the html content of your mirror page, including
         the html form elements which drive the mirror selection. It also
@@ -421,7 +431,7 @@ document.write("Last Published: " + document.lastModified);
         <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/mirrors.html">mirrors.html</a>
         as a template and edit it to suit.)
       </p>
-<a name="N10071"></a><a name="menu"></a>
+<a name="N10078"></a><a name="menu"></a>
 <h3 class="underlined_5">Add a menu entry for Download</h3>
 <p>Add an entry to your site.xml navigation. For example ...
       </p>
@@ -432,7 +442,7 @@ document.write("Last Published: " + document.lastModified);
   &lt;download label="Download" href="http://forrest.apache.org/mirrors.cgi"/&gt;
   &lt;download_html href="mirrors.html"/&gt;&lt;!-- so the page is part of a tab --&gt;
   ...</pre>
-<a name="N1007F"></a><a name="link"></a>
+<a name="N10086"></a><a name="link"></a>
 <h3 class="underlined_5">Cause the mirrors.html to be processed as an extra file</h3>
 <p>Forrest gathers the links that are to be crawled, by reading site.xml
         and by finding any other internal links in the actual documents.
@@ -451,7 +461,7 @@ document.write("Last Published: " + document.lastModified);
 &lt;uris name="mirrors" follow-links="false"&gt;
   &lt;uri type="append" src="mirrors.html"/&gt;
 &lt;/uris&gt;</pre>
-<a name="N1009A"></a><a name="forrest"></a>
+<a name="N100A1"></a><a name="forrest"></a>
 <h3 class="underlined_5">Run 'forrest' to build your site</h3>
 <p>
         That is all that you need to do, Forrest will take care of it from
