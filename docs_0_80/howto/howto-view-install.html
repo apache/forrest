@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How to install the view package (v0.8-dev)</title>
+<title>How to install the views (v0.8-dev)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
@@ -144,7 +144,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../docs_0_80/skin-package.html">Skin Packages</a>
 </div>
 <div class="menuitem">
-<a href="../../docs_0_80/views.html">Views-dev</a>
+<a href="../../docs_0_80/views.html">Views development</a>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/forrest-contract.html">Our Contract</a>
@@ -295,7 +295,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon US 2005" alt="ApacheCon US 2005 - logo" src="http://httpd.apache.org/images/apachecon_2005us.jpg" style="width: 135px;height: 59px;"></a>
 </div>
 </div>
 <!--+
@@ -314,9 +314,9 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How to install the view package</h1>
+<h1>How to install the views</h1>
 <div class="abstract">
-    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed.
+    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed site.
   </div>
 <div id="motd-area">
         This is documentation for development version v0.8
@@ -372,15 +372,14 @@ This HowTo is a good start but still needs more work.
 </div>
 </div>
 <p>
-      Users/devs who wants to get started with view development.
-      This setup guide is valid for both user and devs.
+      Developers who want to get started with view development.
     </p>
 </div>
 <a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      To help user installing views. This is the "getting started" setup-guide.
+      To help with installing views. This is the "getting started" setup guide.
     </p>
 </div>
 <a name="N10023"></a><a name="Prerequisites"></a>
@@ -388,7 +387,7 @@ This HowTo is a good start but still needs more work.
 <div class="section">
 <ul>
       
-<li>You have to use the trunk version of forrest for using views because it is in an early stage</li>
+<li>You need to use the trunk version of Forrest for using views because it is in an early stage</li>
       
 <li>Read <a href="../../docs_0_80/howto/howto-buildPlugin.html">How to Build a Plugin</a>
         especially the section about using Forrest's own Ant.</li>
@@ -400,13 +399,13 @@ This HowTo is a good start but still needs more work.
 <div class="section">
 <p>
       The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
-      Some of the instructions has to be modified with your local settings.
+      Some of the instructions need to be modified with your local settings.
     </p>
 <a name="N1003D"></a><a name="localBuild"></a>
 <h3 class="underlined_5">Build the view and the viewHelper plugins</h3>
 <p>
-        The first step is to build the view and the viewHelper plugins. Change to a console of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an update and after this 
+        The first step is to build and deploy the view and the viewHelper plugins. Change to a terminal window of your choice
+        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an SVN update and after this 
         deploy both plugins locally.
       </p>
 <pre class="code">
@@ -417,7 +416,11 @@ ant local-deploy
 cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
 ant local-deploy
       </pre>
-<a name="N1004B"></a><a name="newSeed"></a>
+<p>
+        Alternatively, run the script <span class="codefrag">etc/views.sh</span>
+      
+</p>
+<a name="N10051"></a><a name="newSeed"></a>
 <h3 class="underlined_5">Seed a new project</h3>
 <p> 
 	Go to the directory where you want to seed a new project and seed it. 
@@ -426,7 +429,7 @@ ant local-deploy
 cd ~/src/newSeed
 forrest seed
       </pre>
-<a name="N10059"></a><a name="forrestProperties"></a>
+<a name="N1005F"></a><a name="forrestProperties"></a>
 <h3 class="underlined_5">Modifying forrest.properties</h3>
 <p>
         Now we have to tell forrest that we are planning to use the view plugins. We will do that
@@ -448,7 +451,7 @@ project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.a
 <pre class="code">
 project.skin=leather-dev
       </pre>
-<a name="N10071"></a><a name="testing"></a>
+<a name="N10077"></a><a name="testing"></a>
 <h3 class="underlined_5">Test your new view based project</h3>
 <p> 
         Now you have finished the preparation and the setup to finally do
@@ -456,15 +459,9 @@ project.skin=leather-dev
 <pre class="code">
 forrest run
       </pre>
-<p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view-based skin.</p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">When developing styles with views, 'forrest run' is the quickest
-way. You will see that you do not have to build your project to see the
-changes on your pages when working with *.fv. </div>
-</div>
-<a name="N10089"></a><a name="availableContracts"></a>
+<p>Then point to <span class="codefrag">http://localhost:8888/</span> and you will see the default
+        views-based site.</p>
+<a name="N1008B"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
 <p> 
 	     To start working with views, you need to know which contracts you can use. 
@@ -479,8 +476,8 @@ ant local-deploy
 </pre>
 <p>
         The newly installed plugin will show the available contracts as html pages.
-        First we have to tell forrest that we are planning to use the new plugin. We will do that
-        by editing the forrest.properties of the <a href="../../docs_0_80/howto/howto-view-install.html">newSeed</a> 
+        First we have to tell Forrest that we are planning to use the new plugin. We will do that
+        by editing the forrest.properties of the <a href="#newSeed">newSeed</a> 
         to add the plugin:
       </p>
 <pre class="code">
@@ -491,7 +488,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
         On this page you will find all contracts that you can use in your project.
       </p>
 </div>
-<a name="N100AB"></a><a name="Further Reading"></a>
+<a name="N100AD"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
@@ -510,12 +507,12 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
     
 </ul>
 </div>
-<a name="N100C2"></a><a name="Feedback"></a>
+<a name="N100C4"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>
-      Please provide feedback about this document via the
-      <a href="../../mail-lists.html">mailing lists</a>.
+      Please provide feedback about this document via the "dev"
+      <a href="../../mail-lists.html">mailing list</a>.
     </p>
 </div>
 </div>
