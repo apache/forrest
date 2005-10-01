@@ -144,7 +144,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../docs_0_80/skin-package.html">Skin Packages</a>
 </div>
 <div class="menuitem">
-<a href="../docs_0_80/views.html">Views-dev</a>
+<a href="../docs_0_80/views.html">Views development</a>
 </div>
 <div class="menuitem">
 <a href="../docs_0_80/forrest-contract.html">Our Contract</a>
@@ -295,7 +295,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://apachecon.com/"><img border="0" title="ApacheCon Europe 2005" alt="ApacheCon Europe 2005 - logo" src="http://apache.org/images/ac2005eu_135x50.gif" style="width: 135px;height: 50px;"></a>
+<a href="http://apachecon.com/"><img border="0" title="ApacheCon US 2005" alt="ApacheCon US 2005 - logo" src="http://httpd.apache.org/images/apachecon_2005us.jpg" style="width: 135px;height: 59px;"></a>
 </div>
 </div>
 <!--+
@@ -324,16 +324,22 @@ document.write("Last Published: " + document.lastModified);
 <a href="#overview">About Locationmaps</a>
 </li>
 <li>
+<a href="#namingConvention">Naming Convention</a>
+</li>
+<li>
+<a href="#selector">Location Selectors</a>
+</li>
+<li>
 <a href="#examples">Locationmap Examples</a>
 <ul class="minitoc">
 <li>
-<a href="#Retrieving+an+XDoc+via+HTTP">Retrieving an XDoc via HTTP</a>
+<a href="#source-via-http">Retrieving an XDoc via HTTP</a>
 </li>
 <li>
-<a href="#Retrieving+HTML+from+a+CMS">Retrieving HTML from a CMS</a>
+<a href="#source-from-remote-cms">Retrieving HTML from a CMS</a>
 </li>
 <li>
-<a href="#Link+Rewriting">Link Rewriting</a>
+<a href="#linkrewriting">Link Rewriting</a>
 </li>
 </ul>
 </li>
@@ -376,10 +382,66 @@ document.write("Last Published: " + document.lastModified);
 </div>
     
     
-<a name="N10038"></a><a name="examples"></a>
+<a name="N10038"></a><a name="namingConvention"></a>
+<h2 class="underlined_10">Naming Convention</h2>
+<div class="section">
+<p>For those that are familiar with name
+      resolution servers or the Handles Service, it might be easier to think of the
+      locationmap as a name resolution module or sort of a handle resolution module
+      that it accepts "names" or whatever you desire to call these "hints" and
+      returns the location.</p>
+<p>The thought is that by using hints that look a little like a
+      file name it disguises what locationmaps are really doing for us.
+      By using URN-style names, we are truly
+      disassociating the name/hint from the physical location.</p>
+<p>For example, here is a locationmap entry based purely on filename:</p>
+<pre class="code">
+&lt;map:transform src="{lm:xhtml2html.xsl}"/&gt;
+      </pre>
+<p>and here is that same entry using a "name" style.  One implies 
+      a certain physical location where as the one below is truly a name that 
+      needs to be resolved to a physical location.</p>
+<pre class="code">
+&lt;map:transform src="{lm:transform.xhtml2.html}"/&gt;
+      </pre>
+<p>The format is essentially one of:</p>
+<pre class="code">
+resource-type(dot)from-format(dot)to-format
+      </pre>
+<p>or</p>
+<pre class="code">
+resource-type(dot)type(dot)name
+      </pre>
+<p>Examples of these two:</p>
+<pre class="code">
+transform.xslt.xthml2.html
+graphic.png.project-logo
+      </pre>
+</div>
+  
+  
+<a name="N10068"></a><a name="selector"></a>
+<h2 class="underlined_10">Location Selectors</h2>
+<div class="section">
+<p>You can define multiple possble locations for a file in the locationmap
+    with the following code:</p>
+<pre class="code">
+&lt;match pattern="tabs.xml"&gt;
+  &lt;select type="exists"&gt;      
+    &lt;location src="{project:content.xdocs}tabs1.xml"/&gt;
+    &lt;location src="{project:content.xdocs}tabs2.xml"/&gt;
+  &lt;/select&gt;   
+&lt;/match&gt;
+    </pre>
+<p>Each location will be tested in turn, if the file exists then it will be returned
+    as a match, otherwise testing will continue.</p>
+</div>
+    
+    
+<a name="N10079"></a><a name="examples"></a>
 <h2 class="underlined_10">Locationmap Examples</h2>
 <div class="section">
-<a name="N1003E"></a><a name="Retrieving+an+XDoc+via+HTTP"></a>
+<a name="N1007F"></a><a name="source-via-http"></a>
 <h3 class="underlined_5">Retrieving an XDoc via HTTP</h3>
 <p>Normally files are generated from <span class="codefrag">{project:content.xdocs}</span>.
         Using the Locationmap it is possible to make these files come from elsewhere.
@@ -407,7 +469,7 @@ document.write("Last Published: " + document.lastModified);
 <div class="content">Because of the above limitation many of the links in the
         page generated from the above example are broken.</div>
 </div>
-<a name="N10064"></a><a name="Retrieving+HTML+from+a+CMS"></a>
+<a name="N100A5"></a><a name="source-from-remote-cms"></a>
 <h3 class="underlined_5">Retrieving HTML from a CMS</h3>
 <p>Using the locationmap you can use Forrest to retrieve data from a 
         Content Management System (CMS), wither local or remote.
@@ -477,7 +539,7 @@ char-encoding=latin1
 <div class="content">This demo is an example only, it does not fully work at this time. For example, absolute URLs
         in the source document need to be rewritten to ensure that they are matched by the locationmap.</div>
 </div>
-<a name="N100A2"></a><a name="Link+Rewriting"></a>
+<a name="N100E3"></a><a name="linkrewriting"></a>
 <h3 class="underlined_5">Link Rewriting</h3>
 <p>The locationmap can be used to rewrite URLs when the page is generated.
         For example, when the locationmap has:</p>
