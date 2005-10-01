@@ -104,13 +104,20 @@ public final class SelectNode extends AbstractNode {
     public String locate(Map om, InvokeContext context) throws Exception {
         
         Parameters parameters = resolveParameters(context,om);
+        String location;
         for (int i = 0; i < m_nodes.length; i++) {
-            String location = m_nodes[i].locate(om,context);
-            if (m_selector.select(location,om,parameters)) {
+            try {
+              location = m_nodes[i].locate(om,context);
+              if (m_selector.select(location,om,parameters)) {
+                  if (getLogger().isDebugEnabled()) {
+                      getLogger().debug("selected: " + location);
+                  }
+                  return location;
+              }
+            } catch (ConfigurationException e) {
                 if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("selected: " + location);
+                    getLogger().debug("Ignoring locatoinmap config exception: " + e.getMessage());
                 }
-                return location;
             }
         }
         return null;
