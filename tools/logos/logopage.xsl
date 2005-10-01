@@ -37,9 +37,11 @@
           <ul> 
            <xsl:for-each select="project">
            
-              <li><a href="#{@name}-{@id}">
-                  <xsl:value-of select="@name" /> - <xsl:value-of select="@id" />
-                  </a></li>
+             <li>
+               <a href="#{@id}">
+                 <xsl:value-of select="@name" /> - <xsl:value-of select="@id" />
+               </a>
+             </li>
    
            </xsl:for-each>
           </ul>
@@ -90,7 +92,7 @@
 
   <xsl:template match="project">
    
-   <h2 id="{@name}-{@id}"><xsl:value-of select="@name" /></h2>
+   <h2 id="{@id}"><xsl:value-of select="@name" /></h2>
    <img><xsl:attribute name="src">apache-<xsl:value-of select="@id" />.png</xsl:attribute></img>
    <br/>
    <a><xsl:attribute name="href">apache-<xsl:value-of select="@id" />.svg</xsl:attribute>apache-<xsl:value-of select="@id" />.svg</a>
