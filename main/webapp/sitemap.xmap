@@ -294,7 +294,6 @@ $Revision: 1.12 $
     </map:pipeline>
 
   <map:pipeline type="caching" internal-only="true">
- 
       <!--
         FIXME: there is a bug in the Cocoon 2.2 resolving that can make cocoon:/ 
                calls call the base sitemap; remove the following when it's fixed.
@@ -330,7 +329,7 @@ $Revision: 1.12 $
       <map:pipeline internal-only="false">
            <map:select type="exists">
              <map:when test="{project:sitemap}">
-               <map:mount uri-prefix="" 
+               <map:mount uri-prefix=""
                           src="{project:sitemap}" 
                           check-reload="yes" 
                           pass-through="true"/>
@@ -356,20 +355,18 @@ $Revision: 1.12 $
           Delivers skin configuration information in a usable form            
          -->  
          <map:match pattern="skinconf.xml">
-           <map:generate src="{project:skinconf}" />
-           <map:transform src="{forrest:stylesheets}/strip-doctype.xsl"/>
-           <map:transform src="{forrest:stylesheets}/upgrade-skinconf.xsl"/>
+           <map:generate src="{lm:skinconf.project}" />
+           <map:transform src="{lm:strip-doctype.xsl}"/>
+           <map:transform src="{lm:upgrade-skinconf.xsl}"/>
            <map:select type="exists">
-             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
-               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
+             <map:when test="{lm:project-skinconf.xsl}">
+               <map:transform src="{lm:project-skinconf.xsl}"/>
+             </map:when>
+             <map:when test="{lm:forrest-skinconf.xsl}">
+               <map:transform src="{lm:forrest-skinconf.xsl}"/>
              </map:when>
            </map:select>
-           <map:select type="exists">
-             <map:when test="{forrest:context}/skins/{forrest:skin}/skinconf.xsl">
-               <map:transform src="{forrest:context}/skins/{forrest:skin}/skinconf.xsl"/>
-             </map:when>
-           </map:select>
-           <map:transform src="{forrest:context}/skins/common/skinconf.xsl"/>
+           <map:transform src="{lm:common-skinconf.xsl}"/>
            <map:transform type="skinconf"/>
            <map:serialize type="xml" />
          </map:match>
