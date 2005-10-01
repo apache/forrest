@@ -62,21 +62,46 @@
       </select>
     </match>
     
-    <match pattern="transform.*.*">
-      <select>
-        <location src="{project:skins-dir}{forrest:skin}/xslt/html/{1}2{2}.xsl" />
-        <location src="{forrest:context}/skins/{forrest:skin}/xslt/html/{1}2{2}.xsl"/>
-      </select>
-    </match>
-    
-    
     <!-- ================================== -->
-    <!-- skinconf files                     -->
+    <!-- utility transforms                 -->
     <!-- ================================== -->
     
     <match pattern="transform.xml.xml-doctype-stripped">
       <location src="{forrest:stylesheets}/strip-doctype.xsl" />
     </match>
+    
+    <!--
+      FIXME: strip remaining i18n elements and attributes.
+      workaround for http://issues.apache.org/jira/browse/FOR-592
+    -->
+    <match pattern="transform.xml.xml-i18n-stripped">
+      <location src="{forrest:stylesheets}/strip-i18n-remains.xsl" />
+    </match>
+    
+    <!--
+      FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
+    -->
+    <match pattern="transform.xml.xml-namespace-stripped">
+      <location src="{forrest:context}/skins/common/xslt/html/strip_namespaces.xsl" />
+    </match>
+    
+    <match pattern="transform.html.broken-links">
+      <location src="resources/stylesheets/declare-broken-site-links.xsl" />
+    </match>
+    
+    <!-- All core other transforms -->
+    
+    <match pattern="transform.*.*">
+      <select>
+        <location src="{project:skins-dir}{forrest:skin}/xslt/html/{1}2{2}.xsl" />
+        <location src="{forrest:context}/skins/{forrest:skin}/xslt/html/{1}2{2}.xsl"/>
+        <location src="{forrest:stylesheets}/{1}2{2}.xsl"/>
+      </select>
+    </match>
+    
+    <!-- ================================== -->
+    <!-- skinconf files                     -->
+    <!-- ================================== -->
     
     <match pattern="transform.old-skinconf.new-skinconf">
       <location src="{forrest:stylesheets}/upgrade-skinconf.xsl" />
@@ -96,19 +121,59 @@
     
     <!-- ================================== -->
     <!-- plugin files                       -->
+    <!-- ================================== -->    
+    <match pattern="plugin.descriptor.whiteboard">
+        <location src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml" />
+    </match>
+    
+    <match pattern="plugin.descriptor.forrest">
+        <location src="{forrest:plugins-src}/plugins.xml" />
+    </match>
+    
+    <match pattern="plugin.xmap.*">
+        <location src="{project:temp-dir}/{1}.xmap" />
+    </match>
+    
     <!-- ================================== -->
-    <match pattern="project.xmap.resources">
-        <location src="{project:temp-dir}/resources.xmap" />
+    <!-- chaperon files                     -->
+    <!-- ================================== -->
+    <match pattern="chaperon.grammar.*">
+        <location src="{forrest:context}/resources/chaperon/grammars/{1}.grm" />
+    </match>
+    
+    <match pattern="chaperon.xgrammar.*">
+        <location src="{forrest:context}/resources/chaperon/grammars/{1}.xgrm" />
+    </match>
+    
+    <match pattern="chaperon.lexicon.*">
+        <location src="resources/chaperon/grammars/{1}.xlex"/>
+        <location src="{forrest:context}/resources/chaperon/grammars/{1}.xlex" />
+    </match>
+    
+    <match pattern="transform.chaperon.grammar.lexicon">
+        <location src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl" />
+    </match>
+    
+    <match pattern="transform.chaperon.*">
+        <location src="{forrest:context}/resources/chaperon/stylesheets/{1}.xsl" />
     </match>
     
     <!-- ================================== -->
     <!-- project files                      -->
     <!-- ================================== -->
+    <match pattern="project.xmap.sitemap">
+        <location src="{project:sitemap}" />
+    </match>
+    
     <match pattern="skinconf.project">
       <location src="{project:skinconf}" />
     </match>
     
-    <match pattern="project.*.*">
+    <match pattern="project.build-info">
+      <location src="{project:temp-dir}/build-info.xml" />
+    </match>
+    
+    <match pattern="project.**.*">
       <location src="{project:content.xdocs}{1}.{2}" />
     </match>
     

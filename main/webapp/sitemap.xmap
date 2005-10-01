@@ -271,13 +271,13 @@ $Revision: 1.12 $
               FIXME: strip remaining i18n elements and attributes.
               workaround for http://issues.apache.org/jira/browse/FOR-592
             -->
-            <map:transform src="{forrest:stylesheets}/strip-i18n-remains.xsl"/>
+            <map:transform src="{lm:transform.xml.xml-i18n-stripped}"/>
 	  </map:otherwise>
         </map:select>
       <!--
         FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
       -->
-        <map:transform src="{forrest:context}/skins/common/xslt/html/strip_namespaces.xsl"/>
+        <map:transform src="{lm:transform.xml.xml-namespace-stripped}"/>
 
       <map:serialize/>
     </map:resource>
@@ -301,17 +301,17 @@ $Revision: 1.12 $
       -->
       <map:match pattern="*.xlex">
         <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xlex">
-            <map:read src="resources/chaperon/grammars/{1}.xlex"/>
+          <map:when test="{lm:chaperon.lexicon.{1}}">
+            <map:read src="{lm:chaperon.lexicon.{1}}"/>
           </map:when>
           <map:otherwise>
-            <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
+            <map:generate  type="text2xml"   src="{lm:chaperon.grammar.{1}}"/>
+            <map:transform type="lexer"  src="{lm:chaperon.lexicon.grm}"/>
+            <map:transform type="parser" src="{lm:chaperon.xgrammar.grm}"/>
+            <map:transform               src="{lm:transform.chaperon.text4regex}"/>
+            <map:transform type="lexer"  src="{lm:chaperon.lexicon.regex}"/>
+            <map:transform type="parser" src="{lm:chaperon.xgrammar.regex}"/>
+            <map:transform               src="{lm:transform.chaperon.grammar.lexicon}"/>
             <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
@@ -373,7 +373,7 @@ $Revision: 1.12 $
 
          <!-- Add some build information, which is added to the html head -->
          <map:match pattern="build-info">
-           <map:generate src="{project:temp-dir}/build-info.xml"/>
+           <map:generate src="{lm:project.build-info}"/>
            <map:serialize type="xml"/>
          </map:match>
        </map:pipeline>
@@ -390,10 +390,10 @@ $Revision: 1.12 $
 
         <map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp">
           <map:aggregate element="pluginList">
-            <map:part src="{forrest:plugins-src}/plugins.xml"/>
-            <map:part src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml"/>
+            <map:part src="{lm:plugin.descriptor.whiteboard}"/>
+            <map:part src="{lm:plugin.descriptor.whiteboard}"/>
           </map:aggregate>
-          <map:transform src="{forrest:stylesheets}/plugins2xdoc.xsl"/>
+          <map:transform src="{lm:transform.plugins.xdoc}"/>
           <map:serialize type="xml"/>
         </map:match>
    
@@ -485,11 +485,11 @@ $Revision: 1.12 $
 
       <map:match pattern="**body-*.html">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}{1}{2}.ehtml">
-            <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
-            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
+          <map:when test="{lm:project.{1}{2}.ehtml}">
+            <map:generate src="{lm:project.{1}{2}.ehtml}" />
+            <map:transform src="{lm:transform.html.htmlbody}" />
             <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-            <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
+            <map:transform src="{lm:transform.html.broken-links}" />
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -502,7 +502,7 @@ $Revision: 1.12 $
         <map:transform type="idgen"/>
         <map:transform type="xinclude"/>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
+        <map:transform src="{lm:transform.html.broken-links}" />
         <map:call resource="skinit">
           <map:parameter name="type" value="transform.xdoc.html"/>
           <map:parameter name="path" value="{1}{2}.html"/>
@@ -513,7 +513,7 @@ $Revision: 1.12 $
       <map:match pattern="**menu-*.html">
         <map:generate src="cocoon:/{1}book-{2}.html"/>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-        <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
+        <map:transform src="{lm:transform.html.broken-links}" />
         <map:call resource="skinit">
           <map:parameter name="type" value="transform.book.menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
@@ -542,8 +542,8 @@ $Revision: 1.12 $
 
     <map:pipeline internal-only="false">
       <map:select type="exists">
-        <map:when test="{project:temp-dir}/output.xmap">
-          <map:mount uri-prefix="" src="{project:temp-dir}/output.xmap" check-reload="yes" pass-through="true"/>
+        <map:when test="{lm:plugin.xmap.output}">
+          <map:mount uri-prefix="" src="{lm:plugin.xmap.output}" check-reload="yes" pass-through="true"/>
         </map:when>
       </map:select>
     </map:pipeline>
