@@ -246,10 +246,26 @@ Section handling
 
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
-    <table cellpadding="4" cellspacing="1" class="ForrestTable">
-      <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor |@id"/>
-      <xsl:apply-templates/>
-    </table>
+    <xsl:choose>
+      <!-- Limit Forrest specific processing  to tables without class -->
+      <xsl:when test="@class = ''">
+        <table cellpadding="4" cellspacing="1" class="ForrestTable">
+          <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor |@id"/>
+          <xsl:apply-templates/>
+        </table>    
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Tables with class are passed without change -->
+        <xsl:copy>
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates/>
+        </xsl:copy>    
+        
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="@class = ''">
+      
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="acronym/@title">
