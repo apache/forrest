@@ -50,28 +50,14 @@
   
   <map:resources>
     <map:resource name="skinit">
-        <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
-              <map:parameter name="notoc" value="{notoc}"/>
-              <!-- For backwards-compat with 0.2 - 0.4 skins -->
-              <map:parameter name="isfaq" value="{notoc}"/>
-              <map:parameter name="nopdf" value="{nopdf}"/>
-              <map:parameter name="path" value="{path}"/>
-              <map:parameter name="config-file" value="{project:skinconf}"/>
-            </map:transform>
-          </map:when>
-          <map:otherwise>
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/html/{type}.xsl">
-              <map:parameter name="notoc" value="{notoc}"/>
-              <!-- For backwards-compat with 0.2 - 0.4 skins -->
-              <map:parameter name="isfaq" value="{notoc}"/>
-              <map:parameter name="nopdf" value="{nopdf}"/>
-              <map:parameter name="path" value="{path}"/>
-              <map:parameter name="config-file" value="{project:skinconf}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
+        <map:transform src="{lm:{type}}">
+          <map:parameter name="notoc" value="{notoc}"/>
+          <!-- For backwards-compat with 0.2 - 0.4 skins -->
+          <map:parameter name="isfaq" value="{notoc}"/>
+          <map:parameter name="nopdf" value="{nopdf}"/>
+          <map:parameter name="path" value="{path}"/>
+          <map:parameter name="config-file" value="{project:skinconf}"/>
+        </map:transform>
       <map:serialize/>
     </map:resource>
 
@@ -118,7 +104,7 @@
         </map:select>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:call resource="skinit">
-          <map:parameter name="type" value="tab2menu"/>
+          <map:parameter name="type" value="transform.tab.menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
       </map:match>      

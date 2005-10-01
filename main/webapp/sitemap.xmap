@@ -251,28 +251,14 @@ $Revision: 1.12 $
 
   <map:resources>
     <map:resource name="skinit">
-        <map:select type="exists">
-          <map:when test="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
-            <map:transform src="{project:skins-dir}{forrest:skin}/xslt/html/{type}.xsl">
-              <map:parameter name="notoc" value="{notoc}"/>
-              <!-- For backwards-compat with 0.2 - 0.4 skins -->
-              <map:parameter name="isfaq" value="{notoc}"/>
-              <map:parameter name="nopdf" value="{nopdf}"/>
-              <map:parameter name="path" value="{path}"/>
-              <map:parameter name="config-file" value="{project:skinconf}"/>
-            </map:transform>
-          </map:when>
-          <map:otherwise>
-            <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/html/{type}.xsl">
-              <map:parameter name="notoc" value="{notoc}"/>
-              <!-- For backwards-compat with 0.2 - 0.4 skins -->
-              <map:parameter name="isfaq" value="{notoc}"/>
-              <map:parameter name="nopdf" value="{nopdf}"/>
-              <map:parameter name="path" value="{path}"/>
-              <map:parameter name="config-file" value="{project:skinconf}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
+        <map:transform src="{lm:{type}}">
+          <map:parameter name="notoc" value="{notoc}"/>
+          <!-- For backwards-compat with 0.2 - 0.4 skins -->
+          <map:parameter name="isfaq" value="{notoc}"/>
+          <map:parameter name="nopdf" value="{nopdf}"/>
+          <map:parameter name="path" value="{path}"/>
+          <map:parameter name="config-file" value="{project:skinconf}"/>
+        </map:transform>
         <map:select type="config">
           <map:parameter name="value" value="{defaults:i18n}"/>
           <map:when test="true">	
@@ -521,7 +507,7 @@ $Revision: 1.12 $
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
         <map:call resource="skinit">
-          <map:parameter name="type" value="document2html"/>
+          <map:parameter name="type" value="transform.xdoc.html"/>
           <map:parameter name="path" value="{1}{2}.html"/>
           <map:parameter name="notoc" value="false"/>
         </map:call>
@@ -532,7 +518,7 @@ $Revision: 1.12 $
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
         <map:transform src="resources/stylesheets/declare-broken-site-links.xsl" />
         <map:call resource="skinit">
-          <map:parameter name="type" value="book2menu"/>
+          <map:parameter name="type" value="transform.book.menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
       </map:match>
@@ -578,7 +564,7 @@ $Revision: 1.12 $
         </map:aggregate>
         
         <map:call resource="skinit">
-          <map:parameter name="type" value="site2xhtml"/>
+          <map:parameter name="type" value="transform.site.xhtml"/>
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>         
@@ -592,7 +578,7 @@ $Revision: 1.12 $
           <map:part src="cocoon:/{1}/body-{2}.html"/>
         </map:aggregate>
         <map:call resource="skinit">
-          <map:parameter name="type" value="site2xhtml"/>
+          <map:parameter name="type" value="transform.site.xhtml"/>
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
