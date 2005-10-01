@@ -243,9 +243,10 @@
     </xsl:template>
     
     <xsl:template match="table">
-      <table>
-            <xsl:apply-templates select="node()"/>
-      </table>
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates/>
+      </xsl:copy>    
     </xsl:template>
     
             
