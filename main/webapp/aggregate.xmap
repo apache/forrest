@@ -49,14 +49,14 @@ $Revision: 1.2 $
       <!-- Aggregation of all XML in the site -->
       <map:match pattern="*.xml">
         <map:generate src="cocoon://abs-linkmap"/>
-        <map:transform src="{forrest:stylesheets}/site2book.xsl" />
-        <map:transform src="{forrest:stylesheets}/aggregates/book2cinclude.xsl">
+        <map:transform src="{lm:transform.site.book}" />
+        <map:transform src="{lm:transform-aggregate.book.cinclude}">
           <map:parameter name="ignore" value="{1}"/>
           <map:parameter name="title" value="{conf:project-name}"/>
         </map:transform>
         <map:transform type="cinclude"/>
-        <map:transform src="{forrest:stylesheets}/aggregates/doc2doc-uniqueids.xsl"/>
-        <map:transform src="{forrest:stylesheets}/aggregates/docs2document.xsl"/>
+        <map:transform src="{lm:transform-aggregate.doc.doc-uniqueids}"/>
+        <map:transform src="{lm:transform-aggregate.docs.document}"/>
         <map:serialize type="xml"/>
       </map:match>
 
@@ -68,7 +68,7 @@ $Revision: 1.2 $
       <map:match pattern="linkmap-*.*">
         <map:generate src="cocoon://abs-linkmap" />
 
-        <map:transform src="{forrest:stylesheets}/aggregates/relativize-split-linkmap.xsl">
+        <map:transform src="{lm:transform-aggregate.linkmap.relativized-linkmap}">
           <map:parameter name="path" value="{1}.{2}" />
         </map:transform>
         <map:serialize type="xml"/>
