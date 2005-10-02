@@ -756,6 +756,24 @@
  <cocoon-crawler     logger="core.search.crawler"/>
  <lucene-xml-indexer logger="core.search.lucene"/>
 
+<!-- ========== Components used for profiling ========== -->
  <include src="resource://org/apache/cocoon/components/profiler/profiler.roles"/>
+
+<!-- ========== Components used for xml validation ========== -->
+ <include src="resource://org/apache/cocoon/components/validation/validation.roles"/>
+  <!--+
+      | The shared Validator instance in Cocoon.
+      |
+      | This defaults to an instance of a "CachedValidator". To disable schema
+      | caching add the following attribute to the <validator ... /> element:
+      |
+      |   class="org.apache.cocoon.components.validation.impl.DefaultValidator"
+      +-->
+  <validator logger="core.validation">
+    <schema-parser name="jing" class="org.apache.cocoon.components.validation.jing.JingSchemaParser"/>
+    <schema-parser name="jaxp" class="org.apache.cocoon.components.validation.jaxp.JaxpSchemaParser">
+      <factory-class>org.apache.xerces.jaxp.validation.XMLSchemaFactory</factory-class>
+    </schema-parser>
+  </validator>
 
 </components>

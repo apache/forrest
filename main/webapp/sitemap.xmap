@@ -147,16 +147,40 @@ $Revision: 1.12 $
       src="org.apache.cocoon.transformation.LogTransformer"
       logger="sitemap.transformer.log" pool-max="16"/>
 
-  <map:transformer name="jing"
-      logger="sitemap.transformer.jing"
-      src="org.apache.cocoon.transformation.JingTransformer">
-    <!--+ The enable-caching configuration element is optional
-        | (defaults to true) and defines whether compiled RelaxNG
-        | schemas should be stored in Cocoon's transient cache or not
-        +-->
-    <!-- <enable-caching>true</enable-caching> -->
+  <map:transformer name="validate"
+    logger="sitemap.transformer.validate"
+    src="org.apache.cocoon.transformation.ValidatingTransformer">
+    
+    <!--+ The "grammar" an optional configuration element specifying the default
+          | grammar used by the validator. When the "grammar" element is specified,
+          | the automatic detection of schema types will be disabled.
+          |
+          | This can also be specifed in pipelines as a parameter:
+          |   <map:parameter name="grammar" value="... grammar identifier ..."/>
+          |
+          | For a list of well known grammars, see the JavaDoc documentation for the
+          | org.apache.cocoon.components.validation.Validator interface.
+          +-->
+    <!-- <grammar>... grammar identifier ...</grammar> -->
   </map:transformer>
 
+  <map:transformer name="validation-report"
+    logger="sitemap.transformer.validate"
+    src="org.apache.cocoon.transformation.ValidationReportTransformer">
+    
+    <!--+ The "grammar" an optional configuration element specifying the default
+          | grammar used by the validator. When the "grammar" element is specified,
+          | the automatic detection of schema types will be disabled.
+          |
+          | This can also be specifed in pipelines as a parameter:
+          |   <map:parameter name="grammar" value="... grammar identifier ..."/>
+          |
+          | For a list of well known grammars, see the JavaDoc documentation for the
+          | org.apache.cocoon.components.validation.Validator interface.
+          +-->
+    <!-- <grammar>... grammar identifier ...</grammar> -->
+  </map:transformer>
+  
  </map:transformers>
 
     <map:readers default="resource">
