@@ -119,73 +119,73 @@ $Revision: 1.8 $
 
           <map:when test="document-v10">
           <!-- FIXME (JJP):  This should use the v12 now-->
-            <map:transform src="{forrest:stylesheets}/docv10todocv11.xsl" />
+            <map:transform src="{lm:transform.docv10.docv11}" />
           </map:when>
 
           <map:when test="document-v20a">
-            <map:transform src="{forrest:stylesheets}/docv20todocv12.xsl" />
+            <map:transform src="{lm:transform.docv20.docv12}" />
           </map:when>
 
           <map:when test="document-v20">
-            <map:transform src="{forrest:stylesheets}/docv20todocv13.xsl" />
+            <map:transform src="{lm:transform.docv20.docv13}" />
           </map:when>
 
           <map:when test="howto-v10">
-            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
+            <map:transform src="{lm:transform.howto.document}" />
           </map:when>
 
           <map:when test="howto-v11">
-            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
+            <map:transform src="{lm:transform.howto.document}" />
           </map:when>
           <map:when test="howto-v12">
-            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
+            <map:transform src="{lm:transform.howto.document}" />
           </map:when>
           <map:when test="howto-v13">
-            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
+            <map:transform src="{lm:transform.howto.document}" />
           </map:when>
           <map:when test="howto-v20">
-            <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
+            <map:transform src="{lm:transform.howto.document}" />
           </map:when>
 
           <map:when test="todo-v10">
-            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
+            <map:transform src="{lm:transform.todo.document}" />
           </map:when>
 
           <map:when test="todo-v11">
-            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
+            <map:transform src="{lm:transform.todo.document}" />
           </map:when>
 
           <map:when test="todo-v12">
-            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
+            <map:transform src="{lm:transform.todo.document}" />
           </map:when>
 
           <map:when test="todo-v13">
-            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
+            <map:transform src="{lm:transform.todo.document}" />
           </map:when>
 
           <map:when test="todo-v20">
-            <map:transform src="{forrest:stylesheets}/todo2document.xsl" />
+            <map:transform src="{lm:transform.todo.document}" />
           </map:when>
 
           <map:when test="changes-v10">
-            <map:transform src="{forrest:stylesheets}/changesv10tochangesv11.xsl" />
-            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
+            <map:transform src="{lm:transform.changesv10.changesv11}" />
+            <map:transform src="{lm:transform.changesv.document}" />
           </map:when>
 
           <map:when test="changes-v11">
-            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
+            <map:transform src="{lm:transform.changesv.document}" />
           </map:when>
 
           <map:when test="changes-v12">
-            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
+            <map:transform src="{lm:transform.changesv.document}" />
           </map:when>
 
           <map:when test="changes-v13">
-            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
+            <map:transform src="{lm:transform.changesv.document}" />
           </map:when>
 
           <map:when test="changes-v20">
-            <map:transform src="{forrest:stylesheets}/changes2document.xsl" />
+            <map:transform src="{lm:transform.changesv.document}" />
           </map:when>
           <map:otherwise />
         </map:select>
@@ -202,9 +202,9 @@ $Revision: 1.8 $
 
       <map:match pattern="**body-*.html">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}{1}{2}.ehtml">
-            <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
-            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
+          <map:when test="{lm:project.{1}{2}.ehtml}">
+            <map:generate src="{lm:project.{1}{2}.ehtml}" />
+            <map:transform src="{lm:transform.html.htmlbody}" />
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -216,9 +216,9 @@ $Revision: 1.8 $
 
       <map:match type="wildcard" pattern="**.xml">
        <map:select type="exists">
-         <map:when test="{project:temp-dir}/input.xmap">
+         <map:when test="{lm:plugin.xmap.input}">
              <map:mount uri-prefix=""
-                        src="{project:temp-dir}/input.xmap"
+                        src="{lm:plugin.xmap.input}"
                         check-reload="yes"
                         pass-through="true"/>
          </map:when> 
@@ -232,19 +232,19 @@ $Revision: 1.8 $
        </map:match>
        <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.ihtml">
          <map:generate src="{source}" type="html" />
-         <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+         <map:transform src="{lm:transform.html.document}" />
          <map:transform type="idgen" />
          <map:serialize type="xml-document"/>
        </map:match>
        <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.html">
          <map:generate src="{source}" type="html" />
-         <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+         <map:transform src="{lm:transform.html.document}" />
          <map:transform type="idgen" />
          <map:serialize type="xml-document"/>
        </map:match>
        <map:match type="i18n" pattern="{project:content.xdocs}{1}.*.txt">
          <map:generate type="text2xml" src="{source}" />
-         <map:transform src="{forrest:stylesheets}/text2document.xsl">
+         <map:transform src="{lm:transform.text.document}">
          <map:parameter name="filename" value="{2}" />
          </map:transform>
          <map:serialize type="xml-document"/>
@@ -269,7 +269,7 @@ $Revision: 1.8 $
              <map:generate src="{lm:{0}}"/>
            </map:when>
            <map:otherwise>
-             <map:generate src="{project:content.xdocs}{0}"/>
+             <map:generate src="{lm:project.{0}}"/>
            </map:otherwise>
          </map:select>
          <map:serialize type="xml"/>
