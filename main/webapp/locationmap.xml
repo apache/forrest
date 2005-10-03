@@ -41,171 +41,34 @@
     </select>
     
     <!-- ================================== -->
-    <!-- transforms                         -->
+    <!-- Mount forrest locationmaps         -->
     <!-- ================================== -->
+    <select>
+      <mount src="{forrest:context}/locationmap-transforms.xml"/>
+    </select>
     
+    <select>
+      <mount src="{forrest:context}/locationmap-i18n.xml"/>
+    </select>
     
-    <!-- FO -->
-    <match pattern="transform.*.fo">
-      <select>
-        <location src="{project:skins-dir}{forrest:skin}/xslt/fo/{1}2fo.xsl" />
-        <location src="{forrest:context}/skins/{forrest:skin}/xslt/fo/{1}2fo.xsl"/>
-        <location src="{forrest:context}/skins/common/xslt/fo/{1}2fo.xsl"/>
-      </select>
-    </match>
+    <select>
+      <mount src="{forrest:context}/locationmap-skinconf.xml"/>
+    </select>
     
-    <!-- skins                              -->
-    <match pattern="transform.xdoc.html">
-      <select>
-        <location src="{project:skins-dir}{forrest:skin}/xslt/html/document2html.xsl" />
-        <location src="{forrest:context}/skins/{forrest:skin}/xslt/html/document2html.xsl"/>
-      </select>
-    </match>
+    <select>
+      <mount src="{forrest:context}/locationmap-plugin.xml"/>
+    </select>
     
-    <!-- ================================== -->
-    <!-- utility transforms                 -->
-    <!-- ================================== -->
-    <match pattern="transform.xml.xml-doctype-stripped">
-      <location src="{forrest:stylesheets}/strip-doctype.xsl" />
-    </match>
+    <select>
+      <mount src="{forrest:context}/locationmap-chaperon.xml"/>
+    </select>
     
-    <match pattern="transform.linkmap.linkmap-absolutized">
-      <location src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
-    </match>
-    
-    <match pattern="transform.linkmap.linkmap-normalizedtabs">
-      <location src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
-    </match>
-    
-    <match pattern="transform.xml.xml-normalizedhrefs">
-      <location src="{forrest:stylesheets}/normalizehrefs.xsl" />
-    </match>
-    
-    <match pattern="transform.linkmap.linkmap-selectnode">
-      <location src="{forrest:stylesheets}/site2site-selectnode.xsl" />
-    </match>
-    
-    <match pattern="transform.linkmap.linkmap-relativized">
-      <location src="{forrest:stylesheets}/relativize-linkmap.xsl" />
-    </match>
-    
-    <!--
-      FIXME: strip remaining i18n elements and attributes.
-      workaround for http://issues.apache.org/jira/browse/FOR-592
-    -->
-    <match pattern="transform.xml.xml-i18n-stripped">
-      <location src="{forrest:stylesheets}/strip-i18n-remains.xsl" />
-    </match>
-    
-    <!--
-      FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
-    -->
-    <match pattern="transform.xml.xml-namespace-stripped">
-      <location src="{forrest:context}/skins/common/xslt/html/strip_namespaces.xsl" />
-    </match>
-    
-    <match pattern="transform.html.broken-links">
-      <location src="resources/stylesheets/declare-broken-site-links.xsl" />
-    </match>
-    
-    <!-- ================================== -->
-    <!-- aggregate transforms                 -->
-    <!-- ================================== -->
-    <match pattern="transform-aggregate.*.*">
-      <location src="{forrest:stylesheets}/aggregates/{1}2{2}.xsl" />
-    </match>
-    
-    <match pattern="transform-aggregate.linkmap.relativized-linkmap">
-      <location src="{forrest:stylesheets}/aggregates/relativize-split-linkmap.xsl" />
-    </match>
-    
-    <!-- All core other transforms -->
-    <match pattern="transform.*.*">
-      <select>
-        <location src="{project:skins-dir}{forrest:skin}/xslt/html/{1}2{2}.xsl" />
-        <location src="{forrest:context}/skins/{forrest:skin}/xslt/html/{1}2{2}.xsl"/>
-        <location src="{forrest:stylesheets}/{1}2{2}.xsl"/>
-      </select>
-    </match>
-    
-    <!-- ================================== -->
-    <!-- i18n files                         -->
-    <!-- ================================== -->
-    <match pattern="project.translations">
-        <location src="{project:translations}" />
-    </match>
-    
-    <!-- ================================== -->
-    <!-- skinconf files                     -->
-    <!-- ================================== -->
-    <match pattern="project.skinconf">
-        <location src="{project:skinconf}" />
-    </match>
-    
-    <match pattern="transform.old-skinconf.new-skinconf">
-      <location src="{forrest:stylesheets}/upgrade-skinconf.xsl" />
-    </match>
-    
-    <match pattern="project-skinconf.xsl">
-        <location src="{project:skins-dir}{forrest:skin}/skinconf.xsl" />
-    </match>
-    
-    <match pattern="forrest-skinconf.xsl">
-        <location src="{forrest:context}/skins/{forrest:skin}/skinconf.xsl" />
-    </match>
-    
-    <match pattern="common-skinconf.xsl">
-        <location src="{forrest:context}/skins/common/skinconf.xsl" />
-    </match>
-    
-    <!-- ================================== -->
-    <!-- plugin files                       -->
-    <!-- ================================== -->    
-    <match pattern="plugin.descriptor.whiteboard">
-        <location src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml" />
-    </match>
-    
-    <match pattern="plugin.descriptor.forrest">
-        <location src="{forrest:plugins-src}/plugins.xml" />
-    </match>
-    
-    <match pattern="plugin.xmap.*">
-        <location src="{project:temp-dir}/{1}.xmap" />
-    </match>
-    
-    <!-- ================================== -->
-    <!-- chaperon files                     -->
-    <!-- ================================== -->
-    <match pattern="chaperon.grammar.*">
-        <location src="{forrest:context}/resources/chaperon/grammars/{1}.grm" />
-    </match>
-    
-    <match pattern="chaperon.xgrammar.*">
-        <location src="{forrest:context}/resources/chaperon/grammars/{1}.xgrm" />
-    </match>
-    
-    <match pattern="chaperon.lexicon.*">
-        <location src="resources/chaperon/grammars/{1}.xlex"/>
-        <location src="{forrest:context}/resources/chaperon/grammars/{1}.xlex" />
-    </match>
-    
-    <match pattern="transform.chaperon.grammar.lexicon">
-        <location src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl" />
-    </match>
-    
-    <match pattern="transform.chaperon.*">
-        <location src="{forrest:context}/resources/chaperon/stylesheets/{1}.xsl" />
-    </match>
     
     <!-- ================================== -->
     <!-- project files                      -->
     <!-- ================================== -->
     <match pattern="project.xmap.sitemap">
         <location src="{project:sitemap}" />
-    </match>
-    
-    <match pattern="skinconf.project">
-      <location src="{project:skinconf}" />
     </match>
     
     <match pattern="project.build-info">
