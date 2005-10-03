@@ -69,6 +69,26 @@
       <location src="{forrest:stylesheets}/strip-doctype.xsl" />
     </match>
     
+    <match pattern="transform.linkmap.linkmap-absolutized">
+      <location src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+    </match>
+    
+    <match pattern="transform.linkmap.linkmap-normalizedtabs">
+      <location src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+    </match>
+    
+    <match pattern="transform.xml.xml-normalizedhrefs">
+      <location src="{forrest:stylesheets}/normalizehrefs.xsl" />
+    </match>
+    
+    <match pattern="transform.linkmap.linkmap-selectnode">
+      <location src="{forrest:stylesheets}/site2site-selectnode.xsl" />
+    </match>
+    
+    <match pattern="transform.linkmap.linkmap-relativized">
+      <location src="{forrest:stylesheets}/relativize-linkmap.xsl" />
+    </match>
+    
     <!--
       FIXME: strip remaining i18n elements and attributes.
       workaround for http://issues.apache.org/jira/browse/FOR-592
@@ -95,18 +115,24 @@
       <location src="{forrest:stylesheets}/aggregates/{1}2{2}.xsl" />
     </match>
     
-    <match pattern="lm:transform-aggregate.linkmap.relativized-linkmap">
+    <match pattern="transform-aggregate.linkmap.relativized-linkmap">
       <location src="{forrest:stylesheets}/aggregates/relativize-split-linkmap.xsl" />
     </match>
     
     <!-- All core other transforms -->
-    
     <match pattern="transform.*.*">
       <select>
         <location src="{project:skins-dir}{forrest:skin}/xslt/html/{1}2{2}.xsl" />
         <location src="{forrest:context}/skins/{forrest:skin}/xslt/html/{1}2{2}.xsl"/>
         <location src="{forrest:stylesheets}/{1}2{2}.xsl"/>
       </select>
+    </match>
+    
+    <!-- ================================== -->
+    <!-- i18n files                         -->
+    <!-- ================================== -->
+    <match pattern="project.translations">
+        <location src="{project:translations}" />
     </match>
     
     <!-- ================================== -->
@@ -184,6 +210,10 @@
     
     <match pattern="project.build-info">
       <location src="{project:temp-dir}/build-info.xml" />
+    </match>
+    
+    <match pattern="project.xml.site">
+      <location src="{project:content.xdocs}site.xml" />
     </match>
     
     <match pattern="project.**">
