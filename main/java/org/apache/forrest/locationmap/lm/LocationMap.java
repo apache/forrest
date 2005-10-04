@@ -261,19 +261,23 @@ public final class LocationMap extends AbstractLogEnabled {
         context.pushMap(ANCHOR_NAME,anchorMap);
 
         //mounted locations first
-        for (int i = 0; i < m_mountNodes.length; i++) {
-        	location = m_mountNodes[i].locate(om,context);
-        	if (location !=null) {
-        		ContainerUtil.dispose(context);
-        		return location;
-        	}
-        }
-
-        for (int i = 0; i < m_locatorNodes.length; i++) {
-            location = m_locatorNodes[i].locate(om,context);
-            if (location != null) {
-                break;
+        if (m_mountNodes != null) {
+          for (int i = 0; i < m_mountNodes.length; i++) {
+            location = m_mountNodes[i].locate(om,context);
+            if (location !=null) {
+              ContainerUtil.dispose(context);
+              return location;
             }
+          }
+        }
+        
+        if (m_locatorNodes != null) {
+          for (int i = 0; i < m_locatorNodes.length; i++) {
+              location = m_locatorNodes[i].locate(om,context);
+              if (location != null) {
+                  break;
+              }
+          }
         }
         
         ContainerUtil.dispose(context);
