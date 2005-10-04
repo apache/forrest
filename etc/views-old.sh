@@ -55,9 +55,9 @@ if [ -z "$FORREST_HOME" ] ; then
   FORREST_HOME=`dirname "$realpath"`/..
 fi
 
-cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.structurer
+cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.view/
 $FORREST_HOME/tools/ant/bin/ant local-deploy
-cd ../org.apache.forrest.plugin.output.themes
+cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
 $FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.input.viewHelper.xhtml.ls
 $FORREST_HOME/tools/ant/bin/ant local-deploy
