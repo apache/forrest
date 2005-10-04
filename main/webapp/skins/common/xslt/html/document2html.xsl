@@ -247,8 +247,8 @@ Section handling
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
     <xsl:choose>
-      <!-- Limit Forrest specific processing  to tables without class -->
-      <xsl:when test="@class = ''">
+      <!-- Limit Forrest specific processing to tables without class -->
+      <xsl:when test="not(@class) or @class=''">
         <table cellpadding="4" cellspacing="1" class="ForrestTable">
           <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor |@id"/>
           <xsl:apply-templates/>
