@@ -336,7 +336,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#localBuild">Build the view and the viewHelper plugins</a>
+<a href="#localBuild">Build the internal.structurer and the output.themes plugins</a>
+</li>
+<li>
+<a href="#jxpath">Upgrade the JXPath library</a>
 </li>
 <li>
 <a href="#newSeed">Seed a new project</a>
@@ -402,25 +405,30 @@ This HowTo is a good start but still needs more work.
       Some of the instructions need to be modified with your local settings.
     </p>
 <a name="N1003D"></a><a name="localBuild"></a>
-<h3 class="underlined_5">Build the view and the viewHelper plugins</h3>
+<h3 class="underlined_5">Build the internal.structurer and the output.themes plugins</h3>
 <p>
-        The first step is to build and deploy the view and the viewHelper plugins. Change to a terminal window of your choice
+        The first step is to build and deploy the internal.structurer and the output.themes plugins. Change to a terminal window of your choice
         and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an SVN update and after this 
         deploy both plugins locally.
       </p>
 <pre class="code">
 cd {forrest-trunk}
 svn up
-cd whiteboard/plugins/org.apache.forrest.plugin.internal.view/
+cd whiteboard/plugins/org.apache.forrest.plugin.internal.structurer/
 ant local-deploy
-cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
+cd ../org.apache.forrest.plugin.output.themes/
 ant local-deploy
       </pre>
 <p>
         Alternatively, run the script <span class="codefrag">etc/views.sh</span>
       
 </p>
-<a name="N10051"></a><a name="newSeed"></a>
+<a name="N10051"></a><a name="jxpath"></a>
+<h3 class="underlined_5">Upgrade the JXPath library</h3>
+<p> 
+        Replace lib.core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
+      </p>
+<a name="N1005B"></a><a name="newSeed"></a>
 <h3 class="underlined_5">Seed a new project</h3>
 <p> 
 	Go to the directory where you want to seed a new project and seed it. 
@@ -429,14 +437,14 @@ ant local-deploy
 cd ~/src/newSeed
 forrest seed
       </pre>
-<a name="N1005F"></a><a name="forrestProperties"></a>
+<a name="N10069"></a><a name="forrestProperties"></a>
 <h3 class="underlined_5">Modifying forrest.properties</h3>
 <p>
         Now we have to tell forrest that we are planning to use the view plugins. We will do that
         by editing the forrest.properties to add the plugins:
       </p>
 <pre class="code">
-project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
+project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forrest.plugin.internal.structurer
       </pre>
 <p>
 	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
@@ -451,7 +459,7 @@ project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.a
 <pre class="code">
 project.skin=leather-dev
       </pre>
-<a name="N10077"></a><a name="testing"></a>
+<a name="N10081"></a><a name="testing"></a>
 <h3 class="underlined_5">Test your new view based project</h3>
 <p> 
         Now you have finished the preparation and the setup to finally do
@@ -461,7 +469,7 @@ forrest run
       </pre>
 <p>Then point to <span class="codefrag">http://localhost:8888/</span> and you will see the default
         views-based site.</p>
-<a name="N1008B"></a><a name="availableContracts"></a>
+<a name="N10095"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
 <p> 
 	     To start working with views, you need to know which contracts you can use. 
@@ -488,7 +496,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
         On this page you will find all contracts that you can use in your project.
       </p>
 </div>
-<a name="N100AD"></a><a name="Further Reading"></a>
+<a name="N100B7"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
@@ -507,7 +515,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
     
 </ul>
 </div>
-<a name="N100C4"></a><a name="Feedback"></a>
+<a name="N100CE"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>
