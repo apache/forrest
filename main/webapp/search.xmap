@@ -103,8 +103,8 @@ $Revision$
       LuceneIndexTransformer, using sources across the whole site -->
       <map:match pattern="site.lucene">
         <map:generate src="cocoon://abs-linkmap"/>
-        <map:transform src="{forrest:stylesheets}/site2book.xsl" />
-        <map:transform src="{forrest:stylesheets}/search/book2cinclude-lucene.xsl">
+        <map:transform src="{lm:transform.site.book}" />
+        <map:transform src="{lm:transform.book.cinclude-lucene}">
           <map:parameter name="analyzer" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
           <map:parameter name="merge-factor" value="20"/>
           <map:parameter name="update-index" value="true"/>
@@ -122,7 +122,7 @@ $Revision$
         <map:select type="exists">
           <map:when test="{project:content.xdocs}{1}{2}.ehtml">
             <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
-            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
+            <map:transform src="{lm:transform.html.htmlbody}" />
           </map:when>
           <map:when test="cocoon://{1}{2}.xml">
             <map:generate src="cocoon://{1}{2}.xml"/>
