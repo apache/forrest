@@ -73,7 +73,7 @@ $Revision$
       <map:match pattern="lucene-update.xml">
         <map:generate src="cocoon:/site.lucene"/>
         <map:transform type="index"/>
-        <map:transform src="{forrest:stylesheets}/search/lucene-update2document.xsl"/>
+        <map:transform src="{lm:transform.lucene-update.xdoc}"/>
         <map:serialize type="xml"/>
       </map:match>
 
@@ -91,8 +91,7 @@ $Revision$
           <map:parameter name="query-string" value="queryString"/>
         </map:generate>
 
-        <map:transform
-        src="{forrest:stylesheets}/search/search2document.xsl"/>
+        <map:transform src="{lm:transform.lucene-search.xdoc}"/>
 
         <map:serialize type="xml"/>
       </map:match>
@@ -129,7 +128,7 @@ $Revision$
             <map:generate src="cocoon://{1}{2}.xml"/>
           </map:when>
         </map:select>
-        <map:transform src="{forrest:stylesheets}/search/document2lucene.xsl">
+        <map:transform src="{lm:transform.xdoc.lucene}">
           <map:parameter name="document-url" value="{1}{2}.xml"/>
         </map:transform>
         <map:serialize type="xml"/>
