@@ -48,7 +48,7 @@ $Revision: 1.2 $
       
       <map:match pattern="linkmap.xml">
         <map:generate src="cocoon://abs-linkmap" />
-        <map:transform src="{forrest:stylesheets}/linkmap2document.xsl"/>
+	<map:transform src="{lm:transform.linkmap.document}"/>
         <map:serialize type="xml" />
       </map:match>
       
@@ -66,14 +66,14 @@ $Revision: 1.2 $
           </map:otherwise>
         </map:select>
         <map:transform type="xinclude"/>
-        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+	<map:transform src="{lm:transform.linkmap.linkmap-absolutized}" />
         <map:serialize type="xml" />
       </map:match>
 
       <!-- Linkmap for regular pages -->
       <map:match pattern="**linkmap-*">
         <map:generate src="cocoon://abs-linkmap" />
-        <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
+        <map:transform src="{lm:transform.linkmap.linkmap-relativized}">
           <map:parameter name="path" value="{1}{2}" />
           <map:parameter name="site-root" value="{conf:project-url}" />
         </map:transform>
