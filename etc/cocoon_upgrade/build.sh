@@ -51,7 +51,7 @@ CONTROL
 *****************************    
 Please check the above output. 
 ******************************
-Verify that all there is not two versions of libraries within same directory. If you see "?" that means you need to resolve by hand. Start with:
+Verify that there are not two versions of libraries within the same directory. If you see "?" that means you need to resolve by hand. Start with:
 
 cd $FORREST_HOME/lib;svn st
 

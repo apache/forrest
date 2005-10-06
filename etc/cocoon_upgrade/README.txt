@@ -8,9 +8,10 @@ Instructions for use:
 
 NOTE:
 Make sure that you have set $COCOON_HOME like e.g.:
-#COCOON_HOME
 export COCOON_HOME=/home/thorsten/apache/cocoon-trunk/
+and do a 'build clean' there.
 
+-------------------------
 0. cd $FORREST_HOME/etc/cocoon_upgrade
 
 1. Keep our local.*.properties files sychronised with Cocoon's.
