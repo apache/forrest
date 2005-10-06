@@ -63,10 +63,10 @@ $Revision: 1.2 $
       </map:match>
 
       <map:match pattern="**revisions-**">
-        <map:generate type="directory" src="{project:content.xdocs}{1}">
+	  <map:generate type="directory" src="{project:content.xdocs}{1}">
           <map:parameter name="dateFormat" value="yyyy-MM-dd hh:mm" />
         </map:generate>
-        <map:transform src="{forrest:stylesheets}/directory2revisions.xsl">
+	<map:transform src="{lm:transform.directory.revisions}">
           <map:parameter name="use-request-parameters" value="true" />
           <map:parameter name="page" value="{2}" />
         </map:transform>
@@ -78,8 +78,8 @@ $Revision: 1.2 $
           <map:part src="{project:content.xdocs}{0}" />
           <map:part src="cocoon:/{1}/revisions-{2}" />
         </map:aggregate>
-        <map:transform src="{forrest:stylesheets}/howto2document.xsl" />
-        <map:serialize type="xml-document"/>
+	<map:transform src="{lm:transform.howto.document}" />
+        <map:serialize type="xml-document" />
       </map:match>
 
     </map:pipeline>
