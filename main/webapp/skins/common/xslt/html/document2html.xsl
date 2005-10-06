@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -137,7 +137,7 @@ Section handling
 
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
-    <div class="frame {local-name()}">
+    <div class="{local-name()}">
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
@@ -192,6 +192,7 @@ Section handling
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:apply-templates select="@id"/>
     <div class="pre">
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </div>
   </xsl:template>
@@ -200,6 +201,7 @@ Section handling
     <xsl:apply-templates select="@id"/>
     <pre class="code">
 <!-- Temporarily removed long-line-splitter ... gives out-of-memory problems -->
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
 <!--
     <xsl:call-template name="format">
@@ -211,36 +213,59 @@ Section handling
   </xsl:template>
 
   <xsl:template match="anchor">
-    <a name="{@id}"/>
+    <a name="{@id}">
+      <xsl:copy-of select="@id"/>
+    </a>
   </xsl:template>
 
   <xsl:template match="icon">
     <xsl:apply-templates select="@id"/>
     <img class="icon">
-        <xsl:copy-of select="@height | @width | @src | @alt"/>
+      <xsl:copy-of select="@height | @width | @src | @alt | @id"/>
     </img>
   </xsl:template>
 
   <xsl:template match="code">
     <xsl:apply-templates select="@id"/>
-    <span class="codefrag"><xsl:value-of select="."/></span>
+    <span class="codefrag">
+      <xsl:copy-of select="@id"/>
+      <xsl:value-of select="."/>
+    </span>
   </xsl:template>
 
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
+    
     <div align="center">
+      <xsl:copy-of select="@id"/>
       <img class="figure">
-        <xsl:copy-of select="@height | @width | @src | @alt"/>
+        <xsl:copy-of select="@height | @width | @src | @alt | @id"/>
       </img>
     </div>
   </xsl:template>
 
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
-    <table cellpadding="4" cellspacing="1" class="ForrestTable">
-      <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor"/>
-      <xsl:apply-templates/>
-    </table>
+    <xsl:choose>
+      <!-- Limit Forrest specific processing to tables without class -->
+      <xsl:when test="not(@class) or @class=''">
+        <table cellpadding="4" cellspacing="1" class="ForrestTable">
+          <xsl:copy-of select="@cellspacing | @cellpadding | @border | @class | @bgcolor |@id"/>
+          <xsl:apply-templates/>
+        </table>    
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Tables with class are passed without change -->
+        <xsl:copy>
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates/>
+        </xsl:copy>    
+        
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="@class = ''">
+      
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="acronym/@title">
@@ -359,8 +384,13 @@ Section handling
   <!-- End of "toc" mode templates -->
 
   <xsl:template match="node()|@*" priority="-1">
+    <!-- id processing will create its own a-element so processing has to 
+         happen outside the copied element 
+    -->
+    <xsl:apply-templates select="@id"/>
     <xsl:copy>
-      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="@*[name(.) != 'id']"/>
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>

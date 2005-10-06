@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -136,8 +136,8 @@ imported document2html.xsl for details.
   
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
-    <div style="text-align: center;">
-      <img src="{@src}" alt="{@alt}" class="figure">
+    <div style="text-align: center;" id="{@id}">
+      <img src="{@src}" alt="{@alt}" class="figure"  id="{@id}">
         <xsl:if test="@height">
           <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
         </xsl:if>
