@@ -53,6 +53,7 @@ if [ -z "$FORREST_HOME" ] ; then
       ;;
   esac
   FORREST_HOME=`dirname "$realpath"`/..
+  export FORREST_HOME
 fi
 
 cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.structurer
