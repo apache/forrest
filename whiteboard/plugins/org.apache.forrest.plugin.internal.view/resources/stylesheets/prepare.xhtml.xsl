@@ -50,7 +50,6 @@
             <alias:template match="site">
                 <html>
                     <head>
-                        <alias:call-template name="getHead"/>
                     	<!--Test whether there is an own css implemention requested by the view-->
                     	<!--*No* forrest:css found in the view-->
                         <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
@@ -62,6 +61,7 @@
                         <xsl:if test="/*/forrest:views/forrest:view/forrest:css">
                             <xsl:apply-templates select="/*/forrest:views/forrest:view/forrest:css"/>
                         </xsl:if>
+                        <alias:call-template name="getHead"/>
                         <title>
                             <alias:value-of select="div[@id='content']/h1"/>
                         </title>
