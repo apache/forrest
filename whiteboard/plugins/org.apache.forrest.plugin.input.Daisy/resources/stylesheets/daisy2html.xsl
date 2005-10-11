@@ -23,6 +23,7 @@
     version="1.0">
       
   <xsl:template match="/">
+    <xsl:variable name="rootElementName"><xsl:value-of select="name(*)"/></xsl:variable>
     <html>
       <head>
         <xsl:choose>
@@ -30,8 +31,8 @@
             <title><xsl:value-of select="//ns:document/@name"/></title>
             <xsl:apply-templates select="//p:preparedDocument/ns:document/ns:fields/ns:field"/>
           </xsl:when>
-          <xsl:when test="html">
-            <title>FIXME: get the title of the document</title>
+          <xsl:when test="$rootElementName = 'html'">
+            <title><xsl:value-of select="html/head/title"/></title>
           </xsl:when>
           <xsl:otherwise>
             <title>Daisy Error</title>
@@ -40,15 +41,15 @@
       </head>
       <body>
         <xsl:choose>
-          <xsl:when test="p:page">
-            <xsl:apply-templates select="p:page/p:publishedDocument/p:preparedDocument[@id='1']"/>
+          <xsl:when test="$rootElementName = 'p:publisherResponse'">
+            <xsl:apply-templates select="p:publisherResponse/p:document/p:preparedDocuments/p:preparedDocument[@id='1']"/>
           </xsl:when>
-          <xsl:when test="html">
+          <xsl:when test="$rootElementName = 'html'">
             <xsl:apply-templates select="//body"/>
           </xsl:when>
           <xsl:otherwise>
             <h1>Daisy Error</h1>
-            <p>Unable to transform the daisy document.</p>
+            <p>Unable to transform the daisy document with root element of <xsl:value-of select="$rootElementName"/>.</p>
           </xsl:otherwise>
         </xsl:choose>
       </body>
