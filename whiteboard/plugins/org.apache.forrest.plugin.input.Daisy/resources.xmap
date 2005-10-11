@@ -35,6 +35,12 @@
        <map:match pattern="**.daisy.img">
          <map:read src="{lm:{0}}"/>
        </map:match>
+
+       <map:match pattern="**.daisy.rawHTML">
+         <map:generate src="{lm:{0}}"/>
+         <map:serialize type="xml"/>
+       </map:match>
+
 		</map:pipeline>
     
    <!-- ============================================================ -->
@@ -44,7 +50,7 @@
     <map:pipeline>
       <map:match pattern="*.daisy.navigation">
         <map:generate src="{lm:{0}}" />
-        <map:transform src="resources/stylesheets/daisyNavigation2siteSnippet.xsl"/>
+        <map:transform src="resources/stylesheets/daisyNavigation-to-siteSnippet.xsl"/>
         <map:serialize type="xml" />
       </map:match>
     </map:pipeline>
