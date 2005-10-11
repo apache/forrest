@@ -26,11 +26,27 @@
   </xsl:template>
   
   <xsl:template match="d:doc">
-    <doc>
-      <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-      <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
-      <xsl:attribute name="href"><xsl:value-of select="@id"/>.daisy.html</xsl:attribute>
-    </doc>
+    <xsl:choose>
+      <xsl:when test="d:doc">
+        <group>
+          <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+          <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+          <doc>
+            <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+            <xsl:attribute name="label">Section Home</xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select="@id"/>.daisy.html</xsl:attribute>
+          </doc>
+          <xsl:apply-templates/>
+        </group>
+      </xsl:when>
+      <xsl:otherwise test="d:doc">
+        <doc>
+          <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+          <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+          <xsl:attribute name="href"><xsl:value-of select="@id"/>.daisy.html</xsl:attribute>
+        </doc>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
     
   <xsl:template match="d:group">
