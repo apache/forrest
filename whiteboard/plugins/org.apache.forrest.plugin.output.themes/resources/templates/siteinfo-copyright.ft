@@ -25,8 +25,10 @@
   <forrest:properties contract="siteinfo-copyright">
     <forrest:property name="siteinfo-copyright">
       <copyright>
-        <year>2005</year>
+        <year [inception="[true|false]"]>2005</year>
         <vendor>The Acme Software Foundation.</vendor>
+        [<copyright-link>http://...</copyright-link>]
+        [<msg>All rights reserved.</msg>]
       </copyright>
     </forrest:property>
   </forrest:properties>
@@ -36,12 +38,17 @@
     name="siteinfo-copyright" inputFormat="xsl" body="true" head="false">
     <xsl:stylesheet version="1.1" 
       xmlns:i18n="http://apache.org/cocoon/i18n/2.1" 
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      xmlns:java="http://xml.apache.org/xslt/java"
+      exclude-result-prefixes="java">
       <xsl:template name="siteinfo-copyright-body"> 
         <xsl:param name="siteinfo-copyright"/> 
         Copyright &#169; 
         <xsl:text> </xsl:text> 
-        <xsl:value-of select="$siteinfo-copyright/copyright/year"/> 
+        <xsl:value-of select="$siteinfo-copyright/copyright/year"/>
+        <xsl:call-template name="current-year">
+          <xsl:with-param name="copyrightyear" select="$siteinfo-copyright/copyright/year"/>
+        </xsl:call-template>
         <xsl:text> </xsl:text> 
         <xsl:choose> 
           <xsl:when test="$siteinfo-copyright/copyright/copyright-link"> 
@@ -56,7 +63,40 @@
             <xsl:value-of select="$siteinfo-copyright/copyright/vendor"/> 
           </xsl:otherwise> 
         </xsl:choose>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$siteinfo-copyright/copyright/msg"/>
+      </xsl:template>
+
+      <xsl:template name="current-year">
+      <!-- Displays the current year after the inception year (in the copyright i.e: 2002-2005)
+       - the copyright year (2005 by default) can be indicated in the copyrightyear parameter,
+       - the year format (yyyy by default) can be indicated in the dateformat parameter,
+       - the dates separator (- by default) can be indicated in the dateseparator parameter.
+       For instance the following call will format the year on 2 digits and separates the dates
+       with /
+       (copyright 02/05)
+         <xsl:call-template name="current-year">
+           <xsl:with-param name="copyrightyear" select="'02'"/>
+           <xsl:with-param name="dateformat" select="'yy'"/>
+           <xsl:with-param name="dateseparator" select="'/'"/>
+         </xsl:call-template>
+       Warning, to enable inception year, inception attribute must be set to "true" in copyright/year/@inception
+      -->
+        <xsl:param name="copyrightyear">2005</xsl:param>
+        <xsl:param name="dateformat">yyyy</xsl:param>
+        <xsl:param name="dateseparator">-</xsl:param>
+        <xsl:if test="$copyrightyear[@inception = 'true']">
+          <xsl:variable name="tz" select='java:java.util.SimpleTimeZone.new(0,"GMT+00:00")' />
+          <xsl:variable name="formatter" select="java:java.text.SimpleDateFormat.new($dateformat)"/>
+          <xsl:variable name="settz" select="java:setTimeZone($formatter, $tz)" />
+          <xsl:variable name="date" select="java:java.util.Date.new()"/>
+          <xsl:variable name="year" select="java:format($formatter, $date)"/>
+
+          <xsl:if test="$copyrightyear != $year">
+            <xsl:value-of select="$dateseparator"/><xsl:value-of select="$year"/>
+          </xsl:if>
+        </xsl:if>
       </xsl:template>
     </xsl:stylesheet>
-  </forrest:template >
+  </forrest:template>
 </forrest:contract>
