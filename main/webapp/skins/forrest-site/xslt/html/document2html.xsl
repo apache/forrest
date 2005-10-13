@@ -22,6 +22,6 @@ imported document2html.xsl for details.
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="../../../common/xslt/html/document2html.xsl"/>
+  <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
 
 </xsl:stylesheet>

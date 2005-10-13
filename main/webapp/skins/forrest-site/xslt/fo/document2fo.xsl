@@ -20,7 +20,7 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
-<xsl:import href="../../../common/xslt/fo/document2fo.xsl"/>
+<xsl:import href="../../../common/xslt/fo/document-to-fo.xsl"/>
 
 </xsl:stylesheet>
 

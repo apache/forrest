@@ -40,7 +40,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
   
 
-  <xsl:import href="../../../common/xslt/html/site2xhtml.xsl"/>
+  <xsl:import href="../../../common/xslt/html/site-to-xhtml.xsl"/>
   <xsl:variable name="request" select="substring-before($filename,'.html')"/>
 
   <xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
