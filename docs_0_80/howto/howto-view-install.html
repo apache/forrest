@@ -390,21 +390,30 @@ This HowTo is a good start but still needs more work.
 <div class="section">
 <ul>
       
-<li>You need to use the trunk version of Forrest for using views because it is in an early stage</li>
+<li>Need the SVN trunk version of Forrest for using views because it is in an early stage.</li>
       
 <li>Read <a href="../../docs_0_80/howto/howto-buildPlugin.html">How to Build a Plugin</a>
         especially the section about using Forrest's own Ant.</li>
     
 </ul>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+Need a recent version of SVN trunk. If you had a working site using the old
+views development in trunk, and don't want to use the new views plugins,
+then use r292708 (see
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=112839617103846">mail</a>).
 </div>
-<a name="N10035"></a><a name="Steps"></a>
+</div>
+</div>
+<a name="N1003C"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <p>
       The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
       Some of the instructions need to be modified with your local settings.
     </p>
-<a name="N1003D"></a><a name="localBuild"></a>
+<a name="N10044"></a><a name="localBuild"></a>
 <h3 class="underlined_5">Build the internal.structurer and the output.themes plugins</h3>
 <p>
         The first step is to build and deploy the internal.structurer and the output.themes plugins. Change to a terminal window of your choice
@@ -423,12 +432,20 @@ ant local-deploy
         Alternatively, run the script <span class="codefrag">etc/views.sh</span>
       
 </p>
-<a name="N10051"></a><a name="jxpath"></a>
+<a name="N10058"></a><a name="jxpath"></a>
 <h3 class="underlined_5">Upgrade the JXPath library</h3>
 <p> 
-        Replace lib.core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
+        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
       </p>
-<a name="N1005B"></a><a name="newSeed"></a>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+That will introduce Issue
+<a href="http://issues.apache.org/jira/browse/FOR-675">FOR-675</a>
+- please help to fix it.
+</div>
+</div>
+<a name="N10069"></a><a name="newSeed"></a>
 <h3 class="underlined_5">Seed a new project</h3>
 <p> 
 	Go to the directory where you want to seed a new project and seed it. 
@@ -437,17 +454,17 @@ ant local-deploy
 cd ~/src/newSeed
 forrest seed
       </pre>
-<a name="N10069"></a><a name="forrestProperties"></a>
+<a name="N10077"></a><a name="forrestProperties"></a>
 <h3 class="underlined_5">Modifying forrest.properties</h3>
 <p>
-        Now we have to tell forrest that we are planning to use the view plugins. We will do that
-        by editing the forrest.properties to add the plugins:
+        Tell forrest that we are using the view plugins. Edit
+        forrest.properties to add the required plugins:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forrest.plugin.internal.structurer
       </pre>
 <p>
-	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
+	     Change the project skin to leather-dev. The reason is that the plugins are still
        not independent from the "old fashion skins".  
       </p>
 <div class="note">
@@ -459,7 +476,7 @@ project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forr
 <pre class="code">
 project.skin=leather-dev
       </pre>
-<a name="N10081"></a><a name="testing"></a>
+<a name="N1008F"></a><a name="testing"></a>
 <h3 class="underlined_5">Test your new view based project</h3>
 <p> 
         Now you have finished the preparation and the setup to finally do
@@ -469,7 +486,7 @@ forrest run
       </pre>
 <p>Then point to <span class="codefrag">http://localhost:8888/</span> and you will see the default
         views-based site.</p>
-<a name="N10095"></a><a name="availableContracts"></a>
+<a name="N100A3"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
 <p> 
 	     To start working with views, you need to know which contracts you can use. 
@@ -496,7 +513,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
         On this page you will find all contracts that you can use in your project.
       </p>
 </div>
-<a name="N100B7"></a><a name="Further Reading"></a>
+<a name="N100C5"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
@@ -515,7 +532,7 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
     
 </ul>
 </div>
-<a name="N100CE"></a><a name="Feedback"></a>
+<a name="N100DC"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>
