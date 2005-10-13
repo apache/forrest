@@ -47,10 +47,16 @@ This HowTo is a good start but still needs more work.
 
   <prerequisites title="Prerequisites">
     <ul>
-      <li>You need to use the trunk version of Forrest for using views because it is in an early stage</li>
+      <li>Need the SVN trunk version of Forrest for using views because it is in an early stage.</li>
       <li>Read <a href="site:v0.80//howto/buildPlugin">How to Build a Plugin</a>
         especially the section about using Forrest's own Ant.</li>
     </ul>
+<warning>
+Need a recent version of SVN trunk. If you had a working site using the old
+views development in trunk, and don't want to use the new views plugins,
+then use r292708 (see
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112839617103846">mail</a>).
+</warning>
   </prerequisites>
 
   <steps title="Steps">
@@ -80,8 +86,13 @@ ant local-deploy
     <section id="jxpath">
       <title>Upgrade the JXPath library</title>
       <p> 
-        Replace lib.core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
+        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
       </p> 
+<note>
+That will introduce Issue
+<a href="http://issues.apache.org/jira/browse/FOR-675">FOR-675</a>
+- please help to fix it.
+</note>
     </section>
     <section id="newSeed">
       <title>Seed a new project</title>
@@ -96,14 +107,14 @@ forrest seed
     <section id="forrestProperties">
       <title>Modifying forrest.properties</title>
       <p>
-        Now we have to tell forrest that we are planning to use the view plugins. We will do that
-        by editing the forrest.properties to add the plugins:
+        Tell forrest that we are using the view plugins. Edit
+        forrest.properties to add the required plugins:
       </p>
       <source>
 project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forrest.plugin.internal.structurer
       </source>
       <p>
-	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
+	     Change the project skin to leather-dev. The reason is that the plugins are still
        not independent from the "old fashion skins".  
       </p>
       <note>We are exchanging only
