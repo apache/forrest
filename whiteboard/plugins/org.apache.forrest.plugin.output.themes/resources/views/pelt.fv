@@ -16,7 +16,9 @@
   limitations under the License.
 -->
 
-<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" >
+<forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
   <forrest:view type="xhtml">
     <forrest:css url="default.css" media="screen" rel="alternate stylesheet" title="leather-dev"/>
     <forrest:css url="leather-dev.css" media="screen" rel="alternate stylesheet" title="leather-dev"/>
@@ -27,7 +29,7 @@
     <forrest:contract name="siteinfo-meta">
       <forrest:properties contract="siteinfo-meta">
         <forrest:property name="siteinfo-meta" nugget="get.build.info">
-          <url>build-info</url>
+          <jx:import uri="cocoon://build-info"/>
         </forrest:property>
       </forrest:properties>
     </forrest:contract>
@@ -100,7 +102,7 @@
           <forrest:contract name="nav-main">
             <forrest:properties contract="nav-main">
               <forrest:property name="nav-main" nugget="get.navigation">
-                <url>${cocoon.parameters.getRequest}.navigation.xml</url>
+                <jx:import uri="cocoon://${cocoon.parameters.getRequest}.navigation.xml"/>
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
@@ -108,7 +110,7 @@
             <forrest:contract name="nav-main-sub">
               <forrest:properties contract="nav-main-sub">
                 <forrest:property name="nav-main-sub" nugget="get.navigation">
-                  <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+                  <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
                 </forrest:property>
               </forrest:properties>
             </forrest:contract>
@@ -132,7 +134,7 @@
           <forrest:contract name="nav-section">
             <forrest:properties contract="nav-section">
               <forrest:property name="nav-section" nugget="get.navigation">
-                <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
@@ -199,7 +201,7 @@
           </forrest:contract>
           <forrest:contract name="nav-section-round-bottom"/>
         </forrest:hook>
-        <forrest:call-template name="export-link"/>
+        <jx:import uri="cocoon://prepare.tiles.export-link"/>
         <forrest:hook name="content">
           <!-- FIXME - Problem with ndeSetTextSize() script from fontsize.js not compliant between Pelt and Leather-dev... -->
           <!--<forrest:hook class="trail">
@@ -208,21 +210,21 @@
           <forrest:contract name="content-title">
             <forrest:properties contract="content-title">
               <forrest:property name="content-title" nugget="get.body">
-                <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/>
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
           <forrest:contract name="content-abstract">
             <forrest:properties contract="content-abstract">
               <forrest:property name="content-abstract" nugget="get.abstract">
-                <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.abstract.xml"/>
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
           <forrest:contract name="content-minitoc">
             <forrest:properties contract="content-minitoc">
               <forrest:property name="content-minitoc-toc" nugget="get.toc">
-                <url>#{$cocoon/parameters/getRequest}.toc.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
               </forrest:property>
               <forrest:property name="content-minitoc-conf" >
                 <toc max-depth="2" 
@@ -233,7 +235,7 @@
           <forrest:contract name="content-main">
             <forrest:properties contract="content-main">
               <forrest:property name="content-main" nugget="get.body">
-                <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/>
               </forrest:property>
               <forrest:property name="content-main-conf">
                 <headings type="underlined"/>
@@ -243,7 +245,7 @@
           <forrest:contract name="content-authors">
             <forrest:properties contract="content-authors">
               <forrest:property name="content-authors" nugget="get.authors">
-                <url>#{$cocoon/parameters/getRequest}.authors.xml</url>
+                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.authors.xml"/>
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
