@@ -20,7 +20,7 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-title" type="nugget">
   <description>
-    content-title - Template will output the title (first h1 of the content). 
+    content-title - Template will output the title (first h1 of the content) and the sub-title (first h3 of the content). 
   </description>
   <usage><![CDATA[<forrest:contract name="content-title">
   <forrest:properties contract="content-title">
@@ -36,10 +36,10 @@
         match="div[@id='content']/h1[position()=1]">
         <xsl:param name="content-title"/>
         <xsl:comment>+ |start content-title +</xsl:comment>
-        <xsl:copy-of 
-          select="$content-title/div[@id='content']/h1[position()=1]"/>
+        [<xsl:copy-of select="$content-title/div[@id='content']/h1[position()=1]"/>]
+        [[<xsl:copy-of select="$content-title/div[@id='content']/h3[position()=1]"/>]]
         <xsl:comment>+ |end content-title +</xsl:comment>
       </xsl:template>
-	  </xsl:stylesheet>
+    </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
