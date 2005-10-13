@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 
-<xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias" xmlns:forrest="http://apache.org/forrest/templates/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:namespace-alias result-prefix="xsl" stylesheet-prefix="alias"/>
     <!--Include forrest:hook matchers-->
     <xsl:include href="hooksMatcher.xsl"/>
@@ -25,7 +25,7 @@
     <xsl:key name="head-template" match="forrest:property[@format='xhtml']" use="@name" />
     <xsl:key name="css-includes" match="forrest:css" use="@url" />
     <xsl:template match="/">
-    	<!--Create the final stylesheet (alias:)-->
+    	<!--Create the final stylesheet (alias:) resources/stylesheets/structurer-tiles-root-strip.xsl -->
         <alias:stylesheet version="1.0">
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site2xhtml.xsl"/> 
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/dotdots.xsl"/>

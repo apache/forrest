@@ -19,7 +19,7 @@
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"  
-  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:c="http://apache.org/cocoon/include/1.0"
   xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias">
     <xsl:namespace-alias 
          stylesheet-prefix="alias" result-prefix="xsl"/>
@@ -35,7 +35,12 @@
       <xsl:for-each 
         select="forrest:views/forrest:view[@type=$format]//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
         <xsl:sort select="@name" />
-        <xi:include href="cocoon://get.contract.{@name}.{$format}"/>
+        <c:include>
+          <xsl:attribute name="src">
+            <xsl:value-of 
+              select="concat('cocoon://get.contract.',@name,'.', $format)"/>
+          </xsl:attribute>
+        </c:include>
       </xsl:for-each>
     </alias:stylesheet>
   </xsl:template>
