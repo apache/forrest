@@ -51,7 +51,7 @@
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    <map:serializers>
+    <map:serializers default="xml">
       <map:serializer logger="sitemap.serializer.xhtml"
         mime-type="text/html" name="xhtml" pool-grow="2" pool-max="64"
         pool-min="2"
@@ -70,7 +70,45 @@
         mime-type="text/plain" logger="sitemap.serializer.text" />
     </map:serializers>
   </map:components>
+    
   <map:pipelines>
+    
+    <map:pipeline>
+      <map:match pattern="prepare.contract.*.**">
+        <map:generate src="{lm:resolve.contract.{1}.{2}}" />
+        <map:transform src="{lm:contract-strip-xsl.xsl}">
+          <!--Which output format?-->
+          <map:parameter name="format" value="xhtml" />
+        </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}" />
+        </map:transform>
+        <map:serialize type="xml" />
+      </map:match>
+    </map:pipeline>
+    
+    <map:pipeline>
+      <map:match pattern="test.**">
+        <map:generate src="status.xml" />
+        <map:transform src="resources/stylesheets/temp.xsl">
+          <map:parameter name="test"
+            value="{lm:resolve.contract.xhtml.{1}}" />
+        </map:transform>
+        <map:serialize />
+      </map:match>
+    </map:pipeline>
+    <map:pipeline>
+      <!-- DO NOT USE ANYMORE
+        FIXME: Finish rewriting move to lm ->  del if finished-->
+      <map:match pattern="get.contract.*.xhtml">
+        <map:generate src="cocoon:/prepare.contract.xhtml.{1}" />
+        <map:serialize />
+      </map:match>
+      <map:match pattern="resolve.contract.*.**">
+        <map:generate src="{lm:resolve.contract.{1}.{2}}" />
+        <map:serialize />
+      </map:match>
+    </map:pipeline>
         <!--
  <map:pipeline>
       <map:match pattern="test.**">
@@ -90,102 +128,21 @@
       common skining
       This is the template producing factory.
     -->
-    <map:pipeline type="noncaching">
-      <!--
-        FIXME:
-        The next pipes have to be refactored and then to go into the view-interface (internal plugin)
-        e.g. resources/templates/{1}.ft -> should become 
-        first {project:view-skin}/templates/{1}.ft 
-        then {project:skin}/templates/{1}.ft
-      -->
-      <!--FIXME:START-->
-      <!--
-        Resolving factory
-        Project implementation of templates have priority before default ones.
-        If no implementation can be found we use the noFt (~ - no forrest:template) implementation.
-        {1} name of the contract-->
-      <map:match pattern="resolve.contract.xhtml.*">
-        <map:select type="exists">
-          <map:when
-            test="{project:resources}/templates/{project:theme}/{1}.ft">
-            <map:generate
-              src="{project:resources}/templates/{project:theme}/{1}.ft" />
-          </map:when>
-          <map:when test="{project:resources}/templates/{1}.ft">
-            <map:generate src="{project:resources}/templates/{1}.ft" />
-          </map:when>
-          <map:when test="{forrest:plugins}/templates/{1}.ft">
-            <map:generate src="{forrest:plugins}/templates/{1}.ft" />
-          </map:when>
-          <map:when test="resources/templates/{project:theme}/{1}.ft">
-            <map:generate
-              src="resources/templates/{project:theme}/{1}.ft" />
-          </map:when>
-          <map:when test="resources/templates/{1}.ft">
-            <map:generate src="resources/templates/{1}.ft" />
-          </map:when>
-          <map:otherwise>
-            <map:generate src="resources/templates/noFt.ft" />
-          </map:otherwise>
-        </map:select>
-        <map:serialize type="xml" />
-      </map:match>
-      <!--This activates forrest:call-templates includes into the view.
-        del-after refactor!
-        -->
-      <map:match pattern="prepare.view-templates.**">
-        <map:select type="exists">
-          <map:when
-            test="{project:resources}/templates/{project:theme}/{1}.vt.xml">
-            <map:generate
-              src="{project:resources}/templates/{project:theme}/{1}.vt.xml" />
-          </map:when>
-          <map:when test="{project:resources}/templates/{1}.vt.xml">
-            <map:generate
-              src="{project:resources}/templates/{1}.vt.xml" />
-          </map:when>
-          <map:when
-            test="resources/templates/{project:theme}/{1}.vt.xml">
-            <map:generate
-              src="resources/templates/{project:theme}/{1}.vt.xml" />
-          </map:when>
-          <map:when test="resources/templates/{1}.vt.xml">
-            <map:generate src="resources/templates/{1}.vt.xml" />
-          </map:when>
-          <!-- otherwiser no view Tiles not found -->
-        </map:select>
-        <map:transform
-          src="{defaults:view-internal}/resources/stylesheets/prepare.include.templates.xsl" />
-        <map:transform type="xinclude" />
-        <map:serialize type="xml" />
-      </map:match>
-      <!-- <!-#-INTERFACE
-        Get the xsl:templates of the requested contract.
-        {1} format to deliver
-        {2} contract name-#->
-        <map:match pattern="get.contract.*.*">
-        <map:generate src="cocoon:/resolve.contract.{2}"/>
-        <map:transform src="resources/stylesheets/contract.xsl">
-        <!-#-Which output format?-#->
-        <map:parameter name="format" value="{1}"/>
-        </map:transform>
-        <map:serialize type="xml"/>
-        </map:match>-->
+    <map:pipeline >
       <!--IMPLEMENTATION
         Get the xsl:templates of the requested contract.
         {html} format to deliver
         {2} contract name-->
-      <map:match pattern="get.contract.*.xhtml">
+<!--       <map:match pattern="get.contract.*.xhtml">
         <map:generate src="cocoon:/resolve.contract.xhtml.{1}" />
         <map:transform src="resources/stylesheets/contract.xsl">
-          <!--Which output format?-->
           <map:parameter name="format" value="xhtml" />
         </map:transform>
         <map:transform type="i18n">
           <map:parameter name="locale" value="{request:locale}" />
         </map:transform>
         <map:serialize type="xml" />
-      </map:match>
+      </map:match> -->
       <!--
         Get the forrest:properties of the requested contract. 
         This will determine which templates (css, head, body) we have to call later on

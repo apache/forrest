@@ -41,7 +41,7 @@
       can be found in the project, we use either the theme or the default one of the themes plugin. -->
     <match pattern="resolve.structurer.**">
       <select type="exists">
-        <!-- File-based -->
+        <!-- project-based file-based -->
         <location src="{project:content.xdocs}{1}{project:theme-ext}" />
         <!-- @src="" workaround for action bug in the locationmap! -->
         <act type="RecursiveDirectoryTraversalAction" src="">
@@ -49,14 +49,22 @@
           <parameter value="{project:theme}" name="projectFallback"/>
           <parameter value="{project:theme-ext}" name="projectExtension"/>
           <parameter value="{project:content.xdocs}" name="projectDir"/>
-          <!--  Theme-based = directory-based / parent-directory based (recursively) -->
+          <!--  project-based theme-based = directory-based / parent-directory based (recursively) -->
           <location src="{uri}" />
         </act>
-        <!-- Application theme-based -->
+        <!-- project-application-based theme-based -->
+        <location 
+          src="{project:themer}/resources/views/{project:theme}{project:theme-ext}" 
+          />
+        <!-- project-application-based default -->
+        <location 
+          src="{project:themer}/resources/views/{defaults:theme}{defaults:theme-ext}" 
+          />
+        <!-- forrest-application-based theme-based -->
         <location 
           src="{defaults:themer}/resources/views/{project:theme}{project:theme-ext}" 
           />
-        <!-- Application default -->
+        <!-- forrest-application-based default -->
         <location 
           src="{defaults:themer}/resources/views/{defaults:theme}{defaults:theme-ext}" 
           />
@@ -72,6 +80,8 @@
       <select type="exists">
         <location src="{project:resources}/templates/{project:theme}/{1}.vt.xml" />
         <location src="{project:resources}/templates/{1}.vt.xml" />
+        <location src="{project:themer}/resources/templates/{project:theme}/{1}.vt.xml" />
+        <location src="{project:themer}/resources/templates/{1}.vt.xml" />
         <location src="{defaults:themer}/resources/templates/{project:theme}/{1}.vt.xml" />
         <location src="{defaults:themer}/resources/templates/{1}.vt.xml" />
       </select>
@@ -92,24 +102,28 @@
     <!-- Some input need to be striped by their root element. -->
     <match pattern="root-strip.xsl">
       <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/root-strip.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
       </select>
     </match>
     <!--  Aggregate the contract-templates requested by the view with cinclude.  -->
     <match pattern="structurer-xsl-includes.xsl">
       <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/prepare.include.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/prepare.include.xsl" />
       </select>
     </match>
     <!--  Aggregate the forrest:properties requested by the *.fv with cinclude.  -->
     <match pattern="structurer-properties-includes.xsl">
       <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/prepare.properties.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/prepare.properties.xsl" />
       </select>
     </match>
     <!--  Doing the transformation of all contracts-templates requested by the view.  -->
     <match pattern="structurer-final-xsl-*.xsl">
       <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/prepare.{1}.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/prepare.{1}.xsl" />
       </select>
     </match>

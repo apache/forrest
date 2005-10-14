@@ -140,13 +140,18 @@
         pass-through="true" />
     </map:pipeline>
       <!-- linkmap -->
-<!-- FIXME: Temporary hack to get working again. Perhaps file is missing
-from yesterday's commit by thorsten.
+<!-- FIXME: Uncomment if jxpath is fixed.
     <map:pipeline>
       <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes"
         pass-through="true" />
     </map:pipeline>
 -->
+    <map:pipeline>
+      <!-- themer interface FIXME thorsten finish the xmap-->
+      <!-- <map:mount uri-prefix="" src="themer.xmap" check-reload="yes"
+        pass-through="true" /> -->
+    </map:pipeline>
+
     <!--
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
@@ -183,17 +188,6 @@ from yesterday's commit by thorsten.
           <map:parameter name="getRequest" value="{1}" />
         </map:transform>
         <map:transform src="{lm:root-strip.xsl}" />
-        <map:serialize />
-      </map:match>
-    </map:pipeline>
-    <map:pipeline>
-      <map:match pattern="test.*.**">
-        <map:generate src="{lm:structurer-properties.{1}.{2}}" type="jx" />
-        <map:serialize />
-        <map:transform src="resources/stylesheets/temp.xsl">
-          <map:parameter name="test"
-            value="{lm:prepare.structurer.{2}}" />
-        </map:transform>
         <map:serialize />
       </map:match>
     </map:pipeline>
