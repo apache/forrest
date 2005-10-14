@@ -19,7 +19,7 @@
 
 <howto>
  <header>
-  <title>How to install the views</title>
+  <title>How to install the views (deprecated)</title>
   <abstract>
     This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed site.
   </abstract>
@@ -31,11 +31,16 @@
 <warning>
 "Views" are new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs more work.
+</warning>
+
+<warning>
+This document relates to an early development version of "views".
+Please use the current development instead. Start at
+<a href="site:howto/dispatcher/install">howto-structurer-install</a>.
 </warning>
 
     <p>
-      Developers who want to get started with view development.
+      Developers who are using the old version of "views" development.
     </p>
   </audience>
   
@@ -54,7 +59,7 @@ This HowTo is a good start but still needs more work.
 <warning>
 Need a recent version of SVN trunk. If you had a working site using the old
 views development in trunk, and don't want to use the new views plugins,
-then use r292708 (see
+then use at least version r292708 (see
 <a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112839617103846">mail</a>).
 </warning>
   </prerequisites>
@@ -67,32 +72,22 @@ then use r292708 (see
     <section id="localBuild">
       <title>Build the internal.structurer and the output.themes plugins</title>
       <p>
-        The first step is to build and deploy the internal.structurer and the output.themes plugins. Change to a terminal window of your choice
+        Build and deploy the two old "views" plugins.
+        Change to a terminal window of your choice
         and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an SVN update and after this 
         deploy both plugins locally.
       </p>
       <source>
 cd {forrest-trunk}
 svn up
-cd whiteboard/plugins/org.apache.forrest.plugin.internal.structurer/
+cd whiteboard/plugins/org.apache.forrest.plugin.internal.view/
 ant local-deploy
-cd ../org.apache.forrest.plugin.output.themes/
+cd ../org.apache.forrest.plugin.output.viewHelper.xhtml/
 ant local-deploy
       </source>
       <p>
         Alternatively, run the script <code>etc/views.sh</code>
       </p>
-    </section>
-    <section id="jxpath">
-      <title>Upgrade the JXPath library</title>
-      <p> 
-        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
-      </p> 
-<note>
-That will introduce Issue
-<a href="http://issues.apache.org/jira/browse/FOR-675">FOR-675</a>
-- please help to fix it.
-</note>
     </section>
     <section id="newSeed">
       <title>Seed a new project</title>
@@ -111,7 +106,7 @@ forrest seed
         forrest.properties to add the required plugins:
       </p>
       <source>
-project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forrest.plugin.internal.structurer
+project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
       </source>
       <p>
 	     Change the project skin to leather-dev. The reason is that the plugins are still
