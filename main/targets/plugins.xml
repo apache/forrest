@@ -173,6 +173,9 @@ to be installed again unless you delete them or wish to upgrade them.
             </antcall>
           </then>
         </if>
+        <antcall target="configure-plugin-locationmap">
+          <param name="plugin" value="${versioned.name}"/>
+        </antcall>
       </then>
       <else>
         <if>
@@ -199,6 +202,9 @@ to be installed again unless you delete them or wish to upgrade them.
             </antcall>
           </then>
         </if>
+        <antcall target="configure-plugin-locationmap">
+          <param name="plugin" value="{plugin.name}"/>
+        </antcall>
       </else>
     </if>
   </target>
@@ -255,6 +261,20 @@ to be installed again unless you delete them or wish to upgrade them.
      </xslt>
      <move file="${project.temp-dir}/internal.xmap.new" 
        tofile="${project.temp-dir}/internal.xmap"/>
+  </target>
+  
+  <target name="configure-plugin-locationmap">
+     <!-- add the snippet to plugins/locationmap.xml that will mount the plugin
+          specific locationmap -->
+     <echo>Mounting plugin locationmap for ${plugin}</echo>
+     <xslt in="${project.temp-dir}/locationmap.xml"
+       out="${project.temp-dir}/locationmap.xml.new"
+       style="${forrest.core}/var/pluginLmMountSnippet.xsl"
+       force="true">
+           <param name="plugin-name" expression="${plugin}"/>  
+     </xslt>
+     <move file="${project.temp-dir}/locationmap.xml.new" 
+       tofile="${project.temp-dir}/locationmap.xml"/>
   </target>
 
   <target name="fetch-plugins-descriptors" if="plugin.unavailable" depends="init-proxy">
@@ -343,6 +363,9 @@ to be installed again unless you delete them or wish to upgrade them.
       overwrite="true"/>
     <copy file="${forrest.core}/var/initial_plugins_sitemap.xmap"
       tofile="${project.temp-dir}/internal.xmap"
+      overwrite="true"/>
+    <copy file="${forrest.core}/var/initial_plugins_locationmap.xml"
+          tofile="${project.temp-dir}/locationmap.xml"
       overwrite="true"/>
 
       <for list="${project.required.plugins}" param="name">
