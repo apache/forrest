@@ -36,6 +36,6 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   
   <xsl:param name="format"/>
   <xsl:template match="/">
-    <xsl:copy-of select="forrest:contract/forrest:template[@format=$format]/xsl:stylesheet/*"/>
+    <xsl:copy-of select="forrest:contract/forrest:template[@format=$format]/xsl:stylesheet"/>
   </xsl:template>
 </xsl:stylesheet>

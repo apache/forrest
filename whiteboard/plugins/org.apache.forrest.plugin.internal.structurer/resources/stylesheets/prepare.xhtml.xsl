@@ -24,14 +24,27 @@
     <xsl:param name="forrestContext" select="'test'"/>
     <xsl:key name="head-template" match="forrest:property[@format='xhtml']" use="@name" />
     <xsl:key name="css-includes" match="forrest:css" use="@url" />
+    <xsl:key name="contract-name" match="forrest:contract" use="@name" />
     <xsl:template match="/">
-    	<!--Create the final stylesheet (alias:) resources/stylesheets/structurer-tiles-root-strip.xsl -->
+      <!--Create the final stylesheet (alias:) resources/stylesheets/structurer-tiles-root-strip.xsl -->
         <alias:stylesheet version="1.0">
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site2xhtml.xsl"/> 
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/dotdots.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/pathutils.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/renderlogo.xsl"/>
-            <alias:include href="cocoon://prepare.include.xhtml.{$request}"/>
+            <!--NOTE:
+              contracts are allowed only to be importet once! Thx to
+              http://www.jenitennison.com/xslt/grouping/muenchian.html-->
+            <xsl:for-each 
+              select="/*/forrest:views/forrest:view[@type='xhtml']//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
+              <xsl:sort select="@name" />
+              <alias:include>
+                <xsl:attribute name="href">
+                  <xsl:value-of 
+                    select="concat('cocoon://prepare.contract.xhtml.', @name)"/>
+                </xsl:attribute>
+              </alias:include>  
+            </xsl:for-each>
             <alias:param name="path"/>
             <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
             <alias:template name="getHead">
@@ -46,18 +59,18 @@
             <alias:template name="getBody">
                 <xsl:apply-templates select="/*/forrest:views/forrest:view"/>
             </alias:template>
-        	<!--default entry point into the presentation model 'site'-->
+          <!--default entry point into the presentation model 'site'-->
             <alias:template match="/">
                 <html>
                     <head>
-                    	<!--Test whether there is an own css implemention requested by the view-->
-                    	<!--*No* forrest:css found in the view-->
+                      <!--Test whether there is an own css implemention requested by the view-->
+                      <!--*No* forrest:css found in the view-->
                         <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
                             <link rel="stylesheet" type="text/css">
                                 <xsl:attribute name="href">{$root}skin/default.css</xsl:attribute>
                             </link>
                         </xsl:if>
-                    	<!-- forrest:css *found* in the view-->
+                      <!-- forrest:css *found* in the view-->
                         <xsl:if test="/*/forrest:views/forrest:view/forrest:css">
                             <xsl:apply-templates select="/*/forrest:views/forrest:view/forrest:css"/>
                         </xsl:if>

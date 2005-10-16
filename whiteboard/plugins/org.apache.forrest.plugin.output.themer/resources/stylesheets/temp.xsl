@@ -18,21 +18,20 @@
 
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
-  >
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
   
-  <xsl:key name="contract-name" match="forrest:properties" use="@name" />
+  <xsl:strip-space elements="forrest:properties"/>
+  <xsl:param name="test"/>
   
   <xsl:template match="/">
-    <xsl:for-each 
-      select="//forrest:properties/*[count(. | key('contract-name', @name)[1]) = 1 and @css='true']">
-      <xsl:sort select="@name" />
-      <xi:include href="cocoon://get.contract-css.{@name}" />
-    </xsl:for-each>
-    <xsl:apply-templates select="//extra-css"/>
+    <p> XXX<xsl:value-of select="$test"/>xxx</p>
   </xsl:template>
-  <xsl:template match="extra-css">
-    <xsl:value-of select="."/>
+  
+  <!--<xsl:template match="forrest:property[@name=$contract]">
+    <xsl:comment> properties <xsl:value-of select="$contract"/> </xsl:comment>
+    <xsl:copy-of select="*"/>
   </xsl:template>
+  
+  <xsl:template match="forrest:property"/>-->
+
 </xsl:stylesheet>

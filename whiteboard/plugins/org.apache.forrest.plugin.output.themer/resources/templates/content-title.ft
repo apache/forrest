@@ -25,19 +25,23 @@
   <usage><![CDATA[<forrest:contract name="content-title">
   <forrest:properties contract="content-title">
     <forrest:property name="content-title" nugget="get.body">
-      <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+      <url>#{$cocoon/parameters/getRequest}.title.xml</url>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="content-title" inputFormat="xsl" body="true" head="false">
+    format="xhtml" name="content-title" inputFormat="xsl" body="true" head="true">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-title-body" 
-        match="div[@id='content']/h1[position()=1]">
+      <xsl:template name="content-title-head" >
         <xsl:param name="content-title"/>
         <xsl:comment>+ |start content-title +</xsl:comment>
-        <xsl:copy-of select="$content-title/div[@id='content']/h1[position()=1]"/>
-        <xsl:copy-of select="$content-title/div[@id='content']/h3[position()=1]"/>
+        <xsl:copy-of select="$content-title"/>
+        <xsl:comment>+ |end content-title +</xsl:comment>
+      </xsl:template>
+      <xsl:template name="content-title-body" >
+        <xsl:param name="content-title"/>
+        <xsl:comment>+ |start content-title +</xsl:comment>
+        <h1><xsl:value-of select="$content-title"/></h1>
         <xsl:comment>+ |end content-title +</xsl:comment>
       </xsl:template>
     </xsl:stylesheet>

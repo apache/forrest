@@ -15,23 +15,24 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
+<!--
+This stylesheet contains templates for converting documentv11 to HTML.  See the
+imported document2html.xsl for details.
+-->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
-  xmlns:xi="http://www.w3.org/2001/XInclude" >
-  
-  <xsl:template match="/">
-    <xsl:apply-templates/>
-  </xsl:template>
-  <!---->
-  <xsl:template match="forrest:call-template">
-    <xi:include 
-      href="cocoon://prepare.view-templates.{@name}#xpointer(/*/*)"/>
-  </xsl:template>
-  
-  <xsl:template match="@*|*|text()|processing-instruction()|comment()">
-    <xsl:copy>
-      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
-    </xsl:copy>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <!--  Templates for "toc" mode.  This will generate a complete
+        Table of Contents for the document.  This will then be used
+        by the site2xhtml to generate a Menu ToC and a Page ToC -->
+  <xsl:template match="document">
+    <xsl:choose>
+      <xsl:when test="header/title">
+        <xsl:copy-of select="header/title"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <title>*No* title found</title>
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 </xsl:stylesheet>

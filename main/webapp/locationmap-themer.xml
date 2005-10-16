@@ -58,11 +58,46 @@
         <location src="{defaults:themer}/resources/templates/noFt.ft" />
       </select>
     </match>
+    <match pattern="contract.xhtml.**">
+      <select type="exists">
+        <location src="cocoon://prepare.contract.xhtml.{1}" />
+      </select>
+    </match>
+    <match pattern="contract-property.xhtml.**">
+      <select type="exists">
+        <location src="cocoon://prepare.contract-property.xhtml.{1}" />
+      </select>
+    </match>
+    <match pattern="dataModel-xml-document-to-**.xsl">
+      <select type="exists">
+        <!-- FIXME 
+          to-xml should become xml 
+          document2 should become document-to-
+          after commiting -->
+        <location src="{project:skins-dir}{project:theme}/xslt/to-xml/document2{1}.xsl" />
+        <location src="{project:structurer}/resources/stylesheets/to-xml/document2{1}.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/to-xml/document2{1}.xsl" />
+      </select>
+    </match>
+    <match pattern="dataModel-html-**.xsl">
+      <select type="exists">
+        <location src="{project:skins-dir}{project:theme}/xslt/html/{1}.xsl" />
+        <location src="{project:structurer}/resources/stylesheets/html/{1}.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/html/{1}.xsl" />
+      </select>
+    </match>
         <!-- contracts have to be striped to their stylesheet for aggregation. -->
     <match pattern="contract-strip-xsl.xsl">
       <select type="exists">
         <location src="{project:structurer}/resources/stylesheets/contract-strip-xsl.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/contract-strip-xsl.xsl" />
+      </select>
+    </match>
+        <!-- contracts (e.g. xhtml) need  to be prepared for their stylesheet-aggregation. -->
+    <match pattern="contract-property.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/contract.property.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/contract.property.xsl" />
       </select>
     </match>
   </locator>

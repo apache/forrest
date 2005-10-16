@@ -19,7 +19,7 @@
 
 <howto>
  <header>
-  <title>How to install the views</title>
+  <title>How to install the views v2 (testing version)</title>
   <abstract>
     This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed site.
   </abstract>
@@ -30,12 +30,13 @@
 
 <warning>
 "Views" are new functionality which is still in development phase. That is why it is in the
-"whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs more work.
+"whiteboard" section of the Forrest distribution. This HowTo is a good start but still needs more work.
 </warning>
-
+<warning> Views v2 are not usable in combination with the linkrewriter!!! There 
+  is a bug with commons-jxpath-1.2.jar and cocoon-linkrewriter-block.jar! 
+  </warning>
     <p>
-      Developers who want to get started with view development.
+      Developers who want to get started with view v2 development.
     </p>
   </audience>
   
@@ -47,15 +48,14 @@ This HowTo is a good start but still needs more work.
 
   <prerequisites title="Prerequisites">
     <ul>
-      <li>Need the SVN trunk version of Forrest for using views because it is in an early stage.</li>
+      <li>Need the SVN trunk version of Forrest for using views v2 because it is in an early stage.</li>
       <li>Read <a href="site:v0.80//howto/buildPlugin">How to Build a Plugin</a>
         especially the section about using Forrest's own Ant.</li>
     </ul>
 <warning>
 Need a recent version of SVN trunk. If you had a working site using the old
-views development in trunk, and don't want to use the new views plugins,
-then use r292708 (see
-<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112839617103846">mail</a>).
+views v1 (stable version) development in trunk, and don't want to use the new views v2 plugins,
+then use <a href="site:howto/view/install">how to install v1</a>.
 </warning>
   </prerequisites>
 
@@ -76,23 +76,26 @@ cd {forrest-trunk}
 svn up
 cd whiteboard/plugins/org.apache.forrest.plugin.internal.structurer/
 ant local-deploy
-cd ../org.apache.forrest.plugin.output.themes/
+cd ../org.apache.forrest.plugin.output.themer/
 ant local-deploy
       </source>
       <p>
-        Alternatively, run the script <code>etc/views.sh</code>
+        Alternatively, run the script <code>etc/structurer.sh</code> after you did an update.
       </p>
     </section>
     <section id="jxpath">
       <title>Upgrade the JXPath library</title>
       <p> 
-        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar
+        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar (you can find it in a cocoon distribution 
+        or on the jarkata website).
       </p> 
-<note>
+<warning>
 That will introduce Issue
 <a href="http://issues.apache.org/jira/browse/FOR-675">FOR-675</a>
-- please help to fix it.
-</note>
+- please help to fix it. This issue prevent that the linkrewritting is working (site:something will *not* be rewritten).
+Besides the plugin can only be used in "forrest run" mode (*without* linkrewriting!!!). If you do need the linkrewriter then
+use views v1.
+</warning>
     </section>
     <section id="newSeed">
       <title>Seed a new project</title>
@@ -101,31 +104,21 @@ That will introduce Issue
       </p>
       <source>
 cd ~/src/newSeed
-forrest seed
+forrest seed-v2
       </source>
     </section>
     <section id="forrestProperties">
-      <title>Modifying forrest.properties</title>
+      <title>Modifying forrest.properties (if you not use the seed-v2 target)</title>
       <p>
         Tell forrest that we are using the view plugins. Edit
         forrest.properties to add the required plugins:
       </p>
       <source>
-project.required.plugins=org.apache.forrest.plugin.output.themes,org.apache.forrest.plugin.internal.structurer
-      </source>
-      <p>
-	     Change the project skin to leather-dev. The reason is that the plugins are still
-       not independent from the "old fashion skins".  
-      </p>
-      <note>We are exchanging only
-	     site2xhtml.xsl of leather-dev skin with the plugins, and some contracts are based
-	     on e.g. document2html.xsl output of leather-dev.</note>
-     <source>
-project.skin=leather-dev
+project.required.plugins=org.apache.forrest.plugin.output.themer,org.apache.forrest.plugin.internal.structurer
       </source>
     </section>
     <section id="testing">
-      <title>Test your new view based project</title>
+      <title>Test your new view v2 based project</title>
       <p> 
         Now you have finished the preparation and the setup to finally do
       </p>
@@ -137,6 +130,7 @@ forrest run
     </section>
     <section id="availableContracts">
 	    <title>Available contracts</title>
+      <fixme>thorsten: Create this list internally and delete this paragraph about installing another plugin!</fixme>
 	    <p> 
 	     To start working with views, you need to know which contracts you can use. 
 	     For this we will install another plugin <code>org.apache.forrest.plugin.input.viewHelper.xhtml.ls</code>.

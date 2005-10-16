@@ -29,7 +29,7 @@
         <c:include>
           <xsl:attribute name="src">
             <xsl:value-of 
-              select="concat('cocoon://get.contract-property.',@name,'.', $format)"/>
+              select="concat('cocoon://prepare.contract-property.', $format,'.', @name)"/>
           </xsl:attribute>
         </c:include>
 	    </xsl:for-each>
