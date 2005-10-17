@@ -42,7 +42,7 @@ public class SourceType implements Configurable
             else if (ruleConfs[i].getName().equals("processing-instruction"))
                 rule = new ProcessingInstructionRule();
             else if (ruleConfs[i].getName().equals("w3c-xml-schema"))
-                rule = new ProcessingInstructionRule();
+                rule = new XmlSchemaRule();
             else if (ruleConfs[i].getName().equals("document-element"))
                 rule = new DocumentElementRule();
             else
