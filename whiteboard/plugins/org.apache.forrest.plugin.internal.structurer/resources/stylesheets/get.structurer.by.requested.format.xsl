@@ -18,22 +18,12 @@
 
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0"  
-  xmlns:c="http://apache.org/cocoon/include/1.0" >
-
-	<xsl:param name="format"/>
-
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  
+  <xsl:param name="format"/>
+  
   <xsl:template match="/">
-    <forrest:properties >
-	    <xsl:for-each select="forrest:view[@type=$format]//forrest:contract">
-        <c:include>
-          <xsl:attribute name="src">
-            <xsl:value-of 
-              select="concat('cocoon://prepare.contract-property.', $format,'.', @name)"/>
-          </xsl:attribute>
-        </c:include>
-	    </xsl:for-each>
-    </forrest:properties>
+    <xsl:copy-of select="forrest:views/forrest:view[@type=$format]"/>
   </xsl:template>
   
 </xsl:stylesheet>

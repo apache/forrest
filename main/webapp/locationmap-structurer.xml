@@ -70,9 +70,15 @@
           />
       </select>
     </match>
-    <match pattern="structurer.**">
+    <match pattern="get.structurer.by.requested.format.xsl">
       <select type="exists">
-        <location src="cocoon://prepare.structurer.{1}" />
+        <location src="{project:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
+      </select>
+    </match>
+    <match pattern="structurer.**.*">
+      <select type="exists">
+        <location src="cocoon://prepare.structurer.{1}.{2}" />
       </select>
     </match>
     <!-- Structurer tiles - You can group elements to a template and call it from any view. -->
@@ -94,7 +100,7 @@
       </select>
     </match>
         <!-- Aggregate the forrest:properties requested by the *.fv.  -->
-    <match pattern="structurer-properties.*.**">
+    <match pattern="structurer-properties.**.*">
       <select type="exists">
         <location src="cocoon://prepare.structurer-properties.{1}.{2}" />
       </select>
@@ -123,8 +129,8 @@
     <!--  Doing the transformation of all contracts-templates requested by the view.  -->
     <match pattern="structurer-final-xsl-*.xsl">
       <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/prepare.{1}.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/prepare.{1}.xsl" />
+        <location src="{project:structurer}/resources/stylesheets/themer.{1}.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/themer.{1}.xsl" />
       </select>
     </match>
   </locator>

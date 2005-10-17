@@ -32,6 +32,7 @@
         src="org.apache.cocoon.generation.HTMLGenerator">
         <jtidy-config>jtidy.properties</jtidy-config>
       </map:generator>
+      <map:generator label="content" logger="sitemap.generator.xpathdirectory" name="xpathdirectory" src="org.apache.cocoon.generation.XPathDirectoryGenerator"/>
       <map:generator name="directory"
         src="org.apache.cocoon.generation.DirectoryGenerator" />
     </map:generators>
@@ -76,7 +77,7 @@
         <map:generate src="status.xml" />
         <map:transform src="resources/stylesheets/temp.xsl">
           <map:parameter name="test"
-            value="{lm:contract-property.{2}.{1}}" />
+            value="{lm:structurer-final-xsl-{1}.xsl}" />
         </map:transform>
         <map:serialize />
       </map:match>
@@ -88,10 +89,11 @@
       list the default fbits-->
     <map:pipeline>
       <map:match pattern="ls.contracts">
-        <map:generate type="directory" src="resources/templates">
-          <map:parameter name="depth" value="1" />
-          <!-- sorted alphabetically -->
-          <map:parameter name="reverse" value="false" />
+       <map:generate src="resources/templates" type="xpathdirectory">
+          <map:parameter name="xpath" value="*" />
+          <map:parameter name="xmlFiles" value="\.ft$" />
+          <map:parameter name="exclude" value="[\w]*.svn" />
+            <map:parameter name="depth" value="2" />
         </map:generate>
         <map:serialize type="xml" />
       </map:match>
@@ -102,11 +104,11 @@
       <map:match pattern="ls.contracts.project">
         <map:generate type="directory"
           src="{project:resources}/templates/">
-          <map:parameter name="depth" value="1" />
+          <map:parameter name="depth" value="2" />
           <!-- sorted alphabetically -->
           <map:parameter name="reverse" value="false" />
         </map:generate>
-        <map:serialize type="xml" />
+        
       </map:match>
     </map:pipeline>
 

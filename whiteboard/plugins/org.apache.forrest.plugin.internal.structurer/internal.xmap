@@ -162,14 +162,18 @@
       that the content can be used later on.
       {1} - requested url (striped from extension) -->
     <map:pipeline>
-      <map:match pattern="prepare.structurer.**">
-        <map:generate src="{lm:resolve.structurer.{1}}" />
+      <map:match pattern="prepare.structurer.*.**">
+        <map:generate src="{lm:resolve.structurer.{2}}" />
+        <map:transform src="{lm:get.structurer.by.requested.format.xsl}">
+          <map:parameter name="format" value="{1}" />
+        </map:transform>
         <!-- FIXME: jxpath -->
         <!-- When jxpath problem is solved rewrite tiles and uncomment -->
         <!-- <map:transform type="linkrewriter" /> -->
         <map:transform type="jx">
           <map:parameter name="lenient-xpath" value="true" />
-          <map:parameter name="getRequest" value="{1}" />
+          <map:parameter name="getRequest" value="{2}" />
+          <map:parameter name="getRequestExstension" value="{1}" />
         </map:transform>
         <map:serialize />
       </map:match>
@@ -200,7 +204,7 @@
         {2} - requested url
       -->
       <map:match pattern="prepare.structurer-properties.*.**">
-        <map:generate src="{lm:structurer.{2}}" />
+        <map:generate src="{lm:structurer.{1}.{2}}" />
         <map:transform src="{lm:structurer-properties-includes.xsl}">
           <map:parameter name="format" value="{1}" />
         </map:transform>
@@ -218,7 +222,7 @@
       -->
       <map:match pattern="structurer-xsl.*.**">
         <map:aggregate element="filter">
-          <map:part src="{lm:structurer.{2}}" />
+          <map:part src="{lm:structurer.{1}.{2}}" />
           <map:part src="{lm:structurer-properties.{1}.{2}}" />
         </map:aggregate>
         <map:transform src="{lm:structurer-final-xsl-{1}.xsl}">
@@ -235,8 +239,8 @@
         Here we are overriding the default skin generation.
       -->
       <map:match pattern="**.html">
-        <map:generate src="{lm:structurer.{1}}" />
-        <map:transform src="cocoon:/structurer-xsl.xhtml.{1}">
+        <map:generate src="{lm:structurer.html.{1}}" />
+        <map:transform src="cocoon:/structurer-xsl.html.{1}">
           <map:parameter name="path" value="{0}" />
         </map:transform>
         <!-- <map:transform src="resources/stylesheets/strip_namespaces.xsl" /> -->

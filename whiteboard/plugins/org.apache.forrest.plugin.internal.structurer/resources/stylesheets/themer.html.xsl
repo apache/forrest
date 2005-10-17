@@ -36,12 +36,12 @@
               contracts are allowed only to be importet once! Thx to
               http://www.jenitennison.com/xslt/grouping/muenchian.html-->
             <xsl:for-each 
-              select="/*/forrest:views/forrest:view[@type='xhtml']//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
+              select="/*/forrest:view[@type='html']//forrest:contract[count(. | key('contract-name', @name)[1]) = 1]">
               <xsl:sort select="@name" />
               <alias:include>
                 <xsl:attribute name="href">
                   <xsl:value-of 
-                    select="concat('cocoon://prepare.contract.xhtml.', @name)"/>
+                    select="concat('cocoon://prepare.contract.html.', @name)"/>
                 </xsl:attribute>
               </alias:include>  
             </xsl:for-each>
@@ -57,7 +57,7 @@
             </alias:template>
             <xsl:comment>All xhtml body elements requested by the forrest:template</xsl:comment>
             <alias:template name="getBody">
-                <xsl:apply-templates select="/*/forrest:views/forrest:view"/>
+                <xsl:apply-templates select="/*/forrest:view"/>
             </alias:template>
           <!--default entry point into the presentation model 'site'-->
             <alias:template match="/">
@@ -65,19 +65,16 @@
                     <head>
                       <!--Test whether there is an own css implemention requested by the view-->
                       <!--*No* forrest:css found in the view-->
-                        <xsl:if test="not(/*/forrest:views/forrest:view/forrest:css)">
+                        <xsl:if test="not(/*/forrest:view/forrest:css)">
                             <link rel="stylesheet" type="text/css">
                                 <xsl:attribute name="href">{$root}skin/default.css</xsl:attribute>
                             </link>
                         </xsl:if>
                       <!-- forrest:css *found* in the view-->
-                        <xsl:if test="/*/forrest:views/forrest:view/forrest:css">
-                            <xsl:apply-templates select="/*/forrest:views/forrest:view/forrest:css"/>
+                        <xsl:if test="/*/forrest:view/forrest:css">
+                            <xsl:apply-templates select="/*/forrest:view/forrest:css"/>
                         </xsl:if>
                         <alias:call-template name="getHead"/>
-                        <title>
-                            <alias:value-of select="div[@id='content']/h1"/>
-                        </title>
                     </head>
                     <body onload="init()">
                         <alias:call-template name="getBody"/>
