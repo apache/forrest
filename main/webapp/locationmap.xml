@@ -41,17 +41,41 @@
     </select>
     
     <!-- ================================== -->
-    <!-- Mount plugin specific locationmap -->
+    <!-- project files                      -->
     <!-- ================================== -->
-    <select>
-      <mount src="{project:temp-dir}/locationmap.xml"/>
-    </select>
+    <match pattern="project.xmap.sitemap">
+        <location src="{project:sitemap}" />
+    </match>
+    
+    <match pattern="project.build-info">
+      <location src="{project:temp-dir}/build-info.xml" />
+    </match>
+    
+    <match pattern="project.xml.site">
+      <location src="{project:content.xdocs}site.xml" />
+    </match>
+    
+    <match pattern="project.images.**.*">
+      <select>
+        <location src="{project:content.xdocs}/images/{1}.{2}" />
+        <location src="{project:content.xdocs}/{1}.{2}" />
+        <location src="{project:content}/../resources/images/{1}.{2}" />
+      </select>
+    </match>
+    
+    <match pattern="project.**">
+      <location src="{project:content.xdocs}{1}" />
+    </match>
     
     <!-- ================================== -->
     <!-- Mount forrest locationmaps         -->
     <!-- ================================== -->
     <select>
       <mount src="{forrest:context}/locationmap-transforms.xml"/>
+    </select>
+    
+    <select>
+      <mount src="{forrest:context}/locationmap-skins.xml"/>
     </select>
     
     <select>
