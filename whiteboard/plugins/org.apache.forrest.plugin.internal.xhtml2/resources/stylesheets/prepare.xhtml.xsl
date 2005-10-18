@@ -115,9 +115,13 @@
                     <alias:call-template name="{@name}-head"/>
                 </xsl:when>
                 <xsl:when test="forrest:properties[@contract=$name]">
-                    <alias:call-template name="{@name}-head">
+                    <alias:call-template name="{@name}-head"  xmlns:forrest="http://apache.org/forrest/templates/1.0">
                         <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-                            <alias:with-param name="{@name}" select="'{normalize-space(.)}'"/>
+                            <xsl:variable name="xpath">
+                            <xsl:value-of select="'/site'"/>
+                            <xsl:call-template name="generateXPath"/>
+                          </xsl:variable>
+                          <alias:with-param name="{@name}" select="{normalize-space($xpath)}"/>
                         </xsl:for-each>
                     </alias:call-template>
                 </xsl:when>
@@ -136,13 +140,22 @@
                 </xsl:when>
                 <xsl:when test="forrest:properties[@contract=$name]">
                     <alias:call-template name="{@name}-body">
-                        <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">
-                            <alias:with-param name="{@name}" select="'{normalize-space(.)}'"/>
+                        <xsl:for-each select="forrest:properties[@contract=$name]/forrest:property">                          <xsl:variable name="xpath">
+                            <xsl:value-of select="'/site'"/>
+                            <xsl:call-template name="generateXPath"/>
+                          </xsl:variable>
+                          <alias:with-param name="{@name}" select="{normalize-space($xpath)}" />
                         </xsl:for-each>
                     </alias:call-template>
                 </xsl:when>
             </xsl:choose>
-        </xsl:if>
-        
+        </xsl:if>        
     </xsl:template>
+    
+    <xsl:template name="generateXPath">
+      <xsl:for-each select="ancestor::*[name()!='filter']">
+        /<xsl:value-of select="name()"/>[<xsl:number/>]
+      </xsl:for-each>
+      /<xsl:value-of select="name()"/>[<xsl:number/>]
+    </xsl:template> 
 </xsl:stylesheet>

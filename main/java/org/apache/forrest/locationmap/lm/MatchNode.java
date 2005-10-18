@@ -121,19 +121,26 @@ public final class MatchNode extends AbstractNode {
     public String locate(Map om, InvokeContext context) throws Exception {
         
         Parameters parameters = resolveParameters(context,om);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug("Examining match: " + m_pattern);
+        }
         Map substitutions = m_matcher.match(m_pattern,om,parameters);
         if (substitutions != null) {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("matched: " + m_pattern);
-            }
             context.pushMap(null,substitutions);
             for (int i = 0; i < m_nodes.length; i++) {
                 String location = m_nodes[i].locate(om,context);
                 if (location != null) {
+                    if (getLogger().isDebugEnabled()) {
+                        getLogger().debug("got location: " + location);
+                    }
                     return location;
                 }
             }
             context.popMap();
+        }
+        
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug("no appropriate location, continue processing matches");
         }
         return null;
     }

@@ -33,7 +33,14 @@
   </xsl:template>
 
   <xsl:template match="forrest:property[@nugget]">
-    <forrest:property name="{@name}"><xi:include href="cocoon://{url}"/></forrest:property>
+    <xsl:element name="forrest:property">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+       <xsl:element name="xi:include">
+        <xsl:attribute name="href">cocoon://<xsl:value-of select="url/text()"/></xsl:attribute>
+       </xsl:element>
+	  </xsl:element>
   </xsl:template>
 
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">

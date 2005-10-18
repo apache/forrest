@@ -109,17 +109,28 @@ public final class SelectNode extends AbstractNode {
             try {
               location = m_nodes[i].locate(om,context);
               if (m_selector.select(location,om,parameters)) {
-                  if (getLogger().isDebugEnabled()) {
-                      getLogger().debug("selected: " + location);
-                  }
+                  debug("Selected: " + location);
                   return location;
+              } else {
+                  debug("Not selected: " + location);
               }
             } catch (ConfigurationException e) {
-                if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Ignoring locatoinmap config exception: " + e.getMessage());
-                }
+                    debug("Ignoring locationmap config exception: " + e.getMessage());
             }
         }
+        
         return null;
+    }
+    
+    
+
+    /**
+     * If debugging is turned on then log a debug message.
+     * @param debugString - the debug message
+     */
+    private final void debug(String debugString) {
+      if (getLogger().isDebugEnabled()) {
+        getLogger().debug(debugString);
+      }
     }
 }
