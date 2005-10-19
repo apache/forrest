@@ -97,8 +97,8 @@
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
-              <xsl:when test="@title">
-                <xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+              <xsl:when test="@theme">
+                <xsl:attribute name="title"><xsl:value-of select="@theme"/></xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:attribute name="title"><xsl:value-of select="@url"/></xsl:attribute>
