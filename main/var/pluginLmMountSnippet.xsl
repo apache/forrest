@@ -39,7 +39,7 @@
        <xsl:apply-templates/>
        <xsl:element name="select">
            <xsl:element name="mount">
-             <xsl:attribute name="src">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/src/documentation/content/locationmap.xml</xsl:attribute> 
+             <xsl:attribute name="src">{forrest:plugins}/<xsl:value-of select="$plugin-name"/>/locationmap.xml</xsl:attribute> 
            </xsl:element>
        </xsl:element>
      </locator>
