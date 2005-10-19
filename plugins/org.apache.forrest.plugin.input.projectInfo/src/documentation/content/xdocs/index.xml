@@ -31,6 +31,7 @@
         <li><a href="changes.html">Recent Changes</a></li>
         <li><a href="todo.html">ToDo list</a></li>
         <li><a href="releaseNotes_0.1.html">Release Notes</a></li>
+        <li><a href="projectDetails.html">Project Details</a></li>
       </ul>
     </section>
     
@@ -57,6 +58,69 @@
       
       <p>The introductory text in the release notes comes from the (optional) 
       element <code>notes</code> (a child of the <code>release</code> element).</p>
+    </section>
+    
+    
+    <section>
+      <title>Project Details</title>
+      <p>Project details are generated from a project descriptor file.
+      This file can be in any of the followin formats:</p>
+      
+      <ul>
+        <li>DOAP</li>
+        <li>DOAP over ATOM</li>
+      </ul>
+      
+      <note>We need your help in adding more formats.</note>
+      
+      <p>The location of this descriptor file is specified in the locationmap
+      with the hint <code>pproject.descriptor</code>. This defaults to
+      the root of your projects content directory. To place your descriptor 
+      in a different location simply add
+      a matcher like this to your project locationmap:</p>
+      
+      <source><![CDATA[
+    <match pattern="project.descriptor">
+      <location src="[path/to/descriptor/file]" />
+    </match>    
+      ]]></source>
+      
+      <p>To retrieve the project details page request the file
+      <code>/projectDetails.html</code>.</p>
+      
+      <section>
+        <title>Multiple Projects</title>
+        <p>You can use the projectInfo plugin to pull together project 
+        information for multiple projects. For example, take a look at
+        the project details for 
+        <a href="projectDetails.forrest.html">Apache Forrest</a>.</p>.
+        
+        <p>Using the locatoinmap you can retrieve this content from 
+        anywhere you want, for example, the DOAP file for the Forrest 
+        project comes from directly from SVN, thus we are always 
+        assured of it being up to date.</p>
+        
+        <p>To retrieve the project details of another project make a request
+        for <code>projectDetails.[PROJECT_NAME].html</code>. For this to work 
+        your project locationmap muest have an entry like this:</p>
+        
+        <source><![CDATA[    
+    <match pattern="project.descriptor.forrest">
+      <location src="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/doap.xml"/>
+    </match>    
+        ]]></source>
+        
+        <p>Of course, if you have a central location for all your project descriptor
+        files you could use a match like this:</p>
+        
+        <source><![CDATA[    
+    <match pattern="project.descriptor.*">
+      <location src="path_to_descriptors/{1}.xml"/>
+    </match>    
+        ]]></source>
+        
+      </section>
+      
     </section>
   </body>
 </document>
