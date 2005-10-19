@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2004 The Apache Software Foundation or its licensors,
+  Copyright 2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@
     </if>
   </target>
 
-  <target name="notify.local" depends="notify.init, build" if="notify.do" description="FB: Notify to the console">
+  <target name="notify.local" depends="build, notify.init" if="notify.do" description="FB: Notify to the console">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
@@ -70,7 +70,7 @@
   <property name="notify.email.to"   value="${user.name}@localhost"/>
   <property name="notify.email.from"   value="Forrestbot"/>
   
-  <target name="notify.email" depends="notify.init, build" if="notify.do" description="FB: Notify by email">
+  <target name="notify.email" depends="build, notify.init" if="notify.do" description="FB: Notify by email">
     <tstamp>
       <format property="NOW" pattern="dd MMMM hh:mm aa"/>
     </tstamp>
@@ -82,7 +82,7 @@
       files="${build.logfile}"
       messagefile="${bot.home}/core/emailtemplate.txt"
       encoding="plain"
-    </>
+    />
   </target>
   
 </project>
