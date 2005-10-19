@@ -111,6 +111,11 @@
             </xsl:if>
         </link>
     </xsl:template>
+    <xsl:template match="forrest:css[not(@url)]">
+        <style type="text/css">
+          <xsl:value-of select="."/>
+        </style>
+    </xsl:template>
     <xsl:template match="forrest:contract" mode="head">
       <xsl:variable name="name" select="@name"/>
       <xsl:if test="/*/forrest:properties/*[@head='true' and @name=$name]">
