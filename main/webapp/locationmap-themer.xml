@@ -45,15 +45,15 @@
         <!-- project-based theme -->
         <location src="{project:resources}/templates/{project:theme}/{1}.ft" />
         <!-- project-based default fallback -->
-        <location src="{project:resources}/templates/{1}.ft" />
+        <location src="{project:resources}/templates/{defaults:theme}/{1}.ft" />
         <!-- project-application-based theme -->
         <location src="{project:themer}/resources/templates/{project:theme}/{1}.ft" />
         <!--  project-application-based default fallback -->
-        <location src="{project:themer}/resources/templates/{1}.ft" />
+        <location src="{project:themer}/resources/templates/{defaults:theme}/{1}.ft" />
         <!-- forrest-application-based theme -->
         <location src="{defaults:themer}/resources/templates/{project:theme}/{1}.ft" />
         <!--  forrest-application-based default fallback -->
-        <location src="{defaults:themer}/resources/templates/{1}.ft" />
+        <location src="{defaults:themer}/resources/templates/{defaults:theme}/{1}.ft" />
         <!--  forrest-application-based no found -->
         <location src="{defaults:themer}/resources/templates/noFt.ft" />
       </select>
@@ -98,6 +98,31 @@
       <select type="exists">
         <location src="{project:structurer}/resources/stylesheets/contract.property.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/contract.property.xsl" />
+      </select>
+    </match>
+        <!-- contracts (e.g. html) that can be used in the project. -->
+    <match pattern="ls.contracts.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/ls.contracts.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/ls.contracts.xsl" />
+      </select>
+    </match>
+    <match pattern="ls.contracts">
+      <select type="exists">
+        <location src="cocoon://ls.contracts" />
+      </select>
+    </match>
+    <match pattern="ls.contracts-to-document.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
+      </select>
+    </match>
+        <!-- contracts (e.g. html) that can be used in the project. -->
+    <match pattern="themer.contracts.dir">
+      <select type="exists">
+        <location src="{project:themer}/resources/templates" />
+        <location src="{defaults:themer}/resources/templates" />
       </select>
     </match>
   </locator>

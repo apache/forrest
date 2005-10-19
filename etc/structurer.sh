@@ -60,5 +60,4 @@ cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.structure
 $FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.output.themes
 $FORREST_HOME/tools/ant/bin/ant local-deploy
-cd ../org.apache.forrest.plugin.input.viewHelper.xhtml.ls
-$FORREST_HOME/tools/ant/bin/ant local-deploy
+
