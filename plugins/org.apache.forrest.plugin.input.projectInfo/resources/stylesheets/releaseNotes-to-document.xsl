@@ -21,7 +21,7 @@
     version="1.0">
 
   <xsl:param name="versionNumber"/>
-  <xsl:include href="changes2document.xsl"/>
+  <xsl:include href="changes-to-document.xsl"/>
 
   <!-- Calculate path to site root, eg '../../' -->
   <xsl:variable name="root">

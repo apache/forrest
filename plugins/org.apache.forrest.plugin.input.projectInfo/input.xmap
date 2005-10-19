@@ -31,7 +31,7 @@
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
         <map:generate type="file" src="{project:status}" />
-        <map:transform src="resources/stylesheets/changes2document.xsl" >
+        <map:transform src="{lm:projectInfo.transform.changes.document}" >
           <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
           <map:parameter name="path" value="{1}{2}"/>
         </map:transform>
@@ -50,13 +50,13 @@
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)todo.xml$">
         <map:generate type="file" src="{project:status}" />
-        <map:transform src="resources/stylesheets/todo2document.xsl" />
+        <map:transform src="{lm:projectInfo.transform.todo.document}" />
         <map:serialize type="xml-document"/>
       </map:match>
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)releaseNotes_(.*).xml$">
         <map:generate type="file" src="{project:status}" />
-        <map:transform src="resources/stylesheets/releaseNotes2document.xsl">
+        <map:transform src="{lm:projectInfo.transform.releaseNotes.document}">
           <map:parameter name="versionNumber" value="{3}"/>
         </map:transform>
         <map:serialize type="xml-document"/>
@@ -64,7 +64,7 @@
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)summary.xml$">
         <map:generate type="file" src="{lm:{0}}" />
-        <map:transform src="resources/stylesheets/releaseNotes2document.xsl"/>
+        <map:transform src="{lm:projectInfo.transform.releaseNotes.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
@@ -74,20 +74,19 @@
 
       <map:match pattern="projectDetails.xml">
         <map:generate type="file" src="{lm:project.descriptor}" />
-        <map:transform src="{lm:projectInfotransform.doap.html}"/>
+        <map:transform src="{lm:projectInfo.transform.doap.html}"/>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails.source.xml">
         <map:generate type="file" src="{lm:projectInfo.project.descriptor}" />
-        <map:transform src="{lm:transform.descriptor.html}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails.*.xml">
         <map:generate type="file" src="{lm:project.descriptor.{1}}" />
-        <map:transform src="{lm:transform.descriptor.html}"/>
+        <map:transform src="{lm:projectInfo.transform.doap.html}"/>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
