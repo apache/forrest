@@ -39,8 +39,8 @@
       </map:match>
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes_(.*).xml$">
-        <map:generate type="file" src="{project:status}" />
-        <map:transform src="resources/stylesheets/changes2document.xsl" >
+        <map:generate type="file" src="{lm:project.status}" />
+        <map:transform src="{lm:projectInfo.transform.changes.document}" >
           <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
           <map:parameter name="path" value="{1}{2}"/>
           <map:parameter name="versionNumber" value="{3}"/>
@@ -74,13 +74,13 @@
 
       <map:match pattern="projectDetails.xml">
         <map:generate type="file" src="{lm:project.descriptor}" />
-        <map:transform src="{lm:transform.descriptor.html}"/>
+        <map:transform src="{lm:projectInfotransform.doap.html}"/>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails.source.xml">
-        <map:generate type="file" src="{lm:project.descriptor}" />
+        <map:generate type="file" src="{lm:projectInfo.project.descriptor}" />
         <map:transform src="{lm:transform.descriptor.html}"/>
         <map:serialize type="xml-document"/>
       </map:match>
