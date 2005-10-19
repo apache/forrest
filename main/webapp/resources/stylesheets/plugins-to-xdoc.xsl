@@ -58,11 +58,16 @@
           funcitonal, in most cases they are usable, but use them with
           caution as they are not considered stable.</p>
           
-          <div class="frame note">
-            <div class="label">Note</div>
-            <div class="content">If you have created a plugin that is not listed
-            here please let us know.</div>
-          </div>
+          <note>If you have created a plugin that is not listed
+            here please let us know.</note>
+    
+          <note>The minimum version of Forrest is for latest version of
+          the plugin, there may be an earlier versions of the plugin for
+          earlier versions of Forrest. If you do not define a version 
+          number for the plugin it will always use the latest version
+          compatible with your version of Forrest. However, be aware
+          that if you are using a development version of forrest, you
+          will also be using development versions of the plugins.</note>
           
           <section>
             <title>Released Plugins</title>
@@ -87,6 +92,7 @@
   </xsl:template>
   
   <xsl:template match="plugins">
+    
     <section>
       <title>Input Plugins</title>
       <p>
@@ -180,7 +186,7 @@
         </tr>
 
         <tr>
-          <th width="25%">Plugin version</th>
+          <th width="25%">Latest Plugin version</th>
           <td>
             <xsl:value-of select="@version" />
           </td>
@@ -188,7 +194,7 @@
 
         <tr>
           <th width="25%">
-            Minimum Forrest version required
+            Minimum Forrest version required *
           </th>
           <td>
             <xsl:value-of select="forrestVersion" />
