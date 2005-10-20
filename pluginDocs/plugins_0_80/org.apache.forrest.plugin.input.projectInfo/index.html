@@ -104,11 +104,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menupage">
 <div class="menupagetitle">Index</div>
 </div>
-<div class="menuitem">
-<a href="projectDetails.html" title="An overview of the project and its resources">Project Details</a>
-</div>
-<div onclick="SwitchMenu('menu_1.1.3', 'skin/')" id="menu_1.1.3Title" class="menutitle">Release Notes</div>
-<div id="menu_1.1.3" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.2', 'skin/')" id="menu_1.1.2Title" class="menutitle">Release Notes</div>
+<div id="menu_1.1.2" class="menuitemgroup">
 <div class="menuitem">
 <a href="releaseNotes_0.1.html">Version 0.1</a>
 </div>
@@ -122,14 +119,26 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="todo.html" title="Todo List">Todo</a>
 </div>
-</div>
-<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Forrest</div>
-<div id="menu_1.2" class="menuitemgroup">
-<div class="menuitem">
-<a href="projectDetails.forrest.html" title="An overview of the Forrest project and its resources">Forrest Details</a>
-</div>
 <div class="menuitem">
 <a href="http://forrest.apache.org/docs/plugins" title="Index of Forrest Plugins">Plugins Index</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Projects</div>
+<div id="menu_1.2" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.2.1', 'skin/')" id="menu_1.2.1Title" class="menutitle">All</div>
+<div id="menu_1.2.1" class="menuitemgroup">
+<div class="menuitem">
+<a href="projectDetails.html" title="Project details for projectInfo">projectInfo</a>
+</div>
+<div class="menuitem">
+<a href="projectDetails.forrest.html" title="Project details for Apache Forrest">Apache Forrest</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.2.2', 'skin/')" id="menu_1.2.2Title" class="menutitle">Java</div>
+<div id="menu_1.2.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="projectDetails.forrest.html" title="Project details for Apache Forrest">Apache Forrest</a>
+</div>
 </div>
 </div>
 <div id="credit">
@@ -176,6 +185,9 @@ document.write("Last Published: " + document.lastModified);
 <ul class="minitoc">
 <li>
 <a href="#Multiple+Projects">Multiple Projects</a>
+</li>
+<li>
+<a href="#Project+Indexes">Project Indexes</a>
 </li>
 </ul>
 </li>
@@ -260,7 +272,8 @@ document.write("Last Published: " + document.lastModified);
       with the hint <span class="codefrag">pproject.descriptor</span>. This defaults to
       the root of your projects content directory. To place your descriptor 
       in a different location simply add
-      a matcher like this to your project locationmap:</p>
+      a matcher like that shown below in your <span class="codefrag">projectInfo.locationmap-projects</span>
+      file. This file is, by default, in the root of the webapp directory.</p>
 <pre class="code">
     &lt;match pattern="project.descriptor"&gt;
       &lt;location src="[path/to/descriptor/file]" /&gt;
@@ -268,7 +281,7 @@ document.write("Last Published: " + document.lastModified);
       </pre>
 <p>To retrieve the project details page request the file
       <span class="codefrag">/projectDetails.html</span>.</p>
-<a name="N10091"></a><a name="Multiple+Projects"></a>
+<a name="N10094"></a><a name="Multiple+Projects"></a>
 <h3 class="underlined_5">Multiple Projects</h3>
 <p>You can use the projectInfo plugin to pull together project 
         information for multiple projects. For example, take a look at
@@ -293,6 +306,16 @@ document.write("Last Published: " + document.lastModified);
       &lt;location src="path_to_descriptors/{1}.xml"/&gt;
     &lt;/match&gt;    
         </pre>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">The indexing of projects (described below) does not currently work with
+        wildcard matchers in the locationmap.</div>
+</div>
+<a name="N100B9"></a><a name="Project+Indexes"></a>
+<h3 class="underlined_5">Project Indexes</h3>
+<p>The system will automatically create an index of projects from your 
+        projects locationmap file. For example, the "Projects" section of the 
+        navigation on the left is automatically generated.</p>
 </div>
   
 </div>
