@@ -17,6 +17,9 @@
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
+    <map:transformers default="xslt">
+      <map:transformer name="cinclude" src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+    </map:transformers>
     <map:serializers default="html">
       <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
         <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
@@ -28,6 +31,17 @@
 
   <map:pipelines>
     <map:pipeline>
+      
+      <map:match pattern="projectDetails.source.xml">
+        <map:generate type="file" src="{lm:project.descriptor}" />
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
+      <map:match pattern="projectDetails.*.source.xml">
+        <map:generate type="file" src="{lm:project.descriptor.{1}}" />
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
         <map:generate type="file" src="{project:status}" />
@@ -79,11 +93,6 @@
         <map:serialize type="xml-document"/>
       </map:match>
       
-      <map:match pattern="projectDetails.source.xml">
-        <map:generate type="file" src="{lm:projectInfo.project.descriptor}" />
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
       <map:match pattern="projectDetails.*.xml">
         <map:generate type="file" src="{lm:project.descriptor.{1}}" />
         <map:transform src="{lm:projectInfo.transform.doap.html}"/>
@@ -91,8 +100,40 @@
         <map:serialize type="xml-document"/>
       </map:match>
       
-      <map:match pattern="projectDetails.*.source.xml">
-        <map:generate type="file" src="{lm:project.descriptor.{1}}" />
+      <map:match pattern="projectDetails/index.xml">
+        <map:generate type="file" src="locationmap-projects.xml" />
+        <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
+        <map:transform type="cinclude"/>
+        <!--<map:transform src="{lm:projectInfo.transform.descriptorIndex.html}"/>-->
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
+      
+      <!--
+        Create a snippet for inclusion in site.xml that lists all projects
+        known in the locationmap-projects.xml file.
+      -->
+      <map:match pattern="projectDetails/index.siteSnippet.xml">
+        <map:generate type="file" src="locationmap.xml" />
+        <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
+        <map:transform type="cinclude"/>
+        <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
+      <!--
+        Create a snippet for inclusion in site.xml that lists all projects
+        known in the locationmap-projects.xml that have the indicated 
+        programming language. 
+      -->
+      <map:match pattern="projectDetails/language-*/index.siteSnippet.xml">
+        <map:generate type="file" src="locationmap.xml" />
+        <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
+        <map:transform type="cinclude"/>
+        <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}">
+          <map:parameter name="name" value="{1}"/>
+          <map:parameter name="progLanguage" value="{1}"/>
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
 
