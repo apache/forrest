@@ -1,5 +1,5 @@
 /*
-* Copyright 2002-2004 The Apache Software Foundation or its licensors,
+* Copyright 2002-2005 The Apache Software Foundation or its licensors,
 * as applicable.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,20 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-var err = initInstall("ForrestBar", "forrestbar", ""); 
-//alert("initInstall");
-addFile("forrestbar", "forrestbar.jar", getFolder("Chrome"),"");
-//alert("addFile");	
-registerChrome(CONTENT | DELAYED_CHROME, getFolder("Chrome","forrestbar.jar"), "content/forrestbar/");
-//alert("registerChrome");
-if (err==SUCCESS){  
-  //alert("SUCCESS");
+
+// Initialize Install
+var err = initInstall("ForrestBar", "forrestbar", "0.7");
+
+// Get the JAR
+addFile("forrestbar", "chrome/forrestbar.jar", getFolder("chrome"),"");
+
+// Register the content
+registerChrome(CONTENT | DELAYED_CHROME, getFolder("chrome","forrestbar.jar"), "content/");
+
+// Install it
+if (err == SUCCESS){
   performInstall();
+  alert('Please restart your browser to finish the installation.');
 } else {
   cancelInstall(err);
 }

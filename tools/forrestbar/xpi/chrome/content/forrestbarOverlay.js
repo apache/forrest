@@ -1,5 +1,5 @@
 /*
-* Copyright 2002-2004 The Apache Software Foundation or its licensors,
+* Copyright 2002-2005 The Apache Software Foundation or its licensors,
 * as applicable.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +17,17 @@
 
 function startforrestbar()
 {
-	//alert("function init");
-	if(document.getElementById("forrestbar").getAttribute("hidden") == "false")
-	{
-		removeEventListener ("load",startforrestbar, true); // Keep the event from firing a hundred more times.
-	}
+  //alert("function init");
+  if(document.getElementById("forrestbar").getAttribute("hidden") == "false")
+  {
+    removeEventListener ("load",startforrestbar, true); // Keep the event from firing a hundred more times.
+  }
 }
 
 addEventListener("load", startforrestbar, true); // Run the startup function when the window loads
-	
+
 function navigate(url) {
-	window._content.document.location.href = url;
+  window._content.document.location.href = url;
 }
 
 
@@ -35,12 +35,12 @@ function navigate(url) {
 
 function search(searchID)
 {
-	var searchItem = document.getElementById(searchID);
-	navigate('http://www.google.com/search?q=' + searchItem.value);
+  var searchItem = document.getElementById(searchID);
+  navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
 }
 
 function navProject(searchID) {
-	var searchItem = document.getElementById(searchID);
-	navigate(searchItem.selectedItem.value);
+  var searchItem = document.getElementById(searchID);
+  navigate(searchItem.selectedItem.value);
 }
 
