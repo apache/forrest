@@ -25,22 +25,39 @@
       extracted from the document itself using the document()
       function.
   -->
+  <xsl:param name="requestedContract" select="'false'"/>
+  <xsl:param name="less" select="'false'"/>
   <xsl:template match="/">
-    <document>
-      <header>
-        <title>ls.contracts</title>
-      </header>
-      <body>
-        <xsl:apply-templates/>
-      </body>
-    </document>
+    <xsl:if test="$less='false'">
+      <document>
+        <header>
+          <title>ls.contract<xsl:if 
+            test="$requestedContract='false'">s</xsl:if><xsl:if 
+            test="$requestedContract!='false'">&#160;<xsl:value-of 
+            select="$requestedContract" /></xsl:if> </title>
+        </header>
+        <body>
+          <xsl:choose>
+            <xsl:when test="$requestedContract='false'">
+              <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates 
+                select=".//forrest:contract[@name=$requestedContract]"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </body>
+      </document>
+    </xsl:if>
+    <xsl:if test="$less='true'">
+      <xsl:apply-templates 
+        select=".//forrest:contract[@name=$requestedContract]"/>
+    </xsl:if>
   </xsl:template>
   <xsl:template match="forrest:theme">
     <xsl:variable select="@name" name="name"/>
     <section id="{$name}">
-      <title>
-        theme name: <xsl:value-of select="@name" />
-      </title>
+      <title> theme name: <xsl:value-of select="@name" /> </title>
       <xsl:apply-templates select="./forrest:contract">
         <xsl:with-param select="$name" name="theme"/>
       </xsl:apply-templates>
@@ -48,32 +65,65 @@
   </xsl:template>
   <xsl:template match="forrest:contract">
     <xsl:param name="theme" select="default"/>
-    <section id="{$theme}-{@name}">
-      <title>
-        <xsl:value-of select="@name" />
-      </title>
-      <p class="file">
-        <strong>file-name:</strong>
-        <br/>
-        <xsl:value-of select="@file-name" />
-      </p>
-      <p class="description">
-        <strong>description:</strong>
-        <br/>
-        <xsl:copy-of select="./description" />
-      </p>
-      <p class="usage">
-        <strong>usage:</strong>
-      </p>
-      <source>
-        <xsl:value-of select="./usage" />
-      </source>
-      <p class="template-definition">
-        <strong>forrest-template definition:</strong>
-      </p>
-      <source>&lt;forrest:template<xsl:apply-templates select="./forrest:template/@*" />/&gt;
-      </source>
-    </section>
+    <xsl:choose>
+      <xsl:when test="$requestedContract!='false'">
+        <section id="{@name}">
+          <title>
+            <xsl:value-of select="@name" />
+          </title>
+          <p class="file">
+            <strong>file-name:</strong>
+            <br/>
+            <xsl:value-of select="@file-name" />
+          </p>
+          <p class="description">
+            <strong>description:</strong>
+            <br/>
+            <xsl:copy-of select="./description/*" />
+          </p>
+          <p class="usage">
+            <strong>usage:</strong>
+          </p>
+          <source>
+            <xsl:value-of select="./usage" />
+          </source>
+          <p class="template-definition">
+            <strong>forrest-template definition:</strong>
+          </p>
+          <source>&lt;forrest:template<xsl:apply-templates 
+            select="./forrest:template/@*" />/&gt; </source>
+        </section>
+      </xsl:when>
+      <xsl:otherwise>
+        <section id="{$theme}-{@name}">
+          <title>
+            <xsl:value-of select="@name" />
+          </title>
+          <p class="file">
+            <strong>file-name:</strong>
+            <br/>
+            <xsl:value-of select="@file-name" />
+          </p>
+          <p class="description">
+            <strong>description:</strong>
+            <br/>
+            <xsl:copy-of select="./description/*" />
+          </p>
+          <p class="usage">
+            <strong>usage:</strong>
+          </p>
+          <source>
+            <xsl:value-of select="./usage" />
+          </source>
+          <p class="template-definition">
+            <strong>forrest-template definition:</strong>
+          </p>
+          <source>&lt;forrest:template<xsl:apply-templates 
+            select="./forrest:template/@*" />/&gt; </source>
+        </section>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
-  <xsl:template match="forrest:template/@*">&#160;<xsl:value-of select="name()"/>="<xsl:value-of select="."/>"</xsl:template>
+  <xsl:template match="forrest:template/@*">&#160;<xsl:value-of 
+    select="name()"/>="<xsl:value-of select="."/>"</xsl:template>
 </xsl:stylesheet>
