@@ -88,14 +88,18 @@
 
       <map:match pattern="projectDetails.xml">
         <map:generate type="file" src="{lm:project.descriptor}" />
-        <map:transform src="{lm:projectInfo.transform.doap.html}"/>
+        <map:transform src="{lm:projectInfo.transform.doap.html}">
+          <map:parameter name="includePageHeader" value="false"/>
+        </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails.*.xml">
         <map:generate type="file" src="{lm:project.descriptor.{1}}" />
-        <map:transform src="{lm:projectInfo.transform.doap.html}"/>
+        <map:transform src="{lm:projectInfo.transform.doap.html}">
+          <map:parameter name="includePageHeader" value="false"/>
+        </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
@@ -114,7 +118,7 @@
         known in the locationmap-projects.xml file.
       -->
       <map:match pattern="projectDetails/index.siteSnippet.xml">
-        <map:generate type="file" src="locationmap.xml" />
+        <map:generate type="file" src="{project:content}/locationmap.xml" />
         <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}"/>
@@ -127,7 +131,7 @@
         programming language. 
       -->
       <map:match pattern="projectDetails/language-*/index.siteSnippet.xml">
-        <map:generate type="file" src="locationmap.xml" />
+        <map:generate type="file" src="{project:content}/locationmap.xml" />
         <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}">
