@@ -111,16 +111,24 @@
       <!-- FIXME: create the XSL for this pipeline
       
       <map:match pattern="projectDetails/index.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descrptorIndex.xml" />
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.html}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       -->
       
       
+      <!-- Create an HTML page listing all projects categorised by programming language -->
+      <map:match pattern="projectDetails/programmingLang/index.xml">
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
+        <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexByLanguage}"/>
+        <map:transform src="{lm:transform.html.document}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
       <!-- Create an HTML page listing all projects using the indicated language -->
       <map:match pattern="projectDetails/*_lang.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descrptorIndex.xml" />
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.langIndex}">
           <map:parameter name="language" value="{1}"/>
         </map:transform>
@@ -137,7 +145,7 @@
         all known programming languages for projects specified in
         locationmap-projects.xml file.
       -->
-      <map:match pattern="projectDetails/descrptorIndex.xml">
+      <map:match pattern="projectDetails/descriptorIndex.xml">
         <map:generate type="file" src="{project:content}/locationmap.xml" />
         <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
@@ -150,7 +158,7 @@
         specified in locationmap-projects.xml file.
       -->
       <map:match pattern="projectDetails/lang_index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descrptorIndex.xml" />
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.langIndex_siteSnippet}"/>
         <map:serialize type="xml-document"/>
       </map:match>
@@ -160,7 +168,7 @@
         known in the locationmap-projects.xml file.
       -->
       <map:match pattern="projectDetails/index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descrptorIndex.xml" />
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}"/>
         <map:serialize type="xml-document"/>
       </map:match>
@@ -171,7 +179,7 @@
         programming language. 
       -->
       <map:match pattern="projectDetails/language-*/index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descrptorIndex.xml" />
+        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}">
           <map:parameter name="name" value="{1}"/>
           <map:parameter name="progLanguage" value="{1}"/>

@@ -20,9 +20,10 @@
         <h1>Index of Projects using the <xsl:value-of select="$language"/> Programming language</h1>
         <ul>
           <xsl:for-each select="//doap:Project[doap:programming-language = $language]/doap:name">
+            
             <li>
               <a>
-                <xsl:attribute name="href">/projectDetails.<xsl:value-of select="."/>.html</xsl:attribute>
+                <xsl:attribute name="href"><xsl:value-of select="ancestor::descriptor/@href-noext"/>.html</xsl:attribute>
                 <xsl:value-of select="."/>
               </a>
             </li>
