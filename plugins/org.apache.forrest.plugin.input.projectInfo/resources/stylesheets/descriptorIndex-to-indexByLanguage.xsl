@@ -8,20 +8,32 @@
   
   <xsl:key name="kDistinctProgLang" match="doap:programming-language" use="."/>
   
+  <xsl:param name="language"/>
+  
   <xsl:template match="/">
     <html>
       <head>
         <title>Projects Indexed by Language</title>
       </head>
       <body>
-        <xsl:for-each select="//doap:programming-language[generate-id() = generate-id(key('kDistinctProgLang',.))]">
-          <xsl:sort select="."/>
-          <xsl:variable name="language" select="."/>
-          <h1><xsl:value-of select="$language"/></h1>
-          <ul>
-            <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $language]"/>
-          </ul>
-        </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="$language">
+            <h1>Index of projects using <xsl:value-of select="$language"/></h1>
+            <ul>
+              <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $language]"/>
+            </ul>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="//doap:programming-language[generate-id() = generate-id(key('kDistinctProgLang',.))]">
+              <xsl:sort select="."/>
+              <xsl:variable name="language" select="."/>
+              <h1><xsl:value-of select="$language"/></h1>
+              <ul>
+                <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $language]"/>
+              </ul>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </body>
     </html>
   </xsl:template>
