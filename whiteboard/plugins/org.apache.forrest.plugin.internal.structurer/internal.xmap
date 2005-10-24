@@ -74,11 +74,25 @@
       <map:transformer name="linkrewriter"
         logger="sitemap.transformer.linkrewriter"
         src="org.apache.cocoon.transformation.LinkRewriterTransformer">
-        <link-attrs>uri</link-attrs>
-        <schemes>lm</schemes>
-        <input-module name="lm" />
-      </map:transformer>
+        <link-attrs>href src</link-attrs>
+        <schemes>site ext lm</schemes>
 
+        <input-module name="lm" />
+        <input-module name="site">
+          <input-module name="linkmap">
+            <file src="{src}" reloadable="true" />
+          </input-module>
+          <prefix>/site//</prefix>
+          <suffix>/@href</suffix>
+        </input-module>
+        <input-module name="ext">
+          <input-module name="linkmap">
+            <file src="{src}" reloadable="true" />
+          </input-module>
+          <prefix>/site/external-refs//</prefix>
+          <suffix>/@href</suffix>
+        </input-module>
+      </map:transformer>
     </map:transformers>
     <map:serializers default="xml">
       <map:serializer logger="sitemap.serializer.xhtml"
@@ -102,38 +116,6 @@
         src="org.apache.forrest.plugin.internal.view.acting.FallbackResolverAction" />
     </map:actions>
   </map:components>
-  <map:resources>
-    <map:resource name="skinit">
-      <map:select type="exists">
-        <map:when
-          test="{project:skins-dir}{project:theme}/xslt/html/{type}.xsl">
-          <map:transform
-            src="{project:skins-dir}{project:theme}/xslt/html/{type}.xsl">
-            <map:parameter name="notoc" value="{notoc}" />
-            <!-- FIXME: do we need this anymore? -->
-            <!-- For backwards-compat with 0.2 - 0.4 skins -->
-            <map:parameter name="isfaq" value="{notoc}" />
-            <map:parameter name="nopdf" value="{nopdf}" />
-            <map:parameter name="path" value="{path}" />
-            <map:parameter name="config-file"
-              value="{project:skinconf}" />
-          </map:transform>
-        </map:when>
-        <map:otherwise>
-          <map:transform src="resources/stylesheets/html/{type}.xsl">
-            <map:parameter name="notoc" value="{notoc}" />
-            <!-- For backwards-compat with 0.2 - 0.4 skins -->
-            <map:parameter name="isfaq" value="{notoc}" />
-            <map:parameter name="nopdf" value="{nopdf}" />
-            <map:parameter name="path" value="{path}" />
-            <map:parameter name="config-file"
-              value="{project:skinconf}" />
-          </map:transform>
-        </map:otherwise>
-      </map:select>
-      <map:serialize />
-    </map:resource>
-  </map:resources>
   <map:pipelines>
     <map:pipeline>
       <!-- businessHelper -->
@@ -141,14 +123,13 @@
         pass-through="true" />
     </map:pipeline>
       <!-- linkmap -->
-<!-- FIXME: Uncomment if jxpath is fixed.
+ <!--FIXME: Uncomment if jxpath is fixed.-->
     <map:pipeline>
       <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes"
         pass-through="true" />
     </map:pipeline>
--->
+
     <map:pipeline>
-      <!-- themer interface FIXME thorsten finish the xmap-->
       <map:mount uri-prefix="" src="themer.xmap" check-reload="yes"
         pass-through="true" /> 
     </map:pipeline>
