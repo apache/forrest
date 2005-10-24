@@ -68,61 +68,46 @@
     <xsl:choose>
       <xsl:when test="$requestedContract!='false'">
         <section id="{@name}">
-          <title>
-            <xsl:value-of select="@name" />
-          </title>
-          <p class="file">
-            <strong>file-name:</strong>
-            <br/>
-            <xsl:value-of select="@file-name" />
-          </p>
-          <p class="description">
-            <strong>description:</strong>
-            <br/>
-            <xsl:copy-of select="./description/*" />
-          </p>
-          <p class="usage">
-            <strong>usage:</strong>
-          </p>
-          <source>
-            <xsl:value-of select="./usage" />
-          </source>
-          <p class="template-definition">
-            <strong>forrest-template definition:</strong>
-          </p>
-          <source>&lt;forrest:template<xsl:apply-templates 
-            select="./forrest:template/@*" />/&gt; </source>
+          <xsl:call-template name="innerBodyLs"/>
         </section>
       </xsl:when>
       <xsl:otherwise>
         <section id="{$theme}-{@name}">
-          <title>
-            <xsl:value-of select="@name" />
-          </title>
-          <p class="file">
-            <strong>file-name:</strong>
-            <br/>
-            <xsl:value-of select="@file-name" />
-          </p>
-          <p class="description">
-            <strong>description:</strong>
-            <br/>
-            <xsl:copy-of select="./description/*" />
-          </p>
-          <p class="usage">
-            <strong>usage:</strong>
-          </p>
-          <source>
-            <xsl:value-of select="./usage" />
-          </source>
-          <p class="template-definition">
-            <strong>forrest-template definition:</strong>
-          </p>
-          <source>&lt;forrest:template<xsl:apply-templates 
-            select="./forrest:template/@*" />/&gt; </source>
+          <xsl:call-template name="innerBodyLs"/>
         </section>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  <xsl:template name="innerBodyLs">
+    <title>
+      <xsl:value-of select="@name" />
+    </title>
+    <p class="file">
+      <strong>file-name:</strong>
+      <br/>
+      <xsl:value-of select="@file-name" />
+    </p>
+    <p class="description">
+      <strong>description:</strong>
+      <br/>
+      <xsl:if test="./description/*">
+        <xsl:copy-of select="./description/*" />
+      </xsl:if>
+      <xsl:if test="not(./description/*)">
+        <xsl:value-of select="./description" />
+      </xsl:if>
+    </p>
+    <p class="usage">
+      <strong>usage:</strong>
+    </p>
+    <source>
+      <xsl:value-of select="./usage" />
+    </source>
+    <p class="template-definition">
+      <strong>forrest-template definition:</strong>
+    </p>
+    <source>&lt;forrest:template<xsl:apply-templates 
+      select="./forrest:template/@*" />/&gt; </source>
   </xsl:template>
   <xsl:template match="forrest:template/@*">&#160;<xsl:value-of 
     select="name()"/>="<xsl:value-of select="."/>"</xsl:template>

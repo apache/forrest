@@ -67,7 +67,7 @@
                       <!--*No* forrest:css found in the view-->
                         <xsl:if test="not(/*/forrest:view/forrest:css)">
                             <link rel="stylesheet" type="text/css">
-                                <xsl:attribute name="href">{$root}skin/default.css</xsl:attribute>
+                                <xsl:attribute name="href">{$root}themes/default.css</xsl:attribute>
                             </link>
                         </xsl:if>
                       <!-- forrest:css *found* in the view-->
@@ -104,7 +104,7 @@
                 <xsl:attribute name="title"><xsl:value-of select="@url"/></xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:attribute name="href">{$root}skin/<xsl:value-of select="@url"/>
+            <xsl:attribute name="href">{$root}themes/<xsl:value-of select="@url"/>
             </xsl:attribute>
             <xsl:if test="@media">
               <xsl:attribute name="media"><xsl:value-of select="@media"/></xsl:attribute>

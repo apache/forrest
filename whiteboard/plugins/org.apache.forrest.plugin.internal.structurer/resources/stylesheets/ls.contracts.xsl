@@ -15,39 +15,29 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet
-    version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:dir="http://apache.org/cocoon/directory/2.0"
-    xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    >
-
-
-  <xsl:template match="/dir:directory">
-   <forrest:themes xmlns:forrest="http://apache.org/forrest/templates/1.0">
-    <xsl:apply-templates />
-   </forrest:themes>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:dir="http://apache.org/cocoon/directory/2.0" 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0" >
+  <xsl:template match="/">
+    <forrest:themes xmlns:forrest="http://apache.org/forrest/templates/1.0">
+      <xsl:apply-templates select="dir:directory/dir:directory"/>
+    </forrest:themes>
   </xsl:template>
-
-<xsl:template match="dir:directory">
-      <forrest:theme name="{@name}">
-        <xsl:apply-templates />
-      </forrest:theme>
-</xsl:template>
-
-<xsl:template match="dir:file[./*/*/@name]">
-  <forrest:contract name="{./*/*/@name}" file-name="{@name}">
-    <xsl:copy-of select="./*/*/description"/>
-    <xsl:copy-of select="./*/*/usage"/>
-    <xsl:apply-templates select=".//forrest:template"/>
-  </forrest:contract>
-</xsl:template>
-
-<xsl:template match="forrest:template">
-  <forrest:template>
-    <xsl:copy-of select="@*"/>
-  </forrest:template>
-</xsl:template>
-
+  <xsl:template match="dir:directory">
+    <forrest:theme name="{@name}">
+      <xsl:apply-templates select="descendant::dir:file" />
+    </forrest:theme>
+  </xsl:template>
+  <xsl:template match="dir:file[./*/*/@name]">
+    <forrest:contract name="{./*/*/@name}" file-name="{@name}">
+      <xsl:copy-of select="./*/*/description"/>
+      <xsl:copy-of select="./*/*/usage"/>
+      <xsl:apply-templates select=".//forrest:template"/>
+    </forrest:contract>
+  </xsl:template>
+  <xsl:template match="forrest:template">
+    <forrest:template>
+      <xsl:copy-of select="@*"/>
+    </forrest:template>
+  </xsl:template>
 </xsl:stylesheet>
-
