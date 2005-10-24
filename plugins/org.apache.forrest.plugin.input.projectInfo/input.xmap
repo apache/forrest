@@ -85,8 +85,8 @@
       <!-- =============================================================== -->
       <!-- Project Description Pipelines                                   -->
       <!-- =============================================================== -->
-
-      <map:match pattern="projectDetails.xml">
+      
+      <map:match pattern="projectDetails/projectDetails.xml">
         <map:generate type="file" src="{lm:project.descriptor}" />
         <map:transform src="{lm:projectInfo.transform.doap.html}">
           <map:parameter name="includePageHeader" value="false"/>
@@ -95,7 +95,7 @@
         <map:serialize type="xml-document"/>
       </map:match>
       
-      <map:match pattern="projectDetails.*.xml">
+      <map:match pattern="projectDetails/projectDetails.*.xml">
         <map:generate type="file" src="{lm:project.descriptor.{1}}" />
         <map:transform src="{lm:projectInfo.transform.doap.html}">
           <map:parameter name="includePageHeader" value="false"/>
@@ -119,7 +119,7 @@
       
       
       <!-- Create an HTML page listing all projects categorised by programming language -->
-      <map:match pattern="projectDetails/programmingLang/index.xml">
+      <map:match pattern="projectDetails/lang-index.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexByLanguage}"/>
         <map:transform src="{lm:transform.html.document}"/>
@@ -149,7 +149,7 @@
         <map:generate type="file" src="{project:content}/locationmap.xml" />
         <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
-        <map:serialize type="xml-document"/>
+        <map:serialize type="xml"/>
       </map:match>
       
       <!--
