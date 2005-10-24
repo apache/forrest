@@ -52,21 +52,29 @@
           <!--  project-based theme-based = directory-based / parent-directory based (recursively) -->
           <location src="{uri}" />
         </act>
-        <!-- project-application-based theme-based -->
+        <!-- themes-dir: project-application-based theme-dir-based -->
         <location 
-          src="{project:themer}/resources/views/{project:theme}{project:theme-ext}" 
+          src="{project:theme-dir}/{project:theme}{project:theme-ext}" 
           />
-        <!-- project-application-based default -->
+        <!-- themer: project-application-based theme-based -->
         <location 
-          src="{project:themer}/resources/views/{defaults:theme}{defaults:theme-ext}" 
+          src="{project:themer}/resources/themes/{project:theme}{project:theme-ext}" 
           />
-        <!-- forrest-application-based theme-based -->
+        <!-- themes-dir: project-application-based default -->
         <location 
-          src="{defaults:themer}/resources/views/{project:theme}{project:theme-ext}" 
+          src="{project:theme-dir}/{defaults:theme}{defaults:theme-ext}" 
           />
-        <!-- forrest-application-based default -->
+        <!-- themer: project-application-based default -->
         <location 
-          src="{defaults:themer}/resources/views/{defaults:theme}{defaults:theme-ext}" 
+          src="{project:themer}/resources/themes/{defaults:theme}{defaults:theme-ext}" 
+          />
+        <!-- themer: forrest-application-based theme-based -->
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}{project:theme-ext}" 
+          />
+        <!-- themer: forrest-application-based default -->
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}{defaults:theme-ext}" 
           />
       </select>
     </match>
@@ -76,7 +84,7 @@
         <location src="{defaults:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
       </select>
     </match>
-    <match pattern="structurer.**.*">
+    <match pattern="structurer.*.**">
       <select type="exists">
         <location src="cocoon://prepare.structurer.{1}.{2}" />
       </select>
@@ -85,20 +93,20 @@
     <match pattern="resolve.tiles.**">
       <select type="exists">
         <location 
-          src="{project:resources}/templates/{project:theme}/{1}.vt.xml" />
+          src="{project:resources}/themes/{project:theme}/html/{1}.vt.xml" />
         <location 
-          src="{project:resources}/templates/{defaults:theme}/{1}.vt.xml" />
+          src="{project:resources}/themes/{defaults:theme}/html/{1}.vt.xml" />
         <location 
-          src="{project:themer}/resources/templates/{project:theme}/{1}.vt.xml" 
+          src="{project:themer}/resources/themes/{project:theme}/html/{1}.vt.xml" 
           />
         <location 
-          src="{project:themer}/resources/templates/{defaults:theme}/{1}.vt.xml" 
+          src="{project:themer}/resources/themes/{defaults:theme}/html/{1}.vt.xml" 
           />
         <location 
-          src="{defaults:themer}/resources/templates/{project:theme}/{1}.vt.xml" 
+          src="{defaults:themer}/resources/themes/{project:theme}/html/{1}.vt.xml" 
           />
         <location 
-          src="{defaults:themer}/resources/templates/{defaults:theme}/{1}.vt.xml" 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/html/{1}.vt.xml" 
           />
       </select>
     </match>
@@ -110,7 +118,7 @@
       </select>
     </match>
         <!-- Aggregate the forrest:properties requested by the *.fv.  -->
-    <match pattern="structurer-properties.**.*">
+    <match pattern="structurer-properties.*.**">
       <select type="exists">
         <location src="cocoon://prepare.structurer-properties.{1}.{2}" />
       </select>

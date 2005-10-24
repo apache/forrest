@@ -43,19 +43,19 @@
     <match pattern="resolve.contract.html.**">
       <select type="exists">
         <!-- project-based theme -->
-        <location src="{project:resources}/templates/{project:theme}/{1}.ft" />
+        <location src="{project:resources}/themes/{project:theme}/html/{1}.ft" />
         <!-- project-based default fallback -->
-        <location src="{project:resources}/templates/{defaults:theme}/{1}.ft" />
+        <location src="{project:resources}/themes/{defaults:theme}/html/{1}.ft" />
         <!-- project-application-based theme -->
-        <location src="{project:themer}/resources/templates/{project:theme}/{1}.ft" />
+        <location src="{project:themer}/resources/themes/{project:theme}/html/{1}.ft" />
         <!--  project-application-based default fallback -->
-        <location src="{project:themer}/resources/templates/{defaults:theme}/{1}.ft" />
+        <location src="{project:themer}/resources/themes/{defaults:theme}/html/{1}.ft" />
         <!-- forrest-application-based theme -->
-        <location src="{defaults:themer}/resources/templates/{project:theme}/{1}.ft" />
+        <location src="{defaults:themer}/resources/themes/{project:theme}/html/{1}.ft" />
         <!--  forrest-application-based default fallback -->
-        <location src="{defaults:themer}/resources/templates/{defaults:theme}/{1}.ft" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/html/{1}.ft" />
         <!--  forrest-application-based no found -->
-        <location src="{defaults:themer}/resources/templates/noFt.ft" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/html/noFt.ft" />
       </select>
     </match>
     <match pattern="contract.html.**">
@@ -112,6 +112,11 @@
         <location src="cocoon://ls.contracts" />
       </select>
     </match>
+    <match pattern="ls.contracts.project">
+      <select type="exists">
+        <location src="cocoon://ls.contracts.project" />
+      </select>
+    </match>
     <match pattern="ls.contracts-to-document.xsl">
       <select type="exists">
         <location src="{project:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
@@ -121,8 +126,27 @@
         <!-- contracts (e.g. html) that can be used in the project. -->
     <match pattern="themer.contracts.dir">
       <select type="exists">
-        <location src="{project:themer}/resources/templates" />
-        <location src="{defaults:themer}/resources/templates" />
+        <location src="{project:themer}/resources/themes" />
+        <location src="{defaults:themer}/resources/themes" />
+      </select>
+    </match>
+        <!-- project contracts (e.g. html) that can be used in the project. -->
+    <match pattern="themer.contracts.project.dir">
+      <select type="exists">
+        <location src="{project:theme-dir}/" />
+        <!-- v1 location -->
+        <location src="{project:resources}/templates/" />
+      </select>
+    </match>
+        <!-- project contracts (e.g. html) that can be used in the project. -->
+    <match pattern="themes/**.css">
+      <select type="exists">
+        <location src="{project:theme-dir}/{project:theme}/css/{1}.css" />
+        <location src="{project:theme-dir}/{defaults:theme}/css/{1}.css" />
+        <location src="{project:themer}/resources/themes/{project:theme}/css/{1}.css" />
+        <location src="{project:themer}/resources/themes/{defaults:theme}/css/{1}.css" />
+        <location src="{defaults:themer}/resources/themes/{project:theme}/css/{1}.css" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/css/{1}.css" />
       </select>
     </match>
   </locator>
