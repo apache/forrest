@@ -23,16 +23,20 @@
   <usage><![CDATA[<forrest:contract name="nav-section">
   <forrest:properties contract="nav-section">
     <forrest:property name="nav-section" nugget="get.navigation">
-      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+      <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="html" name="nav-section" inputFormat="xsl" body="true" head="false">
+  format="html" name="nav-section" inputFormat="xsl" body="true" head="true">
 
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-		  
+		  <xsl:template name="nav-section-head">
+		      <script type="text/javascript" language="javascript" 
+			        src="{$root}skin/menu.js">&#160;</script>
+		  </xsl:template>
+      
 		  <xsl:template name="nav-section-body">
         <xsl:param name="nav-section" select="'test'"/>
 <xsl:comment>+
@@ -74,37 +78,41 @@
     </xsl:variable>
     <xsl:variable name="whichGroup">
       <xsl:choose>
-        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">currentmenuitemgroup</xsl:when>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">selectedmenuitemgroup</xsl:when>
         <xsl:otherwise>menuitemgroup</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
-    <li class="pagegroup"><strong><xsl:value-of select="h1"/></strong>
-      <ul>
+    <li class="pagegroup" id="{$tagid}Title"><span onclick="SwitchMenu('{$tagid}', '{$root}skin/')"><xsl:value-of select="h1"/></span>
+      <ul class="{$whichGroup}" id="{$tagid}">
         <xsl:for-each select= "ul/li">
 
           <xsl:choose>
             <xsl:when test="a">
-              <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
+              <li class="menuitem"><a href="{a/@href}" title="{a/@title}"><xsl:value-of select="a" /></a></li>
             </xsl:when>
             <xsl:when test="div/@class='current'">
               <li class="menupage">
                 <div class="menupagetitle"><xsl:value-of select="div" /></div>
                 <xsl:if test="$config/toc/@max-depth&gt;0 and contains($minitoc-location,'menu')">
-                  <li class="menupageitemgroup">
+                  <ul>
+                    <li class="menupageitemgroup">
                       <xsl:for-each select = "//tocitems/tocitem">
                         <div class="menupageitem">
                           <xsl:choose>
-                            <xsl:when test="string-length(@title)>15">
-                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of select="substring(normalize-space(@title),0,20)" />...</a>
+                            <xsl:when test="string-length(normalize-space(@title))>15">
+                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of 
+                                select="substring(@title,0,20)" />...</a>
                             </xsl:when>
                             <xsl:otherwise>
-                              <a href="{@href}" title="{normalize-space(@title)}"><xsl:value-of select="normalize-space(@title)" /></a>
+                              <a href="{@href}" title="{normalize-space(@title)}">
+                                <xsl:value-of select="@title" />
+                              </a>
                             </xsl:otherwise>
                           </xsl:choose>
                         </div>
                       </xsl:for-each>
-                  </li>
+                    </li>
+                  </ul>
                 </xsl:if>
               </li>
             </xsl:when>
@@ -117,6 +125,7 @@
 
         </xsl:for-each>
       </ul></li>
+      <script>SwitchMenu('<xsl:value-of select="$tagid"/>', '<xsl:value-of select="$root"/>skin/')</script>
   		</xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>

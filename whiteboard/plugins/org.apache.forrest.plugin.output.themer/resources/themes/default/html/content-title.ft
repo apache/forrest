@@ -18,27 +18,32 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="content-abstract" type="nugget">
+  name="content-title" type="nugget">
   <description>
-    content-abstract will output the abstract of the content. 
+    content-title - Template will output the title (first h1 of the content) and the sub-title (first h3 of the content). 
   </description>
-  <usage><![CDATA[<forrest:contract name="content-abstract">
-  <forrest:properties contract="content-abstract">
-    <forrest:property name="content-abstract" nugget="get.body">
-      <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
+  <usage><![CDATA[<forrest:contract name="content-title">
+  <forrest:properties contract="content-title">
+    <forrest:property name="content-title" nugget="get.body">
+      <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.title.xml</url>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="content-abstract" inputFormat="xsl" body="true" head="false">
+    format="html" name="content-title" inputFormat="xsl" body="true" head="true">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-abstract-body">
-        <xsl:param name="content-abstract"/>
-        <xsl:comment>+ |start content-abstract +</xsl:comment>
-        <xsl:copy-of 
-          select="$content-abstract/div[@class='abstract']"/>
-        <xsl:comment>+ |end content-abstract +</xsl:comment>
+      <xsl:template name="content-title-head" >
+        <xsl:param name="content-title"/>
+        <xsl:comment>+ |start content-title +</xsl:comment>
+        <xsl:copy-of select="$content-title/*"/>
+        <xsl:comment>+ |end content-title +</xsl:comment>
       </xsl:template>
-	  </xsl:stylesheet>
+      <xsl:template name="content-title-body" >
+        <xsl:param name="content-title"/>
+        <xsl:comment>+ |start content-title +</xsl:comment>
+        <h1><xsl:value-of select="$content-title/*"/></h1>
+        <xsl:comment>+ |end content-title +</xsl:comment>
+      </xsl:template>
+    </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

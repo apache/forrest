@@ -18,27 +18,35 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="content-main" type="nugget">
+  name="content-abstract" type="nugget">
   <description>
-    content-main - Template will output the content-main.
+    content-abstract will output the abstract of the content. 
   </description>
-  <usage><![CDATA[<forrest:contract name="content-main">
-  <forrest:properties contract="content-main">
-    <forrest:property name="content-main" nugget="get.body">
-      <url>#{$cocoon/parameters/getRequest}.body.xml</url>
+  <usage><![CDATA[<forrest:contract name="content-abstract">
+  <forrest:properties contract="content-abstract">
+    <forrest:property name="content-abstract" nugget="get.abstract">
+      <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.abstract.xml"/>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="content-main" inputFormat="xsl" body="true" head="false">
+    format="html" name="content-abstract" inputFormat="xsl" body="true" head="false">
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-main-body" >
-        <xsl:param name="content-main"/>
-        <xsl:comment>+ |start content-main +</xsl:comment>
-        <xsl:copy-of 
-          select="$content-main/div[@id='content']/div[@id='content-main']/*"/>
-        <xsl:comment>+ |end content-main +</xsl:comment>
+      <xsl:template name="content-abstract-body">
+        <xsl:param name="content-abstract"/>
+<xsl:comment>+
+      |start content-abstract
+      +</xsl:comment>
+            <!-- FIXME - Suppress the following test when empty div problem is solved -->
+        <xsl:if 
+          test="normalize-space($content-abstract/div[@class='abstract'])">
+          <xsl:copy-of 
+            select="$content-abstract/div[@class='abstract']"/>
+        </xsl:if>
+<xsl:comment>+
+    |end content-abstract
+    +</xsl:comment>
       </xsl:template>
-	  </xsl:stylesheet>
+    </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

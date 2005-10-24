@@ -23,7 +23,7 @@
   <usage><![CDATA[<forrest:contract name="nav-main-sub">
   <forrest:properties contract="nav-main-sub">
     <forrest:property name="nav-main-sub" nugget="get.navigation">
-      <url>#{$cocoon/parameters/getRequest}.navigation.xml</url>
+      <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
@@ -34,7 +34,19 @@
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 		  <xsl:template name="nav-main-sub-body">
         <xsl:param name="nav-main-sub" select="'test'"/>
-		     <xsl:apply-templates select="$nav-main-sub/navigation/tab/div[@id='nav-main-sub']/*"/>
+        <xsl:comment>+
+    |start nav-main-sub
+    +</xsl:comment>
+    <!-- FIXME - Suppress the following test when empty div problem is solved -->
+  <xsl:if test="$nav-main-sub/navigation/tab/div[@id='nav-main-sub']/*">
+    <div id="level2tabs">
+      <xsl:apply-templates 
+        select="$nav-main-sub/navigation/tab/div[@id='nav-main-sub']/*"/>
+    </div>
+  </xsl:if>
+  <xsl:comment>+
+    |end Endtabs
+    +</xsl:comment>
 		  </xsl:template>
 		</xsl:stylesheet>
 	</forrest:template>

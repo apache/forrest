@@ -73,12 +73,12 @@
     
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="test.**.*">
+      <map:match pattern="test.**">
         <map:generate src="status.xml" />
-        <!--<map:transform src="resources/stylesheets/temp.xsl">
+        <map:transform src="resources/stylesheets/temp.xsl">
           <map:parameter name="test"
-            value="{lm:ls.contracts.xsl}" />
-        </map:transform>-->
+            value="{lm:themes/{1}.css}" />
+        </map:transform>
         <map:serialize />
       </map:match>
     </map:pipeline>
@@ -86,25 +86,15 @@
         FIXME: Finish rewriting move to lm ->  {lm:contract.{1}.{2}}del if finished-->
     <!--FIXME:START-->
     
-    <!-- ls.fbits 
-      list the project fbits-->
-    <map:pipeline>
-      <map:match pattern="ls.contracts.project">
-        <map:generate type="directory"
-          src="{project:resources}/templates/">
-          <map:parameter name="depth" value="2" />
-          <!-- sorted alphabetically -->
-          <map:parameter name="reverse" value="false" />
-        </map:generate>
-        
-      </map:match>
-    </map:pipeline>
-
     <map:pipeline>
       <!--
         Last processing step. 
         Here we are overriding the default skin generation.
       -->
+      
+      <map:match pattern="themes/**.css">
+         <map:read mime-type="text/css" src="{lm:themes/{1}.css}" />
+      </map:match>
       
       <map:match pattern="**.js">
         <map:mount uri-prefix="" src="resources.xmap"

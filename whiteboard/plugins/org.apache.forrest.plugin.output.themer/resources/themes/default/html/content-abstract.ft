@@ -24,8 +24,8 @@
   </description>
   <usage><![CDATA[<forrest:contract name="content-abstract">
   <forrest:properties contract="content-abstract">
-    <forrest:property name="content-abstract" nugget="get.abstract">
-      <url>#{$cocoon/parameters/getRequest}.abstract.xml</url>
+    <forrest:property name="content-abstract" nugget="get.body">
+      <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.abstract.xml"/>
     </forrest:property>
   </forrest:properties>
 </forrest:contract>]]></usage>
@@ -34,19 +34,11 @@
      <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:template name="content-abstract-body">
         <xsl:param name="content-abstract"/>
-<xsl:comment>+
-      |start content-abstract
-      +</xsl:comment>
-            <!-- FIXME - Suppress the following test when empty div problem is solved -->
-        <xsl:if 
-          test="normalize-space($content-abstract/div[@class='abstract'])">
-          <xsl:copy-of 
-            select="$content-abstract/div[@class='abstract']"/>
-        </xsl:if>
-<xsl:comment>+
-    |end content-abstract
-    +</xsl:comment>
+        <xsl:comment>+ |start content-abstract +</xsl:comment>
+        <xsl:copy-of 
+          select="$content-abstract/div[@class='abstract']"/>
+        <xsl:comment>+ |end content-abstract +</xsl:comment>
       </xsl:template>
-    </xsl:stylesheet>
+	  </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
