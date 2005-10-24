@@ -52,7 +52,7 @@
       
     <li>
       <a>
-        <xsl:attribute name="href">./<xsl:value-of select="@href-noext"/>.html</xsl:attribute>
+        <xsl:attribute name="href"><xsl:value-of select="@href-noext"/>.html</xsl:attribute>
         <xsl:value-of select="$name"/>
       </a>
     </li>

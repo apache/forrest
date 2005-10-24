@@ -13,8 +13,8 @@
   <xsl:template match="lm:locator/lm:match[starts-with(@pattern, 'project.descriptor')]">
     <xsl:variable name="href-noext">
       <xsl:choose>
-        <xsl:when test="@pattern = 'project.descriptor'">/projectDetails</xsl:when>
-        <xsl:otherwise>/projectDetails.<xsl:value-of select="substring-after(@pattern, 'project.descriptor.')"/></xsl:otherwise>
+        <xsl:when test="@pattern = 'project.descriptor'">projectDetails</xsl:when>
+        <xsl:otherwise>projectDetails.<xsl:value-of select="substring-after(@pattern, 'project.descriptor.')"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
@@ -22,7 +22,7 @@
       <xsl:attribute name="id"><xsl:value-of select="@pattern"/></xsl:attribute>
       <xsl:attribute name="href-noext"><xsl:value-of select="$href-noext"/></xsl:attribute>
       <cinclude:include>
-        <xsl:attribute name="src">cocoon:<xsl:value-of select="$href-noext"/>.source.xml</xsl:attribute>
+        <xsl:attribute name="src">cocoon:/<xsl:value-of select="$href-noext"/>.source.xml</xsl:attribute>
       </cinclude:include>
     </descriptor>
   </xsl:template>
