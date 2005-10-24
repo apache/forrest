@@ -53,10 +53,17 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
     public Object getAttribute(String name, Configuration modeConf,
                     Map objectModel) throws ConfigurationException {
-        String original = super.getAttributeValues(name, modeConf, objectModel)[0]
-                        .toString();
-        String attributeValue = this.getAttributeValues(name, modeConf,
-                        objectModel)[0].toString();
+        String original;
+        String attributeValue;
+        
+        try {
+          original = super.getAttributeValues(name, modeConf, objectModel)[0]
+                          .toString();
+          attributeValue = this.getAttributeValues(name, modeConf,
+                          objectModel)[0].toString();
+        } catch (NullPointerException npe) {
+          throw new ConfigurationException("Unable to get attribute value for " + name);
+        }
 
         if (debugging()) {
             debug(" - Requested:" + name);
