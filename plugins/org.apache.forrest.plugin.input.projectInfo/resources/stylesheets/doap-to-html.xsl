@@ -178,6 +178,14 @@
            <xsl:apply-templates select="doap:bug-database/@*" />
             </td>
           </tr>
+       <xsl:if test="doap:wiki">
+         <tr>
+           <td class="left">Wiki</td>
+           <td class="right">
+             <xsl:apply-templates select="doap:wiki/@*" />
+           </td>
+         </tr>
+       </xsl:if>
           <tr>
          <td class="left">License</td>
             <td class="right">
@@ -283,6 +291,8 @@
       </div>
     </xsl:if>
     
+    <xsl:choose>
+    <xsl:when test="doap:release">
     <p>Most recent releases:</p>
     
       <div class="content">              
@@ -291,6 +301,11 @@
        <xsl:apply-templates select="doap:release/doap:Version" />   
           </table>
       </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <p>No current releases.</p>
+    </xsl:otherwise>
+    </xsl:choose>
     
    <p>Access to the source code:</p>
    
