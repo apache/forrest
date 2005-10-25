@@ -107,7 +107,15 @@ without committing anything. This ensures a good release candidate.
           NOTE: This is deliberately a major version up. It is assumed that plugins will be 
           developed against the next version of Forrest. Individual plugins can override this
           property in their own build files.
-                                
+
+    = Edit 4 files in tools/forrestbar to update the version number to match the new release:
+      - install.rdf, line 24: <em:version>0.7</em:version>
+      - install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7");
+      - xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/>
+      - xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version
+      number as well as change the link to point to the new release's docs:
+      <menuitem label="Current Docs (0.7)" onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');" />
+
  - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
    currently being released.  It is best to copy an earlier RELEASE-NOTES file,
    to keep a common layout.
