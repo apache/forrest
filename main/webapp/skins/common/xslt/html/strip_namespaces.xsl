@@ -16,12 +16,14 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- Fixes FOR-555. This might not be the best solution though, but it sure works -->
+  <!-- FIXME: FOR-555. This might not be the best solution though, but it sure works -->
   <xsl:template match="comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
+<!-- End fixme FOR-555 -->
+
     <xsl:template match="*">
       <!-- remove element prefix (if any) -->
       <xsl:element name="{local-name()}">
