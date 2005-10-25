@@ -306,6 +306,38 @@ forrest-trunk
         </p>
       </section>
 
+      <section id="debug-logtransformer">
+        <title>Using the Cocoon LogTransformer</title>
+        <p>
+          LogTransformers can be inserted in the sitemaps. This will write
+          the sax events at that point into a named log file.
+          Here is an example (the logfile will be written relative to this
+          particular sitemap) ...
+        </p>
+      <source><![CDATA[
+<map:match pattern="*.html">
+  <map:generate src="sources/{1}.xml"/>]]><strong><![CDATA[
+  <map:transform type="log">
+    <map:parameter name="logfile" value="my-1.log"/>
+    <map:parameter name="append" value="no"/>
+  </map:transform>]]></strong><![CDATA[
+  <map:transform src="stylesheets/source-to-table.xsl"/>
+  <map:transform src="stylesheets/table-to-page.xsl"/>]]><strong><![CDATA[
+  <map:transform type="log">
+    <map:parameter name="logfile" value="my-2.log"/>
+    <map:parameter name="append" value="no"/>
+  </map:transform>]]></strong><![CDATA[
+  <map:transform src="stylesheets/page-to-html.xsl"/>
+  <map:serialize type="html"/>
+</map:match>
+]]></source>
+        <p>
+          Another use for this technique is when you are not sure which
+          path is being taken through the sitemap. Add various LogTransformers
+          with different filenames and see which one gets triggered.
+        </p>
+      </section>
+
       <section id="debug-links">
         <title>Finding broken internal links</title>
         <p>
