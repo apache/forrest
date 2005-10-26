@@ -21,9 +21,8 @@ imported document2html.xsl for details.
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:import href="../common/xslt/html/document2html.xsl"/>
-
+  <xsl:include href="../helper/generateId.xsl"/>
   <xsl:template match="document">
     <div id="content">
       <xsl:if test="normalize-space(header/title)!=''">
@@ -50,79 +49,94 @@ imported document2html.xsl for details.
         <xsl:apply-templates select="header/version"/>
       </div>
     -->
-      
       <div id="content-main">
         <xsl:apply-templates select="body"/>
       </div>
     </div>
   </xsl:template>
-
   <xsl:template match="body">
     <xsl:apply-templates/>
   </xsl:template>
-  
-  
-  <xsl:template match="@id">
+    <xsl:template name="tocLinkGenerator">
+      <a>
+      <xsl:attribute name="name"><xsl:call-template 
+        name="generate-id"/></xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:value-of select="title"/>
+      </xsl:attribute><xsl:text> </xsl:text>
+    </a>
+  </xsl:template>
+  <!--<xsl:template match="@id">
     <xsl:apply-imports/>
-  </xsl:template>
+  </xsl:template>-->
   <!-- Generate a <a name="..."> tag for an @id -->
-  <xsl:template match="@id">
+  <!--<xsl:template match="@id">
     <xsl:if test="normalize-space(.)!=''">
-      <a name="{.}"><xsl:text> </xsl:text></a>
+      <a name="{.}">&#160;</a>
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
   <xsl:template match="section">
-    <a name="{generate-id()}"><xsl:text> </xsl:text></a>
-    <xsl:apply-templates select="@id"/>
-
+    <xsl:call-template name="tocLinkGenerator"/>
+   <!-- <xsl:apply-templates select="@id"/>-->
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
-
     <xsl:choose>
       <xsl:when test="$level=1">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h1>
+            <xsl:value-of select="title"/>
+          </h1>
         </div>
         <div class="section">
-      <xsl:apply-templates select="*[not(self::title)]"/>
-    </div>  
+          <xsl:apply-templates select="*[not(self::title)]"/>
+        </div>
       </xsl:when>
       <xsl:when test="$level=2">
         <div class="skinconf-heading-{$level}">
-          <h2><xsl:value-of select="title"/></h2>
+          <h2>
+            <xsl:value-of select="title"/>
+          </h2>
         </div>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
-        <h4 class="faq"><xsl:value-of select="title"/></h4>
-        <div align="right"><a href="#{@id}-menu">^</a></div>
+        <h4 class="faq">
+          <xsl:value-of select="title"/>
+        </h4>
+        <div align="right">
+          <a href="#{@id}-menu">^</a>
+        </div>
         <div style="margin-left: 15px">
           <xsl:apply-templates select="*[not(self::title)]"/>
         </div>
       </xsl:when>
       <xsl:when test="$level=3">
-        <h4><xsl:value-of select="title"/></h4>
+        <h4>
+          <xsl:value-of select="title"/>
+        </h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
-
       </xsl:when>
-
       <xsl:otherwise>
-        <h5><xsl:value-of select="title"/></h5>
+        <h5>
+          <xsl:value-of select="title"/>
+        </h5>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:otherwise>
     </xsl:choose>
-
-  </xsl:template>  
-  
+  </xsl:template>
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div style="text-align: center;">
       <img src="{@src}" alt="{@alt}" class="figure">
         <xsl:if test="@height">
-          <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
+          <xsl:attribute name="height">
+            <xsl:value-of select="@height"/>
+          </xsl:attribute>
         </xsl:if>
         <xsl:if test="@width">
-          <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+          <xsl:attribute name="width">
+            <xsl:value-of select="@width"/>
+          </xsl:attribute>
         </xsl:if>
       </img>
     </div>
@@ -133,10 +147,13 @@ imported document2html.xsl for details.
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
-          <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+          <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+          </xsl:when>
           <xsl:when test="local-name() = 'note'">Note</xsl:when>
           <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
-          <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
+          <xsl:otherwise>Fixme (<xsl:value-of 
+            select="@author"/>)</xsl:otherwise>
         </xsl:choose>
       </div>
       <div class="content">

@@ -21,32 +21,21 @@ imported document2html.xsl for details.
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:include href="../helper/generateId.xsl"/>
   <!--  Templates for "toc" mode.  This will generate a complete
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
-  <xsl:template match="document">
-    <xsl:apply-templates mode="toc"/>
-  </xsl:template>
-  <xsl:template match="body" mode="toc">
-    <tocitems>
-      <xsl:apply-templates select="section" mode="toc">
-        <xsl:with-param name="level" select="1"/>
-      </xsl:apply-templates>
-    </tocitems>
-  </xsl:template>
-  <xsl:template match="section" mode="toc">
-    <xsl:param name="level"/>
-    <tocitem level="{$level}">
-      <xsl:attribute name="href">#<xsl:call-template 
-        name="generate-id"/></xsl:attribute>
-      <xsl:attribute name="title">
+  
+  <xsl:template name="generate-id">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:when test="title">
         <xsl:value-of select="title"/>
-      </xsl:attribute>
-      <xsl:apply-templates mode="toc">
-        <xsl:with-param name="level" select="$level+1"/>
-      </xsl:apply-templates>
-    </tocitem>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
-  <xsl:template match="node()|@*" mode="toc"/>
 </xsl:stylesheet>

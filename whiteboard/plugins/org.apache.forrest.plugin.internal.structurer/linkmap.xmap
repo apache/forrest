@@ -49,6 +49,24 @@ $Revision: 1.2 $
         </map:transform>
         <map:serialize />
       </map:match>
+       <!-- site.xml with @href's appended to be context-relative. -->
+      <map:match pattern="abs-linkmap">
+			  <map:select type="exists">
+          <map:when test="{project:content.xdocs}site.xml">
+            <map:generate src="{project:content.xdocs}site.xml"/>
+          </map:when>
+          <map:when test="{lm:site.xml}">
+            <map:generate src="{lm:site.xml}"/>
+          </map:when>
+          <map:otherwise>
+            <map:generate src="{project:content.xdocs}site.xml"/>
+          </map:otherwise>
+        </map:select>
+        <map:transform type="xinclude"/>
+        <map:transform src="{lm:transform.xml.xml-namespace-stripped}" />
+	<map:transform src="{lm:transform.linkmap.linkmap-absolutized}" />
+        <map:serialize type="xml" />
+      </map:match>
     </map:pipeline>
   </map:pipelines>
 
