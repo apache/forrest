@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,17 +54,7 @@ $Revision: 1.2 $
       
       <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
-			  <map:select type="exists">
-          <map:when test="{project:content.xdocs}site.xml">
-            <map:generate src="{project:content.xdocs}site.xml"/>
-          </map:when>
-          <map:when test="{lm:site.xml}">
-            <map:generate src="{lm:site.xml}"/>
-          </map:when>
-          <map:otherwise>
-            <map:generate src="{project:content.xdocs}site.xml"/>
-          </map:otherwise>
-        </map:select>
+        <map:generate src="cocoon://site.navigation.links.xml"/>
         <map:transform type="xinclude"/>
 	<map:transform src="{lm:transform.linkmap.linkmap-absolutized}" />
         <map:serialize type="xml" />

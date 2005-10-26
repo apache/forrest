@@ -317,6 +317,21 @@ $Revision: 1.12 $
       </map:match>
     </map:pipeline>
 
+    <!-- The navigation and links file "site.xml" -->
+    <map:pipeline internal-only="true">
+      <map:match pattern="site.navigation.links.xml">
+        <map:select type="exists">
+          <map:when test="{lm:project.xml.site}">
+            <map:generate src="{lm:project.xml.site}"/>
+          </map:when>
+          <map:when test="{lm:site.xml}">
+            <map:generate src="{lm:site.xml}"/>
+          </map:when>
+        </map:select>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+
     <map:pipeline type="caching" internal-only="true">
       <map:match pattern="*.xlex">
         <map:select type="exists">
