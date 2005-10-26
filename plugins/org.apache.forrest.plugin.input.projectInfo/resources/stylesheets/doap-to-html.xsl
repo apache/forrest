@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version = "1.0"
-                xmlns:atom="http://www.w3.org/2005/atom"
+                xmlns:atom="http://www.w3.org/2005/Atom"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
                 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
@@ -95,7 +95,7 @@
   
   <xsl:template match="doap:category">
     <a>
-      <xsl:attribute name="href"><xsl:value-of select="./@rdf:resource" /></xsl:attribute>
+      <xsl:attribute name="href">category/<xsl:value-of select="substring-after(@rdf:resource, 'category/')" />.html</xsl:attribute>
       <xsl:value-of select="substring-after(@rdf:resource, 'category/')"/>
     </a>
     <xsl:if test="not(position() = last())">
@@ -129,7 +129,7 @@
   </xsl:template>
 
   <xsl:template name="project-header">
-    <div class="header">
+    <div class="projectHeader">
       <h1><xsl:value-of  select="doap:name" /></h1>
     </div>
     <div class="description">
@@ -221,14 +221,21 @@
       <xsl:when test="asfext:subscribe">
         <xsl:value-of select="asfext:subscribe/@rdf:resource"/>
       </xsl:when>
-      <xsl:otherwise>
-        mailto:<xsl:value-of select="substring-before(doap:name,'@')"/>-subscribe@<xsl:value-of select="substring-after(doap:name,'@')"/>
-      </xsl:otherwise>
+      <xsl:otherwise>mailto:<xsl:value-of select="substring-before(doap:name,'@')"/>-subscribe@<xsl:value-of select="substring-after(doap:name,'@')"/></xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>Subscribe</a></td>
-    <td class="right"><a><xsl:attribute name="href">
+    <td class="right">
+      <xsl:choose>
+        <xsl:when test="asfext:archives">
+          <a><xsl:attribute name="href">
     <xsl:value-of select="asfext:archives/@rdf:resource"/>
-    </xsl:attribute>Archives</a></td>
+          </xsl:attribute>Archives</a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>Not Archived</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>    
     </tr>
   </xsl:template>  
 

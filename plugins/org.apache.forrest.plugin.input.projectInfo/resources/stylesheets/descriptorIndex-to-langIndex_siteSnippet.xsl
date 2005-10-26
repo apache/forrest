@@ -16,7 +16,7 @@
         <xsl:variable name="name" select="."/>
         <xsl:element name="{$name}">
           <xsl:attribute name="label"><xsl:value-of select="$name"/></xsl:attribute>
-          <xsl:attribute name="href"><xsl:value-of select="$name"/>-lang.html</xsl:attribute>
+          <xsl:attribute name="href"><xsl:value-of select="$name"/>_lang.html</xsl:attribute>
           <xsl:attribute name="description">All projects using <xsl:value-of select="$name"/></xsl:attribute>
         </xsl:element>
       </xsl:for-each>
