@@ -58,6 +58,6 @@ fi
 
 cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.structurer
 $FORREST_HOME/tools/ant/bin/ant local-deploy
-cd ../org.apache.forrest.plugin.output.themes
+cd ../org.apache.forrest.plugin.output.themer
 $FORREST_HOME/tools/ant/bin/ant local-deploy
 
