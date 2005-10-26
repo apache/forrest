@@ -21,7 +21,6 @@
     xmlns:p="http://outerx.org/daisy/1.0#publisher"
     xmlns:ns="http://outerx.org/daisy/1.0"
     version="1.0">
-      
   <xsl:template match="/">
     <xsl:variable name="rootElementName"><xsl:value-of select="name(*)"/></xsl:variable>
     <html>
@@ -111,7 +110,7 @@
       <xsl:choose>
         <xsl:when test="position() = 1">
           <a>
-            <xsl:attribute name="href"><xsl:value-of select="../@id"/>.daisy.html</xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select="../@documentId"/>.daisy.html</xsl:attribute>
             <xsl:apply-templates/>
           </a>
         </xsl:when>
