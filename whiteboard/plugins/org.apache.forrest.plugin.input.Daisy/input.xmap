@@ -40,17 +40,7 @@
        <map:match pattern="**.daisy.xml">
         <map:generate src="cocoon://{1}.daisy.source" />
         <map:transform src="resources/stylesheets/daisy-to-html.xsl"/>
-        <map:select type="exists">
-          <map:when test="{project:resources.stylesheets}/daisy/preFilter.xsl">
-          <map:transform src="{project:resources.stylesheets}/daisy/preFilter.xsl"/>
-          </map:when>
-        </map:select>
         <map:transform src="{lm:transform.html.document}"/>
-        <!--
-        <map:transform src="{lm:transform.html.document}">
-          <map:parameter name="source" value="{lm:{1}.daisy.source}"/>
-        </map:transform>
-        -->
         <map:select type="exists">
           <map:when test="{project:resources.stylesheets}/daisy/postFilter.xsl">
             <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
