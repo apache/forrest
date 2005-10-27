@@ -52,9 +52,19 @@
       a location string.</p>
       
       <p>Apache Forrest looks in the standard location for the source file first (by default
-      <code>PROJECT_HOME/src/documentation/content/xdocs/...</code>), if a file is found in this
+      <code>PROJECT_HOME/src/documentation/content/...</code>), if a file is found in this
       location then the locationmap is not consulted. However, if one is not found then the 
-      locationmap is used to resolve the source file.</p>
+      locationmap is used to resolve the source file. The locationmap is resolved via the
+      core sitemap, this means that you can generate it dynamically if you so wish. Simply
+      add a match that looks something like this to your projects sitemap:</p>
+      
+      <source><![CDATA[
+   <map:match pattern="locationmap-project.xml">
+     <map:generate src="..."/>
+     <map:transform src="..."/>
+     <map:serialize type="xml"/>
+   </map:match>
+      ]]></source>
       
     </section>
     
@@ -111,7 +121,7 @@ projectInfo.transform.changes.rss
   </section>
   
   <section id="selector">
-    <title>Location Selectors</title>
+    <title>Multiple Location Selectors</title>
     <p>You can define multiple possble locations for a file in the locationmap
     with the following code:</p>
     

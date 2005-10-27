@@ -316,6 +316,15 @@ $Revision: 1.12 $
         <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
       </map:match>
     </map:pipeline>
+    
+    <!-- Project supplied locationmap. Projects can override this
+         matcher if they want to generate the locationmap dynamically -->
+		<map:pipeline internal-only="true">   
+       <map:match pattern="locationmap-project.xml">
+         <map:generate src="{project:content}locationmap.xml"/>
+         <map:serialize type="xml"/>
+       </map:match>
+		</map:pipeline>
 
     <!-- The navigation and links file "site.xml" -->
     <map:pipeline internal-only="true">
