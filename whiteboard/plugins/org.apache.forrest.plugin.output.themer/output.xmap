@@ -35,6 +35,8 @@
       
       <map:generator name="directory"
         src="org.apache.cocoon.generation.DirectoryGenerator" />
+        <!-- <map:generator name="structurerXsl"
+        src="org.apache.forrest.structurer.generation.StructurerXSLGenerator" /> -->
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude"
@@ -75,10 +77,12 @@
     <map:pipeline>
       <map:match pattern="test.**">
         <map:generate src="status.xml" />
+        <!-- <map:generate src="{lm:structurer.html.{1}}" type="structurerXsl"/> -->
         <map:transform src="resources/stylesheets/temp.xsl">
           <map:parameter name="test"
-            value="{lm:themes/{1}.css}" />
+            value="{lm:themes/{1}.js}" />
         </map:transform>
+        
         <map:serialize />
       </map:match>
     </map:pipeline>
@@ -94,6 +98,10 @@
       
       <map:match pattern="themes/**.css">
          <map:read mime-type="text/css" src="{lm:themes/{1}.css}" />
+      </map:match>
+      
+      <map:match pattern="themes/**.js">
+         <map:read mime-type="application/x-javascript" src="{lm:themes/{1}.js}" />
       </map:match>
       
       <map:match pattern="**.js">
