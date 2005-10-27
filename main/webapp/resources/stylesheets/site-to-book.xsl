@@ -31,7 +31,12 @@ isn't a major problem.
     <xsl:apply-templates/>
   </xsl:template>
 
+<!-- FIXME: This is a workaround to Issue FOR-675 and commons-jxpath-1.2 -->
+<!--
   <xsl:template match="f:site">
+-->
+  <xsl:template match="site">
+<!-- end FIXME: FOR-675 -->
     <book software="Forrest"
       title="Apache Forrest"
       copyright="Copyright 2002-2005 The Apache Software Foundation or its licensors, as applicable.">
