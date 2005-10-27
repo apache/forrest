@@ -316,15 +316,6 @@ $Revision: 1.12 $
         <map:mount uri-prefix="" src="profiler.xmap" check-reload="yes" />
       </map:match>
     </map:pipeline>
-    
-    <!-- Project supplied locationmap. Projects can override this
-         matcher if they want to generate the locationmap dynamically -->
-		<map:pipeline internal-only="true">   
-       <map:match pattern="locationmap-project.xml">
-         <map:generate src="{project:content}locationmap.xml"/>
-         <map:serialize type="xml"/>
-       </map:match>
-		</map:pipeline>
 
     <!-- The navigation and links file "site.xml" -->
     <map:pipeline internal-only="true">
@@ -337,6 +328,7 @@ $Revision: 1.12 $
             <map:generate src="{lm:site.xml}"/>
           </map:when>
         </map:select>
+        <map:transform type="xinclude"/>
 <!-- FIXME: This is a workaround to Issue FOR-675 and commons-jxpath-1.2 -->
         <map:transform src="{lm:transform.xml.xml-namespace-stripped}"/>
 <!-- end FIXME: FOR-675 -->
@@ -397,6 +389,15 @@ $Revision: 1.12 $
           </map:when>
         </map:select>
       </map:pipeline>
+    
+    <!-- Project supplied locationmap. Projects can override this
+         matcher if they want to generate the locationmap dynamically -->
+		<map:pipeline internal-only="true">   
+       <map:match pattern="locationmap-project.xml">
+         <map:generate src="{project:content}locationmap.xml"/>
+         <map:serialize type="xml"/>
+       </map:match>
+		</map:pipeline>
       
       <map:pipeline internal-only="false">
 
