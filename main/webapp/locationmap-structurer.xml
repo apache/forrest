@@ -54,7 +54,7 @@
         </act>
         <!-- themes-dir: project-application-based theme-dir-based -->
         <location 
-          src="{project:theme-dir}/{project:theme}{project:theme-ext}" 
+          src="{lm:themer.project.dir}/{project:theme}{project:theme-ext}" 
           />
         <!-- themer: project-application-based theme-based -->
         <location 
@@ -62,7 +62,7 @@
           />
         <!-- themes-dir: project-application-based default -->
         <location 
-          src="{project:theme-dir}/{defaults:theme}{defaults:theme-ext}" 
+          src="{lm:themer.project.dir}/{defaults:theme}{defaults:theme-ext}" 
           />
         <!-- themer: project-application-based default -->
         <location 
@@ -84,6 +84,10 @@
         <location src="{defaults:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
       </select>
     </match>
+    <!-- 
+      {1} format (e.g. html)
+      {2} path (e.g. samples/index)
+      -->
     <match pattern="structurer.*.**">
       <select type="exists">
         <location src="cocoon://prepare.structurer.{1}.{2}" />
@@ -117,7 +121,11 @@
         <location src="cocoon://prepare.tiles.{1}" />
       </select>
     </match>
-        <!-- Aggregate the forrest:properties requested by the *.fv.  -->
+    <!-- Aggregate the forrest:properties requested by the *.fv.  -->
+    <!-- 
+      {1} format (e.g. html)
+      {2} path (e.g. samples/index)
+      -->
     <match pattern="structurer-properties.*.**">
       <select type="exists">
         <location src="cocoon://prepare.structurer-properties.{1}.{2}" />
@@ -130,13 +138,6 @@
         <location src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
       </select>
     </match>
-    <!--  Aggregate the contract-templates requested by the view with cinclude.  -->
-    <!--<match pattern="structurer-xsl-includes.xsl">
-      <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/prepare.include.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/prepare.include.xsl" />
-      </select>
-    </match>-->
     <!--  Aggregate the forrest:properties requested by the *.fv with cinclude.  -->
     <match pattern="structurer-properties-includes.xsl">
       <select type="exists">

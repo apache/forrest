@@ -43,9 +43,9 @@
     <match pattern="resolve.contract.html.**">
       <select type="exists">
         <!-- project-based theme -->
-        <location src="{project:theme-dir}/{project:theme}/html/{1}.ft" />
+        <location src="{lm:themer.project.dir}/{project:theme}/html/{1}.ft" />
         <!-- project-based default fallback -->
-        <location src="{project:theme-dir}/{defaults:theme}/html/{1}.ft" />
+        <location src="{lm:themer.project.dir}/{defaults:theme}/html/{1}.ft" />
         <!-- project-application-based theme -->
         <location src="{project:themer}/resources/themes/{project:theme}/html/{1}.ft" />
         <!--  project-application-based default fallback -->
@@ -123,6 +123,14 @@
         <location src="{defaults:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
       </select>
     </match>
+    <!--Theme dir-->
+    <match pattern="themer.project.dir">
+      <select type="exists">
+        <location src="{project:resources}themes"/>
+        <!-- v1 location -->
+        <location src="{project:resources}templates" />
+      </select>
+    </match>
         <!-- contracts (e.g. html) that can be used in the project. -->
     <match pattern="themer.contracts.dir">
       <select type="exists">
@@ -130,23 +138,19 @@
         <location src="{defaults:themer}/resources/themes" />
       </select>
     </match>
-        <!-- project contracts (e.g. html) that can be used in the project. -->
-    <match pattern="themer.contracts.project.dir">
+    <!-- generic match for theme ressources like css and js. -->
+    <!-- 
+      {1} name
+      {2} extension (note we assume e.g. PATH/css/{1}.css)
+      -->
+    <match pattern="themes/**.*">
       <select type="exists">
-        <location src="{project:theme-dir}/" />
-        <!-- v1 location -->
-        <location src="{project:resources}/templates/" />
-      </select>
-    </match>
-        <!-- project contracts (e.g. html) that can be used in the project. -->
-    <match pattern="themes/**.css">
-      <select type="exists">
-        <location src="{project:theme-dir}/{project:theme}/css/{1}.css" />
-        <location src="{project:theme-dir}/{defaults:theme}/css/{1}.css" />
-        <location src="{project:themer}/resources/themes/{project:theme}/css/{1}.css" />
-        <location src="{project:themer}/resources/themes/{defaults:theme}/css/{1}.css" />
-        <location src="{defaults:themer}/resources/themes/{project:theme}/css/{1}.css" />
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/css/{1}.css" />
+        <location src="{lm:themer.project.dir}/{project:theme}/{2}/{1}.{2}" />
+        <location src="{lm:themer.project.dir}/{defaults:theme}/{2}/{1}.{2}" />
+        <location src="{project:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" />
+        <location src="{project:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" />
+        <location src="{defaults:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" />
       </select>
     </match>
   </locator>
