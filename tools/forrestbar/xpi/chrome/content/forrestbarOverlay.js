@@ -44,3 +44,28 @@ function navProject(searchID) {
   navigate(searchItem.selectedItem.value);
 }
 
+function viewXML(xmltype)
+{
+  var href = gBrowser.currentURI.spec;
+  if( ! isLocalUrl())
+  {
+    alert("This action is only available on Local Forrest (jetty) site...");
+    return(false);
+  }
+  navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
+}
+
+function isLocalUrl ()
+{
+  var href = gBrowser.currentURI.spec;
+
+  return( (typeof(href) != 'undefined') &&
+          (href.substr) &&
+          (startsWith(href, 'http://127.0.0.1:8888/') )
+        );
+}
+
+function startsWith(st, pref)
+{
+  return( (pref.length > 0) && (st.substring(0, pref.length) == pref) );
+}
