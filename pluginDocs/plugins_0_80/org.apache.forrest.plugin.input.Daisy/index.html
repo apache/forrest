@@ -140,7 +140,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Usage">Usage</a>
 <ul class="minitoc">
 <li>
-<a href="#Locationmap">Locationmap</a>
+<a href="#Locationmap+Configuration">Locationmap Configuration</a>
 </li>
 <li>
 <a href="#Using+Daisy+Navigation+Documents">Using Daisy Navigation Documents</a>
@@ -176,80 +176,40 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1001B"></a><a name="Usage"></a>
 <h2 class="boxed">Usage</h2>
 <div class="section">
-<p>Perhaps the most important thing to realise about this plugin is that 
-      there is no relationship between the Forrest URL space and the URL space
-      defined in the Daisy repository. That is the path to and the name of each
-      document within Forrest needs not be the same as the path to and the name
-      of the document within the Daisy repository.</p>
-<p>This enables the repository to be structured in a way that is
-      appropriate for it's editors and the Forrest document collection can
-      be structured in a way that is appropriate for the target audience. In
-      fact, it is possible to use the same document from a Daisy repository in
-      multiple Forrest collections each using a completely different URL 
-      space that is custom designed for the end user of the document
-      collection.</p>
-<a name="N10027"></a><a name="Locationmap"></a>
-<h3 class="boxed">Locationmap</h3>
-<p>In order to tell Forrest which document to retrieve from the
-        repository you need to make use of the locationmap in Forrest. Your
-        project must therefore provide a locationmap similar to the one 
-        that follows.</p>
 <div class="warning">
 <div class="label">Warning</div>
-<div class="content">The HTTP API in Daisy 1.3 has changed. The code below is for
-        Daisy 1.2. We currently have experimental support for Daisy 1.3, if you
-        wish to work with this version of daisy you should discuss your needs with
-        the Forrest mail lists.</div>
+<div class="content">The 0.3-Dev Daisy plugin does not allow you to mix
+      Daisy content with non-Daisy content. You should continue to
+      use version 0.2 if you need to mix content from multiple sources.
+      This is a temporary restriction.</div>
 </div>
+<p>This plugin allows content to be retrieved from a 
+      <a href="http://www.cocoondev.org/daisy/">Daisy CMS repository</a>
+      and displayed alongside any other Forrest content. Unlike many
+      other plugins there is some configuraiton of your project requried.</p>
+<a name="N1002B"></a><a name="Locationmap+Configuration"></a>
+<h3 class="boxed">Locationmap Configuration</h3>
+<p>The project locationmap for a Daisy generated site is automatically
+        created from the daisy navigation documents. In order to tell Forrest
+        how to generate these documents you must add a matcher to your
+        project sitemap as follows:</p>
 <pre class="code">
-&lt;locationmap xmlns="http://apache.org/forrest/locationmap/1.0"&gt;
-
-  &lt;components&gt;
-    &lt;matchers default="lm"&gt;
-      &lt;matcher 
-        name="lm" 
-        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/&gt;
-    &lt;/matchers&gt;
-  &lt;/components&gt;
-  
-  &lt;locator&gt;
-   
-     &lt;match pattern="index.xml"&gt;
-         &lt;location src="cocoon://908.daisy.xml" /&gt;
-     &lt;/match&gt;
-   
-     &lt;match pattern="*.daisy.source"&gt;
-         &lt;location src="http://username:password@repository.domain.com:9263/publisher/document?documentId={1}&amp;amp;includeNavigation=false&amp;amp;locale=en_US&amp;amp;version=live" /&gt;
-     &lt;/match&gt;
-   
-     &lt;match pattern="*.daisy.img"&gt;
-         &lt;location src="http://username:password@repository.domain.com:9263/publisher/blob?documentId={1}&amp;amp;version=live&amp;amp;partType=3" /&gt;
-     &lt;/match&gt;
-   
-     &lt;match pattern="*.daisy.navigation"&gt;
-         &lt;location src="http://username:password@repository.domain.com:9263/publisher/blob?documentId={1}&amp;amp;version=live&amp;amp;partType=1" /&gt;
-     &lt;/match&gt;
- 
-  &lt;/locator&gt;
-&lt;/locationmap&gt;
+&lt;map:match pattern="locationmap-project.xml"&gt;
+  &lt;map:generate src="http://username:password@rop.domain.org:9263/publisher/blob?documentId=NAVIGATION-DOCUMENT-ID&amp;amp;version=live&amp;amp;partType=1"/&gt;
+  &lt;map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl"&gt;
+    &lt;map:parameter name="publisherURL" value="http://username:password@repo.domain.org:9263/publisher/"/&gt;
+    &lt;map:parameter name="pathPrefix" value="/"/&gt;
+  &lt;/map:transform&gt;
+  &lt;map:serialize type="xml"/&gt;
+&lt;/map:match&gt;
         </pre>
-<p>The first match (<span class="codefrag">pattern="index.xml"</span>) will redirect
-        the request for index.xml to a named document
-        in the daisy repository. If you provide your index.xml file locally then omit 
-        this matcher.</p>
-<p>The next match (<span class="codefrag">pattern="*.daisy.source"</span>) is used by the plugin
-        to resolve requests for daisy documents.</p>
-<p>The next match (<span class="codefrag">pattern="*.daisy.img"</span>) is used by the plugin
-        to resolve requests for images stored in the daisy repository.</p>
-<p>The next match (<span class="codefrag">pattern="*.daisy.navigation"</span>) is used by the plugin
-        to resolve requests for daisy navigation documents.</p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">In a future version of Forrest it planned to allow plugins to provide 
-        locationmaps of their own. Therefore, the need for a project to provide this
-        locationmap will be removed.</div>
-</div>
-<a name="N10053"></a><a name="Using+Daisy+Navigation+Documents"></a>
+<p>Note that we use <span class="codefrag">xi:include</span> to include a navigation
+        document in the site.xml file, in this case the document retrieved has
+        id 1208. By using include in this way the site editor is free to use
+        site.xml to reference content from other sources.</p>
+<p>The <span class="codefrag">pathPrefix</span> is  a prefix added to all paths to documents
+        that are to be retrieved from the Daisy repository.</p>
+<a name="N10045"></a><a name="Using+Daisy+Navigation+Documents"></a>
 <h3 class="boxed">Using Daisy Navigation Documents</h3>
 <p>It is possible to use a daisy navigation document in place of a local
         site.xml file. However, in order to allow other content to be added to the
@@ -264,11 +224,7 @@ document.write("Last Published: " + document.lastModified);
   &lt;xi:include href="cocoon://1208.daisy.navigation"/&gt;
 &lt;/site&gt;
         </pre>
-<p>Note that we use <span class="codefrag">xi:include</span> to include a navigation
-        document in the site.xml file, in this case the document retrieved has
-        id 1208. By using include in this way the site editor is free to use
-        site.xml to reference content from other sources.</p>
-<a name="N1006A"></a><a name="Retrieving+RAW+content"></a>
+<a name="N10056"></a><a name="Retrieving+RAW+content"></a>
 <h3 class="boxed">Retrieving RAW content</h3>
 <p>If you want to retrieve the raw, unprocessed XML from
         Daisy simply request the file with a <span class="codefrag">.daisy.source</span>
@@ -276,7 +232,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
       
       
-<a name="N10078"></a><a name="Filtering+Content"></a>
+<a name="N10064"></a><a name="Filtering+Content"></a>
 <h2 class="boxed">Filtering Content</h2>
 <div class="section">
 <p>You may not have full control of the content in the repository, or
@@ -285,14 +241,14 @@ document.write("Last Published: " + document.lastModified);
         which you can filter the content, at the point of retrieval (called a
         pre-filter) and once the file has been converted to the internal 
         Forrest format (called a post-filter).</p>
-<a name="N10081"></a><a name="Pre-Filters"></a>
+<a name="N1006D"></a><a name="Pre-Filters"></a>
 <h3 class="boxed">Pre-Filters</h3>
 <p>Pre-Filters are applied to the XML retrieved from the 
           Daisy repository. To achieve this you can 
           provide an XSL file called <span class="codefrag">daisy/preFilter.xsl</span> in your 
           projects stylesheet directory (default location is 
           <span class="codefrag">PROJECT_HOME/src/documentation/resources/stylesheets</span>).</p>
-<a name="N10091"></a><a name="Post-Filters"></a>
+<a name="N1007D"></a><a name="Post-Filters"></a>
 <h3 class="boxed">Post-Filters</h3>
 <p>Post-Filters are applied to the XDoc generated by 
           Forrest. To achieve this you can 
