@@ -26,6 +26,7 @@ Works with:
 Upgrading
 =========
 * Delete the 'forrest' directory from the XXE application config directory. (e.g. D:\Program Files\XMLmind_XML_Editor\config)
+  * if you have installed the config in your XXE user directory (see below), this step is not necessary
 * Install normally
 
 
@@ -33,6 +34,9 @@ Installing
 ==========
 * For XXEv2.5p3+
   * Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
+    OR
+  * Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only in version 1.3+ of this config)
+    From version 1.3, this is the recommended installation location, as it permits upgrading XXE without having to reinstall this config
 * For XXEv2.5p2 or prior you also need to do
   * Open XXE
   * select Options > Options > Schema > Add File
@@ -44,6 +48,17 @@ Building
 To build the configuration:
 * set the FORREST_HOME environment variable
 * run 'ant' in this directory
+
+History
+=======
+1.3:
+----
+- Fixed a bug that prevented this config to work with XXE 3.x (FOR-720)
+- Fixed a bug that prevented correct loading of the common css stylesheet (FOR-581)
+- Changed icon references to be installation independent (FOR-581)
+- Added a Forrest menu, with more robust table manipulation, and for v2 docs some link traversals (both taken from the XXE XHTML config)
+- Added more entries to the Table button (menu) in the Forrest toolbar, replicating the entries in the Forrest menu
+- Added a History section to the README and documentation
 
 References
 ==========
