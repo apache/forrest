@@ -37,9 +37,12 @@
 		<!-- ============================================================== -->
 		<map:pipeline>   
        
-       <map:match pattern="**.daisy.xml">
-        <map:generate src="cocoon://{1}.daisy.source" />
-        <map:transform src="resources/stylesheets/daisy-to-html.xsl"/>
+       <map:match pattern="**.xml">
+        <map:aggregate element="daisyDocument">
+          <map:part src="cocoon://{1}.daisy.source" />
+          <map:part src="{lm:daisy.siteSnippetFor.{1}}" />
+        </map:aggregate>
+        <map:transform src="{lm:daisy.transform.daisy.html}"/>
         <map:transform src="{lm:transform.html.document}"/>
         <map:select type="exists">
           <map:when test="{project:resources.stylesheets}/daisy/postFilter.xsl">

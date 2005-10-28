@@ -31,28 +31,58 @@
         <group>
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
           <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+          <xsl:if test="@nodeId">
+            <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>/</xsl:attribute>
+          </xsl:if>
           <doc>
             <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
             <xsl:attribute name="label">Section Home</xsl:attribute>
-            <xsl:attribute name="href"><xsl:value-of select="@id"/>.daisy.html</xsl:attribute>
+            <xsl:choose>
+              <xsl:when test="@nodeId">
+                <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>.html</xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
           </doc>
           <xsl:apply-templates/>
         </group>
       </xsl:when>
-      <xsl:otherwise test="d:doc">
+      <xsl:otherwise>
         <doc>
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
           <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
-          <xsl:attribute name="href"><xsl:value-of select="@id"/>.daisy.html</xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="@nodeId">
+              <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>.html</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
         </doc>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="d:link">
+    <link>
+      <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+      <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+    </link>
   </xsl:template>
     
   <xsl:template match="d:group">
     <group>
       <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
       <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:choose>
+          <xsl:when test="@nodeId"><xsl:value-of select="@nodeId"/>/</xsl:when>
+          <xsl:otherwise><xsl:value-of select="@id"/>/</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:apply-templates/>
     </group>
   </xsl:template>

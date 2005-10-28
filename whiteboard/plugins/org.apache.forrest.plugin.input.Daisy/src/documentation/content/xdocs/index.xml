@@ -31,83 +31,38 @@
     <section>
       <title>Usage</title>
       
-      <p>Perhaps the most important thing to realise about this plugin is that 
-      there is no relationship between the Forrest URL space and the URL space
-      defined in the Daisy repository. That is the path to and the name of each
-      document within Forrest needs not be the same as the path to and the name
-      of the document within the Daisy repository.</p>
-      
-      <p>This enables the repository to be structured in a way that is
-      appropriate for it's editors and the Forrest document collection can
-      be structured in a way that is appropriate for the target audience. In
-      fact, it is possible to use the same document from a Daisy repository in
-      multiple Forrest collections each using a completely different URL 
-      space that is custom designed for the end user of the document
-      collection.</p> 
+      <p>This plugin allows content to be retrieved from a 
+      <a href="http://www.cocoondev.org/daisy/">Daisy CMS repository</a>
+      and displayed alongside any other Forrest content. Unlike many
+      other plugins there is some configuraiton of your project requried.</p>.
       
       <section>
-        <title>Locationmap</title>
+        <title>Locationmap Configuration</title>
       
-        <p>In order to tell Forrest which document to retrieve from the
-        repository you need to make use of the locationmap in Forrest. Your
-        project must therefore provide a locationmap similar to the one 
-        that follows.</p>
-        
-        <warning>The HTTP API in Daisy 1.3 has changed. The code below is for
-        Daisy 1.2. We currently have experimental support for Daisy 1.3, if you
-        wish to work with this version of daisy you should discuss your needs with
-        the Forrest mail lists.</warning>
+        <p>The project locationmap for a Daisy generated site is automatically
+        created from the daisy navigation documents. In order to tell Forrest
+        how to generate these documents you must add a matcher to your
+        project sitemap as follows:</p>
       
         <source><![CDATA[
-<locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
-
-  <components>
-    <matchers default="lm">
-      <matcher 
-        name="lm" 
-        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
-    </matchers>
-  </components>
-  
-  <locator>
-   
-     <match pattern="index.xml">
-         <location src="cocoon://908.daisy.xml" />
-     </match>
-   
-     <match pattern="*.daisy.source">
-         <location src="http://username:password@repository.domain.com:9263/publisher/document?documentId={1}&amp;includeNavigation=false&amp;locale=en_US&amp;version=live" />
-     </match>
-   
-     <match pattern="*.daisy.img">
-         <location src="http://username:password@repository.domain.com:9263/publisher/blob?documentId={1}&amp;version=live&amp;partType=3" />
-     </match>
-   
-     <match pattern="*.daisy.navigation">
-         <location src="http://username:password@repository.domain.com:9263/publisher/blob?documentId={1}&amp;version=live&amp;partType=1" />
-     </match>
- 
-  </locator>
-</locationmap>
+<map:match pattern="locationmap-project.xml">
+  <map:generate src="http://username:password@rop.domain.org:9263/publisher/blob?documentId=NAVIGATION-DOCUMENT-ID&amp;version=live&amp;partType=1"/>
+  <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
+    <map:parameter name="publisherURL" value="http://username:password@repo.domain.org:9263/publisher/"/>
+    <map:parameter name="pathPrefix" value="/"/>
+  </map:transform>
+  <map:serialize type="xml"/>
+</map:match>
         ]]></source>
         
-        <p>The first match (<code>pattern="index.xml"</code>) will redirect
-        the request for index.xml to a named document
-        in the daisy repository. If you provide your index.xml file locally then omit 
-        this matcher.</p>
+        <p>Note that we use <code>xi:include</code> to include a navigation
+        document in the site.xml file, in this case the document retrieved has
+        id 1208. By using include in this way the site editor is free to use
+        site.xml to reference content from other sources.</p>
         
-        <p>The next match (<code>pattern="*.daisy.source"</code>) is used by the plugin
-        to resolve requests for daisy documents.</p>
+        <p>The <code>pathPrefix</code> is  a prefix added to all paths to documents
+        that are to be retrieved from the Daisy repository.</p>
         
-        <p>The next match (<code>pattern="*.daisy.img"</code>) is used by the plugin
-        to resolve requests for images stored in the daisy repository.</p>
-                
-        <p>The next match (<code>pattern="*.daisy.navigation"</code>) is used by the plugin
-        to resolve requests for daisy navigation documents.</p>
-        
-        <note>In a future version of Forrest it planned to allow plugins to provide 
-        locationmaps of their own. Therefore, the need for a project to provide this
-        locationmap will be removed.</note>
       </section>
       
       <section>
@@ -127,11 +82,6 @@
   <xi:include href="cocoon://1208.daisy.navigation"/>
 </site>
         ]]></source>
-      
-        <p>Note that we use <code>xi:include</code> to include a navigation
-        document in the site.xml file, in this case the document retrieved has
-        id 1208. By using include in this way the site editor is free to use
-        site.xml to reference content from other sources.</p>
       </section>
       
       <section>

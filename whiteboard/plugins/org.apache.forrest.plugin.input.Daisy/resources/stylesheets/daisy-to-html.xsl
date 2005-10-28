@@ -20,8 +20,14 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:p="http://outerx.org/daisy/1.0#publisher"
     xmlns:ns="http://outerx.org/daisy/1.0"
+    xmlns:nav="http://outerx.org/daisy/1.0#navigationspec"
     version="1.0">
-  <xsl:template match="/">
+    
+  <!-- The pathPrefix is added to the start of all resolved Daisy links 
+       It must include a trailing slash if it is non-empty -->
+  <xsl:param name="pathPrefix">/</xsl:param>
+    
+  <xsl:template match="daisyDocument">
     <xsl:variable name="rootElementName"><xsl:value-of select="name(*)"/></xsl:variable>
     <html>
       <head>
@@ -155,16 +161,21 @@
   <xsl:template match="a">
     <xsl:choose>
       <xsl:when test="starts-with(@href, 'daisy:')">
+        <xsl:variable name="docId"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
+        <xsl:variable name="path">
+          <xsl:value-of select="$pathPrefix"/>
+          <xsl:for-each select="//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::group|//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::doc[@nodeId]"><xsl:value-of select="@href"/></xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="url"><xsl:value-of select="$path"/><xsl:value-of select="//node()[@id=$docId]/@href"/></xsl:variable>
         <a>
-          <xsl:variable name="url"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
           <xsl:choose>
             <xsl:when test="contains($url, '#')">
               <xsl:variable name="pageURL"><xsl:value-of select="substring-before($url, '#')"/></xsl:variable>
               <xsl:variable name="anchor"><xsl:value-of select="substring-after(@href, '#')"/></xsl:variable>
-              <xsl:attribute name="href"><xsl:value-of select="$pageURL"/>.daisy.html#<xsl:value-of select="$anchor"/></xsl:attribute>
+              <xsl:attribute name="href">FIXME: URLS with anchors not working at present - <xsl:value-of select="$pageURL"/>.html#<xsl:value-of select="$anchor"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:attribute name="href"><xsl:value-of select="$url"/>.daisy.html</xsl:attribute>
+              <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:attribute name="description"><xsl:value-of select="@daisyDocumentName"/></xsl:attribute>
@@ -186,7 +197,7 @@
       <xsl:when test="starts-with(@src, 'daisy:')">
         <img>
           <xsl:apply-templates select="@*"/>
-          <xsl:attribute name="src"><xsl:value-of select="substring-after(@src, 'daisy:')"/>.daisy.img</xsl:attribute>
+          <xsl:attribute name="src">/<xsl:value-of select="substring-after(@src, 'daisy:')"/>.daisy.img</xsl:attribute>
           <xsl:apply-templates/>
         </img>
       </xsl:when>
