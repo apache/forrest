@@ -61,7 +61,7 @@ function isLocalUrl ()
 
   return( (typeof(href) != 'undefined') &&
           (href.substr) &&
-          (startsWith(href, 'http://127.0.0.1:8888/') | startsWith(href, 'http://localhost:8888/'))
+          (startsWith(href, 'http://127.0.0.1:8888/') || startsWith(href, 'http://localhost:8888/'))
         );
 }
 
