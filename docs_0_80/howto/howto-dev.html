@@ -389,6 +389,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#debug-cocoon-profiler">Using the Cocoon sitemap profiler</a>
 </li>
 <li>
+<a href="#debug-logtransformer">Using the Cocoon LogTransformer</a>
+</li>
+<li>
 <a href="#debug-links">Finding broken internal links</a>
 </li>
 <li>
@@ -714,7 +717,37 @@ forrest-trunk
           NOTE: Do not forget to turn off the profiler in 
           <span class="codefrag">main/webapp/sitemap.xmap</span> when finished.
         </p>
-<a name="N10126"></a><a name="debug-links"></a>
+<a name="N10126"></a><a name="debug-logtransformer"></a>
+<h4>Using the Cocoon LogTransformer</h4>
+<p>
+          LogTransformers can be inserted in the sitemaps. This will write
+          the sax events at that point into a named log file.
+          Here is an example (the logfile will be written relative to this
+          particular sitemap) ...
+        </p>
+<pre class="code">
+&lt;map:match pattern="*.html"&gt;
+  &lt;map:generate src="sources/{1}.xml"/&gt;<strong>
+  &lt;map:transform type="log"&gt;
+    &lt;map:parameter name="logfile" value="my-1.log"/&gt;
+    &lt;map:parameter name="append" value="no"/&gt;
+  &lt;/map:transform&gt;</strong>
+  &lt;map:transform src="stylesheets/source-to-table.xsl"/&gt;
+  &lt;map:transform src="stylesheets/table-to-page.xsl"/&gt;<strong>
+  &lt;map:transform type="log"&gt;
+    &lt;map:parameter name="logfile" value="my-2.log"/&gt;
+    &lt;map:parameter name="append" value="no"/&gt;
+  &lt;/map:transform&gt;</strong>
+  &lt;map:transform src="stylesheets/page-to-html.xsl"/&gt;
+  &lt;map:serialize type="html"/&gt;
+&lt;/map:match&gt;
+</pre>
+<p>
+          Another use for this technique is when you are not sure which
+          path is being taken through the sitemap. Add various LogTransformers
+          with different filenames and see which one gets triggered.
+        </p>
+<a name="N1013D"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set.
@@ -735,7 +768,7 @@ forrest-trunk
           configuration file or the link in your source document is not
           using the correct name for the "site:..." value.
         </p>
-<a name="N1013A"></a><a name="tips-debug"></a>
+<a name="N10151"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -745,13 +778,13 @@ forrest-trunk
           </li>
         
 </ul>
-<a name="N10148"></a><a name="find"></a>
+<a name="N1015F"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N10151"></a><a name="find-scenario-1"></a>
+<a name="N10168"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -794,7 +827,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N10173"></a><a name="tips-find"></a>
+<a name="N1018A"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -804,31 +837,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N10183"></a><a name="Frequently Asked Questions"></a>
+<a name="N1019A"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10187"></a><a name="1+General+issues"></a>
+<a name="N1019E"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N1018B"></a><a name="1.1+FAQ+1"></a>
+<a name="N101A2"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N10193"></a><a name="2+Other+issues"></a>
+<a name="N101AA"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N10197"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N101AE"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N1019F"></a><a name="Tips"></a>
+<a name="N101B6"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N101A7"></a><a name="tip-howto"></a>
+<a name="N101BE"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -837,7 +870,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N101B1"></a><a name="References"></a>
+<a name="N101C8"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>

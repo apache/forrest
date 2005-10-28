@@ -339,7 +339,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="#namingConvention">Naming Convention</a>
 </li>
 <li>
-<a href="#selector">Location Selectors</a>
+<a href="#selector">Multiple Location Selectors</a>
 </li>
 <li>
 <a href="#examples">Locationmap Examples</a>
@@ -388,13 +388,22 @@ document.write("Last Published: " + document.lastModified);
       the locationmap however the leaf does not identify a pipeline, but instead identifies
       a location string.</p>
 <p>Apache Forrest looks in the standard location for the source file first (by default
-      <span class="codefrag">PROJECT_HOME/src/documentation/content/xdocs/...</span>), if a file is found in this
+      <span class="codefrag">PROJECT_HOME/src/documentation/content/...</span>), if a file is found in this
       location then the locationmap is not consulted. However, if one is not found then the 
-      locationmap is used to resolve the source file.</p>
+      locationmap is used to resolve the source file. The locationmap is resolved via the
+      core sitemap, this means that you can generate it dynamically if you so wish. Simply
+      add a match that looks something like this to your projects sitemap:</p>
+<pre class="code">
+   &lt;map:match pattern="locationmap-project.xml"&gt;
+     &lt;map:generate src="..."/&gt;
+     &lt;map:transform src="..."/&gt;
+     &lt;map:serialize type="xml"/&gt;
+   &lt;/map:match&gt;
+      </pre>
 </div>
     
     
-<a name="N10038"></a><a name="namingConvention"></a>
+<a name="N1003C"></a><a name="namingConvention"></a>
 <h2 class="underlined_10">Naming Convention</h2>
 <div class="section">
 <p>For those that are familiar with name
@@ -416,24 +425,30 @@ document.write("Last Published: " + document.lastModified);
 <pre class="code">
 &lt;map:transform src="{lm:transform.xhtml2.html}"/&gt;
       </pre>
+<p>Where the resource is provided by a plugin rather than Forrest itself
+      this is prefixed with the last part of the plugin name. For example:</p>
+<pre class="code">
+&lt;map:transform src="{lm:projectInfo.transform.doap.html}"/&gt;
+      </pre>
 <p>The format is essentially one of:</p>
 <pre class="code">
-resource-type(dot)from-format(dot)to-format
+[PLUGIN_NAME.]resource-type(dot)from-format(dot)to-format
       </pre>
 <p>or</p>
 <pre class="code">
-resource-type(dot)type(dot)name
+[PLUGIN_NAME.]resource-type(dot)type(dot)name
       </pre>
 <p>Examples of these two:</p>
 <pre class="code">
-transform.xslt.xthml2.html
+transform.transform.xthml2.html
 graphic.png.project-logo
+projectInfo.transform.changes.rss
       </pre>
 </div>
   
   
-<a name="N10068"></a><a name="selector"></a>
-<h2 class="underlined_10">Location Selectors</h2>
+<a name="N10073"></a><a name="selector"></a>
+<h2 class="underlined_10">Multiple Location Selectors</h2>
 <div class="section">
 <p>You can define multiple possble locations for a file in the locationmap
     with the following code:</p>
@@ -450,10 +465,10 @@ graphic.png.project-logo
 </div>
     
     
-<a name="N10079"></a><a name="examples"></a>
+<a name="N10084"></a><a name="examples"></a>
 <h2 class="underlined_10">Locationmap Examples</h2>
 <div class="section">
-<a name="N1007F"></a><a name="source-via-http"></a>
+<a name="N1008A"></a><a name="source-via-http"></a>
 <h3 class="underlined_5">Retrieving an XDoc via HTTP</h3>
 <p>Normally files are generated from <span class="codefrag">{project:content.xdocs}</span>.
         Using the Locationmap it is possible to make these files come from elsewhere.
@@ -481,7 +496,7 @@ graphic.png.project-logo
 <div class="content">Because of the above limitation many of the links in the
         page generated from the above example are broken.</div>
 </div>
-<a name="N100A5"></a><a name="source-from-remote-cms"></a>
+<a name="N100B0"></a><a name="source-from-remote-cms"></a>
 <h3 class="underlined_5">Retrieving HTML from a CMS</h3>
 <p>Using the locationmap you can use Forrest to retrieve data from a 
         Content Management System (CMS), wither local or remote.
@@ -551,7 +566,7 @@ char-encoding=latin1
 <div class="content">This demo is an example only, it does not fully work at this time. For example, absolute URLs
         in the source document need to be rewritten to ensure that they are matched by the locationmap.</div>
 </div>
-<a name="N100E3"></a><a name="linkrewriting"></a>
+<a name="N100EE"></a><a name="linkrewriting"></a>
 <h3 class="underlined_5">Link Rewriting</h3>
 <p>The locationmap can be used to rewrite URLs when the page is generated.
         For example, when the locationmap has:</p>

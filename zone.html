@@ -254,7 +254,17 @@ creates /var/apache2/htdocs ... $DOC_ROOT
 directories /ft/ and /fts/ are the forrestbot config and results, see below.
 </pre>
 <p>
-        Files here are owned in the group "other" so any one of us can
+        
+<strong>test-sources</strong>
+      
+</p>
+<pre class="code">
+A place to hold sources for various test sites.
+Normally these would be in the relevant project's SVN.
+Hold them here until building properly.
+</pre>
+<p>
+        All files are owned in the group "other" so any one of us can
         edit/update. Make sure that your 'umask' is set properly so that
         new files have group write permissions.
         See the <a href="#admin-user">notes</a> about user administration.
@@ -268,7 +278,7 @@ directories /ft/ and /fts/ are the forrestbot config and results, see below.
 </div>
 
     
-<a name="N10048"></a><a name="software"></a>
+<a name="N10052"></a><a name="software"></a>
 <h2 class="underlined_10">Software</h2>
 <div class="section">
 <p>
@@ -279,7 +289,7 @@ directories /ft/ and /fts/ are the forrestbot config and results, see below.
           Various local software is installed in
           <span class="codefrag">/export/opt/</span> (not managed with SVN) ...
         </p>
-<a name="N1005B"></a><a name="s-forrest"></a>
+<a name="N10065"></a><a name="s-forrest"></a>
 <h3 class="underlined_5">Forrest</h3>
 <p>
           
@@ -305,7 +315,6 @@ svn checkout of trunk, manually updated as needed.
 </p>
 <pre class="code">
 svn checkout of current release branch, manually updated as needed.
-FIXME: Not yet done.
 </pre>
 <p>
           To manually update -stable or -release do this:
@@ -320,7 +329,7 @@ cd main
 </div>
 
     
-<a name="N10088"></a><a name="fb"></a>
+<a name="N10092"></a><a name="fb"></a>
 <h2 class="underlined_10">The forrestbots</h2>
 <div class="section">
 <p>
@@ -353,11 +362,14 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         Forrestbot logs are at
         $CONFIG/forrestbot-trunk*/logs/
         and old ones are cleaned up by the crontab.
+        There is also a log file for each site that forrestbot builds
+        which captures the output of cron (cronout-*.txt).
+        Be sure to verify this logfile after making configuration changes.
       </p>
 </div>
 
     
-<a name="N100A9"></a><a name="admin"></a>
+<a name="N100B3"></a><a name="admin"></a>
 <h2 class="underlined_10">Administration</h2>
 <div class="section">
 <p>
@@ -386,7 +398,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         Also it seems that /var/run/apache2 is wiped out on reboot,
         so need to mkdir again.
       </p>
-<a name="N100C6"></a><a name="admin-user"></a>
+<a name="N100D0"></a><a name="admin-user"></a>
 <h3 class="underlined_5">User administration</h3>
 <p>After receiving your account, please be sure to configure it properly.</p>
 <p>See some notes at
