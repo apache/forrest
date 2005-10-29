@@ -20,11 +20,17 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
   <forrest:view type="html">
-    <forrest:css url="default.css" media="screen" rel="alternate stylesheet" theme="default"/>
-    <forrest:css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="default"/>
     <forrest:css url="pelt.basic.css" media="screen" theme="Pelt"/>
     <forrest:css url="pelt.screen.css" media="screen" theme="Pelt"/>
     <forrest:css url="pelt.print.css" media="print"/>
+    <forrest:css url="default.css" media="screen" rel="alternate stylesheet" theme="default"/>
+    <forrest:css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="default"/>
+    <forrest:css >
+/* Extra css */
+    .example {
+      border: 1px solid #ddd;
+    }
+    </forrest:css>
     <forrest:contract name="siteinfo-meta">
       <forrest:properties contract="siteinfo-meta">
         <forrest:property name="siteinfo-meta" nugget="get.build.info">
@@ -244,7 +250,12 @@
               </forrest:property>
             </forrest:properties>
           </forrest:contract>
-          <forrest:contract name="ajax-example"/>
+          <forrest:hook name="example" class="example">
+            <forrest:contract name="branding-theme-switcher"/>
+          </forrest:hook>
+          <forrest:hook name="example" class="example">
+            <forrest:contract name="ajax-example"/>
+          </forrest:hook>
           <forrest:contract name="content-authors">
             <forrest:properties contract="content-authors">
               <forrest:property name="content-authors" nugget="get.authors">
