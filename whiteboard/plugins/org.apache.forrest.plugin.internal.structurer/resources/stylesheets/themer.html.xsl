@@ -76,7 +76,7 @@
                         </xsl:if>
                         <alias:call-template name="getHead"/>
                     </head>
-                    <body onload="init()">
+                    <body>
                         <alias:call-template name="getBody"/>
                     </body>
                 </html>
@@ -87,6 +87,7 @@
         <xsl:apply-templates select="*[local-name()!='css']"/>
     </xsl:template>
     <xsl:template match="forrest:css[@url and count(. | key('css-includes', @url)[1]) = 1]">
+      <xsl:copy-of select="@rel"/>
         <link type="text/css">
             <xsl:choose>
               <xsl:when test="@rel">
