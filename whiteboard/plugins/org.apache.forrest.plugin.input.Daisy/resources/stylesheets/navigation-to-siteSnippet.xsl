@@ -42,6 +42,16 @@
           <xsl:apply-templates/>
         </group>
       </xsl:when>
+      <xsl:when test="d:link">
+        <group>
+          <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+          <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
+          <xsl:if test="@nodeId">
+            <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>/</xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates/>
+        </group>
+      </xsl:when>
       <xsl:otherwise>
         <doc>
           <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
