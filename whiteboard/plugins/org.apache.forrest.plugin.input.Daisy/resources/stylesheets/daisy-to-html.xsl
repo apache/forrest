@@ -197,7 +197,7 @@
       <xsl:when test="starts-with(@src, 'daisy:')">
         <img>
           <xsl:apply-templates select="@*"/>
-          <xsl:attribute name="src">/<xsl:value-of select="substring-after(@src, 'daisy:')"/>.daisy.img</xsl:attribute>
+          <xsl:attribute name="src"><xsl:value-of select="substring-after(@src, 'daisy:')"/>.daisy.img</xsl:attribute>
           <xsl:apply-templates/>
         </img>
       </xsl:when>
