@@ -37,14 +37,7 @@
           <doc>
             <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
             <xsl:attribute name="label">Section Home</xsl:attribute>
-            <xsl:choose>
-              <xsl:when test="@nodeId">
-                <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>.html</xsl:attribute>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:attribute name="href">../<xsl:value-of select="@nodeId"/>.html</xsl:attribute>
           </doc>
           <xsl:apply-templates/>
         </group>

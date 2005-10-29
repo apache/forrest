@@ -23,6 +23,11 @@
     xmlns:nav="http://outerx.org/daisy/1.0#navigationspec"
     version="1.0">
     
+  
+  <!-- The path to the current document, used to calculate the path
+       to the site root when working out paths in links -->
+  <xsl:param name="documentPath"/>
+  
   <!-- The pathPrefix is added to the start of all resolved Daisy links 
        It must include a trailing slash if it is non-empty -->
   <xsl:param name="pathPrefix">/</xsl:param>
@@ -159,6 +164,12 @@
   </xsl:template>
   
   <xsl:template match="a">
+    <xsl:variable name="pathToRoot">
+      <xsl:call-template name="dotdots">
+        <xsl:with-param name="path"><xsl:value-of select="$documentPath"/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <xsl:choose>
       <xsl:when test="starts-with(@href, 'daisy:')">
         <xsl:variable name="docId"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
@@ -166,7 +177,7 @@
           <xsl:value-of select="$pathPrefix"/>
           <xsl:for-each select="//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::group|//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::doc[@nodeId]"><xsl:value-of select="@href"/></xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="url"><xsl:value-of select="$path"/><xsl:value-of select="//node()[@id=$docId]/@href"/></xsl:variable>
+        <xsl:variable name="url"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/></xsl:variable>
         <a>
           <xsl:choose>
             <xsl:when test="contains($url, '#')">
@@ -218,6 +229,27 @@
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
+  </xsl:template>
+  
+  <!-- FIXME: this should come from include of dotdots.xsl in forest core -->
+  <xsl:template name="dotdots">
+    <xsl:param name="path"/>
+    <xsl:variable name="dirs" select="normalize-space(translate(concat($path, 'x'), ' /\', '_  '))"/>
+    <!-- The above does the following:
+       o Adds a trailing character to the path. This prevents us having to deal
+         with the special case of ending with '/'
+       o Translates all directory separators to ' ', and normalize spaces,
+		 cunningly eliminating duplicate '//'s. We also translate any real
+		 spaces into _ to preserve them.
+    -->
+    <xsl:variable name="remainder" select="substring-after($dirs, ' ')"/>
+    <xsl:if test="$remainder">
+      <xsl:text>../</xsl:text>
+      <xsl:call-template name="dotdots">
+        <xsl:with-param name="path" select="translate($remainder, ' ', '/')"/>
+		<!-- Translate back to /'s because that's what the template expects. -->
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
