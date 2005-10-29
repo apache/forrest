@@ -20,7 +20,7 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!--This template will match the different combinations for forrest:hooks-->
-  <xsl:template match="forrest:hook[@name and (@type='div' or not(@type))]">
+  <xsl:template match="forrest:hook[@name and (@type='div' or not(@type) and not(@class))]">
     <div id="{@name}">
       <xsl:apply-templates/>
       <xsl:if test="@nbsp='true'">&#160;</xsl:if>
