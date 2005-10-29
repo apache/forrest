@@ -15,6 +15,12 @@
 * limitations under the License.
 */
 
+var dispatcherCall=false;
+
+function setDispatcherCall(xBoolean) {
+  dispatcherCall=(xBoolean)?true:false;
+}
+
 function startforrestbar()
 {
   //alert("function init");
@@ -52,7 +58,7 @@ function viewXML(xmltype)
     alert("This action is only available on Local Forrest (jetty) site...");
     return(false);
   }
-  navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
+  (dispatcherCall)?navigate("http://127.0.0.1:8888/"+xmltype+href.substring(href.lastIndexOf('8888/')+5, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
 }
 
 function isLocalUrl ()
