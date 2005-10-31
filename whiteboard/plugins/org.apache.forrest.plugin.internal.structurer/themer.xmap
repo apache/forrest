@@ -39,6 +39,12 @@
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
+    <map:pipeline>
+      <map:match pattern="resolve.contract.*.**">
+        <map:generate src="{lm:resolve.contract.{1}.{2}}" />
+        <map:serialize />
+      </map:match>
+    </map:pipeline>
     <!-- prepare the xsl:templates of the requested contract.
       {1} format to deliver
       {2} contract name  -->
@@ -111,7 +117,7 @@
         </map:transform>
         <map:serialize />
       </map:match>
-            <map:match pattern="ls.contract-*.project.xml">
+      <map:match pattern="ls.contract.project-*.xml">
         <map:generate src="{lm:ls.contracts.project}" />
         <map:transform src="{lm:ls.contracts-to-document.xsl}">
           <map:parameter name="requestedContract" value="{1}" />
@@ -126,7 +132,7 @@
         </map:transform>
         <map:serialize />
       </map:match>
-            <map:match pattern="less.contract-*.xml">
+      <map:match pattern="less.contract.project-*.xml">
         <map:generate src="{lm:ls.contracts.project}" />
         <map:transform src="{lm:ls.contracts-to-document.xsl}">
           <map:parameter name="requestedContract" value="{1}" />
