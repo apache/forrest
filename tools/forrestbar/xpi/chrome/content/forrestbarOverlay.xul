@@ -86,15 +86,25 @@ View > Toolbars.  Need to find correct menupopup ID in DOM.
           <menuitem label="Title" onclick="viewXML('.title.xml');" />
           <menuseparator/>
           <menuitem label="structurer" onclick="setDispatcherCall(true);viewXML('prepare.structurer.html.');setDispatcherCall(false);"/>
+          <menuitem label="structurer-xsl" onclick="setDispatcherCall(true);viewXML('structurer-xsl.html.');setDispatcherCall(false);"/>
+          <menuseparator/>
+          <menuitem label="ls.contracts" onclick="navigate('http://localhost:8888/ls.contracts.html');" />
+          <menuitem label="ls.contracts.project" onclick="navigate('http://localhost:8888/ls.contracts.project.html');" />
         </menupopup>
       </toolbarbutton>
 var href = gBrowser.currentURI.spec
       <toolbarseparator/>
 
       <toolbaritem class="forrestbar" id="forrestbar-search">
-        <label value="Search Forrest dev-mail:"/>
+        <label value="Search Forrest:"/>
         <textbox id="forrestbar-input" hidden="false"/>
-        <toolbarbutton label="Go" onclick="search('forrestbar-input');" hidden="false"/>
+        <toolbarbutton label=" dev-mail" onclick="search('forrestbar-input');" hidden="false"/>
+        <toolbarbutton label="contracts" hidden="false" type="menu">
+          <menupopup>
+             <menuitem label="resolve-contract" onclick="contract('resolve.contract.html.','forrestbar-input');"/>
+             <menuitem label="prepare-contract" onclick="contract('prepare.contract.html.','forrestbar-input');"/>
+          </menupopup>
+        </toolbarbutton>
       </toolbaritem>
 
     </toolbar>

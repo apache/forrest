@@ -45,6 +45,12 @@ function search(searchID)
   navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
 }
 
+function contract(subUrl,searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://localhost:8888/'+subUrl + searchItem.value);
+}
+
 function navProject(searchID) {
   var searchItem = document.getElementById(searchID);
   navigate(searchItem.selectedItem.value);
@@ -58,7 +64,7 @@ function viewXML(xmltype)
     alert("This action is only available on Local Forrest (jetty) site...");
     return(false);
   }
-  (dispatcherCall)?navigate("http://127.0.0.1:8888/"+xmltype+href.substring(href.lastIndexOf('8888/')+5, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
+  (dispatcherCall)?navigate("http://localhost:8888/"+xmltype+href.substring(href.lastIndexOf('8888/')+5, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
 }
 
 function isLocalUrl ()
