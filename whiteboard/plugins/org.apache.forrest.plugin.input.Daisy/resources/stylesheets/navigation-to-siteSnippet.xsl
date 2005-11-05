@@ -34,11 +34,22 @@
           <xsl:if test="@nodeId">
             <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>/</xsl:attribute>
           </xsl:if>
-          <doc>
-            <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-            <xsl:attribute name="label">Section Home</xsl:attribute>
-            <xsl:attribute name="href">../<xsl:value-of select="@nodeId"/>.html</xsl:attribute>
-          </doc>
+          <xsl:choose>
+            <xsl:when test="@nodeId">
+              <doc>
+                <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+                <xsl:attribute name="label">Section Home</xsl:attribute>
+                <xsl:attribute name="href">../<xsl:value-of select="@nodeId"/>.html</xsl:attribute>
+              </doc>
+            </xsl:when>
+            <xsl:otherwise>
+              <doc>
+                <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+                <xsl:attribute name="label">Section Home</xsl:attribute>
+                <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
+              </doc>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:apply-templates/>
         </group>
       </xsl:when>
