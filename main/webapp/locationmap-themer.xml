@@ -138,6 +138,21 @@
         <location src="{defaults:themer}/resources/themes" />
       </select>
     </match>
+    <!-- generic match for theme image ressources. -->
+    <!-- 
+      {1} name
+      {2} extension (note we assume e.g. {1}.gif)
+      -->
+    <match pattern="themes/images/**.*">
+      <select type="exists">
+        <location src="{lm:themer.project.dir}/{project:theme}/images/{1}.{2}" />
+        <location src="{lm:themer.project.dir}/{defaults:theme}/images/{1}.{2}" />
+        <location src="{project:themer}/resources/themes/{project:theme}/images/{1}.{2}" />
+        <location src="{project:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" />
+        <location src="{defaults:themer}/resources/themes/{project:theme}/images/{1}.{2}" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" />
+      </select>
+    </match>
     <!-- generic match for theme ressources like css and js. -->
     <!-- 
       {1} name
