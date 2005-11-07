@@ -22,6 +22,7 @@
   </description>
   <usage><![CDATA[<forrest:contract name="search-input">
   <forrest:properties contract="search-input">
+   <forrest:property name="search-lucene">lucene-search.html</forrest:property>
    <forrest:property name="input-size">25</forrest:property>
    <forrest:property name="search-input">
       <search name="MyProject" domain="mydomain" provider="google"/>
@@ -42,6 +43,7 @@
       </xsl:template>
 
       <xsl:template name="search-input-body">
+        <xsl:param name="search-lucene" select="'lucene-search.html'"/>
         <xsl:param name="input-size">25</xsl:param>
         <xsl:param name="search-input"/>
 <xsl:comment>+ 
@@ -61,7 +63,7 @@
                   <xsl:choose>
                     <xsl:when test="$search-input/search/@provider = 'lucene'">
                       <xsl:value-of select="$root"/>
-                      <xsl:value-of select="$lucene-search"/>
+                      <xsl:value-of select="$search-lucene"/>
                     </xsl:when>
                     <xsl:otherwise>http://www.google.com/search</xsl:otherwise>
                   </xsl:choose>

@@ -112,9 +112,74 @@ c) theme functionality (*.js & *.ft)]]> </pre>
           <xsl:param name="branding-theme-profiler"/>
           <xsl:param name="branding-theme-profiler-theme"/>
           <style type="text/css" media="screen" title="{$branding-theme-profiler-theme}" rel="alternate stylesheet" >
-            <xsl:apply-templates select="$branding-theme-profiler/color"/>
-          </style>
-        </xsl:template>
+    <!-- ==================== corner image colors ========================= -->
+    <!--FIXME: Add default values! 
+      If not it can result in 
+      <link message="http://localhost/:-1
+The attribute "rx of the element ><ellipse> can not be negative" uri="themes/images/roundcorner-t-l-5-bg003366-stroke-fg.png">
+    <referrer uri="samples/index.html"/>
+  </link>
+      Maybe like:
+      -->
+    <xsl:variable name="header-input" select="substring-after($branding-theme-profiler/color[@name='header']/@value, '#')"/>
+    <xsl:variable name="header">
+      <xsl:if test="$header-input=''">000000</xsl:if>
+      <xsl:if test="not($header-input='')"><xsl:value-of select="$header-input"/></xsl:if>
+    </xsl:variable>
+    <xsl:variable name="searchbox-input" select="substring-after($branding-theme-profiler/color[@name='searchbox']/@value, '#')"/>
+    <xsl:variable name="searchbox">
+      <xsl:if test="$searchbox-input=''">000000</xsl:if>
+      <xsl:if test="not($searchbox-input='')"><xsl:value-of select="$searchbox-input"/></xsl:if>
+    </xsl:variable>
+     
+    <xsl:variable name="tab-selected" select="substring-after($branding-theme-profiler/color[@name='tab-selected']/@value, '#')"/>
+    <xsl:variable name="tab-unselected" select="substring-after($branding-theme-profiler/color[@name='tab-unselected']/@value, '#')"/>
+    <xsl:variable name="body" select="substring-after($branding-theme-profiler/color[@name='body']/@value, '#')"/>
+    <xsl:variable name="menu" select="substring-after($branding-theme-profiler/color[@name='menu']/@value, '#')"/>
+#header .round-top-left-small {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-l-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($searchbox)"/>-fg<xsl:value-of select="normalize-space($searchbox)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+#header .round-top-right-small {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-r-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($searchbox)"/>-fg<xsl:value-of select="normalize-space($searchbox)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+#nav-main li {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-r-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($tab-unselected)"/>-fg<xsl:value-of select="normalize-space($tab-unselected)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+#nav-main li a {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-l-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($tab-unselected)"/>-fg<xsl:value-of select="normalize-space($tab-unselected)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+#nav-main .current {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-r-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($tab-selected)"/>-fg<xsl:value-of select="normalize-space($tab-selected)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+#nav-main .current a {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-l-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($tab-selected)"/>-fg<xsl:value-of select="normalize-space($tab-selected)"/>.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+#roundbottom {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-b-r-15-bg<xsl:value-of select="normalize-space($body)"/>-stroke<xsl:value-of select="normalize-space($menu)"/>-fg<xsl:value-of select="normalize-space($menu)"/>.png);
+    background-repeat: no-repeat;
+    background-position: bottom right;
+}
+#roundbottomLeft {
+    background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-b-l-15-bg<xsl:value-of select="normalize-space($body)"/>-stroke<xsl:value-of select="normalize-space($menu)"/>-fg<xsl:value-of select="normalize-space($menu)"/>.png);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+}
+    <xsl:apply-templates select="$branding-theme-profiler/color"/>
+  </style> 
+</xsl:template>
+
         <!-- ==================== main block colors ============================ -->
 <xsl:template match="color[@name='header']">
 #container          { background-color: <xsl:value-of select="@value"/>;}  

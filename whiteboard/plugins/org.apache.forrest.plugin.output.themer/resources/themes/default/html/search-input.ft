@@ -25,6 +25,7 @@
   </description>
   <usage><![CDATA[<forrest:contract name="search-input">
   <forrest:properties contract="search-input">
+    <forrest:property name="search-lucene">lucene-search.html</forrest:property>
     <forrest:property name="search-input">
       <search name="MyProject" domain="mydomain" provider="google"/>
     </forrest:property>
@@ -40,6 +41,7 @@
 		  <!--FIXME: IMO each search provider should provide a form. This form should be refactored into
         a meta-search from-->
 		  <xsl:template name="search-input-body">
+        <xsl:param name="search-lucene" select="'lucene-search.html'"/>
         <xsl:param name="search-input"/>
 <xsl:comment>+
     |start Search
@@ -48,7 +50,7 @@
              <xsl:choose>
               <xsl:when test="$search-input/search/@provider = 'lucene'">
                 <!-- Lucene search -->
-                <form method="get" action="{$root}{$lucene-search}">
+                <form method="get" action="{$root}{$search-lucene}">
                   <div id="search-field"> <input type="text" id="query" 
                     name="queryString" size="25" 
                     value="Search the site with {$search-input/search/@provider}:" 
