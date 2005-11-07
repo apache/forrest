@@ -47,7 +47,7 @@ Section handling
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
+  <xsl:variable name="skin-img-dir" select="concat(string($root), 'themes/images')"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="toc"/>

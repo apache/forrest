@@ -122,7 +122,7 @@ which is then merged by site2xhtml.xsl
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
+  <xsl:variable name="skin-img-dir" select="concat(string($root), 'themes/images')"/>
 
   <!--
     The longest path of any level 1 tab, whose path is a subset of the current URL.  Ie,

@@ -144,14 +144,14 @@
       that the content can be used later on.
       {1} - requested url (striped from extension) -->
     <map:pipeline>
-      <map:match pattern="prepare.structurer.*.**">
+      <map:match pattern="prepare.structurer.*.**"> 
         <map:generate src="{lm:resolve.structurer.{2}}" />
         <map:transform src="{lm:get.structurer.by.requested.format.xsl}">
           <map:parameter name="format" value="{1}" />
         </map:transform>
         <!-- FIXME: jxpath -->
         <!-- When jxpath problem is solved rewrite tiles and uncomment -->
-        <!-- <map:transform type="linkrewriter" /> -->
+        <map:transform type="linkrewriter" />
         <map:transform type="jx">
           <map:parameter name="lenient-xpath" value="true" />
           <map:parameter name="getRequest" value="{2}" />
@@ -189,7 +189,7 @@
         <map:generate src="{lm:structurer.{1}.{2}}" />
         <map:transform src="{lm:structurer-properties-includes.xsl}">
           <map:parameter name="format" value="{1}" />
-        </map:transform>
+        </map:transform> 
         <map:transform type="cinclude" />
         <map:serialize />
       </map:match>
@@ -225,6 +225,12 @@
         <map:transform src="{lm:structurer-xsl.html.{1}.xsl}">
           <map:parameter name="path" value="{0}" />
         </map:transform>
+        <!-- WORKAROUND The following transfomer are responsible for generating links for inline css It produces non valid css!!!-->
+        <!-- FIXME make contracts self containing and open them for css-->
+        <map:transform type="pattern"
+        src="{forrest:context}/resources/chaperon/grammars/link.xlex" />
+      <map:transform
+        src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" />
          <map:transform src="{lm:transform.xml.xml-namespace-stripped}" /> 
         <map:serialize type="xhtml" />
       </map:match>

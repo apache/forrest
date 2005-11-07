@@ -28,7 +28,6 @@
     <xsl:template match="/">
       <!--Create the final stylesheet (alias:) resources/stylesheets/structurer-tiles-root-strip.xsl -->
         <alias:stylesheet version="1.0">
-            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site2xhtml.xsl"/> 
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/dotdots.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/pathutils.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/renderlogo.xsl"/>
@@ -46,6 +45,27 @@
               </alias:include>  
             </xsl:for-each>
             <alias:param name="path"/>
+<!-- FIXME: extract the following part to a stylesheet on its own START -->
+              <!-- Path (..'s) to the root directory -->
+            <alias:variable name="root">
+              <alias:call-template name="dotdots">
+                <alias:with-param name="path" select="$path"/>
+              </alias:call-template>
+            </alias:variable>
+            <alias:variable name="filename-noext">
+              <alias:call-template name="filename-noext">
+                <alias:with-param name="path" select="$path"/>
+              </alias:call-template>
+            </alias:variable>
+            <!-- Source filename (eg 'foo.xml') of current page -->
+            <alias:variable name="filename">
+              <alias:call-template name="filename">
+                <alias:with-param name="path" select="$path"/>
+              </alias:call-template>
+            </alias:variable>
+            <alias:variable name="skin-img-dir" select="concat(string($root), 'themes/images')"/>
+            <alias:variable name="spacer" select="concat($root, 'themer/images/spacer.gif')"/>
+<!-- FIXME: extract the following part to a stylesheet on its own END -->
             <xsl:comment>All xhtml head elements requested by the forrest:template</xsl:comment>
             <alias:template name="getHead">
                 <xsl:for-each 
