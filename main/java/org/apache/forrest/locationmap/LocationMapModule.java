@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.forrest.locationmap.lm.LocationMap;
 import org.apache.avalon.framework.activity.Disposable;
@@ -53,6 +54,8 @@ public class LocationMapModule extends AbstractLogEnabled
     private String m_src;
     private SourceValidity m_srcVal;
     private LocationMap m_lm;
+    private boolean m_cacheAll;
+    private Map m_locationsCache;
 
     // ---------------------------------------------------- lifecycle
 
@@ -66,10 +69,16 @@ public class LocationMapModule extends AbstractLogEnabled
 
     public void configure(Configuration configuration) throws ConfigurationException {
         m_src = configuration.getChild("file").getAttribute("src");
+        m_cacheAll = configuration.getChild("cacheable").getValueAsBoolean(true);
+        
+        if (m_cacheAll == true) {
+        	m_locationsCache = new HashMap();
+        }
     }
 
     public void dispose() {
         m_lm.dispose();
+        m_locationsCache = null;
     }
 
     private LocationMap getLocationMap() throws Exception {
@@ -153,9 +162,32 @@ public class LocationMapModule extends AbstractLogEnabled
         final Configuration modeConf,
         final Map objectModel)
         throws ConfigurationException {
-
+    	
+    	Object result = null;
+    	boolean hasBeenCached = false;
+    	
         try {
-            return getLocationMap().locate(name,objectModel);
+        	if (this.m_cacheAll == true) {
+        		hasBeenCached = m_locationsCache.containsKey(name);
+        		if (hasBeenCached == true) {
+        			result =  m_locationsCache.get(name);
+        			if (getLogger().isDebugEnabled()) {
+        				getLogger().debug("Locationmap cached location returned for hint: " + name);
+        			}
+        		}
+        	}
+        	
+        	if (hasBeenCached == false) {
+        		result = getLocationMap().locate(name,objectModel);
+        		
+        		if (m_cacheAll == true) {
+        			m_locationsCache.put(name,result);
+        			if (getLogger().isDebugEnabled()) {
+        				getLogger().debug("Locationmap caching hint: " + name);
+        			}
+        		}
+        	}
+        	return result;
         }
         catch (ConfigurationException e) {
             throw e;
