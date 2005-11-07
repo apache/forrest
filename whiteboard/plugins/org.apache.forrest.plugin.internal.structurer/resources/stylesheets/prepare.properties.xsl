@@ -22,10 +22,11 @@
   xmlns:c="http://apache.org/cocoon/include/1.0" >
 
 	<xsl:param name="format"/>
+  <xsl:key name="contracts" match="forrest:contract" use="@name" />
 
   <xsl:template match="/">
     <forrest:properties >
-	    <xsl:for-each select="forrest:view[@type=$format]//forrest:contract">
+	    <xsl:for-each select="forrest:view[@type=$format]//forrest:contract[count(. | key('contracts', @name)[1]) = 1]">
         <c:include>
           <xsl:attribute name="src">
             <xsl:value-of 
