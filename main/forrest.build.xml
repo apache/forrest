@@ -398,13 +398,18 @@ The skin that most likely resembles these ones is called 'pelt'.
        param: location to clean ${project.webapp}
        param: file to clean ${project.brokenlinkfile}
        =============================================================== -->
-  <target name="clean" depends="init-props" description="* Clean all directories and files generated during the build">
+  <target name="clean-site" depends="init-props"
+      description="* Clean the project generated documents directory">
     <delete failonerror="false" dir="${project.site-dir}"/>
-    <delete failonerror="false" dir="${project.temp-dir}"/>
-    <delete failonerror="false" dir="${project.webapp}"/>
     <delete failonerror="false" file="${project.brokenlinkfile}"/>
   </target>
-  <target name="clean-site" depends="clean"/>
+  <target name="clean-work" depends="init-props"
+      description="* Clean the project work directories">
+    <delete failonerror="false" dir="${project.temp-dir}"/>
+    <delete failonerror="false" dir="${project.webapp}"/>
+  </target>
+  <target name="clean" depends="clean-site,clean-work"
+      description="* Clean all directories and files generated during the build"/>
 
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
