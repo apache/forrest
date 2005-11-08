@@ -64,7 +64,7 @@
     </section>
   </xsl:template>
   <xsl:template match="forrest:contract">
-    <xsl:param name="theme" select="default"/>
+    <xsl:param name="theme" select="common"/>
     <xsl:choose>
       <xsl:when test="$requestedContract!='false'">
         <section id="{@name}">
