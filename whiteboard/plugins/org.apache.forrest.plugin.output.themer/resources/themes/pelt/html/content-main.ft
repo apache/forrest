@@ -86,6 +86,11 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:template>
+      <xsl:template match="@*|*|text()|processing-instruction()" priority="-1">
+        <xsl:copy>
+          <xsl:apply-templates select="@*|*|text()|processing-instruction()"/>
+        </xsl:copy>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
