@@ -31,6 +31,11 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="d:group[d:import]">
+    <!-- ignore groups with only imports -->
+    <xsl:apply-templates/>
+  </xsl:template>
+  
   <xsl:template match="d:import">
     <xi:include>
       <xsl:attribute name="href"><xsl:value-of select="$publisherURL"/>blob?documentId=<xsl:value-of select="@docId"/>&amp;version=live&amp;partType=1</xsl:attribute>
