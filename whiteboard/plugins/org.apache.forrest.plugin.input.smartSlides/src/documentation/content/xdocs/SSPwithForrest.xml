@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD SmartSlides Presentation V1.0//EN" "http://forrest.apache.org/relaxng/smartslides-v10.rnc">
+<presentation>
+    <metadata>
+        <title>Single Source Publishing with Apache Forrest</title>
+        <abstract>
+            <para>Apache Forrest harnesses the power of Apache Cocoon to build a single source publishing framework,
+                based on common standards (xml).</para>
+            <para> It is easy to use and extend to suit a wide variety of publishing needs.</para>
+            <bulletList>
+                <item>Learn how to get started with Forrest in few easy steps.</item>
+                <item>Take a closer look at the design concepts behind Forrest.</item>
+                <item> See that it can be easy to publish a single document to very different target media (Web, print,
+                    speech, presentation slides) in a consistent and uniform way.</item>
+                <item>Find out about 'smart' slide presentions you can create with Forrest.</item>
+                <item>Take a tour of input-plugins for OpenOffice and other common formats learning how to integrate
+                    different document- and data sources in a common corporate design.</item>
+                <item>Discover Forrest's potential to quickly embed dynamic data from local and remote systems.</item>
+            </bulletList>
+        </abstract>
+        <author>
+            <fullName>Ferdinand Soethe</fullName>
+            <email>ferdinand@apache.org</email>
+        </author>
+        <author>
+            <fullName>Ross Gardler</fullName>
+            <email>rgardler@apache.org</email>
+        </author>
+        <created>2005-07-20</created>
+        <updates>
+            <updatedby>Ferdinand Soethe</updatedby>
+            <changeDate>2005-10-24</changeDate>
+        </updates>
+        <presenter>
+            <fullName>Ferdinand Soethe</fullName>
+            <email>ferdinand@apache.org</email>
+        </presenter>
+    </metadata>
+    <content>
+        <chapter title="Introduction">
+            <page title="Welcome" showOnlyFor="slides">
+                <heading>Welcome </heading>
+                <para>Good afternoon and welcome to our presentation<br />"<PresentationTitle />" </para>
+                <Presenters />
+            </page>
+            <page title="SSP in a nutshell">
+                <heading>Single Source Publishing?</heading>
+                <para>Single Source Publishing ...</para>
+                <bulletList>
+                    <item>is about creating content for different target media from just a single source (document),</item>
+                    <item>has the potential to <bulletList>
+                            <item>improve media quality,</item>
+                            <item>enhance author's satisfaction and</item>
+                            <item>save you time and money.</item>
+                        </bulletList>
+                    </item>
+                </bulletList>
+            </page>
+            <page title="Goals of this Session">
+                <heading>Goals of this Session</heading>
+                <para>In this session we&apos;ll</para>
+                <bulletList>
+                    <item>talk about Apache Forrest, the affordable publishing-solution,</item>
+                    <item>show you how simple it is to get started,</item>
+                    <item>explain the power in Forrest&apos;s architecture and</item>
+                    <item>give you a tour of useful applications.</item>
+                </bulletList>
+            </page>
+            <page title="About Ferdinand">
+                <heading>Here for You today ...</heading>
+                <para>Ferdinand Soethe</para>
+                <para>
+                    <image id="ferdinandsphoto" url="images/ferdinand.jpg" alternativeText="Ferdinand's photo" />
+                </para>
+                <bulletList class="incremental">
+                    <item>Systems Analyst, Technical Writer and Consultant</item>
+                    <item>Committer and Member of Forrest PMC</item>
+                    <item>Currently working on the Smart Presentations PlugIn <todo assignedTo="fso">add url to plugin
+                            and raw site</todo>
+                    </item>
+                </bulletList>
+                <para class="clearBoth" />
+                <addlInfo title="Who can I ask?">
+                    <para>Fell free to contact me privately by email (<xref url="mailto:ferdinand@apache.org"
+                            >ferdinand@apache.org</xref>). Post questions about Apache Forrest to one of the Apache
+                        Forrest project mailing lists (<xref url="http://forrest.apache.org/mail-lists.html"
+                            >http://forrest.apache.org/mail-lists.html</xref>)</para>
+                </addlInfo>
+            </page>
+            <page title="Agenda" class="incremental">
+                <bulletList>
+                    <item>
+                        <para>Presentation (40 minutes)</para>
+                        <TOC />
+                    </item>
+                    <item>Questions &amp; Answers (10 minutes) <talk>
+                            <bulletList>
+                                <item>Suggest ways to participate</item>
+                                <item>How and when to ask questions</item>
+                            </bulletList>
+                        </talk>
+                    </item>
+                </bulletList>
+            </page>
+        </chapter>
+        <chapter title="Publishing Facts 2005">
+            <page title="The WYSIWYG-Trap">
+                <talk>Let&apos;s talk about some facts of publishing today:</talk>
+                <bulletList>
+                    <item>
+                        <para>Hardly any word processing software lives up to the promise</para>
+                        <talk>
+                            <bulletList>
+                                <item>You rarely see what you will get.</item>
+                                <item>Tools that deliver to the promise are expensive and require professional type
+                                    setting knowledge</item>
+                            </bulletList>
+                        </talk>
+                    </item>
+                    <item>
+                        <para>Writing and typesetting often are incompatible skills</para>
+                        <talk>
+                            <bulletList>
+                                <item>Few authors create perfect layouts</item>
+                                <item>Content (and budget) often suffers.</item>
+                            </bulletList>
+                        </talk>
+                    </item>
+                    <item>
+                        <para>WYSIWYG-Documents translate poorly to other media</para>
+                        <talk>Let me show you some examples from exporting a word document.</talk>
+                    </item>
+                </bulletList>
+                <addlInfo title="WYSIWYG: Success or Failure">
+                    <para>Wikipedia has the following <xref url="http://en.wikipedia.org/wiki/Wysiwyg">entry for
+                        WYSIWYG</xref>:</para>
+                    <bulletList>
+                        <item>
+                            <para>A description of a user interface that allows the user to view the end result while
+                                the document or graphic character is being created.<br /> For example, a user can see on
+                                screen how a document will look when printed.</para>
+                        </item>
+                        <item>Allows the user to concentrate entirely on how the content should appear.</item>
+                        <item>Also refers to the ability of modifying the layout of a document without having to type
+                            (and remember) names of layout commands.</item>
+                        <item>Also used to describe specifically a web-page creation program in which the user creates
+                            the web page visually, while the program generates the HTML for it. Often users can also
+                            edit this HTML if they so desire.</item>
+                    </bulletList>
+                    <para>WYSIWYG, is becoming increasingly difficult to realise. This is partly because we often want
+                        to use the same content in different environments. To reuse content in a WYSIWYG environment
+                        usually means one has to re-edit the layout for each publication. Furthermore, using the same
+                        tool for content editing and layout means that the writer of the content must also play the role
+                        of layout designer. Two skills that are rarely present in any one individual.</para>
+                    <para>Where WYSIWYG is useful is in single use documents that are unlikely to be further processed
+                        in any way, perhaps for a quick, informal letter to a friend. However, in the business
+                        environment it is unusual to create content that will not need to be further processed.</para>
+                    <para>For further discussion about the history of WYSIWYG and a discussion of its strengths and
+                        weakness see <xref url="http://www.ideography.co.uk/library/seybold/WYSIWYG.html">What has
+                            WYSIWYG done to us? (http://www.ideography.co.uk/library/seybold/WYSIWYG.html)</xref>, first
+                        published in 1996. The author observes:</para>
+                    <para>
+                        <em>how we were seduced by WYSIWYG&apos;s illusion of control and how we lowered our
+                            expectations and typographic standards and became deeply confused about who in publishing is
+                            supposed to do what.</em>
+                    </para>
+                    <para>He goes on to conclude:</para>
+                    <para>
+                        <em>Good typography requires a lot more than good-quality typefaces. It also requires improved
+                            composition algorithms within publishing software -- both for paper and for the Web.</em>
+                    </para>
+                    <para>It is interesting to read this paper today, nearly ten years later. The majority of issues and
+                        problems identified in that paper are still of great concern. In fact, with the growth of the
+                        Web Publishing and "user level" tools for "easy" "publishing" the issues raised within become
+                        even more important.</para>
+                </addlInfo>
+            </page>
+            <page title="Examples of HTML Export problems with Microsoft Word">
+                <todo>show document and result side by side</todo>
+                <bulletList>
+                    <item>
+                        <para>
+                            <xref url="images/word_export_browser_screenshot1.jpg">Table Of Contents Become
+                            Meaningless</xref>
+                        </para>
+                    </item>
+                    <item>
+                        <para>
+                            <xref url="images/word_export_browser_screenshot2.jpg">Inexplicable Whitespace
+                            Inserted</xref>
+                        </para>
+                    </item>
+                    <item>
+                        <para>
+                            <xref url="images/word_export_browser_screenshot3.jpg">Bad Layout of Objects</xref>
+                        </para>
+                    </item>
+                    <item>
+                        <para>
+                            <xref url="images/word_export_mixed_content_and_style.jpg">Mixing of Content and Style
+                                Information</xref>
+                        </para>
+                    </item>
+                </bulletList>
+                <talk>
+                    <bulletList>
+                        <item>dangers of all the extra info that MSWORD includes in its html-files</item>
+                        <item>State: HTML-Export is not Web-publishing</item>
+                    </bulletList>
+                </talk>
+                <addlInfo title="Additional Information">
+                    <para>Here are just a few examples from a single Microsoft Word Document exported as an HTML page
+                        using the latest editition of MS Word. This document was pulled randomly from the Internet to
+                        illustrate the dangers of using a word processor to create content intended for use in any
+                        environment other than the originating word processor.</para>
+                    <section title="Table Of Contents Become Meaningless">
+                        <para>When a word processor creates a tables of contents it usually inserts a special marker
+                            into the content itself indicating that the contents should be displayed at the given point.
+                            However, this is not always the appropriate location or method for creating a table of
+                            contents.</para>
+                        <image class="screenshots" url="images/word_export_browser_screenshot1.jpg"
+                            alternativeText="Table of Contents Relevant only to                             Print" />
+                        <para>The screenshot shows how this chosen document has created a table of contents that refers
+                            to the page number that the content appears on. But this is a web page rendering, there are
+                            no page numbers. It would be more appropriate to create a table of contents with hyperlinks
+                            to the relevant section of the web page. Alternatively, we may choose to place the Table of
+                            Contents in the navigation menu of the site. With this HTML export it is impossible to do
+                            this without editing the exported file. This is hardly Single Source Publishing.</para>
+                    </section>
+                    <section title="Inexplicable Whitespace Inserted">
+                        <para>In this screenshot we can see that for some strange reason there is a large chunk of
+                            whitespace inserted between the table header and the table itself. This whitespace cannot be
+                            seen in the original document so clearly, the editor is failing in its goal of WYSIWYG
+                            editing.</para>
+                        <image class="screenshots" url="images/word_export_browser_screenshot2.jpg"
+                            alternativeText="Large  amounts of meningless                             whitespace are
+                            inserted" />
+                    </section>
+                    <section title="Bad Layout of Objects">
+                        <para>In this final screenshot we see an example of the word processors failure to translate
+                            layout of objects correctly to the screen. Notice how the Date object is not aligned with
+                            other meta data elements, in fact, it is hidden behind the image. In addition notice how the
+                            text is incorrectly appearing to the right of the image and then wrapping below the image.
+                            In the editing environment this text all appears below the image. Again, a complete failure
+                            of the editor to provide a WYSIWYG environment.</para>
+                        <image url="images/word_export_browser_screenshot3.jpg" alternativeText="Objects overlap One
+                            Another" />
+                    </section>
+                    <section title="Mixing of Content and Style Information">
+                        <para>Not content with mixing style and content (which we now know is a bad thing) it also seems
+                            "necessary" to create hugely complex and bloated embedded style sheets. This creates long
+                            load times and prevents central control over the websites style.</para>
+                        <para>To even further complicate things there is often a wild mix of html-formatting (align),
+                            element-local styles and style-sheet references. This makes it very hard to predict the
+                            outcome or even edit the styles in a consistent way.</para> g </section>
+                </addlInfo>
+            </page>
+            <page title="The Internet Publishing Chore">
+                <para>Publishing to the Internet is a requirement for corporate business and non-profits.</para>
+                <para>It&apos;s complex and costly to design Web-Sites that</para>
+                <bulletList>
+                    <item>look great,</item>
+                    <item>navigate easily,</item>
+                    <item>offer full access with a browser of choice,</item>
+                    <item>and satisfy all standards. </item>
+                </bulletList>
+                <addlInfo title="Web-Site Usability">
+                    <para>A good web interface is based more in website usability than graphical rendering.</para>
+                    <para>A consistent visual design will provide the necessary orientation cues and navigational
+                        controls critically needed by users. A successful implementation of these website usability
+                        techniques will guarantee that your users will find the information they are looking for in the
+                        most efficient and pleasing manner.</para>
+                    <para>Unfortunately, maintaining a consistent look and feel is almost impossible when content
+                        editors are given WYSIWYG tools. Where one editor will use headings classes others will use
+                        bold.</para>
+                </addlInfo>
+            </page>
+            <page title="The tools dilemma">
+                <para>Most Web-Design tools were designed for marketing rather than publishing so they</para>
+                <bulletList>
+                    <item>tweak html until pages look good,</item>
+                    <item>make graphic designers happy</item>
+                    <item>fulfill advertising needs.</item>
+                </bulletList>
+                <para>Unfortunately they usually do <em>not</em></para>
+                <bulletList>
+                    <item>satisfy our criteria,</item>
+                    <item>create good looking print versions</item>
+                </bulletList>
+                <para>
+                    <strong>And easy maintenance is usually low on the list!</strong>
+                </para>
+            </page>
+            <page title="Summary">
+                <heading>In Summary</heading>
+                <para>As a Result:</para>
+                <bulletList>
+                    <item>Most documents are prepared for publishing twice.</item>
+                    <item>The costs are enormous!</item>
+                    <item>The results are poor!</item>
+                </bulletList>
+            </page>
+        </chapter>
+        <chapter title="A Look At Alternatives">
+            <page title="It's Time for a change!">
+                <heading>Time for a change!</heading>
+                <para>After 20 years of FYO (<strong>F</strong>ormat-<strong>Y</strong>our-<strong>O</strong>wn)
+                    it&apos;s time to look for alternatives based on the requirements of a modern publishing
+                    concept:</para>
+                <bulletList>
+                    <item>Authors know the meaning of their text!</item>
+                    <item>Typesetting and Web design are professional tasks!</item>
+                    <item>It makes sense to keep them separate!</item>
+                </bulletList>
+                <para>Think about cost!</para>
+                <para>
+                    <strong>We need to make professional typesetting and Web design affordable!</strong>
+                </para>
+            </page>
+            <page title="Publishing Requirements">
+                <heading>Multimedia Publishing Requirements</heading>
+                <para>This leads to three simple requirements:</para>
+                <bulletList>
+                    <item>Create all media from the same document.</item>
+                    <item>Automatically apply formatting-templates.</item>
+                    <item>Cut costs of professional typesetting and Web design</item>
+                </bulletList>
+                <addlInfo title="Aditional Requirements?">
+                    <para>It can certainly be argued that there are many more requirements in a publishing environment.
+                        However, these are the ones that are not adequately covered by current publishing tools.</para>
+                </addlInfo>
+            </page>
+            <page title="Solution: Single Source Publishing">
+                <heading>Consider Single Source Publishing</heading>
+                <comment>The OpenOffice skill-document for this demo will have a very obvious semantic markup. Since we
+                    started with an office document, I&apos;m coming back to showing an office document as source
+                    here. Also because it reduces the number of &apos;new&apos; things and keeps us focussed on
+                    semantic markup</comment>
+                <para>Single source publishing is about smart document processing:</para>
+                <talk>as you can see in this little demo</talk>
+                <comment>Don&apos;t talk about next bullets points</comment>
+                <bulletList>
+                    <item>
+                        <para>Semantical markup adds meaning to text:</para>
+                        <code>
+                            <strong>&lt;author&gt;</strong><br />
+                            <strong>&lt;fullName&gt;</strong>Ferdinand Soethe<strong>&lt;/fullName&gt;</strong><br />
+                            <strong> &lt;email&gt;</strong>ferdinand@apache.org<strong>&lt;/email&gt;</strong><br />
+                            <strong>&lt;/author&gt;</strong></code>
+                        <para>The author need not think about looks!</para>
+                        <demo>
+                            <bulletList>
+                                <item>Open a skill document in Firefox</item>
+                                <item>Show and explain the semantic markup</item>
+                                <item>Rule-based transformations automatically typeset the information.</item>
+                            </bulletList>
+                        </demo>
+                    </item>
+                    <item>Applying professionally designed templates results in superior layouts. <demo>
+                            <bulletList>
+                                <item>Show the rendered page in a browser and briefly comment on the pdf-icon
+                                        <talk>Explain that Forrest works with XML documents, xsl transformations</talk>
+                                </item>
+                                <item> Open an existing Open Office skill document <talk>XML-documents can be also be
+                                        edited in a familiar environment like OpenOffice.</talk>
+                                </item>
+                            </bulletList>
+                        </demo>
+                    </item>
+                </bulletList>
+                <addlInfo title="Definition: Single source publishing">
+                    <para>From <xref url="http://www.wikipedia.org">Wikipedia</xref>, the free encyclopedia:</para>
+                    <para>Single source publishing or single sourcing allows the same content to be used in different
+                        documents and in various formats.</para>
+                    <para>For example, a software company may have several products with user guides that share a common
+                        procedure, like instructions on how to open a file. Rather than maintain duplicate versions of
+                        this procedure (one in each manual) the manuals can share the content, perhaps flowing it into
+                        the document at the time of publication. Eliminating duplicate content can save translation
+                        costs, reduce maintenance costs, improve consistency and reduce errors.</para>
+                    <para>Single sourcing also allows the creation of documents in various formats from the same
+                        content. For example, a company might use the same content in online help, a printed document
+                        and a Web page. With a single source solution, the company only has to update the one source
+                        file for the content and regenerate the three outputs.</para>
+                    <para>Ideally, a single source solution does not require human intervention to customize the
+                        formatting or content for the various outputs. This can be difficult to achieve without the use
+                        of some kind of content management system.</para>
+                </addlInfo>
+            </page>
+            <page title="Solution: Single Source Publishing ...">
+                <heading>Consider SSP (cont)...</heading>
+                <bulletList>
+                    <item>Customizing the general layouts to create individual site design shares template cost among
+                        many users. <demo>Change location of toc by changing skinconfig</demo>
+                        <talk>Explain that Forrest skins use CSS design.</talk>
+                    </item>
+                    <item>Applying different transformations, information can be served to multiple media. <demo>Show
+                            generated pdf</demo></item>
+                </bulletList>
+                <addlInfo title="Single Source Publishing">
+                    <para>To produce multiple documents from a single source it is necessary to be able to apply
+                        templates to the documents. These templates describe how the document should look. In order to
+                        do this it is necessary for the typesetting system to know what the content represents. For
+                        example, it must be able to tell the difference between a title of a book and the author of that
+                        book. This is known as <xref url="http://en.wikipedia.org/wiki/Markup_language">"markup"</xref>.</para>
+                    <para>Since an author will understand the semantics of the content they write it is possible for the
+                        author to apply a "semantic markup" to the content at the point of authoring. The author need
+                        not concern themselves with how this will be presented in the final published version. This
+                        enables the author to adopt editing tools that suit their needs as a content editor, they need
+                        not encumber themselves with graphical environments designed for typesetting.</para>
+                    <para>Just as the content author is freed from the limitations of a typesetting editor, the
+                        professional typesetter need no longer concern themselves with content and content editing
+                        tools. They need only address the typesetting of content that is correctly "marked up" with its
+                        semantic meaning.</para>
+                    <para>Finally, since the content and the layout is completely separate it is possible to apply
+                        different typesetting templates to the same content. This allows the content to be published in
+                        multiple formats and layouts. Each of these templates will create a version of the content that
+                        is "marked up" with presentational information appropriate for the desired usage of the
+                    content.</para>
+                </addlInfo>
+            </page>
+        </chapter>
+        <chapter title="Facts about Forrest">
+            <page title="Forrest Processing explained">
+                <heading>Behind the Scenes</heading>
+                <comment>show and explain a figure of the document processing in functional steps: input-equalization of
+                    foreign formats-gerating html and pdf</comment>
+                <image url="images/Forrestprocessing.gif" alternativeText="Forrest Processing" />
+                <addlInfo title="Apache Forrest">
+                    <para>Apache Forrest is a publishing framework that transforms input from various sources into a
+                        unified presentation in one or more output formats. The modular and extensible plugin
+                        architecture is based on Apache Cocoon and relevant standards, which separates presentation from
+                        content. Forrest can generate static documents, or be used as a dynamic server, or be deployed
+                        by its automated facility.</para>
+                    <para>For more details see the <xref url="http://wforrest.apache.org">Apache Forrest website
+                            (http://wforrest.apache.org)</xref>.</para>
+                </addlInfo>
+            </page>
+            <page title="SSP and Forrest">
+                <heading>SSP and Forrest</heading>
+                <talk>Summarize the difference between OO taking care of the layout and now the transformation doing it </talk>
+                <para>The general concept of Single Source Publishing is not new.</para>
+                <talk>
+                    <bulletList>
+                        <item>SGML was the start of semantic markup languages in the 1970ies</item>
+                        <item> XML-Technologies as an enabeling technology is more than 10 years old.</item>
+                    </bulletList>
+                </talk>
+                <para>What&apos;s new is Forrest as a free-to-use framework for Single Source Publishing</para>
+                <bulletList>
+                    <item>With a focus on practical application,</item>
+                    <item>quick and easy to get started and</item>
+                    <item>extensible when you need it.</item>
+                </bulletList>
+                <addlInfo title="Apache Forrest: A Single Source Publishing                     Framework">
+                    <para>Forrest is far from a quick and dirty solution. Forrest is built on the world&apos;s
+                        leading XML application framework, Apache Cocoon, which provides advanced users with extremely
+                        powerful publishing capabilities.</para>
+                    <bulletList>
+                        <item>Multiple task-specific source XML formats are provided (e.g. How-To, FAQ, change logs and
+                            todo lists supported natively), together with a range of non-XML formats including Apache
+                            xdocs xml format, plain html documents, some Wiki formats, a subset of DocBook,
+                            OpenOffice.org and MS Office.</item>
+                        <item>Multiple output formats supported, for example HTML and PDF (using Apache FOP).</item>
+                        <item>Native Scalable Vector Graphics rendering. Simply drop the SVG in the appropriate
+                            directory and it will be rendered as PNG.</item>
+                        <item>Transparent inclusion and aggregation of external content, like RSS news feeds.</item>
+                        <item>Full extensibility is possible, for example, databases queries, charting, web services
+                            integration.</item>
+                        <item>Based on Java and XML standards, Forrest is platform-independent, making for a
+                            documentation system that is just as portable as the XML data that it processes.</item>
+                    </bulletList>
+                </addlInfo>
+            </page>
+            <page title="How to get started">
+                <talk>In our next demo we will show you how easy it is to create and publish a new document with Forrest</talk>
+                <bulletList>
+                    <item>
+                        <para>Install Forrest</para>
+                        <talk>
+                            <bulletList>
+                                <item>Installing Forrest is as simple as unpacking the zip-file.</item>
+                                <item> Forrest runs on any system that supports Sun Java </item>
+                            </bulletList>
+                        </talk>
+                    </item>
+                    <item>
+                        <para>Create a new project with Forrest</para>
+                    </item>
+                    <item>
+                        <para>Start Forrest as a server</para>
+                        <demo>Forrest run the server and browse it.</demo>
+                        <talk>Explain the difference of running or compiling</talk>
+                    </item>
+                    <item>
+                        <para>Write a document and add it as a new page</para>
+                        <demo>Take a skill document from resume-dir and drag and drop it into the business site. Explain
+                            that we savaing time.</demo>
+                    </item>
+                    <item>
+                        <para>Show the results in the browser.</para>
+                    </item>
+                </bulletList>
+                <talk>OK, that looked really simple. No wonder we have so many novice users considering Forrest for
+                    their publishing. But how about multiuser and online enviroments?</talk>
+                <demo>Open a daisy document in a pre-existing project and edit it. Show the changes showing in Browser</demo>
+                <addlInfo title="Getting Help to Get Started">
+                    <para>See the <xref url="http://wforrest.apache.org">Apache Forrest website
+                            (http://wforrest.apache.org)</xref> and users mailing list for more details.</para>
+                </addlInfo>
+            </page>
+        </chapter>
+        <chapter title="Forrest Publishing Features">
+            <page title="Forrest Publishing Features">
+                <para>Forrest is full of powerful features right from the start!</para>
+                <para>Out of the box you get</para>
+                <chapterTOC />
+            </page>
+            <page title="Automatic generation of Web and Print Media" listIn="chapterTOC">
+                <demo>Compiles daisy example while fso does this slide</demo>
+                <para>Forrest will automatically generate output in html- (Web) and pdf-Format (Print) from a single
+                    source.</para>
+                <para>In contrast to most legacy systems, this output</para>
+                <bulletList>
+                    <item> looks good, </item>
+                    <item> prints well, </item>
+                    <item>conforms to all important web-standards,</item>
+                    <item>
+                        <para>and is fully functional online and offline.</para>
+                    </item>
+                </bulletList>
+                <demo>
+                    <bulletList>
+                        <item>Open a long document in HTML (these slides) and the pdf along with it. Point out that
+                            is&apos;s truely functional pdf (with clickable toc) and will also serve as high quality
+                            print version if needed(has toc with page numbers , headers, footers etc.)</item>
+                        <item>Show aggregated HTML, different views and aggregated All-site-PDF</item>
+                    </bulletList>
+                </demo>
+                <addlInfo title="A Running Start">
+                    <para>Apache Forrest provides a running start in Single Source Publishing. It will generate a range
+                        of output formats together with any necessary usability content such as navigation menus in web
+                        sites, tables of contents in printed materials. It comes preconfigured with templates for HTML
+                        and Print output formats and will even manage the publication of your content to your chosen
+                        server.</para>
+                </addlInfo>
+            </page>
+            <page title="Site-Navigation" listIn="chapterTOC">
+                <para>Tabs and menues for site-navigation are automatically generated from simple structure for a site
+                    that</para>
+                <demo>Show and explain navigation features.</demo>
+                <bulletList>
+                    <item>looks good,</item>
+                    <item>is easy to understand,</item>
+                    <item>and is tested and works properly with most clients.</item>
+                </bulletList>
+            </page>
+            <page title="Support for Accessibility Requirements" listIn="chapterTOC">
+                <para>Forrest already implements many requirements of accessibility guidlines that</para>
+                <bulletList>
+                    <item> require you to present information in a way that makes access independend of capabilities and
+                        features or your client device, </item>
+                    <item>are or are about to become law in many parts of the world,</item>
+                    <item>and a must for many corporate business sites.</item>
+                </bulletList>
+                <talk>
+                    <para>Accessibilty is not just about access for the handicapped!</para>
+                </talk>
+                <talk>important for all kinds of non discriminating access by legacy applications, search engines, pdas
+                    etc.</talk>
+            </page>
+            <page title="Flexible staging options" listIn="chapterTOC">
+                <para>Forrest output can be presented in a variety of ways</para>
+                <bulletList>
+                    <item>Static HTML for cheap hosting and easy distribution on CD or DVD,</item>
+                    <item>Application Server if you need powerful interactive features,</item>
+                    <item>
+                        <para>Build and deploy robot for time delayed updates of static sites</para>
+                        <talk>A third option is to automatically build and deploy a static site on a regular basis. This
+                            allows content to be managed in a collaborative environment, such as SVN, Wiki or (my mind
+                            is blank, what&apos;s MS&apos; version control). Content developers and editors can
+                            monitor change notifications in order to ensure no errors or innapropriate content is added.
+                            If they take no action all changes will be made to the live server by the "ForrestBot" (an
+                            automated publishing application) after a given time period.</talk>
+                    </item>
+                </bulletList>
+                <addlInfo title="Delivery of Content">
+                    <para>Unique amongst comparable documentation tools, Forrest generates sites that can run both
+                        interactively as a dynamic web application, or as statically rendered pages.</para>
+                    <para>This is important since some publication formats are static by their nature, for example
+                        printed materials will always be static. However, the ability to serve in a dynamic environment
+                        enables realtime updating of sites when content is edited (including otherwise static documents,
+                        such as PDF). Furthermore, it provides a path for website growth: start off small and static,
+                        and if dynamic features (user login, forms processing, runtime data, site search etc) are one
+                        day needed, these can be accommodated by switching to webapp mode.</para>
+                </addlInfo>
+            </page>
+        </chapter>
+        <chapter title="SSP Power in Detail">
+            <page title="Single Source Publishing XXL">
+                <para>Internally Forrest implements SSP in a 21st century software architecture:</para>
+                <talk>In the next section we&apos;ll talk about ...</talk>
+                <bulletList>
+                    <item>Modular architecture with a flexible plugin concept</item>
+                    <item>
+                        <para>Separate presentation layer and separation of concerns</para>
+                    </item>
+                    <item>
+                        <para>Commitment to platform independence and common standards</para>
+                    </item>
+                </bulletList>
+                <chapterTOC />
+            </page>
+            <page title="Extensibility through PlugIns">
+                <comment>Show the first figure again and show the plugins in it while explaining the roles of plugins.
+                    If possible we&apos;ll have an embedded forrest in the page to show the features </comment>
+                <demo>Ross brings up the diagramm and fso shows three types of plugins in the diagram.</demo>
+                <bulletList>
+                    <item>Input-plugins to make use of files in many common data formats.</item>
+                    <item>Output-plugins to present your content in various common formats.</item>
+                    <item>Extend functionality with internal plugins to meet authors needs.</item>
+                </bulletList>
+                <addlInfo title="Extensibility">
+                    <para>Forrest, at its core, is nothing more than a framework for processing XML documents. However,
+                        it has a plugin mechanism that allows features to be added by simply installing any number of
+                        plugins. Plugins are installed simply by adding their name to your projects configuration.</para>
+                    <para>There are three types of plugin:</para>
+                    <bulletList>
+                        <item>
+                            <para>Input Plugins<br /> These read in a file of a specific format, for example, Docbook or
+                                MS Office and convert them to a format usable by Apache Forrest</para>
+                        </item>
+                        <item>
+                            <para>Output Plugins<br /> These take the processed files output by Forrest core and convert
+                                them into some rendered format. For example XHTML, PDF or plain Text.</para>
+                        </item>
+                        <item>
+                            <para>Internal Plugins<br /> Extend the internal processing of the data. Internal plugins
+                                perform functions like building site navigation structures.</para>
+                        </item>
+                    </bulletList>
+                    <para>The functionality of Apache Forrest can be extended almost limitlessly. The project maintains
+                        a list of Plugins (<xref url="http://wforrest.apache.org">Apache Forrest website
+                            (http://wforrest.apache.org)</xref>) that have been complete or are in development. We are
+                        also aware of projects that have built plugins to do things such as execute database queries,
+                        read electronic sensors and perform periodic updates of sections of the content.</para>
+                    <para>Note: Plugins are a new feature of the most recent release of Forrest. The project is
+                        currently extracting functionality from the core into plugins in order to enable users to build
+                        the document publishing system that satisfies their individual needs. However, this is an
+                        ongoing process and at the time of writing some functionality scheduled to be moved into plugins
+                        still remains in core. This simply means that you may have some features you don&apos;t need
+                        as part of your initial download.</para>
+                </addlInfo>
+            </page>
+            <page title="Skinnable Interface">
+                <para>Forrest&apos;s keeps site design separate from content (separation of concerns)</para>
+                <bulletList>
+                    <item>Content authors don&apos;t have to worry about looks:
+                            <code><![CDATA[ <skill level="advanced, BSc">Internet Technologies</skill> ]]></code>
+                    </item>
+                    <item>Designers develop and test new looks without interfering with content creation.</item>
+                    <item>New skins can be applied to all documents in a flash. <demo>Show screenshots of skins and
+                            sites</demo>
+                    </item>
+                </bulletList>
+                <addlInfo title="Real Life Skinning Applications">
+                    <para>Output formats can be "skinned" that is, the look and feel can be changed quickly and easily.
+                        As with plugins. The skins are external units of functionality and can be packaged and
+                        downloaded as and when needed. Alternatively, users can develop their own skins consistent with
+                        corporate branding.</para>
+                    <section title="Some Example Skins Developed By Forrest Users">
+                        <section title="http://www.verit.de/">
+                            <image id="skinShots1" url="images/skin_verit.gif" alternativeText="verit skin" />
+                        </section>
+                        <section title="http://www.xmlbelux.be/">
+                            <image id="skinShots2" url="images/skin_xmlbelux.gif" alternativeText="XML Belux
+                                skin" />
+                        </section>
+                        <section title="http://www.dream-models.com">
+                            <image id="skinShots3" url="images/skin_dream_models.gif" alternativeText="Dream
+                                Models skin" />
+                        </section>
+                        <section title="http://www.outerthought.net">
+                            <image id="skinShots4" url="images/skin_outerthought.gif" alternativeText="Outerthought
+                                skin" />
+                        </section>
+                        <section title="http://cese.sourceforge.net">
+                            <image id="skinShots5" url="images/skin_cese.gif" alternativeText="CESE skin" />
+                        </section>
+                    </section>
+                </addlInfo>
+            </page>
+        </chapter>
+        <chapter title="Forrest for (Your) Business">
+            <page title="Making the most of Forrest and SSP ...">
+                <para>A few tips for a good start:</para>
+                <chapterTOC />
+            </page>
+            <page title="Forrest Licensing" listIn="chapterTOC">
+                <comment>skip this slide if running out of time.</comment>
+                <para>What does the Apache License mean?</para>
+                <bulletList>
+                    <item>You can use the Forrest free of charge! <talk>Great!</talk>
+                    </item>
+                    <item>It is OK to use for commercial projects (with very few limitations). </item>
+                    <item>Your extensions and modifications will not have to become Open Source.</item>
+                    <item>
+                        <para>You could even create new commercial Software based on Forrest. </para>
+                        <talk>Even better!</talk>
+                    </item>
+                </bulletList>
+                <talk>
+                    <para>You get Forrest &apos;as is&apos; There are no guarantees!<br /> This needs a closer
+                        look!</para>
+                </talk>
+                <addlInfo title="Apache Software License (Version 2.0)">
+                    <para>
+                        <xref url="http://www.apache.org/licenses/LICENSE-2.0"
+                            >http://www.apache.org/licenses/LICENSE-2.0</xref> (TXT or HTML)</para>
+                    <para>The 2.0 version of the Apache License was approved by the ASF in 2004. The goals of this
+                        license revision have been to reduce the number of frequently asked questions, to allow the
+                        license to be reusable without modification by any project (including non-ASF projects), to
+                        allow the license to be included by reference instead of listed in every file, to clarify the
+                        license on submission of contributions, to require a patent license on contributions that
+                        necessarily infringe the contributor&apos;s own patents, and to move comments regarding
+                        Apache and other inherited attribution notices to a location outside the license terms (the
+                        NOTICE file).</para>
+                    <para>The result is a license that is supposed to be compatible with other open source licenses
+                        while remaining true to the original goals of the Apache Group and supportive of collaborative
+                        development across both nonprofit and commercial organizations. The Apache Software Foundation
+                        is still trying to determine if this version of the Apache License is compatible with the GPL.</para>
+                    <para>All packages produced by the ASF are implicitly licensed under the Apache License, Version
+                        2.0, unless otherwise explicitly stated. More developer documentation on how to apply the Apache
+                        License to your work can be found in Applying the Apache License, Version 2.0.</para>
+                </addlInfo>
+            </page>
+            <page title="Rules of Open Source" listIn="chapterTOC">
+                <heading>Rules of Open Source</heading>
+                <comment>skip this slide if running out of time.</comment>
+                <para>As Open Source development is a volunteer effort, it follows other rules than Closed Source
+                    Software:</para>
+                <bulletList>
+                    <item>You are free to use what is already there ...<bulletList>
+                            <item>and welcome to add what is missing,</item>
+                            <item>or spend some money (saved on the license) to have someone else add it for you.</item>
+                        </bulletList>
+                    </item>
+                </bulletList>
+                <bulletList>
+                    <item>Forrest - just like Slosed Source Software - has bugs ... <bulletList>
+                            <item>but we are committed to fixing them,</item>
+                            <item>and have no sales department to push us into hasty releases.</item>
+                        </bulletList>
+                    </item>
+                </bulletList>
+            </page>
+            <page title="Getting Bug Fixes and Support" listIn="chapterTOC">
+                <heading>Getting Bug Fixes and Support</heading>
+                <bulletList>
+                    <item>
+                        <para>There is no Forrest hotline ...</para>
+                        <bulletList>
+                            <item>
+                                <para>but a mailing lists (<xref url="http://forrest.apache.org/mail-lists.html"
+                                        >http://forrest.apache.org/mail-lists.html</xref>) to address any question You
+                                    have about Forrest,</para>
+                            </item>
+                            <item> to discuss Your questions with the people who build forrest ,</item>
+                            <item>and a large helpful community.</item>
+                        </bulletList>
+                    </item>
+                </bulletList>
+                <bulletList>
+                    <item>
+                        <para>If a bug is bugging you ...</para>
+                        <bulletList>
+                            <item>do something about it: help us fix it ... </item>
+                            <item>and you will find a lot of people chipping in.</item>
+                        </bulletList>
+                    </item>
+                </bulletList>
+                <addlInfo title="Contributing">
+                    <para> The Forrest Project is an <xref url="http://www.opensource.org/">Open Source
+                            (http://www.opensource.org/)</xref> volunteer project released under a very liberal license.
+                        This means there are many ways to contribute to the project - either with direct participation
+                        (coding, documenting, answering questions, proposing ideas, reporting bugs, suggesting
+                        bug-fixes, etc..) or by resource donations (money, time, publicity, hardware, software,
+                        conference presentations, speeches, etc...). </para>
+                    <para> To begin with, we suggest you to subscribe to the Forrest mailing lists (<xref
+                            url="http://forrest.apache.org/mail-lists.html"
+                        >http://forrest.apache.org/mail-lists.html</xref>) (follow the link for information on how to
+                        subscribe and to access the mail list archives). Listen-in for a while, to hear how others make
+                        contributions. </para>
+                    <para>You can get your local working copy of the <xref
+                            url="http://svn.apache.org/viewcvs.cgi/forrest/trunk/">latest and greatest code</xref>
+                        (which you find in the Forrest module in the SVN code repository. Review the todo list, choose a
+                        task (or perhaps you have noticed something that needs patching). Make the changes, do the
+                        testing, generate a patch, and post to the developer mailing list. (Do not worry - the process
+                        is easy and explained on the Forrest website.) </para>
+                    <para> Document writers are usually the most wanted people so if you like to help but
+                        you&apos;re not familiar with the innermost technical details, don&apos;t worry: we have
+                        work for you! </para>
+                    <bulletList>
+                        <item>
+                            <para>
+                                <xref url="http://www.apache.org/foundation/how-it-works.html">How The Apache Software
+                                    Foundation Works (http://www.apache.org/foundation/how-it-works.html)</xref>
+                            </para>
+                        </item>
+                        <item>
+                            <para>
+                                <xref url="http://forrest.apache.org/contrib.html">Contributing to Forrest
+                                    (http://forrest.apache.org/contrib.html)</xref>
+                            </para>
+                        </item>
+                        <item>
+                            <para>
+                                <xref url="http://forrest.apache.org/mail-lists.html">Forrest mailing lists
+                                    (http://forrest.apache.org/mail-lists.html)</xref>
+                            </para>
+                        </item>
+                    </bulletList>
+                </addlInfo>
+            </page>
+            <page title="Is Forrest a Reliable Platform?" listIn="chapterTOC">
+                <heading>A reliable platform?</heading>
+                <para>Trust Forrest with mission critical business applications if you follow a few simple rules:</para>
+                <bulletList>
+                    <item>
+                        <para>Plan to spend some of the license fees saved</para>
+                        <talk>to fix bugs or add features.</talk>
+                    </item>
+                    <item>
+                        <para>Don&apos;t assume that <strong>O</strong>pen <strong>S</strong>ource
+                            <strong>S</strong>oftware is easier to learn.</para>
+                        <talk>Spend money on proper training</talk>
+                    </item>
+                    <item>
+                        <para>Take your time introducing Forrest.</para>
+                        <talk>
+                            <para>to get to know Forrest and determine if the current version will suit your needs.
+                                <br />Talk about current version numbers</para>
+                        </talk>
+                    </item>
+                    <item>
+                        <para>Help us make Forrest better.</para>
+                        <talk>
+                            <para>there are many ways to contribute ...<br />We are looking for CSS experts!</para>
+                        </talk>
+                    </item>
+                </bulletList>
+            </page>
+        </chapter>
+        <page title="Conclusion">
+            <heading>Thank You!</heading>
+            <talk>
+                <para>This concludes our presentation<br /> Thanks for your time. We&apos;ll now take Your
+                    questions.</para>
+            </talk>
+            <bulletList>
+                <item>Presentation</item>
+                <item>
+                    <para><strong>Questions &amp; Answers</strong> (20 min)</para>
+                </item>
+            </bulletList>
+        </page>
+        <page title="Time for Questions">
+            <heading>Time for Your Questions</heading>
+            <para>We have only 10 minutes</para>
+            <bulletList>
+                <item>Try to keep it short</item>
+                <item>Give others a chance to ask there questions</item>
+            </bulletList>
+            <para>For further information check out:</para>
+            <bulletList>
+                <item>
+                    <para>
+                        <xref url="http://forrest.apache.org">http://forrest.apache.org</xref>
+                    </para>
+                </item>
+                <item>
+                    <para>
+                        <xref url="http://forrest.apache.org/mail-lists.html"
+                        >http://forrest.apache.org/mail-lists.html</xref>
+                    </para>
+                </item>
+            </bulletList>
+        </page>
+        <page title="leftovers" showOnlyFor="slides">
+            <heading>Forrest Configurations</heading>
+            <para>The default behaviour of Forrest is to publish to the web and to print. However, an increasing range
+                of extensions are making it possible to publish to other media, such as Eclipse Help files or RSS. We
+                will discuss these extensions later. </para>
+            <para />
+        </page>
+    </content>
+</presentation>
