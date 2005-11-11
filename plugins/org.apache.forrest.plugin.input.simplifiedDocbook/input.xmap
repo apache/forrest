@@ -26,6 +26,9 @@
   <map:components>
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+        <sourcetype name="docbook-v4.3">
+          <document-declaration public-id="-//OASIS//DTD DocBook XML V4.3//EN" />
+        </sourcetype>
         <sourcetype name="docbook-v4.2">
           <document-declaration public-id="-//OASIS//DTD DocBook XML V4.2//EN" />
         </sourcetype>
@@ -50,25 +53,25 @@
           <map:parameter name="parameter-selector-test" value="{sourcetype}" />
 
           <map:when test="docbook-v4.1.2">
-            <map:generate src="{project:content.xdocs}{../../1}.xml" />
+            <map:generate src="{lm:project.{../../1}.xml}" />
             <map:transform src="resources/stylesheets/sdocbook2document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
           
           <map:when test="docbook-v4.2">
-            <map:generate src="{project:content.xdocs}{../../1}.xml" />
+            <map:generate src="{lm:project.{../../1}.xml}" />
             <map:transform src="resources/stylesheets/sdocbook2document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
 
           <map:when test="sdocbook-v1.0">
-            <map:generate src="{project:content.xdocs}{../../1}.xml" />
+            <map:generate src="{lm:project.{../../1}.xml}" />
             <map:transform src="resources/stylesheets/sdocbook2document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
 
           <map:when test="sdocbook-v4.1.2.5">
-            <map:generate src="{project:content.xdocs}{../../1}.xml" />
+            <map:generate src="{lm:project.{../../1}.xml}" />
             <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.simplifiedDocbook/resources/stylesheets/sdocbook2document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
@@ -81,7 +84,7 @@
     <map:pipeline internal="true">
       <map:match pattern="**.xml">
         <map:call resource="transform-to-document">
-          <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
+          <map:parameter name="src" value="{lm:project.{1}.xml}" />
         </map:call>
       </map:match>
     </map:pipeline>
