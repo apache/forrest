@@ -44,7 +44,7 @@
       
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
-        <map:generate type="file" src="{project:status}" />
+        <map:generate type="file" src="{lm:project.status}" />
         <map:transform src="{lm:projectInfo.transform.changes.document}" >
           <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
           <map:parameter name="path" value="{1}{2}"/>
@@ -63,13 +63,13 @@
       </map:match>
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)todo.xml$">
-        <map:generate type="file" src="{project:status}" />
+        <map:generate type="file" src="{lm:project.status}" />
         <map:transform src="{lm:projectInfo.transform.todo.document}" />
         <map:serialize type="xml-document"/>
       </map:match>
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)releaseNotes_(.*).xml$">
-        <map:generate type="file" src="{project:status}" />
+        <map:generate type="file" src="{lm:project.status}" />
         <map:transform src="{lm:projectInfo.transform.releaseNotes.document}">
           <map:parameter name="versionNumber" value="{3}"/>
         </map:transform>
