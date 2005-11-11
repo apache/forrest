@@ -27,16 +27,16 @@
   
     <map:pipeline>
       <map:match pattern="*.rss.xml">
-        <map:generate src="{project:content.xdocs}/{1}.xml"/>
-        <map:transform src="resources/stylesheets/feedDesc2RSS20.xsl"/>
-        <map:transform src="resources/stylesheets/rss2document.xsl"/>
+        <map:generate src="{lm:project.{1}.xml}"/>
+        <map:transform src="{lm:feeder.transform.feedDesc.RSS20}"/>
+        <map:transform src="{lm:feeder.transform.rss.document}"/>
         <map:serialize type="xml"/>
       </map:match>
       
       <map:match pattern="**/*.rss.xml">
-        <map:generate src="{project:content.xdocs}/{1}/{2}.xml"/>
-        <map:transform src="resources/stylesheets/feedDesc2RSS20.xsl"/>
-        <map:transform src="resources/stylesheets/rss2document.xsl"/>
+        <map:generate src="{lm:project.{1}/{2}.xml}"/>
+        <map:transform src="{lm:feeder.transform.feedDesc.RSS20}"/>
+        <map:transform src="{lm:feeder.transform.rss.document}"/>
         <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
