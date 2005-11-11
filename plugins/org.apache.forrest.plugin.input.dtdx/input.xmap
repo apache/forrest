@@ -40,11 +40,11 @@ Uses       :  resources/schema/dtd/*.dtd
   <map:pipelines>
     <map:pipeline>
       <map:match type="regexp" pattern="^(.*?)([^/]*)\.dtdx\.xml$">
-        <map:generate type="nekodtd" src="{forrest:context}/resources/schema/dtd/{2}.dtd">
+        <map:generate type="nekodtd" src="{lm:forrest.schema.{2}}">
           <map:parameter name="config-class" value="org.cyberneko.dtd.DTDConfiguration" />
         </map:generate>
-        <map:transform src="resources/stylesheets/dtdx2flat.xsl" />
-        <map:transform src="resources/stylesheets/flat2document.xsl" />
+        <map:transform src="{lm:dtdx.transform.dtdx.flat}" />
+        <map:transform src="{lm:dtdx.transform.flat-to-document}" />
         <map:serialize type="xml-document"/>
       </map:match>
     </map:pipeline>
