@@ -220,9 +220,16 @@ $Revision: 1.13 $
       </map:match>
 
       <map:match pattern="**/images/**.*">
-        <map:read src="{lm:project.images.{1}/{2}.{3}}" mime-type="image/{3}" />
+        <map:select type="exists">
+          <map:when test="{lm:project.images.{1}/images/{2}.{3}}">
+            <map:read src="{lm:project.images.{1}/images/{2}.{3}}" mime-type="image/{3}" />
+          </map:when>
+          <map:when test="{lm:project.images.{2}.{3}}">
+            <map:read src="{lm:project.images.{2}.{3}}" mime-type="image/{3}" />
+          </map:when>
+        </map:select>
       </map:match>
-
+      
       <map:match pattern="**.png">
         <map:select type="exists">
           <map:when test="{lm:project.images.{1}.svg}">
