@@ -26,14 +26,15 @@
   <map:resources>
     <map:resource name="file-resolver">
       <map:select type="exists">
-        <map:when test="{project:content.xdocs}{uri}.sxw">
+        <map:when test="{lm:project.{uri}.sxw}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate src="resources/stylesheets/aggregates/openoffice.xml"/>
-            <map:transform src="resources/stylesheets/aggregates/openoffice-document.xsl">
-              <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxw"/>
+            <!-- FIXME: use the OOo generator as seen in the resume plugin -->
+            <map:generate src="{lm:OOo.bootstrap}"/>
+            <map:transform src="{lm:OOo.transform.xsl.aggregates/openoffice-document}">
+              <map:parameter name="src" value="{lm:project.{1}{2}.sxw}"/>
             </map:transform>
             <map:transform type="cinclude"/>
-            <map:transform src="resources/stylesheets/openoffice-writer2forrest.xsl">
+            <map:transform src="{lm:OOo.transform.openoffice-writer.forrest}">
               <map:parameter name="filename" value="{2}" />
               <map:parameter name="extension" value="sxw" />
             </map:transform>
@@ -41,14 +42,15 @@
           </map:match>
         </map:when>  
         
-        <map:when test="{project:content.xdocs}{uri}.sxi">
+        <map:when test="{lm:project.{uri}.sxi}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate src="resources/stylesheets/aggregates/openoffice.xml"/>
-            <map:transform src="resources/stylesheets/aggregates/openoffice-document.xsl">
-              <map:parameter name="src" value="{project:content.xdocs}{1}{2}.sxi"/>
+            <!-- FIXME: use the OOo generator as seen in the resume plugin -->
+            <map:generate src="{lm:OOo.bootstrap}"/>
+            <map:transform src="{lm:OOo.transform.xsl.aggregates/openoffice-document}">
+              <map:parameter name="src" value="{lm:project.{1}{2}.sxi}"/>
             </map:transform>
             <map:transform type="cinclude"/>
-            <map:transform src="resources/stylesheets/openoffice-impress2forrest.xsl">
+            <map:transform src="{lm:OOo.transform.openoffice-impress.forrest}">
               <map:parameter name="filename" value="{2}" />
               <map:parameter name="extension" value="sxi" />
             </map:transform>

@@ -39,7 +39,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   exclude-result-prefixes="office meta  table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
 
-  <xsl:import href="openoffice-common2forrest.xsl"/>
+  <xsl:import href="openoffice-common-to-forrest.xsl"/>
 
   <!--+
       | create the body 
