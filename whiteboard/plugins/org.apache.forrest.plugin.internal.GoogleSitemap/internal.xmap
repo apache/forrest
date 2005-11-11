@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -501,7 +501,7 @@ $Revision: 1.12 $
             <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
             <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
             <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-            <map:transform src="{forrest:context}/resources/stylesheets/declare-broken-site-links.xsl" />
+            <map:transform src="{lm:transform.html.broken-links}"/>
             <map:serialize type="xml" />
           </map:when>
         </map:select>
@@ -514,7 +514,7 @@ $Revision: 1.12 $
         <map:transform type="idgen"/>
         <map:transform type="xinclude"/>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-        <map:transform src="{forrest:context}/resources/stylesheets/declare-broken-site-links.xsl" />
+        <map:transform src="{lm:transform.html.broken-links}"/>
         <map:call resource="skinit">
           <map:parameter name="type" value="transform.xdoc.html"/>
           <map:parameter name="path" value="{1}{2}.html"/>
@@ -525,7 +525,7 @@ $Revision: 1.12 $
       <map:match pattern="**menu-*.html">
         <map:generate src="cocoon:/{1}book-{2}.html"/>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
-        <map:transform src="{forrest:context}/resources/stylesheets/declare-broken-site-links.xsl" />
+        <map:transform src="{lm:transform.html.broken-links}"/>
         <map:call resource="skinit">
           <map:parameter name="type" value="transform.book.menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
