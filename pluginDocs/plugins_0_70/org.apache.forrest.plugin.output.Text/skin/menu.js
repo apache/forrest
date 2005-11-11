@@ -32,19 +32,17 @@ function SwitchMenu(obj)
     var title = document.getElementById(obj+'Title');
 
     if(obj.indexOf("_selected_")==0&&el.style.display == ""){
-      //nicolaken: doesn't work :-(
-      //title.style.backgroundImage = "url('images/chapter_open.gif')";
       el.style.display = "block";
+      title.className = "pagegroupselected";
     }
 
-    if(el.style.display != "block"){ 
-      //nicolaken: doesn't work :-(
-      //title.style.backgroundImage = 'url([url]images/chapter_open.gif[/url])';
+    if(el.style.display != "block"){
       el.style.display = "block";
-    }else{
-      //nicolaken: doesn't work :-(
-      //title.style.backgroundImage = "url('images/chapter.gif')";
+      title.className = "pagegroupopen";
+    }
+    else{
       el.style.display = "none";
+      title.className = "pagegroup";
     }
   }// end -  if(document.getElementById) 
 }//end - function SwitchMenu(obj)
