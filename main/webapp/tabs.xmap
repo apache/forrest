@@ -26,7 +26,7 @@
     <map:transformers default="xslt">
       <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="tabs">
-          <catalogue id="tabs" name="tabs" location="{project:translations}"/>
+          <catalogue id="tabs" name="tabs" location="{lm:project.translations}"/>
         </catalogues>
         <!-- <untranslated-text>untranslated</untranslated-text-->
         <cache-at-startup>true</cache-at-startup>
@@ -46,7 +46,7 @@
         <map:parameter name="isfaq" value="{notoc}"/>
         <map:parameter name="nopdf" value="{nopdf}"/>
         <map:parameter name="path" value="{path}"/>
-        <map:parameter name="config-file" value="{project:skinconf}"/>
+        <map:parameter name="config-file" value="{lm:project.skinconf}"/>
       </map:transform>
       <map:serialize/>
     </map:resource>
@@ -55,25 +55,15 @@
   <map:pipelines>
     <map:pipeline >
       <map:match pattern="**tab-*.html">
-			 <map:select type="exists">
-				 <map:when test="{project:content.xdocs}tabs.xml">
-				  <map:generate src="{project:content.xdocs}tabs.xml"/>
-			  </map:when>
-        <map:when test="{lm:tabs.xml}">
-          <map:generate src="{lm:tabs.xml}"/>
-        </map:when>
-				<map:otherwise>
-          <map:generate src="{project:content.xdocs}tabs.xml"/>
-				</map:otherwise>
-		 	</map:select>
+        <map:generate src="{lm:project.tabs.xml}"/>
         <map:transform type="xinclude"/>
         <map:select type="config">
           <map:parameter name="value" value="{defaults:i18n}"/>
           <map:when test="true">
             <map:act type="locale">
-              <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
+              <map:transform src="{lm:transform.i18n}"/>
               <map:transform type="i18n">
-	        <map:parameter name="locale" value="{request:locale}"/>
+	              <map:parameter name="locale" value="{request:locale}"/>
               </map:transform>
             </map:act>
           </map:when>
