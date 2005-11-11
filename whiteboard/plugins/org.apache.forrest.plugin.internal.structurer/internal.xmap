@@ -76,7 +76,6 @@
         src="org.apache.cocoon.transformation.LinkRewriterTransformer">
         <link-attrs>href src</link-attrs>
         <schemes>site ext lm</schemes>
-
         <input-module name="lm" />
         <input-module name="site">
           <input-module name="linkmap">
@@ -111,10 +110,6 @@
         src="org.apache.cocoon.serialization.TextSerializer"
         mime-type="text/plain" logger="sitemap.serializer.text" />
     </map:serializers>
-    <map:actions>
-      <map:action name="fallbackResolverAction"
-        src="org.apache.forrest.plugin.internal.view.acting.FallbackResolverAction" />
-    </map:actions>
   </map:components>
   <map:pipelines>
     <map:pipeline>
@@ -123,17 +118,14 @@
         pass-through="true" />
     </map:pipeline>
       <!-- linkmap -->
- <!--FIXME: Uncomment if jxpath is fixed.-->
     <map:pipeline>
       <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes"
         pass-through="true" />
     </map:pipeline>
-
     <map:pipeline>
       <map:mount uri-prefix="" src="themer.xmap" check-reload="yes"
         pass-through="true" /> 
     </map:pipeline>
-
     <!--
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
