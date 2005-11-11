@@ -28,19 +28,25 @@
 
   <audience title="Intended Audience">
 <warning>
-NEED REFACTORING FOR DISPATCHER!!!
+The "Dispatcher" (aka "Views") is new functionality which is still in development phase. That is why it is in the
+"whiteboard" section of the Forrest distribution. This HowTo is a good start but still needs more work.
 </warning>
-<warning>
-"the dispatcher" are new functionality which is still in development phase. That is why it is in the
-"whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs more work.
-</warning>
-
     <p>
       Devs and skin developer that wants to get started with forrest:contract development. 
       To really understand this how-to you need basic and sometimes advanced understanding of 
       the "old fashion" skin development process.
     </p>
+    <note>
+       For the moment we will use a special seed template called seed-v2. We still 
+        need to fix issues of the dispatcher that it really can replace old 
+        fashion skins. Like performance, standalone contracts, other testing output/input formats - using POJO based 
+        processing will help solving this.  All this will ATM happen in the v2 seed-target till the dispatcher will 
+        be realesed to the stable plugins. So make regular updates of your forrest-trunk to keep track.
+    </note>
+    <warning>
+      The way we develope contracts will/may change with introduction of java based processing rather then xsl. Please keep this in mind
+        and help updating the documentation by sending patches. TIA. ;-)
+    </warning>
   </audience>
   
   <purpose title="Purpose">
@@ -53,14 +59,12 @@ This HowTo is a good start but still needs more work.
   <prerequisites title="Prerequisites">
     <ul>
       <li>
-        You have a ready-to-go new seed (newSeed) based on the dispatcher like described in <a href="site:howto/view/install">Install</a>.
-      </li>
-      <li>
-      	This includes as well all additional plugins that are mentioned in <a href="site:howto/view/install">Install views</a>.
+        You have a ready-to-go new seed-v2 (v2) based on the dispatcher like described in <a href="site:howto/dispatcher/install">Install</a>.
       </li>
       <li>
         Reading that how-to is as well a good idea to understand the used directory structure in this how-to.
       </li>
+      <li>Installing a mozilla browser and the forrestbar helps a lot in developing.</li>
     </ul>
   </prerequisites>
 
@@ -70,7 +74,7 @@ This HowTo is a good start but still needs more work.
       consolidation of this thread. It is mainly based on the thread "[RT] Why using views" - 
       in comparison with "old fashion" skins - usecase i18n</note>
     <p>
-      By working on the i18n integration for "pelt" we again encountered the reasons for using views. ;-)
+      By working on the i18n integration for "pelt" we again encountered the reasons for using the dispatcher. ;-)
       The maintenance problem was to change the captions of the skin features (contracts) to enable
       support for i18n. The case is that the <code>site2xhtml.xsl</code> has a lot of repeating code. 
     </p>
@@ -122,36 +126,40 @@ simply do:
         To start a new forrest:contract you can copy the 'blank.ft' from
         <code>org.apache.forrest.plugin.output.themer/resources/themes/common/html/blank.ft</code>. 
       </p>
-      <warning>
-NEED REFACTORING FOR DISPATCHER!!!
-</warning>
       <p>
         The 'blank.ft' is a simple xml file with the following code which you can use to base new contracts 
         on:
       </p>
       <source>
 <![CDATA[<forrest:contract 
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="blank" type="nugget">
   
   <!--NOTE: 
-    When using the blank template as copy-and-paste master,
-    just search and replace 'blank' by the {contract-name}!-->
+    When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
   
   <description>
-    {contract-name} will output {contract-funtion}.
-    This is just a blank contract, it will output *nothing*.
+    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
   </description>
   <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="blank"/>]]>]]&gt;<![CDATA[</usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="blank" inputFormat="xsl" body="false" head="false">
+    format="html" name="blank" inputFormat="xsl" body="false" head="false">
     <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <!--Add here the needed templates-->
+        <!--
+          Add here the needed templates.
+          Remember to set the forrest:template @attributes!
+          -->
+         <!--
+        <xsl:template name="blank-head">
+        </xsl:template>
+        <xsl:template name="blank-body">
+        </xsl:template>
+        -->
     </xsl:stylesheet>
   </forrest:template>
-</forrest:contract>
-]]>
+</forrest:contract>]]>
       </source>
       <p>
         The most important is the name of the contract <code><![CDATA[<forrest:contract name="blank"/>]]></code>. 
@@ -171,21 +179,25 @@ NEED REFACTORING FOR DISPATCHER!!!
       </source>
       <p>
         In the <code><![CDATA[<usage/>]]></code> tag we have to explain how the designer can use 
-        the contract in his view.
+        the contract in his structurer.
       </p>
       <source><![CDATA[<usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]>]]&gt;<![CDATA[</usage>]]>
       </source>
       <p>
         <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
         That leads to the template attribute @body="true" and
-				@head="false". In xhtml a contract can add content to the <![CDATA[<body/>]]> or/and
-				<![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. These values need to be changed when adding an actual template.
+        @head="false". In html a contract can add content to the <![CDATA[<body/>]]> or/and
+        <![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. These values need to be changed when adding an actual template.
         Besides this, a xsl-template needs to indicate this in the naming. A template that adds content to the 
         html body needs to end with "<code>-body</code>"!!!
       </p>
+      <warning>
+        The last paragraph about <![CDATA[<forrest:template name="blank" body="false" head="false">]]> is due to change. 
+        Please be aware that this part of the dispatcher is the main moving target right now!!!
+      </warning>
       <note>
         It is possible to use contracts in different in/output formats. 
-        We are focussing for now on format="xhtml" as output and the inputFormat="xsl".
+        We are focussing for now on format="html" as output and the inputFormat="xsl".
       </note>
       <p>
         A <![CDATA[<forrest:template />]]> has the child <![CDATA[<xsl:stylesheet/>]]> where we can create 
@@ -202,13 +214,13 @@ NEED REFACTORING FOR DISPATCHER!!!
     </section>
     <section id="newContract">
       <title>Create a new contract</title>
-      <fixme author="thorsten">
-        We need to explain basic naming convention for contracts. Like
-        "naming does not say anything about layout position, but functionality of the contract.".
-      </fixme>
+      <note >
+        We use basic naming convention for contracts. Like
+        "naming does not say anything about layout position, but functionality of the contract".
+      </note>
       <p> 
-				Now let us pick up the example we started with and create a "siteinfo-last-published-howto" contract.
-        Save the blank.ft to <code>{project.home}/src/documentation/resources/templates/siteinfo-last-published-howto.ft</code>.
+        Now let us pick up the example we started with and create a "siteinfo-last-published-howto" contract.
+        Save the blank.ft to <code>{project.home}/src/documentation/resources/themes/common/html/siteinfo-last-published-howto.ft</code>.
       </p>
       <p>
         Now the maintenance-optimized code (xpath="/html/body/*") was:
@@ -219,9 +231,9 @@ NEED REFACTORING FOR DISPATCHER!!!
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
 </xsl:template>]]></source>
-			<p>
+      <p>
         In this code we have to do the following steps to use it in our contract:
-			</p>
+      </p>
       <ul>
         <li>Search and replace "siteinfo-last-published" with "siteinfo-last-publish-howto-body"</li>
         <li>Add a "debug string - " to the template</li>
@@ -236,7 +248,7 @@ debug string -
   document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);
  </script>
 </xsl:template>]]></source>
-			<p>Now we have to do some last steps in the siteinfo-last-publish-howto.ft</p>
+      <p>Now we have to do some last steps in the siteinfo-last-publish-howto.ft</p>
       <ul>
         <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
         <li>Add description and usage of the contract</li>
@@ -255,7 +267,7 @@ debug string -
   <forrest:template 
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="xhtml" name="siteinfo-last-published-howto" inputFormat="xsl" body="true" head="false">
+    format="html" name="siteinfo-last-published-howto" inputFormat="xsl" body="true" head="false">
     <xsl:stylesheet version="1.1" 
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -268,26 +280,25 @@ debug string -
 </forrest:contract>]]>
       </source>
     </section>
-    <section id="viewContract">
+    <section id="structurerContract">
       <title>Activating the contract</title>
       <p>
-        To see whether the new contract works we need to add it to our view.
+        To see whether the new contract works we need to add it to our structurer.
         The contract usage contains the contract-tag <code><![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]></code>
-        Please see <a href="site:howto/view/DSL">Getting started with forrest:view DSL</a> for more details.
+        Please see <a href="site:v0.80//howto/dispatcher/structurer">Getting started with the "structurer"</a> for more details.
       </p>
- 			<fixme author="thorsten">
-        Let us now look into advanced features of the dispatcher. 
-        I will write a how-to for advanced contracts soon. :)
-      </fixme>
+       <note>
+        Next to write are parameter-contracts with advanced features of the dispatcher. 
+      </note>
     </section>
   </steps>
   <extension title="Further Reading">
     <p>
-      Congratulations you are now able to work with view contracts. 
-      From here we recommend to read the following How-To's:
+      Congratulations you are now able to work with structurer contracts. 
+      From here we recommend to read the following How-To's (if not already done):
     </p>
     <ul>
-      <li><a href="site:howto/view/DSL">Getting started with forrest:view DSL</a> </li>
+      <li><a href="site:v0.80//howto/dispatcher/structurer">Getting started with the "structurer"</a> </li>
     </ul>
   </extension>
   <feedback title="Feedback">
