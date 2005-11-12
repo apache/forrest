@@ -312,7 +312,6 @@
     
       <section id="register">
         <title>Register the Plugin with Apache Forrest</title>
-        <fixme author="rdg">Describe the plugins.xml file</fixme>
         <fixme author="rdg">Describe making a request of Forrest devs for 
         inclusion</fixme>
       </section>
@@ -345,6 +344,49 @@
         that your only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</warning>
         
+      </section>
+
+      <section id="descriptor">
+        <title>Managing the plugins descriptors</title>
+        <p>
+          The files plugins/plugins.xml and whiteboard/plugins/plugins.xml are
+          the "Plugins Descriptor" files. Each plugin is described with its
+          name, purpose, location, and version information. These descriptors
+          are deployed to the forrest website so that your application can
+          manage its plugins.
+        </p>
+        <p>
+          The Apache Forrest committers manage these files in SVN and publish
+          them as needed. Here are some notes.
+        </p>
+        <p>
+          When a plugin gains new functionality, then it will be dependent on
+          a more recent version of Forrest. Deploy the plugin one final time
+          before implementing the new work. For example, if current release
+          is 0.7 then ...
+        </p>
+        <ul>
+           <li>Review the docs and ensure any version numbers in text are "0.7"</li>
+           <li>Edit the skinconf.xml to ensure that all version numbers are "0.7", e.g. the MOTD.</li>
+           <li>Edit the plugins descriptor to ensure that the "forrestVersion" is 0.7 and that the "version" is appropriate. </li>
+           <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_70"</li>
+           <li>Edit status.xml to set the release date. Ensure that the changes notes are complete.</li>
+        </ul>
+        <p>
+          Now the plugin gains functionality that binds it to 0.8-dev
+          (e.g. converted to use locationmap) so ...
+        </p>
+        <ul>
+           <li>Review the docs and ensure any version numbers in text are
+             "0.8"</li>
+           <li>Edit the skinconf.xml to ensure that all version numbers are
+             "0.8-dev", e.g. the MOTD.</li>
+           <li>Edit the plugins descriptor to ensure that the "forrestVersion" is
+             0.8 and that the "version" is incremented. </li>
+           <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_80"</li>
+           <li>Edit status.xml to add a new section and set the release date.
+             Start adding changes notes.</li>
+        </ul>
       </section>
     </section>
     
@@ -380,7 +422,7 @@
     <section id="summarise">
       <title>Summarise the Entire Process</title>
 
-      <fixme author="rdg">In a few sentences, remind the reader what they have just learned.
+      <fixme author="open">In a few sentences, remind the reader what they have just learned.
       This helps to reinforce the main points of your How-To.</fixme>
     </section>
   </steps>
