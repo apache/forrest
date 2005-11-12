@@ -205,10 +205,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../docs_0_80/howto/howto-structurer-install.html">Install</a>
 </div>
 <div class="menuitem">
-<a href="../../docs_0_80/howto/howto-structurer-dsl.html">forrest:view DSL</a>
+<a href="../../docs_0_80/howto/howto-structurer-dsl.html">structurer</a>
 </div>
 <div class="menuitem">
-<a href="../../docs_0_80/howto/howto-structurer-contracts.html">Contract implementations</a>
+<a href="../../docs_0_80/howto/howto-structurer-contracts.html">contracts</a>
 </div>
 </div>
 <div onclick="SwitchMenu('menu_1.1.15.13', '../../skin/')" id="menu_1.1.15.13Title" class="menutitle">Old Views (deprecated)</div>
@@ -395,6 +395,9 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#deploy">Deploying the Plugin</a>
+</li>
+<li>
+<a href="#descriptor">Managing the plugins descriptors</a>
 </li>
 </ul>
 </li>
@@ -681,14 +684,10 @@ document.write("Last Published: " + document.lastModified);
 <h4>Register the Plugin with Apache Forrest</h4>
 <div class="fixme">
 <div class="label">Fixme (rdg)</div>
-<div class="content">Describe the plugins.xml file</div>
-</div>
-<div class="fixme">
-<div class="label">Fixme (rdg)</div>
 <div class="content">Describe making a request of Forrest devs for 
         inclusion</div>
 </div>
-<a name="N101C1"></a><a name="deploy"></a>
+<a name="N101BD"></a><a name="deploy"></a>
 <h4>Deploying the Plugin</h4>
 <p>To deploy the plugin so that others can use it, it must be made 
         available as a zip from the URL indicated in the 
@@ -717,29 +716,82 @@ document.write("Last Published: " + document.lastModified);
         that your only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</div>
 </div>
-<a name="N101F4"></a><a name="examples"></a>
+<a name="N101EF"></a><a name="descriptor"></a>
+<h4>Managing the plugins descriptors</h4>
+<p>
+          The files plugins/plugins.xml and whiteboard/plugins/plugins.xml are
+          the "Plugins Descriptor" files. Each plugin is described with its
+          name, purpose, location, and version information. These descriptors
+          are deployed to the forrest website so that your application can
+          manage its plugins.
+        </p>
+<p>
+          The Apache Forrest committers manage these files in SVN and publish
+          them as needed. Here are some notes.
+        </p>
+<p>
+          When a plugin gains new functionality, then it will be dependent on
+          a more recent version of Forrest. Deploy the plugin one final time
+          before implementing the new work. For example, if current release
+          is 0.7 then ...
+        </p>
+<ul>
+           
+<li>Review the docs and ensure any version numbers in text are "0.7"</li>
+           
+<li>Edit the skinconf.xml to ensure that all version numbers are "0.7", e.g. the MOTD.</li>
+           
+<li>Edit the plugins descriptor to ensure that the "forrestVersion" is 0.7 and that the "version" is appropriate. </li>
+           
+<li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_70"</li>
+           
+<li>Edit status.xml to set the release date. Ensure that the changes notes are complete.</li>
+        
+</ul>
+<p>
+          Now the plugin gains functionality that binds it to 0.8-dev
+          (e.g. converted to use locationmap) so ...
+        </p>
+<ul>
+           
+<li>Review the docs and ensure any version numbers in text are
+             "0.8"</li>
+           
+<li>Edit the skinconf.xml to ensure that all version numbers are
+             "0.8-dev", e.g. the MOTD.</li>
+           
+<li>Edit the plugins descriptor to ensure that the "forrestVersion" is
+             0.8 and that the "version" is incremented. </li>
+           
+<li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_80"</li>
+           
+<li>Edit status.xml to add a new section and set the release date.
+             Start adding changes notes.</li>
+        
+</ul>
+<a name="N10227"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-<a name="N101FD"></a><a name="input"></a>
+<a name="N10230"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss OpenOffice.org plugin here</div>
 </div>
-<a name="N10208"></a><a name="output"></a>
+<a name="N1023B"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss s5 plugin here</div>
 </div>
-<a name="N10213"></a><a name="internal"></a>
+<a name="N10246"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss IMSManifest plugin here</div>
 </div>
-<a name="N1021F"></a><a name="extension"></a>
+<a name="N10252"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -750,10 +802,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../pluginDocs/plugins_0_80/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N10235"></a><a name="summarise"></a>
+<a name="N10268"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="fixme">
-<div class="label">Fixme (rdg)</div>
+<div class="label">Fixme (open)</div>
 <div class="content">In a few sentences, remind the reader what they have just learned.
       This helps to reinforce the main points of your How-To.</div>
 </div>
