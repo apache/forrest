@@ -31,7 +31,10 @@
        <body>
         <section>
           <title>Table of Contents</title>
+<!-- FIXME: workaround for a side-effect of the workaround for FOR-675
            <xsl:apply-templates select="*[not(self::site)]" />        
+-->
+           <xsl:apply-templates select="*" />        
         </section>
        </body>
      </document>       
