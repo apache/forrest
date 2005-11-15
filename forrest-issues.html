@@ -204,15 +204,6 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-427%5D+Need+licensing+element+in+plugins.xml">[FOR-427] Need licensing element in plugins.xml</a>
 </li>
 <li>
-<a href="#%5BFOR-388%5D+Use+plugins+in-place+if+src+available">[FOR-388] Use plugins in-place if src available</a>
-</li>
-<li>
-<a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
-</li>
-<li>
-<a href="#%5BFOR-675%5D+upgrading+to+commons-jxpath-1.2.jar+causes+failures+with+linkrewriter+protocols+site%3A+etc.">[FOR-675] upgrading to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc.</a>
-</li>
-<li>
 <a href="#%5BFOR-701%5D+Missing+locationmap+entry+gives+poor+error">[FOR-701] Missing locationmap entry gives poor error</a>
 </li>
 <li>
@@ -223,6 +214,15 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-630%5D+Forrest+strategy+and+direction">[FOR-630] Forrest strategy and direction</a>
+</li>
+<li>
+<a href="#%5BFOR-388%5D+Use+plugins+in-place+if+src+available">[FOR-388] Use plugins in-place if src available</a>
+</li>
+<li>
+<a href="#%5BFOR-675%5D+upgrading+to+commons-jxpath-1.2.jar+causes+failures+with+linkrewriter+protocols+site%3A+etc.">[FOR-675] upgrading to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc.</a>
+</li>
+<li>
+<a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
 </li>
 <li>
 <a href="#%5BFOR-490%5D+serve+multiple+sites+on+a+single+Forrest+instance">[FOR-490] serve multiple sites on a single Forrest instance</a>
@@ -349,47 +349,7 @@ Does someone have the tools to run some diagnostics?
 <p>Since plugins can be hosted on different sites they can be released under licenses other than the Apache one. We need an element in plugins.xml that records the type of license a plugin is released under. This element should be used by the plugin install process to verify that the user agrees to the terms of that license before download and installation is started.&lt;br&gt;
 </p>
 </div>
-<a name="N10065"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
-<h2 class="underlined_10">[FOR-388] Use plugins in-place if src available</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-388">http://issues.apache.org/jira/browse/FOR-388</a>
-</p>
-<p>At present Forrest will attempt to download plugins even if they are available in src form in the local filesystem as part of an SVN checkout.
-&lt;br&gt;
-
-&lt;br&gt;
-Have Forrest mount plugins from designated directories in preference to downloading them wherever possible (need more than posible location for src plugins as some people may be developing their own plugins outside of Forrest)
-&lt;br&gt;
-
-&lt;br&gt;
-</p>
-</div>
-<a name="N10073"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
-<h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-711">http://issues.apache.org/jira/browse/FOR-711</a>
-</p>
-<p>Now that we are using the locationmap extensively it is showing up just how innefficient it is. The problem is that for the majority of requests there are multiple reqeuests to the locationmap. We can make things much faster (especially on the first page request) by caching results in the locationmap.
-&lt;br&gt;
-
-&lt;br&gt;
-I think a simple cache will sufice, lets just provide a static hashmap using the hint as a key and, of course, the location as the value.
-&lt;br&gt;
-
-&lt;br&gt;
-If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
-</div>
-<a name="N10081"></a><a name="%5BFOR-675%5D+upgrading+to+commons-jxpath-1.2.jar+causes+failures+with+linkrewriter+protocols+site%3A+etc."></a>
-<h2 class="underlined_10">[FOR-675] upgrading to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc.</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-675">http://issues.apache.org/jira/browse/FOR-675</a>
-</p>
-<p>upgrading from commons-jxpath-20030909.jar to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc. This happens in both modes: 'forret run' and 'forrest'.</p>
-</div>
-<a name="N1008F"></a><a name="%5BFOR-701%5D+Missing+locationmap+entry+gives+poor+error"></a>
+<a name="N10065"></a><a name="%5BFOR-701%5D+Missing+locationmap+entry+gives+poor+error"></a>
 <h2 class="underlined_10">[FOR-701] Missing locationmap entry gives poor error</h2>
 <div class="section">
 <p>
@@ -401,7 +361,7 @@ If we test all locationmaps and find no result we should record that tere is no 
 &lt;br&gt;
 We need to throw a meaningful error when when a resource cannot be found.</p>
 </div>
-<a name="N1009D"></a><a name="%5BFOR-654%5D+Create+Schema+for+XHTML2+subset"></a>
+<a name="N10073"></a><a name="%5BFOR-654%5D+Create+Schema+for+XHTML2+subset"></a>
 <h2 class="underlined_10">[FOR-654] Create Schema for XHTML2 subset</h2>
 <div class="section">
 <p>
@@ -411,7 +371,7 @@ We need to throw a meaningful error when when a resource cannot be found.</p>
 &lt;br&gt;
 &lt;a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112489488330888&amp;w=2"&gt;http://marc.theaimsgroup.com/?l=forrest-dev&amp;amp;m=112489488330888&amp;amp;w=2&lt;/a&gt;</p>
 </div>
-<a name="N100AB"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
+<a name="N10081"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
 <h2 class="underlined_10">[FOR-707] Document i18n features of Forrest</h2>
 <div class="section">
 <p>
@@ -431,7 +391,7 @@ Cheche wrote a blog entry on his work:
 &lt;br&gt;
 We could, at the very least use the locationmap to pull this content into our site [OT: I wonder if this could be a way to generate more documentation?)</p>
 </div>
-<a name="N100B9"></a><a name="%5BFOR-630%5D+Forrest+strategy+and+direction"></a>
+<a name="N1008F"></a><a name="%5BFOR-630%5D+Forrest+strategy+and+direction"></a>
 <h2 class="underlined_10">[FOR-630] Forrest strategy and direction</h2>
 <div class="section">
 <p>
@@ -600,6 +560,46 @@ Then we went straight on to the top topic:
 
 &lt;br&gt;
 * [C] Content directory.</p>
+</div>
+<a name="N1009D"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
+<h2 class="underlined_10">[FOR-388] Use plugins in-place if src available</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-388">http://issues.apache.org/jira/browse/FOR-388</a>
+</p>
+<p>At present Forrest will attempt to download plugins even if they are available in src form in the local filesystem as part of an SVN checkout.
+&lt;br&gt;
+
+&lt;br&gt;
+Have Forrest mount plugins from designated directories in preference to downloading them wherever possible (need more than posible location for src plugins as some people may be developing their own plugins outside of Forrest)
+&lt;br&gt;
+
+&lt;br&gt;
+</p>
+</div>
+<a name="N100AB"></a><a name="%5BFOR-675%5D+upgrading+to+commons-jxpath-1.2.jar+causes+failures+with+linkrewriter+protocols+site%3A+etc."></a>
+<h2 class="underlined_10">[FOR-675] upgrading to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc.</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-675">http://issues.apache.org/jira/browse/FOR-675</a>
+</p>
+<p>upgrading from commons-jxpath-20030909.jar to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc. This happens in both modes: 'forret run' and 'forrest'.</p>
+</div>
+<a name="N100B9"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
+<h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-711">http://issues.apache.org/jira/browse/FOR-711</a>
+</p>
+<p>Now that we are using the locationmap extensively it is showing up just how innefficient it is. The problem is that for the majority of requests there are multiple reqeuests to the locationmap. We can make things much faster (especially on the first page request) by caching results in the locationmap.
+&lt;br&gt;
+
+&lt;br&gt;
+I think a simple cache will sufice, lets just provide a static hashmap using the hint as a key and, of course, the location as the value.
+&lt;br&gt;
+
+&lt;br&gt;
+If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
 </div>
 <a name="N100C7"></a><a name="%5BFOR-490%5D+serve+multiple+sites+on+a+single+Forrest+instance"></a>
 <h2 class="underlined_10">[FOR-490] serve multiple sites on a single Forrest instance</h2>
