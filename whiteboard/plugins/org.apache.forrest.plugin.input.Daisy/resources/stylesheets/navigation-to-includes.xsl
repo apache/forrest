@@ -16,7 +16,11 @@
 -->
 
 <!--+
-    | Add an edit link into the page content.
+    | Create a version of the navigation document that excludes all nodes that 
+    | only contain imports and expand those imports.
+    |
+    | This is a workaround for the fact that Daisy Navigation documents cannot
+    | group content in the menu without adding something to the directory.
     +-->
 
 <xsl:stylesheet version="1.0"
@@ -38,7 +42,7 @@
   
   <xsl:template match="d:import">
     <xi:include>
-      <xsl:attribute name="href"><xsl:value-of select="$publisherURL"/>blob?documentId=<xsl:value-of select="@docId"/>&amp;version=live&amp;partType=1</xsl:attribute>
+      <xsl:attribute name="href">cocoon://daisy.navigation.<xsl:value-of select="@docId"/></xsl:attribute>
     </xi:include>
   </xsl:template>
 

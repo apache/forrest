@@ -26,6 +26,7 @@
                 
   <xsl:param name="publisherURL"/>
   <xsl:param name="pathPrefix"/>
+  <xsl:param name="index"/>
                 
   <xsl:template match="/">
     <locationmap>
@@ -41,7 +42,9 @@
       <locator>
      
        <match pattern="index.xml">
-           <location src="cocoon://2.1/index.xml" />
+           <location>
+             <xsl:attribute name="src"><xsl:value-of select="$index"/></xsl:attribute>
+           </location>
        </match>
      
        <xsl:apply-templates/>

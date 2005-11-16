@@ -37,13 +37,15 @@
 		<!-- ============================================================== -->
 		<map:pipeline>   
        
-       <map:match pattern="**.xml">
+       <map:match pattern="**.daisy.xml">
         <map:aggregate element="daisyDocument">
           <map:part src="cocoon://{1}.daisy.source" />
-          <map:part src="{lm:daisy.siteSnippetFor.{1}}" />
+          <map:part src="{lm:daisy.site.660}" />
         </map:aggregate>
         <map:transform src="{lm:daisy.transform.daisy.html}">
           <map:parameter name="documentPath" value="{0}"/>
+          <map:parameter name="daisyExtension" value=".daisy"/>
+          <map:parameter name="pathPrefix" value=""/>
         </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:select type="exists">
