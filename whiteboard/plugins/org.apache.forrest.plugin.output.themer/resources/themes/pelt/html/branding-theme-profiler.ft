@@ -126,15 +126,19 @@ The attribute "rx of the element ><ellipse> can not be negative" uri="themes/ima
       <xsl:if test="$header-input=''">000000</xsl:if>
       <xsl:if test="not($header-input='')"><xsl:value-of select="$header-input"/></xsl:if>
     </xsl:variable>
+    <xsl:variable name="body-input" select="substring-after($branding-theme-profiler/color[@name='body']/@value, '#')"/>
+    <xsl:variable name="body">
+      <xsl:if test="$body-input=''">ffffff</xsl:if>
+      <xsl:if test="not($body-input='')"><xsl:value-of select="$body-input"/></xsl:if>
+    </xsl:variable>
     <xsl:variable name="searchbox-input" select="substring-after($branding-theme-profiler/color[@name='searchbox']/@value, '#')"/>
     <xsl:variable name="searchbox">
       <xsl:if test="$searchbox-input=''">000000</xsl:if>
       <xsl:if test="not($searchbox-input='')"><xsl:value-of select="$searchbox-input"/></xsl:if>
     </xsl:variable>
-     
+
     <xsl:variable name="tab-selected" select="substring-after($branding-theme-profiler/color[@name='tab-selected']/@value, '#')"/>
     <xsl:variable name="tab-unselected" select="substring-after($branding-theme-profiler/color[@name='tab-unselected']/@value, '#')"/>
-    <xsl:variable name="body" select="substring-after($branding-theme-profiler/color[@name='body']/@value, '#')"/>
     <xsl:variable name="menu" select="substring-after($branding-theme-profiler/color[@name='menu']/@value, '#')"/>
 #header .round-top-left-small {
     background-image: url(<xsl:value-of select="$skin-img-dir"/>/roundcorner-t-l-5-bg<xsl:value-of select="normalize-space($header)"/>-stroke<xsl:value-of select="normalize-space($searchbox)"/>-fg<xsl:value-of select="normalize-space($searchbox)"/>.png);
