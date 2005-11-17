@@ -205,10 +205,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="../docs_0_80/howto/howto-structurer-install.html">Install</a>
 </div>
 <div class="menuitem">
-<a href="../docs_0_80/howto/howto-structurer-dsl.html">forrest:view DSL</a>
+<a href="../docs_0_80/howto/howto-structurer-dsl.html">structurer</a>
 </div>
 <div class="menuitem">
-<a href="../docs_0_80/howto/howto-structurer-contracts.html">Contract implementations</a>
+<a href="../docs_0_80/howto/howto-structurer-contracts.html">contracts</a>
 </div>
 </div>
 <div onclick="SwitchMenu('menu_1.1.15.13', '../skin/')" id="menu_1.1.15.13Title" class="menutitle">Old Views (deprecated)</div>
@@ -422,7 +422,7 @@ document.write("Last Published: " + document.lastModified);
         replacement?</a>
 </li>
 <li>
-<a href="#cleanSite">2.16.  How can I make Forrest properly clean up the build/site-directory? </a>
+<a href="#cleanSite">2.16.  How to make Forrest clean up the project build directories? </a>
 </li>
 <li>
 <a href="#i18n">2.17. How can I internationalise (i18n) my content?</a>
@@ -965,16 +965,23 @@ document.write("Last Published: " + document.lastModified);
         </p>
 </div>
 <a name="N10251"></a><a name="cleanSite"></a>
-<h4 class="faq">2.16.  How can I make Forrest properly clean up the build/site-directory? </h4>
+<h4 class="faq">2.16.  How to make Forrest clean up the project build directories? </h4>
 <div align="right">
 <a href="#cleanSite-menu">^</a>
 </div>
 <div style="margin-left: 15px">
-<p>Forrest for performance reasons doesn't clean out the build/site-directory each time you
-          compile your project. This usually doesn't matter during development but might become a
-          problem in a production environment.</p>
-<p>To ensure a clean build call 'forrest clean site' instead of just 'forrest' so Forrest
-          will delete all build directories before creating new content. </p>
+<p>
+          By default Forrest does not clean its build directories in the project
+          workspaces. This enables Cocoon to use its disk cache to speed up
+          successive runs of forrest.
+        </p>
+<p>
+        Doing 'forrest clean-site' will remove the contents of the project's
+        generated documents directory. Doing 'forrest clean-work' will remove the
+        project's work directories (usually build/tmp and build/webapp which
+        include the Cocoon cache and the Cocoon logs).
+        Doing 'forrest clean' will remove both sections.
+        </p>
 </div>
 <a name="N1025C"></a><a name="i18n"></a>
 <h4 class="faq">2.17. How can I internationalise (i18n) my content?</h4>

@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How to install the views v2 (testing version) (v0.8-dev)</title>
+<title>How to install the "dispatcher" (v0.8-dev)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
@@ -205,10 +205,10 @@ document.write("Last Published: " + document.lastModified);
 <div class="menupagetitle">Install</div>
 </div>
 <div class="menuitem">
-<a href="../../docs_0_80/howto/howto-structurer-dsl.html">forrest:view DSL</a>
+<a href="../../docs_0_80/howto/howto-structurer-dsl.html">structurer</a>
 </div>
 <div class="menuitem">
-<a href="../../docs_0_80/howto/howto-structurer-contracts.html">Contract implementations</a>
+<a href="../../docs_0_80/howto/howto-structurer-contracts.html">contracts</a>
 </div>
 </div>
 <div onclick="SwitchMenu('menu_1.1.15.13', '../../skin/')" id="menu_1.1.15.13Title" class="menutitle">Old Views (deprecated)</div>
@@ -326,9 +326,9 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How to install the views v2 (testing version)</h1>
+<h1>How to install the "dispatcher"</h1>
 <div class="abstract">
-    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed site.
+    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh v2 seed site.
   </div>
 <div id="motd-area">
         This is documentation for development version v0.8
@@ -348,19 +348,16 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#localBuild">Build the internal.structurer and the output.themes plugins</a>
-</li>
-<li>
-<a href="#jxpath">Upgrade the JXPath library</a>
+<a href="#localBuild">Build the internal.structurer and the output.themer plugins</a>
 </li>
 <li>
 <a href="#newSeed">Seed a new project</a>
 </li>
 <li>
-<a href="#forrestProperties">Modifying forrest.properties (if you not use the seed-v2 target)</a>
+<a href="#forrestProperties">Modify forrest.properties</a>
 </li>
 <li>
-<a href="#testing">Test your new view v2 based project</a>
+<a href="#testing">Test your new "dispatcher" based project</a>
 </li>
 <li>
 <a href="#availableContracts">Available contracts</a>
@@ -381,167 +378,143 @@ document.write("Last Published: " + document.lastModified);
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-"Views" are new functionality which is still in development phase. That is why it is in the
+The "Dispatcher" (aka "Views") is new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution. This HowTo is a good start but still needs more work.
 </div>
 </div>
-<div class="warning">
-<div class="label">Warning</div>
-<div class="content"> Views v2 are not usable in combination with the linkrewriter!!! There 
-  is a bug with commons-jxpath-1.2.jar and cocoon-linkrewriter-block.jar! 
-  </div>
-</div>
 <p>
-      Developers who want to get started with view v2 development.
+      Developers who want to get started with "dispatcher" development and want to help testing and developing the "dispatcher".
     </p>
 </div>
-<a name="N1001E"></a><a name="Purpose"></a>
+<a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      To help with installing views. This is the "getting started" setup guide.
+      Quick guide installing the "dispatcher". This is the "getting started" setup guide.
     </p>
 </div>
-<a name="N10026"></a><a name="Prerequisites"></a>
+<a name="N10023"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
       
-<li>Need the SVN trunk version of Forrest for using views v2 because it is in an early stage.</li>
+<li>Need the SVN trunk version of Forrest for using the "dispatcher" because it is in an early stage.</li>
       
 <li>Read <a href="../../docs_0_80/howto/howto-buildPlugin.html">How to Build a Plugin</a>
         especially the section about using Forrest's own Ant.</li>
+      
+<li>Installing a mozilla browser and the
+        <a href="../../tools/forrestbar.html">Forrestbar</a> helps a lot in developing.</li>
     
 </ul>
-<div class="warning">
-<div class="label">Warning</div>
-<div class="content">
-Need a recent version of SVN trunk. If you had a working site using the old
-views v1 (stable version) development in trunk, and don't want to use the new views v2 plugins,
-then use <a href="../../docs_0_80/howto/howto-view-install.html">how to install v1</a>.
 </div>
-</div>
-</div>
-<a name="N1003F"></a><a name="Steps"></a>
+<a name="N1003C"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <p>
-      The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
-      Some of the instructions need to be modified with your local settings.
+      The process of setting up the plugin should be easy. Still it has too many stages and it
+       will become easier in the future.
     </p>
-<a name="N10047"></a><a name="localBuild"></a>
-<h3 class="underlined_5">Build the internal.structurer and the output.themes plugins</h3>
+<a name="N10044"></a><a name="localBuild"></a>
+<h3 class="underlined_5">Build the internal.structurer and the output.themer plugins</h3>
 <p>
-        The first step is to build and deploy the internal.structurer and the output.themes plugins. Change to a terminal window of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an SVN update and after this 
-        deploy both plugins locally.
+        The first step is to build and deploy the internal.structurer and the output.themer plugins.
+      </p>
+<p>
+        Run the script <span class="codefrag">etc/structurer.sh</span> *after* you did an svn update.
+      </p>
+<p>
+        Otherwise build and deploy them manually. Do your usual 'svn update', then ...
       </p>
 <pre class="code">
-cd {forrest-trunk}
-svn up
 cd whiteboard/plugins/org.apache.forrest.plugin.internal.structurer/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.output.themer/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
       </pre>
-<p>
-        Alternatively, run the script <span class="codefrag">etc/structurer.sh</span> after you did an update.
+<a name="N1005B"></a><a name="newSeed"></a>
+<h3 class="underlined_5">Seed a new project</h3>
+<p> Go to the directory where you want to seed a new project and seed it ...
       </p>
-<a name="N1005B"></a><a name="jxpath"></a>
-<h3 class="underlined_5">Upgrade the JXPath library</h3>
-<p> 
-        Replace lib/core/commons-jxpath-20030909.jar with commons-jxpath-1.2.jar (you can find it in a cocoon distribution 
-        or on the jarkata website).
-      </p>
+<pre class="code">cd ~/src/ 
+mkdir v2 
+cd v2/ 
+forrest seed-v2 </pre>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+       For the moment we will use a special seed template called seed-v2. We still 
+        need to fix issues of the dispatcher, so that it really can replace old 
+        fashion skins. Like performance, standalone contracts, other testing output/input formats - using POJO based 
+        processing will help solving this.  All this will ATM happen in the v2 seed-target till the dispatcher will 
+        be released to the stable plugins. So make regular updates of your forrest-trunk to keep track.
+     </div>
+</div>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-That will introduce Issue
-<a href="http://issues.apache.org/jira/browse/FOR-675">FOR-675</a>
-- please help to fix it. This issue prevent that the linkrewritting is working (site:something will *not* be rewritten).
-Besides the plugin can only be used in "forrest run" mode (*without* linkrewriting!!!). If you do need the linkrewriter then
-use views v1.
+      The way we develop contracts will/may change with introduction of java-based processing 
+      (for certain parts) rather then xsl. Please keep this in mind
+        and help updating the documentation by sending patches. TIA. ;-)
+     </div>
 </div>
-</div>
-<a name="N1006C"></a><a name="newSeed"></a>
-<h3 class="underlined_5">Seed a new project</h3>
-<p> 
-	Go to the directory where you want to seed a new project and seed it. 
-      </p>
-<pre class="code">
-cd ~/src/newSeed
-forrest seed-v2
-      </pre>
-<a name="N1007A"></a><a name="forrestProperties"></a>
-<h3 class="underlined_5">Modifying forrest.properties (if you not use the seed-v2 target)</h3>
+<a name="N1006F"></a><a name="forrestProperties"></a>
+<h3 class="underlined_5">Modify forrest.properties</h3>
 <p>
-        Tell forrest that we are using the view plugins. Edit
-        forrest.properties to add the required plugins:
+        Make sure to tell forrest to use the dispatcher plugins. Of course, if you are
+        using "seed-v2" then this is already done. If you are converting an existing site to use 
+        dispatcher, then do this.
+      </p>
+<p>
+        Edit forrest.properties to add the required plugins:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.output.themer,org.apache.forrest.plugin.internal.structurer
       </pre>
-<a name="N10088"></a><a name="testing"></a>
-<h3 class="underlined_5">Test your new view v2 based project</h3>
+<a name="N10080"></a><a name="testing"></a>
+<h3 class="underlined_5">Test your new "dispatcher" based project</h3>
 <p> 
         Now you have finished the preparation and the setup to finally do
+        <span class="codefrag">'forrest run'</span> and
+        point your browser to <span class="codefrag">http://localhost:8888/</span> and you will see the default
+        dispatcher-based site. Use your browser's menu option "View -&gt; Page Style" to switch
+        themes.
       </p>
-<pre class="code">
-forrest run
-      </pre>
-<p>Then point to <span class="codefrag">http://localhost:8888/</span> and you will see the default
-        views-based site.</p>
-<a name="N1009C"></a><a name="availableContracts"></a>
+<a name="N10090"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
-<div class="fixme">
-<div class="label">Fixme (thorsten)</div>
-<div class="content">Create this list internally and delete this paragraph about installing another plugin!</div>
-</div>
 <p> 
-	     To start working with views, you need to know which contracts you can use. 
-	     For this we will install another plugin <span class="codefrag">org.apache.forrest.plugin.input.viewHelper.xhtml.ls</span>.
-	     The setup is:
-	    </p>
-<pre class="code">
-cd {forrest-trunk}
-svn up
-cd whiteboard/plugins/org.apache.forrest.plugin.input.viewHelper.xhtml.ls/
-ant local-deploy
-</pre>
+       To start working with the dispatcher, you need to know which contracts you can use. 
+       If you used the seed-v2 then the Samples tab will lead to 
+       the available contracts.</p>
 <p>
-        The newly installed plugin will show the available contracts as html pages.
-        First we have to tell Forrest that we are planning to use the new plugin. We will do that
-        by editing the forrest.properties of the <a href="#newSeed">newSeed</a> 
-        to add the plugin:
+       Forrestbar is another way to see available contracts. See the menu point "Devs"
+       (ls.contracts and/or ls.contracts.project)
       </p>
-<pre class="code">
-project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
-      </pre>
 <p>
-        Now point your browser to <span class="codefrag">http://localhost:8888/ls.contracts.html</span>. 
-        On this page you will find all contracts that you can use in your project.
+        Now point your browser to e.g. <span class="codefrag">http://localhost:8888/ls.contracts.html</span> 
+        ... On this page you will find all contracts that you can use in your project.
       </p>
 </div>
-<a name="N100C2"></a><a name="Further Reading"></a>
+<a name="N100A2"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
-      Congratulations you are now able to work with views. 
-      From here we recommend to read the following How-To's:
+      Congratulations you are now able to work with the dispatcher. 
+      From here we recommend to read the following How-To's (in this order):
     </p>
 <ul>
       
 <li>
-<a href="../../docs_0_80/howto/howto-view-dsl.html">Getting started with forrest:view DSL</a> 
+<a href="../../docs_0_80/howto/howto-structurer-dsl.html">Getting started with the "structurer"</a> 
 </li>
       
 <li>
-<a href="../../docs_0_80/howto/howto-view-contracts.html">Create your own contract implementation</a> 
+<a href="../../docs_0_80/howto/howto-structurer-contracts.html">Create your own contract implementation</a> 
 </li>
     
 </ul>
 </div>
-<a name="N100D9"></a><a name="Feedback"></a>
+<a name="N100B9"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>

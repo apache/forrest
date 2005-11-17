@@ -256,12 +256,19 @@
         <p>Here are some references which explain further: <link href="http://orixo.com/events/gt2004/bios.html#torsten">GT2004 presentation by Torsten
             Schlabach</link> and <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode
             resources</link>. </p>
-      </section><section id="cleanSite"><title>2.15.  How can I make Forrest properly clean up the build/site-directory? </title>
-        <p>Forrest for performance reasons doesn't clean out the build/site-directory each time you
-          compile your project. This usually doesn't matter during development but might become a
-          problem in a production environment.</p>
-        <p>To ensure a clean build call 'forrest clean site' instead of just 'forrest' so Forrest
-          will delete all build directories before creating new content. </p>
+      </section><section id="cleanSite"><title>2.15.  How to make Forrest clean up the project build directories? </title>
+        <p>
+          By default Forrest does not clean its build directories in the project
+          workspaces. This enables Cocoon to use its disk cache to speed up
+          successive runs of forrest.
+        </p>
+        <p>
+        Doing 'forrest clean-site' will remove the contents of the project's
+        generated documents directory. Doing 'forrest clean-work' will remove the
+        project's work directories (usually build/tmp and build/webapp which
+        include the Cocoon cache and the Cocoon logs).
+        Doing 'forrest clean' will remove both sections.
+        </p>
       </section><section id="i18n"><title>2.16. How can I internationalise (i18n) my content?</title>
         <p>The i18n features of Forrest are still under development (as of 0.7) however there are
         some features available. For example, navigation menus can be i18n'd (see fresh-site for an
