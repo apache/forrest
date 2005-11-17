@@ -61,51 +61,52 @@ The "Dispatcher" (aka "Views") is new functionality which is still in developmen
     <section id="localBuild">
       <title>Build the internal.structurer and the output.themer plugins</title>
       <p>
-        The first step is to build and deploy the internal.structurer and the output.themer plugins. Change to a terminal window of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an SVN update.
+        The first step is to build and deploy the internal.structurer and the output.themer plugins.
       </p>
-      <source>
-cd {forrest-trunk}
-svn up
-</source>
       <p>
-        After this deploy both plugins locally.</p>
+        Run the script <code>etc/structurer.sh</code> *after* you did an svn update.
+      </p>
+      <p>
+        Otherwise build and deploy them manually. Do your usual 'svn update', then ...
+      </p>
+
        <source>
 cd whiteboard/plugins/org.apache.forrest.plugin.internal.structurer/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.plugin.output.themer/
-ant local-deploy
+$FORREST_HOME/tools/ant/bin/ant local-deploy
       </source>
-      <p>
-        Alternatively, run the script <code>etc/structurer.sh</code> *after* you did an svn update.
-      </p>
     </section>
     <section id="newSeed">
       <title>Seed a new project</title>
-      <p> Go to the directory where you want to seed a new project and seed it 
-        (we recommend the following). </p>
+      <p> Go to the directory where you want to seed a new project and seed it ...
+      </p>
+      <source>cd ~/src/ 
+mkdir v2 
+cd v2/ 
+forrest seed-v2 </source>
      <note>
        For the moment we will use a special seed template called seed-v2. We still 
-        need to fix issues of the dispatcher that it really can replace old 
+        need to fix issues of the dispatcher, so that it really can replace old 
         fashion skins. Like performance, standalone contracts, other testing output/input formats - using POJO based 
         processing will help solving this.  All this will ATM happen in the v2 seed-target till the dispatcher will 
-        be realesed to the stable plugins. So make regular updates of your forrest-trunk to keep track.
+        be released to the stable plugins. So make regular updates of your forrest-trunk to keep track.
      </note>
      <warning>
       The way we develop contracts will/may change with introduction of java-based processing 
       (for certain parts) rather then xsl. Please keep this in mind
         and help updating the documentation by sending patches. TIA. ;-)
      </warning>
-      <source>cd ~/src/ 
-mkdir v2 
-cd v2/ 
-forrest seed-v2 </source>
     </section>
     <section id="forrestProperties">
-      <title>Modifying forrest.properties (HEADSUP: if you are *not* using the seed-v2 target nor v2/)</title>
+      <title>Modify forrest.properties</title>
       <p>
-        Tell forrest that we are using the dispatcher plugins. Edit
-        forrest.properties to add the required plugins:
+        Make sure to tell forrest to use the dispatcher plugins. Of course, if you are
+        using "seed-v2" then this is already done. If you are converting an existing site to use 
+        dispatcher, then do this.
+      </p>
+      <p>
+        Edit forrest.properties to add the required plugins:
       </p>
       <source>
 project.required.plugins=org.apache.forrest.plugin.output.themer,org.apache.forrest.plugin.internal.structurer
@@ -115,24 +116,24 @@ project.required.plugins=org.apache.forrest.plugin.output.themer,org.apache.forr
       <title>Test your new "dispatcher" based project</title>
       <p> 
         Now you have finished the preparation and the setup to finally do
+        <code>'forrest run'</code> and
+        point your browser to <code>http://localhost:8888/</code> and you will see the default
+        dispatcher-based site. Use your browser's menu option "View -&gt; Page Style" to switch
+        themes.
       </p>
-      <source>
-forrest run</source>
-      <p>Point your browser to <code>http://localhost:8888/</code> and you will see the default
-        dispatcher-based site.</p>
     </section>
     <section id="availableContracts">
       <title>Available contracts</title>
       <p> 
        To start working with the dispatcher, you need to know which contracts you can use. 
-       If you used the seed-v2 then click on the samples tab. You can find links there which leads to 
-       the available contracts (same as forrestbar).</p>
+       If you used the seed-v2 then the Samples tab will lead to 
+       the available contracts.</p>
       <p>
-       If you are a mozilla user and have the forrestbar installed, then klick on menu point "Devs"
+       Forrestbar is another way to see available contracts. See the menu point "Devs"
        (ls.contracts and/or ls.contracts.project)
       </p><p>
-        Now point your browser to e.g. <code>http://localhost:8888/ls.contracts.html</code>. 
-        On this page you will find all contracts that you can use in your project.
+        Now point your browser to e.g. <code>http://localhost:8888/ls.contracts.html</code> 
+        ... On this page you will find all contracts that you can use in your project.
       </p>
     </section>
   </steps>
