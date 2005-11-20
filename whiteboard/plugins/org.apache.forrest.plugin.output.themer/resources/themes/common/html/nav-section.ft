@@ -39,6 +39,7 @@
       <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
     </forrest:property>
     [<forrest:property name="toc" max-depth="2"/>]
+    [<forrest:property name="expanding">false</forrest:property>]
   </forrest:properties>
 </forrest:contract>]]></usage>
   <forrest:template
@@ -47,10 +48,13 @@
 
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:template name="nav-section-head">
+        <xsl:param name="expanding" select="'true'"/>
+        <xsl:if test="$expanding = 'true'">
           <script type="text/javascript" language="javascript"
-              src="{$root}themes/menu.js">&#160;</script>
+                src="{$root}themes/menu.js">&#160;</script>
+        </xsl:if>
       </xsl:template>
-
+      
       <xsl:template name="nav-section-body">
         <xsl:param name="nav-section" select="'test'"/>
         <xsl:param name="nav-section-toc" select="'test'"/>
