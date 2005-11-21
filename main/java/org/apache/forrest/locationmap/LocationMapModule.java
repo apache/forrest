@@ -172,7 +172,7 @@ public class LocationMapModule extends AbstractLogEnabled
         		if (hasBeenCached == true) {
         			result =  m_locationsCache.get(name);
         			if (getLogger().isDebugEnabled()) {
-        				getLogger().debug("Locationmap cached location returned for hint: " + name);
+        				getLogger().debug("Locationmap cached location returned for hint: " + name + " value: " + result);
         			}
         		}
         	}
@@ -183,7 +183,7 @@ public class LocationMapModule extends AbstractLogEnabled
         		if (m_cacheAll == true) {
         			m_locationsCache.put(name,result);
         			if (getLogger().isDebugEnabled()) {
-        				getLogger().debug("Locationmap caching hint: " + name);
+        				getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
         			}
         		}
         	}
