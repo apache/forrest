@@ -226,9 +226,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                 } catch (IOException e) {}
             }
         }
-
-        System.out.println("Loaded:" + propertiesStringURI
-                + filteringProperties.getProperty("daisy.navigation.docID"));
         
         return filteringProperties;
     }
@@ -272,10 +269,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             }
         }
         
-
-        System.out.println("Loaded:" + antPropertiesStringURI
-                + filteringProperties.getProperty("daisy.navigation.docID"));
-
         return filteringProperties;
     }
 
