@@ -16,11 +16,17 @@
  */
 package org.apache.forrest.conf;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -31,10 +37,16 @@ import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.cocoon.components.modules.input.DefaultsModule;
 import org.apache.cocoon.components.modules.input.InputModule;
+import org.apache.cocoon.xml.XMLConsumer;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceResolver;
+import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Input module for accessing the base properties used in Forrest. The main
@@ -62,7 +74,11 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
           attributeValue = this.getAttributeValues(name, modeConf,
                           objectModel)[0].toString();
         } catch (NullPointerException npe) {
-          throw new ConfigurationException("Unable to get attribute value for " + name);
+          original = "(not defined in forrest.xconf)";
+          attributeValue = filteringProperties.getProperty(name);
+          if (attributeValue == null) {
+            throw new ConfigurationException("Unable to get attribute value for " + name);
+          }
         }
 
         if (debugging()) {
@@ -111,9 +127,23 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         filteringProperties.setProperty("context.home", contextHome);
 
         //NOTE: the first values set get precedence, as in AntProperties
+        
+        String forrestPropertiesStringURI;
+        
+        // get the values from properties.xml
+        try {
+          forrestPropertiesStringURI = projectHome
+                        + SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
+
+          filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+            forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find forrest.properties.xml, ignoring.");
+        }
 
         // get forrest.properties and load the values
-        String forrestPropertiesStringURI = projectHome
+        forrestPropertiesStringURI = projectHome
                         + SystemUtils.FILE_SEPARATOR + "forrest.properties";
 
         filteringProperties = loadAntPropertiesFromURI(filteringProperties,
@@ -148,6 +178,61 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         }
     }
 
+    /**
+     * @param propertiesStringURI
+     * @throws IOException 
+     * @throws MalformedURLException 
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws ParserConfigurationException 
+     * @throws SAXException 
+     * @throws SourceNotFoundException
+     */
+    private AntProperties loadXMLPropertiesFromURI(
+                    AntProperties precedingProperties,
+                    String propertiesStringURI) throws MalformedURLException, IOException, ParserConfigurationException, SAXException {
+
+    	Source source = null;
+        InputStream in = null;
+        try {
+            if (debugging())
+                debug("Searching for forrest.properties.xml in" + source.getURI());
+            
+            source = m_resolver.resolveURI(propertiesStringURI);
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(source.getURI());
+            
+            NodeList nl = document.getElementsByTagName("property");
+            if(nl != null && nl.getLength() > 0) {
+              for(int i = 0 ; i < nl.getLength();i++) {
+                Element el = (Element)nl.item(i);
+                filteringProperties.setProperty(el.getAttribute("name"), el.getAttribute("value"));
+              }
+            }
+
+            if (debugging())
+                debug("Loaded:" + propertiesStringURI
+                                + filteringProperties.toString());
+            
+        } finally {
+            if (source != null) {
+                m_resolver.release(source);
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {}
+            }
+        }
+
+        System.out.println("Loaded:" + propertiesStringURI
+                + filteringProperties.getProperty("daisy.navigation.docID"));
+        
+        return filteringProperties;
+    }
+    
     /**
      * @param antPropertiesStringURI
      * @throws MalformedURLException
@@ -186,6 +271,10 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                 } catch (IOException e) {}
             }
         }
+        
+
+        System.out.println("Loaded:" + antPropertiesStringURI
+                + filteringProperties.getProperty("daisy.navigation.docID"));
 
         return filteringProperties;
     }
