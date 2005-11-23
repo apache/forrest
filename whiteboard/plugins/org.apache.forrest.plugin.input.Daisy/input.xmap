@@ -38,22 +38,22 @@
 		<map:pipeline>   
        
        <map:match pattern="**.daisy.xml">
-        <map:aggregate element="daisyDocument">
-          <map:part src="cocoon://{1}.daisy.source" />
-          <map:part src="{lm:daisy.site.660}" />
-        </map:aggregate>
-        <map:transform src="{lm:daisy.transform.daisy.html}">
-          <map:parameter name="documentPath" value="{0}"/>
-          <map:parameter name="daisyExtension" value=".daisy"/>
-          <map:parameter name="pathPrefix" value=""/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:select type="exists">
-          <map:when test="{project:resources.stylesheets}/daisy/postFilter.xsl">
-            <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
-          </map:when>
-        </map:select>
-        <map:serialize type="xml"/>
+          <map:aggregate element="daisyDocument">
+            <map:part src="cocoon://{1}.daisy.source" />
+            <map:part src="cocoon://daisy.site.{project:daisy.navigation.docID}" />
+          </map:aggregate>
+          <map:transform src="{lm:daisy.transform.daisy.html}">
+            <map:parameter name="documentPath" value="{0}"/>
+            <map:parameter name="daisyExtension" value=".daisy"/>
+            <map:parameter name="pathPrefix" value=""/>
+          </map:transform>
+          <map:transform src="{lm:transform.html.document}"/>
+          <map:select type="exists">
+            <map:when test="{project:resources.stylesheets}/daisy/postFilter.xsl">
+              <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
+            </map:when>
+          </map:select>
+          <map:serialize type="xml"/>
        </map:match>
 		</map:pipeline>
 	</map:pipelines>

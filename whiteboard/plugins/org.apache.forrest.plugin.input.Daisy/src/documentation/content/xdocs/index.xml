@@ -56,26 +56,35 @@
     <map:parameter name="publisherURL" value="http://username:password@repo.domain.org:9263/publisher/"/>
     <map:parameter name="pathPrefix" value="/"/>
   </map:transform>
+  <map:transform rtype="xinclude"/>
   <map:serialize type="xml"/>
 </map:match>
         ]]></source>
         
-        <p>Note that we use <code>xi:include</code> to include a navigation
-        document in the site.xml file, in this case the document retrieved has
-        id 1208. By using include in this way the site editor is free to use
-        site.xml to reference content from other sources.</p>
-        
         <p>The <code>pathPrefix</code> is  a prefix added to all paths to documents
-        that are to be retrieved from the Daisy repository.</p>
+        that are to be retrieved from the Daisy repository. It can, of course, be ommitted
+        in which case there will no prefix.</p>
+        
+        <p>If your site needs to provide additional locationmap entires it can
+        do so by including them in 
+        <code>PROJECT_HOME/src/documentation/locationmap-daisy-include.xml</code>.
+        The matchers in this file will override any of the auto-generated matchers
+        from the Daisy navigation file.</p>
+        
+        <note>It is recomended that the pipelines that generate the locationmap
+        are cached for at least 1 hour. This is because it is computationally
+        expensive to regenerate these files. A future version of this plugin will provide
+        a more flexible caching mechanism. But for now you need to force a refresh 
+        during development.</note>
         
       </section>
       
       <section>
         <title>Using Daisy Navigation Documents</title>
         <p>It is possible to use a daisy navigation document in place of a local
-        site.xml file. However, in order to allow other content to be added to the
-        forrest publication without requiring write access to the Daisy repository
-        your project still requries a site.xml file.</p>
+        site.xml file. However, you may want to mix content from different sources
+        by adding other entries to site.xml, ones that are not sourced from the 
+        Daisy navigation document. Therefore, you still need a site.xml file.</p>
         
         <p>A minimal site.xml file for your project would be:</p>
         
@@ -87,6 +96,17 @@
   <xi:include href="cocoon://1208.daisy.navigation"/>
 </site>
         ]]></source>
+        
+        <p>Note that we use <code>xi:include</code> to include a navigation
+        document in the site.xml file, in this case the document retrieved has
+        id 1208. By using include in this way the site editor is free to use
+        site.xml to reference content from other sources.</p>
+        
+        <note>As with the locationmap generation, the pipelines that generate the site.xml
+        snippets are cached for at least 1 hour. This is because it is computationally
+        expecnsive to regenerate these files. A future version of this plugin will provide
+        a more flexible caching mechanism. But for now you need to force a refresh 
+        during development.</note>
       </section>
       
       <section>
@@ -99,6 +119,7 @@
       
       <section>
         <title>Filtering Content</title>
+        
         <p>You may not have full control of the content in the repository, or
         you may wish to supress the presentation of some of the parts, for 
         example, the fields within the repository. There are two points at 

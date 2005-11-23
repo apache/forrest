@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    name="content-noteTaking" type="nugget">
+
+  <description>
+    content-noteTaking will output a text box to enable notes to be taken.
+  </description>
+  <usage><![CDATA[<forrest:contract name="content-noteTaking">  
+  <forrest:properties contract="content-noteTaking">
+    <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:properties>
+    <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:properties>
+    [<forrest:property name="content-noteTaking-cols" value="[Number of Columns]"/>]
+    [<forrest:property name="content-noteTaking-rows" vlaue="Number of Rows]"/>]
+  </forrest:properties>
+</forrest:contract>]]></usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+      format="html" name="content-noteTaking" inputFormat="xsl" body="true" head="false">
+    <xsl:stylesheet version="1.1"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:template name="content-noteTaking-body">
+        <xsl:param name="content-noteTaking-cols"/>
+        <xsl:param name="content-noteTaking-rows"/>
+        <xsl:param name="content-noteTaking-notes"/>
+        <xsl:param name="content-noteTaking-srcDoc"/>
+        
+        <xsl:variable name="notes">
+          <xsl:choose>
+            <xsl:when test="not($content-noteTaking-notes='')"><xsl:value-of select="$content-noteTaking-notes"/></xsl:when>
+            <xsl:otherwise>Enter your notes here and click "SAVE" when done.</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        
+        <form action="noteTaking/do/addNote" method="post">
+          <textarea name="note">
+            <xsl:attribute name="cols">
+              <xsl:value-of select="$content-noteTaking-cols/@value"/>
+            </xsl:attribute>
+            <xsl:attribute name="rows">
+              <xsl:value-of select="$content-noteTaking-rows/@value"/>
+            </xsl:attribute>
+            <xsl:value-of select="$notes"/>
+          </textarea>
+          <button type="submit">Save</button>
+          <!-- The path to the node we are writing -->
+          <input type="hidden" name="path">
+            <xsl:attribute name="value"><xsl:value-of select="$content-noteTaking-srcDoc"/></xsl:attribute>
+          </input>
+        </form>
+        
+      </xsl:template>
+
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

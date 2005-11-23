@@ -22,11 +22,12 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://outerx.org/daisy/1.0#navigationspec"
-                xmlns="http://apache.org/forrest/locationmap/1.0">
+                xmlns="http://apache.org/forrest/locationmap/1.0"
+                xmlns:xi="http://www.w3.org/2001/XInclude" >
                 
   <xsl:param name="publisherURL"/>
   <xsl:param name="pathPrefix"/>
-  <xsl:param name="index"/>
+  <xsl:param name="navigationID"/>
                 
   <xsl:template match="/">
     <locationmap>
@@ -40,30 +41,38 @@
       </components>
       
       <locator>
-     
-       <match pattern="index.xml">
-           <location>
-             <xsl:attribute name="src"><xsl:value-of select="$index"/></xsl:attribute>
-           </location>
-       </match>
+      
+       <xi:include href="locationmap-daisy-include.xml #xpointer(//locationmapInclude/*)"/>
      
        <xsl:apply-templates/>
         
-       <match pattern="project.*.daisy.source">
+       <match pattern="*.daisy.source">
            <location>
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>document?documentId={1}&amp;includeNavigation=false&amp;locale=en_US&amp;version=live</xsl:attribute>
            </location>
        </match>
      
-       <match pattern="**/*.daisy.img">
+       <match pattern="project.**/*.daisy.img">
            <location>
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={2}&amp;version=live&amp;partType=3</xsl:attribute>
+           </location>
+       </match>
+     
+       <match pattern="project.**.daisy.img">
+           <location>
+             <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={1}&amp;version=live&amp;partType=3</xsl:attribute>
            </location>
        </match>
      
        <match pattern="daisy.site.*">
            <location>
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={1}&amp;version=live&amp;partType=1</xsl:attribute>
+           </location>
+       </match>
+     
+       <match pattern="*.daisy.rawHTML">
+           <location>
+             <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={1}&amp;version=live&amp;partType=4</xsl:attribute>
            </location>
        </match>
       </locator>

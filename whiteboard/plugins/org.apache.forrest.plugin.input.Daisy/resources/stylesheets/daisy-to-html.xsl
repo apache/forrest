@@ -20,7 +20,6 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:p="http://outerx.org/daisy/1.0#publisher"
     xmlns:ns="http://outerx.org/daisy/1.0"
-    xmlns:nav="http://outerx.org/daisy/1.0#navigationspec"
     version="1.0">
     
   
@@ -31,6 +30,10 @@
   <!-- The pathPrefix is added to the start of all resolved Daisy links 
        It must include a trailing slash if it is non-empty -->
   <xsl:param name="pathPrefix">/</xsl:param>
+  
+  <!-- The daisyExt is added between the Daisy ID and the extension of 
+        of all daisy links. If non-empty it must include a prefixing '.' -->
+  <xsl:param name="daisyExt">.daisy</xsl:param>
     
   <xsl:template match="daisyDocument">
     <xsl:variable name="rootElementName"><xsl:value-of select="name(*)"/></xsl:variable>
@@ -177,7 +180,12 @@
           <xsl:value-of select="$pathPrefix"/>
           <xsl:for-each select="//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::group|//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::doc[@nodeId]"><xsl:value-of select="@href"/></xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="url"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/></xsl:variable>
+        <xsl:variable name="url">
+          <xsl:choose>
+            <xsl:when test="//daisyDocument/descendant::doc[@id=$docId]"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$docId"/><xsl:value-of select="$daisyExt"/>.html</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <a>
           <xsl:choose>
             <xsl:when test="contains($url, '#')">

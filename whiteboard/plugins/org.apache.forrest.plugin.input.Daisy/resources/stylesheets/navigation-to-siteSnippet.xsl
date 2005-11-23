@@ -21,6 +21,8 @@
     xmlns:d="http://outerx.org/daisy/1.0#navigationspec"
     xmlns:xi="http://www.w3.org/2001/XInclude"
     version="1.0">
+    
+  <xsl:param name="daisyExt">.daisy</xsl:param>
       
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -40,14 +42,14 @@
               <doc>
                 <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
                 <xsl:attribute name="label">Section Home</xsl:attribute>
-                <xsl:attribute name="href">../<xsl:value-of select="@nodeId"/>.html</xsl:attribute>
+                <xsl:attribute name="href">../<xsl:value-of select="@nodeId"/><xsl:value-of select="$daisyExt"/>.html</xsl:attribute>
               </doc>
             </xsl:when>
             <xsl:otherwise>
               <doc>
                 <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
                 <xsl:attribute name="label">Section Home</xsl:attribute>
-                <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
+                <xsl:attribute name="href"><xsl:value-of select="@id"/><xsl:value-of select="$daisyExt"/>.html</xsl:attribute>
               </doc>
             </xsl:otherwise>
           </xsl:choose>
@@ -70,10 +72,10 @@
           <xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
           <xsl:choose>
             <xsl:when test="@nodeId">
-              <xsl:attribute name="href"><xsl:value-of select="@nodeId"/>.html</xsl:attribute>
+              <xsl:attribute name="href"><xsl:value-of select="@nodeId"/><xsl:value-of select="$daisyExt"/>.html</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:attribute name="href"><xsl:value-of select="@id"/>.html</xsl:attribute>
+              <xsl:attribute name="href"><xsl:value-of select="@id"/><xsl:value-of select="$daisyExt"/>.html</xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
         </doc>
