@@ -36,6 +36,9 @@
 
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
+ <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
+ <xsl:key name="distinct-contributor" match="changes/release/action" use="@due-to"/>
+ 
  <xsl:template match="/">
   <xsl:apply-templates select="//changes"/>
  </xsl:template>
@@ -72,11 +75,23 @@
         <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="//developers">
+       <section>
+         <title>Committers</title>
+         <p>This is a list of all people, in alphabetic order, who have been 
+         voted in as committers on this project.</p>
+         
+         <ul>
+           <xsl:for-each select="//developers/person">
+             <xsl:sort select="@name"/>
+             <li><xsl:value-of select="@name"/> (<xsl:value-of select="@id"/>)</li>
+           </xsl:for-each>
+         </ul>
+       </section>
+    </xsl:if>
     </body>
   </document>
  </xsl:template>
-
- <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
 
  <xsl:template match="release">
   <section id="version_{@version}">
@@ -102,6 +117,21 @@
      </ul>
     </section>
    </xsl:for-each>
+   <xsl:if test="action[@due-to]">
+     <section>
+       <title>Contributors</title>
+       <p>This is a list of all people who have contributed to this release, but 
+       were full developers on the project. We thank these people for their 
+       contributions.</p>
+       
+       <ul>
+         <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', @due-to))]">
+           <xsl:sort select="@due-to"/>
+           <li><xsl:value-of select="@due-to"/></li>
+         </xsl:for-each>
+       </ul>
+     </section>
+   </xsl:if>
   </section>
  </xsl:template>
 
