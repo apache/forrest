@@ -22,6 +22,10 @@
 
   <xsl:param name="path"/>
   <xsl:param name="versionNumber"/>
+  <xsl:param name="projectInfo.changes.sort"/>
+  <xsl:param name="projectInfo.changes.includeCommitterList"/>
+  <xsl:param name="projectInfo.changes.includeContributorList"/>
+  
   <xsl:include href="dotdots.xsl"/> <!-- FIXME: howto include from forrest core -->
 
   <!-- Calculate path to site root, eg '../../' -->
@@ -75,15 +79,14 @@
         <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="//developers">
+    <xsl:if test="$projectInfo.changes.includeCommitterList = 'true' and //developers">
        <section>
          <title>Committers</title>
-         <p>This is a list of all people, in alphabetic order, who have been 
+         <p>This is a list of all people who have been 
          voted in as committers on this project.</p>
          
          <ul>
            <xsl:for-each select="//developers/person">
-             <xsl:sort select="@name"/>
              <li><xsl:value-of select="@name"/> (<xsl:value-of select="@id"/>)</li>
            </xsl:for-each>
          </ul>
@@ -111,13 +114,20 @@
     </xsl:choose>
     </title>
      <ul>
-      <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
-       <xsl:sort select="@type"/>
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="contains($projectInfo.changes.sort, 'type')">
+          <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
+              <xsl:sort select="@type"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )"/>
+        </xsl:otherwise>
+      </xsl:choose>
      </ul>
     </section>
    </xsl:for-each>
-   <xsl:if test="action[@due-to]">
+   <xsl:if test="$projectInfo.changes.includeContributorList = 'true' and action[@due-to]">
      <section>
        <title>Contributors</title>
        <p>This is a list of all people who have contributed to this release, but 
