@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8">
+<meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>Welcome to the org.apache.forrest.plugin.input.projectInfo Plugin (v0.8)</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
@@ -110,7 +110,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="releaseNotes_0.1.html">Version 0.1</a>
 </div>
 <div class="menuitem">
-<a href="releaseNotes_0.2.html">Version 0.2</a>
+<a href="releaseNotes_0.2-dev.html">Version 0.2-dev</a>
 </div>
 </div>
 <div class="menuitem">
@@ -202,10 +202,21 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Apache+Forrest+-+org.apache.forrest.plugin.input.projectInfo+Plugin">Apache Forrest - org.apache.forrest.plugin.input.projectInfo Plugin</a>
 </li>
 <li>
-<a href="#Features">Features</a>
+<a href="#Changes">Changes</a>
 </li>
 <li>
-<a href="#Producing+Release+Notes">Producing Release Notes</a>
+<a href="#To+Do+List">To Do List</a>
+</li>
+<li>
+<a href="#Release+Notes">Release Notes</a>
+</li>
+<li>
+<a href="#Developers+List">Developers List</a>
+<ul class="minitoc">
+<li>
+<a href="#Contributor+List">Contributor List</a>
+</li>
+</ul>
 </li>
 <li>
 <a href="#Project+Details">Project Details</a>
@@ -218,6 +229,14 @@ document.write("Last Published: " + document.lastModified);
 </li>
 </ul>
 </li>
+<li>
+<a href="#Experimental+Features">Experimental Features</a>
+<ul class="minitoc">
+<li>
+<a href="#Configuration">Configuration</a>
+</li>
+</ul>
+</li>
 </ul>
 </div> 
     
@@ -227,33 +246,39 @@ document.write("Last Published: " + document.lastModified);
 <p>This plugin generates project info from various configuration files.</p>
 </div>
     
-<a name="N10017"></a><a name="Features"></a>
-<h2 class="underlined_10">Features</h2>
+    
+<a name="N10017"></a><a name="Changes"></a>
+<h2 class="underlined_10">Changes</h2>
 <div class="section">
-<ul>
-        
-<li>
-<a href="changes.html">Recent Changes</a>
-</li>
-        
-<li>
-<a href="todo.html">ToDo list</a>
-</li>
-        
-<li>
-<a href="releaseNotes_0.1.html">Release Notes</a>
-</li>
-        
-<li>
-<a href="projectDetails/projectDetails.html">Project Details</a>
-</li>
-      
-</ul>
+<p>By maintaining a file called <span class="codefrag">status.xml</span> you can manage a list
+      changes to your code base. This list can then be generated as a changes 
+      page and/or an RSS feed of those changes. For example, here are the 
+      <a href="changes.html">changes</a> for this plugin, here is the same
+      list of changes as an <a href="changes.rss">RSS feed</a>.</p>
+<p>It's possible to limit the displayed changes to a particular version
+      number as well. For example, here are the changes for 
+      <a href="changes_0.1.html">version 0.1</a> of this plugin (and
+      as an <a href="changes_0.1.rss">RSS feed</a>).</p>
+<p>If you want to only retrieve the changes for the most recent version
+      of the project then you can do that too. Here are the changes in the 
+      <a href="changes_current.html">current development version</a> of this 
+      plugin (and once more as an <a href="changes_current.rss">RSS feed</a>).</p>
 </div>
     
     
-<a name="N10035"></a><a name="Producing+Release+Notes"></a>
-<h2 class="underlined_10">Producing Release Notes</h2>
+<a name="N10042"></a><a name="To+Do+List"></a>
+<h2 class="underlined_10">To Do List</h2>
+<div class="section">
+<p>The status.xml file can also be used to manage a list of todo items for
+      the community. For example, here is a 
+      <a href="todo.html">psuedo todo list</a> for this plugin (our real todo list
+      is managed in an Issue Tracker, one day we hope to add support for that
+      here too).</p>
+</div>
+    
+    
+<a name="N10050"></a><a name="Release+Notes"></a>
+<h2 class="underlined_10">Release Notes</h2>
 <div class="section">
 <p>To produce release notes you must maintain a <span class="codefrag">status.xml</span> file
       for your project and request a page with an URL such as 
@@ -275,11 +300,34 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 <p>The introductory text in the release notes comes from the (optional) 
       element <span class="codefrag">notes</span> (a child of the <span class="codefrag">release</span> element).</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">The same options with respect to retrieveing specific versions of the
+      release notes are available as with the changes feature (discuseed above).</div>
+</div>
 </div>
     
     
+<a name="N1008A"></a><a name="Developers+List"></a>
+<h2 class="underlined_10">Developers List</h2>
+<div class="section">
+<p>The status.xml file can also contain a list of committers and 
+      contributors which can, optionally, be displayed as part of the changes file.</p>
+<p>At the time of writing this functionality is quite minimal, being just
+      a list of authors at the end of the changes document. However, in future 
+      releases it is intended that a more configurable output will be 
+      available.</p>
+<a name="N10096"></a><a name="Contributor+List"></a>
+<h3 class="underlined_5">Contributor List</h3>
+<p>It may be that some items have been contributed by authors other
+        than those listed in the developer list. These are accredited in a
+        <span class="codefrag">due-to</span> attribute of the <span class="codefrag">action</span> element in
+        status.xml. A list of this contributors is made available at the
+        end of the release notes for each version.</p>
+</div>
     
-<a name="N1006C"></a><a name="Project+Details"></a>
+    
+<a name="N100A7"></a><a name="Project+Details"></a>
 <h2 class="underlined_10">Project Details</h2>
 <div class="section">
 <p>Project details are generated from a project descriptor file.
@@ -308,7 +356,7 @@ document.write("Last Published: " + document.lastModified);
       </pre>
 <p>To retrieve the project details page request the file
       <span class="codefrag">/projectDetails.html</span>.</p>
-<a name="N10094"></a><a name="Multiple+Projects"></a>
+<a name="N100CF"></a><a name="Multiple+Projects"></a>
 <h3 class="underlined_5">Multiple Projects</h3>
 <p>You can use the projectInfo plugin to pull together project 
         information for multiple projects. For example, take a look at
@@ -338,7 +386,7 @@ document.write("Last Published: " + document.lastModified);
 <div class="content">The indexing of projects (described below) does not currently work with
         wildcard matchers in the locationmap.</div>
 </div>
-<a name="N100B9"></a><a name="Project+Indexes"></a>
+<a name="N100F4"></a><a name="Project+Indexes"></a>
 <h3 class="underlined_5">Project Indexes</h3>
 <p>The system will automatically create an index of projects from your 
         projects locationmap file. For example, the "Projects" section of the 
@@ -355,6 +403,26 @@ document.write("Last Published: " + document.lastModified);
         correctly when generating a static site. You should only use page based
         indexes for dynamic sites.</div>
 </div>
+</div>
+    
+    
+<a name="N10105"></a><a name="Experimental+Features"></a>
+<h2 class="underlined_10">Experimental Features</h2>
+<div class="section">
+<p>These features are operational, however, they are not fully developed and
+      may change considerably before they become part of the official feature set.
+      You can use them, but be prepared for changes, possibly without warning. If you
+      do use these features we recomend that you join the developers mailing list.</p>
+<a name="N1010E"></a><a name="Configuration"></a>
+<h3 class="underlined_5">Configuration</h3>
+<p>This plugin uses an experimental properties system that allows plugins
+        to expose configuration information to the project. It is likely that at
+        least some of these configuration options will eventually move into Dispatcher
+        based contracts. In the meantime, you can use this config system to control
+        some aspects of the display information. See the 
+        <span class="codefrag">forrest.properties.xml</span> file for a description of the config
+        options available. To alter the configuration simply override these
+        properties in your projects <span class="codefrag">forrest.properties.xml</span> file.</p>
 </div>
   
 </div>
