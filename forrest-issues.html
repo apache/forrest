@@ -189,13 +189,13 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-144%5D+define+new+format+for+skinconf.xml">[FOR-144] define new format for skinconf.xml</a>
 </li>
 <li>
-<a href="#%5BFOR-588%5D+Design+new+configuration+system">[FOR-588] Design new configuration system</a>
-</li>
-<li>
 <a href="#%5BFOR-713%5D+HTML-to-document.xsl+no+longer+generates+an+XDoc">[FOR-713] HTML-to-document.xsl no longer generates an XDoc</a>
 </li>
 <li>
 <a href="#%5BFOR-591%5D+MaxMemory+needs+increasing">[FOR-591] MaxMemory needs increasing</a>
+</li>
+<li>
+<a href="#%5BFOR-588%5D+Design+new+configuration+system">[FOR-588] Design new configuration system</a>
 </li>
 <li>
 <a href="#%5BFOR-572%5D+run+a+memory+profiler+while+forrest+is+operating">[FOR-572] run a memory profiler while forrest is operating</a>
@@ -220,6 +220,9 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
+</li>
+<li>
+<a href="#%5BFOR-735%5D+PDF+cannot+be+generated+when+running+Forrest+as+a+webapp">[FOR-735] PDF cannot be generated when running Forrest as a webapp</a>
 </li>
 <li>
 <a href="#%5BFOR-490%5D+serve+multiple+sites+on+a+single+Forrest+instance">[FOR-490] serve multiple sites on a single Forrest instance</a>
@@ -257,9 +260,6 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#%5BFOR-157%5D+skin-descriptors+comma+separated+list+fails">[FOR-157] skin-descriptors comma separated list fails</a>
 </li>
-<li>
-<a href="#%5BFOR-143%5D+Encoding+of+HTML+files+should+be+configurable">[FOR-143] Encoding of HTML files should be configurable</a>
-</li>
 </ul>
 </div>
 <div class="note">
@@ -288,15 +288,7 @@ document.write("Last Published: " + document.lastModified);
 &lt;br&gt;
 </p>
 </div>
-<a name="N1001F"></a><a name="%5BFOR-588%5D+Design+new+configuration+system"></a>
-<h2 class="underlined_10">[FOR-588] Design new configuration system</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-588">http://issues.apache.org/jira/browse/FOR-588</a>
-</p>
-<p>We need a new config system for Forrest for various reasons: the initial config system was known to be limited; to enable the specification of multiple Forrest sites within a single instance of Forrest; to accommodate the changes brought about by forrest:views, themes, and plugins.</p>
-</div>
-<a name="N1002D"></a><a name="%5BFOR-713%5D+HTML-to-document.xsl+no+longer+generates+an+XDoc"></a>
+<a name="N1001F"></a><a name="%5BFOR-713%5D+HTML-to-document.xsl+no+longer+generates+an+XDoc"></a>
 <h2 class="underlined_10">[FOR-713] HTML-to-document.xsl no longer generates an XDoc</h2>
 <div class="section">
 <p>
@@ -312,7 +304,7 @@ The result is a page that seems to render correctly and in the single test case 
 &lt;br&gt;
 </p>
 </div>
-<a name="N1003B"></a><a name="%5BFOR-591%5D+MaxMemory+needs+increasing"></a>
+<a name="N1002D"></a><a name="%5BFOR-591%5D+MaxMemory+needs+increasing"></a>
 <h2 class="underlined_10">[FOR-591] MaxMemory needs increasing</h2>
 <div class="section">
 <p>
@@ -331,6 +323,14 @@ Does someone have the tools to run some diagnostics?
 
 &lt;br&gt;
 (NB maxmemory has been increased in forrest.properties, if we resolve this issue it should be reduced again)</p>
+</div>
+<a name="N1003B"></a><a name="%5BFOR-588%5D+Design+new+configuration+system"></a>
+<h2 class="underlined_10">[FOR-588] Design new configuration system</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-588">http://issues.apache.org/jira/browse/FOR-588</a>
+</p>
+<p>We need a new config system for Forrest for various reasons: the initial config system was known to be limited; to enable the specification of multiple Forrest sites within a single instance of Forrest; to accommodate the changes brought about by forrest:views, themes, and plugins.</p>
 </div>
 <a name="N10049"></a><a name="%5BFOR-572%5D+run+a+memory+profiler+while+forrest+is+operating"></a>
 <h2 class="underlined_10">[FOR-572] run a memory profiler while forrest is operating</h2>
@@ -592,7 +592,23 @@ I think a simple cache will sufice, lets just provide a static hashmap using the
 &lt;br&gt;
 If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
 </div>
-<a name="N100B9"></a><a name="%5BFOR-490%5D+serve+multiple+sites+on+a+single+Forrest+instance"></a>
+<a name="N100B9"></a><a name="%5BFOR-735%5D+PDF+cannot+be+generated+when+running+Forrest+as+a+webapp"></a>
+<h2 class="underlined_10">[FOR-735] PDF cannot be generated when running Forrest as a webapp</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-735">http://issues.apache.org/jira/browse/FOR-735</a>
+</p>
+<p>(At this point I didn't try this scenario step by step any more; basically it is what we did to setup the site, except that we copied our project data from forrest 0.6 before trying the pdf links)
+&lt;br&gt;
+
+&lt;br&gt;
+- run forrest webapp to create an empty webapp
+&lt;br&gt;
+- configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
+&lt;br&gt;
+- the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
+</div>
+<a name="N100C7"></a><a name="%5BFOR-490%5D+serve+multiple+sites+on+a+single+Forrest+instance"></a>
 <h2 class="underlined_10">[FOR-490] serve multiple sites on a single Forrest instance</h2>
 <div class="section">
 <p>
@@ -615,7 +631,7 @@ with different ports.&lt;br&gt;
 (From Thread &amp;quot;[RT] Serving Apache Forrest site from live Forrest&amp;quot;&lt;br&gt;
 on dev-list. Will add link later.)</p>
 </div>
-<a name="N100C7"></a><a name="%5BFOR-343%5D+Upgrading+Plugins"></a>
+<a name="N100D5"></a><a name="%5BFOR-343%5D+Upgrading+Plugins"></a>
 <h2 class="underlined_10">[FOR-343] Upgrading Plugins</h2>
 <div class="section">
 <p>
@@ -625,7 +641,7 @@ on dev-list. Will add link later.)</p>
 &lt;br&gt;
 We need a traget in the buildfile that will upgrade an indicated plugin when possible. This can then (optionally) be used when running Forrest to automatically upgrade plugins.</p>
 </div>
-<a name="N100D5"></a><a name="%5BFOR-284%5D+link+rewriting+broken+when+linking+to+xml+source+views+which+contain+site%3A+links"></a>
+<a name="N100E3"></a><a name="%5BFOR-284%5D+link+rewriting+broken+when+linking+to+xml+source+views+which+contain+site%3A+links"></a>
 <h2 class="underlined_10">[FOR-284] link rewriting broken when linking to xml source views which contain site: links</h2>
 <div class="section">
 <p>
@@ -633,7 +649,7 @@ We need a traget in the buildfile that will upgrade an indicated plugin when pos
 </p>
 <p>When linking to *.xml files (e.g. to demonstrate a source file) then if that file contains &amp;quot;site:&amp;quot; or &amp;quot;ext:&amp;quot; links, then they are reported as broken, e.g. docs/site:dtd-docs</p>
 </div>
-<a name="N100E3"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
+<a name="N100F1"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
 <h2 class="underlined_10">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</h2>
 <div class="section">
 <p>
@@ -679,7 +695,7 @@ The ampersand in the link element text is properly handled but
 &lt;br&gt;
 the ampersand in the link href attribute is not.</p>
 </div>
-<a name="N100F1"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
+<a name="N100FF"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
 <h2 class="underlined_10">[FOR-210] whole-site html and pdf: broken link faq, broken image links</h2>
 <div class="section">
 <p>
@@ -689,7 +705,7 @@ the ampersand in the link href attribute is not.</p>
 &lt;br&gt;
 </p>
 </div>
-<a name="N100FF"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
+<a name="N1010D"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
 <h2 class="underlined_10">[FOR-209] First level selected tab is not highlighted when containing 2nd level tabs</h2>
 <div class="section">
 <p>
@@ -703,7 +719,7 @@ This is checked with both the default skin, and with tigris-style.
 &lt;br&gt;
 </p>
 </div>
-<a name="N1010D"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
+<a name="N1011B"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
 <h2 class="underlined_10">[FOR-211] whole-site html and pdf: broken ext links</h2>
 <div class="section">
 <p>
@@ -711,7 +727,7 @@ This is checked with both the default skin, and with tigris-style.
 </p>
 <p>In the the generated site.html all of the external links are broken (i.e. the href attributes are like ... error:#ext:forrest).</p>
 </div>
-<a name="N1011B"></a><a name="%5BFOR-215%5D+site.lucene+name+colaps+with+site.html+request"></a>
+<a name="N10129"></a><a name="%5BFOR-215%5D+site.lucene+name+colaps+with+site.html+request"></a>
 <h2 class="underlined_10">[FOR-215] site.lucene name colaps with site.html request</h2>
 <div class="section">
 <p>
@@ -726,7 +742,7 @@ But this means that a request called /index-creation.html would have the same pr
 &lt;br&gt;
 </p>
 </div>
-<a name="N10129"></a><a name="%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately"></a>
+<a name="N10137"></a><a name="%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately"></a>
 <h2 class="underlined_10">[FOR-203] 2nd level tabs are not selected appropriately</h2>
 <div class="section">
 <p>
@@ -748,7 +764,7 @@ Kind regards,
 &lt;br&gt;
 &amp;nbsp;&amp;nbsp;Lorenz Froihofer.</p>
 </div>
-<a name="N10137"></a><a name="%5BFOR-184%5D+Switch+to+XHTML2"></a>
+<a name="N10145"></a><a name="%5BFOR-184%5D+Switch+to+XHTML2"></a>
 <h2 class="underlined_10">[FOR-184] Switch to XHTML2</h2>
 <div class="section">
 <p>
@@ -756,7 +772,7 @@ Kind regards,
 </p>
 <p>Switch to using XHTML2 as a base and intermediate format. This means also using RelaxNG validations, new sitemap pipelines, new stylesheets, new input/output for &amp;quot;views&amp;quot;. See the steps in thread: &lt;a href="http://marc.theaimsgroup.com/?t=112512735800002"&gt;http://marc.theaimsgroup.com/?t=112512735800002&lt;/a&gt;</p>
 </div>
-<a name="N10145"></a><a name="%5BFOR-187%5D+Redefine+project+documentation+dirs"></a>
+<a name="N10153"></a><a name="%5BFOR-187%5D+Redefine+project+documentation+dirs"></a>
 <h2 class="underlined_10">[FOR-187] Redefine project documentation dirs</h2>
 <div class="section">
 <p>
@@ -764,7 +780,7 @@ Kind regards,
 </p>
 <p>We should finalize all discussions about where to put sources and extensions in the projects.</p>
 </div>
-<a name="N10153"></a><a name="%5BFOR-157%5D+skin-descriptors+comma+separated+list+fails"></a>
+<a name="N10161"></a><a name="%5BFOR-157%5D+skin-descriptors+comma+separated+list+fails"></a>
 <h2 class="underlined_10">[FOR-157] skin-descriptors comma separated list fails</h2>
 <div class="section">
 <p>
@@ -792,36 +808,6 @@ Trying to say something wrong with the &amp;quot;comma seperated list,&amp;quot;
 &lt;br&gt;
 I just double checked as well the &lt;a href="file:///d:/get/skins.xml"&gt;file:///d:/get/skins.xml&lt;/a&gt; and it worked. When it stands alone but not in the comma seperated list.&lt;br&gt;
 </p>
-</div>
-<a name="N10161"></a><a name="%5BFOR-143%5D+Encoding+of+HTML+files+should+be+configurable"></a>
-<h2 class="underlined_10">[FOR-143] Encoding of HTML files should be configurable</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-143">http://issues.apache.org/jira/browse/FOR-143</a>
-</p>
-<p>From: Fabrice Bacchella &lt;br&gt;
-&lt;br&gt;
-&lt;br&gt;
-By default, HTML files are encoded in ISO-8859-1 because of the way the Cocoon's HTML serialiser is declared in sitemap.xmap :&lt;br&gt;
-&lt;br&gt;
-&amp;lt;map:serializer name=&amp;quot;html&amp;quot; mime-type=&amp;quot;text/html&amp;quot;&lt;br&gt;
-src=&amp;quot;org.apache.cocoon.serialization.HTMLSerializer&amp;quot;&amp;gt;&lt;br&gt;
-&amp;nbsp;&amp;nbsp;&amp;lt;doctype-public&amp;gt;-//W3C//DTD HTML 4.01 Transitional//EN&amp;lt;/doctype-public&amp;gt;&lt;br&gt;
-&lt;br&gt;
-&amp;lt;doctype-system&amp;gt;&lt;a href="http://www.w3.org/TR/html4/loose.dtd&amp;lt;/doctype-system"&gt;http://www.w3.org/TR/html4/loose.dtd&amp;amp;lt;/doctype-system&lt;/a&gt;&amp;gt;&lt;br&gt;
-&amp;lt;/map:serializer&amp;gt;&lt;br&gt;
-&lt;br&gt;
-The default one is such a case is ISO-8859-1. And it even add a META inthe HTML result. But here in French, ISO-8859-15 is better because of the  =AB e dans l'o =BB character : =9C. In Russian or Asia, the &lt;br&gt;
-situation is even worse.&lt;br&gt;
-&lt;br&gt;
-Is that possible to add a properties in forrest.properties saying for example :&lt;br&gt;
-project.encoding=UTF-8&lt;br&gt;
-&lt;br&gt;
-and adding a &amp;lt;encoding&amp;gt;@project.encoding@&amp;lt;/encoding&amp;gt; element in the&lt;br&gt;
-HTML serializer ?&lt;br&gt;
-&lt;br&gt;
-And in a more general way, where can I find a document about the way properties are used by forrest ? Which files use them ? How to add a&lt;br&gt;
-new one ?</p>
 </div>
 </div>
 <!--+

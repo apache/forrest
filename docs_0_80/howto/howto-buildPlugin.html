@@ -399,6 +399,9 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#descriptor">Managing the plugins descriptors</a>
 </li>
+<li>
+<a href="#Experimental+Functionality">Experimental Functionality</a>
+</li>
 </ul>
 </li>
 <li>
@@ -769,29 +772,78 @@ document.write("Last Published: " + document.lastModified);
              Start adding changes notes.</li>
         
 </ul>
-<a name="N10227"></a><a name="examples"></a>
+<a name="N10226"></a><a name="Experimental+Functionality"></a>
+<h4>Experimental Functionality</h4>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">This section describes functionality that is considered experimental.
+        This functionality may be defective and is not part of the official release at
+        this time, use at your own risk. If you do choose to use this functionality then
+        we recomend that you join the Forrest dev list in order to keep abreast of the
+        changes as they occur.</div>
+</div>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">For an example of each of these features in use see the 
+        <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.</div>
+</div>
+<a name="N10235"></a><a name="Locationmap"></a>
+<h5>Locationmap</h5>
+<p>Plugins can use the Forrest locationmap to expose resources to your
+          project and other plgins. To use this functionality add your 
+          <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.</p>
+<p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
+          for the status of locationmap development.</p>
+<a name="N10249"></a><a name="Dispatcher"></a>
+<h5>Dispatcher</h5>
+<p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
+          that are intended to replace skins in the future. They allow for a much more
+          configurable system of defining the contents and look and feel of a site.</p>
+<p>Plugins can expose contracts for use in structurer files used within
+          Dispatcher-based sites. In order to do this you should develop your contracts
+          as normal and place them in <span class="codefrag">PLUGIN_HOME/resources/themes</span>. However,
+          this, by itself, is not sufficient to export your contracts. You will also need to
+          add the following match to your plugin's <span class="codefrag">locationmap.xml</span> file:</p>
+<pre class="code">
+    &lt;match pattern="resolvePluginContract.*.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:plugins}/PLUGIN_NAME/resources/themes/{project:theme}/{1}/{2}.ft" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+          </pre>
+<p>Of course, you should replace <span class="codefrag">PLUGIN_NAME</span> with the name of 
+          your plugin.</p>
+<p>Once Dispatcher becomes stable we will add this match to the default locationmap
+          which is generated when you seed a new plugin, but for now it must be done manually.</p>
+<a name="N10269"></a><a name="Plugin+Properties"></a>
+<h5>Plugin Properties</h5>
+<p>Plugins can define properties that each project can over-ride.
+          For more information see the issue below.</p>
+<p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
+          for the status of this new configuration system.</p>
+<a name="N1027C"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-<a name="N10230"></a><a name="input"></a>
+<a name="N10285"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss OpenOffice.org plugin here</div>
 </div>
-<a name="N1023B"></a><a name="output"></a>
+<a name="N10290"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss s5 plugin here</div>
 </div>
-<a name="N10246"></a><a name="internal"></a>
+<a name="N1029B"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss IMSManifest plugin here</div>
 </div>
-<a name="N10252"></a><a name="extension"></a>
+<a name="N102A7"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -802,7 +854,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../pluginDocs/plugins_0_80/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N10268"></a><a name="summarise"></a>
+<a name="N102BD"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
