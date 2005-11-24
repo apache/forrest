@@ -76,12 +76,12 @@
   </document>
  </xsl:template>
 
- <xsl:key name="contextes" match="changes/release/action" use="concat(../@version, '_', @context)"/>
+ <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
 
  <xsl:template match="release">
   <section id="version_{@version}">
    <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
-   <xsl:for-each select="action[generate-id()=generate-id(key('contextes',concat(../@version, '_', @context)))]">
+   <xsl:for-each select="action[generate-id()=generate-id(key('contexts',concat(../@version, '_', @context)))]">
     <xsl:sort select="@context"/>
     <section>
     <xsl:variable name="context" select="@context"/>
@@ -96,7 +96,7 @@
     </xsl:choose>
     </title>
      <ul>
-      <xsl:apply-templates select="key('contextes',concat(../@version, '_', @context) )">
+      <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
        <xsl:sort select="@type"/>
       </xsl:apply-templates>
      </ul>
