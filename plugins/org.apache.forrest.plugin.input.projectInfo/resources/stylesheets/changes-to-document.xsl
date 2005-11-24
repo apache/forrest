@@ -72,7 +72,7 @@
         <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
-   </body>
+    </body>
   </document>
  </xsl:template>
 
