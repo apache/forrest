@@ -17,55 +17,101 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="versionNumber"/>
+
+  <xsl:variable name="changes-url"
+    select="concat(../skinconfig/project-url, 'changes.html')"/>
+
   <xsl:template match="status">
-
-    <xsl:variable name="changes-url"
-      select="concat(../skinconfig/project-url, 'changes.html')"/>
-
+      
     <rss version="0.91">
       <channel>
-        <title><xsl:value-of select="../skinconfig/project-name"/> Changes</title>
+        <xsl:choose>
+          <xsl:when test="$versionNumber = 'current'">
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+          </xsl:when>
+          <xsl:when test="$versionNumber">
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</title>
+          </xsl:when>
+          <xsl:otherwise>
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <link><xsl:value-of select="$changes-url"/></link>
 
-        <description><xsl:value-of select="../skinconfig/project-name"/> Changes</description>
+        
+        <xsl:choose>
+          <xsl:when test="$versionNumber = 'current'">
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+          </xsl:when>
+          <xsl:when test="$versionNumber">
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</description>
+          </xsl:when>
+          <xsl:otherwise>
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <language>en-us</language>
 
-        <xsl:for-each select="changes/release[1]/action">
-          <item>
-            <title>
-              <xsl:value-of select="@context" />
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="@type" />
-
-              <xsl:if test="@fixes-bug">
-                (bug <xsl:value-of select="@fixes-bug" />)
-              </xsl:if>
-
-            </title>
-
-            <link><xsl:value-of select="$changes-url"/></link>
-
-            <description>
-              <xsl:value-of select="@context" />
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="@type" />
-              by
-              <xsl:value-of select="@dev" />
-              <xsl:if test="@fixes-bug">
-                (fixes bug <xsl:value-of select="@fixes-bug" />)
-              </xsl:if>
-              :
-              <xsl:value-of select="." />
-              <xsl:if test="@due-to"> Thanks to <xsl:value-of select="@due-to" />.</xsl:if>
-            </description>
-          </item>
-        </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="$versionNumber">
+            <xsl:choose>
+              <xsl:when test="$versionNumber='current'">
+                <xsl:apply-templates select="//release[1]"/>
+              </xsl:when>
+              <xsl:when test="$versionNumber">
+                <xsl:apply-templates select="//release[@version=$versionNumber]"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="//release[1]"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+    
+        <xsl:apply-templates select="changes/release[1]/action"/>
       </channel>
     </rss>
   </xsl:template>
+  
+  <xsl:template match="action">
+    <item>
+      <title>
+        <xsl:value-of select="@context" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@type" />
+
+        <xsl:if test="@fixes-bug">
+          (bug <xsl:value-of select="@fixes-bug" />)
+        </xsl:if>
+
+      </title>
+
+      <link><xsl:value-of select="$changes-url"/></link>
+
+      <description>
+        <xsl:value-of select="@context" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@type" />
+        by
+        <xsl:value-of select="@dev" />
+        <xsl:if test="@fixes-bug">
+          (fixes bug <xsl:value-of select="@fixes-bug" />)
+        </xsl:if>
+        :
+        <xsl:value-of select="." />
+        <xsl:if test="@due-to"> Thanks to <xsl:value-of select="@due-to" />.</xsl:if>
+      </description>
+    </item>
+  </xsl:template>
 
   <xsl:template match="skinconfig"/>
+  <xsl:template match="notes"/>
+  <xsl:template match="todo"/>
 </xsl:stylesheet>
 

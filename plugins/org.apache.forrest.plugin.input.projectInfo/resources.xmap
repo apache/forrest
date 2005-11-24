@@ -37,6 +37,17 @@
         <map:transform src="{lm:projectInfo.transform.changes.rss}"/>
         <map:serialize type="rss091" />
       </map:match>
+    
+      <map:match type="regexp" pattern="^(.*?)([^/]*)changes_(.*).rss$">
+        <map:aggregate element="agg">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="{lm:project.status}"/>
+        </map:aggregate>
+        <map:transform src="{lm:projectInfo.transform.changes.rss}">
+          <map:parameter name="versionNumber" value="{3}"/>
+        </map:transform>
+        <map:serialize type="rss091" />
+      </map:match>
 
     </map:pipeline>
   </map:pipelines>
