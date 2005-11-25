@@ -42,43 +42,6 @@ details.
   </xsl:template>
 
   <xsl:template match="menu-item[@type='hidden']"/>
-    
-    
-   <!-- 
-       FSO
-       Show menu-items of this type only when the referenced page
-       is currently open.
-       Added to maintain context without having to show all pages always on the menu.
-   --> 
-   <xsl:template match="menu-item[@type='showWhenSelected']">
-        
-        <!-- Use apply-imports when overriding -->
-        <xsl:variable name="href-nofrag">
-            <xsl:call-template name="path-nofrag">
-                <xsl:with-param name="path" select="@href" />
-            </xsl:call-template>
-        </xsl:variable>
-        <!-- Compare with extensions stripped -->
-        <xsl:variable name="node-path">
-            <xsl:call-template name="normalize">
-                <xsl:with-param name="path" select="concat($dirname, $href-nofrag)" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="$node-path = $path-nofrag">
-            
-            <li>  
-                <xsl:choose>
-                    <xsl:when test="contains(@href, '#')">
-                        <xsl:call-template name="selected-anchor" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="selected" />
-                    </xsl:otherwise>
-                </xsl:choose></li>
-            
-        </xsl:if>
-        
-   </xsl:template>  
 
   <xsl:template match="menu-item">
     <li>
