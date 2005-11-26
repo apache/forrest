@@ -20,7 +20,7 @@
   <!-- The minimum version of Forrest a plugin is known to work -->
   <!-- This should be overridden in the plugin build file when necessary
        i.e. when the plugin is being developed for a different Forrest version -->
-  <property name="forrest.version"					          value="0.8"/>
+  <property name="forrest.version"					          value="0.8-dev"/>
   <property name="forrest.home"                       location="${env.FORREST_HOME}"/>   
   <property name="forrest.core"                       location="${env.FORREST_HOME}/main" />  
   <property name="forrest.ant.lib.dir"                location="${forrest.home}/tools/ant/lib"/>  
@@ -265,10 +265,11 @@
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
-    <!-- FIXME: remove this duplication of content. It is here to allow a fallback to an
-         unversioned plugin, but the plugin install system should be intelligent enough to know
-         which to download as a fallback. -->
-    <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip" 
+    <!-- FIXME: remove this duplication of content. We currently have a copy of the
+    unversioned plugin in the version directory of Forrest as well as the versioned copy.
+    The plugin loading mechanism shouuld be intelligent enough to get the latest version
+    wehn an unversioned plugin is identified in forrest.properties-->
+    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
      
