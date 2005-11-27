@@ -20,16 +20,20 @@ Preparations
 - Ensure that the line-endings and svn:eol-style property are correct
   for all files. See svn:committers/tools/
 
-- Discuss which Java-Version to use for compliling the release.
+- Discuss which Java-Version to use for compiling the release.
   Downloading and installing that version should be done well 
   ahead of time to avoid delays.
 
+- Ensure that documentation is ready.
+
+- Ensure that all relevant plugins have been deployed to plugins/0.8-dev/
+
 - Announce the release plan to the dev list. Define when the code freeze
-  commences, when the vote ends etc. See email templates at end-of-file.
+  commences, when the vote ends etc. See email templates at end of this file.
   Send a reminder when the code-freeze commences.
   
-  - Check out a fresh copy from SVN to make sure you have no local modifications,
-  especially those that might be hidden by svn:ignore settings.  
+  - Check out a fresh copy from SVN to make sure you have no local
+  modifications, especially those that might be hidden by svn:ignore settings.  
 
       1. Create a new empty directory 'Forrest_Release'
       2. svn co https://svn.apache.org/repos/asf/forrest/trunk
@@ -58,13 +62,16 @@ without committing anything. This ensures a good release candidate.
 
 - Update your release checkout to reflect last minute changes
 
-    1. cd to the 'Forrest_Release'-directory
+    1. cd to the 'Forrest_Release' directory
     2. svn up
     3. Wait for the update to finish
 
 - Do 'build test'. Fix any problems, just those that prevent building.
-  It is not your job to fix bugs.
-  Remove the build directories, run 'svn st --no-ignore' to be sure.
+  It is not your job to fix bugs!
+  If there are bugs, then call a halt to the release process.
+
+  Remove the build directories.
+  Do 'svn st --no-ignore' to be sure.
 
 - Update the version numbers at various places.
 
@@ -245,6 +252,13 @@ Upload and announcement
 FIXME: There is a bug (FOR-300) in the forrest build which generates
 to main/site/mirrors.html instead of build/site/mirrors.html
 
+ - rename the deployed plugins directory:
+   cd /svn/asf/forrest-site
+   svn up
+   svn mv plugins/0.8-dev plugins/0.8
+   svn mkdir plugins/0.9-dev
+   svn commit
+
  - Copy the docs ready for the next development phase, e.g.
    cd site-author/content/xdocs
    svn copy docs_0_70 docs_0_80
@@ -312,6 +326,9 @@ Cleanups
  - Review the Issues for the old version and move any Incomplete ones up.
  - Change the "fixfor" attribute to the next verion for the
    "project.issues-rss-url" RSS feed in forrest.properties
+
+ - Cleanup this RELEASE_PROCESS.txt file to set version number examples
+   to be ready for the next release.
 
  - Remove the release candidates from your public_html directory.
 
