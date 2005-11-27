@@ -341,7 +341,7 @@
         
         <warning>Running the <code>deploy</code> or <code>dist</code> targets
         will always run the <code>test</code> target first. This is to ensure
-        that your only deploy working plugins. This adds a little time to
+        that you only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</warning>
         
       </section>
@@ -388,68 +388,67 @@
              Start adding changes notes.</li>
         </ul>
       </section>
+    </section>
       
+    <section id="experimental">
+      <title>Experimental Functionality</title>
+      <warning>This section describes functionality that is considered experimental.
+      This functionality may be defective and is not part of the official release at
+      this time, use at your own risk. If you do choose to use this functionality then
+      we recomend that you join the Forrest dev list in order to keep abreast of the
+      changes as they occur.</warning>
+        
+      <note>For an example of each of these features in use see the 
+      <code>org.apache.forrest.internal.NoteTaking</code> plugin.</note>
+        
       <section>
-        <title>Experimental Functionality</title>
-        <warning>This section describes functionality that is considered experimental.
-        This functionality may be defective and is not part of the official release at
-        this time, use at your own risk. If you do choose to use this functionality then
-        we recomend that you join the Forrest dev list in order to keep abreast of the
-        changes as they occur.</warning>
+        <title>Locationmap</title>
         
-        <note>For an example of each of these features in use see the 
-        <code>org.apache.forrest.internal.NoteTaking</code> plugin.</note>
-        
-        <section>
-          <title>Locationmap</title>
+        <p>Plugins can use the Forrest locationmap to expose resources to your
+        project and other plgins. To use this functionality add your 
+        <code>locationmap.xml</code> file to the root of the plugin directory.</p>
           
-          <p>Plugins can use the Forrest locationmap to expose resources to your
-          project and other plgins. To use this functionality add your 
-          <code>locationmap.xml</code> file to the root of the plugin directory.</p>
-          
-          <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
-          for the status of locationmap development.</p>
-        </section>
-        
-        <section>
-          <title>Dispatcher</title>
-          
-          <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
-          that are intended to replace skins in the future. They allow for a much more
-          configurable system of defining the contents and look and feel of a site.</p>
-          
-          <p>Plugins can expose contracts for use in structurer files used within
-          Dispatcher-based sites. In order to do this you should develop your contracts
-          as normal and place them in <code>PLUGIN_HOME/resources/themes</code>. However,
-          this, by itself, is not sufficient to export your contracts. You will also need to
-          add the following match to your plugin's <code>locationmap.xml</code> file:</p>
-          
-          <source><![CDATA[
+        <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
+        for the status of locationmap development.</p>
+      </section>
+
+      <section>
+        <title>Dispatcher</title>
+        <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
+        that are intended to replace skins in the future. They allow for a much more
+        configurable system of defining the contents and look and feel of a site.</p>
+
+        <p>Plugins can expose contracts for use in structurer files used within
+        Dispatcher-based sites. In order to do this you should develop your contracts
+        as normal and place them in <code>PLUGIN_HOME/resources/themes</code>. However,
+        this, by itself, is not sufficient to export your contracts. You will also need to
+        add the following match to your plugin's <code>locationmap.xml</code> file:</p>
+
+        <source><![CDATA[
     <match pattern="resolvePluginContract.*.**">
       <select type="exists">
         <location src="{forrest:plugins}/PLUGIN_NAME/resources/themes/{project:theme}/{1}/{2}.ft" />
       </select>
     </match>
-          ]]></source>
-          
-          <p>Of course, you should replace <code>PLUGIN_NAME</code> with the name of 
-          your plugin.</p>
-          
-          <p>Once Dispatcher becomes stable we will add this match to the default locationmap
-          which is generated when you seed a new plugin, but for now it must be done manually.</p>
-        </section>
-        
-        <section>
-          <title>Plugin Properties</title>
-          <p>Plugins can define properties that each project can over-ride.
-          For more information see the issue below.</p>
-          
-          <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
-          for the status of this new configuration system.</p>
-        </section>
+        ]]></source>
+
+        <p>Of course, you should replace <code>PLUGIN_NAME</code> with the name of 
+        your plugin.</p>
+
+        <p>Once Dispatcher becomes stable we will add this match to the default locationmap
+        which is generated when you seed a new plugin, but for now it must be done manually.</p>
+      </section>
+
+      <section>
+        <title>Plugin Properties</title>
+        <p>Plugins can define properties that each project can over-ride.
+        For more information see the issue below.</p>
+
+        <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
+        for the status of this new configuration system.</p>
       </section>
     </section>
-    
+
     <section id="examples">
       <title>Examples</title>
       <p>This section will provide some example plugins to help illustrate the
