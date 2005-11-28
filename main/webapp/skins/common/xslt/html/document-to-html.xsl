@@ -227,7 +227,7 @@ Section handling
 
   <xsl:template match="code">
     <xsl:apply-templates select="@id"/>
-    <span class="codefrag">
+    <span class="codefrag {@class}">
       <xsl:copy-of select="@id"/>
       <xsl:value-of select="."/>
     </span>
