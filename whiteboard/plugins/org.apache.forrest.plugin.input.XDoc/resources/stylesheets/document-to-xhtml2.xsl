@@ -127,6 +127,7 @@ Section handling
           <xsl:attribute name="property">tag</xsl:attribute>
         </meta>
       </xsl:if>
+      <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
   
