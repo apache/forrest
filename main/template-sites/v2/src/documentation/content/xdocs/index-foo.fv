@@ -1,0 +1,32 @@
+<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <forrest:view type="xml">
+    <forrest:hook name="test">
+      <forrest:contract name="nav-main-testing" 
+        dataURI="cocoon://index.navigation.xml">
+        <forrest:property name="nav-main-testing-test1" >x</forrest:property>
+        <forrest:property name="nav-main-testing-test2" >
+          <foo/>
+        </forrest:property>
+        <forrest:property name="nav-main-testing-test3" >xxx</forrest:property>
+      </forrest:contract>
+    </forrest:hook>
+  </forrest:view>
+  <forrest:view type="html" hooksXpath="/html/body">
+    <forrest:hook name="test">
+      <forrest:hook name="anotherXz">
+        <forrest:contract name="nav-main-testing-foo" />
+      </forrest:hook>
+      <forrest:hook name="test2">
+        <forrest:contract name="nav-main-testing" 
+          dataURI="cocoon://index.navigation.xml">
+          <forrest:property name="nav-main-testing-test1" >x</forrest:property>
+          <forrest:property name="nav-main-testing-test2" >
+            <foo/>
+          </forrest:property>
+        </forrest:contract>
+      </forrest:hook>
+    </forrest:hook>
+    <forrest:hook name="anotherX"/>
+  </forrest:view>
+</forrest:views>

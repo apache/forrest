@@ -38,13 +38,15 @@
       </map:generator>
       <map:generator name="directory"
         src="org.apache.cocoon.generation.DirectoryGenerator" />
-      <!-- <map:generator name="structurerXsl"
-        src="org.apache.forrest.structurer.generation.StructurerXSLGenerator" /> -->
+      <!--<map:generator name="structurerXsl"
+        src="org.apache.forrest.structurer.generation.StructurerXSLGenerator" />
+      -->
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude"
         src="org.apache.cocoon.transformation.CIncludeTransformer" />
-
+      <map:transformer name="dispatcher"
+        src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer" />
       <map:transformer name="i18n"
         src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="contracts">
@@ -93,19 +95,31 @@
   </map:resources>
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="test.**">
-        <map:generate src="status.xml" />
-        <!-- <map:generate src="{lm:structurer.html.{1}}" type="structurerXsl"/> -->
-        <map:transform src="resources/stylesheets/temp.xsl">
-          <map:parameter name="test" value="{lm:themes/images/{1}.gif}" />
+      <map:match pattern="test.dispatcher">
+        <map:generate src="{lm:resolve.structurer.index-foo}" />
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="html" />
         </map:transform>
-
+        <map:serialize />
+      </map:match>
+      <map:match pattern="test.**">
+        <map:generate src="{lm:resolve.structurer.{1}}" />
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="html" />
+        </map:transform>
+        <map:serialize />
+        
+        <map:transform
+          src="resources/stylesheets/hooksMatcher-html.xsl" />
+        <!-- type="structurerXsl" -->
+        <map:generate src="status.xml" />
+        <map:transform src="resources/stylesheets/temp.xsl">
+          <map:parameter name="test"
+            value="{lm:resolve.structurer.{1}}" />
+        </map:transform>
         <map:serialize />
       </map:match>
     </map:pipeline>
-    <!-- DO NOT USE ANYMORE
-      FIXME: Finish rewriting move to lm ->  {lm:contract.{1}.{2}}del if finished-->
-    <!--FIXME:START-->
 
     <map:pipeline>
       <!--
