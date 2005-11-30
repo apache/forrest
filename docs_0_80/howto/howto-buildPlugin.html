@@ -399,8 +399,19 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#descriptor">Managing the plugins descriptors</a>
 </li>
+</ul>
+</li>
 <li>
-<a href="#Experimental+Functionality">Experimental Functionality</a>
+<a href="#experimental">Experimental Functionality</a>
+<ul class="minitoc">
+<li>
+<a href="#Locationmap">Locationmap</a>
+</li>
+<li>
+<a href="#Dispatcher">Dispatcher</a>
+</li>
+<li>
+<a href="#Plugin+Properties">Plugin Properties</a>
 </li>
 </ul>
 </li>
@@ -716,7 +727,7 @@ document.write("Last Published: " + document.lastModified);
 <div class="label">Warning</div>
 <div class="content">Running the <span class="codefrag">deploy</span> or <span class="codefrag">dist</span> targets
         will always run the <span class="codefrag">test</span> target first. This is to ensure
-        that your only deploy working plugins. This adds a little time to
+        that you only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</div>
 </div>
 <a name="N101EF"></a><a name="descriptor"></a>
@@ -772,55 +783,55 @@ document.write("Last Published: " + document.lastModified);
              Start adding changes notes.</li>
         
 </ul>
-<a name="N10226"></a><a name="Experimental+Functionality"></a>
-<h4>Experimental Functionality</h4>
+<a name="N10227"></a><a name="experimental"></a>
+<h3 class="underlined_5">Experimental Functionality</h3>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">This section describes functionality that is considered experimental.
-        This functionality may be defective and is not part of the official release at
-        this time, use at your own risk. If you do choose to use this functionality then
-        we recomend that you join the Forrest dev list in order to keep abreast of the
-        changes as they occur.</div>
+      This functionality may be defective and is not part of the official release at
+      this time, use at your own risk. If you do choose to use this functionality then
+      we recomend that you join the Forrest dev list in order to keep abreast of the
+      changes as they occur.</div>
 </div>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">For an example of each of these features in use see the 
-        <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.</div>
+      <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.</div>
 </div>
-<a name="N10235"></a><a name="Locationmap"></a>
-<h5>Locationmap</h5>
+<a name="N10236"></a><a name="Locationmap"></a>
+<h4>Locationmap</h4>
 <p>Plugins can use the Forrest locationmap to expose resources to your
-          project and other plgins. To use this functionality add your 
-          <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.</p>
+        project and other plgins. To use this functionality add your 
+        <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
-          for the status of locationmap development.</p>
-<a name="N10249"></a><a name="Dispatcher"></a>
-<h5>Dispatcher</h5>
+        for the status of locationmap development.</p>
+<a name="N1024A"></a><a name="Dispatcher"></a>
+<h4>Dispatcher</h4>
 <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
-          that are intended to replace skins in the future. They allow for a much more
-          configurable system of defining the contents and look and feel of a site.</p>
+        that are intended to replace skins in the future. They allow for a much more
+        configurable system of defining the contents and look and feel of a site.</p>
 <p>Plugins can expose contracts for use in structurer files used within
-          Dispatcher-based sites. In order to do this you should develop your contracts
-          as normal and place them in <span class="codefrag">PLUGIN_HOME/resources/themes</span>. However,
-          this, by itself, is not sufficient to export your contracts. You will also need to
-          add the following match to your plugin's <span class="codefrag">locationmap.xml</span> file:</p>
+        Dispatcher-based sites. In order to do this you should develop your contracts
+        as normal and place them in <span class="codefrag">PLUGIN_HOME/resources/themes</span>. However,
+        this, by itself, is not sufficient to export your contracts. You will also need to
+        add the following match to your plugin's <span class="codefrag">locationmap.xml</span> file:</p>
 <pre class="code">
     &lt;match pattern="resolvePluginContract.*.**"&gt;
       &lt;select type="exists"&gt;
         &lt;location src="{forrest:plugins}/PLUGIN_NAME/resources/themes/{project:theme}/{1}/{2}.ft" /&gt;
       &lt;/select&gt;
     &lt;/match&gt;
-          </pre>
+        </pre>
 <p>Of course, you should replace <span class="codefrag">PLUGIN_NAME</span> with the name of 
-          your plugin.</p>
+        your plugin.</p>
 <p>Once Dispatcher becomes stable we will add this match to the default locationmap
-          which is generated when you seed a new plugin, but for now it must be done manually.</p>
-<a name="N10269"></a><a name="Plugin+Properties"></a>
-<h5>Plugin Properties</h5>
+        which is generated when you seed a new plugin, but for now it must be done manually.</p>
+<a name="N1026A"></a><a name="Plugin+Properties"></a>
+<h4>Plugin Properties</h4>
 <p>Plugins can define properties that each project can over-ride.
-          For more information see the issue below.</p>
+        For more information see the issue below.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
-          for the status of this new configuration system.</p>
+        for the status of this new configuration system.</p>
 <a name="N1027C"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
