@@ -24,10 +24,6 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.parameters.Parameters;
@@ -44,24 +40,17 @@ import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
+import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.DispatcherHelper;
 import org.apache.lenya.xml.NamespaceHelper;
-import org.apache.xpath.CachedXPathAPI;
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.DOMImplementation;
 
 public class DispatcherTransformer extends AbstractSAXTransformer implements
         Disposable, CacheableProcessingComponent {
@@ -73,7 +62,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * format for the request.
      * 
      * <pre>
-     *                          &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
+     *                                              &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_ELEMENT = "view";
@@ -85,7 +74,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * <strong>format</strong>.
      * 
      * <pre>
-     *                          &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
+     *                                              &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_FORMAT_ATTRIBUTE = "type";
@@ -102,7 +91,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * layout via e.g. css. In html for example
      * 
      * <pre>
-     *                          &lt;forrest:hook name=&quot;test&quot;/&gt;
+     *                                              &lt;forrest:hook name=&quot;test&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -110,7 +99,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *                          &lt;div id=&quot;test&quot;/&gt;
+     *                                              &lt;div id=&quot;test&quot;/&gt;
      * </pre>
      */
     public static final String DISPATCHER_HOOK_ELEMENT = "hook";
@@ -120,7 +109,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * css. In html for example
      * 
      * <pre>
-     *                          &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
+     *                                              &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -128,24 +117,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *                          &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+     *                                              &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
      * </pre>
      */
     public static final String DISPATCHER_CSS_ELEMENT = "css";
-
-    /**
-     * Each contract can have properties, which are definite e.g. in the
-     * structurer index.fv and used in the contract.
-     * 
-     * <pre>
-     *                          &lt;forrest:contract name=&quot;nav-main-testing&quot; nugget=&quot;cocoon://index.navigation.xml&quot;&gt;
-     *                           &lt;forrest:property name=&quot;nav-main-testing-test1&quot; &gt;Just a test&lt;/forrest:property&gt;
-     *                          &lt;/forrest:contract&gt;
-     * </pre>
-     */
-    public static final String CONTRACT_PROPERTY_ELEMENT = "property";
-
-    public static final String CONTRACT_PROPERTY_ID_ATTRIBUTE = "name";
 
     private String propertyID;
 
@@ -158,8 +133,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     protected AttributesImpl attributes;
 
     protected String currentFormat;
-
-    private boolean insideContract = false;
 
     protected ContractBean contract;
 
@@ -179,15 +152,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private DOMBuilder builder, dispatcherBuilder;
 
-    private DOMUtil domUtil;
-
-    private DocumentFragment frag;
-
     private Element rootNode;
 
     private XPathProcessor processor;
-
-    private CachedXPathAPI xpathApi;
 
     private Document document;
 
@@ -201,7 +168,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private DispatcherHelper dispatcherHelper;
 
-    private HashMap domHash;
+    private boolean insideStructurer=false;
 
     /**
      * Constructor Set the namespace
@@ -266,27 +233,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             Parameters par) throws ProcessingException, SAXException,
             IOException {
         super.setup(resolver, objectModel, src, par);
-        // domUtil = new DOMUtil();
-        /*
-         * DOMImplementation domImpl = new
-         * org.apache.xerces.dom.DOMImplementationImpl(); DocumentType docType =
-         * domImpl.createDocumentType("rootElementName", "public ID", "system
-         * ID"); Document doc = domImpl.createDocument("", "rootElementName",
-         * docType);
-         * 
-         */
         this.processor = null;
         this.dispatcherHelper = null;
-        this.xpathApi = null;
         this.contract = null;
         try {
-            this.domHash = new HashMap();
-            this.xpathApi = new CachedXPathAPI();
             this.dispatcherHelper = new DispatcherHelper(manager);
             this.processor = (XPathProcessor) this.manager
                     .lookup(XPathProcessor.ROLE);
         } catch (Exception e) {
-            String error = " dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
+            String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
                     + e;
             getLogger().error(error);
             throw new ProcessingException(error);
@@ -296,7 +251,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         this.requestedFormat = parameters.getParameter(
                 STRUCTURER_FORMAT_ATTRIBUTE, null);
         if (requestedFormat == null) {
-            String error = " dispatcherError:\n You have to set the \"type\" parameter in the sitemap!";
+            String error = "dispatcherError:\n"
+                    + "You have to set the \"type\" parameter in the sitemap!";
             getLogger().error(error);
             throw new ProcessingException(error);
         }
@@ -306,19 +262,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             Attributes attr) throws SAXException {
         // Process start element event
         // Are we inside of properties? If so we need to record the elements.
-        if (this.insideProperties) {
-            if (this.includeNodes) {
-                try {
-                    this.builder.startElement(uri, name, raw, attr);
-                } catch (SAXException e) {
-                    this.insideProperties = false;
-                    String error = " dispatcherError:\n The contract \""
-                            + contract.getContractName()
-                            + "\" has thrown in the property with ID \""
-                            + this.propertyID + "\" following error: " + e;
-                    getLogger().error(error);
-                    throw new SAXException(error);
-                }
+        if (this.insideProperties & this.includeNodes) {
+            try {
+                this.builder.startElement(uri, name, raw, attr);
+            } catch (SAXException e) {
+                this.insideProperties = false;
+                String error = "dispatcherError: "
+                        + DispatcherException.ERROR_500 + "\n"
+                        + "The contract \"" + contract.getContractName()
+                        + "\" has thrown in the property with ID \""
+                        + this.propertyID
+                        + "\" an error.\n\n DispatcherStack:\n " + e;
+                getLogger().error(error);
+                throw new SAXException(error);
             }
         } else if (DispatcherHelper.DISPATCHER_NAMESPACE_URI.equals(uri)) {
             /*
@@ -329,24 +285,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             }
             if (STRUCTURER_ELEMENT.equals(name))
                 structurerProcessingStart(attr);
-            else if (DISPATCHER_HOOK_ELEMENT.equals(name)) {
-                if (this.includeNodes) {
-                    hookProcessingStart(name, raw, attr);
-                }
-            } else if (ContractBean.CONTRACT_ELEMENT.equals(name)) {
-                if (this.includeNodes) {
-                    contractProcessingStart(attr);
-                }
-            } else if (CONTRACT_PROPERTY_ELEMENT.equals(name)) {
+            else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
+                hookProcessingStart(name, raw, attr);
+            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
+                    & this.includeNodes)
+                contractProcessingStart(attr);
+            else if (ContractBean.PROPERTY_ELEMENT.equals(name)
+                    & this.includeNodes) {
                 this.insideProperties = true;
-                if (this.includeNodes)
-                    propertyProcessingStart(uri, name, raw, attr);
-            } else {
-                if (this.includeNodes)
-                    super.startElement(uri, name, raw, attr);
+                propertyProcessingStart(uri, name, raw, attr);
             }
         } else {
-            super.startElement(uri, name, raw, attr);
+            if (!this.insideProperties & this.includeNodes)
+                super.startElement(uri, name, raw, attr);
         }
     }
 
@@ -361,7 +312,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throws DOMException, SAXException {
         /* create a DOM node from the current sax event */
         Element currentElement = dispatcher.getDocument().createElement(name);
-        setAttributesDOM(attr, currentElement);
+        dispatcherHelper.setAttributesDOM(attr, currentElement);
         if (path == null || path.equals("")) {
             path = raw;
             this.rootNode.appendChild(currentElement);
@@ -378,8 +329,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 else
                     xpathNode.appendChild(currentElement);
             } catch (Exception e) {
-                String error = " dispatcherError:\n Could not set up xpath!\n\n DispatcherStack:\n "
-                        + e;
+                String error = "dispatcherError: "
+                        + DispatcherException.ERROR_500 + "\n"
+                        + "Could not set up xpath!\n\n DispatcherStack:\n " + e;
                 getLogger().error(error);
                 throw new SAXException(error);
             }
@@ -399,7 +351,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         xpathNode = DOMUtil
                 .selectSingleNode(rootNode, tempPath, this.processor);
         if (attr != null)
-            setAttributesDOM(attr, xpathNode);
+            dispatcherHelper.setAttributesDOM(attr, xpathNode);
     }
 
     /**
@@ -416,20 +368,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         return xpathNode;
     }
 
-    /**
-     * @param attr
-     * @param xpathNode
-     * @throws DOMException
-     */
-    private void setAttributesDOM(Attributes attr, Node xpathNode)
-            throws DOMException {
-        for (int i = 0; i < attr.getLength(); i++) {
-            String localName = attr.getLocalName(i);
-            String value = attr.getValue(i);
-            ((Element) xpathNode).setAttribute(localName, value);
-        }
-    }
-
     public void endElement(String uri, String name, String raw)
             throws SAXException {
         if (getLogger().isDebugEnabled()) {
@@ -439,24 +377,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         if (this.insideProperties) {
             propertyProcessingEnd(uri, name, raw);
         } else if (DispatcherHelper.DISPATCHER_NAMESPACE_URI.equals(uri)) {
-            if (STRUCTURER_ELEMENT.equals(name)) {
+            if (STRUCTURER_ELEMENT.equals(name))
                 structurerProcessingEnd(raw);
-            } else if (ContractBean.CONTRACT_ELEMENT.equals(name)) {
-                if (this.includeNodes)
-                    contractProcessingEnd();
-            } else if (DISPATCHER_HOOK_ELEMENT.equals(name)) {
-                if (this.includeNodes) {
-                    if (path.lastIndexOf("/") > -1)
-                        path = path.substring(0, path.lastIndexOf("/"));
-                    else
-                        path = null;
-                }
-            } else {
-                if (this.includeNodes)
-                    super.endElement(uri, name, raw);
-            }
+            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
+                    & this.includeNodes)
+                contractProcessingEnd();
+            else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
+                if (path.lastIndexOf("/") > -1)
+                    path = path.substring(0, path.lastIndexOf("/"));
+                else
+                    path = null;
         } else {
-            super.endElement(uri, name, raw);
+            if (!this.insideProperties & this.includeNodes)
+                super.endElement(uri, name, raw);
         }
     }
 
@@ -486,6 +419,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             if (path == null)
                 path = "result/";
             this.includeNodes = true;
+            this.insideStructurer=true;
             this.recording = true;
             try {
                 dispatcherHelper.setNamespaceHelper(
@@ -501,11 +435,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 // we create the path node for the result node
                 DOMUtil.selectSingleNode(rootNode, path, this.processor);
             } catch (Exception e) {
-                String error = " dispatcherError:\n could not setup dispatcherHelper! \""
-                        + "\n dispatcherErrorStack:\n" + e;
-                getLogger().error(error + e);
+                String error = "dispatcherError: "
+                        + DispatcherException.ERROR_500
+                        + "\n"
+                        + "Could not setup dispatcherHelper!\n\n DispatcherStack:\n "
+                        + e;
+                getLogger().error(error);
                 this.recording = false;
-                throw new SAXException(error + e);
+                throw new SAXException(error);
             }
 
         } else {
@@ -524,6 +461,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             XMLUtils.valueOf(new IncludeXMLConsumer(super.xmlConsumer),
                     this.rootNode);
             this.recording = false;
+            this.insideStructurer=false;
         }
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
@@ -539,15 +477,18 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * @throws SAXException
      */
     private void contractProcessingStart(Attributes attr) throws SAXException {
-        this.insideContract = true;
         try {
             if (contract == null)
                 contract = new ContractBean(this.manager);
             else
                 contract.initialize();
         } catch (ParserConfigurationException e) {
-            throw new SAXException("originally ParserConfigurationException"
-                    + e);
+            String error = DispatcherException.ERROR_500 + "\n"
+                    + "component: ContractBean" + "\n"
+                    + "message: Could not setup contractBean." + "\n" + "\n\n"
+                    + "dispatcherErrorStack:\n" + e;
+            getLogger().error(error);
+            throw new SAXException(error);
         }
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
@@ -563,12 +504,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                     contract.setContractImpl(doc);
                     // contract.setContractImpl(contractUri);
                 } catch (Exception e) {
-                    String error = " dispatcherError:\n The contract \""
+                    String error = "dispatcherError: "
+                            + DispatcherException.ERROR_500
+                            + "\n"
+                            + "The contract \""
                             + contract.getContractName()
-                            + "\" has thrown following errorStack by resolving the implementation from \""
-                            + contractUri + "\".\n dispatcherErrorStack:\n";
-                    getLogger().error(error + e);
-                    throw new SAXException(error + e);
+                            + "\" has thrown an exception by resolving the implementation from \""
+                            + contractUri + "\".\n\n"
+                            + "dispatcherErrorStack:\n" + e;
+                    getLogger().error(error);
+                    throw new SAXException(error);
                 }
                 if (getLogger().isDebugEnabled()) {
                     getLogger().debug(
@@ -585,12 +530,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                     contract.setContractRawData(doc);
                     // contract.setNuggetUri(value);
                 } catch (Exception e) {
-                    String error = " dispatcherError:\n The contract \""
+                    String error = "dispatcherError: "
+                            + DispatcherException.ERROR_500
+                            + "\n"
+                            + "The contract \""
                             + contract.getContractName()
-                            + "\" has thrown following errorStack by resolving raw data from \""
-                            + value + "\".\n dispatcherErrorStack:\n ";
-                    getLogger().error(error + e);
-                    throw new SAXException(error + e);
+                            + "\" has thrown thrown an exception by resolving raw data from \""
+                            + value + "\".\n\n" + "dispatcherErrorStack:\n "
+                            + e;
+                    getLogger().error(error);
+                    throw new SAXException(error);
                 }
                 if (getLogger().isDebugEnabled()) {
                     getLogger().debug(
@@ -616,19 +565,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 foo = dispatcherHelper.createDocument("foo");
                 contract.setContractRawData(foo);
             } catch (Exception e) {
-                String error = " dispatcherError:\n The contract \""
+                String error = "dispatcherError: "
+                        + DispatcherException.ERROR_500
+                        + "\n"
+                        + "The contract \""
                         + contract.getContractName()
-                        + "\" has thrown following errorStack by creating the dummy foo document."
-                        + ".\n dispatcherErrorStack:\n ";
-                getLogger().error(error + e);
-                throw new SAXException(error + e);
+                        + "\" has thrown thrown an exception by creating the dummy foo document."
+                        + ".\n\n" + "dispatcherErrorStack:\n " + e;
+                getLogger().error(error);
+                throw new SAXException(error);
             }
-            /*
-             * Document fooDoc =// (Document)
-             * dispatcherHelper.getNamespaceHelper().getDocument();
-             * fooDoc.createElement("foo");
-             * contract.getFooData().getOwnerDocument();
-             */
         }
     }
 
@@ -699,14 +645,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 }
             }
         } catch (Exception e) {
-            String error = " dispatcherError:\n The contract \""
+            String error = "dispatcherError: "
+                    + DispatcherException.ERROR_500
+                    + "\n"
+                    + "The contract \""
                     + contract.getContractName()
-                    + "\" has thrown following error while trying to transform the final markup: "
-                    + e;
+                    + "\" has thrown thrown an exception while trying to transform the final markup. \n\n"
+                    + "dispatcherErrorStack:\n " + e;
             getLogger().error(error);
             throw new SAXException(error);
         } finally {
-            this.insideContract = false;
             this.contract.recycle();
         }
     }
@@ -723,15 +671,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
             String value = attr.getValue(i);
-            if (CONTRACT_PROPERTY_ID_ATTRIBUTE.equals(localName)) {
+            if (ContractBean.PROPERTY_ID_ATTRIBUTE.equals(localName)) 
                 this.propertyID = value;
-            }
         }
         if (this.propertyID.equals("") | this.propertyID == null) {
-            String error = " dispatcherError:\n The contract \""
-                    + contract.getContractName()
+            String error = "dispatcherError: " + DispatcherException.ERROR_500
+                    + "\n" + "The contract \"" + contract.getContractName()
                     + "\" has no identifier attribute \""
-                    + CONTRACT_PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
+                    + ContractBean.PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
             getLogger().error(error);
             throw new SAXException(error);
         }
@@ -749,7 +696,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      */
     private void propertyProcessingEnd(String uri, String name, String raw)
             throws SAXException {
-        if (CONTRACT_PROPERTY_ELEMENT.equals(name)) {
+        if (ContractBean.PROPERTY_ELEMENT.equals(name)) {
             this.insideProperties = false;
             if (this.includeNodes) {
                 this.builder.endElement(uri, name, raw);
@@ -779,33 +726,24 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     }
 
     public void characters(char c[], int start, int len) throws SAXException {
-        if (this.insideProperties) {
-            if (this.includeNodes)
-                this.builder.characters(c, start, len);
-        } else {
-            if (this.includeNodes)
-                super.contentHandler.characters(c, start, len);
-        }
+        if (this.insideProperties & this.includeNodes)
+            this.builder.characters(c, start, len);
+        else if (!this.insideProperties & this.includeNodes&!this.insideStructurer)
+            super.contentHandler.characters(c, start, len);
     }
 
     public void startCDATA() throws SAXException {
-        if (this.insideProperties) {
-            if (this.includeNodes)
-                this.builder.startCDATA();
-        } else {
-            if (this.includeNodes)
-                super.lexicalHandler.startCDATA();
-        }
+        if (this.insideProperties & this.includeNodes)
+            this.builder.startCDATA();
+        else if (!this.insideProperties & this.includeNodes&!this.insideStructurer)
+            super.lexicalHandler.startCDATA();
     }
 
     public void endCDATA() throws SAXException {
-        if (this.insideProperties) {
-            if (this.includeNodes)
-                this.builder.endCDATA();
-        } else {
-            if (this.includeNodes)
-                super.lexicalHandler.endCDATA();
-        }
+        if (this.insideProperties & this.includeNodes)
+            this.builder.endCDATA();
+        else if (!this.insideProperties & this.includeNodes&!this.insideStructurer)
+            super.lexicalHandler.endCDATA();
     }
 
     /** BEGIN SAX ContentHandler handlers * */
@@ -813,9 +751,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     public void startPrefixMapping(String prefix, String uri)
             throws SAXException {
         super.startPrefixMapping(prefix, uri);
-        if (this.insideProperties) {
-            if (this.includeNodes)
-                this.builder.startPrefixMapping(prefix, uri);
+        if (this.insideProperties & this.includeNodes) {
+            this.builder.startPrefixMapping(prefix, uri);
         } else {
             storePrefixMapping(prefix, uri);
         }

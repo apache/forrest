@@ -28,7 +28,11 @@ import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.lenya.xml.NamespaceHelper;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 public class DispatcherHelper extends Beans {
@@ -87,6 +91,23 @@ public class DispatcherHelper extends Beans {
         builder.endDocument();
         return builder.getDocument();
 
+    }
+    
+    /**
+     * void setAttributesDOM(Attributes attr, Node xpathNode)
+     * sets all attributes to the node (like <xsl:copy-of select="@*"/>)
+     * 
+     * @param attr
+     * @param xpathNode
+     * @throws DOMException
+     */
+    public void setAttributesDOM(Attributes attr, Node xpathNode)
+            throws DOMException {
+        for (int i = 0; i < attr.getLength(); i++) {
+            String localName = attr.getLocalName(i);
+            String value = attr.getValue(i);
+            ((Element) xpathNode).setAttribute(localName, value);
+        }
     }
 
     public DispatcherHelper(ServiceManager manager)
