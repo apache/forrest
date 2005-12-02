@@ -25,7 +25,7 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceNotFoundException;
-import org.apache.lenya.xml.DocumentHelper;
+import org.apache.forrest.dispatcher.lenya.xml.DocumentHelper;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

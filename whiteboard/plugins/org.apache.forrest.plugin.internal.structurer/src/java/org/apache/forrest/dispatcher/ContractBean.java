@@ -29,7 +29,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.lenya.xml.NamespaceHelper;
+import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

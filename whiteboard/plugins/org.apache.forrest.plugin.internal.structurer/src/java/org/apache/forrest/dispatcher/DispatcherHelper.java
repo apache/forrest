@@ -27,7 +27,7 @@ import org.apache.cocoon.xml.IncludeXMLConsumer;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.excalibur.source.SourceNotFoundException;
-import org.apache.lenya.xml.NamespaceHelper;
+import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
