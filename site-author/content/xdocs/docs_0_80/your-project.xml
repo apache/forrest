@@ -192,11 +192,10 @@ Copying 41 files to /home/me/forrest/my-test
 Here is an outline of the generated files:
 
 /                        # /home/me/forrest/my-test
-/status.xml              # List of project developers, todo list and change log
 /forrest.properties      # Optional file describing your site layout
 /src/documentation/      # Doc-specific files
 /src/documentation/skinconf.xml    # Info about your project used by the skin
-/src/documentation/content/xdocs   # Site content.
+/src/documentation/content         # Site content.
 /src/documentation/content/xdocs   # XML content.
 /src/documentation/content/xdocs/index.xml # Home page
 /src/documentation/content/xdocs/site.xml  # Navigation file for site structure
@@ -211,8 +210,6 @@ What to do now?
 - Render this template to static HTML by typing 'forrest'.
   View the generated HTML in a browser to make sure everything works.
 - Alternatively 'forrest run' and browse to http://localhost:8888/ live demo.
-- Edit status.xml and src/documentation/skinconf.xml
-  to customize for your project.
 - Start adding content in xdocs/ remembering to declare new files in site.xml
 - Follow the document http://forrest.apache.org/docs/your-project.html
 - Provide any feedback to dev@forrest.apache.org
@@ -269,6 +266,10 @@ Total time: 5 seconds
 |       |       |-- hello.pdf
 |       |       |-- test1.html
 |       |       `-- test2.html
+|       `-- resources
+|           `-- images
+|           `-- schema
+|           `-- stylesheets
 |       |-- sitemap.xmap
 |       |-- skinconf.xml
 |       `-- translations
@@ -285,7 +286,6 @@ Total time: 5 seconds
 |           |-- menu_sk.xml
 |           |-- tabs.xml
 |           `-- tabs_es.xml
-|-- status.xml
       </source>
       <p>
         To render this to HTML, type 'forrest'. You should have a HTML site rendered
@@ -532,7 +532,6 @@ which will be used to configure the chosen Forrest skin.
 # Parent properties must be set. This usually means uncommenting
 # project.content-dir if any other property using it is uncommented
 
-#project.status=status.xml
 #project.content-dir=src/documentation
 #project.conf-dir=${project.content-dir}/conf
 #project.sitemap-dir=${project.content-dir}
@@ -631,7 +630,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
       <section id="images">
         <title>Images</title>
         <p>
-          Images usually go in the <code>content/xdocs/images/</code> directory.
+          Images usually go in the <code>resources/images/</code> directory.
           The default sitemap
           maps this directory to <code>images/</code> so image tags will typically look
           like <code>&lt;figure src="images/project-logo.png" alt="Project Logo"/&gt;</code> 
