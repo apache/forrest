@@ -20,10 +20,14 @@ import java.beans.Beans;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
 
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.cocoon.xml.IncludeXMLConsumer;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.excalibur.source.SourceNotFoundException;
@@ -66,9 +70,9 @@ public class DispatcherHelper extends Beans {
      * @throws IOException
      *             if an error occurs during source access..
      */
-    protected Document getDocument(String uri) throws Exception {
-        Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(uri,
-                this.manager);
+    public Document getDocument(String uri) throws Exception {
+        Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
+                uri, this.manager);
         if (doc != null) {
             this.namespaceHelper = new NamespaceHelper(
                     DISPATCHER_NAMESPACE_URI, DISPATCHER_PREFIX, doc);
@@ -92,10 +96,34 @@ public class DispatcherHelper extends Beans {
         return builder.getDocument();
 
     }
-    
+
+    public Transformer createTransformer()
+            throws TransformerConfigurationException {
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        Transformer transformer = tFactory.newTransformer();
+        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+        // "yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        return transformer;
+
+    }
+
+    public Transformer createTransformer(Source source)
+            throws TransformerConfigurationException {
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        Transformer transformer = tFactory.newTransformer(source);
+        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+        // "yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        return transformer;
+
+    }
+
     /**
-     * void setAttributesDOM(Attributes attr, Node xpathNode)
-     * sets all attributes to the node (like <xsl:copy-of select="@*"/>)
+     * void setAttributesDOM(Attributes attr, Node xpathNode) sets all
+     * attributes to the node (like <xsl:copy-of select="@*"/>)
      * 
      * @param attr
      * @param xpathNode
@@ -108,6 +136,25 @@ public class DispatcherHelper extends Beans {
             String value = attr.getValue(i);
             ((Element) xpathNode).setAttribute(localName, value);
         }
+    }
+
+    public String setAttributesXPath(Attributes attr, String path)
+            throws DOMException {
+        if (attr.getLength() > 0) {
+            String xpath = "[";
+            for (int i = 0; i < attr.getLength(); i++) {
+                String localName = attr.getLocalName(i);
+                String value = attr.getValue(i);
+                xpath = xpath + "@" + localName + "='" + value + "'";
+                if (i < (attr.getLength() - 1)) {
+                    xpath = xpath + " and ";
+                }
+            }
+            xpath = xpath + "]";
+            path = path + xpath;
+        }
+        return path;
+
     }
 
     public DispatcherHelper(ServiceManager manager)
