@@ -56,7 +56,7 @@ public class ContractBean extends Beans {
      * </p>
      * 
      * <pre>
-     *                           &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
+     *  &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
      * </pre>
      */
     public static final String CONTRACT_ELEMENT = "contract";
@@ -93,9 +93,9 @@ public class ContractBean extends Beans {
      * structurer index.fv and used in the contract.
      * 
      * <pre>
-     *                           &lt;forrest:contract name=&quot;nav-main-testing&quot; nugget=&quot;cocoon://index.navigation.xml&quot;&gt;
-     *                            &lt;forrest:property name=&quot;nav-main-testing-test1&quot; &gt;Just a test&lt;/forrest:property&gt;
-     *                           &lt;/forrest:contract&gt;
+     *  &lt;forrest:contract name=&quot;nav-main-testing&quot; nugget=&quot;cocoon://index.navigation.xml&quot;&gt;
+     *   &lt;forrest:property name=&quot;nav-main-testing-test1&quot; &gt;Just a test&lt;/forrest:property&gt;
+     *  &lt;/forrest:contract&gt;
      * </pre>
      */
     public static final String PROPERTY_ELEMENT = "property";
@@ -335,7 +335,7 @@ public class ContractBean extends Beans {
      * </p>
      * 
      * <pre>
-     *                          &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
+     * &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
      * </pre>
      * 
      * @param nuggetUri

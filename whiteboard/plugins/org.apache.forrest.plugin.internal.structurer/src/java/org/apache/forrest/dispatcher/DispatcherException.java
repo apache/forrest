@@ -20,8 +20,8 @@ package org.apache.forrest.dispatcher;
  * Dispatcher Exception
  */
 public class DispatcherException extends Exception {
-    public static final String ERROR_404 =  "code: 404 - Source not found";
-    public static final String ERROR_500 =  "code: 500 - Internal server error";
+    public static final String ERROR_404 =  "404 - Source not found";
+    public static final String ERROR_500 =  "500 - Internal server error";
     /**
      * 
      */
