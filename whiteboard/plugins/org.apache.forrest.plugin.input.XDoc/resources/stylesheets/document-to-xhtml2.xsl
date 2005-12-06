@@ -181,8 +181,12 @@ Section handling
   <xsl:template match="link | fork | jump">
     <xsl:element name="a">
       <xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute>
-      <xsl:attribute name="role"><xsl:value-of select="@role"/></xsl:attribute>
-      <xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+      <xsl:if test="./@role">
+        <xsl:attribute name="role"><xsl:value-of select="@role"/></xsl:attribute>
+      </xsl:if>
+      <xsl:if test="./@title">
+        <xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+      </xsl:if>
       <xsl:if test="local-name() = 'fork'">
         <xsl:attribute name="target">_blank</xsl:attribute>
       </xsl:if>
