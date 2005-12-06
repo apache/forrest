@@ -348,7 +348,7 @@ document.write("Last Published: " + document.lastModified);
         By default, Forrest will validate your XML before generating
         HTML or a webapp from it, and fail if any XML files are not valid.
         Validation can be performed manually by doing
-        '<span class="codefrag">forrest validate</span>' in the project root directory.
+        '<span class="codefrag ">forrest validate</span>' in the project root directory.
       </p>
 <p>
         For an XML file to be valid, it <em>must</em> have a document type
@@ -362,7 +362,7 @@ document.write("Last Published: " + document.lastModified);
         project.  In validated sections, it is possible for projects to specify
         exactly what files they want (and don't want) validated.  Forrest
         validation is controlled through a set of properties in
-        <span class="codefrag">forrest.properties</span>:
+        <span class="codefrag ">forrest.properties</span>:
       </p>
 <pre class="code">
 ##############
@@ -389,18 +389,18 @@ document.write("Last Published: " + document.lastModified);
       </pre>
 <p>
         For example, to avoid validating
-        <span class="codefrag">${project.xdocs-dir}</span>/slides.xml and everything inside the
-        <span class="codefrag">${project.xdocs-dir}/manual/</span> directory, add this to
-        <span class="codefrag">forrest.properties</span>:
+        <span class="codefrag ">${project.xdocs-dir}</span>/slides.xml and everything inside the
+        <span class="codefrag ">${project.xdocs-dir}/manual/</span> directory, add this to
+        <span class="codefrag ">forrest.properties</span>:
       </p>
 <pre class="code">forrest.validate.xdocs.excludes=slides.xml, manual/**</pre>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        The <span class="codefrag">failonerror</span> properties only work for files validated
+        The <span class="codefrag ">failonerror</span> properties only work for files validated
         with Ant's &lt;xmlvalidate&gt; and not (yet) for those validated
-        with &lt;jing&gt;, where <span class="codefrag">failonerror</span> defaults to
-        <span class="codefrag">true</span>.
+        with &lt;jing&gt;, where <span class="codefrag ">failonerror</span> defaults to
+        <span class="codefrag ">true</span>.
       </div>
 </div>
 </div>
@@ -412,12 +412,12 @@ document.write("Last Published: " + document.lastModified);
 <p>
         Forrest provides an <a href="http://www.oasis-open.org/committees/entity/spec.html">OASIS Catalog</a>
         [see <a href="http://xml.apache.org/commons/components/resolver/resolver-article.html">tutorial</a>]
-        <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span>
+        <span class="codefrag ">forrest/main/webapp/resources/schema/catalog.xcat</span>
         as a means of associating public identifiers
-        (e.g. <span class="codefrag">-//APACHE//DTD Documentation V1.1//EN</span> above) with DTDs.
+        (e.g. <span class="codefrag ">-//APACHE//DTD Documentation V1.1//EN</span> above) with DTDs.
         If you <a href="../docs_0_70/your-project.html#adding_new_content_type">add a new content type</a>, you
-        should add the DTD to <span class="codefrag">${project.schema-dir}/dtd/</span> and add
-        an entry to the <span class="codefrag">${project.schema-dir}/catalog.xcat</span> file.  This
+        should add the DTD to <span class="codefrag ">${project.schema-dir}/dtd/</span> and add
+        an entry to the <span class="codefrag ">${project.schema-dir}/catalog.xcat</span> file.  This
         section describes the details of this process.
       </p>
 <a name="N1006A"></a><a name="Creating+or+extending+a+DTD"></a>
@@ -447,13 +447,13 @@ size CDATA #IMPLIED&gt;
         </pre>
 <p>
           The document-v13 entities are defined in a reusable 'module':
-          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v13.mod</span>
+          <span class="codefrag ">forrest/main/webapp/resources/schema/dtd/document-v13.mod</span>
           The
-          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v13.dtd</span>
+          <span class="codefrag ">forrest/main/webapp/resources/schema/dtd/document-v13.dtd</span>
           file provides a full description and basic example of how to pull in
           modules.  In our example, our DTD reuses modules
-          <span class="codefrag">common-charents-v10.mod</span> and
-          <span class="codefrag">document-v13.mod</span>.  Here is the full DTD, with
+          <span class="codefrag ">common-charents-v10.mod</span> and
+          <span class="codefrag ">document-v13.mod</span>.  Here is the full DTD, with
           explanation to follow.
         </p>
 <pre class="code">
@@ -528,20 +528,20 @@ size CDATA #IMPLIED&gt;
 &lt;!-- =============================================================== --&gt;
         </pre>
 <p>This custom DTD should be placed in your project resources
-        directory at <span class="codefrag">src/documentation/resources/schema/dtd/</span>
+        directory at <span class="codefrag ">src/documentation/resources/schema/dtd/</span>
 </p>
 <p>
           The &lt;!ENTITY % ... &gt; blocks are so-called 
           <a href="http://www.xml.com/axml/target.html#dt-PERef">parameter
             entities</a>.  They are like macros, whose content will be
           inserted when a parameter-entity reference, like
-          <span class="codefrag">%common-charents;</span> or <span class="codefrag">%document;</span> is
+          <span class="codefrag ">%common-charents;</span> or <span class="codefrag ">%document;</span> is
           inserted.
         </p>
 <p>
           In our DTD, we first pull in the 'common-charents' entity, which
           defines character symbol sets.  We then define the 'document'
-          entity.  However, before the <span class="codefrag">%document;</span> PE reference, we
+          entity.  However, before the <span class="codefrag ">%document;</span> PE reference, we
           first override the 'local.section' entity.  This is a hook into
           document-v13.mod.  By setting its value to '|release', we declare
           that our &lt;release&gt; element is to be allowed wherever "local
@@ -573,7 +573,7 @@ size CDATA #IMPLIED&gt;
           "download-v10.dtd"&gt;
         </pre>
 <p>
-          We only care about the quoted section after <span class="codefrag">PUBLIC</span>, called
+          We only care about the quoted section after <span class="codefrag ">PUBLIC</span>, called
           the "public identifier", which globally identifies our document type.
           We cannot rely on the subsequent "system identifier" part
           ("download-v10.dtd"), because as a relative reference it is liable to
@@ -590,21 +590,21 @@ size CDATA #IMPLIED&gt;
 </div>
 <p>
           Forrest provides a standard catalog file at
-          <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span>
+          <span class="codefrag ">forrest/main/webapp/resources/schema/catalog.xcat</span>
           for the document
           types that Forrest provides.  Projects can augment this with their
           own catalog file located in
-          <span class="codefrag">${project.schema-dir}/catalog.xcat</span> to use it you must
+          <span class="codefrag ">${project.schema-dir}/catalog.xcat</span> to use it you must
 	    specify either the path (full or relative) to your 
-	    <span class="codefrag">catalog.xcat</span> in the <span class="codefrag">CatalogManager.properties</span>
+	    <span class="codefrag ">catalog.xcat</span> in the <span class="codefrag ">CatalogManager.properties</span>
 	    file. If you provide a relative path you must set the property 
-	    <span class="codefrag">relative-catalogs</span> to "yes".
+	    <span class="codefrag ">relative-catalogs</span> to "yes".
 	  </p>
 <p>
-          When Cocoon starts, it reads the <span class="codefrag">CatalogManager.properties</span> file from your
-          <span class="codefrag">project.classes-dir</span>. This is usually src/documentation/classes/
-          but you can change this in <span class="codefrag">forrest.properties</span>. When you seed 
-          a new site using <span class="codefrag">forrest seed-site</span> a sample catalog file
+          When Cocoon starts, it reads the <span class="codefrag ">CatalogManager.properties</span> file from your
+          <span class="codefrag ">project.classes-dir</span>. This is usually src/documentation/classes/
+          but you can change this in <span class="codefrag ">forrest.properties</span>. When you seed 
+          a new site using <span class="codefrag ">forrest seed-site</span> a sample catalog file
           is placed in the site structure, you can use this as a template for your
           own files.
         </p>
@@ -623,17 +623,17 @@ size CDATA #IMPLIED&gt;
 <p>
           The format is described in <a href="http://www.oasis-open.org/committees/entity/spec.html">the
           spec</a>, and is fairly simple and very powerful.
-          The "<span class="codefrag">public</span>" elements map
+          The "<span class="codefrag ">public</span>" elements map
           a public identifier to a DTD (relative to the catalog file).
         </p>
 <p>
           We now have a custom DTD and a catalog mapping which lets both
           Forrest and Cocoon
-          locate the DTD.  Now if we were to run <span class="codefrag">'forrest validate'</span>
+          locate the DTD.  Now if we were to run <span class="codefrag ">'forrest validate'</span>
           our download file would validate along with all the others.  If
-          something goes wrong, try running <span class="codefrag">'forrest -v validate'</span> to
+          something goes wrong, try running <span class="codefrag ">'forrest -v validate'</span> to
           see the error in more detail. Remember to raise the "verbosity"
-          level in <span class="codefrag">cocoon.xconf</span> if you suspect problems
+          level in <span class="codefrag ">cocoon.xconf</span> if you suspect problems
           with your catalog.
         </p>
 </div>
@@ -644,8 +644,8 @@ size CDATA #IMPLIED&gt;
 <div class="section">
 <p>
         Look at the source of this document
-        (<span class="codefrag">xdocs/docs/validation.xml</span>) and see how the entity set
-        <span class="codefrag">"Numeric and Special Graphic"</span> is declared in the
+        (<span class="codefrag ">xdocs/docs/validation.xml</span>) and see how the entity set
+        <span class="codefrag ">"Numeric and Special Graphic"</span> is declared in the
         document type declaration.
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -687,10 +687,10 @@ size CDATA #IMPLIED&gt;
       </p>
 <p>
         The RNG grammars to do this are located in the
-        <span class="codefrag">main/webapp/resources/schema/relaxng</span> directory.
+        <span class="codefrag ">main/webapp/resources/schema/relaxng</span> directory.
         If you want to
         know more about this, and perhaps extend it for your own use, then
-        see <span class="codefrag">main/webapp/resources/schema/relaxng/README.txt</span>
+        see <span class="codefrag ">main/webapp/resources/schema/relaxng/README.txt</span>
         and the Ant targets in the various build.xml files.
       </p>
 </div>

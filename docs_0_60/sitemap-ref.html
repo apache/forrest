@@ -386,18 +386,18 @@ document.write("Last Published: " + document.lastModified);
       </p>
 <p>
         You can add pre-processing sitemaps to your project
-        <span class="codefrag">src/documentation</span> directory (or wherever
-        <span class="codefrag">${project.sitemap-dir}</span> points to). Any match that
+        <span class="codefrag ">src/documentation</span> directory (or wherever
+        <span class="codefrag ">${project.sitemap-dir}</span> points to). Any match that
         is not handled, passes through to be handled by the default Forrest
         sitemaps - obviously extremely powerful. The capability is described
         in 
         "<a href="../docs_0_60/project-sitemap.html">Using project sitemaps</a>".
       </p>
 <p>
-        Another way to experiment with the sitemap is to do '<span class="codefrag">forrest
+        Another way to experiment with the sitemap is to do '<span class="codefrag ">forrest
         run</span>' on a Forrest-using site.  Changes to the core
-        <span class="codefrag">*.xmap</span> files will now be immediately visible
-        at <span class="codefrag">&gt;http://localhost:8888/</span>
+        <span class="codefrag ">*.xmap</span> files will now be immediately visible
+        at <span class="codefrag ">&gt;http://localhost:8888/</span>
       
 </p>
 </div>
@@ -462,7 +462,7 @@ document.write("Last Published: " + document.lastModified);
 <tr>
           
 <th colspan="1" rowspan="1">raw.xmap</th>
-          <td colspan="1" rowspan="1">Serves files located in <span class="codefrag">src/documentation/content/</span>
+          <td colspan="1" rowspan="1">Serves files located in <span class="codefrag ">src/documentation/content/</span>
             that are not to be modified by Forrest.</td>
         
 </tr>
@@ -487,7 +487,7 @@ document.write("Last Published: " + document.lastModified);
 <th colspan="1" rowspan="1">status.xmap</th>
           <td colspan="1" rowspan="1">Generates <a href="../docs_0_60/changes.html">changes</a> and 
           <a href="../docs_0_60/todo.html">todo</a> pages from a single
-            <span class="codefrag">status.xml</span> in the project root.
+            <span class="codefrag ">status.xml</span> in the project root.
           </td>
         
 </tr>
@@ -559,13 +559,13 @@ document.write("Last Published: " + document.lastModified);
         format.
       </p>
 <p>
-        Source pipelines always have a "<span class="codefrag">.xml</span>" extension.  Thus, 
+        Source pipelines always have a "<span class="codefrag ">.xml</span>" extension.  Thus, 
         <a href="../index.xml">index.xml</a> gives you the XML source for the
         index page.  Likewise, <a href="../docs_0_60/faq.html">faq.xml</a> gives you XML
         for the FAQ (transformed from FAQ syntax), and 
         <a href="../changes.xml">changes.xml</a> returns XML from the status.xml file.
-        Take any page, and replace its extension (<span class="codefrag">.html</span> or
-        <span class="codefrag">.pdf</span>) with <span class="codefrag">.xml</span> and you'll have the Source
+        Take any page, and replace its extension (<span class="codefrag ">.html</span> or
+        <span class="codefrag ">.pdf</span>) with <span class="codefrag ">.xml</span> and you'll have the Source
         XML.
       </p>
 <p>
@@ -590,8 +590,8 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <h3 class="underlined_5">forrest.xmap</h3>
 <p>
           Most of the usual Source pipelines are defined in
-          <span class="codefrag">forrest.xmap</span> which is the default (fallback) handler for
-          <span class="codefrag">**.xml</span> pages. The forrest.xmap uses the 
+          <span class="codefrag ">forrest.xmap</span> which is the default (fallback) handler for
+          <span class="codefrag ">**.xml</span> pages. The forrest.xmap uses the 
           <a href="../docs_0_60/cap.html">SourceTypeAction</a> to determine the type of XML
           it is processing, and converts it to document-v13 if necessary.
         </p>
@@ -611,8 +611,8 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <a name="N10175"></a><a name="other_source"></a>
 <h3 class="underlined_5">Other source pipelines</h3>
 <p>As mentioned above, all non-core Source pipelines are distributed in
-          independent <span class="codefrag">*.xmap</span> files.  There is a block of
-          <span class="codefrag">sitemap.xmap</span> which simply delegates certain requests to
+          independent <span class="codefrag ">*.xmap</span> files.  There is a block of
+          <span class="codefrag ">sitemap.xmap</span> which simply delegates certain requests to
           these subsitemaps:</p>
 <pre class="code">
       &lt;!-- Body content --&gt;
@@ -649,14 +649,14 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             specific about which URLs it handles, and relies on the caller (the
             section listed above) to only pass relevant requests to it.  We term
             this "binding a URL" to a pipeline.</p>
-<p>For instance, the main pipeline in <span class="codefrag">faq.xmap</span> matches
-            <span class="codefrag">**.xml</span>, but only <span class="codefrag">**faq.xml</span> requests are
+<p>For instance, the main pipeline in <span class="codefrag ">faq.xmap</span> matches
+            <span class="codefrag ">**.xml</span>, but only <span class="codefrag ">**faq.xml</span> requests are
             sent to it.</p>
 <p>This "late binding" is useful, because the whole URL space is
-            managed in <span class="codefrag">sitemap.xmap</span> and not spread over lots of
-            *.xmap files.  For instance, say you wish all <span class="codefrag">*.xml</span>
-            inside a "<span class="codefrag">faq/</span>" directory to be processed as FAQs.  Just
-            override <span class="codefrag">sitemap.xmap</span> and redefine the relevant source
+            managed in <span class="codefrag ">sitemap.xmap</span> and not spread over lots of
+            *.xmap files.  For instance, say you wish all <span class="codefrag ">*.xml</span>
+            inside a "<span class="codefrag ">faq/</span>" directory to be processed as FAQs.  Just
+            override <span class="codefrag ">sitemap.xmap</span> and redefine the relevant source
             matcher:</p>
 <pre class="code">
         &lt;map:match pattern="**faq.xml"&gt;
@@ -669,7 +669,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <h2 class="underlined_10">Output pipelines</h2>
 <div class="section">
 <p>
-        To recap, we now have a <span class="codefrag">*.xml</span> pipeline defined for each
+        To recap, we now have a <span class="codefrag ">*.xml</span> pipeline defined for each
         page in the site, emitting standardized XML.  These pipeline definitions
         are located in various *.xmap files, notably forrest.xmap
       </p>
@@ -683,7 +683,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           Easiest case first; PDFs don't require menus or headers, so we can
           simply transform our intermediate format into XSL:FO, and from there
           to PDF.  This is done by the following matcher in
-          <span class="codefrag">sitemap.xmap</span> ...
+          <span class="codefrag ">sitemap.xmap</span> ...
         </p>
 <pre class="code">
 1   &lt;map:match type="regexp" pattern="^(.*?)([^/]*).pdf$"&gt;
@@ -700,11 +700,11 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <ol>
           
 <li>The first line uses a matching regexp to break the URL into
-            directory <span class="codefrag">(.*?)</span> and filename
-            <span class="codefrag">([^/]*)</span> parts.</li>
+            directory <span class="codefrag ">(.*?)</span> and filename
+            <span class="codefrag ">([^/]*)</span> parts.</li>
           
 <li>We then generate XML from a <a href="#source_pipelines">Source
-              pipeline</a>, with the URL <span class="codefrag">cocoon:/{1}{2}.xml</span>
+              pipeline</a>, with the URL <span class="codefrag ">cocoon:/{1}{2}.xml</span>
 </li>
           
 <li>We then expand any XInclude statements..</li>
@@ -720,8 +720,8 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <h3 class="underlined_5">HTML output</h3>
 <p>Generating HTML pages is more complicated, because we have to merge
           the page body with a menu and tabs, and then add a header and footer.
-          Here is the <span class="codefrag">*.html</span> matcher in
-          <span class="codefrag">sitemap.xmap</span> ...</p>
+          Here is the <span class="codefrag ">*.html</span> matcher in
+          <span class="codefrag ">sitemap.xmap</span> ...</p>
 <pre class="code">
           &lt;map:match pattern="*.html"&gt;
             &lt;map:aggregate element="site"&gt;
@@ -740,7 +740,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           aggregating <a href="../body-index.html">body-index.html</a> and
           <a href="../menu-index.html">menu-index.html</a> and 
           <a href="../tab-index.html">tab-index.html</a> and then applying the
-          <span class="codefrag">site2xhtml.xsl</span> stylesheet to the result.
+          <span class="codefrag ">site2xhtml.xsl</span> stylesheet to the result.
         </p>
 <p>
           There is a nearly identical matcher for HTML files in subdirectories:
@@ -791,7 +791,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <li>
             
 <p>We then apply a custom-written
-              <span class="codefrag">IdGeneratorTransformer</span>, which ensures that every
+              <span class="codefrag ">IdGeneratorTransformer</span>, which ensures that every
               &lt;section&gt; has an "id" attribute if one is not supplied, by generating one from the
               &lt;title&gt; if necessary.  For example, &lt;idgen&gt; will
               transform:</p>
@@ -810,9 +810,9 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               ...
             </pre>
             
-<p>Later, the <span class="codefrag">document2html.xsl</span> stylesheet will create
+<p>Later, the <span class="codefrag ">document2html.xsl</span> stylesheet will create
               an &lt;a name&gt; element for every section, allowing this section to
-              be referred to as <span class="codefrag">index.html#How+to+boil+eggs</span>.</p>
+              be referred to as <span class="codefrag ">index.html#How+to+boil+eggs</span>.</p>
           
 </li>
           
@@ -827,7 +827,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 </ol>
 <a name="N10291"></a><a name="menu_pipeline"></a>
 <h3 class="underlined_5">Page menu</h3>
-<p>In the <span class="codefrag">sitemap.xmap</span> file, the matcher generating HTML for the menu is:</p>
+<p>In the <span class="codefrag ">sitemap.xmap</span> file, the matcher generating HTML for the menu is:</p>
 <pre class="code">
       &lt;map:match pattern="**menu-*.html"&gt;
         &lt;map:generate src="cocoon:/{1}book-{2}.html"/&gt;
@@ -840,7 +840,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </pre>
 <p>We get XML from a "book" pipeline, 
         <a href="#linkrewriting_impl">rewrite links</a>, and apply the
-          <span class="codefrag">book2menu.xsl</span> stylesheet to generate HTML.</p>
+          <span class="codefrag ">book2menu.xsl</span> stylesheet to generate HTML.</p>
 <p>How the menu XML is actually generated (the *book-*.html pipeline) is
           sufficiently complex to require a 
           <a href="#menu_xml_generation">section of its own</a>.</p>
@@ -857,23 +857,23 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
        &lt;/map:call&gt;
      &lt;/map:match&gt;
            </pre>
-<p>All the smarts are in the <span class="codefrag">tab2menu.xsl</span> stylesheet, which
+<p>All the smarts are in the <span class="codefrag ">tab2menu.xsl</span> stylesheet, which
           needs to choose the correct tab based on the current path.  Currently,
           a "longest matching path" algorithm is implemented.  See the
-          <span class="codefrag">tab2menu.xsl</span> stylesheet for details.</p>
+          <span class="codefrag ">tab2menu.xsl</span> stylesheet for details.</p>
 </div>
 
     
 <a name="N102D3"></a><a name="menu_xml_generation"></a>
 <h2 class="underlined_10">Menu XML generation</h2>
 <div class="section">
-<p>The "book" pipeline is defined in <span class="codefrag">sitemap.xmap</span>as:</p>
+<p>The "book" pipeline is defined in <span class="codefrag ">sitemap.xmap</span>as:</p>
 <pre class="code">
         &lt;map:match pattern="**book-*.html"&gt;
           &lt;map:mount uri-prefix="" src="menu.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
         </pre>
-<p>Meaning that it is defined in the <span class="codefrag">menu.xmap</span> file.  In there we find
+<p>Meaning that it is defined in the <span class="codefrag ">menu.xmap</span> file.  In there we find
         the real definition, which is quite complicated, because there are three
         supported menu systems (see <a href="../docs_0_60/linking.html">menus and
           linking</a>).  We will not go through the sitemap itself
@@ -884,7 +884,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           root-relative.</li>
         
 <li>
-<p>Depending on the <span class="codefrag">forrest.menu-scheme</span> property, we
+<p>Depending on the <span class="codefrag ">forrest.menu-scheme</span> property, we
             now apply one of the two algorithms for choosing a set of menu links
             (described in <a href="../docs_0_60/linking.html#menu_generation">menu
               generation</a>):</p>
@@ -902,12 +902,12 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               
 <p>
                 For example, say our current page's path is
-                <span class="codefrag">community/howto/index.html</span>.  In
-                <span class="codefrag">site.xml</span> we look for the node with this
-                "<span class="codefrag">href</span>" and discover its "<span class="codefrag">tab</span>" attribute
-                value is "<span class="codefrag">howtos</span>".  We then prune the
-                <span class="codefrag">site.xml</span>-derived content to contain only nodes with
-                <span class="codefrag">tab="howtos"</span>.
+                <span class="codefrag ">community/howto/index.html</span>.  In
+                <span class="codefrag ">site.xml</span> we look for the node with this
+                "<span class="codefrag ">href</span>" and discover its "<span class="codefrag ">tab</span>" attribute
+                value is "<span class="codefrag ">howtos</span>".  We then prune the
+                <span class="codefrag ">site.xml</span>-derived content to contain only nodes with
+                <span class="codefrag ">tab="howtos"</span>.
               </p>
               
 <p>
@@ -927,7 +927,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <li>
               
 <p>For "directory" menu generation, we simply use an
-                <span class="codefrag">XPathTransformer</span> to include only pages in the
+                <span class="codefrag ">XPathTransformer</span> to include only pages in the
                 current page's directory, or below:</p>
               
 <pre class="code">
@@ -937,10 +937,10 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                 </pre>
               
 <p>
-                Here, the "<span class="codefrag">{1}</span>" is the directory part of the current
+                Here, the "<span class="codefrag ">{1}</span>" is the directory part of the current
                 page.  So if our current page is
-                <span class="codefrag">community/howto/index.html</span> then "<span class="codefrag">{1}</span>" will
-                be <span class="codefrag">community/howto/</span> and the transformer will
+                <span class="codefrag ">community/howto/index.html</span> then "<span class="codefrag ">{1}</span>" will
+                be <span class="codefrag ">community/howto/</span> and the transformer will
                 include all nodes in that directory.
               </p>
             
@@ -948,18 +948,18 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           
 </ul>
           
-<p>We now have a <span class="codefrag">site.xml</span> subset relevant to our current
+<p>We now have a <span class="codefrag ">site.xml</span> subset relevant to our current
             page.</p>
         
 </li>
         
-<li>The "<span class="codefrag">href</span>" nodes in this are then made relative to the
+<li>The "<span class="codefrag ">href</span>" nodes in this are then made relative to the
           current page.</li>
         
-<li>The XML is then transformed into a legacy "<span class="codefrag">book.xml</span>"
+<li>The XML is then transformed into a legacy "<span class="codefrag ">book.xml</span>"
           format, for compatibility with existing stylesheets, and this XML
           format is returned (hence the name of the matcher:
-          <span class="codefrag">**book-*.html</span>).</li>
+          <span class="codefrag ">**book-*.html</span>).</li>
       
 </ol>
 </div>
@@ -968,7 +968,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <a name="N10359"></a><a name="linkrewriting_impl"></a>
 <h2 class="underlined_10">Link rewriting</h2>
 <div class="section">
-<p>In numerous places in <span class="codefrag">sitemap.xmap</span> you will see the
+<p>In numerous places in <span class="codefrag ">sitemap.xmap</span> you will see the
         "linkrewriter" transformer in action.  For example:</p>
 <pre class="code">&lt;map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/&gt;</pre>
 <p>This statement is Cocoon's linking system in action.  A full
@@ -977,7 +977,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <a name="N10370"></a><a name="input_modules"></a>
 <h3 class="underlined_5">Cocoon foundations: Input Modules</h3>
 <p>
-          The implementation of <span class="codefrag">site:</span> linking is heavily based on
+          The implementation of <span class="codefrag ">site:</span> linking is heavily based on
           Cocoon <a href="http://cocoon.apache.org/2.1/userdocs/concepts/modules.html">Input Modules</a>, a
           little-known but quite powerful aspect of Cocoon.  Input Modules are
           generic Components which simply allow you to look up a value with a
@@ -985,21 +985,21 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           querying an underlying data source.
         </p>
 <p>
-          In particular, Cocoon contains an <span class="codefrag">XMLFileModule</span>, which
+          In particular, Cocoon contains an <span class="codefrag ">XMLFileModule</span>, which
           lets one look up the value of an XML node, by interpreting the key as
           an XPath expression.  Cocoon also has a
-          <span class="codefrag">SimpleMappingMetaModule</span>, which allows the key to be
+          <span class="codefrag ">SimpleMappingMetaModule</span>, which allows the key to be
           rewritten before it is used to look up a value.
         </p>
 <p>
-          The idea for putting these together to rewrite "<span class="codefrag">site:</span>"
+          The idea for putting these together to rewrite "<span class="codefrag ">site:</span>"
           links was described in <a href="http://marc.theaimsgroup.com/?t=103992708800001&r=1&w=2">this
             thread</a>. The idea is to write a Cocoon Transformer that
           triggers on encountering &lt;link
-          href="<span class="codefrag">scheme:address</span>"&gt;, and interprets the
-          <span class="codefrag">scheme:address</span> internal URI as
-          <span class="codefrag">inputmodule:key</span>.  The transformer then uses the named
-          InputModule to look up the key value. The <span class="codefrag">scheme:address</span>
+          href="<span class="codefrag ">scheme:address</span>"&gt;, and interprets the
+          <span class="codefrag ">scheme:address</span> internal URI as
+          <span class="codefrag ">inputmodule:key</span>.  The transformer then uses the named
+          InputModule to look up the key value. The <span class="codefrag ">scheme:address</span>
           URI is then rewritten with the found value.  This transformer was
           implemented as 
           <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=15611">LinkRewriterTransformer</a>,
@@ -1008,7 +1008,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <a name="N103A4"></a><a name="implement_rewriting"></a>
 <h3 class="underlined_5">Implementing "site:" rewriting</h3>
 <p>
-          Using the above components, "<span class="codefrag">site:</span>" URI rewriting is
+          Using the above components, "<span class="codefrag ">site:</span>" URI rewriting is
           accomplished as follows.
         </p>
 <a name="N103B3"></a><a name="cocoon_xconf"></a>
@@ -1034,26 +1034,26 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             
 <li>
 <strong>linkmap</strong> will provide access to the contents of
-              <span class="codefrag">site.xml</span>; for example, <span class="codefrag">linkmap:/site/about/index/@href</span>
+              <span class="codefrag ">site.xml</span>; for example, <span class="codefrag ">linkmap:/site/about/index/@href</span>
               would return the value "index.html".</li>
             
 <li>
 <strong>site</strong> provides a "mask" over
-              <strong>linkmap</strong> such that <span class="codefrag">site:index</span> expands
-              to <span class="codefrag">linkmap:/site//index/@href</span>
+              <strong>linkmap</strong> such that <span class="codefrag ">site:index</span> expands
+              to <span class="codefrag ">linkmap:/site//index/@href</span>
             
 </li>
             
 <li>
 <strong>ext</strong> provides another "mask" over
-              <strong>linkmap</strong>, such that <span class="codefrag">ext:ant</span> would
-              expand to <span class="codefrag">linkmap:/site/external-refs//ant/@href</span>
+              <strong>linkmap</strong>, such that <span class="codefrag ">ext:ant</span> would
+              expand to <span class="codefrag ">linkmap:/site/external-refs//ant/@href</span>
             
 </li>
           
 </ul>
 <p>However at the moment, we have only declared the input modules.
-            They will be configured in <span class="codefrag">sitemap.xmap</span> as described in
+            They will be configured in <span class="codefrag ">sitemap.xmap</span> as described in
             the next section.</p>
 <a name="N103F1"></a><a name="sitemap"></a>
 <h4>sitemap.xmap</h4>
@@ -1110,39 +1110,39 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                   &lt;file src="{src}" reloadable="false" /&gt;
               &lt;/input-module&gt;</pre>
               
-<p>The "<span class="codefrag">{src}</span>" text is expanded to the value of the
-                "<span class="codefrag">src</span>" attribute in the "<span class="codefrag">linkrewriter</span>"
-                instance, namely "<span class="codefrag">cocoon:/{1}linkmap-{2}.html</span>"
-                Thus the <span class="codefrag">linkmap</span> module reads dynamically
+<p>The "<span class="codefrag ">{src}</span>" text is expanded to the value of the
+                "<span class="codefrag ">src</span>" attribute in the "<span class="codefrag ">linkrewriter</span>"
+                instance, namely "<span class="codefrag ">cocoon:/{1}linkmap-{2}.html</span>"
+                Thus the <span class="codefrag ">linkmap</span> module reads dynamically
                 generated XML specific to the current request.</p>
             
 </li>
             
 <li>
               
-<p>One level out, we configure the "<span class="codefrag">site</span>" and
-                "<span class="codefrag">ext</span>" input modules, to map onto our dynamically
-                configured "<span class="codefrag">linkmap</span>" module.</p>
+<p>One level out, we configure the "<span class="codefrag ">site</span>" and
+                "<span class="codefrag ">ext</span>" input modules, to map onto our dynamically
+                configured "<span class="codefrag ">linkmap</span>" module.</p>
             
 </li>
             
 <li>
               
 <p>Then at the outermost level, we configure the
-                "<span class="codefrag">linkrewriter</span>" transformer.  First we tell it which
+                "<span class="codefrag ">linkrewriter</span>" transformer.  First we tell it which
                 attributes to consider rewriting:</p>
               
 <pre class="code">
                 &lt;link-attrs&gt;href src&lt;/link-attrs&gt;
                 &lt;schemes&gt;site ext&lt;/schemes&gt;</pre>
               
-<p>So, "<span class="codefrag">href</span>" and "<span class="codefrag">src</span>" attributes starting
-                with "<span class="codefrag">site:</span>" or "<span class="codefrag">ext:</span>" are rewritten.</p>
+<p>So, "<span class="codefrag ">href</span>" and "<span class="codefrag ">src</span>" attributes starting
+                with "<span class="codefrag ">site:</span>" or "<span class="codefrag ">ext:</span>" are rewritten.</p>
 
               
-<p>By nesting the "<span class="codefrag">site</span>" and "<span class="codefrag">ext</span>" input
-                modules in the "<span class="codefrag">linkrewriter</span>" configuration, we tell
-                "<span class="codefrag">linkrewriter</span>" to use these two input modules when
+<p>By nesting the "<span class="codefrag ">site</span>" and "<span class="codefrag ">ext</span>" input
+                modules in the "<span class="codefrag ">linkrewriter</span>" configuration, we tell
+                "<span class="codefrag ">linkrewriter</span>" to use these two input modules when
                 rewriting links.</p>
             
 </li>
@@ -1150,20 +1150,20 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 </ul>
 <p>
             The end result is that, for example, the source XML for the
-            <span class="codefrag">community/body-index.html</span> page has its links rewritten
+            <span class="codefrag ">community/body-index.html</span> page has its links rewritten
             by an XMLFileModule reading XML from
-            <span class="codefrag">cocoon:/community/linkmap-index.html</span>
+            <span class="codefrag ">cocoon:/community/linkmap-index.html</span>
           
 </p>
 <a name="N10464"></a><a name="dynamic_linkmap"></a>
 <h4>Dynamically generating a linkmap</h4>
 <p>
             Why do we need this "linkmap" pipeline generating dynamic XML from
-            <span class="codefrag">site.xml</span>, instead of just using <span class="codefrag">site.xml</span> directly?  The reasons are described
+            <span class="codefrag ">site.xml</span>, instead of just using <span class="codefrag ">site.xml</span> directly?  The reasons are described
             in <a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=103444028129281&w=2">the linkmap RT</a>: we need to
             concatenate @hrefs and add dot-dots to the paths, depending on which
             directory the linkee is in.  This is done with the following
-            pipelines in <span class="codefrag">linkmap.xmap</span> ...
+            pipelines in <span class="codefrag ">linkmap.xmap</span> ...
           </p>
 <pre class="code">
 &lt;!-- site.xml with @href's appended to be context-relative. --&gt;
