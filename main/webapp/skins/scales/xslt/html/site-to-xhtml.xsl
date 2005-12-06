@@ -293,6 +293,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     +</xsl:comment>
   <div class="lastmodified"><xsl:call-template name="last-published"/> </div>
 
+    <xsl:if test="not($config/disable-copyright-footer = 'true')">
       <div class="copyright">
         Copyright &#169;
         <xsl:text> </xsl:text>
@@ -312,6 +313,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:otherwise>
         </xsl:choose>
       </div>
+    </xsl:if>
 
           <xsl:if test="$filename = 'index.html'">
             <div id="logos" >
