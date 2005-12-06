@@ -408,7 +408,7 @@ document.write("Last Published: " + document.lastModified);
 <div class="section">
 <p>
         This document describes Forrest's internal URI space; how it is managed
-        with the "<span class="codefrag">site.xml</span>" configuration file, how menus are generated,
+        with the "<span class="codefrag ">site.xml</span>" configuration file, how menus are generated,
         and how various link schemes (site: and ext:) operate.
         An overview of the implementation is also provided.
       </p>
@@ -419,9 +419,9 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">site.xml</h2>
 <div class="section">
 <p>
-        The "<span class="codefrag">site.xml</span>" configuration file is what we would call a "site map"
+        The "<span class="codefrag ">site.xml</span>" configuration file is what we would call a "site map"
         if Cocoon hadn't already claimed that term. 
-        The "<span class="codefrag">site.xml</span>" is a loosely structured XML file, acting as a map of the
+        The "<span class="codefrag ">site.xml</span>" is a loosely structured XML file, acting as a map of the
         site's contents.  It provides a unique identifier (an XPath address)
         for "nodes" of information in the website.  A "node" of site information
         can be:
@@ -434,17 +434,17 @@ document.write("Last Published: " + document.lastModified);
 <li>A specific page, e.g. "the FAQ page"</li>
         
 <li>A specific section in a page, e.g. the "general" section of the FAQ
-          page (identified by <span class="codefrag">id="general"</span> attribute)</li>
+          page (identified by <span class="codefrag ">id="general"</span> attribute)</li>
       
 </ul>
 <p>
-        In addition to providing fine-grained addressing of site info, the <span class="codefrag">site.xml</span>
+        In addition to providing fine-grained addressing of site info, the <span class="codefrag ">site.xml</span>
         allows <em>metadata</em> to be associated with each node, using
-        attributes or child elements.  Most commonly, a <span class="codefrag">label</span>
+        attributes or child elements.  Most commonly, a <span class="codefrag ">label</span>
         attribute is used to provide a text description of the node.
       </p>
 <p>
-        There are currently two applications of <span class="codefrag">site.xml</span>
+        There are currently two applications of <span class="codefrag ">site.xml</span>
       
 </p>
 <dl>
@@ -454,21 +454,21 @@ document.write("Last Published: " + document.lastModified);
 </dt>
         
 <dd>
-<span class="codefrag">site.xml</span> is used to generate the menus for the HTML website.</dd>
+<span class="codefrag ">site.xml</span> is used to generate the menus for the HTML website.</dd>
         
 <dt>
 <a href="#indirect-linking">Indirect linking</a>
 </dt>
         
 <dd>
-<span class="codefrag">site.xml</span> provides a basic aliasing mechanism for linking, e.g. one
+<span class="codefrag ">site.xml</span> provides a basic aliasing mechanism for linking, e.g. one
           can write &lt;link href="site:v0.80//changes"&gt; from anywhere in the site, and
           link to the "changes" information node (translated to changes.html).
           More on this below.</dd>
       
 </dl>
 <p>
-        Here is a sample <span class="codefrag">site.xml</span> ...
+        Here is a sample <span class="codefrag ">site.xml</span> ...
       </p>
 <pre class="code">
 &lt;?xml version="1.0"?&gt;
@@ -529,25 +529,25 @@ document.write("Last Published: " + document.lastModified);
 <ul>
         
 <li>The root element must be "site", and normal content should be in the
-          namespace <span class="codefrag">http://apache.org/forrest/linkmap/1.0</span> (Feel
+          namespace <span class="codefrag ">http://apache.org/forrest/linkmap/1.0</span> (Feel
           free to mix in your own content (RDF, dublin core, etc) under new
           namespaces)</li>
         
-<li>Element names are used as identifiers.  The "<span class="codefrag">foo</span>" in
-          "<span class="codefrag">site:foo</span>" must therefore be a valid NMTOKEN.</li>
+<li>Element names are used as identifiers.  The "<span class="codefrag ">foo</span>" in
+          "<span class="codefrag ">site:foo</span>" must therefore be a valid NMTOKEN.</li>
         
-<li>Elements with <span class="codefrag">href</span> attributes can be used as identifiers
-          in "<span class="codefrag">site:</span>" URIs</li>
+<li>Elements with <span class="codefrag ">href</span> attributes can be used as identifiers
+          in "<span class="codefrag ">site:</span>" URIs</li>
         
 <li>Relative href attribute contents are "accumulated" by prepending hrefs
           from ancestor nodes</li>
         
-<li>Elements without <span class="codefrag">label</span> attributes (and their children)
+<li>Elements without <span class="codefrag ">label</span> attributes (and their children)
           are not displayed in the menu.</li>
         
-<li>Elements below <span class="codefrag">external-refs</span> are mapped to the
-          "<span class="codefrag">ext:</span>" scheme.  So "<span class="codefrag">ext:commons/resolver/</span>" becomes
-          "<span class="codefrag">http://xml.apache.org/commons/resolver/</span>"</li>
+<li>Elements below <span class="codefrag ">external-refs</span> are mapped to the
+          "<span class="codefrag ">ext:</span>" scheme.  So "<span class="codefrag ">ext:commons/resolver/</span>" becomes
+          "<span class="codefrag ">http://xml.apache.org/commons/resolver/</span>"</li>
       
 </ul>
 <p>
@@ -560,11 +560,11 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Generating Menus</h2>
 <div class="section">
 <p>
-        Two files are used to define a site's tabs and menu (<span class="codefrag">site.xml</span> and
-        <span class="codefrag">tabs.xml</span>).  Both files are located in
-        <span class="codefrag">src/documentation/content/xdocs/</span>
+        Two files are used to define a site's tabs and menu (<span class="codefrag ">site.xml</span> and
+        <span class="codefrag ">tabs.xml</span>).  Both files are located in
+        <span class="codefrag ">src/documentation/content/xdocs/</span>
 </p>
-<p>Assume that our <span class="codefrag">tabs.xml</span> looks like this:</p>
+<p>Assume that our <span class="codefrag ">tabs.xml</span> looks like this:</p>
 <pre class="code">
 &lt;tabs ...&gt;
     &lt;tab id="home" label="Home" dir=""/&gt;
@@ -572,48 +572,48 @@ document.write("Last Published: " + document.lastModified);
     &lt;tab id="howto" label="How-Tos" dir="community/howto"/&gt;
 &lt;/tabs&gt;
       </pre>
-<p>Using the "<span class="codefrag">site.xml</span>" listed above, we would get these menus:</p>
+<p>Using the "<span class="codefrag ">site.xml</span>" listed above, we would get these menus:</p>
 <p>
         
 <img alt="Menu generated from site.xml" src="images/menu.png">&nbsp;&nbsp;&nbsp;
         <img alt="Community menu generated from site.xml" src="images/menu2.png">&nbsp;&nbsp;&nbsp;
         <img alt="Howto menu generated from site.xml" src="images/menu3.png">
       </p>
-<p>When using the "<span class="codefrag">dir</span>" attribute as above the value of the
-      "<span class="codefrag">indexfile</span>" parameter is appended to the value of the 
-      "<span class="codefrag">dir</span>" attribute (together with a preceding '/'). For example,
+<p>When using the "<span class="codefrag ">dir</span>" attribute as above the value of the
+      "<span class="codefrag ">indexfile</span>" parameter is appended to the value of the 
+      "<span class="codefrag ">dir</span>" attribute (together with a preceding '/'). For example,
       the link for the community tab above is 
-      <span class="codefrag">community/mailLists.html</span>. Note that "<span class="codefrag">indexfile</span>"
-      defaults to "<span class="codefrag">index.html</span>" if no value is supplied. Therefore the
-      link for the howto tab is <span class="codefrag">community/howto/index.html</span>
+      <span class="codefrag ">community/mailLists.html</span>. Note that "<span class="codefrag ">indexfile</span>"
+      defaults to "<span class="codefrag ">index.html</span>" if no value is supplied. Therefore the
+      link for the howto tab is <span class="codefrag ">community/howto/index.html</span>
 </p>
 <a name="N100F0"></a><a name="tabs-external"></a>
 <h3 class="underlined_5">Tabs for External Resources</h3>
 <p>A tab can refer to an external resource by using the 
-        "<span class="codefrag">href</span>" attribute instead of the "<span class="codefrag">dir</span>" attribute.
-        The value of "<span class="codefrag">href</span>" should be the URI of the resource you wish 
+        "<span class="codefrag ">href</span>" attribute instead of the "<span class="codefrag ">dir</span>" attribute.
+        The value of "<span class="codefrag ">href</span>" should be the URI of the resource you wish 
         to link to. For example:</p>
 <pre class="code">
 &lt;tab id="apache" label="XML Apache" href="http://xml.apache.org/"/&gt;
         </pre>
-<p>Unlike the "<span class="codefrag">dir</span>" attribute, the value of "<span class="codefrag">href</span>"
+<p>Unlike the "<span class="codefrag ">dir</span>" attribute, the value of "<span class="codefrag ">href</span>"
         is left unmodified by Forrest unless it is root-relative and obviously 
         specifies a directory (ends in '/'). In which case /index.html will be 
         added.</p>
 <a name="N10110"></a><a name="selecting-entries"></a>
 <h3 class="underlined_5">Selecting menu entries</h3>
 <p>Forrest decides which menu entries to display, by examining the
-          "<span class="codefrag">tab</span>" attributes in the <span class="codefrag">site.xml</span> file. The children of 
-          all <span class="codefrag">site.xml</span> entries with a
-          "<span class="codefrag">tab</span>" which is equal to that of the current page, are
+          "<span class="codefrag ">tab</span>" attributes in the <span class="codefrag ">site.xml</span> file. The children of 
+          all <span class="codefrag ">site.xml</span> entries with a
+          "<span class="codefrag ">tab</span>" which is equal to that of the current page, are
           added to the menu, whilst the element itself forms the root of that
-          part of the menu (see the "<span class="codefrag">community</span>" element in the 
+          part of the menu (see the "<span class="codefrag ">community</span>" element in the 
           example below). Child elements that have a different 
-          "<span class="codefrag">tab</span>" attribute value will appear in the menu for their
+          "<span class="codefrag ">tab</span>" attribute value will appear in the menu for their
           parents, and will also form the root of a new menu for a tab with 
-          the appropriate name (see the "<span class="codefrag">howto-samples</span>" element
+          the appropriate name (see the "<span class="codefrag ">howto-samples</span>" element
           below).</p>
-<p>Consider our <span class="codefrag">site.xml</span> example:</p>
+<p>Consider our <span class="codefrag ">site.xml</span> example:</p>
 <pre class="code">
 &lt;site label="Forrest" href="" <strong>tab="home"</strong>
   xmlns="http://apache.org/forrest/linkmap/1.0"&gt;
@@ -638,25 +638,25 @@ document.write("Last Published: " + document.lastModified);
         &lt;step1 label="Step 1" href="step1.html"/&gt;
       ...</pre>
 <p>
-          Every <span class="codefrag">site.xml</span> node can potentially have a "<span class="codefrag">tab</span>" attribute.  If
-          unspecified, nodes inherit the "<span class="codefrag">tab</span>" of their parent.  Thus
+          Every <span class="codefrag ">site.xml</span> node can potentially have a "<span class="codefrag ">tab</span>" attribute.  If
+          unspecified, nodes inherit the "<span class="codefrag ">tab</span>" of their parent.  Thus
           everything in the <strong>&lt;about&gt;</strong> section has an implicit
-          <span class="codefrag">tab="home" </span>attribute.</p>
+          <span class="codefrag ">tab="home" </span>attribute.</p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">You can see this by viewing your site's 
         <a href="../abs-menulinks">abs-menulinks</a> pipeline in a
           browser.</div>
 </div>
-<p>Say that the user is viewing the <span class="codefrag">linking.html</span>
+<p>Say that the user is viewing the <span class="codefrag ">linking.html</span>
           page.  The <strong>&lt;linking&gt;</strong> node has an implicit tab
-          value of "<span class="codefrag">home</span>".  Forrest will select <em>all nodes with
+          value of "<span class="codefrag ">home</span>".  Forrest will select <em>all nodes with
             tab="home"</em> and put them in the menu.
         </p>
 <a name="N1016A"></a><a name="other-menu-selection"></a>
 <h3 class="underlined_5">Alternative menu selection mechanisms.</h3>
 <p>
-          The "<span class="codefrag">tab</span>" attribute-based scheme for selecting a menu's
+          The "<span class="codefrag ">tab</span>" attribute-based scheme for selecting a menu's
           entries is not the only one, although it is the most flexible.  Here
           we describe a few alternatives.
         </p>
@@ -675,11 +675,11 @@ document.write("Last Published: " + document.lastModified);
           </p>
 <ul>
             
-<li>Edit <span class="codefrag">forrest.properties</span> and set
-              <span class="codefrag">project.menu-scheme=directories</span>
+<li>Edit <span class="codefrag ">forrest.properties</span> and set
+              <span class="codefrag ">project.menu-scheme=directories</span>
 </li>
             
-<li>Remove the "<span class="codefrag">id</span>" attributes from <span class="codefrag">tabs.xml</span>
+<li>Remove the "<span class="codefrag ">id</span>" attributes from <span class="codefrag ">tabs.xml</span>
               entries.</li>
           
 </ul>
@@ -687,19 +687,19 @@ document.write("Last Published: " + document.lastModified);
 <h4>Specifying menus with book.xml</h4>
 <p>
             Historically, menus in Forrest have been generated from a
-            <span class="codefrag">book.xml</span> file, one per directory.  This mechanism is
-            still available, and if a <span class="codefrag">book.xml</span> is found, it will be
-            used in preference to the menu generated by the <span class="codefrag">site.xml</span> file. The <span class="codefrag">book.xml</span>
-            files can use "<span class="codefrag">site:</span>" URIs to ease the maintenance burden
+            <span class="codefrag ">book.xml</span> file, one per directory.  This mechanism is
+            still available, and if a <span class="codefrag ">book.xml</span> is found, it will be
+            used in preference to the menu generated by the <span class="codefrag ">site.xml</span> file. The <span class="codefrag ">book.xml</span>
+            files can use "<span class="codefrag ">site:</span>" URIs to ease the maintenance burden
             that led to obsolescence of book.xml files.  In general, however, we
-            recommend that users avoid <span class="codefrag">book.xml</span> files.
+            recommend that users avoid <span class="codefrag ">book.xml</span> files.
           </p>
 <a name="N101C3"></a><a name="tab-selection"></a>
 <h3 class="underlined_5">Selecting the current tab</h3>
 <p>
           The tab selection algorithm is quite simple: the tab with the
-          "<span class="codefrag">id</span>" which matches that of the current <span class="codefrag">site.xml</span>
-          node is "selected". However the interaction of <span class="codefrag">tabs.xml</span> and <span class="codefrag">site.xml</span>
+          "<span class="codefrag ">id</span>" which matches that of the current <span class="codefrag ">site.xml</span>
+          node is "selected". However the interaction of <span class="codefrag ">tabs.xml</span> and <span class="codefrag ">site.xml</span>
           while powerful, can be complex to establish.
         </p>
 <a name="N101D9"></a><a name="tab-site"></a>
@@ -720,8 +720,8 @@ document.write("Last Published: " + document.lastModified);
           
 <li>
             The Forrest website also accompanies your software release
-            in the <span class="codefrag">site-author</span> directory, so
-            inspect its <span class="codefrag">tabs.xml</span> and <span class="codefrag">site.xml</span> to see how it is done. Also see the
+            in the <span class="codefrag ">site-author</span> directory, so
+            inspect its <span class="codefrag ">tabs.xml</span> and <span class="codefrag ">site.xml</span> to see how it is done. Also see the
             'forrest seed site' example. It is not as complex as the Forrest website.
           </li>
           
@@ -731,25 +731,25 @@ document.write("Last Published: " + document.lastModified);
           
 <li>
             The value of the tab @id attribute cannot begin with a digit.
-            Likewise, element names in <span class="codefrag">tabs.xml</span> and <span class="codefrag">site.xml</span> cannot begin with a digit.
+            Likewise, element names in <span class="codefrag ">tabs.xml</span> and <span class="codefrag ">site.xml</span> cannot begin with a digit.
           </li>
           
 <li>
-            Add label attributes to <span class="codefrag">site.xml</span> elements to make the menus show.
-            With nested elements in <span class="codefrag">site.xml</span> if the outer element does not have a label
+            Add label attributes to <span class="codefrag ">site.xml</span> elements to make the menus show.
+            With nested elements in <span class="codefrag ">site.xml</span> if the outer element does not have a label
             attribute then the inner elements will not be displayed.
           </li>
           
 <li>
             To cause tabs and menu items to be highlighted, there need to be
-            corresponding elements in <span class="codefrag">site.xml</span> that have href attributes which match
+            corresponding elements in <span class="codefrag ">site.xml</span> that have href attributes which match
             the relevant path.
           </li>
           
 <li>
             When the tab points to a directory, then to make the tab highlighted
             when selected, you need an element which matches index.html within the
-            group of elements that define the menus for this tab in the <span class="codefrag">site.xml</span>
+            group of elements that define the menus for this tab in the <span class="codefrag ">site.xml</span>
             file. That element can be without a label attribute, so that it doesn't
             display as a menu item. However doing that causes that tab's menus
             to be collapsed.
@@ -758,7 +758,7 @@ document.write("Last Published: " + document.lastModified);
 <li>
             Q: The tab link in my site assumes that 'index.html'
             is present in the linked-to directory. How do I fix this?
-            A: In <span class="codefrag">tabs.xml</span> use @href instead of @dir attribute and omit the trailing '/'.
+            A: In <span class="codefrag ">tabs.xml</span> use @href instead of @dir attribute and omit the trailing '/'.
             Which file to serve is then a concern of the sitemap.
             See more at the <a href="../docs_0_80/faq.html#tab-index">FAQ</a>.
           </li>
@@ -774,35 +774,35 @@ document.write("Last Published: " + document.lastModified);
       is created from the titles of each section in your xdoc. By default only
       sections up to two levels deep are included and the table of contents is
       displayed at the top of the page. However, you can configure this
-      behaviour in <span class="codefrag">src/documentation/skinconf.xml</span> using the 
-      "<span class="codefrag">toc</span>" element.</p>
+      behaviour in <span class="codefrag ">src/documentation/skinconf.xml</span> using the 
+      "<span class="codefrag ">toc</span>" element.</p>
 <pre class="code">
 &lt;toc level="2" location="page"/&gt;
       </pre>
 <ul>
         
 <li>
-<strong><span class="codefrag">level</span></strong> - is the depth to which you
+<strong><span class="codefrag ">level</span></strong> - is the depth to which you
         want your table of contents to go. Setting it to "3" will therefore 
         include sections nested to 3 levels. Setting this to "0" will result in
         no table of contents being generated.</li>
         
 <li>
-<strong><span class="codefrag">location</span></strong> - indicates where you
+<strong><span class="codefrag ">location</span></strong> - indicates where you
         want the table of contents to be rendered. It can be set to one of
         three values:
           <ul>
             
 <li>
-<span class="codefrag">page</span> - the table of contents will be rendered
+<span class="codefrag ">page</span> - the table of contents will be rendered
             at the top of the body of your page</li>
             
 <li>
-<span class="codefrag">menu</span> - the table of contents will be rendered
+<span class="codefrag ">menu</span> - the table of contents will be rendered
             in the menu to the left of the body of the page</li>
             
 <li>
-<span class="codefrag">menu, page</span> - table of contents will be rendered
+<span class="codefrag ">menu, page</span> - table of contents will be rendered
             in both the page and the menu positions</li>
           
 </ul>
@@ -820,8 +820,8 @@ document.write("Last Published: " + document.lastModified);
 <h3 class="underlined_5">Direct linking</h3>
 <p>
           In earlier versions of Forrest (and in similar systems), there has
-          been only one URI space: that of the generated site.  If <span class="codefrag">index.xml</span> wants to
-          link to <span class="codefrag">todo.xml</span> then <span class="codefrag">index.xml</span> would use
+          been only one URI space: that of the generated site.  If <span class="codefrag ">index.xml</span> wants to
+          link to <span class="codefrag ">todo.xml</span> then <span class="codefrag ">index.xml</span> would use
         </p>
 <pre class="code">
           &lt;a href="todo.html"&gt;to-do list&lt;a&gt;
@@ -852,8 +852,8 @@ document.write("Last Published: " + document.lastModified);
           
 <dt>todo</dt>
           
-<dd>identifies the content in <span class="codefrag">todo.xml</span> by reference to a
-            "node" of content declared in <span class="codefrag">site.xml</span>
+<dd>identifies the content in <span class="codefrag ">todo.xml</span> by reference to a
+            "node" of content declared in <span class="codefrag ">site.xml</span>
 </dd>
         
 </dl>
@@ -866,13 +866,13 @@ document.write("Last Published: " + document.lastModified);
 <a name="N102AC"></a><a name="resolve-site-uris"></a>
 <h4>Resolving site: URIs</h4>
 <p>
-            So how does "<span class="codefrag">site:v0.80//todo</span>" get resolved?  A full answer
+            So how does "<span class="codefrag ">site:v0.80//todo</span>" get resolved?  A full answer
             is provided in the <a href="#implementation">implementation</a>
-            section.  Essentially, the "<span class="codefrag">todo</span>" part has
-            "<span class="codefrag">/site//</span>" prepended, and "<span class="codefrag">/@href</span>" appended, to
-            form the string "<span class="codefrag">/site//todo/@href</span>".  This is
-            then used as an XPath expression in <span class="codefrag">site.xml</span> to identify the string
-            replacement, in this case "<span class="codefrag">todo.html</span>"
+            section.  Essentially, the "<span class="codefrag ">todo</span>" part has
+            "<span class="codefrag ">/site//</span>" prepended, and "<span class="codefrag ">/@href</span>" appended, to
+            form the string "<span class="codefrag ">/site//todo/@href</span>".  This is
+            then used as an XPath expression in <span class="codefrag ">site.xml</span> to identify the string
+            replacement, in this case "<span class="codefrag ">todo.html</span>"
           </p>
 <p>
             Thus by modifying the XPath prefix and suffix, almost any XML
@@ -882,33 +882,33 @@ document.write("Last Published: " + document.lastModified);
 <div class="label">Note</div>
 <div class="content">
             Actually, the XPath is applied to XML generated dynamically from
-            <span class="codefrag">site.xml</span>.  The generated XML has each "@href" fully expanded ("absolutized")
+            <span class="codefrag ">site.xml</span>.  The generated XML has each "@href" fully expanded ("absolutized")
             and dot-dots (..) added as needed ("relativized").
           </div>
 </div>
 <p>
             Notice that the "//" allows us any degree of specificity when linking.
-            In the sample <span class="codefrag">site.xml</span> above, both "<span class="codefrag">site:v0.80//new_content_type</span>" and
-            "<span class="codefrag">site:about/your-project/new_content_type</span>" identify the
+            In the sample <span class="codefrag ">site.xml</span> above, both "<span class="codefrag ">site:v0.80//new_content_type</span>" and
+            "<span class="codefrag ">site:about/your-project/new_content_type</span>" identify the
             same node.  It is up to you to decide how specific to make links.  One
-            nice benefit of link "ambiguity" is that <span class="codefrag">site.xml</span> can be reorganized
+            nice benefit of link "ambiguity" is that <span class="codefrag ">site.xml</span> can be reorganized
             without breaking links.  For example, "new_content_type" currently
             identifies a node in "your-project".  By leaving that fact unspecified
-            in "<span class="codefrag">site:new_content_type</span>" we are free to make
+            in "<span class="codefrag ">site:new_content_type</span>" we are free to make
             "new_content_type" its own XML file, or a node in another file, in
             another category.
           </p>
 <a name="N102EA"></a><a name="resolve-ext-uris"></a>
 <h4>ext: URIs: linking to external URLs</h4>
 <p>
-            The "<span class="codefrag">ext:</span>" scheme was created partly to demonstrate the
+            The "<span class="codefrag ">ext:</span>" scheme was created partly to demonstrate the
             ease with which new schemes can be defined, and partly for practical
-            use. The "<span class="codefrag">ext:</span>" URIs identify nodes in <span class="codefrag">site.xml</span> below the
+            use. The "<span class="codefrag ">ext:</span>" URIs identify nodes in <span class="codefrag ">site.xml</span> below the
             &lt;external-refs&gt; node.  By convention, nodes here link to URLs
             outside the website, and are not listed in the menu generated from
-            the <span class="codefrag">site.xml</span> file.
+            the <span class="codefrag ">site.xml</span> file.
           </p>
-<p>Here is a <span class="codefrag">site.xml</span> snippet illustrating "<span class="codefrag">external-refs</span>":</p>
+<p>Here is a <span class="codefrag ">site.xml</span> snippet illustrating "<span class="codefrag ">external-refs</span>":</p>
 <pre class="code">
 &lt;site&gt;
   ...
@@ -925,34 +925,34 @@ document.write("Last Published: " + document.lastModified);
 <p>
             As an example, &lt;a href="ext:commons/resolver"&gt;
             generates the link
-            <a href="http://xml.apache.org/commons/components/resolver/">http://xml.apache.org/components/resolver/</a>
+            <a href="http://xml.apache.org/commons/components/resolver/">http://xml.apache.org/commons/components/resolver/</a>
           
 </p>
 <p>
-            The general rules of <span class="codefrag">site.xml</span> and "<span class="codefrag">site:</span>" linking apply.
+            The general rules of <span class="codefrag ">site.xml</span> and "<span class="codefrag ">site:</span>" linking apply.
             Specifically, the "@href" aggregation makes defining large numbers of
             related URLs easy.
           </p>
 <a name="N1031D"></a><a name="source-uris"></a>
 <h4>Theory: source URIs</h4>
 <p>
-            The "<span class="codefrag">site:</span>" URIs like "<span class="codefrag">site:v0.80//todo</span>" are examples of
+            The "<span class="codefrag ">site:</span>" URIs like "<span class="codefrag ">site:v0.80//todo</span>" are examples of
             "<em>source</em>" URIs, in contrast to the more usual
-            <span class="codefrag">foo.html</span> style URIs, which we here call
+            <span class="codefrag ">foo.html</span> style URIs, which we here call
             "<em>destination</em>" URIs.  This introduces an important concept: that
             the "<em>source</em>" URI space exists and is independent of that of the
             generated site.  Furthermore, URIs (i.e. links) are first-class objects,
             on par with XML documents, in that just as XML content is transformed,
             so are the links.  Within the source URI space, we can have all sorts of
             interesting schemes (person: mail: google: java: etc). These will
-            all be translated into plain old "<span class="codefrag">http:</span>" or relative URIs
+            all be translated into plain old "<span class="codefrag ">http:</span>" or relative URIs
             in the destination URI space, just like exotic XML source formats are
             translated into plain old HTML in the output.
           </p>
 <a name="N1033C"></a><a name="future-schemes"></a>
 <h4>Future schemes</h4>
 <p>
-            So far, the "<span class="codefrag">site:</span>" and "<span class="codefrag">ext:</span>" schemes are defined.
+            So far, the "<span class="codefrag ">site:</span>" and "<span class="codefrag ">ext:</span>" schemes are defined.
             To give you some ideas on other things we'd like to implement (and
             wouldd welcome help to implement) here are a few possibilities.
           </p>
@@ -966,10 +966,10 @@ document.write("Last Published: " + document.lastModified);
               
 <td colspan="1" rowspan="1">java</td>
               <td colspan="1" rowspan="1">java:org.apache.proj.SomeClass</td>
-              <td colspan="1" rowspan="1"><span class="codefrag">../../apidocs/org/apache/proj/SomeClass.html</span></td>
+              <td colspan="1" rowspan="1"><span class="codefrag ">../../apidocs/org/apache/proj/SomeClass.html</span></td>
               <td colspan="1" rowspan="1">
                 Links to documentation for a Java class (typically generated by
-                <span class="codefrag">javadoc</span>).
+                <span class="codefrag ">javadoc</span>).
               </td>
             
 </tr>
@@ -978,9 +978,9 @@ document.write("Last Published: " + document.lastModified);
               
 <td colspan="1" rowspan="1">mail</td>
               <td colspan="1" rowspan="1">mail::&lt;Message-Id&gt;</td>
-              <td colspan="1" rowspan="1"><span class="codefrag">http://marc.theaimsgroup.com?t=12345678</span></td>
+              <td colspan="1" rowspan="1"><span class="codefrag ">http://marc.theaimsgroup.com?t=12345678</span></td>
               <td colspan="1" rowspan="1">
-                Links to an email, identified by its <span class="codefrag">Message-Id</span>
+                Links to an email, identified by its <span class="codefrag ">Message-Id</span>
                 header. Any mail archive website could be used.
               </td>
             
@@ -990,7 +990,7 @@ document.write("Last Published: " + document.lastModified);
               
 <td colspan="1" rowspan="1">search</td>
               <td colspan="1" rowspan="1">search:&lt;searchterm&gt;</td>
-              <td colspan="1" rowspan="1"><span class="codefrag">http://www.google.com/search?q=searchterm</span></td>
+              <td colspan="1" rowspan="1"><span class="codefrag ">http://www.google.com/search?q=searchterm</span></td>
               <td colspan="1" rowspan="1">Link to set of results from a search engine</td>
             
 </tr>
@@ -999,10 +999,10 @@ document.write("Last Published: " + document.lastModified);
               
 <td colspan="1" rowspan="1">person</td>
               <td colspan="1" rowspan="1">person:JT, person:JT/blog etc</td>
-              <td colspan="1" rowspan="1"><span class="codefrag">mailto:jefft&lt;at&gt;apache.org</span>,
-                <span class="codefrag">http://www.webweavertech.com/jefft/weblog/</span></td>
+              <td colspan="1" rowspan="1"><span class="codefrag ">mailto:jefft&lt;at&gt;apache.org</span>,
+                <span class="codefrag ">http://www.webweavertech.com/jefft/weblog/</span></td>
               <td colspan="1" rowspan="1">
-                A "<span class="codefrag">person:</span>" scheme could be used, say, to insert an
+                A "<span class="codefrag ">person:</span>" scheme could be used, say, to insert an
                 automatically obfuscated email address, or link to a URI in some
                 way associated with that person.
               </td>
@@ -1012,10 +1012,10 @@ document.write("Last Published: " + document.lastModified);
 </table>
 <p>
             There are even more possibilities in specific environments.  In an
-            intranet, a "<span class="codefrag">project:XYZ</span>" scheme could identify company
+            intranet, a "<span class="codefrag ">project:XYZ</span>" scheme could identify company
             project pages.  In a project like <a href="http://ant.apache.org/">Apache
               Ant</a>, each Task could be identified with
-            <span class="codefrag">task:&lt;taskname&gt;</span>, e.g. <span class="codefrag">task:pathconvert</span>.
+            <span class="codefrag ">task:&lt;taskname&gt;</span>, e.g. <span class="codefrag ">task:pathconvert</span>.
           </p>
 </div>
     
@@ -1023,13 +1023,13 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Concept</h2>
 <div class="section">
 <p>
-        The "<span class="codefrag">site:</span>" scheme and associated ideas for <span class="codefrag">site.xml</span> were
+        The "<span class="codefrag ">site:</span>" scheme and associated ideas for <span class="codefrag ">site.xml</span> were
         originally described in <a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=103444028129281&w=2">the 'linkmap' RT
           email</a> to the forrest-dev list (RT means 'random thought'; a
         Cocoon invention).   Only section 2 has been implemented, and there is
         still significant work required to implement the full system
         described.  In particular, there is much scope for automating the
-        creation of <span class="codefrag">site.xml</span> (section 4).  However, what is currently implemented
+        creation of <span class="codefrag ">site.xml</span> (section 4).  However, what is currently implemented
         gains most of the advantages of the system.
       </p>
 </div>

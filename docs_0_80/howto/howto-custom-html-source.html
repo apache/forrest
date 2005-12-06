@@ -653,8 +653,8 @@ document.write("Last Published: " + document.lastModified);
         current context and then assemble the actual expression(s) from it.
       </p>
 <p>In our example the matcher pattern
-       <span class="codefrag">**/*.html</span> is applied to the request-name
-       <span class="codefrag">mytest/mybad.html</span>, so we have three variables
+       <span class="codefrag ">**/*.html</span> is applied to the request-name
+       <span class="codefrag ">mytest/mybad.html</span>, so we have three variables
        altogether:
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -753,8 +753,8 @@ document.write("Last Published: " + document.lastModified);
       </p>
 <p>
         In our example the matcher pattern
-        <span class="codefrag">**body-*.html</span> is applied to the request-name
-        <span class="codefrag">mytest/body-mybad.html</span>.
+        <span class="codefrag ">**body-*.html</span> is applied to the request-name
+        <span class="codefrag ">mytest/body-mybad.html</span>.
         Which means that we have three variables altogether:
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -856,7 +856,7 @@ document.write("Last Published: " + document.lastModified);
         
 <li>
           
-<span class="codefrag">&lt;map:generate src="{project:content.xdocs}{uri}.html" type="html"/&gt;</span>
+<span class="codefrag ">&lt;map:generate src="{project:content.xdocs}{uri}.html" type="html"/&gt;</span>
 <br>
             Using the html-generator, Forrest reads the html-document
             from file and uses JTidy to clean up and convert it to xml
@@ -869,7 +869,7 @@ document.write("Last Published: " + document.lastModified);
         
 <li>
             
-<span class="codefrag">&lt;map:transform src="{forrest:stylesheets}/html2document.xsl"/&gt;</span>
+<span class="codefrag ">&lt;map:transform src="{forrest:stylesheets}/html2document.xsl"/&gt;</span>
 <br>
           Using the standard stylesheet 'html2document.xsl', this XHTML is 
           transformed into Forrest standard document format.
@@ -877,14 +877,14 @@ document.write("Last Published: " + document.lastModified);
         
 <li>
           
-<span class="codefrag">&lt;map:transform type="idgen"/&gt;</span>
+<span class="codefrag ">&lt;map:transform type="idgen"/&gt;</span>
 <br>
           This step generates IDs required for navigation within the page.
         </li>
         
 <li>
           
-<span class="codefrag">&lt;map:serialize type="xml-document"/&gt;</span>
+<span class="codefrag ">&lt;map:serialize type="xml-document"/&gt;</span>
 <br>
           Finally the document is serialized as XML and returned to the
           calling pipeline.
@@ -1097,7 +1097,9 @@ document.write("Last Published: " + document.lastModified);
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
       &lt;map:generate src="{project:content.xdocs}{uri}.html" type="html" /&gt;
-      &lt;strong&gt;&lt;map:transform src="{forrest:stylesheets}/fixMyBadHTML.xsl"/&gt;&lt;/strong&gt;
+  <strong>
+      &lt;map:transform src="{project:resources.stylesheets}/fixMyBadHTML.xsl"/&gt;
+  </strong>
       &lt;map:transform src="{forrest:stylesheets}/html2document.xsl" /&gt;
       &lt;map:transform type="idgen" /&gt;
       &lt;map:serialize type="xml-document"/&gt;

@@ -472,7 +472,7 @@ document.write("Last Published: " + document.lastModified);
 <h5>Permanently Setting The Environment Variables for Linux/Unix</h5>
 <p>Export only changes the variables during that terminal session for that 
            user, this is useful for testing. To permanently add the variable edit either 
-           <span class="codefrag">/etc/bash.bashrc</span> (for all users) or <span class="codefrag">~/.bash_profile</span>
+           <span class="codefrag ">/etc/bash.bashrc</span> (for all users) or <span class="codefrag ">~/.bash_profile</span>
            (for individual users). Add these lines to the end of the file you edit:</p>
 <pre class="code">
       FORREST_HOME=/full/path/to/forrest
@@ -484,9 +484,9 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1005B"></a><a name="Windows+2000"></a>
 <h4>Windows 2000</h4>
 <p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
-<p class="instruction">add a new variable <span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
+<p class="instruction">add a new variable <span class="codefrag ">FORREST_HOME</span> as <span class="codefrag ">C:\full\path\to\apache-forrest-0.7</span>
 </p>
-<p class="instruction">edit <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
+<p class="instruction">edit <span class="codefrag ">PATH</span> as <span class="codefrag ">%PATH%;%FORREST_HOME%\bin</span>
 </p>
 <a name="N10078"></a><a name="In+Windows+XP%3A"></a>
 <h4>In Windows XP:</h4>
@@ -574,12 +574,12 @@ document.write("Last Published: " + document.lastModified);
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-<span class="codefrag">forrest seed</span> is useful to see what is possible within Forrest,
-      but if you are creating a real site <span class="codefrag">forrest seed-business</span> has less
+<span class="codefrag ">forrest seed</span> is useful to see what is possible within Forrest,
+      but if you are creating a real site <span class="codefrag ">forrest seed-business</span> has less
       content initially, and is therefore easier to edit (even if it is not a business
       site). We hope to include more seed sites in the future.</div>
 </div>
-<p>If you run <span class="codefrag">forrest seed</span> you should see output like this below:</p>
+<p>If you run <span class="codefrag ">forrest seed</span> you should see output like this below:</p>
 <pre class="code">
 [/home/me/forrest/my-test]$ forrest seed
 
@@ -606,11 +606,10 @@ Copying 41 files to /home/me/forrest/my-test
 Here is an outline of the generated files:
 
 /                        # /home/me/forrest/my-test
-/status.xml              # List of project developers, todo list and change log
 /forrest.properties      # Optional file describing your site layout
 /src/documentation/      # Doc-specific files
 /src/documentation/skinconf.xml    # Info about your project used by the skin
-/src/documentation/content/xdocs   # Site content.
+/src/documentation/content         # Site content.
 /src/documentation/content/xdocs   # XML content.
 /src/documentation/content/xdocs/index.xml # Home page
 /src/documentation/content/xdocs/site.xml  # Navigation file for site structure
@@ -625,8 +624,6 @@ What to do now?
 - Render this template to static HTML by typing 'forrest'.
   View the generated HTML in a browser to make sure everything works.
 - Alternatively 'forrest run' and browse to http://localhost:8888/ live demo.
-- Edit status.xml and src/documentation/skinconf.xml
-  to customize for your project.
 - Start adding content in xdocs/ remembering to declare new files in site.xml
 - Follow the document http://forrest.apache.org/docs/your-project.html
 - Provide any feedback to dev@forrest.apache.org
@@ -686,6 +683,10 @@ Total time: 5 seconds
 |       |       |-- hello.pdf
 |       |       |-- test1.html
 |       |       `-- test2.html
+|       `-- resources
+|           `-- images
+|           `-- schema
+|           `-- stylesheets
 |       |-- sitemap.xmap
 |       |-- skinconf.xml
 |       `-- translations
@@ -702,20 +703,19 @@ Total time: 5 seconds
 |           |-- menu_sk.xml
 |           |-- tabs.xml
 |           `-- tabs_es.xml
-|-- status.xml
       </pre>
 <p>
         To render this to HTML, type 'forrest'. You should have a HTML site rendered
-        into the <span class="codefrag">build/site</span> directory:
+        into the <span class="codefrag ">build/site</span> directory:
       </p>
 <div id="" style="text-align: center;">
 <img id="" class="figure" alt="New project" src="images/new-project.png" height="356" width="500"></div>
 <p>
         Practise with adding new content. Change to the directory
-        <span class="codefrag">src/documentation/content/xdocs</span> and copy the file
-        <span class="codefrag">index.xml</span> to create <span class="codefrag">my-new-file.xml</span> as a
+        <span class="codefrag ">src/documentation/content/xdocs</span> and copy the file
+        <span class="codefrag ">index.xml</span> to create <span class="codefrag ">my-new-file.xml</span> as a
         new document. Edit it to change some text. Add an entry to 
-        <span class="codefrag">site.xml</span> by copying one of the other entries and
+        <span class="codefrag ">site.xml</span> by copying one of the other entries and
         changing it to suit. Now do 'forrest' to see the result.
       </p>
 </div>
@@ -734,7 +734,7 @@ Total time: 5 seconds
         If your project already has XML documentation, it may be easier to tell
         Forrest where the XML sources are, rather than rearrange your project
         directories to accommodate Forrest. This can be done by editing
-        <span class="codefrag">forrest.properties</span> (consult
+        <span class="codefrag ">forrest.properties</span> (consult
         the <a href="#Changing_the_layout">Changing the layout</a>
         section for more details).
       </p>
@@ -752,7 +752,7 @@ Total time: 5 seconds
 <h3 class="underlined_5">Configuring the Forrest skin: skinconf.xml</h3>
 <p>
           Most Forrest skins can be customized through a single XML file,
-          <span class="codefrag">src/documentation/skinconf.xml</span>, which looks like this:
+          <span class="codefrag ">src/documentation/skinconf.xml</span>, which looks like this:
         </p>
 <pre class="code">
 &lt;!--
@@ -916,9 +916,9 @@ which will be used to configure the chosen Forrest skin.
 &lt;/skinconfig&gt;
 </pre>
 <p>
-          Customise this file for your project. The <span class="codefrag">images/</span> directory
+          Customise this file for your project. The <span class="codefrag ">images/</span> directory
           mentioned in 'project-logo' and 'group-logo' elements corresponds to the
-          <span class="codefrag">src/documentation/resources/images</span> directory
+          <span class="codefrag ">src/documentation/resources/images</span> directory
           (this mapping is done automatically by the sitemap).
         </p>
 <p>
@@ -933,7 +933,7 @@ which will be used to configure the chosen Forrest skin.
           major file types.
         </p>
 <p>
-          The <span class="codefrag">forrest.properties</span> file maps from your directory
+          The <span class="codefrag ">forrest.properties</span> file maps from your directory
           layout to Forrest's. If you generated your site with 'forrest seed', you
           will have one pre-written, with all the entries commented out.
         </p>
@@ -955,7 +955,6 @@ which will be used to configure the chosen Forrest skin.
 # Parent properties must be set. This usually means uncommenting
 # project.content-dir if any other property using it is uncommented
 
-#project.status=status.xml
 #project.content-dir=src/documentation
 #project.conf-dir=${project.content-dir}/conf
 #project.sitemap-dir=${project.content-dir}
@@ -971,7 +970,7 @@ which will be used to configure the chosen Forrest skin.
        </pre>
 <p>
          For example, if you wish to keep XML documentation in src/xdocs rather than
-         <span class="codefrag">src/documentation/content/xdocs</span> simply change the
+         <span class="codefrag ">src/documentation/content/xdocs</span> simply change the
          definition for project.xdocs-dir
        </p>
 <pre class="code">project.xdocs-dir=src/xdocs</pre>
@@ -997,7 +996,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <div class="label">Note</div>
 <div class="content">
            Internally, Forrest rearranges the specified directory into the default
-           <span class="codefrag">src/documentation/content/xdocs</span> structure. In the layout above, we have
+           <span class="codefrag ">src/documentation/content/xdocs</span> structure. In the layout above, we have
            overlapping directories, so you will end up with duplicate files. This small
            glitch doesn't usually cause problems; just always remember that all links
            are resolved through the sitemap.
@@ -1011,14 +1010,14 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <div class="section">
 <p>
         Now you can start adding content of your own, in
-        <span class="codefrag">src/documentation/content/xdocs</span>
+        <span class="codefrag ">src/documentation/content/xdocs</span>
       
 </p>
 <a name="N10167"></a><a name="site.xml"></a>
 <h3 class="underlined_5">site.xml</h3>
 <p>
           When adding a new xml document, you would add an entry to the project's
-          <span class="codefrag">site.xml</span> file. This site.xml is like a site index, and is rendered as
+          <span class="codefrag ">site.xml</span> file. This site.xml is like a site index, and is rendered as
           the vertical column of links in the default skin.  Look at Forrest's own
           xdocs for an example.  More detailed info about site.xml is provided in 
           the document <a href="../docs_0_80/linking.html">Menus and Linking</a>.
@@ -1026,7 +1025,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <a name="N10178"></a><a name="tabs.xml"></a>
 <h3 class="underlined_5">tabs.xml</h3>
 <p>
-          The <span class="codefrag">tabs.xml</span> file is used to produce the 'tabs'.
+          The <span class="codefrag ">tabs.xml</span> file is used to produce the 'tabs'.
           which enable users to quickly jump to sections of your site.
           See the
           <a href="../docs_0_80/linking.html#menu_generation">menu generation</a> documentation
@@ -1038,12 +1037,12 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>You can have one or two levels of tabs. The images above show a 
         single level. However, you can create a second level that
         will only be displayed when its parent tab is selected. For example,
-        the <span class="codefrag">tabs.xml</span> snippet below will display either one or
+        the <span class="codefrag ">tabs.xml</span> snippet below will display either one or
         two rows of tabs, depending on which of the top level tabs is selected.
-        The first row will have two tabs: one labelled <span class="codefrag">How-Tos</span>
-        and the other labelled <span class="codefrag">Apache XML Projects</span>. When the 
-        <span class="codefrag">How-Tos</span> tab is selected there will
-        be no second row of tabs. However, when the <span class="codefrag">Apache XML
+        The first row will have two tabs: one labelled <span class="codefrag ">How-Tos</span>
+        and the other labelled <span class="codefrag ">Apache XML Projects</span>. When the 
+        <span class="codefrag ">How-Tos</span> tab is selected there will
+        be no second row of tabs. However, when the <span class="codefrag ">Apache XML
         Projects</span> tab is selected, a second row of tabs will be displayed
         below the first.</p>
 <pre class="code">
@@ -1056,10 +1055,10 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <a name="N101A3"></a><a name="images"></a>
 <h3 class="underlined_5">Images</h3>
 <p>
-          Images usually go in the <span class="codefrag">content/xdocs/images/</span> directory.
+          Images usually go in the <span class="codefrag ">resources/images/</span> directory.
           The default sitemap
-          maps this directory to <span class="codefrag">images/</span> so image tags will typically look
-          like <span class="codefrag">&lt;figure src="images/project-logo.png" alt="Project Logo"/&gt;</span> 
+          maps this directory to <span class="codefrag ">images/</span> so image tags will typically look
+          like <span class="codefrag ">&lt;figure src="images/project-logo.png" alt="Project Logo"/&gt;</span> 
         
 </p>
 </div>
@@ -1095,8 +1094,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
           sources available as "virtual" files.
           (<strong>Note:</strong> Forrest makes extensive use of aggregation
           in the default sitemaps. It also defines a whole-site HTML
-          and PDF, available as the standard names <span class="codefrag">wholesite.html</span>
-          and <span class="codefrag">wholesite.pdf</span>.)</li>
+          and PDF, available as the standard names <span class="codefrag ">wholesite.html</span>
+          and <span class="codefrag ">wholesite.pdf</span>.)</li>
         
 <li>Read content from exotic sources like
         <a href="http://www.rpbourret.com/xml/XMLDBLinks.htm">XML
@@ -1110,13 +1109,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </ul>
 <p>
         The Forrest sitemaps are at
-        <span class="codefrag">main/webapp/*.xmap</span>
+        <span class="codefrag ">main/webapp/*.xmap</span>
       
 </p>
 <p>
         You can add pre-processing sitemaps to your project
-        <span class="codefrag">src/documentation</span> directory (or wherever
-        <span class="codefrag">${project.sitemap-dir}</span> points to). Get a copy of a simple
+        <span class="codefrag ">src/documentation</span> directory (or wherever
+        <span class="codefrag ">${project.sitemap-dir}</span> points to). Get a copy of a simple
         sitemap.xmap from a 'forrest seed site'. </p>
 <p>Any match that
         is not handled, passes through to be handled by the default Forrest
@@ -1199,15 +1198,15 @@ project.skinconf=${project.content-dir}/skinconf.xml
     &lt;/section&gt;
   &lt;/body&gt;
 &lt;/document&gt;</pre>
-<p>This file called "<span class="codefrag">download.xml</span>" would be placed in
+<p>This file called "<span class="codefrag ">download.xml</span>" would be placed in
           your content directory (typically
-          <span class="codefrag">src/documentation/content/xdocs</span>) and an entry added to
-          <span class="codefrag">site.xml</span>
+          <span class="codefrag ">src/documentation/content/xdocs</span>) and an entry added to
+          <span class="codefrag ">site.xml</span>
 </p>
 <p>
           To handle these special tags, one would write a stylesheet to convert
           them to the intermediate Forrest xdocs structure. Here is such a stylesheet,
-          called "<span class="codefrag">download2document.xsl</span>" ...
+          called "<span class="codefrag ">download2document.xsl</span>" ...
         </p>
 <pre class="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;xsl:stylesheet
@@ -1244,7 +1243,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </pre>
 <p>
             Place this file in the default stylesheets directory,
-            <span class="codefrag">src/documentation/resources/stylesheets</span> (or wherever
+            <span class="codefrag ">src/documentation/resources/stylesheets</span> (or wherever
             ${project.stylesheets-dir} points).
           </p>
 <p>
@@ -1261,7 +1260,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 <p>
             Add the following match to the file
-            <span class="codefrag">src/documentation/sitemap.xmap</span> ...
+            <span class="codefrag ">src/documentation/sitemap.xmap</span> ...
           </p>
 <pre class="code">&lt;?xml version="1.0"?&gt;
 &lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
@@ -1302,7 +1301,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
                    one.</li>
                  
 <li>Place the new DTD in the
-                   <span class="codefrag">${project.schema-dir}/dtd</span> directory.</li>
+                   <span class="codefrag ">${project.schema-dir}/dtd</span> directory.</li>
                  
 <li>Add an XML Catalog to enable a mapping from the
                    DOCTYPE public id to the relevant DTD file.</li>
@@ -1386,7 +1385,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </pre>
 <p>
               This is the type of processing that happens in the main
-              <span class="codefrag">main/webapp/forrest.xmap</span> sitemap. We have
+              <span class="codefrag ">main/webapp/forrest.xmap</span> sitemap. We have
               added similar handling to our project sitemap. Basically, this
               uses the <a href="../docs_0_80/cap.html">SourceTypeAction (content aware pipelines)</a>
               to detect the doctype. The new document-v11.dtd needs to be also
@@ -1422,9 +1421,9 @@ project.skinconf=${project.content-dir}/skinconf.xml
 &lt;/map:sitemap&gt;
 </pre>
 <p>You will probably want to copy the core Forrest 
-              <span class="codefrag">rss2document.xsl</span> to your project,
+              <span class="codefrag ">rss2document.xsl</span> to your project,
               customise it to your needs, and refer to it with
-              <span class="codefrag">src="{project:resources.stylesheets}/rss2document.xsl"</span>.
+              <span class="codefrag ">src="{project:resources.stylesheets}/rss2document.xsl"</span>.
               Then of course you would add an entry to site.xml to link
               to weblog.html
             </p>
@@ -1437,12 +1436,12 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>
           As Forrest separates content from presentation, we can plug in different
           "skins" to instantly change a site's look and feel.  Forrest provides one
-          primary skin, <span class="codefrag">pelt</span>, and some others in various
+          primary skin, <span class="codefrag ">pelt</span>, and some others in various
           states of development.
         </p>
 <p>
-          To change the skin, edit the <span class="codefrag">forrest.properties</span> file
-          to set <span class="codefrag">project.skin=pelt</span> or some other skin name.
+          To change the skin, edit the <span class="codefrag ">forrest.properties</span> file
+          to set <span class="codefrag ">project.skin=pelt</span> or some other skin name.
           If running in dynamic mode you need to restart Forrest in order to see
           the new skin.
         </p>
@@ -1459,7 +1458,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <h3 class="underlined_5">Configuration of skins</h3>
 <p>
           All configuration is done via your project
-          <span class="codefrag">src/documentation/skinconf.xml</span> file.
+          <span class="codefrag ">src/documentation/skinconf.xml</span> file.
           It contains many comments to describe each capability.
           Please read those, there is no point repeating here.
           </p>
@@ -1473,14 +1472,14 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
 <p>
             Projects can define their own skin in the
-            <span class="codefrag">src/documentation/skins</span> directory (or wherever
-            <span class="codefrag">${project.skins-dir}</span> points). The default sitemap assumes a
+            <span class="codefrag ">src/documentation/skins</span> directory (or wherever
+            <span class="codefrag ">${project.skins-dir}</span> points). The default sitemap assumes a
             certain skin layout, so the easiest way to create a new skin is by
             copying an existing Forrest skin.  For example, copy
-            <span class="codefrag">main/webapp/skins/pelt</span>
+            <span class="codefrag ">main/webapp/skins/pelt</span>
             to your project area at
-            <span class="codefrag">src/documentation/skins/my-fancy-skin</span> and add
-            <span class="codefrag">project.skin=my-fancy-skin</span> to forrest.properties
+            <span class="codefrag ">src/documentation/skins/my-fancy-skin</span> and add
+            <span class="codefrag ">project.skin=my-fancy-skin</span> to forrest.properties
           </p>
 <p>
             The two most interesting XSLT stylesheets involved are:
@@ -1488,7 +1487,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <dl>
             
 <dt>
-<span class="codefrag">xslt/html/document2html.xsl</span>
+<span class="codefrag ">xslt/html/document2html.xsl</span>
 </dt>
             
 <dd>
@@ -1497,7 +1496,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
             </dd>
             
 <dt>
-<span class="codefrag">xslt/html/site2xhtml.xsl</span>
+<span class="codefrag ">xslt/html/site2xhtml.xsl</span>
 </dt>
             
 <dd>
@@ -1521,7 +1520,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 &lt;/xsl:stylesheet&gt;</pre>
 <p>In order to use this feature in your custom skins you must copy
           the common skin from the forrest distribution into your custom skins 
-          directory (from <span class="codefrag">main/webapp/skins/common</span>).
+          directory (from <span class="codefrag ">main/webapp/skins/common</span>).
           This will protect your skin from changes in the Forrest common skin,
           but you must remember to update this skin in order to take advantage
           of new features added over time by the Forrest team.</p>
@@ -1554,20 +1553,20 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <a name="N10358"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
-          Type '<span class="codefrag">forrest run</span>' in your project root to start Forrest's
+          Type '<span class="codefrag ">forrest run</span>' in your project root to start Forrest's
           built-in Jetty web server.  Once it has started, point your browser at
           <a href="http://localhost:8888/">http://localhost:8888/</a>, which
           will show your website, rendered on demand as each link is followed.
         </p>
 <p>(Alternatively, if you wish to run Forrest from within an existing
-          servlet container, type <span class="codefrag">forrest webapp</span> to build an open
-          webapp in <span class="codefrag">build/webapp/</span>)
+          servlet container, type <span class="codefrag ">forrest webapp</span> to build an open
+          webapp in <span class="codefrag ">build/webapp/</span>)
         </p>
 <a name="N10371"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
-            <span class="codefrag">build/webapp/content/xdocs</span> and see the changes
+            <span class="codefrag ">build/webapp/content/xdocs</span> and see the changes
             immediately in the browser.
           </p>
 </div>
@@ -1607,14 +1606,14 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>Because you are using your own version
       of Ant to do Forrest's work, you will need to provide the
       supporting catalog entity resolver:
-      '<span class="codefrag">cp forrest/lib/core/xml-commons-resolver-1.1.jar $ANT_HOME/lib</span>'
+      '<span class="codefrag ">cp forrest/lib/core/xml-commons-resolver-1.1.jar $ANT_HOME/lib</span>'
       </p>
 <p>Note: The technique described above requires Ant 1.6+ otherwise
         the &lt;import&gt;
         task will not be available for you to use. Forrest
         bundles the latest version of Ant, so you can invoke your project
-        like this: '<span class="codefrag">forrest -f myproject.xml</span>'.
-        This will not run the '<span class="codefrag">forrest</span>' command. It will just
+        like this: '<span class="codefrag ">forrest -f myproject.xml</span>'.
+        This will not run the '<span class="codefrag ">forrest</span>' command. It will just
         use Forrest's Ant and resolver to execute your buildfile.
       </p>
 <p>
