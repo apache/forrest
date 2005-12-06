@@ -39,14 +39,16 @@
 
     <map:pipeline>
 
-      <map:match pattern="noteTaking/do/addNote">
+      <map:match pattern="noteTaking/do/addNote.xml">
         <map:generate type="request"/>
         <map:transform src="{lm:noteTaking.transform.postedNotes.sourceWriterNotes}">
           <map:parameter name="notesFile" value="{project:noteTaking.repository.URL}{project:noteTaking.filename}"/>
         </map:transform>
         <map:transform type="write-source"/>
-<!-- FIXME: return to a logical page -->
-        <map:serialize type="xml"/>
+        <map:transform src="{lm:noteTaking.transform.writeResult.acknowledgement}">
+          <map:parameter name="use-request-parameters" value="true"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
       </map:match>
 
       <map:match pattern="noteTaking/do/getNotes">
