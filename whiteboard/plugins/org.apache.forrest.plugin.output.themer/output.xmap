@@ -99,9 +99,21 @@
         <map:generate src="{lm:resolve.structurer.index-foo}" />
         <map:transform type="dispatcher">
           <map:parameter name="type" value="html" />
-          <map:parameter name="hooksTransformer" value="{lm:hooks-to-html.xsl}"/>
+          <map:parameter name="hooksTransformer"
+            value="{lm:hooks-to-html.xsl}" />
         </map:transform>
-        <map:serialize type="xhtml"/>
+        <map:serialize type="xhtml" />
+      </map:match>
+      <map:match pattern="test.css">
+        <map:generate src="{lm:resolve.structurer.index-foo}" />
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="css" />
+        </map:transform>
+        <map:transform type="pattern"
+          src="{forrest:context}/resources/chaperon/grammars/link.xlex" />
+        <map:transform
+          src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" />
+        <map:serialize type="text" mime-type="text/css" />
       </map:match>
       <map:match pattern="test.**">
         <map:generate src="{lm:resolve.structurer.{1}}" />
@@ -109,7 +121,7 @@
           <map:parameter name="type" value="html" />
         </map:transform>
         <map:serialize />
-        
+
         <map:transform
           src="resources/stylesheets/hooksMatcher-html.xsl" />
         <!-- type="structurerXsl" -->
