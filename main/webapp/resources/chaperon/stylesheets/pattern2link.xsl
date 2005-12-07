@@ -21,16 +21,32 @@
     xmlns:lex="http://chaperon.sourceforge.net/schema/lexemes/2.0">
 
  <xsl:template match="lex:lexeme[@symbol='link']">
-  <a href="{@text}">
-   <xsl:value-of select="@text"/>
-  </a>
+   <xsl:choose>
+  <!-- it is possible to disable link writing by prefixing by '\' -->
+    <xsl:when test="not( starts-with( @text, '\') )">
+      <a href="{@text}">
+       <xsl:value-of select="@text"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="lex:group[2]"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
  </xsl:template>
 
  <xsl:template match="lex:lexeme[@symbol='email']">
-  <a href="mailto:{@text}">
-   <xsl:value-of select="lex:group[2]"/> at
-   <xsl:value-of select="lex:group[3]"/>
-  </a>
+  <xsl:choose>
+  <!-- it is possible to disable link writing by prefixing by '\' -->
+    <xsl:when test="not( starts-with( @text, '\') )">
+      <a href="mailto:{@text}">
+        <xsl:value-of select="lex:group[2]"/> at <xsl:value-of select="lex:group[3]"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="lex:group[2]"/>@<xsl:value-of select="lex:group[3]"/>
+    </xsl:otherwise>
+  </xsl:choose>
  </xsl:template>
 
  <xsl:template match="lex:lexeme[@symbol='cssurl']">
