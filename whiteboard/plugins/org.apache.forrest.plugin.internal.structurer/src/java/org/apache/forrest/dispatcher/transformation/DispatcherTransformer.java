@@ -155,6 +155,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private DOMBuilder builder, dispatcherBuilder;
 
+    private Transformer structurerTransformer;
+
     private Element rootNode;
 
     private XPathProcessor processor;
@@ -167,15 +169,17 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private String path = null;
 
-    private boolean recording,allowMarkup;
-    public static final String DISPATCHER_ALLOW_MARKUP="allowMarkup";
+    private boolean recording, allowMarkup;
+
+    public static final String DISPATCHER_ALLOW_MARKUP = "allowMarkup";
 
     private DispatcherHelper dispatcherHelper;
 
     private boolean insideStructurer = false;
 
     private String hooksXSL;
-    public static final String HOOKS_TRANSFORMER_PARAMETER="hooksTransformer";
+
+    public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
 
     /**
      * Constructor Set the namespace
@@ -200,7 +204,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Generate the validity object.
      * 
      * @return The generated validity object or <code>null</code> if the
-     *         component is currently not cacheable.
+     *        component is currently not cacheable.
      */
     public SourceValidity getValidity() {
         return null;
@@ -228,8 +232,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Recycle the component
      */
     public void recycle() {
-        insideProperties = false;
+        localRecycle();
         super.recycle();
+        
     }
 
     /**
@@ -240,10 +245,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             Parameters par) throws ProcessingException, SAXException,
             IOException {
         super.setup(resolver, objectModel, src, par);
-        this.processor = null;
-        this.dispatcherHelper = null;
-        this.contract = null;
-        this.hooksXSL=null;
+        localRecycle();
         try {
             this.dispatcherHelper = new DispatcherHelper(manager);
             this.processor = (XPathProcessor) this.manager
@@ -255,7 +257,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throw new ProcessingException(error);
         }
         storedPrefixMap = new HashMap();
-        insideProperties = false;
+
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
         this.requestedFormat = parameters.getParameter(
@@ -266,14 +268,39 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             getLogger().error(error);
             throw new ProcessingException(error);
         }
-        this.hooksXSL=parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER,null);
-        if (this.hooksXSL.equals("")||this.hooksXSL==null){
+        this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER,
+                null);
+        try {
+            if (this.hooksXSL == null || this.hooksXSL.equals("")) {
+                String warning = "dispatcherError:\n"
+                        + "You did not set up the \"hooksTransformer\" parameter in the sitemap, we are not going to transform forrest:hooks elements."
+                        + " For text output where you would not have to use hooks as structurer, the way you want it.";
+                getLogger().warn(warning);
+            } else {
+                DOMSource stylesheet = new DOMSource(dispatcherHelper
+                        .getDocument(this.hooksXSL));
+                this.structurerTransformer = dispatcherHelper
+                        .createTransformer(stylesheet);
+            }
+        } catch (Exception e) {
             String error = "dispatcherError:\n"
-                + "You have to set the \"hooksTransformer\" parameter in the sitemap!";
-        getLogger().error(error);
-        throw new ProcessingException(error);
+                    + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
+                    + e;
+            getLogger().error(error);
+            throw new ProcessingException(error);
         }
-        
+    }
+
+    /**
+     *  Cleanup the transformer
+     */
+    private void localRecycle() {
+        this.processor = null;
+        this.dispatcherHelper = null;
+        this.contract = null;
+        this.hooksXSL = null;
+        this.structurerTransformer = null;
+        this.insideProperties = false;
     }
 
     public void startElement(String uri, String name, String raw,
@@ -314,9 +341,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 propertyProcessingStart(uri, name, raw, attr);
             }
         } else {
-            if (!this.insideProperties & this.includeNodes&this.insideStructurer&this.allowMarkup)
+            if (!this.insideProperties & this.includeNodes
+                    & this.insideStructurer & this.allowMarkup)
                 super.startElement(uri, name, raw, attr);
-            if (!this.insideProperties & this.includeNodes&!this.insideStructurer)
+            if (!this.insideProperties & this.includeNodes
+                    & !this.insideStructurer)
                 super.startElement(uri, name, raw, attr);
         }
     }
@@ -334,7 +363,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         Element currentElement = dispatcher.getDocument().createElement(name);
         dispatcherHelper.setAttributesDOM(attr, currentElement);
         String tempPath = path + "/" + name;
-        tempPath=dispatcherHelper.setAttributesXPath(attr,tempPath);
+        tempPath = dispatcherHelper.setAttributesXPath(attr, tempPath);
         if (path == null || path.equals("")) {
             path = name;
             this.rootNode.appendChild(currentElement);
@@ -342,7 +371,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             /* calculate, prepare and add node to the dispatcher */
             try {
                 Node xpathNode;
-                xpathNode =DOMUtil.getSingleNode(rootNode,path,this.processor);
+                xpathNode = DOMUtil.getSingleNode(rootNode, path,
+                        this.processor);
                 if (xpathNode == null)
                     createXpathNode(attr, tempPath);
                 else
@@ -407,9 +437,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 else
                     path = null;
         } else {
-            if (!this.insideProperties & this.includeNodes&this.insideStructurer&this.allowMarkup)
+            if (!this.insideProperties & this.includeNodes
+                    & this.insideStructurer & this.allowMarkup)
                 super.endElement(uri, name, raw);
-            if (!this.insideProperties & this.includeNodes&!this.insideStructurer)
+            if (!this.insideProperties & this.includeNodes
+                    & !this.insideStructurer)
                 super.endElement(uri, name, raw);
         }
     }
@@ -430,8 +462,12 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 currentFormat = value;
             }
             if (localName.equals(STRUCTURER_HOOK_XPATH_ATTRIBUTE)) {
-                if ("/".equals(String.valueOf(value.charAt(0)))) {
+                if ("/".equals(String.valueOf(value.charAt(0)))
+                        & value.length() != 1) {
                     path = "result" + value;
+                } else if ("/".equals(String.valueOf(value.charAt(0)))
+                        & value.length() == 1) {
+                    path = "result";
                 } else {
                     path = "result/" + value;
                 }
@@ -439,7 +475,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         }
         if (requestedFormat.equals(currentFormat)) {
             if (path == null)
-                path = "result/";
+                path = "result";
             this.includeNodes = true;
             this.recording = true;
             try {
@@ -480,13 +516,22 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     private void structurerProcessingEnd(String raw) throws SAXException {
         if (this.recording) {
             try {
-                DOMSource stylesheet = new DOMSource(dispatcherHelper.getDocument(this.hooksXSL));
-                Transformer transformer = dispatcherHelper.createTransformer(stylesheet);
-                DOMSource source = new DOMSource(this.rootNode.getFirstChild().getFirstChild());
-                DOMResult result = new DOMResult();
-                transformer.transform(source, result);
-                XMLUtils.valueOf(new IncludeXMLConsumer(super.xmlConsumer),
-                        result.getNode());
+                NodeList resultList = this.rootNode.getFirstChild()
+                        .getChildNodes();
+                for (int i = 0; i < resultList.getLength(); i++) {
+                    Node array_element = resultList.item(i);
+                    if (this.structurerTransformer == null) {
+                        XMLUtils.valueOf(new IncludeXMLConsumer(
+                                super.xmlConsumer), array_element);
+                    } else {
+                        DOMSource source = new DOMSource(array_element);
+                        DOMResult result = new DOMResult();
+                        this.structurerTransformer.transform(source, result);
+                        XMLUtils.valueOf(new IncludeXMLConsumer(
+                                super.xmlConsumer), result.getNode());
+                    }
+                }
+
             } catch (Exception e) {
                 String error = "dispatcherError: "
                         + DispatcherException.ERROR_500
@@ -645,10 +690,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 if (contentChild != null) {
                     String location = contentChild.getAttribute("xpath");
                     if (location.equals("") | location == null) {
-                        Node xpathNode =DOMUtil.getSingleNode(rootNode,path,this.processor);
-                        //String[] xpath = DOMUtil.buildPathArray(path);
-                     //   Node xpathNode = DOMUtil.getFirstNodeFromPath(rootNode,
-                    //            xpath, false);
+                        Node xpathNode = DOMUtil.getSingleNode(rootNode, path,
+                                this.processor);
                         if (xpathNode != null) {
                             // add everything *within* the forrest:part element
                             appendChildToResultIterator(root, finalContent,
@@ -659,10 +702,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                             location = "result" + location;
                         else
                             location = "result/" + location;
-                        Node xpathNode;
-                        String[] xpath = DOMUtil.buildPathArray(location);
-                        xpathNode = DOMUtil.getFirstNodeFromPath(rootNode,
-                                xpath, false);
+                        Node xpathNode= DOMUtil.getSingleNode(rootNode, path,
+                                this.processor);
                         if (xpathNode != null) {
                             // add everything *within* the forrest:part element
                             appendChildToResultIterator(root, finalContent,
