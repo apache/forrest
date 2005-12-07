@@ -36,24 +36,24 @@
     <!-- Project implementation of templates have priority before default ones.
         If no implementation can be found we use the noFt (~ - no forrest:template) implementation.  
        {1} name of the contract -->
-    <match pattern="resolve.contract.html.**">
+    <match pattern="resolve.contract.*.**">
       <select type="exists">
         <!-- project-based theme -->
-        <location src="{lm:themer.project.dir}/{project:theme}/html/{1}.ft" />
+        <location src="{lm:themer.project.dir}/{project:theme}/{1}/{2}.ft" />
         <!-- project-based default fallback -->
-        <location src="{lm:themer.project.dir}/{defaults:theme}/html/{1}.ft" />
+        <location src="{lm:themer.project.dir}/{defaults:theme}/{1}/{2}.ft" />
         <!-- project-application-based theme -->
-        <location src="{project:themer}/resources/themes/{project:theme}/html/{1}.ft" />
+        <location src="{project:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
         <!--  project-application-based default fallback -->
-        <location src="{project:themer}/resources/themes/{defaults:theme}/html/{1}.ft" />
+        <location src="{project:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" />
         <!--  plugin provided contracts -->
-        <location src="{lm:resolvePluginContract.html.{1}}" />
+        <location src="{lm:resolvePluginContract.{1}.{2}}" />
         <!-- forrest-application-based theme -->
-        <location src="{defaults:themer}/resources/themes/{project:theme}/html/{1}.ft" />
+        <location src="{defaults:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
         <!--  forrest-application-based default fallback -->
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/html/{1}.ft" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" />
         <!--  forrest-application-based no found -->
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/html/noFt.ft" />
+        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/noFt.ft" />
       </select>
     </match>
     <match pattern="contract.html.**">
