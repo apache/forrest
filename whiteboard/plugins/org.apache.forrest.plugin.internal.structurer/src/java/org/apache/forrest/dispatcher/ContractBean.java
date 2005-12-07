@@ -280,7 +280,7 @@ public class ContractBean extends Beans {
                 NodeList list_transformer = _contractImpl
                         .getElementsByTagName("xsl:stylesheet");
                 if (list_transformer.getLength() == 1) {
-                    Element node = (Element) list_transformer.item(0);
+                    Node node = list_transformer.item(0);
                     TransformerFactory tFactory = TransformerFactory
                             .newInstance();
                     DOMSource stylesource = new DOMSource(node);
