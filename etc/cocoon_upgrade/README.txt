@@ -15,7 +15,6 @@ and do a 'build clean' there.
 0. cd $FORREST_HOME/etc/cocoon_upgrade
 
 1. Keep our local.*.properties files sychronised with Cocoon's.
-   Make sure to exclude any new blocks that we don't need.
 
 Step 2 and 3 can be done with "./build.sh 0"
 2. Copy the cocoon libraries to forrest (See ./build.xml where some are excluded).
