@@ -17,7 +17,10 @@ and do a 'build clean' there.
 1. Keep our local.*.properties files sychronised with Cocoon's.
 
 Step 2 and 3 can be done with "./build.sh 0"
-2. Copy the cocoon libraries to forrest (See ./build.xml where some are excluded).
+2. Copy the cocoon libraries to forrest.
+   See ./build.xml where some are excluded. You might need to add/exclude others.
+   Remember that things will change with Cocoon and we must keep in sync.
+
     ant copy-core-libs
     ant copy-endorsed-libs
     ant copy-optional-libs
