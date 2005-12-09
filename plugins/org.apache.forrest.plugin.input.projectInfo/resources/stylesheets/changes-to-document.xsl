@@ -26,7 +26,7 @@
   <xsl:param name="projectInfo.changes.includeCommitterList"/>
   <xsl:param name="projectInfo.changes.includeContributorList"/>
   
-  <xsl:include href="dotdots.xsl"/> <!-- FIXME: howto include from forrest core -->
+  <xsl:include href="lm://transform.xml.dotdots"/>
 
   <!-- Calculate path to site root, eg '../../' -->
   <xsl:variable name="root">
