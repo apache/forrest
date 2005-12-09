@@ -282,8 +282,9 @@ public final class LocationMap extends AbstractLogEnabled {
         
         ContainerUtil.dispose(context);
 
-        if (getLogger().isDebugEnabled() && location == null) {
-            getLogger().debug("No location matched request with hint " + hint);
+        if (location == null) {
+            getLogger().error(msg);;
+            throw new Exception(msg);
         }
 
         return location;
