@@ -119,4 +119,17 @@ public class ForrestConfUtils
         props.setProperty("project.skin", skinStoUse);
     }
 
+    /**
+     * Get the directory in which a given plugin is located.
+     * @param name of the plugin to locate
+     * @return
+     * @throws Exception 
+     */
+	public static String getPluginDir(String name) throws Exception {
+        String forrestHome = getForrestHome();
+        //FIXME: HARDCODE VALUE
+        //
+        return forrestHome + SystemUtils.FILE_SEPARATOR + "build" + SystemUtils.FILE_SEPARATOR + "plugins" + SystemUtils.FILE_SEPARATOR + name;
+	}
+
 }
