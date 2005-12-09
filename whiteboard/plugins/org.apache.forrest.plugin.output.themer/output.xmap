@@ -115,6 +115,16 @@
           src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" />
         <map:serialize type="text" mime-type="text/css" />
       </map:match>
+      <map:match pattern="test-lm.**">
+        <!-- FIXME 
+          e.g. lm://"test-lm.resolve.structurer.index-foo" throws an exception
+          cause: Invalid System ID
+          but e.g. lm://"test-lm.plugin.xmap.output" just works fine. 
+          I do not know why but seems that the main forrest lm is read but only the <match/> elements and not the mount ones.
+        -->
+        <map:generate src="lm://{1}" />
+        <map:serialize type="xml" />
+      </map:match>
       <map:match pattern="test.**">
         <map:generate src="{lm:resolve.structurer.{1}}" />
         <map:transform type="dispatcher">
