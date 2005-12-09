@@ -145,29 +145,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 				debug("Unable to find forrest.properties.xml, ignoring.");
 		}
 
-		// if project.required.plugins is curently set, we can load plugin
-		// defaults as we are using the new forrest.properties.xml config system
-		String strPluginList = filteringProperties
-				.getProperty("project.required.plugins");
-		if (strPluginList != null) {
-			StringTokenizer st = new StringTokenizer(strPluginList, ",");
-			while (st.hasMoreTokens()) {
-				forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st
-						.nextToken().trim());
-				try {
-					forrestPropertiesStringURI = forrestPropertiesStringURI
-							+ SystemUtils.FILE_SEPARATOR
-							+ "default.plugin.properties.xml";
-					filteringProperties = loadXMLPropertiesFromURI(
-							filteringProperties, forrestPropertiesStringURI);
-				} catch (FileNotFoundException e) {
-					if (debugging())
-						debug("Unable to load " + forrestPropertiesStringURI
-								+ ", ignoring. " + e.getMessage());
-				}
-			}
-		}
-
 		// get the values from default.forrest.properties.xml
 		try {
 			forrestPropertiesStringURI = contextHome
@@ -194,6 +171,28 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
 		filteringProperties = loadAntPropertiesFromURI(filteringProperties,
 				defaultForrestPropertiesStringURI);
+
+		// Load plugin default properties
+		String strPluginList = filteringProperties
+				.getProperty("project.required.plugins");
+		if (strPluginList != null) {
+			StringTokenizer st = new StringTokenizer(strPluginList, ",");
+			while (st.hasMoreTokens()) {
+				forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st
+						.nextToken().trim());
+				try {
+					forrestPropertiesStringURI = forrestPropertiesStringURI
+							+ SystemUtils.FILE_SEPARATOR
+							+ "default.plugin.properties.xml";
+					filteringProperties = loadXMLPropertiesFromURI(
+							filteringProperties, forrestPropertiesStringURI);
+				} catch (FileNotFoundException e) {
+					if (debugging())
+						debug("Unable to load " + forrestPropertiesStringURI
+								+ ", ignoring. " + e.getMessage());
+				}
+			}
+		}
 
 		loadSystemProperties(filteringProperties);
 		ForrestConfUtils.aliasSkinProperties(filteringProperties);
