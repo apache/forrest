@@ -16,6 +16,7 @@
  */
 package org.apache.forrest.locationmap.lm;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -287,7 +288,11 @@ public final class LocationMap extends AbstractLogEnabled {
             getLogger().error(msg);;
             throw new Exception(msg);
         }
-
+        
+        if (location.startsWith("http:")) {
+        	location = URLEncoder.encode(location, "UTF-8");
+        }
+        
         return location;
     }
     
