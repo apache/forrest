@@ -38,11 +38,11 @@
       <map:select type="exists">
         <map:when test="{project:content.xdocs}{uri}.moinwiki">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.moinwiki" />
+            <map:generate type="text2xml" src="{lm:{1}{2}.moinwiki}" />
             <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
             <map:transform type="xsltc" 
-              src="resources/chaperon/stylesheets/moinwiki2xdoc.xsl">
+              src="{lm:wiki.transform.moinwiki.xdoc}">
               <map:parameter name="name" value="{2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
@@ -51,11 +51,11 @@
         </map:when>
         <map:when test="{project:content.xdocs}{uri}.jspwiki">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.jspwiki" />
+            <map:generate type="text2xml" src="{lm:project.{1}{2}.jspwiki}" />
             <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
             <map:transform type="xsltc" 
-              src="resources/chaperon/stylesheets/wiki2xdoc.xsl">
+              src="{lm:wiki.transform.wiki.xdoc}">
               <map:parameter name="name" value="{2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
@@ -64,11 +64,11 @@
         </map:when>
         <map:when test="{project:content.xdocs}{uri}.cwiki">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{project:content.xdocs}{1}{2}.cwiki" />
+            <map:generate type="text2xml" src="{lm:project.{1}{2}.cwiki}" />
             <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
             <map:transform type="xsltc" 
-              src="resources/chaperon/stylesheets/wiki2xdoc.xsl">
+              src="{lm:wiki.transform.wiki.xdoc}">
               <map:parameter name="name" value="{2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
@@ -92,17 +92,17 @@
 
       <map:match pattern="*.xlex">
         <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xlex">
-            <map:read src="resources/chaperon/grammars/{1}.xlex"/>
+          <map:when test="{lm:wiki.grammar.{1}.xlex}">
+            <map:read src="{lm:wiki.grammar.{1}.xlex}"/>
           </map:when>
           <map:otherwise>
-            <map:generate  type="text2xml"   src="resources/chaperon/grammars/{1}.grm"/>
-            <map:transform type="lexer"  src="resources/chaperon/grammars/grm.xlex"/>
-            <map:transform type="parser" src="resources/chaperon/grammars/grm.xgrm"/>
-            <map:transform               src="resources/chaperon/stylesheets/text4regex.xsl"/>
-            <map:transform type="lexer"  src="resources/chaperon/grammars/regex.xlex"/>
-            <map:transform type="parser" src="resources/chaperon/grammars/regex.xgrm"/>
-            <map:transform               src="resources/chaperon/stylesheets/grm2xlex.xsl"/>
+            <map:generate  type="text2xml"   src="{lm:wiki.grammar.{1}.grm}"/>
+            <map:transform type="lexer"  src="{lm:wiki.grammar.grm.xlex}"/>
+            <map:transform type="parser" src="{lm:wiki.grammar.grm.xgrm}"/>
+            <map:transform               src="{lm:wiki.transform.text4regex}"/>
+            <map:transform type="lexer"  src="{lm:wiki.grammar.regex.xlex}"/>
+            <map:transform type="parser" src="{lm:wiki.grammar.regex.xgrm}"/>
+            <map:transform               src="{lm:wiki.transform.grm.xlex}"/>
             <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
@@ -110,17 +110,17 @@
 
       <map:match pattern="*.xgrm">
         <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xgrm">
-            <map:read src="resources/chaperon/grammars/{1}.xgrm"/>
+          <map:when test="{lm:wiki.grammar.{1}.xgrm}">
+            <map:read src="{lm:wiki.grammar.{1}.xgrm}"/>
           </map:when>
           <map:otherwise>
-            <map:generate  type="text2xml"   src="resources/chaperon/grammars/{1}.grm"/>
-            <map:transform type="lexer"  src="resources/chaperon/grammars/grm.xlex"/>
-            <map:transform type="parser" src="resources/chaperon/grammars/grm.xgrm"/>
-            <map:transform               src="resources/chaperon/stylesheets/text4regex.xsl"/>
-            <map:transform type="lexer"  src="resources/chaperon/grammars/regex.xlex"/>
-            <map:transform type="parser" src="resources/chaperon/grammars/regex.xgrm"/>
-            <map:transform               src="resources/chaperon/stylesheets/grm2xgrm.xsl"/>
+            <map:generate  type="text2xml"   src="{lm:wiki.grammar.{1}.grm}"/>
+            <map:transform type="lexer"  src="{lm:wiki.grammar.grm.xlex}"/>
+            <map:transform type="parser" src="{lm:wiki.grammar.grm.xgrm}"/>
+            <map:transform               src="{lm:wiki.transform.text4regex}"/>
+            <map:transform type="lexer"  src="{lm:wiki.grammar.regex.xlex}"/>
+            <map:transform type="parser" src="{lm:wiki.grammar.regex.xgrm}"/>
+            <map:transform               src="{lm:wiki.transform.grm.xlex}"/>
             <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
@@ -128,13 +128,13 @@
 
      <map:match pattern="*.xegrm">
         <map:select type="exists">
-          <map:when test="resources/chaperon/grammars/{1}.xegrm">
-            <map:read src="resources/chaperon/grammars/{1}.xegrm"/>
+          <map:when test="{lm:wiki.grammar.{1}.xegrm}">
+            <map:read src="{lm:wiki.grammar.{1}.xegrm}"/>
           </map:when>
           <map:otherwise>
-              <map:generate  type="text2xml"   src="resources/chaperon/grammars/{1}.egrm"/>
-              <map:transform type="extparser" src="resources/chaperon/grammars/egrm.xegrm"/>
-              <map:transform               src="resources/chaperon/stylesheets/egrm2xegrm.xsl"/>
+              <map:generate  type="text2xml"   src="{lm:wiki.grammar.{1}.egrm}"/>
+              <map:transform type="extparser" src="{lm:wiki.grammar.egrm.xegrm}"/>
+              <map:transform               src="{lm:wiki.transform.egrm.xegrm}"/>
               <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
