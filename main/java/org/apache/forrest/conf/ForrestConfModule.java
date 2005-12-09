@@ -130,7 +130,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         
         String forrestPropertiesStringURI;
         
-        // get the values from properties.xml
+        // get the values from forrest.properties.xml
         try {
           forrestPropertiesStringURI = projectHome
                         + SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
@@ -142,6 +142,20 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                 debug("Unable to find forrest.properties.xml, ignoring.");
         }
 
+        // FIXME (FOR-759): get the values from forrest.properties.xml
+
+        // get the values from default.forrest.properties.xml
+        try {
+          forrestPropertiesStringURI = contextHome
+                        + SystemUtils.FILE_SEPARATOR + "default.forrest.properties.xml";
+
+          filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+            forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find default.forrest.properties.xml, ignoring.");
+        }
+        
         // get forrest.properties and load the values
         forrestPropertiesStringURI = projectHome
                         + SystemUtils.FILE_SEPARATOR + "forrest.properties";
