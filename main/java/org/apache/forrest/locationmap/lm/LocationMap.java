@@ -290,7 +290,7 @@ public final class LocationMap extends AbstractLogEnabled {
         }
         
         if (location.startsWith("http:")) {
-        	location = URLEncoder.encode(location, "UTF-8");
+        	location.replaceAll(" ", "%20");
         }
         
         return location;
