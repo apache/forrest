@@ -57,6 +57,10 @@
           We have a workaround so use Cocoon's jar.
         <exclude name="commons-jxpath-*.jar"/>
         -->
+        <!-- Exclude some that we don't need -->
+        <exclude name="commons-javaflow-*.jar"/>
+        <!-- We have newer xml-commons-resolver -->
+        <exclude name="xml-commons-resolver-*.jar"/>
         <!-- servlet.jar goes under tools/jetty -->
         <exclude name="servlet-*.jar"/>
       </fileset>
@@ -67,12 +71,14 @@
   <!-- ===============================================================
        Some optional libraries are core to forrest
        FIXME:  jing-*.jar comes from iso-relax.sf.net so maybe we need to 
-               have a copy-extermal-libs target
+               have a copy-external-libs target
        =============================================================== -->
     <copy todir="${forrest.home}/lib/core">
       <fileset dir="${cocoon.home}/lib/optional">
         <include name="batik-all-*.jar"/>
+<!-- FIXME: Cocoon's FOP causes trouble FOR-    ###################
         <include name="fop-*.jar"/>
+-->
         <include name="lucene-*.jar"/>
         <include name="jtidy-*.jar"/>
         <include name="nekopull-*.jar"/>
