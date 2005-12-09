@@ -283,6 +283,7 @@ public final class LocationMap extends AbstractLogEnabled {
         ContainerUtil.dispose(context);
 
         if (location == null) {
+            String msg = "No Lovcation returned for hint " + hint;
             getLogger().error(msg);;
             throw new Exception(msg);
         }
