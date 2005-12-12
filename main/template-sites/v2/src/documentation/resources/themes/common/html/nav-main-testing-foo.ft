@@ -27,9 +27,16 @@
   format="html" name="nav-main-testing-foo" inputFormat="xsl" >
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="defaultVariables" select="'test.html'"/>
+        <xsl:variable name="path" select="$defaultVariables/*/*[@name='path']/@value"/>
       <xsl:template match="/" >
         <forrest:content>
-          <forrest:part> nav-main-testing-foo testing - no @xpath</forrest:part>
+          <forrest:part> nav-main-testing-foo testing - no @xpath<br/>
+            Path: <xsl:value-of select="$path"/><br/>
+            skin-img-dir:  <xsl:copy-of select="$defaultVariables/*/*"/> value:
+            <xsl:value-of select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>
+            <!--copy-of -->
+            </forrest:part>
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
