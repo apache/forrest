@@ -41,8 +41,29 @@ function navigate(url) {
 
 function search(searchID)
 {
+  searchDev('aims', searchID);
+}
+
+function searchDev(engine, searchID)
+{
   var searchItem = document.getElementById(searchID);
-  navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+  if (engine == 'aims') {
+    navigate('http://marc.theaimsgroup.com/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
+  } else {
+    navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+  }
+}
+
+function searchUser(searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=user_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+}
+
+function searchSite(searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://www.google.com/search?sitesearch=forrest.apache.org&q=search&Search=' + searchItem.value);
 }
 
 function contract(subUrl,searchID)

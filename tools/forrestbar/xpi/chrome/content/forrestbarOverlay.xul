@@ -90,9 +90,18 @@
       <toolbarseparator/>
 
       <toolbaritem class="forrestbar" id="forrestbar-search">
-        <label value="Search Forrest:"/>
-        <textbox id="forrestbar-input" hidden="false"/>
-        <toolbarbutton label=" dev-mail" onclick="search('forrestbar-input');" hidden="false"/>
+        <label value="Search:"/>
+        <textbox id="forrestbar-input" onkeydown="if (event.which == 13) {searchDev('aims', 'forrestbar-input');}" hidden="false"/>
+        
+        <toolbarbutton label="Search" hidden="false" type="menu">
+          <menupopup>
+            <menuitem label="Dev (MARC)" onclick="searchDev('aims', 'forrestbar-input');" hidden="false"/>
+            <menuitem label="Dev (The Mail Archive)" onclick="searchDev('mailArchive', 'forrestbar-input');" hidden="false"/>
+            <menuitem label="User (The Mail Archive)" onclick="searchUser('forrestbar-input');" hidden="false"/>
+            <menuitem label="Forrest Site" onclick="searchSite('forrestbar-input');" hidden="false"/>
+          </menupopup>
+        </toolbarbutton>
+        
         <toolbarbutton label="contracts" hidden="false" type="menu">
           <menupopup>
              <menuitem label="resolve-contract" onclick="contract('resolve.contract.html.','forrestbar-input');"/>
