@@ -42,7 +42,7 @@ import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
-import org.apache.forrest.dispatcher.ContractBeanInterface;
+import org.apache.forrest.dispatcher.ContractBeanDOMImpl;
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.DispatcherHelper;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
@@ -137,7 +137,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     protected String currentFormat;
 
-    protected ContractBeanInterface contract;
+    protected ContractBean contract;
 
     /**
      * The namespace used by the transformer for the SAX events filtering. This
@@ -345,10 +345,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 structurerProcessingStart(attr);
             else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
                 hookProcessingStart(name, raw, attr);
-            else if (ContractBeanInterface.CONTRACT_ELEMENT.equals(name)
+            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
                     & this.includeNodes)
                 contractProcessingStart(attr);
-            else if (ContractBeanInterface.PROPERTY_ELEMENT.equals(name)
+            else if (ContractBean.PROPERTY_ELEMENT.equals(name)
                     & this.includeNodes) {
                 this.insideProperties = true;
                 propertyProcessingStart(uri, name, raw, attr);
@@ -441,7 +441,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         } else if (DispatcherHelper.DISPATCHER_NAMESPACE_URI.equals(uri)) {
             if (STRUCTURER_ELEMENT.equals(name))
                 structurerProcessingEnd(raw);
-            else if (ContractBeanInterface.CONTRACT_ELEMENT.equals(name)
+            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
                     & this.includeNodes)
                 contractProcessingEnd();
             else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
@@ -575,7 +575,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     private void contractProcessingStart(Attributes attr) throws SAXException {
         try {
             if (contract == null)
-                contract = new ContractBean(this.manager,parameterHelper);
+                contract = new ContractBeanDOMImpl(this.manager,parameterHelper);
             else
                 contract.initialize();
         } catch (ParserConfigurationException e) {
@@ -589,10 +589,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
             String value = attr.getValue(i);
-            if (ContractBeanInterface.CONTRACT_ID_ATTRIBUTE.equals(localName)) {
+            if (ContractBean.CONTRACT_ID_ATTRIBUTE.equals(localName)) {
                 // getting the contract name
                 contract.setContractName(value);
-                String contractUri = ContractBeanInterface.CONTRACT_RESOLVE_PREFIX + "."
+                String contractUri = ContractBean.CONTRACT_RESOLVE_PREFIX + "."
                         + currentFormat + "." + value;
                 try {
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
@@ -617,7 +617,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                                     + localName + "\n" + "value" + "-->"
                                     + value);
                 }
-            } else if (ContractBeanInterface.CONTRACT_NUGGET_ATTRIBUTE.equals(localName)) {
+            } else if (ContractBean.CONTRACT_NUGGET_ATTRIBUTE.equals(localName)) {
                 // contract is a nugget-contract
                 contract.setNugget(true);
                 try {
@@ -784,14 +784,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
             String value = attr.getValue(i);
-            if (ContractBeanInterface.PROPERTY_ID_ATTRIBUTE.equals(localName))
+            if (ContractBean.PROPERTY_ID_ATTRIBUTE.equals(localName))
                 this.propertyID = value;
         }
         if (this.propertyID.equals("") | this.propertyID == null) {
             String error = "dispatcherError: " + DispatcherException.ERROR_500
                     + "\n" + "The contract \"" + contract.getContractName()
                     + "\" has no identifier attribute \""
-                    + ContractBeanInterface.PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
+                    + ContractBean.PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
             getLogger().error(error);
             throw new SAXException(error);
         }
@@ -809,7 +809,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      */
     private void propertyProcessingEnd(String uri, String name, String raw)
             throws SAXException {
-        if (ContractBeanInterface.PROPERTY_ELEMENT.equals(name)) {
+        if (ContractBean.PROPERTY_ELEMENT.equals(name)) {
             this.insideProperties = false;
             if (this.includeNodes) {
                 this.builder.endElement(uri, name, raw);
