@@ -41,7 +41,7 @@ import org.w3c.dom.NodeList;
  * @author thorsten
  * 
  */
-public class ContractBeanDOMImpl extends Beans implements ContractBeanInterface {
+public class ContractBeanDOMImpl extends Beans implements ContractBean {
 
     private Element[] propertyList;
 
