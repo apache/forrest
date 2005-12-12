@@ -17,6 +17,7 @@
 package org.apache.forrest.dispatcher;
 
 import java.beans.Beans;
+import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -30,6 +31,7 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
+import org.apache.forrest.dispatcher.transformation.DispatcherTransformer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -39,72 +41,7 @@ import org.w3c.dom.NodeList;
  * @author thorsten
  * 
  */
-public class ContractBean extends Beans {
-
-    /**
-     * The resolver prefix
-     */
-    public static final String CONTRACT_RESOLVE_PREFIX = "cocoon://resolve.contract";
-
-    /**
-     * <code>forrest:contract</code> element is used to include extra content
-     * and/or functionality.
-     * 
-     * <p>
-     * extra functionality requested from a uri via CONTRACT_NUGGET_ATTRIBUTE
-     * attribute - example:
-     * </p>
-     * 
-     * <pre>
-     *  &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
-     * </pre>
-     */
-    public static final String CONTRACT_ELEMENT = "contract";
-
-    /**
-     * Each contract can contact external/internal business services to get the
-     * data model. The attribute "CONTRACT_NUGGET_ATTRIBUTE" is the identifier
-     * for the uri of the business data
-     */
-    public static final String CONTRACT_NUGGET_ATTRIBUTE = "dataURI";
-
-    /**
-     * Each contract must have an unique identifier. The attribute
-     * "CONTRACT_ID_ATTRIBUTE" stands for this id
-     */
-    public static final String CONTRACT_ID_ATTRIBUTE = "name";
-
-    /**
-     * Each contract implementation needs to define the input format for the
-     * transformation. ATM we only support xsl. The attribute
-     * "CONTRACT_IMPL_INPUT_FORMAT_ATTRIBUTE" defines the input format for
-     * transformation
-     */
-    public static final String CONTRACT_IMPL_INPUT_FORMAT_ATTRIBUTE = "inputFormat";
-
-    /**
-     * Each contract implementation needs to store the input format within a
-     * root element
-     */
-    public static final String CONTRACT_IMPL_ROOT_ELEMENT = "forrest:template";
-    
-    /**
-     * Each contract can have properties, which are definite e.g. in the
-     * structurer index.fv and used in the contract.
-     * 
-     * <pre>
-     *  &lt;forrest:contract name=&quot;nav-main-testing&quot; nugget=&quot;cocoon://index.navigation.xml&quot;&gt;
-     *   &lt;forrest:property name=&quot;nav-main-testing-test1&quot; &gt;Just a test&lt;/forrest:property&gt;
-     *  &lt;/forrest:contract&gt;
-     * </pre>
-     */
-    public static final String PROPERTY_ELEMENT = "property";
-    
-    /**
-     * Each property must have an unique identifier. The attribute
-     * "PROPERTY_ID_ATTRIBUTE" stands for this id
-     */
-    static public final String PROPERTY_ID_ATTRIBUTE = "name";
+public class ContractBean extends Beans implements ContractBeanInterface {
 
     private Element[] propertyList;
 
@@ -170,6 +107,8 @@ public class ContractBean extends Beans {
 
     protected ServiceManager manager;
 
+    private HashMap parameterHelper;
+
     /**
      * The ContractBean contains all fields to work with contracts. It is a
      * helper bean.
@@ -180,16 +119,20 @@ public class ContractBean extends Beans {
      * information to the transfomer.
      * 
      * @param manager
+     * @param parameterHelper
      * @throws ParserConfigurationException
      */
-    public ContractBean(ServiceManager manager)
+    public ContractBean(ServiceManager manager, HashMap parameterHelper)
             throws ParserConfigurationException {
         this.manager = manager;
         dispatcherHelper = new DispatcherHelper(manager);
+        this.parameterHelper = parameterHelper;
     }
 
-    /**
-     * Recycle the component
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#recycle()
      */
     public void recycle() {
         this.contractDescription = null;
@@ -207,24 +150,19 @@ public class ContractBean extends Beans {
         this.propertyList = null;
     }
 
-    /**
-     * initialize the contract (normally done after recycle) Do not use to
-     * create a new instance!!!
+    /*
+     * (non-Javadoc)
      * 
-     * @throws ParserConfigurationException
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#initialize()
      */
     public void initialize() throws ParserConfigurationException {
         dispatcherHelper = new DispatcherHelper(this.manager);
     }
 
-    /**
-     * setContractImpl(String contractUri)
+    /*
+     * (non-Javadoc)
      * 
-     * This method invokes the setting of the actual contract implementation via
-     * an URI.
-     * 
-     * @param contractUri
-     * @throws Exception
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractImpl(java.lang.String)
      */
     public void setContractImpl(String contractUri) throws Exception {
         Document _contractImpl = dispatcherHelper.getDocument(contractUri);
@@ -232,14 +170,10 @@ public class ContractBean extends Beans {
         contractImplHelper(this.contractImpl);
     }
 
-    /**
-     * setContractImpl(Document _contractImpl)
+    /*
+     * (non-Javadoc)
      * 
-     * This method invokes the setting of the actual contract implementation via
-     * a document.
-     * 
-     * @param contractUri
-     * @throws Exception
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractImpl(org.w3c.dom.Document)
      */
     public void setContractImpl(Document _contractImpl) throws Exception {
         this.contractImpl = _contractImpl;
@@ -274,8 +208,8 @@ public class ContractBean extends Beans {
                     .getAttribute(CONTRACT_IMPL_INPUT_FORMAT_ATTRIBUTE);
             if ("".equals(format) | format == null) {
                 throw new DispatcherException(DispatcherException.ERROR_500
-                        + "\n" + "component: ContractBean" + "\n"
-                        + "message: inputFormat cannot be null");
+                        + "\n" + "component: ContractBean" + "\n" + "message:"
+                        + "\n" + "inputFormat cannot be null");
             } else if ("xsl".equals(format)) {
                 NodeList list_transformer = _contractImpl
                         .getElementsByTagName("xsl:stylesheet");
@@ -292,13 +226,24 @@ public class ContractBean extends Beans {
                                         + "\n"
                                         + "component: ContractBean"
                                         + "\n"
-                                        + "message: Could not setup transformer in the contractBean."
+                                        + "message:"
                                         + "\n"
-                                        + "Please check that the contract implementation is wellformed and valid");
-                    /*
-                     * FIXME: Set default properties
+                                        + "Could not setup transformer in the contractBean."
+                                        + "\n"
+                                        + "Please check that the contract implementation is wellformed and valid!"
+                                        + "\n"
+                                        + "\n"
+                                        + "One reason that an implementation may not be valid is that you are using variables that cannot be resolved."
+                                        + "\n"
+                                        + "Please see the logs and the sysout for more information, you may are see right away the error.");
+                    /**
+                     * Set default properties
                      */
-                    // transformer.setParameter()
+                    // default forrest properties
+                    Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
+                            "cocoon://test-props", this.manager);
+                    transformer.setParameter("defaultVariables",
+                            defaultVariables);
                     transformer.setOutputProperty(
                             OutputKeys.OMIT_XML_DECLARATION, "yes");
                     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -307,12 +252,13 @@ public class ContractBean extends Beans {
                 }
             } else {
                 throw new DispatcherException(DispatcherException.ERROR_404
-                        + "\n" + "component: ContractBean" + "\n"
-                        + "message: inputFormat=\"" + format
+                        + "\n" + "component: ContractBean" + "\n" + "message:"
+                        + "\n" + "inputFormat=\"" + format
                         + "\" not implemented");
             }
         }
-        NodeList description = _contractImpl.getElementsByTagName("description");
+        NodeList description = _contractImpl
+                .getElementsByTagName("description");
         if (description.getLength() == 1) {
             Element node = (Element) description.item(0);
             this.contractDescription = node;
@@ -324,22 +270,10 @@ public class ContractBean extends Beans {
         }
     }
 
-    /**
-     * The presentation model (contractRawData) has to be requested by the
-     * contract if it needs it. This is be done by setting the
-     * CONTRACT_NUGGET_ATTRIBUTE attribute in the structurer which then use this
-     * method to set the contractRawData.
-     * <p>
-     * Extra functionality requested from a uri via CONTRACT_NUGGET_ATTRIBUTE
-     * attribute - example:
-     * </p>
+    /*
+     * (non-Javadoc)
      * 
-     * <pre>
-     * &lt;forrest:contract name=&quot;nav-section&quot; dataURI=&quot;cocoon://index.navigation.xml&quot;/&gt;
-     * </pre>
-     * 
-     * @param nuggetUri
-     * @throws Exception
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setNuggetUri(java.lang.String)
      */
     public void setNuggetUri(String nuggetUri) throws Exception {
         this.nuggetUri = nuggetUri;
@@ -347,12 +281,10 @@ public class ContractBean extends Beans {
         this.contractRawData = rawData;
     }
 
-    /**
-     * This method invokes the transformation of the this.contractRawData with
-     * the this.contractTransformer (make sure you set them before). The result
-     * is set to this.contractResultData.
+    /*
+     * (non-Javadoc)
      * 
-     * @throws TransformerException
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractResultData()
      */
     public void setContractResultData() throws DispatcherException {
         if (this.getContractRawData() == null
@@ -362,7 +294,9 @@ public class ContractBean extends Beans {
                             + "\n"
                             + "component: ContractBean"
                             + "\n"
-                            + "message: Could not transform the result data in contractBean."
+                            + "message:"
+                            + "\n"
+                            + "Could not transform the result data in contractBean."
                             + "\n"
                             + "You need to invoke first the transfomer and the rawData.");
         } else {
@@ -376,7 +310,9 @@ public class ContractBean extends Beans {
                                 + "\n"
                                 + "component: ContractBean"
                                 + "\n"
-                                + "message: Could not transform the result data in contractBean."
+                                + "message:"
+                                + "\n"
+                                + "Could not transform the result data in contractBean."
                                 + "\n"
                                 + "While trying to transform the raw data with the transformer, following error was thrown:\n"
                                 + e);
@@ -388,82 +324,182 @@ public class ContractBean extends Beans {
     /*
      * Simple getter and setter methods
      */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractName()
+     */
     public String getContractName() {
         return contractName;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractName(java.lang.String)
+     */
     public void setContractName(String contractName) {
         this.contractName = contractName;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#isHasProperties()
+     */
     public boolean isHasProperties() {
         return hasProperties;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setHasProperties(boolean)
+     */
     public void setHasProperties(boolean hasProperties) {
         this.hasProperties = hasProperties;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#isNugget()
+     */
     public boolean isNugget() {
         return isNugget;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setNugget(boolean)
+     */
     public void setNugget(boolean isNugget) {
         this.isNugget = isNugget;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getNuggetUri()
+     */
     public String getNuggetUri() {
         return nuggetUri;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractRawData()
+     */
     public Node getContractRawData() {
         return contractRawData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractRawData(org.w3c.dom.Document)
+     */
     public void setContractRawData(Document contractRawData) {
         this.contractRawData = contractRawData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractTransformer()
+     */
     public Transformer getContractTransformer() {
         return contractTransformer;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractTransformer(javax.xml.transform.Transformer)
+     */
     public void setContractTransformer(Transformer contractTransformer) {
         this.contractTransformer = contractTransformer;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractImpl()
+     */
     public Document getContractImpl() {
         return contractImpl;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractDescription()
+     */
     public Element getContractDescription() {
         return contractDescription;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractDescription(org.w3c.dom.Element)
+     */
     public void setContractDescription(Element contractDescription) {
         this.contractDescription = contractDescription;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractUsage()
+     */
     public Element getContractUsage() {
         return contractUsage;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractUsage(org.w3c.dom.Element)
+     */
     public void setContractUsage(Element contractUsage) {
         this.contractUsage = contractUsage;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getPropertyList()
+     */
     public Element[] getPropertyList() {
         return propertyList;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setPropertyList(org.w3c.dom.Element[])
+     */
     public void setPropertyList(Element[] propertyList) {
         this.propertyList = propertyList;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#getContractResultData()
+     */
     public DOMResult getContractResultData() {
         return contractResultData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractResultData(javax.xml.transform.dom.DOMResult)
+     */
     public void setContractResultData(DOMResult contractResultData) {
         this.contractResultData = contractResultData;
     }

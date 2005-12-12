@@ -24,7 +24,6 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
@@ -43,6 +42,7 @@ import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
+import org.apache.forrest.dispatcher.ContractBeanInterface;
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.DispatcherHelper;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
@@ -137,7 +137,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     protected String currentFormat;
 
-    protected ContractBean contract;
+    protected ContractBeanInterface contract;
 
     /**
      * The namespace used by the transformer for the SAX events filtering. This
@@ -179,8 +179,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private String hooksXSL;
 
-    public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
+    private HashMap parameterHelper;
 
+    public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
+    public static final String PATH_PARAMETER = "path";
     /**
      * Constructor Set the namespace
      */
@@ -257,6 +259,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throw new ProcessingException(error);
         }
         storedPrefixMap = new HashMap();
+        this.parameterHelper= new HashMap();
 
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
@@ -268,6 +271,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             getLogger().error(error);
             throw new ProcessingException(error);
         }
+        parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE,requestedFormat);
+        /*this.pathXSL = parameters.getParameter(PATH_PARAMETER,null);
+        if (this.pathXSL==null){
+            String warning = "dispatcherError:\n"
+                + "You did not set up the \"path\" parameter in the sitemap, we are not going to support default variables in contracts."
+                + " Meaning that you are not able to use e.g. $skin-img-dir, if you do the contract bean implementation will throw an exception.";
+        getLogger().warn(warning);
+        }
+        parameterHelper.put(PATH_PARAMETER,pathXSL);*/
         this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER,
                 null);
         try {
@@ -282,6 +294,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 this.structurerTransformer = dispatcherHelper
                         .createTransformer(stylesheet);
             }
+            parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER,hooksXSL);
         } catch (Exception e) {
             String error = "dispatcherError:\n"
                     + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
@@ -332,10 +345,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 structurerProcessingStart(attr);
             else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
                 hookProcessingStart(name, raw, attr);
-            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
+            else if (ContractBeanInterface.CONTRACT_ELEMENT.equals(name)
                     & this.includeNodes)
                 contractProcessingStart(attr);
-            else if (ContractBean.PROPERTY_ELEMENT.equals(name)
+            else if (ContractBeanInterface.PROPERTY_ELEMENT.equals(name)
                     & this.includeNodes) {
                 this.insideProperties = true;
                 propertyProcessingStart(uri, name, raw, attr);
@@ -428,7 +441,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         } else if (DispatcherHelper.DISPATCHER_NAMESPACE_URI.equals(uri)) {
             if (STRUCTURER_ELEMENT.equals(name))
                 structurerProcessingEnd(raw);
-            else if (ContractBean.CONTRACT_ELEMENT.equals(name)
+            else if (ContractBeanInterface.CONTRACT_ELEMENT.equals(name)
                     & this.includeNodes)
                 contractProcessingEnd();
             else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
@@ -562,7 +575,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     private void contractProcessingStart(Attributes attr) throws SAXException {
         try {
             if (contract == null)
-                contract = new ContractBean(this.manager);
+                contract = new ContractBean(this.manager,parameterHelper);
             else
                 contract.initialize();
         } catch (ParserConfigurationException e) {
@@ -576,10 +589,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
             String value = attr.getValue(i);
-            if (ContractBean.CONTRACT_ID_ATTRIBUTE.equals(localName)) {
+            if (ContractBeanInterface.CONTRACT_ID_ATTRIBUTE.equals(localName)) {
                 // getting the contract name
                 contract.setContractName(value);
-                String contractUri = ContractBean.CONTRACT_RESOLVE_PREFIX + "."
+                String contractUri = ContractBeanInterface.CONTRACT_RESOLVE_PREFIX + "."
                         + currentFormat + "." + value;
                 try {
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
@@ -604,7 +617,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                                     + localName + "\n" + "value" + "-->"
                                     + value);
                 }
-            } else if (ContractBean.CONTRACT_NUGGET_ATTRIBUTE.equals(localName)) {
+            } else if (ContractBeanInterface.CONTRACT_NUGGET_ATTRIBUTE.equals(localName)) {
                 // contract is a nugget-contract
                 contract.setNugget(true);
                 try {
@@ -771,14 +784,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         for (int i = 0; i < attr.getLength(); i++) {
             String localName = attr.getLocalName(i);
             String value = attr.getValue(i);
-            if (ContractBean.PROPERTY_ID_ATTRIBUTE.equals(localName))
+            if (ContractBeanInterface.PROPERTY_ID_ATTRIBUTE.equals(localName))
                 this.propertyID = value;
         }
         if (this.propertyID.equals("") | this.propertyID == null) {
             String error = "dispatcherError: " + DispatcherException.ERROR_500
                     + "\n" + "The contract \"" + contract.getContractName()
                     + "\" has no identifier attribute \""
-                    + ContractBean.PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
+                    + ContractBeanInterface.PROPERTY_ID_ATTRIBUTE + "\" in the " + raw;
             getLogger().error(error);
             throw new SAXException(error);
         }
@@ -796,7 +809,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      */
     private void propertyProcessingEnd(String uri, String name, String raw)
             throws SAXException {
-        if (ContractBean.PROPERTY_ELEMENT.equals(name)) {
+        if (ContractBeanInterface.PROPERTY_ELEMENT.equals(name)) {
             this.insideProperties = false;
             if (this.includeNodes) {
                 this.builder.endElement(uri, name, raw);
