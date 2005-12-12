@@ -41,7 +41,7 @@ import org.w3c.dom.NodeList;
  * @author thorsten
  * 
  */
-public class ContractBean extends Beans implements ContractBeanInterface {
+public class ContractBeanDOMImpl extends Beans implements ContractBeanInterface {
 
     private Element[] propertyList;
 
@@ -122,7 +122,7 @@ public class ContractBean extends Beans implements ContractBeanInterface {
      * @param parameterHelper
      * @throws ParserConfigurationException
      */
-    public ContractBean(ServiceManager manager, HashMap parameterHelper)
+    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper)
             throws ParserConfigurationException {
         this.manager = manager;
         dispatcherHelper = new DispatcherHelper(manager);
