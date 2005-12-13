@@ -31,52 +31,95 @@
     <section>
       <title>Usage</title>
       
-      <warning>The 0.3-Dev Daisy plugin does not allow you to mix
-      Daisy content with non-Daisy content. You should continue to
-      use version 0.2 if you need to mix content from multiple sources.
-      This is a temporary restriction.</warning>
-      
       <p>This plugin allows content to be retrieved from a 
       <a href="http://www.cocoondev.org/daisy/">Daisy CMS repository</a>
       and displayed alongside any other Forrest content. Unlike many
       other plugins there is some configuraiton of your project requried.</p>
-      
+            
       <section>
-        <title>Locationmap Configuration</title>
+        <title>Configuration</title>
       
-        <p>The project locationmap for a Daisy generated site is automatically
-        created from the daisy navigation documents. In order to tell Forrest
-        how to generate these documents you must add a matcher to your
-        project sitemap as follows:</p>
-      
-        <source><![CDATA[
-<map:match pattern="locationmap-project.xml">
-  <map:generate src="http://username:password@rop.domain.org:9263/publisher/blob?documentId=NAVIGATION-DOCUMENT-ID&amp;version=live&amp;partType=1"/>
-  <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
-    <map:parameter name="publisherURL" value="http://username:password@repo.domain.org:9263/publisher/"/>
-    <map:parameter name="pathPrefix" value="/"/>
-  </map:transform>
-  <map:transform rtype="xinclude"/>
-  <map:serialize type="xml"/>
-</map:match>
-        ]]></source>
+        <section>
+          <title>Locationmap</title>
+          
+          <p>The project locationmap for a Daisy generated site is automatically
+          created from the daisy navigation documents. This allows the URL of the
+          published Forrest site to be set within the Daisy CMS system as opposed
+          to using the daisy ID for the page.</p>
+          
+          <p>In order for Forrest to know the id of the navigation document to be
+          used your project must set some required properties
+          (see below for details). The project also needs to provide the following match in
+          PROJECT_HOME/sitemap.xmap:</p>
+          
+          <source><![CDATA[
+      <map:match pattern="locationmap-project.xml">
+        <map:generate src="{project:daisy.publisher.URL}blob?documentId={project:daisy.navigation.docID}&amp;version=live&amp;partType=1"/>
+        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
+          <map:parameter name="publisherURL" value="{project:daisy.publisher.URL}"/>
+          <map:parameter name="pathPrefix" value="{project:daisy.publisher.URL}"/>
+          <map:parameter name="navigationID" value="{project:daisy.navigation.docID}"/>
+        </map:transform>
+        <map:transform type="xinclude"/>
+        <map:serialize type="xml"/>
+      </map:match>
+          ]]></source>
+                            
+          <p>If your site needs to provide additional locationmap entries it can
+          do so by including them in 
+          <code>PROJECT_HOME/src/documentation/locationmap-include.xml</code>.
+          The matchers in this file will override any of the auto-generated matchers
+          from the Daisy navigation file. The location of this file can be changed
+          by overriding the locationmap pattern <code>daisy.locationmap.include</code>.</p>
         
-        <p>The <code>pathPrefix</code> is  a prefix added to all paths to documents
-        that are to be retrieved from the Daisy repository. It can, of course, be ommitted
-        in which case there will no prefix.</p>
+          <note>The pipelines that generate the locationmap
+          are cached for 2 hours. This is because it is computationally
+          expensive to regenerate these files. A future version of this plugin will provide
+          a more flexible caching mechanism. But for now you need to force a refresh 
+          during development or override the locationmap match in the plugin sitemap.</note>
+        </section>
         
-        <p>If your site needs to provide additional locationmap entires it can
-        do so by including them in 
-        <code>PROJECT_HOME/src/documentation/locationmap-daisy-include.xml</code>.
-        The matchers in this file will override any of the auto-generated matchers
-        from the Daisy navigation file.</p>
-        
-        <note>It is recomended that the pipelines that generate the locationmap
-        are cached for at least 1 hour. This is because it is computationally
-        expensive to regenerate these files. A future version of this plugin will provide
-        a more flexible caching mechanism. But for now you need to force a refresh 
-        during development.</note>
-        
+        <section>
+          <title>Properties</title>
+          
+          <p>The table below describes all properties that this plugin exposes.</p>
+          
+          <table>
+            <tr>
+              <th>Property Name</th>
+              <th>Description</th>
+              <th>Default</th>
+              <th>Required?</th>
+            </tr>
+            <tr>
+              <td>daisy.publisher.URL</td>
+              <td>The URL of the Diasy repository. This URL is the complete
+              URL to the publisher interface, for example 
+              <code>http://username:password@cms.domain.org:9263/publisher/</code>.</td>
+              <td>No default</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>daisy.navigation.docID</td>
+              <td>The diasy ID for the navigation document to use.</td>
+              <td>No default</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>daisy.index.docID</td>
+              <td>The daisy ID of the document to return when requesting "/index.html".</td>
+              <td>No default</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>daisy.pathPrefix</td>
+              <td>A prefix added to all paths to documents
+              that are to be retrieved from the Daisy repository.</td>
+              <td>Empty String</td>
+              <td>No</td>
+            </tr>
+          </table>
+        </section>
       </section>
       
       <section>
