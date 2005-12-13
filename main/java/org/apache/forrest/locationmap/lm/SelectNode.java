@@ -115,7 +115,7 @@ public final class SelectNode extends AbstractNode {
                   debug("Not selected: " + location);
               }
             } catch (ConfigurationException e) {
-                    debug("Ignoring locationmap config exception: " + e.getMessage());
+              getLogger().error("Ignoring locationmap config exception: " + e.getMessage(), e);
             }
         }
         

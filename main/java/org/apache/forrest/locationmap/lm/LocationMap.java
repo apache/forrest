@@ -112,7 +112,6 @@ public final class LocationMap extends AbstractLogEnabled {
 
     /** list of MountNodes */
     private MountNode[] m_mountNodes;
-   
     
     public LocationMap(ServiceManager manager) {
         m_manager = new LocationMapServiceManager(manager);
@@ -282,14 +281,8 @@ public final class LocationMap extends AbstractLogEnabled {
         }
         
         ContainerUtil.dispose(context);
-
-        if (location == null) {
-            String msg = "No Location returned for hint " + hint;
-            getLogger().error(msg);;
-            throw new Exception(msg);
-        }
         
-        if (location.startsWith("http:")) {
+        if (location != null && location.startsWith("http:")) {
         	location.replaceAll(" ", "%20");
         }
         
