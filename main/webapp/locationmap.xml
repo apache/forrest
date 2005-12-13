@@ -37,7 +37,15 @@
     <!-- Mount project specific locationmap -->
     <!-- ================================== -->
     <select>
-      <mount src="cocoon://locationmap-project.xml"/>
+      <!-- Normally it is discouraged to use the cocoon:
+      protocol in the locationap as this provides too much indirection.
+      
+      However, this is a special case since it allows individual 
+      projects to dynamically generate their locationmap. This is
+      required when content is being drawn from a remote repository
+      and we want the site structure to also come from that repository
+      -->
+      <mount src="cocoon:/locationmap-project.xml"/>
     </select>     
     
     <!-- ================================== -->
@@ -53,34 +61,6 @@
     <!-- ================================== -->
     <match pattern="forrest.schema.**">
         <location src="{forrest:context}/resources/schema/dtd/{1}.dtd" />
-    </match>
-    
-    <!-- ================================== -->
-    <!-- project files                      -->
-    <!-- ================================== -->
-    <match pattern="project.xmap.sitemap">
-        <location src="{project:sitemap}" />
-    </match>
-    
-    <match pattern="project.build-info">
-      <location src="{project:temp-dir}/build-info.xml" />
-    </match>
-    
-    <match pattern="project.xml.site">
-      <location src="{project:content.xdocs}site.xml" />
-    </match>
-    
-    <match pattern="project.images.**.*">
-      <select>
-        <location src="{project:content.xdocs}images/{1}.{2}" />
-        <location src="{project:content.xdocs}{1}.{2}" />
-        <location src="{project:resources.images}{1}.{2}" />
-        <location src="{project:content}../resources/images/{1}.{2}" />
-      </select>
-    </match>
-    
-    <match pattern="project.**">
-      <location src="{project:content.xdocs}{1}" />
     </match>
     
     <!-- ================================== -->
@@ -125,6 +105,15 @@
     
     <match pattern="project.build-info">
       <location src="{project:temp-dir}/build-info.xml" />
+    </match>
+    
+    <match pattern="project.images.**.*">
+      <select>
+        <location src="{project:content.xdocs}images/{1}.{2}" />
+        <location src="{project:content.xdocs}{1}.{2}" />
+        <location src="{project:resources.images}{1}.{2}" />
+        <location src="{project:content}../resources/images/{1}.{2}" />
+      </select>
     </match>
     
     <match pattern="project.xml.site">
