@@ -42,7 +42,7 @@
       
       <locator>
       
-       <xi:include href="locationmap-daisy-include.xml #xpointer(//locationmapInclude/*)"/>
+       <xi:include href="locationmap-daisy-include.xml#xpointer(//locationmapInclude/*)"/>
      
        <xsl:apply-templates/>
         
