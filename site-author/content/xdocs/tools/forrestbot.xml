@@ -26,47 +26,54 @@
     <section>
       <title>Overview</title>
 
-      <p>Forrestbot lets you automate building and deploying websites. The 
-        whole process gets the source docs, builds it, then deploys the site
-        where you want it to go. It can also notify you afterwards, and it
-        keeps a log of the build process. To accomplish these tasks Forrestbot 
-        uses four "workstages" (getsrc, build, deploy, notify). Each workstage
-        has various "implementations" (e.g. getsrc has getsrc.cvs or getsrc.svn
-        or getsrc.local implementations) which 
-        have various properties that may be set, depending upon the 
-        implementations chosen.</p>
+      <p>Forrestbot lets you automate building and deploying websites. The
+      whole process gets the source docs, builds the site, then deploys it
+      where you want it to go. Forrestbot can also notify you afterwards, and
+      it keeps a log of the build process. To accomplish these tasks,
+      Forrestbot uses four "workstages" (getsrc, build, deploy, notify). Each
+      workstage has various implementations (e.g., getsrc has getsrc.cvs or
+      getsrc.svn or getsrc.local implementations), which have various
+      properties that may be set, depending upon the implementations
+      chosen.</p>
     </section>
 
     <section>
       <title>Using Forrestbot</title>
 
-      <p>You need to create a customized buildfile directing Forrestbot's work 
-        and then simply execute:</p>
+      <p>You need to create a customized buildfile directing Forrestbot's work
+      and then simply execute:</p>
 
       <source>forrest -f mybuildfile.xml</source>
 
-      <p>The next section explains how to create your buildfile.</p>
+      <p>This project buildfile is simply an Ant buildfile with specific
+      targets that control Forrestbot's operation. The next section explains
+      how to create such a buildfile. For details on the syntax of Ant
+      buildfiles and the operation of Ant itself consult the <link
+      href="ext:ant">Ant documentation</link>.</p>
     </section>
 
     <section>
-      <title>Creating a buildfile</title>
+      <title>Creating a Forrestbot Project Buildfile</title>
 
+      <p>Within the new buildfile, you need to first set properties needed by
+      the workstages you are going to use and then specify which
+      implementations will be used by each workstage. Note that the properties
+      need to be set at the global scope (as children of
+      <code>&lt;project&gt;</code>, i.e., outside of
+      <code>&lt;target&gt;</code> elements) in order for your settings to
+      override the defaults in the Forrestbot implementation. Other than that,
+      the property definitions can appear anywhere before the
+      <code>&lt;import&gt;</code> task.</p>
 
-
-      <p>Within the new buildfile you need to first set properties needed by 
-        the workstages you are going to use and then specify what 
-        implementations will be used by each workstage.</p>
-    <fixme author="open">This seems backwards since the properties are dependent 
-on the implementations - no?</fixme>
-
-      <p>This sample buildfile can be used as a base from which to customize 
-        your own buildfile.  The file starts with the project name and default 
-        workstage target, then sets the specific properties we will need to get 
-        the source, set up notification and indicate the deploy location.  It then 
-        specifies which implementations we will use and finishes up with 
-        importing the forrestbot.xml file.</p>
-    <fixme author="open">Is "default workstage target" the correct term for 
-default="main"?</fixme>
+      <p>This sample buildfile can be used as a base from which to customize
+      your own buildfile. The file starts with the project name and default
+      target, then sets the specific properties we need to get the source,
+      indicate the deployment location, and set up notification. It then
+      specifies which implementations we will use and finishes up with
+      importing the <code>forrestbot.xml</code> file. The 'main' target, which
+      is specified as the default here, is a convenience target (defined in
+      <code>forrestbot.xml</code>) that executes the four workstages (getsrc,
+      build, deploy, notify) sequentially.</p>
 
       <source>&lt;project name="mysampleproject" default="main"&gt;
 	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
@@ -99,75 +106,112 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 
 </source>
 
-  <section>
-    <title>Workstages</title>
-    <p>It is only necessary to include the specific target implementations in 
-      the buildfile if we want to override the default implementations.  The 
-      following tables show the various workstages and which implementations
-      may be used for each and which is the default.</p>
-      <table>
-        <tr>
-          <th>Workstage</th>
+      <section>
+        <title>Workstages</title>
 
-          <th>Implementations</th>
-        </tr>
+        <p>It is only necessary to include specific target implementations in
+        the buildfile if we want to override the default implementations. The
+        following table shows the various workstages, which implementations
+        may be used for each, and which one is the default.</p>
 
-        <tr>
-          <td>getsrc</td>
+        <table>
+          <tr>
+            <th>Workstage</th>
 
-          <td><ul>
-              <li><link href="#getsrc.local">getsrc.local</link></li>
+            <th>Implementations</th>
+          </tr>
 
-              <li><link href="#getsrc.cvs">getsrc.cvs</link> (default)</li>
+          <tr>
+            <td>getsrc</td>
 
-              <li><link href="#getsrc.svn">getsrc.svn</link></li>
-            </ul></td>
-        </tr>
+            <td><ul>
+                <li><link href="#getsrc.local">getsrc.local</link></li>
 
-        <tr>
-          <td>build</td>
+                <li><link href="#getsrc.cvs">getsrc.cvs</link> (default)</li>
 
-          <td><ul>
-              <li><link href="#build.forrest">build.forrest</link></li>
-            </ul></td>
-        </tr>
+                <li><link href="#getsrc.svn">getsrc.svn</link></li>
+              </ul></td>
+          </tr>
 
-        <tr>
-          <td>deploy</td>
+          <tr>
+            <td>build</td>
 
-          <td><ul>
-              <li><link href="#deploy.local">deploy.local</link> (default)</li>
+            <td><ul>
+                <li><link href="#build.forrest">build.forrest</link></li>
+              </ul></td>
+          </tr>
 
-              <li><link href="#deploy.scp">deploy.scp</link></li>
+          <tr>
+            <td>deploy</td>
 
-              <li><link href="#deploy.cvs">deploy.cvs</link></li>
+            <td><ul>
+                <li><link href="#deploy.local">deploy.local</link>
+                (default)</li>
 
-              <li><link href="#deploy.svn">deploy.svn</link></li>
-              <li><link href="#deploy.ftp">deploy.ftp</link></li>
-            </ul></td>
-        </tr>
+                <li><link href="#deploy.scp">deploy.scp</link></li>
 
-        <tr>
-          <td><link href="#notify">notify</link></td>
+                <li><link href="#deploy.cvs">deploy.cvs</link></li>
 
-          <td><ul>
-              <li><link href="#notify.local">notify.local</link> (default)</li>
+                <li><link href="#deploy.svn">deploy.svn</link></li>
 
-              <li><link href="#notify.email">notify.email</link></li>
-            </ul></td>
-        </tr>
-      </table>
+                <li><link href="#deploy.ftp">deploy.ftp</link></li>
+              </ul></td>
+          </tr>
 
-      <p>If you want to do more advanced processing for your project, you can
-      override the 'main' target, which by default is <code>&lt;target
-      name="main" depends="getsrc, build, deploy, notify"/&gt;</code>, create
-      your own implementation of a workstage, or use any other ant tasks to do
-      additional work.</p>
-    <fixme author="open">How do you create your own implementation?  Can you 
-create a different default target than main - how do you override the 
-default?</fixme>
-      <p></p>
-    </section>
+          <tr>
+            <td><link href="#notify">notify</link></td>
+
+            <td><ul>
+                <li><link href="#notify.local">notify.local</link>
+                (default)</li>
+
+                <li><link href="#notify.email">notify.email</link></li>
+              </ul></td>
+          </tr>
+        </table>
+
+        <p>If you want to do more advanced processing for your project, you
+        can override the 'main' target, which by default is <code>&lt;target
+        name="main" depends="getsrc, build, deploy, notify"/&gt;</code>,
+        create your own implementation of a workstage, or use any other ant
+        tasks to do additional work. In order to create your own workstage
+        implementation, define the workstage target in question in your
+        <code>mybuildfile.xml</code> anywhere before the
+        <code>&lt;import&gt;</code> task. This will override the default
+        implementation provided by Forrestbot.</p>
+
+        <p>Also, you can choose a different target as the default by changing
+        the <code>default</code> attribute of <code>&lt;project&gt;</code>.
+        For example, you will much more frequently do a 'build' without a
+        'deploy' during the development of your website, and only at the end
+        do an actual 'deploy', so you might want to choose 'build' as your
+        default target.</p>
+
+        <section>
+          <title>Correct Use of getsrc.local</title>
+
+          <p>There is a wrinkle when using the 'getsrc.local' implementation
+          of the 'getsrc' workstage. If you define your own 'getsrc.local'
+          target, make sure it starts with the <code>&lt;property&gt;</code>
+          task given here:</p>
+
+          <source>&lt;target name="getsrc.local"&gt;
+  &lt;property name="build.home-dir" location="${getsrc.local.root-dir}"/&gt;
+  [...]
+&lt;/target&gt;</source>
+
+          <p>Alternatively (and preferably), define your 'getsrc' target like
+          this:</p>
+
+          <source>&lt;target name="getsrc" depends="getsrc.clean-workdir, getsrc.get, getsrc.local"/&gt;</source>
+
+          <p>and then implement the actual fetching of the sources in the
+          'getsrc.get' target. This latter approach is safer since it is more
+          likely to be forward-compatible with future versions of
+          Forrestbot.</p>
+        </section>
+      </section>
+
       <section>
         <title>Workstage Properties</title>
 
@@ -175,16 +219,16 @@ default?</fixme>
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
 
-    <p>Many workstage properties use usernames and passwords. You may want to 
-      keep them out of your project's xml buildfile (especially if you store
-      that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
-      my-settings.xml) that just sets those properties (don't include it in
-      CVS/SVN). Then in your project buildfile, have <code>&lt;import
-      file="my-settings.xml"/&gt;</code>.</p>
+        <p>Many workstage properties use usernames and passwords. You may want
+        to keep them out of your project's Ant buildfile (especially if you
+        store that file in CVS or SVN). A nice way to do this is to create a
+        separate properties file (e.g., <code>auth.properties</code>) that
+        just sets those properties (don't include it in CVS/SVN). Then, at the
+        top of your project buildfile, have <code>&lt;property
+        file="auth.properties"/&gt;</code>.</p>
 
         <section>
-          <title>Misc Properties</title>
+          <title>Misc. Properties</title>
 
           <table>
             <tr>
@@ -213,9 +257,9 @@ default?</fixme>
         <section>
           <title>getsrc.clean-workdir</title>
 
-          <p>This should be executed before a getsrc implementation is executed.
-          For example, <code>&lt;target name="getsrc"
-          depends="getsrc.clean-workdir, getsrc.svn"/&gt;</code></p>
+          <p>This should be executed before a getsrc implementation is
+          executed, e.g., <code>&lt;target name="getsrc"
+          depends="getsrc.clean-workdir, getsrc.svn"/&gt;</code>.</p>
         </section>
 
         <section id="getsrc.local">
@@ -236,7 +280,7 @@ default?</fixme>
               <td>getsrc.local.root-dir</td>
 
               <td>Absolute path to the project's root directory on the local
-              computer.  Use <strong>location=</strong> instead of 
+              computer. Use <strong>location=</strong> instead of
               <strong>value=</strong> for this &lt;property&gt;</td>
 
               <td></td>
@@ -303,8 +347,8 @@ default?</fixme>
             <tr>
               <td>getsrc.cvs.module</td>
 
-              <td>CVS module name (an alias, or full path) to the directory that
-              contains forrest.properties</td>
+              <td>CVS module name (an alias for or the full path to the
+              directory that contains forrest.properties)</td>
 
               <td>${ant.project.name}</td>
 
@@ -413,9 +457,10 @@ default?</fixme>
             <tr>
               <td>deploy.local.dir</td>
 
-              <td>Path to deploy site to - the dir that would be the equivalant 
-              of build/site dir.  Relative paths will be relative to
-              project forrestbot descriptor file.</td>
+              <td>Path to deploy site to - the dir that would be the
+              equivalant of build/site dir. Relative paths are relative to
+              ${basedir}, which defaults to the dir containing the Forrestbot
+              project buildfile (mybuildfile.xml).</td>
 
               <td>sites/${ant.project.name}</td>
 
@@ -427,9 +472,9 @@ default?</fixme>
         <section id="deploy.scp">
           <title>deploy.scp</title>
 
-          <p>${user.home}/.ssh/known_hosts must properly recognize the host, so
-          you should manually make an ssh connection to the host if you never
-          have before.</p>
+          <p><code>${user.home}/.ssh/known_hosts</code> must properly
+          recognize the host, so you should manually make an ssh connection to
+          the host if you never have before.</p>
 
           <table>
             <tr>
@@ -649,7 +694,7 @@ default?</fixme>
               <td>deploy.ftp.remotedir</td>
 
               <td>The directory to upload to (this can be an absolute path or
-                relative to the FTP user's default directory)</td>
+              relative to the FTP user's default directory)</td>
 
               <td>incoming</td>
 
@@ -657,6 +702,7 @@ default?</fixme>
             </tr>
           </table>
         </section>
+
         <section id="notify">
           <title>notify</title>
 
@@ -792,32 +838,35 @@ default?</fixme>
     </section>
 
     <section>
-      <title>Forrestbot design</title>
+      <title>Forrestbot Design</title>
 
-      <p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
-      task is used to import multiple buildfiles into a single build. The
-      following is the flow of control when running forrestbot:</p>
+      <p>Forrest and Forrestbot use Ant buildfiles extensively. Ant 1.6's
+      <code>&lt;import&gt;</code> task is used to import multiple buildfiles
+      into a single build. The following is the flow of control when running
+      Forrestbot:</p>
 
       <ul>
-        <li>Your buildfile<ul>
-            <li>forrestbot.xml<ul>
-                <li>workstage buildfiles</li>
+        <li>Your project buildfile (<code>mybuildfile.xml</code>)<ul>
+            <li><code>$FORREST_HOME/tools/forrestbot/core/forrestbot.xml</code><ul>
+                <li>Workstage buildfiles
+                (<code>$FORREST_HOME/tools/forrestbot/core/{getsrc,build,deploy,notify}.xml</code>)</li>
 
-                <li>forrest.build.xml</li>
+                <li><code>$FORREST_HOME/main/forrest.build.xml</code></li>
               </ul></li>
           </ul></li>
       </ul>
 
-      <p>The workstage buildfiles set up the properties and files so that the
-      main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstage buildfiles can implement reporting, deployment, or other
-      post-build activities.</p>
+      <p>The workstage buildfiles define the default workstage implementations
+      and set up the properties and files so that targets in the main Forrest
+      buildfile (<code>forrest.build.xml</code>) will run. After those targets
+      are executed, the targets in the workstage buildfiles can perform
+      reporting, deployment, or other post-build activities.</p>
 
-      <p>Your buildfile can specify which workstages you want to use, set
-      properties for them, and do any additional pre- and post-processing.</p>
-    <fixme author="open">Which of these (Your buildfile/workstage buildfile) is 
-the "project buildfile" referred to elsewhere on this page, if any?  If it is 
-"Your buildfile" can I also create workstage buildfiles?  If so, how?</fixme>
+      <p>Your project buildfile specifies the workstages you want to use, sets
+      properties for them, and does any additional pre- and post-processing.
+      In addition, you can override the default workstage implementations by
+      defining the relevant targets in your project buildfile before the
+      <code>&lt;import&gt;</code> task (see the example above).</p>
     </section>
   </body>
 </document>
