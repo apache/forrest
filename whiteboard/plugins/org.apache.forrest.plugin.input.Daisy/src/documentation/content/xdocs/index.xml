@@ -53,16 +53,21 @@
           PROJECT_HOME/sitemap.xmap:</p>
           
           <source><![CDATA[
+          
+    <map:pipeline>
+      <map:parameter name="expires" value="access plus 2 hours"/>
+    
       <map:match pattern="locationmap-project.xml">
         <map:generate src="{project:daisy.publisher.URL}blob?documentId={project:daisy.navigation.docID}&amp;version=live&amp;partType=1"/>
         <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
           <map:parameter name="publisherURL" value="{project:daisy.publisher.URL}"/>
-          <map:parameter name="pathPrefix" value="{project:daisy.publisher.URL}"/>
+          <map:parameter name="pathPrefix" value="{project:daisy.pathPrefix}"/>
           <map:parameter name="navigationID" value="{project:daisy.navigation.docID}"/>
         </map:transform>
         <map:transform type="xinclude"/>
         <map:serialize type="xml"/>
       </map:match>
+    </map:pipeline>
           ]]></source>
                             
           <p>If your site needs to provide additional locationmap entries it can
@@ -72,11 +77,9 @@
           from the Daisy navigation file. The location of this file can be changed
           by overriding the locationmap pattern <code>daisy.locationmap.include</code>.</p>
         
-          <note>The pipelines that generate the locationmap
-          are cached for 2 hours. This is because it is computationally
-          expensive to regenerate these files. A future version of this plugin will provide
-          a more flexible caching mechanism. But for now you need to force a refresh 
-          during development or override the locationmap match in the plugin sitemap.</note>
+          <note>The pipeline above
+          caches the navigation for 2 hours. This is because it is computationally
+          expensive to regenerate these files.</note>
         </section>
         
         <section>
