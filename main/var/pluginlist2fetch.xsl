@@ -50,47 +50,43 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
             <echo>Versioned plugin unavailable, trying to get versionless plugin...</echo>
             
             <echo>Looking in local plugins src...</echo>
-            <copy failonerror="false">
-              <xsl:attribute name="todir"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-              <fileset>
-                <xsl:attribute name="dir"><xsl:value-of select="$plugin-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-              </fileset>
-            </copy>
-            <available property="plugin.src.present" type="dir">
-               <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-            </available>
-            
             <if>
-                <not><isset property="plugin.src.present"/></not>
-                <then>		        
-                  <echo>Unable to find plugin src in trunk.</echo>
+              <available property="plugin.src.present" type="dir">
+                <xsl:attribute name="file"><xsl:value-of select="$plugin-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+              </available>
+              <then>
+                <ant target="local-deploy">
+                    <xsl:attribute name="antfile"><xsl:value-of select="$plugin-src-dir"/><xsl:value-of select="$plugin-name" />/build.xml</xsl:attribute>
+                    <xsl:attribute name="dir"><xsl:value-of select="$plugin-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                </ant>
+              </then>
+              <else>
+                  <echo>Unable to find plugin src in main plugins src dir.</echo>
                   <echo>Looking in local whiteboard plugins src...</echo>
-                  <copy failonerror="false">
-                    <xsl:attribute name="todir"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-                    <fileset>
-                      <xsl:attribute name="dir"><xsl:value-of select="$plugin-whiteboard-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-                    </fileset>
-                  </copy>
-                  <available property="whiteboard.plugin.src.present" type="dir">
-                     <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-                  </available>
-              </then>
-             </if>
+                  <if>
+                    <available property="whiteboard.plugin.src.present" type="dir">
+                       <xsl:attribute name="file"><xsl:value-of select="$plugin-whiteboard-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                    </available>
+                    <then>
+                      <copy failonerror="false">
+                        <xsl:attribute name="todir"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                        <fileset>
+                          <xsl:attribute name="dir"><xsl:value-of select="$plugin-whiteboard-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                        </fileset>
+                      </copy>
+                    </then>
+                    <else>     
+                      <echo>Unable to find plugin src in whiteboard.</echo>
+                      <echo>Downloaing from distribution site ...</echo>
+                      <get verbose="true" usetimestamp="true" ignoreerrors="true">
+                         <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                         <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                      </get>
+                    </else>
+                  </if>
+              </else>
+            </if>
 	           
-            <if>
-                <and>
-                  <not><isset property="plugin.src.present"/></not>
-                  <not><isset property="whiteboard.plugin.src.present"/></not>
-                </and>
-              <then>		        
-                <echo>Unable to find plugin src in whiteboard.</echo>
-                <echo>Downloaing from distribution site ...</echo>
-                <get verbose="true" usetimestamp="true" ignoreerrors="true">
-                   <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-                   <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-                </get>
-              </then>
-           </if>
          </target>
 
          <target name="final-check">
