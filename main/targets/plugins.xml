@@ -80,7 +80,10 @@
              </antcall>
            </then>
            <else>
-             <echo>
+             <if>
+               <not><available file="${forrest.plugins-dir}/${plugin.name}"/></not>
+               <then>
+                 <echo>
 ERROR
 =====
        
@@ -103,8 +106,10 @@ them into FORREST_HOME/build/plugins.
 
 Note that once the plugins have been installed, they will not need
 to be installed again unless you delete them or wish to upgrade them.
-             </echo>
-             <fail message="Unable to install required plugins. See error messages above for more detail."/>
+                 </echo>
+                 <fail message="Unable to install required plugins. See error messages above for more detail."/>
+               </then>
+             </if>
            </else>
          </if>
        </else>
@@ -331,7 +336,9 @@ to be installed again unless you delete them or wish to upgrade them.
           force="true">
           <param name="plugin-name" expression="${plugin.name}"/>  
           <param name="plugin-version" expression="${plugin.version}"/>  
-          <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>      
+          <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>  
+          <param name="plugin-src-dir" expression="${forrest.plugins.src}/"/>  
+          <param name="plugin-whiteboard-src-dir" expression="${forrest.plugins.whiteboard.src}/"/>      
           <param name="forrest-version" expression="${forrest.version}"/>   
        </xslt>  
        <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/> 

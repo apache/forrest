@@ -21,6 +21,8 @@
    <xsl:param name="plugin-name" />
    <xsl:param name="plugin-version" />
    <xsl:param name="plugin-dir"/>
+   <xsl:param name="plugin-src-dir"/>
+   <xsl:param name="plugin-whiteboard-src-dir"/>
    <xsl:param name="forrest-version" />
 
    <xsl:template match="plugins">
@@ -43,16 +45,56 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
             </xsl:if>
          </target>
 
-         <target name="fetch-unversioned-plugin" unless="versioned-plugin.present">
+         <target name="fetch-unversioned-plugin" 
+           unless="versioned-plugin.present">
             <echo>Versioned plugin unavailable, trying to get versionless plugin...</echo>
-            <get verbose="true" usetimestamp="true" ignoreerrors="true">
-               <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-               <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-            </get>
+            
+            <echo>Looking in local plugins src...</echo>
+            <copy failonerror="false">
+              <xsl:attribute name="todir"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+              <fileset>
+                <xsl:attribute name="dir"><xsl:value-of select="$plugin-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+              </fileset>
+            </copy>
+            <available property="plugin.src.present" type="dir">
+               <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+            </available>
+            
+            <if>
+                <not><isset property="plugin.src.present"/></not>
+                <then>		        
+                  <echo>Unable to find plugin src in trunk.</echo>
+                  <echo>Looking in local whiteboard plugins src...</echo>
+                  <copy failonerror="false">
+                    <xsl:attribute name="todir"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                    <fileset>
+                      <xsl:attribute name="dir"><xsl:value-of select="$plugin-whiteboard-src-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                    </fileset>
+                  </copy>
+                  <available property="whiteboard.plugin.src.present" type="dir">
+                     <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
+                  </available>
+              </then>
+             </if>
+	           
+            <if>
+                <and>
+                  <not><isset property="plugin.src.present"/></not>
+                  <not><isset property="whiteboard.plugin.src.present"/></not>
+                </and>
+              <then>		        
+                <echo>Unable to find plugin src in whiteboard.</echo>
+                <echo>Downloaing from distribution site ...</echo>
+                <get verbose="true" usetimestamp="true" ignoreerrors="true">
+                   <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                   <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                </get>
+              </then>
+           </if>
          </target>
 
          <target name="final-check">
-            <available property="desired.plugin.present">
+            <available property="desired.plugin.zip.present">
               <xsl:choose>
                 <xsl:when test="$plugin-version">
                   <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
@@ -62,14 +104,15 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
                 </xsl:otherwise>
               </xsl:choose>
             </available>
+            
             <if>
-              <isset property="desired.plugin.present"/>
+              <isset property="desired.plugin.zip.present"/>
               <then>
                 <echo><xsl:value-of select="$plugin-name" /> downloaded, ready to install</echo>
               </then>
               <else>
-                <available property="unversioned.plugin.present">
-                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
+                <available property="unversioned.plugin.present" type="dir">
+                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
                 </available>
                 <fail unless="unversioned.plugin.present">
   Unable to download the 
@@ -91,8 +134,6 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
   <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
   extract it into
   <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></fail>
-                <echo>Desired version (<xsl:value-of select="$plugin-version" />) of <xsl:value-of select="$plugin-name" /> unavailable,
-  downloaded unversioned instead, ready to install</echo>
               </else>
             </if>
          </target>
