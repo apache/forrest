@@ -83,6 +83,7 @@ class ExecutorThread extends Thread {
         errorGobbler.start();
 		StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), Priority.DEBUG);
 		outputGobbler.start();
+		
 		try {
 			proc.getInputStream().close();
 			proc.getErrorStream().close();
@@ -98,14 +99,14 @@ public class Executor {
 	private static Logger log = Logger.getLogger(Executor.class);
 
 	private static void run(String target, String project) throws IOException {
-		String command = Config.getProperty("forrest-exec") + " -f " + project + ".xml " + target;
+		String command = Config.getProperty("forrest-exec") 
+		 + " -Dforrest.jvmargs=-Djava.awt.headless=true -f " + project + ".xml " + target;
 		File workingDir = new File(Config.getProperty("config-dir"));
-
-		log.debug("executing '" + command + "' in " + workingDir);
 
 		Runtime rt = Runtime.getRuntime();
 		Process proc = rt.exec(command, null, workingDir);
 		ExecutorThread execThread = new ExecutorThread(project, proc);
+		log.info("Executing command: " + command + " in " + workingDir);
 		execThread.start();
 		// don't wait for it to finish
 	}
