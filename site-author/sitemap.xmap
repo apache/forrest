@@ -19,6 +19,13 @@
 
  <map:pipelines>
   <map:pipeline>
+
+    <map:match pattern="forrest-issues.xml">
+      <map:generate type="file" src="{lm:forrest.issues-rss-url}" />
+      <map:transform src="{lm:transform.rssissues.document}" />
+      <map:serialize type="xml-document"/>
+    </map:match>
+        
     <map:match pattern="dtdx/*.dtdx.pdf">
      <map:select type="exists">
       <map:when test="{project:content}{1}.dtdx.pdf">
