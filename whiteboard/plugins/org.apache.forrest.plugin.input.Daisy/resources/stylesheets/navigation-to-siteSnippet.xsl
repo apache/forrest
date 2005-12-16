@@ -22,7 +22,7 @@
     xmlns:xi="http://www.w3.org/2001/XInclude"
     version="1.0">
     
-  <xsl:param name="daisyExt">.daisy</xsl:param>
+  <xsl:param name="daisyExt"/>
       
   <xsl:template match="/">
     <xsl:apply-templates/>

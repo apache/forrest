@@ -50,7 +50,9 @@
     <map:pipeline>      
       <map:match pattern="daisy.site.*">
         <map:generate src="{project:daisy.publisher.URL}blob?documentId={1}&amp;version=live&amp;partType=1" />
-        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-siteSnippet.xsl"/>
+        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-siteSnippet.xsl">
+          <map:parameter name="daisyExt" value="{project:daisy.fileExt}"/>
+        </map:transform>
         <map:transform type="xinclude"/>
         <map:serialize type="xml" />
       </map:match>
