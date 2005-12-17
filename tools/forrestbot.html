@@ -165,16 +165,21 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Using+Forrestbot">Using Forrestbot</a>
 </li>
 <li>
-<a href="#Creating+a+buildfile">Creating a buildfile</a>
+<a href="#Creating+a+Forrestbot+Project+Buildfile">Creating a Forrestbot Project Buildfile</a>
 <ul class="minitoc">
 <li>
 <a href="#Workstages">Workstages</a>
+<ul class="minitoc">
+<li>
+<a href="#Correct+Use+of+getsrc.local">Correct Use of getsrc.local</a>
+</li>
+</ul>
 </li>
 <li>
 <a href="#Workstage+Properties">Workstage Properties</a>
 <ul class="minitoc">
 <li>
-<a href="#Misc+Properties">Misc Properties</a>
+<a href="#Misc.+Properties">Misc. Properties</a>
 </li>
 <li>
 <a href="#getsrc.clean-workdir">getsrc.clean-workdir</a>
@@ -220,7 +225,7 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 <li>
-<a href="#Forrestbot+design">Forrestbot design</a>
+<a href="#Forrestbot+Design">Forrestbot Design</a>
 </li>
 </ul>
 </div>
@@ -228,50 +233,52 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1000D"></a><a name="Overview"></a>
 <h2 class="underlined_10">Overview</h2>
 <div class="section">
-<p>Forrestbot lets you automate building and deploying websites. The 
-        whole process gets the source docs, builds it, then deploys the site
-        where you want it to go. It can also notify you afterwards, and it
-        keeps a log of the build process. To accomplish these tasks Forrestbot 
-        uses four "workstages" (getsrc, build, deploy, notify). Each workstage
-        has various "implementations" (e.g. getsrc has getsrc.cvs or getsrc.svn
-        or getsrc.local implementations) which 
-        have various properties that may be set, depending upon the 
-        implementations chosen.</p>
+<p>Forrestbot lets you automate building and deploying websites. The
+      whole process gets the source docs, builds the site, then deploys it
+      where you want it to go. Forrestbot can also notify you afterwards, and
+      it keeps a log of the build process. To accomplish these tasks,
+      Forrestbot uses four "workstages" (getsrc, build, deploy, notify). Each
+      workstage has various implementations (e.g., getsrc has getsrc.cvs or
+      getsrc.svn or getsrc.local implementations), which have various
+      properties that may be set, depending upon the implementations
+      chosen.</p>
 </div>
 
     
 <a name="N10017"></a><a name="Using+Forrestbot"></a>
 <h2 class="underlined_10">Using Forrestbot</h2>
 <div class="section">
-<p>You need to create a customized buildfile directing Forrestbot's work 
-        and then simply execute:</p>
+<p>You need to create a customized buildfile directing Forrestbot's work
+      and then simply execute:</p>
 <pre class="code">forrest -f mybuildfile.xml</pre>
-<p>The next section explains how to create your buildfile.</p>
+<p>This project buildfile is simply an Ant buildfile with specific
+      targets that control Forrestbot's operation. The next section explains
+      how to create such a buildfile. For details on the syntax of Ant
+      buildfiles and the operation of Ant itself consult the <a href="http://ant.apache.org/">Ant documentation</a>.</p>
 </div>
 
     
-<a name="N10028"></a><a name="Creating+a+buildfile"></a>
-<h2 class="underlined_10">Creating a buildfile</h2>
+<a name="N1002C"></a><a name="Creating+a+Forrestbot+Project+Buildfile"></a>
+<h2 class="underlined_10">Creating a Forrestbot Project Buildfile</h2>
 <div class="section">
-<p>Within the new buildfile you need to first set properties needed by 
-        the workstages you are going to use and then specify what 
-        implementations will be used by each workstage.</p>
-<div class="fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">This seems backwards since the properties are dependent 
-on the implementations - no?</div>
-</div>
-<p>This sample buildfile can be used as a base from which to customize 
-        your own buildfile.  The file starts with the project name and default 
-        workstage target, then sets the specific properties we will need to get 
-        the source, set up notification and indicate the deploy location.  It then 
-        specifies which implementations we will use and finishes up with 
-        importing the forrestbot.xml file.</p>
-<div class="fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">Is "default workstage target" the correct term for 
-default="main"?</div>
-</div>
+<p>Within the new buildfile, you need to first set properties needed by
+      the workstages you are going to use and then specify which
+      implementations will be used by each workstage. Note that the properties
+      need to be set at the global scope (as children of
+      <span class="codefrag">&lt;project&gt;</span>, i.e., outside of
+      <span class="codefrag">&lt;target&gt;</span> elements) in order for your settings to
+      override the defaults in the Forrestbot implementation. Other than that,
+      the property definitions can appear anywhere before the
+      <span class="codefrag">&lt;import&gt;</span> task.</p>
+<p>This sample buildfile can be used as a base from which to customize
+      your own buildfile. The file starts with the project name and default
+      target, then sets the specific properties we need to get the source,
+      indicate the deployment location, and set up notification. It then
+      specifies which implementations we will use and finishes up with
+      importing the <span class="codefrag">forrestbot.xml</span> file. The 'main' target, which
+      is specified as the default here, is a convenience target (defined in
+      <span class="codefrag">forrestbot.xml</span>) that executes the four workstages (getsrc,
+      build, deploy, notify) sequentially.</p>
 <pre class="code">&lt;project name="mysampleproject" default="main"&gt;
 	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
 	&lt;property name="notify.email.to" value="me@domain.com"/&gt;
@@ -302,148 +309,171 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 &lt;/project&gt;
 
 </pre>
-<a name="N10040"></a><a name="Workstages"></a>
+<a name="N1004B"></a><a name="Workstages"></a>
 <h3 class="underlined_5">Workstages</h3>
-<p>It is only necessary to include the specific target implementations in 
-      the buildfile if we want to override the default implementations.  The 
-      following tables show the various workstages and which implementations
-      may be used for each and which is the default.</p>
+<p>It is only necessary to include specific target implementations in
+        the buildfile if we want to override the default implementations. The
+        following table shows the various workstages, which implementations
+        may be used for each, and which one is the default.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
-        
-<tr>
           
+<tr>
+            
 <th colspan="1" rowspan="1">Workstage</th>
 
-          <th colspan="1" rowspan="1">Implementations</th>
-        
+            <th colspan="1" rowspan="1">Implementations</th>
+          
 </tr>
 
-        
-<tr>
           
+<tr>
+            
 <td colspan="1" rowspan="1">getsrc</td>
 
-          <td colspan="1" rowspan="1">
+            <td colspan="1" rowspan="1">
 <ul>
-              
+                
 <li>
 <a href="#getsrc.local">getsrc.local</a>
 </li>
 
-              
+                
 <li>
 <a href="#getsrc.cvs">getsrc.cvs</a> (default)</li>
 
-              
+                
 <li>
 <a href="#getsrc.svn">getsrc.svn</a>
 </li>
-            
+              
 </ul>
 </td>
-        
+          
 </tr>
 
-        
-<tr>
           
+<tr>
+            
 <td colspan="1" rowspan="1">build</td>
 
-          <td colspan="1" rowspan="1">
+            <td colspan="1" rowspan="1">
 <ul>
-              
+                
 <li>
 <a href="#build.forrest">build.forrest</a>
 </li>
-            
+              
 </ul>
 </td>
-        
+          
 </tr>
 
-        
-<tr>
           
+<tr>
+            
 <td colspan="1" rowspan="1">deploy</td>
 
-          <td colspan="1" rowspan="1">
+            <td colspan="1" rowspan="1">
 <ul>
-              
+                
 <li>
-<a href="#deploy.local">deploy.local</a> (default)</li>
+<a href="#deploy.local">deploy.local</a>
+                (default)</li>
 
-              
+                
 <li>
 <a href="#deploy.scp">deploy.scp</a>
 </li>
 
-              
+                
 <li>
 <a href="#deploy.cvs">deploy.cvs</a>
 </li>
 
-              
+                
 <li>
 <a href="#deploy.svn">deploy.svn</a>
 </li>
-              
+
+                
 <li>
 <a href="#deploy.ftp">deploy.ftp</a>
 </li>
-            
+              
 </ul>
 </td>
-        
+          
 </tr>
 
-        
-<tr>
           
+<tr>
+            
 <td colspan="1" rowspan="1"><a href="#notify">notify</a></td>
 
-          <td colspan="1" rowspan="1">
+            <td colspan="1" rowspan="1">
 <ul>
-              
+                
 <li>
-<a href="#notify.local">notify.local</a> (default)</li>
+<a href="#notify.local">notify.local</a>
+                (default)</li>
 
-              
+                
 <li>
 <a href="#notify.email">notify.email</a>
 </li>
-            
+              
 </ul>
 </td>
-        
+          
 </tr>
-      
+        
 </table>
-<p>If you want to do more advanced processing for your project, you can
-      override the 'main' target, which by default is <span class="codefrag ">&lt;target
-      name="main" depends="getsrc, build, deploy, notify"/&gt;</span>, create
-      your own implementation of a workstage, or use any other ant tasks to do
-      additional work.</p>
-<div class="fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">How do you create your own implementation?  Can you 
-create a different default target than main - how do you override the 
-default?</div>
-</div>
-<p></p>
-<a name="N100DA"></a><a name="Workstage+Properties"></a>
+<p>If you want to do more advanced processing for your project, you
+        can override the 'main' target, which by default is <span class="codefrag">&lt;target
+        name="main" depends="getsrc, build, deploy, notify"/&gt;</span>,
+        create your own implementation of a workstage, or use any other ant
+        tasks to do additional work. In order to create your own workstage
+        implementation, define the workstage target in question in your
+        <span class="codefrag">mybuildfile.xml</span> anywhere before the
+        <span class="codefrag">&lt;import&gt;</span> task. This will override the default
+        implementation provided by Forrestbot.</p>
+<p>Also, you can choose a different target as the default by changing
+        the <span class="codefrag">default</span> attribute of <span class="codefrag">&lt;project&gt;</span>.
+        For example, you will much more frequently do a 'build' without a
+        'deploy' during the development of your website, and only at the end
+        do an actual 'deploy', so you might want to choose 'build' as your
+        default target.</p>
+<a name="N100ED"></a><a name="Correct+Use+of+getsrc.local"></a>
+<h4>Correct Use of getsrc.local</h4>
+<p>There is a wrinkle when using the 'getsrc.local' implementation
+          of the 'getsrc' workstage. If you define your own 'getsrc.local'
+          target, make sure it starts with the <span class="codefrag">&lt;property&gt;</span>
+          task given here:</p>
+<pre class="code">&lt;target name="getsrc.local"&gt;
+  &lt;property name="build.home-dir" location="${getsrc.local.root-dir}"/&gt;
+  [...]
+&lt;/target&gt;</pre>
+<p>Alternatively (and preferably), define your 'getsrc' target like
+          this:</p>
+<pre class="code">&lt;target name="getsrc" depends="getsrc.clean-workdir, getsrc.get, getsrc.local"/&gt;</pre>
+<p>and then implement the actual fetching of the sources in the
+          'getsrc.get' target. This latter approach is safer since it is more
+          likely to be forward-compatible with future versions of
+          Forrestbot.</p>
+<a name="N10109"></a><a name="Workstage+Properties"></a>
 <h3 class="underlined_5">Workstage Properties</h3>
 <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
         required to set it in your buildfile.</p>
-<p>Many workstage properties use usernames and passwords. You may want to 
-      keep them out of your project's xml buildfile (especially if you store
-      that file in CVS
-      or SVN). A nice way to do this is make a simple buildfile (e.g.
-      my-settings.xml) that just sets those properties (don't include it in
-      CVS/SVN). Then in your project buildfile, have <span class="codefrag ">&lt;import
-      file="my-settings.xml"/&gt;</span>.</p>
-<a name="N100E9"></a><a name="Misc+Properties"></a>
-<h4>Misc Properties</h4>
+<p>Many workstage properties use usernames and passwords. You may want
+        to keep them out of your project's Ant buildfile (especially if you
+        store that file in CVS or SVN). A nice way to do this is to create a
+        separate properties file (e.g., <span class="codefrag">auth.properties</span>) that
+        just sets those properties (don't include it in CVS/SVN). Then, at the
+        top of your project buildfile, have <span class="codefrag">&lt;property
+        file="auth.properties"/&gt;</span>.</p>
+<a name="N1011B"></a><a name="Misc.+Properties"></a>
+<h4>Misc. Properties</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -473,13 +503,12 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10120"></a><a name="getsrc.clean-workdir"></a>
+<a name="N10152"></a><a name="getsrc.clean-workdir"></a>
 <h4>getsrc.clean-workdir</h4>
-<p>This should be executed before a getsrc implementation is executed.
-          For example, <span class="codefrag ">&lt;target name="getsrc"
-          depends="getsrc.clean-workdir, getsrc.svn"/&gt;</span>
-</p>
-<a name="N1012C"></a><a name="getsrc.local"></a>
+<p>This should be executed before a getsrc implementation is
+          executed, e.g., <span class="codefrag">&lt;target name="getsrc"
+          depends="getsrc.clean-workdir, getsrc.svn"/&gt;</span>.</p>
+<a name="N1015F"></a><a name="getsrc.local"></a>
 <h4>getsrc.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -501,7 +530,7 @@ default?</div>
 <td colspan="1" rowspan="1">getsrc.local.root-dir</td>
 
               <td colspan="1" rowspan="1">Absolute path to the project's root directory on the local
-              computer.  Use <strong>location=</strong> instead of 
+              computer. Use <strong>location=</strong> instead of
               <strong>value=</strong> for this &lt;property&gt;</td>
 
               <td colspan="1" rowspan="1"></td>
@@ -511,7 +540,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10169"></a><a name="getsrc.cvs"></a>
+<a name="N1019C"></a><a name="getsrc.cvs"></a>
 <h4>getsrc.cvs</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -584,8 +613,8 @@ default?</div>
               
 <td colspan="1" rowspan="1">getsrc.cvs.module</td>
 
-              <td colspan="1" rowspan="1">CVS module name (an alias, or full path) to the directory that
-              contains forrest.properties</td>
+              <td colspan="1" rowspan="1">CVS module name (an alias for or the full path to the
+              directory that contains forrest.properties)</td>
 
               <td colspan="1" rowspan="1">${ant.project.name}</td>
 
@@ -607,7 +636,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10211"></a><a name="getsrc.svn"></a>
+<a name="N10244"></a><a name="getsrc.svn"></a>
 <h4>getsrc.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -651,7 +680,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N1025F"></a><a name="build.forrest"></a>
+<a name="N10292"></a><a name="build.forrest"></a>
 <h4>build.forrest</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -694,7 +723,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N102AE"></a><a name="deploy.local"></a>
+<a name="N102E1"></a><a name="deploy.local"></a>
 <h4>deploy.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -715,9 +744,10 @@ default?</div>
               
 <td colspan="1" rowspan="1">deploy.local.dir</td>
 
-              <td colspan="1" rowspan="1">Path to deploy site to - the dir that would be the equivalant 
-              of build/site dir.  Relative paths will be relative to
-              project forrestbot descriptor file.</td>
+              <td colspan="1" rowspan="1">Path to deploy site to - the dir that would be the
+              equivalant of build/site dir. Relative paths are relative to
+              ${basedir}, which defaults to the dir containing the Forrestbot
+              project buildfile (mybuildfile.xml).</td>
 
               <td colspan="1" rowspan="1">sites/${ant.project.name}</td>
 
@@ -726,11 +756,12 @@ default?</div>
 </tr>
           
 </table>
-<a name="N102E6"></a><a name="deploy.scp"></a>
+<a name="N10319"></a><a name="deploy.scp"></a>
 <h4>deploy.scp</h4>
-<p>${user.home}/.ssh/known_hosts must properly recognize the host, so
-          you should manually make an ssh connection to the host if you never
-          have before.</p>
+<p>
+<span class="codefrag">${user.home}/.ssh/known_hosts</span> must properly
+          recognize the host, so you should manually make an ssh connection to
+          the host if you never have before.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -773,7 +804,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10336"></a><a name="deploy.cvs"></a>
+<a name="N1036B"></a><a name="deploy.cvs"></a>
 <h4>deploy.cvs</h4>
 <p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -870,7 +901,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N103E2"></a><a name="deploy.svn"></a>
+<a name="N10417"></a><a name="deploy.svn"></a>
 <h4>deploy.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -940,7 +971,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N1045C"></a><a name="deploy.ftp"></a>
+<a name="N10491"></a><a name="deploy.ftp"></a>
 <h4>deploy.ftp</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1001,7 +1032,7 @@ default?</div>
 <td colspan="1" rowspan="1">deploy.ftp.remotedir</td>
 
               <td colspan="1" rowspan="1">The directory to upload to (this can be an absolute path or
-                relative to the FTP user's default directory)</td>
+              relative to the FTP user's default directory)</td>
 
               <td colspan="1" rowspan="1">incoming</td>
 
@@ -1010,7 +1041,7 @@ default?</div>
 </tr>
           
 </table>
-<a name="N104D9"></a><a name="notify"></a>
+<a name="N1050E"></a><a name="notify"></a>
 <h4>notify</h4>
 <p>These settings are used by all notify implementations.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -1108,10 +1139,10 @@ default?</div>
 </tr>
           
 </table>
-<a name="N10583"></a><a name="notify.local"></a>
+<a name="N105B8"></a><a name="notify.local"></a>
 <h4>notify.local</h4>
 <p>No properties.</p>
-<a name="N1058D"></a><a name="notify.email"></a>
+<a name="N105C2"></a><a name="notify.email"></a>
 <h4>notify.email</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1170,22 +1201,28 @@ default?</div>
 </div>
 
     
-<a name="N105F5"></a><a name="Forrestbot+design"></a>
-<h2 class="underlined_10">Forrestbot design</h2>
+<a name="N1062A"></a><a name="Forrestbot+Design"></a>
+<h2 class="underlined_10">Forrestbot Design</h2>
 <div class="section">
-<p>Forrest and forrestbot use ant buildfiles extensively. Ant 1.6's import
-      task is used to import multiple buildfiles into a single build. The
-      following is the flow of control when running forrestbot:</p>
+<p>Forrest and Forrestbot use Ant buildfiles extensively. Ant 1.6's
+      <span class="codefrag">&lt;import&gt;</span> task is used to import multiple buildfiles
+      into a single build. The following is the flow of control when running
+      Forrestbot:</p>
 <ul>
         
-<li>Your buildfile<ul>
+<li>Your project buildfile (<span class="codefrag">mybuildfile.xml</span>)<ul>
             
-<li>forrestbot.xml<ul>
+<li>
+<span class="codefrag">$FORREST_HOME/tools/forrestbot/core/forrestbot.xml</span>
+<ul>
                 
-<li>workstage buildfiles</li>
+<li>Workstage buildfiles
+                (<span class="codefrag">$FORREST_HOME/tools/forrestbot/core/{getsrc,build,deploy,notify}.xml</span>)</li>
 
                 
-<li>forrest.build.xml</li>
+<li>
+<span class="codefrag">$FORREST_HOME/main/forrest.build.xml</span>
+</li>
               
 </ul>
 </li>
@@ -1194,18 +1231,16 @@ default?</div>
 </li>
       
 </ul>
-<p>The workstage buildfiles set up the properties and files so that the
-      main forrest buildfile (forrest.build.xml) will run. After it is run,
-      other workstage buildfiles can implement reporting, deployment, or other
-      post-build activities.</p>
-<p>Your buildfile can specify which workstages you want to use, set
-      properties for them, and do any additional pre- and post-processing.</p>
-<div class="fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">Which of these (Your buildfile/workstage buildfile) is 
-the "project buildfile" referred to elsewhere on this page, if any?  If it is 
-"Your buildfile" can I also create workstage buildfiles?  If so, how?</div>
-</div>
+<p>The workstage buildfiles define the default workstage implementations
+      and set up the properties and files so that targets in the main Forrest
+      buildfile (<span class="codefrag">forrest.build.xml</span>) will run. After those targets
+      are executed, the targets in the workstage buildfiles can perform
+      reporting, deployment, or other post-build activities.</p>
+<p>Your project buildfile specifies the workstages you want to use, sets
+      properties for them, and does any additional pre- and post-processing.
+      In addition, you can override the default workstage implementations by
+      defining the relevant targets in your project buildfile before the
+      <span class="codefrag">&lt;import&gt;</span> task (see the example above).</p>
 </div>
   
 </div>
