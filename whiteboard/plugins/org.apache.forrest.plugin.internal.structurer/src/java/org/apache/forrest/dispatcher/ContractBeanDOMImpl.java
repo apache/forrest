@@ -240,8 +240,8 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                      * Set default properties
                      */
                     // default forrest properties
-                    Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-                            "cocoon://test-props", this.manager);
+                    Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil
+                            .readDOM("cocoon://test-props", this.manager);
                     transformer.setParameter("defaultVariables",
                             defaultVariables);
                     transformer.setOutputProperty(
@@ -298,7 +298,12 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                             + "\n"
                             + "Could not transform the result data in contractBean."
                             + "\n"
-                            + "You need to invoke first the transfomer and the rawData.");
+                            + "You need to invoke first the transfomer and the rawData."
+                            + "\n"
+                            + "If you see \"The contract \"null\" has thrown thrown an exception...\" "
+                            + "that can mean you nested contracts, which is forbidden!"
+
+            );
         } else {
             DOMSource source = new DOMSource(contractRawData);
             DOMResult result = new DOMResult();
