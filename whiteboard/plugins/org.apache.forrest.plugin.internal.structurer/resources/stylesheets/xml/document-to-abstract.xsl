@@ -25,10 +25,8 @@ imported document2html.xsl for details.
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
   <xsl:template match="document">
-    <xsl:if test="header/abstract">
-      <div class="abstract">
-        <xsl:value-of select="header/abstract"/>
-      </div>
-    </xsl:if>
+    <div class="abstract">
+      <xsl:value-of select="header/abstract"/>
+    </div>
   </xsl:template>
 </xsl:stylesheet>
