@@ -19,24 +19,37 @@ limitations under the License.
 <forrest:views 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <!-- The following variables are used to contact data models and/or contracts. -->
   <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
   <jx:set var="getRequestExstension" value="#{$cocoon/parameters/getRequestExstension}" />
   <forrest:view type="html" hooksXpath="/html/body">
+    <!-- 
+        @type defines this structurer to html.
+        @hooksXpath defines where all hooks will be injected (as prefix).
+        -->
     <forrest:contract name="branding-css-links">
       <forrest:property name="branding-css-links-input">
         <css url="common.css"/>
       </forrest:property>
     </forrest:contract>
     <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info"/>
+    <!--
+        nuggets (extra data requested by the contract) are now defined in the contract element. 
+        As well the former @nugget is now called @dataURI to reflect better the function of the attribute.
+      -->
     <forrest:hook name="container">
       <forrest:hook name="header">
-         <forrest:contract name="branding-tagline">
-            <forrest:property name="branding-tagline-name">new seed</forrest:property>
-            <forrest:property name="branding-tagline-tagline">powered by the dispatcher</forrest:property>
+        <forrest:contract name="branding-tagline">
+          <forrest:property name="branding-tagline-name">new 
+            seed</forrest:property>
+          <forrest:property name="branding-tagline-tagline">powered by the 
+            dispatcher</forrest:property>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
-          <forrest:contract name="nav-main" dataURI="cocoon://#{$getRequest}.navigation.xml"/>
-          <forrest:contract name="nav-main-sub" dataURI="cocoon://#{$getRequest}.navigation.xml"/>
+          <forrest:contract name="nav-main" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml"/>
+          <forrest:contract name="nav-main-sub" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml"/>
         </forrest:hook>
       </forrest:hook>
     </forrest:hook>
