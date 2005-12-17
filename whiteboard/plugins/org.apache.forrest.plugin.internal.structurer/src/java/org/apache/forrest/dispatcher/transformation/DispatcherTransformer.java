@@ -715,7 +715,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                             location = "result" + location;
                         else
                             location = "result/" + location;
-                        Node xpathNode= DOMUtil.getSingleNode(rootNode, path,
+                        Node xpathNode= DOMUtil.getSingleNode(rootNode, location,
                                 this.processor);
                         if (xpathNode != null) {
                             // add everything *within* the forrest:part element
