@@ -28,6 +28,10 @@ limitations under the License.
         @hooksXpath defines where all hooks will be injected (as prefix).
         -->
     <forrest:contract name="branding-css-links">
+      <!-- More information around this contract
+        http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
+        -->
+      <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
       <forrest:property name="branding-css-links-input">
         <css url="common.css"/>
       </forrest:property>
@@ -52,32 +56,23 @@ limitations under the License.
             dataURI="cocoon://#{$getRequest}.navigation.xml"/>
         </forrest:hook>
       </forrest:hook>
-    </forrest:hook>
-    <!--
-    <forrest:hook name="container">
-      <forrest:hook name="header">
-        <forrest:hook name="nav-main-hook">
-        </forrest:hook>
-      </forrest:hook>
       <forrest:hook name="page">
         <forrest:hook name="leftbar">
-          <forrest:contract name="nav-section">
-            <forrest:properties contract="nav-section">
-              <forrest:property name="nav-section" nugget="get.navigation">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
-          <forrest:contract name="search-input">
-            <forrest:properties contract="search-input">
-              <forrest:property name="search-input">
-                <search name="MyProject" domain="mydomain" provider="google"/>
-              </forrest:property>
-            </forrest:properties>
+          <forrest:contract name="nav-section" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml">
+            <forrest:property name="nav-section-toc" nugget="get.toc">
+              <jx:import uri="cocoon://#{$getRequest}.toc.xml"/>
+            </forrest:property>
+            <forrest:property name="toc" max-depth="2"/>
           </forrest:contract>
         </forrest:hook>
-<!-#- 
- You can group elements to a template and call it from any view. e.g.
+        <forrest:contract name="search-input">
+          <forrest:property name="search-input">
+            <search name="MyProject" domain="mydomain" provider="google"/>
+          </forrest:property>
+        </forrest:contract>
+      </forrest:hook>
+      <!--  You can group elements to a template and call it from any view. e.g.
 <forrest:hook name="export-link">
   <forrest:contract name="content-xml-link"/>
   <forrest:contract name="content-pdf-link"/>
@@ -90,38 +85,30 @@ limitations under the License.
  
 HEADSUP:
 <forrest:call-template name="export-link"/> is *not* working anymore!!!
--#->
+-->
         <jx:import uri="cocoon://prepare.tiles.export-link"/>
-        <!-#- FIXME: jxpath -#->
-        <!-#- Use this when jxpath bug is solved -#->
-        <!-#-<jx:import uri="lm:tiles.export-link"/>-#->
-
         <forrest:hook name="content">
-          <forrest:contract name="content-title">
-            <forrest:properties contract="content-title">
-              <forrest:property name="content-title" nugget="get.title">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.title.xml"/>
-              </forrest:property>
-            </forrest:properties>
+          <forrest:contract name="content-title" 
+            dataURI="cocoon://#{$getRequest}.title.xml"/>
+          <forrest:contract name="content-abstract" 
+            dataURI="cocoon://#{$getRequest}.abstract.xml"/>
+          <forrest:contract name="content-minitoc" 
+            dataURI="cocoon://#{$getRequest}.toc.xml">
+            <forrest:property name="content-minitoc-conf" max-depth="2" 
+              min-sections="1" location="page"/>
           </forrest:contract>
-          <forrest:contract name="content-abstract">
-            <forrest:properties contract="content-abstract">
-              <forrest:property name="content-abstract" nugget="get.abstract">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.abstract.xml"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
-          <forrest:contract name="content-minitoc">
-            <forrest:properties contract="content-minitoc">
-              <forrest:property name="content-minitoc-toc" nugget="get.toc">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
-              </forrest:property>
-              <forrest:property name="content-minitoc-conf" >
-                <toc max-depth="2" 
-                min-sections="1" location="page"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
+        </forrest:hook>
+    </forrest:hook>
+    <!--
+    <forrest:hook name="container">
+      <forrest:hook name="header">
+        <forrest:hook name="nav-main-hook">
+        </forrest:hook>
+      </forrest:hook>
+      <forrest:hook name="page">
+        <forrest:hook name="leftbar">
+        </forrest:hook>
+        <forrest:hook name="content">
           <forrest:contract name="content-main">
             <forrest:properties contract="content-main">
               <forrest:property name="content-main" nugget="get.body">
