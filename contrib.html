@@ -261,7 +261,7 @@ document.write("Last Published: " + document.lastModified);
         Forrest does not quite meet your needs then tell us about it.</li>
       
 <li>Specifying/analysing/designing new features - and beyond. If you
-        wish to get further involved with this, please join the <span class="codefrag ">forrest-dev</span> mailing
+        wish to get further involved with this, please join the <span class="codefrag">forrest-dev</span> mailing
         list, install and try out Forrest and read some of the
         <a href="mail-lists.html">mail archives</a>. You should have a reasonable
       fluency in XML technologies, some Java and Ant skills, and a basic understanding of the Forrest
@@ -270,9 +270,9 @@ document.write("Last Published: " + document.lastModified);
       
 <li>Packaging easy-to-install packages (such as RPMs) for the myriad of
         possible configurations out there. (The project does not maintain anything but
-        the basic <span class="codefrag ">.zip</span> and <span class="codefrag ">.tar.gz</span> packages, but anyone is
+        the basic <span class="codefrag">.zip</span> and <span class="codefrag">.tar.gz</span> packages, but anyone is
         welcome to build their own specific packages and announce them on the
-        <span class="codefrag ">forrest-dev</span> list)</li>
+        <span class="codefrag">forrest-dev</span> list)</li>
       
 <li>... and there is just one other thing - don't forget to tell everyone
         who asks, how great Forrest is! The more people that know about and start
@@ -349,8 +349,8 @@ document.write("Last Published: " + document.lastModified);
         to automatically do this for certain file extensions.
         To do it manually, make sure all line endings
         are in your current OS's native format (the dos2unix and unix2dos utilities
-        may be useful) and then do a <span class="codefrag ">svn propset svn:eol-style native myfilename.txt</span>
-        and <span class="codefrag ">svn commit -m "fix line endings" myfilename.txt</span>
+        may be useful) and then do a <span class="codefrag">svn propset svn:eol-style native myfilename.txt</span>
+        and <span class="codefrag">svn commit -m "fix line endings" myfilename.txt</span>
       
 </p>
 </div>
@@ -394,23 +394,37 @@ document.write("Last Published: " + document.lastModified);
 <a name="N100D2"></a><a name="patch"></a>
 <h2 class="underlined_10">How to prepare and contribute patches</h2>
 <div class="section">
-<p>If you use the current development version of Forrest, then do
-       '<span class="codefrag ">svn update; svn status</span>' to see what files that you
+<p>If you use the current development version of Forrest via Subversion,
+       then do
+       '<span class="codefrag">svn update; svn status</span>' to see what files that you
        have changed.
-       Do '<span class="codefrag ">svn diff &gt; mypatch.txt</span>' to make a patch which
+       Do '<span class="codefrag">svn diff &gt; mypatch.txt</span>' to make a patch which
        includes every change. To make a patch for a specific file, do
-       <span class="codefrag ">svn diff src/documentation/content/xdocs/faq.xml &gt; faq.xml.diff</span>'.
+       <span class="codefrag">svn diff src/documentation/content/xdocs/faq.xml &gt; faq.xml.diff</span>'.
+       It is better to prepare the patch from the $FORREST_HOME directory
+       so that it contains a definite path to the document. However, be careful
+       that the patch does not contain other work-in-progress.
+     </p>
+<p>
        For more information about working with SVN, see
        <a href="http://svnbook.red-bean.com/">Version Control with
        Subversion</a> - the opensource SVN book.
-      </p>
-<p>If you use a downloaded released version of Forrest, then do
-        '<span class="codefrag ">diff -u faq.xml.orig faq.xml &gt; faq.xml.diff</span>'
+     </p>
+<p>
+       If you use a downloaded released version of Forrest (or don't use SVN),
+       then use the 'diff' command of your operating system:
+        '<span class="codefrag">diff -u faq.xml.orig faq.xml &gt; mypatch.txt</span>' (better
+       to do that from $FORREST_HOME directory). If you want to use the most
+       recent version of the documentation then grab its source file directly
+       from the
+       <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/">SVN server</a>
+       (and tell us which Revision number you used).
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">Please send all contributions via our
         <a href="issues.html">issue tracker</a>.
+       and specify the Forrest version or svn version of the source.
       </div>
 </div>
 <p>
@@ -421,7 +435,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
     
     
-<a name="N100FD"></a><a name="revert"></a>
+<a name="N10104"></a><a name="revert"></a>
 <h2 class="underlined_10">How to revert changes in SVN</h2>
 <div class="section">
 <p>Check out <a href="http://svnbook.red-bean.com/en/1.0/ch04s04.html#svn-ch-4-sect-4.2">http://svnbook.red-bean.com/en/1.0/ch04s04.html#svn-ch-4-sect-4.2</a> 
@@ -429,7 +443,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N1010B"></a><a name="tips"></a>
+<a name="N10112"></a><a name="tips"></a>
 <h2 class="underlined_10">Contribution Notes and Tips</h2>
 <div class="section">
 <p> This is a collection of tips for contributing to the project in a
@@ -451,14 +465,14 @@ document.write("Last Published: " + document.lastModified);
         
 <li>Whenever you decide to start a new topic, then start with a fresh
           new email message window. Do not use the "Reply to" button, because
-          threaded mail-readers get confused (they utilise the <span class="codefrag ">In-reply-to</span>
+          threaded mail-readers get confused (they utilise the <span class="codefrag">In-reply-to</span>
           header). If so, then your new topic will get lost in the previous thread and go
           unanswered. </li>
         
 <li> Prepend your email subject line with a marker when that is
-          appropriate, e.g. <span class="codefrag ">[Proposal]</span>,
-          <span class="codefrag ">[RT]</span> (Random Thought which quickly blossom into research topics
-          :-), <span class="codefrag ">[STATUS]</span> (development status of a certain facility). </li>
+          appropriate, e.g. <span class="codefrag">[Proposal]</span>,
+          <span class="codefrag">[RT]</span> (Random Thought which quickly blossom into research topics
+          :-), <span class="codefrag">[STATUS]</span> (development status of a certain facility). </li>
         
 <li> When making changes to XML documentation, or any XML document for
           that matter, use a validating XML editor. Here is some assistance
