@@ -59,6 +59,14 @@
   </map:components>
 
   <map:resources>
+    <map:resource name="jx-transformer">
+      <map:transform type="jx">
+        <map:parameter name="lenient-xpath" value="true" />
+        <map:parameter name="getRequest" value="{request}" />
+        <map:parameter name="getRequestExstension" value="{exstension}" />
+      </map:transform>
+    </map:resource>
+
     <map:resource name="transform-to-document">
       <map:act type="sourcetype" src="{src}">
         <map:select type="parameter">
@@ -93,17 +101,27 @@
       </map:match>
       <map:match pattern="**.html">
         <map:generate src="lm://resolve.structurer.{1}" />
-        <map:transform type="jx">
-          <map:parameter name="lenient-xpath" value="true" />
-          <map:parameter name="getRequest" value="{1}" />
-          <map:parameter name="getRequestExstension" value="html" />
-        </map:transform>
+        <map:call resource="jx-transformer">
+          <map:parameter name="exstension" value="html" />
+          <map:parameter name="request" value="{1}" />
+        </map:call>
         <map:transform type="dispatcher">
           <map:parameter name="type" value="html" />
           <map:parameter name="hooksTransformer"
             value="lm://hooks-to-html.xsl" />
         </map:transform>
         <map:serialize type="xhtml" />
+      </map:match>
+      <map:match pattern="internal.**.*">
+        <map:generate src="lm://resolve.structurer.{2}-to-xhtml2" />
+        <map:call resource="jx-transformer">
+          <map:parameter name="exstension" value="xhtml2" />
+          <map:parameter name="request" value="{1}" />
+        </map:call>
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="xhtml2" />
+        </map:transform>
+        <map:serialize type="xml"/>
       </map:match>
       <map:match pattern="**.xml">
         <map:call resource="transform-to-document">
