@@ -175,28 +175,31 @@
     
     <xsl:choose>
       <xsl:when test="starts-with(@href, 'daisy:')">
-        <xsl:variable name="docId"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
+        <xsl:variable name="docIdPlusAnchor"><xsl:value-of select="substring-after(@href, 'daisy:')"/></xsl:variable>
+        <xsl:variable name="docId">
+          <xsl:choose>
+            <xsl:when test="contains($docIdPlusAnchor, '#')"><xsl:value-of select="substring-before($docIdPlusAnchor, '#')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$docIdPlusAnchor"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="anchor">
+          <xsl:choose>
+            <xsl:when test="contains($docIdPlusAnchor, '#')">#<xsl:value-of select="substring-after($docIdPlusAnchor, '#')"/></xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="path">
           <xsl:value-of select="$pathPrefix"/>
           <xsl:for-each select="//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::group|//daisyDocument/descendant::doc[@id=$docId][1]/ancestor::doc[@nodeId]"><xsl:value-of select="@href"/></xsl:for-each>
         </xsl:variable>
         <xsl:variable name="url">
           <xsl:choose>
-            <xsl:when test="//daisyDocument/descendant::doc[@id=$docId]"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/></xsl:when>
-            <xsl:otherwise><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$docId"/><xsl:value-of select="$daisyExt"/>.html</xsl:otherwise>
+            <xsl:when test="//daisyDocument/descendant::doc[@id=$docId]"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/><xsl:value-of select="$anchor"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$docId"/><xsl:value-of select="$daisyExt"/>.html<xsl:value-of select="$anchor"/></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
         <a>
-          <xsl:choose>
-            <xsl:when test="contains($url, '#')">
-              <xsl:variable name="pageURL"><xsl:value-of select="substring-before($url, '#')"/></xsl:variable>
-              <xsl:variable name="anchor"><xsl:value-of select="substring-after(@href, '#')"/></xsl:variable>
-              <xsl:attribute name="href">FIXME: URLS with anchors not working at present - <xsl:value-of select="$pageURL"/>.html#<xsl:value-of select="$anchor"/></xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
           <xsl:attribute name="description"><xsl:value-of select="@daisyDocumentName"/></xsl:attribute>
           <xsl:apply-templates/>
         </a>
@@ -232,6 +235,11 @@
   
   <xsl:template match="@ns:*|ns:*"/>
   <xsl:template match="@p:*|p:*"/>
+  
+  <xsl:template match="@id">
+    <xsl:attribute name="id"><xsl:value-of select="."/></xsl:attribute>
+    <a><xsl:attribute name="name"><xsl:value-of select="."/></xsl:attribute></a>
+  </xsl:template>
   
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
