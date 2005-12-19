@@ -351,6 +351,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#source-from-remote-cms">Retrieving HTML from a CMS</a>
 </li>
 <li>
+<a href="#sourceResolving">Source Resolving</a>
+</li>
+<li>
 <a href="#linkrewriting">Link Rewriting</a>
 </li>
 </ul>
@@ -376,7 +379,7 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 <p>In other words, the locationmap enables content to be retrieved from a location
         that is defined in a locationmap file (located at 
-        <span class="codefrag ">PROJECT_HOME/src/documentation/content/locationmap.xml</span> file. The
+        <span class="codefrag">PROJECT_HOME/src/documentation/content/locationmap.xml</span> file. The
         advantage of this is that the URL seen by the user need bear no relation to the location
         of the source document, thus Forrest can separate the client URL space from the source
         document URL space. Thus, using the locationmap it is possible to pull together
@@ -388,7 +391,7 @@ document.write("Last Published: " + document.lastModified);
       the locationmap however the leaf does not identify a pipeline, but instead identifies
       a location string.</p>
 <p>Apache Forrest looks in the standard location for the source file first (by default
-      <span class="codefrag ">PROJECT_HOME/src/documentation/content/...</span>), if a file is found in this
+      <span class="codefrag">PROJECT_HOME/src/documentation/content/...</span>), if a file is found in this
       location then the locationmap is not consulted. However, if one is not found then the 
       locationmap is used to resolve the source file. The locationmap is resolved via the
       core sitemap, this means that you can generate it dynamically if you so wish. Simply
@@ -470,7 +473,7 @@ projectInfo.transform.changes.rss
 <div class="section">
 <a name="N1008A"></a><a name="source-via-http"></a>
 <h3 class="underlined_5">Retrieving an XDoc via HTTP</h3>
-<p>Normally files are generated from <span class="codefrag ">{project:content.xdocs}</span>.
+<p>Normally files are generated from <span class="codefrag">{project:content.xdocs}</span>.
         Using the Locationmap it is possible to make these files come from elsewhere.
         This is useful if you want to pull files from different directory structures,
         or even remote repositories. For example, the following location match 
@@ -485,12 +488,12 @@ projectInfo.transform.changes.rss
         </pre>
 <p>Note that because this is a wildcard matcher you can request any page
         from the svn server simply by requesting 
-        <span class="codefrag ">/remoteDemo/PATH/TO/FILE/FILENAME.html</span>. In addition, we
+        <span class="codefrag">/remoteDemo/PATH/TO/FILE/FILENAME.html</span>. In addition, we
         can request any other output format available via Forrest plugins.</p>
 <p>When including resources from remote repositories one has to
-        be careful about things like <span class="codefrag ">site</span> and <span class="codefrag ">ext</span>
+        be careful about things like <span class="codefrag">site</span> and <span class="codefrag">ext</span>
         linking. If the targets are not defined in the local 
-        <span class="codefrag ">site.xml</span> file then these links will be broken.</p>
+        <span class="codefrag">site.xml</span> file then these links will be broken.</p>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">Because of the above limitation many of the links in the
@@ -506,8 +509,8 @@ projectInfo.transform.changes.rss
         on open standards such as XML and XSLT and the Apache Software Stack, in particular the XML publishing 
         framework Apache Cocoon.</p>
 <p>The following locationmap matcher will instruct Forrest to retrieve content from
-        <span class="codefrag ">http://lenya.zones.apache.org:8888/default/live/*.html?raw=true</span>, whenever a local URL of
-        <span class="codefrag ">lenya/**</span> is encountered.</p>
+        <span class="codefrag">http://lenya.zones.apache.org:8888/default/live/*.html?raw=true</span>, whenever a local URL of
+        <span class="codefrag">lenya/**</span> is encountered.</p>
 <pre class="code">
  &lt;match pattern="lenya/**.xml"&gt;
    &lt;location src="http://lenya.zones.apache.org:8888/default/live/{1}.html?raw=true" /&gt;
@@ -515,7 +518,7 @@ projectInfo.transform.changes.rss
         </pre>
 <p>However, since the source returned by this match is HTML and not XDoc we must convert this
         to our internal XDoc format before we can use it. We do this by adding the match below to our 
-        project's <span class="codefrag ">sitemap.xmap</span> file.</p>
+        project's <span class="codefrag">sitemap.xmap</span> file.</p>
 <pre class="code">
 &lt;map:match pattern="lenya/**.xml"&gt;
   &lt;map:generate type="html" src="{lm:{0}}" /&gt;
@@ -536,7 +539,7 @@ projectInfo.transform.changes.rss
 &lt;/map:components&gt;
         </pre>
 <p>Since the HTML generator uses JTidy we need to make available a JTidy configuration file.
-        This is placed in <span class="codefrag ">PROJECT_HOME/src/documentation/WEB-INF/jtidy.properties</span> (the
+        This is placed in <span class="codefrag">PROJECT_HOME/src/documentation/WEB-INF/jtidy.properties</span> (the
         location can be changed in the above sitemap snippet). A sample config file is given below:</p>
 <pre class="code">
 indent=yes
@@ -566,7 +569,17 @@ char-encoding=latin1
 <div class="content">This demo is an example only, it does not fully work at this time. For example, absolute URLs
         in the source document need to be rewritten to ensure that they are matched by the locationmap.</div>
 </div>
-<a name="N100EE"></a><a name="linkrewriting"></a>
+<a name="N100EE"></a><a name="sourceResolving"></a>
+<h3 class="underlined_5">Source Resolving</h3>
+<p>As well as being able to use the locationmap as a parameter in the sitemap,
+        it is also possible to use it as a psuedo-protocol within resources processed
+        by Forrest. For example, you can use it to import an XSL provided by one plugin
+        within another plugin:</p>
+<pre class="code">
+          &lt;xsl:import src="lm://OOo.transform.write.xdoc"/&gt;
+        
+        </pre>
+<a name="N100FC"></a><a name="linkrewriting"></a>
 <h3 class="underlined_5">Link Rewriting</h3>
 <p>The locationmap can be used to rewrite URLs when the page is generated.
         For example, when the locationmap has:</p>
@@ -575,8 +588,8 @@ char-encoding=latin1
    &lt;location src="http://www.domain.org/{1}.xml" /&gt;
  &lt;/match&gt;
         </pre>
-<p>With the above match in the locationmap, a link which has <span class="codefrag ">href="lm:rewriteDemo/index"</span>
-        will be rewritten to an offsite address at <span class="codefrag ">domain.org</span>
+<p>With the above match in the locationmap, a link which has <span class="codefrag">href="lm:rewriteDemo/index"</span>
+        will be rewritten to an offsite address at <span class="codefrag">domain.org</span>
 </p>
 </div>
   

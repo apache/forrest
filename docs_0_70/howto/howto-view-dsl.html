@@ -406,13 +406,13 @@ This HowTo is far from being finished.
 </div>
 <p>
       We developed<strong> forrest:view</strong>  to let the user decide where to place elements in e.g. html-pages.
-      We started this work with the <span class="codefrag ">skinconf.xml</span> where you could configure certain elements and
+      We started this work with the <span class="codefrag">skinconf.xml</span> where you could configure certain elements and
       their positions. This elements was known under certain names. It was up to the skin-designer to support 
       this configuration and the elements.
     </p>
 <p>
      The work started with grouping elements (the ones from skinconf). We used css-contracts that 
-     we added as @attributes e.g. <span class="codefrag ">&lt;div id="content-main"/&gt; </span>. That made it 
+     we added as @attributes e.g. <span class="codefrag">&lt;div id="content-main"/&gt; </span>. That made it 
      possible to use the same elements in different skins. For the full list refer to the
       <a href="http://svn.apache.org/repos/asf/forrest/trunk/main/webapp/skins/leather-dev/contracts.initial.txt">
         inicial contract list
@@ -428,8 +428,8 @@ This HowTo is far from being finished.
      
 <strong>forrest:hook</strong>'s are container that are only used for layout reasons. They <strong>do not</strong> add 
      any content nor functionality to the output. They add <strong>only</strong> layout information to 
-     the output. Actually a <span class="codefrag ">&lt;forrest:hook name="layoutId"/&gt;</span> will be transformed
-     to <span class="codefrag ">&lt;div id="layoutId"/&gt; </span>
+     the output. Actually a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;</span> will be transformed
+     to <span class="codefrag">&lt;div id="layoutId"/&gt; </span>
     
 </p>
 <p>
@@ -458,17 +458,17 @@ This HowTo is far from being finished.
 <p>
 				In this section we will create a new view. We will override the default view of the view-plugin
         for the index page of the <a href="../../docs_0_80/howto/howto-view-install.html">newSeed</a>.
-        For that we will create a file called <span class="codefrag ">index.fv</span> and save it in our xdocs directory. 
+        For that we will create a file called <span class="codefrag">index.fv</span> and save it in our xdocs directory. 
         This will make <strong>only</strong> the index.html page look different from the rest of the project.
 			</p>
 <p>
-        Remember: pointing your browser to <span class="codefrag ">http://localhost:8888/ls.contracts.html</span> will
+        Remember: pointing your browser to <span class="codefrag">http://localhost:8888/ls.contracts.html</span> will
         show a page with all contracts that you can use in your project.
       </p>
 <p>
         Let use the blank view from the earlier step and add the content-main contract. In 
         ls.contracts.html we find the information how to use the contract in our view. Our 
-        <span class="codefrag ">index.fv</span> should look like:
+        <span class="codefrag">index.fv</span> should look like:
       </p>
 <pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;    
@@ -477,7 +477,7 @@ This HowTo is far from being finished.
 &lt;/forrest:views&gt;
       </pre>
 <p>
-        Let's try our new view by pointing to <span class="codefrag ">http://localhost:8888/index.html</span>. 
+        Let's try our new view by pointing to <span class="codefrag">http://localhost:8888/index.html</span>. 
         We will see only the main content. :) Now let's add the section navigation to our view.
         The contract usage in the view can be looked up in ls.contracts.html. Our view now looks like:
       </p>
@@ -496,7 +496,7 @@ This HowTo is far from being finished.
 <a name="N100D1"></a><a name="hookView"></a>
 <h3 class="underlined_5">Hooks in views</h3>
 <p>
-        We will use now the first time a <span class="codefrag ">&lt;forrest:hook name="layoutId"/&gt;</span>.
+        We will use now the first time a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;</span>.
         Hooks are the styling side of views. We can imitate arbitrary html skeleton 
         with their help. Before we explain how to use your own css in views we will use the default css.
         In the default.css we can find 
@@ -510,7 +510,7 @@ This HowTo is far from being finished.
 }
       </pre>
 <p>
-        With this information we know to use <span class="codefrag ">&lt;forrest:hook name="leftbar"/&gt;</span> 
+        With this information we know to use <span class="codefrag">&lt;forrest:hook name="leftbar"/&gt;</span> 
         and add contracts into that container. 
       </p>
 <p>
@@ -538,10 +538,10 @@ This HowTo is far from being finished.
 <p>
         We know now how to place contracts and hooks in our view, till this stage we only used the default.css. 
         CSS-support of views is as easy as placing contracts/hooks. To override the default.css
-        stylesheet we use another tag within our view <span class="codefrag ">&lt;forrest:css url="default.css"/&gt;</span>.
+        stylesheet we use another tag within our view <span class="codefrag">&lt;forrest:css url="default.css"/&gt;</span>.
       </p>
 <p>
-        We will now create a file in <span class="codefrag ">{project:skins-dir}{path}/{name}.css</span>. In our case
+        We will now create a file in <span class="codefrag">{project:skins-dir}{path}/{name}.css</span>. In our case
         we will save a file called howTo.css in newSeed/src/documentation/skins/css/howTo.css containing only 
         the following css:
       </p>
@@ -556,14 +556,14 @@ This HowTo is far from being finished.
 <p>
         We just changed the border-style to 'solid', the background to '#CCCCFF' and the color to '#000000'. 
         Now we have to add a new tag to tell that we want to override the default.css. We are doing this 
-        by adding the tag <span class="codefrag ">&lt;forrest:css url="howTo.css"/&gt;</span> to our view.
+        by adding the tag <span class="codefrag">&lt;forrest:css url="howTo.css"/&gt;</span> to our view.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
         
-<span class="codefrag ">&lt;forrest:css url="howTo.css"/&gt;</span> has to be direct son of 
-        <span class="codefrag ">&lt;forrest:view type="xhtml"&gt;</span>!!!
+<span class="codefrag">&lt;forrest:css url="howTo.css"/&gt;</span> has to be direct son of 
+        <span class="codefrag">&lt;forrest:view type="xhtml"&gt;</span>!!!
       </div>
 </div>
 <pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
@@ -579,7 +579,7 @@ This HowTo is far from being finished.
 <p>
         Now you see a white page where the menu is sourrounded by a solid border with the defined background.
          As second example let us change as well the content-main by adding another hook 
-         <span class="codefrag ">&lt;forrest:hook name="content"/&gt;</span> We need to add the new layout container
+         <span class="codefrag">&lt;forrest:hook name="content"/&gt;</span> We need to add the new layout container
          to our howTo.css:
       </p>
 <pre class="code">
