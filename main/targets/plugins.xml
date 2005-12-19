@@ -177,9 +177,17 @@ to be installed again unless you delete them or wish to upgrade them.
             </antcall>
           </then>
         </if>
-        <antcall target="configure-plugin-locationmap">
-          <param name="plugin" value="${versioned.name}"/>
-        </antcall>
+        <if>
+          <available property="plugin-locationmap" file="${forrest.plugins-dir}/${versioned.name}/locationmap.xml"/>
+          <then>
+            <antcall target="configure-plugin-locationmap">
+              <param name="plugin" value="${versioned.name}"/>
+            </antcall>
+          </then>
+          <else>
+            <echo message="No locationmap provided for plugin ${versioned.name}"/>
+          </else>
+        </if>
       </then>
       <else>
         <if>
@@ -206,9 +214,17 @@ to be installed again unless you delete them or wish to upgrade them.
             </antcall>
           </then>
         </if>
-        <antcall target="configure-plugin-locationmap">
-          <param name="plugin" value="{plugin.name}"/>
-        </antcall>
+        <if>
+          <available property="plugin-locationmap" file="${forrest.plugins-dir}/${plugin.name}/locationmap.xml"/>
+          <then>
+            <antcall target="configure-plugin-locationmap">
+              <param name="plugin" value="${plugin.name}"/>
+            </antcall>
+          </then>
+          <else>
+            <echo message="No locationmap provided for plugin ${plugin.name}"/>
+          </else>
+        </if>
       </else>
     </if>
   </target>
