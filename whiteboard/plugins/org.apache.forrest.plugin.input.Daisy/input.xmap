@@ -37,9 +37,10 @@
           <map:part src="cocoon://{project:daisy.pathPrefix}{docID}.daisy.source" />
           <map:part src="cocoon://daisy.site.{project:daisy.navigation.docID}" />
         </map:aggregate>
-        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/daisy-to-html.xsl">
+        <map:transform src="{lm:daisy.transform.daisy.html}">
           <map:parameter name="documentPath" value="{path}"/>
           <map:parameter name="pathPrefix" value="{project:daisy.pathPrefix}"/>
+          <map:parameter name="daisyExt" value="{project:daisy.fileExt}"/>
         </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:select type="exists">

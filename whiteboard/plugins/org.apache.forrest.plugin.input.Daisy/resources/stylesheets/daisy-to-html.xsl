@@ -195,7 +195,7 @@
         <xsl:variable name="url">
           <xsl:choose>
             <xsl:when test="//daisyDocument/descendant::doc[@id=$docId]"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="//doc[@id=$docId]/@href"/><xsl:value-of select="$anchor"/></xsl:when>
-            <xsl:otherwise><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$docId"/><xsl:value-of select="$daisyExt"/>.html<xsl:value-of select="$anchor"/></xsl:otherwise>
+            <xsl:otherwise><xsl:value-of select="$pathToRoot"/><xsl:value-of select="$path"/><xsl:value-of select="$docId"/><xsl:value-of select="$daisyExt"/>.html<xsl:value-of select="$anchor"/></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
         <a>
