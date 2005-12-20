@@ -46,8 +46,6 @@
                 <div id="content-minitoc-area">
                   <xsl:call-template name="content-minitoc-processing">
                     <xsl:with-param name="tocroot" select="tocitems"/>
-                    <xsl:with-param name="content-minitoc-conf" 
-                      select="$content-minitoc-conf"/>
                   </xsl:call-template>
                 </div>
               </xsl:if>
@@ -58,7 +56,6 @@
       </xsl:template>
       <xsl:template name="content-minitoc-processing">
         <xsl:param name="tocroot"/>
-        <xsl:param name="content-minitoc-conf"/>
         <xsl:if 
           test="count($tocroot/tocitem) >= $content-minitoc-conf/@min-sections">
           <xsl:if test="contains($content-minitoc-conf/@location,'page')">
@@ -72,8 +69,6 @@
                     test="@level&#60;$content-minitoc-conf/@max-depth+1">
                     <xsl:call-template name="content-minitoc-processing">
                       <xsl:with-param name="tocroot" select="."/>
-                      <xsl:with-param name="content-minitoc-conf" 
-                        select="$content-minitoc-conf"/>
                     </xsl:call-template>
                   </xsl:if>
                 </li>
