@@ -627,14 +627,6 @@ $Revision: 1.12 $
         </map:call>
       </map:match>
 
-      <map:match type="regexp" pattern="^.+$">
-        <map:select type="exists">
-          <map:when test="{lm:project.{0}}">
-            <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
-          </map:when>
-        </map:select>
-      </map:match>      
-
       <!-- generate faq.fo specially  -->
       <map:match pattern="**faq.fo">
         <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
@@ -691,7 +683,16 @@ $Revision: 1.12 $
       </map:match>
      <map:match pattern="**.ico">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
-      </map:match> 
+      </map:match>
+      
+      <map:match type="regexp" pattern="^.+$">
+        <map:select type="exists">
+          <map:when test="{lm:project.{0}}">
+            <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
+          </map:when>
+        </map:select>
+      </map:match>      
+
     </map:pipeline>
 
 
