@@ -621,22 +621,68 @@ Credit: original from the jakarta-avalon project
       </xsl:template>
       <xsl:template match="entry" mode="thead">
             <th>
+                  <xsl:call-template name="entry.spans"/>
                   <xsl:apply-templates/>
             </th>
       </xsl:template>
       <xsl:template match="row">
             <tr>
-                  <xsl:apply-templates/>
+              <xsl:apply-templates/>
             </tr>
       </xsl:template>
       <xsl:template match="tbody|tfoot">
             <xsl:apply-templates/>
       </xsl:template>
+
       <xsl:template match="entry">
             <td>
+                  <xsl:call-template name="entry.spans"/>
                   <xsl:apply-templates/>
             </td>
       </xsl:template>
+
+      <xsl:template name="entry.spans">
+              <xsl:if test="@morerows">
+                <xsl:attribute name="rowspan">
+                  <xsl:value-of select="number(@morerows)+1"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="@namest and @nameend">
+                  <xsl:attribute name="colspan">
+
+                  <xsl:variable name="start">
+                    <xsl:call-template name="colspec.index">
+                      <xsl:with-param name="olist" select="ancestor::tgroup/colspec"/>
+                      <xsl:with-param name="colname" select="@namest"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:variable name="end">
+                    <xsl:call-template name="colspec.index">
+                      <xsl:with-param name="olist" select="ancestor::tgroup/colspec"/>
+                      <xsl:with-param name="colname" select="@nameend"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+
+                  <xsl:value-of select="number($end)-number($start)+1"/>
+                </xsl:attribute>
+              </xsl:if>
+      </xsl:template>
+      <xsl:template name="colspec.index">
+        <!-- calculate the index for a given colname, e.g. from entry/@nameend -->
+        <!-- inspired from the original docbook stylesheets -->
+        <xsl:param name="olist" select="//table/tgroup/colspec"/>
+        <xsl:param name="colname" select="c1"/>
+        <xsl:for-each select="$olist">
+          <xsl:if test="@colname=$colname">
+            <xsl:choose>
+              <xsl:when test="@colnum"><xsl:value-of select="@colnum"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="position()"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:template>
+
+
       <xsl:template match="trademark">
             <xsl:apply-templates/>
             <sup>TM</sup>
