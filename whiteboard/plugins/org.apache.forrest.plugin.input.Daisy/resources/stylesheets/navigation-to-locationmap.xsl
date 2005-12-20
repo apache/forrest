@@ -51,6 +51,12 @@
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>document?documentId={1}&amp;includeNavigation=false&amp;locale=en_US&amp;version=live</xsl:attribute>
            </location>
        </match>
+        
+       <match pattern="**/*.daisy.source">
+           <location>
+             <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>document?documentId={2}&amp;includeNavigation=false&amp;locale=en_US&amp;version=live</xsl:attribute>
+           </location>
+       </match>
      
        <match pattern="project.**/*.daisy.img">
            <location>
