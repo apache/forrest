@@ -256,23 +256,28 @@
     />
   </target>
           
-  <target name="deploy"
-          description="Deploy the plugin to the website SVN to make it available for download"
+  <target name="release"
+          description="Release the plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Deploying ${plugin-name} to the download server</echo>
+    <echo>Releasing ${plugin-name} to the download server</echo>
 	
     <!-- copy new plugin files into sandbox -->
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
-    <!-- FIXME: remove this duplication of content. We currently have a copy of the
-    unversioned plugin in the version directory of Forrest as well as the versioned copy.
-    The plugin loading mechanism shouuld be intelligent enough to get the latest version
-    wehn an unversioned plugin is identified in forrest.properties-->
-    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
-          overwrite="true" 
-          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
-     
+    
+    <antcall target="updateSVN"/>
+    
+<echo>
+You have just released a plugin. There are other tasks to complete. For example:
+- release emails
+- SVN tagging
+<!-- FIXME: these tasks can be automated in this build file -->
+</echo>
+  </target>
+    
+  <target name="updateSVN"
+          description="Update SVN with the files in the sandbox"> 
     <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
     <exec executable="svn" dir="${deploy.plugins.svn-dir}" output="${deploy.plugins.svn-filestoadd}" failonerror="true">
@@ -299,6 +304,18 @@
         repositoryurl="${deploy.plugins.svn.url}"
         commitmessage="Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"
     />
+  </target>
+  
+  <target name="deploy"
+          description="Deploy the plugin to the website SVN to make it available for download"
+          depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
+    <echo>Deploying ${plugin-name} to the download server</echo>
+	
+    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+     
+    <antcall target="updateSVN"/>
   </target>
 	   
   <target name="checkout-deployed-docs" 
