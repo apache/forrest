@@ -16,16 +16,19 @@
  */
 package org.apache.forrest.dispatcher.transformation;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.parameters.Parameters;
@@ -39,6 +42,8 @@ import org.apache.cocoon.xml.IncludeXMLConsumer;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.cocoon.xml.dom.DOMUtil;
+import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
@@ -52,11 +57,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class DispatcherTransformer extends AbstractSAXTransformer implements
-        Disposable, CacheableProcessingComponent {
+        Disposable, CacheableProcessingComponent, URIResolver {
 
     /* Node and attribute names */
     /**
@@ -65,7 +71,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * format for the request.
      * 
      * <pre>
-     *       &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
+     *        &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_ELEMENT = "view";
@@ -77,7 +83,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * <strong>format</strong>.
      * 
      * <pre>
-     *       &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
+     *        &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_FORMAT_ATTRIBUTE = "type";
@@ -94,7 +100,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * layout via e.g. css. In html for example
      * 
      * <pre>
-     *       &lt;forrest:hook name=&quot;test&quot;/&gt;
+     *        &lt;forrest:hook name=&quot;test&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -102,7 +108,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *       &lt;div id=&quot;test&quot;/&gt;
+     *        &lt;div id=&quot;test&quot;/&gt;
      * </pre>
      */
     public static final String DISPATCHER_HOOK_ELEMENT = "hook";
@@ -112,7 +118,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * css. In html for example
      * 
      * <pre>
-     *       &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
+     *        &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -120,7 +126,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *       &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+     *        &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
      * </pre>
      */
     public static final String DISPATCHER_CSS_ELEMENT = "css";
@@ -181,8 +187,12 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private HashMap parameterHelper;
 
+    private SourceResolver m_resolver;
+
     public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
+
     public static final String PATH_PARAMETER = "path";
+
     /**
      * Constructor Set the namespace
      */
@@ -206,7 +216,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Generate the validity object.
      * 
      * @return The generated validity object or <code>null</code> if the
-     *        component is currently not cacheable.
+     *         component is currently not cacheable.
      */
     public SourceValidity getValidity() {
         return null;
@@ -224,8 +234,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      */
     public void dispose() {
         if (null != this.manager) {
+            this.manager.release(m_resolver);
             this.manager = null;
         }
+        m_resolver = null;
         insideProperties = false;
         super.dispose();
     }
@@ -236,7 +248,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     public void recycle() {
         localRecycle();
         super.recycle();
-        
+
     }
 
     /**
@@ -252,6 +264,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             this.dispatcherHelper = new DispatcherHelper(manager);
             this.processor = (XPathProcessor) this.manager
                     .lookup(XPathProcessor.ROLE);
+            m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
         } catch (Exception e) {
             String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
                     + e;
@@ -259,7 +272,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throw new ProcessingException(error);
         }
         storedPrefixMap = new HashMap();
-        this.parameterHelper= new HashMap();
+        this.parameterHelper = new HashMap();
 
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
@@ -271,15 +284,17 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             getLogger().error(error);
             throw new ProcessingException(error);
         }
-        parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE,requestedFormat);
-        /*this.pathXSL = parameters.getParameter(PATH_PARAMETER,null);
-        if (this.pathXSL==null){
-            String warning = "dispatcherError:\n"
-                + "You did not set up the \"path\" parameter in the sitemap, we are not going to support default variables in contracts."
-                + " Meaning that you are not able to use e.g. $skin-img-dir, if you do the contract bean implementation will throw an exception.";
-        getLogger().warn(warning);
-        }
-        parameterHelper.put(PATH_PARAMETER,pathXSL);*/
+        parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE, requestedFormat);
+        /*
+         * this.pathXSL = parameters.getParameter(PATH_PARAMETER,null); if
+         * (this.pathXSL==null){ String warning = "dispatcherError:\n" + "You
+         * did not set up the \"path\" parameter in the sitemap, we are not
+         * going to support default variables in contracts." + " Meaning that
+         * you are not able to use e.g. $skin-img-dir, if you do the contract
+         * bean implementation will throw an exception.";
+         * getLogger().warn(warning); }
+         * parameterHelper.put(PATH_PARAMETER,pathXSL);
+         */
         this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER,
                 null);
         try {
@@ -294,7 +309,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 this.structurerTransformer = dispatcherHelper
                         .createTransformer(stylesheet);
             }
-            parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER,hooksXSL);
+            parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
         } catch (Exception e) {
             String error = "dispatcherError:\n"
                     + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
@@ -305,7 +320,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     }
 
     /**
-     *  Cleanup the transformer
+     * Cleanup the transformer
      */
     private void localRecycle() {
         this.processor = null;
@@ -314,6 +329,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         this.hooksXSL = null;
         this.structurerTransformer = null;
         this.insideProperties = false;
+        this.m_resolver = null;
     }
 
     public void startElement(String uri, String name, String raw,
@@ -575,10 +591,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     private void contractProcessingStart(Attributes attr) throws SAXException {
         try {
             if (contract == null)
-                contract = new ContractBeanDOMImpl(this.manager,parameterHelper);
+                contract = new ContractBeanDOMImpl(this.manager,
+                        parameterHelper,(URIResolver)this);
             else
                 contract.initialize();
-        } catch (ParserConfigurationException e) {
+        } catch (Exception e) {
             String error = DispatcherException.ERROR_500 + "\n"
                     + "component: ContractBean" + "\n"
                     + "message: Could not setup contractBean." + "\n" + "\n\n"
@@ -597,7 +614,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 try {
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
                             .readDOM(contractUri, this.manager);
-                    contract.setContractImpl(doc);
+                    contract.setContractImpl(doc, contractUri);
                     // contract.setContractImpl(contractUri);
                 } catch (Exception e) {
                     String error = "dispatcherError: "
@@ -715,8 +732,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                             location = "result" + location;
                         else
                             location = "result/" + location;
-                        Node xpathNode= DOMUtil.getSingleNode(rootNode, location,
-                                this.processor);
+                        Node xpathNode = DOMUtil.getSingleNode(rootNode,
+                                location, this.processor);
                         if (xpathNode != null) {
                             // add everything *within* the forrest:part element
                             appendChildToResultIterator(root, finalContent,
@@ -902,6 +919,112 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                             + pre + " uri: " + uri + " ]");
             this.dispatcherBuilder.startPrefixMapping(pre, uri);
         }
+    }
+
+    public javax.xml.transform.Source resolve(String href, String base)
+            throws TransformerException {
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(
+                    "resolve(href = " + href + ", base = " + base
+                            + "); resolver = " + m_resolver);
+        }
+
+        Source xslSource = null;
+        try {
+            if (base == null || href.indexOf(":") > 1) {
+                // Null base - href must be an absolute URL
+                xslSource = m_resolver.resolveURI(href);
+            } else if (href.length() == 0) {
+                // Empty href resolves to base
+                xslSource = m_resolver.resolveURI(base);
+            } else {
+                // is the base a file or a real m_url
+                if (!base.startsWith("file:")) {
+                    int lastPathElementPos = base.lastIndexOf('/');
+                    if (lastPathElementPos == -1) {
+                        // this should never occur as the base should
+                        // always be protocol:/....
+                        return null; // we can't resolve this
+                    } else {
+                        xslSource = m_resolver.resolveURI(base.substring(0,
+                                lastPathElementPos)
+                                + "/" + href);
+                    }
+                } else {
+                    File parent = new File(base.substring(5));
+                    File parent2 = new File(parent.getParentFile(), href);
+                    xslSource = m_resolver.resolveURI(parent2.toURL()
+                            .toExternalForm());
+                }
+            }
+
+            InputSource is = getInputSource(xslSource);
+
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                        "xslSource = " + xslSource + ", system id = "
+                                + xslSource.getURI());
+            }
+
+//            if (m_checkIncludes) {
+//                // Populate included validities
+//                List includes = (List) m_includesMap.get(base);
+//                if (includes != null) {
+//                    SourceValidity included = xslSource.getValidity();
+//                    if (included != null) {
+//                        includes.add(new Object[] { xslSource.getURI(),
+//                                xslSource.getValidity() });
+//                    } else {
+//                        // One of the included stylesheets is not cacheable
+//                        m_includesMap.remove(base);
+//                    }
+//                }
+//            }
+
+            return new StreamSource(is.getByteStream(), is.getSystemId());
+        } catch (SourceException e) {
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                        "Failed to resolve " + href + "(base = " + base
+                                + "), return null", e);
+            }
+
+            // CZ: To obtain the same behaviour as when the resource is
+            // transformed by the XSLT Transformer we should return null here.
+            return null;
+        } catch (java.net.MalformedURLException mue) {
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                        "Failed to resolve " + href + "(base = " + base
+                                + "), return null", mue);
+            }
+
+            return null;
+        } catch (IOException ioe) {
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug(
+                        "Failed to resolve " + href + "(base = " + base
+                                + "), return null", ioe);
+            }
+
+            return null;
+        } finally {
+            m_resolver.release(xslSource);
+        }
+    }
+    
+    /**
+     * Return a new <code>InputSource</code> object that uses the
+     * <code>InputStream</code> and the system ID of the <code>Source</code>
+     * object.
+     * 
+     * @throws IOException
+     *             if I/O error occured.
+     */
+    private static InputSource getInputSource(final Source source) throws IOException, SourceException {
+        final InputSource newObject = new InputSource(source.getInputStream());
+        newObject.setSystemId(source.getURI());
+        return newObject;
     }
 
 }

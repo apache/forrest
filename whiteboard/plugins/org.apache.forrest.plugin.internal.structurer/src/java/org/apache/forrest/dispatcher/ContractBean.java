@@ -101,15 +101,16 @@ public interface ContractBean {
     public abstract void setContractImpl(String contractUri) throws Exception;
 
     /**
-     * setContractImpl(Document _contractImpl)
+     * setContractImpl(Document _contractImpl,systemID)
      * 
      * This method invokes the setting of the actual contract implementation via
      * a document.
      * 
-     * @param contractUri
+     * @param _contractImpl 
+     * @param systemID
      * @throws Exception
      */
-    public abstract void setContractImpl(Document _contractImpl)
+    public abstract void setContractImpl(Document _contractImpl, String systemID)
             throws Exception;
 
     /**

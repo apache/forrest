@@ -21,17 +21,18 @@ import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
-import org.apache.forrest.dispatcher.transformation.DispatcherTransformer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -109,6 +110,10 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
 
     private HashMap parameterHelper;
 
+    private String m_systemID;
+
+    private URIResolver m_uriResolver;
+
     /**
      * The ContractBean contains all fields to work with contracts. It is a
      * helper bean.
@@ -122,8 +127,9 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * @param parameterHelper
      * @throws ParserConfigurationException
      */
-    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper)
+    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper,URIResolver uriResolver)
             throws ParserConfigurationException {
+        m_uriResolver=uriResolver;
         this.manager = manager;
         dispatcherHelper = new DispatcherHelper(manager);
         this.parameterHelper = parameterHelper;
@@ -165,6 +171,7 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractImpl(java.lang.String)
      */
     public void setContractImpl(String contractUri) throws Exception {
+        m_systemID = contractUri;
         Document _contractImpl = dispatcherHelper.getDocument(contractUri);
         this.contractImpl = _contractImpl;
         contractImplHelper(this.contractImpl);
@@ -175,7 +182,9 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * 
      * @see org.apache.forrest.dispatcher.ContractBeanInterface#setContractImpl(org.w3c.dom.Document)
      */
-    public void setContractImpl(Document _contractImpl) throws Exception {
+    public void setContractImpl(Document _contractImpl, String systemID)
+            throws Exception {
+        m_systemID = systemID;
         this.contractImpl = _contractImpl;
         contractImplHelper(this.contractImpl);
     }
@@ -215,12 +224,13 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                         .getElementsByTagName("xsl:stylesheet");
                 if (list_transformer.getLength() == 1) {
                     Node node = list_transformer.item(0);
-                    TransformerFactory tFactory = TransformerFactory
+                    TransformerFactory transFact = TransformerFactory
                             .newInstance();
                     DOMSource stylesource = new DOMSource(node);
-                    Transformer transformer = tFactory
-                            .newTransformer(stylesource);
-                    if (transformer == null)
+                    stylesource.setSystemId(m_systemID);
+                    transFact.setURIResolver(m_uriResolver);
+                    Templates cachedXSLT = transFact.newTemplates(stylesource);
+                    if (cachedXSLT == null)
                         throw new DispatcherException(
                                 DispatcherException.ERROR_500
                                         + "\n"
@@ -240,6 +250,7 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                      * Set default properties
                      */
                     // default forrest properties
+                    Transformer transformer = cachedXSLT.newTransformer();
                     Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil
                             .readDOM("cocoon://test-props", this.manager);
                     transformer.setParameter("defaultVariables",
