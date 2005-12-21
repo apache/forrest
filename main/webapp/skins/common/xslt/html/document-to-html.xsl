@@ -137,7 +137,10 @@ Section handling
 
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
-    <div class="{local-name()}">
+    <div>
+      <xsl:call-template name="add.class">
+        <xsl:with-param name="class"><xsl:value-of select="local-name()"/></xsl:with-param>
+      </xsl:call-template>
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
@@ -228,12 +231,9 @@ Section handling
   <xsl:template match="code">
     <xsl:apply-templates select="@id"/>
     <span>
-      <xsl:attribute name="class">
-        <xsl:choose>
-          <xsl:when test="@class">codefrag <xsl:value-of select="@class"/></xsl:when>
-          <xsl:otherwise>codefrag</xsl:otherwise>
-        </xsl:choose> 
-      </xsl:attribute>
+      <xsl:call-template name="add.class">
+        <xsl:with-param name="class">codefrag</xsl:with-param>
+      </xsl:call-template>
       <xsl:copy-of select="@id"/>
       <xsl:value-of select="."/>
     </span>
@@ -383,6 +383,24 @@ Section handling
         <xsl:with-param name="level" select="$level+1"/>
       </xsl:apply-templates>
     </tocitem>
+  </xsl:template>
+
+  <xsl:template name="add.class">
+    <!-- use the parameter to set class attribute -->
+    <!-- if there are already classes set, adds to them -->
+    <xsl:param name="class"/> 
+    <xsl:attribute name="class">
+      <xsl:choose>
+        <xsl:when test="@class">
+          <xsl:value-of select="$class"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="@class"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$class"/>
+        </xsl:otherwise>
+      </xsl:choose> 
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template match="node()|@*" mode="toc"/>
