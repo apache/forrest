@@ -18,7 +18,7 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-   xmlns:xhtml2="http://www.w3.org/2002/06/xhtml2"
+   xmlns:html="http://www.w3.org/2002/06/xhtml2"
   name="title">
   <description>
     title - Templates for "title" mode.  
@@ -30,19 +30,19 @@
     name="title" inputFormat="xsl">
       <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-        xmlns:xhtml2="http://www.w3.org/2002/06/xhtml2">
+        xmlns:html="http://www.w3.org/2002/06/xhtml2">
         <xsl:param name="title" select="/"/>
         <xsl:template match="/">
           <forrest:content>
             <forrest:part>
-              <xsl:apply-templates select="xhtml2:html/xhtml2:head"/>
+              <xsl:apply-templates select="html:html/html:head"/>
             </forrest:part>
           </forrest:content>
         </xsl:template>
-        <xsl:template match="xhtml2:head">
+        <xsl:template match="html:head">
           <xsl:choose>
-            <xsl:when test="xhtml2:title">
-              <xsl:copy-of select="xhtml2:title"/>
+            <xsl:when test="html:title">
+              <xsl:copy-of select="html:title"/>
             </xsl:when>
             <xsl:otherwise>
               <title>*No* title found</title>

@@ -18,27 +18,34 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="xhtml2-content-abstract">
+  xmlns:html="http://www.w3.org/2002/06/xhtml2"
+  name="xhtml2-content-body">
   <description>
-    xhtml2-content-abstract - Template will output the abstract of the document. 
+    xhtml2-content-body - Template will output the xhtml2-content-body.
   </description>
-  <usage><![CDATA[<forrest:contract name="xhtml2-content-abstract" dataURI="cocoon://internal.#{$getRequest}.abstract"/>
-]]></usage>
+  <usage><![CDATA[<forrest:contract name="xhtml2-content-body" 
+            dataURI="cocoon://#{$getRequest}.body.xml"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    name="xhtml2-content-abstract" inputFormat="xsl">
-     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-       <xsl:param name="xhtml2-content-abstract" select="/"/>
+    name="xhtml2-content-body" inputFormat="xsl">
+     <xsl:stylesheet version="1.1" 
+      xmlns:html="http://www.w3.org/2002/06/xhtml2"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      exclude-result-prefixes="html xsl">
+      <!--<xsl:include href="lm://transform.xhtml2.html.structurer"/>-->
       <xsl:template match="/">
         <forrest:content>
+          <forrest:part xpath="/html/head">
+            <xsl:comment>+ |start xhtml2-content-body head +</xsl:comment>
+            <xsl:copy-of select="html/head/*" />
+            <xsl:comment>+ |end xhtml2-content-body head +</xsl:comment>
+          </forrest:part>
           <forrest:part>
-            <xsl:comment>+ |start xhtml2-content-abstract +</xsl:comment>
-            <div class="abstract">
-              <xsl:value-of select="$xhtml2-content-abstract"/>
-            </div>
-            <xsl:comment>+ |end xhtml2-content-abstract +</xsl:comment>
+            <xsl:comment>+ |start xhtml2-content-body body +</xsl:comment>
+            <xsl:copy-of select="html/body/*" />
+            <xsl:comment>+ |end xhtml2-content-body body +</xsl:comment>
           </forrest:part>
         </forrest:content>
       </xsl:template>
-    </xsl:stylesheet>
+	  </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
