@@ -205,7 +205,7 @@ Credit: original from the jakarta-avalon project
             </cmdsynopsis>
             -->
             <p>
-                  <code>
+                  <code class="cmdsynopsis">
                         <xsl:value-of select="command"/>
                         <xsl:apply-templates select="node()[ local-name() != 'command' ]"/>
                   </code>
@@ -232,9 +232,20 @@ Credit: original from the jakarta-avalon project
             </section>
       </xsl:template>
       <xsl:template match="example">
-            <section>
+            <!-- changed to note because section gives a hard time
+                 to set the class: it's done in skins/common, pelt 
+                 and then in site2xhtml, too :-(  -->
+            <note class="example" label="{title}">
                   <xsl:apply-templates/>
-            </section>
+            </note>
+      </xsl:template>
+      <xsl:template match="note">
+            <note>
+              <xsl:if test="title">
+                <xsl:attribute name="label"><xsl:value-of select="title"/></xsl:attribute>
+              </xsl:if>
+              <xsl:apply-templates/>
+            </note>
       </xsl:template>
       <xsl:template match="informaltable">
             <table>
@@ -461,39 +472,47 @@ Credit: original from the jakarta-avalon project
             </ul>
       </xsl:template>
       <xsl:template match="command">
-            <code>
+            <code class="command">
                   <xsl:value-of select="."/>
             </code>
       </xsl:template>
       <xsl:template match="computeroutput">
-            <code>
+            <code  class="computeroutput">
+                  <xsl:value-of select="."/>
+            </code>
+      </xsl:template>
+      <xsl:template match="userinput">
+            <code class="userinput">
                   <xsl:value-of select="."/>
             </code>
       </xsl:template>
       <xsl:template match="varname">
-            <code>
+            <code class="varname">
                   <xsl:value-of select="."/>
             </code>
       </xsl:template>
-      <xsl:template match="literal">
-            <code><xsl:value-of select="."/></code>
+      <xsl:template match="literal"> 
+            <!-- @moreinfo ignored -->
+            <code class="literal">
+                  <xsl:value-of select="."/>
+            </code>
       </xsl:template>
       <xsl:template match="option">
-            <code><xsl:value-of select="."/></code>
+            <code class="option"><xsl:value-of select="."/></code>
       </xsl:template>
        <xsl:template match="constant">
-            <code><xsl:value-of select="."/></code>
+            <code class="constant"><xsl:value-of select="."/></code>
       </xsl:template>
       <xsl:template match="trademark">
             <xsl:apply-templates/>&#x2122;
       </xsl:template>
       <xsl:template match="filename">
-            <code>
+            <code class="filename">
                   <xsl:value-of select="."/>
             </code>
       </xsl:template>
       <xsl:template match="classname|function|parameter">
-            <code>
+            <code class="{local-name()}">
                   <xsl:apply-templates/>
                   <xsl:if test="name(.)='function'">
                         <xsl:text>()</xsl:text>
@@ -605,6 +624,7 @@ Credit: original from the jakarta-avalon project
       </xsl:template>
       <xsl:template match="table">
             <table>
+              <caption><xsl:value-of select="title"/></caption>
                   <xsl:apply-templates/>
             </table>
       </xsl:template>
@@ -627,7 +647,7 @@ Credit: original from the jakarta-avalon project
       </xsl:template>
       <xsl:template match="row">
             <tr>
-              <xsl:apply-templates/>
+                  <xsl:apply-templates/>
             </tr>
       </xsl:template>
       <xsl:template match="tbody|tfoot">
