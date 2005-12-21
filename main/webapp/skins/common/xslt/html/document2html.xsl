@@ -137,7 +137,8 @@ Section handling
 
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
-    <div class="{local-name()}">
+    <div class="{@class}">
+    <div class="frame {local-name()}">
       <div class="label">
         <xsl:choose>
           <!-- FIXME: i18n Transformer here -->
@@ -150,6 +151,7 @@ Section handling
       <div class="content">
         <xsl:apply-templates/>
       </div>
+    </div>
     </div>
   </xsl:template>
 
@@ -227,7 +229,7 @@ Section handling
 
   <xsl:template match="code">
     <xsl:apply-templates select="@id"/>
-    <span class="codefrag">
+    <span class="codefrag {@class}">
       <xsl:copy-of select="@id"/>
       <xsl:value-of select="."/>
     </span>
