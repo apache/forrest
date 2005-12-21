@@ -33,6 +33,10 @@ Simply change directory to the plugin home directory and deploy the plugin
 by doing 'tools/ant/bin/ant deploy' [1]. The build system will take care of
 everything else for you.
 
+Deployment is carried out with the command "ant deploy". Since this does not
+affect releaed versions of the plugin it can be run at any time (note some minimal 
+tests are done during the deploy process). 
+
 [1] See the note about using our own version of Ant:
 http://forrest.apache.org/0.7/docs/howto/howto-buildPlugin.html#ant
 
@@ -47,6 +51,24 @@ run.
 Once the deployment is complete the version number should be increased and the 
 '-dev' postfix will be appended.
 
+To release a plugin one should run the command "ant release", however, there is 
+more to it than this.
+
 TODO: announcement emails
 TODO: tagging source tree
+
+FAQs
+====
+
+What if a new feature breaks compatability with a released version of Forrest?
+------------------------------------------------------------------------------
+
+If you add a feature to a plugin that will break compatability with a released version of
+Forrest then you should up the forrest version number in the plugins build.xml file. This
+will prevent the new version of the plugin being made avialble to the older version of 
+Forrest.
+
+However, you might light to consider doing a release of the plugin before you break 
+compatability. It depends on what other changes there are to the plugin before you
+start your work. It is always best to raise this on the dev list.
 
