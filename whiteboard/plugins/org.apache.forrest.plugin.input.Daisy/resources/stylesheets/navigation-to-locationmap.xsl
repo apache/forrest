@@ -58,13 +58,13 @@
            </location>
        </match>
      
-       <match pattern="project.**/*.daisy.img">
+       <match pattern="**/*.daisy.img">
            <location>
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={2}&amp;version=live&amp;partType=3</xsl:attribute>
            </location>
        </match>
      
-       <match pattern="project.**.daisy.img">
+       <match pattern="**.daisy.img">
            <location>
              <xsl:attribute name="src"><xsl:value-of select="$publisherURL"/>blob?documentId={1}&amp;version=live&amp;partType=3</xsl:attribute>
            </location>
