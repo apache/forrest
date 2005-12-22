@@ -88,15 +88,19 @@ which is then merged with other HTML by site2xhtml.xsl
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:variable name="node-path">
-      <xsl:call-template name="normalize">
-        <xsl:with-param name="path" select="concat($dirname, $href-nofrag)"/>
+    <xsl:variable name="node-path-noext">
+      <xsl:call-template name="path-noext">
+        <xsl:with-param name="path">
+          <xsl:call-template name="normalize">
+            <xsl:with-param name="path" select="concat($dirname, $href-nofrag)"/>
+          </xsl:call-template>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
 
     <xsl:choose>
       <!-- Compare with extensions stripped -->
-      <xsl:when test="$node-path = $path-nofrag">
+      <xsl:when test="$node-path-noext = $path-nofrag-noext">
         <xsl:choose>
           <xsl:when test="contains(@href, '#')">
             <xsl:call-template name="selected-anchor"/>
@@ -137,6 +141,16 @@ which is then merged with other HTML by site2xhtml.xsl
   <xsl:variable name="path-nofrag">
     <xsl:call-template name="path-nofrag">
       <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="path-nofrag-noext">
+    <xsl:call-template name="path-noext">
+      <xsl:with-param name="path">
+        <xsl:call-template name="path-nofrag">
+          <xsl:with-param name="path" select="$path"/>
+        </xsl:call-template>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
 

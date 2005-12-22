@@ -22,11 +22,17 @@ probably be done with 2 lines of XQuery.
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:l="http://apache.org/forrest/linkmap/1.0">
+  <xsl:import href="pathutils.xsl"/>
 
   <xsl:param name="path" select="'index'"/>
 
   <xsl:variable name="tab">
-    <xsl:value-of select="string(//*[starts-with(@href, $path)]/@tab)"/>
+    <xsl:variable name="path-noext">
+     <xsl:call-template name="path-noext">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+    <xsl:value-of select="string(//*[starts-with(@href, $path-noext)]/@tab)"/>
   </xsl:variable>
 
   <xsl:template match="/*">

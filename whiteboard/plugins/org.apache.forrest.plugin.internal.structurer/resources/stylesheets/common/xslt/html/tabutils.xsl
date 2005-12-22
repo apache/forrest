@@ -71,7 +71,7 @@ tab2menu.xsl
     the path of the 'current' tab.
   -->
   <xsl:template name="matching-id" xmlns:l="http://apache.org/forrest/linkmap/1.0">
-    <xsl:value-of select="$site//*[starts-with(@href, $path)]/@tab"/>
+    <xsl:value-of select="$site//*[starts-with(@href, $path-noext)]/@tab"/>
   </xsl:template>
  
   <!--
