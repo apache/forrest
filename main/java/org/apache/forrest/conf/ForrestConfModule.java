@@ -133,6 +133,18 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
 		String forrestPropertiesStringURI;
 
+		// get the values from local.forrest.properties.xml
+		try {
+			forrestPropertiesStringURI = projectHome
+					+ SystemUtils.FILE_SEPARATOR + "local.forrest.properties.xml";
+
+			filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+					forrestPropertiesStringURI);
+		} catch (FileNotFoundException e) {
+			if (debugging())
+				debug("Unable to find local.forrest.properties.xml, ignoring.");
+		}
+
 		// get the values from forrest.properties.xml
 		try {
 			forrestPropertiesStringURI = projectHome
