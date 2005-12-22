@@ -22,6 +22,7 @@ tab2menu.xsl
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:include href="pathutils.xsl"/>
 
   <xsl:param name="site-file" select="'cocoon://abs-menulinks'"/>
   <xsl:variable name="site" select="document($site-file)"/>
@@ -71,7 +72,12 @@ tab2menu.xsl
     the path of the 'current' tab.
   -->
   <xsl:template name="matching-id" xmlns:l="http://apache.org/forrest/linkmap/1.0">
-    <xsl:value-of select="$site//*[starts-with(@href, $path-noext)]/@tab"/>
+    <xsl:variable name="path-noext">
+      <xsl:call-template name="path-noext">
+        <xsl:with-param name="path" select="$path"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$site//*[starts-with(@href, $path)]/@tab"/>
   </xsl:template>
  
   <!--
