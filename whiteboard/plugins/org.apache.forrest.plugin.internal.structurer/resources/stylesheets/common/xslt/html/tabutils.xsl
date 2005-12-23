@@ -77,7 +77,7 @@ tab2menu.xsl
         <xsl:with-param name="path" select="$path"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="$site//*[starts-with(@href, $path)]/@tab"/>
+    <xsl:value-of select="$site//*[starts-with(@href, $path-noext)]/@tab"/>
   </xsl:template>
  
   <!--
