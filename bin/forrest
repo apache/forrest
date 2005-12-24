@@ -37,24 +37,27 @@ fi
 
 if [ -z "$FORREST_HOME" ] ; then
   # use the location of this script to infer $FORREST_HOME
-  whoami=`basename $0`
-  whereami=`echo $0 | sed -e "s#^[^/]#\`pwd\`/&#"`
-  whereami=`dirname $whereami`
 
-  # Resolve any symlinks of the now absolute path, $whereami
-  realpath_listing=`ls -l $whereami/$whoami`
-  case "$realpath_listing" in
-    *-\>\ /*)
-      realpath=`echo $realpath_listing | sed -e "s#^.*-> ##"`
-      ;;
-    *-\>*)
-      realpath=`echo $realpath_listing | sed -e "s#^.*-> #$whereami/#"`
-      ;;
-    *)
-      realpath=$whereami/$whoami
-      ;;
-  esac
-  FORREST_HOME=`dirname "$realpath"`/..
+  thisprg="$0"
+
+  # Resolve links - $thisprg may be a symbolic link
+
+  while [ -h "$thisprg" ] ; do
+    ls=`ls -ld "$thisprg"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+
+    if expr "$link" : '/.*' > /dev/null; then
+      thisprg="$link"
+    else
+      thisprg=`dirname "$thisprg"`/"$link"
+    fi
+  done
+
+  FORREST_HOME=`dirname "$thisprg"`/..
+
+  # Make it fully qualified
+
+  FORREST_HOME=`cd "$FORREST_HOME" && pwd`
 fi
 
 # Save old ANT_HOME
@@ -94,7 +97,7 @@ export CLASSPATH
 echo "Apache Forrest.  Run 'forrest -projecthelp' to list options"
 echo
 export FORREST_HOME
-"$ANT_HOME/bin/ant" --noconfig -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -emacs $@
+"$ANT_HOME/bin/ant" --noconfig -buildfile "$ANTFILE" -Dbasedir="$PROJECT_HOME" -emacs "$@"
 RESULT=$?
 
 # ---- Restore Classpath
