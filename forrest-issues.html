@@ -195,9 +195,6 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-762%5D+Default+page+URL+for+breadcrumbs+and+site%3A+links">[FOR-762] Default page URL for breadcrumbs and site: links</a>
 </li>
 <li>
-<a href="#%5BFOR-707%5D+Document+i18n+features+of+Forrest">[FOR-707] Document i18n features of Forrest</a>
-</li>
-<li>
 <a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
 </li>
 <li>
@@ -208,6 +205,9 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-388%5D+Use+plugins+in-place+if+src+available">[FOR-388] Use plugins in-place if src available</a>
+</li>
+<li>
+<a href="#%5BFOR-707%5D+Document+i18n+features+of+Forrest">[FOR-707] Document i18n features of Forrest</a>
 </li>
 <li>
 <a href="#%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</a>
@@ -338,7 +338,69 @@ Case 3. If sitemap has match=&amp;quot;dir/index.html&amp;quot;, cocoon still is
 &lt;br&gt;
 Cocoon does not appear to assume the end node directory is index.* and thus appends no file automatically as tomcat or the http server does so it must be manually done. </p>
 </div>
-<a name="N1003B"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
+<a name="N1003B"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
+<h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-711">http://issues.apache.org/jira/browse/FOR-711</a>
+</p>
+<p>Now that we are using the locationmap extensively it is showing up just how innefficient it is. The problem is that for the majority of requests there are multiple reqeuests to the locationmap. We can make things much faster (especially on the first page request) by caching results in the locationmap.
+&lt;br&gt;
+
+&lt;br&gt;
+I think a simple cache will sufice, lets just provide a static hashmap using the hint as a key and, of course, the location as the value.
+&lt;br&gt;
+
+&lt;br&gt;
+If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
+</div>
+<a name="N10049"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
+<h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-742">http://issues.apache.org/jira/browse/FOR-742</a>
+</p>
+<p>The plugin retrieval and deployment process are not quite correct. Recently the projectInfo plugin had its version number incremented and the &amp;quot;unversioned&amp;quot; plugin now relates specifically to 0.8-dev version. That prevents 0.7 from accessing the relevant plugin.
+&lt;br&gt;
+
+&lt;br&gt;
+The solution is discussed here:
+&lt;br&gt;
+&lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
+</div>
+<a name="N10057"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
+<h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-735">http://issues.apache.org/jira/browse/FOR-735</a>
+</p>
+<p>(At this point I didn't try this scenario step by step any more; basically it is what we did to setup the site, except that we copied our project data from forrest 0.6 before trying the pdf links)
+&lt;br&gt;
+
+&lt;br&gt;
+- run forrest webapp to create an empty webapp
+&lt;br&gt;
+- configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
+&lt;br&gt;
+- the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
+</div>
+<a name="N10065"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
+<h2 class="underlined_10">[FOR-388] Use plugins in-place if src available</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-388">http://issues.apache.org/jira/browse/FOR-388</a>
+</p>
+<p>At present Forrest will attempt to download plugins even if they are available in src form in the local filesystem as part of an SVN checkout.
+&lt;br&gt;
+
+&lt;br&gt;
+Have Forrest mount plugins from designated directories in preference to downloading them wherever possible (need more than posible location for src plugins as some people may be developing their own plugins outside of Forrest)
+&lt;br&gt;
+
+&lt;br&gt;
+</p>
+</div>
+<a name="N10073"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
 <h2 class="underlined_10">[FOR-707] Document i18n features of Forrest</h2>
 <div class="section">
 <p>
@@ -357,68 +419,6 @@ Cheche wrote a blog entry on his work:
 
 &lt;br&gt;
 We could, at the very least use the locationmap to pull this content into our site [OT: I wonder if this could be a way to generate more documentation?)</p>
-</div>
-<a name="N10049"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
-<h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-711">http://issues.apache.org/jira/browse/FOR-711</a>
-</p>
-<p>Now that we are using the locationmap extensively it is showing up just how innefficient it is. The problem is that for the majority of requests there are multiple reqeuests to the locationmap. We can make things much faster (especially on the first page request) by caching results in the locationmap.
-&lt;br&gt;
-
-&lt;br&gt;
-I think a simple cache will sufice, lets just provide a static hashmap using the hint as a key and, of course, the location as the value.
-&lt;br&gt;
-
-&lt;br&gt;
-If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
-</div>
-<a name="N10057"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
-<h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-742">http://issues.apache.org/jira/browse/FOR-742</a>
-</p>
-<p>The plugin retrieval and deployment process are not quite correct. Recently the projectInfo plugin had its version number incremented and the &amp;quot;unversioned&amp;quot; plugin now relates specifically to 0.8-dev version. That prevents 0.7 from accessing the relevant plugin.
-&lt;br&gt;
-
-&lt;br&gt;
-The solution is discussed here:
-&lt;br&gt;
-&lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
-</div>
-<a name="N10065"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
-<h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-735">http://issues.apache.org/jira/browse/FOR-735</a>
-</p>
-<p>(At this point I didn't try this scenario step by step any more; basically it is what we did to setup the site, except that we copied our project data from forrest 0.6 before trying the pdf links)
-&lt;br&gt;
-
-&lt;br&gt;
-- run forrest webapp to create an empty webapp
-&lt;br&gt;
-- configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
-&lt;br&gt;
-- the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
-</div>
-<a name="N10073"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
-<h2 class="underlined_10">[FOR-388] Use plugins in-place if src available</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-388">http://issues.apache.org/jira/browse/FOR-388</a>
-</p>
-<p>At present Forrest will attempt to download plugins even if they are available in src form in the local filesystem as part of an SVN checkout.
-&lt;br&gt;
-
-&lt;br&gt;
-Have Forrest mount plugins from designated directories in preference to downloading them wherever possible (need more than posible location for src plugins as some people may be developing their own plugins outside of Forrest)
-&lt;br&gt;
-
-&lt;br&gt;
-</p>
 </div>
 <a name="N10081"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
 <h2 class="underlined_10">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</h2>
