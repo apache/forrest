@@ -145,7 +145,26 @@
           are included with the distribution (<code>cd forrest/site-author;
             forrest run</code>).
         </p>
-      </section><section id="PDF-output"><title>2.4. How can I generate one pdf-file out of the whole site or selected pages of the site?</title>
+      </section><section id="crawler"><title>2.4. 
+        Help, one of my documents is not being rendered.
+      </title>
+        <p>
+          Did you make a link to it? Forrest does not find documents by scanning
+          the filesystem to find the source documents. Rather it starts at one
+          document and crawls the links to find other documents to process.
+        </p>
+        <p>
+          There are essentially two ways to create links. Via a site.xml file to define the
+          navigation and menu structure, or via direct relative linking. See the
+          to previous FAQs.
+        </p>
+        <p>
+          Normally the source material will be local. The Forrest crawler does not follow
+          and process off-site links. The new locationmap (0.8+) enables content
+          to be drawn from remote sources.
+          
+        </p>
+      </section><section id="PDF-output"><title>2.5. How can I generate one pdf-file out of the whole site or selected pages of the site?</title>
         <p>Add the following entries to your site.xml file:</p>
         <source xml:space="preserve">
   &lt;about tab="home" label="About" href=""&gt;
@@ -159,7 +178,7 @@
           tab</link>.) </p>
         <p> This assumes that you use the <link href="site:v0.80//linking">site.xml</link> method for your
           site structure and navigation, rather than the old book.xml method. </p>
-      </section><section id="pageBreaks"><title>2.5. How do I insert page breaks into documents?</title>
+      </section><section id="pageBreaks"><title>2.6. How do I insert page breaks into documents?</title>
         <p>Page breaks do not make a great deal of sense in HTML documents intended for display on a
           screen. However, PDF documents are intended for printing and therefore page breaks can be
           important.</p>
@@ -180,16 +199,16 @@
             margin-bottom: 0; 
             page-break-after: always; 
             } </source>
-      </section><section id="clickable-email-address"><title>2.6. How can I generate html-pages to show a 'clickable' email-address (of the
+      </section><section id="clickable-email-address"><title>2.7. How can I generate html-pages to show a 'clickable' email-address (of the
         author-element)?</title>
         <p>You would override <code>
             $FORREST_HOME/main/webapp/skins/common/xslt/html/document2html.xsl</code> and edit the
           "headers/authors" template. </p>
-      </section><section id="link_raw"><title>2.7. How do I link to raw files such as config.txt and brochure.pdf? </title>
+      </section><section id="link_raw"><title>2.8. How do I link to raw files such as config.txt and brochure.pdf? </title>
         <p>Handling of raw files was significantly changed in Forrest 0.7. See 
           <link href="site:v0.70//upgrading_07/raw">Upgrading to Apache Forrest 0.7</link> for
           all the details.</p>
-      </section><section id="pdf_images"><title>2.8. Images don't display in PDFs. How do I fix this?</title>
+      </section><section id="pdf_images"><title>2.9. Images don't display in PDFs. How do I fix this?</title>
         <p> Forrest uses <link href="http://xml.apache.org/fop/">Apache FOP</link> for rendering
           PDFs. FOP cannot handle all image types natively, and requires third-party jars to be
           added. FOP natively handles BMP, GIF, JPG, TIFF and EPS (with a few limitations). FOP can
@@ -206,7 +225,7 @@
           <code>http://java.sun.com/products/java-media/jai</code>). For more info, see <link href="http://xml.apache.org/fop/graphics.html#packages">FOP Graphics Packages</link>
         </p>
         <note>Due to Sun's licensing, we cannot redistribute Jimi or JAI with Forrest.</note>
-      </section><section id="tab-index"><title>2.9.  The tab link in my site incorrectly assumes that 'index.html' is present in the
+      </section><section id="tab-index"><title>2.10.  The tab link in my site incorrectly assumes that 'index.html' is present in the
         linked-to directory. How do I fix this? </title>
         <p> In <code>tabs.xml</code>, use @href instead of @dir, and omit the trailing '/'. Which
           file to serve is then a concern of the sitemap. For example, if the "User Manual" tab
@@ -219,11 +238,11 @@
   &lt;map:match pattern="manual"&gt;
     &lt;map:redirect-to uri="manual/Introduction.html"/&gt;
   &lt;/map:match&gt;</source>
-      </section><section id="tab-site"><title>2.10. I need help with the interaction between tabs.xml and site.xml </title>
+      </section><section id="tab-site"><title>2.11. I need help with the interaction between tabs.xml and site.xml </title>
         <p>
           See the <link href="site:v0.80//linking/tab-site">tips</link>.
         </p>
-      </section><section id="defaultFileName"><title>2.11.  How can I change the default file name that Forrest will look for when I request a
+      </section><section id="defaultFileName"><title>2.12.  How can I change the default file name that Forrest will look for when I request a
         URL like <code>http://myserver</code> or <code>http://myserver/mydir/</code> ? </title>
         <p>To change the default file name from 'index.html' (default) to 'overview.html' you need to
           make the following changes:</p>
@@ -241,7 +260,7 @@
   &lt;/map:pipeline&gt;
           </source></li>
         </ol>
-      </section><section id="defaultStartPage"><title>2.12.  How can I use a start-up-page other than index.html? </title>
+      </section><section id="defaultStartPage"><title>2.13.  How can I use a start-up-page other than index.html? </title>
         <p>Forrest by default assumes that the first page (home page) of your site is named
           index.html. Which is good because most web servers are configured to look for index.html
           when you call a url like http://myserver</p>
@@ -260,12 +279,12 @@
           <li>Name the uri-attribute whatever you'd like your start page to be.</li>
           <li>Don't forget to create that page and refer to it in your site.xml</li>
         </ol>
-      </section><section id="label-entity"><title>2.13.  How to use special characters in the labels of the site.xml file? </title>
+      </section><section id="label-entity"><title>2.14.  How to use special characters in the labels of the site.xml file? </title>
         <p> Use the numeric values for character entities. For example, rather than using
             <code>&amp;ouml;</code> use <code>&amp;#246;</code>
         </p>
         <p> See the <link href="http://www.w3.org/TR/xhtml-modularization/dtd_module_defs.html#a_xhtml_character_entities">XHTML Character Entities</link> and see more discussion at <link href="http://issues.apache.org/jira/browse/FOR-244">Issue FOR-244</link>. </p>
-      </section><section id="encoding"><title>2.14. Does Forrest handle accents for non-English languages?</title>
+      </section><section id="encoding"><title>2.15. Does Forrest handle accents for non-English languages?</title>
         <p>Yes, Forrest can process text in any language, so you can include:</p>
         <ul>
           <li>accents: á é í ó ú</li>
@@ -302,7 +321,7 @@
         <p>Here are some references which explain further: <link href="http://orixo.com/events/gt2004/bios.html#torsten">GT2004 presentation by Torsten
             Schlabach</link> and <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode
             resources</link>. </p>
-      </section><section id="xml-entities"><title>2.15. How to use XML entities, for example string
+      </section><section id="xml-entities"><title>2.16. How to use XML entities, for example string
         replacement?</title>
         <p>
           A set of symbols is available. See the demonstration
@@ -312,7 +331,7 @@
           "My Project Name&#8482;".
           Avoid lengthy typing and potential spelling errors.
         </p>
-      </section><section id="cleanSite"><title>2.16.  How to make Forrest clean up the project build directories? </title>
+      </section><section id="cleanSite"><title>2.17.  How to make Forrest clean up the project build directories? </title>
         <p>
           By default Forrest does not clean its build directories in the project
           workspaces. This enables Cocoon to use its disk cache to speed up
@@ -325,7 +344,7 @@
         include the Cocoon cache and the Cocoon logs).
         Doing 'forrest clean' will remove both sections.
         </p>
-      </section><section id="i18n"><title>2.17. How can I internationalise (i18n) my content?</title>
+      </section><section id="i18n"><title>2.18. How can I internationalise (i18n) my content?</title>
         <p>The i18n features of Forrest are still under development (as of 0.7) however there are
         some features available. For example, navigation menus can be i18n'd (see fresh-site for an
         example). Currently, <link href="http://issues.apache.org/jira/browse/FOR-506">work is underway</link> to 
@@ -334,7 +353,7 @@
         <p>All internationalistation of tokens in, for example, the skins and the menus, is carried out
         by the <link href="http://cocoon.apache.org/2.1/userdocs/transformers/i18n-transformer.html">Cocoon i18n 
         Transformer</link>. You can see an example of how it works in the above linked issue.</p>
-      </section><section id="rawTML"><title>2.18. How can I include HTML content that is not to be skinned by Forrest?</title>
+      </section><section id="rawTML"><title>2.19. How can I include HTML content that is not to be skinned by Forrest?</title>
         <p>To serve, for example a legacy HTML site, add something like the following 
         to your project's sitemap and place the source content at the
         <code>src/documentation/content/xdocs/old_site/</code> directory.</p>
@@ -361,7 +380,7 @@
           <li>forrest</li>
           <li><link href="http://localhost:8888/samples/linking.html#no-decoration">Read the doc</link></li>
         </ol>
-      </section><section id="javascript"><title>2.19. How to include additional Javascript and CSS files?</title>
+      </section><section id="javascript"><title>2.20. How to include additional Javascript and CSS files?</title>
         <p>
           Place various resources (e.g. javascript, css) into the
           "project skins" directory. The default forrest.properties
