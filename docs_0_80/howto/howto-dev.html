@@ -386,10 +386,13 @@ document.write("Last Published: " + document.lastModified);
 <a href="#debug">Debugging and profiling techniques</a>
 <ul class="minitoc">
 <li>
-<a href="#debug-cocoon-profiler">Using the Cocoon sitemap profiler</a>
+<a href="#debug-cocoon-profiler">Using Cocoon sitemap profiler</a>
 </li>
 <li>
-<a href="#debug-logtransformer">Using the Cocoon LogTransformer</a>
+<a href="#debug-sitemap-exec">Using Cocoon sitemap execution logger</a>
+</li>
+<li>
+<a href="#debug-logtransformer">Using Cocoon LogTransformer</a>
 </li>
 <li>
 <a href="#debug-links">Finding broken internal links</a>
@@ -687,7 +690,7 @@ forrest-trunk
         configuration.
       </p>
 <a name="N1010A"></a><a name="debug-cocoon-profiler"></a>
-<h4>Using the Cocoon sitemap profiler</h4>
+<h4>Using Cocoon sitemap profiler</h4>
 <p>
           Cocoon provides a simple profiler to analyse itself.
           This enables us to list the various sitemap pipelines and
@@ -717,8 +720,16 @@ forrest-trunk
           NOTE: Do not forget to turn off the profiler in 
           <span class="codefrag">main/webapp/sitemap.xmap</span> when finished.
         </p>
-<a name="N10126"></a><a name="debug-logtransformer"></a>
-<h4>Using the Cocoon LogTransformer</h4>
+<a name="N10126"></a><a name="debug-sitemap-exec"></a>
+<h4>Using Cocoon sitemap execution logger</h4>
+<p>
+          In main/webapp/WEB-INF/xconf/forrest-core.xconf
+          search for "sitemap execution" and uncomment the component.
+          For each sitemap component that is executed, a message will go to
+          WEB-INF/logs/debug.log
+        </p>
+<a name="N10130"></a><a name="debug-logtransformer"></a>
+<h4>Using Cocoon LogTransformer</h4>
 <p>
           LogTransformers can be inserted in the sitemaps. This will write
           the sax events at that point into a named log file.
@@ -747,7 +758,7 @@ forrest-trunk
           path is being taken through the sitemap. Add various LogTransformers
           with different filenames and see which one gets triggered.
         </p>
-<a name="N1013D"></a><a name="debug-links"></a>
+<a name="N10147"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set.
@@ -768,7 +779,7 @@ forrest-trunk
           configuration file or the link in your source document is not
           using the correct name for the "site:..." value.
         </p>
-<a name="N10151"></a><a name="tips-debug"></a>
+<a name="N1015B"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -778,13 +789,13 @@ forrest-trunk
           </li>
         
 </ul>
-<a name="N1015F"></a><a name="find"></a>
+<a name="N10169"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N10168"></a><a name="find-scenario-1"></a>
+<a name="N10172"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -827,7 +838,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N1018A"></a><a name="tips-find"></a>
+<a name="N10194"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -837,31 +848,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N1019A"></a><a name="Frequently Asked Questions"></a>
+<a name="N101A4"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N1019E"></a><a name="1+General+issues"></a>
+<a name="N101A8"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N101A2"></a><a name="1.1+FAQ+1"></a>
+<a name="N101AC"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N101AA"></a><a name="2+Other+issues"></a>
+<a name="N101B4"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N101AE"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N101B8"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N101B6"></a><a name="Tips"></a>
+<a name="N101C0"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N101BE"></a><a name="tip-howto"></a>
+<a name="N101C8"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -870,7 +881,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N101C8"></a><a name="References"></a>
+<a name="N101D2"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
