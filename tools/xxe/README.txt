@@ -19,7 +19,7 @@ XXE Forrest Config
 
 Works with:
 ===========
-* XXE V2.5p3+
+* XXE V3.0p1+ (version 1.3 of the tool works with XXE V2.5p3+)
 * Forrest 0.5+
 
 
@@ -32,16 +32,11 @@ Upgrading
 
 Installing
 ==========
-* For XXEv2.5p3+
-  * Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
-    OR
-  * Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only in version 1.3+ of this config)
-    From version 1.3, this is the recommended installation location, as it permits upgrading XXE without having to reinstall this config
-* For XXEv2.5p2 or prior you also need to do
-  * Open XXE
-  * select Options > Options > Schema > Add File
-  * Specify the XML Catalog file:
-  * "[FORREST_HOME]/main/webapp/resources/schema/catalog.xcat" (where [FORREST_HOME] is the value of your FORREST_HOME environment variable)
+
+* Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
+  OR
+* Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only in version 1.3+ of this config)
+  For version 1.3+ of this tool, it is the recommended installation location, as it permits upgrading XXE without having to reinstall the tool
 
 Building
 ========
@@ -51,6 +46,12 @@ To build the configuration:
 
 History
 =======
+
+1.4:
+----
+- Updated the tool to work with XXE 3.0p1. This change is backwards INCOMPATIBLE, therefore the tool now requires XXE 3.0p1+
+- Added XXE-provided default rendering of tables
+
 1.3:
 ----
 - Fixed a bug that prevented this config to work with XXE 3.x (FOR-720)
