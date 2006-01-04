@@ -43,13 +43,12 @@ import java.util.Map;
 public class WriteToLocalBuildAction extends ServiceableAction implements ThreadSafe {
     Request request;
             
-    public String writeFile() {
-      String stagingDir = "D:\\openSource\\forrest\\whiteboard\\plugins\\org.apache.forrest.plugin.internal.DevTools\\build\\site";
+    public String writeFile(String stagingDir) {
       String url = request.getParameter("URI");
       String stagedFile = stagingDir + "/" + url;
-    
+          
       HttpClient client = new HttpClient();
-      GetMethod get = new GetMethod("http://localhost:8888/" + url);
+      GetMethod get = new GetMethod("http://" + request.getServerName() + ":" + request.getServerPort() +"/" + url);
       
       try {
         int statusCode = client.executeMethod(get);
@@ -75,9 +74,11 @@ public class WriteToLocalBuildAction extends ServiceableAction implements Thread
     
     public Map act (Redirector redirector, SourceResolver resolver, Map objectModel, String src, Parameters par) throws Exception {      
         Map response = new HashMap();
+        String stagingDir = par.getParameter("staging-dir", "");
         
         request = ObjectModelHelper.getRequest(objectModel);
-        response.put("message", writeFile());
+        response.put("message", writeFile(stagingDir));
+        response.put("staging.dir", stagingDir);
 
         return response;
     }

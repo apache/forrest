@@ -22,6 +22,8 @@
   
   <!-- The response from the save action -->
   <xsl:param name="response"/>
+  <!-- The Staging Dir -->
+  <xsl:param name="staging-dir"/>
   
   <xsl:template match="h:request">
     <document>
@@ -45,6 +47,10 @@
         <section>
           <title>Details</title>
           <table>
+            <tr>
+              <th>Staging Directory</th>
+              <td><xsl:value-of select="$staging-dir"/></td>
+            </tr>
             <tr>
               <th>Staged URL</th>
               <td>/<xsl:value-of select="h:requestParameters/h:parameter[@name='URI']/h:value"/></td>
