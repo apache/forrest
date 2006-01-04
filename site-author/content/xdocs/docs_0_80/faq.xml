@@ -756,6 +756,44 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         file. Don't forget to ensure the property is uncommented in that file.</p>
       </answer>
     </faq>
+    <faq id="checksums">
+      <question>How do I enable Cocoon's document checksum feature?</question>
+      <answer>
+        <p>
+        Why might you want to do this?  There is really no effect
+        on Cocoon processing, but a little time can be
+        saved on filesystem writes, which will accumulate
+        to a big savings for a site with thousands of files.
+        </p>
+        <p>
+        There was some discussion about this on the Forrest developer mailing
+        list.  An archive of these discussions can be found here:
+        <link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;s=cocoon+checksum">Cocoon Checksum</link> 
+        Specifically note that this feature only stops Cocoon from writing to 
+        disk that which is the same as the existing file.  Cocoon still spends
+        the same amount of time generating the content as it would if checksums
+        were not enabled.
+        </p>
+        <p>
+        There are two steps required to enable checksums within Cocoon and 
+        Forrest.  The first is to add this line to your forrest.properties
+        file: 
+        <code>project.configfile=${project.home}/src/documentation/conf/cli.xconf</code>
+        </p>
+        <p>
+        The second is to copy a template of this file from the Forrest
+        tree under <code>main/site-author/conf/cli.xconf</code> to the
+        <code>src/documentation/conf</code> directory.
+        </p>
+        <p>
+        An optional last step is to edit the cli.xconf file to specify
+        the directory where the checksums file will be stored.  By default this
+        file is stored in the forrest tree and not in your site's tree. 
+        Locate the <code>checksums-uri</code> tag within cli.xconf and replace
+        the contents with an absolute path and filename for the checksums file.
+        </p>
+      </answer>
+    </faq>
   </part>
   <part id="old_faqs">
     <title>Older version: 0.6</title>
