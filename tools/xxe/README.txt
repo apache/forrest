@@ -17,16 +17,28 @@
 XXE Forrest Config
 ==================
 
-Works with:
-===========
-* XXE V3.0p1+ (version 1.3 of the tool works with XXE V2.5p3+)
+NOTE: This is not a particular endorsement of XXE over other xml editors.
+      It is just that we provide this tool to take advantage of XXE.
+
+XMLmind XML Editor is a validating XML editor featuring a word processor-like
+view. We support the Forrest plugin for XXE only, please direct all XXE-related
+questions to XXE support or mailing lists.
+
+
+Requirements:
+=============
+* XXE 3.0p1+ (version 1.3 of the tool works with XXE version 2.5p3 - 3.0)
 * Forrest 0.5+
 
 
 Upgrading
 =========
-* Delete the 'forrest' directory from the XXE application config directory. (e.g. D:\Program Files\XMLmind_XML_Editor\config)
-  * if you have installed the config in your XXE user directory (see below), this step is not necessary
+* Delete the 'forrest' directory from the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
+  OR
+  Delete the 'forrest' directory from your user XXE config directory:
+    * *nix-es: ~/.xxe/addon/
+    * Windows: %SystemDrive%\Documents and Settings\user\Application Data\XMLmind\XMLeditor\
+  depending on where you installed the previous version of the tool
 * Install normally
 
 
@@ -35,21 +47,29 @@ Installing
 
 * Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
   OR
-* Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only in version 1.3+ of this config)
-  For version 1.3+ of this tool, it is the recommended installation location, as it permits upgrading XXE without having to reinstall the tool
+* Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only for version 1.3+ of this config)
+  For version 1.3+ of this tool, this is the recommended installation location, as it permits upgrading XXE without having to reinstall the tool
+  NOTE: This location is new for XXE 2.10, and is not tested with earlier releases!
 
-Building
-========
+
+Developer Instructions
+======================
 To build the configuration:
 * set the FORREST_HOME environment variable
 * run 'ant' in this directory
+
+To work directly with the SVN version, check out
+http://svn.apache.org/repos/asf/forrest/trunk/tools/xxe/ into the 'forrest'
+folder in the XXE 'addon' folder. Run the build there to copy the DTDs
+
 
 History
 =======
 
 1.4:
 ----
-- Updated the tool to work with XXE 3.0p1. This change is backwards INCOMPATIBLE, therefore the tool now requires XXE 3.0p1+
+- Updated the tool to work with XXE 3.0p1 (FOR-779).
+  NOTE: This change is backwards INCOMPATIBLE, therefore the tool now requires XXE 3.0p1+
 - Added XXE-provided default rendering of tables
 
 1.3:
@@ -70,4 +90,4 @@ Apache Forrest
 Instructions for other Forrest XML Editors
     http://forrest.apache.org/docs/catalog.html
 XXE Custom Configuration Info
-    http://www.xmlmind.com/xmleditor/_distrib/docs/configure/index.html
+    http://www.xmlmind.com/xmleditor/_distrib/doc/configure/index.html
