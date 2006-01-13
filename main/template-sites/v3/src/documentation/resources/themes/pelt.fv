@@ -19,7 +19,29 @@
 <forrest:views 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+
+  <!-- The following variables are used to contact data models and/or contracts. -->
+  <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
+  <jx:set var="getRequestExstension" value="#{$cocoon/parameters/getRequestExstension}" />
+
+  <forrest:view type="html" hooksXpath="/html/body">
+    <!-- 
+        @type defines this structurer to html.
+        @hooksXpath defines where all hooks will be injected (as prefix).
+        -->
+    <forrest:contract name="branding-css-links">
+      <!-- More information around this contract
+        http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
+        -->
+      <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
+      <forrest:property name="branding-css-links-input">
+        <css url="common.css" media="screen" rel="alternate stylesheet" theme="common"/>
+        <css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="common"/>
+        <css url="pelt.basic.css" media="screen" theme="Pelt"/>
+        <css url="pelt.screen.css" media="screen" theme="Pelt"/>
+        <css url="pelt.print.css" media="print"/>
+      </forrest:property>
+    </forrest:contract>
   <!--
     <forrest:css url="common.css" media="screen" rel="alternate stylesheet" theme="common"/>
     <forrest:css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="common"/>
@@ -195,16 +217,8 @@
       </forrest:properties>
     </forrest:contract>
     -->
+    <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info"/>
 
-    <!--
-    <forrest:contract name="siteinfo-meta">
-      <forrest:properties contract="siteinfo-meta">
-        <forrest:property name="siteinfo-meta" nugget="get.build.info">
-          <jx:import uri="cocoon://build-info"/>
-        </forrest:property>
-      </forrest:properties>
-    </forrest:contract>
--->
 <!--
     <forrest:contract name="siteinfo-meta-navigation">
       <forrest:properties contract="siteinfo-meta-navigation">
@@ -221,8 +235,9 @@
       </forrest:properties>
     </forrest:contract>
   -->
-  <!--
+
     <forrest:hook name="container">
+   <!--
       <forrest:contract name="branding-breadcrumbs">
         <forrest:properties contract="branding-breadcrumbs">
           <forrest:property name="branding-breadcrumbs">
@@ -234,43 +249,32 @@
           </forrest:property>
         </forrest:properties>
       </forrest:contract>
+      -->
       <forrest:hook name="header">
-        <forrest:contract name="branding-tagline">
-          <forrest:properties contract="branding-tagline">
-            <forrest:property name="branding-tagline-name">new 
-              seed v2</forrest:property>
-            <forrest:property name="branding-tagline-tagline">powered by 
-              forrest:views v2</forrest:property>
-          </forrest:properties>
+      <forrest:contract name="branding-tagline">
+          <forrest:property name="branding-tagline-name">new 
+            seed</forrest:property>
+          <forrest:property name="branding-tagline-tagline">powered by the 
+            dispatcher</forrest:property>
         </forrest:contract>
+
         <forrest:hook class="logo">
           <forrest:contract name="branding-logo">
-            <forrest:properties contract="branding-logo">
-              <forrest:property name="branding-logo-name">
-                MyGroup</forrest:property>
-              <forrest:property name="branding-logo-description">MyGroup 
-                Description</forrest:property>
-              <forrest:property name="branding-logo-url">
-                http://mygroup.org/</forrest:property>
-              <forrest:property name="branding-logo-logo">
-                images/group.png</forrest:property>
-            </forrest:properties>
-          </forrest:contract>
-          </forrest:hook>
-          <forrest:hook class="logo">
-          <forrest:contract name="branding-logo">
-            <forrest:properties contract="branding-logo">
-              <forrest:property name="branding-logo-name">
-                MyProject</forrest:property>
-              <forrest:property name="branding-logo-description">MyProject 
-                Description</forrest:property>
-              <forrest:property name="branding-logo-url">
-                http://myproj.mygroup.org/</forrest:property>
-              <forrest:property name="branding-logo-logo">
-                images/project.png</forrest:property>
-            </forrest:properties>
+            <forrest:property name="branding-logo-name">MyGroup</forrest:property>
+            <forrest:property name="branding-logo-description">MyGroup Description</forrest:property>
+            <forrest:property name="branding-logo-url">http://mygroup.org/</forrest:property>
+            <forrest:property name="branding-logo-logo">images/group.png</forrest:property>
           </forrest:contract>
         </forrest:hook>
+        <forrest:hook class="logo">
+          <forrest:contract name="branding-logo">
+            <forrest:property name="branding-logo-name">MyProject</forrest:property>
+            <forrest:property name="branding-logo-description">MyProject Description</forrest:property>
+            <forrest:property name="branding-logo-url">http://myproj.mygroup.org/</forrest:property>
+            <forrest:property name="branding-logo-logo">images/project.png</forrest:property>
+          </forrest:contract>
+        </forrest:hook>
+        <!--
         <forrest:contract name="search-input">
           <forrest:properties contract="search-input">
             <forrest:property name="input-size">25</forrest:property>
@@ -298,7 +302,9 @@
             <forrest:contract name="siteinfo-current-time"/>
           </forrest:hook>
         </forrest:hook>
+        -->
       </forrest:hook>
+      <!--
       <forrest:hook name="page">
         <forrest:contract name="branding-breadcrumbs">
           <forrest:properties contract="branding-breadcrumbs">
@@ -487,8 +493,9 @@
         </forrest:contract>
 
       </forrest:hook>
+-->
     </forrest:hook>
-            -->
+
   </forrest:view>
 </forrest:views>
 
