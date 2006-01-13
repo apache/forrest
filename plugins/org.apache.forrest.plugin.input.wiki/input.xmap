@@ -36,9 +36,9 @@
   <map:resources>
     <map:resource name="file-resolver">
       <map:select type="exists">
-        <map:when test="{project:content.xdocs}{uri}.moinwiki">
+        <map:when test="{lm:project.{uri}.moinwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{lm:{1}{2}.moinwiki}" />
+            <map:generate type="text2xml" src="{lm:project.{1}{2}.moinwiki}" />
             <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
             <map:transform type="xsltc" 
@@ -49,7 +49,7 @@
             <map:serialize type="xml-document"/>
           </map:match>
         </map:when>
-        <map:when test="{project:content.xdocs}{uri}.jspwiki">
+        <map:when test="{lm:project.{uri}.jspwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{lm:project.{1}{2}.jspwiki}" />
             <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
@@ -62,13 +62,13 @@
             <map:serialize type="xml-document"/>
           </map:match>
         </map:when>
-        <map:when test="{project:content.xdocs}{uri}.cwiki">
+        <map:when test="{lm:project.{uri}.cwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
             <map:generate type="text2xml" src="{lm:project.{1}{2}.cwiki}" />
             <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
             <map:transform type="xsltc" 
-              src="{lm:wiki.transform.wiki.xdoc}">
+              src="{lm:wiki.transform.wiki2xdoc}">
               <map:parameter name="name" value="{2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
@@ -120,7 +120,7 @@
             <map:transform               src="{lm:wiki.transform.text4regex}"/>
             <map:transform type="lexer"  src="{lm:wiki.grammar.regex.xlex}"/>
             <map:transform type="parser" src="{lm:wiki.grammar.regex.xgrm}"/>
-            <map:transform               src="{lm:wiki.transform.grm.xlex}"/>
+            <map:transform               src="{lm:wiki.transform.grm.xgrm}"/>
             <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
