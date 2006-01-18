@@ -157,6 +157,33 @@ public class DispatcherHelper extends Beans {
 
     }
 
+    /**
+     * setAttributesXPathWithPosition(Attributes attr, String path, int position) generates an XPath with the supplied attributes
+     * and add the condition on the position() to avoid confusion with hooks using the same name.
+     * @param attr Attributes of the XPath
+     * @param path The path
+     * @param position The position of the node
+     * @throws DOMException
+     */
+    public String setAttributesXPathWithPosition(Attributes attr, String path, int position)
+            throws DOMException {
+        String xpath = "[";
+        if (attr.getLength() > 0) {
+            for (int i = 0; i < attr.getLength(); i++) {
+                String localName = attr.getLocalName(i);
+                String value = attr.getValue(i);
+                xpath = xpath + "@" + localName + "='" + value + "'";
+                if (i < (attr.getLength() )) {
+                    xpath = xpath + " and ";
+                }
+            }
+            xpath = xpath + " position()=" + position + "]";
+            path = path + xpath;
+        }
+        return path;
+
+    }
+
     public DispatcherHelper(ServiceManager manager)
             throws ParserConfigurationException {
         this.manager = manager;

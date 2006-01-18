@@ -185,6 +185,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private String hooksXSL;
 
+    private HashMap hooksPosition;
+
     private HashMap parameterHelper;
 
     private SourceResolver m_resolver;
@@ -273,6 +275,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         }
         storedPrefixMap = new HashMap();
         this.parameterHelper = new HashMap();
+
+        this.hooksPosition = new HashMap();
 
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
@@ -391,8 +395,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         /* create a DOM node from the current sax event */
         Element currentElement = dispatcher.getDocument().createElement(name);
         dispatcherHelper.setAttributesDOM(attr, currentElement);
-        String tempPath = path + "/" + name;
-        tempPath = dispatcherHelper.setAttributesXPath(attr, tempPath);
+        String tempPathWithoutAttr = path + "/" + name;
+        String tempPath = dispatcherHelper.setAttributesXPath(attr, tempPathWithoutAttr);
+        // If the hook has already been met, we use the position in the XPath to avoid confusion ...
+        if( hooksPosition.containsKey( tempPath ) )
+        {
+          int pos = ((Integer)hooksPosition.get( tempPath )).intValue() + 1;
+          hooksPosition.put( tempPath, new Integer( pos ) );
+          tempPath = dispatcherHelper.setAttributesXPathWithPosition(attr, tempPathWithoutAttr, pos );
+        }
+        else
+        {
+          hooksPosition.put( tempPath, new Integer( 1 ) ) ;
+        }
         if (path == null || path.equals("")) {
             path = name;
             this.rootNode.appendChild(currentElement);
