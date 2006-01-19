@@ -90,6 +90,10 @@
   <xsl:template match="note">
     <p><xsl:apply-templates/></p>
   </xsl:template>
+  
+  <xsl:template match="geoPoint">
+    <p>Latitude: <xsl:apply-templates select="latitude"/> Longitude: <xsl:apply-templates select="longitude"/></p>
+  </xsl:template>
 
   <xsl:template match="id | title | place | url"/>
 
