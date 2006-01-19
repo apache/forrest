@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2006 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<howto>
+  <header>
+   <title>Dispatcher quickstart</title>
+    <version>0.1</version>
+    <last-modified-content-date date="2006-01-19" />
+  </header>
+
+  <audience title="Intended Audience">
+    <p>People who are helping to develop the Dispatcher.</p>
+    <warning> The "Dispatcher" (previously known as "Views") is new functionality which is 
+      still in development phase. That is why it is in the "whiteboard" section 
+      of the Forrest distribution. This document will also need to change to keep pace.
+    </warning>
+  </audience>
+  
+  <purpose title="Purpose">
+    <p>
+      This document will get you started. We will Dispatcher-enable an
+      existing site and show how to add/remove ready-made contacts.
+      Then we will discuss how add your own new contracts.
+    </p>
+  </purpose>
+
+  <prerequisites title="Prerequisites">
+    <ul>
+      <li>You have an existing forrest site and want to try the
+        new Dispatcher. Otherwise create a 'forrest seed-sample' site.</li>
+      <li>Read <a href="site:howto/dispatcher/install">How to install the "dispatcher"</a>. </li>
+    </ul>
+  </prerequisites>
+
+  <steps title="Steps">
+    <note> When developing with the dispatcher we assume you are using 'forrest 
+      run' and the following workflow "change files -&gt; refresh browser".<br/> 
+      Installing a mozilla browser and the 
+      <a href="site:forrestbar">Forrestbar</a> helps a lot with developing,
+      but is not necessary.
+    </note>
+
+    <section id="enable">
+      <title>Dispatcher-enable the existing site</title>
+      <p>These steps were fully described in the 
+        <a href="site:howto/dispatcher/install">How to install the "dispatcher"</a>.
+      </p>
+      <ul>
+        <li>Add the structurer and themer plugins to forrest.properties</li>
+        <li>Deploy structurer plugins with etc/structurer.sh</li>
+        <li>localhost:8888/index.html ... fantastic. See the default view.</li>
+      </ul>
+    </section>
+
+    <section id="another-theme">
+      <title>Use another theme</title>
+      <ul>
+        <li>Add project.theme=pelt to forrest.properties</li>
+        <li>Re-start 'forrest run'</li>
+        <li>localhost:8888/index.html ... See the new view.</li>
+      </ul>
+    </section>
+
+    <section id="our-structurer">
+      <title>Create our own structurer by copy-and-customise</title>
+      <p>
+        Copy the default structurer for the pelt theme and make local changes.
+      </p>
+      <note>
+        At this stage of rapid development of the Dispatcher, be sure to keep
+        your copy synchronised. Use 'diff' against the known svn version of
+        the core pelt.fv to track your local changes.
+        Also please consider contributing new contracts and changes to the
+        default structurers to the Forrest projects. That eases your local
+        version management and everyone will benefit.
+      </note>
+      <ul>
+        <li>Copy THEMER_PLUGIN/resources/themes/pelt.fv into your project at
+          PROJECT_HOME/src/documentation/resources/themes/pelt.fv
+          (create the new directory folder first).
+        </li>
+        <li>Re-start 'forrest run'</li>
+        <li>localhost:8888/index.html ... See the same view, now structured
+          by us.
+        </li>
+      </ul>
+      <p>
+        From here on there is no need to re-start 'forrest run'. Just edit
+        the structurer and see the effect.
+      </p>
+    </section>
+
+    <section id="remove-default-contract">
+      <title>Remove a default contract</title>
+      <ul>
+        <li>Remove one of the search boxes. Edit your pelt.fv and find the
+          "search-input" contract (there are two). Comment one out.
+        </li>
+      </ul>
+    </section>
+
+    <section id="add-default-contract">
+      <title>Add a default contract</title>
+      <p>
+        Forrest provides many default contracts. If you are using the
+        Forrestbar then choose "Devs =&gt; ls.contracts". Otherwise visit
+        localhost:8888/ls.contracts.html
+      </p>
+      <ul>
+        <li>
+          See the usage detail for your chosen contract via the abovementioned list.
+          e.g. "siteinfo-compliance-links"
+        </li>
+        <li>
+          Insert it at the appropriate point in your structurer. Note that it
+          will need to go inside the appropriate CSS hook, e.g.
+        <source><![CDATA[  ...
+  <forrest:hook name="footer">
+    <forrest:contract name="siteinfo-compliance-links"/>
+    ...
+]]></source>
+        </li>
+      </ul>
+      <p>
+        Notice that you did not need to copy any other code to your project space.
+        Forrest finds the default contract in its core (currently the Themer plugin).
+      </p>
+    </section>
+
+    <section id="add-project-contract">
+      <title>Add a new project contract</title>
+      <warning>
+        Carefully consider the purpose of your contracts. If they are useful
+        in a wider context, then they belong in plugins or the core of Forrest.
+        See below for further discussion on this important topic.
+      </warning>
+      <p>
+        Project-based contracts are defined in theme-specific and
+        output-format-specific directory structure, e.g.
+        PROJECT_HOME/src/documentation/resources/themes/THEME_NAME/OUTPUT_FORMAT/
+      </p>
+      <p>
+       Project-based contracts common to all themes go in
+        PROJECT_HOME/src/documentation/resources/themes/common/OUTPUT_FORMAT/
+      </p>
+      <p>
+        To get started quickly (it is not a project-based contract but a demo),
+        copy one of the default contracts. e.g. copy siteinfo-current-time.ft to become siteinfo-doodad.ft ...
+      </p>
+      <ul>
+        <li>
+          Copy THEMER_PLUGIN/resources/themes/common/html/siteinfo-current-time.ft
+          into your project at
+          PROJECT_HOME/src/documentation/resources/themes/common/html/siteinfo-doodad.ft
+          (create the new directory folders first).
+        </li>
+        <li>
+          Edit it to suit. Replace all occurrences of "siteinfo-current-time" with
+          "siteinfo-doodad" and make your other changes (e.g. the text and the
+          javascript function).
+        </li>
+        <li>
+          Declare your new contract in your structurer as done above for adding a
+          default contract.
+        </li>
+      </ul>
+      <p>
+        See a list of your project-based contracts and their usage notes via 
+        Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
+        localhost:8888/ls.contracts.project.html
+      </p>
+    </section>
+
+<!--
+    <section id="newSection">
+      <title>newSection</title>
+      <ul>
+        <li></li>
+      </ul>
+    </section>
+-->
+
+<!--
+    <section id="notes">
+      <title>Notes</title>
+        <source><![CDATA[
+
+]]></source>
+    </section>
+-->
+
+    <section id="manage">
+      <title>Decide how to manage your contracts</title>
+<fixme author="crossley">
+Glean content from Ross' discussion:
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=113748831226697">Re: Dispatcher quickstart</a>.
+</fixme>
+    </section>
+  </steps>
+  <extension title="Further Reading">
+    <p> Congratulations you are now able to work with the Dispatcher. From here 
+      we recommend to read the following How-Tos: </p>
+    <ul>
+      <li>
+        <a href="site:howto/dispatcher/dsl">How to use the structurer</a>
+      </li>
+      <li>
+        <a href="site:howto/dispatcher/contracts">Create your own contract 
+          implementation</a>
+      </li>
+    </ul>
+  </extension>
+  <feedback title="Feedback">
+    <p> Please provide feedback about this document via the <a href="site:mail-lists">mailing lists</a>. </p>
+  </feedback>
+</howto>
