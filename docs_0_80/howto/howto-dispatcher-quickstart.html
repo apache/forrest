@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How to modify the color of generated corner images (v0.8-dev)</title>
+<title>Dispatcher quickstart (v0.8-dev)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
@@ -172,8 +172,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-editcss.html">Edit CSS (WYSIWYG)</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">CSS corner SVG</div>
+<div class="menuitem">
+<a href="../../docs_0_80/howto/howto-corner-images.html">CSS corner SVG</a>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-forrest-from-maven.html">Maven Integration</a>
@@ -199,16 +199,16 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../docs_0_80/howto/multi/step3.html">Step 3</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.1.15.12', '../../skin/')" id="menu_1.1.15.12Title" class="menutitle">Dispatcher</div>
-<div id="menu_1.1.15.12" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.1.15.12', '../../skin/')" id="menu_selected_1.1.15.12Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">Dispatcher</div>
+<div id="menu_selected_1.1.15.12" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-structurer-install.html">Install</a>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-structurer-dsl.html">Structurer</a>
 </div>
-<div class="menuitem">
-<a href="../../docs_0_80/howto/howto-dispatcher-quickstart.html">Quickstart</a>
+<div class="menupage">
+<div class="menupagetitle">Quickstart</div>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-structurer-contracts.html">Contracts</a>
@@ -307,7 +307,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="howto-corner-images.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="howto-dispatcher-quickstart.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -315,11 +315,7 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How to modify the color of generated corner images</h1>
-<div class="abstract">
-    This How-To describes how to modify the corner images that appear in
-    the menu and tabs of the skins.
-  </div>
+<h1>Dispatcher quickstart</h1>
 <div id="motd-area">
         This is documentation for development version v0.8
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
@@ -338,15 +334,30 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#css-files">Understand how corner images are named (the contract)</a>
+<a href="#enable">Dispatcher-enable the existing site</a>
 </li>
 <li>
-<a href="#skinconfig">Modifying the skinconf.xml of your project</a>
+<a href="#another-theme">Use another theme</a>
 </li>
 <li>
-<a href="#css_modify">Modifying .css files</a>
+<a href="#our-structurer">Create our own structurer by copy-and-customise</a>
+</li>
+<li>
+<a href="#remove-default-contract">Remove a default contract</a>
+</li>
+<li>
+<a href="#add-default-contract">Add a default contract</a>
+</li>
+<li>
+<a href="#add-project-contract">Add a new project contract</a>
+</li>
+<li>
+<a href="#manage">Decide how to manage your contracts</a>
 </li>
 </ul>
+</li>
+<li>
+<a href="#Further Reading">Further Reading</a>
 </li>
 <li>
 <a href="#Feedback">Feedback</a>
@@ -356,322 +367,231 @@ document.write("Last Published: " + document.lastModified);
 <a name="N10010"></a><a name="Intended Audience"></a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
-<p>
-      Users who want to change the colors of the corner images in the
-      output html documents.
-    </p>
-<p>
-      This explanation is also useful for skin developers to understand
-      the corner image generation process.
-    </p>
+<p>People who are helping to develop the Dispatcher.</p>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content"> The "Dispatcher" (previously known as "Views") is new functionality which is 
+      still in development phase. That is why it is in the "whiteboard" section 
+      of the Forrest distribution. This document will also need to change to keep pace.
+    </div>
+</div>
 </div>
 <a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      Forrest renders the corner images through
-      <a href="http://www.w3.org/TR/SVG/">Scalable Vector Graphics (SVG)</a>.
-      It may be necessary to change the color of
-      the corner images to be suitable for your own skin colors.
+      This document will get you started. We will Dispatcher-enable an
+      existing site and show how to add/remove ready-made contacts.
+      Then we will discuss how add your own new contracts.
     </p>
 </div>
-<a name="N10027"></a><a name="Prerequisites"></a>
+<a name="N10023"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
       
-<li>Understand how to use the skinconf.xml file to change the appearance
-      of the output documents.</li>
+<li>You have an existing forrest site and want to try the
+        new Dispatcher. Otherwise create a 'forrest seed-sample' site.</li>
       
-<li>Understand how to create or modify skins by following the
-      <a href="../../docs_0_80/your-project.html">Using Forrest</a> document
-       (topic "<a href="../../docs_0_80/your-project.html#skins">Forrest skins</a>").</li>
+<li>Read <a href="../../docs_0_80/howto/howto-structurer-install.html">How to install the "dispatcher"</a>. </li>
     
 </ul>
 </div>
-<a name="N1003D"></a><a name="Steps"></a>
+<a name="N10035"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
-<p>
-      The procedure outlined below provides an understanding of how corner
-      images are named (the contract) and then shows how to define new
-      colors for these images by modifying the
-      <span class="codefrag">src/documentation/skinconf.xml</span> of a project.
-    </p>
-<a name="N10048"></a><a name="css-files"></a>
-<h3 class="underlined_5">Understand how corner images are named (the contract)</h3>
-<p>
-        The corner images are referenced in some .css files of the
-        above-named skins; for example, in screen.css of the pelt skin:
-      </p>
-<pre class="code">
-/*Example from screen.css of pelt*/
-...
-/**
-* Round corner
-*/
-#roundtop {
-    background-image: url(images/rc-t-r-15-1body-2menu-3menu.png);
-    background-repeat: no-repeat;
-    background-position: top right;
-}
-...
-      </pre>
-<p>
-        The naming follows a contract which is described below. In general,
-        the naming looks like:
-      </p>
-<pre class="code">
-images/{$name}-{$v-orientation}-{$h-orientation}-{$size}-1{$backgroundColor}-2{$strokeColor}-3{$foregroundColor}
-      </pre>
-<p>
-        The first part
-        (<span class="codefrag">images/{$name}-{$v-orientation}-{$h-orientation}-{$size}</span>)
-        identifies which images is used and how big (width x height) it should
-        be. The second part\
-        (<span class="codefrag">-1{$backgroundColor}-2{$strokeColor}-3{$foregroundColor}</span>)
-        identifies the coloring of each portion of the image. The input
-        parameter for the second part comes from the color profile of
-        <span class="codefrag">src/documentation/skinconf.xml</span>. The second part is
-        easily identifiable through the numbering 1-2-3.
-      </p>
-<p>
-        Let us get into details:
-      </p>
-<dl>
-        
-<dt>
-<span class="codefrag">images</span>
-</dt>
-        
-<dd>
-          Path to the xslt that creates the corner.
-          <br>
-          
-<span class="codefrag">images/ = {$FORREST_HOME}/main/webapp/skins/common/images/</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$name}</span>
-</dt>
-        
-<dd>
-          In the common skin there are two XSLT files ready for use:
-          <ul>
-            
-<li>
-              
-<span class="codefrag">rc.svg.xslt</span>: handles rounded corners
-            </li>
-            
-<li>
-              
-<span class="codefrag">dc.svg.xslt</span>: handles diagonal 45-degree corners
-            </li>
-          
-</ul>
-          
-<span class="codefrag">name = [rc|dc]</span>
-          
-<br>
-          
-<em>e.g.</em> <span class="codefrag">rc</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$v-orientation}</span>
-</dt>
-        
-<dd>
-          Vertical orientation of the corner images (top or bottom).
-          <br>
-          
-<span class="codefrag">v-orientation = [t|b]</span>
-          
-<br>
-          
-<em>e.g.</em> <span class="codefrag">t</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$h-orientation}</span>
-</dt>
-        
-<dd>
-          Horizontal orientation of the corner images (left or right).
-          <br>
-          
-<span class="codefrag">h-orientation = [l|r]</span>
-          
-<br>
-          
-<em>e.g.</em> <span class="codefrag">r</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$size}</span>
-</dt>
-        
-<dd>
-          Pixels size of the width <strong>and</strong> height of the corner image.
-          <br>
-          
-<span class="codefrag">size=x</span>
-          
-<br>
-          
-<em>e.g.</em> <span class="codefrag">5</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$backgroundColor}</span>
-</dt>
-        
-<dd>
-          Any <span class="codefrag">&lt;color name=""/&gt;</span> element in the <span class="codefrag">skinconf.xml</span> (the <span class="codefrag">value="{$color}"</span>
-          attribute will be applied).
-          <br>
-          
-<em>e.g.</em> <span class="codefrag">header</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$strokeColor}</span>
-</dt>
-        
-<dd>
-          Any <span class="codefrag">&lt;color name=""/&gt;</span> element in the <span class="codefrag">skinconf.xml</span> (the <span class="codefrag">value="{$color}"</span>
-          attribute will be applied).
-          <br>
-          
-<em>e.g.</em> <span class="codefrag">searchbox</span>
-        
-</dd>
-        
-<dt>
-<span class="codefrag">{$foregroundColor}</span>
-</dt>
-        
-<dd>
-          Any <span class="codefrag">&lt;color name=""/&gt;</span> element in the <span class="codefrag">skinconf.xml</span> (the <span class="codefrag">value="{$color}"</span>
-          attribute will be applied).
-          <br>
-          
-<em>e.g.</em> <span class="codefrag">searchbox</span>
-        
-</dd>
-      
-</dl>
-<a name="N10123"></a><a name="skinconfig"></a>
-<h3 class="underlined_5">Modifying the skinconf.xml of your project</h3>
-<p>
-        modifying the <span class="codefrag">skinconf.xml</span> of your project (by
-        default you find it at <span class="codefrag">[project-dir]/src/documentation/</span>).
-      </p>
-<p>
-        Starting about line 155 you find a <span class="codefrag">&lt;colors&gt;</span>
-        ... <span class="codefrag">&lt;/colors&gt;</span> element with content commented-out:
-      </p>
-<pre class="code">
-&lt;colors&gt;
-&lt;!-- These values are used for the generated CSS files. --&gt;
-
-&lt;!-- Krysalis --&gt;
-&lt;!--
-  &lt;color name="header"    value="#FFFFFF"/&gt;
-
-  &lt;color name="tab-selected" value="#a5b6c6" link="#000000" vlink="#000000" hlink="#000000"/&gt;
-  &lt;color name="tab-unselected" value="#F7F7F7" link="#000000" vlink="#000000" hlink="#000000"/&gt;
-  &lt;color name="subtab-selected" value="#a5b6c6" link="#000000" vlink="#000000" hlink="#000000"/&gt;
-  &lt;color name="subtab-unselected" value="#a5b6c6" link="#000000" vlink="#000000" hlink="#000000"/&gt;
-
-...
-
---&gt;
-
-&lt;/colors&gt;
-      </pre>
-<p>
-        To modify the colors of the corner images, you can either define
-        your own <span class="codefrag">&lt;color name=.../&gt;</span> elements or uncomment
-        one of the existing <span class="codefrag">&lt;color name=.../&gt;</span> elements
-        and adjust the color value to your needs.
-      </p>
-<p>
-        
-<em>e.g.</em>
-      
-</p>
-<pre class="code">
-&lt;color name="tab-selected" value="#FF0000"/&gt;
-      </pre>
-<p>
-        This affects all corner images whose <span class="codefrag">{$backgroundColor}</span>, <span class="codefrag">{$strokeColor}</span> or
-        <span class="codefrag">{$foregroundColor}</span> is set to <span class="codefrag">tab-selected</span>.
-        <br>
-        For example, in <span class="codefrag">screen.css</span> (of the "pelt" skin) you find:
-      </p>
-<pre class="code">
-#roundbottomsmall {
-    background-image: url(images/rc-b-r-5-1header-2tab-selected-3tab-selected.png);
-    background-repeat: no-repeat;
-    background-position: top right;
-}
-      </pre>
-<p>
-        Now the stroke color (<span class="codefrag">-2tab-selected</span>) and the foreground
-        color (<span class="codefrag">-3tab-selected</span>) are set to red (remember: we
-        defined <span class="codefrag">#FF0000</span> as the "color" value of
-        <span class="codefrag">tab-selected</span>).
-      </p>
-<a name="N1017A"></a><a name="css_modify"></a>
-<h3 class="underlined_5">Modifying .css files</h3>
-<p>
-        In addition to the modification of <span class="codefrag">skinconf.xml</span>
-        you can also modify the respective .css file of your skin.
-      </p>
-<p>
-        Here's another example:
-      </p>
-<pre class="code">
-/*your .css file*/
-...
-#roundbottomsmall {
-    background-image: url(images/rc-b-r-5-1<em>foo</em>-2<em>secondfoo</em>-3<em>thirdfoo</em>.png);
-    background-repeat: no-repeat;
-    background-position: top right;
-}
-...
-      </pre>
-<pre class="code">
-&lt;!-- your skinconf.xml --&gt;
-...
-&lt;colors&gt;
-  &lt;color name="<em>foo</em>" value="#FF0000"/&gt;
-  &lt;color name="<em>secondfoo</em>" value="#00FF00"/&gt;
-  &lt;color name="<em>thirdfoo</em>" value="##00FF00"/&gt;
-&lt;/colors&gt;
-      </pre>
-<p>
-        Here we have created our own color tags (in the .css file) and
-        defined the respective values for them (in <span class="codefrag">skinconf.xml</span>). 
-        Now you have color images with a red background and a green
-        foreground. Horrible, isn't it?
-      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content"> When developing with the dispatcher we assume you are using 'forrest 
+      run' and the following workflow "change files -&gt; refresh browser".<br> 
+      Installing a mozilla browser and the 
+      <a href="../../tools/forrestbar.html">Forrestbar</a> helps a lot with developing,
+      but is not necessary.
+    </div>
 </div>
-<a name="N101AA"></a><a name="Feedback"></a>
+<a name="N10043"></a><a name="enable"></a>
+<h3 class="underlined_5">Dispatcher-enable the existing site</h3>
+<p>These steps were fully described in the 
+        <a href="../../docs_0_80/howto/howto-structurer-install.html">How to install the "dispatcher"</a>.
+      </p>
+<ul>
+        
+<li>Add the structurer and themer plugins to forrest.properties</li>
+        
+<li>Deploy structurer plugins with etc/structurer.sh</li>
+        
+<li>localhost:8888/index.html ... fantastic. See the default view.</li>
+      
+</ul>
+<a name="N1005D"></a><a name="another-theme"></a>
+<h3 class="underlined_5">Use another theme</h3>
+<ul>
+        
+<li>Add project.theme=pelt to forrest.properties</li>
+        
+<li>Re-start 'forrest run'</li>
+        
+<li>localhost:8888/index.html ... See the new view.</li>
+      
+</ul>
+<a name="N10070"></a><a name="our-structurer"></a>
+<h3 class="underlined_5">Create our own structurer by copy-and-customise</h3>
+<p>
+        Copy the default structurer for the pelt theme and make local changes.
+      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        At this stage of rapid development of the Dispatcher, be sure to keep
+        your copy synchronised. Use 'diff' against the known svn version of
+        the core pelt.fv to track your local changes.
+        Also please consider contributing new contracts and changes to the
+        default structurers to the Forrest projects. That eases your local
+        version management and everyone will benefit.
+      </div>
+</div>
+<ul>
+        
+<li>Copy THEMER_PLUGIN/resources/themes/pelt.fv into your project at
+          PROJECT_HOME/src/documentation/resources/themes/pelt.fv
+          (create the new directory folder first).
+        </li>
+        
+<li>Re-start 'forrest run'</li>
+        
+<li>localhost:8888/index.html ... See the same view, now structured
+          by us.
+        </li>
+      
+</ul>
+<p>
+        From here on there is no need to re-start 'forrest run'. Just edit
+        the structurer and see the effect.
+      </p>
+<a name="N1008C"></a><a name="remove-default-contract"></a>
+<h3 class="underlined_5">Remove a default contract</h3>
+<ul>
+        
+<li>Remove one of the search boxes. Edit your pelt.fv and find the
+          "search-input" contract (there are two). Comment one out.
+        </li>
+      
+</ul>
+<a name="N10099"></a><a name="add-default-contract"></a>
+<h3 class="underlined_5">Add a default contract</h3>
+<p>
+        Forrest provides many default contracts. If you are using the
+        Forrestbar then choose "Devs =&gt; ls.contracts". Otherwise visit
+        localhost:8888/ls.contracts.html
+      </p>
+<ul>
+        
+<li>
+          See the usage detail for your chosen contract via the abovementioned list.
+          e.g. "siteinfo-compliance-links"
+        </li>
+        
+<li>
+          Insert it at the appropriate point in your structurer. Note that it
+          will need to go inside the appropriate CSS hook, e.g.
+        <pre class="code">  ...
+  &lt;forrest:hook name="footer"&gt;
+    &lt;forrest:contract name="siteinfo-compliance-links"/&gt;
+    ...
+</pre>
+        
+</li>
+      
+</ul>
+<p>
+        Notice that you did not need to copy any other code to your project space.
+        Forrest finds the default contract in its core (currently the Themer plugin).
+      </p>
+<a name="N100B3"></a><a name="add-project-contract"></a>
+<h3 class="underlined_5">Add a new project contract</h3>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+        Carefully consider the purpose of your contracts. If they are useful
+        in a wider context, then they belong in plugins or the core of Forrest.
+        See below for further discussion on this important topic.
+      </div>
+</div>
+<p>
+        Project-based contracts are defined in theme-specific and
+        output-format-specific directory structure, e.g.
+        PROJECT_HOME/src/documentation/resources/themes/THEME_NAME/OUTPUT_FORMAT/
+      </p>
+<p>
+       Project-based contracts common to all themes go in
+        PROJECT_HOME/src/documentation/resources/themes/common/OUTPUT_FORMAT/
+      </p>
+<p>
+        To get started quickly (it is not a project-based contract but a demo),
+        copy one of the default contracts. e.g. copy siteinfo-current-time.ft to become siteinfo-doodad.ft ...
+      </p>
+<ul>
+        
+<li>
+          Copy THEMER_PLUGIN/resources/themes/common/html/siteinfo-current-time.ft
+          into your project at
+          PROJECT_HOME/src/documentation/resources/themes/common/html/siteinfo-doodad.ft
+          (create the new directory folders first).
+        </li>
+        
+<li>
+          Edit it to suit. Replace all occurrences of "siteinfo-current-time" with
+          "siteinfo-doodad" and make your other changes (e.g. the text and the
+          javascript function).
+        </li>
+        
+<li>
+          Declare your new contract in your structurer as done above for adding a
+          default contract.
+        </li>
+      
+</ul>
+<p>
+        See a list of your project-based contracts and their usage notes via 
+        Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
+        localhost:8888/ls.contracts.project.html
+      </p>
+<a name="N100D9"></a><a name="manage"></a>
+<h3 class="underlined_5">Decide how to manage your contracts</h3>
+<div class="fixme">
+<div class="label">Fixme (crossley)</div>
+<div class="content">
+Glean content from Ross' discussion:
+<a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=113748831226697">Re: Dispatcher quickstart</a>.
+</div>
+</div>
+</div>
+<a name="N100E8"></a><a name="Further Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<p> Congratulations you are now able to work with the Dispatcher. From here 
+      we recommend to read the following How-Tos: </p>
+<ul>
+      
+<li>
+        
+<a href="error:site:howto/dispatcher/dsl">How to use the structurer</a>
+      
+</li>
+      
+<li>
+        
+<a href="../../docs_0_80/howto/howto-structurer-contracts.html">Create your own contract 
+          implementation</a>
+      
+</li>
+    
+</ul>
+</div>
+<a name="N10101"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
-<p>
-      Please provide feedback about this document via the
-      <a href="../../mail-lists.html">mailing lists</a>.
-    </p>
+<p> Please provide feedback about this document via the <a href="../../mail-lists.html">mailing lists</a>. </p>
 </div>
 </div>
 <!--+
