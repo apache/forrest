@@ -6,6 +6,9 @@ stable version of Cocoon trunk.
 
 Instructions for use:
 
+FIXME: Latest Cocoon uses Maven, so this instructions needs to get updated.
+
+
 NOTE:
 Make sure that you have set $COCOON_HOME like e.g.:
 export COCOON_HOME=/home/thorsten/apache/cocoon-trunk/
