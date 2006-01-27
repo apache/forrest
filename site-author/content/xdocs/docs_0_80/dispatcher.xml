@@ -15,16 +15,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
+  "http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
   <header>
     <title>Dispatcher (Draft - feature planned for 0.8)</title>
   </header>
   <body>
-<warning> The "dispatcher" is new functionality which is still in development 
-  phase. That is why it is in the "whiteboard" section of the Forrest 
-  distribution. We are working at the moment on its release out of the 
-  whiteboard into the official core plugins </warning>
+    <warning> The "dispatcher" is new functionality which is still in 
+      development phase. That is why it is in the "whiteboard" section of the 
+      Forrest distribution. We are working at the moment on its release out of 
+      the whiteboard into the official core plugins </warning>
     <section id="introduction">
       <title>Introduction</title>
       <p> As stated in the <a href="site:v0.80//documentation/skins">Skin 
@@ -36,10 +37,9 @@
         the user could configure some features of skins but it was up to the 
         skin to support it and did not solve the problem to add page specific 
         extra content. That led us to develop a new concept of creating skins 
-        (we called the result "themes") which would be more easily extensible by a 
-        user. </p>
+        (we called the result "themes") which would be more easily extensible 
+        by a user. </p>
     </section>
-
     <section id="background">
       <title>Background</title>
       <p> The problem with the forrest skins so far has been that even if 
@@ -61,24 +61,29 @@
       <section id="leather">
         <title>leather-dev</title>
         <p> That led to the development of the "leather-dev" skin which 
-          established a semantic container approach for div elements. The 
+          established a semantic container approach for div elements. 
+          Leather-dev evolved from the "pelt" skin and almost used the same 
+          functionality (contracts). We had started to encapsulate functional 
+          code into templates, but there have been still in 4 xsl files and without 
+          any documentation what they are doing and how to use them. The 
           problems with leather-dev was pointed out in the mail "<a 
           href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=111049344517653" 
           >status on leather-dev?</a>". The main proplem was to limit users to 
-          only one html-skeleton was way too limiting regarding design. Since we 
-          had now grouped functionality in named container we were ready to 
+          only one html-skeleton was way too limiting regarding design. Since 
+          we had now grouped functionality in named container we were ready to 
           start the dispatcher (aka forrest:views).</p>
       </section>
     </section>
     <section id="dispatcher">
       <title>Dispatcher - advanced separation of concerns</title>
-       <p> The aim of the "dispatcher" concept is to provide a flexible 
+      <p> The aim of the "dispatcher" concept is to provide a flexible 
         framework for creating site and page specific layout in different 
-        formats from different content. </p>
+        formats from different content through an advanced seperation of 
+        concerns.</p>
       <p>The dispatcher is a filter that limits the data-model to a minimum by 
         only requesting what the strucuter (e.g. common.fv) need. This leads to 
         a different URL handling focus - away from document centric. A document 
-        can be (but do not have to) behind a certain URL. Like said a 
+        can (but do not have to) be behind a certain URL. Like said a 
         structurer can request any given data as input not only a document and 
         the forrest core contracts (like navigation). It may be the main 
         enhancement in comparison to skins that this concept let you easily 
@@ -88,18 +93,32 @@
         easy and less time consuming. The principal is to override or extend 
         only certain parts (contracts) of the core. This is based on the 
         observation that normally only a small percentage of core skin 
-        contracts have been changed. </p>
+        contracts have been changed. At the same time the new plugin system 
+        emerged. Plugins are a way of extending Forrest to satisfy 
+        site-specific needs. This includes to provide plugin specific 
+        contracts.</p>
+      <section id="contracts">
+        <title>Contracts - grouped functionality</title>
+        <p>The result of the leather-dev development were grouped functionality 
+          in named container. We gave those code snippets names (based on their 
+          functionality) and called them contracts. This naming enabled us to 
+          keep the contract separate from the position code itself. Further 
+          since major parts of the code of skins never have been documentended 
+          we started to add for each contract a description and an explanation 
+          how to use this contract. The skinconf.xml gave an excellent 
+          source for this documentation effort, since it described most 
+          features of the pelt skin.</p>
+          <p>Contracts are standalone, self explaining, configurable 
+            pieces of xsl templates created out of pure maintaining reasons.</p>
+      </section>
     </section>
     <section id="info">
       <title>Further information</title>
-      <p>
-        Apache Forrest 1.0 Specification (Draft, not yet published):
-        <code>site-author/content/xdocs/TR/2005/WD-forrest10.html</code>
-      </p>
-      <p>
-        See the various How-to documents about the dispatcher, starting with
-        <a href="site:v0.80//howto/dispatcher/install">installing the dispatcher</a>.
-      </p>
+      <p> Apache Forrest 1.0 Specification (Draft, not yet published): 
+        <code>site-author/content/xdocs/TR/2005/WD-forrest10.html</code> </p>
+      <p> See the various How-to documents about the dispatcher, starting with 
+        <a href="site:v0.80//howto/dispatcher/install">installing the 
+        dispatcher</a>. </p>
     </section>
   </body>
 </document>
