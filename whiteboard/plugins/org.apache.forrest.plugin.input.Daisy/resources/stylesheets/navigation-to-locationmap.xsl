@@ -91,7 +91,7 @@
         <xsl:choose>
           <xsl:when test="@nodeId"><xsl:value-of select="@nodeId"/>/</xsl:when>
           <xsl:otherwise>
-            <xsl:if test="name()='d:group'"><xsl:value-of select="@id"/>/</xsl:if>
+            <xsl:if test="name()='d:group' and @id"><xsl:value-of select="@id"/>/</xsl:if>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
