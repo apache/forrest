@@ -69,9 +69,12 @@
         src="org.apache.cocoon.transformation.CIncludeTransformer" />
       <map:transformer name="xinclude"
         src="org.apache.cocoon.transformation.XIncludeTransformer" />
+      <map:transformer name="dispatcher"
+        src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer" />
+          
       <!-- Rewrites links, e.g. transforming href="site:index" to href="../index.html" -->
       <!-- See http://forrest.apache.org/docs/sitemap-ref.html#linkrewriting_impl -->
-      <map:transformer name="linkrewriter"
+      <!--<map:transformer name="linkrewriter"
         logger="sitemap.transformer.linkrewriter"
         src="org.apache.cocoon.transformation.LinkRewriterTransformer">
         <link-attrs>href src</link-attrs>
@@ -91,7 +94,7 @@
           <prefix>/site/external-refs//</prefix>
           <suffix>/@href</suffix>
         </input-module>
-      </map:transformer>
+      </map:transformer>-->
     </map:transformers>
     <map:serializers default="xml">
       <map:serializer logger="sitemap.serializer.xhtml"
@@ -111,6 +114,15 @@
         mime-type="text/plain" logger="sitemap.serializer.text" />
     </map:serializers>
   </map:components>
+  <map:resources>
+    <map:resource name="jx-transformer">
+      <map:transform type="jx">
+        <map:parameter name="lenient-xpath" value="true" />
+        <map:parameter name="getRequest" value="{request}" />
+        <map:parameter name="getRequestExstension" value="{exstension}" />
+      </map:transform>
+    </map:resource>
+  </map:resources>
   <map:pipelines>
     <map:pipeline>
       <!-- businessHelper -->
@@ -213,19 +225,44 @@
         Here we are overriding the default skin generation.
       -->
       <map:match pattern="**.html">
+        <map:generate src="lm://resolve.structurer.{1}" />
+        <map:call resource="jx-transformer">
+          <map:parameter name="exstension" value="html" />
+          <map:parameter name="request" value="{1}" />
+        </map:call>
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="html" />
+          <map:parameter name="hooksTransformer"
+            value="lm://hooks-to-html.xsl" />
+        </map:transform>
+        <map:serialize type="xhtml" />
+      </map:match>
+      <map:match pattern="internal.**.*">
+        <map:generate src="lm://resolve.structurer.{2}-to-xhtml2" />
+        <map:call resource="jx-transformer">
+          <map:parameter name="exstension" value="xhtml2" />
+          <map:parameter name="request" value="{1}" />
+        </map:call>
+        <map:transform type="dispatcher">
+          <map:parameter name="type" value="xhtml2" />
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+
+<!--      <map:match pattern="**.html">
         <map:generate src="{lm:structurer.html.{1}}" />
         <map:transform src="{lm:structurer-xsl.html.{1}.xsl}">
           <map:parameter name="path" value="{0}" />
         </map:transform>
-        <!-- WORKAROUND The following transfomer are responsible for generating links for inline css It produces non valid css!!!-->
-        <!-- FIXME make contracts self containing and open them for css-->
+        <!-#- WORKAROUND The following transfomer are responsible for generating links for inline css It produces non valid css!!!-#->
+        <!-#- FIXME make contracts self containing and open them for css-#->
         <map:transform type="pattern"
         src="{forrest:context}/resources/chaperon/grammars/link.xlex" />
       <map:transform
         src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" />
          <map:transform src="{lm:transform.xml.xml-namespace-stripped}" /> 
         <map:serialize type="xhtml" />
-      </map:match>
+      </map:match>-->
     </map:pipeline>
   </map:pipelines>
 </map:sitemap>
