@@ -510,10 +510,11 @@ document.write("Last Published: " + document.lastModified);
       structure is almost identical, as are most of the required
       configuration files. In this How-To we will assume that you are creating a 
       plugin in the Forrest source tree. All plugins are developed in the
-      <span class="codefrag">forrest/plugins</span> directory.</p>
+      <span class="codefrag">forrest/plugins</span> directory or the 
+      <span class="codefrag">forrest/whiteboard/plugins</span> directory.</p>
 <p class="instruction">Run the following set of commands:</p>
 <pre class="code">
-      cd [path_to_forrest]/plugins
+      cd [path_to_forrest]/whiteboard/plugins
       ant seedPlugin
       </pre>
 <p>The above ant target will ask you the name of the plugin and some
@@ -537,13 +538,13 @@ document.write("Last Published: " + document.lastModified);
       <a href="../../pluginDocs/plugins_0_80/pluginInfrastructure.html">Plugin
       Infrastructure</a> for more information about the plugin
       directory structure and configuration files.</p>
-<a name="N1009C"></a><a name="edit-template"></a>
+<a name="N1009F"></a><a name="edit-template"></a>
 <h4>Edit the Plugin Template</h4>
 <p>You now have a skeleton plugin project. However, it doesn't do 
         anything useful yet. Now is a good time to edit some of the files
         provided.</p>
 <p>Here are some general notes:</p>
-<a name="N100A8"></a><a name="status"></a>
+<a name="N100AB"></a><a name="status"></a>
 <h5>status.xml</h5>
 <p>This file is used to track changes to the plugin
           project and to manage lists of things that still need to be done.
@@ -553,31 +554,31 @@ document.write("Last Published: " + document.lastModified);
 <p>As you work on the plugin you should record all major changes in
           this file so that it can then be used as a changelog for your
           plugin.</p>
-<a name="N100B8"></a><a name="forrest-properties"></a>
+<a name="N100BB"></a><a name="forrest-properties"></a>
 <h5>forrest.properties</h5>
 <p>This file defines many configuration parameters for Forrest. It
           does not need to be customised in most cases. However, see
           for more details.</p>
-<a name="N100C2"></a><a name="skinconf"></a>
+<a name="N100C5"></a><a name="skinconf"></a>
 <h5>src/documentation/skinconf.xml</h5>
 <p>This configures the skin for your plugins documentation. There
           are some items that need to be configured in here, for example, the
           copyright information. The file is heavily commented so probably
           best to read through it, changing what you need to.</p>
-<a name="N100CC"></a><a name="doc"></a>
+<a name="N100CF"></a><a name="doc"></a>
 <h5>Documentation</h5>
 <p>It is also a good idea to start writing the documentation at this
           stage. The above process created a very simple plugin documentation
           site for you. All you have to do is add the content.</p>
-<a name="N100D6"></a><a name="hosted"></a>
+<a name="N100D9"></a><a name="hosted"></a>
 <h5>Style notes for plugins hosted at forrest.apache.org</h5>
 <p>
             After seeding a new plugin, copy the configuration from an
             existing plugin (e.g. org.apache.forrest.plugin.input.projectInfo).
-            Copy src/documentation/skinconf.xml and 
+            Copy src/documentation/skinconf.xml (and edit to suit) and 
             src/documentation/content/xdocs/images/project-logo.gif
           </p>
-<a name="N100E2"></a><a name="edit-sitemap"></a>
+<a name="N100E5"></a><a name="edit-sitemap"></a>
 <h3 class="underlined_5">Edit the Plugin sitemap file(s)</h3>
 <p>The plugin <span class="codefrag">xmap</span> file is a Cocoon sitemap that is mounted
       at a strategic place in the Forrest pipeline. It is in this file
@@ -602,7 +603,7 @@ document.write("Last Published: " + document.lastModified);
       all development work on Forrest, you will find
       the <a href="../../mail-lists.html#forrest-dev">developer mailing list</a>
       a very good resource (check the archives before posting, please).</p>
-<a name="N1010F"></a><a name="components"></a>
+<a name="N10112"></a><a name="components"></a>
 <h4>Components, Actions and Resources</h4>
 <p>If your plugin uses any components (i.e. generators, transformers or
         serializers), actions or resources they must
@@ -617,13 +618,13 @@ document.write("Last Published: " + document.lastModified);
         <span class="codefrag">{forrest:plugins}/PLUGIN_NAME</span> instead of <span class="codefrag">{realpath:/}</span>.
         </p>
 <p>See the examples below for more details.</p>
-<a name="N10137"></a><a name="resources"></a>
+<a name="N1013A"></a><a name="resources"></a>
 <h3 class="underlined_5">Create the Necessary Resource Files</h3>
 <div class="fixme">
 <div class="label">Fixme (rdg)</div>
 <div class="content">Discuss the XSL files and other such resources</div>
 </div>
-<a name="N10142"></a><a name="samples"></a>
+<a name="N10145"></a><a name="samples"></a>
 <h3 class="underlined_5">Create Samples in the Documentation</h3>
 <p>Plugin documentation should provide (as a minimum) an
       index page that provides an overview and a set of samples that demonstrate
@@ -633,7 +634,7 @@ document.write("Last Published: " + document.lastModified);
       and <span class="codefrag">tabs.xml</span> configuration files.</p>
 <p>Try to provide a sample for all the major functions of your plugin
       and document any configuration that is available.</p>
-<a name="N10158"></a><a name="test"></a>
+<a name="N1015B"></a><a name="test"></a>
 <h3 class="underlined_5">Testing a Plugin</h3>
 <p>Since your documentation for the plugin illustrates all of its 
       functionality, you can use that site for testing the plugin. However, you
@@ -659,7 +660,7 @@ document.write("Last Published: " + document.lastModified);
       as writing your tests.</p>
 <p>Ensure that your sitemaps are robust and handle matches for files
       in sub-directories, as well as those at the root level.</p>
-<a name="N10185"></a><a name="Testing+During+Development"></a>
+<a name="N10188"></a><a name="Testing+During+Development"></a>
 <h4>Testing During Development</h4>
 <p>In the current plugin system plugins are not used from their
         src directories, they must first be deployed locally. To do this
@@ -674,16 +675,16 @@ document.write("Last Published: " + document.lastModified);
         restart Forrest. However, if your plugin changes any configuration
         files in the <span class="codefrag">conf</span> directory you will, most likely, have 
         to restart Forrest to see these changes.</p>
-<a name="N1019C"></a><a name="release"></a>
+<a name="N1019F"></a><a name="release"></a>
 <h3 class="underlined_5">Releasing a Plugin</h3>
-<a name="N101A2"></a><a name="register"></a>
+<a name="N101A5"></a><a name="register"></a>
 <h4>Register the Plugin with Apache Forrest</h4>
 <div class="fixme">
 <div class="label">Fixme (rdg)</div>
 <div class="content">Describe making a request of Forrest devs for 
         inclusion</div>
 </div>
-<a name="N101AD"></a><a name="deploy"></a>
+<a name="N101B0"></a><a name="deploy"></a>
 <h4>Deploying the Plugin</h4>
 <p>To deploy the plugin so that others can use it, it must be made 
         available as a zip from the URL indicated in the 
@@ -712,7 +713,7 @@ document.write("Last Published: " + document.lastModified);
         that you only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</div>
 </div>
-<a name="N101DF"></a><a name="descriptor"></a>
+<a name="N101E2"></a><a name="descriptor"></a>
 <h4>Managing the plugins descriptors</h4>
 <p>
           The files plugins/plugins.xml and whiteboard/plugins/plugins.xml are
@@ -765,7 +766,7 @@ document.write("Last Published: " + document.lastModified);
              Start adding changes notes.</li>
         
 </ul>
-<a name="N10217"></a><a name="experimental"></a>
+<a name="N1021A"></a><a name="experimental"></a>
 <h3 class="underlined_5">Experimental Functionality</h3>
 <div class="warning">
 <div class="label">Warning</div>
@@ -780,14 +781,14 @@ document.write("Last Published: " + document.lastModified);
 <div class="content">For an example of each of these features in use see the 
       <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.</div>
 </div>
-<a name="N10226"></a><a name="Locationmap"></a>
+<a name="N10229"></a><a name="Locationmap"></a>
 <h4>Locationmap</h4>
 <p>Plugins can use the Forrest locationmap to expose resources to your
         project and other plgins. To use this functionality add your 
         <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
         for the status of locationmap development.</p>
-<a name="N1023A"></a><a name="Dispatcher"></a>
+<a name="N1023D"></a><a name="Dispatcher"></a>
 <h4>Dispatcher</h4>
 <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
         that are intended to replace skins in the future. They allow for a much more
@@ -808,35 +809,35 @@ document.write("Last Published: " + document.lastModified);
         your plugin.</p>
 <p>Once Dispatcher becomes stable we will add this match to the default locationmap
         which is generated when you seed a new plugin, but for now it must be done manually.</p>
-<a name="N1025A"></a><a name="Plugin+Properties"></a>
+<a name="N1025D"></a><a name="Plugin+Properties"></a>
 <h4>Plugin Properties</h4>
 <p>Plugins can define properties that each project can over-ride.
         For more information see the issue below.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
         for the status of this new configuration system.</p>
-<a name="N1026C"></a><a name="examples"></a>
+<a name="N1026F"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-<a name="N10275"></a><a name="input"></a>
+<a name="N10278"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss OpenOffice.org plugin here</div>
 </div>
-<a name="N10280"></a><a name="output"></a>
+<a name="N10283"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss s5 plugin here</div>
 </div>
-<a name="N1028B"></a><a name="internal"></a>
+<a name="N1028E"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss IMSManifest plugin here</div>
 </div>
-<a name="N10297"></a><a name="extension"></a>
+<a name="N1029A"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -847,7 +848,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../pluginDocs/plugins_0_80/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N102AD"></a><a name="summarise"></a>
+<a name="N102B0"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
