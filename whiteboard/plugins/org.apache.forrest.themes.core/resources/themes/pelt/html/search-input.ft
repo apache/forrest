@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract name="search-input" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  <description>
+    search-input will output the default search form.
+  </description>
+  <usage><![CDATA[<forrest:contract name="search-input">
+  <forrest:properties contract="search-input">
+   <forrest:property name="search-lucene">lucene-search.html</forrest:property>
+   <forrest:property name="input-size">25</forrest:property>
+   <forrest:property name="search-input">
+      <search name="MyProject" domain="mydomain" provider="google"/>
+    </forrest:property>
+  </forrest:properties>]
+</forrest:contract>]]></usage>
+  
+  <forrest:template
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  format="html" name="search-input" inputFormat="xsl" body="true" head="true">
+
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		  <!--FIXME: IMO each search provider should provide a form. This form should be refactored into
+        a meta-search from-->
+      <xsl:template name="search-input-head">
+        <script type="text/javascript" language="javascript" src="{$root}themes/getBlank.js">&#160;</script>
+      </xsl:template>
+
+      <xsl:template name="search-input-body">
+        <xsl:param name="search-lucene" select="'lucene-search.html'"/>
+        <xsl:param name="input-size">25</xsl:param>
+        <xsl:param name="search-input"/>
+<xsl:comment>+ 
+  |start Search 
+  +</xsl:comment>
+        <div class="searchbox">
+          <div class="round-top-left-small">
+            <div class="round-top-right-small">
+              <div class="search-input">
+                <!-- Form prompt -->
+                <xsl:variable name="search-prompt">
+                  <i18n:text>Search the site with</i18n:text>
+                  <xsl:value-of select="$search-input/search/@provider"/>
+                </xsl:variable>
+                <!-- Form action -->
+                <xsl:variable name="search-action">
+                  <xsl:choose>
+                    <xsl:when test="$search-input/search/@provider = 'lucene'">
+                      <xsl:value-of select="$root"/>
+                      <xsl:value-of select="$search-lucene"/>
+                    </xsl:when>
+                    <xsl:otherwise>http://www.google.com/search</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <!-- Form query field -->
+                <xsl:variable name="search-query">
+                  <xsl:choose>
+                    <xsl:when test="$search-input/search/@provider = 'lucene'">
+                      queryString</xsl:when>
+                    <xsl:otherwise>q</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <!-- Search form generation -->
+                <form method="get" action="{$search-action}">
+                  <div class="search-hidden">
+                    <input type="hidden" name="sitesearch" 
+                      value="{$search-input/search/@domain}"/>
+                  </div>
+                  <div class="search-field">
+                    <input type="text" name="{$search-query}" 
+                      size="{$input-size}" value="{normalize-space($search-prompt)}" 
+                      onFocus="getBlank(this, '{normalize-space($search-prompt)}');" 
+                      onBlur="getPrompt(this, '{normalize-space($search-prompt)}');"/>
+                  </div>
+                  <div class="search-submit">
+                    <input type="submit" value="Search" name="Search" 
+                      i18n:attr="value"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <xsl:comment>+ |end search +</xsl:comment>
+      </xsl:template>
+		</xsl:stylesheet>
+	</forrest:template>
+</forrest:contract>

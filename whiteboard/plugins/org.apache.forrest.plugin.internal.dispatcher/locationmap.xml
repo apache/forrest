@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2005 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- Default Forrest locationmap for the structurer/themer -->
+
+<locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
+
+  <components>
+    <matchers default="lm">
+      <matcher 
+        name="lm" 
+        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
+    </matchers>
+    <actions default="RecursiveDirectoryTraversalAction">
+      <action name="RecursiveDirectoryTraversalAction" 
+        src="org.apache.forrest.structurer.acting.RecursiveDirectoryTraversalAction"/>
+    </actions>
+    <selectors default="exists">
+          <selector name="exists" logger="sitemap.selector.exists"  
+                    src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </selectors>
+  </components>
+  
+  <locator>
+    <!-- xhtml2 to html core transformation -->
+    <match pattern="transform.xhtml2.html.structurer">
+      <select>
+        <location src="{project:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" />
+      </select>
+    </match>
+    <!-- File specific strucuturer templates have priority before default ones. If no strucuturer template 
+      can be found in the project, we use either the theme or the default one of the themes plugin. -->
+    <match pattern="resolve.structurer.**">
+      <select type="exists">
+        <!-- project-based file-based -->
+        <location src="{project:content.xdocs}{1}{project:theme-ext}" />
+        <!-- @src="" workaround for action bug in the locationmap! -->
+        <act type="RecursiveDirectoryTraversalAction" src="">
+          <parameter value="{1}" name="request"/>
+          <parameter value="{project:theme}" name="projectFallback"/>
+          <parameter value="{project:theme-ext}" name="projectExtension"/>
+          <parameter value="{project:content.xdocs}" name="projectDir"/>
+          <!--  project-based theme-based = directory-based / parent-directory based (recursively) -->
+          <location src="{uri}" />
+        </act>
+        <!-- themes-dir: project-application-based theme-dir-based -->
+        <location 
+          src="{lm:themer.project.dir}/{project:theme}{project:theme-ext}" 
+          />
+        <!-- themer: project-application-based theme-based -->
+        <location 
+          src="{project:themer}/resources/themes/{project:theme}{project:theme-ext}" 
+          />
+        <!-- themes-dir: project-application-based default -->
+        <location 
+          src="{lm:themer.project.dir}/{defaults:theme}{defaults:theme-ext}" 
+          />
+        <!-- themer: project-application-based default -->
+        <location 
+          src="{project:themer}/resources/themes/{defaults:theme}{defaults:theme-ext}" 
+          />
+        <!-- themer: forrest-application-based theme-based -->
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}{project:theme-ext}" 
+          />
+        <!-- themer: forrest-application-based default -->
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}{defaults:theme-ext}" 
+          />
+      </select>
+    </match>
+    <match pattern="get.structurer.by.requested.format.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
+      </select>
+    </match>
+    <!-- 
+      {1} format (e.g. html)
+      {2} path (e.g. samples/index)
+      -->
+    <match pattern="structurer.*.**">
+      <select type="exists">
+        <location src="cocoon://prepare.structurer.{1}.{2}" />
+      </select>
+    </match>
+    <!-- Structurer tiles - You can group elements to a template and call it from any view. -->
+    <match pattern="resolve.tiles.**">
+      <select type="exists">
+        <location 
+          src="{project:resources}/themes/{project:theme}/html/{1}.vt.xml" />
+        <location 
+          src="{project:resources}/themes/{defaults:theme}/html/{1}.vt.xml" />
+        <location 
+          src="{project:themer}/resources/themes/{project:theme}/html/{1}.vt.xml" 
+          />
+        <location 
+          src="{project:themer}/resources/themes/{defaults:theme}/html/{1}.vt.xml" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}/html/{1}.vt.xml" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/html/{1}.vt.xml" 
+          />
+      </select>
+    </match>
+    <!-- FIXME: jxpath locationmap-->
+    <!-- Structurer tiles should be requested by (when jxpath bug is solved!):  -->
+    <match pattern="tiles.**">
+      <select type="exists">
+        <location src="cocoon://prepare.tiles.{1}" />
+      </select>
+    </match>
+    <!-- Aggregate the forrest:properties requested by the *.fv.  -->
+    <!-- 
+      {1} format (e.g. html)
+      {2} path (e.g. samples/index)
+      -->
+    <match pattern="structurer-properties.*.**">
+      <select type="exists">
+        <location src="cocoon://prepare.structurer-properties.{1}.{2}" />
+      </select>
+    </match>
+    <!-- Some input need to be striped by their root element. -->
+    <match pattern="root-strip.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/root-strip.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
+      </select>
+    </match>
+    <!--  Aggregate the forrest:properties requested by the *.fv with cinclude.  -->
+    <match pattern="structurer-properties-includes.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/prepare.properties.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/prepare.properties.xsl" />
+      </select>
+    </match>
+    <!--  Doing the transformation of all contracts-templates requested by the view.  -->
+    <match pattern="structurer-final-xsl-*.xsl">
+      <select type="exists">
+        <location src="{project:structurer}/resources/stylesheets/themer.{1}.xsl" />
+        <location src="{defaults:structurer}/resources/stylesheets/themer.{1}.xsl" />
+      </select>
+    </match>
+    <!--  Doing the transformation of all contracts-templates requested by the view.  -->
+    <match pattern="structurer-xsl.html.**.xsl">
+      <select type="exists">
+        <location src="cocoon://structurer-xsl.html.{1}" />
+      </select>
+    </match>
+  </locator>
+</locationmap>
