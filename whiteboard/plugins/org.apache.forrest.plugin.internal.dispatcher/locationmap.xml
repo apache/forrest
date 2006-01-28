@@ -85,21 +85,6 @@
           />
       </select>
     </match>
-    <match pattern="get.structurer.by.requested.format.xsl">
-      <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/get.structurer.by.requested.format.xsl" />
-      </select>
-    </match>
-    <!-- 
-      {1} format (e.g. html)
-      {2} path (e.g. samples/index)
-      -->
-    <match pattern="structurer.*.**">
-      <select type="exists">
-        <location src="cocoon://prepare.structurer.{1}.{2}" />
-      </select>
-    </match>
     <!-- Structurer tiles - You can group elements to a template and call it from any view. -->
     <match pattern="resolve.tiles.**">
       <select type="exists">
@@ -121,48 +106,11 @@
           />
       </select>
     </match>
-    <!-- FIXME: jxpath locationmap-->
-    <!-- Structurer tiles should be requested by (when jxpath bug is solved!):  -->
-    <match pattern="tiles.**">
-      <select type="exists">
-        <location src="cocoon://prepare.tiles.{1}" />
-      </select>
-    </match>
-    <!-- Aggregate the forrest:properties requested by the *.fv.  -->
-    <!-- 
-      {1} format (e.g. html)
-      {2} path (e.g. samples/index)
-      -->
-    <match pattern="structurer-properties.*.**">
-      <select type="exists">
-        <location src="cocoon://prepare.structurer-properties.{1}.{2}" />
-      </select>
-    </match>
     <!-- Some input need to be striped by their root element. -->
     <match pattern="root-strip.xsl">
       <select type="exists">
         <location src="{project:structurer}/resources/stylesheets/root-strip.xsl" />
         <location src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
-      </select>
-    </match>
-    <!--  Aggregate the forrest:properties requested by the *.fv with cinclude.  -->
-    <match pattern="structurer-properties-includes.xsl">
-      <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/prepare.properties.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/prepare.properties.xsl" />
-      </select>
-    </match>
-    <!--  Doing the transformation of all contracts-templates requested by the view.  -->
-    <match pattern="structurer-final-xsl-*.xsl">
-      <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/themer.{1}.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/themer.{1}.xsl" />
-      </select>
-    </match>
-    <!--  Doing the transformation of all contracts-templates requested by the view.  -->
-    <match pattern="structurer-xsl.html.**.xsl">
-      <select type="exists">
-        <location src="cocoon://structurer-xsl.html.{1}" />
       </select>
     </match>
   </locator>
