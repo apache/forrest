@@ -23,39 +23,13 @@
   <!-- The following variables are used to contact data models and/or contracts. -->
   <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
   <jx:set var="getRequestExstension" value="#{$cocoon/parameters/getRequestExstension}" />
-
-  <forrest:view type="html" hooksXpath="/html/body">
-    <!-- 
-        @type defines this structurer to html.
-        @hooksXpath defines where all hooks will be injected (as prefix).
-        -->
-    <forrest:contract name="branding-css-links">
-      <!-- More information around this contract
-        http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
-        -->
-      <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
-      <forrest:property name="branding-css-links-input">
-        <css url="common.css" media="screen" rel="alternate stylesheet" theme="common"/>
-        <css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="common"/>
-        <css url="pelt.basic.css" media="screen" theme="Pelt"/>
-        <css url="pelt.screen.css" media="screen" theme="Pelt"/>
-        <css url="pelt.print.css" media="print"/>
-        <css>/* Extra css */
-    p.quote {
-      margin-left: 2em;
-      padding: .5em;
-      background-color: #f0f0f0;
-      font-family: monospace;
-    }</css>
-      </forrest:property>
-    </forrest:contract>
-  <!--
+  
+  <!-- CSS View of the request e.g. index.dispatcher.css -->
+  <forrest:view type="css" hooksXpath="/">
     <forrest:contract name="branding-theme-profiler">
       <forrest:properties contract="branding-theme-profiler">
          <forrest:property name="branding-theme-profiler-theme">Pelt</forrest:property>
         <forrest:property name="branding-theme-profiler">
-          
-          -->
            <!-- These values are used for the generated CSS files.
     They essentially "override" the default colors defined in the chosen theme.
     There are four duplicate "groups" of colors below, denoted by comments:
@@ -84,7 +58,7 @@
      pelt: feedback: the optional bottom strip containing feedback link
   -->
 
-<!--
+
     <color name="breadtrail" value="#cedfef" font="#0F3660" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
     <color name="header" value="#294563"/>
     <color name="tab-selected" value="#4a6d8c" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
@@ -110,7 +84,7 @@
     <color name="warning" value="#990000"/>
     <color name="code" value="#CFDCED"/>
     <color name="footer" value="#cedfef"/>
--->
+
 
   <!-- Color group: Krysalis -->
 <!--
@@ -205,11 +179,39 @@
     <color name="code" value="#003366"/>
 
     <color name="footer" value="#E5E4D9"/>-->
-<!--
         </forrest:property>
       </forrest:properties>
     </forrest:contract>
-    -->
+  </forrest:view>
+  
+  <!-- HTML View of the request (e.g. index.html)-->
+  <forrest:view type="html" hooksXpath="/html/body">
+    <!-- 
+        @type defines this structurer to html.
+        @hooksXpath defines where all hooks will be injected (as prefix).
+        -->
+    <forrest:contract name="branding-css-links">
+      <!-- More information around this contract
+        http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
+        -->
+      <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
+      <forrest:property name="branding-css-links-input">
+        <css url="common.css" media="screen" rel="alternate stylesheet" theme="common"/>
+        <css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="common"/>
+        <css url="pelt.basic.css" media="screen" theme="Pelt"/>
+        <css url="pelt.screen.css" media="screen" theme="Pelt"/>
+        <!-- You can request request specific css, but beware that you need to use the *.dispatcher.css extension!!!-->
+        <css url="{$getRequest}.dispatcher.css" media="screen" theme="Pelt"/>
+        <css url="pelt.print.css" media="print"/>
+        <css>/* Extra css */
+    p.quote {
+      margin-left: 2em;
+      padding: .5em;
+      background-color: #f0f0f0;
+      font-family: monospace;
+    }</css>
+      </forrest:property>
+    </forrest:contract>
     <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info"/>
 
     <forrest:contract name="siteinfo-meta-navigation" dataURI="cocoon://#{$getRequest}.navigation.xml"/>
