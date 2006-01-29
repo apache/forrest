@@ -95,59 +95,12 @@
   </map:resources>
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="test.dispatcher">
-        <map:generate src="{lm:resolve.structurer.index-foo}" />
-        <map:transform type="dispatcher">
-          <map:parameter name="type" value="html" />
-          <map:parameter name="hooksTransformer"
-            value="{lm:hooks-to-html.xsl}" />
-        </map:transform>
-        <map:serialize type="xhtml" />
-      </map:match>
-      <map:match pattern="test.css">
-        <map:generate src="{lm:resolve.structurer.index-foo}" />
-        <map:transform type="dispatcher">
-          <map:parameter name="type" value="css" />
-        </map:transform>
-        <map:transform type="pattern"
-          src="{forrest:context}/resources/chaperon/grammars/link.xlex" />
-        <map:transform
-          src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" />
-        <map:serialize type="text" mime-type="text/css" />
-      </map:match>
-      <map:match pattern="test-lm.**">
-        <!-- FIXME 
-          e.g. lm://"test-lm.resolve.structurer.index-foo" throws an exception
-          cause: Invalid System ID
-          but e.g. lm://"test-lm.plugin.xmap.output" just works fine. 
-          I do not know why but seems that the main forrest lm is read but only the <match/> elements and not the mount ones.
-        -->
-        <map:generate src="lm://{1}" />
-        <map:serialize type="xml" />
-      </map:match>
       <map:match pattern="test-props">
         <map:generate src="foo.xml" />
         <map:transform src="lm://transform.xml.variable.helper">
           <map:parameter name="path" value="samples/index.html" />
         </map:transform>
         <map:serialize type="xml" />
-      </map:match>
-      <map:match pattern="test.**">
-        <map:generate src="{lm:resolve.structurer.{1}}" />
-        <map:transform type="dispatcher">
-          <map:parameter name="type" value="html" />
-        </map:transform>
-        <map:serialize />
-
-        <map:transform
-          src="resources/stylesheets/hooksMatcher-html.xsl" />
-        <!-- type="structurerXsl" -->
-        <map:generate src="status.xml" />
-        <map:transform src="resources/stylesheets/temp.xsl">
-          <map:parameter name="test"
-            value="{lm:resolve.structurer.{1}}" />
-        </map:transform>
-        <map:serialize />
       </map:match>
     </map:pipeline>
 
