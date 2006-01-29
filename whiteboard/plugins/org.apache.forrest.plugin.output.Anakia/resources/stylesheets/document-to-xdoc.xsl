@@ -42,29 +42,6 @@ No navigation is provided and no rendering of graphics is attempted.
     </properties>
   </xsl:template>
 
-  <xsl:template match="section">
-    <section>
-      <xsl:copy-of select="@*"/>
-      <xsl:attribute name="name">
-        <xsl:value-of select="normalize-space(title)"/>
-      </xsl:attribute>
-      <xsl:apply-templates/>
-    </section>
-  </xsl:template>
-
-  <xsl:template match="section/section">
-    <subsection>
-      <xsl:copy-of select="@*"/>
-      <xsl:attribute name="name">
-        <xsl:value-of select="normalize-space(title)"/>
-      </xsl:attribute>
-      <xsl:apply-templates/>
-    </subsection>
-  </xsl:template>
-
-  <xsl:template match="section/title">
-  </xsl:template>
-
   <xsl:template match="tbody">
     <xsl:apply-templates/>
   </xsl:template>
