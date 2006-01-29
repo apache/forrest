@@ -102,37 +102,13 @@
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
     -->
-    <!-- Structurer population
-      a. Resolve request specific strucuturer template.
-      b. Add businessHelper and tiles to the presentation model 
-      that the content can be used later on.
-      {1} - requested url (striped from extension) -->
-    <map:pipeline>
-      <map:match pattern="prepare.structurer.*.**">
-        <map:generate src="{lm:resolve.structurer.{2}}" />
-        <map:transform src="{lm:get.structurer.by.requested.format.xsl}">
-          <map:parameter name="format" value="{1}" />
-        </map:transform>
-        <!-- FIXME: jxpath -->
-        <!-- When jxpath problem is solved rewrite tiles and uncomment -->
-        <map:transform type="linkrewriter" />
-        <map:transform type="jx">
-          <map:parameter name="lenient-xpath" value="true" />
-          <map:parameter name="getRequest" value="{2}" />
-          <map:parameter name="getRequestExstension" value="{1}" />
-        </map:transform>
-        <map:serialize />
-      </map:match>
-    </map:pipeline>
     <!-- You can group elements to a template and call it from any view. 
       <jx:import uri="cocoon://prepare.tiles.export-link"/>
     -->
     <map:pipeline>
       <map:match pattern="prepare.tiles.**">
         <map:generate src="{lm:resolve.tiles.{1}}" />
-        <!-- FIXME: jxpath -->
-        <!-- When jxpath problem is solved rewrite tiles and uncomment -->
-        <!-- <map:transform type="linkrewriter" /> -->
+        <map:transform type="linkrewriter" />
         <map:transform type="jx">
           <map:parameter name="lenient-xpath" value="true" />
           <map:parameter name="getRequest" value="{1}" />
@@ -147,11 +123,11 @@
         Here we are overriding the default skin generation.
       -->
       <map:match pattern="**.html">
-        <map:generate src="lm://resolve.structurer.{1}" />
-        <map:call resource="jx-transformer">
-          <map:parameter name="exstension" value="html" />
-          <map:parameter name="request" value="{1}" />
-        </map:call>
+        <map:generate src="lm://resolve.structurer.{1}" type="jx">
+          <map:parameter name="lenient-xpath" value="true" />
+          <map:parameter name="getRequest" value="{1}" />
+          <map:parameter name="getRequestExstension" value="html" />
+        </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="type" value="html" />
           <map:parameter name="hooksTransformer" value="lm://hooks-to-html.xsl" 
@@ -160,7 +136,11 @@
         <map:serialize type="xhtml" />
       </map:match>
       <map:match pattern="**.dispatcher.css">
-        <map:generate src="lm://resolve.structurer.{1}" />
+        <map:generate src="lm://resolve.structurer.{1}" type="jx">
+          <map:parameter name="lenient-xpath" value="true" />
+          <map:parameter name="getRequest" value="{1}" />
+          <map:parameter name="getRequestExstension" value="css" />
+        </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="type" value="css" />
         </map:transform>
@@ -172,11 +152,11 @@
         <map:serialize type="text" mime-type="text/css" />
       </map:match>
       <map:match pattern="internal.**.*">
-        <map:generate src="lm://resolve.structurer.{2}-to-xhtml2" />
-        <map:call resource="jx-transformer">
-          <map:parameter name="exstension" value="xhtml2" />
-          <map:parameter name="request" value="{1}" />
-        </map:call>
+        <map:generate src="lm://resolve.structurer.{2}-to-xhtml2" type="jx">
+          <map:parameter name="lenient-xpath" value="true" />
+          <map:parameter name="getRequest" value="{1}" />
+          <map:parameter name="getRequestExstension" value="xhtml2" />
+        </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="type" value="xhtml2" />
         </map:transform>
