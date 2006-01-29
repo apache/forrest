@@ -15,15 +15,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!-- Default Forrest locationmap for the structurer/themer -->
-
 <locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
-
   <components>
     <matchers default="lm">
-      <matcher 
-        name="lm" 
+      <matcher name="lm" 
         src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
     </matchers>
     <actions default="RecursiveDirectoryTraversalAction">
@@ -31,17 +27,20 @@
         src="org.apache.forrest.structurer.acting.RecursiveDirectoryTraversalAction"/>
     </actions>
     <selectors default="exists">
-          <selector name="exists" logger="sitemap.selector.exists"  
-                    src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+      <selector name="exists" logger="sitemap.selector.exists" 
+        src="org.apache.forrest.sourceexists.SourceExistsSelector" />
     </selectors>
   </components>
-  
   <locator>
     <!-- xhtml2 to html core transformation -->
     <match pattern="transform.xhtml2.html.structurer">
       <select>
-        <location src="{project:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" />
+        <location 
+          src="{project:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" 
+          />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" 
+          />
       </select>
     </match>
     <!-- File specific strucuturer templates have priority before default ones. If no strucuturer template 
@@ -61,16 +60,14 @@
         </act>
         <!-- themes-dir: project-application-based theme-dir-based -->
         <location 
-          src="{lm:themer.project.dir}/{project:theme}{project:theme-ext}" 
-          />
+          src="{lm:themer.project.dir}/{project:theme}{project:theme-ext}" />
         <!-- themer: project-application-based theme-based -->
         <location 
           src="{project:themer}/resources/themes/{project:theme}{project:theme-ext}" 
           />
         <!-- themes-dir: project-application-based default -->
         <location 
-          src="{lm:themer.project.dir}/{defaults:theme}{defaults:theme-ext}" 
-          />
+          src="{lm:themer.project.dir}/{defaults:theme}{defaults:theme-ext}" />
         <!-- themer: project-application-based default -->
         <location 
           src="{project:themer}/resources/themes/{defaults:theme}{defaults:theme-ext}" 
@@ -109,11 +106,12 @@
     <!-- Some input need to be striped by their root element. -->
     <match pattern="root-strip.xsl">
       <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/root-strip.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
+        <location 
+          src="{project:structurer}/resources/stylesheets/root-strip.xsl" />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" />
       </select>
     </match>
-    
     <!-- Next coming from themer -->
     <!-- Project implementation of templates have priority before default ones.
         If no implementation can be found we use the noFt (~ - no forrest:template) implementation.  
@@ -125,60 +123,84 @@
         <!-- project-based default fallback -->
         <location src="{lm:themer.project.dir}/{defaults:theme}/{1}/{2}.ft" />
         <!-- project-application-based theme -->
-        <location src="{project:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
+        <location 
+          src="{project:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
         <!--  project-application-based default fallback -->
-        <location src="{project:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" />
+        <location 
+          src="{project:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" />
         <!--  plugin provided contracts -->
         <location src="{lm:resolvePluginContract.{1}.{2}}" />
         <!-- forrest-application-based theme -->
-        <location src="{defaults:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}/{1}/{2}.ft" />
         <!--  forrest-application-based default fallback -->
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" />
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/{2}.ft" 
+          />
         <!--  forrest-application-based no found -->
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/noFt.ft" />
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/{1}/noFt.ft" 
+          />
       </select>
     </match>
     <match pattern="dataModel-xml-document-to-**.xsl">
       <select type="exists">
-        <location
-          src="{project:skins-dir}{project:theme}/xslt/xml/document-to-{1}.xsl" />
-        <location
-          src="{project:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" />
-        <location
-          src="{defaults:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" />
+        <location 
+          src="{project:skins-dir}{project:theme}/xslt/xml/document-to-{1}.xsl" 
+          />
+        <location 
+          src="{project:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" 
+          />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" 
+          />
       </select>
     </match>
     <match pattern="dataModel-html-**.xsl">
       <select type="exists">
         <location src="{project:skins-dir}{project:theme}/xslt/html/{1}.xsl" />
-        <location src="{project:structurer}/resources/stylesheets/html/{1}.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/html/{1}.xsl" />
+        <location src="{project:structurer}/resources/stylesheets/html/{1}.xsl" 
+          />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/html/{1}.xsl" />
       </select>
     </match>
-        <!-- contracts have to be striped to their stylesheet for aggregation. -->
+    <!-- contracts have to be striped to their stylesheet for aggregation. -->
     <match pattern="contract-strip-xsl.xsl">
       <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/contract-strip-xsl.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/contract-strip-xsl.xsl" />
+        <location 
+          src="{project:structurer}/resources/stylesheets/contract-strip-xsl.xsl" 
+          />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/contract-strip-xsl.xsl" 
+          />
       </select>
     </match>
     <match pattern="hooks-to-html.xsl">
       <select type="exists">
-        <location src="{project:themer}/resources/stylesheets/hooksMatcher-html.xsl" />
-        <location src="{defaults:themer}/resources/stylesheets/hooksMatcher-html.xsl" />
+        <location 
+          src="{project:themer}/resources/stylesheets/hooksMatcher-html.xsl" />
+        <location 
+          src="{defaults:themer}/resources/stylesheets/hooksMatcher-html.xsl" />
       </select>
     </match>
-        <!-- contracts (e.g. html) that can be used in the project. -->
+    <!-- contracts (e.g. html) that can be used in the project. -->
     <match pattern="ls.contracts.xsl">
       <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/ls.contracts.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/ls.contracts.xsl" />
+        <location 
+          src="{project:structurer}/resources/stylesheets/ls.contracts.xsl" />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/ls.contracts.xsl" />
       </select>
     </match>
     <match pattern="ls.contracts-to-document.xsl">
       <select type="exists">
-        <location src="{project:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
-        <location src="{defaults:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" />
+        <location 
+          src="{project:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" 
+          />
+        <location 
+          src="{defaults:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" 
+          />
       </select>
     </match>
     <!--Theme dir-->
@@ -189,7 +211,7 @@
         <location src="{project:resources}templates" />
       </select>
     </match>
-        <!-- contracts (e.g. html) that can be used in the project. -->
+    <!-- contracts (e.g. html) that can be used in the project. -->
     <match pattern="themer.contracts.dir">
       <select type="exists">
         <location src="{project:themer}/resources/themes" />
@@ -203,12 +225,22 @@
       -->
     <match pattern="themes/images/**.*">
       <select type="exists">
-        <location src="{lm:themer.project.dir}/{project:theme}/images/{1}.{2}" />
-        <location src="{lm:themer.project.dir}/{defaults:theme}/images/{1}.{2}" />
-        <location src="{project:themer}/resources/themes/{project:theme}/images/{1}.{2}" />
-        <location src="{project:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" />
-        <location src="{defaults:themer}/resources/themes/{project:theme}/images/{1}.{2}" />
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" />
+        <location src="{lm:themer.project.dir}/{project:theme}/images/{1}.{2}" 
+          />
+        <location src="{lm:themer.project.dir}/{defaults:theme}/images/{1}.{2}" 
+          />
+        <location 
+          src="{project:themer}/resources/themes/{project:theme}/images/{1}.{2}" 
+          />
+        <location 
+          src="{project:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}/images/{1}.{2}" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/images/{1}.{2}" 
+          />
       </select>
     </match>
     <!-- generic match for theme resources like css and js. -->
@@ -220,10 +252,17 @@
       <select type="exists">
         <location src="{lm:themer.project.dir}/{project:theme}/{2}/{1}.{2}" />
         <location src="{lm:themer.project.dir}/{defaults:theme}/{2}/{1}.{2}" />
-        <location src="{project:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" />
-        <location src="{project:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" />
-        <location src="{defaults:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" />
-        <location src="{defaults:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" />
+        <location 
+          src="{project:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" />
+        <location 
+          src="{project:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{project:theme}/{2}/{1}.{2}" 
+          />
+        <location 
+          src="{defaults:themer}/resources/themes/{defaults:theme}/{2}/{1}.{2}" 
+          />
       </select>
     </match>
   </locator>
