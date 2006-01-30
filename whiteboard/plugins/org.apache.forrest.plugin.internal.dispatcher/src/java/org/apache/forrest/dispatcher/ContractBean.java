@@ -14,7 +14,7 @@ public interface ContractBean {
     /**
      * The resolver prefix
      */
-    public static final String CONTRACT_RESOLVE_PREFIX = "lm://resolve.contract";
+    public static final String CONTRACT_RESOLVE_PREFIX = "cocoon://resolve.contract";
 
     /**
      * <code>forrest:contract</code> element is used to include extra content

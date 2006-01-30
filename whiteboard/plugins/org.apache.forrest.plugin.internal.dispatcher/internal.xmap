@@ -102,6 +102,15 @@
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
     -->
+    <map:pipeline>
+      <map:match pattern="resolve.contract.*.**">
+        <map:generate src="{lm:resolve.contract.{1}.{2}}" />
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}" />
+        </map:transform>
+        <map:serialize />
+      </map:match>
+    </map:pipeline>
     <!-- You can group elements to a template and call it from any view. 
       <jx:import uri="cocoon://prepare.tiles.export-link"/>
     -->
