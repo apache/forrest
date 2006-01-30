@@ -20,21 +20,54 @@
     <map:generators default="file">
       <map:generator name="imagedirectory"
           src="org.apache.cocoon.generation.ImageDirectoryGenerator" />
+      <map:generator name="xpathdirectory" 
+          src="org.apache.cocoon.generation.XPathDirectoryGenerator" />
     </map:generators>
     <map:transformers default="xslt" />
   </map:components>
 
   <map:pipelines>
     <map:pipeline internal-only="false">
+          <map:match pattern="gallery/raw.xml">
+             <map:generate type="xpathdirectory" src="{lm:project.images/gallery/}">
+                <map:parameter name="depth" value="99"/>
+                <map:parameter name="xpath" value="/albuminfo/*"/>
+                <map:parameter name="sort" value="lastmodified"/>
+                <map:parameter name="reverse" value="true"/>
+                <map:parameter name="exclude" value="(\.svn$|\w\.thumb.jpg|\w\.small.jpg|Thumbs.db)"/>
+                <map:parameter name="xmlFiles" value="album\.xml"/>
+             </map:generate>
+            <map:serialize type="xml"/>      
+      </map:match>
+    
+      <map:match pattern="gallery/index.xml">
+         <map:generate type="xpathdirectory" src="{lm:project.images/gallery/}">
+            <map:parameter name="depth" value="99"/>
+            <map:parameter name="xpath" value="/albuminfo/*"/>
+            <map:parameter name="sort" value="lastmodified"/>
+            <map:parameter name="reverse" value="true"/>
+            <map:parameter name="exclude" value="(\.svn$|\w\.thumb.jpg|\w\.small.jpg|Thumbs.db)"/>
+            <map:parameter name="xmlFiles" value="\.xml$"/>
+         </map:generate>
+        <map:transform src="{lm:photoGallery.transform.dir.galleryHome}"/>
+        <map:serialize type="xml"/>      
+      </map:match>
+      
+      
+ 
       <map:match pattern="gallery/**/dir.xml">
-        <map:generate type="imagedirectory" src="{lm:project.images/gallery/{1}/preview/}">
-          <map:parameter name="exclude" value="Thumbs.db"/> <!-- windows XP thumbnails -->
+        <map:generate type="imagedirectory" src="{lm:project.images/gallery/{1}/}">
+          <!-- HELP:  I'd like to be able to have more dynamic image variants (e.g. thumb)
+              without having them hardcoded like the are but I suck at regex.
+          -->
+          <map:parameter name="exclude" value="(\w\.thumb.jpg|\w\.small.jpg|Thumbs.db)"/>
         </map:generate>
         <map:serialize type="xml" />
       </map:match>
       
       <map:match pattern="gallery/**/index.xml">
-        <map:redirect-to uri="gallery/{1}/index_1.xml"/> 
+        <map:generate src="cocoon://gallery/{1}/index_1.xml"/>
+        <map:serialize type="xml" />
       </map:match>
       
       <map:match pattern="gallery/**/index_*.xml">

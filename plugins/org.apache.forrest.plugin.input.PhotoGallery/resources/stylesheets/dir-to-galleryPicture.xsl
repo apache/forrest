@@ -73,14 +73,14 @@ Author Jörg Werner
 		  <xsl:when test="$big = 0">
 		    <a>
           <xsl:attribute name="href">fullPic_<xsl:value-of select="$pos"/>.html</xsl:attribute>
-		      <img src="small/{@name}" /><br/>
+          <img src="{substring-before(@name, '.')}.small.jpg" /><br/>
           Click to View Largest Picture
 		    </a>
 		  </xsl:when>
 		  <xsl:otherwise>
 		    <a>
           <xsl:attribute name="href">pic_<xsl:value-of select="$pos"/>.html</xsl:attribute>
-		      <img src="big/{@name}" /><br/>
+		      <img src="{@name}" /><br/>
           Click to View Smaller Picture
 		    </a>
 		  </xsl:otherwise>

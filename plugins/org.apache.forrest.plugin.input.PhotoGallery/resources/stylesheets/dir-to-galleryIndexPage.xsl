@@ -95,7 +95,7 @@ Author: Jörg Werner
 	  <td width="100" height="100" align="center">
 	    <a>
         <xsl:attribute name="href">pic_<xsl:value-of select="position()+$offset"/>.html</xsl:attribute>
-	      <img src="preview/{@name}" />
+        <img src="{substring-before(@name, '.')}.thumb.jpg" />
 	    </a>
 	  </td>
 	</xsl:for-each>

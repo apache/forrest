@@ -26,47 +26,31 @@
       <p>This plugin creates a photo album from photographs.</p>
       
       <p>The pictures are expected under 
-      <code>{project:content.xdocs}/images/gallery/**</code> in 
-      folders called <code>preview</code>, <code>small</code> and  
-      <code>big</code>.</p>
+      <code>{project:content.xdocs}/images/gallery/**</code>.  To create your photo 
+      albums simply create a new directory for each photo album under the gallery 
+      directory.  Then place a simple album description file named album.xml in each
+      directory.  Look in the sample gallery for a sample of this album.xml file.</p>
       
-      <p>To view a screen of thumbnails (generated from the <code>preview</code>
-      directory), you need to request an URL in the form of 
+      <p>To view a screen of thumbnails, you need to request an URL in the form of 
       <code>gallery/**/index.html</code>. By default 20 pictures will be 
       displayed. If you have more than 20 then you will need to use an URL in
       the form of <code>gallery/**/index_X.html</code> (where X is the page 
       number you want to view). 
       See our <a href="gallery/demo/index_1.html">demo index</a> for an example.</p>
       
-      <p>To view a single picture at a size optimised for the delivery mecahnism 
-      (generated from the <code>small</code> directory), you need to request an 
-      URL in the form of <code>gallery/**/pic_PICTURE_NUMBER.html</code>,
+      <p>To view a single picture at a size optimised for the delivery mecahnism, you 
+      need to request an URL in the form of <code>gallery/**/pic_PICTURE_NUMBER.html</code>,
       where PICTURE_NUMBER is the number of the picture you want to display.
       See our <a href="gallery/demo/pic_1.html">demo one picture</a>,
       <a href="gallery/demo/pic_2.html">demo two picture</a>, 
       <a href="gallery/demo/pic_3.html">demo three picture</a> for examples.</p>
       
-      <p>To view a single picture at its natural size 
-      (generated from the <code>big</code> directory), you need to request an 
+      <p>To view a single picture at its natural size, you need to request an 
       URL in the form of <code>gallery/**/fullPic_PICTURE_NUMBER.html</code>.
       See our <a href="gallery/demo/fullPic_1.html">demo one picture</a>,
       <a href="gallery/demo/fullPic_2.html">demo two picture</a>, 
       <a href="gallery/demo/fullPic_3.html">demo three picture</a> for examples.</p>
-      
-      <note>To create the relevant directory stuctures for your gallery simply
-      run the following script (unix only). We hope to enhance this plugin
-      so that it will automatically create the relevant images for you, but
-      for now you must do it by hand.
-      <code>
-      for i; do
-        echo -n "Converting:" $i "... ";
-        convert -size 100x100 $i -resize 100x100 preview/$i;
-        convert -size 400x400 $i -resize 400x400 small/$i;
-        convert -size 800x800 $i -resize 800x800 big/$i;
-        echo "finished.";
-      done
-      </code> 
-</note>
+
     </section>
   </body>
 </document>
