@@ -32,6 +32,13 @@
           at the others for examples, change the projects.xml file 
           accordingly, then run 'ant'.
           <br/><a href="#moreinfo">[more info]</a></p>
+
+        <p>
+          Note that if you are not using these logos for an Apache project
+          then be aware about using
+          <a href="http://www.apache.org/foundation/licence-FAQ.html#Marks">
+          trade marks</a>.
+        </p>
  
          <h2>Projects</h2>
           <ul> 
