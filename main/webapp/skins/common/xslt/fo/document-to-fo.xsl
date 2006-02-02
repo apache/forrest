@@ -800,8 +800,10 @@
         </xsl:if>
       </fo:external-graphic>
       <!-- alt text -->
-      <xsl:if test="normalize-space(@alt)!=''">
-          <fo:block><xsl:value-of select="@alt"/></fo:block>
+      <xsl:if test="//skinconfig/pdf/show-image-alt-text='true'">
+        <xsl:if test="normalize-space(@alt)!=''">
+            <fo:block><xsl:value-of select="@alt"/></fo:block>
+        </xsl:if>
       </xsl:if>
     </fo:block>
   </xsl:template>
