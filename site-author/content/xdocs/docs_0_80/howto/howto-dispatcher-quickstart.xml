@@ -19,8 +19,8 @@
 <howto>
   <header>
    <title>Dispatcher quickstart</title>
-    <version>0.1</version>
-    <last-modified-content-date date="2006-01-19" />
+    <version>0.2</version>
+    <last-modified-content-date date="2006-02-02" />
   </header>
 
   <audience title="Intended Audience">
@@ -37,14 +37,22 @@
       existing site and show how to add/remove ready-made contacts.
       Then we will discuss how add your own new contracts.
     </p>
+    <p>
+      This document encourages developers to get involved with
+      fine-tuning and testing the dispatcher. Please help to
+      enhance the current core contracts so that people do not
+      need to re-invent the wheel.
+    </p>
   </purpose>
 
   <prerequisites title="Prerequisites">
     <ul>
+      <li>Using Forrest trunk of SVN (i.e. forrest-0.8-dev).
+        Must be after r373699, preferably head of trunk.
+      </li>
+      <li>Followed the installation instructions below.</li>
       <li>You have an existing forrest site and want to try the
         new Dispatcher. Otherwise create a 'forrest seed-sample' site.</li>
-      <li>Read <a href="site:howto/dispatcher/install">How to install the "dispatcher"</a>. </li>
-      <li>Using Forrest trunk of SVN, i.e. forrest-0.8-dev</li>
     </ul>
   </prerequisites>
 
@@ -56,14 +64,28 @@
       but is not necessary.
     </note>
 
+    <section id="patch">
+      <title>Get ready</title>
+      <ul>
+        <li>Do 'svn update' or at least use r373699.</li>
+        <li>Apply the patch from https://issues.apache.org/jira/browse/FOR-796</li>
+        <li>Deploy both dispatcher plugins.</li>
+      </ul>
+      <source>
+cd whiteboard/plugins/org.apache.forrest.plugin.internal.dispatcher
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+cd ../org.apache.forrest.themes.core
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+      </source>
+    </section>
+
     <section id="enable">
       <title>Dispatcher-enable the existing site</title>
-      <p>These steps were fully described in the 
-        <a href="site:howto/dispatcher/install">How to install the "dispatcher"</a>.
-      </p>
       <ul>
-        <li>Add the structurer and themer plugins to forrest.properties</li>
-        <li>Deploy structurer plugins with etc/structurer.sh</li>
+        <li>Add the new plugins to forrest.properties ...
+        ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core
+        </li>
+        <li>Deploy both dispatcher plugins with etc/structurer.sh</li>
         <li>localhost:8888/index.html ... fantastic. See the default view.</li>
       </ul>
     </section>
@@ -139,7 +161,7 @@
       </ul>
       <p>
         Notice that you did not need to copy any other code to your project space.
-        Forrest finds the default contract in its core (currently the Themer plugin).
+        Forrest finds the default contract in its core (the theme.core plugin).
       </p>
     </section>
 
