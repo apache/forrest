@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
@@ -334,6 +334,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
+<a href="#patch">Get ready</a>
+</li>
+<li>
 <a href="#enable">Dispatcher-enable the existing site</a>
 </li>
 <li>
@@ -373,6 +376,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="content"> The "Dispatcher" (previously known as "Views") is new functionality which is 
       still in development phase. That is why it is in the "whiteboard" section 
       of Forrest. This document will also need to change to keep pace.
+      We are working at the moment on moving this plugin
+      from the whiteboard into the core plugins.
     </div>
 </div>
 </div>
@@ -384,22 +389,30 @@ document.write("Last Published: " + document.lastModified);
       existing site and show how to add/remove ready-made contacts.
       Then we will discuss how add your own new contracts.
     </p>
+<p>
+      This document encourages developers to get involved with
+      fine-tuning and testing the dispatcher. Please help to
+      enhance the current core contracts so that people do not
+      need to re-invent the wheel.
+    </p>
 </div>
-<a name="N10023"></a><a name="Prerequisites"></a>
+<a name="N10026"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
       
+<li>Using Forrest trunk of SVN (i.e. forrest-0.8-dev).
+        Must be after r373699, preferably head of trunk.
+      </li>
+      
+<li>Followed the installation instructions below.</li>
+      
 <li>You have an existing forrest site and want to try the
         new Dispatcher. Otherwise create a 'forrest seed-sample' site.</li>
-      
-<li>Read <a href="../../docs_0_80/howto/howto-structurer-install.html">How to install the "dispatcher"</a>. </li>
-      
-<li>Using Forrest trunk of SVN, i.e. forrest-0.8-dev</li>
     
 </ul>
 </div>
-<a name="N10038"></a><a name="Steps"></a>
+<a name="N10037"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <div class="note">
@@ -411,21 +424,37 @@ document.write("Last Published: " + document.lastModified);
       but is not necessary.
     </div>
 </div>
-<a name="N10046"></a><a name="enable"></a>
-<h3 class="underlined_5">Dispatcher-enable the existing site</h3>
-<p>These steps were fully described in the 
-        <a href="../../docs_0_80/howto/howto-structurer-install.html">How to install the "dispatcher"</a>.
-      </p>
+<a name="N10045"></a><a name="patch"></a>
+<h3 class="underlined_5">Get ready</h3>
 <ul>
         
-<li>Add the structurer and themer plugins to forrest.properties</li>
+<li>Do 'svn update' or at least use r373699.</li>
         
-<li>Deploy structurer plugins with etc/structurer.sh</li>
+<li>Apply the patch from https://issues.apache.org/jira/browse/FOR-796</li>
+        
+<li>Deploy both dispatcher plugins.</li>
+      
+</ul>
+<pre class="code">
+cd whiteboard/plugins/org.apache.forrest.plugin.internal.dispatcher
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+cd ../org.apache.forrest.themes.core
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+      </pre>
+<a name="N1005C"></a><a name="enable"></a>
+<h3 class="underlined_5">Dispatcher-enable the existing site</h3>
+<ul>
+        
+<li>Add the new plugins to forrest.properties ...
+        ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core
+        </li>
+        
+<li>Deploy both dispatcher plugins with etc/structurer.sh</li>
         
 <li>localhost:8888/index.html ... fantastic. See the default view.</li>
       
 </ul>
-<a name="N10060"></a><a name="another-theme"></a>
+<a name="N1006F"></a><a name="another-theme"></a>
 <h3 class="underlined_5">Use another theme</h3>
 <ul>
         
@@ -436,7 +465,7 @@ document.write("Last Published: " + document.lastModified);
 <li>localhost:8888/index.html ... See the new view.</li>
       
 </ul>
-<a name="N10073"></a><a name="our-structurer"></a>
+<a name="N10082"></a><a name="our-structurer"></a>
 <h3 class="underlined_5">Create our own structurer by copy-and-customise</h3>
 <p>
         Copy the default structurer for the pelt theme and make local changes.
@@ -470,7 +499,7 @@ document.write("Last Published: " + document.lastModified);
         From here on there is no need to re-start 'forrest run'. Just edit
         the structurer and see the effect.
       </p>
-<a name="N1008F"></a><a name="remove-default-contract"></a>
+<a name="N1009E"></a><a name="remove-default-contract"></a>
 <h3 class="underlined_5">Remove a default contract</h3>
 <ul>
         
@@ -479,7 +508,7 @@ document.write("Last Published: " + document.lastModified);
         </li>
       
 </ul>
-<a name="N1009C"></a><a name="add-default-contract"></a>
+<a name="N100AB"></a><a name="add-default-contract"></a>
 <h3 class="underlined_5">Add a default contract</h3>
 <p>
         Forrest provides many default contracts. If you are using the
@@ -507,9 +536,9 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 <p>
         Notice that you did not need to copy any other code to your project space.
-        Forrest finds the default contract in its core (currently the Themer plugin).
+        Forrest finds the default contract in its core (the theme.core plugin).
       </p>
-<a name="N100B6"></a><a name="add-project-contract"></a>
+<a name="N100C5"></a><a name="add-project-contract"></a>
 <h3 class="underlined_5">Add a new project contract</h3>
 <div class="warning">
 <div class="label">Warning</div>
@@ -558,7 +587,7 @@ document.write("Last Published: " + document.lastModified);
         Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
         localhost:8888/ls.contracts.project.html
       </p>
-<a name="N100DC"></a><a name="manage"></a>
+<a name="N100EB"></a><a name="manage"></a>
 <h3 class="underlined_5">Decide how to manage your contracts</h3>
 <div class="fixme">
 <div class="label">Fixme (crossley)</div>
@@ -568,7 +597,7 @@ Glean content from Ross' discussion:
 </div>
 </div>
 </div>
-<a name="N100EB"></a><a name="Further Reading"></a>
+<a name="N100FA"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p> Congratulations you are now able to work with the Dispatcher. From here 
@@ -590,7 +619,7 @@ Glean content from Ross' discussion:
     
 </ul>
 </div>
-<a name="N10104"></a><a name="Feedback"></a>
+<a name="N10113"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p> Please provide feedback about this document via the <a href="../../mail-lists.html">mailing lists</a>. </p>
