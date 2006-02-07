@@ -33,6 +33,7 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
+import org.apache.forrest.dispatcher.transformation.DispatcherTransformer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -251,8 +252,10 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                      */
                     // default forrest properties
                     Transformer transformer = cachedXSLT.newTransformer();
+                    String request= (String) parameterHelper.get(DispatcherTransformer.DISPATCHER_REQUEST_ATTRIBUTE);
+                    String propertyURI= "cocoon://"+request+".props";
                     Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil
-                            .readDOM("cocoon://test-props", this.manager);
+                            .readDOM(propertyURI, this.manager);
                     transformer.setParameter("defaultVariables",
                             defaultVariables);
                     transformer.setOutputProperty(

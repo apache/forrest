@@ -191,9 +191,13 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private SourceResolver m_resolver;
 
+    private String requestId;
+
     public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
 
     public static final String PATH_PARAMETER = "path";
+
+    static public final String DISPATCHER_REQUEST_ATTRIBUTE = "request";
 
     /**
      * Constructor Set the namespace
@@ -280,6 +284,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
+        this.requestId= parameters.getParameter(
+                DISPATCHER_REQUEST_ATTRIBUTE, null);
+        if (requestId == null) {
+            String error = "dispatcherError:\n"
+                    + "You have to set the \"request\" parameter in the sitemap!";
+            getLogger().error(error);
+            throw new ProcessingException(error);
+        }
+        parameterHelper.put(DISPATCHER_REQUEST_ATTRIBUTE, requestId);
         this.requestedFormat = parameters.getParameter(
                 STRUCTURER_FORMAT_ATTRIBUTE, null);
         if (requestedFormat == null) {
