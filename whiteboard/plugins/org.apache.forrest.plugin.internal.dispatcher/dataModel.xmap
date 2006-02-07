@@ -17,7 +17,7 @@
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
-    <map:pipes default="caching"/>
+    <map:pipes default="caching" />
     <map:generators default="file" />
     <map:transformers default="xslt" />
     <map:serializers default="xml" />
@@ -34,7 +34,7 @@
         <map:transform type="idgen" />
         <map:transform type="xinclude" />
         <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
-        <map:transform src="{lm:transform.html.broken-links}"/>
+        <map:transform src="{lm:transform.html.broken-links}" />
         <map:serialize />
       </map:match>
     </map:pipeline>
@@ -59,7 +59,8 @@
     <map:pipeline>
       <map:match pattern="**.abstract.xml">
         <map:generate src="cocoon://{1}.xml" />
-        <map:transform src="{lm:dataModel-xml-document-to-abstract.xsl}" />
+        <map:transform
+          src="{lm:dataModel-xml-document-to-abstract.xsl}" />
         <map:serialize />
       </map:match>
     </map:pipeline>
@@ -91,7 +92,7 @@
       <map:match pattern="**.menu.xml">
         <map:generate src="cocoon://{1}.book.xml" />
         <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
-        <map:transform src="{lm:transform.html.broken-links}"/>
+        <map:transform src="{lm:transform.html.broken-links}" />
         <map:transform src="{lm:dataModel-html-book-to-menu.xsl}">
           <map:parameter name="path" value="{1}.html" />
         </map:transform>
@@ -103,31 +104,31 @@
       <map:match pattern="**.tab.xml">
         <map:select type="exists">
           <map:when test="{project:content.xdocs}tabs.xml">
-            <map:generate src="{project:content.xdocs}tabs.xml"/>
+            <map:generate src="{project:content.xdocs}tabs.xml" />
           </map:when>
           <map:when test="{lm:tabs.xml}">
-            <map:generate src="{lm:tabs.xml}"/>
+            <map:generate src="{lm:tabs.xml}" />
           </map:when>
           <map:otherwise>
-            <map:generate src="{project:content.xdocs}tabs.xml"/>
+            <map:generate src="{project:content.xdocs}tabs.xml" />
           </map:otherwise>
         </map:select>
-        <map:transform type="xinclude"/>
+        <map:transform type="xinclude" />
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:parameter name="value" value="{defaults:i18n}" />
           <map:when test="true">
             <map:act type="locale">
-              <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
+              <map:transform src="{forrest:stylesheets}/i18n.xsl" />
               <map:transform type="i18n">
-                <map:parameter name="locale" value="{request:locale}"/>
+                <map:parameter name="locale" value="{request:locale}" />
               </map:transform>
             </map:act>
           </map:when>
         </map:select>
-        <map:transform type="linkrewriter" src="cocoon://linkmap-{1}"/>
+        <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
         <map:transform src="{lm:dataModel-html-tab-to-menu.xsl}">
           <!--<map:transform src="{lm:dataModel-html-tab2menu.xsl}">-->
-          <map:parameter name="path" value="{1}{2}.html"/>
+          <map:parameter name="path" value="{1}{2}.html" />
         </map:transform>
         <map:serialize />
       </map:match>
@@ -138,7 +139,7 @@
           <map:select type="exists">
             <map:when test="{project:content.xdocs}{1}book.xml">
               <!-- If a hand-created book.xml exists, use it -->
-              <map:parameter name="url" 
+              <map:parameter name="url"
                 value="{project:content.xdocs}{1}book.xml" />
               <map:generate src="{project:content.xdocs}{1}book.xml" />
             </map:when>
@@ -146,7 +147,8 @@
               <!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/menulinks-{1}{2}" />
               <!-- The above generates the subset of the linkmap relevant to our directory. -->
-              <map:transform src="{forrest:stylesheets}/site-to-book.xsl" />
+              <map:transform
+                src="{forrest:stylesheets}/site-to-book.xsl" />
             </map:otherwise>
           </map:select>
         </map:match>
@@ -154,7 +156,7 @@
           <map:select type="exists">
             <map:when test="{project:content.xdocs}/book.xml">
               <!-- If a hand-created book.xml exists, use it -->
-              <map:parameter name="url" 
+              <map:parameter name="url"
                 value="{project:content.xdocs}/book.xml" />
               <map:generate src="{project:content.xdocs}/book.xml" />
             </map:when>
@@ -162,39 +164,42 @@
               <!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/menulinks-{1}" />
               <!-- The above generates the subset of the linkmap relevant to our directory. -->
-              <map:transform src="{forrest:stylesheets}/site-to-book.xsl" />
+              <map:transform
+                src="{forrest:stylesheets}/site-to-book.xsl" />
             </map:otherwise>
           </map:select>
         </map:match>
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:parameter name="value" value="{defaults:i18n}" />
           <map:when test="true">
             <map:act type="locale">
-              <map:transform src="{forrest:stylesheets}/i18n.xsl"/>
+              <map:transform src="{forrest:stylesheets}/i18n.xsl" />
               <map:transform type="i18n">
                 <!-- We can use a default locale attribute or Request Parameter
-                <map:parameter name="locale" value="{defaults:locale}"/>
-                <map:parameter name="locale" value="{lang}{country}{variant}"-->
-                <map:parameter name="locale" value="{request:locale}"/>
+                  <map:parameter name="locale" value="{defaults:locale}"/>
+                  <map:parameter name="locale" value="{lang}{country}{variant}"-->
+                <map:parameter name="locale" value="{request:locale}" />
               </map:transform>
             </map:act>
           </map:when>
         </map:select>
-        <map:serialize type="xml"/>
+        <map:serialize type="xml" />
       </map:match>
       <map:match pattern="**menulinks-*">
-        <map:generate src="cocoon://site.navigation.links.xml"/>
-        <map:transform type="xinclude"/>
-        <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
+        <map:generate src="cocoon://site.navigation.links.xml" />
+        <map:transform type="xinclude" />
+        <map:transform
+          src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:menu-scheme}"/>
+          <map:parameter name="value" value="{defaults:menu-scheme}" />
           <map:when test="tab_attributes">
-            <map:transform 
+            <map:transform
               src="{forrest:stylesheets}/site-to-site-normalizetabs.xsl" />
-            <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
-            <map:transform 
+            <map:transform
+              src="{forrest:stylesheets}/normalizehrefs.xsl" />
+            <map:transform
               src="{forrest:stylesheets}/site-to-site-selectnode.xsl">
-              <map:parameter name="path" value="{1}{2}.html"/>
+              <map:parameter name="path" value="{1}{2}.html" />
             </map:transform>
           </map:when>
           <map:when test="directories">
@@ -203,7 +208,8 @@
             </map:transform>
           </map:when>
         </map:select>
-        <map:transform src="{forrest:stylesheets}/relativize-linkmap.xsl">
+        <map:transform
+          src="{forrest:stylesheets}/relativize-linkmap.xsl">
           <map:parameter name="path" value="{1}{2}.html" />
         </map:transform>
         <map:serialize type="xml" />
