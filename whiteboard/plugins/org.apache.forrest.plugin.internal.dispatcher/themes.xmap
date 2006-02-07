@@ -17,51 +17,9 @@
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
-    <map:selectors>
-      <map:selector logger="sitemap.selector.exists" name="exists" 
-        src="org.apache.forrest.sourceexists.SourceExistsSelector" />
-    </map:selectors>
-    <map:generators default="file">
-      <map:generator name="html" 
-        src="org.apache.cocoon.generation.HTMLGenerator">
-        <jtidy-config>jtidy.properties</jtidy-config>
-      </map:generator>
-      <map:generator name="text" 
-        src="org.apache.cocoon.generation.TextGenerator">
-        <parameter name="localizable" value="true" />
-      </map:generator>
-      <map:generator name="directory" 
-        src="org.apache.cocoon.generation.DirectoryGenerator" />
-      <!--<map:generator name="structurerXsl"
-        src="org.apache.forrest.structurer.generation.StructurerXSLGenerator" />
-      -->
-    </map:generators>
-    <map:transformers default="xslt">
-      <map:transformer name="cinclude" 
-        src="org.apache.cocoon.transformation.CIncludeTransformer" />
-      <map:transformer name="dispatcher" 
-        src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer" 
-        />
-      <map:transformer name="i18n" 
-        src="org.apache.cocoon.transformation.I18nTransformer">
-        <catalogues default="contracts">
-          <catalogue id="other" name="OtherMessages" location="messages" />
-          <catalogue id="contracts" name="ContractsMessages" 
-            location="messages" />
-        </catalogues>
-        <cache-at-startup>true</cache-at-startup>
-      </map:transformer>
-    </map:transformers>
+    <map:generators default="file"/>
+    <map:transformers default="xslt"/>
     <map:serializers default="xml">
-      <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
-        name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
-        src="org.apache.cocoon.serialization.XMLSerializer">
-        <doctype-public> -//W3C//DTD XHTML 1.0 Strict//EN </doctype-public>
-        <doctype-system> http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd 
-          </doctype-system>
-        <encoding>UTF-8</encoding>
-        <indent>yes</indent>
-      </map:serializer>
       <map:serializer name="txt" 
         src="org.apache.cocoon.serialization.TextSerializer" 
         mime-type="text/plain" logger="sitemap.serializer.text" />
