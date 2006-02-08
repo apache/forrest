@@ -37,7 +37,7 @@ public class Constants {
 	public static final String FORWARD_NAME_AUTHORIZED = "Authorized";
 
 	// string tokens
-	public static final String BUILD_SUCCESS_STRING = "BUILD SUCCESSFUL";
+	public static final String BUILD_SUCCESS_STRING = "Forrest render Succeeded";
 
     // status values
 	public static final int STATUS_UNKNOWN = 0;
