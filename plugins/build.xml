@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  Copyright 2002-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,7 +123,7 @@
   </target>
   
   
-  <!-- FIXME: Forrest should really use the plugins in-place if they are available as source -->
+  <!-- FIXME: FOR-388 Forrest should really use the plugins in-place if they are available as source -->
   <target name="local-deploy"
           description="Deploy a plugin locally"
           depends="init, clean, jar">
@@ -214,7 +214,7 @@
           <else>
             <!-- FIXME: the docs version number should be derived programmatically from the forrest.version in use 
                  (see http://issues.apache.org/jira/browse/FOR-535) -->
-            <fail message="Trying to deploy plugin docs to an unkown version of Forrest. Please update the plugins build file."/>
+            <fail message="Trying to deploy plugin docs to an unknown version of Forrest. Please update the plugin's build file."/>
           </else>
         </if>
       </else>
@@ -383,6 +383,7 @@ You have just released a plugin. There are other tasks to complete. For example:
           filtering="true">
       <fileset dir="${forrest.plugins.template.dir}"/>
       <filterset>
+<!-- FIXME: need to strip the "-dev" from "forrest-version" FOR-742 -->
         <filter token="forrest-version" value="${forrest.version}"/>
         <filter token="plugin-name" value="${plugin-name}"/>
         <filter token="plugin-type" value="${plugin-type}"/>
