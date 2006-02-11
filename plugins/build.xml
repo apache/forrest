@@ -20,7 +20,7 @@
   <!-- The minimum version of Forrest a plugin is known to work -->
   <!-- This should be overridden in the plugin build file when necessary
        i.e. when the plugin is being developed for a different Forrest version -->
-  <property name="forrest.version"					          value="0.8-dev"/>
+  <property name="forrest.version" value="0.8"/>
   <property name="forrest.home"                       location="${env.FORREST_HOME}"/>   
   <property name="forrest.core"                       location="${env.FORREST_HOME}/main" />  
   <property name="forrest.ant.lib.dir"                location="${forrest.home}/tools/ant/lib"/>  
@@ -261,11 +261,11 @@
   </target>
           
   <target name="release"
-          description="Release the plugin to the website SVN to make it available for download"
+          description="Release the versioned plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Releasing ${plugin-name} to the download server</echo>
+    <echo>Releasing versioned plugin ${plugin-name} to the download server</echo>
 	
-    <!-- copy new plugin files into sandbox -->
+    <!-- Put versioned plugin in the ${forrest.version} directory -->
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
@@ -311,14 +311,15 @@ You have just released a plugin. There are other tasks to complete. For example:
   </target>
   
   <target name="deploy"
-          description="Deploy the plugin to the website SVN to make it available for download"
+          description="Deploy the unversioned plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Deploying ${plugin-name} to the download server</echo>
-	
-    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
+    <echo>Deploying unversioned plugin ${plugin-name} to the download server</echo>
+
+    <!-- Put unversioned plugin in the top-level directory -->
+    <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
-     
+
     <antcall target="updateSVN"/>
   </target>
 	   
@@ -383,7 +384,6 @@ You have just released a plugin. There are other tasks to complete. For example:
           filtering="true">
       <fileset dir="${forrest.plugins.template.dir}"/>
       <filterset>
-<!-- FIXME: need to strip the "-dev" from "forrest-version" FOR-742 -->
         <filter token="forrest-version" value="${forrest.version}"/>
         <filter token="plugin-name" value="${plugin-name}"/>
         <filter token="plugin-type" value="${plugin-type}"/>
