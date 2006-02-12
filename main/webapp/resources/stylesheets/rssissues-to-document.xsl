@@ -37,7 +37,8 @@
   <section>
     <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
     <p><link href="{link}"><xsl:value-of select="link"/></link></p>
-    <p><xsl:value-of select="description" disable-output-escaping="yes"/></p>
+    <!--<p><xsl:value-of select="description" disable-output-escaping="yes" /></p>-->
+    <p><xsl:value-of select="description" /></p>
   </section>
 </xsl:template>
 
