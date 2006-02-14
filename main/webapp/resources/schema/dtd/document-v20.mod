@@ -36,14 +36,6 @@ TYPICAL INVOCATION:
 
 NOTES:
 
-FIXME:
-
-CHANGE HISTORY:
-[Version 2.0a]
-  20030505  Add a meta element to the header, for generic metadata
-  20030505  Zap jump and fork, and rename 'link' to 'a' for better HTMLness
-  20030510  Fix bug which allowed nested lists like <ol><ol>. Now lists can only contain li's.
-
 ==================================================================== -->
 <!-- =============================================================== -->
 <!-- Useful entities for increased DTD readability -->
