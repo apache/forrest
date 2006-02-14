@@ -367,6 +367,9 @@ Section handling
 
   <xsl:template match="body" mode="toc">
     <tocitems>
+      <xsl:if test="../header/meta[@name='forrest.force-toc'] = 'true'">
+        <xsl:attribute name="force">true</xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates select="section" mode="toc">
         <xsl:with-param name="level" select="1"/>
       </xsl:apply-templates>

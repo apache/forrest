@@ -750,7 +750,7 @@
       padding-after="3pt">
       <xsl:apply-templates/>
     </fo:block>
-  </xsl:template>
+  </xsl:template>                 
 
   <xsl:template match="link|fork|jump">
     <xsl:variable name="color" select="//skinconfig/colors/color[@name = 'body']/@link"/>

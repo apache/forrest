@@ -288,7 +288,7 @@ if (VERSION > 3) {
   <xsl:template match="div[@id='skinconf-toc-page']">
     <xsl:if test="$config/toc">
       <xsl:if test="contains($minitoc-location,'page')">
-        <xsl:if test="count(//tocitems/tocitem) >= $config/toc/@min-sections">
+        <xsl:if test="(count(//tocitems/tocitem) >= $config/toc/@min-sections) or (//tocitems/@force = 'true')">
           <xsl:call-template name="minitoc">
             <xsl:with-param name="tocroot" select="//tocitems"/>
           </xsl:call-template>
@@ -299,7 +299,7 @@ if (VERSION > 3) {
 
   <xsl:template name="minitoc">
     <xsl:param name="tocroot"/>
-    <xsl:if test="count($tocroot/tocitem) >= $config/toc/@min-sections">
+    <xsl:if test="(count($tocroot/tocitem) >= $config/toc/@min-sections) or ($tocroot/@force = 'true')">
     <xsl:if test="contains($config/toc/@location,'page')">
       <ul class="minitoc">
         <xsl:for-each select="$tocroot/tocitem">
