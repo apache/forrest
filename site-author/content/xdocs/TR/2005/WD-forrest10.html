@@ -196,8 +196,11 @@ file resolved, which will be our main source.
 
 <H4><A NAME="xifier"></A>Step 2: Xifier (content)</H4>
 <P>Transform the main source to the intermediate format, XHTML2.</P>
-<P>The various input formats and handled by specific input plugins, all transforming
+<P>The various input formats are handled by specific input plugins, all transforming
 to XHTML2. Input plugins for HTML and XHTML are available by default.
+</P>
+<P>
+It has an opportunity to aggregate data from other sources and to do various pre-processing.
 </P>
 <P>Multiple formats can be requested of the same source: the filename
 asked will be in the following manner. 
@@ -285,13 +288,22 @@ xhtml, pdf, rtf, doc, ps, etc.
       <P ALIGN=LEFT>Commence this section. Describe how the whole thing operates
        and define the terminology of each part.
       </P>
+      <P ALIGN=LEFT>
+      See various email to the forrest dev mailing list, especially
+      <A HREF="http://marc.theaimsgroup.com/?t=112276643700001">Re: Defining Views Terminology</A>
     </TD>
   </TR>
 </TABLE>
     <P>
-      This document will eventually define all of the terminology.
-      See various email to the forrest dev mailing list, especially
-      <A HREF="http://marc.theaimsgroup.com/?t=112276643700001">Re: Defining Views Terminology</A>
+The source for the main content is located via the <STRONG>Resolver</STRONG>
+and the XML stream is generated.
+The type of input is detected and a certain input plugin handles the source,
+transforming it to XHTML2. This <STRONG>Xifier</STRONG> step builds the
+initial document structure and provides the initial content nuggets.
+The <STRONG>Forrest:view</STRONG> defines additional content, functionality,
+and style for the request. The Forrest core defines a default view for each
+output format (xhtml2, fo, etc.), and a project can over-ride those contracts
+or provide additional contracts, and page-specific views can also be provided.
     </P>
 
 <H3><A NAME="templates"></A>Forrest:templates</H3>
@@ -314,7 +326,7 @@ xhtml, pdf, rtf, doc, ps, etc.
 
 <P>Forrest:templates (or f:t for short) is a templating language to create
 views.</P>
-<P><B>Definition - Forrest-View:</B> View = content (nuggets) +
+<P><B>Definition of Forrest:View</B> = content (nuggets) +
 functionality (fbit) + design (style) 
 </P>
 <P>Nuggets are the incoming content. They are pure items of
