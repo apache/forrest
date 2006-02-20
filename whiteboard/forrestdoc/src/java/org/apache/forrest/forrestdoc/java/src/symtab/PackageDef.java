@@ -155,9 +155,9 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
         accept(rp);
 
-        // Enumeration enum = getElements().elements();
-        // while (enum.hasMoreElements()) {
-        // ClassDef def = (ClassDef)enum.nextElement();
+        // Enumeration enumList = getElements().elements();
+        // while (enumList.hasMoreElements()) {
+        // ClassDef def = (ClassDef)enumList.nextElement();
         // String newPath = path + File.separatorChar + d.getPackagePath();
         // if (!(def instanceof DummyClass || def instanceof PrimitiveDef) ) {
         // String filename = newPath + File.separatorChar + def.getName() + ".ref";

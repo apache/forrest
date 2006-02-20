@@ -227,10 +227,10 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
         JavaVector refs = def.getReferences();
 
         if (refs != null) {
-            Enumeration enum = refs.elements();
+            Enumeration enumList = refs.elements();
 
-            while (enum.hasMoreElements()) {
-                Occurrence occ = (Occurrence) enum.nextElement();
+            while (enumList.hasMoreElements()) {
+                Occurrence occ = (Occurrence) enumList.nextElement();
 
                 // if (debugFlag) System.out.println("occ="+occ);
                 persist(referentFileClass, referentType, referentTag,

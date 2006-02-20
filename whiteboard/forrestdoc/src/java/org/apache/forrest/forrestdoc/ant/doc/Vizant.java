@@ -123,9 +123,9 @@ public class Vizant extends Task {
     }
 
     protected void loadProjects() throws BuildException {
-        Enumeration enum = loader.getProjects().elements();
-        while (enum.hasMoreElements()) {
-            printer.addProject((VizProject) enum.nextElement());
+        Enumeration enumList = loader.getProjects().elements();
+        while (enumList.hasMoreElements()) {
+            printer.addProject((VizProject) enumList.nextElement());
         }
     }
 

@@ -129,10 +129,10 @@ public class SymbolTable {
         Vector v = (Vector) _fileReferences.get(f);
 
         if (v != null) {
-            Enumeration enum = v.elements();
+            Enumeration enumList = v.elements();
 
-            while (enum.hasMoreElements()) {
-                Occurrence occ = (Occurrence) enum.nextElement();
+            while (enumList.hasMoreElements()) {
+                Occurrence occ = (Occurrence) enumList.nextElement();
                 HTMLTag occTag = occ.getOccurrenceTag();
 
                 if (occTag != null) {

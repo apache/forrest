@@ -86,9 +86,9 @@ public class VizTarget {
     private Vector filterReferences(Vector targets,
                                     Vector references) {
         Vector ret = new Vector();
-        Enumeration enum = references.elements();
-        while (enum.hasMoreElements()) {
-            VizReference r = (VizReference) enum.nextElement();
+        Enumeration enumList = references.elements();
+        while (enumList.hasMoreElements()) {
+            VizReference r = (VizReference) enumList.nextElement();
             if (targets.contains(r.getFrom()) &&
                     targets.contains(r.getTo())) {
                 ret.addElement(r);

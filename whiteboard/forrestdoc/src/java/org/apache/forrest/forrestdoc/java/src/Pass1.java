@@ -198,13 +198,13 @@ public class Pass1 implements FileListener {
                 pDef.generateTags(tagList);
 
                 Hashtable fileTable = tagList.getFileTable();
-                Enumeration enum = fileTable.keys();
+                Enumeration enumList = fileTable.keys();
                 Vector tempFileTags = new Vector();
 
-                while (enum.hasMoreElements()) {
+                while (enumList.hasMoreElements()) {
                     tempFileTags.clear();
 
-                    File f = (File) enum.nextElement();
+                    File f = (File) enumList.nextElement();
 
                     if (inputFiles.contains(f.getAbsolutePath())) {
                         Vector fileTags = (Vector) fileTable.get(f);

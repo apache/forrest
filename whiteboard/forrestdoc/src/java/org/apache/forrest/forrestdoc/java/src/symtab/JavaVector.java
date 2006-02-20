@@ -249,10 +249,10 @@ public class JavaVector extends java.util.Vector
      */
     public void accept(Visitor visitor) {
 
-        Enumeration enum = elements();
+        Enumeration enumList = elements();
 
-        while (enum.hasMoreElements()) {
-            Definition def = (Definition) enum.nextElement();
+        while (enumList.hasMoreElements()) {
+            Definition def = (Definition) enumList.nextElement();
 
             def.accept(visitor);
         }

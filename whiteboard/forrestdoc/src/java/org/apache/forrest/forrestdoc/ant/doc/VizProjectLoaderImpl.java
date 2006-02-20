@@ -274,11 +274,11 @@ public class VizProjectLoaderImpl implements VizProjectLoader {
 
         private VizProject getProject(String dir, String file) {
 
-            Enumeration enum = projects.elements();
+            Enumeration enumList = projects.elements();
 
-            while (enum.hasMoreElements()) {
+            while (enumList.hasMoreElements()) {
 
-                VizProject project = (VizProject) enum.nextElement();
+                VizProject project = (VizProject) enumList.nextElement();
 
                 if (dir.equals(project.getDir()) && file.equals(project.getFile()))
 

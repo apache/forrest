@@ -57,9 +57,9 @@ public class VizAttrStmt {
      * add attribute.
      */
     public void addAttribute(VizAttr attr) {
-        Enumeration enum = attrs.elements();
-        while (enum.hasMoreElements()) {
-            VizAttr a = (VizAttr) enum.nextElement();
+        Enumeration enumList = attrs.elements();
+        while (enumList.hasMoreElements()) {
+            VizAttr a = (VizAttr) enumList.nextElement();
             if (a.getName().equals(attr.getName())) {
                 a.setValue(attr.getValue());
                 return;
@@ -87,9 +87,9 @@ public class VizAttrStmt {
     public void addAttribute(VizAttrStmt attrstmt) {
         if (!type.equals(attrstmt.getType()))
             return;
-        Enumeration enum = attrstmt.getAttributes();
-        while (enum.hasMoreElements()) {
-            addAttribute((VizAttr) enum.nextElement());
+        Enumeration enumList = attrstmt.getAttributes();
+        while (enumList.hasMoreElements()) {
+            addAttribute((VizAttr) enumList.nextElement());
         }
     }
 
@@ -108,9 +108,9 @@ public class VizAttrStmt {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(type).append(" [ ");
-        Enumeration enum = getAttributes();
-        while (enum.hasMoreElements()) {
-            buffer.append(enum.nextElement().toString()).append(" ");
+        Enumeration enumList = getAttributes();
+        while (enumList.hasMoreElements()) {
+            buffer.append(enumList.nextElement().toString()).append(" ");
         }
         buffer.append("]");
         return buffer.toString();

@@ -163,9 +163,9 @@ public class VizPrinter {
     }
 
     public void printAttrStmt(VizAttrStmt as) {
-        Enumeration enum = as.getAttributes();
-        while (enum.hasMoreElements()) {
-            VizAttr attr = (VizAttr) enum.nextElement();
+        Enumeration enumList = as.getAttributes();
+        while (enumList.hasMoreElements()) {
+            VizAttr attr = (VizAttr) enumList.nextElement();
 
             // The attribute value must be raw. DO NOT ESCAPE.
             // Some escape sequence exists: 
@@ -206,9 +206,9 @@ public class VizPrinter {
     }
 
     private void filterReferences(Vector targets) {
-        Enumeration enum = projects.elements();
-        while (enum.hasMoreElements()) {
-            Enumeration targetEnum = ((VizProject) enum.nextElement())
+        Enumeration enumList = projects.elements();
+        while (enumList.hasMoreElements()) {
+            Enumeration targetEnum = ((VizProject) enumList.nextElement())
                     .getOrderedTargets().elements();
             while (targetEnum.hasMoreElements()) {
                 VizTarget target = (VizTarget) targetEnum.nextElement();
@@ -219,9 +219,9 @@ public class VizPrinter {
 
     private void eraseNotContainsTargets(Vector targets) {
         Vector newProjects = new Vector();
-        Enumeration enum = projects.elements();
-        while (enum.hasMoreElements()) {
-            VizProject oldp = (VizProject) enum.nextElement();
+        Enumeration enumList = projects.elements();
+        while (enumList.hasMoreElements()) {
+            VizProject oldp = (VizProject) enumList.nextElement();
             VizProject newp = new VizProject();
             oldp.copyAttributes(newp);
             Enumeration targetEnum = oldp.getOrderedTargets().elements();
@@ -249,9 +249,9 @@ public class VizPrinter {
         } else {
             refs = target.getReferencesOut();
         }
-        Enumeration enum = refs.elements();
-        while (enum.hasMoreElements()) {
-            VizReference ref = (VizReference) enum.nextElement();
+        Enumeration enumList = refs.elements();
+        while (enumList.hasMoreElements()) {
+            VizReference ref = (VizReference) enumList.nextElement();
             VizTarget t = (backward) ? ref.getFrom() : ref.getTo();
             addReferredTargets(t, set, backward);
         }
@@ -295,9 +295,9 @@ public class VizPrinter {
         int subgraphNum = 0;
         Vector clusterRefs = new Vector();
 
-        Enumeration enum = projects.elements();
-        while (enum.hasMoreElements()) {
-            printProject((VizProject) enum.nextElement(),
+        Enumeration enumList = projects.elements();
+        while (enumList.hasMoreElements()) {
+            printProject((VizProject) enumList.nextElement(),
                     clusterRefs, subgraphNum);
             subgraphNum++;
         }
@@ -375,9 +375,9 @@ public class VizPrinter {
     }
 
     private void printClusterRefs(Vector clusterRefs) {
-        Enumeration enum = clusterRefs.elements();
-        while (enum.hasMoreElements()) {
-            VizReference ref = (VizReference) enum.nextElement();
+        Enumeration enumList = clusterRefs.elements();
+        while (enumList.hasMoreElements()) {
+            VizReference ref = (VizReference) enumList.nextElement();
             String from = idtable.getId(ref.getFrom());
             String to = idtable.getId(ref.getTo());
             print("<edge from=" + getQuotedId(from) + " to=" + getQuotedId(to) + " ");
@@ -428,9 +428,9 @@ public class VizPrinter {
             Hashtable result = new Hashtable();
             Vector idSet = new Vector();
 
-            Enumeration enum = projects.elements();
-            while (enum.hasMoreElements()) {
-                VizProject project = (VizProject) enum.nextElement();
+            Enumeration enumList = projects.elements();
+            while (enumList.hasMoreElements()) {
+                VizProject project = (VizProject) enumList.nextElement();
                 Vector targetlist = project.getOrderedTargets();
                 Enumeration targetEnum = targetlist.elements();
                 while (targetEnum.hasMoreElements()) {
