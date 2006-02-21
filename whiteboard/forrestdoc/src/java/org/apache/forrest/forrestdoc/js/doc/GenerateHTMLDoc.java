@@ -26,8 +26,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *         Classe que monta um documento em HTML com a documentação
- *         do respectivo arquivo.
+ *         Class that mounts a Document in HTML as document
  */
 public class GenerateHTMLDoc {
 
