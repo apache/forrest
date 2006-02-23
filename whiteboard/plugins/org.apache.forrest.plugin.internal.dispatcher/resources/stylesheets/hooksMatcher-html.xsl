@@ -23,30 +23,36 @@
     <xsl:apply-templates/>
   </xsl:template>
   <!--This template will match the different combinations for hooks-->
-  <xsl:template match="hook[@name and (@type='div' or not(@type) and not(@class))]">
-    <div id="{@name}">
-      <xsl:apply-templates/>
-      <xsl:if test="@nbsp='true'">&#160;</xsl:if>
-    </div>
+  <xsl:template match="hook">
+    <xsl:if test="@type='block' or not(@type)">
+      <div>
+        <xsl:call-template name="attributes"/>
+        <xsl:if test="@nbsp='true'"><xsl:text> </xsl:text></xsl:if>
+         <xsl:apply-templates/>
+      </div>
+    </xsl:if>
+    <xsl:if test="@type='inline'">
+      <span id="{@name}">
+        <xsl:call-template name="attributes"/>
+        <xsl:if test="@nbsp='true'"><xsl:text> </xsl:text></xsl:if>
+         <xsl:apply-templates/>
+      </span>
+    </xsl:if>
   </xsl:template>
-  <xsl:template match="hook[@class and (@type='div' or not(@type))]">
-    <div class="{@class}">
-      <xsl:apply-templates/>
-      <xsl:if test="@nbsp='true'">&#160;</xsl:if>
-    </div>
+  
+  <xsl:template name="attributes">
+    <xsl:if test="@name">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@name" />
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@class">
+      <xsl:attribute name="class">
+        <xsl:value-of select="@class" />
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
-  <xsl:template match="hook[@class and @type='span']">
-    <span class="{@class}"> 
-      <xsl:apply-templates/>
-      <xsl:if test="@nbsp='true'">&#160;</xsl:if>
-    </span>
-  </xsl:template>
-  <xsl:template match="hook[@name and @type='span']">
-    <span id="{@name}"> 
-      <xsl:apply-templates/>
-      <xsl:if test="@nbsp='true'">&#160;</xsl:if>
-    </span>
-  </xsl:template>
+  
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates 
