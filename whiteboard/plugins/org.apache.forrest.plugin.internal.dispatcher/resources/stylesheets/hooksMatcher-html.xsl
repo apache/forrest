@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -27,19 +26,22 @@
     <xsl:if test="@type='block' or not(@type)">
       <div>
         <xsl:call-template name="attributes"/>
-        <xsl:if test="@nbsp='true'"><xsl:text> </xsl:text></xsl:if>
-         <xsl:apply-templates/>
+        <xsl:if test="@nbsp='true'">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates/>
       </div>
     </xsl:if>
     <xsl:if test="@type='inline'">
       <span id="{@name}">
         <xsl:call-template name="attributes"/>
-        <xsl:if test="@nbsp='true'"><xsl:text> </xsl:text></xsl:if>
-         <xsl:apply-templates/>
+        <xsl:if test="@nbsp='true'">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates/>
       </span>
     </xsl:if>
   </xsl:template>
-  
   <xsl:template name="attributes">
     <xsl:if test="@name">
       <xsl:attribute name="id">
@@ -52,7 +54,6 @@
       </xsl:attribute>
     </xsl:if>
   </xsl:template>
-  
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates 
