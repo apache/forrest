@@ -1,3 +1,5 @@
+See http://issues.apache.org/jira/browse/FOR-820
+for explanation and links to some of the email discussion.
 
   build project
   
