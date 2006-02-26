@@ -56,12 +56,12 @@
      pelt: body: any remaining parts, e.g. the bottom of the page
      pelt: footer: the second from bottom strip containing credit logos and published date
      pelt: feedback: the optional bottom strip containing feedback link
-  -->
+  
 
 
     <color name="breadtrail" value="#cedfef" font="#0F3660" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
     <color name="header" value="#294563"/>
-    <color name="tab-selected" value="#4a6d8c" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
+    <color name="tab-selected" value="#4c6c8f" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
     <color name="tab-unselected" value="#b5c7e7" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
     <color name="subtab-selected" value="#4a6d8c" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
     <color name="subtab-unselected" value="#4a6d8c" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
@@ -74,8 +74,8 @@
     <color name="toolbox" value="#4a6d8c"/>
     <color name="border" value="#294563"/>
     <color name="dialog" value="#4a6d8c"/>
-    <color name="searchbox" value="#4a6d8c" font="#000000"/>
-    <color name="body" value="#ffffff" link="#0F3660" vlink="#009999" hlink="#000066"/>
+    <color name="searchbox" value="#000000" font="#000000"/>
+    <color name="body" value="#000000" link="#0F3660" vlink="#009999" hlink="#000066"/>
     <color name="table" value="#7099C5"/>    
     <color name="table-cell" value="#f0f0ff"/>    
     <color name="highlight" value="#ffff00"/>
@@ -84,7 +84,7 @@
     <color name="warning" value="#990000"/>
     <color name="code" value="#CFDCED"/>
     <color name="footer" value="#cedfef"/>
-
+-->
 
   <!-- Color group: Krysalis -->
 <!--
@@ -198,7 +198,6 @@
       <forrest:property name="branding-css-links-input">
         <css url="common.css" media="screen" rel="alternate stylesheet" theme="common"/>
         <css url="leather-dev.css" media="screen" rel="alternate stylesheet" theme="common"/>
-        <css url="pelt.basic.css" media="screen" theme="Pelt"/>
         <css url="pelt.screen.css" media="screen" theme="Pelt"/>
         <!-- You can request request specific css, but beware that you need to use the *.dispatcher.css extension!!!-->
         <!-- FIXME: that is not working ATM in forrest for subdir/bla needs more testing -->
@@ -269,7 +268,7 @@
         <forrest:hook name="nav-main-hook">
           <forrest:contract name="nav-main" 
             dataURI="cocoon://#{$getRequest}.navigation.xml"/>
-          <forrest:hook name="publishedStrip">
+          <forrest:hook name="publishedStrip" nbsp="true">
             <forrest:contract name="nav-main-sub" 
               dataURI="cocoon://#{$getRequest}.navigation.xml"/>
             <forrest:contract name="siteinfo-current-time"/>
@@ -278,7 +277,8 @@
 
       </forrest:hook>
       <forrest:hook name="page">
-        <forrest:contract name="branding-breadcrumbs">
+        <forrest:hook class="breadtrail" nbsp="true" />
+        <!--<forrest:contract name="branding-breadcrumbs">
           <forrest:property name="branding-breadcrumbs">
             <trail>
               <link1 name="myGroup" href="http://www.apache.org/"/>
@@ -286,7 +286,7 @@
               <link3 name="" href=""/>
             </trail>
           </forrest:property>
-        </forrest:contract>
+        </forrest:contract>-->
 
         <forrest:hook name="leftbar">
           <forrest:contract name="nav-section" dataURI="cocoon://#{$getRequest}.navigation.xml">
@@ -294,23 +294,23 @@
                 <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
               </forrest:property>
               <forrest:property name="expanding">true</forrest:property>
-              <forrest:property name="toc" max-depth="2"/>
+              <!--<forrest:property name="toc" max-depth="2"/>-->
           </forrest:contract>
-          <forrest:contract name="genericMarkup">
+	  <!-- <forrest:contract name="genericMarkup">
             <forrest:property name="genericMarkup">
               <hr/>
             </forrest:property>
-          </forrest:contract>
-          <forrest:contract name="search-input">
+    </forrest:contract>-->
+	  <!-- <forrest:contract name="search-input">
             <forrest:property name="input-size">18</forrest:property>
             <forrest:property name="search-input">
               <search name="MyProject" domain="mydomain" provider="google"/>
             </forrest:property>
-          </forrest:contract>
+    </forrest:contract>-->
           <forrest:contract name="siteinfo-credits">
             <forrest:property name="box-location">credit</forrest:property>
             <forrest:property name="top-separator">true</forrest:property>
-            <forrest:property name="siteinfo-credits">
+	    <!--<forrest:property name="siteinfo-credits">
               <credits>
                 <credit>
                   <name>Built with Apache Forrest</name>
@@ -320,23 +320,26 @@
                   <height>31</height>
                 </credit>
               </credits>
-            </forrest:property>
+      </forrest:property>-->
           </forrest:contract>
-          <forrest:contract name="genericMarkup">
+	  <!-- <forrest:contract name="genericMarkup">
             <forrest:property name="genericMarkup">
               <hr/>
             </forrest:property>
-          </forrest:contract>
+    </forrest:contract>-->
           <forrest:contract name="content-motd-page">
             <forrest:property name="content-motd-page">
-              <motd>
-                <motd-option pattern="index.html">
+		    <motd>
+<!--FIXME: motd-page location needs removing
+These options are not effective anymore in dispatcher
+ Need to be removed in Structurer and contracts usage/decription-->
+		      <!--<motd-option pattern="index.html">
                   <motd-title>sample</motd-title>
-                  <motd-page location="both">
+                  <motd-page location="page">
                     This is an example of a Message of the day (MOTD).
                   </motd-page>
                   <motd-page-url>index.html</motd-page-url>
-                </motd-option>
+	  </motd-option>-->
                 <motd-option pattern="samples/faq.html">
                   <motd-title></motd-title>
                   <motd-page location="both">
@@ -348,14 +351,15 @@
             </forrest:property>
           </forrest:contract>
           <forrest:contract name="nav-section-round-bottom"/>
-
         </forrest:hook>
-        <jx:import uri="cocoon://prepare.tiles.export-link"/>
+        <forrest:hook name="export-link">
+          <forrest:contract name="content-pdf-link"/>
+        </forrest:hook>
         <forrest:hook name="content">
           <!-- FIXME - Problem with ndeSetTextSize() script from fontsize.js not compliant between Pelt and Leather-dev... -->
-          <!--<forrest:hook class="trail">
+	  <!-- <forrest:hook class="trail">
             <forrest:contract name="branding-fontsize"/>
-          </forrest:hook>-->
+    </forrest:hook>-->
           <forrest:contract name="content-title" dataURI="cocoon://#{$getRequest}.title.xml"/>
           <forrest:contract name="content-abstract" dataURI="cocoon://#{$getRequest}.abstract.xml"/>
           <forrest:contract name="content-minitoc" dataURI="cocoon://#{$getRequest}.toc.xml">
@@ -390,12 +394,13 @@
               </copyright>
             </forrest:property>
           </forrest:contract>
-        </forrest:hook>
-        <forrest:contract name="siteinfo-compliance-links"/>
+  </forrest:hook>
+            <forrest:contract name="siteinfo-compliance-links"/>
         <forrest:contract name="siteinfo-credits">
           <forrest:property name="box-location">credit</forrest:property>
-          <forrest:property name="top-separator">false</forrest:property>
-          <forrest:property name="siteinfo-credits">
+	  <forrest:property name="top-separator">false</forrest:property>
+	  <forrest:property name="use-br">false</forrest:property>
+	  <forrest:property name="siteinfo-credits">
             <credits>
               <credit>
                 <name>Built with Apache Forrest</name>
@@ -411,8 +416,8 @@
               </credit>
             </credits>
           </forrest:property>
-        </forrest:contract>
-        <forrest:contract name="siteinfo-feedback">
+  </forrest:contract>
+	<!-- <forrest:contract name="siteinfo-feedback">
           <forrest:properties contract="siteinfo-feedback">
             <forrest:property name="siteinfo-feedback">
               <feedback to="the Webmaster"
@@ -421,7 +426,7 @@
               </feedback>
             </forrest:property>
           </forrest:properties>
-        </forrest:contract>
+  </forrest:contract>-->
 
       </forrest:hook>
 
@@ -429,4 +434,5 @@
 
   </forrest:view>
 </forrest:views>
+
 

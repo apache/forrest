@@ -46,6 +46,7 @@
         <xsl:param name="box-location"></xsl:param>
         <xsl:param name="top-separator">false</xsl:param>
         <xsl:param name="use-role-as-prefix">false</xsl:param>
+ 	<xsl:param name="use-br">false</xsl:param>
         <xsl:variable name="filename" select="$defaultVariables/*/*[@name='filename']/@value"/>
         <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
 
@@ -60,7 +61,7 @@
                 </xsl:if>
                 <xsl:for-each
                   select="$siteinfo-credits/credits/credit[($use-role-as-prefix = 'true' and starts-with( $filename, concat( @role, '.') ) ) or starts-with( $filename, 'index') ]">
-                  <xsl:if test="not( position()=1 )">
+                  <xsl:if test="not( position()=1 ) and $use-br='true'">
                     <br/>
                   </xsl:if>
                   <xsl:variable name="name" select="name"/>
@@ -94,3 +95,4 @@
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
+
