@@ -111,8 +111,12 @@
             <xsl:otherwise></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <li class="pagegroup{$selected}" id="{$tagid}Title">
-          <span onclick="SwitchMenu('{$tagid}')">
+        <li class="pagegroup{normalize-space($selected)}" id="{$tagid}Title">
+          <span>
+            <xsl:if test="$expanding = 'true'">
+              <xsl:attribute name="onclick">SwitchMenu('<xsl:value-of 
+                select="normalize-space($tagid)" />')</xsl:attribute>
+            </xsl:if>
             <xsl:value-of select="h1"/>
           </span>
           <ul class="{$selected}menuitemgroup" id="{$tagid}">
