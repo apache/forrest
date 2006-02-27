@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>Forrestbot</title>
+<title>Forrestbot - automated building and deploying</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
@@ -153,7 +153,7 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>Forrestbot</h1>
+<h1>Forrestbot - automated building and deploying</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
@@ -277,35 +277,35 @@ document.write("Last Published: " + document.lastModified);
       is specified as the default here, is a convenience target (defined in
       <span class="codefrag">forrestbot.xml</span>) that executes the four workstages (getsrc,
       build, deploy, notify) sequentially.</p>
-<pre class="code">&lt;project name="mysampleproject" default="main"&gt;
-	&lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
-	&lt;property name="notify.email.to" value="me@domain.com"/&gt;
-	&lt;property name="notify.administrator" value="Your Name 
-&amp;lt;me@domain.com&gt;"/&gt;
-	&lt;property name="getsrc.cvs.user" value="anoncvs"/&gt;
-	&lt;property name="getsrc.cvs.password" value="anoncvs"/&gt;
-	&lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
-	&lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
-	&lt;property name="getsrc.cvs.module" value="myproject"/&gt;
-	&lt;property name="deploy.scp.dest" 
-value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
+<pre class="code">
+&lt;project name="mysampleproject" default="main"&gt;
+  &lt;property name="notify.email.host" value="smtp.myhost.com"/&gt;
+  &lt;property name="notify.email.to" value="me@domain.com"/&gt;
+  &lt;property name="notify.administrator" value="Your Name"/&gt;
+  &lt;property name="getsrc.cvs.user" value="anoncvs"/&gt;
+  &lt;property name="getsrc.cvs.password" value="anoncvs"/&gt;
+  &lt;property name="getsrc.cvs.root" value="/home/cvspublic"/&gt;
+  &lt;property name="getsrc.cvs.host" value="cvs.myhost.com"/&gt;
+  &lt;property name="getsrc.cvs.module" value="myproject"/&gt;
+  &lt;property name="deploy.scp.dest" 
+      value="username@myhost.com:/var/www/mydomain/htdocs"/&gt;
 
-	&lt;!-- here we specify to use two notification implementations --&gt;
-	&lt;target name="notify" depends="notify.local, notify.email"/&gt;
+  &lt;!-- here we declare the ssh keyfile and passphrase in an external file --&gt;
+  &lt;import file="../deploy-settings.xml" optional="true"/&gt;
 
-	&lt;!-- here we specify to deploy with the scp implementation --&gt;
-	&lt;target name="deploy" depends="deploy.scp"/&gt;
+  &lt;!-- here we specify to use two notification implementations --&gt;
+  &lt;target name="notify" depends="notify.local, notify.email"/&gt;
 
-	&lt;!-- the default implementation for getsrc is getsrc.cvs, which is 
-what we want --&gt;
+  &lt;!-- here we specify to deploy with the scp implementation --&gt;
+  &lt;target name="deploy" depends="deploy.scp"/&gt;
 
-	&lt;!-- assumes FORREST_HOME has been set as an environment variable 
---&gt;
-	&lt;property environment="env"/&gt;
-	&lt;import 
-file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
+  &lt;!-- the default implementation for getsrc is getsrc.cvs,
+       which is what we want --&gt;
+
+  &lt;!-- assumes FORREST_HOME has been set as an environment variable --&gt;
+  &lt;property environment="env"/&gt;
+  &lt;import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 &lt;/project&gt;
-
 </pre>
 <a name="N1004B"></a><a name="Workstages"></a>
 <h3 class="underlined_5">Workstages</h3>
@@ -756,10 +756,13 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </table>
 <a name="N10319"></a><a name="deploy.scp"></a>
 <h4>deploy.scp</h4>
-<p>
-<span class="codefrag">${user.home}/.ssh/known_hosts</span> must properly
+<p>The <span class="codefrag">${user.home}/.ssh/known_hosts</span> must properly
           recognize the host, so you should manually make an ssh connection to
           the host if you never have before.</p>
+<p>If <span class="codefrag">${deploy.scp.keyfile}</span>is defined, then it will use
+          key-based authentication in preference. Otherwise it will use
+          <span class="codefrag">${deploy.scp.password}</span>
+</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
 <tr>
@@ -791,18 +794,53 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
             
 <tr>
               
+<td colspan="1" rowspan="1">deploy.scp.keyfile</td>
+
+              <td colspan="1" rowspan="1">Location of the local file holding the private key.
+              Usually /home/me/.ssh/id_dsa or /home/me/.ssh/id_rsa
+              <br>
+              Note that the deploy.scp.passphrase must also be supplied.
+              </td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">No. However, if this is not supplied then scp will fallback
+              to use the less secure deploy.scp.password</td>
+            
+</tr>
+
+            
+<tr>
+              
+<td colspan="1" rowspan="1">deploy.scp.passphrase</td>
+
+              <td colspan="1" rowspan="1">Local passphrase for your private key.</td>
+
+              <td colspan="1" rowspan="1"></td>
+
+              <td colspan="1" rowspan="1">No. You will be prompted if it is not set.</td>
+            
+</tr>
+
+            
+<tr>
+              
 <td colspan="1" rowspan="1">deploy.scp.password</td>
 
               <td colspan="1" rowspan="1">Password for user@host</td>
 
               <td colspan="1" rowspan="1"></td>
 
-              <td colspan="1" rowspan="1">No. You will be prompted for it if it is not set.</td>
+              <td colspan="1" rowspan="1">No. You will be prompted if it is not set.
+              <br>
+              Not needed if using the preferred
+              deploy.scp.keyfile/deploy.scp.passphrase
+              </td>
             
 </tr>
           
 </table>
-<a name="N1036B"></a><a name="deploy.cvs"></a>
+<a name="N103A4"></a><a name="deploy.cvs"></a>
 <h4>deploy.cvs</h4>
 <p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -899,7 +937,7 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </tr>
           
 </table>
-<a name="N10417"></a><a name="deploy.svn"></a>
+<a name="N10450"></a><a name="deploy.svn"></a>
 <h4>deploy.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -969,7 +1007,7 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </tr>
           
 </table>
-<a name="N10491"></a><a name="deploy.ftp"></a>
+<a name="N104CA"></a><a name="deploy.ftp"></a>
 <h4>deploy.ftp</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1039,7 +1077,7 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </tr>
           
 </table>
-<a name="N1050E"></a><a name="notify"></a>
+<a name="N10547"></a><a name="notify"></a>
 <h4>notify</h4>
 <p>These settings are used by all notify implementations.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -1137,10 +1175,10 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </tr>
           
 </table>
-<a name="N105B8"></a><a name="notify.local"></a>
+<a name="N105F1"></a><a name="notify.local"></a>
 <h4>notify.local</h4>
 <p>No properties.</p>
-<a name="N105C2"></a><a name="notify.email"></a>
+<a name="N105FB"></a><a name="notify.email"></a>
 <h4>notify.email</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1199,7 +1237,7 @@ file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
 </div>
 
     
-<a name="N1062A"></a><a name="Forrestbot+Design"></a>
+<a name="N10663"></a><a name="Forrestbot+Design"></a>
 <h2 class="underlined_10">Forrestbot Design</h2>
 <div class="section">
 <p>Forrest and Forrestbot use Ant buildfiles extensively. Ant 1.6's
