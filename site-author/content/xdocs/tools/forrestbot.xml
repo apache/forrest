@@ -19,7 +19,7 @@
 "http://forrest.apache.org/dtd/document-v12.dtd">
 <document>
   <header>
-    <title>Forrestbot</title>
+    <title>Forrestbot - automated building and deploying</title>
   </header>
 
   <body>
@@ -87,6 +87,9 @@
   <property name="getsrc.cvs.module" value="myproject"/>
   <property name="deploy.scp.dest" 
       value="username@myhost.com:/var/www/mydomain/htdocs"/>
+
+  <!-- here we declare the ssh keyfile and passphrase in an external file -->
+  <import file="../deploy-settings.xml" optional="true"/>
 
   <!-- here we specify to use two notification implementations -->
   <target name="notify" depends="notify.local, notify.email"/>
@@ -469,14 +472,14 @@
         <section id="deploy.scp">
           <title>deploy.scp</title>
 
-          <p><code>${user.home}/.ssh/known_hosts</code> must properly
+          <p>The <code>${user.home}/.ssh/known_hosts</code> must properly
           recognize the host, so you should manually make an ssh connection to
           the host if you never have before.</p>
 
-          <p>Currently only using password-based scp. It would be trivial to add
-          key-based authentication (see
-          <link href="http://issues.apache.org/jira/browse/FOR-818">FOR-818</link>).
-          </p>
+          <p>If <code>${deploy.scp.keyfile}</code>is defined, then it will use
+          key-based authentication in preference. Otherwise it will use
+          <code>${deploy.scp.password}</code></p>
+
           <table>
             <tr>
               <th>Property</th>
@@ -500,13 +503,42 @@
             </tr>
 
             <tr>
+              <td>deploy.scp.keyfile</td>
+
+              <td>Location of the local file holding the private key.
+              Usually /home/me/.ssh/id_dsa or /home/me/.ssh/id_rsa
+              <br />
+              Note that the deploy.scp.passphrase must also be supplied.
+              </td>
+
+              <td></td>
+
+              <td>No. However, if this is not supplied then scp will fallback
+              to use the less secure deploy.scp.password</td>
+            </tr>
+
+            <tr>
+              <td>deploy.scp.passphrase</td>
+
+              <td>Local passphrase for your private key.</td>
+
+              <td></td>
+
+              <td>No. You will be prompted if it is not set.</td>
+            </tr>
+
+            <tr>
               <td>deploy.scp.password</td>
 
               <td>Password for user@host</td>
 
               <td></td>
 
-              <td>No. You will be prompted for it if it is not set.</td>
+              <td>No. You will be prompted if it is not set.
+              <br />
+              Not needed if using the preferred
+              deploy.scp.keyfile/deploy.scp.passphrase
+              </td>
             </tr>
           </table>
         </section>

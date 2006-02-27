@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2005 The Apache Software Foundation or its licensors,
+  Copyright 2004-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,9 @@
 -->
 <project name="deploy">
 
+  <!-- ================================================================= -->
+  <!-- The deploy.local target                                           -->
+  <!-- ================================================================= -->
   <property name="deploy.local.dir" location="sites/${ant.project.name}"/>
 
   <target name="deploy.local" unless="build.failed" description="FB: Deploy to a local location">
@@ -34,7 +37,6 @@
   <!-- ================================================================= -->
   <!-- The deploy.ftp target                                             -->
   <!-- ================================================================= -->
-  <!-- properties for deploy.ftp -->
   <property name="deploy.ftp.server" value="localhost"/>
   <property name="deploy.ftp.user" value="anonymous"/>
   <property name="deploy.ftp.password" value="forrestbot@"/>
@@ -53,21 +55,51 @@
       </fileset>
     </ftp>
   </target>
-  <!-- ================================================================= -->
 
+  <!-- ================================================================= -->
+  <!-- The deploy.scp target                                             -->
+  <!-- ================================================================= -->
   <property name="deploy.scp.dest" value=""/>
   <target name="deploy.scp" unless="build.failed" description="FB: Deploy to a remote location via scp">
     <if>
+      <isset property="deploy.scp.keyfile"/>
+      <then>
+        <antcall target="deploy.scp-with-keyfile"/>
+      </then>
+      <else>
+        <antcall target="deploy.scp-with-password"/>
+      </else>
+    </if>
+  </target>
+  <target name="deploy.scp-with-keyfile">
+    <if>
+      <not><isset property="deploy.scp.passphrase"/></not>
+      <then>
+        <input addproperty="deploy.scp.passphrase"
+            message="Enter local passphrase for key to enable scp to ${deploy.scp.dest}:"/>
+      </then>
+    </if>
+    <scp todir="${deploy.scp.dest}"
+        keyfile="${deploy.scp.keyfile}" passphrase="${deploy.scp.passphrase}">
+      <fileset dir="${build.site-dir}"/>
+    </scp>
+  </target>
+  <target name="deploy.scp-with-password">
+    <if>
       <not><isset property="deploy.scp.password"/></not>
       <then>
-        <input addproperty="deploy.scp.password" message="Enter password for scp to ${deploy.scp.dest}:"/>
+        <input addproperty="deploy.scp.password"
+            message="Enter remote password to enable scp to ${deploy.scp.dest}:"/>
       </then>
     </if>
     <scp todir="${deploy.scp.dest}" password="${deploy.scp.password}">
-     <fileset dir="${build.site-dir}"/>
+      <fileset dir="${build.site-dir}"/>
     </scp>
   </target>
-  
+
+  <!-- ================================================================= -->
+  <!-- The deploy.cvs target                                             -->
+  <!-- ================================================================= -->
   <property name="deploy.cvs.user" value="anoncvs"/>
   <property name="deploy.cvs.password" value="anoncvs"/>
   <property name="deploy.cvs.root" value="/home/cvs"/>
@@ -106,7 +138,9 @@
     </exec>
   </target>
 
-
+  <!-- ================================================================= -->
+  <!-- The deploy.svn target                                             -->
+  <!-- ================================================================= -->
   <property name="deploy.svn.user" value=""/>
   <property name="deploy.svn.password" value=""/>
   <property name="deploy.svn.url" value=""/>
@@ -129,7 +163,7 @@
       <fileset dir="${build.site-dir}"/>
     </copy>
     
-    <!-- add new files to CVS -->
+    <!-- add new files to SVN -->
     <!-- svnadd doesn't work (it doesn't change the working directory properly) -->
     <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
       <arg value="status"/>
