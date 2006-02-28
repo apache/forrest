@@ -18,7 +18,7 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="helper-prototype-ajax" type="nugget">
+  name="helper-prototype-ajax">
   
   <description>
     <p>
@@ -30,11 +30,19 @@
   </description>
   <usage><![CDATA[<forrest:contract name="helper-prototype-ajax"/>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="helper-prototype-ajax" inputFormat="xsl" body="false" head="true">
+    name="helper-prototype-ajax" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <xsl:template name="helper-prototype-ajax-head">
-          <script type="text/javascript" src="{$root}themes/prototype.js">&#160;</script>
+        <xsl:template match="/">
+          <xsl:param name="defaultVariables" select="'test.html'"/>
+          <xsl:variable name="root" 
+            select="$defaultVariables/*/*[@name='root']/@value"/>
+          <forrest:content>
+            <forrest:part>
+              <script type="text/javascript" src="{$root}themes/prototype.js">
+                &#160;</script>
+            </forrest:part>
+          </forrest:content>
         </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
