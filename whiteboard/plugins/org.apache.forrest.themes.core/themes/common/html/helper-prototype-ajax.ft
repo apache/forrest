@@ -32,18 +32,18 @@
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="helper-prototype-ajax" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <xsl:template match="/">
-          <xsl:param name="defaultVariables" select="'test.html'"/>
-          <xsl:variable name="root" 
-            select="$defaultVariables/*/*[@name='root']/@value"/>
-          <forrest:content>
-            <forrest:part>
-              <script type="text/javascript" src="{$root}themes/prototype.js">
-                &#160;</script>
-            </forrest:part>
-          </forrest:content>
-        </xsl:template>
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:variable name="root" 
+        select="$defaultVariables/*/*[@name='root']/@value"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/html/head">
+            <script type="text/javascript" src="{$root}themes/prototype.js"> 
+              &#160;</script>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
