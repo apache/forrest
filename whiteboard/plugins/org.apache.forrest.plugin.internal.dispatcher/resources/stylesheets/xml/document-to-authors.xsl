@@ -25,13 +25,12 @@ imported document2html.xsl for details.
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
   <xsl:template match="document">
-    <xsl:if test="header/authors">
+    <div id="content-authors">
       <xsl:apply-templates select="header/authors"/>
-    </xsl:if>
+    </div>
   </xsl:template>
   <xsl:template match="header/authors">
     <xsl:if test="person">
-      <div id="content-authors">
         <xsl:for-each select="person">
           <div class="author">
             <div class="name">
@@ -42,7 +41,6 @@ imported document2html.xsl for details.
             </div>
           </div>
         </xsl:for-each>
-      </div>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
