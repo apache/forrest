@@ -42,7 +42,7 @@
         <xsl:choose>
           <xsl:when test="//ns:document">
             <title><xsl:value-of select="//ns:document/@name"/></title>
-            <xsl:apply-templates select="//p:preparedDocument/ns:document/ns:fields/ns:field"/>
+            <xsl:apply-templates select="//p:preparedDocument//ns:document/ns:fields/ns:field"/>
           </xsl:when>
           <xsl:when test="$rootElementName = 'html'">
             <title><xsl:value-of select="html/head/title"/></title>
@@ -80,7 +80,16 @@
   
   <xsl:template match="p:preparedDocument">
     <xsl:comment>Prepared Document: ID = <xsl:value-of select="@id"/></xsl:comment>
-    <xsl:apply-templates select="ns:document/ns:parts/ns:part"/>
+    <!-- Test whether the p:preparedDocument contains directly a ns:document (up to Daisy 1.4)
+         or a new publisherResponse (from Daisy 1.5). -->
+    <xsl:choose>
+      <xsl:when test="ns:document">
+        <xsl:apply-templates select="ns:document/ns:parts/ns:part"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="p:publisherResponse/ns:document/ns:parts/ns:part"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="ns:part">
@@ -141,7 +150,19 @@
 
   <xsl:template match="p:daisyPreparedInclude">
     <xsl:variable name="id" select="@id"/>
-    <h1><xsl:value-of select="//p:preparedDocument[@id=$id]/ns:document/@name"/></h1>
+    <xsl:variable name="preparedDocument" select="//p:preparedDocument[@id=$id]"/>
+    <h1>
+      <!-- Test whether the p:preparedDocument contains directly a ns:document (up to Daisy 1.4)
+           or a new publisherResponse (from Daisy 1.5). -->
+      <xsl:choose>
+        <xsl:when test="$preparedDocument/ns:document">
+          <xsl:value-of select="$preparedDocument/ns:document/@name"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$preparedDocument/p:publisherResponse/ns:document/@name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </h1>
     <xsl:apply-templates select="//p:preparedDocument[@id=$id]"/>
   </xsl:template>
   
