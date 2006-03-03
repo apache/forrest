@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  Copyright 2002-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,15 @@
 <faqs title="Frequently Asked Questions">
   <part id="getting_started">
     <title>Getting Started and Building Forrest</title>
+    <faq id="faq">
+      <question> How to use these FAQs? </question>
+      <answer>
+        <p>
+          There is no particular order to these FAQs. Use your browser's
+          "Find in this page" facility to search for keywords.
+        </p>
+      </answer>
+    </faq>
     <faq id="overview">
       <question> Where can I read an overview about how to work with Forrest? </question>
       <answer>
@@ -54,6 +63,34 @@
         <p> Follow these <link href="site:v0.80//build">Building Forrest</link> notes. </p>
         <p> The <link href="site:v0.80//your-project">Using Forrest</link> guide provides further
           step-by-step assistance in getting started with Forrest for your project. </p>
+      </answer>
+    </faq>
+    <faq id="older-plugins">
+      <question> How to use older versions of specific plugins? </question>
+      <answer>
+        <p>
+          Sometimes one does not want to use the most recent functionality
+          of a plugin and instead need to use an older version.
+          Information about changes to each plugin can be found in its
+          <link href="site:v0.80//plugins/index">documentation</link>.
+        </p>
+        <p>
+          In the forrest.properties file, specify the version of the plugin
+          that you require, e.g.
+        </p>
+        <source>project.required.plugins=org.apache.forrest.plugin.input.PhotoGallery-0.1,...</source>
+        <p>
+          Users of Forrest-0.7 will need to do this for the projectInfo plugin
+          if you get the following error ...
+        </p>
+        <source>Could not find component for role:
+ [org.apache.cocoon.components.modules.input.InputModule/lm]
+ (Key='org.apache.cocoon.components.modules.input.InputModule/</source>
+        <p>
+          ... then sorry, we mistakenly added new "locationmap" functionality
+          (due in version 0.8). So do this ...
+        </p>
+        <source>project.required.plugins=org.apache.forrest.plugin.input.projectInfo-0.1,...</source>
       </answer>
     </faq>
     <faq id="single-document">
@@ -121,7 +158,7 @@
       </answer>
     </faq>
     <faq id="debug">
-      <question> How can I start forrest in debug mode? </question>
+      <question> How can I start forrest in Java debug mode? </question>
       <answer>
         <p> The <code>forrest.jvmargs</code> property in the <code>forrest.properties</code> file 
           can be used to start forrest in debug mode on a specific port.
