@@ -202,9 +202,6 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-388%5D+Use+plugins+in-place+if+src+available">[FOR-388] Use plugins in-place if src available</a>
 </li>
 <li>
-<a href="#%5BFOR-533%5D+Auto+Generate+plugins.xml+entry">[FOR-533] Auto Generate plugins.xml entry</a>
-</li>
-<li>
 <a href="#%5BFOR-707%5D+Document+i18n+features+of+Forrest">[FOR-707] Document i18n features of Forrest</a>
 </li>
 <li>
@@ -215,6 +212,9 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode">[FOR-735] Plugins are not correctly deployed in webapp mode</a>
+</li>
+<li>
+<a href="#%5BFOR-533%5D+Auto+Generate+plugins.xml+entry">[FOR-533] Auto Generate plugins.xml entry</a>
 </li>
 <li>
 <a href="#%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</a>
@@ -363,23 +363,7 @@ Have Forrest mount plugins from designated directories in preference to download
 &lt;br&gt;
 </p>
 </div>
-<a name="N1004D"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
-<h2 class="underlined_10">[FOR-533] Auto Generate plugins.xml entry</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-533">http://issues.apache.org/jira/browse/FOR-533</a>
-</p>
-<p>The information in the plugins.xml file would be better kept in the plugin directory and added to the plugins.xml file when deployed. This would reduce the amount of duplication in the plugins config files.
-&lt;br&gt;
-
-&lt;br&gt;
-All the necessary values are now in the plugin build.xml file.
-&lt;br&gt;
-
-&lt;br&gt;
-This change will require that the plugins.xml file be retrieved from the build directory rather than the plugins directory when building the plugin documentation pages. We will therefore need a fall back to retrieve this file from the network if it is not currently available - this can be done with the locationmap</p>
-</div>
-<a name="N10059"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
+<a name="N1004D"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
 <h2 class="underlined_10">[FOR-707] Document i18n features of Forrest</h2>
 <div class="section">
 <p>
@@ -399,7 +383,7 @@ Cheche wrote a blog entry on his work:
 &lt;br&gt;
 We could, at the very least use the locationmap to pull this content into our site [OT: I wonder if this could be a way to generate more documentation?)</p>
 </div>
-<a name="N10065"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
+<a name="N10059"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
 <h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
 <div class="section">
 <p>
@@ -413,7 +397,7 @@ The solution is discussed here:
 &lt;br&gt;
 &lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
 </div>
-<a name="N10071"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
+<a name="N10065"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
 <h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
 <div class="section">
 <p>
@@ -429,7 +413,7 @@ I think a simple cache will sufice, lets just provide a static hashmap using the
 &lt;br&gt;
 If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
 </div>
-<a name="N1007D"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
+<a name="N10071"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
 <h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
 <div class="section">
 <p>
@@ -444,6 +428,22 @@ If we test all locationmaps and find no result we should record that tere is no 
 - configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
 &lt;br&gt;
 - the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
+</div>
+<a name="N1007D"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
+<h2 class="underlined_10">[FOR-533] Auto Generate plugins.xml entry</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-533">http://issues.apache.org/jira/browse/FOR-533</a>
+</p>
+<p>The information in the plugins.xml file would be better kept in the plugin directory and added to the plugins.xml file when deployed. This would reduce the amount of duplication in the plugins config files.
+&lt;br&gt;
+
+&lt;br&gt;
+All the necessary values are now in the plugin build.xml file.
+&lt;br&gt;
+
+&lt;br&gt;
+This change will require that the plugins.xml file be retrieved from the build directory rather than the plugins directory when building the plugin documentation pages. We will therefore need a fall back to retrieve this file from the network if it is not currently available - this can be done with the locationmap</p>
 </div>
 <a name="N10089"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
 <h2 class="underlined_10">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</h2>
