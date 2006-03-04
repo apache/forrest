@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!--
-  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  Copyright 2002-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +13,14 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><document><header><title>Frequently Asked Questions</title></header><body><section id="Questions"><title>Questions</title><section id="getting_started"><title>1. Getting Started and Building Forrest</title><section id="overview"><title>1.1.  Where can I read an overview about how to work with Forrest? </title>
+--><document><header><title>Frequently Asked Questions</title></header><body><section id="Questions"><title>Questions</title><section id="getting_started"><title>1. Getting Started and Building Forrest</title><section id="faq"><title>1.1.  How to use these FAQs? </title>
+        <p>
+          There is no particular order to these FAQs. Use your browser's
+          "Find in this page" facility to search for keywords.
+        </p>
+      </section><section id="overview"><title>1.2.  Where can I read an overview about how to work with Forrest? </title>
         <p> See the <link href="site:v0.80//your-project">Using Forrest</link> guide. </p>
-      </section><section id="requirements"><title>1.2.  What are the system requirements for Forrest? </title>
+      </section><section id="requirements"><title>1.3.  What are the system requirements for Forrest? </title>
         <p> Forrest includes everything necessary to build and run, except of course for Java. In
           addition to all the Cocoon JARs, Forrest includes and uses its own version of Apache Ant.
         </p>
@@ -25,14 +30,38 @@
           If you intend to enhance and rebuild Forrest (or use the Forrest sources
           with Subversion or use a source snapshot) then you need the full JDK.
         </p>
-      </section><section id="cvs"><title>1.3.  The old xml-forrest CVS code repository seems to be stale. What happened? </title>
+      </section><section id="cvs"><title>1.4.  The old xml-forrest CVS code repository seems to be stale. What happened? </title>
         <p> Forrest switched from a CVS code repository to SVN (Subversion) code repository. The old
           CVS repository is closed and not kept current. </p>
-      </section><section id="svn"><title>1.4.  How can I use SVN to keep up to date with the latest codebase? </title>
+      </section><section id="svn"><title>1.5.  How can I use SVN to keep up to date with the latest codebase? </title>
         <p> Follow these <link href="site:v0.80//build">Building Forrest</link> notes. </p>
         <p> The <link href="site:v0.80//your-project">Using Forrest</link> guide provides further
           step-by-step assistance in getting started with Forrest for your project. </p>
-      </section><section id="single-document"><title>1.5.  What is the best way to generate "standalone documents" using Forrest? </title>
+      </section><section id="older-plugins"><title>1.6.  How to use older versions of specific plugins? </title>
+        <p>
+          Sometimes one does not want to use the most recent functionality
+          of a plugin and instead need to use an older version.
+          Information about changes to each plugin can be found in its
+          <link href="site:v0.80//plugins/index">documentation</link>.
+        </p>
+        <p>
+          In the forrest.properties file, specify the version of the plugin
+          that you require, e.g.
+        </p>
+        <source xml:space="preserve">project.required.plugins=org.apache.forrest.plugin.input.PhotoGallery-0.1,...</source>
+        <p>
+          Users of Forrest-0.7 will need to do this for the projectInfo plugin
+          if you get the following error ...
+        </p>
+        <source xml:space="preserve">Could not find component for role:
+ [org.apache.cocoon.components.modules.input.InputModule/lm]
+ (Key='org.apache.cocoon.components.modules.input.InputModule/</source>
+        <p>
+          ... then sorry, we mistakenly added new "locationmap" functionality
+          (due in version 0.8). So do this ...
+        </p>
+        <source xml:space="preserve">project.required.plugins=org.apache.forrest.plugin.input.projectInfo-0.1,...</source>
+      </section><section id="single-document"><title>1.7.  What is the best way to generate "standalone documents" using Forrest? </title>
         <p>
           There is a trick that can cut down your turnaround time
           with building. In forrest.properties ...
@@ -69,11 +98,11 @@
           Cocoon can also be instructed to not process certain URIs
           if you need to temporarily exclude then.
         </p>
-      </section><section id="cygwin_mutex_error"><title>1.6.  When running <code>./build.sh</code> in cygwin, I get an error: <code>cygpath.exe:
+      </section><section id="cygwin_mutex_error"><title>1.8.  When running <code>./build.sh</code> in cygwin, I get an error: <code>cygpath.exe:
           *** can't create title mutex, Win32 error 6</code>. </title>
         <p> This <link href="http://issues.apache.org/jira/secure/ViewIssue.jspa?key=FOR-10">appears
             to be a bug in cygwin</link>. Please use the .bat script instead. </p>
-      </section><section id="maxmemory"><title>1.7.  How can I specify the amount of memory to be used by Java? </title>
+      </section><section id="maxmemory"><title>1.9.  How can I specify the amount of memory to be used by Java? </title>
         <p> There are two ways to control this. If you get an OutOfMemoryError when Cocoon is
           generating pages, see the first paragraph. If you get an OutOfMemoryError when outside of
           Cocoon (e.g., copying raw files), see the second paragraph. </p>
@@ -84,7 +113,7 @@
         <p> Set the <code>ANT_OPTS</code> environment variable before you run forrest. The exact
           value you set it to is dependant on your JVM, but something like
           <code>ANT_OPTS=-Xmx500M</code> will probably work. </p>
-      </section><section id="debug"><title>1.8.  How can I start forrest in debug mode? </title>
+      </section><section id="debug"><title>1.10.  How can I start forrest in Java debug mode? </title>
         <p> The <code>forrest.jvmargs</code> property in the <code>forrest.properties</code> file 
           can be used to start forrest in debug mode on a specific port.
           <code>forrest.jvmargs=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</code>
