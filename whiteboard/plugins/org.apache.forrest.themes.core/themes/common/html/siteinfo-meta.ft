@@ -18,22 +18,33 @@
 <forrest:contract name="siteinfo-meta"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    <p>This functions will output the html meta information.</p>
-    <div class="note">
-      <div class="label">Note</div>
-      <div class="content">Implemented forrest version/skin name.</div>
-    </div>
+    <p>This functions will output html meta information. On the one hand it 
+      will add the default forrest specific meta (generator, version and theme) 
+      and on the other hand you can add custom meta data via the structurer.</p>
+      <note>Standard output:
+        <source><![CDATA[<meta content="Apache Forrest" name="Generator" />
+<meta content="${forrest.version}" name="Forrest-version" />
+<meta content="${project.theme}" name="Forrest-theme-name" />]]></source>
+      </note>
   </description>
-  <usage><![CDATA[<forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info"/>]]></usage>
+  <usage><![CDATA[<forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info">
+  [<forrest:property name="custom">
+    <meta name="Description" content="This page was created to help myself, may it help you now!"/>
+  </forrest:property>]
+</forrest:contract>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="siteinfo-meta" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="custom" />
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/html/head">
             <meta name="Generator" content="Apache Forrest"/>
             <xsl:apply-templates/>
+            <xsl:if test="$custom">
+              <xsl:copy-of select="$custom/*"/>
+            </xsl:if>
           </forrest:part>
         </forrest:content>
       </xsl:template>
