@@ -202,31 +202,31 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-388%5D+Use+plugins+in-place+if+src+available">[FOR-388] Use plugins in-place if src available</a>
 </li>
 <li>
-<a href="#%5BFOR-707%5D+Document+i18n+features+of+Forrest">[FOR-707] Document i18n features of Forrest</a>
-</li>
-<li>
-<a href="#%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</a>
-</li>
-<li>
-<a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
+<a href="#%5BFOR-533%5D+Auto+Generate+plugins.xml+entry">[FOR-533] Auto Generate plugins.xml entry</a>
 </li>
 <li>
 <a href="#%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode">[FOR-735] Plugins are not correctly deployed in webapp mode</a>
 </li>
 <li>
-<a href="#%5BFOR-533%5D+Auto+Generate+plugins.xml+entry">[FOR-533] Auto Generate plugins.xml entry</a>
+<a href="#%5BFOR-707%5D+Document+i18n+features+of+Forrest">[FOR-707] Document i18n features of Forrest</a>
+</li>
+<li>
+<a href="#%5BFOR-711%5D+Cache+results+from+the+Locationmap">[FOR-711] Cache results from the Locationmap</a>
+</li>
+<li>
+<a href="#%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</a>
 </li>
 <li>
 <a href="#%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</a>
 </li>
 <li>
-<a href="#%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs">[FOR-209] First level selected tab is not highlighted when containing 2nd level tabs</a>
+<a href="#%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links">[FOR-211] whole-site html and pdf: broken ext links</a>
 </li>
 <li>
 <a href="#%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links">[FOR-210] whole-site html and pdf: broken link faq, broken image links</a>
 </li>
 <li>
-<a href="#%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links">[FOR-211] whole-site html and pdf: broken ext links</a>
+<a href="#%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs">[FOR-209] First level selected tab is not highlighted when containing 2nd level tabs</a>
 </li>
 <li>
 <a href="#%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately">[FOR-203] 2nd level tabs are not selected appropriately</a>
@@ -244,10 +244,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-562%5D+Update+Plugins+howto">[FOR-562] Update Plugins howto</a>
 </li>
 <li>
-<a href="#%5BFOR-644%5D+whitespace+cleanup">[FOR-644] whitespace cleanup</a>
+<a href="#%5BFOR-645%5D+patches+for+whitespace+cleanup">[FOR-645] patches for whitespace cleanup</a>
 </li>
 <li>
-<a href="#%5BFOR-645%5D+patches+for+whitespace+cleanup">[FOR-645] patches for whitespace cleanup</a>
+<a href="#%5BFOR-644%5D+whitespace+cleanup">[FOR-644] whitespace cleanup</a>
 </li>
 <li>
 <a href="#%5BFOR-726%5D+use+locationmap+in+all+of+the+plugins">[FOR-726] use locationmap in all of the plugins</a>
@@ -363,7 +363,39 @@ Have Forrest mount plugins from designated directories in preference to download
 &lt;br&gt;
 </p>
 </div>
-<a name="N1004D"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
+<a name="N1004D"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
+<h2 class="underlined_10">[FOR-533] Auto Generate plugins.xml entry</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-533">http://issues.apache.org/jira/browse/FOR-533</a>
+</p>
+<p>The information in the plugins.xml file would be better kept in the plugin directory and added to the plugins.xml file when deployed. This would reduce the amount of duplication in the plugins config files.
+&lt;br&gt;
+
+&lt;br&gt;
+All the necessary values are now in the plugin build.xml file.
+&lt;br&gt;
+
+&lt;br&gt;
+This change will require that the plugins.xml file be retrieved from the build directory rather than the plugins directory when building the plugin documentation pages. We will therefore need a fall back to retrieve this file from the network if it is not currently available - this can be done with the locationmap</p>
+</div>
+<a name="N10059"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
+<h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-735">http://issues.apache.org/jira/browse/FOR-735</a>
+</p>
+<p>(At this point I didn't try this scenario step by step any more; basically it is what we did to setup the site, except that we copied our project data from forrest 0.6 before trying the pdf links)
+&lt;br&gt;
+
+&lt;br&gt;
+- run forrest webapp to create an empty webapp
+&lt;br&gt;
+- configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
+&lt;br&gt;
+- the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
+</div>
+<a name="N10065"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
 <h2 class="underlined_10">[FOR-707] Document i18n features of Forrest</h2>
 <div class="section">
 <p>
@@ -383,21 +415,7 @@ Cheche wrote a blog entry on his work:
 &lt;br&gt;
 We could, at the very least use the locationmap to pull this content into our site [OT: I wonder if this could be a way to generate more documentation?)</p>
 </div>
-<a name="N10059"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
-<h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-742">http://issues.apache.org/jira/browse/FOR-742</a>
-</p>
-<p>The plugin retrieval and deployment process are not quite correct. Recently the projectInfo plugin had its version number incremented and the &amp;quot;unversioned&amp;quot; plugin now relates specifically to 0.8-dev version. That prevents 0.7 from accessing the relevant plugin.
-&lt;br&gt;
-
-&lt;br&gt;
-The solution is discussed here:
-&lt;br&gt;
-&lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
-</div>
-<a name="N10065"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
+<a name="N10071"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
 <h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
 <div class="section">
 <p>
@@ -413,37 +431,19 @@ I think a simple cache will sufice, lets just provide a static hashmap using the
 &lt;br&gt;
 If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see FOR-701)</p>
 </div>
-<a name="N10071"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
-<h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
+<a name="N1007D"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
+<h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
 <div class="section">
 <p>
-<a href="http://issues.apache.org/jira/browse/FOR-735">http://issues.apache.org/jira/browse/FOR-735</a>
+<a href="http://issues.apache.org/jira/browse/FOR-742">http://issues.apache.org/jira/browse/FOR-742</a>
 </p>
-<p>(At this point I didn't try this scenario step by step any more; basically it is what we did to setup the site, except that we copied our project data from forrest 0.6 before trying the pdf links)
+<p>The plugin retrieval and deployment process are not quite correct. Recently the projectInfo plugin had its version number incremented and the &amp;quot;unversioned&amp;quot; plugin now relates specifically to 0.8-dev version. That prevents 0.7 from accessing the relevant plugin.
 &lt;br&gt;
 
 &lt;br&gt;
-- run forrest webapp to create an empty webapp
+The solution is discussed here:
 &lt;br&gt;
-- configure Tomcat to run the webapp (we did it by creating a context descriptor and put it onder Tomcat's config directory)
-&lt;br&gt;
-- the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
-</div>
-<a name="N1007D"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
-<h2 class="underlined_10">[FOR-533] Auto Generate plugins.xml entry</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-533">http://issues.apache.org/jira/browse/FOR-533</a>
-</p>
-<p>The information in the plugins.xml file would be better kept in the plugin directory and added to the plugins.xml file when deployed. This would reduce the amount of duplication in the plugins config files.
-&lt;br&gt;
-
-&lt;br&gt;
-All the necessary values are now in the plugin build.xml file.
-&lt;br&gt;
-
-&lt;br&gt;
-This change will require that the plugins.xml file be retrieved from the build directory rather than the plugins directory when building the plugin documentation pages. We will therefore need a fall back to retrieve this file from the network if it is not currently available - this can be done with the locationmap</p>
+&lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
 </div>
 <a name="N10089"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
 <h2 class="underlined_10">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</h2>
@@ -491,7 +491,25 @@ The ampersand in the link element text is properly handled but
 &lt;br&gt;
 the ampersand in the link href attribute is not.</p>
 </div>
-<a name="N10095"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
+<a name="N10095"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
+<h2 class="underlined_10">[FOR-211] whole-site html and pdf: broken ext links</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-211">http://issues.apache.org/jira/browse/FOR-211</a>
+</p>
+<p>In the the generated site.html all of the external links are broken (i.e. the href attributes are like ... error:#ext:forrest).</p>
+</div>
+<a name="N100A1"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
+<h2 class="underlined_10">[FOR-210] whole-site html and pdf: broken link faq, broken image links</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-210">http://issues.apache.org/jira/browse/FOR-210</a>
+</p>
+<p>The &amp;quot;fresh-site&amp;quot; build from 'forrest seed site' reports some failures for faq.html and various missing images. Wonder if sitemap issue?&lt;br&gt;
+&lt;br&gt;
+</p>
+</div>
+<a name="N100AD"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
 <h2 class="underlined_10">[FOR-209] First level selected tab is not highlighted when containing 2nd level tabs</h2>
 <div class="section">
 <p>
@@ -504,24 +522,6 @@ the ampersand in the link href attribute is not.</p>
 This is checked with both the default skin, and with tigris-style.
 &lt;br&gt;
 </p>
-</div>
-<a name="N100A1"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
-<h2 class="underlined_10">[FOR-210] whole-site html and pdf: broken link faq, broken image links</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-210">http://issues.apache.org/jira/browse/FOR-210</a>
-</p>
-<p>The &amp;quot;fresh-site&amp;quot; build from 'forrest seed site' reports some failures for faq.html and various missing images. Wonder if sitemap issue?&lt;br&gt;
-&lt;br&gt;
-</p>
-</div>
-<a name="N100AD"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
-<h2 class="underlined_10">[FOR-211] whole-site html and pdf: broken ext links</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-211">http://issues.apache.org/jira/browse/FOR-211</a>
-</p>
-<p>In the the generated site.html all of the external links are broken (i.e. the href attributes are like ... error:#ext:forrest).</p>
 </div>
 <a name="N100B9"></a><a name="%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately"></a>
 <h2 class="underlined_10">[FOR-203] 2nd level tabs are not selected appropriately</h2>
@@ -625,7 +625,15 @@ In addition the buil file template should really be provided from the plugins di
 &lt;br&gt;
 </p>
 </div>
-<a name="N100F5"></a><a name="%5BFOR-644%5D+whitespace+cleanup"></a>
+<a name="N100F5"></a><a name="%5BFOR-645%5D+patches+for+whitespace+cleanup"></a>
+<h2 class="underlined_10">[FOR-645] patches for whitespace cleanup</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-645">http://issues.apache.org/jira/browse/FOR-645</a>
+</p>
+<p>Use this issue to provide patches for the whitespace cleanup.</p>
+</div>
+<a name="N10101"></a><a name="%5BFOR-644%5D+whitespace+cleanup"></a>
 <h2 class="underlined_10">[FOR-644] whitespace cleanup</h2>
 <div class="section">
 <p>
@@ -636,14 +644,6 @@ In addition the buil file template should really be provided from the plugins di
 
 &lt;br&gt;
 This Issue will be used to announce which section of the repository is due to be cleaned next. Please keep discussion on that mail thread.</p>
-</div>
-<a name="N10101"></a><a name="%5BFOR-645%5D+patches+for+whitespace+cleanup"></a>
-<h2 class="underlined_10">[FOR-645] patches for whitespace cleanup</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-645">http://issues.apache.org/jira/browse/FOR-645</a>
-</p>
-<p>Use this issue to provide patches for the whitespace cleanup.</p>
 </div>
 <a name="N1010D"></a><a name="%5BFOR-726%5D+use+locationmap+in+all+of+the+plugins"></a>
 <h2 class="underlined_10">[FOR-726] use locationmap in all of the plugins</h2>
