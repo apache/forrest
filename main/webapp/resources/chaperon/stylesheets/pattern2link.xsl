@@ -50,11 +50,7 @@
  </xsl:template>
 
  <xsl:template match="lex:lexeme[@symbol='cssurl']">
-  <!--HEADSUP: thorsten changed this because we get working inline css and for static reading it should not differ( one " ;" added).
-    was:
     <a href="{lex:group[3]}"><xsl:value-of select="lex:group[1]"/></a>
-    -->
-  <xsl:value-of select="lex:group[1]"/>;<a href="{lex:group[3]}"><xsl:text> </xsl:text></a>
  </xsl:template>
  
  <xsl:template match="@*|*|text()|processing-instruction()" priority="-1">
