@@ -59,12 +59,12 @@ fi
 
 cd $FORREST_HOME/main
 ./build.sh clean
-./build
+./build.sh
 
-cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.structurer
+cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.internal.dispatcher
 $FORREST_HOME/tools/ant/bin/ant local-deploy
 
-cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.plugin.output.themer
+cd $FORREST_HOME/whiteboard/plugins/org.apache.forrest.themes.core
 $FORREST_HOME/tools/ant/bin/ant local-deploy
 cd $PROJECT_HOME
 
