@@ -16,10 +16,7 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
-  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
-  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="lm://transform.xml.xml-namespace-stripped"/>
 
