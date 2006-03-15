@@ -35,9 +35,17 @@
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
-            <xsl:copy-of select="$genericMarkup/*"/>
+            <xsl:apply-templates 
+              select="$genericMarkup/*|$genericMarkup/comment()| $genericMarkup/processing-instruction() | $genericMarkup/text()"/>
           </forrest:part>
         </forrest:content>
+      </xsl:template>
+      <xsl:template 
+        match="@* | * | comment() | processing-instruction() | text()">
+        <xsl:copy>
+          <xsl:apply-templates 
+            select="@* | * | comment() | processing-instruction() | text()"/>
+        </xsl:copy>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
