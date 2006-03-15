@@ -106,7 +106,19 @@
               </xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:attribute name="href"> <xsl:value-of select="$root"/>themes/<xsl:value-of 
+          <xsl:variable name="prefix">
+            <xsl:choose>
+              <xsl:when test="@prefix">
+                <xsl:value-of select="@prefix"/>
+              </xsl:when>
+              <xsl:otherwise>
+                themes/
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:attribute name="href"> <xsl:value-of 
+            select="$root"/><xsl:value-of 
+            select="normalize-space($prefix)"/><xsl:value-of 
             select="@url"/> </xsl:attribute>
           <xsl:if test="@media">
             <xsl:attribute name="media">
