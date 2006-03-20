@@ -131,7 +131,7 @@
      <section>
        <title>Contributors</title>
        <p>This is a list of all people who have contributed to this release, but 
-       were full developers on the project. We thank these people for their 
+       were not full developers on the project. We thank these people for their 
        contributions.</p>
        
        <ul>
