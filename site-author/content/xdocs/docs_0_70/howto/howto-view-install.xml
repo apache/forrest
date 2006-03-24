@@ -29,33 +29,34 @@
   <audience title="Intended Audience">
 
 <warning>
-"Views" are new functionality which is still in development phase. That is why it is in the
+"Views" are a new functionality which is still in development phase. That is why it is in the
 "whiteboard" section of the Forrest distribution.
 This HowTo is a good start but still needs proof-reading.
 </warning>
 
     <p>
       Users/devs who wants to get started with view development.
-      This setup guide is valid for both user and devs.
+      This setup guide is valid for both users and devs.
     </p>
   </audience>
   
   <purpose title="Purpose">
     <p>
-      To help user installing views. This is the "getting started" setup-guide.
+      To help users install views. This is the "getting started" setup-guide.
     </p>
   </purpose>
 
   <prerequisites title="Prerequisites">
     <ul>
-      <li>You have to use the trunk version of forrest for using views because it is in an early stage</li>
+      <li>You have to use the trunk version of forrest to use views because it is in an early stage
+      	of development.</li>
     </ul>
   </prerequisites>
 
   <steps title="Steps">
     <p>
-      The process of setting up the plugin is quite heavy. We promise it will be easier in the future. 
-      Some of the instructions has to be modified with your local settings.
+      The process of setting up the plugin is quite involved. We promise it will be easier in the future. 
+      Some of the instructions have to be modified with your local settings.
     </p>
     <section id="localBuild">
       <title>Build the view and the viewHelper plugins</title>
@@ -77,9 +78,9 @@ ant local-deploy
       <title>Seed a new project</title>
       <p> 
 				Go to the dir where you want to seed a new project and seed it. 
-        Then we have to prepare a default.fv directory in project.conf-dir (forrest.properties) 
-        of the fresh seed. That will be needed as soon you modify the default view of your project.
-        The "templates"-directory is need for your project specific contract implementations.
+        Next we have to prepare a default.fv directory ("conf") in project.conf-dir (forrest.properties) 
+        of the fresh seed. This will be needed as soon you modify the default view of your project.
+        A "templates" directory is needed as well, for your project-specific contract implementations.
       </p>
       <source>
 cd ~/src/newSeed
@@ -91,25 +92,24 @@ mkdir src/documentation/resources/templates
     <section id="forrestProperties">
       <title>Modifying forrest.properties</title>
       <p>
-        Now we have to tell forrest that we are planing to use the view plugins. We will do that
+        Now we have to tell forrest that we are planning to use the view plugins. We will do that
         by editing to the forrest.properties to add the plugins:
       </p>
       <source>
 project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
       </source>
       <p>
-	     Now we have to change the project skin to leather-dev. The reason is that the plugins are still
-       not independend form the "old fashion skins".  
+	     We also have to change the project skin to leather-dev. The reason for this is that the plugins are still
+       not independent from the "old fashion skins".  
       </p>
-      <note>We exchanging only
-	     site2xhtml.xsl of leather-dev skin by the plugins and some contracts are based
-	     on e.g. document2html.xsl output of leather-dev.</note>
-     <source>
+      <note>We are exchanging only site2xhtml.xsl of leather-dev skin by the plugins and some contracts 
+      	are based on e.g. document2html.xsl output of leather-dev.</note>
+    	<source>
 project.skin=leather-dev
       </source>
     </section>
     <section id="testing">
-      <title>Test your new view based project</title>
+      <title>Test your new view-based project</title>
       <p> 
         Now you have finished the preparation and the setup to finally try
       </p>
@@ -117,7 +117,7 @@ project.skin=leather-dev
 forrest run
       </source>
       <p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view based skin.</p>
+        view-based skin.</p>
       <note>When developing styles with views 'forrest run' is the quickest
 way. You will see you do not have to build your project to see the
 changes on your pages when working with *.fv. </note>
@@ -136,8 +136,8 @@ cd whiteboard/plugins/org.apache.forrest.plugin.input.viewHelper.xhtml.ls/
 ant local-deploy
 </source>
 			<p>
-        The newly installed plugin will show the available contracts as html page.
-        First we have to tell forrest that we are planing to use the new plugin. We will do that
+        The newly installed plugin will show the available contracts listed in an html page.
+        First we have to tell forrest that we are planning to use the new plugin. We will do that
         by editing the forrest.properties of the <a href="site:howto/view/install">newSeed</a> 
         to <strong>add</strong> the plugin:
       </p>
@@ -152,8 +152,8 @@ project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
   </steps>
   <extension title="Further Reading">
     <p>
-      Congratulations you are now able to work with views. 
-      From here we recommend to read the following How-To's:
+      Congratulations, you are now able to work with views. 
+      From here we recommend reading the following How-To's:
     </p>
     <ul>
       <li><a href="site:v0.70//howto/view/DSL">Getting started with forrest:view DSL</a> </li>
