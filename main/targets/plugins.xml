@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Copyright 2002-2005 The Apache Software Foundation or its licensors,
+  Copyright 2002-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -353,8 +353,7 @@ to be installed again unless you delete them or wish to upgrade them.
           <param name="plugin-name" expression="${plugin.name}"/>  
           <param name="plugin-version" expression="${plugin.version}"/>  
           <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>  
-          <param name="plugin-src-dir" expression="${forrest.plugins.src}/"/>  
-          <param name="plugin-whiteboard-src-dir" expression="${forrest.plugins.whiteboard.src}/"/>      
+          <param name="plugin-src-dir" expression="${project.required.plugins.src}"/>
           <param name="forrest-version" expression="${forrest.version}"/>   
        </xslt>  
        <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/> 
@@ -389,7 +388,11 @@ to be installed again unless you delete them or wish to upgrade them.
 
       <for list="${project.required.plugins}" param="name">
       <sequential>
-        <echo>Installing plugin: @{name}</echo>
+        <echo>
+      --------------------------------------------------------------
+      Installing plugin: @{name}
+      --------------------------------------------------------------
+       </echo>
         <propertyregex property="plugin.name"
               override="true"
               input="@{name}"
