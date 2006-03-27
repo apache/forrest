@@ -42,6 +42,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <html>
       <head>
         <xsl:call-template name="html-meta"/>
+        <xsl:call-template name="meta-data"/>
         <style type="text/css">
           /* <![CDATA[ */
           @import "]]><xsl:value-of select="$root"/><![CDATA[skin/tigris.css";

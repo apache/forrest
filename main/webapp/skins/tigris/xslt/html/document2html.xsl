@@ -32,6 +32,9 @@ and tabs (tab2menu.xsl) to generate the final HTML.
   <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
 
   <xsl:template match="document">
+    <meta-data>
+      <xsl:apply-templates select="header/meta"/>
+    </meta-data>
     <div class="content">
      <div id="topmodule" align="right">
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
