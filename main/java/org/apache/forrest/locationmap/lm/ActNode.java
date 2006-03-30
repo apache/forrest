@@ -31,7 +31,6 @@ import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.environment.Redirector;
-import org.apache.cocoon.selection.Selector;
 import org.apache.cocoon.sitemap.PatternException;
 import org.apache.cocoon.environment.SourceResolver;
 
