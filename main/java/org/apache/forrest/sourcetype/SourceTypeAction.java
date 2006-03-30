@@ -61,10 +61,10 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
             throw new Exception("SourceTypeAction: src attribute should be defined and non-empty.");
         Source source = sourceResolver.resolveURI(src);
         XMLPullParser parser = new Xerces2();
-        try {
-          InputStream is = source.getInputStream();
-          parser.setInputSource(new XMLInputSource(null, src, null, is, null));
-        } catch (SourceNotFoundException e) {
+        if (source.exists()) {
+            InputStream is = source.getInputStream();
+            parser.setInputSource(new XMLInputSource(null, src, null, is, null));
+        } else {
           getLogger().warn("Source '"+source+"' not found");
           return null;
         }
