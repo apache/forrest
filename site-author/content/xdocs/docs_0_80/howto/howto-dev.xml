@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2005 The Apache Software Foundation or its licensors,
+  Copyright 2005-2006 The Apache Software Foundation or its licensors,
   as applicable.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,9 +44,6 @@ This document is under initial development.
       useful. For example, the section about debugging and the section about
       editing content.
     </p>
-    <p>
-      See also the companion document "How to be a committer".
-    </p>
   </audience>
 
   <purpose title="Purpose">
@@ -55,6 +52,14 @@ This document is under initial development.
       an Apache Forrest developer. Ideally a developer would
       also contribute back to the project, so these notes assume that.
       Various key development tasks are used as worked examples.
+    </p>
+    <p>
+      This document is intended to be an introduction to developing in Forrest, specifically,
+      for those developers without a strong Cocoon background.  Some key concepts in Forrest 
+      like sitemaps, pipelines, and locationmaps can be challenging enough to understand without
+      also struggling with the fundamental development chores of debugging, extension methods, etc.
+      The goal of this document is to reduce the steep learning curve by providing answers to 
+      some really practical Forrest development questions.
     </p>
   </purpose>
 
@@ -91,6 +96,31 @@ This document is under initial development.
       development are encouraged.
     </p>
 
+    <section id="dev-environment">
+      <title>Development environment</title>
+      <p>
+        There is no *proper* dev environment. It really depends on your personal
+        preferences. In an opensource project there is huge variety of environments.
+        This makes it quite a challenge to keep sources consistent (see discussion below).
+      </p>
+      <p>
+        Some people use vi or emacs, others use graphical editors, others use
+        integrated development environments such as Eclipse or IDEA.
+      </p>
+      <p>
+        Ensure to <a href="site:v0.70//catalog">configure</a> your xml editor to take
+        advantage of the local sets of DTDs provided by Forrest. This also explains how
+        to use xml validators such as 'xmllint'. If your editor of choice doesn't
+        validate XML, then most XML validation issues can be discovered using
+        <code>forrest validate-xdocs</code>
+      </p>
+      <p>
+        There really isn't much Java code in Forrest, but a Java Development Environment
+        such as Eclipse or any text editor of your choice will work just fine.
+        If you point Eclipse at the Forrest build file it will make life easy for you.
+      </p>
+    </section>
+
     <section id="svn">
       <title>Using Subversion</title>
       <p>
@@ -119,6 +149,13 @@ This document is under initial development.
         To get started, see the
         <a href="site:v0.80//documentation/developers/build">instructions</a>
         for obtaining the Apache Forrest sources via SVN.
+      </p>
+
+      <p>
+        Whether you use the svn command-line client or a fancy client,
+        then you still need to make sure you know how to operate SVN properly.
+        <a href="http://svnbook.red-bean.com/">http://svnbook.red-bean.com</a>
+        is a must.
       </p>
 
       <section id="multiple">
@@ -152,6 +189,22 @@ forrest-trunk
           to be immediately up-to-date with changes to the repositories.
           The svn differences (diffs) are automatically sent whenever
           a committer makes some changes.
+        </p>
+      </section>
+
+      <section id="svn-patch">
+        <title>Creating patches</title>
+        <p>See 
+        <a href="site:contrib/patch">instructions</a> for creating and contributing patches.
+        Make sure to do three things before creating the patch:</p>
+
+        <ul>
+          <li>Do 'svn update' to be in sync with the repository in case someone else changed your files in SVN.</li>
+          <li>Do 'svn status' to ensure that you are not including unnecessary changes.</li>
+          <li>Do 'svn diff' to ensure that changes are what you expect.</li>
+        </ul>
+        
+        <p>After creating the patch, open it with a text editor and review it.
         </p>
       </section>
 
@@ -196,14 +249,20 @@ forrest-trunk
           Consistent code makes everyone's life easier.
           See the 
           <a href="http://cocoon.apache.org/community/committer.html">Apache Cocoon tips</a>.
-          We don't get too hung up on style, but a few basic things are important.
+          We don't get too hung up on style, but those few basic things are important.
+          However we know that coding style is mixed, so just follow the same style
+          as that which exists in the file you are editing. We can occasionally clean up later.
+        </p>
+        <p>
+          Don't change anything that is not necessary. Remember that people need to be
+          able to read the differences on the svn@forrest mailing list.
         </p>
       </section>
 
       <section id="whitespace">
         <title>Whitespace</title>
         <p>
-          For new file, use spaces instead of tabs (java files have four-space indentation,
+          For new files, use spaces instead of tabs (java files have four-space indentation,
           xml files and other text files have two-space indentation).
         </p>
         <p>
@@ -240,7 +299,7 @@ forrest-trunk
       <section id="review">
         <title>Use 'forrest run' for immediate gratification</title>
         <p>
-          Edit content and immediately view it in the browser.
+          Edit documentation content and immediately view it in the browser.
           When you are satisifed, then do 'forrest site' to ensure that the
           whole documentation set hangs together and there are no broken
           references.
@@ -265,13 +324,57 @@ forrest-trunk
       </section>
     </section>
 
+    <section id="sitemap">
+      <title>Understanding the Cocoon sitemap</title>
+      <p>
+        The Cocoon sitemap is essential for Forrest developers. See some introductions ....
+      </p>
+      <ul>
+        <li><a href="site:v0.80//developers/sitemap-ref">Forrest sitemap reference</a>.</li>
+        <li>Introduction to Pipelines in this
+          <a href="site:v0.80//howto/custom-html-source">How-to</a>.</li>
+        <li>About
+          <a href="site:v0.80//developers/project-sitemap">Forrest project sitemaps</a>.</li>
+        <li><a href="ext:cocoon/concepts">Cocoon concepts</a>.</li>
+        <li><a href="ext:cocoon/sitemap">Cocoon sitemap</a>.</li>
+        <li><a href="ext:cocoon/protocols">Cocoon protocols</a>, i.e. cocoon:/ and
+          cocoon:// and context:// and resource:// etc. and the
+          <a href="ext:cocoon/file-url">file://</a>
+        </li>
+      </ul>
+    </section>
+
     <section id="debug">
       <title>Debugging and profiling techniques</title>
-      <p>
-        This <a href="site:v0.80//documentation/faq/logs">FAQ</a>
-        describes the location of the Cocoon logfiles and their
-        configuration.
+
+      <section id="debug-logfiles">
+        <title>View logfiles</title>
+        <p>
+          The log files in WEB-INF/logs are indispensible when it comes
+          to debugging sitemaps. While ERRORs will generally always print in the log files, 
+          while you're debugging something you may find it useful to also customize log output in
+          the "logkit.xconf" in webapp/WEB-INF and raise the level of some loggers to WARN.
       </p>
+        <p>
+          This <a href="site:v0.80//documentation/faq/logs">FAQ</a>
+          describes the location of the Cocoon logfiles and their
+          configuration.
+        </p>
+      </section>
+
+      <section id="debug-intermediate">
+        <title>View intermediate processing</title>
+        <p>
+          Perhaps the easiest way to "debug" Forrest is to be aware of all the
+          processing steps between taking in the source and outputting the end
+          result. When you know these you can do 'forrest run' and request the
+          intermediate documents, such as "http://localhost:8888/body-index.xml"
+          which will return the intermediate processing of the body of the document.
+        </p>
+        <p>
+          The techniques described below help you to be aware of the intermediate processing steps.
+        </p>
+      </section>
 
       <section id="debug-cocoon-profiler">
         <title>Using Cocoon sitemap profiler</title>
@@ -345,6 +448,22 @@ forrest-trunk
           Another use for this technique is when you are not sure which
           path is being taken through the sitemap. Add various LogTransformers
           with different filenames and see which one gets triggered.
+        </p>
+      </section>
+
+      <section id="debug-java">
+        <title>Java code</title>
+        <p>
+          Since there's really no way to "trace" the java code through the
+          pipeline process, you may find <code>getLogger().debug()</code> useful for
+          understanding the processing that goes on. You can then open the page that will
+          use the selected code and use the log files mentioned above to look for
+          the information message.
+        </p>
+        <p>
+          If you need to debug actual Cocoon components, then you would need to add such debug
+          statements to the Cocoon sources and rebuild Forrest's packaged Cocoon
+          (as described in $FORREST_HOME/etc/cocoon_upgrade/).
         </p>
       </section>
 
