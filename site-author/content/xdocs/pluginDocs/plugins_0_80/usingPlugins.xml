@@ -31,7 +31,7 @@
       plugins. This document serves as an introduction to the Forrest
       plugin mechanism.</p>
   
-      <section>
+      <section id="available">
         <title>What plugins are available?</title>
         <p>You can run the command <code>forrest available-plugins</code> to get
         a list of the known plugins for Forrest.</p>
@@ -41,9 +41,9 @@
       </section>
     </section>
         
-    <section>
+    <section id="install">
       <title>How is a Plugin Installed?</title>
-        <section>
+        <section id="required">
           <title>List of Plugins Needed by the Project</title>
           <p>If a site requires one or more plugins then the site designer will 
            have to list them in the <code>project.required.plugins</code> property 
@@ -59,7 +59,7 @@
            to include some plugins. Currently there is only one to generate 
            PDF output from your source documents.</note>
         </section>
-        <section>
+        <section id="version">
           <title>What Version of Plugins will be used ?</title>
           <p>In the absence of a version number for the plugin (as is the case in the example above)
           the most recent version that is applicabe to your release of Forrest will be used. This
@@ -75,7 +75,7 @@
           of an in-development plugin, therefore in a production environment you should always specify
           a known working version.</p>
         </section>
-        <section>
+        <section id="sources">
           <title>Where does Forrest look for Plugins sources ?</title>
           <p>By default, forrest looks into the two following directories to find plugins sources : <code>${forrest.home}/plugins</code> and <code>${forrest.home}/whiteboard/plugins</code>.
           It is possible to add other sources locations by specifying the <code>project.required.plugins.src</code> property 
@@ -106,7 +106,17 @@
           <p>
           will add the project specific plugins descriptors file <code>file:///${project.home}/plugins/plugins.xml</code> to the list of descriptors.</p>
         </section>
-      <section>
+      <section id="local-deploy">
+        <title>Editing plugins sources to enhance functionality</title>
+        <p>
+          Until issue
+          <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
+          is fixed to enable the use of plugins in-place, any changes to
+          sources need to be locally deployed.
+          See <a href="#more">Further reading</a> for "How to build a Plugin".
+        </p>
+        </section>
+      <section id="no-plugins">
         <title>Upgrading from a Version of Forrest Without Plugins</title>
         <p>The plugin functionality was introduced in version 0.7 of Forrest.
         At this time some of the functionality previously in Forrest was
@@ -136,7 +146,7 @@
       </section>
     </section>
     
-    <section>
+    <section id="conflict">
       <title>Avoiding Plugin Conflicts</title>
       <p>Clashes between plugins can occur. For example, the simplified-docbook 
       and full docbook plugins may try and process the same files. In this 
@@ -146,11 +156,11 @@
       order and therefore processing precedence is under user control.</p>
     </section>
     
-    <section>
+    <section id="more">
       <title>Further Reading</title>
       <ul>
         <li><a href="site:plugins/infrastructure">Plugin Infrastructure</a></li>
-        <li><a href="site:v0.70//howto/buildPlugin">How to build a Plugin</a></li>
+        <li><a href="site:v0.80//howto/buildPlugin">How to build a Plugin</a></li>
       </ul>
     </section>
   </body>
