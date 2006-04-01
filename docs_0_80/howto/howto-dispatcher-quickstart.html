@@ -202,7 +202,7 @@ document.write("Last Published: " + document.lastModified);
 <div onclick="SwitchMenu('menu_selected_1.1.15.12', '../../skin/')" id="menu_selected_1.1.15.12Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">Dispatcher</div>
 <div id="menu_selected_1.1.15.12" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
-<a href="../../docs_0_80/howto/howto-structurer-install.html">Install</a>
+<a href="../../docs_0_80/howto/howto-dispatcher-install.html">Install</a>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-structurer-dsl.html">Structurer</a>
@@ -432,9 +432,11 @@ document.write("Last Published: " + document.lastModified);
         
 <li>Do 'svn update' or at least use r373699.</li>
         
+<li>Do the 'build clean; build' (necessary because the Dispatcher is changing rapidly and uses some Java)</li>
+        
 <li>Apply the patch from https://issues.apache.org/jira/browse/FOR-796</li>
         
-<li>Deploy both dispatcher plugins.</li>
+<li>Deploy both dispatcher plugins ...</li>
       
 </ul>
 <pre class="code">
@@ -443,7 +445,11 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
 cd ../org.apache.forrest.themes.core
 $FORREST_HOME/tools/ant/bin/ant local-deploy
       </pre>
-<a name="N1005C"></a><a name="enable"></a>
+<p>The build and deploy steps can be done using the convenience script:
+       <span class="codefrag">$FORREST_HOME/etc/builddispatcher.sh|bat</span>
+      
+</p>
+<a name="N10065"></a><a name="enable"></a>
 <h3 class="underlined_5">Dispatcher-enable the existing site</h3>
 <ul>
         
@@ -451,12 +457,10 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
         ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core
         </li>
         
-<li>Deploy both dispatcher plugins with etc/structurer.sh</li>
-        
 <li>localhost:8888/index.html ... fantastic. See the default view.</li>
       
 </ul>
-<a name="N1006F"></a><a name="another-theme"></a>
+<a name="N10075"></a><a name="another-theme"></a>
 <h3 class="underlined_5">Use another theme</h3>
 <ul>
         
@@ -467,7 +471,7 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
 <li>localhost:8888/index.html ... See the new view.</li>
       
 </ul>
-<a name="N10082"></a><a name="our-structurer"></a>
+<a name="N10088"></a><a name="our-structurer"></a>
 <h3 class="underlined_5">Create our own structurer by copy-and-customise</h3>
 <p>
         Copy the default structurer for the pelt theme and make local changes.
@@ -501,7 +505,7 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
         From here on there is no need to re-start 'forrest run'. Just edit
         the structurer and see the effect.
       </p>
-<a name="N1009E"></a><a name="remove-default-contract"></a>
+<a name="N100A4"></a><a name="remove-default-contract"></a>
 <h3 class="underlined_5">Remove a default contract</h3>
 <ul>
         
@@ -510,7 +514,7 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
         </li>
       
 </ul>
-<a name="N100AB"></a><a name="add-default-contract"></a>
+<a name="N100B1"></a><a name="add-default-contract"></a>
 <h3 class="underlined_5">Add a default contract</h3>
 <p>
         Forrest provides many default contracts. If you are using the
@@ -540,7 +544,7 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
         Notice that you did not need to copy any other code to your project space.
         Forrest finds the default contract in its core (the theme.core plugin).
       </p>
-<a name="N100C5"></a><a name="add-project-contract"></a>
+<a name="N100CB"></a><a name="add-project-contract"></a>
 <h3 class="underlined_5">Add a new project contract</h3>
 <div class="warning">
 <div class="label">Warning</div>
@@ -589,7 +593,7 @@ $FORREST_HOME/tools/ant/bin/ant local-deploy
         Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
         localhost:8888/ls.contracts.project.html
       </p>
-<a name="N100EB"></a><a name="manage"></a>
+<a name="N100F1"></a><a name="manage"></a>
 <h3 class="underlined_5">Decide how to manage your contracts</h3>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
@@ -599,7 +603,7 @@ Glean content from Ross' discussion:
 </div>
 </div>
 </div>
-<a name="N100FA"></a><a name="Further Reading"></a>
+<a name="N10100"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p> Congratulations you are now able to work with the Dispatcher. From here 
@@ -621,7 +625,7 @@ Glean content from Ross' discussion:
     
 </ul>
 </div>
-<a name="N10113"></a><a name="Feedback"></a>
+<a name="N10119"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p> Please provide feedback about this document via the <a href="../../mail-lists.html">mailing lists</a>. </p>

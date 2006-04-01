@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>Generate an ASF mirrors page using interactive web form (v0.8-dev)</title>
+<title>How to install the "dispatcher" (v0.8-dev)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
@@ -163,8 +163,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-dev.html">Be a developer</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">Download mirror</div>
+<div class="menuitem">
+<a href="../../docs_0_80/howto/howto-asf-mirror.html">Download mirror</a>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-pdf-tab.html">Create tab PDF</a>
@@ -199,10 +199,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../docs_0_80/howto/multi/step3.html">Step 3</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.1.15.12', '../../skin/')" id="menu_1.1.15.12Title" class="menutitle">Dispatcher</div>
-<div id="menu_1.1.15.12" class="menuitemgroup">
-<div class="menuitem">
-<a href="../../docs_0_80/howto/howto-dispatcher-install.html">Install</a>
+<div onclick="SwitchMenu('menu_selected_1.1.15.12', '../../skin/')" id="menu_selected_1.1.15.12Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">Dispatcher</div>
+<div id="menu_selected_1.1.15.12" class="selectedmenuitemgroup" style="display: block;">
+<div class="menupage">
+<div class="menupagetitle">Install</div>
 </div>
 <div class="menuitem">
 <a href="../../docs_0_80/howto/howto-structurer-dsl.html">Structurer</a>
@@ -309,7 +309,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="howto-asf-mirror.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="howto-dispatcher-install.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -317,11 +317,10 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>Generate an ASF mirrors page using interactive web form</h1>
-<div class="abstract">Include html form elements
-    into a forrest-generated html page. For example, this enables building
-    automated download mirror pages for ASF project websites.
-    </div>
+<h1>How to install the "dispatcher"</h1>
+<div class="abstract">
+    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh v2 seed site.
+  </div>
 <div id="motd-area">
         This is documentation for development version v0.8
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
@@ -340,146 +339,150 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#cgi">Add the mirrors.cgi as a raw file</a>
+<a href="#localBuild">Build the internal.dispatcher and the themes.core plugins</a>
 </li>
 <li>
-<a href="#html">Add the mirrors.html to xdocs directory</a>
+<a href="#newSeed">Seed a new project</a>
 </li>
 <li>
-<a href="#menu">Add a menu entry for Download</a>
+<a href="#forrestProperties">Modify forrest.properties</a>
 </li>
 <li>
-<a href="#link">Cause the mirrors.html to be processed as an extra file</a>
+<a href="#testing">Test your new "dispatcher" based project</a>
 </li>
 <li>
-<a href="#forrest">Run 'forrest' to build your site</a>
+<a href="#availableContracts">Available contracts</a>
 </li>
 </ul>
+</li>
+<li>
+<a href="#Further Reading">Further Reading</a>
+</li>
+<li>
+<a href="#Feedback">Feedback</a>
 </li>
 </ul>
 </div>
 <a name="N10010"></a><a name="Intended Audience"></a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
-<ul>
-      
-<li>Any Apache project that uses Forrest to generate their website
-        will need to have a mirrors page.</li>
-      
-<li>Also anyone interested in the use of embedding html form
-        elements into a generated Forrest page.</li>
-    
-</ul>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+The "Dispatcher" (aka "Views") is new functionality which is still in development phase. That is why it is in the
+"whiteboard" section of the Forrest distribution. This HowTo is a good start but still needs more work.
 </div>
-<a name="N1001E"></a><a name="Purpose"></a>
+</div>
+<p>
+      Developers who want to get started with "dispatcher" development and want to help testing and developing the "dispatcher".
+    </p>
+</div>
+<a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
-<p>All Apache projects use dynamically generated download pages
-    which determine the closest mirror and provide an interactive list of
-    the current alternative mirrors.
-    This HowTo describes the procedure to generate the template page
-    that is utilised by the mirrors.cgi script.
-    </p>
-<p>The mirrors.cgi and mirrors.html are "extra" documents,
-    i.e. have no links from anywhere in the site. So we explain
-    how to process additional files.
+<p>
+      Quick guide installing the "dispatcher". This is the "getting started" setup guide.
     </p>
 </div>
-<a name="N10029"></a><a name="Prerequisites"></a>
+<a name="N10023"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
       
-<li>Followed the documentation about
-      <a href="http://www.apache.org/~bodewig/mirror.html">Making your
-      downloads mirrorable</a> and
-      <a href="http://www.apache.org/dev/mirrors.html">Apache Mirroring Information</a>
-      .
-      </li>
+<li>Need the SVN trunk version of Forrest for using the "dispatcher" because it is in an early stage.</li>
       
-<li>Established your ASF distribution space as described.</li>
+<li>Read <a href="../../docs_0_80/howto/howto-buildPlugin.html">How to Build a Plugin</a>
+        especially the section about using Forrest's own Ant.</li>
       
-<li>Already building your project website with Forrest.</li>
+<li>Installing a mozilla browser and the
+        <a href="../../tools/forrestbar.html">Forrestbar</a> helps a lot in developing.</li>
     
 </ul>
 </div>
-<a name="N10042"></a><a name="Steps"></a>
+<a name="N1003C"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
-<a name="N10047"></a><a name="cgi"></a>
-<h3 class="underlined_5">Add the mirrors.cgi as a raw file</h3>
-<p>As explained in the mirrors document, there will be a two-line CGI
-      wrapper script at the top-level of your website called
-      <span class="codefrag">mirrors.cgi</span>
-</p>
-<p>Utilising the Forrest concept of raw un-processed content,
-       add the file as <span class="codefrag">src/documentation/mirrors.cgi</span>
-       (copy the Forrest project's
-        <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/mirrors.cgi">mirrors.cgi</a>)
-      </p>
-<a name="N1005D"></a><a name="html"></a>
-<h3 class="underlined_5">Add the mirrors.html to xdocs directory</h3>
-<p>This file contains the html content of your mirror page, including
-        the html form elements which drive the mirror selection. It also
-        contains the specific tokens that are interpreted by the mirrors.cgi
-        script to add the list of mirrors and select the closest.
+<p>
+      The process of setting up the plugin should be easy. Still it has too many stages and it
+       will become easier in the future.
+    </p>
+<a name="N10044"></a><a name="localBuild"></a>
+<h3 class="underlined_5">Build the internal.dispatcher and the themes.core plugins</h3>
+<p>
+        The first step is to build and deploy the internal.dispatcher and the themes.core plugins.
       </p>
 <p>
-        Add the file as <span class="codefrag">src/documentation/xdocs/mirrors.html</span>
-        (Use the Forrest project's
-        <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/xdocs/mirrors.html">mirrors.html</a>
-        as a template and edit it to suit.)
-      </p>
-<p>
-        Note that the special tokens (e.g. [if-any http] [for http]) need to
-        be encompassed by xml comments.
-      </p>
-<a name="N10074"></a><a name="menu"></a>
-<h3 class="underlined_5">Add a menu entry for Download</h3>
-<p>Add an entry to your site.xml navigation. For example ...
+        Do your usual 'svn update' on forrest (build it clean and normal), then ...
       </p>
 <pre class="code">
- &lt;about label="About"&gt;
-  &lt;index label="Index" href="index.html"/&gt;
-  &lt;license label="License" href="license.html"/&gt;
-  &lt;download label="Download" href="http://forrest.apache.org/mirrors.cgi"/&gt;
-  &lt;download_html href="mirrors.html"/&gt;&lt;!-- so the page is part of a tab --&gt;
-  ...</pre>
-<a name="N10082"></a><a name="link"></a>
-<h3 class="underlined_5">Cause the mirrors.html to be processed as an extra file</h3>
-<p>Forrest gathers the links that are to be crawled, by reading site.xml
-        and by finding any other internal links in the actual documents.
-        There is no link to mirrors.html because it is an extra file that needs
-        to be generated and skinned, but not linked in any way.
+cd whiteboard/plugins/org.apache.forrest.plugin.internal.dispatcher/
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+cd ../org.apache.forrest.themes.core/
+$FORREST_HOME/tools/ant/bin/ant local-deploy
+      </pre>
+<a name="N10055"></a><a name="newSeed"></a>
+<h3 class="underlined_5">Seed a new project</h3>
+<p> Go to the directory where you want to seed a new project and seed it ...
       </p>
-<p>The Cocoon command-line interface
-        (<a href="http://cocoon.apache.org/2.1/userdocs/offline/">CLI</a>)
-        to the rescue. Add an entry to your project's cli.xconf by copying the
-        default one from
-        <span class="codefrag">$FORREST_HOME/main/webapp/WEB-INF/cli.xconf</span> to your
-        <span class="codefrag">src/documentation/conf/</span> directory (or wherever
-        ${forrest.conf-dir} points). Add the following entry ...
+<pre class="code">cd ~/src/ 
+mkdir dispatcher
+cd dispatcher/ 
+forrest seed </pre>
+<a name="N10063"></a><a name="forrestProperties"></a>
+<h3 class="underlined_5">Modify forrest.properties</h3>
+<p>
+        Make sure to tell forrest to use the dispatcher plugins. <br>
+        Edit forrest.properties to add the required plugins:
       </p>
 <pre class="code">
-&lt;uris name="mirrors" follow-links="false"&gt;
-  &lt;uri type="append" src="mirrors.html"/&gt;
-&lt;/uris&gt;</pre>
-<a name="N1009D"></a><a name="forrest"></a>
-<h3 class="underlined_5">Run 'forrest' to build your site</h3>
-<p>
-        That is all that you need to do, Forrest will take care of it from
-        there. Run the '<span class="codefrag">forrest</span>' command. The mirrors.html page
-        will be generated with the skin applied.
+project.required.plugins=org.apache.forrest.themes.core,org.apache.forrest.plugin.internal.dispatcher
+      </pre>
+<a name="N10073"></a><a name="testing"></a>
+<h3 class="underlined_5">Test your new "dispatcher" based project</h3>
+<p> 
+        Now you have finished the preparation and the setup to finally do
+        <span class="codefrag">'forrest run'</span> and
+        point your browser to <span class="codefrag">http://localhost:8888/</span> and you will see the default
+        dispatcher-based site.
       </p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">
-Due to Issue
-<a href="http://issues.apache.org/jira/browse/FOR-480">FOR-480</a>,
-the generated mirror.html will end up in forrest/main/site/mirrors.html
-rather than in the project's build directory.
+<a name="N10083"></a><a name="availableContracts"></a>
+<h3 class="underlined_5">Available contracts</h3>
+<p> 
+       To start working with the dispatcher, you need to know which contracts you can use. 
+       Forrestbar is a nice way to see available contracts. See the menu point "Devs"
+       (ls.contracts and/or ls.contracts.project)
+      </p>
+<p>
+        You can point your browser to e.g. <span class="codefrag">http://localhost:8888/ls.contracts.html</span> 
+        ... On this page you will find all contracts that you can use in your project provided by the core themes.
+      </p>
 </div>
+<a name="N10092"></a><a name="Further Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<p>
+      Congratulations you are now able to work with the dispatcher. 
+      From here we recommend to read the following How-To's (in this order):
+    </p>
+<ul>
+      
+<li>
+<a href="../../docs_0_80/howto/howto-structurer-dsl.html">Getting started with the "structurer"</a> 
+</li>
+      
+<li>
+<a href="../../docs_0_80/howto/howto-structurer-contracts.html">Create your own contract implementation</a> 
+</li>
+    
+</ul>
 </div>
+<a name="N100A9"></a><a name="Feedback"></a>
+<h2 class="underlined_10">Feedback</h2>
+<div class="section">
+<p>
+      Please provide feedback about this document via the "dev"
+      <a href="../../mail-lists.html">mailing list</a>.
+    </p>
 </div>
 </div>
 <!--+
