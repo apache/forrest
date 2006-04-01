@@ -71,10 +71,11 @@ public final class ActNode extends AbstractNode {
         
         // get the selector
         m_type = configuration.getAttribute("type",m_ln.getDefaultAction());
+        String src=configuration.getAttribute("src","");
         try
         {
                 m_varResolver = VariableResolverFactory.getResolver(
-                    configuration.getAttribute("src"), super.m_manager);
+                    src, super.m_manager);
         }
         catch (PatternException e) {
             throw new ConfigurationException("unable to resolve action 'src' attribute");
