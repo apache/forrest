@@ -161,23 +161,35 @@ document.write("Last Published: " + document.lastModified);
 <a href="#overview">Overview</a>
 <ul class="minitoc">
 <li>
-<a href="#What+plugins+are+available%3F">What plugins are available?</a>
+<a href="#available">What plugins are available?</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#How+is+a+Plugin+Installed%3F">How is a Plugin Installed?</a>
+<a href="#install">How is a Plugin Installed?</a>
 <ul class="minitoc">
 <li>
-<a href="#Upgrading+from+a+Version+of+Forrest+Without+Plugins">Upgrading from a Version of Forrest Without Plugins</a>
+<a href="#required">List of Plugins Needed by the Project</a>
+</li>
+<li>
+<a href="#version">What Version of Plugins will be used ?</a>
+</li>
+<li>
+<a href="#sources">Where does Forrest look for Plugins sources ?</a>
+</li>
+<li>
+<a href="#local-deploy">Editing plugins sources to enhance functionality</a>
+</li>
+<li>
+<a href="#no-plugins">Upgrading from a Version of Forrest Without Plugins</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#Avoiding+Plugin+Conflicts">Avoiding Plugin Conflicts</a>
+<a href="#conflict">Avoiding Plugin Conflicts</a>
 </li>
 <li>
-<a href="#Further+Reading">Further Reading</a>
+<a href="#more">Further Reading</a>
 </li>
 </ul>
 </div>
@@ -190,7 +202,7 @@ document.write("Last Published: " + document.lastModified);
       does not end there. Forrest can be extended through the addition of
       plugins. This document serves as an introduction to the Forrest
       plugin mechanism.</p>
-<a name="N10016"></a><a name="What+plugins+are+available%3F"></a>
+<a name="N10016"></a><a name="available"></a>
 <h3 class="underlined_5">What plugins are available?</h3>
 <p>You can run the command <span class="codefrag">forrest available-plugins</span> to get
         a list of the known plugins for Forrest.</p>
@@ -199,33 +211,82 @@ document.write("Last Published: " + document.lastModified);
 </div>
         
     
-<a name="N1002B"></a><a name="How+is+a+Plugin+Installed%3F"></a>
+<a name="N1002B"></a><a name="install"></a>
 <h2 class="underlined_10">How is a Plugin Installed?</h2>
 <div class="section">
+<a name="N10031"></a><a name="required"></a>
+<h3 class="underlined_5">List of Plugins Needed by the Project</h3>
 <p>If a site requires one or more plugins then the site designer will 
-      have named them in the <span class="codefrag">project.required.plugins</span> property 
-      in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
-      builds the site it will automatically discover the plugin and install 
-      it. In otherwords, the user need do nothing. For example, 
-      <span class="codefrag">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</span>
-      will cause Forrest to load the plugins called "org.apache.forrest.plugin.input.OpenOffice.org" and
-      "org.apache.forrest.plugin.input.simplifiedDocbook".</p>
-<p>In the absence of a version number for the plugin (as is the case in the examples above)
-      the most recent version that is applicabe to your release of Forrest will be used. This
-      may result in unexpected behaviour if a new version of the plugin has been released that
-      is incompatible with your current site. To force Forrest into using a specific version of 
-      a plugin you shuld add "-VERSION_NUMBER" to the end of the plugin name. For example,
-      to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
-      <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span> If you define a version of the
-      plugin that does not exist then it will fall back to using the most recent version avialable.
-      This feature is useful when 
-      developing a new site as you can quickly force a plugin upgrade by deleting all installed 
-      plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
-      of an in-development plugin, therefore in a production environment you should always specify
-      a known working version.</p>
-<p>By default a new forrest project includes plugins to generate 
-      PDF output from your source documents.</p>
-<a name="N10046"></a><a name="Upgrading+from+a+Version+of+Forrest+Without+Plugins"></a>
+           have to list them in the <span class="codefrag">project.required.plugins</span> property 
+           in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
+           builds the site it will automatically discover the plugins and install 
+           them. In otherwords, the user needs do nothing.</p>
+<p>For example,</p>
+<pre class="code">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</pre>
+<p>
+           will cause Forrest to load the plugins called "org.apache.forrest.plugin.input.OpenOffice.org" and
+           "org.apache.forrest.plugin.input.simplifiedDocbook".</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">By default a new forrest project has that property configured
+           to include some plugins. Currently there is only one to generate 
+           PDF output from your source documents.</div>
+</div>
+<a name="N1004E"></a><a name="version"></a>
+<h3 class="underlined_5">What Version of Plugins will be used ?</h3>
+<p>In the absence of a version number for the plugin (as is the case in the example above)
+          the most recent version that is applicabe to your release of Forrest will be used. This
+          may result in unexpected behaviour if a new version of the plugin has been released that
+          is incompatible with your current site. To force Forrest into using a specific version of 
+          a plugin you should add "-VERSION_NUMBER" to the end of the plugin name. For example,
+          to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
+          <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span>. If you define a version of the
+          plugin that does not exist then it will fall back to using the most recent version avialable.
+          This feature is useful when 
+          developing a new site as you can quickly force a plugin upgrade by deleting all installed 
+          plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
+          of an in-development plugin, therefore in a production environment you should always specify
+          a known working version.</p>
+<a name="N1005B"></a><a name="sources"></a>
+<h3 class="underlined_5">Where does Forrest look for Plugins sources ?</h3>
+<p>By default, forrest looks into the two following directories to find plugins sources : <span class="codefrag">${forrest.home}/plugins</span> and <span class="codefrag">${forrest.home}/whiteboard/plugins</span>.
+          It is possible to add other sources locations by specifying the <span class="codefrag">project.required.plugins.src</span> property 
+          in the projects <span class="codefrag">forrest.properties</span> file.</p>
+<p>For example,</p>
+<pre class="code">project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,${project.home}/plugins</pre>
+<p>
+           will add the project specific directory <span class="codefrag">${project.home}/plugins</span> to the list of directories to search in.</p>
+<p>if sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files 
+          in which plugins are described as follows :</p>
+<pre class="code">&lt;plugin name="org.apache.forrest.plugin.output.pdf"
+  type="output"
+  author="Apache Forrest Project"
+  website="http://forrest.apache.org/pluginDocs/plugins_0_80/org.apache.forrest.plugin.output.pdf"
+  url="http://forrest.apache.org/plugins/"
+  version="0.2"&gt;
+  &lt;description&gt;
+    Enable Forrest documents to be output in PDF format. 
+  &lt;/description&gt;
+  &lt;forrestVersion&gt;0.8&lt;/forrestVersion&gt;
+&lt;/plugin&gt;</pre>
+<p>The url to download the different plugins is indicated in this file.</p>
+<p>By default, forrest gets the two following plugins descriptors files : <span class="codefrag">http://forrest.apache.org/plugins/plugins.xml</span> and <span class="codefrag">http://forrest.apache.org/plugins/whiteboard-plugins.xml</span>.
+          It is possible to add other plugins descriptors files by specifying the <span class="codefrag">forrest.plugins.descriptors</span> property 
+          in the projects <span class="codefrag">forrest.properties</span> file.</p>
+<p>For example,</p>
+<pre class="code">forrest.plugins.descriptors=http://forrest.apache.org/plugins/plugins.xml,http://forrest.apache.org/plugins/whiteboard-plugins.xml,file:///${project.home}/plugins/plugins.xml</pre>
+<p>
+          will add the project specific plugins descriptors file <span class="codefrag">file:///${project.home}/plugins/plugins.xml</span> to the list of descriptors.</p>
+<a name="N100A7"></a><a name="local-deploy"></a>
+<h3 class="underlined_5">Editing plugins sources to enhance functionality</h3>
+<p>
+          Until issue
+          <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
+          is fixed to enable the use of plugins in-place, any changes to
+          sources need to be locally deployed.
+          See <a href="#more">Further reading</a> for "How to build a Plugin".
+        </p>
+<a name="N100B9"></a><a name="no-plugins"></a>
 <h3 class="underlined_5">Upgrading from a Version of Forrest Without Plugins</h3>
 <p>The plugin functionality was introduced in version 0.7 of Forrest.
         At this time some of the functionality previously in Forrest was
@@ -253,7 +314,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
     
     
-<a name="N1006F"></a><a name="Avoiding+Plugin+Conflicts"></a>
+<a name="N100E2"></a><a name="conflict"></a>
 <h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
 <div class="section">
 <p>Clashes between plugins can occur. For example, the simplified-docbook 
@@ -265,7 +326,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
     
     
-<a name="N1007C"></a><a name="Further+Reading"></a>
+<a name="N100EF"></a><a name="more"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <ul>
@@ -275,7 +336,7 @@ document.write("Last Published: " + document.lastModified);
 </li>
         
 <li>
-<a href="../../docs_0_70/howto/howto-buildPlugin.html">How to build a Plugin</a>
+<a href="../../docs_0_80/howto/howto-buildPlugin.html">How to build a Plugin</a>
 </li>
       
 </ul>
