@@ -115,11 +115,36 @@
           />
       </select>
     </match>
-    <!-- File specific strucuturer templates have priority before default ones. If no strucuturer template 
-      can be found in the project, we use either the theme or the default one of the themes plugin. -->
+    <!-- 
+      structurer templating
+      *********************
+      URL specific structurer templates (project-based) e.g. index.fv
+      * either in the structurer/url
+      * or in the xdocs dir [depreciated]
+      have priority *before* 
+      
+      a) sourcetype based e.g. document-v20.fv
+      b) resourceTypeAction based on meta data e.g. xhtml.fv
+      (demonstrates lenya meta data integration for DOCO)
+      c) RecursiveDirectoryTraversalAction e.g. samples/common.fv
+      c1) url dir
+      c2) xdocs dir [depreciated]
+     
+      If no structurer template can be found in the project, 
+      we use either the templates provided by the
+      a) custom implementation of the themes.core plugin
+      b) themes.core plugin
+      where we test for 
+      1) {project:theme}{project:theme-ext}
+      2) {defaults:theme}{defaults:theme-ext}
+      -->
     <match pattern="resolve.structurer.**">
       <select type="exists">
-        <!-- project-based file-based -->
+        <!-- project-based 
+          url-based (url location) -->
+        <location src="{project:resources}/structurer/url/{1}{project:theme-ext}" />
+        <!-- project-based 
+          url-based (xdocs location)  [depreciated]-->
         <location src="{project:content.xdocs}{1}{project:theme-ext}" />
         <act type="sourcetype" src="{project:content.xdocs}{1}.xml">
           <!-- Sourcetype based 
@@ -141,8 +166,18 @@
           <parameter value="{1}" name="request"/>
           <parameter value="{project:theme}" name="projectFallback"/>
           <parameter value="{project:theme-ext}" name="projectExtension"/>
+          <parameter value="{project:resources}/structurer/url" name="projectDir"/>
+          <!--  url
+            project-based theme-based = directory-based / parent-directory based (recursively) -->
+          <location src="{uri}" />
+        </act>
+        <act type="RecursiveDirectoryTraversalAction">
+          <parameter value="{1}" name="request"/>
+          <parameter value="{project:theme}" name="projectFallback"/>
+          <parameter value="{project:theme-ext}" name="projectExtension"/>
           <parameter value="{project:content.xdocs}" name="projectDir"/>
-          <!--  project-based theme-based = directory-based / parent-directory based (recursively) -->
+          <!--  xdocs  [depreciated]
+            project-based theme-based = directory-based / parent-directory based (recursively) -->
           <location src="{uri}" />
         </act>
         <!-- themes-dir: project-application-based theme-dir-based -->
