@@ -25,8 +25,8 @@
     <actions default="RecursiveDirectoryTraversalAction">
       <action name="RecursiveDirectoryTraversalAction" 
         src="org.apache.forrest.dispatcher.acting.RecursiveDirectoryTraversalAction"/>
-      <!--<action name="resourceTypeAction" 
-        src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/>-->
+      <action name="resourceTypeAction" 
+        src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/>
       <action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
        <sourcetype name="document-v10">
          <document-declaration public-id="-//APACHE//DTD Documentation V1.0//EN" />
@@ -126,6 +126,16 @@
           http://forrest.apache.org/docs/cap.html-->
           <location src="lm://dispatcher.structurer.resourceType.{sourcetype}" 
             />
+        </act>
+        <act type="resourceTypeAction">
+          <parameter value="{1}" name="request"/>
+          <parameter value="{project:content.xdocs}" name="projectDir"/>
+          <parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/>
+          <parameter value=".xml.meta" name="metaExtension"/>
+          <parameter value="resourceType" name="resourceTypeElement"/>
+          <parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" name="resourceTypeElementNS"/>
+          <!--  Meta data based -->
+          <location src="{uri}" />
         </act>
         <act type="RecursiveDirectoryTraversalAction">
           <parameter value="{1}" name="request"/>
