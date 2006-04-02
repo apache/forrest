@@ -25,6 +25,67 @@
     <actions default="RecursiveDirectoryTraversalAction">
       <action name="RecursiveDirectoryTraversalAction" 
         src="org.apache.forrest.dispatcher.acting.RecursiveDirectoryTraversalAction"/>
+        <action name="resourceTypeAction" 
+        src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/>
+      <action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+       <sourcetype name="document-v10">
+         <document-declaration public-id="-//APACHE//DTD Documentation V1.0//EN" />
+       </sourcetype>
+       <sourcetype name="howto-v10">
+         <document-declaration public-id="-//APACHE//DTD How-to V1.0//EN" />
+       </sourcetype>
+       <sourcetype name="todo-v10">
+         <document-declaration public-id="-//APACHE//DTD Todo V1.0//EN" />
+       </sourcetype>
+       <sourcetype name="changes-v10">
+         <document-declaration public-id="-//APACHE//DTD Changes V1.0//EN" />
+       </sourcetype>
+       <sourcetype name="document-v11">
+         <document-declaration public-id="-//APACHE//DTD Documentation V1.1//EN" />
+       </sourcetype>
+       <sourcetype name="howto-v11">
+         <document-declaration public-id="-//APACHE//DTD How-to V1.1//EN" />
+       </sourcetype>
+       <sourcetype name="todo-v11">
+         <document-declaration public-id="-//APACHE//DTD Todo V1.1//EN" />
+       </sourcetype>
+       <sourcetype name="changes-v11">
+         <document-declaration public-id="-//APACHE//DTD Changes V1.1//EN" />
+       </sourcetype>
+       <sourcetype name="todo-v12">
+         <document-declaration public-id="-//APACHE//DTD Todo V1.2//EN" />
+       </sourcetype>
+       <sourcetype name="changes-v12">
+         <document-declaration public-id="-//APACHE//DTD Changes V1.2//EN" />
+       </sourcetype>
+       <sourcetype name="howto-v12">
+         <document-declaration public-id="-//APACHE//DTD How-to V1.2//EN" />
+       </sourcetype>
+       <sourcetype name="todo-v13">
+         <document-declaration public-id="-//APACHE//DTD Todo V1.3//EN" />
+       </sourcetype>
+       <sourcetype name="changes-v13">
+         <document-declaration public-id="-//APACHE//DTD Changes V1.3//EN" />
+       </sourcetype>
+       <sourcetype name="howto-v13">
+         <document-declaration public-id="-//APACHE//DTD How-to V1.3//EN" />
+       </sourcetype>
+       <sourcetype name="document-v20a">
+         <document-declaration public-id="-//APACHE//DTD Documentation V2.0a//EN" />
+       </sourcetype>
+       <sourcetype name="document-v20">
+         <document-declaration public-id="-//APACHE//DTD Documentation V2.0//EN" />
+       </sourcetype>
+       <sourcetype name="todo-v20">
+         <document-declaration public-id="-//APACHE//DTD Todo V2.0//EN" />
+       </sourcetype>
+       <sourcetype name="changes-v20">
+         <document-declaration public-id="-//APACHE//DTD Changes V2.0//EN" />
+       </sourcetype>
+       <sourcetype name="howto-v20">
+         <document-declaration public-id="-//APACHE//DTD How-to V2.0//EN" />
+       </sourcetype>
+     </action>
     </actions>
     <selectors default="exists">
       <selector name="exists" logger="sitemap.selector.exists" 
@@ -43,12 +104,29 @@
           />
       </select>
     </match>
+    <!-- resource types -->
+    <match pattern="dispatcher.structurer.resourceType.**">
+      <select>
+        <location 
+          src="{project:resources}/structurer/resource-types/{1}{project:theme-ext}" 
+          />
+        <location 
+          src="{defaults:themer}/structurer/resource-types/{1}{project:theme-ext}" 
+          />
+      </select>
+    </match>
     <!-- File specific strucuturer templates have priority before default ones. If no strucuturer template 
       can be found in the project, we use either the theme or the default one of the themes plugin. -->
     <match pattern="resolve.structurer.**">
       <select type="exists">
         <!-- project-based file-based -->
         <location src="{project:content.xdocs}{1}{project:theme-ext}" />
+        <act type="sourcetype" src="{project:content.xdocs}{1}.xml">
+          <!-- Sourcetype based 
+          http://forrest.apache.org/docs/cap.html-->
+          <location src="lm://dispatcher.structurer.resourceType.{sourcetype}" 
+            />
+        </act>
         <act type="RecursiveDirectoryTraversalAction">
           <parameter value="{1}" name="request"/>
           <parameter value="{project:theme}" name="projectFallback"/>
