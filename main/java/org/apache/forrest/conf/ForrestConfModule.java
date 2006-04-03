@@ -52,306 +52,291 @@ import org.xml.sax.SAXException;
  * <b>forrest </b> directories. The values are gotten using the ForrestConfUtils
  * class.
  */
-public class ForrestConfModule extends DefaultsModule implements InputModule,
-		Initializable, ThreadSafe, Serviceable {
-	private AntProperties filteringProperties;
+public class ForrestConfModule extends DefaultsModule implements InputModule, Initializable,
+        ThreadSafe, Serviceable {
+    private AntProperties filteringProperties;
 
-	private String forrestHome, projectHome, contextHome;
+    private String forrestHome, projectHome, contextHome;
 
-	private SourceResolver m_resolver;
+    private SourceResolver m_resolver;
 
-	private final static String defaultHome = "context:/";
+    private final static String defaultHome = "context:/";
 
-	public Object getAttribute(String name, Configuration modeConf,
-			Map objectModel) throws ConfigurationException {
-		String original;
-		String attributeValue;
+    public Object getAttribute(String name, Configuration modeConf, Map objectModel)
+            throws ConfigurationException {
+        String original;
+        String attributeValue;
 
-		try {
-			original = super.getAttributeValues(name, modeConf, objectModel)[0]
-					.toString();
-			attributeValue = this.getAttributeValues(name, modeConf,
-					objectModel)[0].toString();
-		} catch (NullPointerException npe) {
-			original = "(not defined in forrest.xconf)";
-			attributeValue = filteringProperties.getProperty(name);
-			if (attributeValue == null) {
-				throw new ConfigurationException(
-						"Unable to get attribute value for " + name);
-			}
-		}
+        try {
+            original = super.getAttributeValues(name, modeConf, objectModel)[0].toString();
+            attributeValue = this.getAttributeValues(name, modeConf, objectModel)[0].toString();
+        } catch (NullPointerException npe) {
+            original = "(not defined in forrest.xconf)";
+            attributeValue = filteringProperties.getProperty(name);
+            if (attributeValue == null) {
+                throw new ConfigurationException("Unable to get attribute value for " + name);
+            }
+        }
 
-		if (debugging()) {
-			debug(" - Requested:" + name);
-			debug(" - Unfiltered:" + original);
-			debug(" - Given:" + attributeValue);
-		}
+        if (debugging()) {
+            debug(" - Requested:" + name);
+            debug(" - Unfiltered:" + original);
+            debug(" - Given:" + attributeValue);
+        }
 
-		return attributeValue;
-	}
+        return attributeValue;
+    }
 
-	public Object[] getAttributeValues(String name, Configuration modeConf,
-			Map objectModel) throws ConfigurationException {
-		Object[] attributeValues = super.getAttributeValues(name, modeConf,
-				objectModel);
-		for (int i = 0; i < attributeValues.length; i++) {
-			attributeValues[i] = filteringProperties.filter(attributeValues[i]
-					.toString());
-		}
+    public Object[] getAttributeValues(String name, Configuration modeConf, Map objectModel)
+            throws ConfigurationException {
+        Object[] attributeValues = super.getAttributeValues(name, modeConf, objectModel);
+        for (int i = 0; i < attributeValues.length; i++) {
+            attributeValues[i] = filteringProperties.filter(attributeValues[i].toString());
+        }
 
-		return attributeValues;
-	}
+        return attributeValues;
+    }
 
-	private final String getSystemProperty(String propertyName) {
+    private final String getSystemProperty(String propertyName) {
 
-		// if the property is not set, default to the webapp context
-		String propertyValue = System.getProperty(propertyName, defaultHome);
+        // if the property is not set, default to the webapp context
+        String propertyValue = System.getProperty(propertyName, defaultHome);
 
-		if (debugging())
-			debug("system property " + propertyName + "=" + propertyValue);
+        if (debugging())
+            debug("system property " + propertyName + "=" + propertyValue);
 
-		return propertyValue;
-	}
+        return propertyValue;
+    }
 
-	public void initialize() throws Exception {
+    public void initialize() throws Exception {
 
         // add all homes important to forrest to the properties
-		setHomes();
+        setHomes();
 
-		// NOTE: the first values set get precedence, as in AntProperties
+        // NOTE: the first values set get precedence, as in AntProperties
 
-		String forrestPropertiesStringURI;
+        String forrestPropertiesStringURI;
 
-		// get the values from local.forrest.properties.xml
-		try {
-			forrestPropertiesStringURI = projectHome
-					+ SystemUtils.FILE_SEPARATOR + "local.forrest.properties.xml";
+        // get the values from local.forrest.properties.xml
+        try {
+            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
+                    + "local.forrest.properties.xml";
 
-			filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
-					forrestPropertiesStringURI);
-		} catch (FileNotFoundException e) {
-			if (debugging())
-				debug("Unable to find local.forrest.properties.xml, ignoring.");
-		}
+            filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                    forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find local.forrest.properties.xml, ignoring.");
+        }
 
-		// get the values from forrest.properties.xml
-		try {
-			forrestPropertiesStringURI = projectHome
-					+ SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
+        // get the values from forrest.properties.xml
+        try {
+            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
+                    + "forrest.properties.xml";
 
-			filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
-					forrestPropertiesStringURI);
-		} catch (FileNotFoundException e) {
-			if (debugging())
-				debug("Unable to find forrest.properties.xml, ignoring.");
-		}
+            filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                    forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find forrest.properties.xml, ignoring.");
+        }
 
-		// get the values from default.forrest.properties.xml
-		try {
-			forrestPropertiesStringURI = contextHome
-					+ SystemUtils.FILE_SEPARATOR
-					+ "default.forrest.properties.xml";
+        // get the values from default.forrest.properties.xml
+        try {
+            forrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
+                    + "default.forrest.properties.xml";
 
-			filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
-					forrestPropertiesStringURI);
-		} catch (FileNotFoundException e) {
-			if (debugging())
-				debug("Unable to find default.forrest.properties.xml, ignoring.");
-		}
+            filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                    forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find default.forrest.properties.xml, ignoring.");
+        }
 
-		// get forrest.properties and load the values
-		forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
-				+ "forrest.properties";
+        // get forrest.properties and load the values
+        forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
+                + "forrest.properties";
 
-		filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-				forrestPropertiesStringURI);
+        filteringProperties = loadAntPropertiesFromURI(filteringProperties,
+                forrestPropertiesStringURI);
 
-		// get default-forrest.properties and load the values
-		String defaultForrestPropertiesStringURI = contextHome
-				+ SystemUtils.FILE_SEPARATOR + "default-forrest.properties";
+        // get default-forrest.properties and load the values
+        String defaultForrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
+                + "default-forrest.properties";
 
-		filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-				defaultForrestPropertiesStringURI);
+        filteringProperties = loadAntPropertiesFromURI(filteringProperties,
+                defaultForrestPropertiesStringURI);
 
-		// Load plugin default properties
-		String strPluginList = filteringProperties
-				.getProperty("project.required.plugins");
-		if (strPluginList != null) {
-			StringTokenizer st = new StringTokenizer(strPluginList, ",");
-			while (st.hasMoreTokens()) {
-				forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st
-						.nextToken().trim());
-				try {
-					forrestPropertiesStringURI = forrestPropertiesStringURI
-							+ SystemUtils.FILE_SEPARATOR
-							+ "default.plugin.properties.xml";
-					filteringProperties = loadXMLPropertiesFromURI(
-							filteringProperties, forrestPropertiesStringURI);
-				} catch (FileNotFoundException e) {
-					if (debugging())
-						debug("Unable to load " + forrestPropertiesStringURI
-								+ ", ignoring. " + e.getMessage());
-				}
-			}
-		}
+        // Load plugin default properties
+        String strPluginList = filteringProperties.getProperty("project.required.plugins");
+        if (strPluginList != null) {
+            StringTokenizer st = new StringTokenizer(strPluginList, ",");
+            while (st.hasMoreTokens()) {
+                forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st.nextToken().trim());
+                try {
+                    forrestPropertiesStringURI = forrestPropertiesStringURI
+                            + SystemUtils.FILE_SEPARATOR + "default.plugin.properties.xml";
+                    filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                            forrestPropertiesStringURI);
+                } catch (FileNotFoundException e) {
+                    if (debugging())
+                        debug("Unable to load " + forrestPropertiesStringURI + ", ignoring. "
+                                + e.getMessage());
+                }
+            }
+        }
 
-		loadSystemProperties(filteringProperties);
-		ForrestConfUtils.aliasSkinProperties(filteringProperties);
-		if (debugging())
-			debug("Loaded project forrest.properties:" + filteringProperties);
-	}
+        loadSystemProperties(filteringProperties);
+        ForrestConfUtils.aliasSkinProperties(filteringProperties);
+        if (debugging())
+            debug("Loaded project forrest.properties:" + filteringProperties);
+    }
 
     /**
-     * Sets all forrest related home locations such as
-     * - forrestHome
-     * - projectHome
-     * - contextHome
+     * Sets all forrest related home locations such as - forrestHome -
+     * projectHome - contextHome
+     * 
      * @throws Exception
      */
     private void setHomes() throws Exception {
         forrestHome = ForrestConfUtils.getForrestHome();
-		projectHome = ForrestConfUtils.getProjectHome();
-		contextHome = ForrestConfUtils.getContextHome();
+        projectHome = ForrestConfUtils.getProjectHome();
+        contextHome = ForrestConfUtils.getContextHome();
 
-		filteringProperties = new AntProperties();
+        filteringProperties = new AntProperties();
 
-		filteringProperties.setProperty("forrest.home", forrestHome);
-		filteringProperties.setProperty("project.home", projectHome);
-		filteringProperties.setProperty("context.home", contextHome);
+        filteringProperties.setProperty("forrest.home", forrestHome);
+        filteringProperties.setProperty("project.home", projectHome);
+        filteringProperties.setProperty("context.home", contextHome);
     }
 
-	/**
-	 * Override any properties for which a system property exists
-	 */
-	private void loadSystemProperties(AntProperties props) {
-		for (Enumeration e = props.propertyNames(); e.hasMoreElements();) {
-			String propName = (String) e.nextElement();
-			String systemPropValue = System.getProperty(propName);
-			if (systemPropValue != null) {
-				// AntProperties.setProperty doesn't let you override, so we
-				// have to remove the property then add it again
-				props.remove(propName);
-				props.setProperty(propName, systemPropValue);
-			}
-		}
-	}
+    /**
+     * Override any properties for which a system property exists
+     */
+    private void loadSystemProperties(AntProperties props) {
+        for (Enumeration e = props.propertyNames(); e.hasMoreElements();) {
+            String propName = (String) e.nextElement();
+            String systemPropValue = System.getProperty(propName);
+            if (systemPropValue != null) {
+                // AntProperties.setProperty doesn't let you override, so we
+                // have to remove the property then add it again
+                props.remove(propName);
+                props.setProperty(propName, systemPropValue);
+            }
+        }
+    }
 
-	/**
-	 * @param propertiesStringURI
-	 * @throws IOException
-	 * @throws MalformedURLException
-	 * @throws MalformedURLException
-	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws SourceNotFoundException
-	 */
-	private AntProperties loadXMLPropertiesFromURI(
-			AntProperties precedingProperties, String propertiesStringURI)
-			throws MalformedURLException, IOException,
-			ParserConfigurationException, SAXException {
+    /**
+     * @param propertiesStringURI
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws SourceNotFoundException
+     */
+    private AntProperties loadXMLPropertiesFromURI(AntProperties precedingProperties,
+            String propertiesStringURI) throws MalformedURLException, IOException,
+            ParserConfigurationException, SAXException {
 
-		Source source = null;
-		InputStream in = null;
-		try {
-			if (debugging())
-				debug("Searching for forrest.properties.xml in"
-						+ source.getURI());
+        Source source = null;
+        InputStream in = null;
+        try {
+            if (debugging())
+                debug("Searching for forrest.properties.xml in" + source.getURI());
 
-			source = m_resolver.resolveURI(propertiesStringURI);
+            source = m_resolver.resolveURI(propertiesStringURI);
 
-			DocumentBuilderFactory factory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document document = builder.parse(source.getURI());
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(source.getURI());
 
-			NodeList nl = document.getElementsByTagName("property");
-			if (nl != null && nl.getLength() > 0) {
-				for (int i = 0; i < nl.getLength(); i++) {
-					Element el = (Element) nl.item(i);
-					filteringProperties.setProperty(el.getAttribute("name"), el
-							.getAttribute("value"));
-				}
-			}
+            NodeList nl = document.getElementsByTagName("property");
+            if (nl != null && nl.getLength() > 0) {
+                for (int i = 0; i < nl.getLength(); i++) {
+                    Element el = (Element) nl.item(i);
+                    filteringProperties.setProperty(el.getAttribute("name"), el
+                            .getAttribute("value"));
+                }
+            }
 
-			if (debugging())
-				debug("Loaded:" + propertiesStringURI
-						+ filteringProperties.toString());
+            if (debugging())
+                debug("Loaded:" + propertiesStringURI + filteringProperties.toString());
 
-		} finally {
-			if (source != null) {
-				m_resolver.release(source);
-			}
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-				}
-			}
-		}
+        } finally {
+            if (source != null) {
+                m_resolver.release(source);
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+            }
+        }
 
-		return filteringProperties;
-	}
+        return filteringProperties;
+    }
 
-	/**
-	 * @param antPropertiesStringURI
-	 * @throws MalformedURLException
-	 * @throws IOException
-	 * @throws SourceNotFoundException
-	 */
-	private AntProperties loadAntPropertiesFromURI(
-			AntProperties precedingProperties, String antPropertiesStringURI)
-			throws MalformedURLException, IOException, SourceNotFoundException {
+    /**
+     * @param antPropertiesStringURI
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws SourceNotFoundException
+     */
+    private AntProperties loadAntPropertiesFromURI(AntProperties precedingProperties,
+            String antPropertiesStringURI) throws MalformedURLException, IOException,
+            SourceNotFoundException {
 
-		Source source = null;
-		InputStream in = null;
-		try {
+        Source source = null;
+        InputStream in = null;
+        try {
 
-			source = m_resolver.resolveURI(antPropertiesStringURI);
+            source = m_resolver.resolveURI(antPropertiesStringURI);
 
-			if (debugging())
-				debug("Searching for forrest.properties in" + source.getURI());
-			in = source.getInputStream();
-			filteringProperties = new AntProperties(precedingProperties);
-			filteringProperties.load(in);
+            if (debugging())
+                debug("Searching for forrest.properties in" + source.getURI());
+            in = source.getInputStream();
+            filteringProperties = new AntProperties(precedingProperties);
+            filteringProperties.load(in);
 
-			if (debugging())
-				debug("Loaded:" + antPropertiesStringURI
-						+ filteringProperties.toString());
+            if (debugging())
+                debug("Loaded:" + antPropertiesStringURI + filteringProperties.toString());
 
-		} finally {
-			if (source != null) {
-				m_resolver.release(source);
-			}
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-				}
-			}
-		}
+        } finally {
+            if (source != null) {
+                m_resolver.release(source);
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+            }
+        }
 
-		return filteringProperties;
-	}
+        return filteringProperties;
+    }
 
-	public void service(ServiceManager manager) throws ServiceException {
-		m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-	}
+    public void service(ServiceManager manager) throws ServiceException {
+        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+    }
 
-	/**
-	 * Rocked science
-	 */
-	private final boolean debugging() {
-		return getLogger().isDebugEnabled();
-	}
+    /**
+     * Rocked science
+     */
+    private final boolean debugging() {
+        return getLogger().isDebugEnabled();
+    }
 
-	/**
-	 * Rocked science
-	 * 
-	 * @param debugString
-	 */
-	private final void debug(String debugString) {
-		getLogger().debug(debugString);
-	}
+    /**
+     * Rocked science
+     * 
+     * @param debugString
+     */
+    private final void debug(String debugString) {
+        getLogger().debug(debugString);
+    }
 
 }
