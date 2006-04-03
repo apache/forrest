@@ -115,16 +115,8 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
 	public void initialize() throws Exception {
 
-		forrestHome = ForrestConfUtils.getForrestHome();
-		projectHome = ForrestConfUtils.getProjectHome();
-		contextHome = ForrestConfUtils.getContextHome();
-
-		filteringProperties = new AntProperties();
-
-		// add forrest.home and project.home to properties
-		filteringProperties.setProperty("forrest.home", forrestHome);
-		filteringProperties.setProperty("project.home", projectHome);
-		filteringProperties.setProperty("context.home", contextHome);
+        // add all homes important to forrest to the properties
+		setHomes();
 
 		// NOTE: the first values set get precedence, as in AntProperties
 
@@ -208,6 +200,25 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 		if (debugging())
 			debug("Loaded project forrest.properties:" + filteringProperties);
 	}
+
+    /**
+     * Sets all forrest related home locations such as
+     * - forrestHome
+     * - projectHome
+     * - contextHome
+     * @throws Exception
+     */
+    private void setHomes() throws Exception {
+        forrestHome = ForrestConfUtils.getForrestHome();
+		projectHome = ForrestConfUtils.getProjectHome();
+		contextHome = ForrestConfUtils.getContextHome();
+
+		filteringProperties = new AntProperties();
+
+		filteringProperties.setProperty("forrest.home", forrestHome);
+		filteringProperties.setProperty("project.home", projectHome);
+		filteringProperties.setProperty("context.home", contextHome);
+    }
 
 	/**
 	 * Override any properties for which a system property exists
