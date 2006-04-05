@@ -28,26 +28,80 @@
          <xsl:choose>
            <xsl:when test="plugin[@name=$plugin-name]">
       <project default="fetchplugin">
-         <target name="fetchplugin" depends="fetch-versioned-plugin, fetch-unversioned-plugin, final-check"/>
-
-         <target name="fetch-versioned-plugin">
+         <target name="fetchplugin">
+           <xsl:attribute name="depends">
             <xsl:if test="$plugin-version">
-              <echo>Trying to get "<xsl:value-of select="$plugin-name" />" plugin, version <xsl:value-of select="$plugin-version" />
-for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
-              <get verbose="true" usetimestamp="true" ignoreerrors="true">
-                 <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$forrest-version" />/<xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
-                 <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
-              </get>
-              <available property="versioned-plugin.present">
-                 <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
-              </available>
+              <xsl:text>fetch-local-versioned-plugin, fetch-remote-versioned-plugin-version-forrest,</xsl:text>
             </xsl:if>
+            <xsl:text>fetch-local-unversioned-plugin, fetch-remote-unversioned-plugin-version-forrest,</xsl:text>
+            <xsl:text>fetch-remote-unversioned-plugin-unversion-forrest, final-check</xsl:text>
+           </xsl:attribute>
          </target>
 
-         <target name="fetch-unversioned-plugin"
-           unless="versioned-plugin.present">
-            <echo>Versioned plugin unavailable, trying to get versionless plugin...</echo>
-            <trycatch property="plugin-found">
+         <target name="fetch-local-versioned-plugin">
+           <!-- Search for the local versionned plugin ...-->
+           <antcallback target="get-local" return="plugin-found">
+             <param name="local-plugin-version">
+               <xsl:attribute name="value">-<xsl:value-of select="$plugin-version" /></xsl:attribute>
+             </param>
+             <param name="local-plugin-name">
+               <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
+             </param>
+           </antcallback>
+         </target>
+
+         <target name="fetch-remote-versioned-plugin-version-forrest" unless="plugin-found">
+           <!-- Search for the remote versionned plugin in the versionned Forrest...-->
+           <antcallback target="download" return="plugin-found">
+             <param name="download-plugin-version">
+               <xsl:attribute name="value">-<xsl:value-of select="$plugin-version" /></xsl:attribute>
+             </param>
+             <param name="download-plugin-name">
+               <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
+             </param>
+             <param name="download-forrest-version">
+               <xsl:attribute name="value"><xsl:value-of select="$forrest-version" />/</xsl:attribute>
+             </param>
+           </antcallback>
+         </target>
+
+         <target name="fetch-local-unversioned-plugin" unless="plugin-found">
+           <!-- Search for the local unversionned plugin ...-->
+           <antcallback target="get-local" return="plugin-found">
+             <param name="local-plugin-version" value=""/>
+             <param name="local-plugin-name">
+               <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
+             </param>
+           </antcallback>
+         </target>
+
+         <target name="fetch-remote-unversioned-plugin-version-forrest" unless="plugin-found">
+           <!-- Search for the remote unversionned plugin in the versionned Forrest...-->
+           <antcallback target="download" return="plugin-found">
+             <param name="download-plugin-version" value=""/>
+             <param name="download-plugin-name">
+               <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
+             </param>
+             <param name="download-forrest-version">
+               <xsl:attribute name="value"><xsl:value-of select="$forrest-version" />/</xsl:attribute>
+             </param>
+           </antcallback>
+         </target>
+
+         <target name="fetch-remote-unversioned-plugin-unversion-forrest" unless="plugin-found">
+           <!-- Search for the remote unversionned plugin in the unversionned Forrest...-->
+           <antcallback target="download" return="plugin-found">
+             <param name="download-plugin-version" value=""/>
+             <param name="download-plugin-name">
+               <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
+             </param>
+             <param name="download-forrest-version" value=""/>
+           </antcallback>
+         </target>
+
+         <target name="get-local">
+           <echo>Trying to locally get ${local-plugin-name}${local-plugin-version}</echo>
+           <trycatch property="plugin-found">
               <try>
                 <for param="plugin-src-dir">
                   <xsl:attribute name="list"><xsl:value-of select="$plugin-src-dir" /></xsl:attribute>
@@ -55,12 +109,12 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
                     <echo>Looking in local @{plugin-src-dir}</echo>
                     <if>
                       <available property="plugin.src.present" type="dir">
-                        <xsl:attribute name="file">@{plugin-src-dir}/<xsl:value-of select="$plugin-name" /></xsl:attribute>
+                        <xsl:attribute name="file">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
                       </available>
                       <then>
                         <ant target="local-deploy">
-                          <xsl:attribute name="antfile">@{plugin-src-dir}/<xsl:value-of select="$plugin-name" />/build.xml</xsl:attribute>
-                          <xsl:attribute name="dir">@{plugin-src-dir}/<xsl:value-of select="$plugin-name" /></xsl:attribute>
+                          <xsl:attribute name="antfile">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}/build.xml</xsl:attribute>
+                          <xsl:attribute name="dir">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
                         </ant>
                         <fail/>
                       </then>
@@ -69,21 +123,28 @@ for Forrest version <xsl:value-of select="$forrest-version" />...</echo>
                 </for>
               </try>
               <catch>
-                <echo>Plugin <xsl:value-of select="$plugin-name" /> deployed !</echo>
+                <echo>Plugin ${local-plugin-name}${local-plugin-version} deployed !</echo>
               </catch>
             </trycatch>
-            <if>
-              <not>
-                <isset property="plugin-found"/>
-              </not>
-              <then>
-                <echo>Tying to download from the distribution site ...</echo>
-                <get verbose="true" usetimestamp="true" ignoreerrors="true">
-                  <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/<xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-                  <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-                </get>
-              </then>
-            </if>
+         </target>
+
+         <target name="download">
+           <echo>Tying to download ${download-plugin-name}${download-plugin-version} from the distribution site ...</echo>
+           <if>
+             <not><equals arg2="">
+               <xsl:attribute name="arg1">${download.forrest.version}</xsl:attribute>
+             </equals></not>
+             <then>
+               <echo>Using Forrest version : ${download-forrest-version}</echo>
+             </then>
+           </if>
+           <get verbose="true" usetimestamp="true" ignoreerrors="true">
+             <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/${download-forrest-version}${download-plugin-name}${download-plugin-version}.zip</xsl:attribute>
+             <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
+           </get>
+           <available property="plugin-found">
+             <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
+           </available>
          </target>
 
          <target name="final-check">
