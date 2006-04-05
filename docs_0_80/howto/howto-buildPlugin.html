@@ -366,6 +366,11 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#resources">Create the Necessary Resource Files</a>
+<ul class="minitoc">
+<li>
+<a href="#dtd-catalog">Entity catalog for DTDs and other resources</a>
+</li>
+</ul>
 </li>
 <li>
 <a href="#samples">Create Samples in the Documentation</a>
@@ -623,10 +628,16 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1013A"></a><a name="resources"></a>
 <h3 class="underlined_5">Create the Necessary Resource Files</h3>
 <div class="fixme">
-<div class="label">Fixme (rdg)</div>
+<div class="label">Fixme (open)</div>
 <div class="content">Discuss the XSL files and other such resources</div>
 </div>
-<a name="N10145"></a><a name="samples"></a>
+<a name="N10144"></a><a name="dtd-catalog"></a>
+<h4>Entity catalog for DTDs and other resources</h4>
+<p>If the plugin uses non-core DTDs and other entities, then add them to  the
+          <span class="codefrag">resources/schema</span> directory and configure a catalog.xcat file.
+          The best way to do this is to copy an example from another plugin (e.g. listLocations)
+          and edit it to suit.</p>
+<a name="N10152"></a><a name="samples"></a>
 <h3 class="underlined_5">Create Samples in the Documentation</h3>
 <p>Plugin documentation should provide (as a minimum) an
       index page that provides an overview and a set of samples that demonstrate
@@ -636,7 +647,7 @@ document.write("Last Published: " + document.lastModified);
       and <span class="codefrag">tabs.xml</span> configuration files.</p>
 <p>Try to provide a sample for all the major functions of your plugin
       and document any configuration that is available.</p>
-<a name="N1015B"></a><a name="test"></a>
+<a name="N10168"></a><a name="test"></a>
 <h3 class="underlined_5">Testing a Plugin</h3>
 <p>Since your documentation for the plugin illustrates all of its 
       functionality, you can use that site for testing the plugin. However, you
@@ -662,31 +673,35 @@ document.write("Last Published: " + document.lastModified);
       as writing your tests.</p>
 <p>Ensure that your sitemaps are robust and handle matches for files
       in sub-directories, as well as those at the root level.</p>
-<a name="N10188"></a><a name="Testing+During+Development"></a>
+<a name="N10195"></a><a name="Testing+During+Development"></a>
 <h4>Testing During Development</h4>
 <p>In the current plugin system plugins are not used from their
         src directories, they must first be deployed locally. To do this
-        run the command <span class="codefrag">ant local-deploy</span>.</p>
+        run the command
+        <span class="codefrag">$FORREST_HOME/tools/ant/bin/ant local-deploy</span>
+</p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">The test target will do this deployment automatically for you.
+<div class="content">The "test" target will do this deployment automatically for you.
         You need only run it manually if you wish to test the plugin whilst
         editing content in a live Forrest instance.</div>
 </div>
+<p>When you make changes to the plugin while doing its development,
+        then you need to do the local-deploy again for those changes to have effect.</p>
 <p>In most cases you can locally deploy a plugin without having to 
         restart Forrest. However, if your plugin changes any configuration
         files in the <span class="codefrag">conf</span> directory you will, most likely, have 
         to restart Forrest to see these changes.</p>
-<a name="N1019F"></a><a name="release"></a>
+<a name="N101AE"></a><a name="release"></a>
 <h3 class="underlined_5">Releasing a Plugin</h3>
-<a name="N101A5"></a><a name="register"></a>
+<a name="N101B4"></a><a name="register"></a>
 <h4>Register the Plugin with Apache Forrest</h4>
 <div class="fixme">
 <div class="label">Fixme (rdg)</div>
 <div class="content">Describe making a request of Forrest devs for 
         inclusion</div>
 </div>
-<a name="N101B0"></a><a name="deploy"></a>
+<a name="N101BF"></a><a name="deploy"></a>
 <h4>Deploying the Plugin</h4>
 <p>To deploy the plugin so that others can use it, it must be made 
         available as a zip from the URL indicated in the 
@@ -715,7 +730,7 @@ document.write("Last Published: " + document.lastModified);
         that you only deploy working plugins. This adds a little time to
         the deploy cycle, but we feel the peace of mind is worth it.</div>
 </div>
-<a name="N101E2"></a><a name="descriptor"></a>
+<a name="N101F1"></a><a name="descriptor"></a>
 <h4>Managing the plugins descriptors</h4>
 <p>
           The files plugins/plugins.xml and whiteboard/plugins/plugins.xml are
@@ -774,7 +789,7 @@ document.write("Last Published: " + document.lastModified);
              Start adding changes notes.</li>
         
 </ul>
-<a name="N10221"></a><a name="experimental"></a>
+<a name="N10230"></a><a name="experimental"></a>
 <h3 class="underlined_5">Experimental Functionality</h3>
 <div class="warning">
 <div class="label">Warning</div>
@@ -789,14 +804,14 @@ document.write("Last Published: " + document.lastModified);
 <div class="content">For an example of each of these features in use see the 
       <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.</div>
 </div>
-<a name="N10230"></a><a name="Locationmap"></a>
+<a name="N1023F"></a><a name="Locationmap"></a>
 <h4>Locationmap</h4>
 <p>Plugins can use the Forrest locationmap to expose resources to your
         project and other plgins. To use this functionality add your 
         <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a>
         for the status of locationmap development.</p>
-<a name="N10244"></a><a name="Dispatcher"></a>
+<a name="N10253"></a><a name="Dispatcher"></a>
 <h4>Dispatcher</h4>
 <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
         that are intended to replace skins in the future. They allow for a much more
@@ -817,35 +832,35 @@ document.write("Last Published: " + document.lastModified);
         your plugin.</p>
 <p>Once Dispatcher becomes stable we will add this match to the default locationmap
         which is generated when you seed a new plugin, but for now it must be done manually.</p>
-<a name="N10264"></a><a name="Plugin+Properties"></a>
+<a name="N10273"></a><a name="Plugin+Properties"></a>
 <h4>Plugin Properties</h4>
 <p>Plugins can define properties that each project can over-ride.
         For more information see the issue below.</p>
 <p>We have an <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a>
         for the status of this new configuration system.</p>
-<a name="N10276"></a><a name="examples"></a>
+<a name="N10285"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>This section will provide some example plugins to help illustrate the
       steps discussed above.</p>
-<a name="N1027F"></a><a name="input"></a>
+<a name="N1028E"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss OpenOffice.org plugin here</div>
 </div>
-<a name="N1028A"></a><a name="output"></a>
+<a name="N10299"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss s5 plugin here</div>
 </div>
-<a name="N10295"></a><a name="internal"></a>
+<a name="N102A4"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (RDG)</div>
 <div class="content">Discuss IMSManifest plugin here</div>
 </div>
-<a name="N102A1"></a><a name="extension"></a>
+<a name="N102B0"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -856,7 +871,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../pluginDocs/plugins_0_80/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N102B7"></a><a name="summarise"></a>
+<a name="N102C6"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
