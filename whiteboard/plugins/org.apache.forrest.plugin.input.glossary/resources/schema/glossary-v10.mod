@@ -54,8 +54,8 @@ NOTES:
 <!ELEMENT definition (%flow;)*>
 <!ATTLIST definition cite IDREF #IMPLIED>
 
-<!ELEMENT notes (note)+>
-<!ELEMENT note (%flow;)*>
+<!ELEMENT notes (item-note)+>
+<!ELEMENT item-note (%flow;)*>
 
 <!ELEMENT see (id, text)>
 

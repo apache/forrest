@@ -120,7 +120,7 @@
     </ul>
   </xsl:template>
 
-  <xsl:template match="note">
+  <xsl:template match="item-note">
     <li>
       <xsl:apply-templates/>
     </li>
