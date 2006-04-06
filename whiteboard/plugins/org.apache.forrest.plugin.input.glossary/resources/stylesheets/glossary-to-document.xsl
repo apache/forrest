@@ -25,9 +25,22 @@
   <xsl:template match="glossary">
    <document>
     <header>
-     <title>Glossary</title>
+      <xsl:choose>
+        <xsl:when test="title">
+          <title><xsl:value-of select="title"/></title>
+        </xsl:when>
+        <xsl:otherwise>
+          <title>Glossary</title>
+        </xsl:otherwise>
+      </xsl:choose>
     </header>
     <body>
+      <xsl:if test="introduction">
+        <section>
+          <title>Introduction</title>
+          <xsl:apply-templates select="introduction"/>
+        </section>
+      </xsl:if>
       <xsl:apply-templates select="part"/>
     </body>
    </document>  

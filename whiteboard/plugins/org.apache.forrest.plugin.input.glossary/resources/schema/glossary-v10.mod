@@ -37,8 +37,10 @@ NOTES:
 <!-- Element declarations -->
 <!-- =============================================================== -->
 
-<!ELEMENT glossary (authors?, (part)+)>
+<!ELEMENT glossary (authors?, title?, introduction?, (part)+)>
 <!ATTLIST glossary %common.att;>
+
+<!ELEMENT introduction (%flow;)*>
 
 <!ELEMENT part (title, (item | part)+) >
 <!ATTLIST part %common.att;>
@@ -48,7 +50,6 @@ NOTES:
 
 <!ELEMENT term (%content.mix;)*>
 <!ATTLIST term %common.att;>
-
 
 <!ELEMENT definition (%flow;)*>
 <!ATTLIST definition cite IDREF #IMPLIED>
