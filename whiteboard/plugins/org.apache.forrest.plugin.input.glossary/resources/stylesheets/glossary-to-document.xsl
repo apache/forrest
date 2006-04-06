@@ -53,8 +53,8 @@
       <table>
         <tr>
           <th>Term</th>
-          <th>Definition(s)</th>
-          <th>Tutorial(s)</th>
+          <th>Definitions</th>
+          <th>Notes</th>
         </tr>
         <xsl:apply-templates select="item"/>
       </table>
@@ -81,7 +81,9 @@
     </xsl:if>
     </td>
     <td>
-      <xsl:apply-templates select="tutorial"/>
+      <xsl:if test="notes">
+        <xsl:apply-templates select="notes"/>
+      </xsl:if>
     </td>
     </tr>
   </xsl:template>
@@ -111,13 +113,18 @@
     </link>
     <xsl:if test="not(position() = last())">, </xsl:if>
   </xsl:template>
-  
-  <xsl:template match="tutorial">
-    <link><xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute><xsl:value-of select="."/></link> 
-    <xsl:if test="@level">
-      (<xsl:value-of select="@level"/>)
-    </xsl:if>
-  </xsl:template>  
+
+  <xsl:template match="notes">
+    <ul>
+      <xsl:apply-templates/>
+    </ul>
+  </xsl:template>
+
+  <xsl:template match="note">
+    <li>
+      <xsl:apply-templates/>
+    </li>
+  </xsl:template>
   
   <xsl:template name="generate-id">
     <xsl:choose>

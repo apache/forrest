@@ -45,7 +45,7 @@ NOTES:
 <!ELEMENT part (title, (item | part)+) >
 <!ATTLIST part %common.att;>
 
-<!ELEMENT item ((term)+, acronym?, see?, definition)>
+<!ELEMENT item ((term)+, acronym?, see?, definition, notes?)>
 <!ATTLIST item %common.att;>
 
 <!ELEMENT term (%content.mix;)*>
@@ -53,6 +53,9 @@ NOTES:
 
 <!ELEMENT definition (%flow;)*>
 <!ATTLIST definition cite IDREF #IMPLIED>
+
+<!ELEMENT notes (note)+>
+<!ELEMENT note (%flow;)*>
 
 <!ELEMENT see (id, text)>
 
