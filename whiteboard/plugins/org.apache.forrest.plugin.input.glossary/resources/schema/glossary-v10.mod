@@ -15,14 +15,14 @@
   limitations under the License.
 --><!-- ===================================================================
 
-     Apache Forrest Glossary module (Version 1.0)
+     Apache Forrest Glossary module
 
 TYPICAL INVOCATION:
 
-  <!ENTITY % faq PUBLIC
-      "-//APACHE//ENTITIES Glossary Vxy//EN"
+  <!ENTITY % glossary PUBLIC
+      "-//Apache Forrest//ENTITIES Glossary Vx.y//EN"
       "glossary-vxy.mod">
-  %faq;
+  %glossary;
 
   where
 
