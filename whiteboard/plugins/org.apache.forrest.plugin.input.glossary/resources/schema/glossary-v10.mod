@@ -40,25 +40,25 @@ NOTES:
 <!ELEMENT glossary (authors?, (part)+)>
 <!ATTLIST glossary %common.att;>
 
-    <!ELEMENT part (title, (item | part)+) >
-    <!ATTLIST part %common.att;>
+<!ELEMENT part (title, (item | part)+) >
+<!ATTLIST part %common.att;>
 
-    <!ELEMENT item ((term)+, acronym?, see?, definition)>
-    <!ATTLIST item %common.att;>
+<!ELEMENT item ((term)+, acronym?, see?, definition)>
+<!ATTLIST item %common.att;>
 
-        <!ELEMENT term (%content.mix;)*>
-          <!ATTLIST term %common.att;>
-        
- 
-        <!ELEMENT definition (%flow;)*>
-          <!ATTLIST definition cite IDREF #IMPLIED>
-    
-    <!ELEMENT see (id, text)>
-    
-    <!ELEMENT id (#PCDATA)>
-    
-    <!ELEMENT text (%content.mix;)*>
-        <!ATTLIST text %common.att;>
+<!ELEMENT term (%content.mix;)*>
+<!ATTLIST term %common.att;>
+
+
+<!ELEMENT definition (%flow;)*>
+<!ATTLIST definition cite IDREF #IMPLIED>
+
+<!ELEMENT see (id, text)>
+
+<!ELEMENT id (#PCDATA)>
+
+<!ELEMENT text (%content.mix;)*>
+<!ATTLIST text %common.att;>
 
 <!-- =============================================================== -->
 <!-- End of DTD -->
