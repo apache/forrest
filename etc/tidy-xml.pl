@@ -84,7 +84,7 @@ sub process_file {
   my $pathName = $startDir . "/" . $fileName;
   $countTotal++;
   if ($opt_v) { print "$fileName : \n"; }
-  open (TIDY, "$command $fileName |") or warn "Cannot open TIDY: $!";
+  open (TIDY, "$command $fileName |") or die "Cannot run 'tidy': $!";
   while (<TIDY>) {
     print;
   }
