@@ -47,7 +47,7 @@
     <color name="fixme" value="#cc6600"/>
     <color name="note" value="#006699"/>
     <color name="warning" value="#990000"/>
-    <color name="code" value="#003366"/>
+    <color name="code" value="#eeeeee"/>
         
     <color name="footer" value="#ffffff"/>
   </colors>
@@ -125,7 +125,7 @@
        <color name="warning" value="#990000"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='code'])">
-       <color name="code" value="#003366"/>
+       <color name="code" value="#eeeeee"/>
      </xsl:if>  
      <xsl:if test="not(color[@name='footer'])">
        <color name="footer" value="#ffffff"/>
