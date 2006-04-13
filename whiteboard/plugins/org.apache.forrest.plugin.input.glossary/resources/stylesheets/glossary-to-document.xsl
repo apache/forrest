@@ -68,19 +68,19 @@
     <tr>
     <xsl:choose>
       <xsl:when test="acronym">
-        <td id="{$id}"><xsl:apply-templates select="term"/> (<xsl:apply-templates select="acronym"/>)</td>
+        <td width="20%" id="{$id}"><xsl:apply-templates select="term"/> (<xsl:apply-templates select="acronym"/>)</td>
       </xsl:when>
       <xsl:otherwise>
-        <td id="{$id}"><xsl:apply-templates select="term"/></td>
+        <td width="20%" id="{$id}"><xsl:apply-templates select="term"/></td>
       </xsl:otherwise>
     </xsl:choose>
-    <td>
+    <td width="60%">
     <xsl:apply-templates select="definition"/>
     <xsl:if test="see">
       <br/>See Also: <xsl:apply-templates select="see"/>
     </xsl:if>
     </td>
-    <td>
+    <td width="20%">
       <xsl:if test="notes">
         <xsl:apply-templates select="notes"/>
       </xsl:if>
