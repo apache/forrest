@@ -107,10 +107,13 @@
   </xsl:template>  
   
   <xsl:template match="see">
+<!-- FIXME: FOR-858
     <link role="glossary">
       <xsl:attribute name="href"><xsl:value-of select="id"/></xsl:attribute>
       <xsl:value-of select="text"/>      
     </link>
+-->
+    <xsl:value-of select="text"/>      
     <xsl:if test="not(position() = last())">, </xsl:if>
   </xsl:template>
 
