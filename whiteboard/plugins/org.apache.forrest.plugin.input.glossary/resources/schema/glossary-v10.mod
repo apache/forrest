@@ -45,7 +45,7 @@ NOTES:
 <!ELEMENT part (title, (item | part)+) >
 <!ATTLIST part %common.att;>
 
-<!ELEMENT item ((term)+, acronym?, see?, definition, notes?)>
+<!ELEMENT item ((term)+, acronym?, see*, definition+, notes?)>
 <!ATTLIST item %common.att;>
 
 <!ELEMENT term (%content.mix;)*>
