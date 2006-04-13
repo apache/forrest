@@ -147,6 +147,17 @@
     depends="clean,dist-shbat" />
 
   <!-- =================================================================== -->
+  <!-- Use tidy.sf.net on a single xml-type file                           -->
+  <!-- See also etc/tidy-xml.pl                                            -->
+  <!-- =================================================================== -->
+  <target name="tidy-xml-file" depends="init">
+    <exec dir="${build.dir}" executable="tidy">
+      <arg line="-config ${forrest.home}/etc/tidy-rc.txt"/>
+      <arg line="${forrest.home}/etc/test-whitespace/test-1.xml"/>
+    </exec>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Validate the important core configuration files                     -->
   <!-- =================================================================== -->
   <target name="validate-config" depends="init"
