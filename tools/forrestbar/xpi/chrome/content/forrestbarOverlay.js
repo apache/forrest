@@ -60,6 +60,12 @@ function searchUser(searchID)
   navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=user_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
 }
 
+function searchIssue(searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://issues.apache.org/jira/secure/QuickSearch.jspa?pid=12310000&searchString=' + searchItem.value);
+}
+
 function searchSite(searchID)
 {
   var searchItem = document.getElementById(searchID);
