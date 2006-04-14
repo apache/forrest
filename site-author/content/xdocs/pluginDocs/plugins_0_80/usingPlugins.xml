@@ -68,7 +68,7 @@
           a plugin you should add "-VERSION_NUMBER" to the end of the plugin name. For example,
           to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
           <code>org.apache.forrest.plugin.input.OpenOffice.org-1.0</code>. If you define a version of the
-          plugin that does not exist then it will fall back to using the most recent version avialable.
+          plugin that does not exist then it will fall back to using the most recent version available.
           This feature is useful when 
           developing a new site as you can quickly force a plugin upgrade by deleting all installed 
           plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
@@ -77,6 +77,21 @@
         </section>
         <section id="sources">
           <title>Where does Forrest look for Plugins sources ?</title>
+          <p>Forrest uses a fall back mecanism to find the plugins to install for a project.</p>
+          <p>For an unversionned plugin, Forrest tries to get it from :</p>
+          <ol>
+            <li>different local sources directories (<code>project.required.plugins.src</code> property)</li>
+            <li>if not found : the remote site in the forrest version directory</li>
+            <li>if not found : the remote site (with no forrest version directory)</li>
+          </ol>
+          <p>For a versionned plugin, Forrest tries to get :</p>
+          <ol>
+            <li>the versionned plugin from different local sources directories (<code>project.required.plugins.src</code> property)</li>
+            <li>if not found : the versionned plugin from the remote site in the forrest version directory</li>
+            <li>if not found : the unversionned plugin in different local sources directory (<code>project.required.plugins.src</code> property again)</li>
+            <li>if not found : the unversionned plugin from the remote site in the forrest version directory</li>
+            <li>if not found : the remote site (with no forrest version directory)</li>
+          </ol>
           <p>By default, forrest looks into the two following directories to find plugins sources : <code>${forrest.home}/plugins</code> and <code>${forrest.home}/whiteboard/plugins</code>.
           It is possible to add other sources locations by specifying the <code>project.required.plugins.src</code> property 
           in the projects <code>forrest.properties</code> file.</p>
@@ -84,7 +99,7 @@
           <source>project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,${project.home}/plugins</source>
            <p>
            will add the project specific directory <code>${project.home}/plugins</code> to the list of directories to search in.</p>
-          <p>if sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files 
+          <p>If sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files 
           in which plugins are described as follows :</p>
           <source><![CDATA[<plugin name="org.apache.forrest.plugin.output.pdf"
   type="output"
