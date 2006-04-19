@@ -177,13 +177,13 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#sources">Where does Forrest look for Plugins sources ?</a>
 </li>
+</ul>
+</li>
 <li>
 <a href="#local-deploy">Editing plugins sources to enhance functionality</a>
 </li>
 <li>
 <a href="#no-plugins">Upgrading from a Version of Forrest Without Plugins</a>
-</li>
-</ul>
 </li>
 <li>
 <a href="#conflict">Avoiding Plugin Conflicts</a>
@@ -209,17 +209,17 @@ document.write("Last Published: " + document.lastModified);
 <p>If you would like to have your own plugin added to this list then
         contact the <a href="../../mail-lists.html">developer mailing list</a>.</p>
 </div>
-        
+
     
 <a name="N1002B"></a><a name="install"></a>
 <h2 class="underlined_10">How is a Plugin Installed?</h2>
 <div class="section">
 <a name="N10031"></a><a name="required"></a>
 <h3 class="underlined_5">List of Plugins Needed by the Project</h3>
-<p>If a site requires one or more plugins then the site designer will 
-           have to list them in the <span class="codefrag">project.required.plugins</span> property 
-           in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
-           builds the site it will automatically discover the plugins and install 
+<p>If a site requires one or more plugins then the site designer will
+           have to list them in the <span class="codefrag">project.required.plugins</span> property
+           in the projects <span class="codefrag">forrest.properties</span> file. When Forrest
+           builds the site it will automatically discover the plugins and install
            them. In otherwords, the user needs do nothing.</p>
 <p>For example,</p>
 <pre class="code">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</pre>
@@ -229,7 +229,7 @@ document.write("Last Published: " + document.lastModified);
 <div class="note">
 <div class="label">Note</div>
 <div class="content">By default a new forrest project has that property configured
-           to include some plugins. Currently there is only one to generate 
+           to include some plugins. Currently there is only one to generate
            PDF output from your source documents.</div>
 </div>
 <a name="N1004E"></a><a name="version"></a>
@@ -237,26 +237,51 @@ document.write("Last Published: " + document.lastModified);
 <p>In the absence of a version number for the plugin (as is the case in the example above)
           the most recent version that is applicabe to your release of Forrest will be used. This
           may result in unexpected behaviour if a new version of the plugin has been released that
-          is incompatible with your current site. To force Forrest into using a specific version of 
+          is incompatible with your current site. To force Forrest into using a specific version of
           a plugin you should add "-VERSION_NUMBER" to the end of the plugin name. For example,
           to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
           <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span>. If you define a version of the
-          plugin that does not exist then it will fall back to using the most recent version avialable.
-          This feature is useful when 
-          developing a new site as you can quickly force a plugin upgrade by deleting all installed 
+          plugin that does not exist then it will fall back to using the most recent version available.
+          This feature is useful when
+          developing a new site as you can quickly force a plugin upgrade by deleting all installed
           plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
           of an in-development plugin, therefore in a production environment you should always specify
           a known working version.</p>
 <a name="N1005B"></a><a name="sources"></a>
 <h3 class="underlined_5">Where does Forrest look for Plugins sources ?</h3>
+<p>Forrest uses a fall back mecanism to find the plugins to install for a project.</p>
+<p>For an unversionned plugin, Forrest tries to get it from :</p>
+<ol>
+            
+<li>different local sources directories (<span class="codefrag">project.required.plugins.src</span> property)</li>
+            
+<li>if not found : the remote site in the forrest version directory</li>
+            
+<li>if not found : the remote site (with no forrest version directory)</li>
+          
+</ol>
+<p>For a versionned plugin, Forrest tries to get :</p>
+<ol>
+            
+<li>the versionned plugin from different local sources directories (<span class="codefrag">project.required.plugins.src</span> property)</li>
+            
+<li>if not found : the versionned plugin from the remote site in the forrest version directory</li>
+            
+<li>if not found : the unversionned plugin in different local sources directory (<span class="codefrag">project.required.plugins.src</span> property again)</li>
+            
+<li>if not found : the unversionned plugin from the remote site in the forrest version directory</li>
+            
+<li>if not found : the remote site (with no forrest version directory)</li>
+          
+</ol>
 <p>By default, forrest looks into the two following directories to find plugins sources : <span class="codefrag">${forrest.home}/plugins</span> and <span class="codefrag">${forrest.home}/whiteboard/plugins</span>.
-          It is possible to add other sources locations by specifying the <span class="codefrag">project.required.plugins.src</span> property 
+          It is possible to add other sources locations by specifying the <span class="codefrag">project.required.plugins.src</span> property
           in the projects <span class="codefrag">forrest.properties</span> file.</p>
 <p>For example,</p>
 <pre class="code">project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,${project.home}/plugins</pre>
 <p>
            will add the project specific directory <span class="codefrag">${project.home}/plugins</span> to the list of directories to search in.</p>
-<p>if sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files 
+<p>If sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files
           in which plugins are described as follows :</p>
 <pre class="code">&lt;plugin name="org.apache.forrest.plugin.output.pdf"
   type="output"
@@ -265,68 +290,74 @@ document.write("Last Published: " + document.lastModified);
   url="http://forrest.apache.org/plugins/"
   version="0.2"&gt;
   &lt;description&gt;
-    Enable Forrest documents to be output in PDF format. 
+    Enable Forrest documents to be output in PDF format.
   &lt;/description&gt;
   &lt;forrestVersion&gt;0.8&lt;/forrestVersion&gt;
 &lt;/plugin&gt;</pre>
 <p>The url to download the different plugins is indicated in this file.</p>
 <p>By default, forrest gets the two following plugins descriptors files : <span class="codefrag">http://forrest.apache.org/plugins/plugins.xml</span> and <span class="codefrag">http://forrest.apache.org/plugins/whiteboard-plugins.xml</span>.
-          It is possible to add other plugins descriptors files by specifying the <span class="codefrag">forrest.plugins.descriptors</span> property 
+          It is possible to add other plugins descriptors files by specifying the <span class="codefrag">forrest.plugins.descriptors</span> property
           in the projects <span class="codefrag">forrest.properties</span> file.</p>
 <p>For example,</p>
 <pre class="code">forrest.plugins.descriptors=http://forrest.apache.org/plugins/plugins.xml,http://forrest.apache.org/plugins/whiteboard-plugins.xml,file:///${project.home}/plugins/plugins.xml</pre>
 <p>
           will add the project specific plugins descriptors file <span class="codefrag">file:///${project.home}/plugins/plugins.xml</span> to the list of descriptors.</p>
-<a name="N100A7"></a><a name="local-deploy"></a>
-<h3 class="underlined_5">Editing plugins sources to enhance functionality</h3>
-<p>
-          Until issue
-          <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
-          is fixed to enable the use of plugins in-place, any changes to
-          sources need to be locally deployed.
-          See <a href="#more">Further reading</a> for "How to build a Plugin".
-        </p>
-<a name="N100B9"></a><a name="no-plugins"></a>
-<h3 class="underlined_5">Upgrading from a Version of Forrest Without Plugins</h3>
-<p>The plugin functionality was introduced in version 0.7 of Forrest.
-        At this time some of the functionality previously in Forrest was
-        extracted into a plugin. However, we have not broken backward 
-        compatability with earlier versions. In the absence of a
-        <span class="codefrag">project.required.plugins</span> property in the projects 
-        <span class="codefrag">forrest.properties</span> file all plugins that contain 
-        functionality previously part of Forrest itself will be loaded
-        automatically. Unless you intend to use new functionality provided
-        by a plugin you will not need to make any changes top your project.</p>
-<p>If you do require additional plugin functionality, be sure to
-        include all required plugins in the 
-        <span class="codefrag">project.required.plugins</span> property in the project's
-        <span class="codefrag">forrest.properties</span>. You can view
-        <span class="codefrag">main/webapp/default-forrest.properties</span>
-        to see the names of plugins that provide previously core 
-        functionality.</p>
-<p>It is also worth noting that there is a small performance 
-        improvement if you remove plugins that are not in use. Therefore,
-        if you do not use one or more of the plugins named in the 
-        <span class="codefrag">project.required.plugins</span> property of 
-        <span class="codefrag">main/webapp/default-forrest.properties</span>
-        it is recomended that you override this value in your project's
-        <span class="codefrag">forrest.properties</span> file.</p>
 </div>
     
+<a name="N100D8"></a><a name="local-deploy"></a>
+<h2 class="underlined_10">Editing plugins sources to enhance functionality</h2>
+<div class="section">
+<p>
+        Until issue
+        <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
+        is fixed to enable the use of plugins in-place, any changes to
+        sources need to be locally deployed.
+        See <a href="#more">Further reading</a> for "How to build a Plugin".
+      </p>
+</div>
     
-<a name="N100E2"></a><a name="conflict"></a>
+<a name="N100EA"></a><a name="no-plugins"></a>
+<h2 class="underlined_10">Upgrading from a Version of Forrest Without Plugins</h2>
+<div class="section">
+<p>The plugin functionality was introduced in version 0.7 of Forrest.
+      At this time some of the functionality previously in Forrest was
+      extracted into a plugin. However, we have not broken backward
+      compatability with earlier versions. In the absence of a
+      <span class="codefrag">project.required.plugins</span> property in the projects
+      <span class="codefrag">forrest.properties</span> file all plugins that contain
+      functionality previously part of Forrest itself will be loaded
+      automatically. Unless you intend to use new functionality provided
+      by a plugin you will not need to make any changes to your project.</p>
+<p>If you do require additional plugin functionality, be sure to
+      include all required plugins in the
+      <span class="codefrag">project.required.plugins</span> property in the project's
+      <span class="codefrag">forrest.properties</span>. You can view
+      <span class="codefrag">main/webapp/default-forrest.properties</span>
+      to see the names of plugins that provide previously core
+      functionality.</p>
+<p>It is also worth noting that there is a small performance
+      improvement if you remove plugins that are not in use. Therefore,
+      if you do not use one or more of the plugins named in the
+      <span class="codefrag">project.required.plugins</span> property of
+      <span class="codefrag">main/webapp/default-forrest.properties</span>
+      it is recomended that you override this value in your project's
+      <span class="codefrag">forrest.properties</span> file.</p>
+</div>
+
+    
+<a name="N10112"></a><a name="conflict"></a>
 <h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
 <div class="section">
-<p>Clashes between plugins can occur. For example, the simplified-docbook 
-      and full docbook plugins may try and process the same files. In this 
-      instance the one that is mounted first will take precedence. Plugins 
-      are mounted in the order they appear in the 
-      <span class="codefrag">project.required.plugins</span> property, therefore the mounting 
+<p>Clashes between plugins can occur. For example, the simplified-docbook
+      and full docbook plugins may try and process the same files. In this
+      instance the one that is mounted first will take precedence. Plugins
+      are mounted in the order they appear in the
+      <span class="codefrag">project.required.plugins</span> property, therefore the mounting
       order and therefore processing precedence is under user control.</p>
 </div>
+
     
-    
-<a name="N100EF"></a><a name="more"></a>
+<a name="N1011F"></a><a name="more"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <ul>
