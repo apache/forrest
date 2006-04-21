@@ -70,7 +70,12 @@
     </classpath>
   </taskdef>
   
-  <target name="init">
+  <target name="init" depends="init-build-compiler, echo-init"/>
+
+  <target name="init-build-compiler">
+
+    <fail unless="plugin-name" message="You must run plugin build targets from within the plugin directory."/>
+
     <tstamp>
       <format property="YEAR" pattern="yyyy" locale="en"/>
     </tstamp>
@@ -87,10 +92,19 @@
     <property name="build.compiler.type"        value="classic"/>
     <property name="build.compiler.vm"          value="1.2"/>
     
-    <fail unless="plugin-name" message="You must run plugin build targets from within the plugin directory."/>
-           
     <mkdir dir="${build.dir}"/>
     
+    <path id="classpath">
+      <fileset dir="${forrest.home}/lib" includes="**/*.jar"/>
+      <fileset dir="${plugin.lib.dir}" includes="*.jar"/>
+      <fileset dir="${plugin.lib.dir}" includes="*.zip"/>
+    </path>
+  	
+    <available file="${plugin.java.dir}" property="java_exists" type="dir"/>
+    
+  </target>
+  
+  <target name="echo-init" depends="init-build-compiler" unless="no.echo.init">
     <buildnumber file="${build.dir}/build.number"/>
     <echo>
       --------------------------------------------------------------
@@ -106,15 +120,6 @@
       
       --------------------------------------------------------------
     </echo>
-    
-    <path id="classpath">
-      <fileset dir="${forrest.home}/lib" includes="**/*.jar"/>
-      <fileset dir="${plugin.lib.dir}" includes="*.jar"/>
-      <fileset dir="${plugin.lib.dir}" includes="*.zip"/>
-    </path>
-  	
-    <available file="${plugin.java.dir}" property="java_exists" type="dir"/>
-    
   </target>
   
   <target name="clean" depends="init">
@@ -122,11 +127,9 @@
     <delete dir="${forrest.plugins.dist.dir}"/>
   </target>
   
-  
-  <!-- FIXME: FOR-388 Forrest should really use the plugins in-place if they are available as source -->
   <target name="local-deploy"
           description="Deploy a plugin locally"
-          depends="init, clean, jar">
+          depends="init, jar">
           
     <echo>Locally deploying ${plugin-name}</echo>
     

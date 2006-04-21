@@ -53,16 +53,16 @@
     <if>
       <isset property="plugin.unavailable"/>
       <then>
-        <echo>${versioned.name} is not available in the build dir</echo>
+        <echo>${versioned.name} is not available in the build dir. Trying to fetch it...</echo>
       </then>
       <else>
-        <echo>${versioned.name} is available in the build dir</echo>
+        <echo>${versioned.name} is available in the build dir. Trying to update it...</echo>
       </else>
     </if>
   </target>  
             
   <target name="unpack-plugin"
-           if="plugin.unavailable"
+           if="downloaded"
           depends="init-props">
      <if>
        <available file="${forrest.plugins-dir}/${versioned.name}.zip"/>
@@ -121,12 +121,7 @@ to be installed again unless you delete them or wish to upgrade them.
      <fileset dir="${forrest.plugins-dir}/">
         <include name="${plugin}.zip"/>
       </fileset>
-   </unzip>       
-   <delete>
-      <fileset dir="${forrest.plugins-dir}/">
-        <include name="${plugin}.zip"/>
-      </fileset>
-   </delete>
+   </unzip>
 
    <!-- add to the entity catalog -->
    <copy file="${forrest.core}/var/initial_catalog.xcat"
@@ -297,11 +292,7 @@ to be installed again unless you delete them or wish to upgrade them.
        tofile="${project.temp-dir}/locationmap.xml"/>
   </target>
 
-  <target name="fetch-plugins-descriptors" if="plugin.unavailable" depends="init-proxy">
-    <delete>
-      <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
-    </delete>
-  
+  <target name="fetch-plugins-descriptors" depends="init-proxy" unless="plugins.desc.already.fetched">
     <var name="plugin-counter" value="1"/>
     <for list="${forrest.plugins.descriptors}" param="url">
       <sequential>
@@ -339,31 +330,41 @@ to be installed again unless you delete them or wish to upgrade them.
   </target>  
   
   <target name="fetch-plugin" 
-          if = "plugin.unavailable"
+          
           depends="init-props, fetch-plugins-descriptors">
-    <for param="plugin-descriptor-file">
-      <path>
-        <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
-      </path>
-      <sequential>
-        <xslt in="@{plugin-descriptor-file}" 
-          out="${project.temp-dir}/pluginlist2fetchbuild.xml"
-          style="${forrest.core}/var/pluginlist2fetch.xsl"
-          force="true">
-          <param name="plugin-name" expression="${plugin.name}"/>  
-          <param name="plugin-version" expression="${plugin.version}"/>  
-          <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>  
-          <param name="plugin-src-dir" expression="${project.required.plugins.src}"/>
-          <param name="forrest-version" expression="${forrest.version}"/>   
-       </xslt>  
-       <ant antfile="${project.temp-dir}/pluginlist2fetchbuild.xml"/> 
-      </sequential>
-    </for>
+    <echo>Trying to find the description of ${versioned.name} in the different descriptor files</echo>
+    <trycatch property="plugin-found">
+      <try>
+      	<for param="plugin-descriptor-file">
+      		<path>
+        		<fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
+      		</path>
+      		<sequential>
+      		  <echo>Using the descriptor file @{plugin-descriptor-file}...</echo>
+		        <xslt in="@{plugin-descriptor-file}" 
+		          out="${project.temp-dir}/pluginlist2fetchbuild.xml"
+		          style="${forrest.core}/var/pluginlist2fetch.xsl"
+		          force="true">
+		          <param name="plugin-name" expression="${plugin.name}"/>  
+		          <param name="plugin-version" expression="${plugin.version}"/>  
+		          <param name="plugin-dir" expression="${forrest.plugins-dir}/"/>  
+		          <param name="plugin-src-dir" expression="${project.required.plugins.src}"/>
+		          <param name="forrest-version" expression="${forrest.version}"/>   
+		       	</xslt>  
+		       	<antfetch antfile="${project.temp-dir}/pluginlist2fetchbuild.xml" return="plugin-found,downloaded"/>
+		       	<fail if="plugin-found"/>
+      		</sequential>
+		    </for>
+      </try>
+      <catch>
+        <echo>Fetch-plugin Ok, installing !</echo>
+      </catch>
+    </trycatch>
   </target>    
   
   <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin"/>
   
-  <target name="init-plugins" depends="init-props"
+  <target name="init-plugins" depends="init-props, fetch-plugins-descriptors"
     description="Ensure the required plugins are available locally, if any are not, download them automatically">
     
     <mkdir dir="${forrest.plugins-dir}"/>
@@ -411,6 +412,8 @@ to be installed again unless you delete them or wish to upgrade them.
           <param name="plugin.name" value="${plugin.name}"/>
           <param name="plugin.version" value="${plugin.version}"/>
           <param name="versioned.name" value="@{name}"/>
+          <param name="plugins.desc.already.fetched" value="true"/>
+          <param name="proxy.already.set" value="true"/>
         </antcall>
         <antcall target="configure-plugin">
           <param name="plugin.name" value="${plugin.name}"/>

@@ -52,7 +52,7 @@
 
          <target name="fetch-remote-versioned-plugin-version-forrest" unless="plugin-found">
            <!-- Search for the remote versionned plugin in the versionned Forrest...-->
-           <antcallback target="download" return="plugin-found">
+           <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
              <param name="download-plugin-version">
                <xsl:attribute name="value">-<xsl:value-of select="$plugin-version" /></xsl:attribute>
              </param>
@@ -77,7 +77,7 @@
 
          <target name="fetch-remote-unversioned-plugin-version-forrest" unless="plugin-found">
            <!-- Search for the remote unversionned plugin in the versionned Forrest...-->
-           <antcallback target="download" return="plugin-found">
+           <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
              <param name="download-plugin-version" value=""/>
              <param name="download-plugin-name">
                <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
@@ -90,7 +90,7 @@
 
          <target name="fetch-remote-unversioned-plugin-unversion-forrest" unless="plugin-found">
            <!-- Search for the remote unversionned plugin in the unversionned Forrest...-->
-           <antcallback target="download" return="plugin-found">
+           <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
              <param name="download-plugin-version" value=""/>
              <param name="download-plugin-name">
                <xsl:attribute name="value"><xsl:value-of select="$plugin-name" /></xsl:attribute>
@@ -112,9 +112,11 @@
                         <xsl:attribute name="file">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
                       </available>
                       <then>
+                        <echo message="Found !"/>
                         <ant target="local-deploy">
                           <xsl:attribute name="antfile">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}/build.xml</xsl:attribute>
                           <xsl:attribute name="dir">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
+                          <property name="no.echo.init" value="true"/>
                         </ant>
                         <fail/>
                       </then>
@@ -123,13 +125,29 @@
                 </for>
               </try>
               <catch>
-                <echo>Plugin ${local-plugin-name}${local-plugin-version} deployed !</echo>
+                <echo>Plugin ${local-plugin-name}${local-plugin-version} deployed ! Ready to configure</echo>
               </catch>
             </trycatch>
          </target>
 
-         <target name="download">
+         <target name="download" depends="keep-original-zip,get-from-remote-site,is-downloaded,remove-original-zip"/>
+
+         <target name="keep-original-zip" depends="available-original-zip" if="original.zip.exists">
+           <copy preservelastmodified="true">
+             <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
+             <xsl:attribute name="tofile"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip.orig</xsl:attribute>
+           </copy>
+         </target>
+
+         <target name="available-original-zip">
+           <available property="original.zip.exists">
+             <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
+           </available>
+         </target>
+
+         <target name="get-from-remote-site">
            <echo>Tying to download ${download-plugin-name}${download-plugin-version} from the distribution site ...</echo>
+           <!-- FIXME the following test does not work... -->
            <if>
              <not><equals arg2="">
                <xsl:attribute name="arg1">${download.forrest.version}</xsl:attribute>
@@ -138,37 +156,68 @@
                <echo>Using Forrest version : ${download-forrest-version}</echo>
              </then>
            </if>
+           <!-- Get from the remote URL -->
            <get verbose="true" usetimestamp="true" ignoreerrors="true">
              <xsl:attribute name="src"><xsl:value-of select="plugin[@name=$plugin-name]/@url" />/${download-forrest-version}${download-plugin-name}${download-plugin-version}.zip</xsl:attribute>
              <xsl:attribute name="dest"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
            </get>
-           <available property="plugin-found">
+           <!-- Check if a zip has been downloaded from this URL -->
+           <available property="desired.plugin.zip.present">
              <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
            </available>
+           <condition property="plugin-found">
+             <!-- or -->
+               <and>
+                 <isset property="desired.plugin.zip.present"/>
+                 <not><isset property="original.zip.exists"/></not>
+               </and>
+           </condition>
          </target>
 
-         <target name="final-check">
-            <available property="desired.plugin.zip.present">
-              <xsl:choose>
-                <xsl:when test="$plugin-version">
-                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />-<xsl:value-of select="$plugin-version" />.zip</xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />.zip</xsl:attribute>
-                </xsl:otherwise>
-              </xsl:choose>
-            </available>
-
-            <if>
-              <isset property="desired.plugin.zip.present"/>
+         <target name="is-downloaded" if="original.zip.exists">
+           <!-- Check is the downloaded file is more recent than the original zip ... -->
+           <uptodate property="no-difference-found">
+             <xsl:attribute name="srcfile"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip</xsl:attribute>
+             <xsl:attribute name="targetfile"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip.orig</xsl:attribute>
+           </uptodate>
+           <!-- If there are differences, the plugin is found -->
+           <if>
+              <not><isset property="no-difference-found"/></not>
               <then>
-                <echo><xsl:value-of select="$plugin-name" /> downloaded, ready to install</echo>
+                <property name="plugin-found" value="true"/>
               </then>
-              <else>
-                <available property="unversioned.plugin.present" type="dir">
-                  <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></xsl:attribute>
-                </available>
-                <fail unless="unversioned.plugin.present">
+           </if>
+         </target>
+
+         <target name="remove-original-zip" if="original.zip.exists">
+           <!-- Now, we can delete the original -->
+           <delete>
+             <xsl:attribute name="file"><xsl:value-of select="$plugin-dir"/>${download-plugin-name}.zip.orig</xsl:attribute>
+           </delete>
+         </target>
+
+         <target name="final-check" depends="has-been-downloaded,downloaded-message,uptodate-message,not-found-message"/>
+
+         <target name="has-been-downloaded" if="desired.plugin.zip.present">
+           <condition property="up-to-date">
+             <not><isset property="plugin-found"/></not>
+           </condition>
+           <condition property="downloaded">
+             <isset property="plugin-found"/>
+           </condition>
+         </target>
+
+         <target name="downloaded-message" if="downloaded">
+           <echo>Plugin <xsl:value-of select="$plugin-name" /> downloaded ! Ready to install</echo>
+         </target>
+
+         <target name="uptodate-message" if="up-to-date">
+           <echo>Plugin <xsl:value-of select="$plugin-name" /> was up-to-date ! Ready to configure</echo>
+           <property name="plugin-found" value="true"/>
+         </target>
+
+         <target name="not-found-message" unless="desired.plugin.zip.present">
+           <fail>
   Unable to download the
   "<xsl:value-of select="$plugin-name" />" plugin
   <xsl:if test="$plugin-version">version <xsl:value-of select="$plugin-version"/></xsl:if>
@@ -187,10 +236,10 @@
   To manually install a plugin, download the plugin zip file from
   <xsl:value-of select="plugin[@name=$plugin-name]/@url"/> and
   extract it into
-  <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" /></fail>
-              </else>
-            </if>
+  <xsl:value-of select="$plugin-dir"/><xsl:value-of select="$plugin-name" />
+           </fail>
          </target>
+
       </project>
          </xsl:when>
          <xsl:otherwise>
