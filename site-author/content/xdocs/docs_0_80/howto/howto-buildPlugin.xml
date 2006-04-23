@@ -20,7 +20,7 @@
   <header>
     <title>How to Build a Plugin</title>
 
-    <version>0.2.1</version>
+    <version>0.3.0</version>
 
     <abstract>This How-To describes the steps necessary to build a plugin for 
     Forrest. Forrest uses plugins to add new input formats, output formats
@@ -30,19 +30,14 @@
     steps in creating a plugin and then works through some examples of 
     plugin creation in order to illustrate the materials.</abstract>
 
-    <last-modified-content-date date="2005-04-12" />
+    <last-modified-content-date date="2006-04-23" />
   </header>
 
   <audience title="Intended Audience">
     <p>Users needing to add additional input formats or output formats or
     to change the operation of the Forrest internals.</p>
-    
-    <warning>The Plugin Infrastructure is still at an early stage of design 
-    and implementation, consequently this How-To <em>may</em> be out of date
-    and/or incomplete. If you are having problems with any of the steps 
-    described, please ask for help on the developers mailing list (and then
-    provide patches for this document).</warning>
-    <warning>Please make sure that you are using forrest 0.7 if you want use 
+       
+    <warning>Please make sure that you are using forrest 0.8 or above if you want use 
     plugins. Forrest 0.6 will not work!!!</warning>
   </audience>
 
@@ -127,10 +122,23 @@
       conventions</a> that we recommend you follow. Plugins intended to be
       held at forrest.apache.org must follow the naming convention.</note> 
       
-      <note>If you plan on building your plugin elsewhere you can copy the
-      <code>build.xml</code> build file to your own plugin work directory and 
-      use it there.</note>
-      
+      <p>You can also build your plugins from a location outside of the Forrest directory
+      structure, for example from within your own project.
+	      If you don't already have one, create a plugins directory, for example:</p>
+      <source>
+      cd $PROJECT_HOME
+      mkdir plugins
+      </source>
+      <p> Then copy $FORREST_HOME/whiteboard/plugins/build.xml to $PROJECT_HOME/plugins.
+      There are a couple of changes you now need to make to the newly copied
+      build.xml file. Open up 'build.xml' for editing. You can change the project
+      name value to something more suitable.Find the property name for
+      forrest.plugins.dir and change the location to read</p> <source>location="."</source>
+      <p class="instruction">So, revised commands for $PROJECT_HOME/plugins:</p>
+      <source>
+      cd [path_to_project_home]/plugins
+      ant seedPlugin
+      </source>     
       <p>See 
       <a href="site:plugins/infrastructure">Plugin
       Infrastructure</a> for more information about the plugin
