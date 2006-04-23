@@ -68,19 +68,20 @@
     <tr>
     <xsl:choose>
       <xsl:when test="acronym">
-        <td width="20%" id="{$id}"><xsl:apply-templates select="term"/> (<xsl:apply-templates select="acronym"/>)</td>
+        <td class="term" id="{$id}"><xsl:apply-templates select="term"/> (<xsl:apply-templates select="acronym"/>)</td>
       </xsl:when>
       <xsl:otherwise>
-        <td width="20%" id="{$id}"><xsl:apply-templates select="term"/></td>
+        <td class="term" id="{$id}"><xsl:apply-templates select="term"/></td>
       </xsl:otherwise>
     </xsl:choose>
-    <td width="60%">
-    <xsl:apply-templates select="definition"/>
+    <td class="definitions">
+	<xsl:apply-templates select="definitions"/>
+	<xsl:apply-templates select="definition"/>
     <xsl:if test="see">
       <br/>See Also: <xsl:apply-templates select="see"/>
     </xsl:if>
     </td>
-    <td width="20%">
+    <td class="notes">
       <xsl:if test="notes">
         <xsl:apply-templates select="notes"/>
       </xsl:if>
@@ -96,24 +97,26 @@
   <xsl:template match="acronym">
     <xsl:value-of select="."/>
   </xsl:template>
-  
+
+  <xsl:template match="definitions">
+	  <p>
+		<xsl:apply-templates/>
+	  </p>	  
+  </xsl:template>
   <xsl:template match="definition">
-    <p>
       <xsl:number/>. <xsl:apply-templates/>
       <xsl:if test="@cite">
         (Source: <link role="citation"><xsl:attribute name="href"><xsl:value-of select="@cite"/></xsl:attribute><xsl:value-of select="@cite"/></link>)
       </xsl:if>
-    </p>
   </xsl:template>  
   
   <xsl:template match="see">
-<!-- FIXME: FOR-858
+	  <!-- FIXME: FOR-858 -->
     <link role="glossary">
-      <xsl:attribute name="href"><xsl:value-of select="id"/></xsl:attribute>
+      <xsl:attribute name="href">#<xsl:value-of select="id"/></xsl:attribute>
       <xsl:value-of select="text"/>      
     </link>
--->
-    <xsl:value-of select="text"/>      
+
     <xsl:if test="not(position() = last())">, </xsl:if>
   </xsl:template>
 

@@ -45,12 +45,13 @@ NOTES:
 <!ELEMENT part (title, (item | part)+) >
 <!ATTLIST part %common.att;>
 
-<!ELEMENT item ((term)+, acronym?, see*, definition+, notes?)>
+<!ELEMENT item ((term)+, acronym?, see*, definitions, notes?)>
 <!ATTLIST item %common.att;>
 
 <!ELEMENT term (%content.mix;)*>
 <!ATTLIST term %common.att;>
 
+<!ELEMENT definitions (definition)+>
 <!ELEMENT definition (%flow;)*>
 <!ATTLIST definition cite IDREF #IMPLIED>
 
