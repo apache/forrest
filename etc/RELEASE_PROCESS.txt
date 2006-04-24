@@ -1,12 +1,31 @@
 Forrest Release Process
-============================
+=======================
 
-This file documents the steps that a Release Manager should follow when
-making a new Forrest release.
+This documents the steps that the Release Manager (RM) should follow when doing
+a Forrest release. Note that it might have mistakes - we seem to discover
+something new each time and some steps might need to happen in a different
+order. Fine tune these notes for next time. Do some practice runs.
+
+There are some steps that other committers, and even developers, can assist
+with, especially in the areas of getting ready for the release and the final
+testing. Many of the steps can be done only by the Release Manager.
+
+It is not the Release Manager's job to fix bugs nor address blocker issues.
+The RM job begins when the project is ready to do the release.
+
+Review the "FIXME" notes below.
 
 Preparations
 ------------
 
+- Start the process to finalise the outstanding blocker issues. The project
+  would have already prepared the Roadmap to schedule the realistic Issues.
+  The project would have already made good progress towards fixing the Blockers
+  and applying the outstanding patches. The RM should send email to get the
+  project to decide what to do with the remaining issues. Propose to delay
+  some issues to a future release, encourage people to fix others.
+  See http://issues.apache.org/jira/browse/FOR-853
+  
 - Prepare the Release Plan and call for a quick vote on the dev list.
   There are various reasons for voting on the Release Plan, e.g. makes people
   aware that a code-freeze is about to happen; encourage them to get involved
@@ -41,20 +60,18 @@ Preparations
   - Check out a fresh copy from SVN to make sure you have no local
   modifications, especially those that might be hidden by svn:ignore settings.  
 
-      1. Create a new empty directory 'Forrest_Release'
-      2. svn co https://svn.apache.org/repos/asf/forrest/trunk
+    1. Create a new empty directory 'Forrest_Release'
+    2. svn co https://svn.apache.org/repos/asf/forrest/trunk
   
-          NOTE: This will take quite a while if you are on a dial-up connection.
-          See alternatives below.
-  
-      3. Wait for the check-out to finish
+     NOTE: This will take quite a while if you are on a dial-up connection.
+     See alternatives below.
 
   Alternatively:
 
-      1. run 'svn status --no-ignore'
-      2. Delete any extra files that you might have 
-          added/changed in your local copy. They must not be packed with
-          the release. It must be a pristine copy of the current trunk.
+    1. run 'svn status --no-ignore'
+    2. Delete any extra files you might have added/changed in your local copy.
+       They must not be packed with the release. It must be a pristine copy
+       of the current trunk.
 
 - Send a reminder when the code-freeze commences.
 
@@ -68,7 +85,8 @@ without committing anything. This ensures a good release candidate.
 
 - Update your release checkout to reflect last minute changes
 
-- Do 'build test'. Fix any problems, just those that prevent building.
+- Do 'build test' and 'cd site-author; forrest' to ensure that all is well.
+  Fix any problems, just those that prevent building.
   It is not your job to fix bugs!
   If there are bugs, then call a halt to the release process.
 
@@ -128,6 +146,14 @@ without committing anything. This ensures a good release candidate.
       number as well as change the link to point to the new release's docs:
       <menuitem label="Current Docs (0.7)" onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');" />
 
+FIXME: There are probably other areas which have version numbers.
+       How can we improve this?
+
+FIXME: Not sure at what stage we get rid of the old docs, e.g. 0.6
+
+FIXME: Not sure at what stage need to edit site-author/content/xdocs/mirrors.html
+(Presume that it should be done after packing release. See below.)
+
  - Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version
    currently being released.  It is best to copy an earlier RELEASE-NOTES file,
    to keep a common layout.
@@ -137,8 +163,8 @@ without committing anything. This ensures a good release candidate.
 
  - Set your Java version to be the lowest specified of our supported versions.
    
-   Set the environment variable JAVA_HOME to the path of the Java version to use. 
-   Note for Windows: If you change the setting in the system properties, you need
+   Set the environment variable JAVA_HOME to the path of the Java version.
+   Note for Windows: If you change the setting in system properties, you need
    to logout and login again for the changes to become effective.
 
  - Take note of the SVN revision number of your trunk.
@@ -224,9 +250,10 @@ Upload and announcement
 
  - Upload the release: the *.tar.gz, the *.zip, the *.asc and *.md5 files,
    and the RELEASE-NOTES-x.y.txt
-   to www.apache.org at /www/www.apache.org/ dist/forrest/
+   Use scp to people.apache.org at /www/www.apache.org/ dist/forrest/
    Each PMC member has a server account and belongs to the forrest group.
    The process is documented at http://www.apache.org/~bodewig/mirror.html
+   and http://www.apache.org/dev/#releases
    Ensure correct file permissions: chgrp forrest *; chmod 664 *
    Leave the previous dist there as well, until after the announcement.
 
@@ -260,6 +287,8 @@ to main/site/mirrors.html instead of build/site/mirrors.html
    svn mkdir plugins/0.9-dev
    svn commit
 
+FIXME: Not sure at what stage the docs should be copied to become docs_0_90
+FIXME: Not sure at what stage the "site:v0.70" etc. replacements should happen.
  - Copy the docs ready for the next development phase, e.g.
    cd site-author/content/xdocs
    svn copy docs_0_70 docs_0_80
@@ -343,7 +372,8 @@ Email templates
 Here are some email templates to base the announcements. Please tweak.
 
 ------------------------------------------------------------------------------
-Release plan
+Release Plan
+   The previous release has a good template. (Except that we forgot to vote.)
    http://www.mail-archive.com/dev@forrest.apache.org/msg02310.html
 
 ------------------------------------------------------------------------------
