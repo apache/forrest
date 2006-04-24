@@ -1,12 +1,21 @@
 Forrest Release Process
 ============================
 
-
-This file documents the steps a release manager should follow when making a new
-Forrest release.
+This file documents the steps that a Release Manager should follow when
+making a new Forrest release.
 
 Preparations
 ------------
+
+- Prepare the Release Plan and call for a quick vote on the dev list.
+  There are various reasons for voting on the Release Plan, e.g. makes people
+  aware that a code-freeze is about to happen; encourage them to get involved
+  with the release; ensure that the date is suitable and people will be around
+  to test and then vote on the actual release. See a good discussion
+  at http://marc.theaimsgroup.com/?t=114296877800003
+  Define when the code freeze commences, when the vote ends etc.
+  See email templates at end of this file.
+  Send a reminder when the code-freeze commences.
 
 - Ensure that as many PMC members as possible have their PGP keys in
   the KEYS file.
@@ -28,16 +37,6 @@ Preparations
 
 - Ensure that all relevant plugins have been deployed to plugins/0.8-dev/
   See other notes at plugins/RELEASE_PROCESS.txt
-
-- Prepare the Release Plan and call for a quick vote on the dev list.
-  There are various reasons for voting on the Release Plan, e.g. makes people
-  aware that a code-freeze is about to happen; encourage them to get involved
-  with the release; ensure that the date is suitable and people will be around
-  to test and then vote on the actual release. See a good discussion
-  at http://marc.theaimsgroup.com/?t=114296877800003
-  Define when the code freeze commences, when the vote ends etc.
-  See email templates at end of this file.
-  Send a reminder when the code-freeze commences.
   
   - Check out a fresh copy from SVN to make sure you have no local
   modifications, especially those that might be hidden by svn:ignore settings.  
@@ -69,15 +68,11 @@ without committing anything. This ensures a good release candidate.
 
 - Update your release checkout to reflect last minute changes
 
-    1. cd to the 'Forrest_Release' directory
-    2. svn up
-    3. Wait for the update to finish
-
 - Do 'build test'. Fix any problems, just those that prevent building.
   It is not your job to fix bugs!
   If there are bugs, then call a halt to the release process.
 
-  Remove the build directories.
+  Remove the build directories from core and plugins.
   Do 'svn st --no-ignore' to be sure.
 
 - Update the version numbers at various places.
@@ -142,10 +137,9 @@ without committing anything. This ensures a good release candidate.
 
  - Set your Java version to be the lowest specified of our supported versions.
    
-   On Windows you have to set the environment variable JAVA_HOME to the 
-   path of the Java version to use. 
-   Note: If you change the setting in the system properties, you have to logout and login 
-   again for the changes to become effective.
+   Set the environment variable JAVA_HOME to the path of the Java version to use. 
+   Note for Windows: If you change the setting in the system properties, you need
+   to logout and login again for the changes to become effective.
 
  - Take note of the SVN revision number of your trunk.
    Do 'svn info' and look at the "Last Changed Rev: ######".
