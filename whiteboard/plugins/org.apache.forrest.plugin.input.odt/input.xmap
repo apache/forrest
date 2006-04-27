@@ -20,8 +20,15 @@
     <map:resource name="file-resolver">
       <map:select type="exists">
         <map:when test="{lm:project.{uri}.odt}">
-          <map:generate src="zip://content.xml@{lm:project.{uri}.odt}" />
-          <map:transform src="{lm:transform.odt.xhtml}" />
+          <map:aggregate element="odt">
+            <map:part src="cocoon:/{uri}.meta.odt.xml" element="meta" />
+            <map:part src="cocoon:/{uri}.content.odt.xml"
+              element="content" />
+          </map:aggregate>
+          <map:transform src="{lm:transform.odt-forrest.xhtml}">
+            <!-- FIXME the {url} is always null. Could be that extracting the match out of the resources fixes this -->
+            <!-- <map:parameter name="filename" value="test-{url}" /> -->
+          </map:transform>
           <map:transform src="{lm:transform.xml.xml-namespace-stripped}" />
           <map:transform src="{lm:transform.html.document}" />
           <map:serialize type="xml" />
@@ -38,7 +45,18 @@
         </map:call>
       </map:match>
     </map:pipeline>
-    <map:pipeline />
+    <map:pipeline internal="true">
+      <map:match pattern="**.meta.odt.xml">
+        <map:generate src="zip://meta.xml@{lm:project.{1}.odt}" />
+        <map:serialize type="xml" />
+      </map:match>
+    </map:pipeline>
+    <map:pipeline internal="true">
+      <map:match pattern="**.content.odt.xml">
+        <map:generate src="zip://content.xml@{lm:project.{1}.odt}" />
+        <map:serialize type="xml" />
+      </map:match>
+    </map:pipeline>
   </map:pipelines>
 
 </map:sitemap>
