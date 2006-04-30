@@ -81,7 +81,7 @@
        <host-logo/>
      </xsl:if>
      <xsl:if test="not(year)">
-       <year>2005</year>
+       <year>2006</year>
      </xsl:if>
      <xsl:if test="not(vendor)">
        <vendor>The Acme Software Foundation.</vendor>
