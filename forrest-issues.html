@@ -216,6 +216,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-855%5D+verify+the+license+situation+prior+to+each+release">[FOR-855] verify the license situation prior to each release</a>
 </li>
 <li>
+<a href="#%5BFOR-681%5D+Include+xconf+files+in+plugins+using+includes%2C+not+XPatch">[FOR-681] Include xconf files in plugins using includes, not XPatch</a>
+</li>
+<li>
 <a href="#%5BFOR-533%5D+Auto+Generate+plugins.xml+entry">[FOR-533] Auto Generate plugins.xml entry</a>
 </li>
 <li>
@@ -237,6 +240,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-639%5D+define+terminology+for+the+various+aspects+of+Dispatcher">[FOR-639] define terminology for the various aspects of Dispatcher</a>
 </li>
 <li>
+<a href="#%5BFOR-572%5D+run+a+memory+profiler+while+forrest+is+operating">[FOR-572] run a memory profiler while forrest is operating</a>
+</li>
+<li>
 <a href="#%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</a>
 </li>
 <li>
@@ -256,12 +262,6 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-546%5D+Sitemap+reference+doc+should+be+updated+to+reflect+plugin+architecture">[FOR-546] Sitemap reference doc should be updated to reflect plugin architecture</a>
-</li>
-<li>
-<a href="#%5BFOR-560%5D+Remove+duplicate+jars+from+eclipse+plugins">[FOR-560] Remove duplicate jars from eclipse plugins</a>
-</li>
-<li>
-<a href="#%5BFOR-726%5D+use+locationmap+in+all+of+the+plugins">[FOR-726] use locationmap in all of the plugins</a>
 </li>
 </ul>
 </div>
@@ -447,7 +447,105 @@ B) Scan the whole trunk repository to add missing ASF license headers to source 
 &lt;br/&gt;
 </p>
 </div>
-<a name="N1007D"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
+<a name="N1007D"></a><a name="%5BFOR-681%5D+Include+xconf+files+in+plugins+using+includes%2C+not+XPatch"></a>
+<h2 class="underlined_10">[FOR-681] Include xconf files in plugins using includes, not XPatch</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-681">http://issues.apache.org/jira/browse/FOR-681</a>
+</p>
+<p>See &lt;a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112781600212715&amp;w=2"&gt;http://marc.theaimsgroup.com/?l=forrest-dev&amp;amp;m=112781600212715&amp;amp;w=2&lt;/a&gt;
+&lt;br/&gt;
+
+&lt;br/&gt;
+&amp;gt; I was excited to see the addition of xconf capability into plugins. See
+&lt;br/&gt;
+&amp;gt; &lt;a href="http://svn.apache.org/viewcvs?rev=227190&amp;view=rev"&gt;http://svn.apache.org/viewcvs?rev=227190&amp;amp;view=rev&lt;/a&gt;.
+&lt;br/&gt;
+&amp;gt; 
+&lt;br/&gt;
+&amp;gt; I rebuild cocoon with authentication and session blocks, and added the jars
+&lt;br/&gt;
+&amp;gt; to 'plugin/lib' and the xconf files from the
+&lt;br/&gt;
+&amp;gt; 'cocoon-2.2.0-dev\build\webapp\WEB-INF\xconf' to 'plugin/conf'.
+&lt;br/&gt;
+
+&lt;br/&gt;
+...
+&lt;br/&gt;
+
+&lt;br/&gt;
+&amp;gt; So am bit confused, on two counts:
+&lt;br/&gt;
+&amp;gt; 1. if xpatch is required, how do I generate this file?
+&lt;br/&gt;
+&amp;gt; 2. why are we using xpatch, when the current cocoon.xconf uses includes,
+&lt;br/&gt;
+&amp;gt; can't we do the same here?
+&lt;br/&gt;
+
+&lt;br/&gt;
+This was a rather hasty commit of mine that I have not yet fixed, even 
+&lt;br/&gt;
+though David spotted it as soon as I committed. Sorry that it has stung you.
+&lt;br/&gt;
+
+&lt;br/&gt;
+My original solution for including config files for plugins was to use 
+&lt;br/&gt;
+the XPatch utility. This sat on my hard drive for some time because I 
+&lt;br/&gt;
+had a few minor issues to iron out before committing. Then somebody 
+&lt;br/&gt;
+needed some functionlaity from my local &amp;quot;branch&amp;quot; that also contained the 
+&lt;br/&gt;
+XConf code. I committed in a hurry, not noticing that I still used the 
+&lt;br/&gt;
+XPatch method.
+&lt;br/&gt;
+
+&lt;br/&gt;
+The good news is that I have also enabled the XConf includes 
+&lt;br/&gt;
+functionality. But this has not yet been leveraged for plugins.
+&lt;br/&gt;
+
+&lt;br/&gt;
+There are two short term workarounds for you:
+&lt;br/&gt;
+
+&lt;br/&gt;
+1) Use the XPatch facility (see Cocoon docs on XPatch)
+&lt;br/&gt;
+2) is to edit the main/webapp/cocoon.xconf and add the include you need, 
+&lt;br/&gt;
+it will work ust fine.
+&lt;br/&gt;
+
+&lt;br/&gt;
+If you opt for one be aware that we will be removing this in favour of 
+&lt;br/&gt;
+using the includes at some point before the 0.8 release.
+&lt;br/&gt;
+
+&lt;br/&gt;
+The long term solution to the problem is to create a plugin.xconf file 
+&lt;br/&gt;
+that s built each time Forrest is run, much the same as we do with the 
+&lt;br/&gt;
+sitemap mounts for plugins. We would welcome a patch for this, I can 
+&lt;br/&gt;
+help point you in the right direction if you fancy tackling it.
+&lt;br/&gt;
+
+&lt;br/&gt;
+Could you please create an issue for this and point to this thread in 
+&lt;br/&gt;
+the archives so I do not forget again.
+&lt;br/&gt;
+</p>
+</div>
+<a name="N10089"></a><a name="%5BFOR-533%5D+Auto+Generate+plugins.xml+entry"></a>
 <h2 class="underlined_10">[FOR-533] Auto Generate plugins.xml entry</h2>
 <div class="section">
 <p>
@@ -463,7 +561,7 @@ All the necessary values are now in the plugin build.xml file.
 &lt;br/&gt;
 This change will require that the plugins.xml file be retrieved from the build directory rather than the plugins directory when building the plugin documentation pages. We will therefore need a fall back to retrieve this file from the network if it is not currently available - this can be done with the locationmap</p>
 </div>
-<a name="N10089"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
+<a name="N10095"></a><a name="%5BFOR-735%5D+Plugins+are+not+correctly+deployed+in+webapp+mode"></a>
 <h2 class="underlined_10">[FOR-735] Plugins are not correctly deployed in webapp mode</h2>
 <div class="section">
 <p>
@@ -479,7 +577,7 @@ This change will require that the plugins.xml file be retrieved from the build d
 &lt;br/&gt;
 - the pdf links give an error &amp;quot;Resource Not Found&amp;quot;</p>
 </div>
-<a name="N10095"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
+<a name="N100A1"></a><a name="%5BFOR-711%5D+Cache+results+from+the+Locationmap"></a>
 <h2 class="underlined_10">[FOR-711] Cache results from the Locationmap</h2>
 <div class="section">
 <p>
@@ -495,7 +593,7 @@ I think a simple cache will sufice, lets just provide a static hashmap using the
 &lt;br/&gt;
 If we test all locationmaps and find no result we should record that tere is no result in this hashmap. This will also be a good place to throw an exception so that Cocoon can better report such errors (see &lt;a href="http://issues.apache.org/jira/browse/FOR-701" title="Missing locationmap entry gives poor error"&gt;FOR-701&lt;/a&gt;)</p>
 </div>
-<a name="N100A1"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
+<a name="N100AD"></a><a name="%5BFOR-707%5D+Document+i18n+features+of+Forrest"></a>
 <h2 class="underlined_10">[FOR-707] Document i18n features of Forrest</h2>
 <div class="section">
 <p>
@@ -515,7 +613,7 @@ Cheche wrote a blog entry on his work:
 &lt;br/&gt;
 We could, at the very least use the locationmap to pull this content into our site [OT: I wonder if this could be a way to generate more documentation?)</p>
 </div>
-<a name="N100AD"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
+<a name="N100B9"></a><a name="%5BFOR-388%5D+Use+plugins+in-place+if+src+available"></a>
 <h2 class="underlined_10">[FOR-388] Use plugins in-place if src available</h2>
 <div class="section">
 <p>
@@ -531,7 +629,7 @@ Have Forrest mount plugins from designated directories in preference to download
 &lt;br/&gt;
 </p>
 </div>
-<a name="N100B9"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
+<a name="N100C5"></a><a name="%5BFOR-742%5D+trouble+accessing+unversioned+plugin+for+a+released+version+of+Forrest%2C+e.g.+projectInfo"></a>
 <h2 class="underlined_10">[FOR-742] trouble accessing unversioned plugin for a released version of Forrest, e.g. projectInfo</h2>
 <div class="section">
 <p>
@@ -545,7 +643,7 @@ The solution is discussed here:
 &lt;br/&gt;
 &lt;a href="http://marc.theaimsgroup.com/?t=113176328300002"&gt;http://marc.theaimsgroup.com/?t=113176328300002&lt;/a&gt;</p>
 </div>
-<a name="N100C5"></a><a name="%5BFOR-639%5D+define+terminology+for+the+various+aspects+of+Dispatcher"></a>
+<a name="N100D1"></a><a name="%5BFOR-639%5D+define+terminology+for+the+various+aspects+of+Dispatcher"></a>
 <h2 class="underlined_10">[FOR-639] define terminology for the various aspects of Dispatcher</h2>
 <div class="section">
 <p>
@@ -557,7 +655,15 @@ The solution is discussed here:
 &lt;br/&gt;
 </p>
 </div>
-<a name="N100D1"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
+<a name="N100DD"></a><a name="%5BFOR-572%5D+run+a+memory+profiler+while+forrest+is+operating"></a>
+<h2 class="underlined_10">[FOR-572] run a memory profiler while forrest is operating</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-572">http://issues.apache.org/jira/browse/FOR-572</a>
+</p>
+<p>We need to run a memory profiler while forrest is operating.</p>
+</div>
+<a name="N100E9"></a><a name="%5BFOR-241%5D+character+entities+%28e.g.+ampersand%29+are+expanded+again+for+href+or+src+attributes"></a>
 <h2 class="underlined_10">[FOR-241] character entities (e.g. ampersand) are expanded again for href or src attributes</h2>
 <div class="section">
 <p>
@@ -603,7 +709,7 @@ The ampersand in the link element text is properly handled but
 &lt;br/&gt;
 the ampersand in the link href attribute is not.</p>
 </div>
-<a name="N100DD"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
+<a name="N100F5"></a><a name="%5BFOR-211%5D+whole-site+html+and+pdf%3A+broken+ext+links"></a>
 <h2 class="underlined_10">[FOR-211] whole-site html and pdf: broken ext links</h2>
 <div class="section">
 <p>
@@ -611,7 +717,7 @@ the ampersand in the link href attribute is not.</p>
 </p>
 <p>In the the generated site.html all of the external links are broken (i.e. the href attributes are like ... error:#ext:forrest).</p>
 </div>
-<a name="N100E9"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
+<a name="N10101"></a><a name="%5BFOR-210%5D+whole-site+html+and+pdf%3A+broken+link+faq%2C+broken+image+links"></a>
 <h2 class="underlined_10">[FOR-210] whole-site html and pdf: broken link faq, broken image links</h2>
 <div class="section">
 <p>
@@ -621,7 +727,7 @@ the ampersand in the link href attribute is not.</p>
 &lt;br/&gt;
 </p>
 </div>
-<a name="N100F5"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
+<a name="N1010D"></a><a name="%5BFOR-209%5D+First+level+selected+tab+is+not+highlighted+when+containing+2nd+level+tabs"></a>
 <h2 class="underlined_10">[FOR-209] First level selected tab is not highlighted when containing 2nd level tabs</h2>
 <div class="section">
 <p>
@@ -635,7 +741,7 @@ This is checked with both the default skin, and with tigris-style.
 &lt;br/&gt;
 </p>
 </div>
-<a name="N10101"></a><a name="%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately"></a>
+<a name="N10119"></a><a name="%5BFOR-203%5D+2nd+level+tabs+are+not+selected+appropriately"></a>
 <h2 class="underlined_10">[FOR-203] 2nd level tabs are not selected appropriately</h2>
 <div class="section">
 <p>
@@ -657,7 +763,7 @@ Kind regards,
 &lt;br/&gt;
 &amp;nbsp;&amp;nbsp;Lorenz Froihofer.</p>
 </div>
-<a name="N1010D"></a><a name="%5BFOR-200%5D+Locationmap+for+Forrest+and+Users"></a>
+<a name="N10125"></a><a name="%5BFOR-200%5D+Locationmap+for+Forrest+and+Users"></a>
 <h2 class="underlined_10">[FOR-200] Locationmap for Forrest and Users</h2>
 <div class="section">
 <p>
@@ -669,7 +775,7 @@ Kind regards,
 &lt;br/&gt;
 Beware that it will not work for raw files that are not linked, as this &amp;quot;feature&amp;quot; currently uses a fixed dir being being copied by Ant.</p>
 </div>
-<a name="N10119"></a><a name="%5BFOR-546%5D+Sitemap+reference+doc+should+be+updated+to+reflect+plugin+architecture"></a>
+<a name="N10131"></a><a name="%5BFOR-546%5D+Sitemap+reference+doc+should+be+updated+to+reflect+plugin+architecture"></a>
 <h2 class="underlined_10">[FOR-546] Sitemap reference doc should be updated to reflect plugin architecture</h2>
 <div class="section">
 <p>
@@ -700,26 +806,6 @@ With version 0.7, PDF output is moved to a plugin, the fo2pdf serializer seems t
 
 &lt;br/&gt;
 I found out about this because my sitemap uses the fo2pdf too (docbook to PDF), and had to add the serializer.</p>
-</div>
-<a name="N10125"></a><a name="%5BFOR-560%5D+Remove+duplicate+jars+from+eclipse+plugins"></a>
-<h2 class="underlined_10">[FOR-560] Remove duplicate jars from eclipse plugins</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-560">http://issues.apache.org/jira/browse/FOR-560</a>
-</p>
-<p>tools/eclipse/plugins/org.apache.forrest.eclipse.servletEngine/lib contains some duplicate jars to those in the main Forrest trunk. We should find a way of reusing the jars from their existing location.</p>
-</div>
-<a name="N10131"></a><a name="%5BFOR-726%5D+use+locationmap+in+all+of+the+plugins"></a>
-<h2 class="underlined_10">[FOR-726] use locationmap in all of the plugins</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-726">http://issues.apache.org/jira/browse/FOR-726</a>
-</p>
-<p>Each plugin has sitemaps that need to use the locationmap.
-&lt;br/&gt;
-
-&lt;br/&gt;
-(Perhaps we need Jira sub-tasks for each plugin.)</p>
 </div>
 </div>
 <!--+
