@@ -33,6 +33,8 @@
           <title>
             Photo Albums 
           </title> 
+          <p>List of all available albums in this gallery, showing the first
+          photo from each. Select the photo to access that album.</p>
           <xsl:apply-templates select="/dir:directory//dir:directory"/>
         </section>
       </body>
