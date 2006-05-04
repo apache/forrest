@@ -435,21 +435,38 @@ forrest -Dproject.start-uri=live-sites.html
           Search for "javascript" then follow to the 
           &lt;map:resource name="skin-read"&gt; section.
         </p>
-      </section></section><section id="technical"><title>3. Technical</title><section id="proxy_config"><title>3.1. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
+      </section></section><section id="technical"><title>3. Technical</title><section id="java-code"><title>3.1. Where is the Java code?</title>
+        <p>
+          Because we are based on Apache Cocoon, a lot of the functionality is
+          provided behind-the-scenes, i.e. we use Cocoon's sitemaps and sitemap components
+          such as XSLT transformers. So there is not much need for Java code in Forrest.
+        </p>
+        <p>
+          For Forrest developers who want to explore or enhance that code, see the
+          Apache Cocoon SVN trunk. From time-to-time we update Forrest's packaged
+          version of Cocoon and so can include your contributions.
+        </p>
+        <p>
+          That said, you will find some Java code in Forrest at main/java/...
+          for Cocoon components that have been developed at Forrest, e.g.
+          Locationmap and Dispatcher. There is also Java code for some plugins
+          with specialised purpose, e.g. PhotoGallery.
+        </p>
+      </section><section id="proxy_config"><title>3.2. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</title>
         <p>You can configure the proxy in the <code>forrest.properties</code> file. Set the
             <code>proxy.host</code> and <code>proxy.port</code> accordingly.</p>
         <p>You can also cross an authenticated proxy by setting the <code>proxy.user</code> and <code>proxy.password</code> accordingly.</p>
         <note label="Generalise the proxy configuration">You certainly need to cross your proxy for every Forrest projects you have.
         To avoid to edit every project <code>forrest.properties</code> files, you can do once in your <code>${user.home}/forrest.properties</code> !</note>
-      </section><section id="CVS_revison_tags"><title>3.2. How can I generate html-pages to show the revision tag of cvs?</title>
+      </section><section id="CVS_revison_tags"><title>3.3. How can I generate html-pages to show the revision tag of cvs?</title>
         <p>If you have:<code>&lt;version&gt;$Revision: 1.30
           $&lt;/version&gt;</code>The '1.30' will be extracted and
           displayed at the bottom of the page as "version 1.30". See for example the
           bottom of the <link href="site:v0.80//your-project"> Using Forrest</link> document.</p>
         <p>This technique could also be used for a modification date with $Date: 2004/01/15 08:52:47
           $</p>
-      </section><section id="cli-xconf"><title>3.3.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
+      </section><section id="cli-xconf"><title>3.4.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
         other additional ones. </title>
         <p> Forrest uses a configuration file to control the processing done by the Apache Cocoon
           command-line called cli.xconf </p>
@@ -477,12 +494,12 @@ forrest -Dproject.start-uri=live-sites.html
         <note> Wildcards may be used. These are a powerful feature of Cocoon's <link href="site:v0.80//sitemap-ref">sitemap</link>. For example, <strong>foo/*</strong> would match
             <code>foo/bar</code>, but not <code>foo/bar/baz</code> &#8212; use
           <strong>foo/**</strong> to match that. </note>
-      </section><section id="ignoring_javadocs"><title>3.4.  How do I stop Forrest breaking on links to external files that may not exist, like
+      </section><section id="ignoring_javadocs"><title>3.5.  How do I stop Forrest breaking on links to external files that may not exist, like
         javadocs? </title>
         <p> This can be done by overriding the <link href="#cli-xconf">
             <code>cli.xconf</code>
           </link> Cocoon config file, and defining patterns for URLs to exclude. </p>
-      </section><section id="claimed_patterns"><title>3.5. Some of my files are not being processed because they use common filenames. </title>
+      </section><section id="claimed_patterns"><title>3.6. Some of my files are not being processed because they use common filenames. </title>
         <p> Certain patterns are claimed by the default sitemaps for special processing. These
           include: <code>site, changes, todo, faq, images, my-images, skinconf, community,
           howto</code>
@@ -491,7 +508,7 @@ forrest -Dproject.start-uri=live-sites.html
           interview-faq.html would be fine. In future versions of Forrest we will attempt to deal
           with this issue (<link href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</link>).
         </p>
-      </section><section id="build_msg_a"><title>3.6. What do the symbols and numbers mean when Forrest lists each document that it has
+      </section><section id="build_msg_a"><title>3.7. What do the symbols and numbers mean when Forrest lists each document that it has
         built? </title>
         <p>
           Each time that Cocoon processes a link, it will report the status messages ...
@@ -510,14 +527,14 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <li>Column 4 is the time taken.</li>
           <li>Column 5 is the page size.</li>
         </ul>
-      </section><section id="headless_operation"><title>3.7.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
+      </section><section id="headless_operation"><title>3.8.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
         server using ':0.0' as the value of the DISPLAY variable. </title>
         <p> If you are using JDK 1.4.0 or newer, you can enable <em>headless</em> operation by
           running Forrest with the <code>forrest.jvmarg</code> parameter set to
             <code>-Djava.awt.headless=true</code>, like this: </p>
         <source xml:space="preserve">forrest -Dforrest.jvmargs=-Djava.awt.headless=true site</source>
         <p> See also <link href="http://cocoon.apache.org/2.1/faq/faq-configure-environment.html">Cocoon FAQ</link>. </p>
-      </section><section id="project-logo-svg"><title>3.8.  
+      </section><section id="project-logo-svg"><title>3.9.  
         The project logo that is generated from SVG is truncating my project name.
       </title>
         <p>
@@ -531,17 +548,17 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           attribute of the &lt;svg&gt; element. For further details see
           <link href="http://www.w3.org/Graphics/SVG/">SVG</link> resources.
         </p>
-      </section><section id="catalog"><title>3.9.  How do i configure my favourite XML editor or parser to find the local Forrest
+      </section><section id="catalog"><title>3.10.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </title>
         <p> Notes are provided for various tools at <link href="site:v0.80//catalog">Using Catalog Entity
             Resolver for local DTDs</link>. </p>
-      </section><section id="skin"><title>3.10.  How to make the site look better and change its skin? </title>
+      </section><section id="skin"><title>3.11.  How to make the site look better and change its skin? </title>
         <p> There are <link href="site:v0.80//skins">default skins</link> provided, which are configurable
           and so should meet the needs of most projects. The aim is to provide many capabilities so
           that extra skins are not needed. </p>
         <p> See notes about <link href="site:v0.80//your-project/skins">configuration</link> of the skins.
           Some projects may have special needs and can define their <link href="site:v0.80//your-project/new-skin">own skin</link>. </p>
-      </section><section id="xsp"><title>3.11. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
+      </section><section id="xsp"><title>3.12. How do I enable <acronym title="eXtensible Server Pages">XSP</acronym> processing?</title>
         <p>First consider whether your needs would be better met by Cocoon itself, rather than
           Forrest. </p>
         <p>That said, there are valid reasons for wanting programmatically generated content, so
@@ -571,7 +588,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           </li>
         </ol>
         <p>See also the <link href="http://wiki.apache.org/cocoon/AddingXSPToForrest">AddingXSPToForrest</link> Wiki page.</p>
-      </section><section id="breadcrumbs"><title>3.12. How do breadcrumbs work? Why don't they work locally?</title>
+      </section><section id="breadcrumbs"><title>3.13. How do breadcrumbs work? Why don't they work locally?</title>
         <p>Breadcrumbs begin with up to three URLs specified in <code>skinconf.xml</code>. Here is
           what the Forrest site uses:</p>
         <source xml:space="preserve">
@@ -584,20 +601,20 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           the URL for the current page and makes a link for each directory after the domain. If you
           are viewing the site locally, there is no domain and so there will be no extra
           breadcrumbs, only the ones that are specified in <code>skinconf.xml</code>. </p>
-      </section><section id="run_port"><title>3.13. How do I make <code>forrest run</code> listen on a different port?</title>
+      </section><section id="run_port"><title>3.14. How do I make <code>forrest run</code> listen on a different port?</title>
         <p>
           <code>forrest run -Dforrest.jvmargs="-Djetty.port=80"</code>
         </p>
         <p>Or copy Forrest's main/webapp/jettyconf.xml file to your project's src/documentation
           directory and set the port number in that file. Then do <code>forrest run</code>
         </p>
-      </section><section id="debugging"><title>3.14. Can I run Forrest with Java debugging turned on?</title>
+      </section><section id="debugging"><title>3.15. Can I run Forrest with Java debugging turned on?</title>
         <p>If you use an IDE like Eclipse and want to debug java code in Forrest
         you need to start Forrest with debugging mode turned on. To do this you need
         to add <code>-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,susp end=n</code>
         to the <code>forrest.jvmargs</code> property in the <code>forrest.properties</code>
         file. Don't forget to ensure the property is uncommented in that file.</p>
-      </section><section id="checksums"><title>3.15. How do I enable Cocoon's document checksum feature?</title>
+      </section><section id="checksums"><title>3.16. How do I enable Cocoon's document checksum feature?</title>
         <p>
         Why might you want to do this?  There is really no effect
         on Cocoon processing, but a little time can be
