@@ -36,6 +36,8 @@ Preparations
   See email templates at end of this file.
   Send a reminder when the code-freeze commences.
 
+- Be familiar with http://www.apache.org/dev/#releases
+
 - Ensure that as many PMC members as possible have their PGP keys in
   the KEYS file.
 
@@ -195,15 +197,15 @@ FIXME: Not sure at what stage need to edit site-author/content/xdocs/mirrors.htm
    Create the *.asc and *.md5 files. Here is one example:
 
    gpg --recv-key <myKey>
-   gpg --output apache-forrest-0.7rc1.tar.gz.asc \
-       --detach-sig --armor apache-forrest-0.7rc1.tar.gz
+   gpg --output crossley-apache-forrest-0.7-RC1.tar.gz.asc \
+       --detach-sig --armor apache-forrest-0.7-RC1.tar.gz
    gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-       apache-forrest-0.7rc1.tar.gz
+       apache-forrest-0.7-RC1.tar.gz
    ... should say "Good signature from ..."
 
    openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
-       apache-forrest-0.7rc1.tar.gz
-   md5sum apache-forrest-0.7rc1.tar.gz
+       apache-forrest-0.7-RC1.tar.gz
+   md5sum apache-forrest-0.7-RC1.tar.gz
    ... output should match that of the md5 file.
 
  - Create a maintenance branch in SVN with
@@ -228,7 +230,10 @@ FIXME: Not sure at what stage need to edit site-author/content/xdocs/mirrors.htm
    - Ensure that the compressed archives will unpack correctly.
 
  - If necessary, build the second release candidate and ask people to test again.
- - Ask people to vote on the final release candidate.
+ - When a good release candidate has been achieved, rename the files to their
+   final filenames and regenerate the .md5 and .asc
+
+ - Ask people to vote on the final actual release files.
 
  - If there have been changes to the trunk since the branch was created,
    then merge trunk to branch.
@@ -259,6 +264,8 @@ Upload and announcement
 
    Note: The other files there (HEAD.html README.html LICENSE.txt KEYS)
    are all automatically updated from the SVN:forrest/dist/ repository.
+FIXME: Add notes about the KEYS file in the "forrest-dist" SVN respository.
+
 
  - If necessary, re-arrange stuff at the Archives site
    http://archive.apache.org/ at dist/forrest/
@@ -296,6 +303,10 @@ FIXME: Not sure at what stage the "site:v0.70" etc. replacements should happen.
  - Do global replace throughout docs_0_80 to replace the string
    ="site:v0.70 with ="site:v0.80
  - Rebuild and publish the Forrest website as normal.
+
+ - Update the .htaccess file to redirect /docs/dev/ to the next version,
+   and do other changes noted in the .htaccess file.
+   See site-author/content/.htaccess
 
  - Update the xml.apache.org website
    Edit xml-site/src/documentation/content/xdocs/news.xml and record the
