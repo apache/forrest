@@ -41,7 +41,6 @@
         <map:generate type="file" src="{lm:project.descriptor.{1}}" />
         <map:serialize type="xml-document"/>
       </map:match>
-      
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
         <map:generate type="file" src="{lm:project.status}" />
@@ -107,6 +106,29 @@
         <map:serialize type="xml-document"/>
       </map:match>
       
+      <!-- =============================================================== -->
+      <!-- Use Case Pipelines                                              -->
+      <!-- =============================================================== -->
+      
+      <map:match pattern="docs/**/useCases.source.xml">
+        <map:generate type="file" src="{lm:project.useCases}" />
+        <map:serialize type="xml"/>
+      </map:match>
+      
+      <map:match pattern="docs/user/useCases.xml">
+        <map:generate type="file" src="{lm:project.useCases}" />
+        <map:transform src="{lm:projectInfo.transform.useCase.document}">
+          <map:parameter name="includeImplementationNotes" value="false"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
+      <map:match pattern="docs/developer/useCases.xml">
+        <map:generate type="file" src="{lm:project.useCases}" />
+        <map:transform src="{lm:projectInfo.transform.useCase.document}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      
       <!-- ================================================================ -->
       <!-- HTML indexes                                                     -->
       <!-- ================================================================ -->
@@ -163,8 +185,8 @@
       
       <!--
         Create a snippet for inclusion in site.xml that provides a link to
-        all known programming languages for projects specified in
-        locationmap-projects.xml file.
+        all known projects specified in
+        locationmap.xml file.
       -->
       <map:match pattern="projectDetails/descriptorIndex.xml">
         <map:generate type="file" src="{project:content}/locationmap.xml" />
