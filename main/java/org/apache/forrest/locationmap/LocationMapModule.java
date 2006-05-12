@@ -190,7 +190,7 @@ public class LocationMapModule extends AbstractLogEnabled
           
           if (result == null) {
                 String msg = "Locationmap did not return a location for hint " + name;
-                getLogger().warn(msg);
+                getLogger().debug(msg);
           }
           
         	return result;
