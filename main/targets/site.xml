@@ -192,10 +192,26 @@ Read the output above:
     <!-- Fix inconsistent line endings. Workaround for FOR-492
       Default "eol" attribute will set line endings appropriate to current OS.
     -->
-    <fixcrlf srcdir="${project.site-dir}">
-      <include name="**/*.html"/>
-    </fixcrlf>
-    
+<!-- However, due to Ant bug 39585, fixcrlf/@eol is broken on "Mac OS X" so
+     add another workaround.
+-->
+    <condition property="isUnix">
+      <os family="unix"/>
+    </condition>
+    <if>
+      <equals arg1="${isUnix}" arg2="true"/>
+      <then>
+        <fixcrlf srcdir="${project.site-dir}" eol="unix">
+          <include name="**/*.html"/>
+        </fixcrlf>
+      </then>
+      <else>
+        <fixcrlf srcdir="${project.site-dir}">
+          <include name="**/*.html"/>
+        </fixcrlf>
+      </else>
+    </if>
+
     <echo>
 -----------------------------
 Static site was successfully generated at:
