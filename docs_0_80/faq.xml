@@ -107,7 +107,8 @@ forrest -Dproject.start-uri=live-sites.html
           if you need to temporarily exclude then.
         </p>
         <p>
-          Another useful technique is to use 'wget' or Ant to retrieve individual files, e.g.
+          Another useful technique is to use 'wget' or Apache Ant's Get task
+          to retrieve individual files, e.g.
           Do 'forrest run' and then 'wget http://localhost:8888/index.pdf'.
         </p>
       </section><section id="cygwin_mutex_error"><title>1.8.  When running <code>./build.sh</code> in cygwin, I get an error: <code>cygpath.exe:
@@ -695,8 +696,58 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         in the components section of the sitemap. See the 
         <link href="http://cocoon.apache.org/2.1/userdocs/serializers/xhtml-serializer.html">Cocoon
         docs</link> for the elements you need to add to define this component. You can see examples 
-        of other components being added in the <code>FORREST_HOME/main/webapp/sitemap.xmap</code> file.</p>
-        <p> You can also use a mixture of the two methods, some handled automatically by Forrest and
+        of other components being added in the <code>FORREST_HOME/main/webapp/sitemap.xmap</code> file.
+        Alternatively use the "html" DocBook stylesheets and the default Cocoon serializer,
+        i.e. &lt;map:serialize type="html"/&gt;
+        </p>
+        <p>
+          The output of the above sitemap will be plain html not adorned with
+          a Forrest theme and navigation. If instead you need the latter, then
+          use the following technique instead. This transforms DocBook xml to
+          html, then uses a Forrest core stylesheet to transform and serialize
+          to the internal xml format, then the normal machinery takes over and
+          does the output transformation. This use the Content Aware Pipelines
+          (<link href="site:v0.80//cap">SourceTypeAction</link>)
+          to peek at the source xml. If it is DocBook-4.2
+          then this sitemap match is triggered, if not then it falls through to the core of Forrest.
+        </p>
+        <source xml:space="preserve">&lt;?xml version="1.0"?&gt;
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+ &lt;map:components&gt;
+  &lt;map:actions&gt;
+   &lt;map:action logger="sitemap.action.sourcetype"
+      name="sourcetype"src="org.apache.forrest.sourcetype.SourceTypeAction"&gt;
+    &lt;sourcetype name="docbook-v4.2"&gt;
+     &lt;document-declaration public-id="-//OASIS//DTD DocBook XML V4.2//EN"/&gt;
+    &lt;/sourcetype&gt;
+   &lt;/map:action&gt;
+  &lt;/map:actions&gt;
+  &lt;map:selectors default="parameter"&gt;
+   &lt;map:selector logger="sitemap.selector.parameter"
+      name="parameter" src="org.apache.cocoon.selection.ParameterSelector"/&gt;
+  &lt;/map:selectors&gt;
+ &lt;/map:components&gt;
+ &lt;map:pipelines&gt;
+  &lt;map:pipeline&gt;
+   &lt;map:match pattern="**.xml"&gt;
+    &lt;map:act type="sourcetype" src="{project:content.xdocs}{1}.xml"&gt;
+     &lt;map:select type="parameter"&gt;
+      &lt;map:parameter name="parameter-selector-test" value="{sourcetype}"/&gt;
+      &lt;map:when test="docbook-v4.2"&gt;
+       &lt;map:generate src="{project:content.xdocs}{../1}.xml"/&gt;
+       &lt;map:transform
+          src="file:///usr/share/sgml/docbook/xsl-stylesheets/html/docbook.xsl"/&gt;
+       &lt;map:transform src="{forrest:stylesheets}/html-to-document.xsl"/&gt;
+       &lt;map:transform type="idgen"/&gt;
+       &lt;map:serialize type="xml-document"/&gt;
+      &lt;/map:when&gt;
+     &lt;/map:select&gt;
+    &lt;/map:act&gt;
+   &lt;/map:match&gt;
+  &lt;/map:pipeline&gt;
+ &lt;/map:pipelines&gt;
+&lt;/map:sitemap&gt;</source>
+        <p> You can also use a mixture of the methods, some handled automatically by Forrest and
           some directly using DocBook stylesheets. You can also have a mixture of source files as
           "document-v*" DTD and DocBook. </p>
         <p> Ensure that the document type declaration in your XML instance is well specified. Use a
