@@ -63,6 +63,9 @@ which is then merged by site2xhtml.xsl
   <xsl:template name="separator">
   </xsl:template>
 
+    <xsl:template name="level2-separator">
+    </xsl:template>    
+    
   <xsl:template name="selected">
 	<li class="current"><xsl:call-template name="base-selected"/></li>
   </xsl:template>
