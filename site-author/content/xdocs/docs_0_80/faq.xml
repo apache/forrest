@@ -604,6 +604,30 @@ forrest -Dproject.start-uri=live-sites.html
         </p>
       </answer>
     </faq>
+    <faq id="populate-cache">
+      <question>How to enhance the responsiveness of the cache?</question>
+      <answer>
+        <p>
+          Apache Cocoon has a sophisticated cache. When running Forrest in dynamic
+          mode, the initial visitor will receive slower response. The very first
+          page served will cause Cocoon to cache the pipelines. Later requests
+          will re-use those cached components and add others to the cache.
+          A good technique is to warm up the cache after the forrest webapp has
+          been re-started. Requesting the front page alone will populate the
+          cache with the common items used for other pages. Using a spider
+          such as wget, will warm up everything.
+        </p>
+        <p>
+          The Cocoon cache and sitemaps can be tuned. See
+          <link href="http://cocoon.apache.org/2.1/performancetips.html">Cocoon Performance Tips</link>
+          and
+          <link href="http://wiki.apache.org/cocoon/CocoonPerformance">CocoonPerformance</link>
+          and the "Object Stores" section of main/webapp/WEB-INF/forrest-core.xconf
+        </p>
+        <p>Responsiveness can be further enhanced by utilising a transparent proxy server, e.g. Apache HTTP Server as a frontend. See <link href="http://wiki.apache.org/cocoon/ApacheModProxy">CocoonAndApacheModProxy</link>.
+        </p>
+      </answer>
+    </faq>
     <faq id="proxy_config">
       <question>I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</question>
