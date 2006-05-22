@@ -629,7 +629,51 @@
 
         <section id="cleanup">
             <title>Cleanup</title>
-        </section>
+            <ol>
+                <li><p>Edit main/build.xml, increment the version and add a -dev tag:
+                    around line 45:
+                    <![CDATA[<property name="version" value="0.8-dev"/>]]></p></li>
+                <li><p>Edit main/forrest.build.xml and update the version:
+                    around line 32:</p>
+                    <source><![CDATA[
+    <property name="version" value="0.8-dev"/>  
 
+    around line 52:
+    <description>
+    |                 Forrest Site Builder                  |
+    |                        0.8-dev                             |
+                        ]]></source>
+                </li>
+                <li><p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
+                    They have already been archived at archive.apache.org/dist/forrest/</p></li>
+                <li><p>Do some Jira administration (need to be in the jira-administrators group)</p>
+                <fixme author="fso">Does it make sense to pass this job to the Jira-role?</fixme>
+                    <ol>
+                        <li><p>Tweak the "release" versions via "admin" interface at our Jira. Do this ...</p></li>
+                        <li><p>Re-name the VersionIds using "Manage Versions" then "Edit details":
+                            e.g. 0.7-dev is renamed to 0.7 and 0.8 becomes 0.8-dev</p></li>
+                        <li><p>Mark 0.7 as released using "Manage Versions".</p></li>
+                        <li><p>Review the Issues for the old version and move any Incomplete ones up.</p></li>
+                        <li><p>Change the "fixfor" attribute to the next verion for the
+                            "project.issues-rss-url" RSS feed in forrest.properties</p></li>
+                    </ol>
+                    
+                </li>
+                <li><p>Cleanup this RELEASE_PROCESS.txt file to set version number examples
+                    to be ready for the next release.</p>
+                    <fixme author="fso">I'd like to drop this step and rather word everything more flexibly.</fixme>
+                </li>
+                <li><p>Remove the release candidates from your public_html directory.</p></li>
+            </ol>
+            
+        </section>
+        
+        <section id="conclusion">
+            <title>Conclusion</title>
+            <p>All done!</p>
+            <p>Or perhaps not.. if you think of anything, please refine these instructions.</p>
+        </section>
+        
+        
     </body>
 </document>
