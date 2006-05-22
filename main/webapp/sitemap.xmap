@@ -224,13 +224,31 @@ $Revision: 1.12 $
       <map:matcher name="wildcard" src="org.apache.cocoon.matching.WildcardURIMatcher"/>
       <map:matcher name="regexp" src="org.apache.cocoon.matching.RegexpURIMatcher"/>
       <map:matcher name="i18n" src="org.apache.cocoon.matching.LocaleMatcher">
+        <!--  FIXME (FOR-887): make these configurable, using same parameters for LocaleMatcher and LocaleAction -->
+        <!-- See http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html for a description of these parameters -->
+        <default-locale language="en" country="US"/>
         <negotiate>true</negotiate>
+        <use-locale>false</use-locale>
         <use-locales>false</use-locales>
         <use-blank-locale>true</use-blank-locale>
-        <default-locale language="en" country="US"/>
+        <locale-attribute>locale</locale-attribute>
       </map:matcher>
     </map:matchers>
 
+    <map:actions>
+      <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction">
+        <!-- See http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/acting/LocaleAction.html for a description of these parameters -->
+        <!--  FIXME (FOR-887): make these configurable, using same parameters for LocaleMatcher and LocaleAction -->
+        <default-locale language="en" country="US"/>
+        <use-locale>false</use-locale>
+        <store-in-request>false</store-in-request>
+        <create-session>false</create-session>
+        <store-in-session>false</store-in-session>
+        <store-in-cookie>false</store-in-cookie>
+        <locale-attribute>locale</locale-attribute>
+      </map:action>
+    </map:actions>
+    
     <map:selectors>
       <map:selector name="exists" logger="sitemap.selector.exists"  
                     src="org.apache.forrest.sourceexists.SourceExistsSelector" />
@@ -286,9 +304,11 @@ $Revision: 1.12 $
         <map:select type="config">
           <map:parameter name="value" value="{defaults:i18n}"/>
           <map:when test="true">	
-            <map:transform type="i18n">
-              <map:parameter name="locale" value="{request:locale}"/>
-            </map:transform>
+            <map:act type="locale">
+              <map:transform type="i18n">
+                <map:parameter name="locale" value="{locale}"/>
+              </map:transform>
+            </map:act>
 	  </map:when>
 	  <map:otherwise>
             <!--

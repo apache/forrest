@@ -48,9 +48,6 @@ $Revision: 1.2 $
     <map:selectors>
       <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
-    <map:actions>
-      <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
-    </map:actions>
   </map:components>
 
   <map:pipelines>
@@ -127,10 +124,7 @@ $Revision: 1.2 $
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}"/>
               <map:transform type="i18n">
-                <!-- We can use a default locale attribute or Request Parameter
-                <map:parameter name="locale" value="{defaults:locale}"/>
-		<map:parameter name="locale" value="{lang}{country}{variant}"-->
-                <map:parameter name="locale" value="{request:locale}"/>
+                <map:parameter name="locale" value="{locale}"/>
               </map:transform>
             </map:act>
 
