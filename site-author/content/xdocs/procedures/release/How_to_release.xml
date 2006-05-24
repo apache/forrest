@@ -27,6 +27,10 @@
 
         <section id="About">
             <title>About this Document</title>
+<warning>
+This document is still being developed from etc/RELEASE_PROCESS.txt and
+some steps will need to be re-arranged.
+</warning>
             <p>This documents the steps that the Release Manager (RM) should follow when doing a Forrest release. Note
                 that it might have mistakes - we seem to discover something new each time and some steps might need to
                 happen in a different order. Fine tune these notes for next time. Do some practice runs.</p>
@@ -272,8 +276,12 @@
                 </li>
                 <li>
                     <p> Rename the deployed plugins directory by issuing the following commands at the command line </p>
-                    <source> cd /svn/asf/forrest-site svn up svn mv plugins/0.8-dev plugins/0.8 svn mkdir
-                        plugins/0.9-dev svn commit</source>
+                    <source>cd /svn/asf/forrest-site
+svn update
+svn mv plugins/0.8-dev plugins/0.8
+svn mkdir plugins/0.9-dev
+svn status
+svn commit</source>
                     <fixme author="fso">Issue them where and to what end?</fixme>
                 </li>
                 
@@ -287,12 +295,11 @@
             <note>You can practice the following steps (as far as creating the branch) without committing anything even
                 before code-freeze. This ensures a good release candidate.</note>
             <ol>
-                <li>Use template <a href="anounce_code_freeze.txt">anounce_code_freeze.txt</a> to send a reminder-mail
-                    to dev-list when the code-freeze commences.</li>
+                <li>Use template <a href="anounce_code_freeze.txt">anounce_code_freeze.txt</a> to send email
+                    to dev-list that the code-freeze has now commenced.</li>
                 <li>
                     <p>Update your release checkout (svn up) to include last minute changes.</p>
                 </li>
-                <li> </li>
                 <li>
                     <p>Run the following quick tests from the command line of your system to ensure that all is well:</p>
                     <ul>
@@ -545,7 +552,9 @@
                             >http://www.apache.org/~bodewig/mirror.html</a> and <a
                             href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a></p>
 
-                    <p>Leave the previous dist there as well, until after the announcement.</p>
+                    <p>Leave the previous dist there as well as the new one, until after the announcement
+                    (because mirrors.html cannot be updated until most mirrors have received the release).
+                    </p>
 
                     <note>The other files there (HEAD.html README.html LICENSE.txt KEYS) are all automatically updated
                         from the SVN:forrest/dist/ repository. </note>
@@ -623,7 +632,7 @@
     around line 52:
     <description>
     |                 Forrest Site Builder                  |
-    |                        0.8-dev                             |
+    |                        0.8-dev                        |
                         ]]></source>
                 </li>
                 <li><p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
