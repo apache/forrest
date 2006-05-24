@@ -533,7 +533,7 @@
         <section id="UploadAndAnnounce">
             <title>Upload and announcement</title>
             <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
-                announce the new relase.</p>
+                announce the new release.</p>
             <note>During this phase there is a lot of waiting. While things are happening you can be doing the <a
                     href="Cleanups">Cleanups</a> described below.</note>
             <ol>
@@ -555,29 +555,19 @@
                 </li>
 
                 <li>
-                    <p>If necessary, re-arrange stuff at the Archives site <a
-                            href="http://archive.apache.org/ at dist/forrest/">http://archive.apache.org/ at
-                            dist/forrest/</a></p>
-                    <p> You should not need to touch anything, the artifacts are automatically copied from the main
-                        /dist/forrest/</p>
-                    <fixme author="fso">Purpose of this site. What needs to be rearranges and how do I tell?</fixme>
-                </li>
-
-                <li>
                     <p>Wait for the various mirrors to pick up the new files.</p>
                     <p> For some mirrors, this takes only a few hours. However others are slow. How long to wait is a
                         tradeoff, e.g. 8 hours.</p>
-                    <p> See "Status of mirrors" <a href="http://www.apache.org/mirrors/"
-                        >http://www.apache.org/mirrors/</a></p>
+                    <p> See <a href="http://www.apache.org/mirrors/">Status of mirrors</a>.
+                    </p>
                     <p> Take note of the time that the eu.apache.org mirror is updated, then compare each "mirror age"
                         to that.</p>
-                    <fixme author="fso">What do I compare it for?</fixme>
                     <p> When you see that a good proportion of the mirrors have received the release, then update the
-                        website, then do the announcement.</p>
+                        website, then send the announcement.</p>
                 </li>
-                <li>To create a copy of current dev-docs for the next development phase, open the check-out of trunk
-                    (!) and run 'cd site-author/content/xdocs' and 'svn copy docs_0_70 docs_0_80' (Adjust version
-                    numbers as needed.</li>
+                <li>Create a copy of current dev-docs in trunk for the next development phase.
+                    Do 'cd site-author/content/xdocs' and 'svn copy docs_0_70 docs_0_80' (Adjust version
+                    numbers as needed).</li>
                 <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v0.80&gt;) above it.
                     Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v0.90&gt;).
                 </li>
@@ -594,19 +584,15 @@
                             Documentation</a> for details.</p>
                 </li>
                 <li>
-                    <p>Update the xml.apache.org website
+                    <p>Update the xml.apache.org website (Forrest is part of the Apache XML federation of projects).
                         Edit xml-site/src/documentation/content/xdocs/news.xml and record the
                         announcement, and then commit the new HTML to xml-site/targets/forrest
-                        Note that they use forrest-0.6 to build their website.
+                        Note that they use forrest-0.7 to build their website.
                         See http://xml.apache.org/guidelines.html#website-top</p>
-                    <fixme author="fso">Can sbdy pls explain the purpose of this step?</fixme>
-                    <p>Remember that there is currently an rsync delay for all ASF websites.
-                        <a href="http://www.apache.org/dev/project-site.html">http://www.apache.org/dev/project-site.html</a></p>
-                    <fixme author="fso">Meaning?</fixme>
                 </li>
                 <li><p>Send <a href="announce_release.txt">announce_release.txt</a>as email to
                     'dev@forrest.apache.org', 'user@forrest.apache.org', 'announce@apache.org',
-                    'announcements@xml.apache.org'.</p>
+                    'announcements@xml.apache.org'. Sign the email (e.g. PGP).</p>
                     <p>See previous announcements for examples:</p>
                     <ul>
                         <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=103746673310573">0.2</a></li>
@@ -623,6 +609,7 @@
             </ol>
 
         </section>
+<!-- FIXME DC: reviewed from here to end. -->
 
         <section id="cleanup">
             <title>Cleanup</title>
@@ -642,7 +629,7 @@
                         ]]></source>
                 </li>
                 <li><p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
-                    They have already been archived at archive.apache.org/dist/forrest/</p></li>
+                    They have already been automatically archived at archive.apache.org/dist/forrest/</p></li>
                 <li><p>Do some Jira administration (need to be in the jira-administrators group)</p>
                 <fixme author="fso">Does it make sense to pass this job to the Jira-role?</fixme>
                     <ol>
