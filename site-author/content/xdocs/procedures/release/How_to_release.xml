@@ -430,16 +430,16 @@ svn commit</source>
                             >http://www.slproweb.com/products/Win32OpenSSL.html</a></note>
                     <source><![CDATA[
         gpg --recv-key <myKey>
-        gpg --output crossley-apache-forrest-0.7-RC1.tar.gz.asc \
-        --detach-sig --armor apache-forrest-0.7-RC1.tar.gz
+        gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
+        --detach-sig --armor apache-forrest-0.7.tar.gz
         gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-        apache-forrest-0.7-RC1.tar.gz]]></source>
+        apache-forrest-0.7.tar.gz]]></source>
                     <p> ... should say "Good signature from ..."</p>
 
                     <source><![CDATA[
         openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
-        apache-forrest-0.7-RC1.tar.gz
-        md5sum apache-forrest-0.7-RC1.tar.gz]]>
+        apache-forrest-0.7.tar.gz
+        md5sum apache-forrest-0.7.tar.gz]]>
                     </source>
                     <p>... output should match that of the md5 file.</p>
                 </li>
@@ -465,8 +465,8 @@ where
         </section>
 
         <section>
-            <title>Testing the release candidate</title>
-            <p>Test the actual distribution on various platforms.</p>
+            <title>Testing the release candidate and voting</title>
+            <p>Get Forrest developers to test the actual distribution on various platforms.</p>
             <ol>
                 <li>
                     <p>Upload the release candidates and signatures to a committer's webspace. Use the .tar.gz from the
@@ -474,21 +474,31 @@ where
                 </li>
                 <li>
                     <p>Use template <a href="test_and_vote_on_rel_cand.txt">test_and_vote_on_rel_cand.txt</a> for an
-                        email to the dev-list asking all developers to test and vote.</p>
+                      email to the dev-list asking all developers to test and vote. Don't forget
+                      to modify the template, to specify the md5sums etc. People need to tell you the
+                      md5sum to be sure that they have tested and voted on the correct release candidate.
+                      This is especially important if there has been more than one release candidate.</p>
                 </li>
                 <li>
-                    <p>As the votes come in</p>
+                    <p>As the votes come in:</p>
                     <ul>
-                        <li>Make sure the distributions unpacks on different systems w/o problems.</li>
-                        <li>Make sure that somebody has followed the actual user instructions in the Forrest
+                        <li>Make sure the distributions unpack on different systems without problems.</li>
+                        <li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
-                        <li>Encourage people to build ome difficult sites.</li>
+                        <li>Encourage people to build some difficult sites.</li>
                     </ul>
 
                 </li>
-                <li>If necessarry start again with <a href="#BuildDist">Building the distribution</a> and build another
+                <li>If substantial problems are revealed (not just minor glitches) then co-ordinate their
+                  fixing by other developers. Doing the fixing of issues is not the Release Manager's job.
+                  Deciding what constitutes a "substantial" issue is entirely the RM's call.
+                  Remember that there is still a code freeze, so don't let people be tempted to fix other
+                  minor stuff or add some pet new feature that they have neglected. That can easily
+                  introduce new problems.
+                </li>
+                <li>If necessary start again with <a href="#BuildDist">Building the distribution</a> and build another
                     release candidate.</li>
-                <li />
+                <li>Tally the votes and report the result to the dev list.</li>
             </ol>
         </section>
 
@@ -497,15 +507,6 @@ where
             <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
 
             <ol>
-                <li>
-                    <p>rename the Release Candidates distribution files apache-forrest-X.Y-RCx.tar.gz and
-                        apache-forrest-X.Y-RCx.zip to their final filenames apache-forrest-X.Y.tar.gz and
-                        apache-forrest-X.Y.zip</p>
-                </li>
-                <li>
-                    <p>Create new .md5 and .asc-files following the procedure in <a href="#signing">outlined
-                    above</a></p>
-                </li>
                 <li>
                     <p>If there have been changes to the trunk since the branch was created, then merge trunk to branch.</p>
                     <fixme author="fso">What is the purpose of this step? It doesn't seem to be right because trunk may
