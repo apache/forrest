@@ -391,8 +391,10 @@ svn commit</source>
                 </li>
                 <li>
                     <p>Take note of the SVN revision number of your trunk by running <code>svn info</code> from the
-                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".</p>
-                    <fixme author="">What is this used for?</fixme>
+                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".
+                      This will be used later for the svn log message when the branch is created.
+                      Also it is helpful for ensuring that no new commits have been made,
+                      i.e. people forgetting the code freeze.</p>
                 </li>
                 <li>
                     <p>Now we will build the release candidates for Windows and Unix.</p>
@@ -405,20 +407,22 @@ svn commit</source>
                                 to generate the distributions on a UNIX machine.</p>
                             <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
                                 *.zip archive.</p>
-                            <p>Unpack and test the relevant archive in a fresh new directory.</p>
                         </li>
                         <li>
                             <p>On a Windows machine:<br /> Change to directory main and run <code>build
                                 release-dist</code> to generate the distributions on a UNIX machine.</p>
                             <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
                                 *.tar.gz archive.</p>
-                            <p>Unpack and test the relevant archive in a fresh new directory.</p>
                         </li>
-
                     </ul>
                 </li>
+                <li>Unpack and test the relevant archive in a fresh new directory.
+                  No point getting people to test if it is broken. You need this for your own testing and vote anyway.
+                  Be sure to set FORREST_HOME and PATH properly for this release candidate location
+                  i.e. ensure that you are not using your trunk working copy.
+                </li>
                 <li>
-                    <p id="signing">Sign the Release Candidates distribution file and the *.asc and *.md5 files.</p>
+                    <p id="signing">Sign the Release Candidates distribution file and create the *.asc and *.md5 files.</p>
                     <p>Here is one example when using <a href="http://www.gnupg.org/(en)/download/index.html">gpg</a>
                         and openssl from the command line. </p>
                     <note>An windows version for openssl can be found at <a
@@ -440,28 +444,22 @@ svn commit</source>
                     <p>... output should match that of the md5 file.</p>
                 </li>
                 <li>
-                    <p>Create a maintenance branch in SVN</p>
-                    <ol>
-                        <li>
-                            <p>Open the command line</p>
-                        </li>
-                        <li>
-                            <p>Change to the root directory of the release candidate</p>
-                        </li>
-                        <li>
-                            <p>run <code>svn copy -m "Create the x.y release branch from r#####" \
-                                    https://svn.apache.org/repos/asf/forrest/trunk \
-                                    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch </code> where
-                                'xy' is a compact form of the version (e.g. 04, 041, 05) and 'r#####' is the SVN
-                                revision number that the branch was created from which was the revision that the release
-                                candidates were generated from.</p>
-                            <p> See <a href="http://svn.apache.org/repos/asf/forrest/branches/"
-                                    >http://svn.apache.org/repos/asf/forrest/branches/</a> If someone has done a commit
-                                before you get to do it, then specify the revision number with -r </p>
-                            <fixme author="">What do I see at http://svn.apache.org/repos/asf/forrest/branches/ if s.o.
-                                has done a commit? What is this stuff revision numer with -r for?</fixme>
-                        </li>
-                    </ol>
+                  <p>Create a maintenance branch in SVN. This command can be run from anywhere
+                    because it uses full URLs.</p>
+                  <source>
+svn copy -r ##### -m "Create the x.y release branch from r#####" \
+    https://svn.apache.org/repos/asf/forrest/trunk \
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch
+
+where
+  'xy' is a compact form of the version (e.g. 04, 041, 05).
+  '#####' is the SVN revision number that the branch was created from,
+  which was the revision that the release candidates were generated from.
+  (Remember that you recorded this number earlier.)
+                  </source>
+                  <p> See <a href="http://svn.apache.org/repos/asf/forrest/branches/">http://svn.apache.org/repos/asf/forrest/branches/</a>
+                  for examples of past branches, e.g. forrest_07_branch.
+                  </p>
                 </li>
             </ol>
         </section>
@@ -539,8 +537,9 @@ svn commit</source>
             <title>Upload and announcement</title>
             <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
                 announce the new release.</p>
-            <note>During this phase there is a lot of waiting. While things are happening you can be doing the <a
-                    href="#cleanup">Cleanups</a> described below.</note>
+            <note>During this phase there is a lot of waiting. While things are happening you can be doing
+              some of the other tasks in this Upload section and in the <a
+                    href="#cleanup">Cleanup</a> section.</note>
             <ol>
                 <li>
                     <p>Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc and *.md5 files, and the
@@ -616,7 +615,6 @@ svn commit</source>
             </ol>
 
         </section>
-<!-- FIXME DC: reviewed from here to end. -->
 
         <section id="cleanup">
             <title>Cleanup</title>
