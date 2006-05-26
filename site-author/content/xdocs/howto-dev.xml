@@ -192,6 +192,39 @@ forrest-trunk
         </p>
       </section>
 
+      <section id="svn-find-break">
+        <title>Updating svn backwards to find where something broke</title>
+        <p>Sometimes the addition of new features will break something. Often
+          it is difficult to find where the break occurred and what caused it.
+          Updating your svn backwards will enable this.
+        </p>
+        <p>
+          Look at the svn@ mail list to guess which change might be the culprit,
+          e.g. svn revision 406862.
+        </p>
+        <source>
+Update backwards to just before the upgrade:
+svn update -r 406861
+... do 'build clean; build' and test.
+
+Go back further if it still doesn't work.
+After success, start upgrading forward.
+
+Looking at the svn@ mailing list shows that
+could jump forward past minor changes such as doc edits.
+e.g. just after the upgrade:
+svn update -r 406863
+... do 'build clean; build' and test.
+
+If it still works, move a bit further on:
+svn update -r 407260
+... do 'build clean; build' and test.
+
+After finding the break, move back to head of trunk
+svn update -r HEAD.
+        </source>
+      </section>
+
       <section id="svn-patch">
         <title>Creating patches</title>
         <p>See 
