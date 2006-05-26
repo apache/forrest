@@ -175,8 +175,8 @@ some steps will need to be re-arranged.
             </ol>
         </section>
 
-        <section id="PrepNewBranch">
-            <title>Preparing Release Branch</title>
+        <section id="PrepTrunk">
+            <title>Preparing your working copy of SVN trunk</title>
 
             <fixme author="fso">We need to discuss order from here on. My idea is to adjust docs before we enter code
                 freeze to save time later. But if the rc fails and release is postponed might need to roll back changes
@@ -186,22 +186,16 @@ some steps will need to be re-arranged.
                 easiest would be to create an rc branch here and co that. I'd sacrifice the alternative approach for
                 that which is far too risky for my liking anyway. wdyt?</fixme>
 
-            <p>In this step you check out a fresh copy from SVN to make sure you have no local modifications, especially
-                those that might be hidden by svn:ignore settings. It will soon become the release branch.</p>
-            <note>This step is actually just preparation to keep code-freeze period as short as possible.</note>
-<fixme author="dc"> What does that mean?</fixme>
+            <p>In this step you make absolutely sure that your working copy of SVN trunk has no local modifications, or additional files that you have been fiddling with, and especially files that might be hidden by svn:ignore settings.
+            </p>
+            <p>There are two ways to do this. Either do a complete new svn checkout,
+              or use the 'svn status --no-ignore' command on your existing working copy.
+            </p>
             <ol>
                 <li>
-                    <p>Create a new empty directory 'Forrest_Release' on your system and make it the current
-                    directory.</p>
-                </li>
-                <li>
-                    <p>Start <code>svn co https://svn.apache.org/repos/asf/forrest/trunk</code> from the command-line of
-                        your system or the equivalent for the svn-tool you use.</p>
+                    <p>In a new empty directory do <code>'svn co https://svn.apache.org/repos/asf/forrest/trunk'</code></p>
                 </li>
             </ol>
-
-            <note>This will take quite a while if you are on a dial-up connection. See alternatives below.</note>
 
             <p>Alternative Approach</p>
 
@@ -209,12 +203,12 @@ some steps will need to be re-arranged.
                 <li> Do 'svn update -r HEAD' to ensure that you are up-to-date. </li>
                 <li> Run 'svn status --no-ignore' </li>
                 <li>
-                    <p>Delete any extra files you might have added/changed in your local copy. <strong>They must not be
+                    <p>Delete any extra files you might have added/changed in your local copy.
+                      Delete any "build" directories in plugins, etc.
+                      <strong>Extra files must not be
                             packed with the release.</strong> It must be a pristine copy of the current trunk.</p>
                 </li>
             </ol>
-            <warning>This approach requires a good understanding of svn and how it works. It is not as automatic and
-                safe as the method above.</warning>
         </section>
 
         <section id="adjustDocs">
