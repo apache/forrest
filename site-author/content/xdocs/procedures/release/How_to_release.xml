@@ -38,9 +38,6 @@ some steps will need to be re-arranged.
             <p>There are some steps that other committers, and even developers, can assist with, especially in the areas
                 of getting ready for the release and the final testing. Many of the steps can be done only by the
                 Release Manager.</p>
-
-            <p>It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins when the
-                project is ready to do the release.</p>
         </section>
         <section id="rm">
             <title>Who is the Release Manager</title>
@@ -62,21 +59,31 @@ some steps will need to be re-arranged.
               The following notes are terse. If you don't understand, then probably not ready to be RM.
             </p>
         </section>
+        <section id="prep">
+            <title>Tasks to be done by the project before the release can start</title>
+            <p>There are a number of things to be done by the project before the release will start.
+              Don't leave these until the last minute.
+              It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins when the
+                project is ready to do the release.</p>
+            <ul>
+              <li>The project updates the Roadmap to schedule the realistic Issues.</li>
+              <li>The project made good progress towards fixing the Blockers and applying the outstanding patches.</li>
+              <li>The documentation content is ready.</li>
+              <li><p>Relevant changes are listed in the site-author/status.xml and contributers have been attributed. Other changes are listed in the various plugins/status.xml files.</p>
+              </li>
+              <li><p>Major changes are listed in the site-author/status.xml using the "importance"
+                attribute. This will be used to generate the list of top changes for the Release Notes
+                and Announcement text.</p>
+                <p>http://localhost:8888/releaseNotes_0.8-dev.html</p>
+              </li>
+            </ul>
+        </section>
         <section id="PrepProject">
             <title>Preparing the project for the release</title>
+            <p>In this step the Release Manager starts the process to finalise the outstanding blocker issues. </p>
             <ol>
                 <li>
-                    <p>The Release Manager (RM) starts the process to finalise the outstanding blocker issues. </p>
-                    <p>Check and make sure the following preconditions are met:</p>
-                    <ul>
-                        <li>
-                            <p>Has the project prepared or updated the Roadmap to schedule the realistic Issues?</p>
-                        </li>
-                        <li>
-                            <p>Has the project made good progress towards fixing the Blockers and applying the
-                                outstanding patches?</p>
-                        </li>
-                    </ul>
+                    <p>Ensure the above preconditions are met.</p>
                     <p>If not, then the project is not yet ready for release. Remember that it
                       is not the RM's job to do this.</p>
                     <p>If so, then send an email to get the project to decide what to do with the remaining issues. Propose to
@@ -280,6 +287,12 @@ some steps will need to be re-arranged.
 
                 </li>
                 <li>
+                  Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
+                  It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
+                  In this file, insert the list of important changes which is obtained by doing:
+                  http://localhost:8888/releaseNotes_0.8.txt
+                </li>
+                <li>
                     <p>Edit the forrest/site-author/content/xdocs/mirrors.html and adjust all version-specific content.</p>
                     <fixme author="">FIXME: There is a bug (FOR-300) in the forrest build which generates to
                         main/site/mirrors.html instead of build/site/mirrors.html</fixme>
@@ -393,14 +406,6 @@ svn commit</source>
 
                 </li>
                 <li>Commit all of the above changes.</li>
-                <li>
-                    <p>Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
-                        It is best to copy an earlier RELEASE-NOTES file, to keep a common layout. In this file, provide
-                        a summary of changes, and check for general accuracy. Scan the status.xml/changes and the
-                        Roadmap via the issues tracker, to find the important issues. </p>
-                    <fixme author="fso">Could we not automate this process: proof readings changes, save changes 
-                        as release-notes. Do we really need to add a summary?</fixme>
-                </li>
                 <li>
                     <p>Set your Java version to be the lowest specified of our supported versions.</p>
                     <note> Set the environment variable JAVA_HOME to the path of the Java version. Note for Windows: If
@@ -652,6 +657,7 @@ where
     |                        0.8-dev                        |
                         ]]></source>
                 </li>
+                <li>Commit all of the above changes.</li>
                 <li><p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
                     They have already been automatically archived at archive.apache.org/dist/forrest/</p></li>
                 <li><p>Do some Jira administration (need to be in the jira-administrators group)</p>
