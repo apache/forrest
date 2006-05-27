@@ -181,8 +181,8 @@ some steps will need to be re-arranged.
             <fixme author="fso">We need to discuss order from here on. My idea is to adjust docs before we enter code
                 freeze to save time later. But if the rc fails and release is postponed might need to roll back changes
                 easily and - if possible - roll them forward later. So creating an svn branch for the rc seems to make
-                sense to me. Also: For more than one person working on building the release for different OS it would
-                also be good to have all the changes in svn committed already rather than doing it later. Probably
+                sense to me.
+                Probably
                 easiest would be to create an rc branch here and co that. I'd sacrifice the alternative approach for
                 that which is far too risky for my liking anyway. wdyt?</fixme>
 
@@ -214,12 +214,9 @@ some steps will need to be re-arranged.
         <section id="adjustDocs">
             <title>Preparing docs for next release cycle</title>
 
-            <fixme author="">I'd suggest the following steps to keep build size small and simplify procedure:</fixme>
-
-
             <ol>
                 <li>
-                    <p>Edit version subtabs in site.xml as follows:</p>
+                    <p>Edit "versions" entries in site.xml as follows:</p>
 
                     <ol>
                         <li>
@@ -247,6 +244,7 @@ some steps will need to be re-arranged.
                         </li>
                     </ol>
                 </li>
+                <li>Similarly edit tabs.xml</li>
                 <li>
                     <p>Remove past versions (0.6) docs-directory from svn branch.</p>
                     <fixme author="fso">find and list svn-command</fixme>
@@ -300,8 +298,7 @@ svn status
 svn commit</source>
                     <fixme author="fso">Issue them where and to what end?</fixme>
                 </li>
-                
-
+                <li>Commit all of the above changes.</li>
             </ol>
         </section>
 
@@ -357,8 +354,8 @@ svn commit</source>
                         <li>
                             <p>Edit main/forrest.build.xml to update the version tag to remove "-dev". There are two
                                 occurences: around line 32: &lt;property name=&quot;forrest.version&quot;
-                                value=&quot;0.7-dev&quot;/&gt; ^^^^ around line 60:
-                                &lt;description&gt; | Forrest Site Builder | | 0.7-dev | ^^^^</p>
+                                value=&quot;0.7-dev&quot;/&gt; and around line 60:
+                                &lt;description&gt; | Forrest Site Builder | | 0.7-dev |</p>
                         </li>
                         <li>
                             <p>Edit plugins/build.xml and increase the docs version number to the next major release:
@@ -388,13 +385,14 @@ svn commit</source>
                         Docs (0.7)&quot;
                         onclick=&quot;navigate(&apos;http://forrest.apache.org/docs_0_70/index.html&apos;);&quot;
                         /&gt; </p>
-                    <fixme author="">There are probably other areas which have version numbers. How can we improve this?</fixme>
+                    <fixme author="">There are probably other areas which have version numbers. How can we improve this? Possibly with XML Entities, possibly with Ant properties.</fixme>
 
                     <fixme author="">Not sure at what stage we get rid of the old docs, e.g. 0.6</fixme>
                     <fixme author="">Not sure at what stage need to edit site-author/content/xdocs/mirrors.html (Presume
                         that it should be done after packing release. See below.)</fixme>
 
                 </li>
+                <li>Commit all of the above changes.</li>
                 <li>
                     <p>Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
                         It is best to copy an earlier RELEASE-NOTES file, to keep a common layout. In this file, provide
@@ -664,7 +662,7 @@ where
                             e.g. 0.7-dev is renamed to 0.7 and 0.8 becomes 0.8-dev</p></li>
                         <li><p>Mark 0.7 as released using "Manage Versions".</p></li>
                         <li><p>Review the Issues for the old version and move any Incomplete ones up.</p></li>
-                        <li><p>Change the "fixfor" attribute to the next verion for the
+                        <li><p>Change the "fixfor" attribute to the next version for the
                             "project.issues-rss-url" RSS feed in forrest.properties</p></li>
                     </ol>
                     
