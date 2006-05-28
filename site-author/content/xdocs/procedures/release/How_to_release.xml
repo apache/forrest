@@ -253,8 +253,8 @@ some steps will need to be re-arranged.
                 </li>
                 <li>Similarly edit tabs.xml</li>
                 <li>
-                    <p>Remove past versions (0.6) docs-directory from svn branch.</p>
-                    <fixme author="fso">find and list svn-command</fixme>
+                    <p>Remove the past versions (0.6) docs directory by doing 'svn rm site-author/content/xdocs/docs_0_60</p>
+                    <fixme author="">Do we also remove the generated docs from forrest/site/docs_0_60 SVN? This also removes it from the website.</fixme>
 
                 </li>
                 <li>
@@ -321,10 +321,12 @@ svn commit</source>
             <note>You can practice the following steps (as far as creating the branch) without committing anything even
                 before code-freeze. This ensures a good release candidate.</note>
             <ol>
-                <li>Use template <a href="anounce_code_freeze.txt">anounce_code_freeze.txt</a> to send email
-                    to dev-list that the code-freeze has now commenced.</li>
+                <li>Announce that the code-freeze has now commenced.
+                  Use the template <a href="anounce_code_freeze.txt">anounce_code_freeze.txt</a>
+                  to send email to dev-list.
+                </li>
                 <li>
-                    <p>Update your release checkout (svn up) to include last minute changes.</p>
+                    <p>Update your SVN working copy to include any last minute changes.</p>
                 </li>
                 <li>
                     <p>Run the following quick tests from the command line of your system to ensure that all is well:</p>
@@ -417,7 +419,8 @@ svn commit</source>
                         command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".
                       This will be used later for the svn log message when the branch is created.
                       Also it is helpful for ensuring that no new commits have been made,
-                      i.e. people forgetting the code freeze.</p>
+                      i.e. people forgetting the code freeze.
+                      From here on watch the svn@ list.</p>
                 </li>
                 <li>
                     <p>Now we will build the release candidates for Windows and Unix.</p>
@@ -568,10 +571,10 @@ where
                 <li>
                     <p>Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc and *.md5 files, and the
                         RELEASE-NOTES-x.y.txt to people.apache.org at /www/www.apache.org/ dist/forrest/</p>
-                    <p>Ensure correct file permissions by executing <code>chgrp forrest *</code> then <code>chmod 664
-                        *</code> on the remote system.</p>
+                    <p>Ensure correct file permissions by executing <code>'chgrp forrest *'</code> then
+                      <code>'chmod 664 *'</code> in that directory.</p>
                     <p>Each PMC member has a server account and belongs to the forrest group.</p>
-                    <p>The process is documented at <a href="http://www.apache.org/~bodewig/mirror.html"
+                    <p>The process is documented at <a href="http://people.apache.org/~bodewig/mirror.html"
                             >http://www.apache.org/~bodewig/mirror.html</a> and <a
                             href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a></p>
 
