@@ -18,12 +18,10 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="lm://transform.xml.xml-namespace-stripped"/>
-
   <xsl:template match="/">
-    <html>
-      <xsl:apply-templates select="html/head"/>
-      <xsl:apply-templates select="html/body"/>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <xsl:copy-of select="html/head"/>
+      <xsl:copy-of select="html/body"/>
     </html>
   </xsl:template>
 
