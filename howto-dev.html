@@ -250,6 +250,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#svn-email">Watch email notifications for svn differences</a>
 </li>
 <li>
+<a href="#svn-find-break">Updating svn backwards to find where something broke</a>
+</li>
+<li>
 <a href="#svn-patch">Creating patches</a>
 </li>
 <li>
@@ -479,7 +482,7 @@ This document is under initial development.
       </p>
 <p>
         To get started, see the
-        <a href="docs_0_80/howto/build.html">instructions</a>
+        <a href="docs_0_80/howto/../build.html">instructions</a>
         for obtaining the Apache Forrest sources via SVN.
       </p>
 <p>
@@ -518,7 +521,38 @@ forrest-trunk
           The svn differences (diffs) are automatically sent whenever
           a committer makes some changes.
         </p>
-<a name="N100A3"></a><a name="svn-patch"></a>
+<a name="N100A3"></a><a name="svn-find-break"></a>
+<h4>Updating svn backwards to find where something broke</h4>
+<p>Sometimes the addition of new features will break something. Often
+          it is difficult to find where the break occurred and what caused it.
+          Updating your svn backwards will enable this.
+        </p>
+<p>
+          Look at the svn@ mail list to guess which change might be the culprit,
+          e.g. svn revision 406862.
+        </p>
+<pre class="code">
+Update backwards to just before the upgrade:
+svn update -r 406861
+... do 'build clean; build' and test.
+
+Go back further if it still doesn't work.
+After success, start upgrading forward.
+
+Looking at the svn@ mailing list shows that
+could jump forward past minor changes such as doc edits.
+e.g. just after the upgrade:
+svn update -r 406863
+... do 'build clean; build' and test.
+
+If it still works, move a bit further on:
+svn update -r 407260
+... do 'build clean; build' and test.
+
+After finding the break, move back to head of trunk
+svn update -r HEAD.
+        </pre>
+<a name="N100B4"></a><a name="svn-patch"></a>
 <h4>Creating patches</h4>
 <p>See 
         <a href="contrib.html#patch">instructions</a> for creating and contributing patches.
@@ -534,7 +568,7 @@ forrest-trunk
 </ul>
 <p>After creating the patch, open it with a text editor and review it.
         </p>
-<a name="N100C0"></a><a name="tips-svn"></a>
+<a name="N100D1"></a><a name="tips-svn"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -563,7 +597,7 @@ forrest-trunk
           </li>
         
 </ul>
-<a name="N100E3"></a><a name="edit"></a>
+<a name="N100F4"></a><a name="edit"></a>
 <h3 class="underlined_5">Editing content</h3>
 <p>
         See the 
@@ -572,7 +606,7 @@ forrest-trunk
         be used, because Forrest treats the editing of content as a separate
         concern. Be sure to configure the editor to find local copies of DTDs.
       </p>
-<a name="N100F0"></a><a name="code-style"></a>
+<a name="N10101"></a><a name="code-style"></a>
 <h4>Code style guidelines</h4>
 <p>
           Consistent code makes everyone's life easier.
@@ -586,7 +620,7 @@ forrest-trunk
           Don't change anything that is not necessary. Remember that people need to be
           able to read the differences on the svn@forrest mailing list.
         </p>
-<a name="N10101"></a><a name="whitespace"></a>
+<a name="N10112"></a><a name="whitespace"></a>
 <h4>Whitespace</h4>
 <p>
           For new files, use spaces instead of tabs (java files have four-space indentation,
@@ -613,7 +647,7 @@ forrest-trunk
           references.
         </div>
 </div>
-<a name="N10119"></a><a name="line-length"></a>
+<a name="N1012A"></a><a name="line-length"></a>
 <h4>Line length</h4>
 <p>
           If each paragraph of an xml source document is one enourmous long
@@ -622,7 +656,7 @@ forrest-trunk
           efficiently review the changes. Fold long lines to a sensible
           line-length (normally 80-characters wide but not more than 120 characters).
         </p>
-<a name="N10123"></a><a name="review"></a>
+<a name="N10134"></a><a name="review"></a>
 <h4>Use 'forrest run' for immediate gratification</h4>
 <p>
           Edit documentation content and immediately view it in the browser.
@@ -637,7 +671,7 @@ forrest-trunk
           tools such as "xmllint". As a last resort, you can use
           'forrest validate-xdocs'.
         </p>
-<a name="N10130"></a><a name="tips-edit"></a>
+<a name="N10141"></a><a name="tips-edit"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -646,7 +680,7 @@ forrest-trunk
           </li>
         
 </ul>
-<a name="N1013E"></a><a name="sitemap"></a>
+<a name="N1014F"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Understanding the Cocoon sitemap</h3>
 <p>
         The Cocoon sitemap is essential for Forrest developers. See some introductions ....
@@ -676,9 +710,9 @@ forrest-trunk
 </li>
       
 </ul>
-<a name="N10175"></a><a name="debug"></a>
+<a name="N10186"></a><a name="debug"></a>
 <h3 class="underlined_5">Debugging and profiling techniques</h3>
-<a name="N1017B"></a><a name="debug-logfiles"></a>
+<a name="N1018C"></a><a name="debug-logfiles"></a>
 <h4>View logfiles</h4>
 <p>
           The log files in WEB-INF/logs are indispensible when it comes
@@ -691,7 +725,7 @@ forrest-trunk
           describes the location of the Cocoon logfiles and their
           configuration.
         </p>
-<a name="N1018C"></a><a name="debug-intermediate"></a>
+<a name="N1019D"></a><a name="debug-intermediate"></a>
 <h4>View intermediate processing</h4>
 <p>
           Perhaps the easiest way to "debug" Forrest is to be aware of all the
@@ -703,7 +737,7 @@ forrest-trunk
 <p>
           The techniques described below help you to be aware of the intermediate processing steps.
         </p>
-<a name="N10199"></a><a name="debug-cocoon-profiler"></a>
+<a name="N101AA"></a><a name="debug-cocoon-profiler"></a>
 <h4>Using Cocoon sitemap profiler</h4>
 <p>
           Cocoon provides a simple profiler to analyse itself.
@@ -734,7 +768,7 @@ forrest-trunk
           NOTE: Do not forget to turn off the profiler in 
           <span class="codefrag">main/webapp/sitemap.xmap</span> when finished.
         </p>
-<a name="N101B5"></a><a name="debug-sitemap-exec"></a>
+<a name="N101C6"></a><a name="debug-sitemap-exec"></a>
 <h4>Using Cocoon sitemap execution logger</h4>
 <p>
           In main/webapp/WEB-INF/xconf/forrest-core.xconf
@@ -742,7 +776,7 @@ forrest-trunk
           For each sitemap component that is executed, a message will go to
           WEB-INF/logs/debug.log
         </p>
-<a name="N101BF"></a><a name="debug-logtransformer"></a>
+<a name="N101D0"></a><a name="debug-logtransformer"></a>
 <h4>Using Cocoon LogTransformer</h4>
 <p>
           LogTransformers can be inserted in the sitemaps. This will write
@@ -772,7 +806,7 @@ forrest-trunk
           path is being taken through the sitemap. Add various LogTransformers
           with different filenames and see which one gets triggered.
         </p>
-<a name="N101D6"></a><a name="debug-java"></a>
+<a name="N101E7"></a><a name="debug-java"></a>
 <h4>Java code</h4>
 <p>
           Since there's really no way to "trace" the java code through the
@@ -786,7 +820,7 @@ forrest-trunk
           statements to the Cocoon sources and rebuild Forrest's packaged Cocoon
           (as described in $FORREST_HOME/etc/cocoon_upgrade/).
         </p>
-<a name="N101E6"></a><a name="debug-links"></a>
+<a name="N101F7"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set.
@@ -807,7 +841,7 @@ forrest-trunk
           configuration file or the link in your source document is not
           using the correct name for the "site:..." value.
         </p>
-<a name="N101FA"></a><a name="tips-debug"></a>
+<a name="N1020B"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -817,13 +851,13 @@ forrest-trunk
           </li>
         
 </ul>
-<a name="N10208"></a><a name="find"></a>
+<a name="N10219"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N10211"></a><a name="find-scenario-1"></a>
+<a name="N10222"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -866,7 +900,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N10233"></a><a name="tips-find"></a>
+<a name="N10244"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -876,31 +910,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N10243"></a><a name="Frequently Asked Questions"></a>
+<a name="N10254"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10247"></a><a name="1+General+issues"></a>
+<a name="N10258"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N1024B"></a><a name="1.1+FAQ+1"></a>
+<a name="N1025C"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N10253"></a><a name="2+Other+issues"></a>
+<a name="N10264"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N10257"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N10268"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N1025F"></a><a name="Tips"></a>
+<a name="N10270"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N10267"></a><a name="tip-howto"></a>
+<a name="N10278"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -909,7 +943,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N10271"></a><a name="References"></a>
+<a name="N10282"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>

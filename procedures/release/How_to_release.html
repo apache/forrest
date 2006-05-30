@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How to Release Forrest</title>
+<title>How to release Forrest</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
@@ -218,40 +218,46 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How to Release Forrest</h1>
+<h1>How to release Forrest</h1>
 <div class="abstract">This documents the steps that the Release Manager (RM) should follow when doing a Forrest
         release.</div>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
-<a href="#About">About this Document</a>
+<a href="#About">About this document</a>
 </li>
 <li>
-<a href="#PrepProject">Preparing the Project for the release</a>
+<a href="#rm">Who is the Release Manager</a>
 </li>
 <li>
-<a href="#PrepTeam">Preparations for the Release Team</a>
+<a href="#prep">Tasks to be done by the project before the release can start</a>
 </li>
 <li>
-<a href="#PrepRelPlan">Prepare the Release Plan</a>
+<a href="#PrepProject">Preparing the project for the release</a>
 </li>
 <li>
-<a href="#PrepCodeBase">Preparing the Code Base</a>
+<a href="#PrepRM">Preparations for the Release Manager</a>
 </li>
 <li>
-<a href="#PrepNewBranch">Prepare Release Branch</a>
+<a href="#PrepRelPlan">Preparing the Release Plan</a>
 </li>
 <li>
-<a href="#adjustDocs">Prepare Docs for next release cycle</a>
+<a href="#PrepCodeBase">Preparing the code base</a>
+</li>
+<li>
+<a href="#PrepTrunk">Preparing your working copy of SVN trunk</a>
+</li>
+<li>
+<a href="#adjustDocs">Preparing docs for next release cycle</a>
 </li>
 <li>
 <a href="#BuildDist">Building the distribution</a>
 </li>
 <li>
-<a href="#Testing+the+release+candidate">Testing the release candidate</a>
+<a href="#Testing+the+release+candidate+and+voting">Testing the release candidate and voting</a>
 </li>
 <li>
-<a href="#FinalRel">Finalizing the Release</a>
+<a href="#FinalRel">Finalizing the release</a>
 </li>
 <li>
 <a href="#UploadAndAnnounce">Upload and announcement</a>
@@ -267,7 +273,7 @@ document.write("Last Published: " + document.lastModified);
 
         
 <a name="N10010"></a><a name="About"></a>
-<h2 class="underlined_10">About this Document</h2>
+<h2 class="underlined_10">About this document</h2>
 <div class="section">
 <div class="warning">
 <div class="label">Warning</div>
@@ -282,38 +288,71 @@ some steps will need to be re-arranged.
 <p>There are some steps that other committers, and even developers, can assist with, especially in the areas
                 of getting ready for the release and the final testing. Many of the steps can be done only by the
                 Release Manager.</p>
-<p>It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins when the
-                project is ready to do the release.</p>
 </div>
-
         
-<a name="N10023"></a><a name="PrepProject"></a>
-<h2 class="underlined_10">Preparing the Project for the release</h2>
+<a name="N10020"></a><a name="rm"></a>
+<h2 class="underlined_10">Who is the Release Manager</h2>
 <div class="section">
+<p>The Release Manager is a single person who makes all the decisions regarding the
+              actual preparations and the doing of the release.
+              Many projects have the same release manager for years.
+              The project developers have the role of testing, fixing issues,
+              and voting for the release candidate.
+              The votes of the PMC will decide whether the product is fit for release.
+            </p>
+<p>The RM could do the whole job alone, which enables speedy process.
+              There are not actually many tasks where assistants can help.
+              However it is a good idea to have an assistant so as to pass
+              on the knowledge, to help document it, and to perceive potential flaws.
+              More than one assistant would probably hinder.
+            </p>
+<p>The RM should be comfortable with using SVN and be familiar with
+              the ASF hardware, with the distribution mirror system, and with ASF release procedures.
+              The following notes are terse. If you don't understand, then probably not ready to be RM.
+            </p>
+</div>
+        
+<a name="N10030"></a><a name="prep"></a>
+<h2 class="underlined_10">Tasks to be done by the project before the release can start</h2>
+<div class="section">
+<p>There are a number of things to be done by the project before the release will start.
+              Don't leave these until the last minute.
+              It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins when the
+                project is ready to do the release.</p>
+<ul>
+              
+<li>The project updates the Roadmap to schedule the realistic Issues.</li>
+              
+<li>The project made good progress towards fixing the Blockers and applying the outstanding patches.</li>
+              
+<li>The documentation content is ready.</li>
+              
+<li>
+<p>Relevant changes are listed in the site-author/status.xml and contributers have been attributed. Other changes are listed in the various plugins/status.xml files.</p>
+              
+</li>
+              
+<li>
+<p>Major changes are listed in the site-author/status.xml using the "importance"
+                attribute. This will be used to generate the list of top changes for the Release Notes
+                and Announcement text.</p>
+                
+<p>http://localhost:8888/releaseNotes_0.8-dev.html</p>
+              
+</li>
+            
+</ul>
+</div>
+        
+<a name="N10053"></a><a name="PrepProject"></a>
+<h2 class="underlined_10">Preparing the project for the release</h2>
+<div class="section">
+<p>In this step the Release Manager starts the process to finalise the outstanding blocker issues. </p>
 <ol>
                 
 <li>
                     
-<p>The Release Manager (RM) starts the process to finalise the outstanding blocker issues. </p>
-                    
-<p>Check and make sure the following preconditions are met:</p>
-                    
-<ul>
-                        
-<li>
-                            
-<p>Has the project prepared or updated the Roadmap to schedule the realistic Issues?</p>
-                        
-</li>
-                        
-<li>
-                            
-<p>Has the project made good progress towards fixing the Blockers and applying the
-                                outstanding patches?</p>
-                        
-</li>
-                    
-</ul>
+<p>Ensure the above preconditions are met.</p>
                     
 <p>If not, then the project is not yet ready for release. Remember that it
                       is not the RM's job to do this.</p>
@@ -335,8 +374,8 @@ some steps will need to be re-arranged.
 </div>
 
         
-<a name="N10059"></a><a name="PrepTeam"></a>
-<h2 class="underlined_10">Preparations for the Release Team</h2>
+<a name="N1007A"></a><a name="PrepRM"></a>
+<h2 class="underlined_10">Preparations for the Release Manager</h2>
 <div class="section">
 <p>Particularly the Release Manager, but also anyone assisting, needs to be familiar
               with standard procedures and Apache terminology. This is crucial for a successful release.</p>
@@ -345,15 +384,15 @@ some steps will need to be re-arranged.
 <li>
                     
 <p>If you have never done a release before or need to refresh your memory, read all about Apache
-                        Releases in general at <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>. Make sure any assistants have read and understood
+                        releases in general at <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>. Make sure any assistants have read and understood
                         this as well.</p>
                 
 </li>
                 
 <li>
                     
-<p>Make sure every team member is familiar with the process of signing releases and generating MD5
-                        and PGP. You'll find some more info at <a href="http://www.apache.org/dev/release-signing.html">Signing Releases&gt;</a> and <a href="http://forrest.apache.org/mirrors.cgi#verify">http://forrest.apache.org/mirrors.cgi#verify</a>
+<p>Be familiar with the process of signing releases and generating MD5
+                        and PGP. Some more info is at <a href="http://www.apache.org/dev/release-signing.html">Signing Releases</a> and <a href="http://forrest.apache.org/mirrors.cgi#verify">http://forrest.apache.org/mirrors.cgi#verify</a>
                     
 </p>
                 
@@ -363,15 +402,19 @@ some steps will need to be re-arranged.
                     
 <p>Ensure that as many PMC members as possible have their PGP keys in the KEYS file in Forrest's
                         root directory. Instructions on how to add keys are included in that file. Instructions on how to
-                        create and manage pgp-keys can be found at the abovementioned references.</p>
+                        create and manage PGP keys can be found at the abovementioned references.</p>
                 
 </li>
                 
 <li>
+                  Make sure that the network connection is reliable and efficient.
+                </li>
+                
+<li>
                     
-<p>Make sure every team member has downloaded and installed the Java-Version to use for compiling
-                        the release. Downloading and installing that version should be done well ahead of time to avoid
-                        delays.</p>
+<p>Install the Java-Version that has been agreed for compiling the release.
+                       Do this well ahead of time to avoid delays, and ensure that Forrest works for you.
+                    </p>
                 
 </li>
 
@@ -380,8 +423,8 @@ some steps will need to be re-arranged.
 </div>
 
         
-<a name="N1008A"></a><a name="PrepRelPlan"></a>
-<h2 class="underlined_10">Prepare the Release Plan</h2>
+<a name="N100AE"></a><a name="PrepRelPlan"></a>
+<h2 class="underlined_10">Preparing the Release Plan</h2>
 <div class="section">
 <p>Prepare the Release Plan to define the corner stones of the coming release</p>
 <ol>
@@ -416,24 +459,24 @@ some steps will need to be re-arranged.
 </div>
 
         
-<a name="N100BD"></a><a name="PrepCodeBase"></a>
-<h2 class="underlined_10">Preparing the Code Base</h2>
+<a name="N100E1"></a><a name="PrepCodeBase"></a>
+<h2 class="underlined_10">Preparing the code base</h2>
 <div class="section">
 <ol>
                 
 <li>
                     
-<p>Ensure that there are no copyright issues. The committers and PMC would have been continually
-                        monitoring this. There are some tools to assist with scanning for issues, e.g. <span class="codefrag">svn:committers/relicense/src/perl/relicense.txt</span> and <a href="svn:committers/tools/">svn:committers/tools/</a>
-                    
-</p>
+<p>Ensure that there are no license issues. The committers and PMC would have been continually
+                        monitoring this. There are some tools to assist with scanning for issues.
+                      See <a href="../../roles.html#legal-monitor">further information</a>.
+                    </p>
                 
 </li>
                 
 <li>
                     
-<p>Ensure that the line-endings and svn:eol-style property are correct for all files. See <a href="svn:committers/tools/">svn:committers/tools/</a>
-</p>
+<p>Ensure that the line-endings and svn:eol-style property are correct for all files.
+                      See <a href="../../roles.html#subversion-monitor">further information</a>.</p>
                 
 </li>
                 
@@ -459,50 +502,34 @@ some steps will need to be re-arranged.
 </div>
 
         
-<a name="N100ED"></a><a name="PrepNewBranch"></a>
-<h2 class="underlined_10">Prepare Release Branch</h2>
+<a name="N1010F"></a><a name="PrepTrunk"></a>
+<h2 class="underlined_10">Preparing your working copy of SVN trunk</h2>
 <div class="section">
 <div class="fixme">
 <div class="label">Fixme (fso)</div>
 <div class="content">We need to discuss order from here on. My idea is to adjust docs before we enter code
                 freeze to save time later. But if the rc fails and release is postponed might need to roll back changes
                 easily and - if possible - roll them forward later. So creating an svn branch for the rc seems to make
-                sense to me. Also: For more than one person working on building the release for different OS it would
-                also be good to have all the changes in svn committed already rather than doing it later. Probably
+                sense to me.
+                Probably
                 easiest would be to create an rc branch here and co that. I'd sacrifice the alternative approach for
                 that which is far too risky for my liking anyway. wdyt?</div>
 </div>
-<p>In this step you check out a fresh copy from SVN to make sure you have no local modifications, especially
-                those that might be hidden by svn:ignore settings. It will soon become the release branch.</p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">This step is actually just preparation to keep code-freeze period as short as possible.</div>
-</div>
-<div class="fixme">
-<div class="label">Fixme (dc)</div>
-<div class="content"> What does that mean?</div>
-</div>
+<p>In this step you make absolutely sure that your working copy of SVN trunk has no local modifications, or additional files that you have been fiddling with, and especially files that might be hidden by svn:ignore settings.
+            </p>
+<p>There are two ways to do this. Either do a complete new svn checkout,
+              or use the 'svn status --no-ignore' command on your existing working copy.
+            </p>
 <ol>
                 
 <li>
                     
-<p>Create a new empty directory 'Forrest_Release' on your system and make it the current
-                    directory.</p>
-                
-</li>
-                
-<li>
-                    
-<p>Start <span class="codefrag">svn co https://svn.apache.org/repos/asf/forrest/trunk</span> from the command-line of
-                        your system or the equivalent for the svn-tool you use.</p>
+<p>In a new empty directory do <span class="codefrag">'svn co https://svn.apache.org/repos/asf/forrest/trunk'</span>
+</p>
                 
 </li>
             
 </ol>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">This will take quite a while if you are on a dial-up connection. See alternatives below.</div>
-</div>
 <p>Alternative Approach</p>
 <ol>
                 
@@ -512,32 +539,25 @@ some steps will need to be re-arranged.
                 
 <li>
                     
-<p>Delete any extra files you might have added/changed in your local copy. <strong>They must not be
+<p>Delete any extra files you might have added/changed in your local copy.
+                      Delete any "build" directories in plugins, etc.
+                      <strong>Extra files must not be
                             packed with the release.</strong> It must be a pristine copy of the current trunk.</p>
                 
 </li>
             
 </ol>
-<div class="warning">
-<div class="label">Warning</div>
-<div class="content">This approach requires a good understanding of svn and how it works. It is not as automatic and
-                safe as the method above.</div>
-</div>
 </div>
 
         
-<a name="N1012F"></a><a name="adjustDocs"></a>
-<h2 class="underlined_10">Prepare Docs for next release cycle</h2>
+<a name="N10140"></a><a name="adjustDocs"></a>
+<h2 class="underlined_10">Preparing docs for next release cycle</h2>
 <div class="section">
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">I'd suggest the following steps to keep build size small and simplify procedure:</div>
-</div>
 <ol>
                 
 <li>
                     
-<p>Edit version subtabs in site.xml as follows:</p>
+<p>Edit "versions" entries in site.xml as follows:</p>
 
                     
 <ol>
@@ -575,13 +595,15 @@ some steps will need to be re-arranged.
                 
 </li>
                 
+<li>Similarly edit tabs.xml</li>
+                
 <li>
                     
-<p>Remove past versions (0.6) docs-directory from svn branch.</p>
+<p>Remove the past versions (0.6) docs directory by doing 'svn rm site-author/content/xdocs/docs_0_60</p>
                     
 <div class="fixme">
-<div class="label">Fixme (fso)</div>
-<div class="content">find and list svn-command</div>
+<div class="label">Fixme ()</div>
+<div class="content">Do we also remove the generated docs from forrest/site/docs_0_60 SVN? This also removes it from the website.</div>
 </div>
 
                 
@@ -635,6 +657,18 @@ some steps will need to be re-arranged.
 </li>
                 
 <li>
+                  Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
+                  It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
+                  In this file, insert the list of important changes which is obtained by doing:
+                  http://localhost:8888/releaseNotes_0.8.txt
+                </li>
+                
+<li>
+                  Prepare the announcement text. Create a file etc/announcement-x.txt
+                  (by 'svn move' the old one) and list the major new features, e.g. locationmap.
+                </li>
+                
+<li>
                     
 <p>Edit the forrest/site-author/content/xdocs/mirrors.html and adjust all version-specific content.</p>
                     
@@ -654,31 +688,13 @@ some steps will need to be re-arranged.
                 
 </li>
                 
-<li>
-                    
-<p> Rename the deployed plugins directory by issuing the following commands at the command line </p>
-                    
-<pre class="code">cd /svn/asf/forrest-site
-svn update
-svn mv plugins/0.8-dev plugins/0.8
-svn mkdir plugins/0.9-dev
-svn status
-svn commit</pre>
-                    
-<div class="fixme">
-<div class="label">Fixme (fso)</div>
-<div class="content">Issue them where and to what end?</div>
-</div>
-                
-</li>
-                
-
+<li>Commit all of the above changes.</li>
             
 </ol>
 </div>
 
         
-<a name="N101A2"></a><a name="BuildDist"></a>
+<a name="N101AD"></a><a name="BuildDist"></a>
 <h2 class="underlined_10">Building the distribution</h2>
 <div class="section">
 <p>In this phase you build the release candidate to be tested.</p>
@@ -689,12 +705,14 @@ svn commit</pre>
 </div>
 <ol>
                 
-<li>Use template <a href="anounce_code_freeze.txt">anounce_code_freeze.txt</a> to send email
-                    to dev-list that the code-freeze has now commenced.</li>
+<li>Announce that the code-freeze has now commenced.
+                  Use the template <a href="announce_code_freeze.txt">announce_code_freeze.txt</a>
+                  to send email to dev-list.
+                </li>
                 
 <li>
                     
-<p>Update your release checkout (svn up) to include last minute changes.</p>
+<p>Update your SVN working copy to include any last minute changes.</p>
                 
 </li>
                 
@@ -766,8 +784,8 @@ svn commit</pre>
                             
 <p>Edit main/forrest.build.xml to update the version tag to remove "-dev". There are two
                                 occurences: around line 32: &lt;property name="forrest.version"
-                                value="0.7-dev"/&gt; ^^^^ around line 60:
-                                &lt;description&gt; | Forrest Site Builder | | 0.7-dev | ^^^^</p>
+                                value="0.7-dev"/&gt; and around line 60:
+                                &lt;description&gt; | Forrest Site Builder | | 0.7-dev |</p>
                         
 </li>
                         
@@ -795,7 +813,13 @@ svn commit</pre>
 <li>
                     
 <p>Ensure that each plugin that uses the locationmap has its "release version" set to 0.8 or
-                    more.</p>
+                        more.</p>
+                    
+<div class="fixme">
+<div class="label">Fixme (fso)</div>
+<div class="content">Add the steps required to find that plugins that use locationmap and set the
+                        version number. Is that 0.8 only or will this be a permanent job.</div>
+</div>
                 
 </li>
                 
@@ -813,7 +837,7 @@ svn commit</pre>
                     
 <div class="fixme">
 <div class="label">Fixme ()</div>
-<div class="content">There are probably other areas which have version numbers. How can we improve this?</div>
+<div class="content">There are probably other areas which have version numbers. How can we improve this? Possibly with XML Entities, possibly with Ant properties.</div>
 </div>
 
                     
@@ -831,14 +855,7 @@ svn commit</pre>
                 
 </li>
                 
-<li>
-                    
-<p>Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
-                        It is best to copy an earlier RELEASE-NOTES file, to keep a common layout. In this file, provide
-                        a summary of changes, and check for general accuracy. Scan the status.xml/changes and the
-                        Roadmap via the issues tracker, to find the important issues. </p>
-                
-</li>
+<li>Commit all of the above changes.</li>
                 
 <li>
                     
@@ -856,12 +873,11 @@ svn commit</pre>
 <li>
                     
 <p>Take note of the SVN revision number of your trunk by running <span class="codefrag">svn info</span> from the
-                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".</p>
-                    
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">What is this used for?</div>
-</div>
+                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".
+                      This will be used later for the svn log message when the branch is created.
+                      Also it is helpful for ensuring that no new commits have been made,
+                      i.e. people forgetting the code freeze.
+                      From here on watch the svn@ list.</p>
                 
 </li>
                 
@@ -885,8 +901,6 @@ svn commit</pre>
                             
 <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
                                 *.zip archive.</p>
-                            
-<p>Unpack and test the relevant archive in a fresh new directory.</p>
                         
 </li>
                         
@@ -897,20 +911,23 @@ svn commit</pre>
                             
 <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
                                 *.tar.gz archive.</p>
-                            
-<p>Unpack and test the relevant archive in a fresh new directory.</p>
                         
 </li>
-
                     
 </ul>
                 
 </li>
                 
+<li>Unpack and test the relevant archive in a fresh new directory.
+                  No point getting people to test if it is broken. You need this for your own testing and vote anyway.
+                  Be sure to set FORREST_HOME and PATH properly for this release candidate location
+                  i.e. ensure that you are not using your trunk working copy.
+                </li>
+                
 <li>
                     
 <a name="signing"></a>
-<p id="signing">Sign the Release Candidates distribution file and the *.asc and *.md5 files.</p>
+<p id="signing">Sign the Release Candidates distribution file and create the *.asc and *.md5 files.</p>
                     
 <p>Here is one example when using <a href="http://www.gnupg.org/(en)/download/index.html">gpg</a>
                         and openssl from the command line. </p>
@@ -923,18 +940,18 @@ svn commit</pre>
                     
 <pre class="code">
         gpg --recv-key &lt;myKey&gt;
-        gpg --output crossley-apache-forrest-0.7-RC1.tar.gz.asc \
-        --detach-sig --armor apache-forrest-0.7-RC1.tar.gz
+        gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
+        --detach-sig --armor apache-forrest-0.7.tar.gz
         gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-        apache-forrest-0.7-RC1.tar.gz</pre>
+        apache-forrest-0.7.tar.gz</pre>
                     
 <p> ... should say "Good signature from ..."</p>
 
                     
 <pre class="code">
         openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
-        apache-forrest-0.7-RC1.tar.gz
-        md5sum apache-forrest-0.7-RC1.tar.gz
+        apache-forrest-0.7.tar.gz
+        md5sum apache-forrest-0.7.tar.gz
                     </pre>
                     
 <p>... output should match that of the md5 file.</p>
@@ -942,44 +959,25 @@ svn commit</pre>
 </li>
                 
 <li>
-                    
-<p>Create a maintenance branch in SVN</p>
-                    
-<ol>
-                        
-<li>
-                            
-<p>Open the command line</p>
-                        
-</li>
-                        
-<li>
-                            
-<p>Change to the root directory of the release candidate</p>
-                        
-</li>
-                        
-<li>
-                            
-<p>run <span class="codefrag">svn copy -m "Create the x.y release branch from r#####" \
-                                    https://svn.apache.org/repos/asf/forrest/trunk \
-                                    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch </span> where
-                                'xy' is a compact form of the version (e.g. 04, 041, 05) and 'r#####' is the SVN
-                                revision number that the branch was created from which was the revision that the release
-                                candidates were generated from.</p>
-                            
-<p> See <a href="http://svn.apache.org/repos/asf/forrest/branches/">http://svn.apache.org/repos/asf/forrest/branches/</a> If someone has done a commit
-                                before you get to do it, then specify the revision number with -r </p>
-                            
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">What do I see at http://svn.apache.org/repos/asf/forrest/branches/ if s.o.
-                                has done a commit? What is this stuff revision numer with -r for?</div>
-</div>
-                        
-</li>
-                    
-</ol>
+                  
+<p>Create a maintenance branch in SVN. This command can be run from anywhere
+                    because it uses full URLs.</p>
+                  
+<pre class="code">
+svn copy -r ##### -m "Create the x.y release branch from r#####" \
+    https://svn.apache.org/repos/asf/forrest/trunk \
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch
+
+where
+  'xy' is a compact form of the version (e.g. 04, 041, 05).
+  '#####' is the SVN revision number that the branch was created from,
+  which was the revision that the release candidates were generated from.
+  (Remember that you recorded this number earlier.)
+                  </pre>
+                  
+<p> See <a href="http://svn.apache.org/repos/asf/forrest/branches/">http://svn.apache.org/repos/asf/forrest/branches/</a>
+                  for examples of past branches, e.g. forrest_07_branch
+                  </p>
                 
 </li>
             
@@ -987,10 +985,10 @@ svn commit</pre>
 </div>
 
         
-<a name="N102B7"></a><a name="Testing+the+release+candidate"></a>
-<h2 class="underlined_10">Testing the release candidate</h2>
+<a name="N102A4"></a><a name="Testing+the+release+candidate+and+voting"></a>
+<h2 class="underlined_10">Testing the release candidate and voting</h2>
 <div class="section">
-<p>Test the actual distribution on various platforms.</p>
+<p>Get Forrest developers to test the actual distribution on various platforms.</p>
 <ol>
                 
 <li>
@@ -1003,58 +1001,53 @@ svn commit</pre>
 <li>
                     
 <p>Use template <a href="test_and_vote_on_rel_cand.txt">test_and_vote_on_rel_cand.txt</a> for an
-                        email to the dev-list asking all developers to test and vote.</p>
+                      email to the dev-list asking all developers to test and vote. Don't forget
+                      to modify the template, to specify the md5sums etc. People need to tell you the
+                      md5sum to be sure that they have tested and voted on the correct release candidate.
+                      This is especially important if there has been more than one release candidate.</p>
                 
 </li>
                 
 <li>
                     
-<p>As the votes come in</p>
+<p>As the votes come in:</p>
                     
 <ul>
                         
-<li>Make sure the distributions unpacks on different systems w/o problems.</li>
+<li>Make sure the distributions unpack on different systems without problems.</li>
                         
-<li>Make sure that somebody has followed the actual user instructions in the Forrest
+<li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
                         
-<li>Encourage people to build ome difficult sites.</li>
+<li>Encourage people to build some difficult sites.</li>
                     
 </ul>
 
                 
 </li>
                 
-<li>If necessarry start again with <a href="#BuildDist">Building the distribution</a> and build another
+<li>If substantial problems are revealed (not just minor glitches) then co-ordinate their
+                  fixing by other developers. Doing the fixing of issues is not the Release Manager's job.
+                  Deciding what constitutes a "substantial" issue is entirely the RM's call.
+                  Remember that there is still a code freeze, so don't let people be tempted to fix other
+                  minor stuff or add some pet new feature that they have neglected. That can easily
+                  introduce new problems.
+                </li>
+                
+<li>If necessary start again with <a href="#BuildDist">Building the distribution</a> and build another
                     release candidate.</li>
                 
-<li></li>
+<li>Tally the votes and report the result to the dev list.</li>
             
 </ol>
 </div>
 
         
-<a name="N102EF"></a><a name="FinalRel"></a>
-<h2 class="underlined_10">Finalizing the Release</h2>
+<a name="N102E0"></a><a name="FinalRel"></a>
+<h2 class="underlined_10">Finalizing the release</h2>
 <div class="section">
 <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
 <ol>
-                
-<li>
-                    
-<p>rename the Release Candidates distribution files apache-forrest-X.Y-RCx.tar.gz and
-                        apache-forrest-X.Y-RCx.zip to their final filenames apache-forrest-X.Y.tar.gz and
-                        apache-forrest-X.Y.zip</p>
-                
-</li>
-                
-<li>
-                    
-<p>Create new .md5 and .asc-files following the procedure in <a href="#signing">outlined
-                    above</a>
-</p>
-                
-</li>
                 
 <li>
                     
@@ -1072,23 +1065,20 @@ svn commit</pre>
                 
 <li>
                     
-<p>If everything looks okay tag SVN by running <span class="codefrag">svn copy -m "Create tag forrest_xy from release
+<p>Tag SVN by doing <span class="codefrag">'svn copy -m "Create tag forrest_xy from release
                             branch" \ https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch \
-                            https://svn.apache.org/repos/asf/forrest/tags/forrest_xy</span> from the command line of
-                        your system, where 'xy' is a compact (without the dots) form of the version number (e.g. 04,
+                            https://svn.apache.org/repos/asf/forrest/tags/forrest_xy'</span>
+                        where 'xy' is a compact (without the dots) form of the version number (e.g. 04,
                         041, 05).</p>
+                  
+<p> See <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
+                  for examples of past tags, e.g. forrest_07
+                  </p>
                     
 <div class="fixme">
 <div class="label">Fixme (fso)</div>
 <div class="content">If we change procedure to create an rc-branch this will become a merge changes
                         from trunk then rename rc-branch to final release branch. right?</div>
-</div>
-                    
-<p>See <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a> for more information.</p>
-                    
-<div class="fixme">
-<div class="label">Fixme (fso)</div>
-<div class="content">What if it doesn't, how do I tell, what do I do?</div>
 </div>
                 
 </li>
@@ -1104,14 +1094,15 @@ svn commit</pre>
 </div>
 
         
-<a name="N10337"></a><a name="UploadAndAnnounce"></a>
+<a name="N10315"></a><a name="UploadAndAnnounce"></a>
 <h2 class="underlined_10">Upload and announcement</h2>
 <div class="section">
 <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
                 announce the new release.</p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">During this phase there is a lot of waiting. While things are happening you can be doing the <a href="#cleanup">Cleanups</a> described below.</div>
+<div class="content">During this phase there is a lot of waiting. While things are happening you can be doing
+              some of the other tasks in this Upload section and in the <a href="#cleanup">Cleanup</a> section.</div>
 </div>
 <ol>
                 
@@ -1120,12 +1111,12 @@ svn commit</pre>
 <p>Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc and *.md5 files, and the
                         RELEASE-NOTES-x.y.txt to people.apache.org at /www/www.apache.org/ dist/forrest/</p>
                     
-<p>Ensure correct file permissions by executing <span class="codefrag">chgrp forrest *</span> then <span class="codefrag">chmod 664
-                        *</span> on the remote system.</p>
+<p>Ensure correct file permissions by executing <span class="codefrag">'chgrp forrest *'</span> then
+                      <span class="codefrag">'chmod 664 *'</span> in that directory.</p>
                     
 <p>Each PMC member has a server account and belongs to the forrest group.</p>
                     
-<p>The process is documented at <a href="http://www.apache.org/~bodewig/mirror.html">http://www.apache.org/~bodewig/mirror.html</a> and <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>
+<p>The process is documented at <a href="http://people.apache.org/~bodewig/mirror.html">http://www.apache.org/~bodewig/mirror.html</a> and <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>
 </p>
 
                     
@@ -1255,10 +1246,9 @@ svn commit</pre>
             
 </ol>
 </div>
-<!-- FIXME DC: reviewed from here to end. -->
 
         
-<a name="N103E2"></a><a name="cleanup"></a>
+<a name="N103BE"></a><a name="cleanup"></a>
 <h2 class="underlined_10">Cleanup</h2>
 <div class="section">
 <ol>
@@ -1284,9 +1274,19 @@ svn commit</pre>
                 
 </li>
                 
+<li>Commit all of the above changes.</li>
+                
 <li>
 <p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
                     They have already been automatically archived at archive.apache.org/dist/forrest/</p>
+</li>
+                
+<li>Create a new plugins directory in the forrest/site SVN for the
+                  next development phase:
+                  <pre class="code">
+svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
+                  </pre>
+                
 </li>
                 
 <li>
@@ -1317,7 +1317,7 @@ svn commit</pre>
 </li>
                         
 <li>
-<p>Change the "fixfor" attribute to the next verion for the
+<p>Change the "fixfor" attribute to the next version for the
                             "project.issues-rss-url" RSS feed in forrest.properties</p>
 </li>
                     
@@ -1345,7 +1345,7 @@ svn commit</pre>
 </div>
         
         
-<a name="N1042A"></a><a name="conclusion"></a>
+<a name="N10410"></a><a name="conclusion"></a>
 <h2 class="underlined_10">Conclusion</h2>
 <div class="section">
 <p>All done!</p>
