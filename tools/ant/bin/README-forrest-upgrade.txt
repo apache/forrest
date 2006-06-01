@@ -3,5 +3,6 @@ Notes for upgrading Forrest's packaged Ant.
 We have some changes to the Ant scripts.
 See svn log for details.
 
-ant
-ant.bat
+ant : r8757
+ant.bat : r8757
+lcp.bat : r23058
