@@ -23,7 +23,9 @@ if "%OS%"=="WINNT" @setlocal
 rem %~dp0 is expanded pathname of the current script under NT
 set DEFAULT_ANT_HOME=%~dp0..
 
-if "%ANT_HOME%"=="" set ANT_HOME=%DEFAULT_ANT_HOME%
+REM Forrest uses its own packaged Ant, so don't use the system Ant libraries
+REM if "%ANT_HOME%"=="" set ANT_HOME=%DEFAULT_ANT_HOME%
+set ANT_HOME=%DEFAULT_ANT_HOME%
 set DEFAULT_ANT_HOME=
 
 set _USE_CLASSPATH=yes
