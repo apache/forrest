@@ -233,6 +233,7 @@
       <include name="**/*.html"/>
       <include name="**/*.xml"/>
       <include name="**/*.css"/>
+      <include name="**/*.js"/>
     </fixcrlf>
   	
     <!-- add new files to SVN -->
@@ -429,7 +430,17 @@ You have just released a plugin. There are other tasks to complete. For example:
   <!-- =================================================================== -->
   <target name="jar" depends="init, compile" if="java_exists">
     <jar destfile="${build.dir}/${plugin-name}.jar"
-	     basedir="${build.classes}"/>
+	     basedir="${build.classes}">
+      <manifest>
+        <section name="org/apache/forrest/">
+          <attribute name="Comment" value="Support classes for Apache Forrest"/>
+          <attribute name="Implementation-Title" value="org.apache.forrest"/>
+          <attribute name="Implementation-Version" value="${forrest.version} ${TODAY}"/> 
+          <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+          <attribute name="Implementation-URL" value="http://forrest.apache.org/"/>
+        </section>
+      </manifest>
+    </jar>
   </target>
 	
   <target name="test" depends="init, clean, docs"/>

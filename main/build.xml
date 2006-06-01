@@ -375,7 +375,24 @@
   <!-- =================================================================== -->
   <target name="jar" depends="init, compile">
     <jar destfile="${build.dir}/xml-forrest.jar"
-      basedir="${build.classes}"/>
+      basedir="${build.classes}">
+      <manifest>
+        <section name="org/apache/forrest/">
+          <attribute name="Comment" value="Support classes for Apache Forrest"/>
+          <attribute name="Implementation-Title" value="org.apache.forrest"/>
+          <attribute name="Implementation-Version" value="${forrest.version} ${TODAY}"/> 
+          <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+          <attribute name="Implementation-URL" value="http://forrest.apache.org/"/>
+        </section>
+        <section name="org/apache/cocoon/">
+          <attribute name="Comment" value="Support classes for Apache Forrest"/>
+          <attribute name="Implementation-Title" value="org.apache.cocoon"/>
+          <attribute name="Implementation-Version" value="${forrest.version} ${TODAY}"/> 
+          <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
+          <attribute name="Implementation-URL" value="http://forrest.apache.org/"/>
+        </section>
+      </manifest>
+    </jar>
     <echo>
   *-----------------------------------------------------------------
   | Installation notice 
