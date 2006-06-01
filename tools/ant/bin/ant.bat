@@ -15,7 +15,7 @@ REM  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 REM  See the License for the specific language governing permissions and
 REM  limitations under the License.
 
-if exist "%HOME%\antrc_pre.bat" call "%HOME%\antrc_pre.bat"
+if exist "%HOME%\forrestrc_pre.bat" call "%HOME%\forrestrc_pre.bat"
 
 if "%OS%"=="Windows_NT" @setlocal
 if "%OS%"=="WINNT" @setlocal
@@ -123,5 +123,5 @@ if "%OS%"=="Windows_NT" @endlocal
 if "%OS%"=="WINNT" @endlocal
 
 :mainEnd
-if exist "%HOME%\antrc_post.bat" call "%HOME%\antrc_post.bat"
+if exist "%HOME%\forrestrc_post.bat" call "%HOME%\forrestrc_post.bat"
 
