@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!--
 PathUtils.xsl
@@ -27,7 +26,6 @@ filename: return the file part of a path
 ext: return the last extension of the filename in a path
 filename-noext: return the file part of a path without its last extension
 
-$Id: pathutils.xsl,v 1.1 2005/09/21 14:10:24 rgardler Exp $
 -->
 
 <!-- Returns the directory part of a path.  Equivalent to Unix 'dirname'.
@@ -174,17 +172,24 @@ Examples:
 -->
 <xsl:template name="normalize">
   <xsl:param name="path"/>
+    <!-- replace all \  with / -->
   <xsl:variable name="path-" select="translate($path, '\', '/')"/>
   <xsl:choose>
+      <!-- process relative refs here -->
     <xsl:when test="contains($path-, '/../')">
-
+       <!--  put part before /../ into $pa: "foo/bar" -->
       <xsl:variable name="pa" select="substring-before($path-, '/../')"/>
+        <!-- put part after first occurrence /../ into $th: "baz/index.html" -->
       <xsl:variable name="th" select="substring-after($path-, '/../')"/>
+        <!-- cut last real directory name before /../ and put rest in $pa- : "foo/"  -->
       <xsl:variable name="pa-">
         <xsl:call-template name="dirname">
           <xsl:with-param name="path" select="$pa"/>
         </xsl:call-template>
       </xsl:variable>
+      <!-- recombine pieces thus eliminating one .. and one dir step before it
+              and recurse into this template to eliminate more /../
+      -->  
       <xsl:variable name="pa-th" select="concat($pa-, $th)"/>
       <xsl:call-template name="normalize">
         <xsl:with-param name="path" select="$pa-th"/>
