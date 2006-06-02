@@ -349,5 +349,89 @@ which can also be a complete reference
         </source>
       </section>
     </section>
+
+    <section id="images">
+      <title>Images</title>
+      <p>
+        Images (and other resources) are handled by the main/webapp/resource.xmap sitemap.
+        It uses the main/webapp/locationmap.xml to look in various locations for images.
+        As usual, the first match wins.
+      </p>
+      <p> Here is the locationmap snippet ... </p>
+      <source><![CDATA[
+    <match pattern="project.images.**.*">
+      <select>
+        <location src="{project:resources.images}{1}.{2}" />
+        <location src="{project:content}../resources/images/{1}.{2}" />
+        <location src="{project:content.xdocs}images/{1}.{2}" />
+        <location src="{project:content.xdocs}{1}.{2}" />
+      </select>
+    </match>
+]]></source>
+      <p>Which means look first in a project-defined images directory, then in the
+        default location (which is usually src/documentation/resources/images/),
+        then in the old default location (src/documentation/content/xdocs/images/),
+        then relative to the root of your xdocs.</p>
+      <p>So here is the effect of the various image links in source documents ...
+      </p>
+      <ol>
+        <li>
+          <img src="/images/icon-a.png" alt="Icon" />
+          <code>&lt;img src="/images/icon-a.png"</code>
+          ... The source file is found in src/documentation/resources/images/ directory.
+        </li>
+        <li>
+          <img src="/images/sub-dir/icon-c.png" alt="Icon" />
+          <code>&lt;img src="/images/sub-dir/icon-c.png"</code>
+          ... The source file is found in src/documentation/resources/images/sub-dir/ directory.
+        </li>
+        <li>
+          <img src="/images/icon-e.png" alt="Icon" />
+          <code>&lt;img src="/images/icon-e.png"</code>
+          ... The source file is not found in the normal src/documentation/resources/images/
+          so Cocoon looks in the next location and finds the source in
+          src/documentation/content/xdocs/images/ directory.
+          This supports backward-compatibility for this old default location.
+        </li>
+        <li>
+          <img src="../images/icon-a.png" alt="Icon" />
+          <code>&lt;img src="../images/icon-a.png"</code>
+          ... Relative reference. Forrest "absolutizes" the URLs to be like the URLs
+          in examples 1 and 2 and 3. Then Cocoon looks in the normal locations as described above.
+          The source file is found in src/documentation/resources/images/ directory.
+        </li>
+        <li>
+          <img src="../../images/icon-b.png" alt="Icon" />
+          <code>&lt;img src="../../images/icon-b.png"</code>
+          ... Broken relative reference (it points up beyond the document root).
+          Never mind, Forrest "absolutizes" the URLs to be like the URLs in examples 1 and 2 and 3. 
+          The source file is found in src/documentation/resources/images/ directory.
+          However there is a problem here. When using Forrest in command-line mode,
+          the image will be generated outside the document directory.
+          It is better to use absolute /image/ URLs.
+        </li>
+        <li>
+          <img src="icon-d.png" alt="Icon" />
+          <code>&lt;img src="icon-d.png"</code>
+          ... Relative to this document. There is no leading slash, so the various image
+          locations are not used at all.
+          The source file is found in the current directory src/documentation/content/xdocs/samples/
+        </li>
+        <li>
+          <img src="/icon-b.png" alt="Icon" />
+          <code>&lt;img src="/icon-b.png"</code>
+          ... Magic.
+          The source file is found in src/documentation/resources/images/ directory.
+        </li>
+        <li>
+          <img src="/images/ellipse-2.png" alt="Icon" />
+          <code>&lt;img src="/images/ellipse-2.png"</code>
+          ... SVG Magic. Cocoon tried the various locations for an image called
+          ellipse-2.png but did not find one anywhere. So it looked again for a corresponding
+          ellipse-2.svg and generated the PNG image on-the-fly.
+          The source file is found in src/documentation/resources/images/ directory.
+        </li>
+      </ol>
+    </section>
   </body>
 </document>
