@@ -372,7 +372,10 @@ which can also be a complete reference
         default location (which is usually src/documentation/resources/images/),
         then in the old default location (src/documentation/content/xdocs/images/),
         then relative to the root of your xdocs.</p>
-      <p>So here is the effect of the various image links in source documents ...
+      <p>
+        The document author specifies the final image locations with these various
+        "<code>src=</code>" links. Behind-the-scenes Cocoon handles the requests
+        using the sitemap and locationmap.
       </p>
       <ol>
         <li>
@@ -392,6 +395,11 @@ which can also be a complete reference
           so Cocoon looks in the next location and finds the source in
           src/documentation/content/xdocs/images/ directory.
           This supports backward-compatibility for this old default location.
+        </li>
+        <li>
+          <img src="images/icon-a.png" alt="Icon" />
+          <code>&lt;img src="images/icon-a.png"</code>
+          ... same as example 1 above. Except this time the generated image is relative to the document.
         </li>
         <li>
           <img src="../images/icon-a.png" alt="Icon" />
@@ -423,15 +431,16 @@ which can also be a complete reference
           ... Magic.
           The source file is found in src/documentation/resources/images/ directory.
         </li>
-        <li>
-          <img src="/images/ellipse-2.png" alt="Icon" />
-          <code>&lt;img src="/images/ellipse-2.png"</code>
-          ... SVG Magic. Cocoon tried the various locations for an image called
-          ellipse-2.png but did not find one anywhere. So it looked again for a corresponding
-          ellipse-2.svg and generated the PNG image on-the-fly.
-          The source file is found in src/documentation/resources/images/ directory.
-        </li>
       </ol>
+      <p>There is also SVG magic.</p>
+      <p>
+        <img src="/images/ellipse-2.png" alt="Icon" />
+        <code>&lt;img src="/images/ellipse-2.png"</code>
+        ... Cocoon tried the various locations for an image called
+        ellipse-2.png but did not find one anywhere. So it looked again for a corresponding
+        ellipse-2.svg and generated the PNG image on-the-fly.
+        The source file is found in src/documentation/resources/images/ directory.
+      </p>
     </section>
   </body>
 </document>
