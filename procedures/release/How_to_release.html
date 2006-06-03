@@ -512,8 +512,8 @@ some steps will need to be re-arranged.
                 easily and - if possible - roll them forward later. So creating an svn branch for the rc seems to make
                 sense to me.
                 Probably
-                easiest would be to create an rc branch here and co that. I'd sacrifice the alternative approach for
-                that which is far too risky for my liking anyway. wdyt?</div>
+                easiest would be to create an rc branch here and co that.
+                wdyt?</div>
 </div>
 <p>In this step you make absolutely sure that your working copy of SVN trunk has no local modifications, or additional files that you have been fiddling with, and especially files that might be hidden by svn:ignore settings.
             </p>
@@ -553,6 +553,9 @@ some steps will need to be re-arranged.
 <a name="N10140"></a><a name="adjustDocs"></a>
 <h2 class="underlined_10">Preparing docs for next release cycle</h2>
 <div class="section">
+<p>In this phase we get the docs ready for the release. You will
+              commit these changes, but do not publish to the website until
+              after the release.</p>
 <ol>
                 
 <li>
@@ -615,8 +618,19 @@ some steps will need to be re-arranged.
                     
 <div class="fixme">
 <div class="label">Fixme (fso)</div>
-<div class="content">This used to be 'Do global replace throughout docs_0_80 to replace the string
+<div class="content">This used to be the comment: 'Do global replace throughout docs_0_80 to replace the string
                         ="site:v0.70 with ="site:v0.80' but this needs checking.</div>
+</div>
+                    
+<div class="fixme">
+<div class="label">Fixme (dc)</div>
+<div class="content">Perhaps you are talking about something else.
+                      I meant that when we copy the docs to become the next -dev (i.e.
+                      this time docs_0_90) then we need to replace all "site:" references
+                      (i.e. ="site:v0.80 with ="site:v0.90'). If you can see a better way, then great.
+                     Maybe dropping the v0.x prefix will cause it to use the most recent doc,
+                     e.g. use site:buildPlugin rather than site:v0.90/howto/buildplugin.
+                  </div>
 </div>
                     
                 
@@ -657,6 +671,16 @@ some steps will need to be re-arranged.
 </li>
                 
 <li>
+                    
+<p>Edit the Forrest home page in the "News and events" section and add a text like:</p>
+                    
+<pre class="code"> Apache Forrest 0.xx was released on [Date]. [Important new features] </pre>
+                
+</li>
+                
+<li>Ensure that the documentation is building properly, do 'cd site-author; forrest'. Fix any linking errors.</li>
+                
+<li>
                   Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
                   It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
                   In this file, insert the list of important changes which is obtained by doing:
@@ -671,20 +695,6 @@ some steps will need to be re-arranged.
 <li>
                     
 <p>Edit the forrest/site-author/content/xdocs/mirrors.html and adjust all version-specific content.</p>
-                    
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">FIXME: There is a bug (FOR-300) in the forrest build which generates to
-                        main/site/mirrors.html instead of build/site/mirrors.html</div>
-</div>
-                
-</li>
-                
-<li>
-                    
-<p>Edit the Forrest home page in the "News and events" section and add a text like:</p>
-                    
-<pre class="code"> Apache Forrest 0.xx was released on [Date]. [Important new features] </pre>
                 
 </li>
                 
@@ -694,7 +704,7 @@ some steps will need to be re-arranged.
 </div>
 
         
-<a name="N101AD"></a><a name="BuildDist"></a>
+<a name="N101B3"></a><a name="BuildDist"></a>
 <h2 class="underlined_10">Building the distribution</h2>
 <div class="section">
 <p>In this phase you build the release candidate to be tested.</p>
@@ -708,7 +718,12 @@ some steps will need to be re-arranged.
 <li>Announce that the code-freeze has now commenced.
                   Use the template <a href="announce_code_freeze.txt">announce_code_freeze.txt</a>
                   to send email to dev-list.
-                </li>
+                  <div class="fixme">
+<div class="label">Fixme ()</div>
+<div class="content">Define what we mean by "code-freeze".</div>
+</div>
+                
+</li>
                 
 <li>
                     
@@ -815,11 +830,8 @@ some steps will need to be re-arranged.
 <p>Ensure that each plugin that uses the locationmap has its "release version" set to 0.8 or
                         more.</p>
                     
-<div class="fixme">
-<div class="label">Fixme (fso)</div>
-<div class="content">Add the steps required to find that plugins that use locationmap and set the
-                        version number. Is that 0.8 only or will this be a permanent job.</div>
-</div>
+<p>If a plugin has a locationmap.xml file or uses "lm:" references in its *.xmap,
+                     then it is using locationmap. See <a href="../../docs_0_80/howto/howto-buildPlugin.html">buildPlugin</a>.</p>
                 
 </li>
                 
@@ -839,19 +851,6 @@ some steps will need to be re-arranged.
 <div class="label">Fixme ()</div>
 <div class="content">There are probably other areas which have version numbers. How can we improve this? Possibly with XML Entities, possibly with Ant properties.</div>
 </div>
-
-                    
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">Not sure at what stage we get rid of the old docs, e.g. 0.6</div>
-</div>
-                    
-<div class="fixme">
-<div class="label">Fixme ()</div>
-<div class="content">Not sure at what stage need to edit site-author/content/xdocs/mirrors.html (Presume
-                        that it should be done after packing release. See below.)</div>
-</div>
-
                 
 </li>
                 
@@ -985,7 +984,7 @@ where
 </div>
 
         
-<a name="N102A4"></a><a name="Testing+the+release+candidate+and+voting"></a>
+<a name="N102A9"></a><a name="Testing+the+release+candidate+and+voting"></a>
 <h2 class="underlined_10">Testing the release candidate and voting</h2>
 <div class="section">
 <p>Get Forrest developers to test the actual distribution on various platforms.</p>
@@ -1043,7 +1042,7 @@ where
 </div>
 
         
-<a name="N102E0"></a><a name="FinalRel"></a>
+<a name="N102E5"></a><a name="FinalRel"></a>
 <h2 class="underlined_10">Finalizing the release</h2>
 <div class="section">
 <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
@@ -1094,7 +1093,7 @@ where
 </div>
 
         
-<a name="N10315"></a><a name="UploadAndAnnounce"></a>
+<a name="N1031A"></a><a name="UploadAndAnnounce"></a>
 <h2 class="underlined_10">Upload and announcement</h2>
 <div class="section">
 <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
@@ -1177,11 +1176,12 @@ where
 </div>
                 
 </li>
-               
+                
+<li>Commit all of the above changes.</li>
                 
 <li>
                     
-<p>Rebuild (Forrest site) and publish the Forrest website as normal. Be sure to use the new version
+<p>Rebuild (Forrest site) and publish the Forrest website as normal. Be sure to use the new version of trunk
                         for building the docs. Refer to <a href="../../procedures/How_to_publish_docs.html">Publishing Forrest
                             Documentation</a> for details.</p>
                 
@@ -1248,7 +1248,7 @@ where
 </div>
 
         
-<a name="N103BE"></a><a name="cleanup"></a>
+<a name="N103C6"></a><a name="cleanup"></a>
 <h2 class="underlined_10">Cleanup</h2>
 <div class="section">
 <ol>
@@ -1291,11 +1291,6 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
                 
 <li>
 <p>Do some Jira administration (need to be in the jira-administrators group)</p>
-                
-<div class="fixme">
-<div class="label">Fixme (fso)</div>
-<div class="content">Does it make sense to pass this job to the Jira-role?</div>
-</div>
                     
 <ol>
                         
@@ -1327,7 +1322,7 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
 </li>
                 
 <li>
-<p>Cleanup this RELEASE_PROCESS.txt file to set version number examples
+<p>Cleanup this "release process" document to set version number examples
                     to be ready for the next release.</p>
                     
 <div class="fixme">
@@ -1345,7 +1340,7 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
 </div>
         
         
-<a name="N10410"></a><a name="conclusion"></a>
+<a name="N10414"></a><a name="conclusion"></a>
 <h2 class="underlined_10">Conclusion</h2>
 <div class="section">
 <p>All done!</p>
