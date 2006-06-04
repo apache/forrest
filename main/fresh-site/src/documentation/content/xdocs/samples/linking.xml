@@ -385,6 +385,8 @@ which can also be a complete reference
     src/documentation/resources/images/sub-dir/icon-c.png
     src/documentation/content/xdocs/images/icon-e.png
     src/documentation/content/xdocs/samples/icon-d.png
+    src/documentation/content/xdocs/samples/ellipse.svg
+    src/documentation/content/xdocs/samples/cocoon-pyramid.aart
 ]]></source>
       <p>Here is the effect of the various image links ...</p>
       <ol>
@@ -426,16 +428,20 @@ which can also be a complete reference
           The source file is found in src/documentation/resources/images/ directory.
           However there is a problem here. When using Forrest in command-line mode,
           the image will be generated outside the document directory.
-          It is better to use absolute /image/ URLs.
+          It is better to use absolute /image/ URLs or be very careful about using
+          such relative links (Forrest will not repart an error).
         </li>
-        <li>
-          <img src="icon-d.png" alt="Icon" />
-          <code>&lt;img src="icon-d.png"</code>
-          ... Relative to this document. There is no leading slash, so the various image
-          locations are not used at all.
-          The source file is found in the current directory src/documentation/content/xdocs/samples/
-        </li>
+      <li>
+        <img src="/images/ellipse-2.png" alt="Icon" /><br />
+        <code>&lt;img src="/images/ellipse-2.png"</code>
+        ... Cocoon tried the various locations for a PNG image called
+        ellipse-2.png but did not find one anywhere. So the next sitemap match
+        looks for a corresponding
+        ellipse-2.svg and generates the PNG image on-the-fly.
+        The source file is found in src/documentation/resources/images/ directory.
+      </li>
 <!-- Remove this sample.
+  See: http://marc.theaimsgroup.com/?t=114925130200003
         <li>
           <img src="/icon-b.png" alt="Icon" />
           <code>&lt;img src="/icon-b.png"</code>
@@ -444,15 +450,36 @@ which can also be a complete reference
         </li>
 -->
       </ol>
-      <p>There is also SVG magic.</p>
-      <p>
-        <img src="/images/ellipse-2.png" alt="Icon" />
-        <code>&lt;img src="/images/ellipse-2.png"</code>
-        ... Cocoon tried the various locations for an image called
-        ellipse-2.png but did not find one anywhere. So it looked again for a corresponding
-        ellipse-2.svg and generated the PNG image on-the-fly.
-        The source file is found in src/documentation/resources/images/ directory.
+      <p>The image links shown above are handled by the resources.xmap using
+      special matches for the "images" directory in the URI.
       </p>
+      <p>The main/webapp/resources.xmap has another section to deal specifically with PNG images. It looks first for an SVG source file which will be used to generate the PNG image. If that is not found then it looks for an ASCII art source file. Then looks for a pre-prepared PNG image.</p>
+      <ol>
+       <li>
+        <img src="ellipse.png" alt="Icon" /><br />
+        <code>&lt;img src="ellipse.png"</code>
+        ... Cocoon tried the various locations for a PNG image called
+        ellipse-2.png but did not find one anywhere. So the next sitemap match
+        looks for a corresponding
+        ellipse-2.svg and generates the PNG image on-the-fly.
+        The source file is found in src/documentation/resources/images/ directory.
+      </li>
+      <li>
+        <img src="cocoon-pyramid.png" alt="Icon"/><br />
+        <code>&lt;img src="cocoon-pryamid.png"</code>
+        ... ASCII Art. Cocoon did not find a PNG image, nor an SVG file.
+        So the next sitemap match looks for a corresponding
+        cocoon-pryamid.aart and generates the PNG image on-the-fly.
+        The source file is found in src/documentation/resources/images/ directory.
+        </li>
+        <li>
+          <img src="icon-d.png" alt="Icon" />
+          <code>&lt;img src="icon-d.png"</code>
+          ... Relative to this document. There is no leading slash, so the various image
+          locations are not used at all.
+          The source file is found in the current directory src/documentation/content/xdocs/samples/
+        </li>
+      </ol>
       <note>
         You might wonder why the above images all show correctly in dynamic
         'forrest run' mode, but some appear to be broken during static docs
