@@ -1,6 +1,6 @@
 @echo off
 rem Licensed to the Apache Software Foundation (ASF) under one or more
-rem license agreements.  See the NOTICE file distributed with
+rem contributor license agreements.  See the NOTICE file distributed with
 rem this work for additional information regarding copyright ownership.
 rem The ASF licenses this file to You under the Apache License, Version 2.0
 rem (the "License"); you may not use this file except in compliance with
