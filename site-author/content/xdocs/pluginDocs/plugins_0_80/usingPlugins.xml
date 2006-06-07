@@ -124,22 +124,29 @@
       </section>
     <section id="local-deploy">
       <title>Editing plugins sources to enhance functionality</title>
-      <p>If you need to enhance an existing plugin functionality, you should not edit a standard plugin sources.</p>
-      <p>First, copy the whole plugin directory either in a plugins directory in your project tree or, if the plugin is used by several projects, 
-      in a different location outside any project directory.</p>
-      <p>Then declare the new location to make Forrest search in it. There is two cases :</p>
-      <ul>
-        <li>If your plugin is specific to a project, you should edit the corresponding forrest.properties to declare the new location in 
-        the <code>project.required.plugins.src</code> property</li>
-        <li>If your plugin is shared with several project, you should edit your <code>${user.home}/forrest.properties</code></li>
-      </ul>
-      <warning>The order of the directories list in the property is important, if you keep the plugin name, you should add the new location
-      at the beginning of the list to be sure Forrest will use your version and not the standard one.</warning>
-      <fixme author="Cyriaque">We still need to describe the declaration of another remote site to store the specific plugins, with a new 
-      plugins descriptor file...</fixme>
-      <p>Finally, you can then edit your copy !</p>
-      <p>See <a href="#more">Further reading</a> for "How to build a Plugin".</p>
-      </section>
+      
+      <note>Until issue <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a> is fixed to 
+      enable the use of plugins in-place, any change to sources requires you to either
+      restart forrest or to manually deploy the plugin locally with "ant local-deploy".
+      See Further reading for "How to build a Plugin". It is worth noting that if your
+      changes are to Java files you will always have to restart Forrest to ensure the
+      class loader loads your new classes.</note>
+      
+      <p>If you need to add specific behaviour to an existing plugin, you should first consider
+      whether your changes will be of use to all users of the plugin or not. If they are of
+      general use then you can edit the plugin source files in their original location (i.e. 
+      not in the build directory). Once you have completed your changes please 
+      <a href="http://forrest.apache.org/contrib.html#patch">prepare a patch
+      and submit it for inclusion</a> in code base.</p> 
+      
+      <p>If your changes are specific to your own use of the plugin you can create a local
+      copy of the plugin for this. However, we strongly advise against this 
+      since you will need to manually update your plugin each time a new release of the original
+      is made. In the vast majority of cases local enhancements to a plugin wil be of use
+      to the wider communtiy. Please donate back to the project and help keep it vibrant and
+      useful.</p>
+    </section>
+    
     <section id="no-plugins">
       <title>Upgrading from a Version of Forrest Without Plugins</title>
       <p>The plugin functionality was introduced in version 0.7 of Forrest.
