@@ -76,7 +76,33 @@
           a known working version.</p>
         </section>
         <section id="sources">
-          <title>Where does Forrest look for Plugins sources ?</title>
+          <title>Where does Forrest look for Plugins sources?</title>
+          
+          <section>
+            <title>Overview</title>
+            
+            <p>This is fairly complex, so here is a simple overview. If you want to know the
+            details you need to read the rest of this section. For most people this overview
+            will be sufficient.</p>
+            
+            <p>Forrest will try and retrieve a plugin from local source files first, if that
+            fails it will look on a remote distribution server. Once it finds a copy of the
+            plugin it will deploy it to the local Forrest instance and use it from there.</p>
+            
+            <p>The local directories that will be searched are defined in the <code>project.required.plugins.src</code>
+            property, which is defined in the <code>forrest.properties</code> file. By default
+            this is set to <code>${forrest.home}/plugins,${forrest.home}/whiteboard/plugins</code>,
+            which means that these two directories will be searched for plugins.</p>
+            
+            <p>If you have a collection of local plugins you would like Forrest to use then you
+            need to add the directory to this property. For example: 
+            <code>project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,/export/forrest_plugins</code></p>
+            
+            <p>You can add this line to your projects <code>forrest.properties</code> file. However,
+            it may be more convenient to add it to a <code>forrest.properties</code> file
+            in your users home directory.</p>
+          </section>
+          
           <p>Forrest uses a fall back mecanism to find the plugins to install for a project.</p>
           <p>For an unversionned plugin, Forrest tries to get it from :</p>
           <ol>
@@ -96,7 +122,7 @@
           It is possible to add other sources locations by specifying the <code>project.required.plugins.src</code> property
           in the projects <code>forrest.properties</code> file.</p>
           <p>For example,</p>
-          <source>project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,${project.home}/plugins</source>
+          <source>project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,/export/forrest_plugins</source>
            <p>
            will add the project specific directory <code>${project.home}/plugins</code> to the list of directories to search in.</p>
           <p>If sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files
@@ -136,7 +162,7 @@
       whether your changes will be of use to all users of the plugin or not. If they are of
       general use then you can edit the plugin source files in their original location (i.e. 
       not in the build directory). Once you have completed your changes please 
-      <a href="http://forrest.apache.org/contrib.html#patch">prepare a patch
+      <a href="contrib.html#patch">prepare a patch
       and submit it for inclusion</a> in code base.</p> 
       
       <p>If your changes are specific to your own use of the plugin you can create a local
@@ -144,7 +170,8 @@
       since you will need to manually update your plugin each time a new release of the original
       is made. In the vast majority of cases local enhancements to a plugin wil be of use
       to the wider communtiy. Please donate back to the project and help keep it vibrant and
-      useful.</p>
+      useful. See the Further Reading section at the end of this document for links to
+      documents with more information.</p>
     </section>
     
     <section id="no-plugins">
