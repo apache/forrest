@@ -484,6 +484,33 @@ svn update -r HEAD.
         </p>
       </section>
 
+      <section id="debug-validation">
+        <title>Using Cocoon Validation Transformers</title>
+        <p>
+          Validating Transformers can be inserted in the sitemaps to validate
+          the xml stream at that stage.
+          Enables RELAX NG validation and W3C XML Schema validation using
+          Jing and Xerces.
+        </p>
+        <p>
+          The Validation Block is already added to Forrest and configured.
+          To use it simply add entries to your sitemap like this:
+        </p>
+      <source><![CDATA[
+...
+<map:transform type="validation-report"
+  src="{forrest:context}/resources/schema/relaxng/unstable/any.rng"/>
+...
+]]></source>
+        <p>See
+          <a href="http://marc.theaimsgroup.com/?t=112541971900003">Pier's note to cocoon-dev</a> and
+
+          Cocoon documentation:
+          <a href="http://cocoon.zones.apache.org/daisy/documentation/components/1058/g2/684.html">ValidatingTransformer</a> and
+          <a href="http://cocoon.zones.apache.org/daisy/documentation/components/1058/g2/691.html">ValidationReportTransformer</a>.
+        </p>
+      </section>
+
       <section id="debug-java">
         <title>Java code</title>
         <p>
