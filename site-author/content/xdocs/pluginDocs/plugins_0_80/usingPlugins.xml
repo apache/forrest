@@ -124,13 +124,21 @@
       </section>
     <section id="local-deploy">
       <title>Editing plugins sources to enhance functionality</title>
-      <p>
-        Until issue
-        <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
-        is fixed to enable the use of plugins in-place, any changes to
-        sources need to be locally deployed.
-        See <a href="#more">Further reading</a> for "How to build a Plugin".
-      </p>
+      <p>If you need to enhance an existing plugin functionality, you should not edit a standard plugin sources.</p>
+      <p>First, copy the whole plugin directory either in a plugins directory in your project tree or, if the plugin is used by several projects, 
+      in a different location outside any project directory.</p>
+      <p>Then declare the new location to make Forrest search in it. There is two cases :</p>
+      <ul>
+        <li>If your plugin is specific to a project, you should edit the corresponding forrest.properties to declare the new location in 
+        the <code>project.required.plugins.src</code> property</li>
+        <li>If your plugin is shared with several project, you should edit your <code>${user.home}/forrest.properties</code></li>
+      </ul>
+      <warning>The order of the directories list in the property is important, if you keep the plugin name, you should add the new location
+      at the beginning of the list to be sure Forrest will use your version and not the standard one.</warning>
+      <fixme author="Cyriaque">We still need to describe the declaration of another remote site to store the specific plugins, with a new 
+      plugins descriptor file...</fixme>
+      <p>Finally, you can then edit your copy !</p>
+      <p>See <a href="#more">Further reading</a> for "How to build a Plugin".</p>
       </section>
     <section id="no-plugins">
       <title>Upgrading from a Version of Forrest Without Plugins</title>
