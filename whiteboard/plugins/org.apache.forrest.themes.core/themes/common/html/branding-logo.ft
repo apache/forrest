@@ -18,7 +18,17 @@
 <forrest:contract name="branding-logo"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    branding-logo will output the logo defined in the view.
+    <p>This contract will output images. You can configure it like follow:</p>
+    <ul>
+          <li>branding-logo-name - will be used for @alt value of the &lt;img&gt; </li>
+          <li>branding-logo-description - will be used for @title value of the &lt;img&gt; </li>
+          <li>branding-logo-url - will be used for the @href location of a surrounding &lt;a&gt;  </li>
+          <li>branding-logo-logo - will be used for @src value of the &lt;img&gt; </li>
+          <li>branding-logo-over - if used then a javascript will be rendered which switches the images.
+             Will be used for @onmouseover image @src value of the &lt;img&gt; </li>
+           <li>branding-logo-width - will be used for @width value of the &lt;img&gt; </li>
+           <li>branding-logo-height - will be used for @height value of the &lt;img&gt; </li>
+        </ul>
   </description>
 
   <usage><![CDATA[<forrest:contract name="branding-logo">
@@ -27,6 +37,8 @@
   <forrest:property name="branding-logo-url">http://forrest.apache.org/</forrest:property>
   <forrest:property name="branding-logo-logo">images/project-logo.gif</forrest:property>
   [<forrest:property name="branding-logo-over">images/project-logo_over.gif</forrest:property>]
+  [<forrest:property name="branding-logo-width">500</forrest:property>]
+  [<forrest:property name="branding-logo-height">490</forrest:property>]
 </forrest:contract>]]></usage>
 
   <forrest:template
@@ -42,6 +54,8 @@
         <xsl:param name="branding-logo-url"/>
         <xsl:param name="branding-logo-logo"/>
         <xsl:param name="branding-logo-over"/>
+        <xsl:param name="branding-logo-width"/>
+        <xsl:param name="branding-logo-height"/>
         <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
       <xsl:template match="/">
         <forrest:content>
@@ -54,6 +68,8 @@
               <xsl:with-param name="url" select="normalize-space($branding-logo-url)"/>
               <xsl:with-param name="logo" select="normalize-space($branding-logo-logo)"/>
               <xsl:with-param name="rollover" select="normalize-space($branding-logo-over)"/>
+              <xsl:with-param name="width" select="normalize-space($branding-logo-width)"/>
+              <xsl:with-param name="height" select="normalize-space($branding-logo-height)"/>
               <xsl:with-param name="root" select="$root"/>
               <xsl:with-param name="description" 
                 select="normalize-space($branding-logo-description)"/>
