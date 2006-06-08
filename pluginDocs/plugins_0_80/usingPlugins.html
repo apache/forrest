@@ -175,7 +175,12 @@ document.write("Last Published: " + document.lastModified);
 <a href="#version">What Version of Plugins will be used ?</a>
 </li>
 <li>
-<a href="#sources">Where does Forrest look for Plugins sources ?</a>
+<a href="#sources">Where does Forrest look for Plugins sources?</a>
+<ul class="minitoc">
+<li>
+<a href="#Overview">Overview</a>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -248,7 +253,26 @@ document.write("Last Published: " + document.lastModified);
           of an in-development plugin, therefore in a production environment you should always specify
           a known working version.</p>
 <a name="N1005B"></a><a name="sources"></a>
-<h3 class="underlined_5">Where does Forrest look for Plugins sources ?</h3>
+<h3 class="underlined_5">Where does Forrest look for Plugins sources?</h3>
+<a name="N10061"></a><a name="Overview"></a>
+<h4>Overview</h4>
+<p>This is fairly complex, so here is a simple overview. If you want to know the
+            details you need to read the rest of this section. For most people this overview
+            will be sufficient.</p>
+<p>Forrest will try and retrieve a plugin from local source files first, if that
+            fails it will look on a remote distribution server. Once it finds a copy of the
+            plugin it will deploy it to the local Forrest instance and use it from there.</p>
+<p>The local directories that will be searched are defined in the <span class="codefrag">project.required.plugins.src</span>
+            property, which is defined in the <span class="codefrag">forrest.properties</span> file. By default
+            this is set to <span class="codefrag">${forrest.home}/plugins,${forrest.home}/whiteboard/plugins</span>,
+            which means that these two directories will be searched for plugins.</p>
+<p>If you have a collection of local plugins you would like Forrest to use then you
+            need to add the directory to this property. For example: 
+            <span class="codefrag">project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,/export/forrest_plugins</span>
+</p>
+<p>You can add this line to your projects <span class="codefrag">forrest.properties</span> file. However,
+            it may be more convenient to add it to a <span class="codefrag">forrest.properties</span> file
+            in your users home directory.</p>
 <p>Forrest uses a fall back mecanism to find the plugins to install for a project.</p>
 <p>For an unversionned plugin, Forrest tries to get it from :</p>
 <ol>
@@ -278,7 +302,7 @@ document.write("Last Published: " + document.lastModified);
           It is possible to add other sources locations by specifying the <span class="codefrag">project.required.plugins.src</span> property
           in the projects <span class="codefrag">forrest.properties</span> file.</p>
 <p>For example,</p>
-<pre class="code">project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,${project.home}/plugins</pre>
+<pre class="code">project.required.plugins.src=${forrest.home}/plugins,${forrest.home}/whiteboard/plugins,/export/forrest_plugins</pre>
 <p>
            will add the project specific directory <span class="codefrag">${project.home}/plugins</span> to the list of directories to search in.</p>
 <p>If sources are not found, forrest will try to get them from the Web. Forrest <em>knows</em> the plugins description with plugins descriptors files
@@ -304,19 +328,35 @@ document.write("Last Published: " + document.lastModified);
           will add the project specific plugins descriptors file <span class="codefrag">file:///${project.home}/plugins/plugins.xml</span> to the list of descriptors.</p>
 </div>
     
-<a name="N100D8"></a><a name="local-deploy"></a>
+<a name="N100FF"></a><a name="local-deploy"></a>
 <h2 class="underlined_10">Editing plugins sources to enhance functionality</h2>
 <div class="section">
-<p>
-        Until issue
-        <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a>
-        is fixed to enable the use of plugins in-place, any changes to
-        sources need to be locally deployed.
-        See <a href="#more">Further reading</a> for "How to build a Plugin".
-      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">Until issue <a href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</a> is fixed to 
+      enable the use of plugins in-place, any change to sources requires you to either
+      restart forrest or to manually deploy the plugin locally with "ant local-deploy".
+      See Further reading for "How to build a Plugin". It is worth noting that if your
+      changes are to Java files you will always have to restart Forrest to ensure the
+      class loader loads your new classes.</div>
+</div>
+<p>If you need to add specific behaviour to an existing plugin, you should first consider
+      whether your changes will be of use to all users of the plugin or not. If they are of
+      general use then you can edit the plugin source files in their original location (i.e. 
+      not in the build directory). Once you have completed your changes please 
+      <a href="../../contrib.html#patch">prepare a patch
+      and submit it for inclusion</a> in code base.</p>
+<p>If your changes are specific to your own use of the plugin you can create a local
+      copy of the plugin for this. However, we strongly advise against this 
+      since you will need to manually update your plugin each time a new release of the original
+      is made. In the vast majority of cases local enhancements to a plugin wil be of use
+      to the wider communtiy. Please donate back to the project and help keep it vibrant and
+      useful. See the Further Reading section at the end of this document for links to
+      documents with more information.</p>
 </div>
     
-<a name="N100EA"></a><a name="no-plugins"></a>
+    
+<a name="N10117"></a><a name="no-plugins"></a>
 <h2 class="underlined_10">Upgrading from a Version of Forrest Without Plugins</h2>
 <div class="section">
 <p>The plugin functionality was introduced in version 0.7 of Forrest.
@@ -345,7 +385,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N10112"></a><a name="conflict"></a>
+<a name="N1013F"></a><a name="conflict"></a>
 <h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
 <div class="section">
 <p>Clashes between plugins can occur. For example, the simplified-docbook
@@ -357,7 +397,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N1011F"></a><a name="more"></a>
+<a name="N1014C"></a><a name="more"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <ul>
