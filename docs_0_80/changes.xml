@@ -19,10 +19,9 @@
         See <link href="site:v0.80//dispatcher-concept">dispatcher development</link> and
         follow to the quickstart howto.
       (TS)</li><li><icon alt="add" src="../images/add.jpg"/>
-        Added Validation transformer to enable RELAX NG validation and
+        Add Validation Block. Uses transformers to enable RELAX NG validation and
         W3C XML Schema validation using Jing and Xerces.
-        See <link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=112598308027438">forrest-dev
-          discussion</link>.
+        See <link href="site:procedures/forrest-dev/debug-validation">documentation</link>.
       (DC) Thanks to Pier Fumagalli.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added initial whiteboard input plugin for Lenya integration.
       (RDG) Thanks to Joachim Breitsprecher. Fixes <link href="http://issues.apache.org/jira/browse/FOR-660">FOR-660</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
@@ -51,17 +50,17 @@
         PLUGIN_HOME/conf/*.xconf. Note that changes to this configuration
         file will not take effect until Forrest has been restarted.
       (RDG)</li><li><icon alt="add" src="../images/add.jpg"/>
-        Add an
-        "<link href="http://svn.apache.org/repos/asf/forrest/events/">events</link>"
-        section to our SVN to hold materials for gatherings of developers that
-        have been held outside the mailing list community.
-      (DC)</li><li><icon alt="add" src="../images/add.jpg"/>
         Added initial whiteboard output plugin for "voice".
         Read a document using a voice enabled browser such as Opera.
       (RDG) Thanks to Tom HANAX. Fixes <link href="http://issues.apache.org/jira/browse/FOR-589">FOR-589</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
         Strip remaining &lt;i18n:text&gt; elements that remain if i18n processing
         has been disabled. This was causing invalid HTML output.
-      (DC) Fixes <link href="http://issues.apache.org/jira/browse/FOR-592">FOR-592</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
+      (DC) Fixes <link href="http://issues.apache.org/jira/browse/FOR-592">FOR-592</link>.</li><li><icon alt="add" src="../images/add.jpg"/> Added a shell script to 
+        do some steps of the cocoon update process. Still there are some steps 
+        that should rather be done by a script then committer interaction. 
+        Updated the readme to state that some steps could be done by the 
+        script. <link href="http://svn.apache.org/viewcvs.cgi?rev=280710&amp;view=rev">Diff</link> 
+        (TS)</li><li><icon alt="add" src="../images/add.jpg"/>
         Refactored the view resolver code of the internal.view plugin. Created an action that
         is doing the same as before the combination of sitemap+xsl. <br/>Added 2 java classes to package
         org.apache.forrest.plugin.internal.view.acting:<br/>
@@ -171,8 +170,13 @@
       (DC) Thanks to Sjur N. Moshagen. Fixes <link href="http://issues.apache.org/jira/browse/FOR-581">FOR-581</link>, <link href="http://issues.apache.org/jira/browse/FOR-720">FOR-720</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Updated tools/forrestbar to be compatiable with recent versions of Firefox.
       (DC) Thanks to Addison Berry. Fixes <link href="http://issues.apache.org/jira/browse/FOR-180">FOR-180</link>, <link href="http://issues.apache.org/jira/browse/FOR-716">FOR-716</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
-        Enable Cocoon Profiler block.
-      (DC) Thanks to Ron Blaschke. Fixes <link href="http://issues.apache.org/jira/browse/FOR-572">FOR-572</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
+        Add Cocoon Profiler block. Use this during development to list the
+        various sitemap pipelines and components that are being used, how
+        much time was used by each, whether each component uses the Cocoon
+        cache, and show the actual xml data.
+        See <link href="site:procedures/forrest-dev/debug-cocoon-profiler">documentation</link>.
+        Thanks to Ron Blaschke for the suggestion.
+      (DC) Fixes <link href="http://issues.apache.org/jira/browse/FOR-572">FOR-572</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         The hlink and vlink colors were not set correctly by SkinconfTransformer.
       (DC) Thanks to Dave Brosius. Fixes <link href="http://issues.apache.org/jira/browse/FOR-649">FOR-649</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Synchronise the appearance of warning, fixme, and note elements
@@ -187,24 +191,50 @@
         Enhanced the initial Eclipse plugin for using Forrest via Eclipse.
         This work was enabled via a "Google Summer of Code" project.
         See <link href="site:tools/eclipse">docs</link>.
-      (RDG) Thanks to Anil Ramnanan.</li></ul></section><section><title>Changes to Documentation</title><ul><li><icon alt="add" src="../images/add.jpg"/>
+      (RDG) Thanks to Anil Ramnanan.</li><li><icon alt="update" src="../images/update.jpg"/> Added new 
+        seed targets seed-basic and seed-sample. That closes FOR-253. <link href="http://svn.apache.org/viewcvs.cgi?rev=231130&amp;view=rev">Diff</link> 
+        (TS) Fixes <link href="http://issues.apache.org/jira/browse/FOR-253">FOR-253</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Fixed sample 
+        sites from the seedTestBusiness FOR-670: forrest seedTestBusiness; 
+        forrest site fails resume dtd validation <link href="http://svn.apache.org/viewcvs.cgi?rev=279892&amp;view=rev">Diff</link> 
+        (TS) Thanks to kevin. Fixes <link href="http://issues.apache.org/jira/browse/FOR-670">FOR-670</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Added a new 
+        {defaults:view-internal} to better reuse the internal code of views. 
+        has the benefit that I only need to change the forrest-core.conf when 
+        we move views in to the core. The change in 
+        includes-viewLocationmap.xsl allows us to parse the views extension as 
+        paramater. That allows us to easily change '.fv' to '.fv.xml' via the 
+        forrest.properties. <link href="http://svn.apache.org/viewcvs.cgi?rev=215902&amp;view=rev">Diff</link> 
+        (TS)</li></ul></section><section><title>Changes to Documentation</title><ul><li><icon alt="add" src="../images/add.jpg"/>
 <!-- Please keep this action at the top -->
         Added document to facilitate
         <link href="site:v0.80//upgrading_08">upgrading to v0.8</link>
+      (DC)</li><li><icon alt="add" src="../images/add.jpg"/>
+        We now have a regular 24-hour IRC session once per month. Developers get together.
+        See <link href="site:forrest-friday">ForrestFriday</link>.
       (DC)</li><li><icon alt="add" src="../images/add.jpg"/>
         Documenting some of the locationmap syntax as comments/examples 
         until it can be done more formally.
         See 'forrest seed-sample' and 
         <link href="site:locationmap">locationmap docs</link>.
       (TWW)</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add an
+        "<link href="http://svn.apache.org/repos/asf/forrest/events/">events</link>"
+        section to our SVN to hold materials for gatherings of developers that
+        have been held outside the mailing list community.
+      (DC)</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add a new document
+        <link href="site:procedures/forrest-dev">How be a Forrest developer</link>.
+        Provides some tips and procedures for all aspects of using Forrest.
+      (DC)</li><li><icon alt="add" src="../images/add.jpg"/>
         Added document to explain the process for
         <link href="site:getting-involved/committed">Becoming an Apache Forrest
         committer</link>.
       (DC) Thanks to Addison Berry. Fixes <link href="http://issues.apache.org/jira/browse/FOR-603">FOR-603</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Clarify documentation for Forrestbot.
-      (DC) Thanks to Addison Berry. Fixes <link href="http://issues.apache.org/jira/browse/FOR-568">FOR-568</link>.</li></ul></section><section><title>Contributors</title><p>This is a list of all people who have contributed to this release, but 
+      (DC) Thanks to Addison Berry. Fixes <link href="http://issues.apache.org/jira/browse/FOR-568">FOR-568</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Added information about 
+        how to debug forrest java classes to the faq <link href="http://svn.apache.org/viewcvs.cgi?rev=291361&amp;view=rev">Diff</link> 
+        (TS)</li></ul></section><section><title>Contributors</title><p>This is a list of all people who have contributed to this release, but 
        were not full developers on the project. We thank these people for their 
-       contributions.</p><ul><li>Addison Berry</li><li>Alan Chandler</li><li>Anil Ramnanan</li><li>Dave Brosius</li><li>Gavin McDonald</li><li>Joachim Breitsprecher</li><li>Paul Devine</li><li>Phillip Evens</li><li>Pier Fumagalli</li><li>Rasik Pandey</li><li>Ron Blaschke</li><li>Sjur N. Moshagen</li><li>Steve Masover</li><li>Tom HANAX</li></ul></section></section>
+       contributions.</p><ul><li>Addison Berry</li><li>Alan Chandler</li><li>Anil Ramnanan</li><li>Dave Brosius</li><li>Gavin McDonald</li><li>Joachim Breitsprecher</li><li>kevin</li><li>Paul Devine</li><li>Phillip Evens</li><li>Pier Fumagalli</li><li>Rasik Pandey</li><li>Sjur N. Moshagen</li><li>Steve Masover</li><li>Tom HANAX</li></ul></section></section>
     <section id="version_0.7.1-dev"><title>Version 0.7.1-dev (not released)</title><section><title>Changes to the Code Base</title><ul><li><icon alt="update" src="../images/update.jpg"/>
         Howto-v20 now properly handles a/@class=fork etc. attribute to enable
         links to open in a new browser window.
@@ -445,7 +475,7 @@
         tab</link> to create subject-specific aggregated documents.
       (TS)</li></ul></section><section><title>Contributors</title><p>This is a list of all people who have contributed to this release, but 
        were not full developers on the project. We thank these people for their 
-       contributions.</p><ul><li>Cyriaque Dupoirieux</li><li>Ferdinand Soethe</li><li>Florian G. Haas</li><li>Gary Feldman</li><li>Ian P. Springer</li><li>Joao Ferreira</li><li>Johannes Schaefer</li><li>Jörg Werner</li><li>Kevin</li><li>Mark Eggers</li><li>Stephan E. Schlierf</li><li>Tamara Harpster</li><li>Upayavira</li></ul></section></section>
+       contributions.</p><ul><li>Cyriaque Dupoirieux</li><li>Ferdinand Soethe</li><li>Florian G. Haas</li><li>Gary Feldman</li><li>Ian P. Springer</li><li>Joao Ferreira</li><li>Johannes Schaefer</li><li>Jörg Werner</li><li>Kevin</li><li>Mark Eggers</li><li>Ron Blaschke</li><li>Stephan E. Schlierf</li><li>Tamara Harpster</li><li>Upayavira</li></ul></section></section>
     <section id="version_0.6"><title>Version 0.6 (2004-10-15)</title><section><title>Changes to Project Administration</title><ul><li><icon alt="update" src="../images/update.jpg"/>
         Moved forrestbot2 from scratchpad into main.  Uses ant 1.6's 
         'import' task instead of XSLT/ant.  Webapp completely
