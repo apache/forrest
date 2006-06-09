@@ -41,6 +41,8 @@
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
  <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
+ <xsl:key name="committers" match="developers/person" use="@id"/>
+ <xsl:key name="distinct-committer" match="changes/release/action" use="concat(../@version, '_', @dev)"/>
  <xsl:key name="distinct-contributor" match="changes/release/action" use="concat(../@version, '_', @due-to)"/>
  
  <xsl:template match="/">
@@ -56,7 +58,7 @@
        <xsl:value-of select="@title"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:text>History of Changes</xsl:text> <xsl:value-of select="$versionNumber"/>
+       <xsl:text>History of Changes </xsl:text> <xsl:value-of select="$versionNumber"/>
      </xsl:otherwise>
     </xsl:choose>
    </title>
@@ -82,8 +84,8 @@
     <xsl:if test="$projectInfo.changes.includeCommitterList = 'true' and //developers">
        <section>
          <title>Committers</title>
-         <p>This is a list of all people who have been 
-         voted in as committers on this project.</p>
+         <p>This is a list of all people who have ever participated
+         as committers on this project.</p>
          
          <ul>
            <xsl:for-each select="//developers/person">
@@ -129,15 +131,29 @@
    </xsl:for-each>
    <xsl:if test="$projectInfo.changes.includeContributorList = 'true' and action[@due-to]">
      <section>
-       <title>Contributors</title>
-       <p>This is a list of all people who have contributed to this release, but 
-       were not full developers on the project. We thank these people for their 
-       contributions.</p>
-
-       <p>
+       <title>Contributors to this release</title>
+       <p>We thank the following people for their contributions to this release.</p>
+       <p>This is a list of all people who participated as committers:<br/>
+         <xsl:for-each select="action[generate-id()=generate-id(key('distinct-committer', concat(../@version, '_', @dev)))]">
+           <xsl:sort select="@dev"/>
+           <xsl:value-of select="key('committers', @dev)/@name"/>
+           <xsl:text> (</xsl:text>
+           <xsl:value-of select="@dev"/>
+           <xsl:text>)</xsl:text>
+           <xsl:if test="not(position()=last())">
+              <xsl:text>, </xsl:text>
+           </xsl:if>
+           <xsl:if test="position()=last()">
+              <xsl:text>.</xsl:text>
+           </xsl:if>
+         </xsl:for-each>
+       </p>
+       <p>This is a list of other contributors:<br/>
          <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', concat(../@version, '_', @due-to)))]">
            <xsl:sort select="@due-to"/>
            <xsl:value-of select="@due-to"/>
+           <!-- FIXME: There must be an extra node here from the entries
+                that do not have @due-to. Workaround is to skip position #1 -->
            <xsl:if test="not(position()=1) and not(position()=last())">
               <xsl:text>, </xsl:text>
             </xsl:if>
