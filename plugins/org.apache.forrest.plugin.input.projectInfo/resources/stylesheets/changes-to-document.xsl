@@ -41,6 +41,7 @@
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
  <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
+ <xsl:key name="types" match="changes/release/action" use="@type"/>
  <xsl:key name="committers" match="developers/person" use="@id"/>
  <xsl:key name="distinct-committer" match="changes/release/action" use="concat(../@version, '_', @dev)"/>
  <xsl:key name="distinct-contributor" match="changes/release/action" use="concat(../@version, '_', @due-to)"/>
@@ -66,6 +67,19 @@
    <body>
 
     <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
+    <section id="introduction">
+      <title>Introduction and explanation of symbols</title>
+      <p>The following symbols are used to denote the various action types:
+        <xsl:for-each select="//release/action[generate-id()=generate-id(key('types', @type))]">
+          <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
+          <xsl:text>=</xsl:text>
+          <xsl:value-of select="@type"/>
+          <xsl:if test="not(position()=last())">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </p>
+    </section>
     <xsl:choose>
       <xsl:when test="$versionNumber">
         <xsl:choose>
@@ -82,8 +96,8 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="$projectInfo.changes.includeCommitterList = 'true' and //developers">
-       <section>
-         <title>Committers</title>
+       <section id="all-committers">
+         <title>All Committers</title>
          <p>This is a list of all people who have ever participated
          as committers on this project.</p>
          
