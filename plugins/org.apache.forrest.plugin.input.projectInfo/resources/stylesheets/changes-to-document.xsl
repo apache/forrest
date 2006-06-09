@@ -41,7 +41,7 @@
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
  <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
- <xsl:key name="distinct-contributor" match="changes/release/action" use="@due-to"/>
+ <xsl:key name="distinct-contributor" match="changes/release/action" use="concat(../@version, '_', @due-to)"/>
  
  <xsl:template match="/">
   <xsl:apply-templates select="//changes"/>
@@ -135,11 +135,14 @@
        contributions.</p>
 
        <p>
-         <xsl:for-each select="action[@due-to and count(. | key('distinct-contributor', @due-to)[1]) = 1 and not(@due-to='')]">
+         <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', concat(../@version, '_', @due-to)))]">
            <xsl:sort select="@due-to"/>
            <xsl:value-of select="@due-to"/>
-           <xsl:if test="not(position()=last())">
+           <xsl:if test="not(position()=1) and not(position()=last())">
               <xsl:text>, </xsl:text>
+            </xsl:if>
+           <xsl:if test="position()=last()">
+              <xsl:text>.</xsl:text>
             </xsl:if>
          </xsl:for-each>
        </p>
