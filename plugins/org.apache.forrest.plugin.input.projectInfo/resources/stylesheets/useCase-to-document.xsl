@@ -24,10 +24,6 @@
     <xsl:param name="includeStepsSummary">true</xsl:param>
 
  <xsl:template match="/">
-  <xsl:apply-templates select="//useCases"/>
- </xsl:template>
-
- <xsl:template match="useCases">
   <document>
    <header>
     <title>
@@ -42,9 +38,16 @@
     </title>
    </header>
    <body>
-    <xsl:apply-templates select="useCase"/>
+       <xsl:apply-templates select="//useCases"/>
    </body>
   </document>
+ </xsl:template>
+
+ <xsl:template match="useCases">
+   <section>
+     <title><xsl:value-of select="title"/></title>
+     <xsl:apply-templates select="useCase"/>
+   </section>
  </xsl:template>
 
  <xsl:template match="useCase">
