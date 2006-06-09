@@ -149,7 +149,7 @@
   <li>
    <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
    <xsl:apply-templates/>
-   <xsl:text>(</xsl:text><xsl:value-of select="@dev"/><xsl:text>)</xsl:text>
+   <xsl:text>Committed by </xsl:text><xsl:value-of select="@dev"/><xsl:text>.</xsl:text>
 
    <xsl:if test="@due-to and @due-to!=''">
     <xsl:text> Thanks to </xsl:text>
