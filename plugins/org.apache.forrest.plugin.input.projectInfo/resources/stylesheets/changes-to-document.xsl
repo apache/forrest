@@ -167,7 +167,7 @@
    </xsl:if>
 
    <xsl:if test="@fixes-bug">
-     <xsl:text> Fixes </xsl:text>
+     <xsl:text> See Issue </xsl:text>
      <xsl:call-template name="print-bugs">
        <xsl:with-param name="buglist" select="translate(normalize-space(@fixes-bug),' ','')"/>
      </xsl:call-template>
