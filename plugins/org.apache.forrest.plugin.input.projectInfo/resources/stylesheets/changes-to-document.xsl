@@ -135,7 +135,7 @@
        contributions.</p>
 
        <p>
-         <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', @due-to))]">
+         <xsl:for-each select="action[@due-to and count(. | key('distinct-contributor', @due-to)[1]) = 1 and not(@due-to='')]">
            <xsl:sort select="@due-to"/>
            <xsl:value-of select="@due-to"/>
            <xsl:text>, </xsl:text>
