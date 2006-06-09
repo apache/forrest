@@ -133,13 +133,14 @@
        <p>This is a list of all people who have contributed to this release, but 
        were not full developers on the project. We thank these people for their 
        contributions.</p>
-       
-       <ul>
+
+       <p>
          <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', @due-to))]">
            <xsl:sort select="@due-to"/>
-           <li><xsl:value-of select="@due-to"/></li>
+           <xsl:value-of select="@due-to"/>
+           <xsl:text>, </xsl:text>
          </xsl:for-each>
-       </ul>
+       </p>
      </section>
    </xsl:if>
   </section>
