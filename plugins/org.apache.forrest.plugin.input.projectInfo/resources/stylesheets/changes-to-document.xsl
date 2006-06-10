@@ -144,7 +144,7 @@
      </ul>
     </section>
    </xsl:for-each>
-   <xsl:if test="$projectInfo.changes.includeContributorList = 'true' and action[@due-to]">
+   <xsl:if test="$projectInfo.changes.includeContributorList = 'true'">
      <section>
        <title>Contributors to this release</title>
        <p>We thank the following people for their contributions to this release.</p>
@@ -163,20 +163,22 @@
            </xsl:if>
          </xsl:for-each>
        </p>
-       <p>This is a list of other contributors:<br/>
-         <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', concat(../@version, '_', @due-to)))]">
-           <xsl:sort select="@due-to"/>
-           <xsl:value-of select="@due-to"/>
-           <!-- FIXME: There must be an extra node here from the entries
-                that do not have @due-to. Workaround is to skip position #1 -->
-           <xsl:if test="not(position()=1) and not(position()=last())">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-           <xsl:if test="position()=last()">
-              <xsl:text>.</xsl:text>
-            </xsl:if>
-         </xsl:for-each>
-       </p>
+       <xsl:if test="action[@due-to]">
+         <p>This is a list of other contributors:<br/>
+           <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', concat(../@version, '_', @due-to)))]">
+             <xsl:sort select="@due-to"/>
+             <xsl:value-of select="@due-to"/>
+             <!-- FIXME: There must be an extra node here from the entries
+                  that do not have @due-to. Workaround is to skip position #1 -->
+             <xsl:if test="not(position()=1) and not(position()=last())">
+               <xsl:text>, </xsl:text>
+             </xsl:if>
+             <xsl:if test="position()=last()">
+               <xsl:text>.</xsl:text>
+             </xsl:if>
+           </xsl:for-each>
+         </p>
+       </xsl:if>
      </section>
    </xsl:if>
   </section>
