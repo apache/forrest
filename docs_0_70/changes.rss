@@ -23,6 +23,7 @@
     
     
     
+    
 
     
   
@@ -41,6 +42,12 @@
   
     
       
+        See each
+          plugin
+          for its detailed changes.
+        
+      
+      
 
       <item><title>docs add</title><link>changes.html</link><description>docs add
         by
@@ -51,6 +58,8 @@
         Added document to facilitate
         upgrading to v0.8
       </description></item>
+
+
 
 
 
@@ -160,15 +169,6 @@
         backward-compatible, so existing users need to move original images
         from the old "big" directory and remove the "preview" and "small" directories.
       </description></item>
-
-      <item><title>code add</title><link>changes.html</link><description>code add
-        by
-        TS
-        :
-         New protocol / source factory 
-        that is contacting the locationmap module to look up the source. Use it 
-        like lm://resolve.contract.html.content-main for source resolving. 
-        </description></item>
         
       <item><title>code add</title><link>changes.html</link><description>code add
         by
@@ -177,6 +177,15 @@
          Added first implementation of 
         the dispatcher. Including contract bean implementation and interface; 
         dispatcher exception and dispatcher transformers. </description></item>
+
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        DC
+        :
+        
+        Upgrade our packaged Cocoon to cocoon-2.2.0-dev-r351990 and enhanced the notes
+        about how to upgrade.
+      </description></item>
       
       <item><title>code update</title><link>changes.html</link><description>code update
         by
@@ -186,7 +195,17 @@
         New skinconf parameter "disable-copyright-footer" (default=false)
         to not show the copyright notice in html page footer.
       </description></item>
-
+      
+ 
+ 
+      <item><title>docs update</title><link>changes.html</link><description>docs update
+        by
+        TS
+        :
+         Added lenya.zone 
+        site to the dispatcher section in the live sites. 
+      </description></item>
+      
 
 
       <item><title>code add</title><link>changes.html</link><description>code add
@@ -196,7 +215,7 @@
         
         Add new site seeding targets and a new business seed target.
         This allows for interactive creation of seed sites - existing
-        'forrest seed' behaviour is unchanged and is equivalent to 'forrest seed-sample'.
+        'forrest seed' behaviour is unchanged which is equivalent to 'forrest seed-sample'.
         New ones are 'forrest seed-business' and 'forrest seed-basic'.
       </description></item>
 
@@ -206,7 +225,7 @@
         :
         
         Enable use of common character entities in skinconf.xml,
-        e.g accented characters and trademark symbols.
+        e.g. accented characters and trademark symbols.
        Thanks to Paul Devine.</description></item>
   
         <item><title>code update</title><link>changes.html</link><description>code update
@@ -242,6 +261,49 @@
         and the Cocoon logs).
         Doing 'forrest clean' will remove both sections.
       </description></item>
+      
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added 
+        LocationmapSourceFactory.java. With this it is possible to request 
+        locationmap source via lm://my-location which makes it easier to use it 
+        without contacting a input module in java and any other files. Diff 
+      </description></item>
+      
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added variable.helper.xsl 
+        to the core, should be enhanced by matching the 
+        default.forrest.properties.xml. This xsl will produce all variables we 
+        use in skins to the new property system. Moved pathutils.xsl to the 
+        core from the skins. Diff 
+      </description></item>
+        
+      <item><title>docs update
+          (bug FOR-768)
+        </title><link>changes.html</link><description>docs update
+        by
+        TS
+          (fixes bug FOR-768)
+        
+        :
+        
+       Added section "linking to external css files" to howto-structurer-dsl doc.
+       Thanks to Paul Bolger.</description></item>
+      
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added helper 
+        stylesheets to locationmap and core stylesheets. generateId.xsl (will 
+        generate a unique id) and replaceCharsInString.xsl (will find and 
+        replace character in a string) Diff 
+        </description></item>
 
 
   
@@ -266,8 +328,17 @@
         
         :
         
-        Updated tools/forrestbar to be compatiable with recent versions of Firefox.
+        Updated tools/forrestbar to be compatible with recent versions of Firefox.
        Thanks to Addison Berry.</description></item>
+      <item><title>code add</title><link>changes.html</link><description>code add
+        by
+        DC
+        :
+        
+        Describe the 
+        status messages
+        that are issued by Cocoon CLI during processing of each doc.
+      </description></item>
 
       <item><title>code add</title><link>changes.html</link><description>code add
         by
@@ -278,8 +349,66 @@
         "broken-links.xml" so that when building with Forrestbot
         you can easily view it.
       </description></item>
+      <item><title>code update
+          (bug FOR-710)
+        </title><link>changes.html</link><description>code update
+        by
+        RDG
+          (fixes bug FOR-710)
+        
+        :
+        
+        Correctly handle w3c-xml-schema rules in 
+        SourceTypeAction.
+       Thanks to Josias Thoeny.</description></item>
+      <item><title>code add
+          (bug FOR-200)
+        </title><link>changes.html</link><description>code add
+        by
+        RDG
+          (fixes bug FOR-200)
+        
+        :
+        
+        Reviewed all sitemaps to use locationmap references (lm:).
+        At the same time we changed filenames of core stylesheets to follow 
+        a filename convention (e.g. html2document.xsl =&gt; html-to-document.xsl)
+        which enables automated locationmap matches.
+        Thanks to the many people who were involved with addressing this issue.
+        See the commit logs associated with FOR-200.
+       Thanks to Community.</description></item>
+
+      <item><title>code add
+          (bug FOR-200)
+        </title><link>changes.html</link><description>code add
+        by
+        RDG
+          (fixes bug FOR-200)
+        
+        :
+        
+        Add notes about naming convention for locationmap references.
+        Gathered from a ForrestFriday IRC session (thanks to Tim Williams for writing them up).
+        See locationmap docs.
+       Thanks to Community.</description></item>
 
 
+
+      <item><title>code add</title><link>changes.html</link><description>code add
+        by
+        RDG
+        :
+        
+        Added initial whiteboard internal plugin xhtml2. Started work on xhtml in the core.
+      </description></item>
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        JJP
+        :
+        
+        Upgrade our packaged Cocoon to cocoon-2.2.0-dev-r279987 and enhanced the notes
+        about how to upgrade.
+      </description></item>
 
       <item><title>code add</title><link>changes.html</link><description>code add
         by
@@ -291,7 +420,63 @@
         follow to the quickstart howto.
       </description></item>
 
-
+      <item><title>docs add</title><link>changes.html</link><description>docs add
+        by
+        TS
+        :
+        Added basic instructions to 
+        deploy and install the forrestbar from the source as readme.txtDiff 
+        </description></item>
+      
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+        Removed 
+        the project.theme-dir property by adding it to the lm like suggest by 
+        Ross. Diff 
+         Thanks to Ross Gardler.</description></item>
+      
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Changed the 'local 
+        forrest' caption to host:port format. Added localhost as option. added 
+        structurer xml view to devs. Diff 
+        </description></item>
+        
+      <item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+        Allowed as well 
+        localhost as local address for jetty for the forrestbar. Diff 
+        </description></item>
+      <item><title>docs update
+          (bug FOR-666)
+        </title><link>changes.html</link><description>docs update
+        by
+        RDG
+          (fixes bug FOR-666)
+        
+        :
+        
+        Clarify the FAQ about using
+        raw HTML
+        docs with no decoration.
+      </description></item>
+      <item><title>code update
+          (bug FOR-555)
+        </title><link>changes.html</link><description>code update
+        by
+        DG
+          (fixes bug FOR-555)
+        
+        :
+        
+        The xml comments from source files were not being generated to the output.
+      </description></item>
       <item><title>code add</title><link>changes.html</link><description>code add
         by
         DC
@@ -383,9 +568,10 @@
         TWW
         :
         
-        Documenting some of the locationmap syntax as comments/examples 
+        Documenting some of the locationmap syntax and naming conventions
+        as comments/examples 
         until it can be done more formally.
-        See 'forrest seed-sample' and 
+        See 'forrest seed-sample' and
         locationmap docs.
       </description></item>
       <item><title>code add</title><link>changes.html</link><description>code add
@@ -550,7 +736,7 @@
         :
          Added a shell script to 
         do some steps of the cocoon update process. Still there are some steps 
-        that should rather be done by a script then committer interaction. 
+        that should rather be done by a script, rather than committer interaction. 
         Updated the readme to state that some steps could be done by the 
         script. Diff 
         </description></item>
@@ -713,6 +899,12 @@
     
     
       
+        See each
+          plugin
+          for its detailed changes.
+        
+      
+      
       <item><title>docs add</title><link>changes.html</link><description>docs add
         by
         DC
@@ -779,6 +971,12 @@
       </description></item>
     
     
+      
+        See each
+          plugin
+          for its detailed changes.
+        
+      
       <item><title>docs add</title><link>changes.html</link><description>docs add
         by
         DC
@@ -4845,13 +5043,6 @@
         by
         TS
         :
-         New protocol / source factory 
-        that is contacting the locationmap module to look up the source. Use it 
-        like lm://resolve.contract.html.content-main for source resolving. 
-        </description></item><item><title>code add</title><link>changes.html</link><description>code add
-        by
-        TS
-        :
          Added first implementation of 
         the dispatcher. Including contract bean implementation and interface; 
         dispatcher exception and dispatcher transformers. </description></item><item><title>code update</title><link>changes.html</link><description>code update
@@ -4859,8 +5050,21 @@
         DC
         :
         
+        Upgrade our packaged Cocoon to cocoon-2.2.0-dev-r351990 and enhanced the notes
+        about how to upgrade.
+      </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        DC
+        :
+        
         New skinconf parameter "disable-copyright-footer" (default=false)
         to not show the copyright notice in html page footer.
+      </description></item><item><title>docs update</title><link>changes.html</link><description>docs update
+        by
+        TS
+        :
+         Added lenya.zone 
+        site to the dispatcher section in the live sites. 
       </description></item><item><title>code add</title><link>changes.html</link><description>code add
         by
         RDG
@@ -4868,7 +5072,7 @@
         
         Add new site seeding targets and a new business seed target.
         This allows for interactive creation of seed sites - existing
-        'forrest seed' behaviour is unchanged and is equivalent to 'forrest seed-sample'.
+        'forrest seed' behaviour is unchanged which is equivalent to 'forrest seed-sample'.
         New ones are 'forrest seed-business' and 'forrest seed-basic'.
       </description></item><item><title>code update</title><link>changes.html</link><description>code update
         by
@@ -4876,7 +5080,7 @@
         :
         
         Enable use of common character entities in skinconf.xml,
-        e.g accented characters and trademark symbols.
+        e.g. accented characters and trademark symbols.
        Thanks to Paul Devine.</description></item><item><title>code update</title><link>changes.html</link><description>code update
         by
         FSO
@@ -4905,7 +5109,42 @@
         (usually build/tmp and build/webapp which include the Cocoon cache
         and the Cocoon logs).
         Doing 'forrest clean' will remove both sections.
-      </description></item><item><title>code update
+      </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added 
+        LocationmapSourceFactory.java. With this it is possible to request 
+        locationmap source via lm://my-location which makes it easier to use it 
+        without contacting a input module in java and any other files. Diff 
+      </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added variable.helper.xsl 
+        to the core, should be enhanced by matching the 
+        default.forrest.properties.xml. This xsl will produce all variables we 
+        use in skins to the new property system. Moved pathutils.xsl to the 
+        core from the skins. Diff 
+      </description></item><item><title>docs update
+          (bug FOR-768)
+        </title><link>changes.html</link><description>docs update
+        by
+        TS
+          (fixes bug FOR-768)
+        
+        :
+        
+       Added section "linking to external css files" to howto-structurer-dsl doc.
+       Thanks to Paul Bolger.</description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Added helper 
+        stylesheets to locationmap and core stylesheets. generateId.xsl (will 
+        generate a unique id) and replaceCharsInString.xsl (will find and 
+        replace character in a string) Diff 
+        </description></item><item><title>code update
           (bug FOR-581,FOR-720)
         </title><link>changes.html</link><description>code update
         by
@@ -4924,8 +5163,16 @@
         
         :
         
-        Updated tools/forrestbar to be compatiable with recent versions of Firefox.
+        Updated tools/forrestbar to be compatible with recent versions of Firefox.
        Thanks to Addison Berry.</description></item><item><title>code add</title><link>changes.html</link><description>code add
+        by
+        DC
+        :
+        
+        Describe the 
+        status messages
+        that are issued by Cocoon CLI during processing of each doc.
+      </description></item><item><title>code add</title><link>changes.html</link><description>code add
         by
         RDG
         :
@@ -4933,6 +5180,57 @@
         The broken-links file is now copied into to the site root as
         "broken-links.xml" so that when building with Forrestbot
         you can easily view it.
+      </description></item><item><title>code update
+          (bug FOR-710)
+        </title><link>changes.html</link><description>code update
+        by
+        RDG
+          (fixes bug FOR-710)
+        
+        :
+        
+        Correctly handle w3c-xml-schema rules in 
+        SourceTypeAction.
+       Thanks to Josias Thoeny.</description></item><item><title>code add
+          (bug FOR-200)
+        </title><link>changes.html</link><description>code add
+        by
+        RDG
+          (fixes bug FOR-200)
+        
+        :
+        
+        Reviewed all sitemaps to use locationmap references (lm:).
+        At the same time we changed filenames of core stylesheets to follow 
+        a filename convention (e.g. html2document.xsl =&gt; html-to-document.xsl)
+        which enables automated locationmap matches.
+        Thanks to the many people who were involved with addressing this issue.
+        See the commit logs associated with FOR-200.
+       Thanks to Community.</description></item><item><title>code add
+          (bug FOR-200)
+        </title><link>changes.html</link><description>code add
+        by
+        RDG
+          (fixes bug FOR-200)
+        
+        :
+        
+        Add notes about naming convention for locationmap references.
+        Gathered from a ForrestFriday IRC session (thanks to Tim Williams for writing them up).
+        See locationmap docs.
+       Thanks to Community.</description></item><item><title>code add</title><link>changes.html</link><description>code add
+        by
+        RDG
+        :
+        
+        Added initial whiteboard internal plugin xhtml2. Started work on xhtml in the core.
+      </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        JJP
+        :
+        
+        Upgrade our packaged Cocoon to cocoon-2.2.0-dev-r279987 and enhanced the notes
+        about how to upgrade.
       </description></item><item><title>code add</title><link>changes.html</link><description>code add
         by
         TS
@@ -4941,6 +5239,54 @@
         The "dispatcher" development work has moved to two new plugins.
         See dispatcher development and
         follow to the quickstart howto.
+      </description></item><item><title>docs add</title><link>changes.html</link><description>docs add
+        by
+        TS
+        :
+        Added basic instructions to 
+        deploy and install the forrestbar from the source as readme.txtDiff 
+        </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+        Removed 
+        the project.theme-dir property by adding it to the lm like suggest by 
+        Ross. Diff 
+         Thanks to Ross Gardler.</description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+         Changed the 'local 
+        forrest' caption to host:port format. Added localhost as option. added 
+        structurer xml view to devs. Diff 
+        </description></item><item><title>code update</title><link>changes.html</link><description>code update
+        by
+        TS
+        :
+        Allowed as well 
+        localhost as local address for jetty for the forrestbar. Diff 
+        </description></item><item><title>docs update
+          (bug FOR-666)
+        </title><link>changes.html</link><description>docs update
+        by
+        RDG
+          (fixes bug FOR-666)
+        
+        :
+        
+        Clarify the FAQ about using
+        raw HTML
+        docs with no decoration.
+      </description></item><item><title>code update
+          (bug FOR-555)
+        </title><link>changes.html</link><description>code update
+        by
+        DG
+          (fixes bug FOR-555)
+        
+        :
+        
+        The xml comments from source files were not being generated to the output.
       </description></item><item><title>code add</title><link>changes.html</link><description>code add
         by
         DC
@@ -5022,9 +5368,10 @@
         TWW
         :
         
-        Documenting some of the locationmap syntax as comments/examples 
+        Documenting some of the locationmap syntax and naming conventions
+        as comments/examples 
         until it can be done more formally.
-        See 'forrest seed-sample' and 
+        See 'forrest seed-sample' and
         locationmap docs.
       </description></item><item><title>code add</title><link>changes.html</link><description>code add
         by
@@ -5167,7 +5514,7 @@
         :
          Added a shell script to 
         do some steps of the cocoon update process. Still there are some steps 
-        that should rather be done by a script then committer interaction. 
+        that should rather be done by a script, rather than committer interaction. 
         Updated the readme to state that some steps could be done by the 
         script. Diff 
         </description></item><item><title>code update
