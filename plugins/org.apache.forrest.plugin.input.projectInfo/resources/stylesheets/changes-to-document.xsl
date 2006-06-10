@@ -115,6 +115,7 @@
  <xsl:template match="release">
   <section id="version_{@version}">
    <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
+   <xsl:apply-templates select="introduction"/>
    <xsl:for-each select="action[generate-id()=generate-id(key('contexts',concat(../@version, '_', @context)))]">
     <xsl:sort select="@context"/>
     <section>
@@ -245,6 +246,10 @@
        <link href="{concat($bugtracking-url, $buglist)}"><xsl:value-of select="$buglist"/></link>
      </xsl:otherwise>
    </xsl:choose>
+ </xsl:template>
+
+ <xsl:template match="introduction">
+   <xsl:apply-templates/>
  </xsl:template>
 
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
