@@ -78,6 +78,7 @@
         <xsl:text>chronologically with the most recent at the top.</xsl:text>
         These symbols denote the various action types:
         <xsl:for-each select="//release/action[generate-id()=generate-id(key('types', @type))]">
+          <xsl:sort select="@type"/>
           <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
           <xsl:text>=</xsl:text>
           <xsl:value-of select="@type"/>
