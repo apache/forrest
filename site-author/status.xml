@@ -38,6 +38,7 @@
     <person name="Thorsten Scherler"    email="thorsten@apache.org"     id="TS"/>
     <person name="Rick Tessner"         email="rick@apache.org"         id="RFT"/>
     <person name="Ferdinand Soethe"     email="ferdinand@apache.org"    id="FSO"/>
+    <person name="Johannes Schaefer"    email="josch@apache.org"        id="JS"/>
     <person name="Cyriaque Dupoirieux"  email="cdupoirieux@apache.org"  id="CD"/>
     <person name="Bertrand Delacretaz"  email="bdelacretaz@apache.org"  id="BD"/>
     <person name="Tim Williams"         email="twilliams@apache.org"    id="TWW"/>
@@ -209,9 +210,41 @@
       </action>
       
  <!-- 2006-01 -->
- 
+      <action dev="RDG" type="update" context="code">
+        Ensure that content exists before forrest starts.
+      </action>
+      <action dev="JS" type="update" context="code">
+        Add a new xslt template "add.class" to properly append extra class attributes
+        to note|warning|fixme|code elements to enable extra CSS classification.
+        <link href="http://svn.apache.org/viewvc?rev=358325&amp;view=rev">Diff</link> 
+      </action>
+      <action dev="DC" type="update" context="code">
+        Review and synchronise our Cocoon configuration.
+      </action>
       <action dev="TS" type="update" context="docs"> Added lenya.zone 
         site to the dispatcher section in the live sites. 
+      </action>
+      <action dev="DC" type="add" context="code">
+        New skinconf parameter "disable-copyright-footer" (default=false)
+        to not show the copyright notice in html page footer.
+      </action>
+      <action dev="RDG" type="add" context="code" fixes-bug="FOR-588">
+        Added ForrestConfModule as the beginning of a new configuration system.
+      </action>
+      <action dev="RDG" type="add" context="code" fixes-bug="FOR-388">
+        A "half way" solution to using plugins in place. Note that if you modify
+        your plugin code you will still need to do "ant local-deploy" to see the
+        changes. This patch only ensures that the plugin is installed on the
+        first run.
+      </action>
+      <action context="code" type="remove" dev="RDG" importance="high">
+        Remove xconf support for plugins. Cocoon has moved away from this
+        XConfToolTask xpatch technique.
+        <link href="http://svn.apache.org/viewvc?rev=354749&amp;view=rev">Diff</link> 
+      </action>
+      <action dev="DC" type="update" context="code">
+        Reduce some log messages duplication. Tidy up the log configuration file.
+        Add a commented example of adding contextual info to other logs.
       </action>
       <action context="code" type="update" dev="RDG" due-to="Richard Calmbach" fixes-bug="FOR-771">
         Improve symlink resolution and fix incorrect argument passing
