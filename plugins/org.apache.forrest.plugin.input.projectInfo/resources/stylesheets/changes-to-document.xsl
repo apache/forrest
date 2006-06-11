@@ -59,7 +59,7 @@
        <xsl:value-of select="@title"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:text>History of Changes </xsl:text> <xsl:value-of select="$versionNumber"/>
+       <xsl:text>History of Changes</xsl:text> <xsl:value-of select="$versionNumber"/>
      </xsl:otherwise>
     </xsl:choose>
    </title>
@@ -69,7 +69,14 @@
     <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
     <section id="introduction">
       <title>Introduction and explanation of symbols</title>
-      <p>The following symbols are used to denote the various action types:
+      <p>Changes are sorted
+        <xsl:if test="$projectInfo.changes.sort!='none'">
+          <xsl:text>by "</xsl:text>
+           <xsl:value-of select="$projectInfo.changes.sort"/>
+          <xsl:text>" and then </xsl:text>
+        </xsl:if>
+        <xsl:text>chronologically with the most recent at the top.</xsl:text>
+        These symbols denote the various action types:
         <xsl:for-each select="//release/action[generate-id()=generate-id(key('types', @type))]">
           <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
           <xsl:text>=</xsl:text>
