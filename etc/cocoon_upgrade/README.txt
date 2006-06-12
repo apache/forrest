@@ -7,6 +7,10 @@ stable version of Cocoon trunk.
 Instructions for use:
 
 FIXME: Latest Cocoon uses Maven, so this instructions needs to get updated.
+http://cocoon.zones.apache.org/daisy/documentation/g2/756.html
+
+try this command to install:
+mvn -Dmaven.test.skip=true install
 
 
 NOTE:
