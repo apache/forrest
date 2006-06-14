@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "document-v13.dtd">
-<document><header><title>History of Changes </title></header><body><p><link href="changes.rss"><img alt="RSS" src="images/rss.png"/></link></p><section id="introduction"><title>Introduction and explanation of symbols</title><p>The following symbols are used to denote the various action types:
-        <icon alt="add" src="images/add.jpg"/>=add, <icon alt="update" src="images/update.jpg"/>=update, <icon alt="fix" src="images/fix.jpg"/>=fix, <icon alt="remove" src="images/remove.jpg"/>=remove</p></section>
+<document><header><title>History of Changes</title></header><body><p><link href="changes.rss"><img alt="RSS" src="images/rss.png"/></link></p><section id="introduction"><title>Introduction and explanation of symbols</title><p>Changes are sorted
+        by "type" and then chronologically with the most recent at the top.
+        These symbols denote the various action types:
+        <icon alt="add" src="images/add.jpg"/>=add, <icon alt="fix" src="images/fix.jpg"/>=fix, <icon alt="remove" src="images/remove.jpg"/>=remove, <icon alt="update" src="images/update.jpg"/>=update</p></section>
     <section id="version_0.8-dev"><title>Version 0.8-dev (not yet released)</title>
         <p>See each
           <link href="site:v0.80//plugins/index">plugin</link>
@@ -9,11 +11,35 @@
       <section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="images/add.jpg"/> Added first implementation of 
         the dispatcher. Including contract bean implementation and interface; 
         dispatcher exception and dispatcher transformers. Committed by TS.</li><li><icon alt="add" src="images/add.jpg"/>
+        New skinconf parameter "disable-copyright-footer" (default=false)
+        to not show the copyright notice in html page footer.
+      Committed by DC.</li><li><icon alt="add" src="images/add.jpg"/>
+        Added ForrestConfModule as the beginning of a new configuration system.
+      Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-588">FOR-588</link>.</li><li><icon alt="add" src="images/add.jpg"/>
+        A "half way" solution to using plugins in place. Note that if you modify
+        your plugin code you will still need to do "ant local-deploy" to see the
+        changes. This patch only ensures that the plugin is installed on the
+        first run.
+      Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-388">FOR-388</link>.</li><li><icon alt="add" src="images/add.jpg"/>
         Add new site seeding targets and a new business seed target.
         This allows for interactive creation of seed sites - existing
         'forrest seed' behaviour is unchanged which is equivalent to 'forrest seed-sample'.
         New ones are 'forrest seed-business' and 'forrest seed-basic'.
       Committed by RDG.</li><li><icon alt="add" src="images/add.jpg"/>
+        Added new "clean" targets. Doing 'forrest clean-site' will remove
+        the contents of the project's generated documents directory.
+        Doing 'forrest clean-work' will remove the project's work directories
+        (usually build/tmp and build/webapp which include the Cocoon cache
+        and the Cocoon logs).
+        Doing 'forrest clean' will remove both sections.
+      Committed by DC.</li><li><icon alt="add" src="images/add.jpg"/>
+        Clarify some confusing notes about site/@href in seeds xdocs/site.xml files.
+      Committed by DC.</li><li><icon alt="add" src="images/add.jpg"/>
+       Finish renaming of files for a-to-b.xsl naming convention. 
+      Committed by DG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-697">FOR-697</link>.</li><li><icon alt="add" src="images/add.jpg"/>
+        Add a Devs menu to tools/forrestbar to help with testing intermediate
+        Cocoon pipelines.
+      Committed by CD.</li><li><icon alt="add" src="images/add.jpg"/>
         Describe the 
         <link href="site:faq/build_msg_a">status messages</link>
         that are issued by Cocoon CLI during processing of each doc.
@@ -131,6 +157,10 @@
         See <link href="site:v0.80//locationmap">locationmap docs</link> for more information.
         Thanks to Unico Hommes for the original locationmap implementation which
         was added to Forrest long ago.
+      Committed by RDG.</li><li><icon alt="remove" src="images/remove.jpg"/>
+        Remove xconf support for plugins. Cocoon has moved away from this
+        XConfToolTask xpatch technique.
+        <link href="http://svn.apache.org/viewvc?rev=354749&amp;view=rev">Diff</link> 
       Committed by RDG.</li><li><icon alt="update" src="images/update.jpg"/>
         Enabled i18n by default in fresh-site: as the default i18n config now requires
         an explicit locale specification (using an URL parameter for example), this shouldn't
@@ -170,6 +200,20 @@
         New skinconf parameter "disable-copyright-footer" (default=false)
         to not show the copyright notice in html page footer.
       Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/>
+        Ensure that content exists before forrest starts.
+      Committed by RDG.</li><li><icon alt="update" src="images/update.jpg"/>
+        Add a new xslt template "add.class" to properly append extra class attributes
+        to note|warning|fixme|code elements to enable extra CSS classification.
+        <link href="http://svn.apache.org/viewvc?rev=358325&amp;view=rev">Diff</link> 
+      Committed by JS.</li><li><icon alt="update" src="images/update.jpg"/>
+        Review and synchronise our Cocoon configuration.
+      Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/>
+        Reduce some log messages duplication. Tidy up the log configuration file.
+        Add a commented example of adding contextual info to other logs.
+      Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/>
+        Improve symlink resolution and fix incorrect argument passing
+        in the bin/forrest shell script.
+      Committed by RDG. Thanks to Richard Calmbach. See Issue <link href="http://issues.apache.org/jira/browse/FOR-771">FOR-771</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         Enable use of common character entities in skinconf.xml,
         e.g. accented characters and trademark symbols.
       Committed by DC. Thanks to Paul Devine.</li><li><icon alt="update" src="images/update.jpg"/>
@@ -181,14 +225,7 @@
             in the extra-css-section of skinconfig.
         Committed by FSO.</li><li><icon alt="update" src="images/update.jpg"/>
             Fixed problems with disappearing of id-attributes in img-element and several others.    
-        Committed by FSO.</li><li><icon alt="update" src="images/update.jpg"/>
-        Added new "clean" targets. Doing 'forrest clean-site' will remove
-        the contents of the project's generated documents directory.
-        Doing 'forrest clean-work' will remove the project's work directories
-        (usually build/tmp and build/webapp which include the Cocoon cache
-        and the Cocoon logs).
-        Doing 'forrest clean' will remove both sections.
-      Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/> Added 
+        Committed by FSO.</li><li><icon alt="update" src="images/update.jpg"/> Added 
         LocationmapSourceFactory.java. With this it is possible to request 
         locationmap source via lm://my-location which makes it easier to use it 
         without contacting a input module in java and any other files. <link href="http://svn.apache.org/viewcvs.cgi?rev=355474&amp;view=rev">Diff</link> 
@@ -281,11 +318,19 @@
         Provides some tips and procedures for all aspects of using Forrest.
       Committed by DC.</li><li><icon alt="add" src="images/add.jpg"/>
         Added document to explain the process for
-        <link href="site:getting-involved/committed">Becoming an Apache Forrest
+        <link href="site:committed">Becoming an Apache Forrest
         committer</link>.
       Committed by DC. Thanks to Addison Berry. See Issue <link href="http://issues.apache.org/jira/browse/FOR-603">FOR-603</link>.</li><li><icon alt="update" src="images/update.jpg"/> Added lenya.zone 
         site to the dispatcher section in the live sites. 
       Committed by TS.</li><li><icon alt="update" src="images/update.jpg"/>
+        Enhance etc/RELEASE_NOTES.txt
+      Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/>
+        Add section about using new/experimental features (e.g. Locationmap, Dispatcher) together with plugins.
+        See <link href="site:buildPlugin">Howto Build Plugins</link> doc.
+      Committed by RDG.</li><li><icon alt="update" src="images/update.jpg"/>
+        Add section about managing the plugins descriptors to
+        <link href="site:buildPlugin">Howto Build Plugins</link> doc.
+      Committed by DC.</li><li><icon alt="update" src="images/update.jpg"/>
        Added section "linking to external css files" to howto-structurer-dsl doc.
       Committed by TS. Thanks to Paul Bolger. See Issue <link href="http://issues.apache.org/jira/browse/FOR-768">FOR-768</link>.</li><li><icon alt="update" src="images/update.jpg"/>
         Clarify the FAQ about using
@@ -295,7 +340,7 @@
         Clarify documentation for Forrestbot.
       Committed by DC. Thanks to Addison Berry. See Issue <link href="http://issues.apache.org/jira/browse/FOR-568">FOR-568</link>.</li><li><icon alt="update" src="images/update.jpg"/> Added information about 
         how to debug forrest java classes to the faq <link href="http://svn.apache.org/viewcvs.cgi?rev=291361&amp;view=rev">Diff</link> 
-        Committed by TS.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Bertrand Delacretaz (BD), Cyriaque Dupoirieux (CD), David Crossley (DC), Diwaker Gupta (DG), Ferdinand Soethe (FSO), Juan Jose Pablos (JJP), Ross Gardler (RDG), Thorsten Scherler (TS), Tim Williams (TWW).</p><p>This is a list of other contributors:<br/>Addison Berry, Alan Chandler, Anil Ramnanan, Community, Dave Brosius, Gavin McDonald, Joachim Breitsprecher, Josias Thoeny, kevin, Paul Bolger, Paul Devine, Phillip Evens, Pier Fumagalli, Rasik Pandey, Ross Gardler, Sjur N. Moshagen, Steve Masover, Tom HANAX.</p></section></section>
+        Committed by TS.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Bertrand Delacretaz (BD), Cyriaque Dupoirieux (CD), David Crossley (DC), Diwaker Gupta (DG), Ferdinand Soethe (FSO), Juan Jose Pablos (JJP), Johannes Schaefer (JS), Ross Gardler (RDG), Thorsten Scherler (TS), Tim Williams (TWW).</p><p>This is a list of other contributors:<br/>Addison Berry, Alan Chandler, Anil Ramnanan, Community, Dave Brosius, Gavin McDonald, Joachim Breitsprecher, Josias Thoeny, kevin, Paul Bolger, Paul Devine, Phillip Evens, Pier Fumagalli, Rasik Pandey, Richard Calmbach, Ross Gardler, Sjur N. Moshagen, Steve Masover, Tom HANAX.</p></section></section>
     <section id="version_0.7.1-dev"><title>Version 0.7.1-dev (not released)</title>
         <p>See each
           <link href="site:v0.70//plugins/index">plugin</link>
@@ -1727,4 +1772,4 @@
         validated using these DTDs and OASIS Catalogs.
       Committed by DC. Thanks to <link href="mailto:stevenn@outerthought.org">Steven Noels</link>.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Bert Van Kets (BK), David Crossley (DC), Jeff Turner (JT), Nicola Ken Barozzi (NKB), Stefano Mazzocchi (SM), Steven Noels (SN).</p><p>This is a list of other contributors:<br/>Bert Van Kets, Bruno Dumon, Kevin Ross, Leo Simons, Marc Portier, Peter Donald, Steven Noels.</p></section></section>
   <section id="all-committers"><title>All Committers</title><p>This is a list of all people who have ever participated
-         as committers on this project.</p><ul><li>Stefano Mazzocchi (SM)</li><li>Sam Ruby (SR)</li><li>John Morrison (JM)</li><li>David Crossley (DC)</li><li>Steven Noels (SN)</li><li>Nicola Ken Barozzi (NKB)</li><li>Konstantin Piroumian (KP)</li><li>Bert Van Kets (BK)</li><li>Marc Portier (MP)</li><li>Jeff Turner (JT)</li><li>Juan Jose Pablos (JJP)</li><li>Dave Brondsema (DB)</li><li>Antonio Gallardo (AG)</li><li>Reinhard Pötz (RP)</li><li>Ross Gardler (RDG)</li><li>Thorsten Scherler (TS)</li><li>Rick Tessner (RFT)</li><li>Ferdinand Soethe (FSO)</li><li>Cyriaque Dupoirieux (CD)</li><li>Bertrand Delacretaz (BD)</li><li>Tim Williams (TWW)</li><li>Diwaker Gupta (DG)</li><li>Volunteer needed (open)</li></ul></section></body></document>
+         as committers on this project.</p><ul><li>Stefano Mazzocchi (SM)</li><li>Sam Ruby (SR)</li><li>John Morrison (JM)</li><li>David Crossley (DC)</li><li>Steven Noels (SN)</li><li>Nicola Ken Barozzi (NKB)</li><li>Konstantin Piroumian (KP)</li><li>Bert Van Kets (BK)</li><li>Marc Portier (MP)</li><li>Jeff Turner (JT)</li><li>Juan Jose Pablos (JJP)</li><li>Dave Brondsema (DB)</li><li>Antonio Gallardo (AG)</li><li>Reinhard Pötz (RP)</li><li>Ross Gardler (RDG)</li><li>Thorsten Scherler (TS)</li><li>Rick Tessner (RFT)</li><li>Ferdinand Soethe (FSO)</li><li>Johannes Schaefer (JS)</li><li>Cyriaque Dupoirieux (CD)</li><li>Bertrand Delacretaz (BD)</li><li>Tim Williams (TWW)</li><li>Diwaker Gupta (DG)</li><li>Volunteer needed (open)</li></ul></section></body></document>
