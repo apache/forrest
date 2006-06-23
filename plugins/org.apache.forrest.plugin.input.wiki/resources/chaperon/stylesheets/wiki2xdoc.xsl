@@ -136,7 +136,7 @@
  </xsl:template>
 
  <xsl:template match="st:line" mode="paragraph">
-  <p>--------------------------------------------------------------------------------</p>
+  <hr/>
  </xsl:template>
 
  <xsl:template match="st:table" mode="paragraph"> 
@@ -275,25 +275,25 @@
 
  <xsl:template match="st:bulletedlist1" mode="paragraph">
   <ul>
-   <xsl:apply-templates select="st:bulletedlistitem1|st:bulletedlist2"/>
+   <xsl:apply-templates select="st:bulletedlistitem1"/>
   </ul>
  </xsl:template>
  
  <xsl:template match="st:bulletedlistitem1" >
    <li>
-    <xsl:apply-templates select="st:textsequence/st:textblock/*"/>
+    <xsl:apply-templates select="st:textsequence/st:textblock/*|following-sibling::st:*[1][name() != 'bulletedlistitem1']"/>
    </li>
  </xsl:template>
  
  <xsl:template match="st:bulletedlist2" >
   <ul>
-   <xsl:apply-templates select="st:bulletedlistitem2|st:bulletedlist3"/>
+   <xsl:apply-templates select="st:bulletedlistitem2"/>
   </ul>
  </xsl:template>
 
  <xsl:template match="st:bulletedlistitem2" >
   <li>
-   <xsl:apply-templates select="st:textsequence/st:textblock/*"/>
+   <xsl:apply-templates select="st:textsequence/st:textblock/*|following-sibling::st:*[1][name() != 'bulletedlistitem2']"/>
   </li>
  </xsl:template>
 
@@ -312,25 +312,25 @@
 
  <xsl:template match="st:numberedlist1" mode="paragraph">
   <ol>
-   <xsl:apply-templates select="st:numberedlistitem1|st:numberedlist2"/>
+   <xsl:apply-templates select="st:numberedlistitem1"/>
   </ol>
  </xsl:template>
 
  <xsl:template match="st:numberedlistitem1" >
   <li>
-   <xsl:apply-templates select="st:textsequence/st:textblock/*"/>
+   <xsl:apply-templates select="st:textsequence/st:textblock/*|following-sibling::st:*[1][name() != 'numberedlistitem1']"/>
   </li>
  </xsl:template>
 
  <xsl:template match="st:numberedlist2" >
   <ol>
-   <xsl:apply-templates select="st:numberedlistitem2|st:numberedlist3"/>
+   <xsl:apply-templates select="st:numberedlistitem2"/>
   </ol>
  </xsl:template>
     
  <xsl:template match="st:numberedlistitem2" >
   <li>
-   <xsl:apply-templates select="st:textsequence/st:textblock/*"/>
+   <xsl:apply-templates select="st:textsequence/st:textblock/*|following-sibling::st:*[1][name() != 'numberedlistitem2']"/>
   </li>
  </xsl:template>
 
