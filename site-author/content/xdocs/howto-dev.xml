@@ -19,7 +19,7 @@
   "http://forrest.apache.org/dtd/howto-v20.dtd">
 <howto>
   <header>
-    <title>How be a Forrest developer</title>
+    <title>How to be a Forrest developer</title>
 
     <abstract>
       This How-To provides some tips and procedures for being a
@@ -513,18 +513,19 @@ svn update -r HEAD.
 
       <section id="debug-java">
         <title>Java code</title>
+        <p>There are two ways to debug your java code. The first is through embedded
+        logging, the second is by tracing the codes execution.</p>
         <p>
-          Since there's really no way to "trace" the java code through the
-          pipeline process, you may find <code>getLogger().debug()</code> useful for
+          You may find <code>getLogger().debug()</code> useful for
           understanding the processing that goes on. You can then open the page that will
           use the selected code and use the log files mentioned above to look for
           the information message.
         </p>
-        <p>
-          If you need to debug actual Cocoon components, then you would need to add such debug
-          statements to the Cocoon sources and rebuild Forrest's packaged Cocoon
-          (as described in $FORREST_HOME/etc/cocoon_upgrade/).
-        </p>
+        <p>To step through the java code you need to run forrest with Java debugging turned
+        on. The <code>forrest.jvmargs</code>code> property in the <code>forrest.properties</code>
+        file can be used to start forrest in debug mode on a specific port. For example:</p>
+        
+        <source>forrest.jvmargs=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</source>
       </section>
 
       <section id="debug-links">
