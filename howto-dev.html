@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How be a Forrest developer</title>
+<title>How to be a Forrest developer</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
@@ -230,7 +230,7 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How be a Forrest developer</h1>
+<h1>How to be a Forrest developer</h1>
 <div class="abstract">
       This How-To provides some tips and procedures for being a
       Forrest developer.
@@ -848,19 +848,19 @@ svn update -r HEAD.
         </p>
 <a name="N10207"></a><a name="debug-java"></a>
 <h4>Java code</h4>
+<p>There are two ways to debug your java code. The first is through embedded
+        logging, the second is by tracing the codes execution.</p>
 <p>
-          Since there's really no way to "trace" the java code through the
-          pipeline process, you may find <span class="codefrag">getLogger().debug()</span> useful for
+          You may find <span class="codefrag">getLogger().debug()</span> useful for
           understanding the processing that goes on. You can then open the page that will
           use the selected code and use the log files mentioned above to look for
           the information message.
         </p>
-<p>
-          If you need to debug actual Cocoon components, then you would need to add such debug
-          statements to the Cocoon sources and rebuild Forrest's packaged Cocoon
-          (as described in $FORREST_HOME/etc/cocoon_upgrade/).
-        </p>
-<a name="N10217"></a><a name="debug-links"></a>
+<p>To step through the java code you need to run forrest with Java debugging turned
+        on. The <span class="codefrag">forrest.jvmargs</span>code&gt; property in the <span class="codefrag">forrest.properties</span>
+        file can be used to start forrest in debug mode on a specific port. For example:</p>
+<pre class="code">forrest.jvmargs=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</pre>
+<a name="N10224"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set.
@@ -881,7 +881,7 @@ svn update -r HEAD.
           configuration file or the link in your source document is not
           using the correct name for the "site:..." value.
         </p>
-<a name="N1022B"></a><a name="tips-debug"></a>
+<a name="N10238"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -891,13 +891,13 @@ svn update -r HEAD.
           </li>
         
 </ul>
-<a name="N10239"></a><a name="find"></a>
+<a name="N10246"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N10242"></a><a name="find-scenario-1"></a>
+<a name="N1024F"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -940,7 +940,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N10264"></a><a name="tips-find"></a>
+<a name="N10271"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -950,31 +950,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N10274"></a><a name="Frequently Asked Questions"></a>
+<a name="N10281"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10278"></a><a name="1+General+issues"></a>
+<a name="N10285"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N1027C"></a><a name="1.1+FAQ+1"></a>
+<a name="N10289"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N10284"></a><a name="2+Other+issues"></a>
+<a name="N10291"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N10288"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N10295"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N10290"></a><a name="Tips"></a>
+<a name="N1029D"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N10298"></a><a name="tip-howto"></a>
+<a name="N102A5"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -983,7 +983,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N102A2"></a><a name="References"></a>
+<a name="N102AF"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
