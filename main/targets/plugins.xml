@@ -360,6 +360,18 @@ to be installed again unless you delete them or wish to upgrade them.
         <echo>Fetch-plugin Ok, installing !</echo>
       </catch>
     </trycatch>
+    <!-- Here we stop if the description of a plugin has not been found... -->
+    <fail unless="plugin-found">STOP GENERATION !
+    WARNING - Cannot find the plugin description
+    ============================================ 
+
+    Unable to find the description of ${versioned.name} in the different descriptor files.
+    This plugin used by this project (declared in project.required.plugins variable of the forrest.properties).
+    Forrest will stop the generation now.
+    To correct this :
+      - Check the name of the plugin and correct it in case it is wrong,
+      - Add the missing descriptor file in the list in the forrest.plugins.descriptors variable (forrest.properties) if necessary...
+    </fail>
   </target>    
   
   <target name="install-plugin" depends="check-plugin, fetch-plugin, unpack-plugin"/>
