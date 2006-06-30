@@ -29,10 +29,9 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.net.URI;
-import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
-import javax.imageio.metadata.*;
 import javax.imageio.*;
+
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
@@ -66,6 +65,17 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  *          If no width parameter is specified, the aspect ratio
  *          of the image is kept. The parameter may be expressed as an int or a percentage.
  *     </dd>
+ *     <dt>&lt;variant&gt;</dt>
+ *     <dd> This parameter is used to create a unique filename for the persistent
+ *          version of the scaled image. This is required is any kind of transform
+ *          is specified. 
+ *     </dd>
+ *     <dt>&lt;persistentStoreLocation&gt;</dt>
+ *     <dd>This parameter defines the location on the filesystem in which transformed
+ *     images are stroed. Although this parameter is not required it is highly recomended
+ *     to provide a value otherwise your persistent store will be in the root of the 
+ *     application (on Linux) or the reader will fail (on Windows).
+ *     </dd>
  *     <dt>&lt;scale(Red|Green|Blue)&gt;</dt>
  *     <dd>This parameter is optional. When specified it will cause the
  *         specified color component in the image to be multiplied by the
@@ -94,12 +104,6 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  *         compression is used. The range is 0.0 to 1.0, if specified. 
  *     </dd>
  *   </dl>
- *
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:stephan@apache.org">Stephan Michels</a>
- * @author <a href="mailto:tcurdt@apache.org">Torsten Curdt</a>
- * @author <a href="mailto:eric@plauditdesign.com">Eric Caron</a>
- * @version $Id: ImageReader.java 348563 2005-11-23 21:02:33Z vgritsenko $
  */
 final public class PersistentImageReader extends ResourceReader {
     private static final boolean GRAYSCALE_DEFAULT = false;
@@ -119,6 +123,7 @@ final public class PersistentImageReader extends ResourceReader {
     private boolean usePercent;
     private RescaleOp colorFilter;
     private ColorConvertOp grayscaleFilter;
+	private String persistentStoreLocation;
 
 
     public void setup(SourceResolver resolver, Map objectModel, String src, Parameters par)
@@ -129,7 +134,9 @@ final public class PersistentImageReader extends ResourceReader {
         String tmpHeight = par.getParameter("height", "0");
        
         this.variant = par.getParameter("variant", "thumb");
-        getLogger().error("IMAGE VARIANT: " + this.variant);
+		this.persistentStoreLocation = par.getParameter("persistentStoreLocation", "");
+			
+        getLogger().debug("IMAGE VARIANT: " + this.variant);
         this.scaleColor[0] = par.getParameterAsFloat("scaleRed", -1.0f);
         this.scaleColor[1] = par.getParameterAsFloat("scaleGreen", -1.0f);
         this.scaleColor[2] = par.getParameterAsFloat("scaleBlue", -1.0f);
@@ -289,20 +296,23 @@ final public class PersistentImageReader extends ResourceReader {
                 
                     BufferedImage thumbBuffer = new BufferedImage(original.getColorModel(), scaledRaster, true, null);
                     URI fUri = new URI(fName);
-                    fName = fUri.getPath();
-                    File persistentImgFile = new File(fName );
-                    getLogger().debug("TRYING THUMB");
+                    
+                    String persistentFilePath = persistentStoreLocation + fUri.getPath().substring(0, fUri.getPath().lastIndexOf("/"));
+                    File persistentFileDir = new File(persistentFilePath);
+                    persistentFileDir.mkdirs();
+                    
+                    String persistentFilename = fUri.getPath().substring(fUri.getPath().lastIndexOf("/"));
+                    File persistentImgFile = new File(persistentFilePath + persistentFilename);
                     if (persistentImgFile.exists() == false) { 
                     	persistentImgFile.createNewFile();
                     }
-            		//FileImageOutputStream persistentImgStream = new FileImageOutputStream(persistentImgFile);
-            		ImageWriter writer = (ImageWriter)ImageIO.getImageWritersByFormatName("JPEG").next();
+
+                    ImageWriter writer = (ImageWriter)ImageIO.getImageWritersByFormatName("JPEG").next();
             		ImageWriteParam wp = writer.getDefaultWriteParam();
             		
             		ImageOutputStream imgOut = ImageIO.createImageOutputStream(persistentImgFile);
             		IIOImage imgImage = new IIOImage(thumbBuffer, null, null);
             		writer.setOutput(imgOut);
-            		//ImageIO.write(thumbBuffer,"jpg",imgOut);
             		
            	  		writer.write(null,imgImage,wp);
                  
@@ -328,7 +338,7 @@ final public class PersistentImageReader extends ResourceReader {
                 
                 out.flush();
             } catch (java.net.URISyntaxException e) {
-                throw new ProcessingException("Error creating thumbnail: "+ fName ,e);
+                throw new ProcessingException("Error creating persistent file for transformed version of "+ fName ,e);
             } catch (ImageFormatException e) {
                 throw new ProcessingException("Error reading the image. " +
                                               "Note that only JPEG images are currently supported.");
@@ -345,21 +355,6 @@ final public class PersistentImageReader extends ResourceReader {
             }
             super.processStream(inputStream);
         }
-    }
-    
-    private void writeThumbnail(WritableRaster img) throws ProcessingException {
-    	try {
-    		String fName = super.inputSource.getURI();
-    		fName = fName.replaceFirst(".",".thumb.");
-    		File persistentImgFile = new File(fName);
-    		FileImageOutputStream persistentImgStream = new FileImageOutputStream(persistentImgFile);
-    		ImageWriter writer = (ImageWriter)ImageIO.getImageWritersByFormatName("JPEG");
-    		IIOImage imgImage = new IIOImage(img, null, null);
-    		writer.setOutput(persistentImgStream);
-   	  		writer.write((IIOMetadata)null,imgImage ,null);
-    	} catch (Exception e) {
-    		throw new ProcessingException("Error persisting new thumbnail: " + super.inputSource.getURI());
-    	}
     }
 
     /**
