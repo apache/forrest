@@ -24,23 +24,27 @@
     content-noteTaking will output a text box to enable notes to be taken.
   </description>
   <usage><![CDATA[<forrest:contract name="content-noteTaking">  
-  <forrest:properties contract="content-noteTaking">
-    <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:properties>
-    <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:properties>
-    [<forrest:property name="content-noteTaking-cols" value="[Number of Columns]"/>]
-    [<forrest:property name="content-noteTaking-rows" vlaue="Number of Rows]"/>]
-  </forrest:properties>
+  <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:properties>
+  <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:properties>
+  [<forrest:property name="content-noteTaking-cols" value="[Number of Columns]"/>]
+  [<forrest:property name="content-noteTaking-rows" vlaue="Number of Rows]"/>]
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
       format="html" name="content-noteTaking" inputFormat="xsl" body="true" head="false">
     <xsl:stylesheet version="1.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="content-noteTaking-cols"/>
+      <xsl:param name="content-noteTaking-rows"/>
+      <xsl:param name="content-noteTaking-notes"/>
+      <xsl:param name="content-noteTaking-srcDoc"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
+            <xsl:call-template name="content-noteTaking-body"/>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
       <xsl:template name="content-noteTaking-body">
-        <xsl:param name="content-noteTaking-cols"/>
-        <xsl:param name="content-noteTaking-rows"/>
-        <xsl:param name="content-noteTaking-notes"/>
-        <xsl:param name="content-noteTaking-srcDoc"/>
-        
         <xsl:variable name="notes">
           <xsl:choose>
             <xsl:when test="not($content-noteTaking-notes='')"><xsl:value-of select="$content-noteTaking-notes"/></xsl:when>

@@ -19,59 +19,50 @@ limitations under the License.
 <forrest:views 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
-    <forrest:css url="common.css"/>
-    <forrest:contract name="siteinfo-meta">
-      <forrest:properties contract="siteinfo-meta">
-        <forrest:property name="siteinfo-meta" nugget="get.build.info">
-          <jx:import uri="cocoon://build-info"/>
-        </forrest:property>
-      </forrest:properties>
+  <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
+  <jx:set var="getRequestExtension" 
+    value="#{$cocoon/parameters/getRequestExtension}" />
+  <forrest:view type="html" hooksXpath="/html/body">
+    <forrest:contract name="branding-css-links">
+      <forrest:property name="branding-css-links-input">
+        <css url="common.css"/>
+      </forrest:property>
+    </forrest:contract>
+    <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info">
+      <forrest:property name="custom">
+         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+      </forrest:property>
     </forrest:contract>
     <forrest:hook name="container">
       <forrest:hook name="header">
         <forrest:contract name="branding-tagline">
-          <forrest:properties contract="branding-tagline">
-            <forrest:property name="branding-tagline-name">Note Taking Plugin</forrest:property>
-            <forrest:property name="branding-tagline-tagline">The ability to write notes within Forrest content objects</forrest:property>
-          </forrest:properties>
+          <forrest:property name="branding-tagline-name">Note Taking Plugin</forrest:property>
+          <forrest:property name="branding-tagline-tagline">The ability to write notes within Forrest content objects</forrest:property>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
-          <forrest:contract name="nav-main">
-            <forrest:properties contract="nav-main">
-              <forrest:property name="nav-main" nugget="get.navigation">
-                <jx:import uri="cocoon://${cocoon.parameters.getRequest}.navigation.xml"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
-          <forrest:contract name="nav-main-sub">
-            <forrest:properties contract="nav-main-sub">
-              <forrest:property name="nav-main-sub" nugget="get.navigation">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
+          <forrest:contract name="nav-main" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml"/>
+          <forrest:contract name="nav-main-sub" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml"/>
         </forrest:hook>
       </forrest:hook>
       <forrest:hook name="page">
         <forrest:hook name="leftbar">
-          <forrest:contract name="nav-section">
-            <forrest:properties contract="nav-section">
-              <forrest:property name="nav-section" nugget="get.navigation">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>
-              </forrest:property>
-            </forrest:properties>
+          <forrest:contract name="nav-section" 
+            dataURI="cocoon://#{$getRequest}.navigation.xml">
+            <forrest:property name="nav-section-toc" nugget="get.toc">
+              <jx:import uri="cocoon://#{$getRequest}.toc.xml"/>
+            </forrest:property>
+            <forrest:property name="toc" max-depth="2"/>
           </forrest:contract> 
-          <forrest:contract name="search-input">
-            <forrest:properties contract="search-input">
-              <forrest:property name="search-input">
-                <search name="MyProject" domain="mydomain" provider="google"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
+            <forrest:contract name="search-input">
+                <forrest:property name="search-input">
+                    <search name="MyProject" domain="mydomain" 
+                        provider="google"/>
+                </forrest:property>
+            </forrest:contract>
         </forrest:hook>
-<!-- 
- You can group elements to a template and call it from any view. e.g.
+<!--  You can group elements to a template and call it from any view. e.g.
 <forrest:hook name="export-link">
   <forrest:contract name="content-xml-link"/>
   <forrest:contract name="content-pdf-link"/>
@@ -91,54 +82,36 @@ HEADSUP:
         <!--<jx:import uri="lm:tiles.export-link"/>-->
 
         <forrest:hook name="content">
-          <forrest:contract name="content-title">
-            <forrest:properties contract="content-title">
-              <forrest:property name="content-title" nugget="get.title">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.title.xml"/>
-              </forrest:property>
-            </forrest:properties>
+          <forrest:contract name="content-title" 
+            dataURI="cocoon://#{$getRequest}.title.xml"/>
+          <forrest:contract name="content-abstract" 
+            dataURI="cocoon://#{$getRequest}.abstract.xml"/>
+          <forrest:contract name="content-minitoc" 
+            dataURI="cocoon://#{$getRequest}.toc.xml">
+            <forrest:property name="content-minitoc-conf" max-depth="2" 
+              min-sections="1" location="page"/>
           </forrest:contract>
-          <forrest:contract name="content-minitoc">
-            <forrest:properties contract="content-minitoc">
-              <forrest:property name="content-minitoc-toc" nugget="get.toc">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
-              </forrest:property>
-              <forrest:property name="content-minitoc-conf" >
-                <toc max-depth="2" 
-                min-sections="1" location="page"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
-          <forrest:contract name="content-main">
-            <forrest:properties contract="content-main">
-              <forrest:property name="content-main" nugget="get.body">
-                <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/>
-              </forrest:property>
-            </forrest:properties>
-          </forrest:contract>
+          <forrest:contract name="content-main" 
+              dataURI="cocoon://#{$getRequest}.body.xml"/>
         </forrest:hook>
       </forrest:hook>
       <forrest:hook name="notes">
         <forrest:contract name="content-noteTaking">
-          <forrest:properties contract="content-noteTaking">
-            <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:property>
-            <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:property>
-            <forrest:property name="content-noteTaking-cols" value="60"/>
-            <forrest:property name="content-noteTaking-rows" value="10"/>
-          </forrest:properties>
+          <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:property>
+          <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:property>
+          <forrest:property name="content-noteTaking-cols" value="60"/>
+          <forrest:property name="content-noteTaking-rows" value="10"/>
         </forrest:contract>
       </forrest:hook>
     </forrest:hook>
     <forrest:hook name="footer">
       <forrest:contract name="siteinfo-feedback">
-        <forrest:properties contract="siteinfo-feedback">
           <forrest:property name="siteinfo-feedback">
             <feedback to="webmaster@foo.com"
               href="mailto:webmaster@foo.com?subject=Feedback&#160;" >
               Send feedback about the website to:
             </feedback>
           </forrest:property>
-        </forrest:properties>
       </forrest:contract>
       <forrest:contract name="siteinfo-last-published"/>
     </forrest:hook>
