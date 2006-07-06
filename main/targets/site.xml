@@ -81,7 +81,6 @@
           </copy>
   
           <!-- Copy skin images -->
-          <!-- The following lines are causing FOR-237 -->
           <echo message="Copying main skin images to site ..."/>
           <mkdir dir="${project.site-dir}/skin/images"/>
            <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
@@ -89,11 +88,15 @@
            <!-- Do the common ones first followed by those for the skin. -->
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
-             <fileset dir="${forrest.skins-dir}/common/images"/>
+             <fileset dir="${forrest.skins-dir}/common/images">
+               <exclude name="**/*.xslt"/>
+             </fileset>
           </copy>
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
-             <fileset dir="${forrest.skins-dir}/${project.skin}/images"/>
+             <fileset dir="${forrest.skins-dir}/${project.skin}/images">
+               <exclude name="**/*.xslt"/>
+             </fileset>
           </copy>
   
           <!-- Copy project skin images -->
@@ -105,7 +108,9 @@
           </copy>
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
-            <fileset dir="${project.skins-dir}/${project.skin}/images"/>
+            <fileset dir="${project.skins-dir}/${project.skin}/images">
+              <exclude name="**/*.xslt"/>
+            </fileset>
           </copy>
   
           <!-- Copy all other non-resource files -->
@@ -118,6 +123,8 @@
             <fileset dir="${forrest.skins-dir}/common">
               <exclude name="images/**"/>
               <exclude name="xslt/**"/>
+              <exclude name="**/*.xslt"/>
+              <exclude name="skinconf.xsl"/>
             </fileset>
           </copy>
           <copy toDir="${project.site-dir}/skin" 
@@ -127,6 +134,8 @@
             <fileset dir="${forrest.skins-dir}/${project.skin}">
               <exclude name="images/**"/>
               <exclude name="xslt/**"/>
+              <exclude name="**/*.xslt"/>
+              <exclude name="skinconf.xsl"/>
             </fileset>
           </copy>
           
@@ -141,6 +150,7 @@
             <fileset dir="${project.skins-dir}/common">
               <exclude name="images/**"/>
               <exclude name="xslt/**"/>
+              <exclude name="**/*.xslt"/>
             </fileset>
           </copy>
           <copy toDir="${project.site-dir}/skin" 
@@ -150,6 +160,7 @@
             <fileset dir="${project.skins-dir}/${project.skin}">
               <exclude name="images/**"/>
               <exclude name="xslt/**"/>
+              <exclude name="**/*.xslt"/>
             </fileset>
           </copy>
           <echo>
