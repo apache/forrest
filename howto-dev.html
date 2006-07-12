@@ -325,6 +325,12 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#tips-debug">Tips</a>
 </li>
+<li>
+<a href="#profile-yourkit">Profiling Forrest with YourKit</a>
+</li>
+<li>
+<a href="#profile-netbeans">Profiling Forrest with Netbeans</a>
+</li>
 </ul>
 </li>
 <li>
@@ -891,13 +897,52 @@ svn update -r HEAD.
           </li>
         
 </ul>
-<a name="N10246"></a><a name="find"></a>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        The next two sections describe the configuration of profiling tools but they are not
+        integrated with the IDE.  If you can figure out how to properly configure the for 
+        integrated operation with the IDE, please provide a documentation patch.
+      </div>
+</div>
+<a name="N10248"></a><a name="profile-yourkit"></a>
+<h4>Profiling Forrest with YourKit</h4>
+<p>
+          Assuming you have the YourKit software installed you simply need to do two things to
+          profile a particular Forrest Project. First, you need to add *YourKit Home*\bin\win32 to
+          your PATH environment variable - where *YourKit Home* is the installation directory of that 
+          software.  Next you need to add the following to your forrest.properties file for the project.
+        </p>
+<pre class="code">forrest.jvmargs=-agentlib:yjpagent</pre>
+<p>
+          You are now all set, simply type 'forrest run', then open up YourKit and select "Connect 
+          to locally running profiled application...".   If you don't see the types of objects that you
+          expected, check the current filters - YourKit seems to filter out org.apache.* namespaces by
+          default.
+        </p>
+<a name="N10259"></a><a name="profile-netbeans"></a>
+<h4>Profiling Forrest with Netbeans</h4>
+<p>
+          Assuming you have the Netbeans IDE installed you simply need to do a couple things to 
+          profile a particular Forrest Project.  First, you need to add 
+          *Netbeans Home*\profiler1\lib\deployed\jdk142\windows to your path.  Obviously, this needs
+          to be slightly modified for a Unix machine.  Now, you need to add the following line to your
+          forrest.properties file for the project (replacing *NetbeansHome* with the path to your install).
+        </p>
+<pre class="code">forrest.jvmargs=-agentpath:C:\*NetbeansHome*\\profiler1\\lib\\deployed\\jdk15\\windows\\
+profilerinterface.dll=\C:\\*NetbeansHome*\\profiler1\\lib\\,5140</pre>
+<p>
+          You are now all set, simply type 'forrest run', then open up the Netbeans IDE with your Forrest 
+          project.  Click Profile-&gt;Attach Profiler and make selections appropriate to what you are trying 
+          to achieve. 
+        </p>
+<a name="N1026B"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N1024F"></a><a name="find-scenario-1"></a>
+<a name="N10274"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -940,7 +985,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N10271"></a><a name="tips-find"></a>
+<a name="N10296"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -950,31 +995,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N10281"></a><a name="Frequently Asked Questions"></a>
+<a name="N102A6"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10285"></a><a name="1+General+issues"></a>
+<a name="N102AA"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N10289"></a><a name="1.1+FAQ+1"></a>
+<a name="N102AE"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N10291"></a><a name="2+Other+issues"></a>
+<a name="N102B6"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N10295"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N102BA"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N1029D"></a><a name="Tips"></a>
+<a name="N102C2"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N102A5"></a><a name="tip-howto"></a>
+<a name="N102CA"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -983,7 +1028,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N102AF"></a><a name="References"></a>
+<a name="N102D4"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
