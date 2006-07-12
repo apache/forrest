@@ -560,6 +560,46 @@ svn update -r HEAD.
           </li>
         </ul>
       </section>
+
+      <note>
+        The next two sections describe the configuration of profiling tools but they are not
+        integrated with the IDE.  If you can figure out how to properly configure the for 
+        integrated operation with the IDE, please provide a documentation patch.
+      </note>
+      
+      <section id="profile-yourkit">
+        <title>Profiling Forrest with YourKit</title>
+        <p>
+          Assuming you have the YourKit software installed you simply need to do two things to
+          profile a particular Forrest Project. First, you need to add *YourKit Home*\bin\win32 to
+          your PATH environment variable - where *YourKit Home* is the installation directory of that 
+          software.  Next you need to add the following to your forrest.properties file for the project.
+        </p>
+        <source>forrest.jvmargs=-agentlib:yjpagent</source>
+        <p>
+          You are now all set, simply type 'forrest run', then open up YourKit and select "Connect 
+          to locally running profiled application...".   If you don't see the types of objects that you
+          expected, check the current filters - YourKit seems to filter out org.apache.* namespaces by
+          default.
+        </p>
+      </section>
+      <section id="profile-netbeans">
+        <title>Profiling Forrest with Netbeans</title>
+        <p>
+          Assuming you have the Netbeans IDE installed you simply need to do a couple things to 
+          profile a particular Forrest Project.  First, you need to add 
+          *Netbeans Home*\profiler1\lib\deployed\jdk142\windows to your path.  Obviously, this needs
+          to be slightly modified for a Unix machine.  Now, you need to add the following line to your
+          forrest.properties file for the project (replacing *NetbeansHome* with the path to your install).
+        </p>
+        <source>forrest.jvmargs=-agentpath:C:\*NetbeansHome*\\profiler1\\lib\\deployed\\jdk15\\windows\\
+profilerinterface.dll=\C:\\*NetbeansHome*\\profiler1\\lib\\,5140</source>
+        <p>
+          You are now all set, simply type 'forrest run', then open up the Netbeans IDE with your Forrest 
+          project.  Click Profile->Attach Profiler and make selections appropriate to what you are trying 
+          to achieve. 
+        </p>
+      </section>
     </section>
 
     <section id="find">
