@@ -123,10 +123,10 @@ The job is done by the XSL, to write something like that.
 {{{
 <office:document xmlns:**>
   <c:include select="...">
-    <xsl:attribute name="src">zip://meta.xml@<xsl:value-of select="$src"/></xsl:attribute>
+    <xsl:attribute name="src">zip:<xsl:value-of select="$src"/>!/meta.xml</xsl:attribute>
   </c:include>
   <c:include select="...">
-    <xsl:attribute name="src">zip://content.xml@<xsl:value-of select="$src"/></xsl:attribute>
+    <xsl:attribute name="src">zip:<xsl:value-of select="$src"/>!/content.xml</xsl:attribute>
   </c:include>
 </office:document>
 }}}
@@ -171,12 +171,12 @@ public class SXWGenerator extends FileGenerator implements CacheableProcessingCo
             super.contentHandler.startElement("http://openoffice.org/2000/office", "document", "office" + ':' + "document", new AttributesImpl());
 
             //      from org.apache.cocoon.transformation.XIncludeTransformer
-            SourceUtil.toSAX(super.resolver.resolveURI("zip://meta.xml@" + this.inputSource.getURI()),
+            SourceUtil.toSAX(super.resolver.resolveURI("zip:" + this.inputSource.getURI() + "!/meta.xml"),
                     new IncludeXMLConsumer(this.contentHandler));
             // useful to get size of page from which calculate relative width of an image 
-            SourceUtil.toSAX(super.resolver.resolveURI("zip://styles.xml@" + this.inputSource.getURI()),
+            SourceUtil.toSAX(super.resolver.resolveURI("zip:" + this.inputSource.getURI() + "!/styles.xml"),
                     new IncludeXMLConsumer(this.contentHandler));
-            SourceUtil.toSAX(super.resolver.resolveURI("zip://content.xml@" + this.inputSource.getURI()),
+            SourceUtil.toSAX(super.resolver.resolveURI("zip:" + this.inputSource.getURI() + "!/content.xml"),
                     new IncludeXMLConsumer(this.contentHandler));
             
             super.contentHandler.endElement("http://openoffice.org/2000/office", "document", "office" + ':' + "document");
