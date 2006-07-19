@@ -116,6 +116,14 @@
       </select>
     </match>
     <!-- 
+      FIXME - Problem with the pattern
+      ********************************
+      We have encountered a strange problem with the pattern 'resolve.structurer.**'.
+      The {1} sometimes matches nothing, whereas {../1} is OK.
+      On the contrary, the {../1} sometimes matches nothing, whereas {1} is OK.
+      As a temporary workaround, we put {../1}{1} which covers all the cases.
+      CF. FOR-893
+      
       structurer templating
       *********************
       URL specific structurer templates (project-based) e.g. index.fv
@@ -142,18 +150,18 @@
       <select type="exists">
         <!-- project-based 
           url-based (url location) -->
-        <location src="{project:resources}/structurer/url/{1}{project:theme-ext}" />
+	  <location src="{project:resources}/structurer/url/{../1}{1}{project:theme-ext}" />
         <!-- project-based 
           url-based (xdocs location)  [depreciated]-->
-        <location src="{project:content.xdocs}{1}{project:theme-ext}" />
-        <act type="sourcetype" src="{project:content.xdocs}{1}.xml">
+	  <location src="{project:content.xdocs}{../1}{1}{project:theme-ext}" />
+	<act type="sourcetype" src="{project:content.xdocs}{../1}{1}.xml">
           <!-- Sourcetype based 
           http://forrest.apache.org/docs/cap.html-->
           <location src="lm://dispatcher.structurer.resourceType.{sourcetype}" 
             />
         </act>
         <act type="resourceTypeAction">
-          <parameter value="{../1}" name="request"/>
+	  <parameter value="{../1}{1}" name="request"/>
           <parameter value="{project:content.xdocs}" name="projectDir"/>
           <parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/>
           <parameter value=".xml.meta" name="metaExtension"/>
@@ -163,7 +171,7 @@
           <location src="{uri}" />
         </act>
         <act type="RecursiveDirectoryTraversalAction">
-          <parameter value="{../1}" name="request"/>
+	  <parameter value="{../1}{1}" name="request"/>
           <parameter value="{project:theme}" name="projectFallback"/>
           <parameter value="{project:theme-ext}" name="projectExtension"/>
           <parameter value="{project:resources}structurer/url/" name="projectDir"/>
@@ -172,7 +180,7 @@
           <location src="{uri}" />
         </act>
         <act type="RecursiveDirectoryTraversalAction">
-          <parameter value="{../1}" name="request"/>
+	  <parameter value="{../1}{1}" name="request"/>
           <parameter value="{project:theme}" name="projectFallback"/>
           <parameter value="{project:theme-ext}" name="projectExtension"/>
           <parameter value="{project:content.xdocs}" name="projectDir"/>
