@@ -368,36 +368,11 @@ document.write("Last Published: " + document.lastModified);
         </p>
 <p>This role is not actually about doing the documentation. That should
           be up to everyone.</p>
-<p>Generating and publishing the main docs is very easy using a local forrestbot:</p>
-<pre class="code">cd site-author
-forrest -f publish.xml build
-forrest -f publish.xml deploy</pre>
-<p>This builds the documentation locally then deploys it by committing
-          it to the <a href="https://svn.apache.org/repos/asf/forrest/site">forrest/site SVN</a>.
-          Then a cronjob on the server will automatically publish it. However, if
-          instant turnaround is required, then do this:
+<p>Generating and publishing the main docs is very easy using a local forrestbot:
+          See 
+          <a href="procedures/How_to_publish_docs.html">How to publish Forrest documentation</a>.
         </p>
-<pre class="code">ssh people.apache.org
-cd /www/forrest.apache.org
-svn update</pre>
-<p>See some general notes about managing
-          <a href="http://www.apache.org/dev/project-site.html">project websites</a>.
-        </p>
-<p>Note that forrestbot does not remove docs from the forrest/site SVN (FOR-392).
-          So need to manually delete: 'cd /svn/forrest/site; svn delete oldDoc'.
-          Then remove it from the forrestbot work directories:
-          'cd $FORREST_HOME; rm build/forrest-docs/oldDoc; rm work/svn-deploy/forrest-docs/oldDoc'.
-        </p>
-<p>
-          Publishing documentation for a particular plugin is done by:
-        </p>
-<pre class="code">cd plugins/myPluginName
-$FORREST_HOME/tools/ant/bin/ant deploy-docs</pre>
-<p>
-          See further information in the 
-          <a href="docs_0_80/howto/howto-buildPlugin.html">buildPlugin</a> doc.
-        </p>
-<a name="N100D0"></a><a name="subversion-monitor"></a>
+<a name="N100AD"></a><a name="subversion-monitor"></a>
 <h3 class="underlined_5">Subversion Monitor</h3>
 <p>Ensure that svn:eol-style settings are "native" for all text files.</p>
 <p>Ensure no line-endings issues.</p>
@@ -407,7 +382,7 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</pre>
           "<a href="https://svn.apache.org/repos/private/committers">committers</a>"
           SVN in the "tools" directory.
         </p>
-<a name="N100EA"></a><a name="legal-monitor"></a>
+<a name="N100C7"></a><a name="legal-monitor"></a>
 <h3 class="underlined_5">Legal Monitor</h3>
 <p>Regularly run a script which verifies and inserts missing license
           headers to source files.
@@ -423,7 +398,7 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</pre>
           "<a href="https://svn.apache.org/repos/private/committers">committers</a>"
           SVN in the "tools" and "relicense/src/perl" directories.
         </p>
-<a name="N10101"></a><a name="developer"></a>
+<a name="N100DE"></a><a name="developer"></a>
 <h3 class="underlined_5">Developer</h3>
 <p>The above roles are only for PMC Members. How can the Developers be
           involved? That is easy: do the Developer Role.
