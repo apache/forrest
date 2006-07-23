@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- svn helper
+  ***********************
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:pipes default="caching" />
+    <map:generators default="file" />
+    <map:transformers default="xslt" />
+    <map:serializers default="xml" />
+  </map:components>
+  <map:pipelines>
+    <map:pipeline>
+      <map:match pattern="*.svn.xml">
+        <map:aggregate element="svn">
+          <map:part src="{lm:projectInfo.svn.log.dir}{0}"/>
+          <map:part src="{lm:projectInfo.svn.mapper}"/>
+        </map:aggregate>
+        <map:transform src="resources/stylesheets/svn-to-changes.xsl" />
+        <map:transform src="{lm:projectInfo.transform.changes.document}" >
+          <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
+          <map:parameter name="path" value="{1}"/>
+          <map:parameter name="projectInfo.changes.sort" value="{project:projectInfo.changes.sort}"/>
+          <map:parameter name="projectInfo.changes.includeCommitterList" value="{project:projectInfo.changes.includeCommitterList}"/>
+          <map:parameter name="projectInfo.changes.includeContributorList" value="{project:projectInfo.changes.includeContributorList}"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      <map:match pattern="*.svn-revison.xml">
+        <map:generate src="{lm:projectInfo.svn.log.dir}{1}.svn.xml"/>
+        <map:transform src="resources/stylesheets/svn-to-revision.xsl" />
+        <map:transform src="resources/stylesheets/first-last-revision.xsl" />
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="*.svn-sh.xml">
+        <map:generate src="cocoon:/{1}.svn-revison.xml"/>
+        <map:transform src="resources/stylesheets/svn-log.xsl">
+          <map:parameter value="{lm:project.svn.url}" name="url"/>
+          <!-- 
+            If I use the following then I get:
+            Unable to get attribute value for projectInfo.svn.ext
+            -->
+          <!--<map:parameter value="{project:projectInfo.svn.ext}" name="test"/>-->
+        </map:transform>
+        <map:serialize type="text"/>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
+</map:sitemap>
