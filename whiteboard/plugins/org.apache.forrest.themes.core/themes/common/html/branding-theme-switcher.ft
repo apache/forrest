@@ -18,7 +18,7 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="branding-theme-switcher" type="nugget">
+  name="branding-theme-switcher">
   
   <description>
     <p> <strong>branding-theme-switcher</strong> provides a way to switch the 
@@ -57,39 +57,32 @@ c) theme functionality (*.js & *.ft)]]> </pre>
   <!--<forrest:property name="branding-theme-switcher-select" caption="Theme switcher: "/>-->
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="branding-theme-switcher" inputFormat="xsl" body="true" head="true">
-    <xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    name="branding-theme-switcher" inputFormat="xsl">
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="defaultVariables" select="'test.html'"/>
         <xsl:param name="branding-theme-switcher-defaultTheme" />
         <xsl:param name="branding-theme-switcher-profiler" />
-        <xsl:param name="branding-theme-switcher-a" select="false"/>
-        <xsl:param name="branding-theme-switcher-select" select="false"/>
+        <xsl:param name="branding-theme-switcher-a" select="'false'"/>
+        <xsl:param name="branding-theme-switcher-select" select="'false'"/>
         <xsl:variable name="seperator" select="$branding-theme-switcher-a/@seperator"/>
         <xsl:variable name="caption" select="$branding-theme-switcher-a/@caption"/>
         <xsl:variable name="captionSelect" select="$branding-theme-switcher-select/@caption"/>
         <xsl:variable name="defaultTheme" select="$branding-theme-switcher-defaultTheme/@defaultTheme"/>
         <xsl:variable name="profilerActivated" select="$branding-theme-switcher-profiler/@activated"/>
+        <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
           
         <xsl:template match="/">
-            <forrest:part>
-                <xsl:call-template name="branding-theme-switcher-body"/>
-            </forrest:part>
+            <forrest:content>
             <forrest:part xpath="/html/head">
-                <xsl:call-template name="branding-theme-switcher-head"/>
+                <script type="text/javascript" 
+                    src="{$root}themes/cssStyleSwitcher.js">&#160;</script>
+                <script type="text/javascript"> 
+                    initBrandingThemeSwitcher('<xsl:value-of 
+                    select="$defaultTheme"/>','<xsl:value-of 
+                    select="$profilerActivated"/>'); </script>
             </forrest:part>
-        </xsl:template>
-        
-        <xsl:template name="branding-theme-switcher-head">
-          <script type="text/javascript"
-              src="{$root}themes/cssStyleSwitcher.js">&#160;</script>
-          <script type="text/javascript"> 
-              initBrandingThemeSwitcher('<xsl:value-of 
-              select="$defaultTheme"/>','<xsl:value-of 
-              select="$profilerActivated"/>'); </script>
-        </xsl:template>
-        
-        <xsl:template name="branding-theme-switcher-body">
-          <xsl:if test="$branding-theme-switcher-a!='false'">
+            <forrest:part>
+                <xsl:if test="$branding-theme-switcher-a!='false'">xx
             <xsl:value-of select="$caption"/>
             <span id="theme-switcher-dyn-a">dynamic theme switcher links</span>
             <script type="text/javascript"> 
@@ -97,7 +90,7 @@ c) theme functionality (*.js & *.ft)]]> </pre>
               select="$seperator"/>'); </script>
           </xsl:if>
           <xsl:if test="$branding-theme-switcher-select!='false'">
-            <div id="theme-switcher-dyn">
+            <div class="theme-switcher-dyn">
               <form action="">
                 <xsl:value-of select="$captionSelect"/>
                 <select id="themeSwitcherSelect" 
@@ -109,6 +102,8 @@ c) theme functionality (*.js & *.ft)]]> </pre>
                 initSelectSwitcher('themeSwitcherSelect'); </script>
             </div>
           </xsl:if>
+            </forrest:part>
+            </forrest:content>
         </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
