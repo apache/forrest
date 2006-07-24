@@ -30,6 +30,13 @@
         <encoding>ISO-8859-1</encoding>
       </map:serializer>
     </map:serializers>
+    
+    <map:pipes>
+      <map:pipe name="navigation"
+        src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
+        <parameter name="cache-expires" value="600"/> <!-- Expires in seconds -->
+      </map:pipe>
+    </map:pipes>
   </map:components>
 
   <map:pipelines>
@@ -192,7 +199,9 @@
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
-      
+    </map:pipeline>
+    
+    <map:pipeline type="navigation">
       <!-- ================================================================ -->
       <!-- Site.xml snippets                                                -->
       <!-- ================================================================ -->
