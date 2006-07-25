@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<useCases>
+  <title>Uses Cases for the Use Case management features of org.apache.forrest.plugin.input.projectInfo</title>
+
+  <useCase>
+    <title>Write Use Case Documentation</title>
+    <description>
+      <p>Write semi-structured use case documents so that they can be reused in a variety of ways.
+      This use case describews a process for writing such documents. This document is derived from
+      such a <a href="useCaseFeatures.source.xml">source document</a>.</p>
+
+      <section>
+        <title>Justification</title>
+
+        <p>A use case describes a unit of work. It is typically used in the design
+        stages of a software project. It is very useful for describing what an applicaiton must
+        do and what patchs through the system can be taken.</p>
+
+        <p>By bringing this information together in a semi-structured document we can use it in many
+        different ways. For example:</p>
+
+        <ul>
+          <li>Requirements Documentation</li>
+          <li>Developer Documentation</li>
+          <li>User Documentaiton</li>
+          <li>Functionality Matrices</li>
+          <li>Task Lists</li>
+        </ul>
+      </section>
+      
+    </description>
+
+    <steps>
+      <step>
+        <title>Create/open a Use Case file</title>
+        <description>In your favourite XML editor either create a new file
+        or open an existing use case file. The default location of these files
+        within a Forrest content object is <code>/content/documentation/useCases/**.xml</code>
+        </description>
+        <result>You have either a blank use case document or an existing one ready for editing.</result>
+
+        <fixme priority="Medium">Create a DTD for use case descriptions.</fixme>
+        <fixme priority="High">Aggregate all documents in the useCases directory to provide
+        ne large document describing all use cases.</fixme>
+      </step>
+
+      <step>
+        <title>Create a new use case</title>
+        <description>
+          <p>A use case is enclosed within a <code>useCase</code> element.
+          Each use case should be given a brief <code>title</code> to describe it.</p>
+
+        </description>
+
+        <result>You have the container for your new use case.</result>
+      </step>
+
+        <step>
+          <title>Describe the overall objective of the use case</title>
+          <description>
+            <p>Each use case should be described in terms of:</p>
+            <ul>
+              <li>The objective</li>
+              <li>The expected results</li>
+              <li>The justification</li>
+            </ul>
+            <p>This information should be placed in the <code>description</code> element
+          of your use case. This node allows any XDoc markup and therefore you are
+          reasonably free to use whatever formatting or images are needed to convey the
+          important details most efficiently.</p>
+          </description>
+
+          <result>You have a use case that is described sufficiently well for an average user of the end system
+        to understand its purpose.</result>
+        </step>
+
+        <step>
+          <title>Define each step in the Use Case</title>
+          <description>
+            <p>Each use case will be subdivided into one or more steps that must be carried out
+          in order to complete the task. Each of these steps is defined within a <code>step</code>
+          element which are chilren of a <code>steps</code> element.</p>
+          </description>
+        </step>
+
+        <step>
+          <title>Descripbe the step</title>
+          <description>
+            <p>Each step has a title and a description. The description should provide enough information
+            for a user to complete the task and for a developer to implement support for the user in that
+            task.</p>
+
+            <p>In addition each step can be described as required or optional. By default a step is assumed
+            be required. To set it to optional add a <code>required="false"</code> attribute to the
+            <code>step</code> element.</p>
+          </description>
+
+          <result>A user will be able to follow instructions on how to carry out the step.</result>
+        </step>
+
+        <step>
+          <title>Describe the expected results</title>
+          <description>
+            <p>Provide, within a <code>result</code> a brief description of the expected results from
+            this step. This should summarise what state the application will be in once this use case
+            has been performed.</p>
+          </description>
+          <result>You will have provided enough information to allow developers to test the functionality and
+          users to identify when a step has been succesfully completed.</result>
+        </step>
+
+        <step required="false">
+          <title>Add "fixme" notes</title>
+          <description>
+            <p>A fixme note is enclosed within a <code>fixme</code> element. It describes something that
+            remains to be done within this step. Each fixme has a priority attribute which can take one of
+            of the followin values:</p>
+
+            <ul>
+              <li>Enhancement - a nice to have ehancment that may or may not be implemented.</li>
+              <li>Low - this is considered an important addition to the use case, but everything works without it.</li>
+              <li>High - this is an important addition. Everything works without it, but having this implmeneted would
+              improve the application considerably.</li>
+              <li>Major - this is nor preventing work that utilises the use case, but it is considered a requirement
+              for the next release since it adds key functionlaity.</li>
+              <li>Blocker - this is preventing the correct operation of this use case and must be implmeneted ASAP</li>
+            </ul>
+
+            <p>Although this step is optional, it is good practice to allways add a 
+            <code>&lt;fixme priority="blocker"&gt;Not yet implemented&lt;/fixme&gt;</code>
+            element to all new steps. This is becuase these nodes will be used to build a 
+            functionality matrix later on.</p>
+          </description>
+
+          <result>Users will be able to understand to what degree a step is implemented and developers will be able to 
+          see what remains to be done.</result>
+          
+          <fixme priority="enhancement">All fixmes to link to an issue tracker entry</fixme>
+        </step>
+
+        <step required="false">
+          <title>Add alternatives</title>
+          <description>
+            <p>Sometimes there will be alternative paths through each step. These can be described in an
+            <code>alternatives</code> element that allows free-form XDoc content. However, please be
+            careful, if an alternative is more than a simple variation you may want to consider a 
+            whole new use case for the alternative.</p>
+          </description>
+
+          <result>Minor variations in the path through a use case will be documented for your users.</result>
+        </step>
+        
+        <step required="false">
+          <title>Write Implementation Notes</title>
+          <description>
+            <p>Developer implementation notes for each of the steps should be added either when writing the
+            initial use case or later during the development phases of the use case. These notes are for technical readers
+            and are intended to help those who come after the initial author to get a starting point when inspecting how
+            a feature is implemented. It is not intended that these notes will contain full implementation details, only an
+            overview should be provided.</p>
+          </description>
+          
+          <result>A technical reader will be able to gain a baisc understanding of how each step is implemented in the 
+          application.</result>
+        </step>          
+    </steps>
+  </useCase>
+
+  <useCase status="In Progress" owner="open">
+    <title>Generate Use Case Documentation for Developers</title>
+
+    <description>
+      <p>Generate a complete list of all use cases for a project in a format useful to 
+      developers of the application. This list is to include:</p>
+
+      <ul>
+        <li>a description of the use case</li>
+        <li>a summary of each of the steps involved</li>
+        <li>full details of each of the steps</li>
+        <li>a description of the expected outcome of each step</li>
+        <li>details of common alternatives in each step</li>
+        <li>implementation notes for each step</li> 
+      </ul>
+
+      <section>
+        <title>Justification</title>
+        <p>A use case describes a unit of work. It is typically used in the design
+        stages of a software project, however, they can often be useful in creating
+        user documentaiton. Especially when they describe user interface functionality.</p>
+
+        <warning>Unfortunately this use case document does not currently cover all functions
+        of the plugin since this functionlaity was added after many other features. Whilst you
+        are exploring this feature, why not add a use case to the plugin and submit a patch
+        so that those coming after you can enjoy more complete documentation.</warning>
+      </section>
+    </description>
+
+    <steps>
+      <step>
+        <title>Make HTTP request</title>
+        <description>
+          <p>
+            Request
+            http://localhost:8888/docs/developer/useCases.xml
+          </p>
+        </description>
+        <result>
+          <p>
+            An XDoc is created that describes the use cases
+          </p>
+        </result>
+
+        <fixme priority="High">Make the summary optional - already added 
+        $includeImplementationNotes parameter to stylesheet. Need to pass value form sitemap.</fixme>
+        
+        <alternatives>
+          <p>Depending on what plugins are available within your running instance of Forrest you will
+          be able to request different output formats as per the usual Forrest usage. For example requesting
+          a http://localhost:8888/docs/developer/useCases.html will generate the HTML document, whilst
+          http://localhost:8888/docs/developer/useCases.pdf will generate the PDF document (as long
+          as you have the relevant plugins installed).</p>
+        </alternatives>
+
+        <implementation>
+          <description>
+            <p>The source document for use cases is, by default, called <code>useCases.xml</code> and is
+            located in the root of the projects xdocs directory.</p>
+
+            <p>The URL space <code>docs/**/useCases.xml</code> is reserved for the projectInfo plugin. A request to
+            /docs/developer/useCases.xml results in the useCases.xml file being translated into an XDoc as per
+            the usual forrest processing. See the input.xmap file fo this plugin,</p>
+          </description>
+        </implementation>
+      </step>
+    </steps>
+  </useCase>
+  
+  <useCase status="In Progress" owner="open">
+    <title>Generate Use Case Documentation for Users</title>
+
+    <description>
+      <p>Generate a complete list of all use cases for a project. This list is to include:</p>
+
+      <ul>
+        <li>a description of the use case</li>
+        <li>a summary of each of the steps involved</li>
+        <li>full details of each of the steps</li>
+        <li>a description of the expected outcome of each step</li>
+        <li>details of common alternatives in each step</li>
+      </ul>
+
+      <section>
+        <title>Justification</title>
+        <p>A use case describes a unit of work. It is typically used in the design
+        stages of a software project, however, they can often be useful in creating
+        user documentaiton. Especially when they describe user interface functionality.</p>
+
+        <warning>Unfortunately the use case document does not currently cover all functions
+        of the plugin since this functionlaity was added after many other features. Whilst you
+        are exploring this feature, why not add a use case to the plugin and submit a patch
+        so that those coming after you can enjoy more complete documentation.</warning>
+      </section>
+    </description>
+
+    <steps>
+      <step>
+        <title>Make HTTP request</title>
+        <description>
+          <p>
+            Request
+            http://localhost:8888/docs/user/useCases.xml
+          </p>
+        </description>
+        <result>
+          <p>
+            An XDoc is created that describes the use cases
+          </p>
+        </result>
+
+        <fixme priority="High">Enable the retrieval of a specific use case rather than all at once.</fixme>
+        <fixme priority="Low">Make the summary optional - there is a switch in the XSL for this, just need to pass a property
+        from the XMAP</fixme>
+        
+        <alternatives>
+          <p>Depending on what plugins are available within your running instance of Forrest you will
+          be able to request different output formats as per the usual Forrest usage. For example requesting
+          a http://localhost:8888/docs/user/useCases.html will generate the HTML document, whilst
+          http://localhost:8888/docs/user/useCases.pdf will generate the PDF document (as long
+          as you have the relevant plugins installed).</p>
+        </alternatives>
+
+        <implementation>
+          <description>
+            <p>The source document for use cases is, by default, called <code>useCases.xml</code> and is
+            located in the root of the projects xdocs directory.</p>
+
+            <p>The URL space <code>docs/**/useCases.xml</code> is reserved for the projectInfo plugin. A request to
+            /docs/user/useCases.xml results in the useCases.xml file being translated into an XDoc as per
+            the usual forrest processing, see input.xmap for more details.</p>
+          </description>
+        </implementation>
+      </step>
+    </steps>
+  </useCase>
+  
+  <useCase status="In Progress">
+    <title>Generate a Functionality Matrix</title>
+    <description>
+      <p>If a use case document is correcly marked up with <code>fixme</code> elements it is possible
+      to create a functionality matrix for each use case. This will show how complete the implementation
+      of a use case is.</p>
+      
+      <p>A table can be created which shows each of the steps in a use case, each step can be given a
+      count for the bumber of fixme items outstanding on each of the steps. Furthermore, since each
+      <code>fixme</code> is given a priority we can clearly indicate which use cases are operational an 
+      hich are not.</p>
+    </description>
+    
+    <steps>
+      <step>
+        <title>Make HTTP request</title>
+        <description>
+          <p>
+            Request
+            http://localhost:8888/docs/developer/featureMatrix/useCases.xml
+          </p>
+        </description>
+        <result>
+          <p>
+            An XDoc is created that lists the steps in each use case and identifies the status
+            of each use case.
+          </p>
+        </result>
+
+        <fixme priority="Blocker">Not Implemented Yet - although the user and dev use case documents
+        do show the status of each step in the details table and implementation notes.</fixme>
+        
+        <alternatives>
+          <p>Depending on what plugins are available within your running instance of Forrest you will
+          be able to request different output formats as per the usual Forrest usage. For example requesting
+          a http://localhost:8888/docs/developer/featureMatrix/useCases.html will generate the HTML document, whilst
+          http://localhost:8888/docs/developer/featureMatrix/useCases.pdf will generate the PDF document (as long
+          as you have the relevant plugins installed).</p>
+        </alternatives>
+
+        <implementation>
+          <description>
+            <p>The source document for use cases is, by default, called <code>useCases.xml</code> and is
+            located in the root of the projects xdocs directory.</p>
+
+            <p>The URL space <code>docs/**/useCases.xml</code> is reserved for the projectInfo plugin. A request to
+            /docs/developer/featureMatrix/useCases.xml results in the useCases.xml file being translated into an XDoc as per
+            the usual forrest processing. See the input.xmap file fo this plugin,</p>
+          </description>
+        </implementation>
+      </step>
+    </steps>
+  </useCase>
+</useCases>
+
