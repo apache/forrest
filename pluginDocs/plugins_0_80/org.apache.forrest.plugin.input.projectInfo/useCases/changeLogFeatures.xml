@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<useCases>
+  <title>Uses Cases for Change Log management features of org.apache.forrest.plugin.input.projectInfo</title>
+
+  <useCase>
+    <title>Write status.xml File</title>
+    <description>
+      <p>Status.xml if an XML file that records the actions that have been taken in each release
+      of a project. You can then generate a Change Log from that file using the projectInfo
+      plugin.</p>
+
+      <section>
+        <title>Justification</title>
+
+        <p>Provide a central location and a semi-structured format for recording
+        actions taken during project development. This file can then be used to 
+        generate various views on the changes in a release. For example:</p>
+
+        <ul>
+          <li>Changes between releases</li>
+          <li>Developers involved in a release</li>
+          <li>Release notes</li>
+        </ul>
+      </section>
+      
+    </description>
+
+    <steps>
+      <step>
+        <title>Create/open a status.xml file</title>
+        <description>
+          <p>In your favourite XML editor either create a new file
+          or open an existing status.xml file. The default location of these files
+          within a Forrest content object is in the project root. This file should
+          conform to one of the status.xml schemas. The root element for this
+          document is <code>status</code>.</p>
+        </description>
+        <result>You have either a blank status.xml document or an existing one ready for editing.</result>
+      </step>
+      
+      <step>
+        <title>Create a developer list</title>
+        <description>
+          <p>In order to attribute changes to a specific developer it is neceessary to create
+          a <code>developers</code> element. Within this element you should add a single
+          <code>person</code> element for each develop who works on the project.</p>
+        </description>
+        <result>Each developer is identified in the status.xml file.</result>
+      </step>
+
+      
+      <step>
+        <title>Create a contexts list</title>
+        <description>
+          <p>Each action within a release is given a context to help classify changes.
+          When reports are created the context of an action is used to create a more
+          readable report in which similar actions are grouped together. You can
+          specify any contexts you like within the <code>contexts</code> element.</p>
+          <p>Common contexts used in an software development project are:</p>
+          <source><![CDATA[
+<contexts>
+ <context id="code" title="Changes to the Code Base"/>
+ <context id="docs" title="Changes to Documentation"/>
+ <context id="admin" title="Changes to Project Administration"/>
+ <context id="design" title="Changes to Design"/>
+ <context id="build" title="Changes to Build"/>
+</contexts> 
+          ]]></source>
+        </description>
+        <result>The status.xml file describes the sufficient contexts to group common
+        actions together.</result>
+      </step>
+      
+      <step>
+        <title>Create a changes element</title>
+        <description>
+          <p>Actions that describe the changed in a release are placed within
+          a <code>changes</code>.</p>
+        </description>
+        <result>Status.xml holds an changes element that will group all release 
+        information.</result>
+      </step>
+      
+      <step>
+        <title>Create a release element</title>
+        <description>
+          <p>The details of each release are enclosed within a <code>release</code> element,
+          so you need to create that now.</p>
+        </description>
+
+        <result>You have the container for your current development release.</result>
+      </step>
+
+        <step>
+          <title>Create a notes element</title>
+          <description>
+            <p>Each release can have a <code>notes</code> section. This is used
+            to provide descriptive text at the start of many reports. The notes
+            should describe the release in fairly high level detail, it should
+            not describe any change descriptions, these will be added in the 
+            next step.</p>
+          </description>
+
+          <result>You have a user focussed description of the project and this release.</result>
+        </step>
+
+        <step>
+          <title>Add actions taken during the development cycle</title>
+          <description>
+            <p>During the development cycle for the release <code>action</code> elements
+            should be added for each significant contribution to the release.</p>
+            
+            <p>If the change is of particular significance and you woul dlike it to appear
+            in the release notes generated by the projectInfo plugin you should set the
+            <code>importance</code> attribute to <code>"high"</code>.</p>
+          </description>
+          
+          <result>Each significant change in this development cycle is describe in a 
+          <code>action</code> element.</result>
+        </step>
+
+        <step>
+          <title>Generate the change log</title>
+          <description>
+            <p>To generate a changelog from your status.xml file you need to request
+            <code>/changes.html</code> or <code>changes.pdf</code> or whatever format
+            you have enabled within Forrest using output plugins.</p>
+            
+            <p>Note that the projectInfo plugin provides a special RSS output format
+            of. Technically, this should not be part of an input plugin and therefore
+            it may be moved at a later date. However, you will always be able to 
+            generate the RSS feed by requesting <code>changes.rss</code>.</p>
+            
+            <p>You can generate a change log for a specific version by specifying a 
+            version number in the request, for example, <code>changes_0.1.html</code>.</p>
+          </description>
+          
+          <result>Your project is able to generate a changelog.</result>
+        </step>
+    </steps>
+  </useCase>
+</useCases>
