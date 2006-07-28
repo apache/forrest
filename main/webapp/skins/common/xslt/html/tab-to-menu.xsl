@@ -200,7 +200,7 @@ which is then merged by site2xhtml.xsl
 
   <!-- Called from 'selected' -->
   <xsl:template name="base-selected">
-    <a class="base-selected">
+    <a class="selected">
       <xsl:attribute name="href">
         <xsl:call-template name="calculate-tab-href">
           <xsl:with-param name="tab" select="."/>
@@ -213,7 +213,7 @@ which is then merged by site2xhtml.xsl
 
   <!-- Called from 'not-selected' -->
   <xsl:template name="base-not-selected">
-    <a class="base-not-selected">
+    <a class="unselected">
       <xsl:attribute name="href">
         <xsl:call-template name="calculate-tab-href">
           <xsl:with-param name="tab" select="."/>

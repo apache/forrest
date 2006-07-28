@@ -44,19 +44,18 @@
 </xsl:template> 
 
 <xsl:template match="color[@name='subtab-selected']">
-#level2tabs       { background-color: <xsl:value-of select="@value"/> ;} 
+#level2tabs a.selected      { background-color: <xsl:value-of select="@value"/> ;} 
 #level2tabs a:link {  color: <xsl:value-of select="@link"/>;  }
 #level2tabs a:visited { color: <xsl:value-of select="@vlink"/>; }
 #level2tabs a:hover { color: <xsl:value-of select="@hlink"/>; }
 </xsl:template> 
 
-<!--xsl:template match="color[@name='subtab-unselected']">
-.level2tabstrip { background-color: <xsl:value-of select="@value"/>;}
-.datenote { background-color: <xsl:value-of select="@value"/>;} 
-.level2tabstrip.unselected a:link {  color: <xsl:value-of select="@link"/>;  }
-.level2tabstrip.unselected a:visited { color: <xsl:value-of select="@vlink"/>; }
-.level2tabstrip.unselected a:hover { color: <xsl:value-of select="@hlink"/>; }
-</xsl:template--> 
+<xsl:template match="color[@name='subtab-unselected']">
+#level2tabs { background-color: <xsl:value-of select="@value"/>;}
+#level2tabs a.unselected:link {  color: <xsl:value-of select="@link"/>;  }
+#level2tabs a.unselected:visited { color: <xsl:value-of select="@vlink"/>; }
+#level2tabs a.unselected:hover { color: <xsl:value-of select="@hlink"/>; }
+</xsl:template> 
 
 <xsl:template match="color[@name='heading']">
 .heading { background-color: <xsl:value-of select="@value"/>;} 
