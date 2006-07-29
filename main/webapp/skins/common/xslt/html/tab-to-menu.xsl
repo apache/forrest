@@ -178,6 +178,9 @@ which is then merged by site2xhtml.xsl
       <xsl:when test="not(@id) and @dir = $longest-dir or @href = $longest-dir">
         <xsl:call-template name="selected"/>
       </xsl:when>
+      <xsl:when test="tab[@id = $matching-id]">
+        <xsl:call-template name="selected"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="not-selected"/>
       </xsl:otherwise>
