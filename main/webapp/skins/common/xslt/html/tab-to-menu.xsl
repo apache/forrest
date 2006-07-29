@@ -163,7 +163,7 @@ which is then merged by site2xhtml.xsl
   any other HTML -->
   <xsl:template name="level2tabs">
     <xsl:call-template name="level2-pre-separator"/>
-    <xsl:for-each select="tab[@dir=$longest-dir]/tab|tab[@href=$longest-dir]/tab">
+    <xsl:for-each select="tab[@dir=$longest-dir]/tab|tab[@href=$longest-dir]/tab|tab[tab/@id=$matching-id]/tab">
       <xsl:if test="position()!=1"><xsl:call-template name="level2-separator"/></xsl:if>
       <xsl:apply-templates select="." mode="level2"/>
     </xsl:for-each>

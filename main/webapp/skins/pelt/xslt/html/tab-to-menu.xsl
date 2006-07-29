@@ -47,11 +47,9 @@ which is then merged by site2xhtml.xsl
   	<ul id="tabs">
   		<xsl:call-template name="base-tabs"/>
   	</ul>
-    <xsl:if test="tab[@dir=$longest-dir]/tab">
-      <span id="level2tabs">
-        <xsl:call-template name="level2tabs"/>
-      </span>
-    </xsl:if>
+    <span id="level2tabs">
+      <xsl:call-template name="level2tabs"/>
+    </span>
   </xsl:template>
 
   <xsl:template name="pre-separator">
