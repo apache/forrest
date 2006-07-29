@@ -171,11 +171,14 @@ which is then merged by site2xhtml.xsl
   </xsl:template>
 
   <xsl:template match="tab" mode="level1">
+    <xsl:variable name="tabPath">
+      <xsl:value-of select="@dir"/>/<xsl:value-of select="@href"/>
+    </xsl:variable>
     <xsl:choose>
       <xsl:when test="@id and @id = $matching-id">
         <xsl:call-template name="selected"/>
       </xsl:when>
-      <xsl:when test="not(@id) and @dir = $longest-dir or @href = $longest-dir">
+      <xsl:when test="starts-with($tabPath,$longest-dir)">
         <xsl:call-template name="selected"/>
       </xsl:when>
       <xsl:otherwise>
