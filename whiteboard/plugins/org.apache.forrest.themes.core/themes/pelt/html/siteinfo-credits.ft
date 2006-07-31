@@ -46,48 +46,51 @@
         <xsl:param name="box-location"></xsl:param>
         <xsl:param name="top-separator">false</xsl:param>
         <xsl:param name="use-role-as-prefix">false</xsl:param>
- 	<xsl:param name="use-br">false</xsl:param>
+        <xsl:param name="use-br">false</xsl:param>
         <xsl:variable name="filename" select="$defaultVariables/*/*[@name='filename']/@value"/>
         <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
 
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
-            <xsl:if test="$siteinfo-credits/credits/credit[($use-role-as-prefix = 'true' and starts-with( $filename, concat( @role, '.') ) ) or starts-with( $filename, 'index') ]">
-              <xsl:comment> |start siteinfo-credits </xsl:comment>
-              <div id="{$box-location}">
-                <xsl:if test="$top-separator = 'true'">
-                  <hr/>
-                </xsl:if>
-                <xsl:for-each
-                  select="$siteinfo-credits/credits/credit[($use-role-as-prefix = 'true' and starts-with( $filename, concat( @role, '.') ) ) or starts-with( $filename, 'index') ]">
-                  <xsl:if test="not( position()=1 ) and $use-br='true'">
-                    <br/>
+            <xsl:if test="$siteinfo-credits">
+              <xsl:variable name="credit" 
+                select="$siteinfo-credits/credits/credit[($use-role-as-prefix = 'true' and starts-with( $filename, concat( @role, '.') ) ) or starts-with( $filename, 'index') ]"/>
+              <xsl:if test="$credit">
+                <xsl:comment> |start siteinfo-credits </xsl:comment>
+                <div id="{$box-location}">
+                  <xsl:if test="$top-separator = 'true'">
+                    <hr/>
                   </xsl:if>
-                  <xsl:variable name="name" select="name"/>
-                  <xsl:variable name="url" select="url"/>
-                  <xsl:variable name="image" select="image"/>
-                  <xsl:variable name="width" select="width"/>
-                  <xsl:variable name="height" select="height"/>
-                  <a href="{$url}">
-                    <img alt="{$name} - logo" title="{$name}">
-                      <xsl:attribute name="src">
-                        <xsl:if test="not(starts-with($image, 'http://'))">
-                          <xsl:value-of select="$root"/>
-                        </xsl:if>
-                        <xsl:value-of select="$image"/>
-                      </xsl:attribute>
-                      <xsl:attribute name="style">
-                        <xsl:if test="$width">width: <xsl:value-of
-                          select="$width"/>px;</xsl:if>
-                        <xsl:if test="$height">height: <xsl:value-of
-                          select="$height"/>px;</xsl:if>
-                      </xsl:attribute>
-                    </img>
-                  </a>
-                </xsl:for-each>
-              </div>
-              <xsl:comment>+ |end siteinfo-credits +</xsl:comment>
+                  <xsl:for-each select="$credit">
+                    <xsl:if test="not( position()=1 ) and $use-br='true'">
+                      <br/>
+                    </xsl:if>
+                    <xsl:variable name="name" select="name"/>
+                    <xsl:variable name="url" select="url"/>
+                    <xsl:variable name="image" select="image"/>
+                    <xsl:variable name="width" select="width"/>
+                    <xsl:variable name="height" select="height"/>
+                    <a href="{$url}">
+                      <img alt="{$name} - logo" title="{$name}">
+                        <xsl:attribute name="src">
+                          <xsl:if test="not(starts-with($image, 'http://'))">
+                            <xsl:value-of select="$root"/>
+                          </xsl:if>
+                          <xsl:value-of select="$image"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="style">
+                          <xsl:if test="$width">width: <xsl:value-of 
+                            select="$width"/>px;</xsl:if>
+                          <xsl:if test="$height">height: <xsl:value-of 
+                            select="$height"/>px;</xsl:if>
+                        </xsl:attribute>
+                      </img>
+                    </a>
+                  </xsl:for-each>
+                </div>
+                <xsl:comment>+ |end siteinfo-credits +</xsl:comment>
+              </xsl:if>
             </xsl:if>
           </forrest:part>
         </forrest:content>
