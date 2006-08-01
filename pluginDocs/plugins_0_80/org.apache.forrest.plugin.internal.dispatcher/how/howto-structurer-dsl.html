@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <link href="../themes/common.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
+        <link href="../themes/leather-dev.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
+        <link href="../themes/pelt.screen.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
+        
+        <link href="../how/howto-structurer-dsl.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
+        <link href="../themes/pelt.print.css" media="print" rel="stylesheet" title="pelt.print.css" type="text/css" />
+        <style type="text/css">/* Extra css */ 
+p.quote {
+ margin-left: 2em; 
+ padding: .5em; 
+ background-color: #f0f0f0; 
+ font-family: monospace; 
+}</style>
+      <meta content="Apache Forrest" name="Generator" />
+<meta content="0.8-dev" name="Forrest-version" />
+<meta content="pelt" name="Forrest-theme-name" />
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<!--+ |start navigation links +-->
+<link href="../index.html" rel="Index" title="Index..." />
+<link href="../linkmap.html" rel="CONTENTS" title="Site map..." />
+<link href="../how/howto-structurer-contracts.html" rel="NEXT" title="Contracts" />
+<link href="../how/howto-dispatcher-quickstart.html" rel="PREVIOUS" title="Quickstart" />
+<link href="../how/howto-structurer-contracts.html" rel="LAST" title="Contracts" />
+<link href="../how/howto-dispatcher-quickstart.html" rel="FIRST" title="Quickstart" />
+<!--+ |end navigation links +-->
+<!--+|start favicon +-->
+<link href="../favicon.ico" rel="shortcut icon" />
+<!--+|start favicon +-->
+<script src="../themes/getBlank.js" type="text/javascript"> </script>
+<script src="../themes/menu.js" type="text/javascript"> </script>
+<!--+ |start content-title +-->
+<title>How to use the structurer</title>
+<!--+ |end content-title +-->
+</head>
+<body>
+<div id="container">
+<!--+
+    | start breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">MyGroup</a>
+                   &gt; <a href="http://forrest.apache.org/">MyProject</a>
+<script src="../themes/breadcrumbs.js" type="text/javascript"> </script>
+</div>
+<!--+
+    | end breadtrail
+    +-->
+<div id="header">
+<div id="branding-tagline-name">new 
+            seed</div>
+<div id="branding-tagline-tagline">powered by the 
+            dispatcher</div>
+<div class="logo">
+<!--+
+    |start Logo
+    +-->
+<a href="http://mygroup.org/">
+<img alt="MyGroup" class="logoImage" src="../images/group.png" title="MyGroup Description" />
+</a>
+<!--+
+    |end group Logo
+    +-->
+</div>
+<div class="logo">
+<!--+
+    |start Logo
+    +-->
+<a href="http://myproj.mygroup.org/">
+<img alt="MyProject" class="logoImage" src="../images/project.png" title="MyProject Description" />
+</a>
+<!--+
+    |end group Logo
+    +-->
+</div>
+<!--+
+  |start Search
+  +-->
+<div class="searchbox">
+<div class="round-top-left-small">
+<div class="round-top-right-small">
+<div class="search-input">
+<form action="http://www.google.com/search" method="get">
+<div class="search-hidden">
+<input name="sitesearch" type="hidden" value="mydomain" />
+</div>
+<div class="search-field">
+<input name="q" size="25" type="text" value="Search the site with google" />
+</div>
+<div class="search-submit">
+<input name="Search" type="submit" value="Search" />
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<!--+ |end search +-->
+<div id="nav-main-hook">
+<!--+ |start Tabs new +-->
+<ul id="nav-main">
+<li>
+<a class="base-not-selected" href="../index.html">Home</a>
+</li>
+<li class="current">
+<a class="base-selected" href="../how/howto-dispatcher-quickstart.html">HowTo</a>
+</li>
+</ul>
+<!--+ |end Tabs +-->
+<div id="publishedStrip"> <!--+
+    |start nav-main-sub
+    +--><!--+
+    |end Endtabs
+    +--><script type="text/javascript">document.write("Last Published: " + document.lastModified);</script>
+</div>
+</div>
+</div>
+<div id="page">
+<div class="breadtrail"> </div>
+<div id="leftbar">
+<!--+ |start 0 menu +-->
+<!--+ |start Menu +-->
+<div id="nav-section">
+<ul>
+<li class="pagegroupselected" id="menu_selected_1.1Title">
+<span onclick="SwitchMenu('menu_selected_1.1')">How to</span>
+<ul class="&#10;               selectedmenuitemgroup" id="menu_selected_1.1">
+<li class="menuitem">
+<a href="../how/howto-dispatcher-quickstart.html" title="">Quickstart</a>
+</li>
+<li class="menupage">
+<div class="menupagetitle">Structurer</div>
+</li>
+<li class="menuitem">
+<a href="../how/howto-structurer-contracts.html" title="">Contracts</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<!--+ |end menu +-->
+<!--+ |start content-motd-page +-->
+<!--+ |end content-motd-page +-->
+<div id="roundbottom">
+<div id="roundbottomLeft">
+<img alt="spacer" src="../themes/images/spacer.gif" />
+</div>
+</div>
+</div>
+<div id="export-link">
+<a class="format" href="howto-structurer-dsl.pdf">
+<img alt="PDF - icon" class="skin" src="../themes/images/pdfdoc.gif" />
+<span class="caption">PDF</span>
+</a>
+</div>
+<div id="content">
+<!--+ |start content-title +-->
+<h1 class="content-title">How to use the structurer</h1>
+<!--+ |end content-title +-->
+<!--+ |start content-abstract +--> This How-To describes the usage of the structurer config domain 
+    specific language to create beautiful websites in no time. <!--+ |end content-abstract +--><!--+ |start content-minitoc +--><div id="content-minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Intended Audience">Intended Audience</a>
+</li>
+<li>
+<a href="#Purpose">Purpose</a>
+</li>
+<li>
+<a href="#Prerequisites">Prerequisites</a>
+</li>
+<li>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#emptystructurer">Empty structurer file</a>
+</li>
+<li>
+<a href="#firststructurer">Creating your first structurer</a>
+</li>
+<li>
+<a href="#hookstructurer">Hooks in the structurer</a>
+</li>
+<li>
+<a href="#cssstructurer">CSS in the structurer</a>
+</li>
+<li>
+<a href="#Linking+to+an+external+css+file">Linking to an external css file</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Further Reading">Further Reading</a>
+</li>
+<li>
+<a href="#Feedback">Feedback</a>
+</li>
+</ul>
+</div>
+<!--+ |end minitoc +-->
+<!--+ |start content-main +-->
+<a name="Intended Audience" title="Intended Audience"> </a>
+<h2 class="underlined_10">Intended Audience</h2>
+<div class="section">
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content"> The "Dispatcher" (aka "Views") is new functionality which is 
+      still in development phase. That is why it is in the "whiteboard" section 
+      of the Forrest distribution. This HowTo is a good start but still needs 
+      more work.
+      See <a href="http://forrest.apache.org/docs_0_80/status-themes.html">Status of Themes: Skins and Dispatcher</a>.
+    </div>
+</div>
+<p> This part of the the dispatcher is called the structurer and is 
+      dedicated to webdesigner and user with some knowledge of css. </p>
+</div>
+<a name="Purpose" title="Purpose"> </a>
+<h2 class="underlined_10">Purpose</h2>
+<div class="section">
+<p> This how-to will show you how to write a <strong>structurer</strong> 
+      from the ground up. We will focus on html as the output format. As well 
+      it will show how to add your own css implementation to the structurer. 
+      </p>
+</div>
+<a name="Prerequisites" title="Prerequisites"> </a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<ul>
+      <li>Installing a mozilla browser and the forrestbar helps a lot in 
+        developing.</li>
+    </ul>
+</div>
+<a name="Steps" title="Steps"> </a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<div class="note">
+<div class="label">Note</div>
+<div class="content"> When developing with the dispatcher we assume you are using 'forrest 
+      run' and the following workflow "change files -&gt; refresh browser"<br /> 
+      Installing a mozilla browser and the forrestbar helps a lot in 
+      developing. Many instructions assumes that you have the forrestbar 
+      installed. </div>
+</div>
+<a name="emptystructurer" title="Empty structurer file"> </a>
+<h3 class="underlined_5">Empty structurer file</h3>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<p> <strong> The structurer</strong> is designed to be open for any 
+        format that can use<strong> forrest:view</strong> as configuration 
+        file. The only format we implemented is html for now. This is as well 
+        true for the delivered contracts. </p>
+<a name="firststructurer" title="Creating your first structurer"> </a>
+<h3 class="underlined_5">Creating your first structurer</h3>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content"> The structurer is based on jx templates to allow simple 
+        presentation logic (all code starting with "jx:"). Please refer to the 
+        cocoon documentation about jx. </div>
+</div>
+<p> In this section we will create a new structurer. We will override the 
+        default structurer of the core themes for the index page of a new seed. 
+        For that we will create a file called <span class="codefrag">index.fv</span> and save it 
+        in the directory <span class="codefrag">{project:resources}/structurer/url</span> 
+        (create it if needed). This will make <strong>only</strong> the 
+        index.html page look different from the rest of the project. </p>
+<div class="note">
+<div class="label">RecursiveDirectoryTraversalAction</div>
+<div class="content"> You can set a view for an individual file, a directory, or the whole site. To address multiple files in a directory call your  <span class="codefrag">.fv</span> file <span class="codefrag">common.fv</span>. If Forrest doesn't find a <span class="codefrag">.fv</span> file with the same name as the current file it will use the common.fv file in that directory, or the first one it finds going upwards through the directory structure. 
+	<span class="codefrag">common.fv</span> files affect all subdirectories unless they are overidden by another <span class="codefrag">common.fv</span> or a file-specific <span class="codefrag">foo.fv</span> file. 
+	</div>
+</div>
+<p> Remember: pointing your browser to 
+        <span class="codefrag">http://localhost:8888/ls.contracts.html</span> will show a page 
+        with all contracts and themes that you can use in your project provided 
+        by forrest. </p>
+<p> Let us use the blank structurer from the earlier step and add the 
+        content-main contract. In ls.contracts.html we find the information for 
+        how to use the contract in our structurer. Our <span class="codefrag">index.fv</span> 
+        should look like: </p>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+    &lt;forrest:contract name="content-main"&gt;
+    &lt;forrest:properties contract="content-main"&gt;
+      &lt;forrest:property name="content-main" nugget="get.body"&gt;
+        &lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+      &lt;/forrest:property&gt;
+      &lt;!-- Heading types can be clean|underlined|boxed  --&gt;
+      &lt;forrest:property name="content-main-conf"&gt;
+        &lt;headings type="underlined"/&gt;
+      &lt;/forrest:property&gt;
+    &lt;/forrest:properties&gt;
+  &lt;/forrest:contract&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<p>A contract has to request the data model it want to transform. This 
+        happends by defining forrest:properties which have the same name like 
+        the contract. In our case we want the HTML rendered from intermediate 
+        format (**.body.xml). This we are going to include via: <span class="codefrag">&lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+         </span>
+</p>
+<p>Contracts can offer some property configuration of the outcome of 
+            the transformation. In our case <span class="codefrag">&lt;forrest:property name="content-main-conf"&gt;
+        &lt;headings type="underlined"/&gt;
+      &lt;/forrest:property&gt;. </span>
+</p>
+<p> Lets try our new structurer by pointing to 
+        <span class="codefrag">http://localhost:8888/index.html</span>. We will see only the 
+        main content. Now let us add the section navigation to our structurer. 
+        The contract usage in the structurer can be looked up in 
+        ls.contracts.html. Our structurer now looks like: </p>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+    &lt;forrest:contract name="nav-main"&gt;
+      &lt;forrest:properties contract="nav-main"&gt;
+        &lt;forrest:property name="nav-main" nugget="get.navigation"&gt;
+          &lt;jx:import 
+            uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/&gt;
+        &lt;/forrest:property&gt;
+      &lt;/forrest:properties&gt;
+    &lt;/forrest:contract&gt;
+    &lt;forrest:contract name="content-main"&gt;
+      &lt;forrest:properties contract="content-main"&gt;
+        &lt;forrest:property name="content-main" nugget="get.body"&gt;
+          &lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+        &lt;/forrest:property&gt;
+        &lt;!-- Heading types can be clean|underlined|boxed  --&gt;
+        &lt;forrest:property name="content-main-conf"&gt;
+          &lt;headings type="underlined"/&gt;
+        &lt;/forrest:property&gt;
+      &lt;/forrest:properties&gt;
+    &lt;/forrest:contract&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<p> We now find the main content and the section navigation after each 
+        other and in the order we placed them in the structurer, but we want it 
+        next to each other (left: nav-section; right: content-main). </p>
+<a name="hookstructurer" title="Hooks in the structurer"> </a>
+<h3 class="underlined_5">Hooks in the structurer</h3>
+<p> We will use now the first time a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;
+         </span>. Hooks are the styling side of the structurer. We can imitate 
+        arbitrary html skeleton with their help. Before we explain how to use 
+        your own css in the structurer, we will use the default css. You can 
+        see in our example that we have css included. That is a default 
+        fallback coming from the implementation. In this common.css we can find 
+        </p>
+<pre class="code">/* menu */
+#leftbar {
+    width: 25%;
+    float: left;
+    background: #eae8e3;
+    border: thin dashed #565248;
+}
+      </pre>
+<p> With this information we know to use <span class="codefrag">&lt;forrest:hook name="leftbar"/&gt;
+        </span> and add contracts into that container. </p>
+<p> If we want to put the nav-section contract into the left-hand side 
+        position of the site we need to place the contract into that hook. 
+        Like: </p>
+<pre class="code">&lt;forrest:hook name="leftbar"&gt;
+  &lt;!-- Include contract here --&gt;
+&lt;/forrest:hook&gt;
+      </pre>
+<p> Our structurer will then look like: </p>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+    &lt;forrest:hook name="leftbar"&gt;
+      &lt;forrest:contract name="nav-section"&gt;
+        &lt;forrest:properties contract="nav-section"&gt;
+          &lt;forrest:property name="nav-section" nugget="get.navigation"&gt;
+            &lt;jx:import 
+              uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/&gt;
+          &lt;/forrest:property&gt;
+        &lt;/forrest:properties&gt;
+      &lt;/forrest:contract&gt;
+    &lt;/forrest:hook&gt;   
+    &lt;forrest:contract name="content-main"&gt;
+      &lt;forrest:properties contract="content-main"&gt;
+        &lt;forrest:property name="content-main" nugget="get.body"&gt;
+          &lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+        &lt;/forrest:property&gt;
+        &lt;!-- Heading types can be clean|underlined|boxed  --&gt;
+        &lt;forrest:property name="content-main-conf"&gt;
+          &lt;headings type="underlined"/&gt;
+        &lt;/forrest:property&gt;
+      &lt;/forrest:properties&gt;
+    &lt;/forrest:contract&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<a name="cssstructurer" title="CSS in the structurer"> </a>
+<h3 class="underlined_5">CSS in the structurer</h3>
+<p>We now know how to place contracts and hooks in our structurer. Until 
+        this stage we only used the common.css. CSS-support of the structurer 
+        is as easy as placing contracts/hooks. To override the common.css 
+        stylesheet we use another tag within our structurer <span class="codefrag">&lt;forrest:css /&gt;
+        </span>. </p>
+<p>You can add inline and linked css with the structurer. As soon as you 
+        use forrest:css you will disable the fallback css support from 
+        forrest. With this tag we tell the dispatcher that we want to override the common.css.  
+        After adding the following to our index.fv the design will be different.</p>
+<pre class="code">&lt;forrest:css &gt;
+/* Extra css */
+/* menu */
+#leftbar {
+  width: 25%;
+  float: left;
+  background: #CCCCFF;
+  border: thin solid #000000;
+}
+&lt;/forrest:css&gt; </pre>
+<p> We just changed the border-style to 'solid', the background to 
+        '#CCCCFF' and the color to '#000000'.  So you see a white page where the menu is surrounded by a solid 
+        border with the defined background.</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        <span class="codefrag">&lt;forrest:css /&gt;</span> needs to be the direct child of 
+        <span class="codefrag">&lt;forrest:view type="html"&gt;</span>
+      </div>
+</div>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+    &lt;forrest:css &gt;
+/* Extra css */
+/* menu */
+#leftbar {
+  width: 25%;
+  float: left;
+  background: #CCCCFF;
+  border: thin solid #000000;
+}
+    &lt;/forrest:css&gt;
+    &lt;forrest:hook name="leftbar"&gt;
+      &lt;forrest:contract name="nav-section"&gt;
+        &lt;forrest:properties contract="nav-section"&gt;
+          &lt;forrest:property name="nav-section" nugget="get.navigation"&gt;
+            &lt;jx:import 
+              uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/&gt;
+          &lt;/forrest:property&gt;
+        &lt;/forrest:properties&gt;
+      &lt;/forrest:contract&gt;
+    &lt;/forrest:hook&gt;   
+    &lt;forrest:contract name="content-main"&gt;
+      &lt;forrest:properties contract="content-main"&gt;
+        &lt;forrest:property name="content-main" nugget="get.body"&gt;
+          &lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+        &lt;/forrest:property&gt;
+        &lt;!-- Heading types can be clean|underlined|boxed  --&gt;
+        &lt;forrest:property name="content-main-conf"&gt;
+          &lt;headings type="underlined"/&gt;
+        &lt;/forrest:property&gt;
+      &lt;/forrest:properties&gt;
+    &lt;/forrest:contract&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<p>As a second example, let us change 
+        as well the content-main by adding another hook <span class="codefrag">&lt;forrest:hook name="content"/&gt;
+        </span> We need to add the new layout container to our inline css: </p>
+<pre class="code">
+/* The actual content */
+#content {
+  margin-left: 25%;
+  padding: 0 20px 0 20px;
+  background: #B9D3EE;
+}</pre>
+<p> Then we have to add the 'content-main' contract to the 'content' 
+        hook. The resulting structurer looks like: </p>
+<pre class="code">&lt;forrest:views 
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+  &lt;forrest:view type="html"&gt;
+    &lt;forrest:css &gt;
+/* Extra css */
+/* menu */
+#leftbar {
+  width: 25%;
+  float: left;
+  background: #CCCCFF;
+  border: thin solid #000000;
+}
+/* The actual content */
+#content {
+  margin-left: 25%;
+  padding: 0 20px 0 20px;
+  background: #B9D3EE;
+}
+    &lt;/forrest:css&gt;
+    &lt;forrest:hook name="leftbar"&gt;
+      &lt;forrest:contract name="nav-section"&gt;
+        &lt;forrest:properties contract="nav-section"&gt;
+          &lt;forrest:property name="nav-section" nugget="get.navigation"&gt;
+            &lt;jx:import 
+              uri="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/&gt;
+          &lt;/forrest:property&gt;
+        &lt;/forrest:properties&gt;
+      &lt;/forrest:contract&gt;
+    &lt;/forrest:hook&gt;
+    &lt;forrest:hook name="content"&gt;
+      &lt;forrest:contract name="content-main"&gt;
+      &lt;forrest:properties contract="content-main"&gt;
+        &lt;forrest:property name="content-main" nugget="get.body"&gt;
+          &lt;jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/&gt;
+        &lt;/forrest:property&gt;
+        &lt;!-- Heading types can be clean|underlined|boxed  --&gt;
+        &lt;forrest:property name="content-main-conf"&gt;
+          &lt;headings type="underlined"/&gt;
+        &lt;/forrest:property&gt;
+      &lt;/forrest:properties&gt;
+    &lt;/forrest:contract&gt;
+    &lt;/forrest:hook&gt;
+  &lt;/forrest:view&gt;
+&lt;/forrest:views&gt;
+      </pre>
+<p> We are now able to place contracts into the layout container and add 
+        custom css to the structurer. </p>
+<a name="Linking+to+an+external+css+file" title="Linking to an external css file"> </a>
+<h3 class="underlined_5">Linking to an external css file</h3>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">This will change for the next version of views (v3) where we use a 
+        generic contract instead of the standalone element (forrest:css). </div>
+</div>
+<p>Make sure your project has the following directory structure. If it 
+        doesn't you'll have to create it. "common" is the fallback for all 
+        themes, if you want to override the css for a specific theme replace 
+        "common" with "themeName". This is where Forrest will look for external 
+        css stylesheets. </p>
+<pre class="code">
+        $projectHome\src\documentation\resources\themes\common\css</pre>
+<p>Where $projectHome is the directory where your project exists.</p>
+<p>Put your css stylesheets in this directory. For arguement's sake let's say 
+        it's called mystyles.css</p>
+<p>Edit your common.fv structurer (or whatever structurer (theme) you are using). This 
+        will probably be some where in: </p>
+<pre class="code">$projectHome\src\documentation\content\xdocs</pre>
+<p>or if you want to override it for the whole project in:</p>
+<pre class="code">$projectHome\src\documentation\resources\themes\</pre>
+<p>Add the following element to the *.fv file:</p>
+<pre class="code">&lt;forrest:css url="styles.css" media="screen" theme="pelt"/&gt;
+        </pre>
+<p>
+<strong>Important!</strong> This must appear straight after the "view 
+        type" element (as first child): </p>
+<pre class="code">&lt;forrest:view type="html"&gt;</pre>
+<pre class="code">&lt;forrest:css url="mystyles.css" media="screen" theme="pelt"/&gt;
+        </pre>
+<p>The attributes are: </p>
+<ol>
+        <li>the url where the css exist (NOTE: it will be rewritten to "../themes/mystyles.css").</li>
+        <li>the media type, you can set different styles for screen and print. 
+          This is really useful if you want to hide elements such as navigation 
+          in the print output (#nav-section{display:none} for example).</li>
+        <li>the theme, "pelt" is the default theme (another is the "common" theme). Change this if you 
+          are using your own theme.</li>
+      </ol>
+<p>You can have as many css links as you like, and they'll appear in the 
+        head of your document in same order as they are in the .fv file.</p>
+<div class="fixme">
+<div class="label">Fixme (thorsten)</div>
+<div class="content"> Add more information of recent threads around 
+        css in the structurer and information how you add an @import? Use e.g. 
+        <a href="http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2">http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2</a> 
+        </div>
+</div>
+</div>
+<a name="Further Reading" title="Further Reading"> </a>
+<h2 class="underlined_10">Further Reading</h2>
+<div class="section">
+<p> Congratulations you are now able to work with the structurer. From here 
+      we recommend to read the following How-Tos: </p>
+<ul>
+      <li>
+        <a href="../how/howto-structurer-contracts.html">Create your own contract 
+          implementation</a>
+      </li>
+    </ul>
+</div>
+<a name="Feedback" title="Feedback"> </a>
+<h2 class="underlined_10">Feedback</h2>
+<div class="section">
+<p> Please provide feedback about this document via the <a href="http://forrest.apache.org/mail-lists.html">mailing lists</a>. </p>
+</div>
+<!--+ |end content-main +-->
+</div>
+</div>
+<div id="footer">
+<div class="lastmodified">
+<script type="text/javascript">document.write("Last Published: " + document.lastModified);</script>
+</div>
+<div class="copyright">
+            Copyright ©
+             2002-2006 <a href="http://www.acme.org/licenses/">The Acme Software Organisation.</a> </div>
+<!--+ |start compliance links +-->
+<div id="siteinfo-compliance-links">
+<a href="http://validator.w3.org/check?uri=referer">
+<img alt="Valid XHTML 1.0!" height="31" src="http://www.w3.org/Icons/valid-xhtml10" width="88" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer">
+<img alt="Valid CSS!" src="http://jigsaw.w3.org/css-validator/images/vcss" style="border:0;width:88px;height:31px" />
+</a>
+</div>
+<!--+ |end compliance links +-->
+</div>
+</div>
+</body>
+</html>
