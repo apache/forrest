@@ -65,6 +65,45 @@
         emerged. Plugins are a way of extending Forrest to satisfy 
         site-specific needs. This includes to provide plugin specific 
         contracts.</p>
+      <section id="structurer">
+        <title>Structurer - configuration for themes</title>
+        <p> We developed<strong> the structurer</strong> to let the user decide 
+      where to place elements in e.g. html pages. We started this work with the 
+      <code>skinconf.xml</code> where you could configure certain elements and 
+      their positions. These elements were known under certain names. It was up 
+      to the skin designer to support this configuration and the elements. </p>
+    <p> The work started with grouping elements (the ones from skinconf). We 
+      used css-contracts that we added as @attributes e.g. <code><![CDATA[<div id="content-main"/>]]>
+       </code>. That made it possible to use the same elements in different 
+      skins. For the full list refer to the <a href="http://svn.apache.org/repos/asf/forrest/trunk/main/webapp/skins/leather-dev/contracts.initial.txt"> 
+      initial contract list </a> </p>
+    <p> Around this contracts we developed a configuration Domain Specific 
+      Language - called <strong>the structurer</strong>. The 
+      <strong>structurer</strong> allows us to define the order in which 
+      <strong>forrest:contract</strong>s appear, and also to group them using 
+      <strong>forrest:hook</strong>s. </p>
+    <p> <strong>forrest:hook</strong>s are containers that are only used for 
+      layout reasons. They <strong>do not</strong> add any content nor 
+      functionality to the output. They add <strong>only</strong> layout 
+      information to the output. Actually e.g. a <code><![CDATA[<forrest:hook name="layoutId"/>]]>
+      </code> will be transformed to <code><![CDATA[<div id="layoutId"/>]]> 
+      </code> </p>
+    <p> <strong>forrest:contract</strong>s are functionality or extra content 
+      that a theme can use to display the request. Sometimes a contract 
+      delivers <strong>format-specific markup</strong>, other times it delivers 
+      a <strong>format-independent string</strong>. We decide different kind of 
+      contracts, static one (like described in the contract howto), semi static 
+      (which offer configuration parameter in the structurer) and dynamic 
+      contracts (which offer semi-static configuration and/or requesting the 
+      content).  </p>
+      <p> The structurer is as well a configuration file for the dispatcher. 
+        The new think on the dispatcher is that one can include any content 
+        from any given business service by dispatching a request against it. In 
+        "old fashion" skins and in v1 contracts we assumed a given data model. 
+        In the dispatcher there is <strong>no</strong> given data model any 
+        more. All data has to be defined in the structurer that they can be 
+        dispatched. </p>
+      </section>
       <section id="contracts">
         <title>Contracts - grouped functionality</title>
         <p>The result of the leather-dev development were grouped functionality 
@@ -78,6 +117,11 @@
           features of the pelt skin.</p>
           <p>Contracts are standalone, self explaining, configurable 
             pieces of xsl templates created out of pure maintaining reasons.</p>
+          <p>Since this contracts are working from the input given in the <a 
+            href="#structurer">structurer</a>, it works on different input 
+            sources. Further one can pass variables into the contracts that can 
+            be used to apply presentation logic in the xsl (like sorting order, 
+            ...).</p>
       </section>
     </section>
      <section id="background">
