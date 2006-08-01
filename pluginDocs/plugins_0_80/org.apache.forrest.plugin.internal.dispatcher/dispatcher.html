@@ -5,7 +5,7 @@
         <link href="themes/leather-dev.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
         <link href="themes/pelt.screen.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
         
-        <link href="index.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
+        <link href="dispatcher.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
         <link href="themes/pelt.print.css" media="print" rel="stylesheet" title="pelt.print.css" type="text/css" />
         <style type="text/css">/* Extra css */ 
 p.quote {
@@ -15,13 +15,13 @@ p.quote {
  font-family: monospace; 
 }</style>
       <meta content="Apache Forrest" name="Generator" />
-<meta content="0.8" name="Forrest-version" />
+<meta content="0.8-dev" name="Forrest-version" />
 <meta content="pelt" name="Forrest-theme-name" />
 <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <!--+ |start navigation links +-->
 <link href="index.html" rel="Index" title="Index..." />
 <link href="linkmap.html" rel="CONTENTS" title="Site map..." />
-<link href="dispatcher-glossary.html" rel="NEXT" title="Glossary" />
+<link href="dispatcher-glossary.html" rel="NEXT" title="(FIXME: add content) Glossary" />
 <link href="todo.html" rel="LAST" title="Todo" />
 <!--+ |end navigation links +-->
 <!--+|start favicon +-->
@@ -100,10 +100,7 @@ p.quote {
 <!--+ |start Tabs new +-->
 <ul id="nav-main">
 <li class="current">
-<a class="base-selected" href="index.html">Home</a>
-</li>
-<li>
-<a class="base-not-selected" href="how/howto-dispatcher-quickstart.html">HowTo</a>
+<a class="base-selected" href="dispatcher.html">Home</a>
 </li>
 </ul>
 <!--+ |end Tabs +-->
@@ -129,27 +126,33 @@ p.quote {
 <div class="menupagetitle">Dispatcher development</div>
 </li>
 <li class="menuitem">
-<a href="dispatcher-glossary.html" title="(FIXME: add content) Dispactcher related terms and meanings">Glossary</a>
+<a href="dispatcher-glossary.html" title="Dispactcher related terms and meanings">(FIXME: add content) Glossary</a>
+</li>
+<li class="pagegroup" id="menu_1.1.3Title">
+<span onclick="SwitchMenu('menu_1.1.3')">How to</span>
+<ul class="menuitemgroup" id="menu_1.1.3">
+<li class="menuitem">
+<a href="howto-structurer-dsl.html" title="">Structurer</a>
+</li>
+<li class="menuitem">
+<a href="howto-dispatcher-quickstart.html" title="">Quickstart</a>
+</li>
+<li class="menuitem">
+<a href="howto-structurer-contracts.html" title="">Contracts</a>
+</li>
+</ul>
+</li>
+<li class="menuitem">
+<a href="how/index.html" title="(FIXME: old) index">(FIXME: old) Index</a>
+</li>
+<li class="menuitem">
+<a href="how/howItWork.html" title="(FIXME: old) howItWorks">(FIXME: old) howItWorks</a>
 </li>
 <li class="menuitem">
 <a href="changes.html" title="History of Changes">Changes</a>
 </li>
 <li class="menuitem">
 <a href="todo.html" title="Todo List">Todo</a>
-</li>
-</ul>
-</li>
-<li class="pagegroup" id="menu_1.2Title">
-<span onclick="SwitchMenu('menu_1.2')">How to</span>
-<ul class="menuitemgroup" id="menu_1.2">
-<li class="menuitem">
-<a href="how/howto-dispatcher-quickstart.html" title="">Quickstart</a>
-</li>
-<li class="menuitem">
-<a href="how/howto-dispatcher-structurer.html" title="">Structurer</a>
-</li>
-<li class="menuitem">
-<a href="how/howto-dispatcher-contracts.html" title="">Contracts</a>
 </li>
 </ul>
 </li>
@@ -165,7 +168,7 @@ p.quote {
 </div>
 </div>
 <div id="export-link">
-<a class="format" href="index.pdf">
+<a class="format" href="dispatcher.pdf">
 <img alt="PDF - icon" class="skin" src="themes/images/pdfdoc.gif" />
 <span class="caption">PDF</span>
 </a>
@@ -185,9 +188,6 @@ p.quote {
 <li>
 <a href="#dispatcher">Dispatcher - advanced separation of concerns</a>
 <ul class="minitoc">
-<li>
-<a href="#structurer">Structurer - configuration for themes</a>
-</li>
 <li>
 <a href="#contracts">Contracts - grouped functionality</a>
 </li>
@@ -258,44 +258,6 @@ p.quote {
         emerged. Plugins are a way of extending Forrest to satisfy 
         site-specific needs. This includes to provide plugin specific 
         contracts.</p>
-<a name="structurer" title="Structurer - configuration for themes"> </a>
-<h3 class="underlined_5">Structurer - configuration for themes</h3>
-<p> We developed<strong> the structurer</strong> to let the user decide 
-      where to place elements in e.g. html pages. We started this work with the 
-      <span class="codefrag">skinconf.xml</span> where you could configure certain elements and 
-      their positions. These elements were known under certain names. It was up 
-      to the skin designer to support this configuration and the elements. </p>
-<p> The work started with grouping elements (the ones from skinconf). We 
-      used css-contracts that we added as @attributes e.g. <span class="codefrag">&lt;div id="content-main"/&gt;
-       </span>. That made it possible to use the same elements in different 
-      skins. For the full list refer to the <a href="http://svn.apache.org/repos/asf/forrest/trunk/main/webapp/skins/leather-dev/contracts.initial.txt"> 
-      initial contract list </a> </p>
-<p> Around this contracts we developed a configuration Domain Specific 
-      Language - called <strong>the structurer</strong>. The 
-      <strong>structurer</strong> allows us to define the order in which 
-      <strong>forrest:contract</strong>s appear, and also to group them using 
-      <strong>forrest:hook</strong>s. </p>
-<p> <strong>forrest:hook</strong>s are containers that are only used for 
-      layout reasons. They <strong>do not</strong> add any content nor 
-      functionality to the output. They add <strong>only</strong> layout 
-      information to the output. Actually e.g. a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;
-      </span> will be transformed to <span class="codefrag">&lt;div id="layoutId"/&gt; 
-      </span> </p>
-<p> <strong>forrest:contract</strong>s are functionality or extra content 
-      that a theme can use to display the request. Sometimes a contract 
-      delivers <strong>format-specific markup</strong>, other times it delivers 
-      a <strong>format-independent string</strong>. We decide different kind of 
-      contracts, static one (like described in the contract howto), semi static 
-      (which offer configuration parameter in the structurer) and dynamic 
-      contracts (which offer semi-static configuration and/or requesting the 
-      content).  </p>
-<p> The structurer is as well a configuration file for the dispatcher. 
-        The new think on the dispatcher is that one can include any content 
-        from any given business service by dispatching a request against it. In 
-        "old fashion" skins and in v1 contracts we assumed a given data model. 
-        In the dispatcher there is <strong>no</strong> given data model any 
-        more. All data has to be defined in the structurer that they can be 
-        dispatched. </p>
 <a name="contracts" title="Contracts - grouped functionality"> </a>
 <h3 class="underlined_5">Contracts - grouped functionality</h3>
 <p>The result of the leather-dev development were grouped functionality 
@@ -309,10 +271,6 @@ p.quote {
           features of the pelt skin.</p>
 <p>Contracts are standalone, self explaining, configurable 
             pieces of xsl templates created out of pure maintaining reasons.</p>
-<p>Since this contracts are working from the input given in the <a href="#structurer">structurer</a>, it works on different input 
-            sources. Further one can pass variables into the contracts that can 
-            be used to apply presentation logic in the xsl (like sorting order, 
-            ...).</p>
 </div>
 <a name="background" title="Background"> </a>
 <h2 class="underlined_10">Background</h2>
@@ -347,7 +305,7 @@ p.quote {
 <h2 class="underlined_10">Further information</h2>
 <div class="section">
 <p> See the various How-to documents about the dispatcher, starting with 
-         the <a href="how/howto-dispatcher-quickstart.html">quickstart</a>
+         the <a href="error:site:v0.80//dispatcher/quickstart">quickstart</a>
       </p>
 <p> Apache Forrest 1.0 Specification (Draft, not yet published): 
         <span class="codefrag">site-author/content/xdocs/TR/2005/WD-forrest10.html</span> </p>
@@ -372,16 +330,6 @@ p.quote {
 </a>
 </div>
 <!--+ |end compliance links +-->
-<!-- |start siteinfo-credits -->
-<div id="credit">
-<a href="http://forrest.apache.org/">
-<img alt="Built with Apache Forrest - logo" src="images/built-with-forrest-button.png" style="width: 88px;height: 31px;" title="Built with Apache Forrest" />
-</a>
-<a href="http://cocoon.apache.org/">
-<img alt="Built with Cocoon - logo" src="&#10;                  http://forrest.apache.org/images/built-with-cocoon.gif" style="" title="Built with Cocoon" />
-</a>
-</div>
-<!--+ |end siteinfo-credits +-->
 </div>
 </div>
 </body>
