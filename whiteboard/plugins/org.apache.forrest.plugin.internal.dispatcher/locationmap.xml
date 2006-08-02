@@ -113,25 +113,28 @@
         </selectors>
     </components>
     <locator>
+        <!-- Base location of the builded dispatcher plugin-->
+        <match pattern="dispatcher.home">
+          <location src="{defaults:plugins}/{project:dispatcher.home}" />
+        </match> 
+        <!-- Base location of the builded themer plugin-->
+        <match pattern="dispatcher.themer">
+          <location src="{defaults:plugins}/{project:dispatcher.themer}" />
+        </match>
         <!-- xhtml2 to html core transformation -->
         <match pattern="transform.xhtml2.html.structurer">
-            <select>
-                <location 
-                    src="{project:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/html/xhtml2_to_html.xsl" 
-                    />
-            </select>
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/html/xhtml2_to_html.xsl" 
+            />
         </match>
         <!-- resource types -->
         <match pattern="dispatcher.structurer.resourceType.**">
             <select>
                 <location 
-                    src="{project:resources}/structurer/resource-types/{1}{project:theme-ext}" 
+                    src="{project:resources}/structurer/resource-types/{1}{project:dispatcher.theme-ext}" 
                     />
                 <location 
-                    src="{defaults:themer}/structurer/resource-types/{1}{project:theme-ext}" 
+                    src="{lm:dispatcher.themer}/structurer/resource-types/{1}{project:dispatcher.theme-ext}" 
                     />
             </select>
         </match>
@@ -163,20 +166,20 @@
       a) custom implementation of the themes.core plugin
       b) themes.core plugin
       where we test for 
-      1) {project:theme}{project:theme-ext}
-      2) {defaults:theme}{defaults:theme-ext}
+      1) {project:dispatcher.theme}{project:dispatcher.theme-ext}
+      2) {project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}
       -->
         <match pattern="resolve.structurer.**">
             <select type="exists">
                 <!-- project-based 
           url-based (url location) -->
                 <location 
-                    src="{project:resources}/structurer/url/{1}{project:theme-ext}" 
+                    src="{project:resources}/structurer/url/{1}{project:dispatcher.theme-ext}" 
                     />
                 <!-- project-based 
           url-based (xdocs location)  [depreciated]-->
                 <location 
-                    src="{project:content.xdocs}{1}{project:theme-ext}" />
+                    src="{project:content.xdocs}{1}{project:dispatcher.theme-ext}" />
                 <act type="sourcetype" 
                     src="{project:content.xdocs}{1}.xml">
                     <!-- Sourcetype based 
@@ -201,8 +204,8 @@
                 </act>
                 <act type="RecursiveDirectoryTraversalAction">
                     <parameter value="{../1}{1}" name="request"/>
-                    <parameter value="{project:theme}" name="projectFallback"/>
-                    <parameter value="{project:theme-ext}" 
+                    <parameter value="{project:dispatcher.theme}" name="projectFallback"/>
+                    <parameter value="{project:dispatcher.theme-ext}" 
                         name="projectExtension"/>
                     <parameter value="{project:resources}structurer/url/" 
                         name="projectDir"/>
@@ -212,8 +215,8 @@
                 </act>
                 <act type="RecursiveDirectoryTraversalAction">
                     <parameter value="{../1}{1}" name="request"/>
-                    <parameter value="{project:theme}" name="projectFallback"/>
-                    <parameter value="{project:theme-ext}" 
+                    <parameter value="{project:dispatcher.theme}" name="projectFallback"/>
+                    <parameter value="{project:dispatcher.theme-ext}" 
                         name="projectExtension"/>
                     <parameter value="{project:content.xdocs}" 
                         name="projectDir"/>
@@ -223,27 +226,19 @@
                 </act>
                 <!-- themes-dir: project-application-based theme-dir-based -->
                 <location 
-                    src="{lm:themer.project.dir}/{project:theme}{project:theme-ext}" 
-                    />
-                <!-- themer: project-application-based theme-based -->
-                <location 
-                    src="{project:themer}/themes/{project:theme}{project:theme-ext}" 
+                    src="{lm:themer.project.dir}/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
                     />
                 <!-- themes-dir: project-application-based default -->
                 <location 
-                    src="{lm:themer.project.dir}/{defaults:theme}{defaults:theme-ext}" 
-                    />
-                <!-- themer: project-application-based default -->
-                <location 
-                    src="{project:themer}/themes/{defaults:theme}{defaults:theme-ext}" 
+                    src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
                     />
                 <!-- themer: forrest-application-based theme-based -->
                 <location 
-                    src="{defaults:themer}/themes/{project:theme}{project:theme-ext}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
                     />
                 <!-- themer: forrest-application-based default -->
                 <location 
-                    src="{defaults:themer}/themes/{defaults:theme}{defaults:theme-ext}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
                     />
             </select>
         </match>
@@ -251,22 +246,16 @@
         <match pattern="resolve.tiles.**">
             <select type="exists">
                 <location 
-                    src="{project:resources}/themes/{project:theme}/html/{1}.vt.xml" 
+                    src="{project:resources}/themes/{project:dispatcher.theme}/html/{1}.vt.xml" 
                     />
                 <location 
-                    src="{project:resources}/themes/{defaults:theme}/html/{1}.vt.xml" 
+                    src="{project:resources}/themes/{project:dispatcher.fallback.theme}/html/{1}.vt.xml" 
                     />
                 <location 
-                    src="{project:themer}/themes/{project:theme}/html/{1}.vt.xml" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}/html/{1}.vt.xml" 
                     />
                 <location 
-                    src="{project:themer}/themes/{defaults:theme}/html/{1}.vt.xml" 
-                    />
-                <location 
-                    src="{defaults:themer}/themes/{project:theme}/html/{1}.vt.xml" 
-                    />
-                <location 
-                    src="{defaults:themer}/themes/{defaults:theme}/html/{1}.vt.xml" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}/html/{1}.vt.xml" 
                     />
             </select>
         </match>
@@ -274,10 +263,7 @@
         <match pattern="root-strip.xsl">
             <select type="exists">
                 <location 
-                    src="{project:structurer}/resources/stylesheets/root-strip.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/root-strip.xsl" 
+                    src="{lm:dispatcher.home}/resources/stylesheets/root-strip.xsl" 
                     />
             </select>
         </match>
@@ -289,54 +275,42 @@
             <select type="exists">
                 <!-- project-based theme -->
                 <location 
-                    src="{lm:themer.project.dir}/{project:theme}/{1}/{2}.ft" />
+                    src="{lm:themer.project.dir}/{project:dispatcher.theme}/{1}/{2}.ft" />
                 <!-- project-based default fallback -->
                 <location 
-                    src="{lm:themer.project.dir}/{defaults:theme}/{1}/{2}.ft" />
-                <!-- project-application-based theme -->
-                <location 
-                    src="{project:themer}/themes/{project:theme}/{1}/{2}.ft" />
-                <!--  project-application-based default fallback -->
-                <location 
-                    src="{project:themer}/themes/{defaults:theme}/{1}/{2}.ft" />
+                    src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}/{1}/{2}.ft" />
                 <!--  plugin provided contracts -->
                 <location src="{lm:resolvePluginContract.{1}.{2}}" />
                 <!-- forrest-application-based theme -->
                 <location 
-                    src="{defaults:themer}/themes/{project:theme}/{1}/{2}.ft" />
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}/{1}/{2}.ft" />
                 <!--  forrest-application-based default fallback -->
                 <location 
-                    src="{defaults:themer}/themes/{defaults:theme}/{1}/{2}.ft" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}/{1}/{2}.ft" 
                     />
                 <!--  forrest-application-based no found -->
                 <location 
-                    src="{defaults:themer}/themes/{defaults:theme}/{1}/noFt.ft" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}/{1}/noFt.ft" 
                     />
             </select>
         </match>
         <match pattern="dataModel-xml-document-to-**.xsl">
             <select type="exists">
                 <location 
-                    src="{project:skins-dir}{project:theme}/xslt/xml/document-to-{1}.xsl" 
+                    src="{project:skins-dir}{project:dispatcher.theme}/xslt/xml/document-to-{1}.xsl" 
                     />
                 <location 
-                    src="{project:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/xml/document-to-{1}.xsl" 
+                    src="{lm:dispatcher.home}/resources/stylesheets/xml/document-to-{1}.xsl" 
                     />
             </select>
         </match>
         <match pattern="dataModel-html-**.xsl">
             <select type="exists">
                 <location 
-                    src="{project:skins-dir}{project:theme}/xslt/html/{1}.xsl" 
+                    src="{project:skins-dir}{project:dispatcher.theme}/xslt/html/{1}.xsl" 
                     />
                 <location 
-                    src="{project:structurer}/resources/stylesheets/html/{1}.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/html/{1}.xsl" 
+                    src="{lm:dispatcher.home}/resources/stylesheets/html/{1}.xsl" 
                     />
             </select>
         </match>
@@ -344,43 +318,24 @@
         <match pattern="contract-strip-xsl.xsl">
             <select type="exists">
                 <location 
-                    src="{project:structurer}/resources/stylesheets/contract-strip-xsl.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/contract-strip-xsl.xsl" 
+                    src="{lm:dispatcher.home}/resources/stylesheets/contract-strip-xsl.xsl" 
                     />
             </select>
         </match>
         <match pattern="hooks-to-html.xsl">
-            <select type="exists">
-                <location 
-                    src="{project:structurer}/resources/stylesheets/hooksMatcher-html.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/hooksMatcher-html.xsl" 
-                    />
-            </select>
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/hooksMatcher-html.xsl" 
+            />
         </match>
         <!-- contracts (e.g. html) that can be used in the project. -->
         <match pattern="ls.contracts.xsl">
-            <select type="exists">
-                <location 
-                    src="{project:structurer}/resources/stylesheets/ls.contracts.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/ls.contracts.xsl" 
-                    />
-            </select>
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/ls.contracts.xsl" />
         </match>
         <match pattern="ls.contracts-to-document.xsl">
-            <select type="exists">
-                <location 
-                    src="{project:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" 
-                    />
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/ls.contracts-to-document.xsl" 
-                    />
-            </select>
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/ls.contracts-to-document.xsl" 
+            />
         </match>
         <!--Theme dir-->
         <match pattern="themer.project.dir">
@@ -392,10 +347,7 @@
         </match>
         <!-- contracts (e.g. html) that can be used in the project. -->
         <match pattern="themer.contracts.dir">
-            <select type="exists">
-                <location src="{project:themer}/themes" />
-                <location src="{defaults:themer}/themes" />
-            </select>
+          <location src="{lm:dispatcher.themer}/themes" />
         </match>
         <!-- generic match for theme image resources -->
         <!-- 
@@ -405,22 +357,16 @@
         <match pattern="themes/images/**.*">
             <select type="exists">
                 <location 
-                    src="{lm:themer.project.dir}/{project:theme}/images/{1}.{2}" 
+                    src="{lm:themer.project.dir}/{project:dispatcher.theme}/images/{1}.{2}" 
                     />
                 <location 
-                    src="{lm:themer.project.dir}/{defaults:theme}/images/{1}.{2}" 
+                    src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}/images/{1}.{2}" 
                     />
                 <location 
-                    src="{project:themer}/themes/{project:theme}/images/{1}.{2}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}/images/{1}.{2}" 
                     />
                 <location 
-                    src="{project:themer}/themes/{defaults:theme}/images/{1}.{2}" 
-                    />
-                <location 
-                    src="{defaults:themer}/themes/{project:theme}/images/{1}.{2}" 
-                    />
-                <location 
-                    src="{defaults:themer}/themes/{defaults:theme}/images/{1}.{2}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}/images/{1}.{2}" 
                     />
             </select>
         </match>
@@ -432,32 +378,23 @@
         <match pattern="themes/**.*">
             <select type="exists">
                 <location 
-                    src="{lm:themer.project.dir}/{project:theme}/{2}/{1}.{2}" />
+                    src="{lm:themer.project.dir}/{project:dispatcher.theme}/{2}/{1}.{2}" />
                 <location 
-                    src="{lm:themer.project.dir}/{defaults:theme}/{2}/{1}.{2}" 
+                    src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}/{2}/{1}.{2}" 
                     />
                 <location 
-                    src="{project:themer}/themes/{project:theme}/{2}/{1}.{2}" />
-                <location 
-                    src="{project:themer}/themes/{defaults:theme}/{2}/{1}.{2}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}/{2}/{1}.{2}" 
                     />
                 <location 
-                    src="{defaults:themer}/themes/{project:theme}/{2}/{1}.{2}" 
-                    />
-                <location 
-                    src="{defaults:themer}/themes/{defaults:theme}/{2}/{1}.{2}" 
+                    src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}/{2}/{1}.{2}" 
                     />
             </select>
         </match>
         <!--  Extracts the style sheet from the contract.  -->
         <match pattern="contract-strip-xsl.xsl">
-            <select type="exists">
-                <!-- don't think it's wise to let project override this... -->
-                <!-- location src="{project:structurer}/resources/stylesheets/helper/contract-strip-xsl.xsl" /-->
-                <location 
-                    src="{defaults:structurer}/resources/stylesheets/helper/contract-strip-xsl.xsl" 
-                    />
-            </select>
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/helper/contract-strip-xsl.xsl" 
+            />
         </match>
     </locator>
 </locationmap>
