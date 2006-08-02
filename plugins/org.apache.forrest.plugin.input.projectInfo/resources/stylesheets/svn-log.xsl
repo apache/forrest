@@ -18,11 +18,13 @@
 <!-- $Id$ -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="url"/>
-  <xsl:param name="test"/>
-  <!--test: <xsl:value-of select="$test"/>-->
+  <xsl:param name="ext"/>
+  <xsl:param name="path-prefix"/>
   <xsl:template match="/">
-    <xsl:apply-templates/>
+    <shell>
+      <xsl:apply-templates/>
+    </shell>
   </xsl:template>
-  <xsl:template match="changes">svn log -r <xsl:value-of select="revision/@first"/>:<xsl:value-of select="revision/@last"/> --xml -v <xsl:value-of select="$url"/> > <xsl:value-of select="@release"/>.svn.xml
+  <xsl:template match="changes">svn log -r <xsl:value-of select="revision/@first"/>:<xsl:value-of select="revision/@last"/> --xml -v <xsl:value-of select="$url"/> > <xsl:value-of select="$path-prefix"/><xsl:value-of select="@release"/><xsl:value-of select="$ext"/>
 </xsl:template>
 </xsl:stylesheet>

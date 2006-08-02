@@ -52,13 +52,10 @@
         <map:generate src="cocoon:/{1}.svn-revision.xml"/>
         <map:transform src="resources/stylesheets/svn-log.xsl">
           <map:parameter value="{lm:project.svn.url}" name="url"/>
-          <!-- 
-            If I use the following then I get:
-            Unable to get attribute value for projectInfo.svn.ext
-            -->
-          <!--<map:parameter value="{project:projectInfo.svn.ext}" name="test"/>-->
+          <map:parameter value="{project:projectInfo.svn.ext}" name="ext"/>
+          <map:parameter value="{project:projectInfo.svn.path-prefix}" name="path-prefix"/>
         </map:transform>
-        <map:serialize type="text"/>
+        <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
   </map:pipelines>
