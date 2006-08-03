@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Living on the egde.</title>
+  </header>
+  <body>
+    <section id="introduction">
+      <title>Introduction</title>
+      <p> Since the dispatcher is in the whiteboard, we can effort to use the 
+        latest features aviable in forreest. This helps to test this new 
+        features and to be prepared for the future when this feature get 
+        standard.</p>
+    </section>
+    <section id="fpx">
+      <title>forrest.properties.xml</title>
+      <p> We needed to prevent having references from the core to a plugin. 
+        This can be done with the new properties system. You can override any 
+        of the following values via a <code>forrest.properties.xml</code> in your 
+        project.</p>
+      <source><![CDATA[  <property name="dispatcher.theme" value="pelt"/>
+  <property name="dispatcher.fallback.theme" value="common"/>
+  <property name="dispatcher.theme-ext" value=".fv"/>
+  <property name="dispatcher.fallback.theme-ext" value=".fv"/>
+  <property name="dispatcher.themer" value="org.apache.forrest.themes.core"/>
+  <property name="dispatcher.home" value="org.apache.forrest.plugin.internal.dispatcher"/>]]>
+      </source>
+    </section>
+    <section id="lm">
+      <title>locationmap.xml</title>
+      <p> One of the main feature of the dispatcher is its fallback mechanism. 
+        We are not only looking into one or two places but a sopisticated list 
+        of locations. This locations are defined in the locationmap.xml. Like 
+        with the forrest.properties.xml you can override any match in there by 
+        implementing it in your project locationmap.xml.</p>
+        <section id="handson">
+          <title>Hands on the lm</title>
+          <p>The resolving process of the structurer responsible for the URL 
+            has implemented a high amount of fallbacks. Let us have a look.</p>
+          <source><![CDATA[<match pattern="resolve.structurer.**">
+  <!-- 
+      FIXME - Problem with the pattern
+      ********************************
+      We have encountered a strange problem with the pattern 'resolve.structurer.**'.
+      The {1} sometimes matches nothing, whereas {../1} is OK.
+      On the contrary, the {../1} sometimes matches nothing, whereas {1} is OK.
+      As a temporary workaround, we put {../1}{1} which covers all the cases.
+      CF. FOR-893
+      
+      structurer templating
+      *********************
+      URL specific structurer templates (project-based) e.g. index.fv
+      * either in the structurer/url
+      * or in the xdocs dir [depreciated]
+      have priority *before* 
+      
+      a) sourcetype based e.g. document-v20.fv
+      b) resourceTypeAction based on meta data e.g. xhtml.fv
+      (demonstrates lenya meta data integration for DOCO)
+      c) RecursiveDirectoryTraversalAction e.g. samples/common.fv
+      c1) url dir
+      c2) xdocs dir [depreciated]
+     
+      If no structurer template can be found in the project, 
+      we use either the templates provided by the
+      a) custom implementation of the themes.core plugin
+      b) themes.core plugin
+      where we test for 
+      1) {project:dispatcher.theme}{project:dispatcher.theme-ext}
+      2) {project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}
+      -->
+  <select type="exists">
+    <!-- project-based 
+          url-based (url location) -->
+    <location 
+      src="{project:resources}/structurer/url/{1}{project:dispatcher.theme-ext}" 
+      />
+    <!-- project-based 
+          url-based (xdocs location)  [depreciated]-->
+    <location src="{project:content.xdocs}{1}{project:dispatcher.theme-ext}" />
+    <act type="sourcetype" src="{project:content.xdocs}{1}.xml">
+      <!-- Sourcetype based 
+          http://forrest.apache.org/docs/cap.html-->
+      <location src="lm://dispatcher.structurer.resourceType.{sourcetype}" />
+    </act>
+    <act type="resourceTypeAction">
+      <parameter value="{../1}{1}" name="request"/>
+      <parameter value="{project:content.xdocs}" name="projectDir"/>
+      <parameter value="lm://dispatcher.structurer.resourceType." 
+        name="resourceTypeBase"/>
+      <parameter value=".xml.meta" name="metaExtension"/>
+      <parameter value="resourceType" name="resourceTypeElement"/>
+      <parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" 
+        name="resourceTypeElementNS"/>
+      <!--  Meta data based -->
+      <location src="{uri}" />
+    </act>
+    <act type="RecursiveDirectoryTraversalAction">
+      <parameter value="{../1}{1}" name="request"/>
+      <parameter value="{project:dispatcher.theme}" name="projectFallback"/>
+      <parameter value="{project:dispatcher.theme-ext}" 
+        name="projectExtension"/>
+      <parameter value="{project:resources}structurer/url/" name="projectDir"/>
+      <!--  url
+            project-based theme-based = directory-based / parent-directory based (recursively) -->
+      <location src="{uri}" />
+    </act>
+    <act type="RecursiveDirectoryTraversalAction">
+      <parameter value="{../1}{1}" name="request"/>
+      <parameter value="{project:dispatcher.theme}" name="projectFallback"/>
+      <parameter value="{project:dispatcher.theme-ext}" 
+        name="projectExtension"/>
+      <parameter value="{project:content.xdocs}" name="projectDir"/>
+      <!--  xdocs  [depreciated]
+            project-based theme-based = directory-based / parent-directory based (recursively) -->
+      <location src="{uri}" />
+    </act>
+    <!-- themes-dir: project-application-based theme-dir-based -->
+    <location 
+      src="{lm:themer.project.dir}/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
+      />
+    <!-- themes-dir: project-application-based default -->
+    <location 
+      src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
+      />
+    <!-- themer: forrest-application-based theme-based -->
+    <location 
+      src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
+      />
+    <!-- themer: forrest-application-based default -->
+    <location 
+      src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
+      />
+  </select>
+</match>]]> </source>
+        </section>
+    </section>
+  </body>
+</document>
