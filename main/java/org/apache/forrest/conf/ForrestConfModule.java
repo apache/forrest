@@ -74,7 +74,19 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
             original = "(not defined in forrest.xconf)";
             attributeValue = filteringProperties.getProperty(name);
             if (attributeValue == null) {
-                throw new ConfigurationException("Unable to get attribute value for " + name);
+                String error = "Unable to get attribute value for "
+                    + name
+                    + "\n"
+                    + "Please make sure you defined "
+                    + name
+                    + " in forrest.properties.xml either in $PROJECT_HOME "
+                    + "or in the default.forrest.properties.xml of the plugin "
+                    + "that is requesting this property."
+                    + "\n" 
+                    + "If you see this message, most of the time you spotted a plugin bug "
+                    + "(forget to define the default property). Please report it to our mailing list.";
+            throw new ConfigurationException(
+                    error);
             }
         }
 
