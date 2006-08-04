@@ -177,6 +177,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         }
         } catch (Exception e) {
         	getLogger().error("Opps, something went wrong.",e);
+        	throw new Exception("Opps, something went wrong.",e);
         }
 
         loadSystemProperties(filteringProperties);
