@@ -136,45 +136,26 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
 
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
-        } catch (FileNotFoundException e) {
-            if (debugging())
-                debug("Unable to find local.forrest.properties.xml, ignoring.");
-        }
 
         // get the values from forrest.properties.xml
-        try {
             forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
                     + "forrest.properties.xml";
 
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
-        } catch (FileNotFoundException e) {
-            if (debugging())
-                debug("Unable to find forrest.properties.xml, ignoring.");
-        }
 
         // get the values from default.forrest.properties.xml
-        try {
             forrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
                     + "default.forrest.properties.xml";
 
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
-        } catch (FileNotFoundException e) {
-            if (debugging())
-                debug("Unable to find default.forrest.properties.xml, ignoring.");
-        }
 
         // get forrest.properties and load the values
-        try {
             forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
                 + "forrest.properties";        
             filteringProperties = loadAntPropertiesFromURI(filteringProperties,
                 forrestPropertiesStringURI);
-        } catch (FileNotFoundException e) {
-            if (debugging())
-                debug("Unable to find forrest.properties, using defaults.");
-        }
 
         // get default-forrest.properties and load the values
         String defaultForrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
@@ -188,17 +169,14 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
             StringTokenizer st = new StringTokenizer(strPluginList, ",");
             while (st.hasMoreTokens()) {
                 forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st.nextToken().trim());
-                try {
                     forrestPropertiesStringURI = forrestPropertiesStringURI
                             + SystemUtils.FILE_SEPARATOR + "default.plugin.properties.xml";
                     filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                             forrestPropertiesStringURI);
-                } catch (FileNotFoundException e) {
-                    if (debugging())
-                        debug("Unable to load " + forrestPropertiesStringURI + ", ignoring. "
-                                + e.getMessage());
-                }
             }
+        }
+        } catch (Exception e) {
+        	getLogger().error("Opps, something went wrong.",e);
         }
 
         loadSystemProperties(filteringProperties);
@@ -259,9 +237,9 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         InputStream in = null;
         try {
             source = m_resolver.resolveURI(propertiesStringURI);
+            if (debugging())
+                debug("Searching for forrest.properties.xml in " + source.getURI());
             if (source.exists()){
-            	if (debugging())
-                    debug("Searching for forrest.properties.xml in " + source.getURI());
 
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
@@ -278,7 +256,8 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
 
                 if (debugging())
                     debug("Loaded:" + propertiesStringURI + filteringProperties.toString());
-            }
+            }else if (debugging())
+                debug("Unable to find "+source.getURI()+", ignoring.");
 
         } finally {
             if (source != null) {
@@ -308,17 +287,17 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         Source source = null;
         InputStream in = null;
         try {
-
             source = m_resolver.resolveURI(antPropertiesStringURI);
-
             if (debugging())
                 debug("Searching for forrest.properties in" + source.getURI());
-            in = source.getInputStream();
-            filteringProperties = new AntProperties(precedingProperties);
-            filteringProperties.load(in);
+            if (source.exists()){
+            	in = source.getInputStream();
+                filteringProperties = new AntProperties(precedingProperties);
+                filteringProperties.load(in);
 
-            if (debugging())
-                debug("Loaded:" + antPropertiesStringURI + filteringProperties.toString());
+                if (debugging())
+                    debug("Loaded:" + antPropertiesStringURI + filteringProperties.toString());
+            }
 
         } finally {
             if (source != null) {
