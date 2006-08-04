@@ -166,16 +166,19 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         }
 
         // get forrest.properties and load the values
-        forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
-                + "forrest.properties";
-
-        filteringProperties = loadAntPropertiesFromURI(filteringProperties,
+        try {
+            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
+                + "forrest.properties";        
+            filteringProperties = loadAntPropertiesFromURI(filteringProperties,
                 forrestPropertiesStringURI);
+        } catch (FileNotFoundException e) {
+            if (debugging())
+                debug("Unable to find forrest.properties, using defaults.");
+        }
 
         // get default-forrest.properties and load the values
         String defaultForrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
                 + "default-forrest.properties";
-
         filteringProperties = loadAntPropertiesFromURI(filteringProperties,
                 defaultForrestPropertiesStringURI);
 
@@ -201,7 +204,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         loadSystemProperties(filteringProperties);
         ForrestConfUtils.aliasSkinProperties(filteringProperties);
         if (debugging())
-            debug("Loaded project forrest.properties:" + filteringProperties);
+            debug("Loaded project properties:" + filteringProperties);
     }
 
     /**
