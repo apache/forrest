@@ -16,6 +16,14 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:pipes>
+      <map:pipe name="navigation"
+        src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
+        <parameter name="cache-expires" value="600"/> <!-- Expires in seconds -->
+      </map:pipe>
+    </map:pipes>
+  </map:components>
 
 	<map:pipelines>
 		<!-- ============================================================== -->
@@ -47,7 +55,7 @@
    <!-- Navigation elements                                          -->
    <!-- ============================================================ -->
   
-    <map:pipeline>      
+    <map:pipeline ype="navigation">      
       <map:match pattern="daisy.site.*">
         <map:generate src="{project:daisy.publisher.URL}blob?documentId={1}&amp;version=live&amp;partType=1" />
         <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-siteSnippet.xsl">
