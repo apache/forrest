@@ -256,24 +256,26 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         InputStream in = null;
         try {
             source = m_resolver.resolveURI(propertiesStringURI);
-            if (debugging())
-                debug("Searching for forrest.properties.xml in " + source.getURI());
+            if (source.exists()){
+            	if (debugging())
+                    debug("Searching for forrest.properties.xml in " + source.getURI());
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(source.getURI());
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(source.getURI());
 
-            NodeList nl = document.getElementsByTagName("property");
-            if (nl != null && nl.getLength() > 0) {
-                for (int i = 0; i < nl.getLength(); i++) {
-                    Element el = (Element) nl.item(i);
-                    filteringProperties.setProperty(el.getAttribute("name"), el
-                            .getAttribute("value"));
+                NodeList nl = document.getElementsByTagName("property");
+                if (nl != null && nl.getLength() > 0) {
+                    for (int i = 0; i < nl.getLength(); i++) {
+                        Element el = (Element) nl.item(i);
+                        filteringProperties.setProperty(el.getAttribute("name"), el
+                                .getAttribute("value"));
+                    }
                 }
-            }
 
-            if (debugging())
-                debug("Loaded:" + propertiesStringURI + filteringProperties.toString());
+                if (debugging())
+                    debug("Loaded:" + propertiesStringURI + filteringProperties.toString());
+            }
 
         } finally {
             if (source != null) {
