@@ -175,15 +175,12 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
                             forrestPropertiesStringURI);
             }
         }
-        } catch (Exception e) {
-        	getLogger().error("Opps, something went wrong.",e);
-        	throw new Exception("Opps, something went wrong.",e);
-        }
-
+        } finally {
         loadSystemProperties(filteringProperties);
         ForrestConfUtils.aliasSkinProperties(filteringProperties);
         if (debugging())
             debug("Loaded project properties:" + filteringProperties);
+        }
     }
 
     /**
