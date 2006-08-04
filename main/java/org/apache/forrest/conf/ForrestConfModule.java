@@ -79,12 +79,12 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
                     + "\n"
                     + "Please make sure you defined "
                     + name
-                    + " in forrest.properties.xml either in $PROJECT_HOME "
+                    + " in either forrest.properties.xml in $PROJECT_HOME "
                     + "or in the default.forrest.properties.xml of the plugin "
                     + "that is requesting this property."
                     + "\n" 
-                    + "If you see this message, most of the time you spotted a plugin bug "
-                    + "(forget to define the default property). Please report it to our mailing list.";
+                    + "If you see this message, then most of the time you have spotted a plugin bug "
+                    + "(i.e. forgot to define the plugin's default property). Please report to our mailing list.";
             throw new ConfigurationException(
                     error);
             }
