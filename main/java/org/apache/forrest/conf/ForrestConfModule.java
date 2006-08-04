@@ -255,10 +255,9 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         Source source = null;
         InputStream in = null;
         try {
-            if (debugging())
-                debug("Searching for forrest.properties.xml in" + source.getURI());
-
             source = m_resolver.resolveURI(propertiesStringURI);
+            if (debugging())
+                debug("Searching for forrest.properties.xml in " + source.getURI());
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
