@@ -175,7 +175,7 @@ $Revision: 1.13 $
         <map:read src="resources/css/{1}.css" mime-type="text/css" />
       </map:match>
       
-     <!-- special case cormer generator pipeline -->
+     <!-- special case corner generator pipeline -->
      <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.png">
         <map:call resource="read-svg2png-corner-resource">
            <map:parameter name="path" value="images/{1}" />
@@ -189,7 +189,7 @@ $Revision: 1.13 $
         </map:call>
      </map:match>
      
-     <!-- special case cormer generator pipeline -->
+     <!-- special case corner generator pipeline SVG -->
      <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.svg">
       <map:generate src="cocoon://skinconf.xml" />
       <map:transform src="{lm:skin.images.corner.images/{1}.{2}c}">
@@ -202,6 +202,12 @@ $Revision: 1.13 $
       </map:transform>
       <map:call resource="transform-project2text"/>
       <map:serialize type="xml" />
+     </map:match>
+     
+     <!-- DEBUG: special case corner generator pipeline PNG from SVG-->
+     <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.test.png">
+      <map:generate src="cocoon:/skin/images{1}/{2}c-{3}-{4}-{5}-1{6}-2{7}-3{8}.svg" />
+      <map:serialize type="svg2png" />
      </map:match>
 
       <map:match pattern="skin/images**/*.*">
