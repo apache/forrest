@@ -188,6 +188,21 @@ $Revision: 1.13 $
            <map:parameter name="fg-color-name" value="{8}"/>    
         </map:call>
      </map:match>
+     
+     <!-- special case cormer generator pipeline -->
+     <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.svg">
+      <map:generate src="cocoon://skinconf.xml" />
+      <map:transform src="{lm:skin.images.corner.images/{1}.{2}c}">
+         <map:parameter name="orientation-tb" value="{3}"/>
+         <map:parameter name="orientation-lr" value="{4}"/>
+         <map:parameter name="size" value="{5}"/>    
+         <map:parameter name="bg-color-name" value="{6}"/>
+         <map:parameter name="stroke-color-name" value="{7}"/>
+         <map:parameter name="fg-color-name" value="{8}"/>
+      </map:transform>
+      <map:call resource="transform-project2text"/>
+      <map:serialize type="xml" />
+     </map:match>
 
       <map:match pattern="skin/images**/*.*">
         <map:read src="{lm:skin.images.{1}/{2}.{3}}" mime-type="image/{3}" />
