@@ -38,12 +38,13 @@
             <source>$FORREST_HOME/whiteboard/plugins/org.apache.forrest.themes.core/resources/themes/common/css/</source>
           </li>
         </ul>
+     The <strong>url</strong> attribute is required.
       </li>
-      <li><strong>media</strong> to the browser the stylesheets to use
+      <li><strong>media</strong> attribute indicates to the browser the stylesheets to use
      depending on the detination media :
         <ul>
-          <li>screen : the stylesheet is used with the browser displaying the page on the screen,</li>
-          <li>print : the stylesheet is used while printing the document - or print preview...</li>
+          <li><em>screen</em> : the stylesheet is used with the browser displaying the page on the screen,</li>
+          <li><em>print</em> : the stylesheet is used while printing the document - or print preview...</li>
           <li>othervalues can also be managed by browsers.cf. <a href="http://www.w3.org/TR/REC-CSS2/media.html#media-types" class="fork">W3C Media Types</a>.</li>
         </ul>
         <div class="note">
@@ -55,7 +56,8 @@
       </li>
       <li><strong>theme</strong> attribute indicates to the browser for which theme this
         stylesheet should be used, letting you add several css files
-        corresponding to different themes of the same page.
+        corresponding to different themes of the same page.<br/>
+        If omitted, the <strong>theme</strong> attribute take the value of the <code>dispatcher.theme</code> property that you should have defined in your forrest.properties.xml file.
       </li>
     </ul>
   </description>
@@ -73,6 +75,8 @@
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <xsl:param name="branding-css-links-input"/>
       <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
+      <xsl:variable name="theme" select="$defaultVariables/*/*[@name='theme']/@value"/>
+
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/html/head">
@@ -102,7 +106,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="title">
-                <xsl:value-of select="@url"/>
+                <xsl:value-of select="concat( translate( substring($theme, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($theme,2))"/>
               </xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>

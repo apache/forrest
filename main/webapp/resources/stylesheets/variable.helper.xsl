@@ -22,6 +22,7 @@
   <xsl:import href="lm://transform.xml.dotdots"/>
   <xsl:import href="lm://transform.xml.pathutils"/>
   <xsl:param name="path" select="'test.html'"/>
+  <xsl:param name="theme" select="'notheme'"/>
   <!-- Path (..'s) to the root directory -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
@@ -50,6 +51,7 @@
         <property name="filename-noext" value="{$filename-noext}"/>
         <property name="root" value="{$root}"/>
         <property name="path" value="{$path}"/>
+        <property name="theme" value="{$theme}"/>
       </properties>
     </xsl:template>
 </xsl:stylesheet>
