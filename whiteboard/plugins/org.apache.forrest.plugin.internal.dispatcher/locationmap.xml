@@ -294,26 +294,48 @@
                     />
             </select>
         </match>
+
+        <!-- dataModel -->
+        <!-- A project can to supersede the standard <format>-to-<format>.xsl file to add specific feature.
+             to include the standard in the new stylesheet, just import the standard stylesheet has follows :
+                <xsl:import href="lm://std-dataModel-xml-document-to-<format>.xsl"/>
+             or <xsl:import href="lm://std-dataModel-html-<format>-to-<format>.xsl"/>
+        -->
         <match pattern="dataModel-xml-document-to-**.xsl">
             <select type="exists">
                 <location 
-                    src="{project:skins-dir}{project:dispatcher.theme}/xslt/xml/document-to-{1}.xsl" 
+                    src="{project:resources}stylesheets/xslt/xml/document-to-{1}.xsl" 
                     />
                 <location 
-                    src="{lm:dispatcher.home}/resources/stylesheets/xml/document-to-{1}.xsl" 
+                    src="{lm:std-dataModel-xml-document-to-{1}.xsl}" 
                     />
             </select>
         </match>
         <match pattern="dataModel-html-**.xsl">
             <select type="exists">
                 <location 
-                    src="{project:skins-dir}{project:dispatcher.theme}/xslt/html/{1}.xsl" 
+                    src="{project:resources}stylesheets/xslt/html/{1}.xsl" 
                     />
+                <location 
+                    src="{lm:std-dataModel-html-{1}.xsl}" 
+                    />
+            </select>
+        </match>
+        <match pattern="std-dataModel-html-**.xsl">
+            <select type="exists">
                 <location 
                     src="{lm:dispatcher.home}/resources/stylesheets/html/{1}.xsl" 
                     />
             </select>
         </match>
+        <match pattern="std-dataModel-xml-document-to-**.xsl">
+            <select type="exists">
+                <location 
+                    src="{lm:dispatcher.home}/resources/stylesheets/xml/document-to-{1}.xsl" 
+                    />
+            </select>
+        </match>
+
         <!-- contracts have to be striped to their stylesheet for aggregation. -->
         <match pattern="contract-strip-xsl.xsl">
             <select type="exists">
