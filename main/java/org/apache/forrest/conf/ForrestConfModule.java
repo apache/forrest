@@ -16,7 +16,6 @@
  */
 package org.apache.forrest.conf;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -60,8 +59,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
 
     private SourceResolver m_resolver;
 
-    private final static String defaultHome = "context:/";
-
     public Object getAttribute(String name, Configuration modeConf, Map objectModel)
             throws ConfigurationException {
         String original;
@@ -82,7 +79,7 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
                     + " in either forrest.properties.xml in $PROJECT_HOME "
                     + "or in the default.forrest.properties.xml of the plugin "
                     + "that is requesting this property."
-                    + "\n" 
+                    + "\n"
                     + "If you see this message, then most of the time you have spotted a plugin bug "
                     + "(i.e. forgot to define the plugin's default property). Please report to our mailing list.";
             throw new ConfigurationException(
@@ -109,77 +106,72 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
         return attributeValues;
     }
 
-    private final String getSystemProperty(String propertyName) {
-
-        // if the property is not set, default to the webapp context
-        String propertyValue = System.getProperty(propertyName, defaultHome);
-
-        if (debugging())
-            debug("system property " + propertyName + "=" + propertyValue);
-
-        return propertyValue;
-    }
-
     public void initialize() throws Exception {
 
         // add all homes important to forrest to the properties
         setHomes();
 
+        loadSystemProperties(filteringProperties);
+
         // NOTE: the first values set get precedence, as in AntProperties
 
         String forrestPropertiesStringURI;
 
-        // get the values from local.forrest.properties.xml
         try {
+            // get the values from local.forrest.properties.xml
             forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
                     + "local.forrest.properties.xml";
-
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
 
-        // get the values from forrest.properties.xml
+            // get the values from project forrest.properties.xml
             forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
                     + "forrest.properties.xml";
-
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
 
-        // get the values from default.forrest.properties.xml
+            // get the values from user forrest.properties.xml
+            String userHome = filteringProperties.getProperty("user.home");
+            if (userHome != null)
+            {
+                forrestPropertiesStringURI = userHome + SystemUtils.FILE_SEPARATOR
+                        + "forrest.properties.xml";
+                filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                        forrestPropertiesStringURI);
+            }
+
+            // get the values from global forrest.properties.xml
+            String globalHome = filteringProperties.getProperty("global.home");
+            if (globalHome != null)
+            {
+                forrestPropertiesStringURI = globalHome + SystemUtils.FILE_SEPARATOR
+                        + "forrest.properties.xml";
+                filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
+                        forrestPropertiesStringURI);
+            }
+
+            // get the values from default.forrest.properties.xml
             forrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
                     + "default.forrest.properties.xml";
-
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
 
-        // get forrest.properties and load the values
-            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
-                + "forrest.properties";        
-            filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                forrestPropertiesStringURI);
-
-        // get default-forrest.properties and load the values
-        String defaultForrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
-                + "default-forrest.properties";
-        filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                defaultForrestPropertiesStringURI);
-
-        // Load plugin default properties
-        String strPluginList = filteringProperties.getProperty("project.required.plugins");
-        if (strPluginList != null) {
-            StringTokenizer st = new StringTokenizer(strPluginList, ",");
-            while (st.hasMoreTokens()) {
-                forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st.nextToken().trim());
+            // Load plugin default properties
+            String strPluginList = filteringProperties.getProperty("project.required.plugins");
+            if (strPluginList != null) {
+                StringTokenizer st = new StringTokenizer(strPluginList, ",");
+                while (st.hasMoreTokens()) {
+                    forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st.nextToken().trim());
                     forrestPropertiesStringURI = forrestPropertiesStringURI
                             + SystemUtils.FILE_SEPARATOR + "default.plugin.properties.xml";
                     filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                             forrestPropertiesStringURI);
+                }
             }
-        }
         } finally {
-        loadSystemProperties(filteringProperties);
-        ForrestConfUtils.aliasSkinProperties(filteringProperties);
-        if (debugging())
-            debug("Loaded project properties:" + filteringProperties);
+            ForrestConfUtils.aliasSkinProperties(filteringProperties);
+            if (debugging())
+                debug("Loaded project properties:" + filteringProperties);
         }
     }
 
@@ -202,17 +194,19 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
     }
 
     /**
-     * Override any properties for which a system property exists
+     * Load system properties
      */
     private void loadSystemProperties(AntProperties props) {
-        for (Enumeration e = props.propertyNames(); e.hasMoreElements();) {
+        for (Enumeration e = System.getProperties().propertyNames(); e.hasMoreElements();) {
             String propName = (String) e.nextElement();
-            String systemPropValue = System.getProperty(propName);
-            if (systemPropValue != null) {
-                // AntProperties.setProperty doesn't let you override, so we
-                // have to remove the property then add it again
-                props.remove(propName);
-                props.setProperty(propName, systemPropValue);
+            if (propName.startsWith("forrest.")
+             || propName.startsWith("project.")
+             || propName.endsWith(".home"))
+            {
+                String systemPropValue = System.getProperty(propName);
+                if (systemPropValue != null) {
+                    props.setProperty(propName, systemPropValue);
+                }
             }
         }
     }
@@ -256,46 +250,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule, In
                     debug("Loaded:" + propertiesStringURI + filteringProperties.toString());
             }else if (debugging())
                 debug("Unable to find "+source.getURI()+", ignoring.");
-
-        } finally {
-            if (source != null) {
-                m_resolver.release(source);
-            }
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-
-        return filteringProperties;
-    }
-
-    /**
-     * @param antPropertiesStringURI
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws SourceNotFoundException
-     */
-    private AntProperties loadAntPropertiesFromURI(AntProperties precedingProperties,
-            String antPropertiesStringURI) throws MalformedURLException, IOException,
-            SourceNotFoundException {
-
-        Source source = null;
-        InputStream in = null;
-        try {
-            source = m_resolver.resolveURI(antPropertiesStringURI);
-            if (debugging())
-                debug("Searching for forrest.properties in" + source.getURI());
-            if (source.exists()){
-            	in = source.getInputStream();
-                filteringProperties = new AntProperties(precedingProperties);
-                filteringProperties.load(in);
-
-                if (debugging())
-                    debug("Loaded:" + antPropertiesStringURI + filteringProperties.toString());
-            }
 
         } finally {
             if (source != null) {
