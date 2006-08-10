@@ -30,21 +30,20 @@
     <map:pipeline>
 
       <map:match pattern="**changes.rss">
-        <map:generate src="{lm:project.status}"/>
-        <map:transform src="{lm:projectInfo.transform.changes.rss}">
-          <map:parameter name="projectName" value="{project:projectInfo.project.fullname}"/>
-          <map:parameter name="projectUrl" value="{project:projectInfo.project.url}"/>
-          <map:parameter name="rssLanguage" value="{project:projectInfo.rss.language}"/>
-        </map:transform>
+        <map:aggregate element="agg">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="{lm:project.status}"/>
+        </map:aggregate>
+        <map:transform src="{lm:projectInfo.transform.changes.rss}"/>
         <map:serialize type="rss091" />
       </map:match>
     
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes_(.*).rss$">
-        <map:generate src="{lm:project.status}"/>
+        <map:aggregate element="agg">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="{lm:project.status}"/>
+        </map:aggregate>
         <map:transform src="{lm:projectInfo.transform.changes.rss}">
-          <map:parameter name="projectName" value="{project:projectInfo.project.fullname}"/>
-          <map:parameter name="projectUrl" value="{project:projectInfo.project.url}"/>
-          <map:parameter name="rssLanguage" value="{project:projectInfo.rss.language}"/>
           <map:parameter name="versionNumber" value="{3}"/>
         </map:transform>
         <map:serialize type="rss091" />

@@ -18,12 +18,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:param name="versionNumber"/>
-  <xsl:param name="projectName"/>
-  <xsl:param name="projectUrl"/>
-  <xsl:param name="rssLanguage"/>
 
   <xsl:variable name="changes-url"
-    select="concat($projectUrl, 'changes.html')"/>
+    select="concat(../skinconfig/project-url, 'changes.html')"/>
 
   <xsl:template match="status">
       
@@ -31,13 +28,13 @@
       <channel>
         <xsl:choose>
           <xsl:when test="$versionNumber = 'current'">
-            <title><xsl:value-of select="$projectName"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
           </xsl:when>
           <xsl:when test="$versionNumber">
-            <title><xsl:value-of select="$projectName"/> (<xsl:value-of select="$versionNumber"/>) Changes</title>
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</title>
           </xsl:when>
           <xsl:otherwise>
-            <title><xsl:value-of select="$projectName"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -46,17 +43,17 @@
         
         <xsl:choose>
           <xsl:when test="$versionNumber = 'current'">
-            <description><xsl:value-of select="$projectName"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
           </xsl:when>
           <xsl:when test="$versionNumber">
-            <description><xsl:value-of select="$projectName"/> (<xsl:value-of select="$versionNumber"/>) Changes</description>
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</description>
           </xsl:when>
           <xsl:otherwise>
-            <description><xsl:value-of select="$projectName"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
           </xsl:otherwise>
         </xsl:choose>
 
-        <language><xsl:value-of select="$rssLanguage"/></language>
+        <language>en-us</language>
 
         <xsl:choose>
           <xsl:when test="$versionNumber">
@@ -113,7 +110,6 @@
     </item>
   </xsl:template>
 
-  <!-- FIXME - not sure it is still needed since we do not use the skinconf.xml aggregation... -->
   <xsl:template match="skinconfig"/>
   <xsl:template match="notes"/>
   <xsl:template match="todo"/>
