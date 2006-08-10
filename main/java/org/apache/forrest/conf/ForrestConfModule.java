@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -107,6 +110,21 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         }
 
         return attributeValues;
+    }
+
+    public Iterator getAttributeNames(Configuration modeConf, Map objectModel)
+            throws ConfigurationException {
+
+        SortedSet matchset = new TreeSet();
+        Enumeration enumeration = filteringProperties.keys();
+        while (enumeration.hasMoreElements()) {
+            String key = (String) enumeration.nextElement();
+            matchset.add(key);
+        }
+        Iterator iterator = super.getAttributeNames(modeConf, objectModel);
+        while (iterator.hasNext())
+            matchset.add(iterator.next());
+        return matchset.iterator();
     }
 
     public void initialize() throws Exception {
