@@ -115,6 +115,8 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
 
     private URIResolver m_uriResolver;
 
+    private Object defaultVariables;
+
     /**
      * The ContractBean contains all fields to work with contracts. It is a
      * helper bean.
@@ -126,14 +128,16 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * 
      * @param manager
      * @param parameterHelper
+     * @param defaultProperties 
      * @throws ParserConfigurationException
      */
-    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper,URIResolver uriResolver)
+    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper,Document defaultProperties, URIResolver uriResolver)
             throws ParserConfigurationException {
         m_uriResolver=uriResolver;
         this.manager = manager;
         dispatcherHelper = new DispatcherHelper(manager);
         this.parameterHelper = parameterHelper;
+        this.defaultVariables=defaultProperties;
     }
 
     /*
@@ -252,12 +256,8 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
                      */
                     // default forrest properties
                     Transformer transformer = cachedXSLT.newTransformer();
-                    String request= (String) parameterHelper.get(DispatcherTransformer.DISPATCHER_REQUEST_ATTRIBUTE);
-                    String propertyURI= "cocoon://"+request+".props";
-                    Node defaultVariables = org.apache.forrest.dispatcher.util.SourceUtil
-                            .readDOM(propertyURI, this.manager);
                     transformer.setParameter("defaultVariables",
-                            defaultVariables);
+                            this.defaultVariables);
                     transformer.setOutputProperty(
                             OutputKeys.OMIT_XML_DECLARATION, "yes");
                     transformer.setOutputProperty(OutputKeys.INDENT, "yes");

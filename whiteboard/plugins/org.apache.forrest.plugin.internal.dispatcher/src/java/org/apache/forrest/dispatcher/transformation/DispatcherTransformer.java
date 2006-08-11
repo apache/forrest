@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
@@ -193,6 +194,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private String requestId;
 
+    private Document defaultProperties;
+
     public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
 
     public static final String PATH_PARAMETER = "path";
@@ -291,6 +294,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                     + "You have to set the \"request\" parameter in the sitemap!";
             getLogger().error(error);
             throw new ProcessingException(error);
+        }
+        String propertyURI= "cocoon://"+requestId+".props";
+        try {
+            this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
+            .readDOM(propertyURI, this.manager);
+        } catch (Exception e1) {
+            String error = "dispatcherError:\n"
+                + "Could not get the properties for "+propertyURI;
+        getLogger().error(error);
+        throw new ProcessingException(error);
         }
         parameterHelper.put(DISPATCHER_REQUEST_ATTRIBUTE, requestId);
         this.requestedFormat = parameters.getParameter(
@@ -620,9 +633,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         try {
             if (contract == null)
                 contract = new ContractBeanDOMImpl(this.manager,
-                        parameterHelper,(URIResolver)this);
-            else
-                contract.initialize();
+                        parameterHelper,defaultProperties,(URIResolver)this);
+            // This is not needed since the manager did not change.
+            //else
+              //  contract.initialize();
         } catch (Exception e) {
             String error = DispatcherException.ERROR_500 + "\n"
                     + "component: ContractBean" + "\n"
