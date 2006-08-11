@@ -310,7 +310,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 STRUCTURER_FORMAT_ATTRIBUTE, null);
         if (requestedFormat == null) {
             String error = "dispatcherError:\n"
-                    + "You have to set the \"type\" parameter in the sitemap!";
+                    + "You have to set the \"type\" parameter in the sitemap!\n DispatcherStack: " + e1;
             getLogger().error(error);
             throw new ProcessingException(error);
         }
