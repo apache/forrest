@@ -22,6 +22,14 @@
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer name="cinclude" src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="i18n" 
+        src="org.apache.cocoon.transformation.I18nTransformer">
+        <catalogues default="projectInfo">
+          <catalogue id="other" name="OtherMessages" location="{lm:project.translations}" />
+          <catalogue id="projectInfo" name="ProjectInfoMessages" location="{lm:project.translations}" />
+        </catalogues>
+        <cache-at-startup>true</cache-at-startup>
+      </map:transformer>
     </map:transformers>
     <map:serializers default="html">
       <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
@@ -61,6 +69,9 @@
           <map:parameter name="projectInfo.changes.includeCommitterList" value="{project:projectInfo.changes.includeCommitterList}"/>
           <map:parameter name="projectInfo.changes.includeContributorList" value="{project:projectInfo.changes.includeContributorList}"/>
         </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}" />
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
     
@@ -73,6 +84,9 @@
           <map:parameter name="projectInfo.changes.sort" value="{project:projectInfo.changes.sort}"/>
           <map:parameter name="projectInfo.changes.includeContributorList" value="{project:projectInfo.changes.includeContributorList}"/>
         </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}" />
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
 
@@ -83,9 +97,15 @@
       </map:match>
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)releaseNotes_(.*).xml$">
-        <map:generate type="file" src="{lm:project.status}" />
+	<map:aggregate element="agg">
+          <map:part src="cocoon://skinconf.xml"/>
+          <map:part src="{lm:project.status}"/>
+        </map:aggregate>
         <map:transform src="{lm:projectInfo.transform.releaseNotes.document}">
           <map:parameter name="versionNumber" value="{3}"/>
+        </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{request:locale}" />
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>

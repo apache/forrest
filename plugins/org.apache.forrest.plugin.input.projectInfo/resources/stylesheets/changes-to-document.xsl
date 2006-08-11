@@ -18,6 +18,7 @@
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     version="1.0">
 
   <xsl:param name="path"/>
@@ -59,7 +60,7 @@
        <xsl:value-of select="@title"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:text>History of Changes</xsl:text> <xsl:value-of select="$versionNumber"/>
+       <i18n:text i18n:key="title">History of Changes</i18n:text><xsl:text> </xsl:text><xsl:value-of select="$versionNumber"/>
      </xsl:otherwise>
     </xsl:choose>
    </title>
@@ -68,20 +69,24 @@
 
     <p><link href="changes.rss"><img src="{$root}images/rss.png" alt="RSS"/></link></p>
     <section id="introduction">
-      <title>Introduction and explanation of symbols</title>
-      <p>Changes are sorted
+      <title><i18n:text i18n:key="introduction">Introduction and explanation of symbols</i18n:text></title>
+      <p><i18n:text i18n:key="intro_s1_begin">Changes are sorted</i18n:text>
+        <xsl:text> </xsl:text>
         <xsl:if test="$projectInfo.changes.sort!='none'">
-          <xsl:text>by "</xsl:text>
-           <xsl:value-of select="$projectInfo.changes.sort"/>
-          <xsl:text>" and then </xsl:text>
+          <i18n:translate>
+            <i18n:text i18n:key="intro_s1_bythen">by "{0}" and then</i18n:text>
+            <i18n:param><i18n:text><xsl:value-of select="$projectInfo.changes.sort"/></i18n:text></i18n:param>
+          </i18n:translate>
+          <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:text>chronologically with the most recent at the top.</xsl:text>
-        These symbols denote the various action types:
+        <i18n:text i18n:key="intro_s1_end">chronologically with the most recent at the top.</i18n:text>
+        <xsl:text> </xsl:text>
+        <i18n:text i18n:key="intro_s2_begin">These symbols denote the various action types:</i18n:text>
         <xsl:for-each select="//release/action[generate-id()=generate-id(key('types', @type))]">
           <xsl:sort select="@type"/>
           <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
           <xsl:text>=</xsl:text>
-          <xsl:value-of select="@type"/>
+          <i18n:text><xsl:value-of select="@type"/></i18n:text>
           <xsl:if test="not(position()=last())">
             <xsl:text>, </xsl:text>
           </xsl:if>
@@ -105,10 +110,9 @@
     </xsl:choose>
     <xsl:if test="$projectInfo.changes.includeCommitterList = 'true' and //developers">
        <section id="all-committers">
-         <title>All Committers</title>
-         <p>This is a list of all people who have ever participated
-         as committers on this project.</p>
-         
+       <title><i18n:text i18n:key="committers">All Committers</i18n:text></title>
+         <p><i18n:text i18n:key="committers_s1">This is a list of all people who have ever participated
+           as committers on this project.</i18n:text></p>
          <ul>
            <xsl:for-each select="//developers/person">
              <li><xsl:value-of select="@name"/> (<xsl:value-of select="@id"/>)</li>
@@ -122,7 +126,9 @@
 
  <xsl:template match="release">
   <section id="version_{@version}">
-   <title>Version <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
+   <title><i18n:text i18n:key="version">Version</i18n:text>
+   <xsl:text> </xsl:text>
+   <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
    <xsl:apply-templates select="introduction"/>
    <xsl:for-each select="action[generate-id()=generate-id(key('contexts',concat(../@version, '_', @context)))]">
     <xsl:sort select="@context"/>
@@ -154,9 +160,9 @@
    </xsl:for-each>
    <xsl:if test="$projectInfo.changes.includeContributorList = 'true'">
      <section>
-       <title>Contributors to this release</title>
-       <p>We thank the following people for their contributions to this release.</p>
-       <p>This is a list of all people who participated as committers:<br/>
+       <title><i18n:text i18n:key="release_committers">Contributors to this release</i18n:text></title>
+       <p><i18n:text i18n:key="release_committers_s1">We thank the following people for their contributions to this release.</i18n:text></p>
+       <p><i18n:text i18n:key="release_committers_s2">This is a list of all people who participated as committers:</i18n:text><br/>
          <xsl:for-each select="action[generate-id()=generate-id(key('distinct-committer', concat(../@version, '_', @dev)))]">
            <xsl:sort select="@dev"/>
            <xsl:value-of select="key('committers', @dev)/@name"/>
@@ -172,7 +178,7 @@
          </xsl:for-each>
        </p>
        <xsl:if test="action[@due-to]">
-         <p>This is a list of other contributors:<br/>
+         <p><i18n:text i18n:key="release_committers_s3">This is a list of other contributors:</i18n:text><br/>
            <xsl:for-each select="action[generate-id()=generate-id(key('distinct-contributor', concat(../@version, '_', @due-to)))]">
              <xsl:sort select="@due-to"/>
              <xsl:value-of select="@due-to"/>
@@ -196,10 +202,16 @@
   <li>
    <icon src="{$root}images/{@type}.jpg" alt="{@type}"/>
    <xsl:apply-templates/>
-   <xsl:text>Committed by </xsl:text><xsl:value-of select="@dev"/><xsl:text>.</xsl:text>
+   <xsl:text> </xsl:text>
+   <i18n:text i18n:key="committedby">Committed by</i18n:text>
+   <xsl:text> </xsl:text>
+   <xsl:value-of select="@dev"/>
+   <xsl:text>.</xsl:text>
 
    <xsl:if test="@due-to and @due-to!=''">
-    <xsl:text> Thanks to </xsl:text>
+    <xsl:text> </xsl:text>
+    <i18n:text i18n:key="thanksto">Thanks to</i18n:text>
+    <xsl:text> </xsl:text>
     <xsl:choose>
      <xsl:when test="@due-to-email and @due-to-email!=''">
       <link href="mailto:{@due-to-email}">
@@ -214,7 +226,9 @@
    </xsl:if>
 
    <xsl:if test="@fixes-bug">
-     <xsl:text> See Issue </xsl:text>
+     <xsl:text> </xsl:text>
+     <i18n:text i18n:key="seeissue">See Issue</i18n:text>
+     <xsl:text> </xsl:text>
      <xsl:call-template name="print-bugs">
        <xsl:with-param name="buglist" select="translate(normalize-space(@fixes-bug),' ','')"/>
      </xsl:call-template>

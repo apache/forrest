@@ -18,17 +18,14 @@
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     version="1.0">
 
   <xsl:param name="versionNumber"/>
   <xsl:include href="changes-to-document.xsl"/>
 
-  <!-- Calculate path to site root, eg '../../' -->
-  <xsl:variable name="root">
-    <xsl:call-template name="dotdots">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <!-- Key to retrieve important Actions (@important='high') of the selected version sorted by context... -->
+  <xsl:key name="ActionByVersionByContextByImportance" match="changes/release/action" use="concat(../@version, '_', @context, '_', @importance)"/>
 
   <!-- versionNumber: detect the value "current" or use the number that was supplied -->
   <xsl:variable name="realVersionNumber">
@@ -45,15 +42,6 @@
     </xsl:choose>
   </xsl:variable>
 
- <!-- FIXME (JJP):  bugzilla is hardwired -->
- <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
-
- <xsl:param name="bugtracking-url" select="$bugzilla"/>
-
- <xsl:template match="/">
-  <xsl:apply-templates select="//changes"/>
- </xsl:template>
-
  <xsl:template match="changes">
   <document>
    <header>
@@ -63,20 +51,25 @@
        <xsl:value-of select="@title"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:text>Release Notes for Apache Forrest </xsl:text><xsl:value-of select="$versionNumber"/>
+       <i18n:translate>
+         <i18n:text i18n:key="titleReleaseNotesFor">Release Notes for {0} {1}</i18n:text>
+         <i18n:param><xsl:value-of select="../../skinconfig/project-name"/></i18n:param>
+         <i18n:param><i18n:text><xsl:value-of select="$versionNumber"/></i18n:text></i18n:param>
+       </i18n:translate>
      </xsl:otherwise>
     </xsl:choose>
    </title>
    </header>
    <body>
      <xsl:if test="contains($realVersionNumber, 'dev')">
-       <warning>Version <xsl:value-of select="$realVersionNumber"/> is a development release,
+       <warning>
+         <i18n:translate>
+           <i18n:text i18n:key="warningDevRelease">Version {0} is a development release,
        these notes are therefore not complete, they are intended to be an indicator
-       of the major features that are so far included in this version.</warning>
-     </xsl:if>
-
-     <xsl:if test="release[@version=$realVersionNumber]/notes">
-         <xsl:apply-templates select="release[@version=$realVersionNumber]/notes"/>
+       of the major features that are so far included in this version.</i18n:text>
+         <i18n:param><i18n:text><xsl:value-of select="$realVersionNumber"/></i18n:text></i18n:param>
+         </i18n:translate>
+       </warning>
      </xsl:if>
 
      <xsl:apply-templates select="release[@version=$realVersionNumber]"/>
@@ -85,61 +78,41 @@
  </xsl:template>
 
  <xsl:template match="release">
+  <xsl:apply-templates select="notes"/>
   <section id="version_{@version}">
-   <title>Major Changes in Version <xsl:value-of select="@version"/></title>
-   <note>This is not a complete list of changes, a
-   full list of changes in this release
-   <a href="changes_{$versionNumber}.html">is available</a>.</note>
-     <xsl:if test="action[@context='code' and @importance='high']">
-       <section>
-         <title>Important Changes Code Base</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='code' and @importance='high']">
-            <xsl:sort select="@type"/>
+   <title><i18n:text i18n:key="majorChanges">Major Changes in Version</i18n:text><xsl:text> </xsl:text><xsl:value-of select="@version"/></title>
+   <note><i18n:text i18n:key="noteMajorChanges">This is not a complete list of changes, a
+           full list of changes in this release</i18n:text>
+   <xsl:text> </xsl:text>
+   <a href="changes_{$versionNumber}.html"><i18n:text i18n:key="isavailable">is available</i18n:text></a>.</note>
+   <xsl:for-each select="action[generate-id()=generate-id(key('ActionByVersionByContextByImportance',concat(../@version, '_', @context, '_high')))]">
+    <xsl:sort select="@context"/>
+    <section>
+    <xsl:variable name="context" select="@context"/>
+    <title>
+    <xsl:choose>
+      <xsl:when test="//contexts/context[@id=$context]">
+       <xsl:value-of select="//contexts/context[@id=$context]/@title"/>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="@context"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    </title>
+     <ul>
+      <xsl:choose>
+        <xsl:when test="contains($projectInfo.changes.sort, 'type')">
+          <xsl:apply-templates select="key('ActionByVersionByContextByImportance',concat(../@version, '_', @context, '_high') )">
+              <xsl:sort select="@type"/>
           </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='docs' and @importance='high']">
-       <section>
-         <title>Important Changes Documentation</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='docs' and @importance='high']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-        </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='admin' and @importance='high']">
-       <section>
-         <title>Important Changes Project Administration</title>
-         <ul>
-           <xsl:apply-templates select="action[@context='admin' and @importance='high']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='design' and @importance='high']">
-       <section>
-         <title>Important Changes Design</title>
-         <ul>
-          <xsl:apply-templates select="action[@context='design' and @importance='high']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
-     <xsl:if test="action[@context='build' and @importance='high']">
-       <section>
-         <title>Important Changes Build</title>
-         <ul>
-           <xsl:apply-templates select="action[@context='build' and @importance='high']">
-            <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-         </ul>
-       </section>
-     </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="key('ActionByVersionByContextByImportance',concat(../@version, '_', @context, '_high') )"/>
+        </xsl:otherwise>
+      </xsl:choose>
+     </ul>
+    </section>
+   </xsl:for-each>
   </section>
  </xsl:template>
 
