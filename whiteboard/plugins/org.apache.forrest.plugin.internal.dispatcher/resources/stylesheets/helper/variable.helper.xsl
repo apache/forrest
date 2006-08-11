@@ -17,7 +17,7 @@
 -->
 
 <xsl:stylesheet version="1.0" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+  xmlns:forrest="http://apache.org/forrest/properties/1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="lm://transform.xml.dotdots"/>
   <xsl:import href="lm://transform.xml.pathutils"/>
@@ -52,6 +52,10 @@
         <property name="root" value="{$root}"/>
         <property name="path" value="{$path}"/>
         <property name="theme" value="{$theme}"/>
+        <xsl:apply-templates select="forrest:properties/forrest:property"/>
       </properties>
     </xsl:template>
+  <xsl:template match="forrest:property">
+    <property name="{@name}" value="{@value}"/>
+  </xsl:template>
 </xsl:stylesheet>
