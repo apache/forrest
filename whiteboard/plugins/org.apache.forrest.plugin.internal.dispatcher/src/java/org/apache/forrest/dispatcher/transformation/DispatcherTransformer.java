@@ -301,7 +301,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             .readDOM(propertyURI, this.manager);
         } catch (Exception e1) {
             String error = "dispatcherError:\n"
-                + "Could not get the properties for "+propertyURI;
+                + "Could not get the properties for "+propertyURI +"\n DispatcherStack: "+ e1;
         getLogger().error(error);
         throw new ProcessingException(error);
         }
@@ -310,7 +310,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 STRUCTURER_FORMAT_ATTRIBUTE, null);
         if (requestedFormat == null) {
             String error = "dispatcherError:\n"
-                    + "You have to set the \"type\" parameter in the sitemap!\n DispatcherStack: " + e1;
+                    + "You have to set the \"type\" parameter in the sitemap!";
             getLogger().error(error);
             throw new ProcessingException(error);
         }
