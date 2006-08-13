@@ -221,18 +221,18 @@ org.apache.forrest.plugin.internal.IMSManifest
 <source><![CDATA[
 <map:match pattern="abs-menulinks">
   <map:select type="exists">
-    <map:when test="{project:content.xdocs}imsmanifest.xml">
-       <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+    <map:when test="{properties:content.xdocs}imsmanifest.xml">
+       <map:generate src="{properties:content.xdocs}imsmanifest.xml" />
        <map:transform src="resources/stylesheets/imsmanifest2site.xsl"/>
-       <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
-       <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
+       <map:transform src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" />
+       <map:transform src="{forrest:forrest.stylesheets}/site2site-normalizetabs.xsl" />
      <map:serialize type="xml"/>
    </map:when>
-   <map:when test="{project:content.xdocs}site.xml">
-      <map:generate src="{project:content.xdocs}site.xml" />
-      <map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" />
-      <map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" />
-      <map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/>
+   <map:when test="{properties:content.xdocs}site.xml">
+      <map:generate src="{properties:content.xdocs}site.xml" />
+      <map:transform src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" />
+      <map:transform src="{forrest:forrest.stylesheets}/site2site-normalizetabs.xsl" />
+      <map:transform src="{forrest:forrest.stylesheets}/normalizehrefs.xsl"/>
     <map:serialize type="xml"/>
   </map:when>
   </map:select>
@@ -272,7 +272,7 @@ org.apache.forrest.plugin.internal.IMSManifest
   <source><![CDATA[
         <map:pipeline internal-only="false">
            <map:mount uri-prefix=""
-                      src="{forrest:plugins}/sitemap.xmap"
+                      src="{forrest:forrest.plugins}/sitemap.xmap"
                       check-reload="yes"
                       pass-through="true"/>
         </map:pipeline>

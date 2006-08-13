@@ -166,19 +166,19 @@ Raw un-processed content ...
         <source>
 &lt;map:match pattern="**.html"&gt;
  &lt;map:select type="exists"&gt;
-  &lt;map:when test="{project:content}{0}"&gt;
-    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+  &lt;map:when test="{properties:content}{0}"&gt;
+    &lt;map:read src="{properties:content}/{0}" mime-type="text/html"/&gt;
     &lt;!--
       Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:generate type="html" src="{properties:content}/{0}" /&gt;
       &lt;map:serialize type="html"/&gt;
     --&gt;
   &lt;/map:when&gt;
-  &lt;map:when test="{project:content.xdocs}{0}"&gt;
-    &lt;map:read src="{project:content.xdocs}/{0}" mime-type="text/html"/&gt;
+  &lt;map:when test="{properties:content.xdocs}{0}"&gt;
+    &lt;map:read src="{properties:content.xdocs}/{0}" mime-type="text/html"/&gt;
     &lt;!--
       Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{project:content.xdocs}/{0}" /&gt;
+      &lt;map:generate type="html" src="{properties:content.xdocs}/{0}" /&gt;
       &lt;map:serialize type="html"/&gt;
     --&gt;
   &lt;/map:when&gt;
@@ -187,7 +187,7 @@ Raw un-processed content ...
         </source>
         
         <p>The above allows us to create links to un-processed skinned files stored
-        in the <code>{project:content}</code> or <code>{project:content.xdocs}</code> 
+        in the <code>{properties:content}</code> or <code>{properties:content.xdocs}</code> 
         directory. For example:  
         &lt;a href="/test1.html"&gt;HTML content&lt;/a&gt;. However, it will
         break the 0.7 behaviour of skinning HTML content. For this reason the old
@@ -204,11 +204,11 @@ Raw un-processed content ...
         <source>
 &lt;map:match pattern="old_site/**.html"&gt;
  &lt;map:select type="exists"&gt;
-  &lt;map:when test="{project:content}{1}.html"&gt;
-    &lt;map:read src="{project:content}/{1}.html" mime-type="text/html"/&gt;
+  &lt;map:when test="{properties:content}{1}.html"&gt;
+    &lt;map:read src="{properties:content}/{1}.html" mime-type="text/html"/&gt;
     &lt;!--
       Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:generate type="html" src="{properties:content}/{0}" /&gt;
       &lt;map:serialize type="html"/&gt;
     --&gt;
   &lt;/map:when&gt;
@@ -361,10 +361,10 @@ which can also be a complete reference
       <source><![CDATA[
     <match pattern="project.images.**.*">
       <select>
-        <location src="{project:resources.images}{1}.{2}" />
-        <location src="{project:content}../resources/images/{1}.{2}" />
-        <location src="{project:content.xdocs}images/{1}.{2}" />
-        <location src="{project:content.xdocs}{1}.{2}" />
+        <location src="{properties:resources.images}{1}.{2}" />
+        <location src="{properties:content}../resources/images/{1}.{2}" />
+        <location src="{properties:content.xdocs}images/{1}.{2}" />
+        <location src="{properties:content.xdocs}{1}.{2}" />
       </select>
     </match>
 ]]></source>

@@ -33,8 +33,8 @@
        <map:match pattern="**.daisy.source">
         <map:generate src="{lm:{0}}" />
         <map:select type="exists">
-          <map:when test="{project:resources.stylesheets}/daisy/preFilter.xsl">
-				    <map:transform src="{project:resources.stylesheets}/daisy/preFilter.xsl"/>
+          <map:when test="{properties:resources.stylesheets}/daisy/preFilter.xsl">
+				    <map:transform src="{properties:resources.stylesheets}/daisy/preFilter.xsl"/>
           </map:when>
         </map:select>
         <map:serialize type="xml"/>
@@ -57,9 +57,9 @@
   
     <map:pipeline ype="navigation">      
       <map:match pattern="daisy.site.*">
-        <map:generate src="{project:daisy.publisher.URL}blob?documentId={1}&amp;version=live&amp;partType=1" />
-        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-siteSnippet.xsl">
-          <map:parameter name="daisyExt" value="{project:daisy.fileExt}"/>
+        <map:generate src="{properties:daisy.publisher.URL}blob?documentId={1}&amp;version=live&amp;partType=1" />
+        <map:transform src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-siteSnippet.xsl">
+          <map:parameter name="daisyExt" value="{properties:daisy.fileExt}"/>
         </map:transform>
         <map:transform type="xinclude"/>
         <map:serialize type="xml" />

@@ -35,7 +35,7 @@
     <map:transformers default="xslt">
       <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="menu">
-          <catalogue id="menu" name="menu" location="{project:translations}"/>
+          <catalogue id="menu" name="menu" location="{properties:translations}"/>
         </catalogues>
         <!-- Commented out to verify your translations
         <untranslated-text>untranslated</untranslated-text> -->
@@ -56,7 +56,7 @@
           <map:parameter name="isfaq" value="{notoc}"/>
           <map:parameter name="nopdf" value="{nopdf}"/>
           <map:parameter name="path" value="{path}"/>
-          <map:parameter name="config-file" value="{project:skinconf}"/>
+          <map:parameter name="config-file" value="{properties:skinconf}"/>
         </map:transform>
       <map:serialize/>
     </map:resource>
@@ -73,12 +73,12 @@
     <map:pipeline>
       <map:match pattern="abs-linkmap">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}imsmanifest.xml">
-            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+          <map:when test="{properties:content.xdocs}imsmanifest.xml">
+            <map:generate src="{properties:content.xdocs}imsmanifest.xml" />
             <map:transform src="resources/stylesheets/imsmanifest2site.xsl"/>
           </map:when>
-          <map:when test="{project:content.xdocs}site.xml">
-            <map:generate src="{project:content.xdocs}site.xml" />
+          <map:when test="{properties:content.xdocs}site.xml">
+            <map:generate src="{properties:content.xdocs}site.xml" />
           </map:when>
         </map:select>
         <map:transform src="{transform.linkmap.linkmap-absolutized}" />
@@ -94,12 +94,12 @@
     <map:pipeline >
       <map:match pattern="**tab-*.html">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}imsmanifest.xml">
-            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+          <map:when test="{properties:content.xdocs}imsmanifest.xml">
+            <map:generate src="{properties:content.xdocs}imsmanifest.xml" />
             <map:transform src="resources/stylesheets/imsmanifest2tabs.xsl"/>
           </map:when>
-          <map:when test="{project:content.xdocs}tabs.xml">
-            <map:generate src="{project:content.xdocs}tabs.xml" />
+          <map:when test="{properties:content.xdocs}tabs.xml">
+            <map:generate src="{properties:content.xdocs}tabs.xml" />
           </map:when>
         </map:select>
         <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
@@ -119,15 +119,15 @@
 
       <map:match pattern="abs-menulinks">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}imsmanifest.xml">
-            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+          <map:when test="{properties:content.xdocs}imsmanifest.xml">
+            <map:generate src="{properties:content.xdocs}imsmanifest.xml" />
             <map:transform src="resources/stylesheets/imsmanifest2site.xsl"/>
             <map:transform src="{transform.linkmap.linkmap-absolutized}" />
             <map:transform src="{transform.linkmap.linkmap-normalizedtabs}" />
             <map:serialize type="xml"/>
           </map:when>
-          <map:when test="{project:content.xdocs}site.xml">
-            <map:generate src="{project:content.xdocs}site.xml" />
+          <map:when test="{properties:content.xdocs}site.xml">
+            <map:generate src="{properties:content.xdocs}site.xml" />
             <map:transform src="{transform.linkmap.linkmap-absolutized}" />
             <map:transform src="{transform.linkmap.linkmap-normalizedtabs}" />
             <map:transform src="{transform.xml.xml-normalizedhrefs}"/>
@@ -138,19 +138,19 @@
 
       <map:match pattern="**menulinks-*">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}imsmanifest.xml">
-            <map:generate src="{project:content.xdocs}imsmanifest.xml" />
+          <map:when test="{properties:content.xdocs}imsmanifest.xml">
+            <map:generate src="{properties:content.xdocs}imsmanifest.xml" />
             <map:transform src="resources/stylesheets/imsmanifest2site.xsl"/>
             <map:transform src="{transform.linkmap.linkmap-absolutized}" />
           </map:when>
-          <map:when test="{project:content.xdocs}site.xml">
-            <map:generate src="{project:content.xdocs}site.xml" />
+          <map:when test="{properties:content.xdocs}site.xml">
+            <map:generate src="{properties:content.xdocs}site.xml" />
             <map:transform src="{transform.linkmap.linkmap-absolutized}" />
           </map:when>
         </map:select>
 
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:menu-scheme}"/>
+          <map:parameter name="value" value="{properties:forrest.menu-scheme}"/>
 
           <map:when test="tab_attributes">
             <map:transform src="{transform.linkmap.linkmap-normalizedtabs}" />
@@ -172,10 +172,10 @@
 
         <map:select type="exists">
 
-          <map:when test="{project:content.xdocs}{1}book.xml">
+          <map:when test="{properties:content.xdocs}{1}book.xml">
             <!-- If a hand-created book.xml exists, use it -->
-            <map:parameter name="url" value="{project:content.xdocs}{1}book.xml" />
-            <map:generate src="{project:content.xdocs}{1}book.xml" />
+            <map:parameter name="url" value="{properties:content.xdocs}{1}book.xml" />
+            <map:generate src="{properties:content.xdocs}{1}book.xml" />
           </map:when>
 
           <map:otherwise>
@@ -188,14 +188,14 @@
         </map:select>
 
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:parameter name="value" value="{properties:forrest.i18n}"/>
           <map:when test="true">
 
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}"/>
               <map:transform type="i18n">
                 <!-- We can use a default locale attribute or Request Parameter
-                <map:parameter name="locale" value="{defaults:locale}"/>
+                <map:parameter name="locale" value="{properties:forrest.locale}"/>
                 <map:parameter name="locale" value="{request-param:locale}"/>
                 -->
                 <map:parameter name="locale" value="{lang}{country}{variant}"/>
@@ -223,7 +223,7 @@
               <map:generate type="text2xml" src="http://{2}/{1}/src/documentation/content/xdocs/{3}.cwiki" />
               <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
               <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-              <map:transform type="xsltc" src="{forrest:home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
+              <map:transform type="xsltc" src="{forrest:forrest.home}/context/resources/chaperon/stylesheets/wiki2xdoc.xsl">
                 <map:parameter name="name" value="{2}" />
               </map:transform>
               <map:serialize/>
@@ -248,14 +248,14 @@
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxw!/content.xml"/>
             </map:aggregate>
             <map:select type="exists">
-              <map:when test="{project:resources.stylesheets}/openoffice-writer2forrest.xsl">
-                <map:transform src="{project:resources.stylesheets}/openoffice-writer2forrest.xsl">
+              <map:when test="{properties:resources.stylesheets}/openoffice-writer2forrest.xsl">
+                <map:transform src="{properties:resources.stylesheets}/openoffice-writer2forrest.xsl">
                   <map:parameter name="filename" value="{2}" />
                   <map:parameter name="extension" value="sxw" />
                 </map:transform>
               </map:when>
               <map:otherwise>
-                <map:transform src="{forrest:stylesheets}/openoffice-writer2forrest.xsl">
+                <map:transform src="{forrest:forrest.stylesheets}/openoffice-writer2forrest.xsl">
                   <map:parameter name="filename" value="{2}" />
                   <map:parameter name="extension" value="sxw" />
                 </map:transform>
@@ -272,14 +272,14 @@
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxi!/content.xml"/>
             </map:aggregate>
             <map:select type="exists">
-              <map:when test="{project:resources.stylesheets}/openoffice-impress2forrest.xsl">
-                <map:transform src="{project:resources.stylesheets}/openoffice-impress2forrest.xsl">
+              <map:when test="{properties:resources.stylesheets}/openoffice-impress2forrest.xsl">
+                <map:transform src="{properties:resources.stylesheets}/openoffice-impress2forrest.xsl">
                   <map:parameter name="filename" value="{2}" />
                   <map:parameter name="extension" value="sxi" />
                 </map:transform>
               </map:when>
               <map:otherwise>
-                <map:transform src="{forrest:stylesheets}/openoffice-impress2forrest.xsl">
+                <map:transform src="{forrest:forrest.stylesheets}/openoffice-impress2forrest.xsl">
                   <map:parameter name="filename" value="{2}" />
                   <map:parameter name="extension" value="sxi" />
                 </map:transform>

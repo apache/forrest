@@ -336,12 +336,12 @@
        </p>
 <source><![CDATA[
 <map:select type="exists">
-   <map:when test="{project:content.xdocs}mytests/mybad.ehtml">]]></source>
+   <map:when test="{properties:content.xdocs}mytests/mybad.ehtml">]]></source>
        <p>
          we quickly discover that there can't be a file of
          that name in the project-directory.
          <br />
-         (The variable '{project:content.xdocs}' is always replaced with
+         (The variable '{properties:content.xdocs}' is always replaced with
          the name of your project directory that you can change
          in the 'forrest.properties'-file.)
        </p>
@@ -467,7 +467,7 @@
       </p>
       <ol>
         <li>
-          <code>&lt;map:generate src="{project:content.xdocs}{uri}.html" type="html"/&gt;</code><br/>
+          <code>&lt;map:generate src="{properties:content.xdocs}{uri}.html" type="html"/&gt;</code><br/>
             Using the html-generator, Forrest reads the html-document
             from file and uses JTidy to clean up and convert it to xml
             (which is required for all processing in cocoon pipelines).
@@ -477,7 +477,7 @@
             <a href="site:v0.70//howto/custom-html-source">When to customize</a>).
         </li>
         <li>
-            <code>&lt;map:transform src="{forrest:stylesheets}/html2document.xsl"/&gt;</code><br/>
+            <code>&lt;map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/&gt;</code><br/>
           Using the standard stylesheet 'html2document.xsl', this XHTML is 
           transformed into Forrest standard document format.
         </li>
@@ -668,8 +668,8 @@
 <!--Custom Pipeline for my bad html-pages-->        
 <map:pipeline>
     <map:match pattern="mytest/*.xml">
-      <map:generate src="{project:content.xdocs}{uri}.html" type="html"/>
-      <map:transform src="{forrest:stylesheets}/html2document.xsl"/>
+      <map:generate src="{properties:content.xdocs}{uri}.html" type="html"/>
+      <map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/>
       <map:transform type="idgen"/>
       <map:serialize type="xml-document"/>
     </map:match>
@@ -694,9 +694,9 @@
 <!--Custom Pipeline for my bad html-pages-->        
 <map:pipeline>
     <map:match pattern="mytest/*.xml">
-      <map:generate src="{project:content.xdocs}{uri}.html" type="html" />
-      <strong><map:transform src="{forrest:stylesheets}/fixMyBadHTML.xsl"/></strong>
-      <map:transform src="{forrest:stylesheets}/html2document.xsl" />
+      <map:generate src="{properties:content.xdocs}{uri}.html" type="html" />
+      <strong><map:transform src="{forrest:forrest.stylesheets}/fixMyBadHTML.xsl"/></strong>
+      <map:transform src="{forrest:forrest.stylesheets}/html2document.xsl" />
       <map:transform type="idgen" />
       <map:serialize type="xml-document"/>
     </map:match>

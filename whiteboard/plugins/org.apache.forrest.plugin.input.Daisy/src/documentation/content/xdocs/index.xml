@@ -57,11 +57,11 @@
       <map:parameter name="expires" value="access plus 2 hours"/>
     
       <map:match pattern="locationmap-project.xml">
-        <map:generate src="{project:daisy.publisher.URL}blob?documentId={project:daisy.navigation.docID}&amp;version=live&amp;partType=1"/>
-        <map:transform src="{forrest:plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
-          <map:parameter name="publisherURL" value="{project:daisy.publisher.URL}"/>
-          <map:parameter name="pathPrefix" value="{project:daisy.pathPrefix}"/>
-          <map:parameter name="navigationID" value="{project:daisy.navigation.docID}"/>
+        <map:generate src="{properties:daisy.publisher.URL}blob?documentId={properties:daisy.navigation.docID}&amp;version=live&amp;partType=1"/>
+        <map:transform src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.Daisy/resources/stylesheets/navigation-to-locationmap.xsl">
+          <map:parameter name="publisherURL" value="{properties:daisy.publisher.URL}"/>
+          <map:parameter name="pathPrefix" value="{properties:daisy.pathPrefix}"/>
+          <map:parameter name="navigationID" value="{properties:daisy.navigation.docID}"/>
         </map:transform>
         <map:transform type="xinclude"/>
         <map:serialize type="xml"/>

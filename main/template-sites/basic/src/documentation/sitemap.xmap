@@ -38,8 +38,8 @@
           <map:parameter name="parameter-selector-test" value="{sourcetype}" />
 
           <map:when test="hello-v1.0">
-            <map:generate src="{project:content.xdocs}{../../1}.xml" />
-            <map:transform src="{project:resources.stylesheets}/hello2document.xsl" />
+            <map:generate src="{properties:content.xdocs}{../../1}.xml" />
+            <map:transform src="{properties:resources.stylesheets}/hello2document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
         </map:select>
@@ -51,11 +51,11 @@
   <map:pipeline>
     <map:match pattern="old_site/*.html">
      <map:select type="exists">
-      <map:when test="{project:content}{1}.html">
-        <map:read src="{project:content}{1}.html" mime-type="text/html"/>
+      <map:when test="{properties:content}{1}.html">
+        <map:read src="{properties:content}{1}.html" mime-type="text/html"/>
         <!--
           Use this instead if you want JTidy to clean up your HTML
-          <map:generate type="html" src="{project:content}/{0}" />
+          <map:generate type="html" src="{properties:content}/{0}" />
           <map:serialize type="html"/>
         -->
       </map:when>
@@ -64,7 +64,7 @@
   
    <map:match pattern="**.xml">
       <map:call resource="transform-to-document">
-        <map:parameter name="src" value="{project:content.xdocs}{1}.xml" />
+        <map:parameter name="src" value="{properties:content.xdocs}{1}.xml" />
       </map:call>
     </map:match>
   </map:pipeline>

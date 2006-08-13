@@ -35,9 +35,9 @@
     <map:resource name="read-linked-text">
       <map:generate type="text" src="{path}" />
       <map:transform type="pattern" 
-        src="{forrest:context}/resources/chaperon/grammars/link.xlex" />
+        src="{forrest:forrest.context}/resources/chaperon/grammars/link.xlex" />
       <map:transform 
-        src="{forrest:context}/resources/chaperon/stylesheets/pattern2link.xsl" 
+        src="{forrest:forrest.context}/resources/chaperon/stylesheets/pattern2link.xsl" 
         />
       <map:serialize type="text" mime-type="text/css" />
     </map:resource>
@@ -45,10 +45,10 @@
   <map:pipelines>
     <map:pipeline>
       <map:match pattern="**.props">
-        <map:generate src="cocoon://module.project.properties" />
+        <map:generate src="cocoon://module.properties.properties" />
         <map:transform src="lm://transform.xml.variable.helper">
           <map:parameter name="path" value="{1}.html" />
-          <map:parameter name="theme" value="{project:dispatcher.theme}" />
+          <map:parameter name="theme" value="{properties:dispatcher.theme}" />
         </map:transform>
         <map:serialize type="xml" />
       </map:match>

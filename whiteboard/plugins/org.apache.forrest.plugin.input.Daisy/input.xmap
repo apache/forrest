@@ -34,18 +34,18 @@
   <map:resources>
     <map:resource name="daisy-to-document">
         <map:aggregate element="daisyDocument">
-          <map:part src="cocoon://{project:daisy.pathPrefix}{docID}.daisy.source" />
-          <map:part src="cocoon://daisy.site.{project:daisy.navigation.docID}" />
+          <map:part src="cocoon://{properties:daisy.pathPrefix}{docID}.daisy.source" />
+          <map:part src="cocoon://daisy.site.{properties:daisy.navigation.docID}" />
         </map:aggregate>
         <map:transform src="{lm:daisy.transform.daisy.html}">
           <map:parameter name="documentPath" value="{path}"/>
-          <map:parameter name="pathPrefix" value="{project:daisy.pathPrefix}"/>
-          <map:parameter name="daisyExt" value="{project:daisy.fileExt}"/>
+          <map:parameter name="pathPrefix" value="{properties:daisy.pathPrefix}"/>
+          <map:parameter name="daisyExt" value="{properties:daisy.fileExt}"/>
         </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:select type="exists">
-          <map:when test="{project:resources.stylesheets}/daisy/postFilter.xsl">
-            <map:transform src="{project:resources.stylesheets}/daisy/postFilter.xsl"/>
+          <map:when test="{properties:resources.stylesheets}/daisy/postFilter.xsl">
+            <map:transform src="{properties:resources.stylesheets}/daisy/postFilter.xsl"/>
           </map:when>
         </map:select>
         <map:serialize/>
@@ -70,21 +70,21 @@
       selects to generate pages are likely to have the same problem is they
       do not use the default ".daisy" extension for daisy hosted pages.
       -->
-      <map:match pattern="{project:daisy.pathPrefix}*.daisy.xml">
+      <map:match pattern="{properties:daisy.pathPrefix}*.daisy.xml">
         <map:call resource="daisy-to-document">
           <map:parameter name="docID" value="{1}"/>
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
       
-      <map:match pattern="{project:daisy.pathPrefix}*{project:daisy.fileExt}.xml">
+      <map:match pattern="{properties:daisy.pathPrefix}*{properties:daisy.fileExt}.xml">
         <map:call resource="daisy-to-document">
           <map:parameter name="docID" value="{1}"/>
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
       
-      <map:match pattern="{project:daisy.pathPrefix}**{project:daisy.fileExt}.xml">
+      <map:match pattern="{properties:daisy.pathPrefix}**{properties:daisy.fileExt}.xml">
         <map:call resource="daisy-to-document">
           <map:parameter name="docID" value="{1}"/>
           <map:parameter name="path" value="{0}"/>

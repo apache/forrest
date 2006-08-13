@@ -138,7 +138,7 @@ $Revision: 1.12 $
 
    <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
     <catalogues default="common">
-      <catalogue id="common" name="CommonMessages" location="{project:skins-dir}common/translations"/>
+      <catalogue id="common" name="CommonMessages" location="{properties:skins-dir}common/translations"/>
       </catalogues>
     <cache-at-startup>true</cache-at-startup>
    </map:transformer>
@@ -283,7 +283,7 @@ $Revision: 1.12 $
        Instead of filterlinks.xsl, use cli.xconf include/exclude nodes to define which pages to render.
   <map:views>
     <map:view name="links" from-position="last">
-      <map:transform src="{forrest:stylesheets}/filterlinks.xsl">
+      <map:transform src="{forrest:forrest.stylesheets}/filterlinks.xsl">
         <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
       </map:transform>
       <map:serialize type="links"/>
@@ -299,10 +299,10 @@ $Revision: 1.12 $
           <map:parameter name="isfaq" value="{notoc}"/>
           <map:parameter name="nopdf" value="{nopdf}"/>
           <map:parameter name="path" value="{path}"/>
-          <map:parameter name="config-file" value="{project:skinconf}"/>
+          <map:parameter name="config-file" value="{properties:skinconf}"/>
         </map:transform>
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:parameter name="value" value="{properties:forrest.i18n}"/>
           <map:when test="true">	
             <map:act type="locale">
               <map:transform type="i18n">
@@ -389,9 +389,9 @@ $Revision: 1.12 $
       -->
       <map:pipeline internal-only="false">
            <map:select type="exists">
-             <map:when test="{project:sitemap}">
+             <map:when test="{properties:sitemap}">
                <map:mount uri-prefix=""
-                          src="{project:sitemap}" 
+                          src="{properties:sitemap}" 
                           check-reload="yes" 
                           pass-through="true"/>
              </map:when>  
@@ -404,8 +404,8 @@ $Revision: 1.12 $
       -->  
       <map:pipeline internal-only="false">
         <map:select type="exists">
-          <map:when test="{project:temp-dir}/internal.xmap">
-            <map:mount uri-prefix="" src="{project:temp-dir}/internal.xmap" check-reload="yes" pass-through="true"/>
+          <map:when test="{properties:temp-dir}/internal.xmap">
+            <map:mount uri-prefix="" src="{properties:temp-dir}/internal.xmap" check-reload="yes" pass-through="true"/>
           </map:when>
         </map:select>
       </map:pipeline>
@@ -414,7 +414,7 @@ $Revision: 1.12 $
          matcher if they want to generate the locationmap dynamically -->
 		<map:pipeline internal-only="true">   
        <map:match pattern="locationmap-project.xml">
-         <map:generate src="{project:content}locationmap.xml"/>
+         <map:generate src="{properties:content}locationmap.xml"/>
          <map:serialize type="xml"/>
        </map:match>
 		</map:pipeline>
@@ -468,7 +468,7 @@ $Revision: 1.12 $
         </map:match>
    
         <map:match pattern="locationmap.xml">
-          <map:generate src="{forrest:locationmap}" />
+          <map:generate src="{forrest:forrest.locationmap}" />
           <map:serialize type="xml"/>
         </map:match>
 
@@ -667,8 +667,8 @@ $Revision: 1.12 $
             <map:transform type="xinclude"/>
             <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
             <map:transform src="{lm:transform.document.fo}">
-              <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+              <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
+              <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
             </map:transform>
         </map:otherwise>
       </map:select>

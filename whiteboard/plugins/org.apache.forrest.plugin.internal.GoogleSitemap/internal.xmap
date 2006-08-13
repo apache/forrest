@@ -240,10 +240,10 @@ $Revision: 1.12 $
           <map:parameter name="isfaq" value="{notoc}"/>
           <map:parameter name="nopdf" value="{nopdf}"/>
           <map:parameter name="path" value="{path}"/>
-          <map:parameter name="config-file" value="{project:skinconf}"/>
+          <map:parameter name="config-file" value="{properties:skinconf}"/>
         </map:transform>
         <map:select type="config">
-          <map:parameter name="value" value="{defaults:i18n}"/>
+          <map:parameter name="value" value="{properties:forrest.i18n}"/>
           <map:when test="true">	
             <map:transform type="i18n">
               <map:parameter name="locale" value="{request:locale}"/>
@@ -253,7 +253,7 @@ $Revision: 1.12 $
       <!--
         FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
       -->
-        <map:transform src="{forrest:context}/skins/common/xslt/html/strip_namespaces.xsl"/>
+        <map:transform src="{forrest:forrest.context}/skins/common/xslt/html/strip_namespaces.xsl"/>
 
       <map:serialize/>
     </map:resource>
@@ -276,13 +276,13 @@ $Revision: 1.12 $
             <map:read src="resources/chaperon/grammars/{1}.xlex"/>
           </map:when>
           <map:otherwise>
-            <map:generate  type="text2xml"   src="{forrest:context}/resources/chaperon/grammars/{1}.grm"/>
-            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/grm.xlex"/>
-            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/grm.xgrm"/>
-            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/text4regex.xsl"/>
-            <map:transform type="lexer"  src="{forrest:context}/resources/chaperon/grammars/regex.xlex"/>
-            <map:transform type="parser" src="{forrest:context}/resources/chaperon/grammars/regex.xgrm"/>
-            <map:transform               src="{forrest:context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
+            <map:generate  type="text2xml"   src="{forrest:forrest.context}/resources/chaperon/grammars/{1}.grm"/>
+            <map:transform type="lexer"  src="{forrest:forrest.context}/resources/chaperon/grammars/grm.xlex"/>
+            <map:transform type="parser" src="{forrest:forrest.context}/resources/chaperon/grammars/grm.xgrm"/>
+            <map:transform               src="{forrest:forrest.context}/resources/chaperon/stylesheets/text4regex.xsl"/>
+            <map:transform type="lexer"  src="{forrest:forrest.context}/resources/chaperon/grammars/regex.xlex"/>
+            <map:transform type="parser" src="{forrest:forrest.context}/resources/chaperon/grammars/regex.xgrm"/>
+            <map:transform               src="{forrest:forrest.context}/resources/chaperon/stylesheets/grm2xlex.xsl"/>
             <map:serialize type="xml"/>
           </map:otherwise>
         </map:select>
@@ -357,9 +357,9 @@ $Revision: 1.12 $
       -->
       <map:pipeline internal-only="false">
            <map:select type="exists">
-             <map:when test="{project:sitemap}">
+             <map:when test="{properties:sitemap}">
                <map:mount uri-prefix="" 
-                          src="{project:sitemap}" 
+                          src="{properties:sitemap}" 
                           check-reload="yes" 
                           pass-through="true"/>
              </map:when>  
@@ -370,27 +370,27 @@ $Revision: 1.12 $
       
       <map:pipeline internal-only="false">
          <map:match pattern="skinconf.xml">
-           <map:generate src="{project:skinconf}" />
-           <map:transform src="{forrest:stylesheets}/strip-doctype.xsl"/>
-           <map:transform src="{forrest:stylesheets}/upgrade-skinconf.xsl"/>
+           <map:generate src="{properties:skinconf}" />
+           <map:transform src="{forrest:forrest.stylesheets}/strip-doctype.xsl"/>
+           <map:transform src="{forrest:forrest.stylesheets}/upgrade-skinconf.xsl"/>
            <map:select type="exists">
-             <map:when test="{project:skins-dir}{forrest:skin}/skinconf.xsl">
-               <map:transform src="{project:skins-dir}{forrest:skin}/skinconf.xsl"/>
+             <map:when test="{properties:skins-dir}{forrest:forrest.skin}/skinconf.xsl">
+               <map:transform src="{properties:skins-dir}{forrest:forrest.skin}/skinconf.xsl"/>
              </map:when>
            </map:select>
            <map:select type="exists">
-             <map:when test="{forrest:context}/skins/{forrest:skin}/skinconf.xsl">
-               <map:transform src="{forrest:context}/skins/{forrest:skin}/skinconf.xsl"/>
+             <map:when test="{forrest:forrest.context}/skins/{forrest:forrest.skin}/skinconf.xsl">
+               <map:transform src="{forrest:forrest.context}/skins/{forrest:forrest.skin}/skinconf.xsl"/>
              </map:when>
            </map:select>
-           <map:transform src="{forrest:context}/skins/common/skinconf.xsl"/>
+           <map:transform src="{forrest:forrest.context}/skins/common/skinconf.xsl"/>
            <map:transform type="skinconf"/>
            <map:serialize type="xml" />
          </map:match>
 
          <!-- Add some build information, which is added to the html head -->
          <map:match pattern="build-info">
-           <map:generate src="{project:temp-dir}/build-info.xml"/>
+           <map:generate src="{properties:temp-dir}/build-info.xml"/>
            <map:serialize type="xml"/>
          </map:match>
        </map:pipeline>
@@ -407,74 +407,74 @@ $Revision: 1.12 $
 
         <map:match pattern="pluginDocs/plugins_*/index.xml">
           <map:aggregate element="pluginList">
-            <map:part src="{forrest:plugins-src}/plugins.xml"/>
-            <map:part src="{forrest:whiteboard-plugins-src}/whiteboard-plugins.xml"/>
+            <map:part src="{forrest:forrest.plugins-src}/plugins.xml"/>
+            <map:part src="{forrest:forrest.whiteboard-plugins-src}/whiteboard-plugins.xml"/>
           </map:aggregate>
-          <map:transform src="{forrest:stylesheets}/plugins2xdoc.xsl"/>
+          <map:transform src="{forrest:forrest.stylesheets}/plugins2xdoc.xsl"/>
           <map:serialize type="xml"/>
         </map:match>
 
         <map:match pattern="linkmap.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/linkmap.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/linkmap.xmap" check-reload="yes" />
         </map:match>
 
         <map:match pattern="forrest-issues.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/issues.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/issues.xmap" check-reload="yes" />
         </map:match>
 
         <map:match pattern="**faq.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/faq.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/faq.xmap" check-reload="yes" />
         </map:match>
 
         <map:match pattern="community/**index.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/forrest.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/forrest.xmap" check-reload="yes" />
         </map:match>
 
         <map:match pattern="community/*/**.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/revisions.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/revisions.xmap" check-reload="yes" />
         </map:match>
 
         <!-- wholesite is preferred; site is here for compatibility -->
         <map:match pattern="wholesite.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/aggregate.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/aggregate.xmap" check-reload="yes" />
         </map:match>
         <map:match pattern="site.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/aggregate.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/aggregate.xmap" check-reload="yes" />
         </map:match>
 
         <!-- Lucene index update and search -->
         <map:match pattern="lucene-*.xml">
-          <map:mount uri-prefix="" src="{forrest:context}/search.xmap" check-reload="yes"/>
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/search.xmap" check-reload="yes"/>
         </map:match>
 
         <!-- Default source types -->
-        <map:mount uri-prefix="" src="{forrest:context}/forrest.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/forrest.xmap" check-reload="yes" />
 
       </map:match>
 
       <!-- Menu content -->
       <map:match pattern="abs-menulinks">
-        <map:mount uri-prefix="" src="{forrest:context}/menu.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/menu.xmap" check-reload="yes" />
       </map:match>
 
       <map:match pattern="**menulinks-*">
-        <map:mount uri-prefix="" src="{forrest:context}/menu.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/menu.xmap" check-reload="yes" />
       </map:match>
 
       <!-- Link maps -->
       <map:match pattern="abs-linkmap">
-        <map:mount uri-prefix="" src="{forrest:context}/linkmap.xmap"/>
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/linkmap.xmap"/>
       </map:match>
 
       <map:match pattern="**linkmap-*">
         <map:match pattern="linkmap-wholesite.*">
-          <map:mount uri-prefix="" src="{forrest:context}/aggregate.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/aggregate.xmap" check-reload="yes" />
         </map:match>
         <map:match pattern="linkmap-site.*">
-          <map:mount uri-prefix="" src="{forrest:context}/aggregate.xmap" check-reload="yes" />
+          <map:mount uri-prefix="" src="{forrest:forrest.context}/aggregate.xmap" check-reload="yes" />
         </map:match>
 
-        <map:mount uri-prefix="" src="{forrest:context}/linkmap.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/linkmap.xmap" check-reload="yes" />
       </map:match>
 
     </map:pipeline>
@@ -492,14 +492,14 @@ $Revision: 1.12 $
       <!-- External matches -->
       <!-- (HTML rendered directly from special formats) -->
       <map:match pattern="**body-faq.html">
-        <map:mount uri-prefix="" src="{forrest:context}/faq.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/faq.xmap" check-reload="yes" />
       </map:match>
 
       <map:match pattern="**body-*.html">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}{1}{2}.ehtml">
-            <map:generate src="{project:content.xdocs}{1}{2}.ehtml" />
-            <map:transform src="{forrest:stylesheets}/html2htmlbody.xsl" />
+          <map:when test="{properties:content.xdocs}{1}{2}.ehtml">
+            <map:generate src="{properties:content.xdocs}{1}{2}.ehtml" />
+            <map:transform src="{forrest:forrest.stylesheets}/html2htmlbody.xsl" />
             <map:transform type="linkrewriter" src="cocoon:/{1}linkmap-{2}.html"/>
             <map:transform src="{lm:transform.html.broken-links}"/>
             <map:serialize type="xml" />
@@ -533,15 +533,15 @@ $Revision: 1.12 $
       </map:match>
 
       <map:match pattern="**tab-*.html">
-        <map:mount uri-prefix="" src="{forrest:context}/tabs.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/tabs.xmap" check-reload="yes" />
       </map:match>
       
       <map:match pattern="**i18n-*.html">
-        <map:mount uri-prefix="" src="{forrest:context}/i18n.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/i18n.xmap" check-reload="yes" />
       </map:match>
 
       <map:match pattern="**book-*.html">
-        <map:mount uri-prefix="" src="{forrest:context}/menu.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/menu.xmap" check-reload="yes" />
       </map:match>
 
     </map:pipeline>
@@ -587,22 +587,22 @@ $Revision: 1.12 $
 
       <map:match type="regexp" pattern="^.+$">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}/{0}">
-            <map:mount uri-prefix="" src="{forrest:context}/raw.xmap" check-reload="yes" />
+          <map:when test="{properties:content.xdocs}/{0}">
+            <map:mount uri-prefix="" src="{forrest:forrest.context}/raw.xmap" check-reload="yes" />
           </map:when>
         </map:select>
       </map:match>      
 
       <!-- generate faq.fo specially  -->
       <map:match pattern="**faq.fo">
-        <map:mount uri-prefix="" src="{forrest:context}/faq.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/faq.xmap" check-reload="yes" />
       </map:match>
 
       <!-- generate .fo from .xml  -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).fo$">
         <map:select type="exists">
-          <map:when test="{project:content.xdocs}{1}{2}.fo">
-            <map:generate src="{project:content.xdocs}{1}{2}.fo"/>
+          <map:when test="{properties:content.xdocs}{1}{2}.fo">
+            <map:generate src="{properties:content.xdocs}{1}{2}.fo"/>
           </map:when>
           <map:otherwise>
             <map:aggregate element="site">
@@ -613,22 +613,22 @@ $Revision: 1.12 $
             <map:transform type="xinclude"/>
             <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
             <map:select type="exists">
-              <map:when test="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-                <map:transform src="{project:skins-dir}{forrest:skin}/xslt/fo/document2fo.xsl">
-                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+              <map:when test="{properties:skins-dir}{forrest:forrest.skin}/xslt/fo/document2fo.xsl">
+                <map:transform src="{properties:skins-dir}{forrest:forrest.skin}/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
                 </map:transform>
               </map:when>
-              <map:when test="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-                <map:transform src="{forrest:context}/skins/{forrest:skin}/xslt/fo/document2fo.xsl">
-                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+              <map:when test="{forrest:forrest.context}/skins/{forrest:forrest.skin}/xslt/fo/document2fo.xsl">
+                <map:transform src="{forrest:forrest.context}/skins/{forrest:forrest.skin}/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
                 </map:transform>
               </map:when>
               <map:otherwise>
-                <map:transform src="{forrest:context}/skins/common/xslt/fo/document2fo.xsl">
-                  <map:parameter name="imagesdir" value="{project:resources.images}/"/>
-                  <map:parameter name="xmlbasedir" value="{project:content.xdocs}{1}"/>
+                <map:transform src="{forrest:forrest.context}/skins/common/xslt/fo/document2fo.xsl">
+                  <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
+                  <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
                 </map:transform>
               </map:otherwise>
             </map:select>
@@ -638,29 +638,29 @@ $Revision: 1.12 $
       </map:match>
 
       <map:match pattern="profiler">
-        <map:mount uri-prefix="" src="{forrest:context}/profiler.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/profiler.xmap" check-reload="yes" />
       </map:match>
 
       <map:match pattern="**.lucene">
-        <map:mount uri-prefix="" src="{forrest:context}/search.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/search.xmap" check-reload="yes" />
       </map:match> 
 
      
       
       <map:match pattern="**.js">
-        <map:mount uri-prefix="" src="{forrest:context}/resources.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/resources.xmap" check-reload="yes" />
       </map:match>
       <map:match pattern="**.css">
-        <map:mount uri-prefix="" src="{forrest:context}/resources.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/resources.xmap" check-reload="yes" />
       </map:match>
       <map:match pattern="**images**">
-        <map:mount uri-prefix="" src="{forrest:context}/resources.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/resources.xmap" check-reload="yes" />
       </map:match>
       <map:match pattern="**.png">
-        <map:mount uri-prefix="" src="{forrest:context}/resources.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/resources.xmap" check-reload="yes" />
       </map:match>
      <map:match pattern="**.ico">
-        <map:mount uri-prefix="" src="{forrest:context}/resources.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="{forrest:forrest.context}/resources.xmap" check-reload="yes" />
       </map:match> 
     </map:pipeline>
 

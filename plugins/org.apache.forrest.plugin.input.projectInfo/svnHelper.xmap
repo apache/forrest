@@ -34,11 +34,11 @@
         </map:aggregate>
         <map:transform src="resources/stylesheets/svn-to-changes.xsl" />
         <map:transform src="{lm:projectInfo.transform.changes.document}" >
-          <map:parameter name="bugtracking-url" value="{defaults:bugtracking-url}"/>
+          <map:parameter name="bugtracking-url" value="{properties:forrest.bugtracking-url}"/>
           <map:parameter name="path" value="{1}"/>
-          <map:parameter name="projectInfo.changes.sort" value="{project:projectInfo.changes.sort}"/>
-          <map:parameter name="projectInfo.changes.includeCommitterList" value="{project:projectInfo.changes.includeCommitterList}"/>
-          <map:parameter name="projectInfo.changes.includeContributorList" value="{project:projectInfo.changes.includeContributorList}"/>
+          <map:parameter name="projectInfo.changes.sort" value="{properties:projectInfo.changes.sort}"/>
+          <map:parameter name="projectInfo.changes.includeCommitterList" value="{properties:projectInfo.changes.includeCommitterList}"/>
+          <map:parameter name="projectInfo.changes.includeContributorList" value="{properties:projectInfo.changes.includeContributorList}"/>
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
@@ -52,8 +52,8 @@
         <map:generate src="cocoon:/{1}.svn-revision.xml"/>
         <map:transform src="resources/stylesheets/svn-log.xsl">
           <map:parameter value="{lm:project.svn.url}" name="url"/>
-          <map:parameter value="{project:projectInfo.svn.ext}" name="ext"/>
-          <map:parameter value="{project:projectInfo.svn.path-prefix}" name="path-prefix"/>
+          <map:parameter value="{properties:projectInfo.svn.ext}" name="ext"/>
+          <map:parameter value="{properties:projectInfo.svn.path-prefix}" name="path-prefix"/>
         </map:transform>
         <map:serialize type="xml"/>
       </map:match>
