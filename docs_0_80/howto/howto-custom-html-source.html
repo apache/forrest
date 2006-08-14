@@ -705,12 +705,12 @@ document.write("Last Published: " + document.lastModified);
        </p>
 <pre class="code">
 &lt;map:select type="exists"&gt;
-   &lt;map:when test="{project:content.xdocs}mytests/mybad.ehtml"&gt;</pre>
+   &lt;map:when test="{properties:content.xdocs}mytests/mybad.ehtml"&gt;</pre>
 <p>
          we quickly discover that there can't be a file of
          that name in the project-directory.
          <br>
-         (The variable '{project:content.xdocs}' is always replaced with
+         (The variable '{properties:content.xdocs}' is always replaced with
          the name of your project directory that you can change
          in the 'forrest.properties'-file.)
        </p>
@@ -843,7 +843,7 @@ document.write("Last Published: " + document.lastModified);
         
 <li>
           
-<span class="codefrag">&lt;map:generate src="{project:content.xdocs}{uri}.html" type="html"/&gt;</span>
+<span class="codefrag">&lt;map:generate src="{properties:content.xdocs}{uri}.html" type="html"/&gt;</span>
 <br>
             Using the html-generator, Forrest reads the html-document
             from file and uses JTidy to clean up and convert it to xml
@@ -856,7 +856,7 @@ document.write("Last Published: " + document.lastModified);
         
 <li>
             
-<span class="codefrag">&lt;map:transform src="{forrest:stylesheets}/html2document.xsl"/&gt;</span>
+<span class="codefrag">&lt;map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/&gt;</span>
 <br>
           Using the standard stylesheet 'html2document.xsl', this XHTML is 
           transformed into Forrest standard document format.
@@ -1057,8 +1057,8 @@ document.write("Last Published: " + document.lastModified);
 &lt;!--Custom Pipeline for my bad html-pages--&gt;        
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
-      &lt;map:generate src="{project:content.xdocs}{uri}.html" type="html"/&gt;
-      &lt;map:transform src="{forrest:stylesheets}/html2document.xsl"/&gt;
+      &lt;map:generate src="{properties:content.xdocs}{uri}.html" type="html"/&gt;
+      &lt;map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/&gt;
       &lt;map:transform type="idgen"/&gt;
       &lt;map:serialize type="xml-document"/&gt;
     &lt;/map:match&gt;
@@ -1083,11 +1083,11 @@ document.write("Last Published: " + document.lastModified);
 &lt;!--Custom Pipeline for my bad html-pages--&gt;        
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
-      &lt;map:generate src="{project:content.xdocs}{uri}.html" type="html" /&gt;
+      &lt;map:generate src="{properties:content.xdocs}{uri}.html" type="html" /&gt;
   <strong>
-      &lt;map:transform src="{project:resources.stylesheets}/fixMyBadHTML.xsl"/&gt;
+      &lt;map:transform src="{properties:resources.stylesheets}/fixMyBadHTML.xsl"/&gt;
   </strong>
-      &lt;map:transform src="{forrest:stylesheets}/html2document.xsl" /&gt;
+      &lt;map:transform src="{forrest:forrest.stylesheets}/html2document.xsl" /&gt;
       &lt;map:transform type="idgen" /&gt;
       &lt;map:serialize type="xml-document"/&gt;
     &lt;/map:match&gt;

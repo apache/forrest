@@ -990,11 +990,11 @@ document.write("Last Published: " + document.lastModified);
 <pre class="code">
 &lt;map:match pattern="old_site/**.html"&gt;
  &lt;map:select type="exists"&gt;
-  &lt;map:when test="{project:content}{0}"&gt;
-    &lt;map:read src="{project:content}/{0}" mime-type="text/html"/&gt;
+  &lt;map:when test="{properties:content}{0}"&gt;
+    &lt;map:read src="{properties:content}/{0}" mime-type="text/html"/&gt;
     &lt;!--
       Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{project:content}/{0}" /&gt;
+      &lt;map:generate type="html" src="{properties:content}/{0}" /&gt;
       &lt;map:serialize type="html"/&gt;
     --&gt;
   &lt;/map:when&gt;
@@ -1339,7 +1339,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
  &lt;map:pipelines&gt;
   &lt;map:pipeline&gt;
    &lt;map:match pattern="resolver-*.html"&gt;
-    &lt;map:generate src="{project:content.xdocs}resolver-{1}.xml"/&gt;
+    &lt;map:generate src="{properties:content.xdocs}resolver-{1}.xml"/&gt;
     &lt;map:transform
       src="file:///usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl"/&gt;
     &lt;map:serialize type="xhtml"/&gt;

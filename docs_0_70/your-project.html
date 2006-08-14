@@ -1242,8 +1242,8 @@ project.skinconf=${project.content-dir}/skinconf.xml
   ...
   <strong>
    &lt;map:match pattern="**download.xml"&gt;
-    &lt;map:generate src="{project:content.xdocs}{1}download.xml" /&gt;
-    &lt;map:transform src="{project:resources.stylesheets}/download2document.xsl" /&gt;
+    &lt;map:generate src="{properties:content.xdocs}{1}download.xml" /&gt;
+    &lt;map:transform src="{properties:resources.stylesheets}/download2document.xsl" /&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
@@ -1336,17 +1336,17 @@ project.skinconf=${project.content-dir}/skinconf.xml
  &lt;map:pipelines&gt;
   &lt;map:pipeline&gt;
    &lt;map:match pattern="**download.xml"&gt;
-    &lt;map:generate src="{project:content.xdocs}{1}download.xml" /&gt;
-    &lt;map:act type="sourcetype" src="{project:content.xdocs}{1}download.xml"&gt;
+    &lt;map:generate src="{properties:content.xdocs}{1}download.xml" /&gt;
+    &lt;map:act type="sourcetype" src="{properties:content.xdocs}{1}download.xml"&gt;
      &lt;map:select type="parameter"&gt;
       &lt;map:parameter name="parameter-selector-test" value="{sourcetype}" /&gt;
       &lt;map:when test="download-v1.0"&gt;
        &lt;map:transform
-          src="{project:resources.stylesheets}/download2document.xsl" /&gt;
+          src="{properties:resources.stylesheets}/download2document.xsl" /&gt;
       &lt;/map:when&gt;
       &lt;map:when test="download-v1.1"&gt;
        &lt;map:transform
-          src="{project:resources.stylesheets}/download-v11-2document.xsl" /&gt;
+          src="{properties:resources.stylesheets}/download-v11-2document.xsl" /&gt;
       &lt;/map:when&gt;
      &lt;/map:select&gt;
     &lt;/map:act&gt;
@@ -1382,7 +1382,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
   <strong>
    &lt;map:match pattern="**weblog.xml"&gt;
     &lt;map:generate src="http://blogs.cocoondev.org/stevenn/index.rss"/&gt;
-    &lt;map:transform src="{forrest:stylesheets}/rss2document.xsl"/&gt;
+    &lt;map:transform src="{forrest:forrest.stylesheets}/rss2document.xsl"/&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
@@ -1396,7 +1396,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>You will probably want to copy the core Forrest 
               <span class="codefrag">rss2document.xsl</span> to your project,
               customise it to your needs, and refer to it with
-              <span class="codefrag">src="{project:resources.stylesheets}/rss2document.xsl"</span>.
+              <span class="codefrag">src="{properties:resources.stylesheets}/rss2document.xsl"</span>.
               Then of course you would add an entry to site.xml to link
               to weblog.html
             </p>
