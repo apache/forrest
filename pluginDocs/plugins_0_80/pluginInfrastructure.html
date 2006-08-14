@@ -371,18 +371,18 @@ org.apache.forrest.plugin.internal.IMSManifest
 <pre class="code">
 &lt;map:match pattern="abs-menulinks"&gt;
   &lt;map:select type="exists"&gt;
-    &lt;map:when test="{project:content.xdocs}imsmanifest.xml"&gt;
-       &lt;map:generate src="{project:content.xdocs}imsmanifest.xml" /&gt;
+    &lt;map:when test="{properties:content.xdocs}imsmanifest.xml"&gt;
+       &lt;map:generate src="{properties:content.xdocs}imsmanifest.xml" /&gt;
        &lt;map:transform src="resources/stylesheets/imsmanifest2site.xsl"/&gt;
-       &lt;map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" /&gt;
-       &lt;map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" /&gt;
+       &lt;map:transform src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" /&gt;
+       &lt;map:transform src="{forrest:forrest.stylesheets}/site2site-normalizetabs.xsl" /&gt;
      &lt;map:serialize type="xml"/&gt;
    &lt;/map:when&gt;
-   &lt;map:when test="{project:content.xdocs}site.xml"&gt;
-      &lt;map:generate src="{project:content.xdocs}site.xml" /&gt;
-      &lt;map:transform src="{forrest:stylesheets}/absolutize-linkmap.xsl" /&gt;
-      &lt;map:transform src="{forrest:stylesheets}/site2site-normalizetabs.xsl" /&gt;
-      &lt;map:transform src="{forrest:stylesheets}/normalizehrefs.xsl"/&gt;
+   &lt;map:when test="{properties:content.xdocs}site.xml"&gt;
+      &lt;map:generate src="{properties:content.xdocs}site.xml" /&gt;
+      &lt;map:transform src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" /&gt;
+      &lt;map:transform src="{forrest:forrest.stylesheets}/site2site-normalizetabs.xsl" /&gt;
+      &lt;map:transform src="{forrest:forrest.stylesheets}/normalizehrefs.xsl"/&gt;
     &lt;map:serialize type="xml"/&gt;
   &lt;/map:when&gt;
   &lt;/map:select&gt;
@@ -422,7 +422,7 @@ org.apache.forrest.plugin.internal.IMSManifest
 <pre class="code">
         &lt;map:pipeline internal-only="false"&gt;
            &lt;map:mount uri-prefix=""
-                      src="{forrest:plugins}/sitemap.xmap"
+                      src="{forrest:forrest.plugins}/sitemap.xmap"
                       check-reload="yes"
                       pass-through="true"/&gt;
         &lt;/map:pipeline&gt;
