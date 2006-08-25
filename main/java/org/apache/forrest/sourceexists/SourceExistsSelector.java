@@ -53,7 +53,7 @@ import org.apache.excalibur.source.SourceResolver;
  *       &lt;/map:when>
  *       &lt;map:otherwise>
  *         &lt;map:generate src="content/xdocs/{1}.xml" />
- *         &lt;map:transform src="stylesheets/document2fo.xsl" />
+ *         &lt;map:transform src="stylesheets/document-to-fo.xsl" />
  *       &lt;/map:otherwise>
  *    &lt;/map:select>
  *    &lt;map:serialize type="fo2pdf" />

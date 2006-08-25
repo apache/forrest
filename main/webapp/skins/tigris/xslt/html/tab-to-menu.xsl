@@ -34,7 +34,7 @@ The output of this stylesheet is HTML of the form:
       ...
     </div>
 
-which is then merged by site2xhtml.xsl
+which is then merged by site-to-xhtml.xsl
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">

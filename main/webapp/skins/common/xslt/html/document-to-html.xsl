@@ -23,8 +23,8 @@ to HTML.  It renders XML as HTML in this form:
    ...
   </div>
 
-..which site2xhtml.xsl then combines with HTML from the index (book2menu.xsl)
-and tabs (tab2menu.xsl) to generate the final HTML.
+..which site-to-xhtml.xsl then combines with HTML from the index (book-to-menu.xsl)
+and tabs (tab-to-menu.xsl) to generate the final HTML.
 
 Section handling
   - <a name/> anchors are added if the id attribute is specified

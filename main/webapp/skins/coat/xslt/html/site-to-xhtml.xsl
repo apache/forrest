@@ -16,8 +16,8 @@
   limitations under the License.
 -->
 <!--
-site2xhtml.xsl is the final stage in HTML page production.  It merges HTML from
-document2html.xsl, tab2menu.xsl and book2menu.xsl, and adds the site header,
+site-to-xhtml.xsl is the final stage in HTML page production.  It merges HTML from
+document-to-html.xsl, tab-to-menu.xsl and book-to-menu.xsl, and adds the site header,
 footer, searchbar, css etc.  As input, it takes XML of the form:
 
 <site>

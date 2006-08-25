@@ -16,11 +16,11 @@
   limitations under the License.
 -->
 <!--
-book2menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
+book-to-menu.xsl generates the HTML menu. It outputs XML/HTML of the form:
   <div class="menu">
      ...
   </div>
-which is then merged with other HTML by site2xhtml.xsl
+which is then merged with other HTML by site-to-xhtml.xsl
 
 -->
 

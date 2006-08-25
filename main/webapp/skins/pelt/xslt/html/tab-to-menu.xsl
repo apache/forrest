@@ -35,7 +35,7 @@ The output of this stylesheet is HTML of the form:
       ...
     </div>
 
-which is then merged by site2xhtml.xsl
+which is then merged by site-to-xhtml.xsl
 
 -->
 

@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 <!--
-book2menu.xsl generates the HTML menu.  See the imported book2menu.xsl for
+book-to-menu.xsl generates the HTML menu.  See the imported book-to-menu.xsl for
 details.
 -->
 

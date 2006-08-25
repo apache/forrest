@@ -231,7 +231,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           to document-v13:</p>
         <source><![CDATA[
           <map:when test="howto-v13">
-            <map:transform src="{forrest:forrest.stylesheets}/howto2document.xsl" />
+            <map:transform src="{forrest:forrest.stylesheets}/howto-to-document.xsl" />
           </map:when>
           ]]></source>
           <!--
@@ -327,7 +327,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 2     <map:generate src="cocoon:/{1}{2}.xml"/>
 3     <map:transform type="xinclude"/>
 4     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon://{1}linkmap-{2}.pdf"/>
-5     <map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document2fo.xsl">
+5     <map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl">
 6       <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
 7       <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
 8     </map:transform>
@@ -342,7 +342,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               pipeline</link>, with the URL <code>cocoon:/{1}{2}.xml</code></li>
           <li>We then expand any XInclude statements..</li>
           <li>and <link href="#linkrewriting_impl">rewrite links</link>..</li>
-          <li>and finally apply the document2fo.xsl stylesheet, to generate
+          <li>and finally apply the document-to-fo.xsl stylesheet, to generate
             XSL:FO XML.</li>
         </ol>
         <p>Lastly, we generate a PDF using the fo2pdf serializer.</p>
@@ -371,7 +371,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           aggregating <link href="body-index.html">body-index.html</link> and
           <link href="menu-index.html">menu-index.html</link> and 
           <link href="tab-index.html">tab-index.html</link> and then applying the
-          <code>site2xhtml.xsl</code> stylesheet to the result.
+          <code>site-to-xhtml.xsl</code> stylesheet to the result.
         </p>
         <p>
           There is a nearly identical matcher for HTML files in subdirectories:
@@ -435,7 +435,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               &lt;title&gt;How to boil eggs&lt;/title&gt;
               ...
             </source>
-            <p>Later, the <code>document2html.xsl</code> stylesheet will create
+            <p>Later, the <code>document-to-html.xsl</code> stylesheet will create
               an &lt;a name> element for every section, allowing this section to
               be referred to as <code>index.html#How+to+boil+eggs</code>.</p>
           </li>
@@ -461,7 +461,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       ]]></source>
         <p>We get XML from a "book" pipeline, 
         <link href="#linkrewriting_impl">rewrite links</link>, and apply the
-          <code>book2menu.xsl</code> stylesheet to generate HTML.</p>
+          <code>book-to-menu.xsl</code> stylesheet to generate HTML.</p>
         <p>How the menu XML is actually generated (the *book-*.html pipeline) is
           sufficiently complex to require a 
           <link href="#menu_generation_impl">section of its own</link>.</p>
@@ -480,10 +480,10 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
        </map:call>
      </map:match>
            ]]></source>
-        <p>All the smarts are in the <code>tab2menu.xsl</code> stylesheet, which
+        <p>All the smarts are in the <code>tab-to-menu.xsl</code> stylesheet, which
           needs to choose the correct tab based on the current path.  Currently,
           a "longest matching path" algorithm is implemented.  See the
-          <code>tab2menu.xsl</code> stylesheet for details.</p>
+          <code>tab-to-menu.xsl</code> stylesheet for details.</p>
       </section>
     </section>
 
@@ -529,8 +529,8 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                 reveal this complexity:
               </p>
               <source><![CDATA[
-<map:transform src="resources/stylesheets/site2site-normalizetabs.xsl" />
-<map:transform src="resources/stylesheets/site2site-selectnode.xsl">
+<map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" />
+<map:transform src="resources/stylesheets/site-to-site-selectnode.xsl">
   <map:parameter name="path" value="{1}{2}"/>
 </map:transform>
                 ]]></source>
