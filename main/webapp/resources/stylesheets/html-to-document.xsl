@@ -174,21 +174,14 @@
        </xsl:choose>
     </xsl:template>
 
-  
     <!-- convert a to link -->
     <xsl:template match="a">
-      <xsl:if test="@name">
-        <!-- Attach an id to the current node -->
-        <xsl:attribute name="id"><xsl:value-of select="translate(@name, ' $', '__')"/></xsl:attribute>
+      <link>
+        <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
-      </xsl:if>
-      <xsl:if test="@href">
-        <link href="{@href}">
-          <xsl:apply-templates/>
-        </link>
-      </xsl:if>
+      </link>
     </xsl:template>
-    
+
     <xsl:template match="@valign | @align"/>
         
     <xsl:template match="center">
