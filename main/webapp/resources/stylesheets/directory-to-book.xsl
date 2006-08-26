@@ -33,7 +33,7 @@ automatically generate a menu for (here wiki/):
     <map:parameter name="depth" value="5" />
     <map:parameter name="exclude" value="[.][^x[^m][^l]|~$|^my-images$" />
   </map:generate>
-  <map:transform src="resources/stylesheets/directory2book.xsl" />
+  <map:transform src="resources/stylesheets/directory-to-book.xsl" />
   <map:serialize type="xml"/>
 </map:match>
 
@@ -48,7 +48,7 @@ type="xpathdirectory">
       <map:parameter name="xpath" value="/document/header/meta | 
 /document/header/title"/>
    </map:generate>
-   <map:transform src="resources/stylesheets/directory2book.xsl">
+   <map:transform src="resources/stylesheets/directory-to-book.xsl">
       <map:parameter name="sort-order" value="descending"/>
       <map:parameter name="sort-select" value="dir:xpath/meta[@name='date']"/>
    </map:transform>
@@ -118,7 +118,7 @@ type="xpathdirectory">
         </xsl:if>
     </xsl:template>
 
-    <!-- override this to your needs. For example, see xpathdirectory2book.xsl -->
+    <!-- override this to your needs. For example, see xpathdirectory-to-book.xsl -->
     <xsl:template name="get-label">
         <xsl:param name="corename"/>
         <xsl:value-of select="translate($corename,'-_',' ')"/>
