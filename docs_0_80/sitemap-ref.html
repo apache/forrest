@@ -650,7 +650,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           to document-v13:</p>
 <pre class="code">
           &lt;map:when test="howto-v13"&gt;
-            &lt;map:transform src="{forrest:forrest.stylesheets}/howto2document.xsl" /&gt;
+            &lt;map:transform src="{forrest:forrest.stylesheets}/howto-to-document.xsl" /&gt;
           &lt;/map:when&gt;
           </pre>
 <a name="N10175"></a><a name="other_source"></a>
@@ -735,7 +735,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 2     &lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
 3     &lt;map:transform type="xinclude"/&gt;
 4     &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon://{1}linkmap-{2}.pdf"/&gt;
-5     &lt;map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document2fo.xsl"&gt;
+5     &lt;map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl"&gt;
 6       &lt;map:parameter name="ctxbasedir" value="{realpath:.}/"/&gt;
 7       &lt;map:parameter name="xmlbasedir" value="content/xdocs/{1}"/&gt;
 8     &lt;/map:transform&gt;
@@ -756,7 +756,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           
 <li>and <a href="#linkrewriting_impl">rewrite links</a>..</li>
           
-<li>and finally apply the document2fo.xsl stylesheet, to generate
+<li>and finally apply the document-to-fo.xsl stylesheet, to generate
             XSL:FO XML.</li>
         
 </ol>
@@ -785,7 +785,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           aggregating <a href="body-index.html">body-index.html</a> and
           <a href="menu-index.html">menu-index.html</a> and 
           <a href="tab-index.html">tab-index.html</a> and then applying the
-          <span class="codefrag">site2xhtml.xsl</span> stylesheet to the result.
+          <span class="codefrag">site-to-xhtml.xsl</span> stylesheet to the result.
         </p>
 <p>
           There is a nearly identical matcher for HTML files in subdirectories:
@@ -855,7 +855,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               ...
             </pre>
             
-<p>Later, the <span class="codefrag">document2html.xsl</span> stylesheet will create
+<p>Later, the <span class="codefrag">document-to-html.xsl</span> stylesheet will create
               an &lt;a name&gt; element for every section, allowing this section to
               be referred to as <span class="codefrag">index.html#How+to+boil+eggs</span>.</p>
           
@@ -885,7 +885,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </pre>
 <p>We get XML from a "book" pipeline, 
         <a href="#linkrewriting_impl">rewrite links</a>, and apply the
-          <span class="codefrag">book2menu.xsl</span> stylesheet to generate HTML.</p>
+          <span class="codefrag">book-to-menu.xsl</span> stylesheet to generate HTML.</p>
 <p>How the menu XML is actually generated (the *book-*.html pipeline) is
           sufficiently complex to require a 
           <a href="#menu_generation_impl">section of its own</a>.</p>
@@ -902,10 +902,10 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
        &lt;/map:call&gt;
      &lt;/map:match&gt;
            </pre>
-<p>All the smarts are in the <span class="codefrag">tab2menu.xsl</span> stylesheet, which
+<p>All the smarts are in the <span class="codefrag">tab-to-menu.xsl</span> stylesheet, which
           needs to choose the correct tab based on the current path.  Currently,
           a "longest matching path" algorithm is implemented.  See the
-          <span class="codefrag">tab2menu.xsl</span> stylesheet for details.</p>
+          <span class="codefrag">tab-to-menu.xsl</span> stylesheet for details.</p>
 </div>
 
     
@@ -961,8 +961,8 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               </p>
               
 <pre class="code">
-&lt;map:transform src="resources/stylesheets/site2site-normalizetabs.xsl" /&gt;
-&lt;map:transform src="resources/stylesheets/site2site-selectnode.xsl"&gt;
+&lt;map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" /&gt;
+&lt;map:transform src="resources/stylesheets/site-to-site-selectnode.xsl"&gt;
   &lt;map:parameter name="path" value="{1}{2}"/&gt;
 &lt;/map:transform&gt;
                 </pre>

@@ -1193,7 +1193,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>
           To handle these special tags, one would write a stylesheet to convert
           them to the intermediate Forrest xdocs structure. Here is such a stylesheet,
-          called "<span class="codefrag">download2document.xsl</span>" ...
+          called "<span class="codefrag">download-to-document.xsl</span>" ...
         </p>
 <pre class="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;xsl:stylesheet
@@ -1257,7 +1257,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
   <strong>
    &lt;map:match pattern="**download.xml"&gt;
     &lt;map:generate src="{properties:content.xdocs}{1}download.xml" /&gt;
-    &lt;map:transform src="{properties:resources.stylesheets}/download2document.xsl" /&gt;
+    &lt;map:transform src="{properties:resources.stylesheets}/download-to-document.xsl" /&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
@@ -1356,11 +1356,11 @@ project.skinconf=${project.content-dir}/skinconf.xml
       &lt;map:parameter name="parameter-selector-test" value="{sourcetype}" /&gt;
       &lt;map:when test="download-v1.0"&gt;
        &lt;map:transform
-          src="{properties:resources.stylesheets}/download2document.xsl" /&gt;
+          src="{properties:resources.stylesheets}/download-to-document.xsl" /&gt;
       &lt;/map:when&gt;
       &lt;map:when test="download-v1.1"&gt;
        &lt;map:transform
-          src="{properties:resources.stylesheets}/download-v11-2document.xsl" /&gt;
+          src="{properties:resources.stylesheets}/downloadv11-to-document.xsl" /&gt;
       &lt;/map:when&gt;
      &lt;/map:select&gt;
     &lt;/map:act&gt;
@@ -1396,7 +1396,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
   <strong>
    &lt;map:match pattern="**weblog.xml"&gt;
     &lt;map:generate src="http://blogs.cocoondev.org/stevenn/index.rss"/&gt;
-    &lt;map:transform src="{forrest:forrest.stylesheets}/rss2document.xsl"/&gt;
+    &lt;map:transform src="{forrest:forrest.stylesheets}/rss-to-document.xsl"/&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
@@ -1408,9 +1408,9 @@ project.skinconf=${project.content-dir}/skinconf.xml
 &lt;/map:sitemap&gt;
 </pre>
 <p>You will probably want to copy the core Forrest 
-              <span class="codefrag">rss2document.xsl</span> to your project,
+              <span class="codefrag">rss-to-document.xsl</span> to your project,
               customise it to your needs, and refer to it with
-              <span class="codefrag">src="{properties:resources.stylesheets}/rss2document.xsl"</span>.
+              <span class="codefrag">src="{properties:resources.stylesheets}/rss-to-document.xsl"</span>.
               Then of course you would add an entry to site.xml to link
               to weblog.html
             </p>
@@ -1474,7 +1474,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <dl>
             
 <dt>
-<span class="codefrag">xslt/html/document2html.xsl</span>
+<span class="codefrag">xslt/html/document-to-html.xsl</span>
 </dt>
             
 <dd>
@@ -1483,7 +1483,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
             </dd>
             
 <dt>
-<span class="codefrag">xslt/html/site2xhtml.xsl</span>
+<span class="codefrag">xslt/html/site-to-xhtml.xsl</span>
 </dt>
             
 <dd>
@@ -1501,7 +1501,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <pre class="code">
 &lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
 
-  &lt;xsl:import href="../../../common/xslt/html/document2html.xsl"/&gt;
+  &lt;xsl:import href="../../../common/xslt/html/document-to-html.xsl"/&gt;
 
   <strong>... overrides of default templates ...</strong> 
 &lt;/xsl:stylesheet&gt;</pre>
@@ -1517,7 +1517,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           as this section recomends you will also need to copy the common skin
           since all existing skins import the common skin.</div>
 </div>
-<p>This is particularly relevant for menu rendering (book2menu.xsl),
+<p>This is particularly relevant for menu rendering (book-to-menu.xsl),
             where the common stylesheet does the 'logic' of which item is
             selected, and over-riding stylesheets define the presentation.</p>
 </div>
