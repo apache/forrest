@@ -23,14 +23,17 @@
   <xsl:param name="cols"/>
   <xsl:param name="rows"/>
   
-  <xsl:template match="/pics/dir:directory">
+  <xsl:template match="pics">
     <document>
       <header>
-        <title><xsl:value-of select="/pics/albuminfo/title"/></title>
+        <title><xsl:value-of select="albuminfo/title"/></title>
       </header>
       <body>
-        <p><xsl:value-of select="/pics/albuminfo/description"/></p>
-
+        <xsl:apply-templates/>
+      </body>
+    </document>
+  </xsl:template>
+  <xsl:template match="dir:directory">
           <xsl:variable name="all_hits" select="dir:file" />
           <xsl:variable name="count" select="count(dir:file)"/>
           <table>
@@ -75,8 +78,6 @@
               <td width="100">&#160;</td>
             </tr>
           </table>
-      </body>
-    </document>
   </xsl:template>
   
   <xsl:template name="make_table_rows">
@@ -127,6 +128,17 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="albuminfo"/>
+  <xsl:template match="albuminfo">
+    <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="description">
+    <p><xsl:apply-templates/></p>
+  </xsl:template>
+  <xsl:template match="title"/>
+  <xsl:template match="@*|*|text()|processing-instruction()|comment()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>
 
