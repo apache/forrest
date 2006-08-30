@@ -26,11 +26,11 @@
   <xsl:template match="/pics/dir:directory">
     <document>
       <header>
-        <title>Gallery</title>
+        <title><xsl:value-of select="/pics/albuminfo/title"/></title>
       </header>
       <body>
-        <section>
-          <title>Gallery</title>
+        <p><xsl:value-of select="/pics/albuminfo/description"/></p>
+
           <xsl:variable name="all_hits" select="dir:file" />
           <xsl:variable name="count" select="count(dir:file)"/>
           <table>
@@ -75,7 +75,6 @@
               <td width="100">&#160;</td>
             </tr>
           </table>
-        </section>
       </body>
     </document>
   </xsl:template>
@@ -128,5 +127,6 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+  <xsl:template match="albuminfo"/>
 </xsl:stylesheet>
 
