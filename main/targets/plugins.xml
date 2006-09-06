@@ -293,6 +293,12 @@ to be installed again unless you delete them or wish to upgrade them.
   </target>
 
   <target name="fetch-plugins-descriptors" depends="init-proxy" unless="plugins.desc.already.fetched">
+    <!-- Copy the initial local descriptors, then replace them with the
+      published descriptors. This enables offline operation. -->
+    <copy file="${forrest.home}/plugins/plugins.xml"
+      tofile="${project.temp-dir}/plugins-1.xml"/>
+    <copy file="${forrest.home}/whiteboard/plugins/whiteboard-plugins.xml"
+      tofile="${project.temp-dir}/plugins-2.xml"/>
     <var name="plugin-counter" value="1"/>
     <for list="${forrest.plugins.descriptors}" param="url">
       <sequential>
