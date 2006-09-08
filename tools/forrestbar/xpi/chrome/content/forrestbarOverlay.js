@@ -51,7 +51,6 @@ function searchDev(engine, searchID)
     navigate('http://marc.theaimsgroup.com/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.devel&sort=date&query=' + searchItem.value);
-  } else if (engine == 'asf') {
   } else {
     navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
   }
@@ -61,8 +60,6 @@ function searchUser(engine, searchID)
 {
   var searchItem = document.getElementById(searchID);
   if (engine == 'gmane') {
-    navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
-  } else if (engine == 'asf') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=user_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
