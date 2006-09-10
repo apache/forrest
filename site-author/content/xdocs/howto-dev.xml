@@ -226,60 +226,17 @@ svn update -r HEAD.
       </section>
         <section id="svn-merge">
           <title>Reverting Changes using SVN Merge</title>
-          <p>You may want to revert some changes made to HEAD or may want to revert changes made
-             to an earlier revision that still exists in HEAD today.</p>
-          <p>This is where SVN Merge comes in handy. Taking the first scenario, here is an
-                  example of reverting a change from HEAD to an earlier revision 300.</p>
+          <p>Two examples of using SVN Merge.</p>
           <source>
-# reverting unneccesary changes to %FORREST_HOME%/site-author/content/xdocs/index.xml
+$ svn merge -r 400:300 /site-author/content/xdocs/index.xml /site-author/content/xdocs/index.xml
 
-$ svn merge -r HEAD:300 /site-author/content/xdocs/index.xml /site-author/content/xdocs/index.xml
+or
 
-# you should then get confirmation of this as :
-U       /site-author/content/xdocs/index.xml
+$ svn merge -r 303:302
 
-# Then do an svn diff to verify the change is removed.
-$ svn diff
-...
-
-# Then commit the reverted changed file(s)
-
-$ svn commit -m "Undoing changes commited to index.xml in r300."
-Sending         /site-author/content/xdocs/index.xml
-Transmitting file data .
-Committed revision 350.
+... then commit as usual.
           </source>
-          <p>It should only be neccessary to specify a particular file to revert
-                  with svn merge only if there are other changed files in that revision.</p>
-          <p> This second example assumes that way back in revision r303 only one change was
-                  made to one file and that this is what we want to remove.</p>
-          <source>
-# reverting unneccessary change to /site-author/content/xdocs/index.xml 
-# - this is the only changed file for this revision.
-
-svn merge -r 303:302
-
-# you should then get confirmation of this as "
-U       index.xml
-
-# Then do an svn diff to verify the change is removed.
-$ svn diff
-...
-
-# Then commit the reverted changed file(s)
-
-$ svn commit -m "Undoing unwanted change to index.xml from r303."
-Sending         index.xml
-Transmitting file data .
-Committed revision 351.
-          </source>
-          <p>The second example above will revert any changes made by revision 303
-                  from revision 302 and then applies it to the current revision HEAD which in 
-                  this example has become r351. Also note that the changes have NOT been removed
-                  from ANY revisions in between r303 and r350, so rolling back to any of these
-                  revisions will add the un-needed change back in again.</p>
-          <p> More information can be found at <a href="http://svnbook.red-bean.com/en/1.0/ch04s04.html#svn-ch-4-sect-4.2">Common use-cases for
-                          merging</a> section of the Red Bean SVN Book.</p>
+          <p> More information can be found at <a href="http://svnbook.red-bean.com/en/1.0/ch04s04.html#svn-ch-4-sect-4.2">Common use-cases for merging</a> section of the Red Bean SVN Book.</p>
       </section>
 
       <section id="svn-patch">
