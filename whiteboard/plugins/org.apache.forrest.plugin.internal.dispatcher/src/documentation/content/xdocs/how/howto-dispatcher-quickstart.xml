@@ -107,10 +107,16 @@
         default structurers to the Forrest projects. That eases your local
         version management and everyone will benefit.
       </note>
+      <note>
+        We use <code>${themer.project.dir}</code> for PROJECT_HOME/src/documentation/resources/themes
+        (create the new directory folder first).
+        You can change this location by adding <![CDATA[<match pattern="themer.project.dir">
+          <location src="{properties:resources}/themes" />
+        </match> ]]> to your locationmap and point to another directory.
+      </note>
       <ul>
         <li>Copy THEMER_PLUGIN/themes/pelt.fv into your project at
-          PROJECT_HOME/src/documentation/resources/themes/pelt.fv
-          (create the new directory folder first).
+          ${themer.project.dir}/pelt.fv
         </li>
         <li>Re-start 'forrest run'</li>
         <li>localhost:8888/index.html ... See the same view, now structured
@@ -170,11 +176,11 @@
       <p>
         Project-based contracts are defined in theme-specific and
         output-format-specific directory structure, e.g.
-        PROJECT_HOME/src/documentation/resources/themes/THEME_NAME/OUTPUT_FORMAT/
+        ${themer.project.dir}/THEME_NAME/OUTPUT_FORMAT/
       </p>
       <p>
        Project-based contracts common to all themes go in
-        PROJECT_HOME/src/documentation/resources/themes/common/OUTPUT_FORMAT/
+        ${themer.project.dir}/common/OUTPUT_FORMAT/
       </p>
       <p>
         To get started quickly (it is not a project-based contract but a demo),
@@ -184,7 +190,7 @@
         <li>
           Copy THEMER_PLUGIN/themes/common/html/siteinfo-current-time.ft
           into your project at
-          PROJECT_HOME/src/documentation/resources/themes/common/html/siteinfo-doodad.ft
+          ${themer.project.dir}/common/html/siteinfo-doodad.ft
           (create the new directory folders first).
         </li>
         <li>
