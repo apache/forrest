@@ -6,7 +6,7 @@
         <link href="../themes/pelt.screen.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
         
         <link href="../int/index.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
-        <link href="../themes/pelt.print.css" media="print" rel="stylesheet" title="pelt.print.css" type="text/css" />
+        <link href="../themes/pelt.print.css" media="print" rel="stylesheet" title="Pelt" type="text/css" />
         <style type="text/css">/* Extra css */ 
 p.quote {
  margin-left: 2em; 
@@ -16,7 +16,7 @@ p.quote {
 }</style>
       <meta content="Apache Forrest" name="Generator" />
 <meta content="0.8" name="Forrest-version" />
-<meta content="${project.theme}" name="Forrest-theme-name" />
+<meta content="pelt" name="Forrest-theme-name" />
 <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <!--+ |start navigation links +-->
 <link href="../index.html" rel="Index" title="Index..." />
@@ -25,7 +25,7 @@ p.quote {
 <!--+|start favicon +-->
 <link href="../favicon.ico" rel="shortcut icon" />
 <!--+|start favicon +-->
-<script src="../themes/getBlank.js" type="text/javascript"> </script>
+<script language="javascript" src="../themes/getBlank.js" type="text/javascript"> </script>
 <script src="../themes/menu.js" type="text/javascript"> </script>
 <!--+ |start content-title +-->
 <title>Living on the edge.</title>
@@ -83,7 +83,7 @@ p.quote {
 <input name="sitesearch" type="hidden" value="mydomain" />
 </div>
 <div class="search-field">
-<input name="q" size="25" type="text" value="Search the site with google" />
+<input name="q" onBlur="getPrompt(this, 'Search the site with google');" onFocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
 </div>
 <div class="search-submit">
 <input name="Search" type="submit" value="Search" />
@@ -239,26 +239,26 @@ p.quote {
       a) custom implementation of the themes.core plugin
       b) themes.core plugin
       where we test for 
-      1) {project:dispatcher.theme}{project:dispatcher.theme-ext}
-      2) {project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}
+      1) {properties:dispatcher.theme}{properties:dispatcher.theme-ext}
+      2) {properties:dispatcher.fallback.theme}{properties:dispatcher.fallback.theme-ext}
       --&gt;
   &lt;select type="exists"&gt;
     &lt;!-- project-based 
           url-based (url location) --&gt;
     &lt;location 
-      src="{project:resources}/structurer/url/{1}{project:dispatcher.theme-ext}" 
+      src="{properties:resources}/structurer/url/{1}{properties:dispatcher.theme-ext}" 
       /&gt;
     &lt;!-- project-based 
           url-based (xdocs location)  [depreciated]--&gt;
-    &lt;location src="{project:content.xdocs}{1}{project:dispatcher.theme-ext}" /&gt;
-    &lt;act type="sourcetype" src="{project:content.xdocs}{1}.xml"&gt;
+    &lt;location src="{properties:content.xdocs}{1}{properties:dispatcher.theme-ext}" /&gt;
+    &lt;act type="sourcetype" src="{properties:content.xdocs}{1}.xml"&gt;
       &lt;!-- Sourcetype based 
           http://forrest.apache.org/docs/cap.html--&gt;
       &lt;location src="lm://dispatcher.structurer.resourceType.{sourcetype}" /&gt;
     &lt;/act&gt;
     &lt;act type="resourceTypeAction"&gt;
       &lt;parameter value="{../1}{1}" name="request"/&gt;
-      &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;
+      &lt;parameter value="{properties:content.xdocs}" name="projectDir"/&gt;
       &lt;parameter value="lm://dispatcher.structurer.resourceType." 
         name="resourceTypeBase"/&gt;
       &lt;parameter value=".xml.meta" name="metaExtension"/&gt;
@@ -270,39 +270,39 @@ p.quote {
     &lt;/act&gt;
     &lt;act type="RecursiveDirectoryTraversalAction"&gt;
       &lt;parameter value="{../1}{1}" name="request"/&gt;
-      &lt;parameter value="{project:dispatcher.theme}" name="projectFallback"/&gt;
-      &lt;parameter value="{project:dispatcher.theme-ext}" 
+      &lt;parameter value="{properties:dispatcher.theme}" name="projectFallback"/&gt;
+      &lt;parameter value="{properties:dispatcher.theme-ext}" 
         name="projectExtension"/&gt;
-      &lt;parameter value="{project:resources}structurer/url/" name="projectDir"/&gt;
+      &lt;parameter value="{properties:resources}structurer/url/" name="projectDir"/&gt;
       &lt;!--  url
             project-based theme-based = directory-based / parent-directory based (recursively) --&gt;
       &lt;location src="{uri}" /&gt;
     &lt;/act&gt;
     &lt;act type="RecursiveDirectoryTraversalAction"&gt;
       &lt;parameter value="{../1}{1}" name="request"/&gt;
-      &lt;parameter value="{project:dispatcher.theme}" name="projectFallback"/&gt;
-      &lt;parameter value="{project:dispatcher.theme-ext}" 
+      &lt;parameter value="{properties:dispatcher.theme}" name="projectFallback"/&gt;
+      &lt;parameter value="{properties:dispatcher.theme-ext}" 
         name="projectExtension"/&gt;
-      &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;
+      &lt;parameter value="{properties:content.xdocs}" name="projectDir"/&gt;
       &lt;!--  xdocs  [depreciated]
             project-based theme-based = directory-based / parent-directory based (recursively) --&gt;
       &lt;location src="{uri}" /&gt;
     &lt;/act&gt;
     &lt;!-- themes-dir: project-application-based theme-dir-based --&gt;
     &lt;location 
-      src="{lm:themer.project.dir}/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
+      src="{lm:themer.project.dir}/{properties:dispatcher.theme}{properties:dispatcher.theme-ext}" 
       /&gt;
     &lt;!-- themes-dir: project-application-based default --&gt;
     &lt;location 
-      src="{lm:themer.project.dir}/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
+      src="{lm:themer.project.dir}/{properties:dispatcher.fallback.theme}{properties:dispatcher.fallback.theme-ext}" 
       /&gt;
     &lt;!-- themer: forrest-application-based theme-based --&gt;
     &lt;location 
-      src="{lm:dispatcher.themer}/themes/{project:dispatcher.theme}{project:dispatcher.theme-ext}" 
+      src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}{properties:dispatcher.theme-ext}" 
       /&gt;
     &lt;!-- themer: forrest-application-based default --&gt;
     &lt;location 
-      src="{lm:dispatcher.themer}/themes/{project:dispatcher.fallback.theme}{project:dispatcher.fallback.theme-ext}" 
+      src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}{properties:dispatcher.fallback.theme-ext}" 
       /&gt;
   &lt;/select&gt;
 &lt;/match&gt; </pre>
@@ -333,7 +333,7 @@ p.quote {
 <img alt="Built with Apache Forrest - logo" src="../images/built-with-forrest-button.png" style="width: 88px;height: 31px;" title="Built with Apache Forrest" />
 </a>
 <a href="http://cocoon.apache.org/">
-<img alt="Built with Cocoon - logo" src="../&#10;                  http://forrest.apache.org/images/built-with-cocoon.gif" style="" title="Built with Cocoon" />
+<img alt="Built with Cocoon - logo" src="http://forrest.apache.org/images/built-with-cocoon.gif" style="" title="Built with Cocoon" />
 </a>
 </div>
 <!--+ |end siteinfo-credits +-->
