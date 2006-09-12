@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><document> 
+  <header> 
+    <title>forrest:views - x formats, one config</title>
+    <abstract>This plugin depends on a ViewHelper and a BusinessHelper implementation.</abstract> 
+  </header> 
+  <body> 
+    <section>
+      <title>How it works </title>
+      <source xml:space="preserve">
+This plugin has three components:
+  1. viewHelper - delivers contracts in form of xsl:templates
+  2. businessHelper - delivers content that is used in the contracts
+  3. views - prepares and transforms the requested contracts (viewHelper) 
+     and populate them with the content (businessHelper)
+
+1. viewHelper
+  This is the template producing factory.
+
+a. &lt;map:match pattern="resolve.contract.*.*"&gt; -&gt; Resolving factory
+Project implementation of templates have priority before default ones.
+If no implementation can be found we use the noFt (~ - no
+forrest:template) implementation.-&gt; this match is implemented in the viewHelper plugin
+
+b. &lt;map:match pattern="get.contract.*.*"&gt;-&gt; this match is implemented in the viewHelper plugin
+Get the xsl:templates of the requested contract and specific format.
+
+c. &lt;map:match pattern="get.contract-property.*"&gt;-&gt; this match is implemented in the viewHelper plugin
+Get the forrest:properties of the requested contract. 
+This will determine which templates (css, head, body) we have to call
+later on
+
+GENERAL:
+Contracts are stored in forrest:templates ({contract-name}.ft) please
+have a look on the templates/*.ft that the viewHelper implementation contain to get
+an idea how your own implementation have to look like.
+
+
+2. businessHelper
+  This is the content producing factory.
+
+NOTE: &lt;map:match pattern="*.page"&gt;
+  The current factory uses the models the skin (e.g. document2xhtml.xsl from pelt [default skin]).
+  It is only exchanging the last model of the models the skin is producing (site2xhtml.xsl) till now.
+  This will have to be changed in the future.
+
+3. views
+  prepares the requested contracts viewHelper and dispatches
+the corresponding businessHelper.
+
+a.  &lt;map:match pattern="prepare.view.*"&gt; -&gt; View config resolver
+File specific views have priority before default ones.
+If no view can be found in the project we use the default one of the
+views plugin.
+
+b.  &lt;map:match pattern="prepare.include.*.**"&gt; 
+Aggregate the contract-templates requested by the view with xinclude.
+The result is a stylesheet with all needed xsl:templates.
+
+c. &lt;map:match pattern="prepare.properties.*.*"&gt;
+Aggregate the forrest:properties requested by the *.fv.
+The result is an aggregation of properties which defines the templates
+to be call.
+
+d. &lt;map:match pattern="prepare.xhtml.*"&gt;
+Aggregate all contracts-templates requested by the view.
+Create a xsl that can be used for the last step of the transformation of
+the view.
+
+e. &lt;map:match pattern="*.html"&gt; -&gt; Last processing step. 
+Here we are overriding the default skin generation. 
+-&gt; this match is implemented in the viewHelper plugin
+
+GENERAL:
+Views are stored in forrest:view ({file-name}.fv) please have look on
+plugins/org.apache.forrest.plugin.internal.structurer/src/documentation/common.fv do
+get an idea how your own implementation have to look like.
+
+      </source>
+    </section>
+    <section>
+      <title>Resume</title>
+      <source xml:space="preserve">
+The views plugin can be seen as prototype for the next generation
+skinning of forrest. It is still in early stage but with extracting the businessHelper we
+hope to make it easier for all devs (not only committer) to get the idea
+and enable them to enhance the design of this plugin and their implementation.
+
+Some basic and simple hints:
+a) If you want another implementation of a contract then create a folder
+"templates" in ${project.resources-dir} and it will be matched before
+the standard implementation. 
+
+e.g. feedback contract:
+
+&lt;forrest:contract name="feedback" type="nugget"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"&gt;
+&lt;description&gt;
+This function will output the html feedback information.
+&lt;/description&gt;
+
+&lt;forrest:template
+xmlns:forrest="http://apache.org/forrest/templates/1.0"
+format="xhtml" name="feedback" inputFormat="xsl" body="true"
+head="false" css="true"&gt;
+
+&lt;xsl:stylesheet version="1.1" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"&gt;
+
+&lt;xsl:template name="feedback-css"&gt;
+#feedback {
+    color: black;
+    background: #CFDCED;
+    text-align:center;
+    margin-top: 5px;
+}
+#feedback #feedbackto {
+    font-size: 90%;
+    color: black;
+}&lt;/xsl:template&gt;
+
+&lt;xsl:template name="feedback-body"&gt;
+&lt;div id="feedback"&gt; Modified project implementation
+&lt;xsl:value-of select="$config/feedback"/&gt;
+&lt;xsl:choose&gt;
+&lt;xsl:when test="$config/feedback/@href and
+not($config/feedback/@href='')"&gt;
+  &lt;a id="feedbackto"&gt;
+    &lt;xsl:attribute name="href"&gt;
+      &lt;xsl:value-of select="$config/feedback/@href"/&gt;
+      &lt;xsl:value-of select="$path"/&gt;
+    &lt;/xsl:attribute&gt;
+    &lt;xsl:value-of select="$config/feedback/@to"/&gt;
+  &lt;/a&gt;
+&lt;/xsl:when&gt;
+&lt;xsl:otherwise&gt;
+  &lt;xsl:value-of select="$config/feedback/@to"/&gt;
+&lt;/xsl:otherwise&gt;
+&lt;/xsl:choose&gt;
+&lt;/div&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+&lt;/forrest:template&gt;
+&lt;/forrest:contract&gt;
+
+The @attributes (body="true" head="false" css="true") of the 
+forrest:template defining which parts of the html page (head, head-css
+and body) we have to render. The xsl:templates are following the simple
+naming convention {@name}-(css|head|body).
+
+
+b. If you want a default view for your project then copy the common.fv
+from the viewHelper implementation to your ${project.conf-dir} and modify this file. When
+you want another view for a specific file (e.g. ${project.xdocs-dir}/index.html) then copy
+the common.fv to your ${project.xdocs-dir} and renamed it to 
+${project.xdocs-dir}/index.fv.</source>
+    </section>
+  </body>
+</document>

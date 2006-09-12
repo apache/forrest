@@ -101,8 +101,11 @@ p.quote {
 <div id="nav-main-hook">
 <!--+ |start Tabs new +-->
 <ul id="nav-main">
+<li>
+<a class="base-not-selected" href="../index.html">Home</a>
+</li>
 <li class="current">
-<a class="base-selected" href="../index.html">Home</a>
+<a class="base-selected" href="../how/howto-dispatcher-quickstart.html">HowTo</a>
 </li>
 </ul>
 <!--+ |end Tabs +-->
@@ -122,14 +125,8 @@ p.quote {
 <div id="nav-section">
 <ul>
 <li class="pagegroupselected" id="menu_selected_1.1Title">
-<span onclick="SwitchMenu('menu_selected_1.1')">About</span>
+<span onclick="SwitchMenu('menu_selected_1.1')">How to</span>
 <ul class="&#10;               selectedmenuitemgroup" id="menu_selected_1.1">
-<li class="menuitem">
-<a href="../index.html" title="">Dispatcher development</a>
-</li>
-<li class="pagegroupselected" id="menu_selected_1.1.2Title">
-<span onclick="SwitchMenu('menu_selected_1.1.2')">How to</span>
-<ul class="&#10;               selectedmenuitemgroup" id="menu_selected_1.1.2">
 <li class="menuitem">
 <a href="../how/howto-dispatcher-quickstart.html" title="">Quickstart</a>
 </li>
@@ -138,23 +135,6 @@ p.quote {
 </li>
 <li class="menuitem">
 <a href="../how/howto-structurer-contracts.html" title="">Contracts</a>
-</li>
-</ul>
-</li>
-<li class="menuitem">
-<a href="../dispatcher-glossary.html" title="Dispactcher related terms and meanings">(FIXME: add content) Glossary</a>
-</li>
-<li class="menuitem">
-<a href="../index.old.html" title="(FIXME: old) index">(FIXME: old) Index</a>
-</li>
-<li class="menuitem">
-<a href="../how/howItWork.html" title="(FIXME: old) howItWorks">(FIXME: old) howItWorks</a>
-</li>
-<li class="menuitem">
-<a href="../changes.html" title="History of Changes">Changes</a>
-</li>
-<li class="menuitem">
-<a href="../todo.html" title="Todo List">Todo</a>
 </li>
 </ul>
 </li>
@@ -263,45 +243,6 @@ p.quote {
       developing. Many instructions assumes that you have the forrestbar 
       installed. </div>
 </div>
-<p> We developed<strong> the structurer</strong> to let the user decide 
-      where to place elements in e.g. html pages. We started this work with the 
-      <span class="codefrag">skinconf.xml</span> where you could configure certain elements and 
-      their positions. These elements were known under certain names. It was up 
-      to the skin designer to support this configuration and the elements. </p>
-<p> The work started with grouping elements (the ones from skinconf). We 
-      used css-contracts that we added as @attributes e.g. <span class="codefrag">&lt;div id="content-main"/&gt;
-       </span>. That made it possible to use the same elements in different 
-      skins. For the full list refer to the <a href="http://svn.apache.org/repos/asf/forrest/trunk/main/webapp/skins/leather-dev/contracts.initial.txt"> 
-      initial contract list </a> </p>
-<p> Around this contracts we developed a configuration Domain Specific 
-      Language - called <strong>the structurer</strong>. The 
-      <strong>structurer</strong> allows us to define the order in which 
-      <strong>forrest:contract</strong>s appear, and also to group them using 
-      <strong>forrest:hook</strong>s. </p>
-<p> <strong>forrest:hook</strong>s are containers that are only used for 
-      layout reasons. They <strong>do not</strong> add any content nor 
-      functionality to the output. They add <strong>only</strong> layout 
-      information to the output. Actually e.g. a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;
-      </span> will be transformed to <span class="codefrag">&lt;div id="layoutId"/&gt; 
-      </span> </p>
-<p> <strong>forrest:contract</strong>s are functionality or extra content 
-      that a theme can use to display the request. Sometimes a contract 
-      delivers <strong>format-specific markup</strong>, other times it delivers 
-      a <strong>format-independent string</strong>. We decide different kind of 
-      contracts, static one (like described in the contract howto), semi static 
-      (which offer configuration parameter in the structurer) and dynamic 
-      contracts (which offer semi-static configuration and/or requesting the 
-      content).  </p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content"> The structurer is as well a configuration file for the dispatcher. 
-        The new think on the dispatcher is that one can include any content 
-        from any given business service by dispatching a request against it. In 
-        "old fashion" skins and in v1 contracts we assumed a given data model. 
-        In the dispatcher there is <strong>no</strong> given data model any 
-        more. All data has to be defined in the structurer that they can be 
-        dispatched. </div>
-</div>
 <a name="emptystructurer" title="Empty structurer file"> </a>
 <h3 class="underlined_5">Empty structurer file</h3>
 <pre class="code">&lt;forrest:views 
@@ -321,19 +262,17 @@ p.quote {
 <div class="label">Warning</div>
 <div class="content"> The structurer is based on jx templates to allow simple 
         presentation logic (all code starting with "jx:"). Please refer to the 
-        cocoon documentation about jx. For now we are using jx to 
-        include the raw data into the presentation model and generating an 
-        alias-xsl stylesheet. That is heavy on performance and we will change 
-        this ASAP. Mind the warning at the start of the howto. </div>
+        cocoon documentation about jx. </div>
 </div>
 <p> In this section we will create a new structurer. We will override the 
-        default structurer of the themer-plugin for the index page of the new seed. For that we will create a 
-        file called <span class="codefrag">index.fv</span> and save it in our xdocs directory. 
-        This will make <strong>only</strong> the index.html page look different 
-        from the rest of the project. </p>
+        default structurer of the core themes for the index page of a new seed. 
+        For that we will create a file called <span class="codefrag">index.fv</span> and save it 
+        in the directory <span class="codefrag">{project:resources}/structurer/url</span> 
+        (create it if needed). This will make <strong>only</strong> the 
+        index.html page look different from the rest of the project. </p>
 <div class="note">
-<div class="label">Note</div>
-<div class="content">You can set a view for an individual file, a directory, or the whole site. To address multiple files in a directory call your  <span class="codefrag">.fv</span> file <span class="codefrag">common.fv</span>. If Forrest doesn't find a <span class="codefrag">.fv</span> file with the same name as the current file it will use the common.fv file in that directory, or the first one it finds going upwards through the directory structure. 
+<div class="label">RecursiveDirectoryTraversalAction</div>
+<div class="content"> You can set a view for an individual file, a directory, or the whole site. To address multiple files in a directory call your  <span class="codefrag">.fv</span> file <span class="codefrag">common.fv</span>. If Forrest doesn't find a <span class="codefrag">.fv</span> file with the same name as the current file it will use the common.fv file in that directory, or the first one it finds going upwards through the directory structure. 
 	<span class="codefrag">common.fv</span> files affect all subdirectories unless they are overidden by another <span class="codefrag">common.fv</span> or a file-specific <span class="codefrag">foo.fv</span> file. 
 	</div>
 </div>
