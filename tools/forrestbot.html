@@ -171,6 +171,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Workstages">Workstages</a>
 <ul class="minitoc">
 <li>
+<a href="#checksums">Deploying only modified files</a>
+</li>
+<li>
 <a href="#Correct+Use+of+getsrc.local">Correct Use of getsrc.local</a>
 </li>
 </ul>
@@ -443,7 +446,19 @@ document.write("Last Published: " + document.lastModified);
         'deploy' during the development of your website, and only at the end
         do an actual 'deploy', so you might want to choose 'build' as your
         default target.</p>
-<a name="N100ED"></a><a name="Correct+Use+of+getsrc.local"></a>
+<a name="N100ED"></a><a name="checksums"></a>
+<h4>Deploying only modified files</h4>
+<p>Use the <a href="../docs_0_80/faq.html#checksums">checkums</a> feature of the Cocoon CLI.
+            This enables Forrest to keep track of which generated files have actually
+            been changed. The Ant tasks used by Forrestbot will then deploy only the
+            modified files. Ant keeps a <span class="codefrag">cache.properties</span> file.
+            If you need to deploy all files then remove this file and let it
+            be re-generated.
+          </p>
+<p>Note that the deplo.svn and deploy.cvs workstages handle modified files
+            with their own mechanism.
+          </p>
+<a name="N10101"></a><a name="Correct+Use+of+getsrc.local"></a>
 <h4>Correct Use of getsrc.local</h4>
 <p>There is a wrinkle when using the 'getsrc.local' implementation
           of the 'getsrc' workstage. If you define your own 'getsrc.local'
@@ -460,7 +475,7 @@ document.write("Last Published: " + document.lastModified);
           'getsrc.get' target. This latter approach is safer since it is more
           likely to be forward-compatible with future versions of
           Forrestbot.</p>
-<a name="N10109"></a><a name="Workstage+Properties"></a>
+<a name="N1011D"></a><a name="Workstage+Properties"></a>
 <h3 class="underlined_5">Workstage Properties</h3>
 <p>Each workstage implementation is configurable with properties. The
         following tables describe each property and whether or not you are
@@ -472,7 +487,7 @@ document.write("Last Published: " + document.lastModified);
         just sets those properties (don't include it in CVS/SVN). Then, at the
         top of your project buildfile, have <span class="codefrag">&lt;property
         file="auth.properties"/&gt;</span>.</p>
-<a name="N1011B"></a><a name="Misc.+Properties"></a>
+<a name="N1012F"></a><a name="Misc.+Properties"></a>
 <h4>Misc. Properties</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -503,12 +518,12 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10152"></a><a name="getsrc.clean-workdir"></a>
+<a name="N10166"></a><a name="getsrc.clean-workdir"></a>
 <h4>getsrc.clean-workdir</h4>
 <p>This should be executed before a getsrc implementation is
           executed, e.g., <span class="codefrag">&lt;target name="getsrc"
           depends="getsrc.clean-workdir, getsrc.svn"/&gt;</span>.</p>
-<a name="N1015F"></a><a name="getsrc.local"></a>
+<a name="N10173"></a><a name="getsrc.local"></a>
 <h4>getsrc.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -540,7 +555,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N1019C"></a><a name="getsrc.cvs"></a>
+<a name="N101B0"></a><a name="getsrc.cvs"></a>
 <h4>getsrc.cvs</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -636,7 +651,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10244"></a><a name="getsrc.svn"></a>
+<a name="N10258"></a><a name="getsrc.svn"></a>
 <h4>getsrc.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -680,7 +695,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10292"></a><a name="build.forrest"></a>
+<a name="N102A6"></a><a name="build.forrest"></a>
 <h4>build.forrest</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -723,7 +738,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N102E1"></a><a name="deploy.local"></a>
+<a name="N102F5"></a><a name="deploy.local"></a>
 <h4>deploy.local</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -756,7 +771,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10319"></a><a name="deploy.scp"></a>
+<a name="N1032D"></a><a name="deploy.scp"></a>
 <h4>deploy.scp</h4>
 <p>The <span class="codefrag">${user.home}/.ssh/known_hosts</span> must properly
           recognize the host, so you should manually make an ssh connection to
@@ -842,7 +857,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N103A4"></a><a name="deploy.cvs"></a>
+<a name="N103B8"></a><a name="deploy.cvs"></a>
 <h4>deploy.cvs</h4>
 <p>This is only available on *nix operating systems.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -939,7 +954,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10450"></a><a name="deploy.svn"></a>
+<a name="N10464"></a><a name="deploy.svn"></a>
 <h4>deploy.svn</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1009,7 +1024,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N104CA"></a><a name="deploy.ftp"></a>
+<a name="N104DE"></a><a name="deploy.ftp"></a>
 <h4>deploy.ftp</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1079,7 +1094,7 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N10547"></a><a name="notify"></a>
+<a name="N1055B"></a><a name="notify"></a>
 <h4>notify</h4>
 <p>These settings are used by all notify implementations.</p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
@@ -1177,10 +1192,10 @@ document.write("Last Published: " + document.lastModified);
 </tr>
           
 </table>
-<a name="N105F1"></a><a name="notify.local"></a>
+<a name="N10605"></a><a name="notify.local"></a>
 <h4>notify.local</h4>
 <p>No properties.</p>
-<a name="N105FB"></a><a name="notify.email"></a>
+<a name="N1060F"></a><a name="notify.email"></a>
 <h4>notify.email</h4>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
             
@@ -1239,7 +1254,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N10663"></a><a name="Forrestbot+Design"></a>
+<a name="N10677"></a><a name="Forrestbot+Design"></a>
 <h2 class="underlined_10">Forrestbot Design</h2>
 <div class="section">
 <p>Forrest and Forrestbot use Ant buildfiles extensively. Ant 1.6's
