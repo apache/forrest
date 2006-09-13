@@ -265,6 +265,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#svn-find-break">Updating svn backwards to find where something broke</a>
 </li>
 <li>
+<a href="#svn-merge">Reverting Changes using SVN Merge</a>
+</li>
+<li>
 <a href="#svn-patch">Creating patches</a>
 </li>
 <li>
@@ -573,7 +576,20 @@ svn update -r 407260
 After finding the break, move back to head of trunk
 svn update -r HEAD.
         </pre>
-<a name="N100B4"></a><a name="svn-patch"></a>
+<a name="N100B4"></a><a name="svn-merge"></a>
+<h4>Reverting Changes using SVN Merge</h4>
+<p>Two examples of using SVN Merge.</p>
+<pre class="code">
+$ svn merge -r 400:300 /site-author/content/xdocs/index.xml /site-author/content/xdocs/index.xml
+
+or
+
+$ svn merge -r 303:302
+
+... then commit as usual.
+          </pre>
+<p> More information can be found at <a href="http://svnbook.red-bean.com/en/1.0/ch04s04.html#svn-ch-4-sect-4.2">Common use-cases for merging</a> section of the Red Bean SVN Book.</p>
+<a name="N100C9"></a><a name="svn-patch"></a>
 <h4>Creating patches</h4>
 <p>See 
         <a href="contrib.html#patch">instructions</a> for creating and contributing patches.
@@ -589,7 +605,7 @@ svn update -r HEAD.
 </ul>
 <p>After creating the patch, open it with a text editor and review it.
         </p>
-<a name="N100D1"></a><a name="tips-svn"></a>
+<a name="N100E6"></a><a name="tips-svn"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -618,7 +634,7 @@ svn update -r HEAD.
           </li>
         
 </ul>
-<a name="N100F4"></a><a name="edit"></a>
+<a name="N10109"></a><a name="edit"></a>
 <h3 class="underlined_5">Editing content</h3>
 <p>
         See the 
@@ -627,7 +643,7 @@ svn update -r HEAD.
         be used, because Forrest treats the editing of content as a separate
         concern. Be sure to configure the editor to find local copies of DTDs.
       </p>
-<a name="N10101"></a><a name="code-style"></a>
+<a name="N10116"></a><a name="code-style"></a>
 <h4>Code style guidelines</h4>
 <p>
           Consistent code makes everyone's life easier.
@@ -641,7 +657,7 @@ svn update -r HEAD.
           Don't change anything that is not necessary. Remember that people need to be
           able to read the differences on the svn@forrest mailing list.
         </p>
-<a name="N10112"></a><a name="whitespace"></a>
+<a name="N10127"></a><a name="whitespace"></a>
 <h4>Whitespace</h4>
 <p>
           For new files, use spaces instead of tabs (java files have four-space indentation,
@@ -668,7 +684,7 @@ svn update -r HEAD.
           references.
         </div>
 </div>
-<a name="N1012A"></a><a name="line-length"></a>
+<a name="N1013F"></a><a name="line-length"></a>
 <h4>Line length</h4>
 <p>
           If each paragraph of an xml source document is one enourmous long
@@ -677,7 +693,7 @@ svn update -r HEAD.
           efficiently review the changes. Fold long lines to a sensible
           line-length (normally 80-characters wide but not more than 120 characters).
         </p>
-<a name="N10134"></a><a name="review"></a>
+<a name="N10149"></a><a name="review"></a>
 <h4>Use 'forrest run' for immediate gratification</h4>
 <p>
           Edit documentation content and immediately view it in the browser.
@@ -692,7 +708,7 @@ svn update -r HEAD.
           tools such as "xmllint". As a last resort, you can use
           'forrest validate-xdocs'.
         </p>
-<a name="N10141"></a><a name="tips-edit"></a>
+<a name="N10156"></a><a name="tips-edit"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -701,7 +717,7 @@ svn update -r HEAD.
           </li>
         
 </ul>
-<a name="N1014F"></a><a name="sitemap"></a>
+<a name="N10164"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Understanding the Cocoon sitemap</h3>
 <p>
         The Cocoon sitemap is essential for Forrest developers. See some introductions ....
@@ -731,9 +747,9 @@ svn update -r HEAD.
 </li>
       
 </ul>
-<a name="N10186"></a><a name="debug"></a>
+<a name="N1019B"></a><a name="debug"></a>
 <h3 class="underlined_5">Debugging and profiling techniques</h3>
-<a name="N1018C"></a><a name="debug-logfiles"></a>
+<a name="N101A1"></a><a name="debug-logfiles"></a>
 <h4>View logfiles</h4>
 <p>
           The log files in WEB-INF/logs are indispensible when it comes
@@ -746,7 +762,7 @@ svn update -r HEAD.
           describes the location of the Cocoon logfiles and their
           configuration.
         </p>
-<a name="N1019D"></a><a name="debug-intermediate"></a>
+<a name="N101B2"></a><a name="debug-intermediate"></a>
 <h4>View intermediate processing</h4>
 <p>
           Perhaps the easiest way to "debug" Forrest is to be aware of all the
@@ -758,7 +774,7 @@ svn update -r HEAD.
 <p>
           The techniques described below help you to be aware of the intermediate processing steps.
         </p>
-<a name="N101AA"></a><a name="debug-cocoon-profiler"></a>
+<a name="N101BF"></a><a name="debug-cocoon-profiler"></a>
 <h4>Using Cocoon sitemap profiler</h4>
 <p>
           Cocoon provides a simple profiler to analyse itself.
@@ -789,7 +805,7 @@ svn update -r HEAD.
           NOTE: Do not forget to turn off the profiler in 
           <span class="codefrag">main/webapp/sitemap.xmap</span> when finished.
         </p>
-<a name="N101C6"></a><a name="debug-sitemap-exec"></a>
+<a name="N101DB"></a><a name="debug-sitemap-exec"></a>
 <h4>Using Cocoon sitemap execution logger</h4>
 <p>
           In main/webapp/WEB-INF/xconf/forrest-core.xconf
@@ -797,7 +813,7 @@ svn update -r HEAD.
           For each sitemap component that is executed, a message will go to
           WEB-INF/logs/debug.log
         </p>
-<a name="N101D0"></a><a name="debug-logtransformer"></a>
+<a name="N101E5"></a><a name="debug-logtransformer"></a>
 <h4>Using Cocoon LogTransformer</h4>
 <p>
           LogTransformers can be inserted in the sitemaps. This will write
@@ -827,7 +843,7 @@ svn update -r HEAD.
           path is being taken through the sitemap. Add various LogTransformers
           with different filenames and see which one gets triggered.
         </p>
-<a name="N101E7"></a><a name="debug-validation"></a>
+<a name="N101FC"></a><a name="debug-validation"></a>
 <h4>Using Cocoon Validation Transformers</h4>
 <p>
           Validating Transformers can be inserted in the sitemaps to validate
@@ -852,7 +868,7 @@ svn update -r HEAD.
           <a href="http://cocoon.zones.apache.org/daisy/documentation/components/1058/g2/684.html">ValidatingTransformer</a> and
           <a href="http://cocoon.zones.apache.org/daisy/documentation/components/1058/g2/691.html">ValidationReportTransformer</a>.
         </p>
-<a name="N10207"></a><a name="debug-java"></a>
+<a name="N1021C"></a><a name="debug-java"></a>
 <h4>Java code</h4>
 <p>There are two ways to debug your java code. The first is through embedded
         logging, the second is by tracing the codes execution.</p>
@@ -866,7 +882,7 @@ svn update -r HEAD.
         on. The <span class="codefrag">forrest.jvmargs</span>code&gt; property in the <span class="codefrag">forrest.properties</span>
         file can be used to start forrest in debug mode on a specific port. For example:</p>
 <pre class="code">forrest.jvmargs=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</pre>
-<a name="N10224"></a><a name="debug-links"></a>
+<a name="N10239"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set.
@@ -887,7 +903,7 @@ svn update -r HEAD.
           configuration file or the link in your source document is not
           using the correct name for the "site:..." value.
         </p>
-<a name="N10238"></a><a name="tips-debug"></a>
+<a name="N1024D"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -905,7 +921,7 @@ svn update -r HEAD.
         integrated operation with the IDE, please provide a documentation patch.
       </div>
 </div>
-<a name="N10248"></a><a name="profile-yourkit"></a>
+<a name="N1025D"></a><a name="profile-yourkit"></a>
 <h4>Profiling Forrest with YourKit</h4>
 <p>
           Assuming you have the YourKit software installed you simply need to do two things to
@@ -920,7 +936,7 @@ svn update -r HEAD.
           expected, check the current filters - YourKit seems to filter out org.apache.* namespaces by
           default.
         </p>
-<a name="N10259"></a><a name="profile-netbeans"></a>
+<a name="N1026E"></a><a name="profile-netbeans"></a>
 <h4>Profiling Forrest with Netbeans</h4>
 <p>
           Assuming you have the Netbeans IDE installed, you simply need to do a couple things to 
@@ -936,13 +952,13 @@ profilerinterface.dll=\C:\\*NetbeansHome*\\profiler1\\lib\\,5140</pre>
           project.  Click Profile-&gt;Attach Profiler and make selections appropriate to what you are trying 
           to achieve. 
         </p>
-<a name="N1026B"></a><a name="find"></a>
+<a name="N10280"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N10274"></a><a name="find-scenario-1"></a>
+<a name="N10289"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -985,7 +1001,7 @@ grep i18n *.*</pre>
           is declared to use i18n, then further down the page the "skinit"
           pipeline uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N10296"></a><a name="tips-find"></a>
+<a name="N102AB"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -995,31 +1011,31 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N102A6"></a><a name="Frequently Asked Questions"></a>
+<a name="N102BB"></a><a name="Frequently Asked Questions"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N102AA"></a><a name="1+General+issues"></a>
+<a name="N102BF"></a><a name="1+General+issues"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N102AE"></a><a name="1.1+FAQ+1"></a>
+<a name="N102C3"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
 ####
           </p>
-<a name="N102B6"></a><a name="2+Other+issues"></a>
+<a name="N102CB"></a><a name="2+Other+issues"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N102BA"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N102CF"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
 ###
           </p>
 </div>
-<a name="N102C2"></a><a name="Tips"></a>
+<a name="N102D7"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections above. 
     </p>
-<a name="N102CA"></a><a name="tip-howto"></a>
+<a name="N102DF"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -1028,7 +1044,7 @@ grep i18n *.*</pre>
         which links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N102D4"></a><a name="References"></a>
+<a name="N102E9"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
