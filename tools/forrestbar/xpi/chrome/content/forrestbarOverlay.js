@@ -88,6 +88,12 @@ function searchSite(searchID)
   navigate('http://www.google.com/search?sitesearch=forrest.apache.org&q=' + searchItem.value +'&Search=Search');
 }
 
+function searchSVN(searchID)
+{
+  var searchedRev = document.getElementById(searchID);
+  navigate('http://svn.apache.org/viewvc?view=rev&revision=' + searchedRev.value );
+}
+
 function contract(subUrl,searchID)
 {
   var searchItem = document.getElementById(searchID);
