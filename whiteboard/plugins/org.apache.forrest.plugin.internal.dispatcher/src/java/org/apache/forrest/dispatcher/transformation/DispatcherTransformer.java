@@ -209,6 +209,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     }
 
     // FIXME: turn on caching!!!
+    // doing some testing
     /**
      * Generate the unique key. This key must be unique inside the space of this
      * component.
@@ -263,16 +264,20 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Setup the file generator. Try to get the last modification date of the
      * source for caching.
      */
+    // FIXME: See http://cocoon.zones.apache.org/daisy/documentation/writing/690.html
+    // Writing Cache Efficient Components
+    // we have to do all the heavy stuff later and only prepare the basics here, this will
+    // help enhance caching. I mark them with *
     public void setup(SourceResolver resolver, Map objectModel, String src,
             Parameters par) throws ProcessingException, SAXException,
             IOException {
         super.setup(resolver, objectModel, src, par);
         localRecycle();
         try {
-            this.dispatcherHelper = new DispatcherHelper(manager);
-            this.processor = (XPathProcessor) this.manager
+            if (null==this.dispatcherHelper)this.dispatcherHelper = new DispatcherHelper(manager);
+            if (null==this.processor)this.processor = (XPathProcessor) this.manager
                     .lookup(XPathProcessor.ROLE);
-            m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+            if (null==m_resolver)  m_resolver= (SourceResolver) manager.lookup(SourceResolver.ROLE);
         } catch (Exception e) {
             String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
                     + e;
@@ -294,6 +299,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             getLogger().error(error);
             throw new ProcessingException(error);
         }
+        // * just store the $requestId and do the DOM-reading/storing later
         String propertyURI= "cocoon://"+requestId+".props";
         try {
             this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
@@ -333,6 +339,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                         + " For text output where you would not have to use hooks as structurer, the way you want it.";
                 getLogger().warn(warning);
             } else {
+                // * just store the $hooksXSL and do the DOM-reading/storing later
                 DOMSource stylesheet = new DOMSource(dispatcherHelper
                         .getDocument(this.hooksXSL));
                 this.structurerTransformer = dispatcherHelper
@@ -352,13 +359,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Cleanup the transformer
      */
     private void localRecycle() {
-        this.processor = null;
-        this.dispatcherHelper = null;
         this.contract = null;
         this.hooksXSL = null;
         this.structurerTransformer = null;
         this.insideProperties = false;
-        this.m_resolver = null;
     }
 
     public void startElement(String uri, String name, String raw,
