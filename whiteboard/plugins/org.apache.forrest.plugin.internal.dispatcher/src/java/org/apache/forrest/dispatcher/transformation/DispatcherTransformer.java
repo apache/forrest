@@ -19,6 +19,7 @@ package org.apache.forrest.dispatcher.transformation;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -183,7 +184,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private boolean insideStructurer = false;
 
-    private String hooksXSL;
+    private String hooksXSL,cacheKey,validityFile;
 
     private HashMap hooksPosition;
 
@@ -195,11 +196,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private Document defaultProperties;
 
+    private SourceValidity validity;
+
     public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
 
     public static final String PATH_PARAMETER = "path";
 
     static public final String DISPATCHER_REQUEST_ATTRIBUTE = "request";
+    public static final String CACHE_PARAMETER = "cacheKey";
+    public static final String VALIDITY_PARAMETER = "validityFile";
 
     /**
      * Constructor Set the namespace
@@ -208,8 +213,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         this.defaultNamespaceURI = DispatcherHelper.DISPATCHER_NAMESPACE_URI;
     }
 
-    // FIXME: turn on caching!!!
-    // doing some testing
     /**
      * Generate the unique key. This key must be unique inside the space of this
      * component.
@@ -217,10 +220,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * @return The generated key hashes the src
      */
     public Serializable getKey() {
-        return null;
+        return this.cacheKey;
     }
 
-    // FIXME: turn on caching!!!
     /**
      * Generate the validity object.
      * 
@@ -228,7 +230,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      *         component is currently not cacheable.
      */
     public SourceValidity getValidity() {
-        return null;
+        return this.validity;
     }
 
     /**
@@ -293,6 +295,20 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 DISPATCHER_ALLOW_MARKUP, null));
         this.requestId= parameters.getParameter(
                 DISPATCHER_REQUEST_ATTRIBUTE, null);
+        this.cacheKey = parameters.getParameter(
+                this.CACHE_PARAMETER, null);
+        if(null==this.cacheKey) getLogger().warn("Caching not activated! Declare the CACHE_KEY_PARAMETER="+CACHE_PARAMETER+" in your sitemap.");
+        this.validityFile = parameters.getParameter(
+                this.VALIDITY_PARAMETER, null);
+        // FIXME: We are taking here a shortcut that we need to enhance ASAP
+        // We assume that all contracts that a structurer may include
+        // have not changed, which may the wrong assumption.
+        // The workaround is to do a touch on the $validityFile
+        // to force a SourceValidity.INVALID
+        if(null!=validityFile)
+            this.validity=m_resolver.resolveURI(validityFile).getValidity();
+        else 
+            this.validity=null;
         if (requestId == null) {
             String error = "dispatcherError:\n"
                     + "You have to set the \"request\" parameter in the sitemap!";

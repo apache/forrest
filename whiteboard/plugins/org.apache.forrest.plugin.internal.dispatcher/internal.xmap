@@ -84,6 +84,7 @@
     <map:actions>
       <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
     </map:actions>
+     <map:pipes default="caching"/>
   </map:components>
   <map:pipelines>
     <!--
@@ -144,6 +145,8 @@
           <map:parameter name="getRequestExtension" value="html" />
         </map:generate>
         <map:transform type="dispatcher">
+          <map:parameter name="cacheKey" value="{0}" />
+          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="html" />
           <map:parameter name="hooksTransformer" value="lm://hooks-to-html.xsl" 
@@ -164,6 +167,8 @@
           <map:parameter name="getRequestExtension" value="internal{2}" />
         </map:generate>
         <map:transform type="dispatcher">
+          <map:parameter name="cacheKey" value="{0}" />
+          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="internal{2}" />
         </map:transform>
@@ -176,6 +181,8 @@
           <map:parameter name="getRequestExtension" value="css" />
         </map:generate>
         <map:transform type="dispatcher">
+          <map:parameter name="cacheKey" value="{0}" />
+          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="css" />
         </map:transform>
@@ -197,6 +204,8 @@
           <map:parameter name="getRequestExtension" value="xhtml2" />
         </map:generate>
         <map:transform type="dispatcher">
+          <map:parameter name="cacheKey" value="{0}" />
+          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="xhtml2" />
         </map:transform>
