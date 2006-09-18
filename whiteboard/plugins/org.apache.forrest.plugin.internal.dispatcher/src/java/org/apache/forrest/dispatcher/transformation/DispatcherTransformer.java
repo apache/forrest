@@ -19,7 +19,6 @@ package org.apache.forrest.dispatcher.transformation;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,6 +45,7 @@ import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.AggregatedValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
 import org.apache.forrest.dispatcher.ContractBeanDOMImpl;
@@ -196,7 +196,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private Document defaultProperties;
 
-    private SourceValidity validity;
+    private AggregatedValidity validity;
+
+    private String validityOverride;
 
     public static final String HOOKS_TRANSFORMER_PARAMETER = "hooksTransformer";
 
@@ -205,6 +207,13 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     static public final String DISPATCHER_REQUEST_ATTRIBUTE = "request";
     public static final String CACHE_PARAMETER = "cacheKey";
     public static final String VALIDITY_PARAMETER = "validityFile";
+
+    private static final String VALIDITY_OVERRIDE_PARAMETER = "dispatcher.caching";
+    
+    private static final String CACHING_OFF = "off";
+    
+    private static final String CACHING_ON = "on";
+    
 
     /**
      * Constructor Set the namespace
@@ -230,6 +239,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      *         component is currently not cacheable.
      */
     public SourceValidity getValidity() {
+//      You can either request URL?dispatcher.caching=off
+        // or add this property to forrest.properties.xml
+        // to force a SourceValidity.INVALID
+        if(null!=validityFile&!(validityOverride.equals(CACHING_OFF))){
+            this.validity= new AggregatedValidity();
+            try {
+                this.validity.add(m_resolver.resolveURI(validityFile).getValidity());
+            } catch (Exception e) {
+                getLogger().error(e.getMessage());
+            }
+        }
+        else 
+            this.validity=null;
         return this.validity;
     }
 
@@ -258,6 +280,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      */
     public void recycle() {
         localRecycle();
+        this.validity = null;
         super.recycle();
 
     }
@@ -296,19 +319,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         this.requestId= parameters.getParameter(
                 DISPATCHER_REQUEST_ATTRIBUTE, null);
         this.cacheKey = parameters.getParameter(
-                this.CACHE_PARAMETER, null);
+                CACHE_PARAMETER, null);
         if(null==this.cacheKey) getLogger().warn("Caching not activated! Declare the CACHE_KEY_PARAMETER="+CACHE_PARAMETER+" in your sitemap.");
         this.validityFile = parameters.getParameter(
-                this.VALIDITY_PARAMETER, null);
-        // FIXME: We are taking here a shortcut that we need to enhance ASAP
-        // We assume that all contracts that a structurer may include
-        // have not changed, which may the wrong assumption.
-        // The workaround is to do a touch on the $validityFile
-        // to force a SourceValidity.INVALID
-        if(null!=validityFile)
-            this.validity=m_resolver.resolveURI(validityFile).getValidity();
-        else 
-            this.validity=null;
+                VALIDITY_PARAMETER, null);
+        this.validityOverride = parameters.getParameter(
+                VALIDITY_OVERRIDE_PARAMETER, "");
+        this.cacheKey+=validityOverride;
+        
         if (requestId == null) {
             String error = "dispatcherError:\n"
                     + "You have to set the \"request\" parameter in the sitemap!";
@@ -336,16 +354,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throw new ProcessingException(error);
         }
         parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE, requestedFormat);
-        /*
-         * this.pathXSL = parameters.getParameter(PATH_PARAMETER,null); if
-         * (this.pathXSL==null){ String warning = "dispatcherError:\n" + "You
-         * did not set up the \"path\" parameter in the sitemap, we are not
-         * going to support default variables in contracts." + " Meaning that
-         * you are not able to use e.g. $skin-img-dir, if you do the contract
-         * bean implementation will throw an exception.";
-         * getLogger().warn(warning); }
-         * parameterHelper.put(PATH_PARAMETER,pathXSL);
-         */
+
         this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER,
                 null);
         try {
@@ -673,6 +682,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 String contractUri = ContractBean.CONTRACT_RESOLVE_PREFIX + "."
                         + currentFormat + "." + value;
                 try {
+                    // Adding the contract to the validity object.
+                    // As soon the contract changes we want a rebuild of 
+                    // the page and not the cached object.
+                    if(!validityOverride.equals(CACHING_OFF)) {
+                        SourceValidity contractValidityId = m_resolver.resolveURI(contractUri).getValidity();
+//                      we cannot allow null in an AggregatedValidity
+                        if (null!=contractValidityId)
+                            this.validity.add(contractValidityId);
+                    }
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
                             .readDOM(contractUri, this.manager);
                     contract.setContractImpl(doc, contractUri);
@@ -699,6 +717,15 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 // contract is a nugget-contract
                 contract.setNugget(true);
                 try {
+                    // Adding the raw data to the validity object.
+                    // As soon the raw data changes we want a rebuild of 
+                    // the page and not the cached object.
+                    if(!validityOverride.equals(CACHING_OFF)) {
+                        SourceValidity contractValidityRaw = m_resolver.resolveURI(value).getValidity();
+                        // we cannot allow null in an AggregatedValidity
+                        if(null!=contractValidityRaw)
+                            this.validity.add(contractValidityRaw);
+                    }
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
                             .readDOM(value, this.manager);
                     contract.setContractRawData(doc);
