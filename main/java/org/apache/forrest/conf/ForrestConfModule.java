@@ -105,8 +105,11 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         Object[] attributeValues = super.getAttributeValues(name, modeConf,
                 objectModel);
         for (int i = 0; i < attributeValues.length; i++) {
-            attributeValues[i] = filteringProperties.filter(attributeValues[i]
+            if (null!=attributeValues[i])
+                attributeValues[i] = filteringProperties.filter(attributeValues[i]
                     .toString());
+            else
+                attributeValues[i] = filteringProperties.filter(filteringProperties.getProperty(name));
         }
 
         return attributeValues;
