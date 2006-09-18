@@ -62,16 +62,16 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
     private SourceResolver m_resolver;
 
-    public Object getAttribute(String name, Configuration modeConf, Map objectModel)
-            throws ConfigurationException {
+    public Object getAttribute(String name, Configuration modeConf,
+            Map objectModel) throws ConfigurationException {
         String original;
         String attributeValue;
 
         try {
             original = super.getAttributeValues(name, modeConf, objectModel)[0]
                     .toString();
-            attributeValue = this.getAttributeValues(name, modeConf, objectModel)[0]
-                    .toString();
+            attributeValue = this.getAttributeValues(name, modeConf,
+                    objectModel)[0].toString();
         } catch (NullPointerException npe) {
             original = "(not defined in forrest.xconf)";
             attributeValue = filteringProperties.getProperty(name);
@@ -105,11 +105,12 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         Object[] attributeValues = super.getAttributeValues(name, modeConf,
                 objectModel);
         for (int i = 0; i < attributeValues.length; i++) {
-            if (null!=attributeValues[i])
-                attributeValues[i] = filteringProperties.filter(attributeValues[i]
-                    .toString());
+            if (null != attributeValues[i])
+                attributeValues[i] = filteringProperties
+                        .filter(attributeValues[i].toString());
             else
-                attributeValues[i] = filteringProperties.filter(filteringProperties.getProperty(name));
+                attributeValues[i] = filteringProperties
+                        .filter(filteringProperties.getProperty(name));
         }
 
         return attributeValues;
@@ -143,24 +144,25 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
 
         try {
             // get the values from local.forrest.properties.xml
-            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
+            forrestPropertiesStringURI = projectHome
+                    + SystemUtils.FILE_SEPARATOR
                     + "local.forrest.properties.xml";
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
 
             // get the values from project forrest.properties.xml
-            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
-                    + "forrest.properties.xml";
+            forrestPropertiesStringURI = projectHome
+                    + SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
 
             // get the values from user forrest.properties.xml
             String userHome = filteringProperties.getProperty("user.home");
             if (userHome != null) {
-                forrestPropertiesStringURI = userHome + SystemUtils.FILE_SEPARATOR
-                        + "forrest.properties.xml";
-                filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
-                        forrestPropertiesStringURI);
+                forrestPropertiesStringURI = userHome
+                        + SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
+                filteringProperties = loadXMLPropertiesFromURI(
+                        filteringProperties, forrestPropertiesStringURI);
             }
 
             // get the values from global forrest.properties.xml
@@ -168,12 +170,13 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             if (globalHome != null) {
                 forrestPropertiesStringURI = globalHome
                         + SystemUtils.FILE_SEPARATOR + "forrest.properties.xml";
-                filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
-                        forrestPropertiesStringURI);
+                filteringProperties = loadXMLPropertiesFromURI(
+                        filteringProperties, forrestPropertiesStringURI);
             }
 
             // get the values from default.forrest.properties.xml
-            forrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
+            forrestPropertiesStringURI = contextHome
+                    + SystemUtils.FILE_SEPARATOR
                     + "default.forrest.properties.xml";
             filteringProperties = loadXMLPropertiesFromURI(filteringProperties,
                     forrestPropertiesStringURI);
@@ -184,8 +187,8 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             if (strPluginList != null) {
                 StringTokenizer st = new StringTokenizer(strPluginList, ",");
                 while (st.hasMoreTokens()) {
-                    forrestPropertiesStringURI = ForrestConfUtils.getPluginDir(st
-                            .nextToken().trim());
+                    forrestPropertiesStringURI = ForrestConfUtils
+                            .getPluginDir(st.nextToken().trim());
                     forrestPropertiesStringURI = forrestPropertiesStringURI
                             + SystemUtils.FILE_SEPARATOR
                             + "default.plugin.properties.xml";
@@ -225,7 +228,8 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         for (Enumeration e = System.getProperties().propertyNames(); e
                 .hasMoreElements();) {
             String propName = (String) e.nextElement();
-            if (propName.startsWith("forrest.") || propName.startsWith("project.")
+            if (propName.startsWith("forrest.")
+                    || propName.startsWith("project.")
                     || propName.endsWith(".home")) {
                 String systemPropValue = System.getProperty(propName);
                 if (systemPropValue != null) {
@@ -255,7 +259,8 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         try {
             source = m_resolver.resolveURI(propertiesStringURI);
             if (debugging())
-                debug("Searching for forrest.properties.xml in " + source.getURI());
+                debug("Searching for forrest.properties.xml in "
+                        + source.getURI());
             if (source.exists()) {
 
                 DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -267,8 +272,9 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                 if (nl != null && nl.getLength() > 0) {
                     for (int i = 0; i < nl.getLength(); i++) {
                         Element el = (Element) nl.item(i);
-                        filteringProperties.setProperty(el.getAttribute("name"), el
-                                .getAttribute("value"));
+                        filteringProperties.setProperty(
+                                el.getAttribute("name"), el
+                                        .getAttribute("value"));
                     }
                 }
 
