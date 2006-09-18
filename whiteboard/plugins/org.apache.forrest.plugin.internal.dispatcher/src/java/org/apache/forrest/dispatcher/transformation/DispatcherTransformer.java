@@ -72,7 +72,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * format for the request.
      * 
      * <pre>
-     *        &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
+     *         &lt;&lt;strong&gt;forrest:view&lt;/strong&gt; format=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_ELEMENT = "view";
@@ -84,7 +84,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * <strong>format</strong>.
      * 
      * <pre>
-     *        &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
+     *         &lt;forrest:view &lt;strong&gt;format&lt;/strong&gt;=&quot;html&quot;/&gt;
      * </pre>
      */
     public static final String STRUCTURER_FORMAT_ATTRIBUTE = "type";
@@ -101,7 +101,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * layout via e.g. css. In html for example
      * 
      * <pre>
-     *        &lt;forrest:hook name=&quot;test&quot;/&gt;
+     *         &lt;forrest:hook name=&quot;test&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -109,7 +109,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *        &lt;div id=&quot;test&quot;/&gt;
+     *         &lt;div id=&quot;test&quot;/&gt;
      * </pre>
      */
     public static final String DISPATCHER_HOOK_ELEMENT = "hook";
@@ -119,7 +119,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * css. In html for example
      * 
      * <pre>
-     *        &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
+     *         &lt;forrest:css url=&quot;pelt.basic.css&quot; media=&quot;screen&quot; theme=&quot;Pelt&quot;/&gt;
      * </pre>
      * 
      * <p>
@@ -127,7 +127,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * </p>
      * 
      * <pre>
-     *        &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+     *         &lt;link media=&quot;screen&quot; href=&quot;../themes/pelt.basic.css&quot; title=&quot;Pelt&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
      * </pre>
      */
     public static final String DISPATCHER_CSS_ELEMENT = "css";
@@ -184,7 +184,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     private boolean insideStructurer = false;
 
-    private String hooksXSL,cacheKey,validityFile;
+    private String hooksXSL, cacheKey, validityFile;
 
     private HashMap hooksPosition;
 
@@ -205,15 +205,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     public static final String PATH_PARAMETER = "path";
 
     static public final String DISPATCHER_REQUEST_ATTRIBUTE = "request";
+
     public static final String CACHE_PARAMETER = "cacheKey";
+
     public static final String VALIDITY_PARAMETER = "validityFile";
 
     private static final String VALIDITY_OVERRIDE_PARAMETER = "dispatcher.caching";
-    
+
     private static final String CACHING_OFF = "off";
-    
+
     private static final String CACHING_ON = "on";
-    
 
     /**
      * Constructor Set the namespace
@@ -239,19 +240,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      *         component is currently not cacheable.
      */
     public SourceValidity getValidity() {
-//      You can either request URL?dispatcher.caching=off
+        // You can either request URL?dispatcher.caching=off
         // or add this property to forrest.properties.xml
         // to force a SourceValidity.INVALID
-        if(null!=validityFile&!(validityOverride.equals(CACHING_OFF))){
-            this.validity= new AggregatedValidity();
+        if (null != validityFile & !(validityOverride.equals(CACHING_OFF))) {
+            this.validity = new AggregatedValidity();
             try {
-                this.validity.add(m_resolver.resolveURI(validityFile).getValidity());
+                this.validity.add(m_resolver.resolveURI(validityFile)
+                        .getValidity());
             } catch (Exception e) {
                 getLogger().error(e.getMessage());
             }
-        }
-        else 
-            this.validity=null;
+        } else
+            this.validity = null;
         return this.validity;
     }
 
@@ -289,9 +290,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * Setup the file generator. Try to get the last modification date of the
      * source for caching.
      */
-    // FIXME: See http://cocoon.zones.apache.org/daisy/documentation/writing/690.html
+    // FIXME: See
+    // http://cocoon.zones.apache.org/daisy/documentation/writing/690.html
     // Writing Cache Efficient Components
-    // we have to do all the heavy stuff later and only prepare the basics here, this will
+    // we have to do all the heavy stuff later and only prepare the basics here,
+    // this will
     // help enhance caching. I mark them with *
     public void setup(SourceResolver resolver, Map objectModel, String src,
             Parameters par) throws ProcessingException, SAXException,
@@ -299,10 +302,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         super.setup(resolver, objectModel, src, par);
         localRecycle();
         try {
-            if (null==this.dispatcherHelper)this.dispatcherHelper = new DispatcherHelper(manager);
-            if (null==this.processor)this.processor = (XPathProcessor) this.manager
-                    .lookup(XPathProcessor.ROLE);
-            if (null==m_resolver)  m_resolver= (SourceResolver) manager.lookup(SourceResolver.ROLE);
+            if (null == this.dispatcherHelper)
+                this.dispatcherHelper = new DispatcherHelper(manager);
+            if (null == this.processor)
+                this.processor = (XPathProcessor) this.manager
+                        .lookup(XPathProcessor.ROLE);
+            if (null == m_resolver)
+                m_resolver = (SourceResolver) manager
+                        .lookup(SourceResolver.ROLE);
         } catch (Exception e) {
             String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
                     + e;
@@ -316,17 +323,18 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
         this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
                 DISPATCHER_ALLOW_MARKUP, null));
-        this.requestId= parameters.getParameter(
-                DISPATCHER_REQUEST_ATTRIBUTE, null);
-        this.cacheKey = parameters.getParameter(
-                CACHE_PARAMETER, null);
-        if(null==this.cacheKey) getLogger().warn("Caching not activated! Declare the CACHE_KEY_PARAMETER="+CACHE_PARAMETER+" in your sitemap.");
-        this.validityFile = parameters.getParameter(
-                VALIDITY_PARAMETER, null);
+        this.requestId = parameters.getParameter(DISPATCHER_REQUEST_ATTRIBUTE,
+                null);
+        this.cacheKey = parameters.getParameter(CACHE_PARAMETER, null);
+        if (null == this.cacheKey)
+            getLogger().warn(
+                    "Caching not activated! Declare the CACHE_KEY_PARAMETER="
+                            + CACHE_PARAMETER + " in your sitemap.");
+        this.validityFile = parameters.getParameter(VALIDITY_PARAMETER, null);
         this.validityOverride = parameters.getParameter(
                 VALIDITY_OVERRIDE_PARAMETER, "");
-        this.cacheKey+=validityOverride;
-        
+        this.cacheKey += validityOverride;
+
         if (requestId == null) {
             String error = "dispatcherError:\n"
                     + "You have to set the \"request\" parameter in the sitemap!";
@@ -334,15 +342,16 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             throw new ProcessingException(error);
         }
         // * just store the $requestId and do the DOM-reading/storing later
-        String propertyURI= "cocoon://"+requestId+".props";
+        String propertyURI = "cocoon://" + requestId + ".props";
         try {
             this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
-            .readDOM(propertyURI, this.manager);
+                    .readDOM(propertyURI, this.manager);
         } catch (Exception e1) {
             String error = "dispatcherError:\n"
-                + "Could not get the properties for "+propertyURI +"\n DispatcherStack: "+ e1;
-        getLogger().error(error);
-        throw new ProcessingException(error);
+                    + "Could not get the properties for " + propertyURI
+                    + "\n DispatcherStack: " + e1;
+            getLogger().error(error);
+            throw new ProcessingException(error);
         }
         parameterHelper.put(DISPATCHER_REQUEST_ATTRIBUTE, requestId);
         this.requestedFormat = parameters.getParameter(
@@ -364,7 +373,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                         + " For text output where you would not have to use hooks as structurer, the way you want it.";
                 getLogger().warn(warning);
             } else {
-                // * just store the $hooksXSL and do the DOM-reading/storing later
+                // * just store the $hooksXSL and do the DOM-reading/storing
+                // later
                 DOMSource stylesheet = new DOMSource(dispatcherHelper
                         .getDocument(this.hooksXSL));
                 this.structurerTransformer = dispatcherHelper
@@ -450,17 +460,17 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         Element currentElement = dispatcher.getDocument().createElement(name);
         dispatcherHelper.setAttributesDOM(attr, currentElement);
         String tempPathWithoutAttr = path + "/" + name;
-        String tempPath = dispatcherHelper.setAttributesXPath(attr, tempPathWithoutAttr);
-        // If the hook has already been met, we use the position in the XPath to avoid confusion ...
-        if( hooksPosition.containsKey( tempPath ) )
-        {
-          int pos = ((Integer)hooksPosition.get( tempPath )).intValue() + 1;
-          hooksPosition.put( tempPath, new Integer( pos ) );
-          tempPath = dispatcherHelper.setAttributesXPathWithPosition(attr, tempPathWithoutAttr, pos );
-        }
-        else
-        {
-          hooksPosition.put( tempPath, new Integer( 1 ) ) ;
+        String tempPath = dispatcherHelper.setAttributesXPath(attr,
+                tempPathWithoutAttr);
+        // If the hook has already been met, we use the position in the XPath to
+        // avoid confusion ...
+        if (hooksPosition.containsKey(tempPath)) {
+            int pos = ((Integer) hooksPosition.get(tempPath)).intValue() + 1;
+            hooksPosition.put(tempPath, new Integer(pos));
+            tempPath = dispatcherHelper.setAttributesXPathWithPosition(attr,
+                    tempPathWithoutAttr, pos);
+        } else {
+            hooksPosition.put(tempPath, new Integer(1));
         }
         if (path == null || path.equals("")) {
             path = name;
@@ -661,10 +671,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         try {
             if (contract == null)
                 contract = new ContractBeanDOMImpl(this.manager,
-                        parameterHelper,defaultProperties,(URIResolver)this);
+                        parameterHelper, defaultProperties, (URIResolver) this);
             // This is not needed since the manager did not change.
-            //else
-              //  contract.initialize();
+            // else
+            // contract.initialize();
         } catch (Exception e) {
             String error = DispatcherException.ERROR_500 + "\n"
                     + "component: ContractBean" + "\n"
@@ -683,12 +693,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                         + currentFormat + "." + value;
                 try {
                     // Adding the contract to the validity object.
-                    // As soon the contract changes we want a rebuild of 
+                    // As soon the contract changes we want a rebuild of
                     // the page and not the cached object.
-                    if(!validityOverride.equals(CACHING_OFF)&null!=this.validity) {
-                        SourceValidity contractValidityId = m_resolver.resolveURI(contractUri).getValidity();
-//                      we cannot allow null in an AggregatedValidity
-                        if (null!=contractValidityId)
+                    if (!validityOverride.equals(CACHING_OFF)
+                            & null != this.validity) {
+                        SourceValidity contractValidityId = m_resolver
+                                .resolveURI(contractUri).getValidity();
+                        // we cannot allow null in an AggregatedValidity
+                        if (null != contractValidityId)
                             this.validity.add(contractValidityId);
                     }
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
@@ -718,12 +730,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                 contract.setNugget(true);
                 try {
                     // Adding the raw data to the validity object.
-                    // As soon the raw data changes we want a rebuild of 
+                    // As soon the raw data changes we want a rebuild of
                     // the page and not the cached object.
-                    if(!validityOverride.equals(CACHING_OFF)&null!=this.validity) {
-                        SourceValidity contractValidityRaw = m_resolver.resolveURI(value).getValidity();
+                    if (!validityOverride.equals(CACHING_OFF)
+                            & null != this.validity) {
+                        SourceValidity contractValidityRaw = m_resolver
+                                .resolveURI(value).getValidity();
                         // we cannot allow null in an AggregatedValidity
-                        if(null!=contractValidityRaw)
+                        if (null != contractValidityRaw)
                             this.validity.add(contractValidityRaw);
                     }
                     Document doc = org.apache.forrest.dispatcher.util.SourceUtil
@@ -1054,20 +1068,20 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                                 + xslSource.getURI());
             }
 
-//            if (m_checkIncludes) {
-//                // Populate included validities
-//                List includes = (List) m_includesMap.get(base);
-//                if (includes != null) {
-//                    SourceValidity included = xslSource.getValidity();
-//                    if (included != null) {
-//                        includes.add(new Object[] { xslSource.getURI(),
-//                                xslSource.getValidity() });
-//                    } else {
-//                        // One of the included stylesheets is not cacheable
-//                        m_includesMap.remove(base);
-//                    }
-//                }
-//            }
+            // if (m_checkIncludes) {
+            // // Populate included validities
+            // List includes = (List) m_includesMap.get(base);
+            // if (includes != null) {
+            // SourceValidity included = xslSource.getValidity();
+            // if (included != null) {
+            // includes.add(new Object[] { xslSource.getURI(),
+            // xslSource.getValidity() });
+            // } else {
+            // // One of the included stylesheets is not cacheable
+            // m_includesMap.remove(base);
+            // }
+            // }
+            // }
 
             return new StreamSource(is.getByteStream(), is.getSystemId());
         } catch (SourceException e) {
@@ -1100,7 +1114,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             m_resolver.release(xslSource);
         }
     }
-    
+
     /**
      * Return a new <code>InputSource</code> object that uses the
      * <code>InputStream</code> and the system ID of the <code>Source</code>
@@ -1109,7 +1123,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * @throws IOException
      *             if I/O error occured.
      */
-    private static InputSource getInputSource(final Source source) throws IOException, SourceException {
+    private static InputSource getInputSource(final Source source)
+            throws IOException, SourceException {
         final InputSource newObject = new InputSource(source.getInputStream());
         newObject.setSystemId(source.getURI());
         return newObject;
