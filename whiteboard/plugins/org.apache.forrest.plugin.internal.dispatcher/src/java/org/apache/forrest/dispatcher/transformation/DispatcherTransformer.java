@@ -685,7 +685,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                     // Adding the contract to the validity object.
                     // As soon the contract changes we want a rebuild of 
                     // the page and not the cached object.
-                    if(!validityOverride.equals(CACHING_OFF)) {
+                    if(!validityOverride.equals(CACHING_OFF)&null!=this.validity) {
                         SourceValidity contractValidityId = m_resolver.resolveURI(contractUri).getValidity();
 //                      we cannot allow null in an AggregatedValidity
                         if (null!=contractValidityId)
@@ -720,7 +720,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                     // Adding the raw data to the validity object.
                     // As soon the raw data changes we want a rebuild of 
                     // the page and not the cached object.
-                    if(!validityOverride.equals(CACHING_OFF)) {
+                    if(!validityOverride.equals(CACHING_OFF)&null!=this.validity) {
                         SourceValidity contractValidityRaw = m_resolver.resolveURI(value).getValidity();
                         // we cannot allow null in an AggregatedValidity
                         if(null!=contractValidityRaw)
