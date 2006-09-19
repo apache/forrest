@@ -196,17 +196,17 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                             filteringProperties, forrestPropertiesStringURI);
                 }
             }
-//          get forrest.properties and load the values
-            forrestPropertiesStringURI = projectHome + SystemUtils.FILE_SEPARATOR
-                + "forrest.properties";        
+            // get forrest.properties and load the values
+            forrestPropertiesStringURI = projectHome
+                    + SystemUtils.FILE_SEPARATOR + "forrest.properties";
             filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                forrestPropertiesStringURI);
+                    forrestPropertiesStringURI);
 
-        // get default-forrest.properties and load the values
-        String defaultForrestPropertiesStringURI = contextHome + SystemUtils.FILE_SEPARATOR
-                + "default-forrest.properties";
-        filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                defaultForrestPropertiesStringURI);
+            // get default-forrest.properties and load the values
+            String defaultForrestPropertiesStringURI = contextHome
+                    + SystemUtils.FILE_SEPARATOR + "default-forrest.properties";
+            filteringProperties = loadAntPropertiesFromURI(filteringProperties,
+                    defaultForrestPropertiesStringURI);
         } finally {
             ForrestConfUtils.aliasSkinProperties(filteringProperties);
             if (debugging())
@@ -249,16 +249,16 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             }
         }
     }
-    
+
     /**
      * @param antPropertiesStringURI
      * @throws MalformedURLException
      * @throws IOException
      * @throws SourceNotFoundException
      */
-    private AntProperties loadAntPropertiesFromURI(AntProperties precedingProperties,
-            String antPropertiesStringURI) throws MalformedURLException, IOException,
-            SourceNotFoundException {
+    private AntProperties loadAntPropertiesFromURI(
+            AntProperties precedingProperties, String antPropertiesStringURI)
+            throws MalformedURLException, IOException, SourceNotFoundException {
 
         Source source = null;
         InputStream in = null;
@@ -266,13 +266,14 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
             source = m_resolver.resolveURI(antPropertiesStringURI);
             if (debugging())
                 debug("Searching for forrest.properties in" + source.getURI());
-            if (source.exists()){
+            if (source.exists()) {
                 in = source.getInputStream();
                 filteringProperties = new AntProperties(precedingProperties);
                 filteringProperties.load(in);
 
                 if (debugging())
-                    debug("Loaded:" + antPropertiesStringURI + filteringProperties.toString());
+                    debug("Loaded:" + antPropertiesStringURI
+                            + filteringProperties.toString());
             }
 
         } finally {
