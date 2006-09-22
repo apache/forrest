@@ -32,7 +32,7 @@ import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.cocoon.components.ContextHelper;
 import org.apache.cocoon.components.modules.input.InputModule;
-import org.apache.cocoon.environment.SourceResolver;
+import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceFactory;
