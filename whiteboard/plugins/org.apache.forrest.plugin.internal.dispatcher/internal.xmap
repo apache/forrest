@@ -92,6 +92,7 @@
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
     -->
     <map:pipeline>
+      <map:act type="locale" >
       <map:match pattern="resolve.structurer.**">
         <map:generate src="lm://resolve.structurer.{1}" />
         <map:serialize />
@@ -99,10 +100,11 @@
       <map:match pattern="resolve.contract.*.**">
         <map:generate src="{lm:resolve.contract.{1}.{2}}" />
         <map:transform type="i18n">
-          <map:parameter name="locale" value="{request:locale}" />
+          <map:parameter name="locale" value="{../locale}" />
         </map:transform>
         <map:serialize />
       </map:match>
+      </map:act>
     </map:pipeline>
 
     <!-- prepare the xsl:templates of the requested contract.
@@ -112,14 +114,16 @@
             <xsl:include href="cocoon://prepare.contract.html.NameOfTheContract"/>
       Warning - At the moment, the contracts do not manage formats anymore... -->
     <map:pipeline>
+      <map:act type="locale" >
       <map:match pattern="prepare.contract.*.**">
         <map:generate src="{lm:resolve.contract.{1}.{2}}" />
         <map:transform src="{lm:contract-strip-xsl.xsl}"/>
         <map:transform type="i18n">
-          <map:parameter name="locale" value="{request:locale}" />
+          <map:parameter name="locale" value="{../locale}" />
         </map:transform>
         <map:serialize />
       </map:match>
+      </map:act>
     </map:pipeline>
 
     <!-- You can group elements to a template and call it from any view. 
