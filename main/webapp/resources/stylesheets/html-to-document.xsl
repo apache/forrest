@@ -66,6 +66,8 @@
     <!--infer structure from sibling headings-->
     <xsl:template match="body">
        <body>
+       <!-- some paragraphs may be included before the first title... -->
+       <xsl:apply-templates select="*[1]" mode="next"/>
         <xsl:choose>
           <xsl:when test="h1">
             <xsl:call-template name="process_h1"/>
