@@ -22,7 +22,24 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:dc="http://purl.org/dc/elements/1.1/" >
   <xsl:import href="lm://transform.odt.xhtml"/>
-  <xsl:param name="filename" select="'odt file name'"/>
+  <xsl:param name="path" select="'odt path name'"/>
+  
+  <xsl:include href="lm://transform.xml.dotdots"/>
+  <xsl:include href="lm://transform.xml.pathutils"/>
+
+  <!-- Calculate dirname -->
+  <xsl:variable name="dirname">
+    <xsl:call-template name="dirname">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <!-- Calculate filename -->
+  <xsl:variable name="filename">
+    <xsl:call-template name="filename">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:template match="/">
     <xsl:apply-templates select="/odt/content/*"/>
   </xsl:template>
