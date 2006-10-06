@@ -30,7 +30,23 @@
   </components>
   
   <locator>  
+    <!-- A project can to supersede the standard transform.odt.xhtml file to add specific feature.
+         The customised style sheet should be in {properties:resources}stylesheets/xslt/odt/odt_to_xhtml.xsl
+         to include the standard in the new stylesheet, just import the standard stylesheet has follows :
+           <xsl:import href="lm://std-transform.odt.xhtml"/>
+    -->
     <match pattern="transform.odt.xhtml">
+      <select type="exists">
+        <location 
+          src="{properties:resources}stylesheets/xslt/odt/odt_to_xhtml.xsl" 
+        />
+        <location 
+          src="{lm:std-transform.odt.xhtml}" 
+        />
+      </select>
+    </match>
+
+    <match pattern="std-transform.odt.xhtml">
       <select>
         <location 
           src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.odt/resources/stylesheets/common/odt_to_xhtml.xsl" 
