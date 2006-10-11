@@ -32,7 +32,7 @@
     <xsl:template match="/">
     	<!--Create the final stylesheet (alias:)-->
         <alias:stylesheet version="1.0">
-            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site2xhtml.xsl"/> 
+            <alias:import href="file:{$forrestContext}/skins/common/xslt/html/site-to-xhtml.xsl"/> 
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/dotdots.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/pathutils.xsl"/>
             <alias:import href="file:{$forrestContext}/skins/common/xslt/html/renderlogo.xsl"/>
