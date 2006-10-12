@@ -160,7 +160,7 @@
        </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="source|blockquote">
+    <xsl:template match="blockquote">
       <xsl:choose>
     	<xsl:when test="name(..)='p'">
     	  <code>
