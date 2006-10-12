@@ -17,7 +17,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- FIXME: FOR-555. This might not be the best solution though, but it sure works -->
-  <xsl:template match="comment()">
+  <xsl:template match="comment()|processing-instruction()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>

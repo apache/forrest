@@ -44,7 +44,7 @@
           <forrest:part>
             <xsl:comment>+ |start content-main +</xsl:comment>
             <xsl:apply-templates
-              select="//div[@id='content']/div[@id='content-main']/*">
+              select="//div[@id='content']/div[@id='content-main']/*|//div[@id='content']/div[@id='content-main']/processing-instruction()">
               <xsl:with-param name="content-main-conf"
                       select="$content-main-conf"/>
             </xsl:apply-templates>
@@ -72,7 +72,7 @@
       <xsl:template match="div[@class = 'section']">
         <xsl:param name="content-main-conf"/>
         <div class="section">
-          <xsl:apply-templates select="*">
+          <xsl:apply-templates select="*|processing-instruction()">
             <xsl:with-param name="content-main-conf"
                   select="$content-main-conf"/>
           </xsl:apply-templates>
