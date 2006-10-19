@@ -136,6 +136,14 @@
 	<xsl:param name="text"/>
 	<xsl:param name="indStyle" select="count(../@*)"/>
 	<xsl:choose>
+		<!-- Case of the code style - generally rendered with Courier -->
+		<xsl:when test="name()='style:font-name' and starts-with(.,'Courier')">
+			<xsl:call-template name="layout-span">
+				<xsl:with-param name="text" select="$text"/>
+				<xsl:with-param name="indStyle" select="$indStyle"/>
+				<xsl:with-param name="tag" select="'code'"/>
+			</xsl:call-template>
+		</xsl:when>
 		<!-- Case of the emphasys style - generally rendered with Italic -->
 		<xsl:when test="name()='fo:font-style' and .='italic'">
 			<xsl:call-template name="layout-span">
