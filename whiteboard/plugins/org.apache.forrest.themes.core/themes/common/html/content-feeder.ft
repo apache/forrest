@@ -16,26 +16,24 @@
   limitations under the License.
 -->
 
-<forrest:contract name="content-feeder" type="nugget"
+<forrest:contract name="content-feeder"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
     content-feeder will output the html information retrieved by the feeder plugin (needs to be installed!). 
   </description>
-	<usage><![CDATA[<forrest:contract name="content-feeder">
-    <forrest:properties contract="content-feeder">
-      <forrest:property name="content-feeder" nugget="get.nugget.feeder">
-        <jx:import uri="/feeds/somefeed.xml"/>
-      </forrest:property>
-    </forrest:properties>
-</forrest:contract>]]></usage>
+	<usage><![CDATA[<forrest:contract name="content-feeder" dataUri="/feeds/somefeed.rss.xml"/>]]></usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="html" name="content-feeder" inputFormat="xsl" body="true" head="false">
+  name="content-feeder" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="content-feeder-body" >
-	      <xsl:param name="content-feeder"/>
-				<xsl:apply-templates select="$content-feeder/document"/>		    
+      <xsl:variable name="content-feeder" select="/"/>
+	    <xsl:template match="/" >
+        <forrest:content>
+          <forrest:part>
+            <xsl:apply-templates select="$content-feeder/document"/>
+          </forrest:part>
+        </forrest:content>
 			</xsl:template>
       
       <xsl:template match="document">
@@ -61,26 +59,6 @@
         <div class="{@class}">
           <xsl:apply-templates/>
         </div>
-        
-<!--
-        <xsl:variable name="parse">
-          <xsl:if test="$feedConfig/feed[@position]">
-            <xsl:value-of select="position()"/><xsl:value-of select="$feedConfig/feed/@position"/>
-					</xsl:if>
-          <div class="itemTitle"><xsl:value-of select="title" disable-output-escaping="yes"/></div>
-      		<div class="itemLink"><a href="{link}">...more</a></div>
-        </xsl:variable>
-        
-        <xsl:choose>
-          <xsl:when test="$feedConfig/feed[@maxItem]">
-            <xsl:if test="position()&lt;=$feedConfig/feed/@maxItem">
-							<xsl:copy-of select="$parse"/>            
-						</xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:copy-of select="$parse"/>
-          </xsl:otherwise>
-        </xsl:choose>-->
 			</xsl:template>
     
     </xsl:stylesheet>
