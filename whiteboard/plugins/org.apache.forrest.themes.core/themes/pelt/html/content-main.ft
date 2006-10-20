@@ -95,8 +95,12 @@
       </xsl:template>
 
       <xsl:template match="@*|*|text()|processing-instruction()" priority="-1">
+        <xsl:param name="content-main-conf"/>
         <xsl:copy>
-          <xsl:apply-templates select="@*|*|text()|processing-instruction()"/>
+          <xsl:apply-templates select="@*|*|text()|processing-instruction()">
+            <xsl:with-param name="content-main-conf"
+                  select="$content-main-conf"/>
+          </xsl:apply-templates>
         </xsl:copy>
       </xsl:template>
     </xsl:stylesheet>
