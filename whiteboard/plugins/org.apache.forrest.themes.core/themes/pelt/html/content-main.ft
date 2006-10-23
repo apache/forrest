@@ -44,10 +44,7 @@
           <forrest:part>
             <xsl:comment>+ |start content-main +</xsl:comment>
             <xsl:apply-templates
-              select="//div[@id='content']/div[@id='content-main']/*|//div[@id='content']/div[@id='content-main']/processing-instruction()">
-              <xsl:with-param name="content-main-conf"
-                      select="$content-main-conf"/>
-            </xsl:apply-templates>
+              select="//div[@id='content']/div[@id='content-main']/*|//div[@id='content']/div[@id='content-main']/processing-instruction()"/>
             <xsl:comment>+ |end content-main +</xsl:comment>
           </forrest:part>
         </forrest:content>
@@ -55,7 +52,6 @@
 
       <!--headings-->
       <xsl:template match="div[@class = 'skinconf-heading-1']">
-        <xsl:param name="content-main-conf"/>
         <xsl:choose>
           <xsl:when test="$content-main-conf/headings/@type='underlined'">
             <h2 class="underlined_10"><xsl:value-of select="h1"/></h2>
@@ -70,17 +66,12 @@
       </xsl:template>
 
       <xsl:template match="div[@class = 'section']">
-        <xsl:param name="content-main-conf"/>
         <div class="section">
-          <xsl:apply-templates select="*|processing-instruction()">
-            <xsl:with-param name="content-main-conf"
-                  select="$content-main-conf"/>
-          </xsl:apply-templates>
+          <xsl:apply-templates select="*|processing-instruction()"/>
         </div>
       </xsl:template>
 
       <xsl:template match="div[@class = 'skinconf-heading-2']">
-        <xsl:param name="content-main-conf"/>
         <xsl:choose>
           <xsl:when test="$content-main-conf/headings/@type='underlined'">
             <h3 class="underlined_5"><xsl:value-of select="h2"/></h3>
@@ -95,12 +86,8 @@
       </xsl:template>
 
       <xsl:template match="@*|*|text()|processing-instruction()" priority="-1">
-        <xsl:param name="content-main-conf"/>
         <xsl:copy>
-          <xsl:apply-templates select="@*|*|text()|processing-instruction()">
-            <xsl:with-param name="content-main-conf"
-                  select="$content-main-conf"/>
-          </xsl:apply-templates>
+          <xsl:apply-templates select="@*|*|text()|processing-instruction()"/>
         </xsl:copy>
       </xsl:template>
     </xsl:stylesheet>
