@@ -22,7 +22,7 @@
  *
  * Typical usage:
  * <script type="text/javascript" src="getBlank.js"></script>
- * <input type="text" id="query" value="Search the site:" onFocus="getBlank (this, 'Search the site:');" onBlur="getPrompt (this, 'Search the site:');"/>
+ * <input type="text" id="query" value="Search the site:" onfocus="getBlank (this, 'Search the site:');" onblur="getPrompt (this, 'Search the site:');"/>
  */
 <!--
 function getBlank (form, stdValue){
