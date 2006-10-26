@@ -18,7 +18,7 @@
  * This script, when included in a html file, can be used to make collapsible menus
  *
  * Typical usage:
- * <script type="text/javascript" language="JavaScript" src="menu.js"></script>
+ * <script type="text/javascript" src="menu.js"></script>
  */
 
 if (document.getElementById){ 

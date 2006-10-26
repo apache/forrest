@@ -21,7 +21,7 @@
  * if the text value is empty.
  *
  * Typical usage:
- * <script type="text/javascript" language="JavaScript" src="getBlank.js"></script>
+ * <script type="text/javascript" src="getBlank.js"></script>
  * <input type="text" id="query" value="Search the site:" onFocus="getBlank (this, 'Search the site:');" onBlur="getBlank (this, 'Search the site:');"/>
  */
 <!--

@@ -117,7 +117,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:otherwise>
         </xsl:choose>
         All rights reserved.
-        <script language="JavaScript" type="text/javascript"><![CDATA[<!-#-
+        <script type="text/javascript"><![CDATA[<!-#-
           document.write(" - "+"Last Published: " + document.lastModified);
           //  -#->]]></script>
         <xsl:if test="//skinconfig/host-logo and not(//skinconfig/host-logo = '')">
@@ -205,7 +205,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   <!-#- Generates the "printer friendly version" link -#->
   <xsl:template match="div[@id='skinconf-printlink']">
     <xsl:if test="$disable-print-link = 'false'">
-<script type="text/javascript" language="Javascript">
+<script type="text/javascript">
 function printit() {
   if (window.print) {
     window.focus();
