@@ -18,6 +18,7 @@ package org.apache.forrest.locationmap;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
@@ -55,6 +56,8 @@ public class LocationMapModule extends AbstractLogEnabled
     private SourceValidity m_srcVal;
     private LocationMap m_lm;
     private boolean m_cacheAll;
+    private int m_cacheTtl;
+    private Date m_cacheLastLoaded;
     private Map m_locationsCache;
 
     // ---------------------------------------------------- lifecycle
@@ -70,9 +73,14 @@ public class LocationMapModule extends AbstractLogEnabled
     public void configure(Configuration configuration) throws ConfigurationException {
         m_src = configuration.getChild("file").getAttribute("src");
         m_cacheAll = configuration.getChild("cacheable").getValueAsBoolean(true);
+        m_cacheTtl = configuration.getChild("cache-lifespan").getValueAsInteger();
+        
+        debug("LM Configured cache? " + m_cacheAll);
+        debug("LM Configured cache-lifespan: " + m_cacheTtl);
         
         if (m_cacheAll == true) {
         	m_locationsCache = new HashMap();
+            m_cacheLastLoaded = new Date();
         }
     }
 
@@ -121,6 +129,8 @@ public class LocationMapModule extends AbstractLogEnabled
                 m_resolver.release(source);
             }
         }
+        m_cacheLastLoaded = new Date();
+        
         return m_lm;
     }
 
@@ -168,6 +178,18 @@ public class LocationMapModule extends AbstractLogEnabled
     	
         try {
         	if (this.m_cacheAll == true) {
+                  Date now = new Date();
+                  long cacheAge = now.getTime() - m_cacheLastLoaded.getTime();
+                  debug("LM Cache current age is: " + cacheAge + "ms");
+                 
+                  if (cacheAge > m_cacheTtl) {
+                    debug("LM Cache has expiring - contains " + m_locationsCache.size() + " objects.");
+                    synchronized (this) {
+                      m_locationsCache.clear(); 
+                      debug("LM Cache has expired - now contains " + m_locationsCache.size() + " objects.");
+                  }
+                }
+                  
         		hasBeenCached = m_locationsCache.containsKey(name);
         		if (hasBeenCached == true) {
         			result =  m_locationsCache.get(name);
@@ -226,4 +248,13 @@ public class LocationMapModule extends AbstractLogEnabled
         return new Object[] {getAttribute(name,modeConf,objectModel)};
     }
 
+        /**
+     * If debugging is turned on then log a debug message.
+     * @param debugString - the debug message
+     */
+    private final void debug(String debugString) {
+      if (getLogger().isDebugEnabled()) {
+        getLogger().debug(debugString);
+      }
+    }
 }
