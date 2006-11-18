@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Forrest 1 Vs Forrest 2</title>
+</head>
+<body>
+  <p>This document attempts to answer the common questins
+  asked by people familiar with Forrest 1 and trying to
+  understand Forrest 2.</p>
+  
+  <h1>Where are the *.xmap files?</h1>
+  
+  <p>There aren't any.</p>
+  
+  <p>Forrest 2 does not use Cocoon as its underlying
+  framework and so we have been able to do away with
+  our sitemaps.</p>
+  
+  <h1>So where is the processing pipeline define?</h1>
+  
+  <p>In Forrest 1 the processing pipeline was defined in
+  the cocoon sitemap files. The sitemap language is very
+  powerful, but it is also very confusing for newcomers.
+  Forrest 2 recognises that since Forrest is an XML
+  publishing framework all it needs to do is read an input
+  (or set of inputs), convert them to the Forrest internal
+  format and then process them using relevant output 
+  documents. To do this we do not need the complexities of
+  the sitemap.</p>
+  
+  <p>The processing pipeline of Forrest 2 is defined in
+  forrestContext.xml. Briefly:</p>
+
+  <p>All pipelines are, essentially, a Reader -> an Input 
+  Plugin -> an Output Plugin. This is anologous to Generator
+  -> Transformaer -> Serliazer in Cocoon sitemaps.</p>
+  
+  <p>The reader provides the source document, the input 
+  plugin converts it into a document Forrest can work with
+  internally, and the output Plugin produces the required
+  output document.</p>
+  
+  <p>A client makes a query, such as "http://foo.org/bar.html".
+  This is mapped to a source document URI using the locationmap
+  (this process is almost identical to that in Forrest 1).
+  This URI will look something like "file:foo/bar.xml" or
+  "http://remote.foo.org/bar.xml".</p>
+
+  <p>Once we have this source URI we can select a reader to 
+  retrieve the document. Readers are selected based on the 
+  protocol in the source URI. The protocol corresponds to 
+  the bean id in forrestContext.xml.</p>
+
+  <p>So a source of "file://foo/bar.xml" will use the reader 
+  identified by &lt;bean id="file"...&gt; in forrestcontext.xml. 
+  Similarly, "http://remote.foo.org/bar.xml" will use the
+  reader identified by &lt;bean id="http"...&gt;.</p>
+
+  <p>The reader produces a document encapsulated in a class 
+  that exposes a getType() method. The return value of this
+  method is used to select the input plugin to use. Again 
+  selected on the bean id in forrestContext.xml</p>
+  
+  <p>Now we have the input plugin we need to get the output
+  plugin. This is selected slightly differently, because 
+  each output plugin may be used for many request URI's. For
+  example, both "html" and "htm" extensions may indicate
+  that an HTML document is required.</p>
+  
+  <p>In order to select the output plugin each plugin bean
+  defines a "pattern property. This property is a Regular 
+  Expresion that is used to match against the original client
+  request URI. The first output plugin that is discovered is
+  the one that is used.</p>
+  
+  
+  
+</body>
+</html>
