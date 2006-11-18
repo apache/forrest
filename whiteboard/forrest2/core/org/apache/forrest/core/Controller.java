@@ -224,7 +224,7 @@ public class Controller implements IController {
 	 * @see org.apache.forrest.core.IController#getOutputPlugin(java.net.URI)
 	 */
 	public BaseOutputPlugin getOutputPlugin(final URI requestURI) {
-		BaseOutputPlugin plugin;
+		BaseOutputPlugin plugin = null;
 		final String[] names = this.context.getBeanNamesForType(plugin
 				.getClass());
 		for (int i = 0; i < names.length; i = i + 1) {
