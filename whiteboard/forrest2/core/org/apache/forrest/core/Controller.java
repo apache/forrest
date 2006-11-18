@@ -225,8 +225,7 @@ public class Controller implements IController {
 	 */
 	public BaseOutputPlugin getOutputPlugin(final URI requestURI) {
 		BaseOutputPlugin plugin = null;
-		final String[] names = this.context.getBeanNamesForType(plugin
-				.getClass());
+		final String[] names = this.context.getBeanNamesForType(BaseOutputPlugin.class);
 		for (int i = 0; i < names.length; i = i + 1) {
 			plugin = (BaseOutputPlugin) this.context.getBean(names[i]);
 			if (plugin.isMatch(requestURI)) {
@@ -258,7 +257,7 @@ public class Controller implements IController {
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final Location location = sourceLocations.get(i);
 			IReader reader = getReader(location);
-			results.add(reader.read(this.context, location));
+			results.add(reader.read(this, location));
 		}
 		return results;
 	}
