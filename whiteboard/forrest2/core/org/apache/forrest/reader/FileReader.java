@@ -20,11 +20,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DocumentFactory;
 import org.apache.forrest.core.exception.SourceException;
 import org.apache.forrest.core.locationMap.Location;
-import org.springframework.context.support.AbstractXmlApplicationContext;
 
 /**
  * An File reader reads a resource using the file protocol, i.e. it will read
@@ -38,7 +38,7 @@ public class FileReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(AbstractXmlApplicationContext context, final Location location) {
+	public AbstractSourceDocument read(IController controller, final Location location) {
 		AbstractSourceDocument result = null;
 		try {
 			final InputStream is = new FileInputStream(new File(location

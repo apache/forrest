@@ -23,11 +23,11 @@ import java.net.MalformedURLException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.exception.SourceException;
 import org.apache.forrest.core.locationMap.Location;
-import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.w3c.tidy.Tidy;
 
 /**
@@ -53,7 +53,7 @@ public class HTTPReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(AbstractXmlApplicationContext context, final Location location)
+	public AbstractSourceDocument read(IController controller, final Location location)
 			throws MalformedURLException {
 		InputStream is;
 		DefaultSourceDocument result = null;

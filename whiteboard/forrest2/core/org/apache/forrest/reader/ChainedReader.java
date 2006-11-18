@@ -20,10 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.locationMap.Location;
-import org.springframework.context.support.AbstractXmlApplicationContext;
 
 /**
  * A chained reader implements a psuedo protocol.
@@ -60,7 +60,7 @@ public class ChainedReader extends AbstractReader {
 
 	private String docType;
 	
-	public AbstractSourceDocument read(AbstractXmlApplicationContext context,
+	public AbstractSourceDocument read(IController controller,
 			final Location location) {
 		DefaultSourceDocument doc = null;
 		final URI psudeoURI = location.getSourceURI();
@@ -70,8 +70,8 @@ public class ChainedReader extends AbstractReader {
 			uri = new URI(ssp);
 			location.setSourceURI(uri);
 			IReader reader;
-			reader = (IReader) context.getBean(uri.getScheme());
-			doc = (DefaultSourceDocument) reader.read(context, location);
+			reader = (IReader) controller.getReader(location);
+			doc = (DefaultSourceDocument) reader.read(controller, location);
 			if (doc != null) {
 				doc
 						.setType(getDocType());

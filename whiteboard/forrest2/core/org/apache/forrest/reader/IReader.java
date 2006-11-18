@@ -18,9 +18,9 @@ package org.apache.forrest.reader;
 
 import java.net.MalformedURLException;
 
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.locationMap.Location;
-import org.springframework.context.support.AbstractXmlApplicationContext;
 
 public interface IReader {
 
@@ -41,7 +41,7 @@ public interface IReader {
 	 * @return
 	 * @throws MalformedURLException
 	 */
-	public abstract AbstractSourceDocument read(AbstractXmlApplicationContext context, Location location)
+	public abstract AbstractSourceDocument read(IController controller, Location location)
 			throws MalformedURLException;
 
 }
