@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
  * 
  * 
  */
-public class Controller {
+public class Controller implements IController {
 
 	private final String sourceURLExtension = ".forrestSource";
 
@@ -175,16 +175,24 @@ public class Controller {
 				sourceDocuments.size());
 		for (int i = 0; i < sourceDocuments.size(); i++) {
 			final AbstractSourceDocument doc = sourceDocuments.get(i);
-			AbstractInputPlugin plugin;
-			try {
-				plugin = (AbstractInputPlugin) this.context.getBean(doc
-						.getType());
-			} catch (final NoSuchBeanDefinitionException e) {
-				plugin = new PassThroughInputPlugin();
-			}
+			AbstractInputPlugin plugin = getInputPlugin(doc);
 			results.add((InternalDocument) plugin.process(doc));
 		}
 		return results;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getInputPlugin(org.apache.forrest.core.document.AbstractSourceDocument)
+	 */
+	public AbstractInputPlugin getInputPlugin(final AbstractSourceDocument doc) {
+		AbstractInputPlugin plugin;
+		try {
+			plugin = (AbstractInputPlugin) this.context.getBean(doc
+					.getType());
+		} catch (final NoSuchBeanDefinitionException e) {
+			plugin = new PassThroughInputPlugin();
+		}
+		return plugin;
 	}
 
 	/**
@@ -207,7 +215,16 @@ public class Controller {
 			doc = intDocs.get(0);
 		}
 
-		BaseOutputPlugin plugin = new BaseOutputPlugin();
+		BaseOutputPlugin plugin = getOutputPlugin(requestURI);
+		
+		return (AbstractOutputDocument) plugin.process(doc);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getOutputPlugin(java.net.URI)
+	 */
+	public BaseOutputPlugin getOutputPlugin(final URI requestURI) {
+		BaseOutputPlugin plugin;
 		final String[] names = this.context.getBeanNamesForType(plugin
 				.getClass());
 		for (int i = 0; i < names.length; i = i + 1) {
@@ -221,8 +238,7 @@ public class Controller {
 		if (plugin == null) {
 			plugin = new BaseOutputPlugin();
 		}
-
-		return (AbstractOutputDocument) plugin.process(doc);
+		return plugin;
 	}
 
 	/**
@@ -241,12 +257,20 @@ public class Controller {
 
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final Location location = sourceLocations.get(i);
-			IReader reader;
-			reader = (IReader) this.context.getBean(location.getSourceURI()
-					.getScheme());
+			IReader reader = getReader(location);
 			results.add(reader.read(this.context, location));
 		}
 		return results;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getReader(org.apache.forrest.core.locationMap.Location)
+	 */
+	public IReader getReader(final Location location) {
+		IReader reader;
+		reader = (IReader) this.context.getBean(location.getSourceURI()
+				.getScheme());
+		return reader;
 	}
 
 	/**
@@ -271,14 +295,8 @@ public class Controller {
 		return possibleLocs.get(0);
 	}
 
-	/**
-	 * Get the source URLs for a given request URI.
-	 * 
-	 * @param requestURI
-	 * @return
-	 * @throws IOException
-	 * @throws LocationmapException
-	 * @throws ProcessingException
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getSourceLocations(java.net.URI)
 	 */
 	public List<Location> getSourceLocations(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException {
@@ -290,14 +308,8 @@ public class Controller {
 		return locs;
 	}
 
-	/**
-	 * Get the source documents for a given request URI.
-	 * 
-	 * @param requestURI
-	 * @return
-	 * @throws ProcessingException
-	 * @throws MalformedURLException
-	 * @throws IOException
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getSourceDocuments(java.net.URI)
 	 */
 	public List<AbstractSourceDocument> getSourceDocuments(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
@@ -315,14 +327,8 @@ public class Controller {
 		return sources;
 	}
 
-	/**
-	 * Get the internal format documents for a given request URI.
-	 * 
-	 * @param requestURI
-	 * @return
-	 * @throws ProcessingException
-	 * @throws MalformedURLException
-	 * @throws IOException
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getInternalDocuments(java.net.URI)
 	 */
 	public List<InternalDocument> getInternalDocuments(final URI requestURI)
 			throws ProcessingException {
@@ -341,14 +347,8 @@ public class Controller {
 		return internalDocs;
 	}
 
-	/**
-	 * Get the output format documents for a given request URI.
-	 * 
-	 * @param requestURI
-	 * @return
-	 * @throws ProcessingException
-	 * @throws MalformedURLException
-	 * @throws IOException
+	/* (non-Javadoc)
+	 * @see org.apache.forrest.core.IController#getOutputDocument(java.net.URI)
 	 */
 	public AbstractOutputDocument getOutputDocument(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
