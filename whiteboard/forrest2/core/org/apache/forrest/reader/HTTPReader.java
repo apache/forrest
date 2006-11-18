@@ -75,8 +75,4 @@ public class HTTPReader extends AbstractReader {
 		}
 		return result;
 	}
-
-	public String getScheme() {
-		return "http";
-	}
 }

@@ -22,4 +22,8 @@ public abstract class AbstractReader implements IReader {
 		this.init();
 	}
 
+	public void init() {
+		// Do Nothing
+	}
+
 }

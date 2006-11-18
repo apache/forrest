@@ -35,14 +35,6 @@ public class FileReader extends AbstractReader {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.forrest.reader.IReader#init()
-	 */
-	public void init() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
 	public AbstractSourceDocument read(final Location location) {
@@ -56,9 +48,5 @@ public class FileReader extends AbstractReader {
 				throw new SourceException("Source URL is invalid", e);
 		}
 		return result;
-	}
-
-	public String getScheme() {
-		return "file";
 	}
 }

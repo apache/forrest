@@ -42,10 +42,4 @@ public interface IReader {
 	public abstract AbstractSourceDocument read(Location location)
 			throws MalformedURLException;
 
-	/**
-	 * Get the scheme that this reader handles.
-	 * 
-	 * @return
-	 */
-	public abstract String getScheme();
 }
