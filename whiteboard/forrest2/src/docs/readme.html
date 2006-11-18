@@ -1,0 +1,452 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+<head>
+<title>Welcome to Forrest 2</title>
+</head>
+<body>
+<div class="note">
+<p>This document is written as though this is approved as a Forrest
+2 implementation, however, it is important to note that this is only an
+experiment at this time. The Apache Forrest project is using this
+implementation as a discussion tool. This code should therefore be
+considered as PRE-ALPHA and should not be used for anything other than
+experimentation.</p>
+</div>
+
+<h1>Forrest 2.0</h1>
+
+<p>Forrest2 is a complete rewrite of the XML publishing framework
+Apache Forrest.</p>
+
+<p>It draws on the lessons learned during development and use of
+earlier verions of Forrest, but it takes the opportunity to simplify the
+implementation and use wherever possible.</p>
+
+<p>Forrest2 is no longer built upon Apache Cocoon, it is a plain
+Java application.</p>
+
+<p>This may prompt you to ask "does this mean we lose the power of
+the Apache Cocoon framework?" The answer to that question is an emphatic
+no. You see, Apache Cocoon can still be used by Forrest, but you are no
+longer tied to it as was the case with earlier versions.</p>
+
+<p>Breaking away from Cocoon means that embedding Forrest2 in
+another application is much easier. In fact, since the new Forrest can
+be packaged as a Cocoon generator it is, ironically enough, easier to
+use in another Cocoon application than the original Forrest was. At the
+same time it is easier to embed Forrest in any other type of
+application.</p>
+
+<p>The core of Forrest2 is only a few megabytes in size (and can
+doubtless be trimmed even further). This compares very favourably with
+40Mb+ for Cocoon based versions of Forrest.</p>
+
+<p>Furthermore, the removal of Cocoon as the core framework means
+that extending Forrest no longer requires an understanding of Cocoon, in
+fact, Forrest2 can be extended very easily with just about any
+technology (including Cocoon). It is now possible to extend Forrest in
+any way you desire, all you need to do is expose your services via a
+REST style API.</p>
+
+<p>Of course, it's easier to use too...</p>
+
+<h1>Using Forrest 2.0</h1>
+
+<h2>Background Concepts</h2>
+
+<p>Forrest 2.0 builds on the concept of input and output plugins
+that were introduced in Forrest 0.7. An input plugin processes a source
+document and coverts it to an internal format for use within Forrest.
+This internal format is a subset of XHTML2. The internal document is
+further processed by zero or more output plugins which provide further
+processing to create the final output documents, in whatever format is
+required.</p>
+
+<p>Forrest 2.0 also utilises the Locationmap, utilised extensively
+in Forrest 0.8. This is a configuration file that maps request URL's to
+source documents. Thus allowing the client URL space to be completely
+decoupled from the surce URI space.</p>
+
+<h2>Hello World Example</h2>
+
+<div class="note"><p>Code for all examples in this document can be found in the src/examples
+directory of the core distribution.</p></div>
+
+<p>As is traditional we will work from the simplest possible use case and build up the
+complexity as we explore Forrest 2.0 in use. Of course, we will start with the most
+simplistic "Hello World" example we can.</p>
+
+<p>This simple case means we provide a "Hello World" document in a subset of XHTML2,
+i.e. it will already be in a format suitable for use within Forrest. We will
+require an output of this document in XHTML2.</p>
+
+<p>Hmmm... that sounds pretty pointless, what will Forrest actually do in this use 
+case?</p>
+
+<p>This use case will illustrate the decoupling of the client URL space from the
+source URI space. In so doing it will show how to configure a basic instance
+of Forrest 2.0.</p>
+
+<p>So, we want to alow the user to request the document "helloWorld.xhtml2" and recieve
+and XHTML2 document generated from a source document located at
+"src/xdocs/helloWorld.xhtml2".</p>
+
+<h3>Source Document</h3>
+
+<p>There is nothing magical about the source document. It's a simple XHMTL2 document:</p>
+
+<div class="code"><![CDATA[
+<?xml-stylesheet type="text/css" 
+                 href="http://www.w3.org/MarkUp/style/xhtml2.css"?>
+
+
+<html xmlns="http://www.w3.org/2002/06/xhtml2" xml:lang="en"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd">
+<head>
+<title>XHTML 2 Hello World</title>
+</head>
+<body>
+<h>
+Hello World
+</h>
+</body>
+</html>
+]]>
+</div>
+
+<p>This document is stored in "src/xdocs/helloWorld.xhtml2"</p>
+
+<h3>Locationmap</h3>
+
+<p>The locationmap, in its simplest form, is used to map the
+client URI to the actual location of the source document. In this case
+we need the following locationmap:</p>
+
+<div class="code"><[![CDATA
+<?xml version="1.0"?>
+<locationmap>
+<location pattern="helloWorld.xhtml2">
+<source href="classpath:/xdocs/helloWorld.xhtml2" />
+</location>
+</locationmap>
+]]></div>
+
+<p>Note the use of the "classpath:" protocol. This means that Forrest will
+search the classpath for the resource. Valid protocols in Forrest core
+are:</p>
+
+<ul>
+  <li>file:</li>
+  <li>http:</li>
+  <li>lasspath:</li>
+</ul>
+
+<p>These protocols can be extended by
+adding additional readers, we'll discuss this later.</p>
+
+<p>The locationmap
+document is stored in "src/locationmap.xml"</p>
+
+<h3>Running Forrest</h3>
+
+<p>There are a number of ways of running Forrest. Perhaps
+the most convenient is the Forrest webapp. This is not a part of core
+though, so we will focus on the command line version for now.</p>
+
+<p>The class
+org.apache.forrest.cli.CLI implements the command line. The simplest way
+of running the command line is with:</p>
+
+<div class="code">
+java -jar forrest.jar org.apache.forrest.cli.CLI [REQUEST_URI]
+</div>
+
+<p>So, in this instance we would
+run the following command from within the src/examples/helloWorld
+directory:</p>
+
+<div class="code">
+java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI hellowWorld.xhtml2
+</div>
+
+<p>This command dumps
+the results document to System.out, so you will see the source document
+displayed on the screen.</p>
+
+<p>In this example forrest does not do any
+internal processing because we request an XHTML2 document. In the next
+example we'll look at how we can get Forrest to do some output
+processing for us.</p>
+
+<h2>HTML Hello World Example</h2>
+
+<p>In
+this example we will use the same XHTML2 input document, but we want to
+retrieve an HTML version of that document for display in a standard
+browser. To achieve this we will have Forrest process the document using
+an HTML output plugin. This output plugin will convert the XHTML2
+internal document into an HTML document.</p>
+
+<p>Forrest 2.0 core includes an
+output plugin that will convert from the internal XHTML2 format to HTML.
+This is the only output plugin bundled with Forrest2 core. We need to ensure 
+Forrest uses this plugin for this example. To do this
+all we need to do is add a new entry to our locationmap and request the file
+"helloWorld.html" (note the changed extension).</p>
+
+<h3>Locationmap</h3>
+
+<p>Recall that the locationmap maps request URLs to source files. In our
+first example we added a mapping from "helloWorld.xhtml2" to
+"classpath:/xdocs/helloWorld.xhtml2". In this example we will
+be requesting "helloWorld.html", so we need a new mapping. Add the following to
+your locationmap:</p>
+
+<div class="code"><![CDATA[
+<location pattern="helloWorld.html">
+<source href="classpath:/xdocs/helloWorld.xhtml2" />
+</location>
+]]></div>
+
+<p>This will work just fine, but we now have two mappings that use the 
+helloWorld.xhtml2 source file. Surely there is a way to express these two 
+matches in a more concise way.</p>
+
+<div class="todo">Explain that we could use pattern="helloWorld.*" for both cases
+since the source file is the same . The pattern is a regular expression.</div>
+
+<p>That's it, there is no need to tell Forrest that it must process a request for
+helloWorld.html with the HTML output plugin since, by default, the plugin will
+be activated for any request ending in ".html". Since it is a goal of Forrest 
+to remove the need to predefine
+the client URL space you will not be suprised to learn that it is not
+necessary to use an ".html" extension to trigger the html output plugin.
+It is possible to configure the trigger as any part of a request URL,
+for example, we may use something like "/html/helloWorld". Discussion of
+how to configure this is outside the scope of this example.</p>
+
+
+<h2>Embedding Forrest</h2>
+
+<p>The main driver
+behind writing Forrest 2.0 was to make it more embeddable. Earlier
+versions of Forrest were built on top of Cocoon and therefore it
+was difficult and/or computationally expensive to embed forrest in anything that
+was not based on Cocoon. Forrest 2.0 Core provides two main techniques for
+embedding. First, you can use the CLI to pipe results to other
+applications in your command shell. Secondly, Forrest 2.0 exposes a
+simple Java API that allows it to be controlled programatically.</p>
+
+<p>If
+neither of these solutions suits your use case, for example, you are not
+using Java and do not want to rely on shell scripts, then there is a
+separate web application that exposes Forrest via a REST style interface.</p>
+
+<p>Of course, it would be perfectly possible to create other extensions
+that enable Forrest to be embedded in other ways, such via a SOAP
+interface.</p>
+
+<h3>Embedding using the CLI</h3>
+
+<div class="todo">simple example of piping results to another
+shell command Java</div>
+
+<h3>Embedding using the Java API</h3>
+
+<p>All you need to do to embed Forrest using he Java API is
+instantiate an instance of the Forrest Controller class, then you 
+request the document required. For example:</p> 
+
+<div class="code"><pre>
+Controller controller = new Controller();
+AbstractOutputDocument doc = controller.getOutputDocument(requestURI);
+</pre></div>
+
+<p>That's it! At least it is for most use cases.</p>
+
+<p>As a more complete example lets look at the 
+core of a simple CLI class (with exception handling removed for
+clarity):</p>
+
+<div class="code">
+<pre>
+public static void main(String[] args) { 
+  try { 
+    URI requestURI = new URI(args[0]);
+    Controller controller = new Controller();
+    AbstractOutputDocument doc;
+    doc = controller.getOutputDocument(requestURI);
+    System.out.println(doc.getContentAsString());
+  } catch (...) { 
+    ... 
+  } }
+</pre></div>
+
+<p>As another example, here is the doGet method of a servlet that will route requests to
+Forrest and stream the results back to the requesting client.</p>
+
+<div class="todo"> show the webapp servlet class.</div>
+
+<h2>Running Forrest 2.0 as a Webapp</h2>
+
+<div class="todo">HTML Hello World example run in
+the webapp.</div> 
+
+<h2>Extending Forrest</h2>
+
+<p>There are three key ways to extend Forrest:</p>
+
+<ul>
+  <li>readers - read source documents</li>
+  <li>input plugins - convert source documents to internal documents</li>
+  <li>output plugins - convert internal documents to output documents</li>
+</ul>
+
+<p>To give you an idea of
+what you can do with each of these lets consider a few hypothetical
+examples of each type of extension.</p>
+
+<h3>Readers</h3>
+
+<p>Readers add
+protocols to the locationmap, thus allowing different methods of reading
+source documents. For example, we may build a relational database reader.</p>
+
+<p>This reader reads a document from a
+relational database and provide it in an XML format. It adds a
+locationmap protocol of "db:" and is configured from within the URL, e.g.
+"db:user@dbserver.domain.co.uk/catalogue:product.id=AL292"</p>
+
+<p>The above URL will return an XML representation of the product with ID
+"AL292" from the database "catalogue" on the server at "dbserver.domain.co.uk".
+The database is accessed using the username "user".</p>
+
+<h3>Input Plugins</h3>
+
+<p>Input plugins take some kind of input document and convert
+them to an XHTML2 internal document for further processing. For example 
+we could have an input plugin that converts OpenOffice.org documents
+to Forrest documents.</p>
+
+
+<h3>Output Plugins</h3>
+
+<p>Output Plugins convert an internal document into
+the final output format that is required. For example a PDF Output Plugin
+converts an internal document into a PDF document.</p>
+
+<h2>Configuring Forrest</h2>
+
+<p>Forrest uses the Spring
+framework to manage its configuration. If you need to add one or more
+readers or plugins to Forrest core you need to create a Spring context
+file in your project. This will be stored at 
+"PROJECT_HOME/src/forrestContext.xml".</p>
+
+<h1>Extended Examples</h1>
+
+<p>This set of examples extend the
+reading, input and output capabilites of Forrest to perform more complex
+tasks than are capable with Forrest Core. They therefore demonstrate the use
+of additional readers and plugins.</p>
+
+<h2>HTML From Plain Text Hello World</h2>
+
+<p>This example illustrates the use
+of an input plugin.</p>
+
+<div class="todo">an example showing the creation of an HTML
+document from a plain text source document.</div>
+
+<h2>PDF From Plain Text Hello World</h2>
+
+<p>This example illustrates the use
+of an output plugin in conjunction with the input plugin from the previous
+example.</p>
+
+<p>an example showing the creation of an PDF
+document from a plain text source document.</p>
+
+<h3>Hello Username</h3>
+
+<p>This example illustates the use of a reader to extract
+information about the execution environment.</p>
+
+<h3>Affiliates Product Catalogue</h3>
+
+<p>In <a href="example/affiliateProductDatabase.html">this example</a>
+we create an input plugin to use
+product feeds from affiliate programs (in this case
+TradeDoubler). This is then coupled with an output plugin
+that presents this data as an HTML page for inclusion in
+a web site or as a PDF document for printing.</p>
+
+<h3>Extended Product Catalogue</h3>
+
+<p class="todo">In this example, we extend the affiliate
+product catalogue example by adding business logic to the
+reader. In the previous version all products in the feed
+appeared in the catalogue. In this new version we are able
+to provide keywords that must be present in the product
+title or description for it to appear in the catalogue.</p>
+
+<p>This example illustrates how an Input plugin can extend
+the functioanlity of an existing plugin.</p>
+
+<h3>ECommerce Application</h3>
+
+<p class="todo">This example illustrates how
+Apache Forrest can be embedded in a Wicket web application (Wicket is 
+a Java web application framework. The Wicket
+application handles all dynamic funtions, such as the management of a
+shopping cart and "clever" Ajax search functionality, whilst Forrest
+handles the generation of semi-static content, such as product
+description pages. It builds on the previous example in which
+Forrest generated content from an Product Catalogue.</p>
+
+<p>Here we are using Wicket to generate many parts of an
+HTML page, such as the navigation. This is because we happen to like
+Wickets approach to the building of web pages from components. However,
+with a little imagination we are sure you can see how to use your
+favourite templating technology to do this. Some suggested alternatives to wicket
+rendering would be:</p>
+
+<ul>
+  <li>jxTemplate</li>
+  <li>Tiles</li>
+  <li>Cocoon</li>
+  <li>Dispatcher</li>
+</ul>
+
+<p>The use of Forrest to generate content
+allows us to leverage the mulitple output plugins provided by Forrest to
+present content in many different formats, such as web page, PDF, voice
+etc.</p>
+
+<h3>Extended Product Catalogue</h3>
+
+<p class="todo">We will now extend the product catalgoue to enable the embedding of
+third party product feeds as well as products from our own database. To
+do this we will retrieve a feed from TradeDoubler.co.uk and embed the
+results in our product catalogue. This example will illustrate the
+aggregation of content from multiple sources, in different source
+formats into a single output document available in multiple formats.</p>
+
+</body>
+</html>

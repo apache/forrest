@@ -1,0 +1,186 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Affiliates Product Catalogue</title>
+</head>
+<body>
+<h3>Affiliates Product Catalogue</h3>
+
+<p class="todo">In this example we create an input plugin to use
+product feeds from affiliate programs (in this case
+TradeDoubler). This is then coupled with an output plugin
+that presents this data as an HTML page for inclusion in
+a web site.</p>
+
+<h4>About the Product Feed</h4>
+
+<p><a href="http://www.tradedoubler.com">Trade Doubler</a> is an 
+affiliate programme in which some members provide XML feeds 
+of their products. To retrieve these feeds you will need to 
+register on the tradedoubler site. However, in order to see
+this example in action we have provided a sample document
+in <span class="source">src/examples/affiliateProductCatalogue/src/xdocs/exampleFeed.xml</span>.</p>
+
+<h4>Creating a TradeDoubler Reader</h4>
+
+<p>TradeDoubler XML feeds are not Valid XML documents, that
+is they do not have a DTD definition within them. This means
+that we have to create a Reader to read these documents for 
+us and assign a type to them so that Forrest knows how to 
+process them in subsequent stages.</p>
+
+<p>In a production system this reader would pull the feed from
+the TradeDoubler site, however, since we want to run this
+example without creating a TradeDoubler account we will create
+simple file reader that will retrieve our example feed document.
+The code for this reader is provided in 
+<span class="source">src/examples/affiliateProductCatalogue/src/org/apache/forrest/examples/affiliateProductCatalogue/reader/TradeDoubler.java</span>.</p>
+
+<p>Note that this reader returns a document with the type
+<span class="source">org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed</span>.
+We will need to use this type value to select the correct
+input plugin to use. If you wanted to convert this example
+to work with real live trade doubler accounts you would
+need to extend te httpReader in the same way that this class
+extends the fileReader.</p>
+
+<p>Having written a reader for our TradeDoubler we must register it
+with Forrest. Just add the following line to your forrestContext.xml
+file.</p>
+
+<code><![CDATA[
+	<bean id="tradeDoubler"
+		class="org.apache.forrest.examples.affiliateProductCatalogue.reader.TradeDoubler" />
+]]></code>
+
+<p>This bean definition registers our new reader with the psudo protocol
+<span class="source">tradeDoubler</span>. So, lets add a locationmap entry
+to read our example feed:</p>
+
+<code><![CDATA[
+  <location pattern="tradeDoubler.*">
+    <source href="tradeDoubler:classpath:/xdocs/exampleFeed.xml"/>
+  </location>
+]]></code>
+
+<p>Notice how we use the <span class="source">tradeDoubler</span> psuedo protocol
+to tell Forrest which reader to use.</p>
+
+<h5>Checking our Progress</h5>
+
+<p>At this point we can check everything works. We should be
+able to retrieve our source document by requesting 
+<span class="source">tradeDoubler.forrestSource</span>. We'll
+ use the CLI to test this.</p>
+
+<p class="code">
+cd [FORREST_HOME]/src/examples/afiliateProductCatalogue
+java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI tradeDoubler.forrestSource
+</p>
+
+<h4>Creating the Input Plugin</h4>
+
+<p class="note">A more complete description of creating an Input
+plugin is provided in the <a href="createAPlugin.html">Create a Plugin</a>
+How To.</p>
+
+<p>Since the TradeDoubler feeds are XML our input plugin is just
+a standard XSL transformation. Such plugins can be created without
+having to write any Java code, but we will, of course, need
+an XSLT file to convert from the XML product feed to Forrests
+internal format.</p>
+
+<p>Our XSLT is found in <span class="source">src/examples/affiliateProductCatalogue/src/xslt/tradeDoublerFeed-to-internal.xsl</span>
+to define our input plugin we just need to add the following to
+forresContext.xml</p>
+
+<code><![CDATA[
+	<bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
+		class="org.apache.forrest.core.plugin.XSLTInputPlugin">
+		<property name="xsltURL"
+			value="/src/xslt/tradeDoublerFeed-to-internal.xsl" />
+	</bean>
+]]></code>
+
+<p>Note how we use an ID that is the same as the document type
+created by our reader.</p>
+
+<h5>Checking our Progress</h5>
+
+<p>Now we can check that the internal document generation
+works OK. We should be
+able to retrieve our internal document by requesting 
+<span class="source">tradeDoubler.forrestInternal</span>. 
+Use the CLI to test this:</p>
+
+<p class="code">
+cd [FORREST_HOME]/src/examples/afiliateProductCatalogue
+java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI tradeDoubler.forrestInternal
+</p>
+
+<h>Generating HTML</h>
+
+<p>Since an HTML output plugin is only an XSLT transformation
+we need only configure a version of the XSLTOutputPlugin. To do
+this we need to add the following to our forrestContext.xml:</p>
+
+<code><![CDATA[
+	<bean id="htmlOutputPlugin"
+		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
+		<property name="pattern" value=".*(html|htm)" />
+		<property name="xsltPath"
+			value="/xdocs/samples/xslt/internal-to-html.xsl" />
+	</bean>
+]]></code>
+
+<p class="todo">The above location of the xsltPath will need
+to change to someting more permanent.</p>
+
+<p>In this case the id attribute, unlike with readers and 
+input plugins, can be any unique value. The pattern property
+defines which request URLs should be processed by this output
+plugin. In this case, any URL ending in either "html" or 
+"htm" will be processed by this plugin. This property
+is a Regular Expression so you can define some very complex
+pattern matching rules here.</p>
+
+<h5>Checking our Progress</h5>
+
+<p>Now we can check that the html document generation
+works OK. We should be
+able to retrieve our html document by requesting 
+<span class="source">tradeDoubler.html</span>. 
+Use the CLI to test this:</p>
+
+<p class="code">
+cd [FORREST_HOME]/src/examples/afiliateProductCatalogue
+java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI tradeDoubler.html
+</p>
+
+<p>Whilst we are at it, lets check the other potential URL for
+this document:</p>
+
+<p class="code">
+cd [FORREST_HOME]/src/examples/afiliateProductCatalogue
+java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI tradeDoubler.htm
+</p>
+
+</body>
+</html>

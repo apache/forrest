@@ -1,0 +1,133 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>How Does It Work</title>
+</head>
+<body>
+
+<h1>Overview</h1>
+
+<p>Forrest uses three major components in its processing:</p>
+
+<ol>
+  <li>Readers - read source documents</li>
+  <li>Input Plugins - converts source documents to 
+  the internal Forrest format</li>
+  <li>Output Plugins - converts internal format documents to
+  the requried output format</li>
+</ol>
+
+<p>Different implementations of each of these components
+allow different processing to take place. For example,
+different readers will retrieve the source document using
+different methods, such as HTTP, FTP or SSH. Different 
+input plugins will allow different types of source document
+to be processed and different output plugins will provide
+different output formats such as HTML, PDF or OpenOffice.org</p>
+
+<p>In the followin sections we will examine how the Forrest
+controller selets which reader, input and ouput plugins to use
+for any particular request.</p>
+
+<h2>Selecting Readers</h2>
+
+<p>Which reader is used to read a source document is defined
+by the protocol used in the location URL. Note that this
+has nothing to do with the request URL, it is defined in
+the locationmap for the Forrest content object. So, for example,
+if the source location of a file is defined as 
+<span class="source">file://foo/bar.html</span> the reader
+defined to handle "file:" requests will be used.</p>
+
+<p>To define a reader for a specific protocol we add a bean 
+definition to our content objects forestContext.xml file. 
+The ID of the bean should be the name of the protocol we wish
+process with this reader. For example:</p>
+
+<p class="source"><![CDATA[
+  	<bean id="file" class="org.apache.forrest.reader.FileReader"></bean>
+]]></p>
+
+<h3>What Source Type?</h3>
+
+<p>A reader creates a source document object that is used in
+the next stage of processing. This source document is an object
+that extends <span class="source">AbstractSourceDocument</span>.
+A method <span class="source">getType</span> returns a string
+identifying the type of document represented. This string is
+used in the next stage of processing, which is selecting an
+Input plugin to convert the source document to our internal
+format.</p>
+
+<p>A <span class="source">DocumnetFactory</span> is provided
+by core that attempts to identify the source document type.
+This factory is used by the default readers provided by core.
+However, in some cases, such as when an XML document does not
+provide a DTD definition that can be used to identify the
+document type, you will need to create a custom reader that
+returns the correct document type. In this case the utility
+class <span class="source">DefaultSourceDocument</span> 
+will probably be useful (see the 
+<span class="source">setType</span> method).</p>
+
+<h2>Selecting Input Plugins</h2>
+
+<p>Each input plugin will process a single type of source 
+document. Each document is defined by a "type", this is 
+set by the reader that reads the document. In many cases
+this will be a MIME type, but where no suitably specific
+MIME type exists, such as an XML document, an arbitrary 
+string can be used.</p>
+
+<p>When selecting an input plugin to be used the documents
+type is utilised to lookup the correct input plugin. To 
+facilitate this lookup we again use the ID of the input
+plugins bean as defined in the forrestContext.xml file. For
+example, the following will process documents of type bar:</p>
+
+<p class="source"><![CDATA[
+	<bean id="bar" class="bar.Foo"/>
+]]></p>
+
+<h2>Selecting an Output Plugin</h2>
+
+<p>An output plugin is selected by looking at the request URL
+of the. This URL is matched against an output plugin by looking
+at an "pattern" property in the bean that implements the plugin.
+The first bean that is found where the request URL matches the
+supplied pattern will be used to process the output. 
+In addition to the pattern property an output plugin 
+specifies an XSLT file that is used to convert the internal 
+format to our desired output format.</p>
+
+<p>For example, the following output plugin will be used
+to proces requests ending in either ".html" or ".htm".</p>
+
+<p class="source"><![CDATA[
+	<bean id="html"
+		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
+		<property name="pattern" value=".*\.html|.*\.htm" />
+		<property name="xsltPath"
+			value="/xdocs/samples/xslt/internal-to-html.xsl" />
+	</bean>
+]]></p>
+
+</body>
+</html>

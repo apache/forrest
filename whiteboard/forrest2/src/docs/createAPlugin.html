@@ -1,0 +1,236 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+<body>
+
+<h1>How to create an input plugin</h1>
+
+<p>The first thing to do when creating an input plugin is to decide if
+you can best achieve your objectives using XSLT or Java. Generally, if
+your input document is an XML document then you should use XSLT, 
+otherwise you will need to use Java.</p>
+
+<h2>Creating an XSLT Plugin</h2>
+
+<p>Creating an XSLT plugin is a matter of creating an XSLT stylesheet
+and registering a copy of the XSLTInputPlugin that will use your
+stylesheet.</p>
+
+<p>An XSLT plugin has two defining properties. One is the URL
+of the XSLT file to be used, the other is a property that defines
+what type of document can be processed by this plugin.</p>
+
+<h3>Register the Plugin</h3>
+
+<p>Plugins are registered with Forrest2 using the Spring Framework.
+This means that you need to add an entry to the forrestContext.xml
+file, such as:</p>
+
+<![CDATA[  <bean id="helloWorldXSLTInput"
+    class="org.apache.forrest.test.core.plugins.input.HelloWorldInputPlugin"/>]]>
+
+<p>The Forrest controller will read all the files that it finds in the classpath tat
+match this naming convention.</p>
+
+
+
+<h2>Creating an Java Plugin</h2>
+
+<h3>Create a new java project to house your plugin</h3>
+
+<h3>Create a class file that will be the controller for the plugin.</h3>
+<p>This should extend the abstact class <br/>
+	org.apache.forrest.core.plugins.input.AbstractInputPlugin</p>
+
+<p>You must implement the following two methods:</p>
+<div class="code"><pre>
+	public IDocument process(IDocument doc)
+	public String getInputType()
+</pre></div>
+
+<p>The getInputType method returns a string that uniquely identifies 
+the document type that this plugin is able to process. It is advisable
+to follow a naming convention here. We suggest:</p>
+
+<p>If the document has a suitably unique mime-type then use that.</p>
+
+<p>If the document is an XML document with a Doctype then use the URI
+of that doctype.</p>
+
+<p>If the above guidelines do not suggest a suitable type string then 
+we recomend you us a notation similar to the naming of java classes.
+For example org.foo.document.type.</p>
+
+<p>The process method should create an instance of an 
+	org.apache.forrest.core.document.InternalDocument by performing whatever
+	process is required to generate an internal Forrest document from the
+	source docuemnt.</p>
+
+<h3>Register the Plugin</h3>
+
+<p>Plugins are registered with Forrest2 using the Spring Framework.
+This means that you need to add an entry to the forrestContext.xml
+file, such as:</p>
+
+<![CDATA[  <bean id="helloWorldInput"
+    class="org.apache.forrest.test.core.plugins.input.HelloWorldInputPlugin"/>]]>
+
+<p>The Forrest controller will read all the files that it finds in the classpath tat
+match this naming convention.</p>
+
+
+
+
+=================
+An Example Plugin
+=================
+
+So lets look at a plugin example. Of course, we will start with 
+the traditional HelloWorld example. This plugin will produce 
+a document with a "Hello World" message. The contents of the source 
+document is irrelevant in this case.
+
+Here's the plugin class:
+
+package org.apache.forrest.test.core.plugins.input;
+
+import org.apache.forrest.core.document.IDocument;
+import org.apache.forrest.core.document.InternalDocument;
+import org.apache.forrest.core.plugin.AbstractInputPlugin;
+
+/**
+ * A very simple plugin that alwasy produces a Hello World document,
+ * regardless of the input document.
+ *
+ */
+public class HelloWorldInputPlugin extends AbstractInputPlugin {
+
+	public static final String CONTENT = "<html xmlns=\"http://www.w3.org/2002/06/xhtml2\" xml:lang=\"en\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd\">  <head>    <title>XHTML 2 Simple Sample Page</title>   </head>  <body>  <h>Hellow World</h>  </body></html>";
+
+	public IDocument process(IDocument doc) {
+		return new InternalDocument(CONTENT);
+	}
+
+	@Override
+	public String getInputType() {
+		return "http://forrest.apache.org/helloWorld.dtd";
+	}
+}
+
+Once registered with the InputPluginFactory we can provide an instance of the
+org.apache.forrest.test.document.HelloWorldPluginTest class and Forrest will
+then use this plugin to produce a new InternalDocument with a simple Hello 
+World message.
+
+==============================
+How to create an Output Plugin
+==============================
+
+TODO
+
+======================
+How to create a Reader
+======================
+
+A reader is respponsible for creating the initial source content. Forrest provides
+a set of generic readers that can retrieve a document from the network or from the
+filesystem. These documents will oftern need to be processed by an input plugin to
+create a document in Forrests internal format.
+
+<p>To read a document from a non-standard resource, for example, to read a document
+from a relational database, we will need to implement a custom reader. To do this
+we extend <code>org.apache.forrest.reader.AbstractReader</code>. This abstract class
+requires the following methods to be implemented:</p>
+
+<code><![CDATA[
+    /**
+	 * Initialise the reader. This method is called by the readers
+	 * constructors and should prepare the reader for operation.
+	 *
+	 */
+	abstract void init();
+
+	/**
+	 * Read a resource from a given location. If the resource
+	 * cannot be read, but it is an optional location then return null,
+	 * if it cannot be read and it is a required location throw
+	 * SourceException.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public abstract AbstractSourceDocument read(Location location);
+
+	/**
+	 * Get the scheme that this reader handles.
+	 * @return
+	 */
+	public abstract String getscheme();
+]]></code>
+
+<p>The init() method provides any necessary configuration. This method is called once during
+creation of the reader object. The read(Location location) method performs the actual "read"
+of the document. The getscheme() method defines a scheme or psuedo scheme that this
+reader will respond to. It is used by Forrest core to select the correct reader for a given
+location. We will discuss this method in more detail first, then we will look at the read
+method.</p>
+
+<p>The scheme can be any string that represents the type of reader we are building. For 
+example, if we are building a reader that will provide documents representing products in 
+a catalogue database then we may choose a scheme of "product" (note that we don't
+include the ':'). This will then be used
+in the locationmap to indicate a product document. For example, we may have a location
+defined as: </p>
+
+<code><![CDATA[
+  <location pattern="http://localhost:8888/test/product.html">
+    <source href="product:/1"/>
+  </location>
+]]></code>
+
+<p>This entry means that a request for <code>http://localhost:8888/test/product.html</code>
+will result in a request to the reader assigned the <code>product</code> scheme. To
+actually read the document Forrest will call the <code>read(Location location)</code>
+method.</p>
+
+<p>The <code>read(Location location)</code> method will process the request in whatever
+way is appropriate for that particular scheme. In this case it will communicate with
+the database to retrieve the product with ID 1.</p>
+
+Register Reader
+---------------
+
+----
+NOTE
+----
+At present a plugin needs to add itself by editing the core config documents. This will
+change shortly.
+
+Once you have built your reader then you need to register it with Forrest. This is done
+by adding an entry to the <code>applicationContext-readers.xml</code>. The entry should
+look something like this:
+
+<code><![CDATA[
+  <bean id="product" 
+    class="org.foo.forrest.reader.ProductReader">
+  </bean>
+]]></code>
+
+<p>Note that the beans id is the same as the scheme defined in the reader. This
+is how Forrest will lookup the correct reader for any given location.</p>
+</body>
+</html>
