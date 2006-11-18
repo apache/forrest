@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.locationMap.Location;
+import org.springframework.context.support.AbstractXmlApplicationContext;
 
 public interface IReader {
 
@@ -34,12 +35,13 @@ public interface IReader {
 	 * Read a resource from a given location. If the resource cannot be read,
 	 * but it is an optional location then return null, if it cannot be read and
 	 * it is a required location throw SourceException.
+	 * @param context 
 	 * 
 	 * @param location
 	 * @return
 	 * @throws MalformedURLException
 	 */
-	public abstract AbstractSourceDocument read(Location location)
+	public abstract AbstractSourceDocument read(AbstractXmlApplicationContext context, Location location)
 			throws MalformedURLException;
 
 }

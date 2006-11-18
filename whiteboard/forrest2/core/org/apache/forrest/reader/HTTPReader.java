@@ -27,6 +27,7 @@ import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.exception.SourceException;
 import org.apache.forrest.core.locationMap.Location;
+import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.w3c.tidy.Tidy;
 
 /**
@@ -52,7 +53,7 @@ public class HTTPReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(final Location location)
+	public AbstractSourceDocument read(AbstractXmlApplicationContext context, final Location location)
 			throws MalformedURLException {
 		InputStream is;
 		DefaultSourceDocument result = null;

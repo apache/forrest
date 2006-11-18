@@ -244,7 +244,7 @@ public class Controller {
 			IReader reader;
 			reader = (IReader) this.context.getBean(location.getSourceURI()
 					.getScheme());
-			results.add(reader.read(location));
+			results.add(reader.read(this.context, location));
 		}
 		return results;
 	}
