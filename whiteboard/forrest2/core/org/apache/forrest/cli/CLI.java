@@ -21,6 +21,7 @@ import java.net.URI;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.forrest.core.Controller;
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractOutputDocument;
 
 /**
@@ -46,7 +47,7 @@ public class CLI {
 			AbstractOutputDocument doc = null;
 			System.out.println("\n Processing request for " + args[0]);
 			final URI requestURI = new URI(args[0]);
-			final Controller controller = new Controller();
+			final IController controller = new Controller();
 			doc = controller.getOutputDocument(requestURI);
 
 			System.out.println("\n Resulting document for request " + args[0]
