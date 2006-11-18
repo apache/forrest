@@ -25,6 +25,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.forrest.core.Controller;
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractOutputDocument;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.InternalDocument;
@@ -55,7 +56,7 @@ public class TestController extends TestCase {
 	public static final String HELLO_WORLD_REQUEST_URI = BASE_REQUEST_URI
 			+ "helloWorld.html";
 
-	private Controller controller;
+	private IController controller;
 
 	@Override
 	public void setUp() {
