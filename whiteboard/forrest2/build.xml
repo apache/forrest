@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:fr.jayasoft.ivy.ant" name="forrest2" default="compile-core">
+
+	<property file="local.build.properties" />
+
+	<property name="project.name" value="forrest2" />
+
+	<property name="project.core.src.dir" location="src/core" />
+	<property name="project.core.test.src.dir" location="src/test" />
+
+	<property name="project.dist.dir" location="dist" />
+	<property name="project.build.classes.dir" location="build/classes" />
+    <property name="test.reports" location="build/reports" />
+	
+	<property name="compile.debug" value="off" />
+
+	<property name="ivy.jar.dir" location="tools/ivy" />
+
+	<!-- try to load ivy here from local tools/ivy dir, in case the user has not already dropped
+	      it into ant's lib dir (note that the latter copy will always take precedence).
+	      We will not fail as long as local lib dir exists (it may be empty) and
+	      ivy is in at least one of ant's lib dir or the local lib dir. -->
+	<path id="ivy.lib.path">
+		<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+	</path>
+	
+	<taskdef resource="fr/jayasoft/ivy/ant/antlib.xml" 
+		     uri="antlib:fr.jayasoft.ivy.ant" 
+		     classpathref="ivy.lib.path" />
+
+	<target name="clean">
+		<delete dir="${project.build.classes.dir}" />
+		<delete dir="${project.dist.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${project.build.classes.dir}" />
+		<mkdir dir="${project.dist.dir}" />
+		<ivy:cachepath pathid="lib.path.id" conf="default" />
+	</target>
+
+	<target name="compile-core" depends="init">
+		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="lib.path.id">
+			<src path="${project.core.src.dir}" />
+		</javac>
+	</target>
+
+	<target name="compile-core-tests" depends="compile-core">
+		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="lib.path.id">
+			<src path="${project.core.test.src.dir}" />
+		</javac>
+	</target>
+
+	<!-- ================================= 
+	          Ivy Targets           
+    ================================= -->
+	<target name="resolve">
+		<ivy:configure file="./ivyconf.xml" />
+		<ivy:resolve file="ivy.xml" conf="default" />
+	</target>
+
+	<target name="retrieve-default" depends="resolve">
+		<ivy:retrieve pattern="lib/default/[artifact]-[revision].[ext]" conf="default" />
+	</target>
+
+	<target name="retrieve-test" depends="resolve">
+		<ivy:retrieve pattern="lib/test/[artifact]-[revision].[ext]" conf="test" />
+	</target>
+
+	<target name="retrieve-all" depends="resolve">
+		<ivy:retrieve pattern="lib/[conf]/[artifact]-[revision].[ext]" conf="*" />
+	</target>
+
+	<target name="deliver" depends="retrieve-all">
+		<ivy:deliver deliverpattern="distrib/[artifact]-[revision].[ext]" pubrevision="1.1b4" pubdate="20050115123254" status="milestone" />
+	</target>
+</project>
