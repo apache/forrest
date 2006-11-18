@@ -65,20 +65,20 @@ extends the fileReader.</p>
 with Forrest. Just add the following line to your forrestContext.xml
 file.</p>
 
-<code><![CDATA[
+<p class="code"><![CDATA[
 	<bean id="tradeDoubler"
 		class="org.apache.forrest.examples.affiliateProductCatalogue.reader.TradeDoubler" />
-]]></code>
+]]></p>
 
 <p>This bean definition registers our new reader with the psudo protocol
 <span class="source">tradeDoubler</span>. So, lets add a locationmap entry
 to read our example feed:</p>
 
-<code><![CDATA[
+<p class="code"><![CDATA[
   <location pattern="tradeDoubler.*">
     <source href="tradeDoubler:classpath:/xdocs/exampleFeed.xml"/>
   </location>
-]]></code>
+]]></p>
 
 <p>Notice how we use the <span class="source">tradeDoubler</span> psuedo protocol
 to tell Forrest which reader to use.</p>
@@ -111,13 +111,13 @@ internal format.</p>
 to define our input plugin we just need to add the following to
 forresContext.xml</p>
 
-<code><![CDATA[
+<p class="code"><![CDATA[
 	<bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
 		class="org.apache.forrest.core.plugin.XSLTInputPlugin">
 		<property name="xsltURL"
 			value="/src/xslt/tradeDoublerFeed-to-internal.xsl" />
 	</bean>
-]]></code>
+]]></p>
 
 <p>Note how we use an ID that is the same as the document type
 created by our reader.</p>
@@ -141,14 +141,14 @@ java -jar [FORREST_HOME]/forrest.jar org.apache.forrest.cli.CLI tradeDoubler.for
 we need only configure a version of the XSLTOutputPlugin. To do
 this we need to add the following to our forrestContext.xml:</p>
 
-<code><![CDATA[
+<p class="code"><![CDATA[
 	<bean id="htmlOutputPlugin"
 		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
 		<property name="pattern" value=".*(html|htm)" />
 		<property name="xsltPath"
 			value="/xdocs/samples/xslt/internal-to-html.xsl" />
 	</bean>
-]]></code>
+]]></p>
 
 <p class="todo">The above location of the xsltPath will need
 to change to someting more permanent.</p>
