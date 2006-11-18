@@ -130,7 +130,7 @@ public class TestController extends TestCase {
 				.getOutputDocument(new URI(SOURCE_REQUEST_URI));
 		assertNotNull(output);
 		assertTrue("Content is not as expected", output.getContentAsString()
-				.contains("xml-stylesheet"));
+				.contains("xmlns:html=\"http://www.w3.org/2002/06/xhtml2\""));
 	}
 
 	public void testForrestInternalRequest() throws ProcessingException,
