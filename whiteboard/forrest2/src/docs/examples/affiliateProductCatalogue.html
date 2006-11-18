@@ -46,33 +46,32 @@ that we have to create a Reader to read these documents for
 us and assign a type to them so that Forrest knows how to 
 process them in subsequent stages.</p>
 
-<p>In a production system this reader would pull the feed from
-the TradeDoubler site, however, since we want to run this
-example without creating a TradeDoubler account we will create
-simple file reader that will retrieve our example feed document.
-The code for this reader is provided in 
-<span class="source">src/examples/affiliateProductCatalogue/src/org/apache/forrest/examples/affiliateProductCatalogue/reader/TradeDoubler.java</span>.</p>
+<p>Fortunately, Forrest core provides a ChainedReader class that
+allows a reader to be placed before another. The ChainedReader
+can be used to perform processing on a document after it is read
+by another reader. For example, we can create a chained reader that
+will add a given document type to a document after it has been read
+by some other reader.</p>
 
-<p>Note that this reader returns a document with the type
-<span class="source">org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed</span>.
-We will need to use this type value to select the correct
-input plugin to use. If you wanted to convert this example
-to work with real live trade doubler accounts you would
-need to extend te httpReader in the same way that this class
-extends the fileReader.</p>
-
-<p>Having written a reader for our TradeDoubler we must register it
-with Forrest. Just add the following line to your forrestContext.xml
-file.</p>
+<p>To define our ChainedReader we need to add the following to
+forrestContext.xml:</p>
 
 <p class="code"><![CDATA[
 	<bean id="tradeDoubler"
-		class="org.apache.forrest.examples.affiliateProductCatalogue.reader.TradeDoubler" />
+		class="org.apache.forrest.reader.ChainedReader">
+          <property name="docType" value="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"/>
+        </bean>
 ]]></p>
 
-<p>This bean definition registers our new reader with the psudo protocol
-<span class="source">tradeDoubler</span>. So, lets add a locationmap entry
-to read our example feed:</p>
+<p>This reader is invoked with the pseudo protocol of "tradeDoubler" 
+and returns a document with the type
+<span class="source">org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed</span>.
+We will need to use this type value to select the correct
+input plugin to use.</p>
+
+
+<p>Now we need to define which client requests will invoke this reader.
+Lets add a locationmap entry to read our example feed:</p>
 
 <p class="code"><![CDATA[
   <location pattern="tradeDoubler.*">
@@ -81,7 +80,16 @@ to read our example feed:</p>
 ]]></p>
 
 <p>Notice how we use the <span class="source">tradeDoubler</span> psuedo protocol
-to tell Forrest which reader to use.</p>
+to tell Forrest which reader to use and that, in this case, it is chained to a
+classpath reader. The source could define any kind of reader that is available, for
+example:</p>
+
+<p class="code"><![CDATA[
+  <location pattern="tradeDoubler.*">
+    <source href="tradeDoubler:http://foo.org/bar.xml"/>
+  </location>
+]]></p>
+
 
 <h5>Checking our Progress</h5>
 
