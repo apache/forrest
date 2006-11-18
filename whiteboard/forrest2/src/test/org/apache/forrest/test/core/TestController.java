@@ -61,8 +61,8 @@ public class TestController extends TestCase {
 	@Override
 	public void setUp() {
 		try {
-			this.controller = new Controller("test/locationmap.xml",
-					"test/forrestContext.xml");
+			this.controller = new Controller("src/test/locationmap.xml",
+					"src/test/forrestContext.xml");
 		} catch (final Exception e) {
 			fail("Unable to set up tests: " + e.getMessage());
 		}
