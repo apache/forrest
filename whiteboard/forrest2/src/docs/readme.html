@@ -301,7 +301,32 @@ public static void main(String[] args) {
 <p>As another example, here is the doGet method of a servlet that will route requests to
 Forrest and stream the results back to the requesting client.</p>
 
-<div class="todo"> show the webapp servlet class.</div>
+<div class="code">
+<pre>
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		URI requestURI;
+		try {
+			requestURI = new URI(request.getContextPath());
+			AbstractOutputDocument doc;
+			try {
+				doc = controller.getOutputDocument(requestURI);
+			} catch (ProcessingException e) {
+				throw new ServletException(e);
+			}
+			out.println(doc.getContentAsString());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		out.flush();
+		out.close();
+	}
+</pre>
+</div>
 
 <h2>Running Forrest 2.0 as a Webapp</h2>
 
