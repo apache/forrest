@@ -167,14 +167,18 @@ public class Controller implements IController {
 	 * 
 	 * @param sourceDocuments
 	 * @throws IOException
+	 * @throws ProcessingException 
 	 */
 	private List<InternalDocument> processInputPlugins(
 			final List<AbstractSourceDocument> sourceDocuments)
-			throws IOException {
+			throws IOException, ProcessingException {
 		final List<InternalDocument> results = new ArrayList<InternalDocument>(
 				sourceDocuments.size());
 		for (int i = 0; i < sourceDocuments.size(); i++) {
 			final AbstractSourceDocument doc = sourceDocuments.get(i);
+			if (doc == null) {
+				throw new ProcessingException("No source document is available.");
+			}
 			AbstractInputPlugin plugin = getInputPlugin(doc);
 			results.add((InternalDocument) plugin.process(doc));
 		}
