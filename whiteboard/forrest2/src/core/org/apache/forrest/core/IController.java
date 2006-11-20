@@ -13,7 +13,7 @@ import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.Location;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
-import org.apache.forrest.reader.IReader;
+import org.apache.forrest.core.reader.IReader;
 
 public interface IController {
 

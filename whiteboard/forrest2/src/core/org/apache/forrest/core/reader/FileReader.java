@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.reader;
+package org.apache.forrest.core.reader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +37,7 @@ public class FileReader extends AbstractReader {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
+	 * @see org.apache.forrest.core.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
 	public AbstractSourceDocument read(IController controller, URI requestURI, final Location location) {
 		AbstractSourceDocument result = null;

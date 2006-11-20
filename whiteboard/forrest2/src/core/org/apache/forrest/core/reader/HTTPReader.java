@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.reader;
+package org.apache.forrest.core.reader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -42,7 +42,7 @@ public class HTTPReader extends AbstractReader {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.forrest.reader.IReader#init()
+	 * @see org.apache.forrest.core.reader.IReader#init()
 	 */
 	public void init() {
 		this.client = new HttpClient(new MultiThreadedHttpConnectionManager());
@@ -53,7 +53,7 @@ public class HTTPReader extends AbstractReader {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
+	 * @see org.apache.forrest.core.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
 	public AbstractSourceDocument read(IController controller, final URI requestURI, final Location location)
 			throws MalformedURLException, ProcessingException {

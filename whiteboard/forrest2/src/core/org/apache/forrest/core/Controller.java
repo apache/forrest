@@ -39,7 +39,7 @@ import org.apache.forrest.core.locationMap.LocationMap;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
 import org.apache.forrest.core.plugin.PassThroughInputPlugin;
-import org.apache.forrest.reader.IReader;
+import org.apache.forrest.core.reader.IReader;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.reader;
+package org.apache.forrest.core.reader;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -35,7 +35,7 @@ import org.apache.forrest.core.locationMap.Location;
  * It is defined in forrestContext.xml as follows:
  * 
  * <bean id="fooProtocol"
- *   class="org.apache.forrest.reader.ChainedReader" >
+ *   class="org.apache.forrest.core.reader.ChainedReader" >
  *   <property name="docType"
  *             value="org.foo.Bar" />
  * </bean>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.reader;
+package org.apache.forrest.core.reader;
 
 import java.net.MalformedURLException;
 import java.net.URI;
