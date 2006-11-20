@@ -70,24 +70,7 @@ public class Location {
 				}
 			}
 		}
-		if (url.contains("classpath:")) {
-			final String path = url.substring(url.lastIndexOf(':') + 1);
-			final URL resourceURL = this.getClass().getResource(path);
-			if (resourceURL == null)
-				throw new IOException("Cannot find the resource: " + path);
-			URI uri;
-			if (url.indexOf("classpath:") != 0) {
-				final String psudeoProtocol = url.substring(0, url
-						.indexOf("classpath:") - 1);
-				final String ssp = resourceURL.toURI().toURL().toExternalForm();
-				uri = new URI(psudeoProtocol, ssp, null);
-			} else {
-				uri = resourceURL.toURI();
-			}
-			this.init(pattern, uri, isOptional);
-		} else {
-			this.init(pattern, new URI(url), isOptional);
-		}
+		this.init(pattern, new URI(url), isOptional);
 	}
 
 	private void init(final String pattern, final URI uri,
@@ -118,8 +101,54 @@ public class Location {
 		this.requestPattern = pattern;
 	}
 
-	public URL getSourceURL() throws MalformedURLException {
-		return this.getSourceURI().toURL();
+	/**
+	 * Get the source URL, that is the one to use when reading the source
+	 * document. The source URL is the sourceURI modified appropriately for the
+	 * given request.
+	 * 
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	public URL getResolvedSourceURL() throws MalformedURLException {
+		URI uri = getSourceURI();
+		URL resourceURL;
+		final String sourcePath;
+		if (uri.getScheme().equals("classpath")) {
+			sourcePath = uri.getPath();
+			resourceURL = resolveClasspathURI(sourcePath);
+		} else {
+			String strURI = uri.getSchemeSpecificPart();
+			if (strURI.contains(":")) {
+				String subProtocol = strURI.substring(0, strURI
+						.lastIndexOf(':'));
+				sourcePath = strURI.substring(strURI.lastIndexOf(':') + 1);
+				if (subProtocol.equals("classpath")) {
+					resourceURL = resolveClasspathURI(sourcePath);
+				} else {
+					URI subURI;
+					try {
+						subURI = new URI(subProtocol, sourcePath, null);
+						resourceURL = subURI.toURL();
+					} catch (URISyntaxException e) {
+						throw new MalformedURLException(
+								"Unable to work out sub protocol URI");
+					}
+				}
+			} else {
+				resourceURL = uri.toURL();
+			}
+		}
+		return resourceURL;
+	}
+
+	private URL resolveClasspathURI(final String sourcePath)
+			throws MalformedURLException {
+		URL resourceURL;
+		resourceURL = this.getClass().getResource(sourcePath);
+		if (resourceURL == null)
+			throw new MalformedURLException(
+					"Cannot find the classpath resource: " + sourcePath);
+		return resourceURL;
 	}
 
 	public void setSourceURL(final URL sourceURL) throws URISyntaxException {
@@ -132,6 +161,19 @@ public class Location {
 
 	public void setSourceURI(final URI sourceURI) {
 		this.sourceURI = sourceURI;
+	}
+
+	/**
+	 * Get the scheme used for retrieving this resource.
+	 * The scheme will be the first protocol in the source URI.
+	 * @return
+	 */
+	public String getScheme() {
+		String scheme = getSourceURI().getScheme();
+		if (scheme.equals("classpath")) {
+			scheme = "file";
+		}
+		return scheme;
 	}
 
 }
