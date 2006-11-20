@@ -62,7 +62,7 @@ public class ChainedReader extends AbstractReader {
 	private String docType;
 	
 	public AbstractSourceDocument read(IController controller,
-			final Location location) throws ProcessingException {
+			URI requestURI, final Location location) throws ProcessingException {
 		DefaultSourceDocument doc = null;
 		final URI psudeoURI = location.getSourceURI();
 		final String ssp = psudeoURI.getSchemeSpecificPart();
@@ -72,7 +72,7 @@ public class ChainedReader extends AbstractReader {
 			location.setSourceURI(uri);
 			IReader reader;
 			reader = (IReader) controller.getReader(location);
-			doc = (DefaultSourceDocument) reader.read(controller, location);
+			doc = (DefaultSourceDocument) reader.read(controller, requestURI, location);
 			if (doc != null) {
 				doc
 						.setType(getDocType());

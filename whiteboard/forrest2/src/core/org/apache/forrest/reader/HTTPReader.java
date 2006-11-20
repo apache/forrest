@@ -19,6 +19,7 @@ package org.apache.forrest.reader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -26,6 +27,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.exception.SourceException;
 import org.apache.forrest.core.locationMap.Location;
 import org.w3c.tidy.Tidy;
@@ -53,12 +55,12 @@ public class HTTPReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(IController controller, final Location location)
-			throws MalformedURLException {
+	public AbstractSourceDocument read(IController controller, final URI requestURI, final Location location)
+			throws MalformedURLException, ProcessingException {
 		InputStream is;
 		DefaultSourceDocument result = null;
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final GetMethod get = new GetMethod(location.getResolvedSourceURL()
+		final GetMethod get = new GetMethod(location.getResolvedSourceURL(requestURI)
 				.toExternalForm());
 		get.setFollowRedirects(true);
 		try {

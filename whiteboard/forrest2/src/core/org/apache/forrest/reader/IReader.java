@@ -17,6 +17,7 @@
 package org.apache.forrest.reader;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
@@ -38,12 +39,15 @@ public interface IReader {
 	 * it is a required location throw SourceException.
 	 * @param context 
 	 * 
-	 * @param location
+	 * @param controller - the forrest controller in use
+	 * @param requestURI - the URI being requested
+	 * @param location - the location we are to read the document from
+	 * 
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws ProcessingException 
 	 */
-	public abstract AbstractSourceDocument read(IController controller, Location location)
+	public abstract AbstractSourceDocument read(IController controller, URI requestURI, Location location)
 			throws MalformedURLException, ProcessingException;
 
 }

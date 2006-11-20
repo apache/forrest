@@ -148,7 +148,7 @@ public class Controller implements IController {
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
 		final List<AbstractSourceDocument> sourceDocs = this
-				.loadSourceDocuments(sourceLocs);
+				.loadSourceDocuments(requestURI, sourceLocs);
 		this.sourceDocsCache.put(requestURI, sourceDocs);
 
 		final List<InternalDocument> internalDocs = this
@@ -255,7 +255,7 @@ public class Controller implements IController {
 	 * @fixme resource handlers should be provided from a factory class
 	 */
 	private List<AbstractSourceDocument> loadSourceDocuments(
-			final List<Location> sourceLocations) throws MalformedURLException,
+			URI requestURI, final List<Location> sourceLocations) throws MalformedURLException,
 			ProcessingException {
 		final List<AbstractSourceDocument> results = new ArrayList<AbstractSourceDocument>(
 				sourceLocations.size());
@@ -263,7 +263,7 @@ public class Controller implements IController {
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final Location location = sourceLocations.get(i);
 			IReader reader = getReader(location);
-			results.add(reader.read(this, location));
+			results.add(reader.read(this, requestURI, location));
 		}
 		return results;
 	}
@@ -279,12 +279,8 @@ public class Controller implements IController {
 		try {
 			reader = (IReader) this.context.getBean(location.getScheme());
 		} catch (Exception e) {
-			try {
-				throw new ProcessingException("Unable to get a reader for : "
-						+ location.getResolvedSourceURL().toExternalForm(), e);
-			} catch (MalformedURLException e1) {
-				throw new ProcessingException("Unable to get a reader", e1);
-			}
+			throw new ProcessingException("Unable to get a reader for : "
+					+ location.getRequestPattern(), e);
 		}
 		return reader;
 	}

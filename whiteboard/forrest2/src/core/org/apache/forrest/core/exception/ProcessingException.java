@@ -27,4 +27,8 @@ public class ProcessingException extends Exception {
 		super(message, e);
 	}
 
+	public ProcessingException(String message) {
+		super(message);
+	}
+
 }

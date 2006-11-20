@@ -19,6 +19,7 @@ package org.apache.forrest.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
@@ -38,11 +39,11 @@ public class FileReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(IController controller, final Location location) {
+	public AbstractSourceDocument read(IController controller, URI requestURI, final Location location) {
 		AbstractSourceDocument result = null;
 		try {
 			final InputStream is = new FileInputStream(new File(location
-					.getResolvedSourceURL().toURI()));
+					.getResolvedSourceURL(requestURI).toURI()));
 			result = DocumentFactory.getSourceDocumentFor(is);
 		} catch (final Exception e) {
 			if (location.isRequired())
