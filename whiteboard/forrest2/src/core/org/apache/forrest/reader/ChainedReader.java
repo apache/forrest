@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.Location;
 
 /**
@@ -61,7 +62,7 @@ public class ChainedReader extends AbstractReader {
 	private String docType;
 	
 	public AbstractSourceDocument read(IController controller,
-			final Location location) {
+			final Location location) throws ProcessingException {
 		DefaultSourceDocument doc = null;
 		final URI psudeoURI = location.getSourceURI();
 		final String ssp = psudeoURI.getSchemeSpecificPart();

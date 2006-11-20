@@ -281,7 +281,7 @@ public class Controller implements IController {
 		} catch (Exception e) {
 			try {
 				throw new ProcessingException("Unable to get a reader for : "
-						+ location.getSourceURL().toExternalForm(), e);
+						+ location.getResolvedSourceURL().toExternalForm(), e);
 			} catch (MalformedURLException e1) {
 				throw new ProcessingException("Unable to get a reader", e1);
 			}

@@ -58,7 +58,7 @@ public class HTTPReader extends AbstractReader {
 		InputStream is;
 		DefaultSourceDocument result = null;
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final GetMethod get = new GetMethod(location.getSourceURL()
+		final GetMethod get = new GetMethod(location.getResolvedSourceURL()
 				.toExternalForm());
 		get.setFollowRedirects(true);
 		try {

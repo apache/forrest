@@ -42,7 +42,7 @@ public class FileReader extends AbstractReader {
 		AbstractSourceDocument result = null;
 		try {
 			final InputStream is = new FileInputStream(new File(location
-					.getSourceURL().toURI()));
+					.getResolvedSourceURL().toURI()));
 			result = DocumentFactory.getSourceDocumentFor(is);
 		} catch (final Exception e) {
 			if (location.isRequired())

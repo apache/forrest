@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.Location;
 
 public interface IReader {
@@ -40,8 +41,9 @@ public interface IReader {
 	 * @param location
 	 * @return
 	 * @throws MalformedURLException
+	 * @throws ProcessingException 
 	 */
 	public abstract AbstractSourceDocument read(IController controller, Location location)
-			throws MalformedURLException;
+			throws MalformedURLException, ProcessingException;
 
 }
