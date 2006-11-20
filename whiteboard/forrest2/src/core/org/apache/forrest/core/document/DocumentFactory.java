@@ -82,7 +82,7 @@ public class DocumentFactory {
 			if (fileData.toString().contains("<?xml")) {
 				doc = new XMLSourceDocument(fileData.toString(), reader,
 						"application/xml");
-			} if (fileData.toString().toLowerCase().contains("<html>")) {
+			} else if (fileData.toString().toLowerCase().contains("<html>")) {
 				doc = new DefaultSourceDocument(fileData.toString(), reader,
 						"html");
 			} else {
