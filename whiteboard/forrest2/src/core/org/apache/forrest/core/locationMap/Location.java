@@ -22,9 +22,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.forrest.core.exception.ProcessingException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.sun.org.apache.regexp.internal.RE;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 
 /**
  * A location is a possible source location for a given request URI. There may
@@ -108,13 +112,47 @@ public class Location {
 	 * 
 	 * @return
 	 * @throws MalformedURLException
+	 * @throws ProcessingException
 	 */
-	public URL getResolvedSourceURL() throws MalformedURLException {
+	public URL getResolvedSourceURL(URI requestURI)
+			throws MalformedURLException, ProcessingException {
+
+		URL url;
+		try {
+			url = requestURI.toURL();
+		} catch (final IllegalArgumentException e) {
+			// we'll assume that this is not an absolute URL and therefore
+			// refers to a file
+			url = new URL("file://" + requestURI);
+		}
+		final String urlString = url.toExternalForm();
+
+		RE r;
+		String sourcePath = this.getSourceURI().getPath();
+		try {
+			r = new RE(getRequestPattern());
+		} catch (RESyntaxException re) {
+			throw new ProcessingException(
+					"Unable to extract variable values from request: "
+							+ re.getMessage(), re);
+		}
+
+		if (r.match(urlString)) {
+			String variable;
+			String value;
+			for (int i = 0; i < r.getParenCount(); i++) {
+				variable = "$(" + i + ")";
+				value = r.getParen(i);
+				sourcePath = sourcePath.replace(variable, value);
+			}
+		} else {
+			throw new ProcessingException(
+					"Unable to extract variable values from requestURI");
+		}
+
 		URI uri = getSourceURI();
 		URL resourceURL;
-		final String sourcePath;
 		if (uri.getScheme().equals("classpath")) {
-			sourcePath = uri.getPath();
 			resourceURL = resolveClasspathURI(sourcePath);
 		} else {
 			String strURI = uri.getSchemeSpecificPart();
@@ -164,8 +202,9 @@ public class Location {
 	}
 
 	/**
-	 * Get the scheme used for retrieving this resource.
-	 * The scheme will be the first protocol in the source URI.
+	 * Get the scheme used for retrieving this resource. The scheme will be the
+	 * first protocol in the source URI.
+	 * 
 	 * @return
 	 */
 	public String getScheme() {
