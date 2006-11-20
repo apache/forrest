@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.forrest.core.exception.ProcessingException;
+
 /**
  * The document factory creates instances of various types of document.
  * 
@@ -39,9 +41,10 @@ public class DocumentFactory {
 	 * @throws IOException
 	 *             If there is a problem reading the document content from the
 	 *             InputStream
+	 * @throws ProcessingException 
 	 */
 	public static AbstractSourceDocument getSourceDocumentFor(
-			final InputStream is) throws IOException {
+			final InputStream is) throws IOException, ProcessingException {
 		return readFile(is);
 	}
 
@@ -52,9 +55,10 @@ public class DocumentFactory {
 	 * the reader used to read the rest of the data.
 	 * 
 	 * @param is
+	 * @throws ProcessingException 
 	 */
 	private static AbstractSourceDocument readFile(final InputStream is)
-			throws java.io.IOException {
+			throws java.io.IOException, ProcessingException {
 		AbstractSourceDocument doc = null;
 		final StringBuffer fileData = new StringBuffer(1024);
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -78,9 +82,11 @@ public class DocumentFactory {
 			if (fileData.toString().contains("<?xml")) {
 				doc = new XMLSourceDocument(fileData.toString(), reader,
 						"application/xml");
-			} else {
+			} if (fileData.toString().toLowerCase().contains("<html>")) {
 				doc = new DefaultSourceDocument(fileData.toString(), reader,
-						null);
+						"html");
+			} else {
+				throw new ProcessingException("Unable to determine the source document type");
 			}
 		}
 		return doc;
