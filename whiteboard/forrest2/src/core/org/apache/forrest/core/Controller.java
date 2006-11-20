@@ -181,14 +181,15 @@ public class Controller implements IController {
 		return results;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getInputPlugin(org.apache.forrest.core.document.AbstractSourceDocument)
 	 */
 	public AbstractInputPlugin getInputPlugin(final AbstractSourceDocument doc) {
 		AbstractInputPlugin plugin;
 		try {
-			plugin = (AbstractInputPlugin) this.context.getBean(doc
-					.getType());
+			plugin = (AbstractInputPlugin) this.context.getBean(doc.getType());
 		} catch (final NoSuchBeanDefinitionException e) {
 			plugin = new PassThroughInputPlugin();
 		}
@@ -216,16 +217,19 @@ public class Controller implements IController {
 		}
 
 		BaseOutputPlugin plugin = getOutputPlugin(requestURI);
-		
+
 		return (AbstractOutputDocument) plugin.process(doc);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getOutputPlugin(java.net.URI)
 	 */
 	public BaseOutputPlugin getOutputPlugin(final URI requestURI) {
 		BaseOutputPlugin plugin = null;
-		final String[] names = this.context.getBeanNamesForType(BaseOutputPlugin.class);
+		final String[] names = this.context
+				.getBeanNamesForType(BaseOutputPlugin.class);
 		for (int i = 0; i < names.length; i = i + 1) {
 			plugin = (BaseOutputPlugin) this.context.getBean(names[i]);
 			if (plugin.isMatch(requestURI)) {
@@ -244,13 +248,15 @@ public class Controller implements IController {
 	 * Load each of the source documents.
 	 * 
 	 * @throws MalformedURLException
+	 * @throws ProcessingException
 	 * 
 	 * @fixme cache the resource
 	 * @fixme handle document types other than HTML
 	 * @fixme resource handlers should be provided from a factory class
 	 */
 	private List<AbstractSourceDocument> loadSourceDocuments(
-			final List<Location> sourceLocations) throws MalformedURLException {
+			final List<Location> sourceLocations) throws MalformedURLException,
+			ProcessingException {
 		final List<AbstractSourceDocument> results = new ArrayList<AbstractSourceDocument>(
 				sourceLocations.size());
 
@@ -262,13 +268,24 @@ public class Controller implements IController {
 		return results;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getReader(org.apache.forrest.core.locationMap.Location)
 	 */
-	public IReader getReader(final Location location) {
+	public IReader getReader(final Location location)
+			throws ProcessingException {
 		IReader reader;
-		reader = (IReader) this.context.getBean(location.getSourceURI()
-				.getScheme());
+		try {
+			reader = (IReader) this.context.getBean(location.getScheme());
+		} catch (Exception e) {
+			try {
+				throw new ProcessingException("Unable to get a reader for : "
+						+ location.getSourceURL().toExternalForm(), e);
+			} catch (MalformedURLException e1) {
+				throw new ProcessingException("Unable to get a reader", e1);
+			}
+		}
 		return reader;
 	}
 
@@ -294,7 +311,9 @@ public class Controller implements IController {
 		return possibleLocs.get(0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getSourceLocations(java.net.URI)
 	 */
 	public List<Location> getSourceLocations(final URI requestURI)
@@ -307,7 +326,9 @@ public class Controller implements IController {
 		return locs;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getSourceDocuments(java.net.URI)
 	 */
 	public List<AbstractSourceDocument> getSourceDocuments(final URI requestURI)
@@ -326,7 +347,9 @@ public class Controller implements IController {
 		return sources;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getInternalDocuments(java.net.URI)
 	 */
 	public List<InternalDocument> getInternalDocuments(final URI requestURI)
@@ -346,7 +369,9 @@ public class Controller implements IController {
 		return internalDocs;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.forrest.core.IController#getOutputDocument(java.net.URI)
 	 */
 	public AbstractOutputDocument getOutputDocument(final URI requestURI)

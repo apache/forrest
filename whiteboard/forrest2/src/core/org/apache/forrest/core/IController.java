@@ -22,7 +22,7 @@ public interface IController {
 
 	public abstract BaseOutputPlugin getOutputPlugin(final URI requestURI);
 
-	public abstract IReader getReader(final Location location);
+	public abstract IReader getReader(final Location location) throws ProcessingException;
 
 	/**
 	 * Get the source URLs for a given request URI.
