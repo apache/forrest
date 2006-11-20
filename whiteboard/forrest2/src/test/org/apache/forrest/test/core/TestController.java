@@ -146,4 +146,13 @@ public class TestController extends TestCase {
 				.contains("http://www.w3.org/2002/06/xhtml2"));
 	}
 
+	public void testVariableSubstitution() throws ProcessingException,
+			URISyntaxException, IOException {
+		final AbstractOutputDocument output = this.controller
+				.getOutputDocument(new URI(VARIABLE_SUBSTITUTION_REQUEST_URI));
+				assertNotNull(output);
+				assertTrue("Content is not as expected", output.getContentAsString()
+						.contains("http://www.w3.org/2002/06/xhtml2"));
+	}
+
 }
