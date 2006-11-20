@@ -45,10 +45,13 @@ public class TestController extends TestCase {
 	public static final String BASE_REQUEST_URI = "http://localhost:8888/xhtml/";
 
 	public static final String SOURCE_REQUEST_URI = BASE_REQUEST_URI
-			+ "testPage.forestSource";
+			+ "testPage.forrestSource";
 
 	public static final String INTERNAL_REQUEST_URI = BASE_REQUEST_URI
-			+ "testPage.forestInternal";
+			+ "testPage.forrestInternal";
+
+	public static final String VARIABLE_SUBSTITUTION_REQUEST_URI = BASE_REQUEST_URI
+			+ "variable/sample_simple.forrestSource";
 
 	public static final String XHTML_REQUEST_URI = BASE_REQUEST_URI
 			+ "testPage.html";
@@ -131,7 +134,7 @@ public class TestController extends TestCase {
 				.getOutputDocument(new URI(SOURCE_REQUEST_URI));
 		assertNotNull(output);
 		assertTrue("Content is not as expected", output.getContentAsString()
-				.contains("xmlns:html=\"http://www.w3.org/2002/06/xhtml2\""));
+				.contains("http://www.w3.org/2002/06/xhtml2"));
 	}
 
 	public void testForrestInternalRequest() throws ProcessingException,
@@ -140,7 +143,7 @@ public class TestController extends TestCase {
 				.getOutputDocument(new URI(INTERNAL_REQUEST_URI));
 		assertNotNull(output);
 		assertTrue("Content is not as expected", output.getContentAsString()
-				.contains("Forrest Generated (Internal) Document"));
+				.contains("http://www.w3.org/2002/06/xhtml2"));
 	}
 
 }
