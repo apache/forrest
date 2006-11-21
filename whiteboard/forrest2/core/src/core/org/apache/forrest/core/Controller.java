@@ -42,6 +42,7 @@ import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
 import org.apache.forrest.core.plugin.PassThroughInputPlugin;
 import org.apache.forrest.core.reader.IReader;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.support.AbstractXmlApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -64,6 +65,8 @@ import org.xml.sax.SAXException;
  * 
  */
 public class Controller implements IController {
+	
+	Logger log = Logger.getLogger(Controller.class);
 
 	private final String sourceURLExtension = ".forrestSource";
 
@@ -98,9 +101,11 @@ public class Controller implements IController {
 			throws URISyntaxException, SAXException, IOException {
 		final File file = new File(contextPath);
 		if (file.exists()) {
+			log.info("Using Spring Context definition in " + contextPath);
 			this.context = new FileSystemXmlApplicationContext(file
 					.getAbsolutePath());
 		} else {
+			log.info("Using default spring context definition");
 			this.context = new ClassPathXmlApplicationContext(
 					"defaultForrestContext.xml");
 		}
