@@ -45,7 +45,7 @@ public interface IController {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public abstract List<AbstractSourceDocument> getSourceDocuments(
+	public abstract AbstractSourceDocument getSourceDocuments(
 			final URI requestURI) throws MalformedURLException,
 			ProcessingException;
 

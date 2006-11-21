@@ -28,6 +28,7 @@ import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractOutputDocument;
 import org.apache.forrest.core.document.AbstractSourceDocument;
+import org.apache.forrest.core.document.AggregatedSourceDocument;
 import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
@@ -82,9 +83,9 @@ public class TestController extends TestCase {
 
 	public void testSourceDocuments() throws IOException, ProcessingException,
 			URISyntaxException {
-		final List<AbstractSourceDocument> documents = this.controller
+		final AbstractSourceDocument document = this.controller
 				.getSourceDocuments(new URI(XHTML_REQUEST_URI));
-		assertNotNull(documents);
+		assertNotNull(document);
 		// AbstractSourceDocument firstDoc = documents.get(0);
 		// AbstractSourceDocument secondDoc = documents.get(1);
 		// assertFalse(firstDoc.equals(secondDoc));
@@ -92,17 +93,13 @@ public class TestController extends TestCase {
 
 	public void testInternalDocuments() throws IOException,
 			ProcessingException, URISyntaxException {
-		final List<AbstractSourceDocument> srcDocs = this.controller
+		final AbstractSourceDocument srcDoc = this.controller
 				.getSourceDocuments(new URI(XHTML_REQUEST_URI));
 		final List<InternalDocument> internalDocs = this.controller
 				.getInternalDocuments(new URI(XHTML_REQUEST_URI));
-		final AbstractSourceDocument firstSrcDoc = srcDocs.get(0);
-		// AbstractSourceDocument secondSrcDoc = srcDocs.get(1);
+		final AbstractSourceDocument firstSrcDoc = srcDoc;
 		final InternalDocument firstIntDoc = internalDocs.get(0);
-		// InternalDocument secondIntDoc = internalDocs.get(1);
 		assertFalse(firstSrcDoc.equals(firstIntDoc));
-		// assertFalse(secondSrcDoc.equals(secondIntDoc));
-		// assertFalse(firstIntDoc.equals(secondIntDoc));
 	}
 
 	public void testProcessRequest() throws IOException, ProcessingException,
@@ -118,14 +115,13 @@ public class TestController extends TestCase {
 
 	public void testReader() throws ProcessingException, MalformedURLException,
 			URISyntaxException {
-		final List<AbstractSourceDocument> source = this.controller
+		final AbstractSourceDocument source = this.controller
 				.getSourceDocuments(new URI(HELLO_WORLD_REQUEST_URI));
-		assertEquals(
-				"Should have a single internal document for Hello World request",
-				1, source.size());
-		final AbstractSourceDocument doc = source.get(0);
+		assertTrue(
+				"Should not have an aggregated document for Hello World request",
+				! (source instanceof AggregatedSourceDocument));
 		assertEquals("Document type read by Hello world is incorrect",
-				"org.apache.forrest.helloWorld", doc.getType());
+				"org.apache.forrest.helloWorld", source.getType());
 	}
 
 	public void testForrestSourceRequest() throws ProcessingException,

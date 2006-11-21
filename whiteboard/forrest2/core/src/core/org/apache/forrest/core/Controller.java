@@ -23,12 +23,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.forrest.core.document.AbstractOutputDocument;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.AggregateInteralDocument;
+import org.apache.forrest.core.document.AggregatedSourceDocument;
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
@@ -69,7 +71,7 @@ public class Controller implements IController {
 
 	private final Map<URI, List<Location>> sourceLocationsCache = new HashMap<URI, List<Location>>();
 
-	private final Map<URI, List<AbstractSourceDocument>> sourceDocsCache = new HashMap<URI, List<AbstractSourceDocument>>();
+	private final Map<URI, AbstractSourceDocument> sourceDocsCache = new HashMap<URI, AbstractSourceDocument>();
 
 	private final Map<URI, List<InternalDocument>> internalDocsCache = new HashMap<URI, List<InternalDocument>>();
 
@@ -148,8 +150,7 @@ public class Controller implements IController {
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
 		final List<AbstractSourceDocument> sourceDocs = this
-				.loadSourceDocuments(requestURI, sourceLocs);
-		this.sourceDocsCache.put(requestURI, sourceDocs);
+				.loadAllSourceDocuments(requestURI, sourceLocs);
 
 		final List<InternalDocument> internalDocs = this
 				.processInputPlugins(sourceDocs);
@@ -167,7 +168,7 @@ public class Controller implements IController {
 	 * 
 	 * @param sourceDocuments
 	 * @throws IOException
-	 * @throws ProcessingException 
+	 * @throws ProcessingException
 	 */
 	private List<InternalDocument> processInputPlugins(
 			final List<AbstractSourceDocument> sourceDocuments)
@@ -177,7 +178,8 @@ public class Controller implements IController {
 		for (int i = 0; i < sourceDocuments.size(); i++) {
 			final AbstractSourceDocument doc = sourceDocuments.get(i);
 			if (doc == null) {
-				throw new ProcessingException("No source document is available.");
+				throw new ProcessingException(
+						"No source document is available.");
 			}
 			AbstractInputPlugin plugin = getInputPlugin(doc);
 			results.add((InternalDocument) plugin.process(doc));
@@ -249,7 +251,7 @@ public class Controller implements IController {
 	}
 
 	/**
-	 * Load each of the source documents.
+	 * Load each of the source documents into the docuemnt cache.
 	 * 
 	 * @throws MalformedURLException
 	 * @throws ProcessingException
@@ -258,18 +260,42 @@ public class Controller implements IController {
 	 * @fixme handle document types other than HTML
 	 * @fixme resource handlers should be provided from a factory class
 	 */
-	private List<AbstractSourceDocument> loadSourceDocuments(
-			URI requestURI, final List<Location> sourceLocations) throws MalformedURLException,
+	private List<AbstractSourceDocument> loadAllSourceDocuments(URI requestURI,
+			final List<Location> sourceLocations) throws MalformedURLException,
 			ProcessingException {
 		final List<AbstractSourceDocument> results = new ArrayList<AbstractSourceDocument>(
 				sourceLocations.size());
 
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final Location location = sourceLocations.get(i);
-			IReader reader = getReader(location);
-			results.add(reader.read(this, requestURI, location));
+			AbstractSourceDocument doc = loadSourceDocument(requestURI,
+					location);
+			results.add(doc);
 		}
 		return results;
+	}
+
+	private AbstractSourceDocument loadSourceDocument(URI requestURI,
+			final Location location) throws ProcessingException,
+			MalformedURLException {
+		AbstractSourceDocument doc = sourceDocsCache.get(requestURI);
+		if (doc == null) {
+			IReader reader = getReader(location);
+			doc = reader.read(this, requestURI, location);
+			addToSourceDocCache(requestURI, doc);
+		}
+		return doc;
+	}
+
+	private void addToSourceDocCache(URI requestURI, AbstractSourceDocument doc) {
+		AbstractSourceDocument sourceDoc = sourceDocsCache.get(requestURI);
+		if (sourceDoc instanceof AggregatedSourceDocument) {
+			AggregatedSourceDocument aggDoc = (AggregatedSourceDocument) sourceDoc;
+			if (!aggDoc.contains(doc)) {
+				aggDoc.add(doc);
+			}
+		}
+		this.sourceDocsCache.put(requestURI, doc);
 	}
 
 	/*
@@ -290,25 +316,69 @@ public class Controller implements IController {
 	}
 
 	/**
-	 * Resolve the input documents for a given request.
+	 * Resolve the source locations for a given request. The result is a list of
+	 * locations that make up the source document. If the list contains a single
+	 * location then the document will be read. If it contains multiple
+	 * locations they will be aggregated into a single document.
 	 * 
 	 * @param requestURI
 	 * @return
 	 * @throws LocationmapException
 	 * @throws MalformedURLException
 	 *             if the Request URI is not valid
+	 * @throws ProcessingException
 	 * @FIXME handle fall through if the first location is not correct
 	 */
 	private List<Location> resolveSources(final URI requestURI)
-			throws LocationmapException, MalformedURLException {
+			throws LocationmapException, MalformedURLException,
+			ProcessingException {
 		final List<List<Location>> possibleLocs = this.locationMap
 				.get(requestURI);
 		if (possibleLocs == null || possibleLocs.size() == 0)
 			throw new LocationmapException(
 					"Unable to find a source location for " + requestURI);
-		// TODO: we need to test for the validity of a location and return the
-		// first matching one instead of returning the first location regardless
-		return possibleLocs.get(0);
+
+		List<Location> result = new ArrayList<Location>();
+		Boolean isValid = false;
+		for (List<Location> locs : possibleLocs) {
+			result = new ArrayList<Location>();
+			isValid = true;
+			Iterator<Location> sourceLocs = locs.iterator();
+			Location loc;
+			while (sourceLocs.hasNext() && isValid) {
+				loc = sourceLocs.next();
+				if (sourceExists(requestURI, loc)) {
+					result.add(loc);
+				} else {
+					if (loc.isRequired()) {
+						isValid = false;
+					}
+				}
+			}
+			if (isValid)
+				break;
+		}
+		if (!isValid) {
+			throw new ProcessingException(
+					"Unable to find a valid source location for "
+							+ requestURI.toASCIIString());
+		}
+		return result;
+	}
+
+	/**
+	 * Test to see if a given source document exists.
+	 * 
+	 * @param loc
+	 * @return
+	 * @throws ProcessingException
+	 * @throws MalformedURLException
+	 * @TODO we need a more efficient test for existence.
+	 */
+	private boolean sourceExists(URI requestURI, Location location)
+			throws MalformedURLException, ProcessingException {
+		AbstractSourceDocument doc = loadSourceDocument(requestURI, location);
+		return doc != null;
 	}
 
 	/*
@@ -331,20 +401,19 @@ public class Controller implements IController {
 	 * 
 	 * @see org.apache.forrest.core.IController#getSourceDocuments(java.net.URI)
 	 */
-	public List<AbstractSourceDocument> getSourceDocuments(final URI requestURI)
+	public AbstractSourceDocument getSourceDocuments(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
-		List<AbstractSourceDocument> sources = this.sourceDocsCache
-				.get(requestURI);
-		if (sources == null)
+		AbstractSourceDocument source = this.sourceDocsCache.get(requestURI);
+		if (source == null)
 			try {
 				this.processRequest(requestURI);
-				sources = this.sourceDocsCache.get(requestURI);
+				source = this.sourceDocsCache.get(requestURI);
 			} catch (final Exception e) {
 				throw new ProcessingException(
 						"Unable to retrieve the source documents for "
 								+ requestURI, e);
 			}
-		return sources;
+		return source;
 	}
 
 	/*
@@ -377,19 +446,17 @@ public class Controller implements IController {
 	public AbstractOutputDocument getOutputDocument(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
 		if (requestURI.getPath().endsWith(this.sourceURLExtension)) {
-			final List<AbstractSourceDocument> sources = this
+			final AbstractSourceDocument doc = this
 					.getSourceDocuments(requestURI);
 			final StringBuffer content = new StringBuffer();
-			for (final AbstractSourceDocument doc : sources) {
-				try {
-					content.append(doc.getContentAsString());
-				} catch (final IOException e) {
-					content
-							.append("<error>Unable to read source document for ");
-					content.append(requestURI);
-					content.append("</error>");
-				}
+			try {
+				content.append(doc.getContentAsString());
+			} catch (final IOException e) {
+				content.append("<error>Unable to read source document for ");
+				content.append(requestURI);
+				content.append("</error>");
 			}
+
 			final DefaultOutputDocument output = new DefaultOutputDocument(
 					content.toString());
 			return output;
