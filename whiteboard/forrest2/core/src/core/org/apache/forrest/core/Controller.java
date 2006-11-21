@@ -146,7 +146,7 @@ public class Controller implements IController {
 	 */
 	private AbstractOutputDocument processRequest(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException {
-		final List<Location> sourceLocs = this.resolveSources(requestURI);
+		final List<Location> sourceLocs = this.resolveSourceLocations(requestURI);
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
 		final List<AbstractSourceDocument> sourceDocs = this
@@ -329,7 +329,7 @@ public class Controller implements IController {
 	 * @throws ProcessingException
 	 * @FIXME handle fall through if the first location is not correct
 	 */
-	private List<Location> resolveSources(final URI requestURI)
+	private List<Location> resolveSourceLocations(final URI requestURI)
 			throws LocationmapException, MalformedURLException,
 			ProcessingException {
 		final List<List<Location>> possibleLocs = this.locationMap
