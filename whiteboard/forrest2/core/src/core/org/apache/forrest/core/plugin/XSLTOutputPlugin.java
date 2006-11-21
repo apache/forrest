@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -32,6 +33,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.IDocument;
+import org.apache.log4j.Logger;
 
 /**
  * A plugin that performs an XSLT transformation on the internal documents to
@@ -39,6 +41,8 @@ import org.apache.forrest.core.document.IDocument;
  * 
  */
 public class XSLTOutputPlugin extends BaseOutputPlugin {
+
+	Logger log = Logger.getLogger(XSLTInputPlugin.class);
 
 	private String xsltPath;
 
@@ -53,7 +57,7 @@ public class XSLTOutputPlugin extends BaseOutputPlugin {
 	@Override
 	public IDocument process(final IDocument doc) throws IOException {
 		final TransformerFactory tFactory = TransformerFactory.newInstance();
-
+		log.debug("Processing document with output stylesheet from " + this.getXsltPath());
 		try {
 			final String xsltURL = this.getClass().getResource(
 					this.getXsltPath()).toExternalForm();
