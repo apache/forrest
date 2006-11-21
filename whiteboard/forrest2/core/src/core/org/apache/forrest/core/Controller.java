@@ -354,9 +354,11 @@ public class Controller implements IController {
 				loc = sourceLocs.next();
 				if (sourceExists(requestURI, loc)) {
 					result.add(loc);
+					log.debug("Found valid location: " + loc.toString());
 				} else {
 					if (loc.isRequired()) {
 						isValid = false;
+						log.debug("Can't use this set of locations because one is required: " + loc.toString());
 					}
 				}
 			}

@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.forrest.core.exception.LocationmapException;
+import org.apache.log4j.Logger;
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -44,6 +45,8 @@ import com.sun.org.apache.regexp.internal.RESyntaxException;
  * 
  */
 public class LocationMap {
+	Logger log = Logger.getLogger(LocationMap.class);
+	
 	private final Map<String, List<Location>> locations = new HashMap<String, List<Location>>();
 
 	/**
@@ -58,6 +61,7 @@ public class LocationMap {
 	 */
 	public LocationMap(final String locationmapPath) throws URISyntaxException,
 			SAXException, IOException {
+		log.debug("Initialise locationmap from config file " + locationmapPath);
 		final File file = new File(locationmapPath);
 		final URL lmURL = file.toURL();
 
@@ -70,7 +74,9 @@ public class LocationMap {
 		for (int i = 0; i < nodes.getLength(); i++) {
 			final Node element = nodes.item(i);
 			if (element.getNodeName().equals("location")) {
-				this.put(new Location(element));
+				Location loc = new Location(element);
+				this.put(loc);
+				log.debug("Adding " + loc.toString());
 			}
 		}
 	}
@@ -102,12 +108,16 @@ public class LocationMap {
 	 */
 	public List<List<Location>> get(final URI requestURI)
 			throws MalformedURLException, LocationmapException {
+		log.debug("Getting potential locations for request of " + requestURI.toASCIIString());
 		final List<List<Location>> results = new ArrayList<List<Location>>();
 		final Set<String> locPatterns = this.locations.keySet();
 		for (final String pattern : locPatterns) {
 			try {
-				if (this.isMatch(pattern, requestURI))
-					results.add(this.locations.get(pattern));
+				if (this.isMatch(pattern, requestURI)) {
+					List<Location> locs = this.locations.get(pattern);
+					results.add(locs);
+					log.info(locs.size() + " potenatial location from pattern " + pattern);
+				}
 			} catch (final RESyntaxException e) {
 				throw new LocationmapException(
 						"Pattern is not a valid regular expression (" + pattern

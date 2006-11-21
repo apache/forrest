@@ -214,5 +214,21 @@ public class Location {
 		}
 		return scheme;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		if (isRequired()) {
+			sb.append("Required ");
+		} else {
+			sb.append("Optional ");
+		}
+		sb.append("location: ");
+		sb.append("Pattern: ");
+		sb.append(this.getRequestPattern());
+		sb.append(" SourceURI: ");
+		sb.append(this.getSourceURI().toASCIIString());
+		
+		return sb.toString();
+	}
 
 }
