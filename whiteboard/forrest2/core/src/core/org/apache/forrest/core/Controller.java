@@ -359,6 +359,8 @@ public class Controller implements IController {
 					if (loc.isRequired()) {
 						isValid = false;
 						log.debug("Can't use this set of locations because one is required: " + loc.toString());
+					} else {
+						log.debug("Can't find file for " + loc.toString());
 					}
 				}
 			}
