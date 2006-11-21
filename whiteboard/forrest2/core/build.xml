@@ -10,8 +10,12 @@
 
 	<property name="project.dist.dir" location="dist" />
 	<property name="project.build.classes.dir" location="build/classes" />
-    <property name="test.reports" location="build/reports" />
+	<property name="test.reports" location="build/reports" />
 	
+	<property name="content.object.dir" location="src/examples/helloWorld"/>
+	<property name="content.object.start.uri" value="helloWorld2.html"/>
+	<property name="content.object.src.dir" location="${content.object.dir}/src"/>
+
 	<property name="compile.debug" value="off" />
 
 	<property name="ivy.jar.dir" location="tools/ivy" />
@@ -23,10 +27,8 @@
 	<path id="ivy.lib.path">
 		<fileset dir="${ivy.jar.dir}" includes="*.jar" />
 	</path>
-	
-	<taskdef resource="fr/jayasoft/ivy/ant/antlib.xml" 
-		     uri="antlib:fr.jayasoft.ivy.ant" 
-		     classpathref="ivy.lib.path" />
+
+	<taskdef resource="fr/jayasoft/ivy/ant/antlib.xml" uri="antlib:fr.jayasoft.ivy.ant" classpathref="ivy.lib.path" />
 
 	<target name="clean">
 		<delete dir="${project.build.classes.dir}" />
@@ -36,16 +38,47 @@
 	<target name="init" depends="clean">
 		<mkdir dir="${project.build.classes.dir}" />
 		<mkdir dir="${project.dist.dir}" />
+		<mkdir dir="${project.dist.dir}/lib" />
 		<ivy:cachepath pathid="lib.path.id" conf="default" />
 	</target>
 
-	<target name="compile-core" depends="init">
+	<target name="copy-core-resources" depends="init">
+	  <copy todir="${project.build.classes.dir}">
+	    <fileset dir="${project.core.src.dir}">
+	    	<exclude name="**/*.java"/>
+	    </fileset>
+	  </copy>
+	</target>
+
+	<target name="copy-test-resources" depends="init">
+		  <copy todir="${project.build.classes.dir}">
+		    <fileset dir="${project.core.test.src.dir}">
+		    	<exclude name="**/*.java"/>
+		    </fileset>
+		  </copy>
+	</target>
+
+	<target name="copy-content-object-resources" depends="init">
+		  <copy todir="${project.build.classes.dir}">
+		    <fileset dir="${content.object.src.dir}">
+		    	<exclude name="**/*.java"/>
+		    </fileset>
+		  </copy>
+	</target>
+	
+	<target name="compile-core" depends="copy-core-resources">
 		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="lib.path.id">
 			<src path="${project.core.src.dir}" />
 		</javac>
 	</target>
+	
+	<target name="compile-content-object" depends="compile-core, copy-content-object-resources">
+		<javac destdir="${content.object.dir}" debug="${compile.debug}" classpathref="lib.path.id">
+			<src path="${content.object.src.dir}" />
+		</javac>
+	</target>
 
-	<target name="compile-core-tests" depends="compile-core">
+	<target name="compile-core-tests" depends="compile-core, copy-test-resources">
 		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="lib.path.id">
 			<src path="${project.core.test.src.dir}" />
 		</javac>
@@ -72,6 +105,19 @@
 	</target>
 
 	<target name="deliver" depends="retrieve-all">
-		<ivy:deliver deliverpattern="distrib/[artifact]-[revision].[ext]" pubrevision="1.1b4" pubdate="20050115123254" status="milestone" />
+		<ivy:deliver deliverpattern="${project.dist.dir}/lib/[artifact]-[revision].[ext]" pubrevision="1.1b4" pubdate="20050115123254" status="milestone" />
 	</target>
+
+	<target name="run" depends="compile-content-object">
+		<java classname="org.apache.forrest.cli.CLI" 
+			dir="${content.object.dir}" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="lib.path.id" />
+				<pathelement path="${project.build.classes.dir}"/>
+		        <pathelement path="${content.object.dir}/src"/>
+			</classpath>
+			<arg line="${content.object.start.uri}"/>
+		</java>
+	</target>
+
 </project>
