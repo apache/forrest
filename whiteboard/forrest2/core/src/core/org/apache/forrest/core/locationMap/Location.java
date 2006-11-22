@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.forrest.core.exception.ProcessingException;
+import org.apache.log4j.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,6 +38,9 @@ import com.sun.org.apache.regexp.internal.RESyntaxException;
  * 
  */
 public class Location {
+	
+	Logger log = Logger.getLogger(Location.class);
+	
 	private String requestPattern;
 
 	private boolean isRequired;
@@ -145,6 +149,7 @@ public class Location {
 				value = r.getParen(i);
 				sourcePath = sourcePath.replace(variable, value);
 			}
+			log.debug("After variable substitution the source path is " + sourcePath);
 		} else {
 			throw new ProcessingException(
 					"Unable to extract variable values from requestURI");
