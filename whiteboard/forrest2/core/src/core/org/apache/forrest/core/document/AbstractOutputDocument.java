@@ -17,6 +17,7 @@
 package org.apache.forrest.core.document;
 
 import java.net.URI;
+import java.util.Set;
 
 /**
  * An output document is a single document that has been processed by Forrest
@@ -34,5 +35,14 @@ public abstract class AbstractOutputDocument extends AbstractDocument {
 	public URI getRequestURI() {
 		return this.requestURI;
 	}
+
+	/**
+	 * Get a set of links to local documents in within this
+	 * document. This is used to identify links that should
+	 * be crawled when generating content.
+	 * 
+	 * @return
+	 */
+	public abstract Set<String> getLocalDocumentLinks();
 
 }

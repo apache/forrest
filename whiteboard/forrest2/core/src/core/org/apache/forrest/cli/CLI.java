@@ -16,13 +16,19 @@
  */
 package org.apache.forrest.cli;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractOutputDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 
 /**
  * A command line interface for Forrest.
@@ -30,6 +36,12 @@ import org.apache.forrest.core.document.AbstractOutputDocument;
  */
 public class CLI {
 	private static final Log log = LogFactory.getLog(CLI.class);
+
+	private static Set<String> processedUris = new HashSet<String>();
+
+	private static Set<String> unProcessedUris = new HashSet<String>();
+
+	private static IController controller;
 
 	/**
 	 * @param args
@@ -45,19 +57,47 @@ public class CLI {
 
 		try {
 			AbstractOutputDocument doc = null;
+			controller = new Controller();
 			System.out.println("\n Processing request for " + args[0]);
-			final URI requestURI = new URI(args[0]);
-			final IController controller = new Controller();
-			doc = controller.getOutputDocument(requestURI);
-
-			System.out.println("\n Resulting document for request " + args[0]
-					+ " is:\n");
-			System.out.println(doc.getContentAsString());
-
+			unProcessedUris.add(args[0]);
+			while (unProcessedUris.size() > 0) {
+				processURIs(unProcessedUris);
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 			log.error(e);
 			System.exit(1);
+		}
+	}
+
+	/**
+	 * Processes a URI to get the response document. Any local links found in
+	 * the document are added to the list of documents to be processed.
+	 * 
+	 * @param uri
+	 * @param controller
+	 * @throws MalformedURLException
+	 * @throws ProcessingException
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	private static void processURIs(final Set<String> uris)
+			throws MalformedURLException, ProcessingException, IOException,
+			URISyntaxException {
+		AbstractOutputDocument doc;
+		HashSet<String> processingUris = new HashSet<String>(uris);
+		unProcessedUris = new HashSet<String>();
+		for (String strUri : processingUris) {
+			URI uri = new URI(strUri);
+			if (!(processedUris.contains(strUri))) {
+				log.debug("Processing: " + strUri);
+				doc = controller.getOutputDocument(uri);
+				unProcessedUris.addAll(doc.getLocalDocumentLinks());
+				System.out.println("\n Resulting document for request " + uri
+						+ " is:\n");
+				System.out.println(doc.getContentAsString());
+				processedUris.add(strUri);
+			}
 		}
 	}
 

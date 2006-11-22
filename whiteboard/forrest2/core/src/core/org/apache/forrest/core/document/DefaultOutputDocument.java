@@ -16,12 +16,24 @@
  */
 package org.apache.forrest.core.document;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
+
+import com.sun.org.apache.regexp.internal.RE;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
+
 /**
  * The most basic of output documents. The document itself is nothing more than
  * a String.
  * 
  */
 public class DefaultOutputDocument extends AbstractOutputDocument {
+	
+	Logger log = Logger.getLogger(DefaultOutputDocument.class);
 
 	public DefaultOutputDocument(final String content) {
 		this.setContent(content);
@@ -30,6 +42,34 @@ public class DefaultOutputDocument extends AbstractOutputDocument {
 	@Override
 	public String getContentAsString() {
 		return this.content;
+	}
+
+	/**
+	 * Get the links that should be crawled from this document. Since type of
+	 * this document is not known (it's a string) it can be difficult to
+	 * identify links. However, if the document appears to be an HTML string
+	 * then href attributes of anchors are retrieved (only local links will be
+	 * returned in the resutls).
+	 */
+	@Override
+	public Set<String> getLocalDocumentLinks() {
+		Set<String> results = new HashSet<String>();
+		String content = getContentAsString();
+		if (content.contains("html") || content.contains("HTML")) {
+			String rePattern = "<[a|A]\\s*href=\"([^\"#]+)\"\\s*>([^*<]+)</[a|A]>";
+			Pattern pattern = Pattern.compile(rePattern);
+			Matcher matcher = pattern.matcher(content);
+			while (matcher.find()) {
+				String href = matcher.group(1);
+				if (href.startsWith("#") || href.startsWith("href://")) {
+					log.debug("Ignoring non-local href: " + href);
+				} else {
+		            results.add(href);
+		            log.debug("Added local href: " + href);
+				}
+	        }
+		}
+		return results;
 	}
 
 }
