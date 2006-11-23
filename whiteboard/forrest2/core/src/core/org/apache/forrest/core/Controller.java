@@ -103,7 +103,7 @@ public class Controller implements IController {
 		if (file.exists()) {
 			log.info("Using Spring Context definition in " + contextPath);
 			this.context = new FileSystemXmlApplicationContext(file
-					.getAbsolutePath());
+					.getPath());
 		} else {
 			log.info("Using default spring context definition");
 			this.context = new ClassPathXmlApplicationContext(
