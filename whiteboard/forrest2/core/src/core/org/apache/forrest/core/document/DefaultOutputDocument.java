@@ -23,9 +23,6 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.regexp.internal.RE;
-import com.sun.org.apache.regexp.internal.RESyntaxException;
-
 /**
  * The most basic of output documents. The document itself is nothing more than
  * a String.
