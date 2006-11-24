@@ -60,6 +60,12 @@ public class TestController extends TestCase {
 	public static final String HELLO_WORLD_REQUEST_URI = BASE_REQUEST_URI
 			+ "helloWorld.html";
 
+	public static final String OPTIONAL_RESOURCES_REQUEST_URI = BASE_REQUEST_URI
+			+ "optional/sample_simple.forrestSource";
+
+	public static final String REQUIRED_RESOURCES_REQUEST_URI = BASE_REQUEST_URI
+			+ "required/sample_simple.forrestSource";
+
 	private IController controller;
 
 	@Override
@@ -95,11 +101,10 @@ public class TestController extends TestCase {
 			ProcessingException, URISyntaxException {
 		final AbstractSourceDocument srcDoc = this.controller
 				.getSourceDocuments(new URI(XHTML_REQUEST_URI));
-		final List<InternalDocument> internalDocs = this.controller
-				.getInternalDocuments(new URI(XHTML_REQUEST_URI));
+		final InternalDocument internalDoc = this.controller
+				.getInternalDocument(new URI(XHTML_REQUEST_URI));
 		final AbstractSourceDocument firstSrcDoc = srcDoc;
-		final InternalDocument firstIntDoc = internalDocs.get(0);
-		assertFalse(firstSrcDoc.equals(firstIntDoc));
+		assertFalse(firstSrcDoc.equals(internalDoc));
 	}
 
 	public void testProcessRequest() throws IOException, ProcessingException,
@@ -119,7 +124,7 @@ public class TestController extends TestCase {
 				.getSourceDocuments(new URI(HELLO_WORLD_REQUEST_URI));
 		assertTrue(
 				"Should not have an aggregated document for Hello World request",
-				! (source instanceof AggregatedSourceDocument));
+				!(source instanceof AggregatedSourceDocument));
 		assertEquals("Document type read by Hello world is incorrect",
 				"org.apache.forrest.helloWorld", source.getType());
 	}
@@ -146,9 +151,31 @@ public class TestController extends TestCase {
 			URISyntaxException, IOException {
 		final AbstractOutputDocument output = this.controller
 				.getOutputDocument(new URI(VARIABLE_SUBSTITUTION_REQUEST_URI));
-				assertNotNull(output);
-				assertTrue("Content is not as expected", output.getContentAsString()
-						.contains("http://www.w3.org/2002/06/xhtml2"));
+		assertNotNull(output);
+		assertTrue("Content is not as expected", output.getContentAsString()
+				.contains("http://www.w3.org/2002/06/xhtml2"));
+	}
+
+	public void testOptionalResources() throws ProcessingException,
+			URISyntaxException, IOException {
+		final AbstractOutputDocument output = this.controller
+				.getOutputDocument(new URI(OPTIONAL_RESOURCES_REQUEST_URI));
+		assertNotNull(
+				"We should have a result document from optional requests",
+				output);
+		assertTrue("Content is not as expected", output.getContentAsString()
+				.contains("http://www.w3.org/2002/06/xhtml2"));
+	}
+
+	public void testRequiredResources() throws ProcessingException,
+			URISyntaxException, IOException {
+		try {
+			final AbstractOutputDocument output = this.controller
+					.getOutputDocument(new URI(REQUIRED_RESOURCES_REQUEST_URI));
+		} catch (ProcessingException e) {
+			return;
+		}
+		fail("We should throw a processing exception when a required document is missing");
 	}
 
 }
