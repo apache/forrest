@@ -18,10 +18,11 @@ package org.apache.forrest.core.plugin;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.IDocument;
-import org.apache.regexp.RE;
 
 /**
  * A base output plugin from which all other output plugins should be etended.
@@ -59,8 +60,11 @@ public class BaseOutputPlugin implements IOutputPlugin {
 	 * @fixme implement proper matching
 	 */
 	public boolean isMatch(final URI requestURI) {
-		final RE r = new RE(this.getPattern());
-		return r.match(requestURI.getPath());
+		final Pattern pattern = 
+            Pattern.compile(this.getPattern());
+		Matcher matcher = 
+            pattern.matcher(requestURI.getPath());
+		return matcher.find();
 	}
 
 	public IDocument process(final IDocument doc) throws IOException {
