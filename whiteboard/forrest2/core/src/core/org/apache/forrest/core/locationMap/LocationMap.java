@@ -98,7 +98,12 @@ public class LocationMap {
 	}
 
 	/**
-	 * Get the all matching sets of locations for the given URI.
+	 * Get all matching sets of locations for the given URI.
+	 * A matching location is one that provides a source
+	 * location that <em>may</em> provide a source document
+	 * for the request. That is, the existence of the source
+	 * document is not checked before adding the location
+	 * to the results.
 	 * 
 	 * @param requestURI
 	 * @return

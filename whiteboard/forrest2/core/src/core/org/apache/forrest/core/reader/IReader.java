@@ -34,20 +34,20 @@ public interface IReader {
 	abstract void init();
 
 	/**
-	 * Read a resource from a given location. If the resource cannot be read,
+	 * Read a resource from a given uri. If the resource cannot be read,
 	 * but it is an optional location then return null, if it cannot be read and
 	 * it is a required location throw SourceException.
 	 * @param context 
 	 * 
 	 * @param controller - the forrest controller in use
 	 * @param requestURI - the URI being requested
-	 * @param location - the location we are to read the document from
+	 * @param uri - the uri we are to read the document from
 	 * 
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws ProcessingException 
 	 */
-	public abstract AbstractSourceDocument read(IController controller, URI requestURI, Location location)
+	public abstract AbstractSourceDocument read(IController controller, URI requestURI, Location location, URI sourceURI)
 			throws MalformedURLException, ProcessingException;
 
 }

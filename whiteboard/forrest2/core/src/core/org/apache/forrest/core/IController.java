@@ -22,7 +22,15 @@ public interface IController {
 
 	public abstract BaseOutputPlugin getOutputPlugin(final URI requestURI);
 
-	public abstract IReader getReader(final Location location) throws ProcessingException;
+	/**
+	 * Get a reader that can be used for retrieving a resource
+	 * from a given URI.
+	 * 
+	 * @param sourceURI
+	 * @return
+	 * @throws ProcessingException
+	 */
+	public abstract IReader getReader(final URI sourceURI) throws ProcessingException;
 
 	/**
 	 * Get the source URLs for a given request URI.
@@ -58,7 +66,7 @@ public interface IController {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public abstract List<InternalDocument> getInternalDocuments(
+	public abstract InternalDocument getInternalDocument(
 			final URI requestURI) throws ProcessingException;
 
 	/**

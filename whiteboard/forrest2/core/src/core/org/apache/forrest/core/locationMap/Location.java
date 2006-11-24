@@ -21,6 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.log4j.Logger;
@@ -38,18 +40,20 @@ import com.sun.org.apache.regexp.internal.RESyntaxException;
  * 
  */
 public class Location {
-	
+
 	Logger log = Logger.getLogger(Location.class);
-	
+
 	private String requestPattern;
 
 	private boolean isRequired;
 
-	private URI sourceURI;
+	private List<URI> sourceURIs;
 
 	public Location(final String pattern, final URL sourceURL,
 			final boolean isRequired) throws URISyntaxException {
-		this.init(pattern, sourceURL.toURI(), isRequired);
+		List<URI> uris = new ArrayList<URI>();
+		uris.add(sourceURL.toURI());
+		this.init(pattern, uris, isRequired);
 	}
 
 	/**
@@ -62,35 +66,39 @@ public class Location {
 	public Location(final Node element) throws URISyntaxException, IOException {
 		String pattern = null;
 		String url = null;
-		boolean isOptional = false;
+		List<URI> uris = new ArrayList<URI>();
+		boolean isRequired = false;
 
 		final NamedNodeMap atts = element.getAttributes();
 		pattern = atts.getNamedItem("pattern").getNodeValue();
 		final NodeList children = element.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
-			if (child.getNodeName().equals("source")) {
+			String nodeName = child.getNodeName();
+			if (nodeName != null && nodeName.equals("source")) {
 				url = child.getAttributes().getNamedItem("href").getNodeValue();
 				final Node required = child.getAttributes().getNamedItem(
 						"required");
 				if (required != null) {
-					isOptional = required.getNodeValue().equals("false");
+					isRequired = required.getNodeValue().equals("true");
 				}
+				uris.add(new URI(url));
 			}
 		}
-		this.init(pattern, new URI(url), isOptional);
+		this.init(pattern, uris, isRequired);
 	}
 
-	private void init(final String pattern, final URI uri,
-			final boolean isOptional) throws URISyntaxException {
+	private void init(final String pattern, final List<URI> uris,
+			final boolean isRequired) throws URISyntaxException {
 		if (pattern == null)
 			throw new IllegalArgumentException(
 					"requestURIPattern cannot be null");
-		if (uri == null)
-			throw new IllegalArgumentException("sourceURI cannot be null");
+		if (uris == null || uris.size() == 0)
+			throw new IllegalArgumentException(
+					"There must be at least one postential source uri");
 		this.setRequestPattern(pattern);
-		this.setSourceURI(uri);
-		this.setRequired(this.isRequired);
+		this.setSourceURIs(uris);
+		this.setRequired(isRequired);
 	}
 
 	public boolean isRequired() {
@@ -110,114 +118,51 @@ public class Location {
 	}
 
 	/**
-	 * Get the source URL, that is the one to use when reading the source
-	 * document. The source URL is the sourceURI modified appropriately for the
-	 * given request.
+	 * Get the source URLs, that may be used to read the source document. A
+	 * source URL is the sourceURI modified appropriately for the given request.
+	 * Note that the resulting list of URLs have not been verified with respect
+	 * to the existence of a document, it is only a potential location.
 	 * 
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws ProcessingException
 	 */
-	public URL getResolvedSourceURL(URI requestURI)
+	public List<URL> getResolvedSourceURL(URI requestURI)
 			throws MalformedURLException, ProcessingException {
-
-		URL url;
-		try {
-			url = requestURI.toURL();
-		} catch (final IllegalArgumentException e) {
-			// we'll assume that this is not an absolute URL and therefore
-			// refers to a file
-			url = new URL("file://" + requestURI);
+		List<URL> resolvedUrls = new ArrayList<URL>();
+		for (URI sourceURI : getSourceURIs()) {
+			resolvedUrls.add(resolveURL(requestURI, sourceURI));
 		}
-		final String urlString = url.toExternalForm();
-
-		RE r;
-		String sourcePath = this.getSourceURI().getPath();
-		try {
-			r = new RE(getRequestPattern());
-		} catch (RESyntaxException re) {
-			throw new ProcessingException(
-					"Unable to extract variable values from request: "
-							+ re.getMessage(), re);
-		}
-
-		if (r.match(urlString)) {
-			String variable;
-			String value;
-			for (int i = 0; i < r.getParenCount(); i++) {
-				variable = "$(" + i + ")";
-				value = r.getParen(i);
-				sourcePath = sourcePath.replace(variable, value);
-			}
-			log.debug("After variable substitution the source path is " + sourcePath);
-		} else {
-			throw new ProcessingException(
-					"Unable to extract variable values from requestURI");
-		}
-
-		URI uri = getSourceURI();
-		URL resourceURL;
-		if (uri.getScheme().equals("classpath")) {
-			resourceURL = resolveClasspathURI(sourcePath);
-		} else {
-			String strURI = uri.getSchemeSpecificPart();
-			if (strURI.contains(":")) {
-				String subProtocol = strURI.substring(0, strURI
-						.lastIndexOf(':'));
-				sourcePath = strURI.substring(strURI.lastIndexOf(':') + 1);
-				if (subProtocol.equals("classpath")) {
-					resourceURL = resolveClasspathURI(sourcePath);
-				} else {
-					URI subURI;
-					try {
-						subURI = new URI(subProtocol, sourcePath, null);
-						resourceURL = subURI.toURL();
-					} catch (URISyntaxException e) {
-						throw new MalformedURLException(
-								"Unable to work out sub protocol URI");
-					}
-				}
-			} else {
-				resourceURL = uri.toURL();
-			}
-		}
-		return resourceURL;
+		return resolvedUrls;
 	}
 
+	/**
+	 * 
+	 * @param sourcePath
+	 * @return
+	 * @throws ProcessingException - if the path to the resource cannot be resolved
+	 */
 	private URL resolveClasspathURI(final String sourcePath)
-			throws MalformedURLException {
+			throws ProcessingException {
 		URL resourceURL;
 		resourceURL = this.getClass().getResource(sourcePath);
 		if (resourceURL == null)
-			throw new MalformedURLException(
+			throw new ProcessingException(
 					"Cannot find the classpath resource: " + sourcePath);
 		return resourceURL;
 	}
 
-	public void setSourceURL(final URL sourceURL) throws URISyntaxException {
-		this.setSourceURI(sourceURL.toURI());
-	}
-
-	public URI getSourceURI() {
-		return this.sourceURI;
-	}
-
-	public void setSourceURI(final URI sourceURI) {
-		this.sourceURI = sourceURI;
+	public List<URI> getSourceURIs() {
+		return this.sourceURIs;
 	}
 
 	/**
-	 * Get the scheme used for retrieving this resource. The scheme will be the
-	 * first protocol in the source URI.
+	 * Set the list of potential source URIs for this document.
 	 * 
-	 * @return
+	 * @param sourceURI
 	 */
-	public String getScheme() {
-		String scheme = getSourceURI().getScheme();
-		if (scheme.equals("classpath")) {
-			scheme = "file";
-		}
-		return scheme;
+	public void setSourceURIs(final List<URI> sourceURIs) {
+		this.sourceURIs = sourceURIs;
 	}
 	
 	public String toString() {
@@ -230,10 +175,90 @@ public class Location {
 		sb.append("location: ");
 		sb.append("Pattern: ");
 		sb.append(this.getRequestPattern());
-		sb.append(" SourceURI: ");
-		sb.append(this.getSourceURI().toASCIIString());
-		
+		sb.append(" Potential sourceURIs: ");
+		for (URI uri : getSourceURIs()) {
+		  sb.append(uri.toASCIIString());
+		  sb.append(" ");
+		}
+
 		return sb.toString();
+	}
+
+	/**
+	 * Resolve the supplied URI and return a URL that can
+	 * be used to attempt to retrieve the resource. A resolved
+	 * uri has all variables substituted with their values.
+	 * 
+	 * @param sourceURI
+	 * @return
+	 * @throws MalformedURLException 
+	 * @throws ProcessingException 
+	 */
+	public URL resolveURL(URI requestURI, URI sourceURI) throws MalformedURLException, ProcessingException {
+		URL url;
+		RE r;
+
+		try {
+			r = new RE(getRequestPattern());
+		} catch (RESyntaxException re) {
+			throw new ProcessingException(
+					"Unable to extract variable values from request: "
+							+ re.getMessage(), re);
+		}
+
+		try {
+			url = requestURI.toURL();
+		} catch (final IllegalArgumentException e) {
+			// we'll assume that this is not an absolute URL and therefore
+			// refers to a file
+			url = new URL("file://" + requestURI);
+		}
+		final String urlString = url.toExternalForm();
+
+			String sourceSSP = sourceURI.getSchemeSpecificPart();
+
+			if (r.match(urlString)) {
+				String variable;
+				String value;
+				for (int i = 0; i < r.getParenCount(); i++) {
+					variable = "$(" + i + ")";
+					value = r.getParen(i);
+					sourceSSP = sourceSSP.replace(variable, value);
+				}
+				log.debug("After variable substitution a potential source path is "
+						+ sourceSSP);
+			} else {
+				throw new ProcessingException(
+						"Unable to extract variable values from requestURI");
+			}
+
+			URL resolvedURL;
+			if (sourceURI.getScheme().equals("classpath")) {
+				resolvedURL = resolveClasspathURI(sourceSSP);
+			} else {
+				String strURI = sourceURI.getSchemeSpecificPart();
+				if (strURI.contains(":")) {
+					String subProtocol = strURI.substring(0, strURI
+							.lastIndexOf(':'));
+					sourceSSP = strURI.substring(strURI.lastIndexOf(':') + 1);
+					if (subProtocol.equals("classpath")) {
+						resolvedURL = resolveClasspathURI(sourceSSP);
+					} else {
+						URI subURI;
+						try {
+							subURI = new URI(subProtocol, sourceSSP, null);
+							resolvedURL = subURI.toURL();
+						} catch (URISyntaxException e) {
+							throw new MalformedURLException(
+									"Unable to work out sub protocol URI");
+						}
+					}
+				} else {
+					resolvedURL = sourceURI.toURL();
+				}
+			}
+			return resolvedURL;
+		
 	}
 
 }

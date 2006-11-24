@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -55,13 +56,14 @@ public class HTTPReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.core.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(IController controller, final URI requestURI, final Location location)
+	public AbstractSourceDocument read(IController controller,
+			final URI requestURI, final Location location, URI sourceURI)
 			throws MalformedURLException, ProcessingException {
 		InputStream is;
 		DefaultSourceDocument result = null;
+		URL resolvedURL = location.resolveURL(requestURI, sourceURI);
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final GetMethod get = new GetMethod(location.getResolvedSourceURL(requestURI)
-				.toExternalForm());
+		final GetMethod get = new GetMethod(resolvedURL.toExternalForm());
 		get.setFollowRedirects(true);
 		try {
 			this.client.executeMethod(get);
@@ -71,6 +73,7 @@ public class HTTPReader extends AbstractReader {
 			tidy.parseDOM(is, out);
 			result = new DefaultSourceDocument(out.toString());
 		} catch (final Exception e) {
+			result = null;
 			if (location.isRequired())
 				throw new SourceException("Source URL is invalid", e);
 		} finally {

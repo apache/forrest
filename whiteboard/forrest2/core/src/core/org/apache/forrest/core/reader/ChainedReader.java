@@ -27,32 +27,25 @@ import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.Location;
 
 /**
- * A chained reader implements a psuedo protocol.
- * It is commonly used when you need to retrieve a
- * document that whose type cannot be identified
- * from the raw source alone.
+ * A chained reader implements a psuedo protocol. It is commonly used when you
+ * need to retrieve a document that whose type cannot be identified from the raw
+ * source alone.
  * 
  * It is defined in forrestContext.xml as follows:
  * 
- * <bean id="fooProtocol"
- *   class="org.apache.forrest.core.reader.ChainedReader" >
- *   <property name="docType"
- *             value="org.foo.Bar" />
- * </bean>
+ * <bean id="fooProtocol" class="org.apache.forrest.core.reader.ChainedReader" >
+ * <property name="docType" value="org.foo.Bar" /> </bean>
  * 
  * We can then define a chain of readers like this:
- *
- * <location pattern="classpath/foo.*">
- *   <source href="fooProtocol:classpath:/xdocs/exampleFeed.xml"/>
- * </location>
- *
- * <location pattern="file/foo.*">
- *    <source href="fooProtocol:file:/xdocs/exampleFeed.xml"/>
- * </location>
  * 
- * <location pattern="http/foo.*">
- *   <source href="fooProtocol:http:/xdocs/exampleFeed.xml"/>
- * </location>
+ * <location pattern="classpath/foo.*"> <source
+ * href="fooProtocol:classpath:/xdocs/exampleFeed.xml"/> </location>
+ * 
+ * <location pattern="file/foo.*"> <source
+ * href="fooProtocol:file:/xdocs/exampleFeed.xml"/> </location>
+ * 
+ * <location pattern="http/foo.*"> <source
+ * href="fooProtocol:http:/xdocs/exampleFeed.xml"/> </location>
  * 
  * etc.
  * 
@@ -60,29 +53,30 @@ import org.apache.forrest.core.locationMap.Location;
 public class ChainedReader extends AbstractReader {
 
 	private String docType;
-	
-	public AbstractSourceDocument read(IController controller,
-			URI requestURI, final Location location) throws ProcessingException {
+
+	public AbstractSourceDocument read(IController controller, URI requestURI,
+			final Location location, URI sourceURI) throws ProcessingException {
 		DefaultSourceDocument doc = null;
-		final URI psudeoURI = location.getSourceURI();
-		final String ssp = psudeoURI.getSchemeSpecificPart();
-		URI uri;
-		try {
-			uri = new URI(ssp);
-			location.setSourceURI(uri);
-			IReader reader;
-			reader = (IReader) controller.getReader(location);
-			doc = (DefaultSourceDocument) reader.read(controller, requestURI, location);
-			if (doc != null) {
-				doc
-						.setType(getDocType());
+		for (URI psuedoURI: location.getSourceURIs()) {
+			final String ssp = psuedoURI.getSchemeSpecificPart();
+			URI subSourceURI;
+			try {
+				subSourceURI = new URI(ssp);
+				IReader reader;
+				reader = (IReader) controller.getReader(subSourceURI);
+				doc = (DefaultSourceDocument) reader.read(controller,
+						requestURI, location, subSourceURI);
+				if (doc != null) {
+					doc.setType(getDocType());
+					break;
+				}
+			} catch (final URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (final URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return doc;
 	}
@@ -94,6 +88,5 @@ public class ChainedReader extends AbstractReader {
 	public void setDocType(String docType) {
 		this.docType = docType;
 	}
-	
-	
+
 }

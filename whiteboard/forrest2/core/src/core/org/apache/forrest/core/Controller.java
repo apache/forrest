@@ -65,7 +65,7 @@ import org.xml.sax.SAXException;
  * 
  */
 public class Controller implements IController {
-	
+
 	Logger log = Logger.getLogger(Controller.class);
 
 	private final String sourceURLExtension = ".forrestSource";
@@ -76,7 +76,7 @@ public class Controller implements IController {
 
 	private final Map<URI, AbstractSourceDocument> sourceDocsCache = new HashMap<URI, AbstractSourceDocument>();
 
-	private final Map<URI, List<InternalDocument>> internalDocsCache = new HashMap<URI, List<InternalDocument>>();
+	private final Map<URI, InternalDocument> internalDocsCache = new HashMap<URI, InternalDocument>();
 
 	private final Map<URI, AbstractOutputDocument> outputDocCache = new HashMap<URI, AbstractOutputDocument>();
 
@@ -102,8 +102,7 @@ public class Controller implements IController {
 		final File file = new File(contextPath);
 		if (file.exists()) {
 			log.info("Using Spring Context definition in " + contextPath);
-			this.context = new FileSystemXmlApplicationContext(file
-					.getPath());
+			this.context = new FileSystemXmlApplicationContext(file.getPath());
 		} else {
 			log.info("Using default spring context definition");
 			this.context = new ClassPathXmlApplicationContext(
@@ -151,15 +150,16 @@ public class Controller implements IController {
 	 */
 	private AbstractOutputDocument processRequest(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException {
-		final List<Location> sourceLocs = this.resolveSourceLocations(requestURI);
+		final List<Location> sourceLocs = this
+				.resolveSourceLocations(requestURI);
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
 		final List<AbstractSourceDocument> sourceDocs = this
 				.loadAllSourceDocuments(requestURI, sourceLocs);
 
-		final List<InternalDocument> internalDocs = this
+		final InternalDocument internalDoc = this
 				.processInputPlugins(sourceDocs);
-		this.internalDocsCache.put(requestURI, internalDocs);
+		this.internalDocsCache.put(requestURI, internalDoc);
 
 		final AbstractOutputDocument output = this
 				.processOutputPlugins(requestURI);
@@ -175,11 +175,10 @@ public class Controller implements IController {
 	 * @throws IOException
 	 * @throws ProcessingException
 	 */
-	private List<InternalDocument> processInputPlugins(
+	private InternalDocument processInputPlugins(
 			final List<AbstractSourceDocument> sourceDocuments)
 			throws IOException, ProcessingException {
-		final List<InternalDocument> results = new ArrayList<InternalDocument>(
-				sourceDocuments.size());
+		InternalDocument result = null;
 		for (int i = 0; i < sourceDocuments.size(); i++) {
 			final AbstractSourceDocument doc = sourceDocuments.get(i);
 			if (doc == null) {
@@ -187,9 +186,9 @@ public class Controller implements IController {
 						"No source document is available.");
 			}
 			AbstractInputPlugin plugin = getInputPlugin(doc);
-			results.add((InternalDocument) plugin.process(doc));
+			result = (InternalDocument) plugin.process(doc);
 		}
-		return results;
+		return result;
 	}
 
 	/*
@@ -218,18 +217,9 @@ public class Controller implements IController {
 	 */
 	private AbstractOutputDocument processOutputPlugins(final URI requestURI)
 			throws ProcessingException, IOException {
-		IDocument doc = null;
-		final List<InternalDocument> intDocs = this
-				.getInternalDocuments(requestURI);
-		if (intDocs.size() > 1) {
-			doc = new AggregateInteralDocument(intDocs);
-		} else {
-			doc = intDocs.get(0);
-		}
-
+		final InternalDocument intDoc = this.getInternalDocument(requestURI);
 		BaseOutputPlugin plugin = getOutputPlugin(requestURI);
-
-		return (AbstractOutputDocument) plugin.process(doc);
+		return (AbstractOutputDocument) plugin.process(intDoc);
 	}
 
 	/*
@@ -285,9 +275,14 @@ public class Controller implements IController {
 			MalformedURLException {
 		AbstractSourceDocument doc = sourceDocsCache.get(requestURI);
 		if (doc == null) {
-			IReader reader = getReader(location);
-			doc = reader.read(this, requestURI, location);
-			addToSourceDocCache(requestURI, doc);
+			for (URI uri : location.getSourceURIs()) {
+				IReader reader = getReader(uri);
+				doc = reader.read(this, requestURI, location, uri);
+				if (doc != null) {
+				  addToSourceDocCache(requestURI, doc);
+				  break;
+				}
+			}
 		}
 		return doc;
 	}
@@ -308,14 +303,17 @@ public class Controller implements IController {
 	 * 
 	 * @see org.apache.forrest.core.IController#getReader(org.apache.forrest.core.locationMap.Location)
 	 */
-	public IReader getReader(final Location location)
-			throws ProcessingException {
+	public IReader getReader(final URI uri) throws ProcessingException {
 		IReader reader;
+		String scheme = uri.getScheme();
+		if (scheme.equals("classpath")) {
+			scheme = "file";
+		}
 		try {
-			reader = (IReader) this.context.getBean(location.getScheme());
+			reader = (IReader) this.context.getBean(scheme);
 		} catch (Exception e) {
-			throw new ProcessingException("Unable to get a reader for : "
-					+ location.getRequestPattern(), e);
+			throw new ProcessingException(
+					"Unable to get a reader for : " + uri, e);
 		}
 		return reader;
 	}
@@ -358,7 +356,9 @@ public class Controller implements IController {
 				} else {
 					if (loc.isRequired()) {
 						isValid = false;
-						log.debug("Can't use this set of locations because one is required: " + loc.toString());
+						log
+								.debug("Can't use this set of locations because one is required: "
+										+ loc.toString());
 					} else {
 						log.debug("Can't find file for " + loc.toString());
 					}
@@ -430,21 +430,20 @@ public class Controller implements IController {
 	 * 
 	 * @see org.apache.forrest.core.IController#getInternalDocuments(java.net.URI)
 	 */
-	public List<InternalDocument> getInternalDocuments(final URI requestURI)
+	public InternalDocument getInternalDocument(final URI requestURI)
 			throws ProcessingException {
-		List<InternalDocument> internalDocs = this.internalDocsCache
-				.get(requestURI);
-		if (internalDocs == null)
+		InternalDocument internalDoc = this.internalDocsCache.get(requestURI);
+		if (internalDoc == null)
 			try {
 				this.processRequest(requestURI);
-				internalDocs = this.internalDocsCache.get(requestURI);
+				internalDoc = this.internalDocsCache.get(requestURI);
 			} catch (final Exception e) {
 				throw new ProcessingException(
 						"Unable to create the internal representation of the source documents for "
 								+ requestURI.toString(), e);
 			}
 
-		return internalDocs;
+		return internalDoc;
 	}
 
 	/*
@@ -470,18 +469,14 @@ public class Controller implements IController {
 					content.toString());
 			return output;
 		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
-			final List<InternalDocument> docs = this
-					.getInternalDocuments(requestURI);
+			final InternalDocument doc = this.getInternalDocument(requestURI);
 			final StringBuffer content = new StringBuffer();
-			for (final InternalDocument doc : docs) {
-				try {
-					content.append(doc.getContentAsString());
-				} catch (final IOException e) {
-					content
-							.append("<error>Unable to read source document for ");
-					content.append(requestURI);
-					content.append("</error>");
-				}
+			try {
+				content.append(doc.getContentAsString());
+			} catch (final IOException e) {
+				content.append("<error>Unable to read source document for ");
+				content.append(requestURI);
+				content.append("</error>");
 			}
 			final DefaultOutputDocument output = new DefaultOutputDocument(
 					content.toString());
