@@ -71,7 +71,7 @@ public class HTTPReader extends AbstractReader {
 			final Tidy tidy = new Tidy();
 			tidy.setXHTML(true);
 			tidy.parseDOM(is, out);
-			result = new DefaultSourceDocument(out.toString());
+			result = new DefaultSourceDocument(requestURI, out.toString());
 		} catch (final Exception e) {
 			result = null;
 			if (location.isRequired())

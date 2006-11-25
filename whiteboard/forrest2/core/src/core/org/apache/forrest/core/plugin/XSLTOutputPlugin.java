@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -70,7 +69,7 @@ public class XSLTOutputPlugin extends BaseOutputPlugin {
 			final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			final StreamResult out = new StreamResult(outStream);
 			transformer.transform(in, out);
-			return new DefaultOutputDocument(outStream.toString());
+			return new DefaultOutputDocument(doc.getRequestURI(), outStream.toString());
 		} catch (final TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

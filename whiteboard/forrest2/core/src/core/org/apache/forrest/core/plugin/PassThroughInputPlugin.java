@@ -30,7 +30,7 @@ import org.apache.forrest.core.document.InternalDocument;
 public class PassThroughInputPlugin extends AbstractInputPlugin {
 
 	public IDocument process(final IDocument doc) throws IOException {
-		return new InternalDocument(doc.getContentAsString());
+		return new InternalDocument(doc.getRequestURI(), doc.getContentAsString());
 	}
 
 }

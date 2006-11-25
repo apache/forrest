@@ -46,7 +46,7 @@ public class FileReader extends AbstractReader {
 		try {
 			URL resolvedURL = location.resolveURL(requestURI, sourceURI);
 			final InputStream is = new FileInputStream(new File(resolvedURL.toURI()));
-			result = DocumentFactory.getSourceDocumentFor(is);
+			result = DocumentFactory.getSourceDocumentFor(requestURI, is);
 		} catch (final Exception e) {
 			if (location.isRequired())
 				throw new SourceException("Source URL is invalid", e);

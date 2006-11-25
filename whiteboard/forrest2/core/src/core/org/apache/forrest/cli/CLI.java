@@ -16,6 +16,8 @@
  */
 package org.apache.forrest.cli;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -56,7 +58,6 @@ public class CLI {
 		}
 
 		try {
-			AbstractOutputDocument doc = null;
 			controller = new Controller();
 			System.out.println("\n Processing request for " + args[0]);
 			unProcessedUris.add(args[0]);
@@ -93,12 +94,27 @@ public class CLI {
 				log.debug("Processing: " + strUri);
 				doc = controller.getOutputDocument(uri);
 				unProcessedUris.addAll(doc.getLocalDocumentLinks());
-				System.out.println("\n Resulting document for request " + uri
-						+ " is:\n");
-				System.out.println(doc.getContentAsString());
+				outputDocument(doc, uri);
 				processedUris.add(strUri);
 			}
 		}
+	}
+
+	/**
+	 * Output the document.
+	 * @param doc
+	 * @param uri
+	 * @throws IOException
+	 */
+	private static void outputDocument(AbstractOutputDocument doc, URI uri) throws IOException {
+		System.out.println("\n Resulting document for request " + uri
+				+ " is:\n");
+		System.out.println(doc.getContentAsString());
+		
+		File outFile = new File("c:\\tmp\\" + doc.getPath());
+		FileWriter writer = new FileWriter(outFile);
+		writer.write(doc.getContentAsString());
+		writer.close();
 	}
 
 	/**

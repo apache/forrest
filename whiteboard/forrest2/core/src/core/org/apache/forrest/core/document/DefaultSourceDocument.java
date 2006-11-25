@@ -17,6 +17,7 @@
 package org.apache.forrest.core.document;
 
 import java.io.BufferedReader;
+import java.net.URI;
 
 /**
  * A basic source document. It holds the document as a string.
@@ -24,8 +25,8 @@ import java.io.BufferedReader;
  */
 public class DefaultSourceDocument extends AbstractSourceDocument {
 
-	public DefaultSourceDocument(final String content) {
-		this.setContent(content);
+	public DefaultSourceDocument(final URI requestURI, final String content) {
+		super(requestURI, content);
 		this.setComplete(true);
 	}
 
@@ -38,16 +39,16 @@ public class DefaultSourceDocument extends AbstractSourceDocument {
 	 * @param type
 	 *            The mime type of the document. May be null if unkown.
 	 */
-	public DefaultSourceDocument(final String fileData,
+	public DefaultSourceDocument(final URI requestURI, final String fileData,
 			final BufferedReader reader, final String type) {
-		this.setContent(fileData);
+		this(requestURI, fileData);
 		this.setReader(reader);
 		this.setComplete(false);
 		this.setType(type);
 	}
 
-	public DefaultSourceDocument(final String content, final String type) {
-		this.setContent(content);
+	public DefaultSourceDocument(final URI requestURI, final String content, final String type) {
+		this(requestURI, content);
 		this.setComplete(true);
 		this.setType(type);
 	}

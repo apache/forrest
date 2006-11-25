@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 import org.apache.forrest.core.exception.ProcessingException;
 
@@ -43,9 +44,9 @@ public class DocumentFactory {
 	 *             InputStream
 	 * @throws ProcessingException 
 	 */
-	public static AbstractSourceDocument getSourceDocumentFor(
+	public static AbstractSourceDocument getSourceDocumentFor(final URI requestURI, 
 			final InputStream is) throws IOException, ProcessingException {
-		return readFile(is);
+		return readFile(requestURI, is);
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class DocumentFactory {
 	 * @param is
 	 * @throws ProcessingException 
 	 */
-	private static AbstractSourceDocument readFile(final InputStream is)
+	private static AbstractSourceDocument readFile(final URI requestURI, final InputStream is)
 			throws java.io.IOException, ProcessingException {
 		AbstractSourceDocument doc = null;
 		final StringBuffer fileData = new StringBuffer(1024);
@@ -73,17 +74,17 @@ public class DocumentFactory {
 			if (fileData.toString().contains("<?xml")) {
 				type = getXMLDocumentType(fileData.toString());
 				if (type != null) {
-					doc = new XMLSourceDocument(fileData.toString(), reader,
+					doc = new XMLSourceDocument(requestURI, fileData.toString(), reader,
 							type);
 				}
 			}
 		}
 		if (type == null) {
 			if (fileData.toString().contains("<?xml")) {
-				doc = new XMLSourceDocument(fileData.toString(), reader,
+				doc = new XMLSourceDocument(requestURI, fileData.toString(), reader,
 						"application/xml");
 			} else if (fileData.toString().toLowerCase().contains("<html>")) {
-				doc = new DefaultSourceDocument(fileData.toString(), reader,
+				doc = new DefaultSourceDocument(requestURI, fileData.toString(), reader,
 						"html");
 			} else {
 				throw new ProcessingException("Unable to determine the source document type");

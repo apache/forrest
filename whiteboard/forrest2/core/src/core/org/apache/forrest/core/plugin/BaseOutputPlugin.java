@@ -68,7 +68,7 @@ public class BaseOutputPlugin implements IOutputPlugin {
 	}
 
 	public IDocument process(final IDocument doc) throws IOException {
-		return new DefaultOutputDocument(doc.getContentAsString());
+		return new DefaultOutputDocument(doc.getRequestURI(), doc.getContentAsString());
 	}
 
 }

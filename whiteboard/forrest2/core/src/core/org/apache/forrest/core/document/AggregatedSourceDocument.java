@@ -18,7 +18,6 @@ package org.apache.forrest.core.document;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,6 +27,10 @@ import java.util.List;
  * 
  */
 public class AggregatedSourceDocument extends AbstractSourceDocument {
+
+	public AggregatedSourceDocument(URI requestURI, String content) {
+		super(requestURI, content);
+	}
 
 	List<AbstractSourceDocument> docs = new ArrayList<AbstractSourceDocument>();
 

@@ -17,18 +17,22 @@
 package org.apache.forrest.core.document;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 
 public abstract class AbstractDocument implements IDocument {
 	private Date lastModified;
 
 	String content;
+	
+	private URI requestURI;
 
 	public AbstractDocument() {
 	}
 
-	public AbstractDocument(final String string) {
-		this.content = string;
+	public AbstractDocument(final URI requestURI, final String content) {
+		setContent(content);
+		setRequestURI(requestURI);
 	}
 
 	public String getContentAsString() throws IOException {
@@ -59,4 +63,24 @@ public abstract class AbstractDocument implements IDocument {
 	public Date getLastModified() {
 		return this.lastModified;
 	}
+	
+	/**
+	 * Set the URI that was used to request this document.
+	 * 
+	 * @return
+	 */
+	public void setRequestURI(URI requestURI) {
+		this.requestURI = requestURI;
+	}
+
+	/**
+	 * Get the URI that was used to request this document.
+	 * 
+	 * @return
+	 */
+	public URI getRequestURI() {
+		return this.requestURI;
+	}
+
+
 }

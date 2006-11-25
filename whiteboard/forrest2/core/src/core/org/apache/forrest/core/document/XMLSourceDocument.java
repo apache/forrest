@@ -17,6 +17,7 @@
 package org.apache.forrest.core.document;
 
 import java.io.BufferedReader;
+import java.net.URI;
 
 /**
  * A representation of an XML document.
@@ -26,13 +27,13 @@ import java.io.BufferedReader;
  */
 public class XMLSourceDocument extends DefaultSourceDocument {
 
-	public XMLSourceDocument(final String fileData,
+	public XMLSourceDocument(final URI requestURI, final String fileData,
 			final BufferedReader reader, final String type) {
-		super(fileData, reader, type);
+		super(requestURI, fileData, reader, type);
 	}
 
-	public XMLSourceDocument(final String content, final String type) {
-		super(content, type);
+	public XMLSourceDocument(final URI requestURI, final String content, final String type) {
+		super(requestURI, content, type);
 	}
 
 }

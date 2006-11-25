@@ -30,6 +30,6 @@ public class HelloWorldInputPlugin extends AbstractInputPlugin {
 	public static final String CONTENT = "<html xmlns=\"http://www.w3.org/2002/06/xhtml2\" xml:lang=\"en\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd\">  <head>    <title>XHTML 2 Simple Sample Page</title>   </head>  <body>  <h>Hello World</h>  </body></html>";
 
 	public IDocument process(final IDocument doc) {
-		return new InternalDocument(CONTENT);
+		return new InternalDocument(doc.getRequestURI(), CONTENT);
 	}
 }

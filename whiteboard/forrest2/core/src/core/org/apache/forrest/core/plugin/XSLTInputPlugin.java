@@ -82,7 +82,7 @@ public class XSLTInputPlugin extends AbstractInputPlugin {
 			final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			final StreamResult out = new StreamResult(outStream);
 			transformer.transform(in, out);
-			return new InternalDocument(outStream.toString());
+			return new InternalDocument(doc.getRequestURI(), outStream.toString());
 		} catch (final TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

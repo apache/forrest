@@ -16,6 +16,7 @@
  */
 package org.apache.forrest.core.document;
 
+import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -32,7 +33,8 @@ public class DefaultOutputDocument extends AbstractOutputDocument {
 	
 	Logger log = Logger.getLogger(DefaultOutputDocument.class);
 
-	public DefaultOutputDocument(final String content) {
+	public DefaultOutputDocument(final URI requestURI, final String content) {
+		this.setRequestURI(requestURI);
 		this.setContent(content);
 	}
 

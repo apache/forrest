@@ -16,6 +16,8 @@
  */
 package org.apache.forrest.core.document;
 
+import java.net.URI;
+
 /**
  * An InternalDocument is a document that has been converted from a Source
  * IDocument into the internal Forrest XML format for processing.
@@ -26,7 +28,8 @@ public class InternalDocument extends AbstractDocument {
 	public InternalDocument() {
 	}
 
-	public InternalDocument(final String content) {
+	public InternalDocument(final URI requestURI, final String content) {
+		this.setRequestURI(requestURI);
 		this.setContent(content);
 	}
 

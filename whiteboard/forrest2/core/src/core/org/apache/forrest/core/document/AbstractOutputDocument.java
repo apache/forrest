@@ -16,7 +16,6 @@
  */
 package org.apache.forrest.core.document;
 
-import java.net.URI;
 import java.util.Set;
 
 /**
@@ -25,16 +24,6 @@ import java.util.Set;
  */
 public abstract class AbstractOutputDocument extends AbstractDocument {
 
-	private URI requestURI;
-
-	/**
-	 * Get the URI that was used to request this document.
-	 * 
-	 * @return
-	 */
-	public URI getRequestURI() {
-		return this.requestURI;
-	}
 
 	/**
 	 * Get a set of links to local documents in within this
@@ -44,5 +33,15 @@ public abstract class AbstractOutputDocument extends AbstractDocument {
 	 * @return
 	 */
 	public abstract Set<String> getLocalDocumentLinks();
+
+	/**
+	 * Get the the relative path to this document from the
+	 * point of view of the client.
+	 * 
+	 * @return
+	 */
+	public String getPath() {
+		return getRequestURI().getPath();
+	}
 
 }

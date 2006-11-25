@@ -17,6 +17,7 @@
 package org.apache.forrest.core.document;
 
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * A document contains all the necessary information for processing a resource.
@@ -31,4 +32,18 @@ public interface IDocument {
 	 * @throws IOException
 	 */
 	public String getContentAsString() throws IOException;
+	
+	/**
+	 * Set the URI that was used to request this document.
+	 * 
+	 * @return
+	 */
+	public void setRequestURI(URI requestURI);
+
+	/**
+	 * Get the URI that was used to request this document.
+	 * 
+	 * @return
+	 */
+	public URI getRequestURI();
 }

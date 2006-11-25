@@ -29,10 +29,8 @@ import java.util.Map;
 
 import org.apache.forrest.core.document.AbstractOutputDocument;
 import org.apache.forrest.core.document.AbstractSourceDocument;
-import org.apache.forrest.core.document.AggregateInteralDocument;
 import org.apache.forrest.core.document.AggregatedSourceDocument;
 import org.apache.forrest.core.document.DefaultOutputDocument;
-import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
@@ -465,7 +463,7 @@ public class Controller implements IController {
 				content.append("</error>");
 			}
 
-			final DefaultOutputDocument output = new DefaultOutputDocument(
+			final DefaultOutputDocument output = new DefaultOutputDocument(requestURI,
 					content.toString());
 			return output;
 		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
@@ -478,7 +476,7 @@ public class Controller implements IController {
 				content.append(requestURI);
 				content.append("</error>");
 			}
-			final DefaultOutputDocument output = new DefaultOutputDocument(
+			final DefaultOutputDocument output = new DefaultOutputDocument(requestURI,
 					content.toString());
 			return output;
 		}

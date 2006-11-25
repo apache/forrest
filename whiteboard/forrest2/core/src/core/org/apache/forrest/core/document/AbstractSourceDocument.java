@@ -18,6 +18,7 @@ package org.apache.forrest.core.document;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * A source document is a single input document as retrieved from its source
@@ -26,6 +27,11 @@ import java.io.IOException;
  */
 public abstract class AbstractSourceDocument extends AbstractDocument {
 	String type;
+
+	public AbstractSourceDocument(URI requestURI, String content) {
+		setRequestURI(requestURI);
+		setContent(content);
+	}
 
 	@Override
 	public String getContentAsString() throws IOException {
