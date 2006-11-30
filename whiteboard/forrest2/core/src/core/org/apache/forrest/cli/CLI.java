@@ -111,7 +111,7 @@ public class CLI {
 				+ " is:\n");
 		System.out.println(doc.getContentAsString());
 		
-		File outFile = new File("c:\\tmp\\" + doc.getPath());
+		File outFile = new File("build\\" + doc.getPath());
 		FileWriter writer = new FileWriter(outFile);
 		writer.write(doc.getContentAsString());
 		writer.close();
