@@ -111,10 +111,18 @@ public class CLI {
 				+ " is:\n");
 		System.out.println(doc.getContentAsString());
 		
-		File outFile = new File("build\\" + doc.getPath());
+		String path = getContentBuildPath();
+		File outPath = new File(path);
+		outPath.mkdirs();
+		File outFile = new File(path + doc.getPath());
 		FileWriter writer = new FileWriter(outFile);
 		writer.write(doc.getContentAsString());
 		writer.close();
+		log.debug("Written document to " + path + doc.getPath());
+	}
+
+	private static String getContentBuildPath() {
+		return System.getProperty("user.dir") + "/build/content/";
 	}
 
 	/**
