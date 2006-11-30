@@ -83,8 +83,6 @@ public class TestController extends TestCase {
 		final List<Location> sourceURLs = this.controller
 				.getSourceLocations(new URI(XHTML_REQUEST_URI));
 		assertNotNull(sourceURLs);
-		// assertTrue(sourceURLs.get(0).getSourceURL().equals(firstSourceURL));
-		// assertTrue(sourceURLs.get(1).getSourceURL().equals(secondSourceURL));
 	}
 
 	public void testSourceDocuments() throws IOException, ProcessingException,
@@ -92,9 +90,6 @@ public class TestController extends TestCase {
 		final AbstractSourceDocument document = this.controller
 				.getSourceDocuments(new URI(XHTML_REQUEST_URI));
 		assertNotNull(document);
-		// AbstractSourceDocument firstDoc = documents.get(0);
-		// AbstractSourceDocument secondDoc = documents.get(1);
-		// assertFalse(firstDoc.equals(secondDoc));
 	}
 
 	public void testInternalDocuments() throws IOException,
