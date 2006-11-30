@@ -18,7 +18,9 @@ package org.apache.forrest.core.plugin;
 
 import java.io.IOException;
 
+import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.document.IDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 
 public interface IPlugin {
 
@@ -29,6 +31,7 @@ public interface IPlugin {
 	 * @param doc
 	 * @return
 	 * @throws IOException
+	 * @throws ProcessingException 
 	 */
-	public IDocument process(IDocument doc) throws IOException;
+	public IDocument process(Controller controller, IDocument doc) throws IOException, ProcessingException;
 }

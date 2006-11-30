@@ -32,6 +32,7 @@ import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.AggregatedSourceDocument;
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.InternalDocument;
+import org.apache.forrest.core.document.InternalErrorDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.Location;
@@ -156,7 +157,7 @@ public class Controller implements IController {
 				.loadAllSourceDocuments(requestURI, sourceLocs);
 
 		final InternalDocument internalDoc = this
-				.processInputPlugins(sourceDocs);
+				.processInputPlugins(requestURI, sourceDocs);
 		this.internalDocsCache.put(requestURI, internalDoc);
 
 		final AbstractOutputDocument output = this
@@ -168,23 +169,28 @@ public class Controller implements IController {
 	/**
 	 * Process each of the documents supplied with the appropriate input plugins
 	 * to get a document in our internal format.
+	 * @param requestURI 
 	 * 
 	 * @param sourceDocuments
 	 * @throws IOException
 	 * @throws ProcessingException
 	 */
 	private InternalDocument processInputPlugins(
-			final List<AbstractSourceDocument> sourceDocuments)
+			URI requestURI, final List<AbstractSourceDocument> sourceDocuments)
 			throws IOException, ProcessingException {
 		InternalDocument result = null;
-		for (int i = 0; i < sourceDocuments.size(); i++) {
-			final AbstractSourceDocument doc = sourceDocuments.get(i);
-			if (doc == null) {
-				throw new ProcessingException(
-						"No source document is available.");
+		if (sourceDocuments.size() == 0) {
+			result = new InternalErrorDocument(requestURI, "Unable to load source document");
+		} else {
+			for (int i = 0; i < sourceDocuments.size(); i++) {
+				final AbstractSourceDocument doc = sourceDocuments.get(i);
+				if (doc == null) {
+					throw new ProcessingException(
+							"No source document is available.");
+				}
+				AbstractInputPlugin plugin = getInputPlugin(doc);
+				result = (InternalDocument) plugin.process(this, doc);
 			}
-			AbstractInputPlugin plugin = getInputPlugin(doc);
-			result = (InternalDocument) plugin.process(doc);
 		}
 		return result;
 	}
@@ -217,7 +223,7 @@ public class Controller implements IController {
 			throws ProcessingException, IOException {
 		final InternalDocument intDoc = this.getInternalDocument(requestURI);
 		BaseOutputPlugin plugin = getOutputPlugin(requestURI);
-		return (AbstractOutputDocument) plugin.process(intDoc);
+		return (AbstractOutputDocument) plugin.process(this, intDoc);
 	}
 
 	/*
@@ -277,8 +283,8 @@ public class Controller implements IController {
 				IReader reader = getReader(uri);
 				doc = reader.read(this, requestURI, location, uri);
 				if (doc != null) {
-				  addToSourceDocCache(requestURI, doc);
-				  break;
+					addToSourceDocCache(requestURI, doc);
+					break;
 				}
 			}
 		}
@@ -350,7 +356,7 @@ public class Controller implements IController {
 				loc = sourceLocs.next();
 				if (sourceExists(requestURI, loc)) {
 					result.add(loc);
-					log.debug("Found valid location: " + loc.toString());
+					log.debug("Found valid location");
 				} else {
 					if (loc.isRequired()) {
 						isValid = false;
@@ -463,8 +469,8 @@ public class Controller implements IController {
 				content.append("</error>");
 			}
 
-			final DefaultOutputDocument output = new DefaultOutputDocument(requestURI,
-					content.toString());
+			final DefaultOutputDocument output = new DefaultOutputDocument(
+					requestURI, content.toString());
 			return output;
 		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
 			final InternalDocument doc = this.getInternalDocument(requestURI);
@@ -476,8 +482,8 @@ public class Controller implements IController {
 				content.append(requestURI);
 				content.append("</error>");
 			}
-			final DefaultOutputDocument output = new DefaultOutputDocument(requestURI,
-					content.toString());
+			final DefaultOutputDocument output = new DefaultOutputDocument(
+					requestURI, content.toString());
 			return output;
 		}
 

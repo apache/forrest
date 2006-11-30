@@ -32,6 +32,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
 
@@ -67,7 +68,7 @@ public class XSLTInputPlugin extends AbstractInputPlugin {
 		}
 	}
 
-	public IDocument process(final IDocument doc) throws IOException {
+	public IDocument process(final Controller controller, final IDocument doc) throws IOException {
 		final TransformerFactory tFactory = TransformerFactory.newInstance();
 
 		try {

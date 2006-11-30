@@ -21,8 +21,10 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.IDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 
 /**
  * A base output plugin from which all other output plugins should be etended.
@@ -67,7 +69,7 @@ public class BaseOutputPlugin implements IOutputPlugin {
 		return matcher.find();
 	}
 
-	public IDocument process(final IDocument doc) throws IOException {
+	public IDocument process(final Controller controller, final IDocument doc) throws IOException, ProcessingException {
 		return new DefaultOutputDocument(doc.getRequestURI(), doc.getContentAsString());
 	}
 
