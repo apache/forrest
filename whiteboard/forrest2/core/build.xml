@@ -10,13 +10,12 @@
 
 	<property name="project.dist.dir" location="dist" />
 	<property name="project.build.classes.dir" location="build/classes" />
-  <property name="test.reports" location="build/reports" />
+	<property name="test.reports" location="build/reports" />
 	
 	<property name="content.object.dir" location="src/examples/helloWorld"/>
 	<property name="content.object.start.uri" value="helloWorld2.html"/>
 	<property name="content.object.src.dir" location="${content.object.dir}/src"/>
-  
-  <property name="project.build.content.dir" location="${content.object.dir}/build"/>
+	<property name="content.object.build.dir" location="${content.object.dir}/build"/>
 
 	<property name="compile.debug" value="off" />
 
@@ -39,7 +38,6 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="${project.build.classes.dir}" />
-    <mkdir dir="${project.build.content.dir}" />
 		<mkdir dir="${project.dist.dir}" />
 		<mkdir dir="${project.dist.dir}/lib" />
 		<ivy:cachepath pathid="lib.path.id" conf="default" />
@@ -76,7 +74,11 @@
 	</target>
 	
 	<target name="compile-content-object" depends="compile-core, copy-content-object-resources">
-		<javac destdir="${content.object.dir}" debug="${compile.debug}" classpathref="lib.path.id">
+		<javac destdir="${content.object.build.dir}" debug="${compile.debug}">
+			<classpath>
+		      <path refid="lib.path.id"/>
+		      <pathelement path="${project.build.classes.dir}"/>
+			</classpath>
 			<src path="${content.object.src.dir}" />
 		</javac>
 	</target>
@@ -117,7 +119,7 @@
 			<classpath>
 				<path refid="lib.path.id" />
 				<pathelement path="${project.build.classes.dir}"/>
-		        <pathelement path="${content.object.dir}/src"/>
+		        <pathelement path="${content.object.build.dir}"/>
 			</classpath>
 			<arg line="${content.object.start.uri}"/>
 		</java>
