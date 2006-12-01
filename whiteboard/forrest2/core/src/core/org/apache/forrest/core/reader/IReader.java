@@ -42,6 +42,7 @@ public interface IReader {
 	 * @param controller - the forrest controller in use
 	 * @param requestURI - the URI being requested
 	 * @param uri - the uri we are to read the document from
+	 * @param sourceURI - the source URI we are trying to read
 	 * 
 	 * @return
 	 * @throws MalformedURLException
