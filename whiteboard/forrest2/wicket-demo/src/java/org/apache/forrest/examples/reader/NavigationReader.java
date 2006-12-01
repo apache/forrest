@@ -13,11 +13,11 @@ import org.apache.forrest.core.reader.AbstractReader;
 public class NavigationReader extends AbstractReader {
 
 	public AbstractSourceDocument read(IController controller, URI requestURI,
-			Location location) throws MalformedURLException,
+			Location location, URI sourceURI) throws MalformedURLException,
 			ProcessingException {
 		String content = "<navigation><item label=\"Item 1\"/><item label=\"Item 2\"/><item label=\"Item 3\"/></navigation>";
 		String type = "org.apache.forrest.example.Navigation";
-		XMLSourceDocument doc = new XMLSourceDocument(content, type);
+		XMLSourceDocument doc = new XMLSourceDocument(requestURI, content, type);
 		return doc;
 	}
 
