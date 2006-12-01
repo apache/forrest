@@ -223,7 +223,9 @@ public class Location {
 				for (int i = 0; i < r.getParenCount(); i++) {
 					variable = "$(" + i + ")";
 					value = r.getParen(i);
-					sourceSSP = sourceSSP.replace(variable, value);
+					if (value != null) {
+						sourceSSP = sourceSSP.replace(variable, value);
+					}
 				}
 				log.debug("After variable substitution a potential source path is "
 						+ sourceSSP);
