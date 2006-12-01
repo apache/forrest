@@ -7,7 +7,7 @@ import wicket.MarkupContainer;
 import wicketbench.junit.WicketBenchTestCase;
 import wicketbench.web.IComponentFactory;
 
-public class ApplicationTest extends WicketBenchTestCase {
+public class WelcomeTest extends WicketBenchTestCase {
 
 	@Override
 	public IComponentFactory<?> createFactory() {
