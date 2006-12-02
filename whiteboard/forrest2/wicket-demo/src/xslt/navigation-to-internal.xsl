@@ -29,12 +29,14 @@
 			</head>
 			<body>
 			  <ul>
-				<xsl:apply-templates select="item"/>
+				<xsl:apply-templates/>
 			  </ul>
 			</body>
 		</html>
 	</xsl:template>
 	
+	<!-- The item element provides a link to some otehr item in the
+	content object. -->
 	<xsl:template match="item">
 	  <li>
 	    <xsl:choose>
@@ -49,6 +51,17 @@
 	    </xsl:otherwise>
 	    </xsl:choose>
 	  </li>
+	</xsl:template>
+	
+	<!--  The parent element provides a link back to the
+	      parent directory. -->
+	<xsl:template match="parent">
+	  <li>
+	    <a href="..">
+	      <xsl:value-of select="@label"/>
+	    </a>
+	  </li>
+	    
 	</xsl:template>
 
 </xsl:stylesheet>
