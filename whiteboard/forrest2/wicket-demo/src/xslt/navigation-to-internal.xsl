@@ -37,7 +37,17 @@
 	
 	<xsl:template match="item">
 	  <li>
-	    <xsl:value-of select="@label"/>
+	    <xsl:choose>
+	    <xsl:when test="@href">
+	    <a>
+	      <xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute>
+	      <xsl:value-of select="@label"/>
+	    </a>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="@label"/>
+	    </xsl:otherwise>
+	    </xsl:choose>
 	  </li>
 	</xsl:template>
 
