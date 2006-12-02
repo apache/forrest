@@ -38,7 +38,7 @@
 	<!-- The item element provides a link to some otehr item in the
 	content object. -->
 	<xsl:template match="item">
-	  <li>
+	  <li class="menuitem">
 	    <xsl:choose>
 	    <xsl:when test="@href">
 	    <a>
@@ -50,6 +50,11 @@
 	      <xsl:value-of select="@label"/>
 	    </xsl:otherwise>
 	    </xsl:choose>
+	    <xsl:if test="item">
+	      <ul>
+	        <xsl:apply-templates/>
+	      </ul>
+	    </xsl:if>
 	  </li>
 	</xsl:template>
 	
