@@ -70,7 +70,7 @@ public class Location {
 		boolean isRequired = false;
 
 		final NamedNodeMap atts = element.getAttributes();
-		pattern = atts.getNamedItem("pattern").getNodeValue();
+		pattern = atts.getNamedItem("regexp").getNodeValue();
 		final NodeList children = element.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			final Node child = children.item(i);
