@@ -454,33 +454,9 @@ public class Controller implements IController {
 	public AbstractOutputDocument getOutputDocument(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
 		if (requestURI.getPath().endsWith(this.sourceURLExtension)) {
-			final AbstractSourceDocument doc = this
-					.getSourceDocuments(requestURI);
-			final StringBuffer content = new StringBuffer();
-			try {
-				content.append(doc.getContentAsString());
-			} catch (final IOException e) {
-				content.append("<error>Unable to read source document for ");
-				content.append(requestURI);
-				content.append("</error>");
-			}
-
-			final DefaultOutputDocument output = new DefaultOutputDocument(
-					requestURI, content.toString());
-			return output;
+			return getSourceDocumentAsOutput(requestURI);
 		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
-			final InternalDocument doc = this.getInternalDocument(requestURI);
-			final StringBuffer content = new StringBuffer();
-			try {
-				content.append(doc.getContentAsString());
-			} catch (final IOException e) {
-				content.append("<error>Unable to read source document for ");
-				content.append(requestURI);
-				content.append("</error>");
-			}
-			final DefaultOutputDocument output = new DefaultOutputDocument(
-					requestURI, content.toString());
-			return output;
+			return getInternalDocumentAsOutput(requestURI);
 		}
 
 		AbstractOutputDocument output = this.outputDocCache.get(requestURI);
@@ -492,6 +468,38 @@ public class Controller implements IController {
 						"Unable to create the output documents for "
 								+ requestURI + " because " + e.getMessage(), e);
 			}
+		return output;
+	}
+
+	private DefaultOutputDocument getInternalDocumentAsOutput(final URI requestURI) throws ProcessingException {
+		final InternalDocument doc = this.getInternalDocument(requestURI);
+		final StringBuffer content = new StringBuffer();
+		try {
+			content.append(doc.getContentAsString());
+		} catch (final IOException e) {
+			content.append("<error>Unable to read source document for ");
+			content.append(requestURI);
+			content.append("</error>");
+		}
+		final DefaultOutputDocument output = new DefaultOutputDocument(
+				requestURI, content.toString());
+		return output;
+	}
+
+	private DefaultOutputDocument getSourceDocumentAsOutput(final URI requestURI) throws MalformedURLException, ProcessingException {
+		final AbstractSourceDocument doc = this
+				.getSourceDocuments(requestURI);
+		final StringBuffer content = new StringBuffer();
+		try {
+			content.append(doc.getContentAsString());
+		} catch (final IOException e) {
+			content.append("<error>Unable to read source document for ");
+			content.append(requestURI);
+			content.append("</error>");
+		}
+
+		final DefaultOutputDocument output = new DefaultOutputDocument(
+				requestURI, content.toString());
 		return output;
 	}
 }
