@@ -95,7 +95,7 @@ public class Location {
 					"requestURIPattern cannot be null");
 		if (uris == null || uris.size() == 0)
 			throw new IllegalArgumentException(
-					"There must be at least one postential source uri");
+					"There must be at least one potential source uri");
 		this.setRequestPattern(pattern);
 		this.setSourceURIs(uris);
 		this.setRequired(isRequired);
