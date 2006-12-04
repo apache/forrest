@@ -19,6 +19,8 @@ public interface IController {
 	final String sourceURLExtension = ".forrestSource";
 
 	final String internalURLExtension = ".forrestInternal";
+
+	final String pipelineURLExtension = ".forrestPipeline";
 	
 	public abstract AbstractInputPlugin getInputPlugin(
 			final AbstractSourceDocument doc);

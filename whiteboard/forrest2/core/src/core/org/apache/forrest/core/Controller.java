@@ -79,6 +79,12 @@ public class Controller implements IController {
 
 	private AbstractXmlApplicationContext context;
 
+	private String outputPluginClass;
+
+	private String inputPluginClass;
+
+	private String readerClass;
+
 	/**
 	 * Create a controller that uses the locationmap definition file at the
 	 * provided location.
@@ -152,8 +158,8 @@ public class Controller implements IController {
 		final List<AbstractSourceDocument> sourceDocs = this
 				.loadAllSourceDocuments(requestURI, sourceLocs);
 
-		final InternalDocument internalDoc = this
-				.processInputPlugins(requestURI, sourceDocs);
+		final InternalDocument internalDoc = this.processInputPlugins(
+				requestURI, sourceDocs);
 		this.internalDocsCache.put(requestURI, internalDoc);
 
 		final AbstractOutputDocument output = this
@@ -165,18 +171,20 @@ public class Controller implements IController {
 	/**
 	 * Process each of the documents supplied with the appropriate input plugins
 	 * to get a document in our internal format.
-	 * @param requestURI 
+	 * 
+	 * @param requestURI
 	 * 
 	 * @param sourceDocuments
 	 * @throws IOException
 	 * @throws ProcessingException
 	 */
-	private InternalDocument processInputPlugins(
-			URI requestURI, final List<AbstractSourceDocument> sourceDocuments)
+	private InternalDocument processInputPlugins(URI requestURI,
+			final List<AbstractSourceDocument> sourceDocuments)
 			throws IOException, ProcessingException {
 		InternalDocument result = null;
 		if (sourceDocuments.size() == 0) {
-			result = new InternalErrorDocument(requestURI, "Unable to load source document");
+			result = new InternalErrorDocument(requestURI,
+					"Unable to load source document");
 		} else {
 			for (int i = 0; i < sourceDocuments.size(); i++) {
 				final AbstractSourceDocument doc = sourceDocuments.get(i);
@@ -203,6 +211,7 @@ public class Controller implements IController {
 		} catch (final NoSuchBeanDefinitionException e) {
 			plugin = new PassThroughInputPlugin();
 		}
+		inputPluginClass = plugin.getClass().toString();
 		return plugin;
 	}
 
@@ -242,6 +251,7 @@ public class Controller implements IController {
 		if (plugin == null) {
 			plugin = new BaseOutputPlugin();
 		}
+		outputPluginClass = plugin.getClass().toString();
 		return plugin;
 	}
 
@@ -315,6 +325,7 @@ public class Controller implements IController {
 			throw new ProcessingException(
 					"Unable to get a reader for : " + uri, e);
 		}
+		readerClass = reader.getClass().toString();
 		return reader;
 	}
 
@@ -457,6 +468,8 @@ public class Controller implements IController {
 			return getSourceDocumentAsOutput(requestURI);
 		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
 			return getInternalDocumentAsOutput(requestURI);
+		} else if (requestURI.getPath().endsWith(this.pipelineURLExtension)) {
+			return getPipelineAsOutput(requestURI);
 		}
 
 		AbstractOutputDocument output = this.outputDocCache.get(requestURI);
@@ -471,7 +484,57 @@ public class Controller implements IController {
 		return output;
 	}
 
-	private DefaultOutputDocument getInternalDocumentAsOutput(final URI requestURI) throws ProcessingException {
+	/**
+	 * Return an XML document that represents the processing pipeline for the
+	 * given request URI.
+	 * 
+	 * @param requestURI
+	 * @return
+	 * @throws ProcessingException 
+	 */
+	private AbstractOutputDocument getPipelineAsOutput(URI requestURI) throws ProcessingException {
+		try {
+			this.processRequest(requestURI);
+		} catch (final Exception e) {
+			throw new ProcessingException(
+					"Unable to create the output documents for "
+							+ requestURI + " because " + e.getMessage(), e);
+		}
+		StringBuffer sb = new StringBuffer();
+		sb.append("<forrestPipeline request=\"");
+		sb.append(requestURI);
+		sb.append("\">");
+		sb.append("<source url=\"");
+		sb.append("URL calculation not implemented yet\">");
+		sb.append("</source>");
+		sb.append("<!-- FIXME: if there are a chain of readers we should show them all here -->");
+		sb.append("<reader class=\"");
+		sb.append(readerClass);
+		sb.append("\">");
+		sb.append("</reader>");
+		sb.append("<!-- FIXME: if there are a chain of input plugins we should show them all here -->");
+		sb.append("<inputPlugin class=\"");
+		sb.append(inputPluginClass);
+		sb.append("\">");
+		sb.append("</inputPlugin>");
+		sb.append("<outputPlugin class=\"");
+		sb.append(outputPluginClass);
+		sb.append("\">");
+		sb.append("</outputPlugin>");
+		sb.append("<forrestPipeline>");
+		return new DefaultOutputDocument(requestURI, sb.toString());
+	}
+
+	/**
+	 * Get an output document that contains the internal document gneerated by
+	 * the given request URI.
+	 * 
+	 * @param requestURI
+	 * @return
+	 * @throws ProcessingException
+	 */
+	private DefaultOutputDocument getInternalDocumentAsOutput(
+			final URI requestURI) throws ProcessingException {
 		final InternalDocument doc = this.getInternalDocument(requestURI);
 		final StringBuffer content = new StringBuffer();
 		try {
@@ -481,14 +544,21 @@ public class Controller implements IController {
 			content.append(requestURI);
 			content.append("</error>");
 		}
-		final DefaultOutputDocument output = new DefaultOutputDocument(
-				requestURI, content.toString());
-		return output;
+		return new DefaultOutputDocument(requestURI, content.toString());
 	}
 
-	private DefaultOutputDocument getSourceDocumentAsOutput(final URI requestURI) throws MalformedURLException, ProcessingException {
-		final AbstractSourceDocument doc = this
-				.getSourceDocuments(requestURI);
+	/**
+	 * Get an output document that contains the original source document for the
+	 * given request URI.
+	 * 
+	 * @param requestURI
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws ProcessingException
+	 */
+	private DefaultOutputDocument getSourceDocumentAsOutput(final URI requestURI)
+			throws MalformedURLException, ProcessingException {
+		final AbstractSourceDocument doc = this.getSourceDocuments(requestURI);
 		final StringBuffer content = new StringBuffer();
 		try {
 			content.append(doc.getContentAsString());
@@ -498,8 +568,6 @@ public class Controller implements IController {
 			content.append("</error>");
 		}
 
-		final DefaultOutputDocument output = new DefaultOutputDocument(
-				requestURI, content.toString());
-		return output;
+		return new DefaultOutputDocument(requestURI, content.toString());
 	}
 }

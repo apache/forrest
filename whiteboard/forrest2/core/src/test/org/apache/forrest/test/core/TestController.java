@@ -51,6 +51,9 @@ public class TestController extends TestCase {
 	public static final String INTERNAL_REQUEST_URI = BASE_REQUEST_URI
 			+ "testPage.forrestInternal";
 
+	public static final String PIPELINE_REQUEST_URI = BASE_REQUEST_URI
+			+ "testPage.forrestPipeline";
+
 	public static final String VARIABLE_SUBSTITUTION_REQUEST_URI = BASE_REQUEST_URI
 			+ "variable/sample_simple.forrestSource";
 
@@ -140,6 +143,23 @@ public class TestController extends TestCase {
 		assertNotNull(output);
 		assertTrue("Content is not as expected", output.getContentAsString()
 				.contains("http://www.w3.org/2002/06/xhtml2"));
+	}
+
+	public void testForrestPipelineRequest() throws ProcessingException,
+			URISyntaxException, IOException {
+		final AbstractOutputDocument output = this.controller
+				.getOutputDocument(new URI(PIPELINE_REQUEST_URI));
+		assertNotNull(output);
+		assertTrue("Content does not appear to be a pipeline description", output.getContentAsString()
+				.contains("forrestPipeline"));
+		assertTrue("Pipeline does not define source location", output.getContentAsString()
+				.contains("<source"));
+		assertTrue("Pipeline does not define a reader", output.getContentAsString()
+				.contains("<reader"));
+		assertTrue("Pipeline does not define an input plugin", output.getContentAsString()
+				.contains("<inputPlugin"));
+		assertTrue("Pipeline does not define an output plugin", output.getContentAsString()
+				.contains("<outputPlugin"));
 	}
 
 	public void testVariableSubstitution() throws ProcessingException,
