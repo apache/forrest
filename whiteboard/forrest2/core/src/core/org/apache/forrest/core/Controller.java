@@ -67,10 +67,6 @@ public class Controller implements IController {
 
 	Logger log = Logger.getLogger(Controller.class);
 
-	private final String sourceURLExtension = ".forrestSource";
-
-	private final String internalURLExtension = ".forrestInternal";
-
 	private final Map<URI, List<Location>> sourceLocationsCache = new HashMap<URI, List<Location>>();
 
 	private final Map<URI, AbstractSourceDocument> sourceDocsCache = new HashMap<URI, AbstractSourceDocument>();

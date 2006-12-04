@@ -16,7 +16,10 @@ import org.apache.forrest.core.plugin.BaseOutputPlugin;
 import org.apache.forrest.core.reader.IReader;
 
 public interface IController {
+	final String sourceURLExtension = ".forrestSource";
 
+	final String internalURLExtension = ".forrestInternal";
+	
 	public abstract AbstractInputPlugin getInputPlugin(
 			final AbstractSourceDocument doc);
 
