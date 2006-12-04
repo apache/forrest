@@ -164,6 +164,24 @@
           />
         <map:serialize type="xhtml" />
       </map:match>
+      <!--
+        Last processing step. 
+        Here we are overriding the default skin generation.
+      -->
+      <map:match pattern="**.fo">
+        <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
+          <map:parameter name="lenient-xpath" value="true" />
+          <map:parameter name="getRequest" value="{1}" />
+          <map:parameter name="getRequestExtension" value="fo" />
+        </map:generate>
+        <map:transform type="dispatcher">
+          <map:parameter name="cacheKey" value="{0}" />
+          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="request" value="{1}" />
+          <map:parameter name="type" value="fo" />
+        </map:transform>
+        <map:serialize type="xml" />
+      </map:match>
       <map:match pattern="**.internal*">
         <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
           <map:parameter name="lenient-xpath" value="true" />
