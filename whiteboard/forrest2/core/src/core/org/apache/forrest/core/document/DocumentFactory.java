@@ -67,7 +67,7 @@ public class DocumentFactory {
 		char[] buf = new char[1000];
 		int numRead = 0;
 		String type = null;
-		while ((numRead = reader.read(buf)) != -1 && type == null) {
+		while (type == null && (numRead = reader.read(buf)) != -1) {
 			final String readData = String.valueOf(buf, 0, numRead);
 			fileData.append(readData);
 			buf = new char[1024];
@@ -111,6 +111,8 @@ public class DocumentFactory {
 			type = "org.w3c.xhtml2";
 		} else if (content.contains("http://forrest.apache.org/helloWorld.dtd")) {
 			type = "org.apache.forrest.hellowWorld";
+		} else if (content.contains("http://forrest.apache.org/dtd/document-v20.dtd")) {
+			type = "org.apache.forrest.xdoc2";
 		}
 		return type;
 	}
