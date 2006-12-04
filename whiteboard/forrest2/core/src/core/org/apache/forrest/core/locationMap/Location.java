@@ -205,15 +205,8 @@ public class Location {
 					"Unable to extract variable values from request: "
 							+ re.getMessage(), re);
 		}
-
-		try {
-			url = requestURI.toURL();
-		} catch (final IllegalArgumentException e) {
-			// we'll assume that this is not an absolute URL and therefore
-			// refers to a file
-			url = new URL("file://" + requestURI);
-		}
-		final String urlString = url.toExternalForm();
+		
+		String urlString = requestURI.getPath();
 
 			String sourceSSP = sourceURI.getSchemeSpecificPart();
 
