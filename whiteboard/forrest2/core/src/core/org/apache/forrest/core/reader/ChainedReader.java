@@ -24,7 +24,9 @@ import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.LocationNode;
+import org.apache.forrest.core.matcher.AbstractMatcher;
 
 /**
  * A chained reader implements a psuedo protocol. It is commonly used when you
@@ -55,28 +57,26 @@ public class ChainedReader extends AbstractReader {
 	private String docType;
 
 	public AbstractSourceDocument read(IController controller, URI requestURI,
-			final Location location, URI sourceURI) throws ProcessingException {
+			final AbstractSourceNode sourceNode, AbstractMatcher matcher)
+			throws ProcessingException {
 		DefaultSourceDocument doc = null;
-		for (URI psuedoURI: location.getSourceURIs()) {
-			final String ssp = psuedoURI.getSchemeSpecificPart();
-			URI subSourceURI;
-			try {
-				subSourceURI = new URI(ssp);
-				IReader reader;
-				reader = (IReader) controller.getReader(subSourceURI);
-				doc = (DefaultSourceDocument) reader.read(controller,
-						requestURI, location, subSourceURI);
-				if (doc != null) {
-					doc.setType(getDocType());
-					break;
-				}
-			} catch (final URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		final String ssp = sourceNode.getSourceURI().getSchemeSpecificPart();
+		URI subSourceURI;
+		try {
+			subSourceURI = new URI(ssp);
+			IReader reader;
+			reader = (IReader) controller.getReader(subSourceURI);
+			doc = (DefaultSourceDocument) reader.read(controller, requestURI,
+					sourceNode, matcher);
+			if (doc != null) {
+				doc.setType(getDocType());
 			}
+		} catch (final URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return doc;
 	}

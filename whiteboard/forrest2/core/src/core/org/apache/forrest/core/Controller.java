@@ -35,7 +35,8 @@ import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.document.InternalErrorDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.LocationNode;
 import org.apache.forrest.core.locationMap.LocationMap;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
@@ -67,7 +68,7 @@ public class Controller implements IController {
 
 	Logger log = Logger.getLogger(Controller.class);
 
-	private final Map<URI, List<Location>> sourceLocationsCache = new HashMap<URI, List<Location>>();
+	private final Map<URI, List<LocationNode>> sourceLocationsCache = new HashMap<URI, List<LocationNode>>();
 
 	private final Map<URI, AbstractSourceDocument> sourceDocsCache = new HashMap<URI, AbstractSourceDocument>();
 
@@ -151,7 +152,7 @@ public class Controller implements IController {
 	 */
 	private AbstractOutputDocument processRequest(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException {
-		final List<Location> sourceLocs = this
+		final List<LocationNode> sourceLocs = this
 				.resolveSourceLocations(requestURI);
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
@@ -266,13 +267,13 @@ public class Controller implements IController {
 	 * @fixme resource handlers should be provided from a factory class
 	 */
 	private List<AbstractSourceDocument> loadAllSourceDocuments(URI requestURI,
-			final List<Location> sourceLocations) throws MalformedURLException,
+			final List<LocationNode> sourceLocations) throws MalformedURLException,
 			ProcessingException {
 		final List<AbstractSourceDocument> results = new ArrayList<AbstractSourceDocument>(
 				sourceLocations.size());
 
 		for (int i = 0; i < sourceLocations.size(); i++) {
-			final Location location = sourceLocations.get(i);
+			final LocationNode location = sourceLocations.get(i);
 			AbstractSourceDocument doc = loadSourceDocument(requestURI,
 					location);
 			results.add(doc);
@@ -281,13 +282,13 @@ public class Controller implements IController {
 	}
 
 	private AbstractSourceDocument loadSourceDocument(URI requestURI,
-			final Location location) throws ProcessingException,
+			final LocationNode location) throws ProcessingException,
 			MalformedURLException {
 		AbstractSourceDocument doc = sourceDocsCache.get(requestURI);
 		if (doc == null) {
-			for (URI uri : location.getSourceURIs()) {
-				IReader reader = getReader(uri);
-				doc = reader.read(this, requestURI, location, uri);
+			for (AbstractSourceNode node : location.getSourceNodes()) {
+				IReader reader = getReader(node.getSourceURI());
+				doc = reader.read(this, requestURI, node, location.getMatcher());
 				if (doc != null) {
 					addToSourceDocCache(requestURI, doc);
 					break;
@@ -311,7 +312,7 @@ public class Controller implements IController {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.forrest.core.IController#getReader(org.apache.forrest.core.locationMap.Location)
+	 * @see org.apache.forrest.core.IController#getReader(org.apache.forrest.core.locationMap.LocationNode)
 	 */
 	public IReader getReader(final URI uri) throws ProcessingException {
 		IReader reader;
@@ -343,36 +344,27 @@ public class Controller implements IController {
 	 * @throws ProcessingException
 	 * @FIXME handle fall through if the first location is not correct
 	 */
-	private List<Location> resolveSourceLocations(final URI requestURI)
+	private List<LocationNode> resolveSourceLocations(final URI requestURI)
 			throws LocationmapException, MalformedURLException,
 			ProcessingException {
-		final List<List<Location>> possibleLocs = this.locationMap
+		final List<List<LocationNode>> possibleLocs = this.locationMap
 				.get(requestURI);
 		if (possibleLocs == null || possibleLocs.size() == 0)
 			throw new LocationmapException(
 					"Unable to find a source location for " + requestURI);
 
-		List<Location> result = new ArrayList<Location>();
+		List<LocationNode> result = new ArrayList<LocationNode>();
 		Boolean isValid = false;
-		for (List<Location> locs : possibleLocs) {
-			result = new ArrayList<Location>();
+		for (List<LocationNode> locs : possibleLocs) {
+			result = new ArrayList<LocationNode>();
 			isValid = true;
-			Iterator<Location> sourceLocs = locs.iterator();
-			Location loc;
+			Iterator<LocationNode> sourceLocs = locs.iterator();
+			LocationNode loc;
 			while (sourceLocs.hasNext() && isValid) {
 				loc = sourceLocs.next();
 				if (sourceExists(requestURI, loc)) {
 					result.add(loc);
 					log.debug("Found valid location");
-				} else {
-					if (loc.isRequired()) {
-						isValid = false;
-						log
-								.debug("Can't use this set of locations because one is required: "
-										+ loc.toString());
-					} else {
-						log.debug("Can't find file for " + loc.toString());
-					}
 				}
 			}
 			if (isValid)
@@ -395,7 +387,7 @@ public class Controller implements IController {
 	 * @throws MalformedURLException
 	 * @TODO we need a more efficient test for existence.
 	 */
-	private boolean sourceExists(URI requestURI, Location location)
+	private boolean sourceExists(URI requestURI, LocationNode location)
 			throws MalformedURLException, ProcessingException {
 		AbstractSourceDocument doc = loadSourceDocument(requestURI, location);
 		return doc != null;
@@ -406,9 +398,9 @@ public class Controller implements IController {
 	 * 
 	 * @see org.apache.forrest.core.IController#getSourceLocations(java.net.URI)
 	 */
-	public List<Location> getSourceLocations(final URI requestURI)
+	public List<LocationNode> getSourceLocations(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException {
-		List<Location> locs = this.sourceLocationsCache.get(requestURI);
+		List<LocationNode> locs = this.sourceLocationsCache.get(requestURI);
 		if (locs == null) {
 			this.processRequest(requestURI);
 			locs = this.sourceLocationsCache.get(requestURI);

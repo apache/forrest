@@ -32,7 +32,7 @@ import org.apache.forrest.core.document.AggregatedSourceDocument;
 import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.LocationNode;
 
 public class TestController extends TestCase {
 	static final String SOURCE_DOCUMENT_XHTML2_SIMPLE = "/xdocs/samples/xhtml2/sample_simple.html";
@@ -83,7 +83,7 @@ public class TestController extends TestCase {
 
 	public void testSourceURLs() throws IOException, LocationmapException,
 			ProcessingException, URISyntaxException {
-		final List<Location> sourceURLs = this.controller
+		final List<LocationNode> sourceURLs = this.controller
 				.getSourceLocations(new URI(XHTML_REQUEST_URI));
 		assertNotNull(sourceURLs);
 	}
@@ -92,7 +92,7 @@ public class TestController extends TestCase {
 			URISyntaxException {
 		final AbstractSourceDocument document = this.controller
 				.getSourceDocuments(new URI(XHTML_REQUEST_URI));
-		assertNotNull(document);
+		assertNotNull("No document returned", document);
 	}
 
 	public void testInternalDocuments() throws IOException,
@@ -102,6 +102,7 @@ public class TestController extends TestCase {
 		final InternalDocument internalDoc = this.controller
 				.getInternalDocument(new URI(XHTML_REQUEST_URI));
 		final AbstractSourceDocument firstSrcDoc = srcDoc;
+		assertNotNull("No internal document returned", internalDoc);
 		assertFalse(firstSrcDoc.equals(internalDoc));
 	}
 

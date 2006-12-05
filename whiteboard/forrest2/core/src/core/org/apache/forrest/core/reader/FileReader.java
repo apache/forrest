@@ -26,7 +26,9 @@ import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DocumentFactory;
 import org.apache.forrest.core.exception.SourceException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.LocationNode;
+import org.apache.forrest.core.matcher.AbstractMatcher;
 
 /**
  * A File reader reads a resource using the file protocol, i.e. it will read
@@ -41,14 +43,14 @@ public class FileReader extends AbstractReader {
 	 * @see org.apache.forrest.core.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
 	public AbstractSourceDocument read(IController controller, URI requestURI,
-			final Location location, final URI sourceURI) {
+			final AbstractSourceNode sourceNode, AbstractMatcher matcher) {
 		AbstractSourceDocument result = null;
 		try {
-			URL resolvedURL = location.resolveURL(requestURI, sourceURI);
+			URL resolvedURL = sourceNode.resolveURL(matcher, requestURI);
 			final InputStream is = new FileInputStream(new File(resolvedURL.toURI()));
 			result = DocumentFactory.getSourceDocumentFor(requestURI, is);
 		} catch (final Exception e) {
-			if (location.isRequired())
+			if (sourceNode.isRequired())
 				throw new SourceException("Source URL is invalid", e);
 		}
 		return result;

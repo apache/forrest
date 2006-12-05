@@ -10,7 +10,7 @@ import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.LocationNode;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
 import org.apache.forrest.core.reader.IReader;
@@ -46,7 +46,7 @@ public interface IController {
 	 * @throws LocationmapException
 	 * @throws ProcessingException
 	 */
-	public abstract List<Location> getSourceLocations(final URI requestURI)
+	public abstract List<LocationNode> getSourceLocations(final URI requestURI)
 			throws IOException, LocationmapException, ProcessingException;
 
 	/**

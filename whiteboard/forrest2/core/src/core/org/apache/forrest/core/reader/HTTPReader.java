@@ -30,7 +30,9 @@ import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.exception.SourceException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.LocationNode;
+import org.apache.forrest.core.matcher.AbstractMatcher;
 import org.w3c.tidy.Tidy;
 
 /**
@@ -56,12 +58,12 @@ public class HTTPReader extends AbstractReader {
 	 * 
 	 * @see org.apache.forrest.core.reader.IReader#read(org.apache.forrest.test.core.locationMap.Location)
 	 */
-	public AbstractSourceDocument read(IController controller,
-			final URI requestURI, final Location location, URI sourceURI)
+	public AbstractSourceDocument read(IController controller, URI requestURI,
+			final AbstractSourceNode sourceNode, AbstractMatcher matcher)
 			throws MalformedURLException, ProcessingException {
 		InputStream is;
 		DefaultSourceDocument result = null;
-		URL resolvedURL = location.resolveURL(requestURI, sourceURI);
+		URL resolvedURL = sourceNode.resolveURL(matcher, requestURI);
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		final GetMethod get = new GetMethod(resolvedURL.toExternalForm());
 		get.setFollowRedirects(true);
@@ -74,7 +76,7 @@ public class HTTPReader extends AbstractReader {
 			result = new DefaultSourceDocument(requestURI, out.toString());
 		} catch (final Exception e) {
 			result = null;
-			if (location.isRequired())
+			if (sourceNode.isRequired())
 				throw new SourceException("Source URL is invalid", e);
 		} finally {
 			get.releaseConnection();

@@ -47,7 +47,7 @@ import com.sun.org.apache.regexp.internal.RESyntaxException;
 public class LocationMap {
 	Logger log = Logger.getLogger(LocationMap.class);
 	
-	private final Map<String, List<Location>> locations = new HashMap<String, List<Location>>();
+	private final Map<String, List<LocationNode>> locations = new HashMap<String, List<LocationNode>>();
 
 	/**
 	 * Create a new locationmap, configured by the file at the given path within
@@ -74,7 +74,7 @@ public class LocationMap {
 		for (int i = 0; i < nodes.getLength(); i++) {
 			final Node element = nodes.item(i);
 			if (element.getNodeName().equals("location")) {
-				Location loc = new Location(element);
+				LocationNode loc = new LocationNode(element);
 				this.put(loc);
 				log.debug("Adding " + loc.toString());
 			}
@@ -87,14 +87,14 @@ public class LocationMap {
 	 * @param requestURI
 	 * @param location
 	 */
-	public void put(final Location location) {
-		List<Location> sourceLocations = this.locations.get(location
-				.getRequestPattern());
+	public void put(final LocationNode location) {
+		List<LocationNode> sourceLocations = this.locations.get(location
+				.getMatcher().getPattern());
 		if (sourceLocations == null)
-			sourceLocations = new ArrayList<Location>();
+			sourceLocations = new ArrayList<LocationNode>();
 		if (sourceLocations.contains(location) == false)
 			sourceLocations.add(location);
-		this.locations.put(location.getRequestPattern(), sourceLocations);
+		this.locations.put(location.getMatcher().getPattern(), sourceLocations);
 	}
 
 	/**
@@ -111,15 +111,15 @@ public class LocationMap {
 	 *             if the Request URI is invalid
 	 * @throws LocationmapException
 	 */
-	public List<List<Location>> get(final URI requestURI)
+	public List<List<LocationNode>> get(final URI requestURI)
 			throws MalformedURLException, LocationmapException {
 		log.debug("Getting potential locations for request of " + requestURI.toASCIIString());
-		final List<List<Location>> results = new ArrayList<List<Location>>();
+		final List<List<LocationNode>> results = new ArrayList<List<LocationNode>>();
 		final Set<String> locPatterns = this.locations.keySet();
 		for (final String pattern : locPatterns) {
 			try {
 				if (this.isMatch(pattern, requestURI)) {
-					List<Location> locs = this.locations.get(pattern);
+					List<LocationNode> locs = this.locations.get(pattern);
 					results.add(locs);
 					log.info(locs.size() + " potenatial location from pattern " + pattern);
 				}

@@ -22,7 +22,9 @@ import java.net.URI;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.Location;
+import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.LocationNode;
+import org.apache.forrest.core.matcher.AbstractMatcher;
 
 public interface IReader {
 
@@ -41,14 +43,15 @@ public interface IReader {
 	 * 
 	 * @param controller - the forrest controller in use
 	 * @param requestURI - the URI being requested
-	 * @param uri - the uri we are to read the document from
-	 * @param sourceURI - the source URI we are trying to read
+	 * @param sourceNode - the source node we are trying to use to resole this document
+	 * @param matcher - the matcher that produced this source node
 	 * 
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws ProcessingException 
 	 */
-	public abstract AbstractSourceDocument read(IController controller, URI requestURI, Location location, URI sourceURI)
+	public abstract AbstractSourceDocument read(IController controller, URI requestURI,
+			final AbstractSourceNode sourceNode, AbstractMatcher matcher)
 			throws MalformedURLException, ProcessingException;
 
 }
