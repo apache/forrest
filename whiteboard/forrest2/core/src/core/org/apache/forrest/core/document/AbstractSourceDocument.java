@@ -26,11 +26,15 @@ import java.net.URI;
  * 
  */
 public abstract class AbstractSourceDocument extends AbstractDocument {
-	String type;
+	String type = "org.apache.forrest.AggregateDocument";
 
 	public AbstractSourceDocument(URI requestURI, String content) {
 		setRequestURI(requestURI);
 		setContent(content);
+	}
+
+	public AbstractSourceDocument(URI requestURI) {
+		setRequestURI(requestURI);
 	}
 
 	@Override

@@ -46,7 +46,7 @@ import com.sun.org.apache.regexp.internal.RESyntaxException;
  */
 public class LocationMap {
 	Logger log = Logger.getLogger(LocationMap.class);
-	
+
 	private final Map<String, List<LocationNode>> locations = new HashMap<String, List<LocationNode>>();
 
 	/**
@@ -98,12 +98,10 @@ public class LocationMap {
 	}
 
 	/**
-	 * Get all matching sets of locations for the given URI.
-	 * A matching location is one that provides a source
-	 * location that <em>may</em> provide a source document
-	 * for the request. That is, the existence of the source
-	 * document is not checked before adding the location
-	 * to the results.
+	 * Get all matching sets of locations for the given URI. A matching location
+	 * is one that provides a source location that <em>may</em> provide a
+	 * source document for the request. That is, the existence of the source
+	 * document is not checked before adding the location to the results.
 	 * 
 	 * @param requestURI
 	 * @return
@@ -113,7 +111,8 @@ public class LocationMap {
 	 */
 	public List<List<LocationNode>> get(final URI requestURI)
 			throws MalformedURLException, LocationmapException {
-		log.debug("Getting potential locations for request of " + requestURI.toASCIIString());
+		log.debug("Getting potential locations for request of "
+				+ requestURI.toASCIIString());
 		final List<List<LocationNode>> results = new ArrayList<List<LocationNode>>();
 		final Set<String> locPatterns = this.locations.keySet();
 		for (final String pattern : locPatterns) {
@@ -121,7 +120,8 @@ public class LocationMap {
 				if (this.isMatch(pattern, requestURI)) {
 					List<LocationNode> locs = this.locations.get(pattern);
 					results.add(locs);
-					log.info(locs.size() + " potenatial location from pattern " + pattern);
+					log.info(locs.size() + " potenatial location from pattern "
+							+ pattern);
 				}
 			} catch (final RESyntaxException e) {
 				throw new LocationmapException(

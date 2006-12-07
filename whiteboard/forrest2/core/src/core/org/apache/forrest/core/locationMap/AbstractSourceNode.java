@@ -44,8 +44,11 @@ public abstract class AbstractSourceNode {
 		setSourceURI(new URI(atts.getNamedItem("href").getNodeValue()));
 		final Node required = atts.getNamedItem("required");
 		if (required != null) {
-			setRequired(required.getNodeValue().equals("true"));
+			setRequired(required.getNodeValue().toLowerCase().equals("true"));
 		}
+	}
+
+	public AbstractSourceNode() {
 	}
 
 	public boolean isRequired() {

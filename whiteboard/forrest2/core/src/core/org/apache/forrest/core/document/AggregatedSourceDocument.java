@@ -16,14 +16,14 @@
  */
 package org.apache.forrest.core.document;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An aggregated source document is used to represent
- * a source document that consists of a number of 
- * separate documents.
+ * An aggregated source document is used to represent a source document that
+ * consists of a number of separate documents.
  * 
  */
 public class AggregatedSourceDocument extends AbstractSourceDocument {
@@ -32,11 +32,15 @@ public class AggregatedSourceDocument extends AbstractSourceDocument {
 		super(requestURI, content);
 	}
 
+	public AggregatedSourceDocument(URI requestURI) {
+		super(requestURI);
+	}
+
 	List<AbstractSourceDocument> docs = new ArrayList<AbstractSourceDocument>();
 
 	/**
-	 * Look to see if this aggregation of documents contains
-	 * a specificed document.
+	 * Look to see if this aggregation of documents contains a specificed
+	 * document.
 	 * 
 	 * @param doc
 	 * @return
@@ -47,10 +51,27 @@ public class AggregatedSourceDocument extends AbstractSourceDocument {
 
 	/**
 	 * Add a document to the aggregated documents list.
+	 * 
 	 * @param doc
 	 */
 	public boolean add(AbstractSourceDocument doc) {
-		return docs.add(doc);
+		if (doc != null) {
+			return docs.add(doc);
+		}
+		return false;
 	}
 	
+	public List<AbstractSourceDocument> getDocuments() {
+		return docs;
+	}
+
+	@Override
+	public String getContentAsString() throws IOException {
+		StringBuffer sb = new StringBuffer("<aggregate>");
+		for (AbstractSourceDocument doc : docs) {
+			sb.append(doc.getContentAsString());
+		}
+		sb.append("</aggegate>");
+		return sb.toString();
+	}
 }

@@ -61,6 +61,8 @@ public class LocationNode {
 			String nodeName = child.getNodeName();
 			if (nodeName != null && nodeName.equals("source")) {
 				nodes.add(new SourceNode(child));
+			} else if (nodeName != null && nodeName.equals("aggregate")) {
+				nodes.add(new AggregateNode(child));
 			}
 		}
 		this.init(pattern, nodes);

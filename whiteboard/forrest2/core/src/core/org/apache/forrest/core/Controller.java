@@ -36,11 +36,14 @@ import org.apache.forrest.core.document.InternalErrorDocument;
 import org.apache.forrest.core.exception.LocationmapException;
 import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.AbstractSourceNode;
+import org.apache.forrest.core.locationMap.AggregateNode;
 import org.apache.forrest.core.locationMap.LocationNode;
 import org.apache.forrest.core.locationMap.LocationMap;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
+import org.apache.forrest.core.plugin.AggregateInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
 import org.apache.forrest.core.plugin.PassThroughInputPlugin;
+import org.apache.forrest.core.reader.AggregateReader;
 import org.apache.forrest.core.reader.IReader;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -206,6 +209,9 @@ public class Controller implements IController {
 	 * @see org.apache.forrest.core.IController#getInputPlugin(org.apache.forrest.core.document.AbstractSourceDocument)
 	 */
 	public AbstractInputPlugin getInputPlugin(final AbstractSourceDocument doc) {
+		if (doc instanceof AggregatedSourceDocument) {
+			return new AggregateInputPlugin();
+		}
 		AbstractInputPlugin plugin;
 		try {
 			plugin = (AbstractInputPlugin) this.context.getBean(doc.getType());
@@ -257,7 +263,7 @@ public class Controller implements IController {
 	}
 
 	/**
-	 * Load each of the source documents into the docuemnt cache.
+	 * Load each of the source documents into the document cache.
 	 * 
 	 * @throws MalformedURLException
 	 * @throws ProcessingException
@@ -287,7 +293,7 @@ public class Controller implements IController {
 		AbstractSourceDocument doc = sourceDocsCache.get(requestURI);
 		if (doc == null) {
 			for (AbstractSourceNode node : location.getSourceNodes()) {
-				IReader reader = getReader(node.getSourceURI());
+				IReader reader = getReader(node);
 				doc = reader.read(this, requestURI, node, location.getMatcher());
 				if (doc != null) {
 					addToSourceDocCache(requestURI, doc);
@@ -328,6 +334,16 @@ public class Controller implements IController {
 		}
 		readerClass = reader.getClass().toString();
 		return reader;
+	}
+	
+	
+
+	public IReader getReader(AbstractSourceNode sourceNode) throws ProcessingException {
+		if (sourceNode instanceof AggregateNode) {
+			return new AggregateReader();
+		} else {
+			return getReader(sourceNode.getSourceURI());
+		}
 	}
 
 	/**
