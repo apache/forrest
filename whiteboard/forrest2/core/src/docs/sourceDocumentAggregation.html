@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Source Document Aggregation</title>
+</head>
+<body>
+
+<p>It is common to want to aggregate the contents of multiple 
+documents into a single source documenent. There are a number
+of ways of achieving this, such as XInclude or the document()
+method in XSLT. Forrest 2 provides its own aggregation 
+mechanism to augment such techniques.</p>
+
+<p>We can define an aggregation in the locationmap/xml file.
+For example:</p>
+
+<source><![CDATA[
+  <location regexp="(.*).html">
+    <aggregate>
+      <source href="classpath:/xdocs/navigation/$(1).xml"/>
+      <source href="classpath:/xdocs/navigation/site.xml"/>
+      <source href="classpath:/xdocs/$(1).xml" required="true"/>
+      <source href="classpath:/xdocs/$(1).metadata.xml"/>
+    </aggregate>
+  </location>
+]]></source>
+
+</body>
+</html>
