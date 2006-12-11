@@ -33,8 +33,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.forrest.core.Controller;
+import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 
 /**
  * A plugin that performs an XSLT transformation on a source documents to create
@@ -68,7 +70,7 @@ public class XSLTInputPlugin extends AbstractInputPlugin {
 		}
 	}
 
-	public IDocument process(final Controller controller, final IDocument doc) throws IOException {
+	public IDocument process(final Controller controller, final IDocument doc) throws IOException, ProcessingException {
 		final TransformerFactory tFactory = TransformerFactory.newInstance();
 
 		try {
@@ -83,19 +85,13 @@ public class XSLTInputPlugin extends AbstractInputPlugin {
 			final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			final StreamResult out = new StreamResult(outStream);
 			transformer.transform(in, out);
-			return new InternalDocument(doc.getRequestURI(), outStream.toString());
+			return new InternalDocument((AbstractSourceDocument)doc, outStream.toString());
 		} catch (final TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			throw new ProcessingException("Unable tocfigure XSL Transformer", e);
 		} catch (final TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			throw new ProcessingException("Unable to transform source document", e);
 		} catch (final URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			throw new ProcessingException("URI Syntax exception", e);
 		}
 	}
 

@@ -66,12 +66,12 @@ public class AggregateInputPlugin extends AbstractInputPlugin {
 			if (startPos > -1 && endPos > -1) {
 				sb.append(content.substring(startPos + 6, endPos - 1));
 			} else {
-				throw new ProcessingException("Invalid document in the aggregate collection");
+				throw new ProcessingException("Invalid document in the aggregate collection: Document type = " + doc.getType());
 			}
 		}
 		sb.append(getDocumentFooter());
 
-		return new InternalDocument(aggregateDoc.getRequestURI(), sb.toString());
+		return new InternalDocument((AbstractSourceDocument)aggregateDoc, sb.toString());
 	}
 
 	private CharSequence getDocumentHeader() {

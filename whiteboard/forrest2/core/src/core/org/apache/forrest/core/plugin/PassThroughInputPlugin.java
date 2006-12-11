@@ -19,6 +19,7 @@ package org.apache.forrest.core.plugin;
 import java.io.IOException;
 
 import org.apache.forrest.core.Controller;
+import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
 
@@ -31,7 +32,7 @@ import org.apache.forrest.core.document.InternalDocument;
 public class PassThroughInputPlugin extends AbstractInputPlugin {
 
 	public IDocument process(final Controller controller, final IDocument doc) throws IOException {
-		return new InternalDocument(doc.getRequestURI(), doc.getContentAsString());
+		return new InternalDocument((AbstractSourceDocument)doc, doc.getContentAsString());
 	}
 
 }
