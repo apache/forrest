@@ -5,8 +5,8 @@ import java.net.URI;
 
 public class InternalErrorDocument extends InternalDocument {
 
-	public InternalErrorDocument(URI requestURI, String message) {
-		super (requestURI, message);
+	public InternalErrorDocument(AbstractSourceDocument sourceDoc, String message) {
+		super (sourceDoc, message);
 	}
 
 	@Override

@@ -24,13 +24,36 @@ import java.net.URI;
  * 
  */
 public class InternalDocument extends AbstractDocument {
+	
+	private AbstractSourceDocument sourceDocument;
 
-	public InternalDocument() {
+	public InternalDocument(AbstractSourceDocument sourceDoc) {
+		setSourceDocument(sourceDoc);
 	}
 
-	public InternalDocument(final URI requestURI, final String content) {
-		this.setRequestURI(requestURI);
+	public InternalDocument(AbstractSourceDocument sourceDoc, final String content) {
+		setSourceDocument(sourceDoc);
+		this.setRequestURI(sourceDoc.getRequestURI());
 		this.setContent(content);
 	}
 
+	/**
+	 * Get the source document that resulted in this
+	 * document being created.
+	 * 
+	 * @return
+	 */
+	public AbstractSourceDocument getSourceDocument() {
+		return sourceDocument;
+	}
+
+	/**
+	 * Set the source documen that was used to create this
+	 * internal document.
+	 * 
+	 * @param sourceDocument
+	 */
+	public void setSourceDocument(AbstractSourceDocument sourceDocument) {
+		this.sourceDocument = sourceDocument;
+	}
 }
