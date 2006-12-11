@@ -113,6 +113,10 @@ public class DocumentFactory {
 			type = "org.apache.forrest.hellowWorld";
 		} else if (content.contains("http://forrest.apache.org/dtd/document-v20.dtd")) {
 			type = "org.apache.forrest.xdoc2";
+		} else if (content.contains("http://forrest.apache.org/dtd/document-v20.dtd")) {
+			type = "org.apache.forrest.xdoc2";
+		} else if (content.contains("<site")) {
+			type = "org.apache.forrest.site";
 		}
 		return type;
 	}
