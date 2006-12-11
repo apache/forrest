@@ -69,6 +69,9 @@ public class TestController extends TestCase {
 	public static final String REQUIRED_RESOURCES_REQUEST_URI = BASE_REQUEST_URI
 			+ "required/sample_simple.forrestSource";
 
+	public static final String AGGREGATED_RESOURCES_REQUEST_URI = BASE_REQUEST_URI
+			+ "aggregate/sample_simple.html";
+
 	private IController controller;
 
 	@Override
@@ -151,16 +154,16 @@ public class TestController extends TestCase {
 		final AbstractOutputDocument output = this.controller
 				.getOutputDocument(new URI(PIPELINE_REQUEST_URI));
 		assertNotNull(output);
-		assertTrue("Content does not appear to be a pipeline description", output.getContentAsString()
-				.contains("forrestPipeline"));
-		assertTrue("Pipeline does not define source location", output.getContentAsString()
-				.contains("<source"));
-		assertTrue("Pipeline does not define a reader", output.getContentAsString()
-				.contains("<reader"));
-		assertTrue("Pipeline does not define an input plugin", output.getContentAsString()
-				.contains("<inputPlugin"));
-		assertTrue("Pipeline does not define an output plugin", output.getContentAsString()
-				.contains("<outputPlugin"));
+		assertTrue("Content does not appear to be a pipeline description",
+				output.getContentAsString().contains("forrestPipeline"));
+		assertTrue("Pipeline does not define source location", output
+				.getContentAsString().contains("<source"));
+		assertTrue("Pipeline does not define a reader", output
+				.getContentAsString().contains("<reader"));
+		assertTrue("Pipeline does not define an input plugin", output
+				.getContentAsString().contains("<inputPlugin"));
+		assertTrue("Pipeline does not define an output plugin", output
+				.getContentAsString().contains("<outputPlugin"));
 	}
 
 	public void testVariableSubstitution() throws ProcessingException,
@@ -194,4 +197,18 @@ public class TestController extends TestCase {
 		fail("We should throw a processing exception when a required document is missing");
 	}
 
+	public void testAggregatedResources() throws ProcessingException,
+			URISyntaxException, IOException {
+		final AbstractOutputDocument output = this.controller
+				.getOutputDocument(new URI(AGGREGATED_RESOURCES_REQUEST_URI));
+		assertNotNull("No document returned", output);
+		assertTrue("Content is not as expected", output.getContentAsString()
+				.contains("http://www.w3.org/2002/06/xhtml2"));
+		String content = output.getContentAsString();
+		assertTrue("Content is not as expected", content
+				.contains("Second Sample"));
+	}
+	
 }
+
+
