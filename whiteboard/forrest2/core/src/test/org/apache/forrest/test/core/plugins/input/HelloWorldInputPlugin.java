@@ -17,6 +17,7 @@
 package org.apache.forrest.test.core.plugins.input;
 
 import org.apache.forrest.core.Controller;
+import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.IDocument;
 import org.apache.forrest.core.document.InternalDocument;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
@@ -31,6 +32,6 @@ public class HelloWorldInputPlugin extends AbstractInputPlugin {
 	public static final String CONTENT = "<html xmlns=\"http://www.w3.org/2002/06/xhtml2\" xml:lang=\"en\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd\">  <head>    <title>XHTML 2 Simple Sample Page</title>   </head>  <body>  <h>Hello World</h>  </body></html>";
 
 	public IDocument process(final Controller controller, final IDocument doc) {
-		return new InternalDocument(doc.getRequestURI(), CONTENT);
+		return new InternalDocument((AbstractSourceDocument)doc, CONTENT);
 	}
 }
