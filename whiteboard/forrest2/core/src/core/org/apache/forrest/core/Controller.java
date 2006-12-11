@@ -159,7 +159,7 @@ public class Controller implements IController {
 				.resolveSourceLocations(requestURI);
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
-		final List<AbstractSourceDocument> sourceDocs = this
+		final AbstractSourceDocument sourceDocs = this
 				.loadAllSourceDocuments(requestURI, sourceLocs);
 
 		final InternalDocument internalDoc = this.processInputPlugins(
@@ -183,22 +183,19 @@ public class Controller implements IController {
 	 * @throws ProcessingException
 	 */
 	private InternalDocument processInputPlugins(URI requestURI,
-			final List<AbstractSourceDocument> sourceDocuments)
+			final AbstractSourceDocument sourceDocument)
 			throws IOException, ProcessingException {
 		InternalDocument result = null;
-		if (sourceDocuments.size() == 0) {
-			result = new InternalErrorDocument(requestURI,
+		if (sourceDocument == null) {
+			result = new InternalErrorDocument(sourceDocument,
 					"Unable to load source document");
 		} else {
-			for (int i = 0; i < sourceDocuments.size(); i++) {
-				final AbstractSourceDocument doc = sourceDocuments.get(i);
-				if (doc == null) {
+				if (sourceDocument == null) {
 					throw new ProcessingException(
 							"No source document is available.");
 				}
-				AbstractInputPlugin plugin = getInputPlugin(doc);
-				result = (InternalDocument) plugin.process(this, doc);
-			}
+				AbstractInputPlugin plugin = getInputPlugin(sourceDocument);
+				result = (InternalDocument) plugin.process(this, sourceDocument);
 		}
 		return result;
 	}
@@ -272,19 +269,18 @@ public class Controller implements IController {
 	 * @fixme handle document types other than HTML
 	 * @fixme resource handlers should be provided from a factory class
 	 */
-	private List<AbstractSourceDocument> loadAllSourceDocuments(URI requestURI,
+	private AbstractSourceDocument loadAllSourceDocuments(URI requestURI,
 			final List<LocationNode> sourceLocations) throws MalformedURLException,
 			ProcessingException {
-		final List<AbstractSourceDocument> results = new ArrayList<AbstractSourceDocument>(
-				sourceLocations.size());
+		AbstractSourceDocument result = null;
 
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final LocationNode location = sourceLocations.get(i);
-			AbstractSourceDocument doc = loadSourceDocument(requestURI,
+			result = loadSourceDocument(requestURI,
 					location);
-			results.add(doc);
+			if (result != null) break;
 		}
-		return results;
+		return result;
 	}
 
 	private AbstractSourceDocument loadSourceDocument(URI requestURI,
