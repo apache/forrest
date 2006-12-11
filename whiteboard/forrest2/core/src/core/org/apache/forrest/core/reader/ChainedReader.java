@@ -25,7 +25,6 @@ import org.apache.forrest.core.document.AbstractSourceDocument;
 import org.apache.forrest.core.document.DefaultSourceDocument;
 import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.forrest.core.locationMap.AbstractSourceNode;
-import org.apache.forrest.core.locationMap.LocationNode;
 import org.apache.forrest.core.matcher.AbstractMatcher;
 
 /**
