@@ -29,6 +29,10 @@ import java.util.List;
 public class AggregateInteralDocument extends InternalDocument {
 
 	private List<InternalDocument> documents;
+	
+	public AggregateInteralDocument(AbstractSourceDocument sourceDoc) {
+		super(sourceDoc);
+	}
 
 	/**
 	 * Create a new Aggregate document containing all the supplied internal
@@ -36,7 +40,8 @@ public class AggregateInteralDocument extends InternalDocument {
 	 * 
 	 * @param intDocs
 	 */
-	public AggregateInteralDocument(final List<InternalDocument> internalDocs) {
+	public AggregateInteralDocument(AbstractSourceDocument sourceDoc, final List<InternalDocument> internalDocs) {
+		super(sourceDoc);
 		this.documents = internalDocs;
 	}
 
