@@ -814,13 +814,38 @@
          Unfortunately, this means that each column is a fixed width,
          but at least the table displays! -->
 
-    <xsl:variable name="max-number-columns">
+    <xsl:variable name="max-number-columns-td">
       <xsl:for-each select="tr">
-        <xsl:sort select="count(td|th)" data-type="number" order="descending"/>
+        <xsl:sort select="count(td|th)" data-type="number"
+          order="descending"/>
         <xsl:if test="position() = 1">
           <xsl:value-of select="count(td|th)"/>
         </xsl:if>
       </xsl:for-each>
+    </xsl:variable>
+        
+    <xsl:variable name="max-number-columns-colspan">
+      <xsl:for-each select="tr">
+        <xsl:sort select="count(td|th)" data-type="number"
+          order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of
+            select="sum(td/@colspan|th/@colspan)"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+        
+    <xsl:variable name="max-number-columns">
+      <xsl:choose>
+        <xsl:when
+          test="$max-number-columns-colspan&gt;max-number-columns-td">
+          <xsl:value-of
+            select="$max-number-columns-colspan"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$max-number-columns-td"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
 
