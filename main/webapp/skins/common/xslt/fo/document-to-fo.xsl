@@ -838,7 +838,7 @@
     <xsl:variable name="max-number-columns">
       <xsl:choose>
         <xsl:when
-          test="$max-number-columns-colspan&gt;max-number-columns-td">
+          test="$max-number-columns-colspan&gt;$max-number-columns-td">
           <xsl:value-of
             select="$max-number-columns-colspan"/>
         </xsl:when>
