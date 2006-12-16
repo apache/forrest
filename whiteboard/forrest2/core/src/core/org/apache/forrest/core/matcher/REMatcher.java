@@ -1,12 +1,10 @@
 package org.apache.forrest.core.matcher;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.forrest.core.exception.ProcessingException;
-import org.apache.forrest.core.locationMap.AbstractSourceNode;
 import org.apache.log4j.Logger;
 
 import com.sun.org.apache.regexp.internal.RE;
@@ -61,7 +59,7 @@ public class REMatcher extends AbstractMatcher {
 					+ sourceSSP);
 		} else {
 			throw new ProcessingException(
-					"Unable to extract variable values from requestURI");
+					"Unable to extract variable values from '" + urlString + "' using Regular Expression: " + getPattern());
 		}
 
 		URI newURI;

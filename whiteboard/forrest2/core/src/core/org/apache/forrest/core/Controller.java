@@ -162,6 +162,9 @@ public class Controller implements IController {
 		final AbstractSourceDocument sourceDocs = this
 				.loadAllSourceDocuments(requestURI, sourceLocs);
 
+		if (sourceDocs == null) {
+			throw new ProcessingException("Unable to get a source document for request " + requestURI);
+		}
 		final InternalDocument internalDoc = this.processInputPlugins(
 				requestURI, sourceDocs);
 		this.internalDocsCache.put(requestURI, internalDoc);
@@ -290,6 +293,7 @@ public class Controller implements IController {
 		if (doc == null) {
 			for (AbstractSourceNode node : location.getSourceNodes()) {
 				IReader reader = getReader(node);
+				log.debug("Reader to use is " + reader.toString());
 				doc = reader.read(this, requestURI, node, location.getMatcher());
 				if (doc != null) {
 					addToSourceDocCache(requestURI, doc);
@@ -363,7 +367,7 @@ public class Controller implements IController {
 				.get(requestURI);
 		if (possibleLocs == null || possibleLocs.size() == 0)
 			throw new LocationmapException(
-					"Unable to find a source location for " + requestURI);
+					"Unable to find any potential source locationa for " + requestURI + ". This means that there is no location node in your locationmap that matches this request.");
 
 		List<LocationNode> result = new ArrayList<LocationNode>();
 		Boolean isValid = false;
@@ -376,7 +380,6 @@ public class Controller implements IController {
 				loc = sourceLocs.next();
 				if (sourceExists(requestURI, loc)) {
 					result.add(loc);
-					log.debug("Found valid location");
 				}
 			}
 			if (isValid)
@@ -483,7 +486,7 @@ public class Controller implements IController {
 			} catch (final Exception e) {
 				throw new ProcessingException(
 						"Unable to create the output documents for "
-								+ requestURI + " because " + e.getMessage(), e);
+								+ requestURI, e);
 			}
 		return output;
 	}
@@ -502,7 +505,7 @@ public class Controller implements IController {
 		} catch (final Exception e) {
 			throw new ProcessingException(
 					"Unable to create the output documents for "
-							+ requestURI + " because " + e.getMessage(), e);
+							+ requestURI, e);
 		}
 		StringBuffer sb = new StringBuffer();
 		sb.append("<forrestPipeline request=\"");

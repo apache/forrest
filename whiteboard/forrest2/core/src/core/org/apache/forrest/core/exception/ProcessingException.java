@@ -35,7 +35,11 @@ public class ProcessingException extends Exception {
 	public String getMessage() {
 		String msg = super.getMessage();
 		if (getCause() != null) {
+			if (getCause().getMessage() != null) {
 			msg = msg + " caused by " + getCause().getMessage();
+			} else {
+				msg = msg + " caused by " + getCause().getClass().getName();
+			}
 		}
 		return msg;
 	}
