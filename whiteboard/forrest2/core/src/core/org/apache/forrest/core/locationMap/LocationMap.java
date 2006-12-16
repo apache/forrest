@@ -120,7 +120,7 @@ public class LocationMap {
 				if (this.isMatch(pattern, requestURI)) {
 					List<LocationNode> locs = this.locations.get(pattern);
 					results.add(locs);
-					log.info(locs.size() + " potenatial location from pattern "
+					log.info(locs.size() + " potential location from pattern "
 							+ pattern);
 				}
 			} catch (final RESyntaxException e) {
@@ -146,17 +146,8 @@ public class LocationMap {
 	 */
 	public boolean isMatch(final String pattern, final URI requestURI)
 			throws MalformedURLException, RESyntaxException {
-		URL url;
-		try {
-			url = requestURI.toURL();
-		} catch (final IllegalArgumentException e) {
-			// we'll assume that this is not an absolute URL and therefore
-			// refers to a file
-			url = new URL("file://" + requestURI);
-		}
-		final String urlString = url.toExternalForm();
-
+		log.debug("Testing for a match against location pattern " + pattern);
 		final RE r = new RE(pattern);
-		return r.match(urlString);
+		return r.match(requestURI.getPath());
 	}
 }
