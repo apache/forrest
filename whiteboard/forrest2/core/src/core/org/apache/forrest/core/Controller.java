@@ -367,7 +367,7 @@ public class Controller implements IController {
 				.get(requestURI);
 		if (possibleLocs == null || possibleLocs.size() == 0)
 			throw new LocationmapException(
-					"Unable to find any potential source locationa for " + requestURI + ". This means that there is no location node in your locationmap that matches this request.");
+                                                "Unable to find any potential source location for " + requestURI + ". This means that there is no location node in your locationmap that matches this request.");
 
 		List<LocationNode> result = new ArrayList<LocationNode>();
 		Boolean isValid = false;
