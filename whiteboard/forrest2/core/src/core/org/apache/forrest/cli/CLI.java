@@ -31,6 +31,7 @@ import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.IController;
 import org.apache.forrest.core.document.AbstractOutputDocument;
 import org.apache.forrest.core.exception.ProcessingException;
+import org.xml.sax.SAXException;
 
 /**
  * A command line interface for Forrest.
@@ -59,15 +60,15 @@ public class CLI {
 
 		try {
 			controller = new Controller();
-			System.out.println("\n Processing request for " + args[0]);
-			unProcessedUris.add(args[0]);
-			while (unProcessedUris.size() > 0) {
-				processURIs(unProcessedUris);
-			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
+			log.fatal("Uable to get controller", e);
 			e.printStackTrace();
-			log.error(e);
 			System.exit(1);
+		}
+		System.out.println("\n Processing request for " + args[0]);
+		unProcessedUris.add(args[0]);
+		while (unProcessedUris.size() > 0) {
+			processURIs(unProcessedUris);
 		}
 	}
 
@@ -82,35 +83,45 @@ public class CLI {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	private static void processURIs(final Set<String> uris)
-			throws MalformedURLException, ProcessingException, IOException,
-			URISyntaxException {
+	private static void processURIs(final Set<String> uris) {
 		AbstractOutputDocument doc;
 		HashSet<String> processingUris = new HashSet<String>(uris);
 		unProcessedUris = new HashSet<String>();
 		for (String strUri : processingUris) {
-			URI uri = new URI(strUri);
-			if (!(processedUris.contains(strUri))) {
-				log.debug("Processing: " + strUri);
-				doc = controller.getOutputDocument(uri);
-				unProcessedUris.addAll(doc.getLocalDocumentLinks());
-				outputDocument(doc, uri);
-				processedUris.add(strUri);
+			try {
+				URI uri = new URI(strUri);
+				if (!(processedUris.contains(strUri))) {
+					log.debug("Processing: " + strUri);
+					doc = controller.getOutputDocument(uri);
+					unProcessedUris.addAll(doc.getLocalDocumentLinks());
+					outputDocument(doc, uri);
+					processedUris.add(strUri);
+				}
+			} catch (URISyntaxException e) {
+				log.error("Unable to process " + strUri, e);
+			} catch (MalformedURLException e) {
+				log.error("Unable to process " + strUri, e);
+			} catch (ProcessingException e) {
+				log.error("Unable to process " + strUri, e);
+			} catch (IOException e) {
+				log.error("Unable to process " + strUri, e);
 			}
 		}
 	}
 
 	/**
 	 * Output the document.
+	 * 
 	 * @param doc
 	 * @param uri
 	 * @throws IOException
 	 */
-	private static void outputDocument(AbstractOutputDocument doc, URI uri) throws IOException {
+	private static void outputDocument(AbstractOutputDocument doc, URI uri)
+			throws IOException {
 		System.out.println("\n Resulting document for request " + uri
 				+ " is:\n");
 		System.out.println(doc.getContentAsString());
-		
+
 		String path = getContentBuildPath();
 		File outPath = new File(path);
 		outPath.mkdirs();
