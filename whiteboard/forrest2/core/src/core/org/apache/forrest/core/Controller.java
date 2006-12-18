@@ -471,11 +471,15 @@ public class Controller implements IController {
 	 */
 	public AbstractOutputDocument getOutputDocument(final URI requestURI)
 			throws MalformedURLException, ProcessingException {
-		if (requestURI.getPath().endsWith(this.sourceURLExtension)) {
+		String path = requestURI.getPath();
+		if (path == null) {
+			throw new ProcessingException("Unable to process request URI: " + requestURI);
+		}
+		if (path.endsWith(this.sourceURLExtension)) {
 			return getSourceDocumentAsOutput(requestURI);
-		} else if (requestURI.getPath().endsWith(this.internalURLExtension)) {
+		} else if (path.endsWith(this.internalURLExtension)) {
 			return getInternalDocumentAsOutput(requestURI);
-		} else if (requestURI.getPath().endsWith(this.pipelineURLExtension)) {
+		} else if (path.endsWith(this.pipelineURLExtension)) {
 			return getPipelineAsOutput(requestURI);
 		}
 
