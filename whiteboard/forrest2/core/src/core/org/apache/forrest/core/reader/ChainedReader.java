@@ -71,11 +71,9 @@ public class ChainedReader extends AbstractReader {
 				doc.setType(getDocType());
 			}
 		} catch (final URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ProcessingException("Unable to processes chained reader", e);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ProcessingException("Unable to processes chained reader", e);
 		}
 		return doc;
 	}
