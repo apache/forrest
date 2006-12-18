@@ -21,49 +21,68 @@
 <title>How to Create a Reader</title>
 </head>
 <body>
-  <h1>Overview</h1>
-  
-  <p>Readers are the first stage in the processing pipeline.
-  They read the source document for subsequent processing.
-  It is worth noting that a reader may not actually read a
-  file, it may generate the files content dynamically. This
-  document describes how to create a new reader.</p>
-  
-  <h2>Chained Readers</h2>
-  
-  <p>Chained readers provide a means of pre and/or post
-  processing a document retrieved from some other reader.</p>
-  
-  <p class="todo">Bring over description from 
-  examples/affiliateProductCatalogue.html</p>
-  
-  <h2>Java Readers</h2>
-  
-  <p>If you want to do complex processing in order to
-  generate the source document you can create a Java
-  class to carry out thge necessary processing. This 
-  is really easy, simply extend 
-  <span class="code">org.apache.forrest.core.reader.AbstractReader</span>
-  and implement <span class="code">public AbstractSourceDocument read(IController controller, URI requestURI, final Location location)</span>.
-  For example:
-  </p>
-  
-  <p class="code">![CDATA[
-	public AbstractSourceDocument read(IController controller, URI requestURI,
-			Location location) throws MalformedURLException,
-			ProcessingException {
-		String content = "&lt;example&gt;&lt;document&gt;&lt;/example&gt;";
-		String type = "org.apache.forrest.example";
-		XMLSourceDocument doc = new XMLSourceDocument(content, type);
-		return doc;
-	}
-  ]]></p>
-    
-  <p>If your reader needs to do some initialisation before it
-  executes the read method you should override
-  <span class="code">public void init()</span>.</p>
-  
-  
-  
+<h1>Overview</h1>
+
+<p>Readers are te first stage in the processing pipeline. They read
+the source document for subsequent processing. It is worth noting that a
+reader may no actually read a file, it may generate the files content
+dynamically. This document describes how to create a new reader.</p>
+
+<h2>Chained Readers</h2>
+
+<p>Chained readers are the type of reader you will most often use.
+A Chained reader provides a means of pre and/or post processing a
+document retrieved from some other reader. It is commonly used when you
+need to retrieve a document whose type cannot be identified from the raw
+source alone.</p>
+ 
+<p>A Chained Reader is defined in forrestContext.xml as follows:</p>
+ 
+ <source><![CDATA[
+ <bean id="fooProtocol" 
+       class="org.apache.forrest.core.reader.ChainedReader" >
+    <property name="docType" value="org.foo.Bar" /> 
+ </bean>
+]]></source>
+ 
+<p>We can then define a chain of readers in the locationmap 
+like this:</p>
+ 
+<source><![CDATA[
+ <location pattern="classpath/foo.*"> 
+   <source href="fooProtocol:classpath:/xdocs/exampleFeed.xml"/>
+ </location>
+ 
+ <location pattern="file/foo.*"> 
+   <source href="fooProtocol:file:/xdocs/exampleFeed.xml"/> 
+ </location>
+ 
+ <location pattern="http/foo.*"> 
+   <source href="fooProtocol:http:/xdocs/exampleFeed.xml"/> 
+ </location>
+]]></source>
+
+<h2>Java Readers</h2>
+
+<p>If you want to do complex processing in order to generate the
+source document you can create a Java class to carry out thge necessary
+processing. This is really easy, simply extend <span class="code">org.apache.forrest.core.reader.AbstractReader</span>
+and implement <span class="code">public AbstractSourceDocument
+read(IController controller, URI requestURI, final Location location)</span>.
+For example:</p>
+
+<p class="code">![CDATA[ public AbstractSourceDocument
+read(IController controller, URI requestURI, Location location) throws
+MalformedURLException, ProcessingException { String content =
+"&lt;example&gt;&lt;document&gt;&lt;/example&gt;"; String type =
+"org.apache.forrest.example"; XMLSourceDocument doc = new
+XMLSourceDocument(content, type); return doc; } ]]></p>
+
+<p>If your reader needs to do some initialisation before it executes
+the read method you should override <span class="code">public
+void init()</span>.</p>
+
+
+
 </body>
 </html>
