@@ -469,12 +469,9 @@ public class Controller implements IController {
 	 * 
 	 * @see org.apache.forrest.core.IController#getOutputDocument(java.net.URI)
 	 */
-	public AbstractOutputDocument getOutputDocument(final URI requestURI)
+	public AbstractOutputDocument getOutputDocument(URI requestURI)
 			throws MalformedURLException, ProcessingException {
-		String path = requestURI.getPath();
-		if (path == null) {
-			throw new ProcessingException("Unable to process request URI: " + requestURI);
-		}
+		String path = requestURI.getSchemeSpecificPart();
 		if (path.endsWith(this.sourceURLExtension)) {
 			return getSourceDocumentAsOutput(requestURI);
 		} else if (path.endsWith(this.internalURLExtension)) {
