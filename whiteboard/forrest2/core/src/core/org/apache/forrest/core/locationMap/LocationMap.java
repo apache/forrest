@@ -148,6 +148,6 @@ public class LocationMap {
 			throws MalformedURLException, RESyntaxException {
 		log.debug("Testing for a match against location pattern " + pattern);
 		final RE r = new RE(pattern);
-		return r.match(requestURI.getPath());
+		return r.match(requestURI.getSchemeSpecificPart());
 	}
 }
