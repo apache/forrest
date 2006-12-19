@@ -44,4 +44,14 @@ public abstract class AbstractOutputDocument extends AbstractDocument {
 		return getRequestURI().getPath();
 	}
 
+	/**
+	 * Get a value from this document as defined by a
+	 * XPath statement.
+	 * 
+	 * @param xpath
+	 */
+	public String getValue(String xpath) {
+		return "FIXME: imple ment getValue(xpath) method in AbstractOutputDocument";
+	}
+
 }
