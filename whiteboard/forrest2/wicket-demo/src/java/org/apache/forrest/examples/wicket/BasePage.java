@@ -1,9 +1,10 @@
 package org.apache.forrest.examples.wicket;
 
-public class WelcomePage extends AuthenticatedWebPage {
+import wicket.markup.html.WebPage;
+
+public class BasePage extends WebPage {
 	
-	public WelcomePage() {
-		super();
+	public BasePage() {
 		String path = this.getRequest().getPath();
 		/*
 		 * When running in the WicketBench (Eclipse IDE Plugin) the test
@@ -20,6 +21,8 @@ public class WelcomePage extends AuthenticatedWebPage {
 		if (path.length() == 0 || path.equals("/")) {
 			path = "/index.html";
 		}
-		new Forrest2Panel(this, "body", "body" + path);
+		new Forrest2Panel(this, "header", "header" + path);
+		new Forrest2Panel(this, "mainNavigation", "navigation" + path);
+		new Forrest2Panel(this, "footer", "footer" + path);
 	}
 }
