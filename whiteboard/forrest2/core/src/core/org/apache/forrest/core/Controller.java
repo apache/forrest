@@ -39,6 +39,8 @@ import org.apache.forrest.core.locationMap.AbstractSourceNode;
 import org.apache.forrest.core.locationMap.AggregateNode;
 import org.apache.forrest.core.locationMap.LocationNode;
 import org.apache.forrest.core.locationMap.LocationMap;
+import org.apache.forrest.core.locationMap.SourceNode;
+import org.apache.forrest.core.matcher.WildcardMatcher;
 import org.apache.forrest.core.plugin.AbstractInputPlugin;
 import org.apache.forrest.core.plugin.AggregateInputPlugin;
 import org.apache.forrest.core.plugin.BaseOutputPlugin;
@@ -159,11 +161,12 @@ public class Controller implements IController {
 				.resolveSourceLocations(requestURI);
 		this.sourceLocationsCache.put(requestURI, sourceLocs);
 
-		final AbstractSourceDocument sourceDocs = this
-				.loadAllSourceDocuments(requestURI, sourceLocs);
+		final AbstractSourceDocument sourceDocs = this.loadAllSourceDocuments(
+				requestURI, sourceLocs);
 
 		if (sourceDocs == null) {
-			throw new ProcessingException("Unable to get a source document for request " + requestURI);
+			throw new ProcessingException(
+					"Unable to get a source document for request " + requestURI);
 		}
 		final InternalDocument internalDoc = this.processInputPlugins(
 				requestURI, sourceDocs);
@@ -186,19 +189,19 @@ public class Controller implements IController {
 	 * @throws ProcessingException
 	 */
 	private InternalDocument processInputPlugins(URI requestURI,
-			final AbstractSourceDocument sourceDocument)
-			throws IOException, ProcessingException {
+			final AbstractSourceDocument sourceDocument) throws IOException,
+			ProcessingException {
 		InternalDocument result = null;
 		if (sourceDocument == null) {
 			result = new InternalErrorDocument(sourceDocument,
 					"Unable to load source document");
 		} else {
-				if (sourceDocument == null) {
-					throw new ProcessingException(
-							"No source document is available.");
-				}
-				AbstractInputPlugin plugin = getInputPlugin(sourceDocument);
-				result = (InternalDocument) plugin.process(this, sourceDocument);
+			if (sourceDocument == null) {
+				throw new ProcessingException(
+						"No source document is available.");
+			}
+			AbstractInputPlugin plugin = getInputPlugin(sourceDocument);
+			result = (InternalDocument) plugin.process(this, sourceDocument);
 		}
 		return result;
 	}
@@ -273,15 +276,15 @@ public class Controller implements IController {
 	 * @fixme resource handlers should be provided from a factory class
 	 */
 	private AbstractSourceDocument loadAllSourceDocuments(URI requestURI,
-			final List<LocationNode> sourceLocations) throws MalformedURLException,
-			ProcessingException {
+			final List<LocationNode> sourceLocations)
+			throws MalformedURLException, ProcessingException {
 		AbstractSourceDocument result = null;
 
 		for (int i = 0; i < sourceLocations.size(); i++) {
 			final LocationNode location = sourceLocations.get(i);
-			result = loadSourceDocument(requestURI,
-					location);
-			if (result != null) break;
+			result = loadSourceDocument(requestURI, location);
+			if (result != null)
+				break;
 		}
 		return result;
 	}
@@ -294,7 +297,8 @@ public class Controller implements IController {
 			for (AbstractSourceNode node : location.getSourceNodes()) {
 				IReader reader = getReader(node);
 				log.debug("Reader to use is " + reader.toString());
-				doc = reader.read(this, requestURI, node, location.getMatcher());
+				doc = reader
+						.read(this, requestURI, node, location.getMatcher());
 				if (doc != null) {
 					addToSourceDocCache(requestURI, doc);
 					break;
@@ -335,10 +339,9 @@ public class Controller implements IController {
 		readerClass = reader.getClass().toString();
 		return reader;
 	}
-	
-	
 
-	public IReader getReader(AbstractSourceNode sourceNode) throws ProcessingException {
+	public IReader getReader(AbstractSourceNode sourceNode)
+			throws ProcessingException {
 		if (sourceNode instanceof AggregateNode) {
 			return new AggregateReader();
 		} else {
@@ -365,32 +368,47 @@ public class Controller implements IController {
 			ProcessingException {
 		final List<List<LocationNode>> possibleLocs = this.locationMap
 				.get(requestURI);
-		if (possibleLocs == null || possibleLocs.size() == 0)
-			throw new LocationmapException(
-                                                "Unable to find any potential source location for " + requestURI + ". This means that there is no location node in your locationmap that matches this request.");
-
-		List<LocationNode> result = new ArrayList<LocationNode>();
-		Boolean isValid = false;
-		for (List<LocationNode> locs : possibleLocs) {
-			result = new ArrayList<LocationNode>();
-			isValid = true;
-			Iterator<LocationNode> sourceLocs = locs.iterator();
+		if (possibleLocs == null || possibleLocs.size() == 0) {
+			// If no locations found lets try the request URI as the requried location
+			List<LocationNode> result = new ArrayList<LocationNode>();
+			SourceNode srcNode = new SourceNode(requestURI, true);
+			List<AbstractSourceNode> srcNodes = new ArrayList<AbstractSourceNode>();
+			srcNodes.add(srcNode);
 			LocationNode loc;
-			while (sourceLocs.hasNext() && isValid) {
-				loc = sourceLocs.next();
-				if (sourceExists(requestURI, loc)) {
-					result.add(loc);
-				}
+			try {
+				WildcardMatcher matcher = new WildcardMatcher(requestURI.toString());
+				loc = new LocationNode(matcher, srcNodes);
+			} catch (URISyntaxException e) {
+				throw new ProcessingException("Unabl to get URI as sring", e);
 			}
-			if (isValid)
-				break;
+			if (sourceExists(requestURI, loc)) {
+				result.add(loc);
+			}
+			return result;
+		} else {
+			List<LocationNode> result = new ArrayList<LocationNode>();
+			Boolean isValid = false;
+			for (List<LocationNode> locs : possibleLocs) {
+				result = new ArrayList<LocationNode>();
+				isValid = true;
+				Iterator<LocationNode> sourceLocs = locs.iterator();
+				LocationNode loc;
+				while (sourceLocs.hasNext() && isValid) {
+					loc = sourceLocs.next();
+					if (sourceExists(requestURI, loc)) {
+						result.add(loc);
+					}
+				}
+				if (isValid)
+					break;
+			}
+			if (!isValid) {
+				throw new ProcessingException(
+						"Unable to find a valid source location for "
+								+ requestURI.toASCIIString());
+			}
+			return result;
 		}
-		if (!isValid) {
-			throw new ProcessingException(
-					"Unable to find a valid source location for "
-							+ requestURI.toASCIIString());
-		}
-		return result;
 	}
 
 	/**
@@ -498,15 +516,16 @@ public class Controller implements IController {
 	 * 
 	 * @param requestURI
 	 * @return
-	 * @throws ProcessingException 
+	 * @throws ProcessingException
 	 */
-	private AbstractOutputDocument getPipelineAsOutput(URI requestURI) throws ProcessingException {
+	private AbstractOutputDocument getPipelineAsOutput(URI requestURI)
+			throws ProcessingException {
 		try {
 			this.processRequest(requestURI);
 		} catch (final Exception e) {
 			throw new ProcessingException(
-					"Unable to create the output documents for "
-							+ requestURI, e);
+					"Unable to create the output documents for " + requestURI,
+					e);
 		}
 		StringBuffer sb = new StringBuffer();
 		sb.append("<forrestPipeline request=\"");
@@ -515,12 +534,14 @@ public class Controller implements IController {
 		sb.append("<source url=\"");
 		sb.append("URL calculation not implemented yet\">");
 		sb.append("</source>");
-		sb.append("<!-- FIXME: if there are a chain of readers we should show them all here -->");
+		sb
+				.append("<!-- FIXME: if there are a chain of readers we should show them all here -->");
 		sb.append("<reader class=\"");
 		sb.append(readerClass);
 		sb.append("\">");
 		sb.append("</reader>");
-		sb.append("<!-- FIXME: if there are a chain of input plugins we should show them all here -->");
+		sb
+				.append("<!-- FIXME: if there are a chain of input plugins we should show them all here -->");
 		sb.append("<inputPlugin class=\"");
 		sb.append(inputPluginClass);
 		sb.append("\">");
