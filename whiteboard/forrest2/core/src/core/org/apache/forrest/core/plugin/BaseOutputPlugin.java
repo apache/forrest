@@ -65,7 +65,7 @@ public class BaseOutputPlugin implements IOutputPlugin {
 		final Pattern pattern = 
             Pattern.compile(this.getPattern());
 		Matcher matcher = 
-            pattern.matcher(requestURI.getPath());
+            pattern.matcher(requestURI.getSchemeSpecificPart());
 		return matcher.find();
 	}
 
