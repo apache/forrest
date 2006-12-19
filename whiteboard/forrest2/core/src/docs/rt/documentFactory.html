@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Document Factory</title>
+</head>
+<body>
+  <p>The org.apache.forrest.core.document.DocumentFactory
+  class is responsible for providing the type of document
+  when a reader has retrieved it from the source URL.
+  Clearly, there is an unlimited number of potential
+  document types that Forrest can process. It is therefore
+  necessary to be able to configure the DocumentFactory 
+  without touching the Java code. This document describes how
+  this configuration is performed.</p>
+  
+  <h1>A First Example</h1>
+  
+  <source><![CDATA[
+  <type id="org.apache.forrest.image.jpgeg"/>
+    <mime-type id="image/jpeg"/>
+  </type>
+  ]]></source>
+  
+  <h1>A Valid XML Exmple</h1>
+  
+  <p>Using the mime tyoe works well where the mime-type 
+  uniquely identifies the document type, however, this is
+  not always the case. For example, an XML document is
+  always identified by the mime-type "application/xml".
+  We therefore need a way of identifying the specific 
+  document type in such cases.</p>
+  
+  <p>For XML documents we are often provided with a reference
+  to a DTD that defines the XML document type. We can use this
+  information to define the document type within Forrest. For
+  example:</p>
+     
+  <source><![CDATA[
+  <type id="org.apache.forrest.xdoc2"/>
+    <mime-type id="application/xml"/>
+    <public-id="http://forrest.apache.org/dtd/document-v20.dtd"/>
+  </type>
+  ]]></source>
+  
+  <p>The above definition says that when an XML document is
+  discovered we should look to see if there is a reference
+  to a DTD with the public ID of 
+  "-//APACHE//DTD Documentation V2.0//EN".
+  If there is such a reference in a doctype definition then
+  we have identified the XML document type with the ID
+  "org.apache.forrest.xdoc2".</p>
+  
+  <h1>A XML Exmple (no DTD)</h1>
+  
+  <p>Using the Doctype definition is fine if the document is
+  well formed, but it is not a requirement for an XML document
+  to be well formed. We therefore need a way of identifying
+  a document type when the XML source does not contain a DTD.</p>
+  
+  <p>Unfortunately, there is no guarenteed method for
+  identifying such an XML document. The best we can do is
+  look at the struture of the document and infer the
+  type from what we find. For example:</p>
+    
+  <source><![CDATA[
+  <type id="org.foo.bar"/>
+    <mime-type id="application/xml"/>
+    <root>
+      <name>rootElement</name>
+    </root>
+  </type>
+  ]]></source>
+  
+  <p>This definition simply looks at the root element of
+  the document and, if a match is found then we have identified
+  the document type. Clearly, this could result in false matches
+  where two document types have the same root element. We
+  therefore need a way of further refining the document structure
+  definition. For example:</p>
+  
+  <source><![CDATA[
+  <type id="org.foo.bar"/>
+    <mime-type id="application/xml"/>
+    <root>
+      <name>root</name>
+      <attribute name="id"/>
+      <attribute name="url"/>
+    </root>
+  </type>
+  ]]></source>
+  
+  <p>This definition expects to see a root element called
+  "root" with  an "id" and a "url" attibute.</p>
+  
+  <p>A different refinement would be:</p>
+  
+  <source><![CDATA[
+  <type id="org.foo.bar"/>
+    <mime-type id="application/xml"/>
+    <root>
+      <name>root</name>
+      <children>
+        <element>
+          <name>child1</name>
+        </element>
+        <element>
+          <name>child2</name>
+          <attribute name="colour"/>
+        </element>
+      </children>
+    </root>
+  </type>
+  ]]></source>
+  
+  <p>This definition expects a root element with the name
+  "root" and two child elements named "child1" and "child2".
+  These elements need not be in this order, but they must
+  both be present. The "child2" element must have an id
+  with the name "colour".</p>
+</body>
+</html>
