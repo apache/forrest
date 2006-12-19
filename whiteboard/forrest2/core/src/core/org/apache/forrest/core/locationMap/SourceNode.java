@@ -17,6 +17,7 @@
 package org.apache.forrest.core.locationMap;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.w3c.dom.Node;
@@ -31,6 +32,10 @@ public class SourceNode extends AbstractSourceNode {
 
 	public SourceNode(Node element) throws URISyntaxException, IOException {
 		super(element);
+	}
+
+	public SourceNode(URI requestURI, Boolean isRequired) {
+		super(requestURI, isRequired);
 	}
 	
 }

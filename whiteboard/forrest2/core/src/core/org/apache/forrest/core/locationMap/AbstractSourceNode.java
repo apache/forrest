@@ -47,6 +47,11 @@ public abstract class AbstractSourceNode {
 			setRequired(required.getNodeValue().toLowerCase().equals("true"));
 		}
 	}
+	
+	public AbstractSourceNode(final URI uri, final Boolean isRequired) {
+		setSourceURI(uri);
+		setRequired(isRequired);
+	}
 
 	public AbstractSourceNode() {
 	}
@@ -69,7 +74,7 @@ public abstract class AbstractSourceNode {
 	private URL resolveClasspathURI(final URI sourceURI)
 			throws ProcessingException {
 		URL resourceURL;
-		resourceURL = this.getClass().getResource(sourceURI.getPath());
+		resourceURL = this.getClass().getResource(sourceURI.getSchemeSpecificPart());
 		if (resourceURL == null)
 			throw new ProcessingException(
 					"Cannot find the classpath resource: " + sourceURI);

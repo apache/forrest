@@ -41,6 +41,10 @@ public class LocationNode {
 	private AbstractMatcher matcher;
 	
 	private List<AbstractSourceNode> sourceNodes;
+	
+	public LocationNode(final AbstractMatcher matcher, final List<AbstractSourceNode> srcNodes) throws URISyntaxException {
+		init(matcher, srcNodes);
+	}
 
 	/**
 	 * Construct a new LocationNode from an XML node.
@@ -68,14 +72,22 @@ public class LocationNode {
 		this.init(pattern, nodes);
 	}
 
-	private void init(final String pattern, final List<AbstractSourceNode> nodes) throws URISyntaxException {
-		if (pattern == null)
+	private void init(final AbstractMatcher matcher, final List<AbstractSourceNode> nodes) throws URISyntaxException {
+		if (nodes == null || nodes.size() == 0)
+			throw new IllegalArgumentException(
+					"There must be at least one source node for a location");
+		this.setMatcher(matcher);
+		this.setSourceNodes(nodes);
+	}
+	
+	private void init(final String rePattern, final List<AbstractSourceNode> nodes) throws URISyntaxException {
+		if (rePattern == null)
 			throw new IllegalArgumentException(
 					"requestURIPattern cannot be null");
 		if (nodes == null || nodes.size() == 0)
 			throw new IllegalArgumentException(
 					"There must be at least one source node for a location");
-		this.setMatcher(new REMatcher(pattern));
+		this.setMatcher(new REMatcher(rePattern));
 		this.setSourceNodes(nodes);
 	}
 
