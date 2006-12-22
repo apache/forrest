@@ -40,13 +40,15 @@ what type of document can be processed by this plugin.</p>
 This means that you need to add an entry to the forrestContext.xml
 file, such as:</p>
 
-<![CDATA[  <bean id="helloWorldXSLTInput"
-    class="org.apache.forrest.test.core.plugins.input.HelloWorldInputPlugin"/>]]>
+<![CDATA[  
+<bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
+		class="org.apache.forrest.core.plugin.XSLTInputPlugin">
+		<property name="xsltURL"
+			value="/src/xslt/tradeDoublerFeed-to-internal.xsl" />
+</bean>]]>
 
-<p>The Forrest controller will read all the files that it finds in the classpath tat
-match this naming convention.</p>
-
-
+<p>This input plugin will take an XML source document and process it with the indicated
+stylesheet. The result is expected to be an document using the internal Forrest2 format.</p>
 
 <h2>Creating an Java Plugin</h2>
 
