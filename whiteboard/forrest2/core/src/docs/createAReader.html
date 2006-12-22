@@ -23,10 +23,15 @@
 <body>
 <h1>Overview</h1>
 
-<p>Readers are te first stage in the processing pipeline. They read
+<p>Readers are the first stage in the processing pipeline. They read
 the source document for subsequent processing. It is worth noting that a
 reader may no actually read a file, it may generate the files content
 dynamically. This document describes how to create a new reader.</p>
+
+<p>A reader is responsible for creating the initial source content. Forrest provides
+a set of generic readers that can retrieve a document from the network or from the
+filesystem. These documents will often need to be processed by an input plugin to
+create a document in Forrests internal format.</p>
 
 <h2>Chained Readers</h2>
 
@@ -84,8 +89,43 @@ For example:</p>
 
 <p>If your reader needs to do some initialisation before it executes
 the read method you should override <span class="code">public
-void init()</span>.</p>
+void init()</span>. This method is called once during
+creation of the reader object.</p>
 
+<h3>Register The Reader</h3>
+
+<p>Once you have built your reader then you need to register it with Forrest. This is done
+by adding an entry to the <code>forrestContext.xml</code>. The entry should
+look something like this:
+
+<code><![CDATA[
+  <bean id="product" 
+    class="org.foo.forrest.reader.ProductReader">
+  </bean>
+]]></code>
+
+<p>Note that the beans id is the same as the scheme used in the locationmap to identify a source
+location. This is used by Forrest to lookup the correct reader for any given location.</p>
+
+<p>The scheme can be any string that represents the type of reader we are building. For 
+example, if we are building a reader that will provide documents representing products in 
+a catalogue database then we may choose a scheme of "product" (note that we don't
+include the ':'). This will then be used
+in the locationmap to indicate a product document. For example, we may have a location
+defined as: </p>
+
+<code><![CDATA[
+  <location regexp="http://localhost:8888/test/product.html">
+    <source href="product:/1"/>
+  </location>
+]]></code>
+
+<p>This entry means that a request for <code>http://localhost:8888/test/product.html</code>
+will result in a request to the reader assigned the <code>product</code> scheme. To
+actually read the document Forrest will call the <code>read(...)</code>
+method. This method will process the request in whatever
+way is appropriate for that particular scheme. In this case it will communicate with
+the database to retrieve the product with ID 1.</p>
 
 
 </body>
