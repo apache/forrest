@@ -192,10 +192,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-855%5D+verify+the+license+situation+prior+to+each+release">[FOR-855] verify the license situation prior to each release</a>
 </li>
 <li>
-<a href="#%5BFOR-865%5D+Add+missing+entries+to+status.xml+to+generate+the+changes+list">[FOR-865] Add missing entries to status.xml to generate the changes list</a>
+<a href="#%5BFOR-868%5D+add+relevant+notes+to+the+%22Upgrading%22+xdoc">[FOR-868] add relevant notes to the "Upgrading" xdoc</a>
 </li>
 <li>
-<a href="#%5BFOR-868%5D+add+relevant+notes+to+the+%22Upgrading%22+xdoc">[FOR-868] add relevant notes to the "Upgrading" xdoc</a>
+<a href="#%5BFOR-865%5D+Add+missing+entries+to+status.xml+to+generate+the+changes+list">[FOR-865] Add missing entries to status.xml to generate the changes list</a>
 </li>
 <li>
 <a href="#%5BFOR-911%5D+decide+content+of+release">[FOR-911] decide content of release</a>
@@ -246,6 +246,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-936%5D+Forrest+%22looses%22+the+locale+when+switching+pages">[FOR-936] Forrest "looses" the locale when switching pages</a>
 </li>
 <li>
+<a href="#%5BFOR-704%5D+span-template+in+html2document.xsl+doubles+span-content">[FOR-704] span-template in html2document.xsl doubles span-content</a>
+</li>
+<li>
 <a href="#%5BFOR-537%5D+Plugin+documentation+sitemap+references">[FOR-537] Plugin documentation sitemap references</a>
 </li>
 <li>
@@ -259,9 +262,6 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#%5BFOR-767%5D+Forrestbot+webapp+reports+succesful+even+when+there+are+broken+links">[FOR-767] Forrestbot webapp reports succesful even when there are broken links</a>
-</li>
-<li>
-<a href="#%5BFOR-861%5D+Update+locationmap+docs+for+working+with+remote+files">[FOR-861] Update locationmap docs for working with remote files</a>
 </li>
 </ul>
 </div>
@@ -295,7 +295,15 @@ B) Scan the whole trunk repository to add missing ASF license headers to source 
 &lt;br/&gt;
 </p>
 </div>
-<a name="N1001D"></a><a name="%5BFOR-865%5D+Add+missing+entries+to+status.xml+to+generate+the+changes+list"></a>
+<a name="N1001D"></a><a name="%5BFOR-868%5D+add+relevant+notes+to+the+%22Upgrading%22+xdoc"></a>
+<h2 class="underlined_10">[FOR-868] add relevant notes to the "Upgrading" xdoc</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-868">http://issues.apache.org/jira/browse/FOR-868</a>
+</p>
+<p>We need to add some notes to the upgrading_0*.html doc for the upcoming release. This would most easily be done after attending to &lt;a href="http://issues.apache.org/jira/browse/FOR-865" title="Add missing entries to status.xml to generate the changes list"&gt;FOR-865&lt;/a&gt; &amp;quot;Add missing entries to status.xml to generate the changes list&amp;quot;.</p>
+</div>
+<a name="N10029"></a><a name="%5BFOR-865%5D+Add+missing+entries+to+status.xml+to+generate+the+changes+list"></a>
 <h2 class="underlined_10">[FOR-865] Add missing entries to status.xml to generate the changes list</h2>
 <div class="section">
 <p>
@@ -312,14 +320,6 @@ Besides informing users of the major changes and providing cross-links to the is
 Re: better use of changes.html (Was: Community health)
 &lt;br/&gt;
 &lt;a href="http://marc.theaimsgroup.com/?t=114274836600001"&gt;http://marc.theaimsgroup.com/?t=114274836600001&lt;/a&gt;</p>
-</div>
-<a name="N10029"></a><a name="%5BFOR-868%5D+add+relevant+notes+to+the+%22Upgrading%22+xdoc"></a>
-<h2 class="underlined_10">[FOR-868] add relevant notes to the "Upgrading" xdoc</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-868">http://issues.apache.org/jira/browse/FOR-868</a>
-</p>
-<p>We need to add some notes to the upgrading_0*.html doc for the upcoming release. This would most easily be done after attending to &lt;a href="http://issues.apache.org/jira/browse/FOR-865" title="Add missing entries to status.xml to generate the changes list"&gt;FOR-865&lt;/a&gt; &amp;quot;Add missing entries to status.xml to generate the changes list&amp;quot;.</p>
 </div>
 <a name="N10035"></a><a name="%5BFOR-911%5D+decide+content+of+release"></a>
 <h2 class="underlined_10">[FOR-911] decide content of release</h2>
@@ -593,7 +593,45 @@ Although one could argue that the described behaviour is wanted in some cases, I
 &lt;br/&gt;
 The fix is simple, patch to come soon.</p>
 </div>
-<a name="N100F5"></a><a name="%5BFOR-537%5D+Plugin+documentation+sitemap+references"></a>
+<a name="N100F5"></a><a name="%5BFOR-704%5D+span-template+in+html2document.xsl+doubles+span-content"></a>
+<h2 class="underlined_10">[FOR-704] span-template in html2document.xsl doubles span-content</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-704">http://issues.apache.org/jira/browse/FOR-704</a>
+</p>
+<p>template for span-element traverses to children elements via xsl:apply-templates TWICE!
+&lt;br/&gt;
+once in xsl:choose, than outside
+&lt;br/&gt;
+thus producing doubling the content of span.
+&lt;br/&gt;
+::
+&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;xsl:template match=&amp;quot;span&amp;quot;&amp;gt;
+&lt;br/&gt;
+		  &amp;lt;xsl:choose&amp;gt;
+&lt;br/&gt;
+&amp;lt;!-- ... --&amp;gt;
+&lt;br/&gt;
+	  	    &amp;lt;xsl:otherwise&amp;gt;
+&lt;br/&gt;
+	  	        &amp;lt;!-- Strip --&amp;gt;
+&lt;br/&gt;
+	            &amp;lt;xsl:apply-templates/&amp;gt;
+&lt;br/&gt;
+		    &amp;lt;/xsl:otherwise&amp;gt;
+&lt;br/&gt;
+	    &amp;lt;/xsl:choose&amp;gt;
+&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;xsl:apply-templates select=&amp;quot;./*&amp;quot;/&amp;gt; 
+&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/xsl:template&amp;gt;
+&lt;br/&gt;
+</p>
+</div>
+<a name="N10101"></a><a name="%5BFOR-537%5D+Plugin+documentation+sitemap+references"></a>
 <h2 class="underlined_10">[FOR-537] Plugin documentation sitemap references</h2>
 <div class="section">
 <p>
@@ -623,7 +661,7 @@ and
 &lt;br/&gt;
 --tim</p>
 </div>
-<a name="N10101"></a><a name="%5BFOR-635%5D+images+not+reproduced+in+PDFs%2C+if+sources+are+in+xdocs%2Fimages+directory"></a>
+<a name="N1010D"></a><a name="%5BFOR-635%5D+images+not+reproduced+in+PDFs%2C+if+sources+are+in+xdocs%2Fimages+directory"></a>
 <h2 class="underlined_10">[FOR-635] images not reproduced in PDFs, if sources are in xdocs/images directory</h2>
 <div class="section">
 <p>
@@ -631,7 +669,7 @@ and
 </p>
 <p>We used to enable images to be placed in the xdocs/images directory. However, now they are intended to go in the resources/images directory instead. Both methods will work for html pages, but  only the latter method for the PDF pages.</p>
 </div>
-<a name="N1010D"></a><a name="%5BFOR-671%5D+Layering+error+of+HTML+headings+breaks+rest+of+the+page+w%2Fo+warning"></a>
+<a name="N10119"></a><a name="%5BFOR-671%5D+Layering+error+of+HTML+headings+breaks+rest+of+the+page+w%2Fo+warning"></a>
 <h2 class="underlined_10">[FOR-671] Layering error of HTML headings breaks rest of the page w/o warning</h2>
 <div class="section">
 <p>
@@ -693,7 +731,7 @@ If Forrest minds this layering error it should at least report it as an error, s
 &lt;br/&gt;
 &amp;lt;/html&amp;gt;</p>
 </div>
-<a name="N10119"></a><a name="%5BFOR-731%5D+empty+linkmap.html+document%2C+side-effect+of+workaround+to+FOR-675"></a>
+<a name="N10125"></a><a name="%5BFOR-731%5D+empty+linkmap.html+document%2C+side-effect+of+workaround+to+FOR-675"></a>
 <h2 class="underlined_10">[FOR-731] empty linkmap.html document, side-effect of workaround to FOR-675</h2>
 <div class="section">
 <p>
@@ -701,7 +739,7 @@ If Forrest minds this layering error it should at least report it as an error, s
 </p>
 <p>The main/webapp/resources/stylesheets/linkmap-to-document.xsl has a workaround for a side-effect to the of the workaround for issue &lt;a href="http://issues.apache.org/jira/browse/FOR-675" title="upgrading to commons-jxpath-1.2.jar causes failures with linkrewriter protocols site: etc."&gt;FOR-675&lt;/a&gt;.</p>
 </div>
-<a name="N10125"></a><a name="%5BFOR-767%5D+Forrestbot+webapp+reports+succesful+even+when+there+are+broken+links"></a>
+<a name="N10131"></a><a name="%5BFOR-767%5D+Forrestbot+webapp+reports+succesful+even+when+there+are+broken+links"></a>
 <h2 class="underlined_10">[FOR-767] Forrestbot webapp reports succesful even when there are broken links</h2>
 <div class="section">
 <p>
@@ -718,26 +756,6 @@ If Forrest minds this layering error it should at least report it as an error, s
 - ??
 &lt;br/&gt;
 </p>
-</div>
-<a name="N10131"></a><a name="%5BFOR-861%5D+Update+locationmap+docs+for+working+with+remote+files"></a>
-<h2 class="underlined_10">[FOR-861] Update locationmap docs for working with remote files</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-861">http://issues.apache.org/jira/browse/FOR-861</a>
-</p>
-<p>The docs for retrieving content from remote locations [1] have not kept up with Tims wonderful naming conventions for the locationmap [2]
-&lt;br/&gt;
-
-&lt;br/&gt;
-We need to update the docs to reflect the situation described in [3] (don't miss the correction in the next message)
-&lt;br/&gt;
-
-&lt;br/&gt;
-[1] &lt;a href="http://forrest.apache.org/docs_0_80/locationmap.html#source-via-http"&gt;http://forrest.apache.org/docs_0_80/locationmap.html#source-via-http&lt;/a&gt;
-&lt;br/&gt;
-[2] &lt;a href="http://forrest.apache.org/docs_0_80/locationmap.html#namingConvention"&gt;http://forrest.apache.org/docs_0_80/locationmap.html#namingConvention&lt;/a&gt;
-&lt;br/&gt;
-[3] &lt;a href="http://marc.theaimsgroup.com/?t=114492612100001&amp;r=1&amp;w=2"&gt;http://marc.theaimsgroup.com/?t=114492612100001&amp;amp;r=1&amp;amp;w=2&lt;/a&gt;</p>
 </div>
 </div>
 <!--+
