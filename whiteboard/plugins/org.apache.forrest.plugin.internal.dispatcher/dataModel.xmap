@@ -19,7 +19,14 @@
   <map:components>
     <map:pipes default="caching" />
     <map:generators default="file" />
-    <map:transformers default="xslt" />
+    <map:transformers default="xslt">
+      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+        <catalogues default="menu">
+          <catalogue id="menu" name="menu" location="{lm:project.translations}"/>
+        </catalogues>
+        <cache-at-startup>true</cache-at-startup>
+      </map:transformer>
+    </map:transformers>
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
@@ -110,42 +117,10 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-      <!-- navigation for the current request PART tab-->
+      <!-- navigation for the current request PART tab: relegated to a separate
+           sitemap to allow proper i18n. -->
       <map:match pattern="**.tab.xml">
-        <map:select type="exists">
-          <map:when test="{properties:content.xdocs}tabs.xml">
-            <map:generate src="{properties:content.xdocs}tabs.xml" />
-          </map:when>
-          <map:when test="{lm:tabs.xml}">
-            <map:generate src="{lm:tabs.xml}" />
-          </map:when>
-          <map:otherwise>
-            <map:generate src="{properties:content.xdocs}tabs.xml" />
-          </map:otherwise>
-        </map:select>
-        <map:transform type="xinclude" />
-        <map:select type="config">
-          <map:parameter name="value" value="{properties:forrest.i18n}" />
-          <map:when test="true">
-            <map:act type="locale">
-              <map:transform src="{lm:transform.book.book-i18n}" />
-              <map:transform type="i18n">
-                <map:parameter name="locale" value="{locale}" />
-              </map:transform>
-            </map:act>
-          </map:when>
-        </map:select>
-        <map:match pattern="**/*.tab.xml">
-          <map:transform type="linkrewriter" src="cocoon://{1}/linkmap-{2}" />
-        </map:match>
-        <map:match pattern="*.tab.xml">
-          <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
-        </map:match>
-        <map:transform src="{lm:dataModel-html-tab-to-menu.xsl}">
-          <!--<map:transform src="{lm:dataModel-html-tab2menu.xsl}">-->
-          <map:parameter name="path" value="{1}{2}.html" />
-        </map:transform>
-        <map:serialize />
+        <map:mount uri-prefix="" src="dataModel-tabs.xmap" check-reload="yes" />
       </map:match>
     </map:pipeline>
     <map:pipeline>
