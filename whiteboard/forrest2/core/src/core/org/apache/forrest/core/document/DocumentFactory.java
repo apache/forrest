@@ -21,7 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URL;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.forrest.core.IController;
 import org.apache.forrest.core.exception.ProcessingException;
 
 /**
@@ -29,6 +33,8 @@ import org.apache.forrest.core.exception.ProcessingException;
  * 
  */
 public class DocumentFactory {
+	
+	static Log log = LogFactory.getLog(DocumentFactory.class);
 
 	/**
 	 * Reads as much of the supplied input stream as needed in order to identify
@@ -44,9 +50,9 @@ public class DocumentFactory {
 	 *             InputStream
 	 * @throws ProcessingException 
 	 */
-	public static AbstractSourceDocument getSourceDocumentFor(final URI requestURI, 
+	public static AbstractSourceDocument getSourceDocumentFor(final URL sourceURL, final URI requestURI, 
 			final InputStream is) throws IOException, ProcessingException {
-		return readFile(requestURI, is);
+		return readFile(sourceURL, requestURI, is);
 	}
 
 	/**
@@ -58,7 +64,7 @@ public class DocumentFactory {
 	 * @param is
 	 * @throws ProcessingException 
 	 */
-	private static AbstractSourceDocument readFile(final URI requestURI, final InputStream is)
+	private static AbstractSourceDocument readFile(final URL sourceURL, final URI requestURI, final InputStream is)
 			throws java.io.IOException, ProcessingException {
 		AbstractSourceDocument doc = null;
 		final StringBuffer fileData = new StringBuffer(1024);
@@ -87,7 +93,11 @@ public class DocumentFactory {
 				doc = new DefaultSourceDocument(requestURI, fileData.toString(), reader,
 						"html");
 			} else {
-				throw new ProcessingException("Unable to determine the source document type");
+				String file = sourceURL.getFile();
+				String ext = file.substring(file.lastIndexOf(".") + 1);
+				log.warn("We don't know the document type, so using source file extension: " + ext);
+				doc = new DefaultSourceDocument(requestURI, fileData.toString(), reader,
+				ext);
 			}
 		}
 		return doc;
