@@ -49,7 +49,7 @@ public class FileReader extends AbstractReader {
 		try {
 			URL resolvedURL = sourceNode.resolveURL(matcher, requestURI);
 			final InputStream is = new FileInputStream(new File(resolvedURL.toURI()));
-			result = DocumentFactory.getSourceDocumentFor(requestURI, is);
+			result = DocumentFactory.getSourceDocumentFor(resolvedURL, requestURI, is);
 			if (result == null) {
 				log.debug("No source document exists at " + resolvedURL.toExternalForm());
 			} else {
