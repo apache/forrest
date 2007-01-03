@@ -46,4 +46,10 @@ public interface IDocument {
 	 * @return
 	 */
 	public URI getRequestURI();
+
+	/**
+	 * Set the content of this document.
+	 * @param content
+	 */
+	public void setContent(String content);
 }
