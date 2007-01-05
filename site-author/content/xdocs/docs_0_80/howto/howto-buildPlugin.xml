@@ -437,7 +437,7 @@
         that are intended to replace skins in the future. They allow for a much more
         configurable system of defining the contents and look and feel of a site.</p>
 
-        <p>Plugins can expose contracts for use in structurer files used within
+        <p>Plugins can expose contracts and resources for use in structurer files used within
         Dispatcher-based sites. In order to do this you should develop your contracts
         as normal and place them in <code>PLUGIN_HOME/resources/themes</code>. However,
         this, by itself, is not sufficient to export your contracts. You will also need to
@@ -446,7 +446,14 @@
         <source><![CDATA[
     <match pattern="resolvePluginContract.*.**">
       <select type="exists">
-        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:theme}/{1}/{2}.ft" />
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.ft" />
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.ft" />
+      </select>
+    </match>
+    <match pattern="resolvePluginThemes.*.**">
+      <select type="exists">
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.{1}" />
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}" />
       </select>
     </match>
         ]]></source>
