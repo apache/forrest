@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators default="file">
+      <map:generator name="solrUpdate"
+        src="org.apache.forrest.solr.client.SolrUpdateGenerator"/>
+    </map:generators>
+  </map:components>
+<!--  <map:flow language="javascript">
+    <!-#- Flow will use the javascript functions defined in game.js -#->
+    <map:script src="resources/flow/update.js"/>
+  </map:flow>-->
+  <map:pipelines>
+    <map:pipeline>
+      <!-- Update generator will send the command to the solr server and
+        generate the server response -->
+      <map:match pattern="**.do">
+        <map:generate type="solrUpdate">
+          <map:parameter name="destinationUrl" value="{properties:solr.update.url}"/>
+          <map:parameter name="srcUrlBase" value="http://{request:serverName}:{request:serverPort}/{request:contextPath}/"/>
+          <map:parameter name="srcId" value="{1}"/>
+        </map:generate>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Static solr commands -->
+      <map:match pattern="solr.*">
+        <map:generate src="resources/xml/{1}.xml"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Output the whole project as solr docs 
+        as add comand-->
+      <map:match pattern="index-creation.solr.add">
+        <map:generate src="cocoon://abs-linkmap"/>
+        <map:transform src="{lm:transform.site.book}"/>
+        <map:transform src="resources/stylesheets/book-to-cinclude-solr.xsl"/>
+        <map:transform type="cinclude"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Output xdocs as solr docs -->
+      <map:match pattern="**.solr">
+        <map:generate src="cocoon://{1}.xml"/>
+        <map:transform src="resources/stylesheets/xdocs-to-solrDoc.xsl">
+          <map:parameter name="document-url" value="{1}.xml"/>
+          <map:parameter name="project" value="{properties:project.name}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Implemented solr commands -->
+      <!-- ADD -->
+      <map:match pattern="**.solr.add">
+        <map:generate src="cocoon://{1}.solr"/>
+        <map:transform src="resources/stylesheets/solrDoc-add.xsl"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- DELETE -->
+      <map:match pattern="**.solr.del">
+        <map:generate src="cocoon://{1}.solr"/>
+        <map:transform src="resources/stylesheets/solrDoc-delete.xsl"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!--Testing-->
+      <!--<map:match pattern="resolvePluginContract.*.**">
+        <map:generate src="build.xml"/>
+        <map:transform src="resources/stylesheets/test.xsl">
+          <map:parameter name="document-url" value="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.solr/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}**{lm:resolvePluginThemes.{1}.{2}}-#-{lm:themes/{1}.{1}}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>-->
+      <!-- OLD flow approach -->
+          <!-- use JXtemplate to generate page content -->
+<!--      <map:match pattern="*.jx">
+        <map:generate type="jx" src="resources/flow/{1}.jx"/>
+        <map:serialize type="xml"/>
+      </map:match>-->
+      <!--      <map:match pattern="**solr.*.do">
+        <map:call function="update">
+          <map:parameter name="action" value="{2}"/>
+          <map:parameter name="destinationUrl" value="http://localhost:8983/solr/update"/>
+          <map:parameter name="srcUrlBase" value="http://localhost:8888/"/>
+          <map:parameter name="srcId" value="{1}"/>
+        </map:call>
+      </map:match>-->
+    </map:pipeline>
+  </map:pipelines>
+  
+</map:sitemap>

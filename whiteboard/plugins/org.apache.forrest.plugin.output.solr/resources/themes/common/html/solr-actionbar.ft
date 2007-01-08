@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract 
+  xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="solr-actionbar">
+  
+  <description>
+    <p> This is the solr-actionbar contract, it will output links to manage forrest docs with
+      a Apache solr server. </p>
+    <p>In your solr server add the following field definitions to the schema.xml. We assume
+        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
+        "content" otherwise you need to prefix your queries.</p>
+    <source>
+      <![CDATA[<field name="content" type="text" indexed="true" stored="true" />
+<field name="title" type="text" indexed="true" stored="true"/>
+<field name="subtitle" type="text" indexed="true" stored="true"/>
+<field name="abstract" type="text" indexed="true" stored="true"/>
+<field name="version" type="text" indexed="true" stored="true"/>
+<field name="author" type="text" indexed="true" stored="true" multiValued="true"/>]]>
+    </source>
+  </description>
+  <usage><![CDATA[<forrest:contract name="solr-actionbar">
+  <forrest:property name="request">#{$getRequest}</forrest:property>
+  <forrest:property name="contextPath">#{$contextPath}</forrest:property>
+</forrest:contract>]]></usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    name="solr-actionbar" inputFormat="xsl">
+    <xsl:stylesheet version="1.1" 
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="request" />
+      <xsl:param name="contextPath" />
+      <xsl:template match="/">
+        <xsl:variable name="context">
+          <xsl:choose>
+            <xsl:when test="$contextPath!=''">
+              /<xsl:value-of select="$contextPath"/>/
+            </xsl:when>
+            <xsl:otherwise>
+              /
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <forrest:content>
+          <forrest:part>Apache Solr Server commands: 
+            <ul>
+              <li>
+                <xsl:choose>
+                  <xsl:when test="contains($request,'solr.add.do')">
+                    add document (not committed)
+                  </xsl:when>
+                  <xsl:when test="contains($request,'solr-search') or contains($request,'solr.commit') or contains($request,'solr.delete.do') or contains($request,'solr.optimize')"/>
+                  <xsl:otherwise>
+                    <a href="{normalize-space($context)}{$request}.solr.add.do.html"> add document </a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </li>
+              <li>
+                <xsl:choose>
+                  <xsl:when test="contains($request,'solr.delete.do')">
+                    delete document (not committed)
+                  </xsl:when>
+                  <xsl:when test="contains($request,'solr-search') or contains($request,'solr.commit') or contains($request,'solr.add.do') or contains($request,'solr.optimize')"/>
+                  <xsl:otherwise>
+                    <a href="{normalize-space($context)}{$request}.solr.delete.do.html"> delete document</a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </li>
+              <li>
+                <a href="{normalize-space($context)}solr.commit.do.html"> commit </a>
+              </li>
+              <li>
+                <a href="{normalize-space($context)}solr.optimize.do.html"> optimize </a>
+              </li>
+            </ul> </forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:generators default="file">
+      <map:generator name="request"
+        src="org.apache.cocoon.generation.RequestGenerator"/>
+    </map:generators>
+    <map:transformers default="xslt">
+      <map:transformer logger="sitemap.transformer.solr" name="solr" pool-max="16" 
+        src="org.apache.forrest.solr.client.SolrQueryTransformer" />
+    </map:transformers>
+  </map:components>
+  <map:pipelines>
+    <map:pipeline>
+      <!-- Will dispatch a query against the solr server -->
+      <map:match pattern="solr-search.xml">
+        <map:generate type="request"/>
+        <map:transform src="resources/stylesheets/query-to-cinclude-solr.xsl">
+          <map:parameter name="host" value="{properties:solr.select.url}"/>
+        </map:transform>
+        <map:transform type="cinclude"/>
+        <map:transform type="solr"/>
+        <map:transform src="resources/stylesheets/solrQueryResult-to-xdocs.xsl">
+          <map:parameter name="command" value="{1}"/>
+          <map:parameter name="searchForm" value="{request:servletPath}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!--Generating xdocs-->
+      <map:match pattern="**.do.xml">
+        <map:generate src="cocoon://{1}.do"/>
+        <map:transform src="resources/stylesheets/solrResult-to-xdocs.xsl">
+          <map:parameter name="command" value="{1}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
+</map:sitemap>
