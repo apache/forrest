@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><add xmlns:lucene="http://apache.org/cocoon/lucene/1.0">
+    <doc><field name="id">my-project:index.xml</field><field name="title">Welcome to the org.apache.forrest.plugin.output.solr Plugin</field><field name="content"> 
+    
+      Apache Forrest - org.apache.forrest.plugin.output.solr Plugin
+      Generates
+        solr documents from xdos. Further when run with the
+        dispatcher it provides a GUI to manage your project in solr and a search interface to
+        search your solr server. 
+    
+    
+    
+      Samples
+      This section includes links to a number of samples using this plugin. The plugin is
+        intended to be self documenting through these samples. If you require further help
+        please ask on the user mailing list.
+      
+      
+        
+          index.solr - the xdocs-to-solrDoc.xsl
+          transforms xdocs to solr docs.
+        
+          index.solr.add - surround the solr docs with an
+          add statement.
+        
+          index.solr.del - surround the solr docs with a
+          delete statement.
+        
+          solr.commit - commit statement for solr.
+        
+        
+          solr.optimize - optimize statement for solr.
+        
+        
+          index-creation.solr.add - is
+          generating and adding an "add" statement for solr with the whole site as solr docs as
+          input. This will index your whole project if you add ".do.html" to the url.
+      
+      Aboves pages suffixed with
+        .do.html will trigger the underlying statment on the solr server. We
+        do not link them in this document since the links would be broken on the official
+        document server. This is as well the reason why the gui is deactivated. You can
+        activate it by using following snippet.
+          &lt;forrest:contract name="branding-css-links"&gt;
+      &lt;forrest:property name="branding-css-links-input"&gt;
+        &lt;css url="solr.css" media="screen" theme="Pelt"/&gt;
+      &lt;/forrest:property&gt;
+    &lt;/forrest:contract&gt;
+    &lt;forrest:hook name="solr"&gt;
+      &lt;forrest:hook class="solrSearch"&gt;
+        &lt;forrest:contract name="solr-search"&gt;
+          &lt;forrest:property name="contextPath"&gt;#{$contextPath}&lt;/forrest:property&gt;
+          &lt;forrest:property name="hidden"&gt;
+            &lt;input name="hl" type="hidden" value="true"/&gt;
+            &lt;input name="hl.fl" type="hidden" value="content"/&gt;
+            &lt;input name="fl" type="hidden" value="id,title"/&gt;
+            &lt;input name="indent" type="hidden" value="on"/&gt;
+            &lt;input name="rows" type="hidden" value="10"/&gt;
+            &lt;input name="start" type="hidden" value="0"/&gt;
+          &lt;/forrest:property&gt;
+        &lt;/forrest:contract&gt;
+      &lt;/forrest:hook&gt;
+      &lt;forrest:hook class="solrActionbar"&gt;
+        &lt;forrest:contract name="solr-actionbar"&gt;
+          &lt;forrest:property name="request"&gt;#{$getRequest}&lt;/forrest:property&gt;
+          &lt;forrest:property name="contextPath"&gt;#{$contextPath}&lt;/forrest:property&gt;
+        &lt;/forrest:contract&gt;
+      &lt;/forrest:hook&gt;
+    &lt;/forrest:hook&gt; 
+      The host server urls can be configured by adding the following properties to your
+        project forrest.properties.xml in case you do not use the default values.
+      &lt;property name="solr.select.url" value="http://localhost:8983/solr/select"/&gt;
+&lt;property name="solr.update.url" value="http://localhost:8983/solr/update"/&gt;
+      In your solr server add the following field definitions to the schema.xml. We assume
+        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
+        "content" otherwise you need to prefix your queries.
+      &lt;field name="content" type="text" indexed="true" stored="true" /&gt;
+&lt;field name="title" type="text" indexed="true" stored="true"/&gt;
+&lt;field name="subtitle" type="text" indexed="true" stored="true"/&gt;
+&lt;field name="abstract" type="text" indexed="true" stored="true"/&gt;
+&lt;field name="version" type="text" indexed="true" stored="true"/&gt;
+&lt;field name="author" type="text" indexed="true" stored="true" multiValued="true"/&gt; 
+    
+  </field></doc>
+    <doc><field name="id">my-project:screenshots.xml</field><field name="title">solr screenshots</field><field name="content"> 
+    
+      solr dispatcher gui - solr-actionbar contract
+       
+    
+    
+      solr dispatcher gui - solr-search contract
+       
+    
+    
+      solr search results
+       
+    
+  </field></doc>
+    
+    <doc><field name="id">my-project:changes.xml</field><field name="title">History of Changes </field><field name="content">Introduction and explanation of symbolsChanges are sorted by "type" and then chronologically with the most recent at the top. These symbols denote the various action types:=add
+    
+    Version 0.1 (not-released)Changes to Project Administration
+        Initial plugin code.
+       Committed by RDG.Contributors to this releaseWe thank the following people for their contributions to this release.This is a list of all people who participated as committers: (RDG).
+  All CommittersThis is a list of all people who have ever participated
+           as committers on this project.Volunteer needed (open)</field></doc>
+    <doc><field name="id">my-project:todo.xml</field><field name="title">Todo List</field><field name="content">
+    high[docs] 
+        Customize this template plugin with your plugin's details.  This
+        TODO list is generated from 'status.xml'.
+       &#8594; open[docs] 
+        Create the documentation with lots of examples and samples.  
+        XML content goes in
+        src/documentation/content/xdocs.
+       &#8594; open
+  </field></doc>
+  </add>
