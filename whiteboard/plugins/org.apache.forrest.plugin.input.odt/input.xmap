@@ -24,6 +24,7 @@
         <map:when test="{lm:project.{1}.odt}">
           <map:aggregate element="odt">
             <map:part src="cocoon:/{1}.meta.odt.xml" element="meta" />
+            <map:part src="cocoon:/{1}.styles.odt.xml" element="styles" />
             <map:part src="cocoon:/{1}.content.odt.xml"
               element="content" />
           </map:aggregate>
@@ -37,6 +38,7 @@
       </map:select>
       </map:match>
     </map:pipeline>
+    <!-- FIXME - We can have just one pipeline to superseed the following... -->
     <map:pipeline internal="true">
       <map:match pattern="**.meta.odt.xml">
         <map:generate src="zip:{lm:project.{1}.odt}!/meta.xml" />
@@ -46,6 +48,12 @@
     <map:pipeline internal="true">
       <map:match pattern="**.content.odt.xml">
         <map:generate src="zip:{lm:project.{1}.odt}!/content.xml" />
+        <map:serialize type="xml" />
+      </map:match>
+    </map:pipeline>
+    <map:pipeline internal="true">
+      <map:match pattern="**.styles.odt.xml">
+        <map:generate src="zip:{lm:project.{1}.odt}!/styles.xml" />
         <map:serialize type="xml" />
       </map:match>
     </map:pipeline>

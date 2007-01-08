@@ -22,7 +22,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" 
   xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" 
-  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0">
   <xsl:import href="lm://transform.odt.xhtml"/>
   <xsl:param name="path" select="'odt path name'"/>
   
@@ -127,7 +128,11 @@
      tags such as <em>, <strong>, <sup> and <sub>... -->
 <xsl:template match="text:span">
 	<xsl:variable name="styleName" select="@text:style-name"/>
-	<xsl:apply-templates select="//office:document-content/office:automatic-styles/style:style[@style:name=$styleName]/style:text-properties/@*[last()]">
+	<!-- the style can be either in content or in style, we try both, one of them does not exist and so is empty... -->
+	<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]/style:text-properties/@*[last()]">
+		<xsl:with-param name="text" select="./text()"/>
+	</xsl:apply-templates>
+	<xsl:apply-templates select="//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]/style:text-properties/@*[last()]">
 		<xsl:with-param name="text" select="./text()"/>
 	</xsl:apply-templates>
 </xsl:template>
@@ -224,10 +229,10 @@
 	<xsl:variable name="href"><xsl:value-of select="@xlink:href"/></xsl:variable>
 	<xsl:choose>
 		<xsl:when test="starts-with($href, 'http:')">
-			<img src="{$href}" alt="{@draw:name}"/>
+			<img src="{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="/{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}"/>
+			<img src="/{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -237,7 +242,20 @@
       +-->
 <!-- A little more detailled than in the Lenya file, we add a title and a target attribute if it is supplied... -->
 <xsl:template match="text:a">
-	<a href="{@xlink:href}">
+	<!-- There is a strange behaviour with the links, a .. is used when pointing to a sub-folder instead of '.' -->
+	<!-- we replace it by '.' in the next variable... -->
+	<xsl:variable name="href">
+		<xsl:choose>
+			<xsl:when test="starts-with(@xlink:href,'..')">
+				<xsl:value-of select="substring-after(@xlink:href,'.')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="@xlink:href"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+			
+	<a href="{$href}">
 		<xsl:if test="@office:target-frame-name">
 			<xsl:attribute name="target">
 				<xsl:value-of select="@office:target-frame-name"/>
