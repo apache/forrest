@@ -109,6 +109,18 @@ apache-jakarta - 350,68
       <filter token="NAME">
         <xsl:attribute name="value"><xsl:value-of select="@name" /></xsl:attribute>      
       </filter>
+      <filter token="NAME-2">
+        <xsl:attribute name="value"><xsl:value-of select="@name-2" /></xsl:attribute>      
+      </filter>
+      <filter token="NAME-3">
+        <xsl:attribute name="value"><xsl:value-of select="@name-3" /></xsl:attribute>      
+      </filter>
+      <filter token="NAME-4">
+        <xsl:attribute name="value"><xsl:value-of select="@name-4" /></xsl:attribute>      
+      </filter>
+      <filter token="NAME-5">
+        <xsl:attribute name="value"><xsl:value-of select="@name-5" /></xsl:attribute>      
+      </filter>
       <filter token="ID">
         <xsl:attribute name="value"><xsl:value-of select="@id" /></xsl:attribute>      
       </filter>
@@ -120,6 +132,9 @@ apache-jakarta - 350,68
       </filter>
       <filter token="COLOR">
         <xsl:attribute name="value"><xsl:value-of select="@color" /></xsl:attribute>      
+      </filter>
+      <filter token="COLOR-2">
+        <xsl:attribute name="value"><xsl:value-of select="@color-2" /></xsl:attribute>      
       </filter>
       <filter token="SCALE">
         <xsl:attribute name="value"><xsl:value-of select="$scale" /></xsl:attribute>      
