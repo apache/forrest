@@ -48,7 +48,7 @@
       <xsl:template match="/">
         <xsl:variable name="action">
           <xsl:choose>
-            <xsl:when test="$contextPath!=''">
+            <xsl:when test="$contextPath!='' and $contextPath!=' '">
               /<xsl:value-of select="$contextPath"/>/solr-search.html
             </xsl:when>
             <xsl:otherwise>
@@ -58,7 +58,7 @@
         </xsl:variable>
         <forrest:content>
           <forrest:part>
-            <form action="{normalize-space($action)}" method="get" name="solr-search">
+            <form action="{normalize-space($action)}" method="post" name="solr-search">
               <div class="searchHidden">
                 <input name="version" type="hidden" value="2.2"/>
                 <xsl:copy-of select="$hidden/*"/>
