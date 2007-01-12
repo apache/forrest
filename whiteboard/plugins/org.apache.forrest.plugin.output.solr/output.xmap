@@ -31,10 +31,8 @@
       <!-- Update generator will send the command to the solr server and
         generate the server response -->
       <map:match pattern="**.do">
-        <map:generate type="solrUpdate">
+        <map:generate type="solrUpdate" src="cocoon:/{1}">
           <map:parameter name="destinationUrl" value="{properties:solr.update.url}"/>
-          <map:parameter name="srcUrlBase" value="http://{request:serverName}:{request:serverPort}/{request:contextPath}/"/>
-          <map:parameter name="srcId" value="{1}"/>
         </map:generate>
         <map:serialize type="xml"/>
       </map:match>
