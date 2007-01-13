@@ -37,28 +37,21 @@
   <input name="rows" type="hidden" value="10"/>
   <input name="start" type="hidden" value="0"/>
  </forrest:property>
- <forrest:property name="contextPath">#{$contextPath}</forrest:property>
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="solr-search" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="hidden" />
-      <xsl:param name="contextPath" />
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
       <xsl:template match="/">
         <xsl:variable name="action">
-          <xsl:choose>
-            <xsl:when test="$contextPath!='' and $contextPath!=' '">
-              /<xsl:value-of select="$contextPath"/>/solr-search.html
-            </xsl:when>
-            <xsl:otherwise>
-              /solr-search.html
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:value-of select="$root"/>solr-search.html
         </xsl:variable>
         <forrest:content>
           <forrest:part>
-            <form action="{normalize-space($action)}" method="post" name="solr-search">
+            <form action="{normalize-space($action)}" method="get" name="solr-search">
               <div class="searchHidden">
                 <input name="version" type="hidden" value="2.2"/>
                 <xsl:copy-of select="$hidden/*"/>
