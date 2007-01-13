@@ -20,6 +20,9 @@
     <map:generators default="file">
       <map:generator name="request"
         src="org.apache.cocoon.generation.RequestGenerator"/>
+       <map:generator name="solr-search"
+        logger="sitemap.generator.searchgenerator"
+        src="org.apache.forrest.solr.client.SolrSearchGenerator" />
     </map:generators>
     <map:transformers default="xslt">
       <map:transformer logger="sitemap.transformer.solr" name="solr" pool-max="16" 
@@ -30,14 +33,11 @@
     <map:pipeline>
       <!-- Will dispatch a query against the solr server -->
       <map:match pattern="solr-search.xml">
-        <map:generate type="request"/>
-        <map:transform src="resources/stylesheets/query-to-cinclude-solr.xsl">
-          <map:parameter name="host" value="{properties:solr.select.url}"/>
-        </map:transform>
-        <map:transform type="cinclude"/>
+        <map:generate type="solr-search">
+          <map:parameter name="destinationUrl" value="{properties:solr.select.url}"/>
+        </map:generate>
         <map:transform type="solr"/>
         <map:transform src="resources/stylesheets/solrQueryResult-to-xdocs.xsl">
-          <map:parameter name="command" value="{1}"/>
           <map:parameter name="searchForm" value="{request:servletPath}"/>
         </map:transform>
         <map:serialize type="xml"/>
