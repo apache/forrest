@@ -56,7 +56,10 @@
         </xsl:variable>
         <forrest:content>
           <forrest:part>Apache Solr Server commands: 
-            <ul>
+            <xsl:choose>
+              <xsl:when test="$request='linkmap'"> not supported here.</xsl:when>
+              <xsl:otherwise>
+                <ul>
               <li>
                 <xsl:choose>
                   <xsl:when test="contains($request,'solr.add.do')">
@@ -85,7 +88,9 @@
               <li>
                 <a href="{normalize-space($context)}solr.optimize.do.html"> optimize </a>
               </li>
-            </ul> </forrest:part>
+            </ul>
+              </xsl:otherwise>
+            </xsl:choose> </forrest:part>
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
