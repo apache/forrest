@@ -437,7 +437,7 @@
         that are intended to replace skins in the future. They allow for a much more
         configurable system of defining the contents and look and feel of a site.</p>
 
-        <p>Plugins can expose contracts and resources for use in structurer files used within
+        <p>Plugins can expose contracts, resources  and tiles for use in structurer files used within
         Dispatcher-based sites. In order to do this you should develop your contracts
         as normal and place them in <code>PLUGIN_HOME/resources/themes</code>. However,
         this, by itself, is not sufficient to export your contracts. You will also need to
@@ -456,12 +456,17 @@
         <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}" />
       </select>
     </match>
-        ]]></source>
+    <match pattern="resolvePluginTiles.**">
+      <select type="exists">
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/html/{1}.vt.xml" />
+        <location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/html/{1}.vt.xml" />
+      </select>
+    </match>]]></source>
 
         <p>Of course, you should replace <code>PLUGIN_NAME</code> with the name of 
         your plugin.</p>
 
-        <p>Once Dispatcher becomes stable we will add this match to the default locationmap
+        <p>Once Dispatcher becomes stable we will add this matches to the default locationmap
         which is generated when you seed a new plugin, but for now it must be done manually.</p>
       </section>
 
