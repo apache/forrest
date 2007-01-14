@@ -17,44 +17,22 @@
 -->
 <forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  
   <!-- The following variables are used to contact data models and/or contracts. -->
   <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
   <jx:set var="getRequestExtension"
     value="#{$cocoon/parameters/getRequestExtension}"/>
   <jx:set var="contextPath" value="#{$cocoon/parameters/contextPath}"/>
+  <forrest:view type="fo" hooksXpath="/">
+    <jx:import uri="cocoon://prepare.tiles.common-fo"/>
+  </forrest:view>
   <!-- CSS View of the request e.g. index.dispatcher.css -->
   <forrest:view type="css" hooksXpath="/">
     <jx:import uri="cocoon://prepare.tiles.pelt-css"/>
   </forrest:view>
   <!-- HTML View of the request (e.g. index.html)-->
   <forrest:view type="html" hooksXpath="/html/body">
-    <forrest:contract name="branding-css-links">
-      <forrest:property name="branding-css-links-input">
-        <css url="solr.css" media="screen" theme="Pelt"/>
-      </forrest:property>
-    </forrest:contract>
-    <!--<forrest:hook name="solr">
-      <forrest:hook class="solrSearch">
-        <forrest:contract name="solr-search">
-          <forrest:property name="contextPath">#{$contextPath}</forrest:property>
-          <forrest:property name="hidden">
-            <input name="hl" type="hidden" value="true"/>
-            <input name="hl.fl" type="hidden" value="content"/>
-            <input name="fl" type="hidden" value="id,title"/>
-            <input name="indent" type="hidden" value="on"/>
-            <input name="rows" type="hidden" value="10"/>
-            <input name="start" type="hidden" value="0"/>
-          </forrest:property>
-        </forrest:contract>
-      </forrest:hook>
-      <forrest:hook class="solrActionbar">
-        <forrest:contract name="solr-actionbar">
-          <forrest:property name="request">#{$getRequest}</forrest:property>
-          <forrest:property name="contextPath">#{$contextPath}</forrest:property>
-        </forrest:contract>
-      </forrest:hook>
-    </forrest:hook>-->
+    <jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
+    <jx:import uri="cocoon://prepare.tiles.solrbar"/>
     <jx:import uri="cocoon://prepare.tiles.pelt-html"/>
   </forrest:view>
 </forrest:views>
