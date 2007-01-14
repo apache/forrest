@@ -23,12 +23,87 @@
   <body> 
     <section id="overview">
       <title>Apache Forrest - org.apache.forrest.plugin.output.solr Plugin</title>
-      <p>Generates
+      <p> Generates
         <a href="ext:solr">solr</a> documents from xdos. Further when run with the
-        dispatcher it provides a GUI to manage your project in solr and a search interface to
+        dispatcher in static mode it allows you to update a Solr server with the content of your
+        website at the same time you generate the site (
+        <a href="resolve.contract.html.solr-add">solr-add contract</a>). In dynamic
+        mode (as servlet) it provides a GUI to manage your project in solr (
+        <a href="resolve.contract.html.solr-actionbar">solr-actionbar contract</a>
+        ) and a search interface (
+        <a href="resolve.contract.html.solr-search">solr-search contract</a>) to
         search your solr server. </p>
     </section>
-    
+    <section id="dispatcher">
+      <title>Dispatcher activation</title>
+      <p>You can see some
+        <a href="/screenshots.html">screenshots</a> and activate the different
+        contracts by using following snippets. Explanation given within xml comments.</p>
+      <source><![CDATA[    <!-- default plugin CSS -->
+    <forrest:contract name="branding-css-links">
+      <forrest:property name="branding-css-links-input">
+        <css url="solr.css" media="screen" theme="Pelt"/>
+      </forrest:property>
+    </forrest:contract>
+    <!-- In static mode solr-add allows you to update a Solr server with the content of your
+        website at the same time you generate the site. -->
+    <forrest:contract name="solr-add">
+      <forrest:property name="request">#{$getRequest}</forrest:property>
+    </forrest:contract>
+    <forrest:hook name="solr">
+      <forrest:hook class="solrSearch">
+      <!--Search interface (solr-search contract) to
+        search your solr server. -->
+        <forrest:contract name="solr-search">
+          <forrest:property name="contextPath">#{$contextPath}</forrest:property>
+          <forrest:property name="hidden">
+            <input name="hl" type="hidden" value="true"/>
+            <input name="hl.fl" type="hidden" value="content"/>
+            <input name="fl" type="hidden" value="id,title"/>
+            <input name="indent" type="hidden" value="on"/>
+            <input name="rows" type="hidden" value="10"/>
+            <input name="start" type="hidden" value="0"/>
+          </forrest:property>
+        </forrest:contract>
+      </forrest:hook>
+      <!-- If the userAgent is the cocoon crawler then we do not want to 
+      output the actionbar. The cocoon crawler does not provide the request
+      header "User-Agent".-->
+      <!-- HEADSUP 
+        The jx:set var="userAgent" must be defined in the main structurer
+        and cannot go into a tiles! -->
+      <jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
+      <jx:if test="${!userAgent.equals('')&amp;null!=userAgent}">
+        <forrest:hook class="solrActionbar">
+        <!-- GUI to manage your project in solr. -->
+          <forrest:contract name="solr-actionbar">
+            <forrest:property name="request">#{$getRequest}</forrest:property>
+            <forrest:property name="contextPath">
+              #{$contextPath}</forrest:property>
+          </forrest:contract>
+        </forrest:hook>
+      </jx:if>
+    </forrest:hook>]]> </source> 
+      <p>You can as well use the above aggregated to a tiles, like (make sure you copy both lines!):</p>
+      <source><![CDATA[<jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
+<jx:import uri="cocoon://prepare.tiles.solrbar"/>]]></source>
+    </section>
+    <section id="solr">
+      <title>Solr activation</title>
+      <p>The host server urls can be configured by adding the following properties to your
+        project forrest.properties.xml in case you do not use the default values.</p>
+      <source><![CDATA[<property name="solr.select.url" value="http://localhost:8983/solr/select"/>
+<property name="solr.update.url" value="http://localhost:8983/solr/update"/>]]></source>
+      <p>In your solr server add the following field definitions to the schema.xml. We assume
+        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
+        "content" otherwise you need to prefix your queries.</p>
+      <source><![CDATA[<field name="content" type="text" indexed="true" stored="true" />
+<field name="title" type="text" indexed="true" stored="true"/>
+<field name="subtitle" type="text" indexed="true" stored="true"/>
+<field name="abstract" type="text" indexed="true" stored="true"/>
+<field name="version" type="text" indexed="true" stored="true"/>
+<field name="author" type="text" indexed="true" stored="true" multiValued="true"/>]]> </source>
+    </section>
     <section id="samples">
       <title>Samples</title>
       <p>This section includes links to a number of samples using this plugin. The plugin is
@@ -43,7 +118,7 @@
           <a href="index.solr.add">index.solr.add</a> - surround the solr docs with an
           add statement.</li>
         <li>
-          <a href="index.solr.delete">index.solr.delete</a> - surround the solr docs with a
+          <a href="index.solr.delete">index.solr.delete</a> - surround the solr docs id with a
           delete statement.</li>
         <li>
           <a href="solr.commit">solr.commit</a> - commit statement for solr.
@@ -58,48 +133,9 @@
       </ul>
       <p>Aboves pages suffixed with
         <code>.do.html</code> will trigger the underlying statment on the solr server. We
-        do not link them in this document since the links would be broken on the official
-        document server. This is as well the reason why the gui is deactivated. You can
-        see some <a href="/screenshots.html">screenshots</a> and activate it by using following snippet.</p>
-      <source><![CDATA[    <forrest:contract name="branding-css-links">
-      <forrest:property name="branding-css-links-input">
-        <css url="solr.css" media="screen" theme="Pelt"/>
-      </forrest:property>
-    </forrest:contract>
-    <forrest:hook name="solr">
-      <forrest:hook class="solrSearch">
-        <forrest:contract name="solr-search">
-          <forrest:property name="contextPath">#{$contextPath}</forrest:property>
-          <forrest:property name="hidden">
-            <input name="hl" type="hidden" value="true"/>
-            <input name="hl.fl" type="hidden" value="content"/>
-            <input name="fl" type="hidden" value="id,title"/>
-            <input name="indent" type="hidden" value="on"/>
-            <input name="rows" type="hidden" value="10"/>
-            <input name="start" type="hidden" value="0"/>
-          </forrest:property>
-        </forrest:contract>
-      </forrest:hook>
-      <forrest:hook class="solrActionbar">
-        <forrest:contract name="solr-actionbar">
-          <forrest:property name="request">#{$getRequest}</forrest:property>
-          <forrest:property name="contextPath">#{$contextPath}</forrest:property>
-        </forrest:contract>
-      </forrest:hook>
-    </forrest:hook>]]> </source>
-      <p>The host server urls can be configured by adding the following properties to your
-        project forrest.properties.xml in case you do not use the default values.</p>
-      <source><![CDATA[<property name="solr.select.url" value="http://localhost:8983/solr/select"/>
-<property name="solr.update.url" value="http://localhost:8983/solr/update"/>]]></source>
-      <p>In your solr server add the following field definitions to the schema.xml. We assume
-        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
-        "content" otherwise you need to prefix your queries.</p>
-      <source><![CDATA[<field name="content" type="text" indexed="true" stored="true" />
-<field name="title" type="text" indexed="true" stored="true"/>
-<field name="subtitle" type="text" indexed="true" stored="true"/>
-<field name="abstract" type="text" indexed="true" stored="true"/>
-<field name="version" type="text" indexed="true" stored="true"/>
-<field name="author" type="text" indexed="true" stored="true" multiValued="true"/>]]> </source>
+        do not link them in this document since the links would be crawled. This is as well the
+        reason why the gui is deactivated. Each the gui would trigger the delete,
+        add, commit and optimze statement against the solr server for every page.</p>
     </section>
   </body>
 </document>
