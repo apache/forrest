@@ -818,7 +818,7 @@ document.write("Last Published: " + document.lastModified);
 <p>Dispatcher (previous codename Forrest Views) is the collective name for the various pieces of functionality
         that are intended to replace skins in the future. They allow for a much more
         configurable system of defining the contents and look and feel of a site.</p>
-<p>Plugins can expose contracts for use in structurer files used within
+<p>Plugins can expose contracts, resources  and tiles for use in structurer files used within
         Dispatcher-based sites. In order to do this you should develop your contracts
         as normal and place them in <span class="codefrag">PLUGIN_HOME/resources/themes</span>. However,
         this, by itself, is not sufficient to export your contracts. You will also need to
@@ -826,13 +826,25 @@ document.write("Last Published: " + document.lastModified);
 <pre class="code">
     &lt;match pattern="resolvePluginContract.*.**"&gt;
       &lt;select type="exists"&gt;
-        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:theme}/{1}/{2}.ft" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.ft" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.ft" /&gt;
       &lt;/select&gt;
     &lt;/match&gt;
-        </pre>
+    &lt;match pattern="resolvePluginThemes.*.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.{1}" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+    &lt;match pattern="resolvePluginTiles.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/html/{1}.vt.xml" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/html/{1}.vt.xml" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;</pre>
 <p>Of course, you should replace <span class="codefrag">PLUGIN_NAME</span> with the name of 
         your plugin.</p>
-<p>Once Dispatcher becomes stable we will add this match to the default locationmap
+<p>Once Dispatcher becomes stable we will add this matches to the default locationmap
         which is generated when you seed a new plugin, but for now it must be done manually.</p>
 <a name="N1027D"></a><a name="Plugin+Properties"></a>
 <h4>Plugin Properties</h4>
