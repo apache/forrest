@@ -28,14 +28,11 @@
           </forrest:property>
         </forrest:contract>
       </forrest:hook>
-      <!-- HEADSUP 
-        The jx:set var="userAgent" must be defined in the main structurer
-        and cannot go into a tiles. -->
-      <!--<jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>-->
+      <jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
       <!-- If the userAgent is the cocoon crawler then we do not want to 
       output the actionbar. The cocoon crawler does not provide the request
-      header "User-Agent".-->
-      <jx:if test="${!userAgent.equals('')&amp;null!=userAgent}">
+      header "User-Agent" meaning null.-->
+      <jx:if test="${null!=userAgent}">
         <forrest:hook class="solrActionbar">
         <!-- GUI to manage your project in solr. -->
           <forrest:contract name="solr-actionbar">
