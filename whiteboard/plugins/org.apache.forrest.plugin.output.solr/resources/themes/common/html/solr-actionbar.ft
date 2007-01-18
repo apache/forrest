@@ -37,23 +37,15 @@
   </description>
   <usage><![CDATA[<forrest:contract name="solr-actionbar">
   <forrest:property name="request">#{$getRequest}</forrest:property>
-  <forrest:property name="contextPath">#{$contextPath}</forrest:property>
 </forrest:contract>]]></usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="solr-actionbar" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="request" />
-      <xsl:param name="contextPath" />
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
       <xsl:template match="/">
-        <xsl:variable name="context">
-          <xsl:choose>
-            <xsl:when test="$contextPath!='' and $contextPath!=' '">       
-              /<xsl:value-of select="$contextPath"/>/
-            </xsl:when>
-            <xsl:otherwise>/</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
         <forrest:content>
           <forrest:part>Apache Solr Server commands: 
             <xsl:choose>
@@ -67,7 +59,7 @@
                   </xsl:when>
                   <xsl:when test="contains($request,'solr-search') or contains($request,'solr.commit') or contains($request,'solr.delete.do') or contains($request,'solr.optimize')"/>
                   <xsl:otherwise>
-                    <a href="{normalize-space($context)}{$request}.solr.add.do.html"> add document </a>
+                    <a href="{normalize-space($root)}{$request}.solr.add.do.html"> add document </a>
                   </xsl:otherwise>
                 </xsl:choose>
               </li>
@@ -78,15 +70,15 @@
                   </xsl:when>
                   <xsl:when test="contains($request,'solr-search') or contains($request,'solr.commit') or contains($request,'solr.add.do') or contains($request,'solr.optimize')"/>
                   <xsl:otherwise>
-                    <a href="{normalize-space($context)}{$request}.solr.delete.do.html"> delete document</a>
+                    <a href="{normalize-space($root)}{$request}.solr.delete.do.html"> delete document</a>
                   </xsl:otherwise>
                 </xsl:choose>
               </li>
               <li>
-                <a href="{normalize-space($context)}solr.commit.do.html"> commit </a>
+                <a href="{normalize-space($root)}solr.commit.do.html"> commit </a>
               </li>
               <li>
-                <a href="{normalize-space($context)}solr.optimize.do.html"> optimize </a>
+                <a href="{normalize-space($root)}solr.optimize.do.html"> optimize </a>
               </li>
             </ul>
               </xsl:otherwise>
