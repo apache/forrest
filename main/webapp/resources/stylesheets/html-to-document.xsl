@@ -66,10 +66,12 @@
     <!--infer structure from sibling headings-->
     <xsl:template match="body">
        <body>
-       <!-- some paragraphs may be included before the first title... -->
-       <xsl:apply-templates select="*[1]" mode="next"/>
         <xsl:choose>
           <xsl:when test="h1">
+            <!-- some paragraphs may be included before the first title... -->
+            <xsl:if test="name(*[1]) != 'h1'">
+              <xsl:apply-templates select="*[1]" mode="next"/>
+            </xsl:if>
             <xsl:call-template name="process_h1"/>
           </xsl:when>
           <xsl:otherwise>
@@ -311,8 +313,6 @@
 	            <xsl:apply-templates/>
 		    </xsl:otherwise>
 	    </xsl:choose>
-    
-      <xsl:apply-templates select="./*"/>
     </xsl:template>
 
     <xsl:template match="@*|*|text()|processing-instruction()|comment()">
