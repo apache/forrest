@@ -42,6 +42,12 @@
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
+  <!-- Path to site root, eg '../../' -->
+  <xsl:variable name="root">
+    <xsl:call-template name="dotdots">
+      <xsl:with-param name="path" select="$path"/>
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:template match="/">
     <xsl:apply-templates select="/odt/content/*"/>
@@ -232,7 +238,7 @@
 			<img src="{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="/{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
+			<img src="./{$root}{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
