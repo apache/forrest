@@ -28,6 +28,11 @@
       <map:transformer logger="sitemap.transformer.solr" name="solr" pool-max="16" 
         src="org.apache.forrest.solr.client.SolrQueryTransformer" />
     </map:transformers>
+    <map:serializers default="xml-utf8" >
+      <map:serializer name="xml-utf8" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <encoding>UTF-8</encoding>
+      </map:serializer>
+    </map:serializers>
   </map:components>
   <map:pipelines>
     <map:pipeline>
@@ -40,7 +45,7 @@
         <map:transform src="resources/stylesheets/solrQueryResult-to-xdocs.xsl">
           <map:parameter name="searchForm" value="{request:servletPath}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!--Generating xdocs-->
       <map:match pattern="**.do.xml">
@@ -48,7 +53,7 @@
         <map:transform src="resources/stylesheets/solrResult-to-xdocs.xsl">
           <map:parameter name="command" value="{1}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
     </map:pipeline>
   </map:pipelines>
