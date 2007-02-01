@@ -21,6 +21,11 @@
       <map:generator name="solrUpdate"
         src="org.apache.forrest.solr.client.SolrUpdateGenerator"/>
     </map:generators>
+    <map:serializers default="xml-utf8" >
+      <map:serializer name="xml-utf8" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <encoding>UTF-8</encoding>
+      </map:serializer>
+    </map:serializers>
   </map:components>
 <!--  <map:flow language="javascript">
     <!-#- Flow will use the javascript functions defined in game.js -#->
@@ -34,12 +39,12 @@
         <map:generate type="solrUpdate" src="cocoon:/{1}">
           <map:parameter name="destinationUrl" value="{properties:solr.update.url}"/>
         </map:generate>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!-- Static solr commands -->
       <map:match pattern="solr.*">
         <map:generate src="resources/xml/{1}.xml"/>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!-- Output the whole project as solr docs 
         as add comand-->
@@ -48,7 +53,7 @@
         <map:transform src="{lm:transform.site.book}"/>
         <map:transform src="resources/stylesheets/book-to-cinclude-solr.xsl"/>
         <map:transform type="cinclude"/>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!-- Output xdocs as solr docs -->
       <map:match pattern="**.solr">
@@ -57,20 +62,20 @@
           <map:parameter name="document-url" value="{1}.xml"/>
           <map:parameter name="project" value="{properties:project.name}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!-- Implemented solr commands -->
       <!-- ADD -->
       <map:match pattern="**.solr.add">
         <map:generate src="cocoon://{1}.solr"/>
         <map:transform src="resources/stylesheets/solrDoc-add.xsl"/>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!-- DELETE -->
       <map:match pattern="**.solr.delete">
         <map:generate src="cocoon://{1}.solr"/>
         <map:transform src="resources/stylesheets/solrDoc-delete.xsl"/>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>
       <!--Testing-->
       <!--<map:match pattern="resolvePluginContract.*.**">
@@ -78,13 +83,13 @@
         <map:transform src="resources/stylesheets/test.xsl">
           <map:parameter name="document-url" value="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.solr/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}**{lm:resolvePluginThemes.{1}.{2}}-#-{lm:themes/{1}.{1}}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>-->
       <!-- OLD flow approach -->
           <!-- use JXtemplate to generate page content -->
 <!--      <map:match pattern="*.jx">
         <map:generate type="jx" src="resources/flow/{1}.jx"/>
-        <map:serialize type="xml"/>
+        <map:serialize/>
       </map:match>-->
       <!--      <map:match pattern="**solr.*.do">
         <map:call function="update">
