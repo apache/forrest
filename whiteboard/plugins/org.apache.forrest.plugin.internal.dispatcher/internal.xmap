@@ -63,7 +63,7 @@
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    <map:serializers default="xml">
+    <map:serializers default="xml-utf8">
       <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
         name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
         src="org.apache.cocoon.serialization.XMLSerializer">
@@ -79,6 +79,9 @@
         <!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
         <!-- <parameter name="gamma" type="float" value="0.48"/> -->
         <parameter name="gamma" type="float" value="0" />
+      </map:serializer>
+      <map:serializer name="xml-utf8" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+        <encoding>UTF-8</encoding>
       </map:serializer>
     </map:serializers>
     <map:actions>
@@ -182,7 +185,7 @@
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="fo" />
         </map:transform>
-        <map:serialize type="xml" />
+        <map:serialize  />
       </map:match>
       <map:match pattern="**.internal*">
         <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
@@ -198,7 +201,7 @@
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="internal{2}" />
         </map:transform>
-        <map:serialize type="xml" />
+        <map:serialize  />
       </map:match>
       <map:match pattern="**.prepare.dispatcher.css">
         <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
@@ -239,7 +242,7 @@
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="xhtml2" />
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize />
       </map:match>
     </map:pipeline>
     <map:pipeline>
