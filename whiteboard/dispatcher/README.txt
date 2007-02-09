@@ -14,12 +14,27 @@
 # limitations under the License.
 
 
+Running
+*******
+
+After installing StAX (see next section)...
+
+Build
+./build.sh
+
+Run
+./dispatch
+
 StAX
 ****
-You need to download and install JSR-000173 Streaming API for XML 1.0
-see http://jcp.org/aboutJava/communityprocess/final/jsr173/index.html
-and
-see https://stax-utils.dev.java.net/
+To make the version compile you need to download the JSR 173 API from 
+http://www.ibiblio.org/maven2/stax/stax-api/1.0/stax-api-1.0.jar 
+and copy it to lib/api/. We cannot redistribute the API (it was once a
+discussion on cocoon-dev when the jcr got introduced). The
+specifications can be found http://www.jcp.org/en/jsr/detail?id=173 
+
+To get kick started with StAX have a look at
+http://today.java.net/pub/a/today/2006/07/20/introduction-to-stax.html
 
 tutorials: http://www.devx.com/ibm/Door/20346
 
