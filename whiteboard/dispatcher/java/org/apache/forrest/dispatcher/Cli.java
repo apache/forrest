@@ -29,7 +29,13 @@ public class Cli {
      */
     public static void main(String[] args) {
         System.out.println("--- Dispatcher CLI ---");
-        final String home = args[0];
+        final String home;
+        if (args.length == 0) {
+            // no home directory specified so use the current working directory
+            home = System.getProperty("user.dir");
+        } else {
+            home  = args[0];
+        }
         System.out.println("home: "+home);
         propertiesHelper = new DispatcherPropertiesHelper(home);
         String sourceUrl;
