@@ -127,7 +127,7 @@ public class ContractHelperStAX {
             // here we need to inject the dataUri or foo
             if (!dataFile.isFile()) {
                 // no dataFile defined trying cache for foo
-                dataFile = new File(propertiesHelper.getMasterFooUrl().replace("file://", ""));
+                dataFile = new File(propertiesHelper.getMasterFooUrl().replace("file:///", ""));
                 if (!dataFile.isFile()) {
                     // not in cache either, so we create it and
                     // store it in cache
@@ -203,7 +203,7 @@ public class ContractHelperStAX {
             if (sourceUrl.indexOf(":/") > -1)
                 contractUrl = new URL(sourceUrl);
             else
-                contractUrl = new URL("file://" + sourceUrl);
+                contractUrl = new URL("file:///" + sourceUrl);
             InputStream in = contractUrl.openStream();
             inputFactory.setEventAllocator(new XMLEventAllocatorBase());
             XMLEventAllocator allocator = inputFactory.getEventAllocator();

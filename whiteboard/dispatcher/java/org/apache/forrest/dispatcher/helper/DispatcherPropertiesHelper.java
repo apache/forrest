@@ -39,21 +39,21 @@ public class DispatcherPropertiesHelper {
     public final String MASTER_CONTRACT = "master.contract.xml";
 
     public String getMasterContractUrl() {
-        String url = "file://" + contractRep + MASTER_CONTRACT;
+        String url = "file:///" + contractRep + MASTER_CONTRACT;
         return url;
     }
 
     public final String MASTER_STRUCTURER = "master.structurer.xml";
 
     public String getMasterStructurerUrl() {
-        String url = "file://" + structurerRep + MASTER_STRUCTURER;
+        String url = "file:///" + structurerRep + MASTER_STRUCTURER;
         return url;
     }
 
     public final String MASTER_FOO = "foo.xml";
 
     public String getMasterFooUrl() {
-        String url = "file://" + cacheHome + MASTER_FOO;
+        String url = "file:///" + cacheHome + MASTER_FOO;
         return url;
     }
 

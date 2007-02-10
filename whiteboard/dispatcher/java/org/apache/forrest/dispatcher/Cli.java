@@ -40,7 +40,7 @@ public class Cli {
         propertiesHelper = new DispatcherPropertiesHelper(home);
         String sourceUrl;
         try {
-            sourceUrl = propertiesHelper.getMasterStructurerUrl().replace("file://", "");
+            sourceUrl = propertiesHelper.getMasterStructurerUrl().replace("file:///", "");
             System.out.println("sourceUrl "+sourceUrl);
             StructurerHelperStAX helper = new StructurerHelperStAX(home);
             File result = helper.execute(sourceUrl, "html");

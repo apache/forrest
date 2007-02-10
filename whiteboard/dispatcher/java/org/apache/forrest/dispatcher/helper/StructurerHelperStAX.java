@@ -143,7 +143,7 @@ public class StructurerHelperStAX {
         if (sourceUrl.indexOf(":/") > -1)
             structurerUrl = new URL(sourceUrl);
         else
-            structurerUrl = new URL("file://" + sourceUrl);
+            structurerUrl = new URL("file:///" + sourceUrl);
         InputStream in = structurerUrl.openStream();
         inputFactory.setEventAllocator(new XMLEventAllocatorBase());
         allocator = inputFactory.getEventAllocator();
