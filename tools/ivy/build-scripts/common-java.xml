@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
+
+    <import file="common-ivy.xml"/>
+
+	<property name="project.lib.dir" location="${project.webapp.dir}/WEB-INF/lib" />
+
+	<property name="project.core.src.dir" location="src/main" />
+	<property name="project.test.src.dir" location="src/test" />
+
+	<property name="project.build.classes.dir" location="${project.build.dir}/classes" />
+
+	<property name="compile.debug" value="off" />
+	
+	<property name="dist.dir" location="dist"/>
+	
+    <property name="jar.file" location="${dist.dir}/${ant.project.name}.jar"/>
+	
+    <path id="run.path.id">
+        <path refid="project.core.class.path" />
+        <path location="${project.build.classes.dir}" />
+    </path>
+	
+	<target name="init">
+    	<available file="${project.core.src.dir}" property="project.core.src.dir.exists"/>
+    	<available file="${project.test.src.dir}" property="project.test.src.dir.exists"/>
+		<ivy:cachepath pathid="project.core.class.path" conf="default" />
+		<ivy:cachepath pathid="project.test.class.path" conf="test" />
+	</target>
+    
+    <target name="compile-test" 
+    	depends="compile-core" description="--> compile the project tests"
+    	if="project.test.src.dir.exists">
+    	<echo>Compiling test files in ${project.test.src.dir}</echo>
+        <mkdir dir="${project.build.classes.dir}" />
+		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="project.test.class.path">
+			<src path="${project.test.src.dir}" />
+		</javac>
+		
+		<echo>Copying resources from test source directory</echo>
+		<copy todir="${project.build.classes.dir}">
+			<fileset dir="${project.test.src.dir}">
+				<exclude name="**.java" />
+			</fileset>
+		</copy>
+		
+    	<antcall target="post-compile-test"/>
+    </target>
+    
+    <target name="post-compile-test" description="Run after compile-test. Intended to be overridden if your project needs any post compile processing"/>
+    
+    <target name="compile-core" 
+    	depends="resolve, init" description="--> compile the project"
+    	if="project.core.src.dir.exists">
+    	<echo>Compiling files in ${project.core.src.dir}</echo>
+        <mkdir dir="${project.build.classes.dir}" />
+		<javac destdir="${project.build.classes.dir}" debug="${compile.debug}" classpathref="project.core.class.path">
+			<src path="${project.core.src.dir}" />
+		</javac>
+		
+		<echo>Copying resources from source directory</echo>
+		<copy todir="${project.build.classes.dir}">
+			<fileset dir="${project.core.src.dir}">
+				<exclude name="**.java" />
+			</fileset>
+		</copy>
+		
+    	<antcall target="post-compile-core"/>
+    </target>
+    
+    <target name="post-compile-core" description="Run after compile-core. Intended to be overridden if your project needs any post compile processing"/>
+    	
+    <target name="run" depends="version, compile-core" description="--> compile and run the project">
+        <java classpathref="run.path.id" classname="${main.class.name}"/>
+    </target>
+    
+    <target name="jar" depends="clean-dist, version, compile-core" description="--> make a jar file for this project">
+    	<mkdir dir="${dist.dir}"/>
+        <jar destfile="${jar.file}">
+            <fileset dir="${project.build.classes.dir}"/>
+        </jar>
+    </target>
+	
+    <target name="publish" depends="clean-build, new-version, jar" description="--> publish this project in the ivy repository">
+        <property name="revision" value="${version}"/>
+    	<ivy:publish
+    	   artifactspattern="[artifact].[ext]"
+           resolver="shared"
+           pubrevision="${revision}" 
+    	/>
+        <echo message="project ${ant.project.name} released with version ${revision}" />
+    </target>
+
+    <target name="publish-local" depends="clean-dist, local-version, jar" description="--> publish this project in the local ivy repository">
+		<delete file="${build.dir}/ivy.xml"/> <!-- delete last produced ivy file to be sure a new one will be generated -->
+    	<ivy:publish resolver="local"
+    		artifactspattern="${dist.dir}/[artifact].[ext]"
+    		pubrevision="${revision}"
+    		forcedeliver="true"
+			pubdate="${now}"
+    	/>
+        <echo message="project ${ant.project.name} published locally with version ${revision}" />
+    </target>
+
+</project>
