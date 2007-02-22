@@ -75,10 +75,17 @@ Your project build file should import one of the above common
 build scripts. For example:
 
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="anhydrite" default="deploy-webapp">
+<project name="FOO" default="deploy-webapp">
 	<property file="build.properties"/>
 	<import file="${ivy.repository.dir}/build-scripts/common-webapp.xml"/>
 </project>
+
+At the very least your build.properties file will require the path to your
+ivy repository directory. Confusingly, this is not necessarily where the
+jar files are stored, but it is where the build files an ivyconf.xml file
+is located. For exampl:
+
+ivy.repository.dir=../tools/ivy
 
 Project ivy.xml
 ---------------
