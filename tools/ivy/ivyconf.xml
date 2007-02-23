@@ -22,31 +22,23 @@
 
 	<conf defaultResolver="default" />
 	<resolvers>
-		<ivyrep name="ivyrep" ivyroot="http://ivyrep.jayasoft.org/" />
-		<ivyrep name="ivyrepsandbox"
-			ivyroot="http://opensvn.csie.org/ivyrepsandbox/" />
-		<ibiblio name="apache-snapshot" m2compatible="true"
-			root="http://people.apache.org/maven-snapshot-repository" />
-		<ibiblio name="apache" m2compatible="true"
-			root="http://people.apache.org/repository"
-			pattern="[organisation]/[type]s/[artifact]-[revision].[ext]" />
-		<ibiblio name="ibiblio-maven2" root="${ibiblio-maven2-root}"
-			pattern="${ibiblio-maven2-pattern}" m2compatible="true"
-			namespace="ibiblio-maven2" />
-		<filesystem name="local">
-			<ivy
-				pattern="${local.repo.dir}/[organisation]/[module]/ivy-[revision].xml" />
-			<artifact
-				pattern="${local.repo.dir}/[organisation]/[module]/[type]s/[artifact]-[revision].[type]" />
-		</filesystem>
-
 		<chain name="default" returnFirst="true">
-			<resolver ref="local" />
-			<ivyrep name="apache" />
-			<ivyrep name="apache-snapshot" />
-			<ivyrep name="ivyrep" />
-			<ivyrep name="ivyrepsandbox" />
-			<ibiblio name="ibiblio-maven2" />
+    		<ivyrep name="ivyrep" ivyroot="http://ivyrep.jayasoft.org/" />
+    		<ivyrep name="ivyrepsandbox"
+    			ivyroot="http://opensvn.csie.org/ivyrepsandbox/" />
+            <ibiblio name="apache"
+                root="http://people.apache.org/repository" />
+            <ibiblio name="pache-snapshot" m2compatible="true"
+                root="http://people.apache.org/maven-snapshot-repository" />
+    		<ibiblio name="ibiblio-maven2" root="${ibiblio-maven2-root}"
+    			pattern="${ibiblio-maven2-pattern}" m2compatible="true"
+    			namespace="ibiblio-maven2" />
+    		<filesystem name="local">
+    			<ivy
+    				pattern="${local.repo.dir}/[organisation]/[module]/ivy-[revision].xml" />
+    			<artifact
+    				pattern="${local.repo.dir}/[organisation]/[module]/[type]s/[artifact]-[revision].[type]" />
+    		</filesystem>
 		</chain>
 	</resolvers>
 </ivyconf>
