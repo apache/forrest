@@ -31,35 +31,12 @@
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    <map:serializers default="html">
-      <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
-        <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
-        <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
-        <encoding>ISO-8859-1</encoding>
-      </map:serializer>
-    </map:serializers>
     
-    <map:pipes>
-      <map:pipe name="navigation"
-        src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
-        <parameter name="cache-expires" value="600"/> <!-- Expires in seconds -->
-      </map:pipe>
-    </map:pipes>
   </map:components>
 
   <map:pipelines>
     <map:pipeline>
       
-      <map:match pattern="projectDetails.source.xml">
-        <map:generate type="file" src="{lm:project.descriptor}" />
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <map:match pattern="projectDetails.*.source.xml">
-        <map:generate type="file" src="{lm:project.descriptor.{1}}" />
-        <map:serialize type="xml-document"/>
-      </map:match>
-    
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes.xml$">
         <map:generate type="file" src="{lm:project.status}" />
         <map:transform src="{lm:projectInfo.transform.changes.document}" >
@@ -117,28 +94,6 @@
       </map:match>
       
       <!-- =============================================================== -->
-      <!-- Project Description Pipelines                                   -->
-      <!-- =============================================================== -->
-      
-      <map:match pattern="projectDetails/projectDetails.xml">
-        <map:generate type="file" src="{lm:project.descriptor}" />
-        <map:transform src="{lm:projectInfo.transform.doap.html}">
-          <map:parameter name="includePageHeader" value="false"/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <map:match pattern="projectDetails/projectDetails.*.xml">
-        <map:generate type="file" src="{lm:project.descriptor.{1}}" />
-        <map:transform src="{lm:projectInfo.transform.doap.html}">
-          <map:parameter name="includePageHeader" value="false"/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <!-- =============================================================== -->
       <!-- Use Case Pipelines                                              -->
       <!-- =============================================================== -->
    
@@ -170,110 +125,8 @@
         <map:serialize type="xml-document"/>
       </map:match>
       
-      <!-- ================================================================ -->
-      <!-- HTML indexes                                                     -->
-      <!-- ================================================================ -->
-      
-      <!-- FIXME: create the XSL for this pipeline
-      
-      <map:match pattern="projectDetails/index.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.html}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      -->
-      
-      
-      <!-- Create an HTML page listing all projects categorised by category -->
-      <map:match pattern="projectDetails/category-index.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexBycategory}"/>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match> 
-      
-      <!-- Create an HTML page listing all projects using the indicated language -->
-      <map:match pattern="projectDetails/category/*.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexBycategory}">
-          <map:parameter name="category" value="{1}"/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <!-- Create an HTML page listing all projects categorised by programming language -->
-      <map:match pattern="projectDetails/lang-index.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexBylang}"/>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <!-- Create an HTML page listing all projects using the indicated language -->
-      <map:match pattern="projectDetails/*_lang.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.indexBylang}">
-          <map:parameter name="language" value="{1}"/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
     </map:pipeline>
     
-    <map:pipeline type="navigation">
-      <!-- ================================================================ -->
-      <!-- Site.xml snippets                                                -->
-      <!-- ================================================================ -->
-      
-      <!--
-        Create a snippet for inclusion in site.xml that provides a link to
-        all known projects specified in
-        locationmap.xml file.
-      -->
-      <map:match pattern="projectDetails/descriptorIndex.xml">
-        <map:generate type="file" src="{properties:content}/locationmap.xml" />
-        <map:transform src="{lm:projectInfo.transform.locationmap.descriptorIndex}"/>
-        <map:transform type="cinclude"/>
-        <map:serialize type="xml"/>
-      </map:match>
-      
-      <!--
-        Create a snippet for inclusion in site.xml that provides a link to
-        an index page for all known programming languages for projects 
-        specified in locationmap-projects.xml file.
-      -->
-      <map:match pattern="projectDetails/lang_index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.langIndex_siteSnippet}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <!--
-        Create a snippet for inclusion in site.xml that lists all projects
-        known in the locationmap-projects.xml file.
-      -->
-      <map:match pattern="projectDetails/index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}"/>
-        <map:serialize type="xml-document"/>
-      </map:match>
-      
-      <!--
-        Create a snippet for inclusion in site.xml that lists all projects
-        known in the locationmap-projects.xml that have the indicated 
-        programming language. 
-      -->
-      <map:match pattern="projectDetails/language-*/index.siteSnippet.xml">
-        <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:projectInfo.transform.descriptorIndex.siteSnippet}">
-          <map:parameter name="name" value="{1}"/>
-          <map:parameter name="progLanguage" value="{1}"/>
-        </map:transform>
-        <map:serialize type="xml-document"/>
-      </map:match>
-
-    </map:pipeline>
     <map:pipeline>
       <!-- svnHelper -->
       <map:mount uri-prefix="" src="svnHelper.xmap" check-reload="yes" 
