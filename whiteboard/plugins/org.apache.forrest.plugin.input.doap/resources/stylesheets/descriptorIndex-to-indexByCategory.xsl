@@ -26,7 +26,7 @@
   
   <xsl:key name="kDistinctCategory" match="doap:category" use="@rdf:resource"/>
   
-  <xsl:param name="category"/>
+  <xsl:param name="filter"/>
   <xsl:param name="categoryURL">http://projects.apache.org/category/</xsl:param>
   
   <xsl:template match="/">
@@ -36,10 +36,10 @@
       </head>
       <body>
         <xsl:choose>
-          <xsl:when test="$category">
+          <xsl:when test="$filter">
             <section>
-              <title>Index of projects in the category of <xsl:value-of select="$category"/></title>
-              <xsl:apply-templates select="//descriptor[descendant::doap:category/@rdf:resource = concat($categoryURL, $category)]"/>
+              <title>Index of projects in the category of <xsl:value-of select="$filter"/></title>
+              <xsl:apply-templates select="//descriptor[descendant::doap:category/@rdf:resource = concat($categoryURL, $filter)]"/>
             </section>
           </xsl:when>
           <xsl:otherwise>
@@ -47,7 +47,7 @@
               <xsl:sort select="@rdf:resource"/>
               <xsl:variable name="category" select="@rdf:resource"/>
               <section>
-                  <title><xsl:value-of select="substring-after($category, $categoryURL)"/></title>
+                  <title><xsl:value-of select="substring-after($filter, $categoryURL)"/></title>
                   <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
               </section>
             </xsl:for-each>

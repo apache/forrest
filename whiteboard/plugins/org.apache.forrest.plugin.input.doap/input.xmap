@@ -31,13 +31,6 @@
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    <map:serializers default="html">
-      <map:serializer name="rss091" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
-        <doctype-public>-//Netscape Communications//DTD RSS 0.91//EN</doctype-public>
-        <doctype-system>http://my.netscape.com/publish/formats/rss-0.91.dtd</doctype-system>
-        <encoding>ISO-8859-1</encoding>
-      </map:serializer>
-    </map:serializers>
     
     <map:pipes>
       <map:pipe name="navigation"
@@ -118,19 +111,19 @@
       <map:match pattern="projectDetails/index/by*/*.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}">
-          <map:parameter name="category" value="{2}"/>
+          <map:parameter name="filter" value="{2}"/>
         </map:transform>
         <map:transform src="{lm:transform.html.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails/source.xml">
-        <map:generate type="file" src="{lm:project.descriptor}" />
+        <map:generate type="file" src="{lm:doap.descriptor}" />
         <map:serialize type="xml-document"/>
       </map:match>
       
       <map:match pattern="projectDetails/**.source.xml">
-        <map:generate type="file" src="{lm:project.descriptor.{1}}" />
+        <map:generate type="file" src="{lm:doap.descriptor.{1}}" />
         <map:serialize type="xml-document"/>
       </map:match>
     

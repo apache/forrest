@@ -26,11 +26,11 @@
     </descriptors>
   </xsl:template>
   
-  <xsl:template match="lm:locator/lm:match[starts-with(@pattern, 'project.descriptor')]">
+  <xsl:template match="lm:locator/lm:match[starts-with(@pattern, 'doap.descriptor')]">
     <xsl:variable name="href-noext">
       <xsl:choose>
-        <xsl:when test="@pattern = 'project.descriptor'">/projectDetails</xsl:when>
-        <xsl:otherwise><xsl:value-of select="substring-after(@pattern, 'project.descriptor.')"/></xsl:otherwise>
+        <xsl:when test="@pattern = 'doap.descriptor'">/projectDetails</xsl:when>
+        <xsl:otherwise><xsl:value-of select="substring-after(@pattern, 'doap.descriptor.')"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
