@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -66,7 +65,7 @@
         <xsl:if test="doap:description">
           <section>
             <title>Description</title>
-            <xsl:value-of select="doap:description"/>
+            <p><xsl:value-of select="doap:description"/></p>
           </section>
         </xsl:if>
       </body>
