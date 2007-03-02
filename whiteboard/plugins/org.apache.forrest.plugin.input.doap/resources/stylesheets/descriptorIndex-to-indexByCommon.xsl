@@ -37,7 +37,8 @@
     <div>
       <p>
         <a>
-          <xsl:attribute name="href"><xsl:value-of select="@href-noext"/>.html</xsl:attribute>
+          <!-- FIXME: should use the dotdots.xsl to calculate the root -->
+          <xsl:attribute name="href">../../<xsl:value-of select="@href-noext"/>.html</xsl:attribute>
           <xsl:value-of select="$name"/>
         </a>
         <xsl:text> </xsl:text>
