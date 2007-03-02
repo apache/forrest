@@ -29,22 +29,26 @@
   <xsl:param name="filter"/>
   
   <xsl:template match="/">
-    <html>
-      <head>
+    <document>
+      <header>
         <title>Projects Indexed by Language</title>
-      </head>
+      </header>
       <body>
         <xsl:choose>
           <xsl:when test="$filter">
-            <h1>Index of projects using <xsl:value-of select="$filter"/></h1>
-            <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $filter]"/>
+            <section>
+              <title>Index of projects using <xsl:value-of select="$filter"/></title>
+              <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $filter]"/>
+            </section>
           </xsl:when>
           <xsl:otherwise>
             <xsl:for-each select="//doap:programming-language[generate-id() = generate-id(key('kDistinctProgLang',.))]">
               <xsl:sort select="."/>
               <xsl:variable name="language" select="."/>
-              <h1><xsl:value-of select="$language"/></h1>
-              <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $language]"/>
+              <section>
+                <title><xsl:value-of select="$language"/></title>
+                <xsl:apply-templates select="//descriptor[descendant::doap:programming-language = $language]"/>
+              </section>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
@@ -54,7 +58,7 @@
           <xsl:apply-templates select="//descriptor[not(descendant::doap:programming-language)]"/>
         </xsl:if>
       </body>
-    </html>
+    </document>
   </xsl:template>
 </xsl:stylesheet>
 
