@@ -130,34 +130,57 @@
    <xsl:text> </xsl:text>
    <xsl:value-of select="@version"/> (<xsl:value-of select="@date"/>)</title>
    <xsl:apply-templates select="introduction"/>
+
    <xsl:for-each select="action[generate-id()=generate-id(key('contexts',concat(../@version, '_', @context)))]">
     <xsl:sort select="@context"/>
-    <section>
     <xsl:variable name="context" select="@context"/>
-    <title>
+    <xsl:variable name="title">
+     <xsl:choose>
+       <xsl:when test="//contexts/context[@id=$context]">
+        <xsl:value-of select="//contexts/context[@id=$context]/@title"/>
+       </xsl:when>
+       <xsl:otherwise>
+        <xsl:value-of select="@context"/>
+       </xsl:otherwise>
+     </xsl:choose>
+    </xsl:variable>
+
     <xsl:choose>
-      <xsl:when test="//contexts/context[@id=$context]">
-       <xsl:value-of select="//contexts/context[@id=$context]/@title"/>
-      </xsl:when>
-      <xsl:otherwise>
-       <xsl:value-of select="@context"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    </title>
-     <ul>
-      <xsl:choose>
-        <xsl:when test="contains($projectInfo.changes.sort, 'type')">
-          <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
+     <xsl:when test="$title != ''">
+      <section>
+       <title><xsl:value-of select="$title"/></title>
+       <ul>
+        <xsl:choose>
+          <xsl:when test="contains($projectInfo.changes.sort, 'type')">
+            <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
               <xsl:sort select="@type"/>
-          </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )"/>
-        </xsl:otherwise>
-      </xsl:choose>
-     </ul>
-    </section>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )"/>
+          </xsl:otherwise>
+        </xsl:choose>
+       </ul>
+      </section>
+     </xsl:when>
+     <xsl:otherwise>
+      <ul>
+       <xsl:choose>
+         <xsl:when test="contains($projectInfo.changes.sort, 'type')">
+           <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )">
+             <xsl:sort select="@type"/>
+           </xsl:apply-templates>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:apply-templates select="key('contexts',concat(../@version, '_', @context) )"/>
+         </xsl:otherwise>
+       </xsl:choose>
+      </ul>
+     </xsl:otherwise>
+    </xsl:choose>
+
    </xsl:for-each>
+
    <xsl:if test="$projectInfo.changes.includeContributorList = 'true'">
      <section>
        <title><i18n:text i18n:key="release_committers">Contributors to this release</i18n:text></title>
