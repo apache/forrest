@@ -89,10 +89,7 @@
   </xsl:template>
   
   <xsl:template match="doap:category">
-    <a>
-      <xsl:attribute name="href">category/<xsl:value-of select="substring-after(@rdf:resource, 'category/')" />.html</xsl:attribute>
-      <xsl:value-of select="substring-after(@rdf:resource, 'category/')"/>
-    </a>
+    <xsl:value-of select="@rdf:resource"/>
     <xsl:if test="not(position() = last())">
       <xsl:text>, </xsl:text>
     </xsl:if>
