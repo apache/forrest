@@ -54,8 +54,10 @@
         </xsl:choose>
                 
         <xsl:if test="//descriptor[not(descendant::doap:programming-language)]">
-          <h1>Unkown Language</h1>
-          <xsl:apply-templates select="//descriptor[not(descendant::doap:programming-language)]"/>
+          <section>
+            <title>Unkown Language</title>
+            <xsl:apply-templates select="//descriptor[not(descendant::doap:programming-language)]"/>
+          </section>
         </xsl:if>
       </body>
     </document>
