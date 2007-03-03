@@ -21,8 +21,16 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#">
-  
+    
+  <xsl:param name="documentPath"/>  
+    
   <xsl:template match="descriptor">
+    <xsl:variable name="pathToRoot">
+      <xsl:call-template name="dotdots">
+        <xsl:with-param name="path"><xsl:value-of select="$documentPath"/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <xsl:variable name="name">
       <xsl:choose>
         <xsl:when test="descendant::doap:Project/doap:shortname">
@@ -37,8 +45,7 @@
     <div>
       <p>
         <a>
-          <!-- FIXME: should use the dotdots.xsl to calculate the root -->
-          <xsl:attribute name="href">../../<xsl:value-of select="@href-noext"/>.html</xsl:attribute>
+          <xsl:attribute name="href"><xsl:value-of select="$pathToRoot"/><xsl:value-of select="@href-noext"/>.html</xsl:attribute>
           <xsl:value-of select="$name"/>
         </a>
         <xsl:text> </xsl:text>
@@ -53,5 +60,27 @@
       </p>
     </div>
   </xsl:template>
+  
+  <!-- FIXME: this should come from include of dotdots.xsl in forest core -->
+  <xsl:template name="dotdots">
+    <xsl:param name="path"/>
+    <xsl:variable name="dirs" select="normalize-space(translate(concat($path, 'x'), ' /\', '_  '))"/>
+    <!-- The above does the following:
+       o Adds a trailing character to the path. This prevents us having to deal
+         with the special case of ending with '/'
+       o Translates all directory separators to ' ', and normalize spaces,
+         cunningly eliminating duplicate '//'s. We also translate any real
+         spaces into _ to preserve them.
+    -->
+    <xsl:variable name="remainder" select="substring-after($dirs, ' ')"/>
+    <xsl:if test="$remainder">
+      <xsl:text>../</xsl:text>
+      <xsl:call-template name="dotdots">
+        <xsl:with-param name="path" select="translate($remainder, ' ', '/')"/>
+        <!-- Translate back to /'s because that's what the template expects. -->
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+  
 </xsl:stylesheet>
 

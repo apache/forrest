@@ -56,7 +56,9 @@
       
       <map:match pattern="projectDetails/index/by*/siteSnippet.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:doap.transform.descriptorIndex.siteSnippet_by{1}}"/>
+        <map:transform src="{lm:doap.transform.descriptorIndex.siteSnippet_by{1}}">
+          <map:parameter name="documentPath" value="{0}"/>
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
       
@@ -103,13 +105,16 @@
       
       <map:match pattern="projectDetails/index/by*.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
-        <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}"/>
+        <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}">
+          <map:parameter name="documentPath" value="{0}"/>
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match> 
       
       <map:match pattern="projectDetails/index/by*/*.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}">
+          <map:parameter name="documentPath" value="{0}"/>
           <map:parameter name="filter" value="{2}"/>
         </map:transform>
         <map:serialize type="xml-document"/>
