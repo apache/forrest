@@ -15,31 +15,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="branding-fontsize" type="nugget"
+<forrest:contract name="branding-fontsize"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1">
   <description>
     branding-fontsize lets users change the size of the font via javascript.
   </description>
   <usage><![CDATA[<forrest:contract name="branding-fontsize"/>]]></usage>
-  <forrest:template
-  xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="html" name="branding-fontsize" inputFormat="xsl" body="true" head="true">
-	 	<xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-			  <xsl:template name="branding-fontsize-head">
-		      <script type="text/javascript"
-			        src="{$root}themes/fontsize.js">&#160;</script>
-			  </xsl:template>
-        
-			  <xsl:template name="branding-fontsize-body">
-			      <script type="text/javascript">ndeSetTextSize();</script>
-            <i18n:text >Font size:</i18n:text>
-              &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
-              &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
-              &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
-			  </xsl:template>
-			
-			</xsl:stylesheet>
-	</forrest:template>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" name="branding-fontsize" inputFormat="xsl">
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:param name="defaultVariables"/>
+  <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
+    <xsl:template match="/">
+      <forrest:content>
+        <forrest:part xpath="/html/head">
+          <script type="text/javascript" src="{$root}themes/fontsize.js">&#160;</script>
+        </forrest:part>
+        <forrest:part>
+          <script type="text/javascript">ndeSetTextSize();</script>
+          <i18n:text >Font size:</i18n:text>
+          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>
+          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
+          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+        </forrest:part>
+      </forrest:content>
+    </xsl:template>
+</xsl:stylesheet>
+</forrest:template>
 </forrest:contract>
