@@ -34,7 +34,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:java="http://xml.apache.org/xslt/java" exclude-result-prefixes="java">
 
   <xsl:variable name="config" select="//skinconfig"/>
   <!-- If true, a txt link for this page will not be generated -->
@@ -141,12 +142,18 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
               <xsl:attribute name="href">
                 <xsl:value-of select="$config/copyright-link"/>
               </xsl:attribute>
-            Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
-            <xsl:value-of select="$config/vendor"/>
+              Copyright &#169; <xsl:value-of select="$config/year"/>
+              <xsl:call-template name="current-year">
+                <xsl:with-param name="copyrightyear" select="$config/year"/>
+              </xsl:call-template>&#160;
+              <xsl:value-of select="$config/vendor"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            Copyright &#169; <xsl:value-of select="$config/year"/>&#160;
+            Copyright &#169; <xsl:value-of select="$config/year"/>
+            <xsl:call-template name="current-year">
+              <xsl:with-param name="copyrightyear" select="$config/year"/>
+            </xsl:call-template>&#160;
             <xsl:value-of select="$config/vendor"/>
           </xsl:otherwise>
         </xsl:choose>
@@ -374,4 +381,35 @@ if (VERSION > 3) {
     </xsl:copy>
   </xsl:template>
 
+  <!-- inception year copyright management -->
+  <xsl:template name="current-year">
+    <!-- Displays the current year after the inception year (in the copyright i.e: 2002-2005)
+       - the copyright year (2005 by default) can be indicated in the copyrightyear parameter,
+       - the year format (yyyy by default) can be indicated in the dateformat parameter,
+       - the dates separator (- by default) can be indicated in the dateseparator parameter.
+       For instance the following call will format the year on 2 digits and separates the dates
+       with /
+       (copyright 02/05)
+        <xsl:call-template name="current-year">
+           <xsl:with-param name="copyrightyear" select="'02'"/>
+           <xsl:with-param name="dateformat" select="'yy'"/>
+           <xsl:with-param name="dateseparator" select="'/'"/>
+         </xsl:call-template>
+       Warning, to enable inception year, inception attribute must be set to "true" in copyright/year/@inception
+     -->
+    <xsl:param name="copyrightyear">2005</xsl:param>
+      <xsl:param name="dateformat">yyyy</xsl:param>
+      <xsl:param name="dateseparator">-</xsl:param>
+      <xsl:if test="$copyrightyear[@inception = 'true']">
+        <xsl:variable name="tz" select='java:java.util.SimpleTimeZone.new(0,"GMT+00:00")' />
+        <xsl:variable name="formatter" select="java:java.text.SimpleDateFormat.new($dateformat)"/>
+        <xsl:variable name="settz" select="java:setTimeZone($formatter, $tz)" />
+        <xsl:variable name="date" select="java:java.util.Date.new()"/>
+        <xsl:variable name="year" select="java:format($formatter, $date)"/>
+
+        <xsl:if test="$copyrightyear != $year">
+          <xsl:value-of select="$dateseparator"/><xsl:value-of select="$year"/>
+        </xsl:if>
+      </xsl:if>
+  </xsl:template>
 </xsl:stylesheet>

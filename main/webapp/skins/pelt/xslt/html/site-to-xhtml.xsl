@@ -298,6 +298,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         Copyright &#169;
         <xsl:text> </xsl:text>
         <xsl:value-of select="$config/year"/>
+        <xsl:call-template name="current-year">
+          <xsl:with-param name="copyrightyear" select="$config/year"/>
+        </xsl:call-template>
         <xsl:text> </xsl:text>
         <xsl:choose>
           <xsl:when test="$config/copyright-link">
