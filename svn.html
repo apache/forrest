@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>Todo List</title>
+<title>Version control</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
@@ -149,8 +149,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="issues.html" title="Issue tracker manages known issues and desired enhancements">Issue management</a>
 </div>
-<div class="menuitem">
-<a href="svn.html" title="Access to the Subversion (SVN) version control system">Version control</a>
+<div class="menupage">
+<div class="menupagetitle">Version control</div>
 </div>
 <div class="menuitem">
 <a href="http://forrest.zones.apache.org/" title="Demonstrations and testbed at forrest.zones.apache.org">Demonstrations</a>
@@ -167,8 +167,8 @@ document.write("Last Published: " + document.lastModified);
 <a href="plan/internal-xhtml.html">Internal XHTML</a>
 </div>
 </div>
-<div class="menupage">
-<div class="menupagetitle">Todo</div>
+<div class="menuitem">
+<a href="todo.html">Todo</a>
 </div>
 </div>
 <div onclick="SwitchMenu('menu_1.3', 'skin/')" id="menu_1.3Title" class="menutitle">Best Practices and Procedures</div>
@@ -222,7 +222,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="todo.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="svn.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -230,170 +230,42 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>Todo List</h1>
-<div id="minitoc-area">
-<ul class="minitoc">
-<li>
-<a href="#high">high</a>
-</li>
-<li>
-<a href="#medium">medium</a>
-</li>
-<li>
-<a href="#low">low</a>
-</li>
-</ul>
-</div>
-    
-<a name="N10008"></a><a name="high"></a>
-<h2 class="underlined_10">high</h2>
-<div class="section">
-<ul>
-<li>
-<strong>[code]</strong> 
-        <!-- Please leave this action at the top -->
-        Please see our Jira
-        <a href="issues.html">issue tracker</a> for tasks to be done.
-        Note that the Todo list below is old. We need someone to move those
-        tasks over to the issue tracker.
-       &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-        Rework the menu generation system to make it more flexible.  See thread
-        <a href="http://marc.theaimsgroup.com/?w=2&r=1&s=Fixing+menus&q=t">Fixing
-          menus</a>
-       &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-        Define an 'object model' for Forrest sites, in the form of a Cocoon
-        pipeline, that defines
-        - The directory structure of a site
-        - Site metadata (what currently lives in skinconf.xml + gump.xml
-         stuff)
-        - Perhaps site.xml metadata for pages?
-        
-        This info can then be made public to the sitemap (via XMLFileModule
-        attributes) and the stylesheets (through
-        <span class="codefrag">document(cocoon:/...)</span> calls or inlined with source XML).
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Finalise the project-definition DTDs, like status.xml and module.xml;
-          try to come up with a common format with others on community.at.apache.org.
-         &rarr; NKB</li>
-</ul>
-</div>
+<h1>Version control</h1>
+      
+<p>
+        The version control system Subversion is used by all ASF projects to manage their
+        source code and other resources.
+      </p>
 
       
-<a name="N1002B"></a><a name="medium"></a>
-<h2 class="underlined_10">medium</h2>
-<div class="section">
-<ul>
-<li>
-<strong>[code]</strong> 
-          Finish the RSS feed for status.xml.
-          Aggregate status.xml and project.xml to have all needed project data.
-         &rarr; NKB</li>
-<li>
-<strong>[docs]</strong> 
-          Add stylesheets to render the enhanced status.xml file contents.
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          In skinconf.xml, change 'disable-search' to 'enable-search'.
-         &rarr; JT</li>
-<li>
-<strong>[code]</strong> 
-          Enhance the initial forrest toolbar for Mozilla.
-          See email discussion <a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102471820523388">draft forrest toolbar for Mozilla</a>.
-         &rarr; NKB</li>
-<li>
-<strong>[code]</strong> 
-          Fix things so docs can be edited in src/*, and have the changes appear
-          immediately in the webapp.  Involves creating/using an InputModule for
-          passing 'forrest.skin' and other properties to the sitemap, so we can
-          avoid the @skin@ hack, and a bit of forrest.build.xml hacking.  There
-          are some @tokens@ in a forrest-site CSS file that also need some sort
-          of in-place modification.  Perhaps a @token@-to-value Transformer could
-          be the same ${variable}-to-value Transformer mentioned in the RT [3].
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Act on <a href="http://marc.theaimsgroup.com/?t=104099660500001&r=1&w=2">'Entities in XML docs' RT</a>.
-          I can implement Stefano's
-          suggested solution quite easily, but is such limited functionality
-          worth the cost of introducing a proprietary ${variable} syntax? Maybe..
-          Best short-term alternative seems to be using the XNI XInclude
-          processor for pre-validation inclusion.
-         &rarr; open</li>
-<li>
-<strong>[docs]</strong> 
-          A lot of the info on the website is outdated.
-         &rarr; open</li>
-<li>
-<strong>[docs]</strong> 
-          Using metadata
-          from site.xml, it would at least be possible to indicate how old the
-          doc is, and perhaps indicate its relevance from a small controlled
-          vocabulary.
-         &rarr; open</li>
-<li>
-<strong>[design]</strong> 
-          Develop a mechanism for supporting legacy URLs.
-          See email discussion -
-          <a href="http://marc.theaimsgroup.com/?l=forrest-dev&m=102390892524750">redirects with static sites</a>
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Fix up and integrate the Forrest Maven plugin.
-         &rarr; open</li>
-</ul>
-</div>
+<p>
+        The "trunk" is where the main development happens. From time-to-time "branches"
+         are used for specific short-term development tasks and later merged to trunk.
+      </p>
 
       
-<a name="N10065"></a><a name="low"></a>
-<h2 class="underlined_10">low</h2>
-<div class="section">
-<ul>
-<li>
-<strong>[code]</strong> 
-          Ensure that PHP-like stuff can be embedded easily in Forrest files and
-          document it.
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Continue the development of the <a href="docs_0_70/libre-intro.html">Libre</a> facility - replacement for
-          */book.xml
-         &rarr; open</li>
-<li>
-<strong>[docs]</strong> 
-          Start a community doc where we list tools such as "code".
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Migrate to a decent schema language, primarily so that we can use
-          namespaces in XML docs, allowing things like XInclude, 
-          <a href="http://www.xml.com/pub/a/2002/10/30/rdf-friendly.html">in-line metadata</a>,
-          in-line SVG, Jelly snippets, or anything else users can make a
-          Transformer for.
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Streamline the process of adding support for new schemas.  Ideally we'd
-          have an auto-download system, e.g. 'forrest-update docbook' would fetch
-          and install the Docbook DTDs, create catalog entries, sitemap mods etc.
-         &rarr; open</li>
-<li>
-<strong>[code]</strong> 
-          Make a CSS Generator and a stylesheet to serialize it to text.
-         &rarr; NKB</li>
-<li>
-<strong>[docs]</strong> 
-          Add a document about authoring in XML for beginners..
-         &rarr; open</li>
-</ul>
-</div>    
-    
+<p>
+        Browse the trunk via 
+        <a href="http://svn.apache.org/repos/asf/forrest/">direct access</a> or
+        via the <a href="http://svn.apache.org/viewvc/forrest/trunk">ViewVC web interface</a>.
+        Similarly branches can be browsed (go up one level).
+      </p>
+      
+<p>
+        For every change, a notification email is automatically sent to the
+        <a href="mail-lists.html">svn@ mailing list</a>. Subscribe to that
+        list or search the archives to keep up-to-date with changes.
+      </p>
+      
+<p>
+        To work with the most recent sources rather than a released version,
+        follow the <a href="docs_0_80/howto/../build.html">instructions</a> to checkout your working copy.
+      </p>
+      
+<p>
+        See other <a href="subversion_bestpractices.html">best practice notes</a>.
+      </p>
+  
 </div>
 <!--+
     |end content
