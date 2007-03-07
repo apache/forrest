@@ -25,7 +25,7 @@
         <title>Plugins Index</title>
       </header>
       <body>
-        <section>
+        <section id="introduction">
           <title>Plugins Index</title>
           <p>
             Plugins are a way of extending Forrest to
@@ -34,8 +34,8 @@
             have named them in the <code>project.required.plugins</code> property 
             in the projects <code>forrest.properties</code> file. When Forrest 
             builds the site it will automatically discover the plugin and install 
-            it.For more information on how to use plugins see
-            <a href="http://forrest.apache.org/pluginDocs/plugins_0_70/usingPlugins.html">
+            it. For more information on how to use plugins see
+            <a href="site:plugins/using">
               Extending Forrest with Plugins
             </a>.
           </p>
@@ -55,8 +55,9 @@
           <p>The second section lists plugins in the whiteboard, that is
           plugins that may change considerably in how they work before
           their first official release. These plugins may not be fully
-          funcitonal, in most cases they are usable, but use them with
-          caution as they are not considered stable.</p>
+          functional, in most cases they are usable, but use them with
+          caution as they are not considered stable. You would need to
+          keep up-to-date with the dev@ mailing list.</p>
           
           <note>If you have created a plugin that is not listed
             here please let us know.</note>
@@ -76,6 +77,10 @@
           
           <section>
             <title>Whiteboard Plugins</title>
+            <warning>
+              See <a href="#introduction">introduction</a>
+              for notes about plugins in development.
+            </warning>
             
             <div class="frame warning">
               <div class="label">Warning</div>
