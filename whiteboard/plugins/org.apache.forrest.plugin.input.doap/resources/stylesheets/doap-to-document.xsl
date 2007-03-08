@@ -57,18 +57,15 @@
       <body>
         <xsl:call-template name="project-header" />
         <xsl:call-template name="project-summary" />
-        <xsl:call-template name="project-releases" />
-        <xsl:if test="asfext:mailing-list">
-          <xsl:call-template name="detailed-mailing-lists" />
-        </xsl:if>
         
-        <xsl:if test="doap:description">
-          <section>
-            <title>Description</title>
-            <p><xsl:value-of select="doap:description"/></p>
-          </section>
-        </xsl:if>
-      </body>
+        <section>
+          <title>Description</title>
+          <p><xsl:value-of select="doap:description"/></p>
+        </section>
+        
+        <xsl:call-template name="project-releases" />
+        
+     </body>
   </xsl:template>
 
   <xsl:template match="@rdf:resource">
@@ -115,47 +112,36 @@
 
         <div class="content">
           <table>
-           <xsl:if test="doap:programming-language">
                <tr>
                  <td class="left">Programming Languages</td>
                  <td class="right">
                    <xsl:apply-templates select="doap:programming-language" />
                  </td>
                </tr>
-           </xsl:if>
-           <xsl:if test="doap:category">
                <tr>
                  <td class="left">Categories</td>
                  <td class="right">
                    <xsl:apply-templates select="doap:category" />
                  </td>
                </tr>  
-           </xsl:if>
-           <xsl:if test="doap:mailing-list">
                <tr>
                  <td class="left">Mailing Lists</td>
                  <td class="right">
                    <xsl:apply-templates select="doap:mailing-list/@*" />
                  </td>
                </tr>
-           </xsl:if>
-           <xsl:if test="doap:bug-database">
                <tr>
                  <td class="left">Bug/Issue Tracker</td>
                  <td class="right">
                    <xsl:apply-templates select="doap:bug-database/@*" />
                  </td>
                </tr>
-           </xsl:if>
-           <xsl:if test="doap:wiki">
-             <tr>
-               <td class="left">Wiki</td>
-               <td class="right">
-                 <xsl:apply-templates select="doap:wiki/@*" />
-               </td>
-             </tr>
-           </xsl:if>
-           <xsl:if test="doap:license">
+               <tr>
+                 <td class="left">Wiki</td>
+                 <td class="right">
+                   <xsl:apply-templates select="doap:wiki/@*" />
+                 </td>
+               </tr>
                <tr>
                  <td class="left">License</td>
                  <td class="right">
@@ -169,54 +155,15 @@
                    </xsl:choose>
                  </td>
                </tr>    
-           </xsl:if>    
-           <xsl:if test="doap:homepage">      
                <tr>
                  <td class="left">Project Website</td>
                  <td class="right">
                        <xsl:apply-templates select="doap:homepage/@*" />
                  </td>
                </tr>
-           </xsl:if>
              </table>
            </div>
      </section>
-  </xsl:template>
-
-  <xsl:template match="asfext:mailing-list/asfext:Mail-list">
-  <tr><td class="title"><xsl:apply-templates select="doap:name"/></td>
-    <td class="right"><xsl:value-of select="doap:description"/></td>
-    <td class="right"><a><xsl:attribute name="href">
-      <xsl:choose>
-      <xsl:when test="asfext:subscribe">
-        <xsl:value-of select="asfext:subscribe/@rdf:resource"/>
-      </xsl:when>
-      <xsl:otherwise>mailto:<xsl:value-of select="substring-before(doap:name,'@')"/>-subscribe@<xsl:value-of select="substring-after(doap:name,'@')"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>Subscribe</a></td>
-    <td class="right">
-      <xsl:choose>
-        <xsl:when test="asfext:archives">
-          <a><xsl:attribute name="href">
-    <xsl:value-of select="asfext:archives/@rdf:resource"/>
-          </xsl:attribute>Archives</a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>Not Archived</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>    
-    </tr>
-  </xsl:template>  
-
-  <xsl:template name="detailed-mailing-lists">
-    <section>
-      <title>Mailing List Details</title>
-        <table><tr><td>Name</td><td>Description</td><td>Subscribe</td>
-        <td>Archives</td></tr>
-        <xsl:apply-templates select="asfext:mailing-list/asfext:Mail-list" />
-        </table>
-    </section>
   </xsl:template>
 
   <xsl:template name="project-scm">
@@ -250,11 +197,11 @@
 
   <xsl:template match="doap:release/doap:Version">
     <tr>
-            <td class="title">
-                <xsl:value-of select="doap:name" />
-            </td>
-            <td class="right"><xsl:value-of  select="doap:revision" /></td>
-            <td class="right"><xsl:value-of  select="doap:created" /></td>
+        <td class="title">
+            <xsl:value-of select="doap:name" />
+        </td>
+        <td class="right"><xsl:value-of  select="doap:revision" /></td>
+        <td class="right"><xsl:value-of  select="doap:created" /></td>
     </tr>
   </xsl:template>
   
@@ -262,15 +209,20 @@
     <section>
       <title>Source and Releases</title>
 
-    <xsl:if test="doap:download-page">
-    <div class="content">
-      <p>Releases can be downloaded from
-        <xsl:apply-templates select="doap:download-page/@*" />
-        .
-      </p>
+      <div class="content">
+        <xsl:choose>
+            <xsl:when test="doap:doanload-page">
+                <p>Releases can be downloaded from
+                  <xsl:apply-templates select="doap:download-page/@*" />
+                  .
+                </p>
+            </xsl:when>
+            <xsl:otherwise>
+              <p>No release download page available.</p>
+            </xsl:otherwise>
+        </xsl:choose>
     </div>
-    </xsl:if>
-
+    
     <xsl:choose>
     <xsl:when test="doap:release">
       <p>Most recent releases:</p>
@@ -283,7 +235,7 @@
      </div>
     </xsl:when>
     <xsl:otherwise>
-      <p>No current releases.</p>
+      <p>No known current releases.</p>
     </xsl:otherwise>
     </xsl:choose>
    
