@@ -39,20 +39,24 @@
       <note>We need your help in adding more formats.</note>
       
       <p>The location of this descriptor file is specified in the locationmap
-      with the hint <code>doap.projectDescriptor</code>. This defaults to
-      the root of your projects content directory. To place your descriptor 
+      with the hint <code>doap.descriptor</code>. This defaults to
+      a file clled doap.xml in the root of your projects content directory. 
+      To place your descriptor 
       in a different location simply add
       a matcher like that shown below in your project locationmap
       file.</p>
       
       <source><![CDATA[
-    <match pattern="doap.projectDescriptor">
+    <match pattern="doap.descriptor">
       <location src="[path/to/descriptor/file]" />
     </match>    
       ]]></source>
             
+      <p>To retrieve the project DOAP file in its raw form 
+      request the file <code>/projectDetails/source.xml</code>.</p>
+            
       <p>To retrieve the project details page request the file
-      <code>/projectDetails.html</code>.</p>
+      <code>/projectDetails.[FORMAT]</code>.</p>
       
       <section>
         <title>Multiple Projects</title>
@@ -68,10 +72,10 @@
         
         <p>To retrieve the project details of another project make a request
         for <code>projectDetails/projectDetails.[PROJECT_NAME].html</code>. For this to work 
-        your project locationmap muest have an entry like this:</p>
+        your project locationmap must have an entry like this:</p>
         
         <source><![CDATA[    
-    <match pattern="doap.projectDescriptor.forrest">
+    <match pattern="doap.descriptor.forrest">
       <location src="http://svn.apache.org/repos/asf/forrest/trunk/site-author/content/doap.xml"/>
     </match>    
         ]]></source>
@@ -85,7 +89,7 @@ so use a local copy instead.
         files you could use a match like this:</p>
         
         <source><![CDATA[    
-    <match pattern="doap.projectDescriptor.*">
+    <match pattern="doap.descriptor.*">
       <location src="path_to_descriptors/{1}.xml"/>
     </match>    
         ]]></source>
@@ -108,6 +112,14 @@ so use a local copy instead.
         <warning>The indexes to be included in your site navigation only work
         correctly when generating a static site. You should only use page based
         indexes for dynamic sites.</warning>
+      </section>
+      
+      <section>
+        <title>Dispatcher</title>
+        
+        <p>The DOAP plugin provides dispatcher templates for oring with 
+        DOAP files. For usage instructions see the docs for the 
+        <a href="/ls.contracts.org.apache.forrest.plugin.input.doap.html">doap templates</a>.</p>
       </section>
       
     </section>
