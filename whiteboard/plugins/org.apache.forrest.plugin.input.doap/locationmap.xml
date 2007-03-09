@@ -37,5 +37,25 @@
     <match pattern="doap.transform.*.*">
       <location src="resources/stylesheets/{1}-to-{2}.xsl"/>
     </match>   
+
+     <match pattern="resolvePluginContract.*.**">
+      <select type="exists">
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.theme}/{1}/{2}.ft" />
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.ft" />
+      </select>
+    </match>
+    <match pattern="resolvePluginThemes.*.**">
+      <select type="exists">
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.theme}/{1}/{2}.{1}" />
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}" />
+      </select>
+    </match>
+    <match pattern="resolvePluginTiles.**">
+      <select type="exists">
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.theme}/html/{1}.vt.xml" />
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.input.doap/resources/themes/{properties:dispatcher.fallback.theme}/html/{1}.vt.xml" />
+      </select>
+    </match>
+
   </locator>
 </locationmap>
