@@ -92,6 +92,11 @@
 		<xsl:if test="count(node())=0"><br /></xsl:if>
 	</note>
 </xsl:template>
+<xsl:template match="text:span[@text:style-name='Forrest_3a__20_Title']">
+	<xsl:attribute name="label">
+		<xsl:value-of select="."/>
+	</xsl:attribute>
+</xsl:template>
 
 <!-- FIXME : this is not XHTML -->
 <!-- Case of Warnings -->
@@ -126,21 +131,67 @@
              layout. Maybe depending on a properties keepLayout=True. -->
 <xsl:template match="text:p">
 	<p>
-		<xsl:apply-templates/>
+		<xsl:variable name="styleName" select="@text:style-name"/>
+		<xsl:variable name='layout'>
+			<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
+		</xsl:variable>
+		<xsl:call-template name="displayLayout">
+			<xsl:with-param name="layout" select="$layout"/>
+		</xsl:call-template>
 	</p>
 </xsl:template>
 
 <!-- Instead of using styles like in the Lenya file, we try here to recognise the style to use XHTML specific
      tags such as <em>, <strong>, <sup> and <sub>... -->
-<xsl:template match="text:span">
+<xsl:template match="text:span">	
 	<xsl:variable name="styleName" select="@text:style-name"/>
 	<!-- the style can be either in content or in style, we try both, one of them does not exist and so is empty... -->
-	<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]/style:text-properties/@*[last()]">
-		<xsl:with-param name="text" select="./text()"/>
-	</xsl:apply-templates>
-	<xsl:apply-templates select="//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]/style:text-properties/@*[last()]">
-		<xsl:with-param name="text" select="./text()"/>
-	</xsl:apply-templates>
+	<xsl:variable name='layout'>
+		<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
+	</xsl:variable>
+	<xsl:call-template name="displayLayout">
+		<xsl:with-param name="layout" select="$layout"/>
+	</xsl:call-template>
+</xsl:template>
+
+<xsl:template name='displayLayout'>
+	<xsl:param name='layout' select="NONE"/>
+	<xsl:variable name="tag">
+		<xsl:choose>
+			<xsl:when test="contains($layout,',')">
+				<xsl:value-of select="normalize-space(substring-before($layout,','))"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="normalize-space($layout)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:choose>
+		<xsl:when test="not($tag='NONE') and not($tag='')">
+			<xsl:element name="{$tag}">
+				<xsl:call-template name="displayLayout">
+					<xsl:with-param name="layout" select="substring-after($layout,',')"/>
+				</xsl:call-template>
+			</xsl:element>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:apply-templates/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+	
+<xsl:template match="style:style">
+	<xsl:param name="text"/>
+	<xsl:variable name="styleName" select="@style:name"/>
+	<xsl:choose>
+		<xsl:when test='./style:text-properties/@*[last()]'>
+			<xsl:apply-templates select="./style:text-properties/@*[last()]"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:variable name="parentStyleName" select="@style:parent-style-name"/>
+			<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$parentStyleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$parentStyleName]"/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <xsl:template match="style:text-properties/@*">
@@ -149,7 +200,7 @@
 	<xsl:choose>
 		<!-- Case of the code style - generally rendered with Courier -->
 		<xsl:when test="name()='style:font-name' and starts-with(.,'Courier')">
-			<xsl:call-template name="layout-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 				<xsl:with-param name="tag" select="'code'"/>
@@ -157,7 +208,7 @@
 		</xsl:when>
 		<!-- Case of the emphasys style - generally rendered with Italic -->
 		<xsl:when test="name()='fo:font-style' and .='italic'">
-			<xsl:call-template name="layout-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 				<xsl:with-param name="tag" select="'em'"/>
@@ -165,7 +216,7 @@
 		</xsl:when>
 		<!-- Case of the strong style -->
 		<xsl:when test="name()='fo:font-weight' and .='bold'">
-			<xsl:call-template name="layout-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 				<xsl:with-param name="tag" select="'strong'"/>
@@ -173,7 +224,7 @@
 		</xsl:when>
 		<!-- Case of the exponent style -->
 		<xsl:when test="name()='style:text-position' and starts-with(.,'super')">
-			<xsl:call-template name="layout-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 				<xsl:with-param name="tag" select="'sup'"/>
@@ -181,14 +232,14 @@
 		</xsl:when>
 		<!-- Case of the subscript style -->
 		<xsl:when test="name()='style:text-position' and starts-with(.,'sub')">
-			<xsl:call-template name="layout-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 				<xsl:with-param name="tag" select="'sub'"/>
 			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:call-template name="text-span">
+			<xsl:call-template name="addLayout2List">
 				<xsl:with-param name="text" select="$text"/>
 				<xsl:with-param name="indStyle" select="$indStyle"/>
 			</xsl:call-template>
@@ -196,36 +247,22 @@
 	</xsl:choose>
 </xsl:template>
 
-<xsl:template name="layout-span">
+<xsl:template name="addLayout2List">
 	<xsl:param name="text"/>
 	<xsl:param name="indStyle"/>
 	<xsl:param name="tag" select="NONE"/>
-	<!-- Add a layout tag for a span -->
-	<xsl:if test="not($tag='NONE')">
-		<xsl:element name="{$tag}">
-			<xsl:call-template name="text-span">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-			</xsl:call-template>
-		</xsl:element>
+	<!-- Add a layout tag -->
+	<!-- If the tag has been supplied, we add it to the layout list... -->
+	<xsl:if test="not($tag='NONE') and not(normalize-space($tag)='')">
+		<xsl:value-of select='$tag'/>,
 	</xsl:if>
-</xsl:template>
-
-<xsl:template name="text-span">
-	<xsl:param name="text"/>
-	<xsl:param name="indStyle" select="last()"/>
-	<!-- Add the text of a span or continue to browse the styles -->
-	<xsl:choose>
-		<xsl:when test="$indStyle=1">
-			<xsl:apply-templates select="$text"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:apply-templates select="../@*[number($indStyle)-1]">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="number($indStyle)-1"/>
-			</xsl:apply-templates>
-		</xsl:otherwise>
-	</xsl:choose>
+	<!-- if the style index is not the first (1), we continue - note we start from the end... -->
+	<xsl:if test="not($indStyle=1)">
+		<xsl:apply-templates select="../@*[number($indStyle)-1]">
+			<xsl:with-param name="text" select="$text"/>
+			<xsl:with-param name="indStyle" select="number($indStyle)-1"/>
+		</xsl:apply-templates>
+	</xsl:if>
 </xsl:template>
 
   <!--+
