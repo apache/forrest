@@ -60,7 +60,14 @@
         
         <section>
           <title>Description</title>
-          <p><xsl:value-of select="doap:description"/></p>
+          <xsl:choose>
+            <xsl:when test="doap:description">
+              <p><xsl:value-of select="doap:description"/></p>
+            </xsl:when>
+            <xsl:otherwise>
+              <p>No description supplied.</p>
+            </xsl:otherwise>
+          </xsl:choose>  
         </section>
         
         <xsl:call-template name="project-releases" />
@@ -115,31 +122,66 @@
                <tr>
                  <td class="left">Programming Languages</td>
                  <td class="right">
-                   <xsl:apply-templates select="doap:programming-language" />
+                   <xsl:choose>
+                     <xsl:when test="doap:programming-language">
+                       <xsl:apply-templates select="doap:programming-language" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>
                  </td>
                </tr>
                <tr>
                  <td class="left">Categories</td>
                  <td class="right">
-                   <xsl:apply-templates select="doap:category" />
+                   <xsl:choose>
+                     <xsl:when test="doap:category">
+                       <xsl:apply-templates select="doap:category" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>
                  </td>
                </tr>  
                <tr>
                  <td class="left">Mailing Lists</td>
                  <td class="right">
-                   <xsl:apply-templates select="doap:mailing-list/@*" />
+                   <xsl:choose>
+                     <xsl:when test="doap:mailing-list/@*">
+                       <xsl:apply-templates select="doap:mailing-list/@*" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>  
                  </td>
                </tr>
                <tr>
                  <td class="left">Bug/Issue Tracker</td>
                  <td class="right">
-                   <xsl:apply-templates select="doap:bug-database/@*" />
+                   <xsl:choose>
+                     <xsl:when test="doap:bug-database/@*">
+                       <xsl:apply-templates select="doap:bug-database/@*" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>  
                  </td>
                </tr>
                <tr>
                  <td class="left">Wiki</td>
                  <td class="right">
-                   <xsl:apply-templates select="doap:wiki/@*" />
+                   <xsl:choose>
+                     <xsl:when test="doap:wiki/@*">
+                       <xsl:apply-templates select="doap:wiki/@*" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>
                  </td>
                </tr>
                <tr>
@@ -150,7 +192,14 @@
                        <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a>
                      </xsl:when>
                      <xsl:otherwise>
-                       <xsl:apply-templates select="doap:license/@*" />
+                       <xsl:choose>
+                         <xsl:when test="doap:license/@*">
+                           <xsl:apply-templates select="doap:license/@*" />
+                         </xsl:when>
+                         <xsl:otherwise>
+                           None Defined
+                         </xsl:otherwise>
+                       </xsl:choose>
                      </xsl:otherwise>
                    </xsl:choose>
                  </td>
@@ -158,7 +207,14 @@
                <tr>
                  <td class="left">Project Website</td>
                  <td class="right">
-                       <xsl:apply-templates select="doap:homepage/@*" />
+                   <xsl:choose>
+                     <xsl:when test="doap:homepage/@*">
+                   <xsl:apply-templates select="doap:homepage/@*" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>
                  </td>
                </tr>
              </table>
