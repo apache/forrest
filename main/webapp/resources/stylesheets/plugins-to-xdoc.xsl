@@ -35,7 +35,7 @@
             in the projects <code>forrest.properties</code> file. When Forrest 
             builds the site it will automatically discover the plugin and install 
             it. For more information on how to use plugins see
-            <a href="site:plugins/using">
+            <a href="http://forrest.apache.org/pluginDocs/plugins_0_80/usingPlugins.html">
               Extending Forrest with Plugins
             </a>.
           </p>
