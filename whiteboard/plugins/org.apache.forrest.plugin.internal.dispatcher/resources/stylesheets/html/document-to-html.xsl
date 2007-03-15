@@ -96,7 +96,9 @@ imported document2html.xsl for details.
             <xsl:value-of select="title"/>
           </h2>
         </div>
-        <xsl:apply-templates select="*[not(self::title)]"/>
+        <div class="section">
+          <xsl:apply-templates select="*[not(self::title)]"/>
+        </div>
       </xsl:when>
       <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">

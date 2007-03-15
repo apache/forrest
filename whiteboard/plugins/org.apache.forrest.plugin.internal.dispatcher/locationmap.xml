@@ -350,10 +350,19 @@
                     />
             </select>
         </match>
-        <match pattern="hooks-to-html.xsl">
-          <location 
-            src="{lm:dispatcher.home}/resources/stylesheets/hooksMatcher-html.xsl" 
-            />
+        <match pattern="hooks-to-**.xsl">
+            <select type="exists">
+                <location 
+                    src="{lm:dispatcher.home}/resources/stylesheets/{1}/hooksMatcher.xsl" 
+                    />
+             </select>
+        </match>
+        <match pattern="strip-dispatcher-remains-**.xsl">
+            <select type="exists">
+                <location 
+                    src="{lm:dispatcher.home}/resources/stylesheets/{1}/strip-dispatcher-remains.xsl" 
+                    />
+            </select>
         </match>
         <!-- contracts (e.g. html) that can be used in the project. -->
         <match pattern="ls.contracts.xsl">
@@ -429,6 +438,12 @@
         <match pattern="transform.xml.variable.helper">
           <location 
             src="{lm:dispatcher.home}/resources/stylesheets/helper/variable.helper.xsl" 
+            />
+        </match>
+        <!-- Id generation -->
+        <match pattern="generateId.xsl">
+          <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/helper/generateId.xsl" 
             />
         </match>
     </locator>

@@ -164,7 +164,7 @@
           src="lm://transform.xml.xml-namespace-stripped" 
           />
         <map:transform 
-          src="resources/stylesheets/helper/strip-dispatcher-remains.xsl" 
+          src="lm://strip-dispatcher-remains-html.xsl" 
           />
         <map:serialize type="xhtml" />
       </map:match>
@@ -184,7 +184,11 @@
           <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="fo" />
+          <map:parameter name="hooksTransformer" value="lm://hooks-to-fo.xsl"/> 
         </map:transform>
+        <map:transform 
+          src="lm://strip-dispatcher-remains-fo.xsl" 
+          />
         <map:serialize  />
       </map:match>
       <map:match pattern="**.internal*">
