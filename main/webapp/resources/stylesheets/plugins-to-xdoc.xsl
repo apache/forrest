@@ -19,6 +19,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
 
+  <xsl:param name="pluginDocsVersion"/>
+
   <xsl:template match="pluginList">
     <document>
       <header>
@@ -35,7 +37,13 @@
             in the projects <code>forrest.properties</code> file. When Forrest 
             builds the site it will automatically discover the plugin and install 
             it. For more information on how to use plugins see
-            <a href="http://forrest.apache.org/pluginDocs/plugins_0_80/usingPlugins.html">
+<!-- See FOR-963 regarding the reasons for this full URL. -->
+            <a>
+              <xsl:attribute name="href">
+                <xsl:text>http://forrest.apache.org/pluginDocs/plugins_</xsl:text>
+                <xsl:value-of select="$pluginDocsVersion"/>
+                <xsl:text>/usingPlugins.html</xsl:text>
+              </xsl:attribute>
               Extending Forrest with Plugins
             </a>.
           </p>
