@@ -22,7 +22,18 @@
     Run the build script: build.bat or build.sh
   </description>
 
-   <target name="init">
+  <!-- Global properties for taskdef ... -->
+  <property name="forrest.home" location=".."/>
+  <property name="forrest.ant.lib-dir"    location="${forrest.home}/tools/ant/lib"/>
+
+  <!-- Defintion of optional but useful targets ... -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+      <fileset dir="${forrest.ant.lib-dir}" includes="ant-contrib-*.jar" />
+    </classpath>
+  </taskdef>
+
+  <target name="init">
     <tstamp>
       <format property="YEAR" pattern="yyyy" locale="en"/>
     </tstamp>
@@ -43,7 +54,6 @@
    
     <property name="name" value="apache-forrest"/>
     <property name="forrest.version" value="0.8-dev"/>
-    <property name="forrest.home" location=".."/>
     <property name="forrest.core" location="."/>
 
     <property name="java.dir"              location="java"/>
@@ -329,16 +339,33 @@
   </target>
 
   <target name="testseed" depends="init, cleanPlugins">
-    <echo>=============================</echo>
-    <echo>Testing a seeded site</echo>
-    <echo>=============================</echo>
-    <property name="test.dir" value="${build.dir}/test"/>
+    <for list="skinned,dispatcher" param="type">
+      <sequential>
+        <antcall target="testSeedSiteType">
+          <param name="test.seed.site.type" value="@{type}"/>
+        </antcall>
+      </sequential> 
+    </for>
+  </target>
+
+  <target name="testSeedSiteType" if="test.seed.site.type">
+    <echo>
+      -------------------------------------
+      Testing seeded ${test.seed.site.type} site ...
+      -------------------------------------
+    </echo>
+    <echo/>
+    <property name="test.dir" value="${build.dir}/test_${test.seed.site.type}_site"/>
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
     <ant antfile="${forrest.core}/forrest.build.xml" target="seed">
       <property name="forrest.home" value="${forrest.home}"/>  
       <property name="project.home" value="${test.dir}"/>
     </ant>
+    <copy file="${test.dir}/forrest.properties.${test.seed.site.type}.properties" tofile="${test.dir}/forrest.properties" failonerror="false"/> 
+    <delete file="${test.dir}/forrest.properties.*.properties" failonerror="false"> 
+      <fileset dir="${test.dir}" includes="forrest.properties.*.properties"/> 
+    </delete>
     <ant antfile="${forrest.core}/forrest.build.xml" target="site">
       <property name="forrest.home" value="${forrest.home}"/>  
       <property name="project.home" value="${test.dir}"/>
