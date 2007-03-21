@@ -457,21 +457,18 @@ $Revision: 1.12 $
      
       <!-- Body content -->
       <map:match pattern="**.xml">
-
-        <map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp">
-          <map:aggregate element="pluginList">
-            <map:part src="{lm:plugin.descriptor.forrest}"/>
-            <map:part src="{lm:plugin.descriptor.whiteboard}"/>
-          </map:aggregate>
-          <map:transform src="{lm:transform.plugins.xdoc}">
-            <map:parameter name="pluginDocsVersion" value="{1}"/>
-          </map:transform>
-          <map:serialize type="xml"/>
-        </map:match>
    
         <map:match pattern="locationmap.xml">
           <map:generate src="{forrest:forrest.locationmap}" />
           <map:serialize type="xml"/>
+        </map:match>        
+       
+        <map:match pattern="plugins.xml">
+          <map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" />
+        </map:match>        
+       
+        <map:match pattern="pluginDocs/**">
+          <map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" />
         </map:match>
 
         <map:match pattern="linkmap.*">
