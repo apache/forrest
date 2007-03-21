@@ -20,6 +20,8 @@
                 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
                 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
                 xmlns:doap="http://usefulinc.com/ns/doap#"
+                xmlns:foaf="http://xmlns.com/foaf/0.1/"
+		xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:asfext="http://projects.apache.org/ns/asfext#"
                 >
 
@@ -91,12 +93,37 @@
       <xsl:text>, </xsl:text>
     </xsl:if>
   </xsl:template>
-  
   <xsl:template match="doap:category">
     <xsl:value-of select="@rdf:resource"/>
     <xsl:if test="not(position() = last())">
       <xsl:text>, </xsl:text>
     </xsl:if>
+  </xsl:template>
+
+    <xsl:template match="foaf:seeAlso">
+      <xsl:choose>
+        <xsl:when test="@dc:format='application/rss+xml'">
+           <a class="rss-rss-link">
+	   <xsl:attribute name="href">
+           <xsl:value-of select="@rdf:resource"/>
+	   </xsl:attribute> RSS
+           </a>
+        </xsl:when>
+        <xsl:when test="@dc:format='application/atom+xml'">
+           <a class="rss-atom-link">
+	   <xsl:attribute name="href">
+           <xsl:value-of select="@rdf:resource"/>
+	   </xsl:attribute> Atom
+           </a>
+        </xsl:when>	  
+        <xsl:when test="@dc:format='application/rdf+xml'">
+           <a class="rss-rdf-link">
+	   <xsl:attribute name="href">
+           <xsl:value-of select="@rdf:resource"/>
+	   </xsl:attribute> RDF
+           </a>
+        </xsl:when>	  
+      </xsl:choose>
   </xsl:template>
 
   <xsl:template name="project-header">
@@ -210,6 +237,19 @@
                    <xsl:choose>
                      <xsl:when test="doap:homepage/@*">
                    <xsl:apply-templates select="doap:homepage/@*" />
+                     </xsl:when>
+                     <xsl:otherwise>
+                       None Defined
+                     </xsl:otherwise>
+                   </xsl:choose>
+                 </td>
+               </tr>
+               <tr>
+                 <td class="left">RSS Feeds</td>
+                 <td class="right">
+                   <xsl:choose>
+		     <xsl:when test="foaf:seeAlso">
+		       <xsl:apply-templates select="foaf:seeAlso" />
                      </xsl:when>
                      <xsl:otherwise>
                        None Defined
