@@ -338,38 +338,58 @@
     <delete dir="${forrest.home}/build/plugins"/>
   </target>
 
-  <target name="testseed" depends="init, cleanPlugins">
+  <target name="testseed"
+	  depends="init, cleanPlugins"
+          description="Called by test target - Seeds and generates the different types of sites (skinned, dispatcher...)">
     <for list="skinned,dispatcher" param="type">
       <sequential>
-        <antcall target="testSeedSiteType">
-          <param name="test.seed.site.type" value="@{type}"/>
+        <antcall target="testSiteType">
+          <param name="test.site.type" value="@{type}"/>
         </antcall>
       </sequential> 
     </for>
   </target>
 
-  <target name="testSeedSiteType" if="test.seed.site.type">
+  <target name="testSiteType"
+	  depends="testSeedSiteType,testReplacePluginsList"
+          if="test.site.type"
+	  description="Called by test target - Seeds, replaces list of required plugins and generates a new site for testing">
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site">
+      <property name="forrest.home" value="${forrest.home}"/>  
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+  </target>
+
+  <target name="testSeedSiteType"
+	  description="Called by test target - Seeds a new site for testing and read the value of project.required.plugins if supplied">
     <echo>
       -------------------------------------
-      Testing seeded ${test.seed.site.type} site ...
+      Testing seeded ${test.site.type} site ...
       -------------------------------------
     </echo>
     <echo/>
-    <property name="test.dir" value="${build.dir}/test_${test.seed.site.type}_site"/>
+    <property name="test.dir" value="${build.dir}/test_${test.site.type}_site"/>
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
     <ant antfile="${forrest.core}/forrest.build.xml" target="seed">
       <property name="forrest.home" value="${forrest.home}"/>  
       <property name="project.home" value="${test.dir}"/>
-    </ant>
-    <copy file="${test.dir}/forrest.properties.${test.seed.site.type}.properties" tofile="${test.dir}/forrest.properties" failonerror="false"/> 
+    </ant> 
+    <!-- reading the value of project.required.plugins property if defined in forrest.properties.${test.site.type}.properties -->
+    <property file="${test.dir}/forrest.properties.${test.site.type}.properties"/>
     <delete file="${test.dir}/forrest.properties.*.properties" failonerror="false"> 
       <fileset dir="${test.dir}" includes="forrest.properties.*.properties"/> 
     </delete>
-    <ant antfile="${forrest.core}/forrest.build.xml" target="site">
-      <property name="forrest.home" value="${forrest.home}"/>  
-      <property name="project.home" value="${test.dir}"/>
-    </ant>
+  </target>
+
+  <target name="testReplacePluginsList"
+          if="project.required.plugins"
+          description="Called by test target - Replaces the list of required plugins if supplied for testing a new site">
+    <echo message="Replace the plugins list"/>
+    <replaceregexp file="${test.dir}/forrest.properties"
+      match="project.required.plugins=(.+)"
+      replace="project.required.plugins=${project.required.plugins}"
+      byline="true"/> 
   </target>
 
   <!-- ==================================================
