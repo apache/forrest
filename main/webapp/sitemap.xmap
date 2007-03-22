@@ -32,7 +32,7 @@ $Revision: 1.12 $
       </map:generator>
       
       <map:generator name="exception"
-                  src="org.apache.cocoon.generation.ParseExceptionGenerator"/>
+                  src="org.apache.cocoon.generation.ExceptionGenerator"/>
       
       <map:generator name="notifier" src="org.apache.cocoon.sitemap.NotifyingGenerator" />
       
@@ -252,12 +252,13 @@ $Revision: 1.12 $
     <map:selectors>
       <map:selector name="exists" logger="sitemap.selector.exists"  
                     src="org.apache.forrest.sourceexists.SourceExistsSelector" />
-      <map:selector name="exception" logger="sitemap.selector.exception" 
-                    src="org.apache.cocoon.selection.ExceptionSelector">
-       <exception name="syntax" class="net.sourceforge.chaperon.process.ParseException"/>
-       <exception class="java.lang.Throwable" unroll="true"/>
-     </map:selector>
-     <map:selector name="config" logger="sitemap.selector.config" 
+                    
+      <map:selector name="exception" src="org.apache.cocoon.selection.ExceptionSelector">
+        <exception name="resourceNotFound" class="org.apache.cocoon.ResourceNotFoundException"/>
+        <exception class="java.lang.Throwable" unroll="true"/>       
+      </map:selector>
+  
+      <map:selector name="config" logger="sitemap.selector.config" 
                    src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
 
@@ -728,7 +729,16 @@ $Revision: 1.12 $
           <map:redirect-to uri="index.html"/>
       </map:match>
     </map:pipeline>
-
+    
+     <map:handle-errors>
+      <map:select type="exception">
+       <map:when test="resourceNotFound">
+         <map:generate  type="exception"/>
+         <map:transform src="{lm:transform.exception.html}"/>
+         <map:serialize type="html"/>
+       </map:when>
+      </map:select>
+    </map:handle-errors>
   
-     </map:pipelines>
+  </map:pipelines>
 </map:sitemap>
