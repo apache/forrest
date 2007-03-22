@@ -36,8 +36,7 @@
      <xsl:when test="contains(ex:message, '(Access is denied)')">
          <h1>An Error Occurred</h1>
          
-         <p>It looks like there is a problem with an unresolved hint in the your locationmap 
-         found at <xsl:value-of select="substring(ex:message, 0, string-length(ex:message) - string-length('(Access is denied)'))"/>/locationmap.xml.</p>
+         <p>It looks like there is a problem with an unresolved hint in the your locationmap.</p>         
          
          <p>More information can be found in the logs.</p>
      </xsl:when>
