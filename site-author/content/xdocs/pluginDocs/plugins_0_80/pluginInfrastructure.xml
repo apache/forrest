@@ -254,19 +254,17 @@ org.apache.forrest.plugin.internal.IMSManifest
       for an overview of how the plugin installation system works and the places and order
       that will be searched.
     </p>
-    <fixme author="open">
-      The explanation below is out-of-date.
-      See <a href="http://issues.apache.org/jira/browse/FOR-537">FOR-537</a>
-    </fixme>
+    
     <p>When Forrest installs a plugin it downloads a zip of the plugin code and 
     extracts it into the <code>plugins</code> directory of Forrest and an entry is made 
-    in <code>src/plugins/sitemap.xmap</code>. For example, installing the 
+    in a temporary sitemap that manages plugins for your content object.
+    For example, installing the 
     IMSManifest plugin described above will result in the following entry 
-    being added to the plugin sitemap:</p>
+    being added to the this temporary sitemap:</p>
 
   <source><![CDATA[
 <map:select type="exists">
-  <map:when test="sitemap.xmap">
+  <map:when test="output.xmap">
     <map:mount uri-prefix="" 
       src="sitemap.xmap" 
       check-reload="yes" 
@@ -275,21 +273,11 @@ org.apache.forrest.plugin.internal.IMSManifest
 </map:select>
   ]]></source>
   
-      <p>Installed plugins are managed by the
-      FORREST_INSTALL_DIR/plugins/sitemap.xmap file. This file is mounted
-      by the main Forrest sitemap with the following code:</p>
-  
-  <source><![CDATA[
-        <map:pipeline internal-only="false">
-           <map:mount uri-prefix=""
-                      src="{forrest:forrest.plugins}/sitemap.xmap"
-                      check-reload="yes"
-                      pass-through="true"/>
-        </map:pipeline>
-  ]]></source>
-      
-      <note>The plugin sitemap.xmap file is automatically managed by Forrest, the 
-      end user need never edit this file.</note>
+    <p>To be more accurate, the entries are made in one of three temporary
+    sitemaps, input.xmap, output.xmap and resources.xmap. These temporary
+    sitemaps are rebuilt each time the content object is built or run, thus
+    we are always guarenteed of having the right plugins installed.</p>
+    
     </section>
 
 	<section>
