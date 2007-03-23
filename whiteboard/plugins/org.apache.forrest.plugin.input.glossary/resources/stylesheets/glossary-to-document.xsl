@@ -104,7 +104,7 @@
 	  </p>	  
   </xsl:template>
   <xsl:template match="definition">
-      <xsl:number/>. <xsl:apply-templates/>
+          <xsl:number/>. <xsl:apply-templates/><br />
       <xsl:if test="@cite">
         (Source: <link role="citation"><xsl:attribute name="href"><xsl:value-of select="@cite"/></xsl:attribute><xsl:value-of select="@cite"/></link>)
       </xsl:if>
