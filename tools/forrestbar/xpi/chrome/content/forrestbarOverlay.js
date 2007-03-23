@@ -28,6 +28,12 @@ function startforrestbar()
   {
     removeEventListener ("load",startforrestbar, true); // Keep the event from firing a hundred more times.
   }
+  setLocalHostMenuItemLabel();
+}
+
+function setLocalHostMenuItemLabel()
+{
+  document.getElementById("forrest.run.menuitem").label="Local Forrest (" + getLocalWebServer() + ")";
 }
 
 addEventListener("load", startforrestbar, true); // Run the startup function when the window loads
@@ -96,8 +102,11 @@ function searchSVN(searchID)
 
 function contract(subUrl,searchID)
 {
-  var searchItem = document.getElementById(searchID);
-  navigate('http://localhost:8888/'+subUrl + searchItem.value);
+  if( isLocalUrlOrWarnMe() )
+  {
+    var searchItem = document.getElementById(searchID);
+    navigate(getLocalWebServerUrl() + subUrl + searchItem.value);
+  }
 }
 
 function navProject(searchID) {
@@ -108,12 +117,10 @@ function navProject(searchID) {
 function viewXML(xmltype)
 {
   var href = gBrowser.currentURI.spec;
-  if( ! isLocalUrl())
+  if( isLocalUrlOrWarnMe() )
   {
-    alert("This action is only available on Local Forrest (jetty) site...");
-    return(false);
+    (dispatcherCall)?navigate(getLocalWebServerUrl()+xmltype+href.substring(getLocalWebServerUrl().length, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
   }
-  (dispatcherCall)?navigate("http://localhost:8888/"+xmltype+href.substring(href.lastIndexOf('8888/')+5, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
 }
 
 function isLocalUrl ()
@@ -122,11 +129,114 @@ function isLocalUrl ()
 
   return( (typeof(href) != 'undefined') &&
           (href.substr) &&
-          (startsWith(href, 'http://127.0.0.1:8888/') || startsWith(href, 'http://localhost:8888/'))
+          (startsWith(href, getLocalWebServerUrl() ))
         );
+}
+
+function isLocalUrlOrWarnMe()
+{
+  var isIt = isLocalUrl();
+  if( ! isIt )
+  {
+    alert("This action is only available on Local Forrest (jetty) site...");
+  }
+  return isIt;
 }
 
 function startsWith(st, pref)
 {
   return( (pref.length > 0) && (st.substring(0, pref.length) == pref) );
 }
+
+/* ----------- */
+/* Forrest Run */
+/* ----------- */
+function navigateForrestRun() {
+  navigate( getLocalWebServerUrl() );
+}
+
+function getLocalWebServer() {
+  var localhost= getForrestRunHost() + ":" + getForrestRunPort() ;
+  return localhost;
+}
+
+function getLocalWebServerUrl() {
+  var Url= "http://" + getLocalWebServer() + "/" ;
+  return Url;
+}
+
+/* ----------------- */
+/* Options functions */
+/* ----------------- */
+
+/* Getting preferences */
+function getForrestRunHost()
+{
+  var prefservice = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+  var prefs = prefservice.getBranch("");
+
+  var forrestHost = null;
+  if (prefs.getPrefType("forrestbar.run.host") == prefs.PREF_STRING)
+  {
+    forrestHost = prefs.getCharPref("forrestbar.run.host");
+  }
+  if ((forrestHost == null) || (forrestHost.length = 0))
+  {
+     forrestHost='localhost';
+  }
+  return forrestHost;
+}
+
+function getForrestRunPort()
+{
+  var prefservice = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+  var prefs = prefservice.getBranch("");
+
+  var forrestPort = null;
+  if (prefs.getPrefType("forrestbar.run.port") == prefs.PREF_STRING)
+  {
+    forrestPort = prefs.getCharPref("forrestbar.run.port");
+  }
+  if ((forrestPort == null) || (forrestPort.length = 0))
+  {
+     forrestPort='8888';
+  }
+  return forrestPort;
+}
+
+/* Initialising Options Panel */
+function initForrestBarOptions()
+{
+  document.getElementById('forrestbar.run.host').value = getForrestRunHost();
+  document.getElementById('forrestbar.run.port').value = getForrestRunPort();
+}
+
+/* recording Options in prefs */
+function setForrestBarOptions()
+{
+  var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService);
+  var prefs = prefService.getBranch("");
+
+  var oldHost=getForrestRunHost();
+  var oldPort=getForrestRunPort();
+  var newHost=document.getElementById('forrestbar.run.host').value;
+  var newPort=document.getElementById('forrestbar.run.port').value;
+  var change=false;
+
+  if( oldHost != newHost )
+  {
+    change=true;
+    prefs.setCharPref("forrestbar.run.host", newHost);
+  }
+  if( oldPort != newPort )
+  {
+    change=true;
+    prefs.setCharPref("forrestbar.run.port", newPort);
+  }
+  if( change )
+    alert("Warning! the label of the Local Forrest item will be refreshed at the next start of your browser...");
+
+  window.close();
+}
+
