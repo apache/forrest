@@ -23,7 +23,7 @@
   <abstract>
     This How-To will explain how we wrote the contracts for the dispatcher and hope afterwards you will be able to do the same.
   </abstract>
-  <last-modified-content-date date="2005-07-17"/>
+  <last-modified-content-date date="2007-03-24"/>
  </header>
 
   <audience title="Intended Audience">
@@ -108,7 +108,7 @@ simply do:
       <title>Explaining the blank forrest:contract</title>
       <p>
         To start a new forrest:contract you can copy the 'blank.ft' from
-        <code>org.apache.forrest.plugin.output.themer/resources/themes/common/html/blank.ft</code>. 
+        <code>org.apache.forrest.plugin.themes.core/themes/common/html/blank.ft</code>. 
       </p>
       <p>
         The 'blank.ft' is a simple xml file with the following code which you can use to base new contracts 
@@ -118,29 +118,27 @@ simply do:
 <![CDATA[<forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="blank" type="nugget">
+  name="blank">
   
   <!--NOTE: 
     When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!-->
   
   <description>
-    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
+    blank will output {contract-function}. This is just a blank contract, it will output *nothing*.
   </description>
-  <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="blank"/>]]>]]&gt;<![CDATA[</usage>
+  <usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="blank"/>]]>&gt;<![CDATA[</usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="blank" inputFormat="xsl" body="false" head="false">
+    name="blank" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <!--
-          Add here the needed templates.
-          Remember to set the forrest:template @attributes!
-          -->
-         <!--
-        <xsl:template name="blank-head">
-        </xsl:template>
-        <xsl:template name="blank-body">
-        </xsl:template>
-        -->
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <!--<xsl:param name="defaultVariables" select="'test.html'"/>-->
+      <!--<xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>-->
+      <xsl:template match="/">
+        <forrest:content>
+          <!--<forrest:part/>-->
+          <!--<forrest:part xpath="/html/head"/>-->
+        </forrest:content>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>]]>
@@ -155,7 +153,7 @@ simply do:
       <p>
         The <code><![CDATA[<description/>]]></code> tag needs to be filled in with some information
         that is explaining the contract to the webdesigner. The better explained the more efficient
-        for the webdesigner to pick the right contract.
+        for the web designer to pick the right contract.
       </p>
       <source><![CDATA[<description>
   siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
@@ -168,33 +166,21 @@ simply do:
       <source><![CDATA[<usage>]]>&lt;![CDATA[<![CDATA[<forrest:contract name="siteinfo-last-published-howto"/>]]>]]&gt;<![CDATA[</usage>]]>
       </source>
       <p>
-        <code><![CDATA[<forrest:template name="blank" body="false" head="false">]]> </code> 
-        That leads to the template attribute @body="true" and
-        @head="false". In html a contract can add content to the <![CDATA[<body/>]]> or/and
-        <![CDATA[<head/>]]> part of <![CDATA[<html/>]]>. These values need to be changed when adding an actual template.
-        Besides this, a xsl-template needs to indicate this in the naming. A template that adds content to the 
-        html body needs to end with "<code>-body</code>"!!!
+              To put contract code into the <code><![CDATA[<head></head>]]></code> section, this needs to be declared in the contract as :-
+        <code><![CDATA[<forrest:part xpath="/html/head">...</forrest:part>]]></code>
+        Simply by leaving out the xpath declaration and the code will go into body. You can use 
+        <code><![CDATA[<forrest:part xpath="/html/head">...</forrest:part><forrest:part>...</forrest:part>]]></code>
+        if you need content in both head and body.
       </p>
       <warning>
-        The last paragraph about <![CDATA[<forrest:template name="blank" body="false" head="false">]]> is due to change. 
-        Please be aware that this part of the dispatcher is the main moving target right now!!!
+              The last paragraph about <![CDATA[<forrest:part/>]]> has replaced the older way of
+              <![CDATA[<forrest:template name="blank" body="false" head="false">]]>.
+        Please be aware that this part of the dispatcher is still a moving target and may change still.
       </warning>
       <note>
-        It is possible to use contracts in different in/output formats. 
-        We are focussing for now on format="html" as output and the inputFormat="xsl".
+        It is possible to use contracts in different input/output formats. 
+        We are focusing for now on format="html" as output and the inputFormat="xsl".
       </note>
-      <p>
-        A <![CDATA[<forrest:template />]]> has the child <![CDATA[<xsl:stylesheet/>]]> where we can create 
-        templates for the html-head and html-body. For adding content into the body of the final 
-        document change @body="true" and add:
-      </p>
-      <source>
-<![CDATA[<xsl:stylesheet version="1.1" 
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
- <!--Add here the needed templates-->
- <xsl:template name="blank-body"/>
-</xsl:stylesheet>]]>        
-      </source>
     </section>
     <section id="newContract">
       <title>Create a new contract</title>
@@ -236,14 +222,13 @@ debug string -
       <ul>
         <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
         <li>Add description and usage of the contract</li>
-        <li>Set @body="true"</li>
         <li>Copy the maintenance optimized code to the contract.</li>
       </ul>
       <p>
         As the result your code should look like this:
       </p>
       <source><![CDATA[<forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="siteinfo-last-published-howto" type="nugget">
+  name="siteinfo-last-published-howto">
   <description>
     siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
   </description>
@@ -251,13 +236,17 @@ debug string -
   <forrest:template 
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="siteinfo-last-published-howto" inputFormat="xsl" body="true" head="false">
+    name="siteinfo-last-published-howto" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <xsl:template name="siteinfo-last-published-howto-body">
+        <xsl:template match="/">
           debug string - 
-          <script type="text/javascript">document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);</script>
+            <forrest:content>
+              <forrest:part>
+                <script type="text/javascript">document.write("<i18n:text >Last Published:</i18n:text>&#160;" + document.lastModified);</script>
+              </forrest:part>
+            </forrest:content>
         </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
