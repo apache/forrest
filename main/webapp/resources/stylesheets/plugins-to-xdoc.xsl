@@ -112,10 +112,17 @@
         Input plugins enable Forrest to work with
         source documents in different formats.
       </p>
-      <xsl:apply-templates
-        select="plugin[@type='input']">
-        <xsl:sort select="@name" />
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="plugin[@type='input']">
+          <xsl:apply-templates
+            select="plugin[@type='input']">
+            <xsl:sort select="@name" />
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <p>No plugins of this type available.</p>
+        </xsl:otherwise>
+      </xsl:choose>
     </section>
 
     <section>
@@ -124,10 +131,17 @@
         Output plugins enable Forrest to produce
         documents in different formats.
       </p>
-      <xsl:apply-templates
-        select="plugin[@type='output']">
-        <xsl:sort select="@name" />
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="plugin[@type='output']">
+          <xsl:apply-templates
+            select="plugin[@type='output']">
+            <xsl:sort select="@name" />
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <p>No plugins of this type available.</p>
+        </xsl:otherwise>
+      </xsl:choose>
     </section>
 
     <section>
@@ -136,10 +150,17 @@
         Internal plugins change the core behaviour
         of Forrest.
       </p>
-      <xsl:apply-templates
-        select="plugin[@type='internal']">
-        <xsl:sort select="@name" />
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="plugin[@type='internal']">
+          <xsl:apply-templates
+            select="plugin[@type='internal']">
+            <xsl:sort select="@name" />
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <p>No plugins of this type available.</p>
+        </xsl:otherwise>
+      </xsl:choose>
     </section>
   </xsl:template>
 
