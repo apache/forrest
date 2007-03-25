@@ -12,6 +12,7 @@
     </xsl:template>
     
     <xsl:template match="project">
+      <xsl:if test="property[@name='publish']/@value='true'">
         <plugin>
             <xsl:attribute name="name"><xsl:value-of select="property[@name='plugin-name']/@value"/></xsl:attribute>
             <xsl:attribute name="type"><xsl:value-of select="property[@name='type']/@value"/></xsl:attribute>
@@ -25,5 +26,6 @@
               <xsl:value-of select="property[@name='description']/@value"/>
             </description>
         </plugin>       
+      </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
