@@ -453,6 +453,16 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1003F"></a><a name="Understanding the HTML-Pipeline"></a>
 <h2 class="underlined_10">Understanding the HTML-Pipeline</h2>
 <div class="section">
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+      The example sitemap fragments are out-of-date because since this
+      document was written, the core sitemaps in main/webapp/ have changed and
+      some of the specialised processing has moved to plugins.
+      View your source sitemaps when reading this document.
+      (See <a href="https://issues.apache.org/jira/browse/FOR-922">FOR-922</a>.)
+    </div>
+</div>
 <p>
       The first part of this howto explains the html pipeline, so as to
       provide the background to enable you to add additional processing
@@ -460,7 +470,7 @@ document.write("Last Published: " + document.lastModified);
       then skip to the section about
       <a href="#custom">Customizing the html pipeline</a>.
     </p>
-<a name="N1004B"></a><a name="example"></a>
+<a name="N10052"></a><a name="example"></a>
 <h3 class="underlined_5">Driven by Example</h3>
 <p>
         The best way to learn about Forrest pipelines is follow
@@ -473,7 +483,7 @@ document.write("Last Published: " + document.lastModified);
         <br>
         'http://some.domain.org/mytest/mybad.html'.
       </p>
-<a name="N1005A"></a><a name="sitemap"></a>
+<a name="N10061"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Finding the Sitemap</h3>
 <p>
         Like all applications based on Apache Cocoon, each request for
@@ -512,7 +522,7 @@ document.write("Last Published: " + document.lastModified);
         (which we will see later on), we always start looking for a
         matching pattern right here.
       </p>
-<a name="N10079"></a><a name="pipelines"></a>
+<a name="N10080"></a><a name="pipelines"></a>
 <h3 class="underlined_5">Find the Beginning of the Pipelines Section</h3>
 <p>
         Modular as everything else in Cocoon, Forrest's sitemap
@@ -539,7 +549,7 @@ document.write("Last Published: " + document.lastModified);
         Pipelines from top to bottom until it encounters a
         Pipeline that will take care of our request.
       </p>
-<a name="N10091"></a><a name="matches"></a>
+<a name="N10098"></a><a name="matches"></a>
 <h3 class="underlined_5">Looking for a Match</h3>
 <p>
         Like all Cocoon applications, Forrest knows which
@@ -571,7 +581,7 @@ document.write("Last Published: " + document.lastModified);
         </a>
         (&lt;map:match pattern="**/*.html"&gt;).
       </p>
-<a name="N100AE"></a><a name="html-pipeline"></a>
+<a name="N100B5"></a><a name="html-pipeline"></a>
 <h3 class="underlined_5">Processing in the '**/*.html' Pipeline</h3>
 <p>  
         Let's take a quick look at this pipeline to understand
@@ -624,7 +634,7 @@ document.write("Last Published: " + document.lastModified);
         where it comes from. To find out, we have to look at the sources
         of the aggregation.
       </p>
-<a name="N100CF"></a><a name="protocols"></a>
+<a name="N100D6"></a><a name="protocols"></a>
 <h3 class="underlined_5">Following the Pseudo-Protocols</h3>
 <p>
         To find out what goes into our aggregation, we'll need to look
@@ -679,7 +689,7 @@ document.write("Last Published: " + document.lastModified);
         As you can easily tell, we are suddenly calling for a whole
         new document. Let's see where that takes us:
       </p>
-<a name="N10133"></a><a name="call"></a>
+<a name="N1013A"></a><a name="call"></a>
 <h3 class="underlined_5">Second Call for Content</h3>
 <p>
         Processing of cocoon-calls is not much different from
@@ -696,7 +706,7 @@ document.write("Last Published: " + document.lastModified);
          <a href="sitemap.xmap.html#First+Match+for+%27**body-*.html%27">First Match for '**body-*.html'</a>
          to see where we find our next match.
       </p>
-<a name="N1014C"></a><a name="match-1"></a>
+<a name="N10153"></a><a name="match-1"></a>
 <h3 class="underlined_5">First Match for '**body-*.html'</h3>
 <p>
          Our first match is different to the previous ones because
@@ -719,7 +729,7 @@ document.write("Last Published: " + document.lastModified);
          In this case Forrest will simply keep looking for
          the next match further down.
        </p>
-<a name="N10162"></a><a name="match-2"></a>
+<a name="N10169"></a><a name="match-2"></a>
 <h3 class="underlined_5">Second Match for '**body-*.html'</h3>
 <p class="instruction">
          Continue searching downwards for '**body-*.html' in the
@@ -779,7 +789,7 @@ document.write("Last Published: " + document.lastModified);
         we get
       </p>
 <pre class="code">&lt;map:generate src="cocoon:/mytests/mybad.xml"/&gt;</pre>
-<a name="N101CE"></a><a name="match-3"></a>
+<a name="N101D5"></a><a name="match-3"></a>
 <h3 class="underlined_5">Third Call for Content</h3>
 <p class="instruction">
         So let's scan the main sitemap looking for a match for
@@ -818,7 +828,7 @@ document.write("Last Published: " + document.lastModified);
 &lt;map:call resource="file-resolver"&gt;
   &lt;map:parameter name="uri" value="mytests/mybad"/&gt;
 &lt;/map:call&gt;</pre>
-<a name="N101F9"></a><a name="file"></a>
+<a name="N10200"></a><a name="file"></a>
 <h3 class="underlined_5">Introducing the File-Resolver</h3>
 <p class="instruction">
         To find out more about the working of the file-resolver,
@@ -833,7 +843,7 @@ document.write("Last Published: " + document.lastModified);
         the file with different extensions. '.html' is second in this
         list and leads to the processing steps shown below:
       </p>
-<a name="N1020B"></a><a name="process-html"></a>
+<a name="N10212"></a><a name="process-html"></a>
 <h3 class="underlined_5">html-Default Processing</h3>
 <p>
         The default processing of html-files consists of four
@@ -891,7 +901,7 @@ document.write("Last Published: " + document.lastModified);
         machine and there is an html-page of that name).
       </div>
 </div>
-<a name="N1023E"></a><a name="body"></a>
+<a name="N10245"></a><a name="body"></a>
 <h3 class="underlined_5">Returning to the '**body-*.html'-Pipeline</h3>
 <p>
         On returning into the
@@ -941,7 +951,7 @@ document.write("Last Published: " + document.lastModified);
         and there is an html-page of that name).
       </div>
 </div>
-<a name="N1026A"></a><a name="aggregate"></a>
+<a name="N10271"></a><a name="aggregate"></a>
 <h3 class="underlined_5">Returning to the '**/*.html'-Pipeline</h3>
 <p>
         At the end of this pipeline, processing returns the results into
@@ -950,13 +960,13 @@ document.write("Last Published: " + document.lastModified);
         merges it with other data, skins and serializes for presentation
         in the requesting client.
       </p>
-<a name="N10278"></a><a name="custom"></a>
+<a name="N1027F"></a><a name="custom"></a>
 <h3 class="underlined_5">Customizing the html pipeline</h3>
 <p>
         In this last part of this document, we will show how to customize the
         HTML-pipeline to add your additional steps to the default processing.
       </p>
-<a name="N10281"></a><a name="when"></a>
+<a name="N10288"></a><a name="when"></a>
 <h4>When to customize?</h4>
 <p>
           The html-Pipeline in Forrest is designed to be able to also
@@ -978,7 +988,7 @@ document.write("Last Published: " + document.lastModified);
           then you will see the original page from your legacy website,
           menu and all, embedded in your new Forrest site.
         </p>
-<a name="N10291"></a><a name="how"></a>
+<a name="N10298"></a><a name="how"></a>
 <h4>How to customize?</h4>
 <p>
           To add your own custom processing for a group of pages, you will
@@ -1001,7 +1011,7 @@ document.write("Last Published: " + document.lastModified);
           right at the top</a>, your pipeline intercepts practically all
           of Forrest's standard pipelines.
         </p>
-<a name="N102A9"></a><a name="what"></a>
+<a name="N102B0"></a><a name="what"></a>
 <h4>What to intercept?</h4>
 <p>
           Where to intercept standard processing is really a matter of your
@@ -1021,7 +1031,7 @@ document.write("Last Published: " + document.lastModified);
           copy the steps the original processor is doing and add a
           transformation of our own to it.
         </p>
-<a name="N102B9"></a><a name="intercept"></a>
+<a name="N102C0"></a><a name="intercept"></a>
 <h4>Intercept pattern</h4>
 <p>
           Take great care when intercepting very basic pipelines.
