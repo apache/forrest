@@ -27,7 +27,6 @@ p.quote {
 <!--+|start favicon +-->
 <link href="favicon.ico" rel="shortcut icon" />
 <!--+|start favicon +-->
-<script language="javascript" src="themes/getBlank.js" type="text/javascript"> </script>
 <script src="themes/menu.js" type="text/javascript"> </script>
 <!--+ |start content-title +-->
 <title>Dispatcher (Draft - feature under development)</title>
@@ -84,7 +83,7 @@ p.quote {
 <input name="sitesearch" type="hidden" value="mydomain" />
 </div>
 <div class="search-field">
-<input name="q" onBlur="getPrompt(this, 'Search the site with google');" onFocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
+<input name="q" onblur="getPrompt(this, 'Search the site with google');" onfocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
 </div>
 <div class="search-submit">
 <input name="Search" type="submit" value="Search" />
@@ -249,12 +248,12 @@ p.quote {
         formats from different content through an advanced seperation of 
         concerns.</p>
 <p>The dispatcher is a filter that limits the data-model to a minimum by 
-        only requesting what the strucuter (e.g. common.fv) need. This leads to 
+        only requesting what the structurer (e.g. common-html.vt.xml) need. This leads to 
         a different URL handling focus - away from document centric. A document 
-        can (but do not have to) be behind a certain URL. Like said a 
+        can (but does not have to) be behind a certain URL. Like said a 
         structurer can request any given data as input not only a document and 
         the forrest core contracts (like navigation). It may be the main 
-        enhancement in comparison to skins that this concept let you easily 
+        enhancement in comparison to skins that this concept lets you easily 
         extend the default data models provided by forrest.</p>
 <p>Since the dispatcher has implemented a fallback concept it makes 
         maintenance of custom themes which are based on forrest core ones very 
@@ -263,10 +262,11 @@ p.quote {
         observation that normally only a small percentage of core skin 
         contracts have been changed. At the same time the new plugin system 
         emerged. Plugins are a way of extending Forrest to satisfy 
-        site-specific needs. This includes to provide plugin specific 
+        site-specific needs. This includes to provide for plugin specific 
         contracts.</p>
 <a name="structurer" title="Structurer - configuration for themes"> </a>
 <h3 class="underlined_5">Structurer - configuration for themes</h3>
+<div class="section">
 <p> We developed<strong> the structurer</strong> to let the user decide 
       where to place elements in e.g. html pages. We started this work with the 
       <span class="codefrag">skinconf.xml</span> where you could configure certain elements and 
@@ -296,30 +296,33 @@ p.quote {
       (which offer configuration parameter in the structurer) and dynamic 
       contracts (which offer semi-static configuration and/or requesting the 
       content).  </p>
-<p> The structurer is as well a configuration file for the dispatcher. 
-        The new think on the dispatcher is that one can include any content 
+<p> The structurer is also a configuration file for the dispatcher. 
+        The new thinking on the dispatcher is that one can include any content 
         from any given business service by dispatching a request against it. In 
         "old fashion" skins and in v1 contracts we assumed a given data model. 
         In the dispatcher there is <strong>no</strong> given data model any 
-        more. All data has to be defined in the structurer that they can be 
+        more. All data has to be defined in the structurer so that they can be 
         dispatched. </p>
+</div>
 <a name="contracts" title="Contracts - grouped functionality"> </a>
 <h3 class="underlined_5">Contracts - grouped functionality</h3>
-<p>The result of the leather-dev development were grouped functionality 
-          in named container. We gave those code snippets names (based on their 
-          functionality) and called them contracts. This naming enabled us to 
-          keep the contract separate from the position code itself. Further 
-          since major parts of the code of skins never have been documentended 
-          we started to add for each contract a description and an explanation 
+<div class="section">
+<p>The result of the leather-dev development was grouped functionality 
+          in named containers. We gave those code snippets names (based on their 
+          functionality) and called them <strong>contracts</strong>. This naming enabled us to 
+          keep the contract separate from the positioning of the code itself. Furthermore, 
+          since major parts of the code of skins has never been documented, 
+          we started to add for each contract a description and an explanation on
           how to use this contract. The skinconf.xml gave an excellent 
           source for this documentation effort, since it described most 
           features of the pelt skin.</p>
 <p>Contracts are standalone, self explaining, configurable 
-            pieces of xsl templates created out of pure maintaining reasons.</p>
-<p>Since this contracts are working from the input given in the <a href="#structurer">structurer</a>, it works on different input 
-            sources. Further one can pass variables into the contracts that can 
+            pieces of xsl templates created purely for ease of maintenance.</p>
+<p>Since these contracts are working from the input given in the <a href="#structurer">structurer</a>, it works on different input 
+            sources. One can pass variables into the contracts that can 
             be used to apply presentation logic in the xsl (like sorting order, 
             ...).</p>
+</div>
 </div>
 <a name="background" title="Background"> </a>
 <h2 class="underlined_10">Background</h2>
@@ -333,28 +336,32 @@ p.quote {
         website</a>, where you can find some more background information.</p>
 <a name="nc-definition" title="Definition of naming conventions"> </a>
 <h3 class="underlined_5">Definition of naming conventions</h3>
+<div class="section">
 <p> "A naming convention is an attempt to systematize names in a field 
           so they unambiguously convey similar information in a similar 
           manner." <a href="http://en.wikipedia.org/wiki/Naming_conventions">wikipedia</a> 
           </p>
+</div>
 <a name="leather" title="leather-dev"> </a>
 <h3 class="underlined_5">leather-dev</h3>
+<div class="section">
 <p> That led to the development of the "leather-dev" skin which 
           established a semantic container approach for div elements. 
-          Leather-dev evolved from the "pelt" skin and almost used the same 
+          Leather-dev evolved from the "pelt" skin and used almost the same 
           functionality (contracts). We had started to encapsulate functional 
           code into templates, but there have been still in 4 xsl files and without 
-          any documentation what they are doing and how to use them. The 
+          any documentation on what they are doing and how to use them. The 
           problems with leather-dev was pointed out in the mail "<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=111049344517653">status on leather-dev?</a>". The main proplem was to limit users to 
-          only one html-skeleton was way too limiting regarding design. Since 
-          we had now grouped functionality in named container we were ready to 
+          only one html-skeleton which was way too limiting regarding design. Since 
+          we had now grouped functionality in named containers we were ready to 
           start the dispatcher (aka forrest:views).</p>
+</div>
 </div>
 <a name="info" title="Further information"> </a>
 <h2 class="underlined_10">Further information</h2>
 <div class="section">
 <p> See the various How-to documents about the dispatcher, starting with 
-         the <a href="how/howto-dispatcher-quickstart.html">quickstart</a>
+              the <a href="how/howto-dispatcher-quickstart.html">quickstart</a>. It would also be useful to familiarise yourself with some of the terms used in the dispatcher, the <a href="dispatcher-glossary.html">Dispatcher Glossary</a> contains some of the terms used.
       </p>
 <p> Apache Forrest 1.0 Specification (Draft, not yet published): 
         <span class="codefrag">site-author/content/xdocs/TR/2005/WD-forrest10.html</span> </p>
@@ -368,7 +375,7 @@ p.quote {
 </div>
 <div class="copyright">
             Copyright ©
-             2002-2006 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
+             2002-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
 <!--+ |start compliance links +-->
 <div id="siteinfo-compliance-links">
 <a href="http://validator.w3.org/check?uri=referer">

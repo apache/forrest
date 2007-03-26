@@ -27,7 +27,6 @@ p.quote {
 <!--+|start favicon +-->
 <link href="../favicon.ico" rel="shortcut icon" />
 <!--+|start favicon +-->
-<script language="javascript" src="../themes/getBlank.js" type="text/javascript"> </script>
 <script src="../themes/menu.js" type="text/javascript"> </script>
 <!--+ |start content-title +-->
 <title>How to write a forrest:contract</title>
@@ -84,7 +83,7 @@ p.quote {
 <input name="sitesearch" type="hidden" value="mydomain" />
 </div>
 <div class="search-field">
-<input name="q" onBlur="getPrompt(this, 'Search the site with google');" onFocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
+<input name="q" onblur="getPrompt(this, 'Search the site with google');" onfocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
 </div>
 <div class="search-submit">
 <input name="Search" type="submit" value="Search" />
@@ -184,6 +183,9 @@ p.quote {
 <li>
 <a href="#structurerContract">Activating the contract</a>
 </li>
+<li>
+<a href="#pluginContracts">Plugin Supplied Contracts</a>
+</li>
 </ul>
 </li>
 <li>
@@ -250,7 +252,7 @@ The "Dispatcher" (aka "Views") is new functionality which is still in developmen
     </p>
 <pre class="code">
 
-- &lt;script language="JavaScript"
+- &lt;script 
 - type="text/javascript"&gt;document.write("Published: " + document.lastModified);&lt;/script&gt;
 
 + &lt;script type="text/javascript"&gt;document.write("&lt;i18n:text &gt;Last
@@ -259,6 +261,7 @@ The "Dispatcher" (aka "Views") is new functionality which is still in developmen
     </pre>
 <a name="enhanceMaintenance" title="Enhance the maintenance"> </a>
 <h3 class="underlined_5">Enhance the maintenance</h3>
+<div class="section">
 <p>Now we can enhance the maintenance for the future and we give these code snippets 
         contracts names (based on their functionality). This naming enables us to keep
 the contract separate from the position code itself. In xsl you would
@@ -285,11 +288,13 @@ simply do:
         Now this refactoring of the site2xhtml.xsl is exactly what we doing in creating contracts for the dispatcher.
       </div>
 </div>
+</div>
 <a name="blankContract" title="Explaining the blank forrest:contract"> </a>
 <h3 class="underlined_5">Explaining the blank forrest:contract</h3>
+<div class="section">
 <p>
         To start a new forrest:contract you can copy the 'blank.ft' from
-        <span class="codefrag">org.apache.forrest.plugin.output.themer/resources/themes/common/html/blank.ft</span>. 
+        <span class="codefrag">org.apache.forrest.plugin.themes.core/themes/common/html/blank.ft</span>. 
       </p>
 <p>
         The 'blank.ft' is a simple xml file with the following code which you can use to base new contracts 
@@ -299,29 +304,27 @@ simply do:
 &lt;forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="blank" type="nugget"&gt;
+  name="blank"&gt;
   
   &lt;!--NOTE: 
     When using the blank template as c'n p master just search and replace 'blank' by the {contract-name}!--&gt;
   
   &lt;description&gt;
-    {contract-name} will output {contract-funtion}. This is just a blank contract, it will output *nothing*.
+    blank will output {contract-function}. This is just a blank contract, it will output *nothing*.
   &lt;/description&gt;
-  &lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="blank"/&gt;]]&gt;&lt;/usage&gt;
+  &lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="blank"/&gt;&gt;&lt;/usage&gt;
   &lt;forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="blank" inputFormat="xsl" body="false" head="false"&gt;
+    name="blank" inputFormat="xsl"&gt;
     &lt;xsl:stylesheet version="1.1" 
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
-        &lt;!--
-          Add here the needed templates.
-          Remember to set the forrest:template @attributes!
-          --&gt;
-         &lt;!--
-        &lt;xsl:template name="blank-head"&gt;
-        &lt;/xsl:template&gt;
-        &lt;xsl:template name="blank-body"&gt;
-        &lt;/xsl:template&gt;
-        --&gt;
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+      &lt;!--&lt;xsl:param name="defaultVariables" select="'test.html'"/&gt;--&gt;
+      &lt;!--&lt;xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/&gt;--&gt;
+      &lt;xsl:template match="/"&gt;
+        &lt;forrest:content&gt;
+          &lt;!--&lt;forrest:part/&gt;--&gt;
+          &lt;!--&lt;forrest:part xpath="/html/head"/&gt;--&gt;
+        &lt;/forrest:content&gt;
+      &lt;/xsl:template&gt;
     &lt;/xsl:stylesheet&gt;
   &lt;/forrest:template&gt;
 &lt;/forrest:contract&gt;
@@ -339,7 +342,7 @@ simply do:
 <p>
         The <span class="codefrag">&lt;description/&gt;</span> tag needs to be filled in with some information
         that is explaining the contract to the webdesigner. The better explained the more efficient
-        for the webdesigner to pick the right contract.
+        for the web designer to pick the right contract.
       </p>
 <pre class="code">&lt;description&gt;
   siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
@@ -352,41 +355,31 @@ simply do:
 <pre class="code">&lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;]]&gt;&lt;/usage&gt;
       </pre>
 <p>
-        <span class="codefrag">&lt;forrest:template name="blank" body="false" head="false"&gt; </span> 
-        That leads to the template attribute @body="true" and
-        @head="false". In html a contract can add content to the &lt;body/&gt; or/and
-        &lt;head/&gt; part of &lt;html/&gt;. These values need to be changed when adding an actual template.
-        Besides this, a xsl-template needs to indicate this in the naming. A template that adds content to the 
-        html body needs to end with "<span class="codefrag">-body</span>"!!!
+              To put contract code into the <span class="codefrag">&lt;head&gt;&lt;/head&gt;</span> section, this needs to be declared in the contract as :-
+        <span class="codefrag">&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;</span>
+        Simply by leaving out the xpath declaration and the code will go into body. You can use 
+        <span class="codefrag">&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;&lt;forrest:part&gt;...&lt;/forrest:part&gt;</span>
+        if you need content in both head and body.
       </p>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-        The last paragraph about &lt;forrest:template name="blank" body="false" head="false"&gt; is due to change. 
-        Please be aware that this part of the dispatcher is the main moving target right now!!!
+              The last paragraph about &lt;forrest:part/&gt; has replaced the older way of
+              &lt;forrest:template name="blank" body="false" head="false"&gt;.
+        Please be aware that this part of the dispatcher is still a moving target and may change still.
       </div>
 </div>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        It is possible to use contracts in different in/output formats. 
-        We are focussing for now on format="html" as output and the inputFormat="xsl".
+        It is possible to use contracts in different input/output formats. 
+        We are focusing for now on format="html" as output and the inputFormat="xsl".
       </div>
 </div>
-<p>
-        A &lt;forrest:template /&gt; has the child &lt;xsl:stylesheet/&gt; where we can create 
-        templates for the html-head and html-body. For adding content into the body of the final 
-        document change @body="true" and add:
-      </p>
-<pre class="code">
-&lt;xsl:stylesheet version="1.1" 
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
- &lt;!--Add here the needed templates--&gt;
- &lt;xsl:template name="blank-body"/&gt;
-&lt;/xsl:stylesheet&gt;        
-      </pre>
+</div>
 <a name="newContract" title="Create a new contract"> </a>
 <h3 class="underlined_5">Create a new contract</h3>
+<div class="section">
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
@@ -428,14 +421,13 @@ debug string -
 <ul>
         <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
         <li>Add description and usage of the contract</li>
-        <li>Set @body="true"</li>
         <li>Copy the maintenance optimized code to the contract.</li>
       </ul>
 <p>
         As the result your code should look like this:
       </p>
 <pre class="code">&lt;forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="siteinfo-last-published-howto" type="nugget"&gt;
+  name="siteinfo-last-published-howto"&gt;
   &lt;description&gt;
     siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
   &lt;/description&gt;
@@ -443,20 +435,26 @@ debug string -
   &lt;forrest:template 
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="siteinfo-last-published-howto" inputFormat="xsl" body="true" head="false"&gt;
+    name="siteinfo-last-published-howto" inputFormat="xsl"&gt;
     &lt;xsl:stylesheet version="1.1" 
         xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
-        &lt;xsl:template name="siteinfo-last-published-howto-body"&gt;
+        &lt;xsl:template match="/"&gt;
           debug string - 
-          &lt;script type="text/javascript"&gt;document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);&lt;/script&gt;
+            &lt;forrest:content&gt;
+              &lt;forrest:part&gt;
+                &lt;script type="text/javascript"&gt;document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);&lt;/script&gt;
+              &lt;/forrest:part&gt;
+            &lt;/forrest:content&gt;
         &lt;/xsl:template&gt;
     &lt;/xsl:stylesheet&gt;
   &lt;/forrest:template&gt;
 &lt;/forrest:contract&gt;
       </pre>
+</div>
 <a name="structurerContract" title="Activating the contract"> </a>
 <h3 class="underlined_5">Activating the contract</h3>
+<div class="section">
 <p>
         To see whether the new contract works we need to add it to our structurer.
         The contract usage contains the contract-tag <span class="codefrag">&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;</span>
@@ -467,6 +465,13 @@ debug string -
 <div class="content">
         Next to write are parameter-contracts with advanced features of the dispatcher. 
       </div>
+</div>
+</div>
+<a name="pluginContracts" title="Plugin Supplied Contracts"> </a>
+<h3 class="underlined_5">Plugin Supplied Contracts</h3>
+<div class="section">
+<p>It is possible for plugins to provide contracts for use in the dispatcher.
+      For details on how this is done see the <a href="http://forrest.apache.org/docs/howto/howto-buildPlugin.html#Dispatcher">Plugin HowTo</a>.</p>
 </div>
 </div>
 <a name="Further Reading" title="Further Reading"> </a>
@@ -498,7 +503,7 @@ debug string -
 </div>
 <div class="copyright">
             Copyright ©
-             2002-2006 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
+             2002-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
 <!--+ |start compliance links +-->
 <div id="siteinfo-compliance-links">
 <a href="http://validator.w3.org/check?uri=referer">
