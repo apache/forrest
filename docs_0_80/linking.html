@@ -399,10 +399,19 @@ document.write("Last Published: " + document.lastModified);
         and how various link schemes (site: and ext:) operate.
         An overview of the implementation is also provided.
       </p>
+<p>
+        While reading this document, bear in mind that the Cocoon
+        <a href="../docs_0_80/sitemap-ref.html">Sitemap</a> is handling the processing.
+        The sitemaps are resolving the site: URIs and then matching them to
+        determine how to process each.
+        In general, you can use the power of the Cocoon Sitemap to
+        handle certain difficult linking and menu situations 
+       (for example see this <a href="../docs_0_80/faq.html#tab-index">FAQ</a>).
+      </p>
 </div>
 
     
-<a name="N1001A"></a><a name="site"></a>
+<a name="N10025"></a><a name="site"></a>
 <h2 class="underlined_10">site.xml</h2>
 <div class="section">
 <p>
@@ -539,11 +548,12 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 <p>
         See another <a href="../docs_0_80/faq.html#site-xml">explained example</a>.
+        Also remember to look at the comprehensive example with Forrest's own documentation.
       </p>
 </div>
 
     
-<a name="N100A9"></a><a name="menu_generation"></a>
+<a name="N100B4"></a><a name="menu_generation"></a>
 <h2 class="underlined_10">Generating Menus</h2>
 <div class="section">
 <p>
@@ -574,7 +584,7 @@ document.write("Last Published: " + document.lastModified);
       defaults to "<span class="codefrag">index.html</span>" if no value is supplied. Therefore the
       link for the howto tab is <span class="codefrag">community/howto/index.html</span>
 </p>
-<a name="N100F0"></a><a name="tabs-external"></a>
+<a name="N100FB"></a><a name="tabs-external"></a>
 <h3 class="underlined_5">Tabs for External Resources</h3>
 <p>A tab can refer to an external resource by using the 
         "<span class="codefrag">href</span>" attribute instead of the "<span class="codefrag">dir</span>" attribute.
@@ -587,7 +597,7 @@ document.write("Last Published: " + document.lastModified);
         is left unmodified by Forrest unless it is root-relative and obviously 
         specifies a directory (ends in '/'). In which case /index.html will be 
         added.</p>
-<a name="N10110"></a><a name="selecting-entries"></a>
+<a name="N1011B"></a><a name="selecting-entries"></a>
 <h3 class="underlined_5">Selecting menu entries</h3>
 <p>Forrest decides which menu entries to display, by examining the
           "<span class="codefrag">tab</span>" attributes in the <span class="codefrag">site.xml</span> file. The children of 
@@ -640,14 +650,14 @@ document.write("Last Published: " + document.lastModified);
           value of "<span class="codefrag">home</span>".  Forrest will select <em>all nodes with
             tab="home"</em> and put them in the menu.
         </p>
-<a name="N1016A"></a><a name="other-menu-selection"></a>
+<a name="N10175"></a><a name="other-menu-selection"></a>
 <h3 class="underlined_5">Alternative menu selection mechanisms.</h3>
 <p>
           The "<span class="codefrag">tab</span>" attribute-based scheme for selecting a menu's
           entries is not the only one, although it is the most flexible.  Here
           we describe a few alternatives.
         </p>
-<a name="N10176"></a><a name="dir-menu-selection"></a>
+<a name="N10181"></a><a name="dir-menu-selection"></a>
 <h4>Directory-based selection</h4>
 <p>In this scheme, each tab corresponds to a directory within the
             site.  All content below that directory is included in the menu.</p>
@@ -670,7 +680,7 @@ document.write("Last Published: " + document.lastModified);
               entries.</li>
           
 </ul>
-<a name="N101A6"></a><a name="book-menu-selection"></a>
+<a name="N101B1"></a><a name="book-menu-selection"></a>
 <h4>Specifying menus with book.xml</h4>
 <p>
             Historically, menus in Forrest have been generated from a
@@ -681,7 +691,7 @@ document.write("Last Published: " + document.lastModified);
             that led to obsolescence of book.xml files.  In general, however, we
             recommend that users avoid <span class="codefrag">book.xml</span> files.
           </p>
-<a name="N101C3"></a><a name="tab-selection"></a>
+<a name="N101CE"></a><a name="tab-selection"></a>
 <h3 class="underlined_5">Selecting the current tab</h3>
 <p>
           The tab selection algorithm is quite simple: the tab with the
@@ -689,7 +699,7 @@ document.write("Last Published: " + document.lastModified);
           node is "selected". However the interaction of <span class="codefrag">tabs.xml</span> and <span class="codefrag">site.xml</span>
           while powerful, can be complex to establish.
         </p>
-<a name="N101D9"></a><a name="tab-site"></a>
+<a name="N101E4"></a><a name="tab-site"></a>
 <h3 class="underlined_5">Configuring the interaction between tabs.xml and site.xml</h3>
 <p>
           This is a collection of tips to assist with getting your menus and tabs
@@ -760,7 +770,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N1022C"></a><a name="toc-generation"></a>
+<a name="N10237"></a><a name="toc-generation"></a>
 <h2 class="underlined_10">Table of Contents Generation</h2>
 <div class="section">
 <p>Each page can have an automatically generated table of contents. This
@@ -806,10 +816,10 @@ document.write("Last Published: " + document.lastModified);
 </div>
     
     
-<a name="N10261"></a><a name="linking"></a>
+<a name="N1026C"></a><a name="linking"></a>
 <h2 class="underlined_10">Linking systems</h2>
 <div class="section">
-<a name="N10267"></a><a name="direct-linking"></a>
+<a name="N10272"></a><a name="direct-linking"></a>
 <h3 class="underlined_5">Direct linking</h3>
 <p>
           In earlier versions of Forrest (and in similar systems), there has
@@ -828,7 +838,7 @@ document.write("Last Published: " + document.lastModified);
           typically renders to multiple output formats (HTML and PDF), links in
           one of them (here, the PDF) are likely to break.
         </p>
-<a name="N1028C"></a><a name="indirect-linking"></a>
+<a name="N10297"></a><a name="indirect-linking"></a>
 <h3 class="underlined_5">Indirect linking</h3>
 <p>
           Forrest's solution is simple: instead of &lt;a href="todo.html"&gt;,
@@ -856,7 +866,7 @@ document.write("Last Published: " + document.lastModified);
           "idea" of "the todo file".  It doesn't matter where it physically lives;
           that will be sorted out by Forrest.
         </p>
-<a name="N102B3"></a><a name="resolve-site-uris"></a>
+<a name="N102BE"></a><a name="resolve-site-uris"></a>
 <h4>Resolving site: URIs</h4>
 <p>
             So how does "<span class="codefrag">site:todo</span>" get resolved?  A full answer
@@ -891,7 +901,7 @@ document.write("Last Published: " + document.lastModified);
             "new_content_type" its own XML file, or a node in another file, in
             another category.
           </p>
-<a name="N102F1"></a><a name="resolve-ext-uris"></a>
+<a name="N102FC"></a><a name="resolve-ext-uris"></a>
 <h4>ext: URIs: linking to external URLs</h4>
 <p>
             The "<span class="codefrag">ext:</span>" scheme was created partly to demonstrate the
@@ -926,7 +936,7 @@ document.write("Last Published: " + document.lastModified);
             Specifically, the "@href" aggregation makes defining large numbers of
             related URLs easy.
           </p>
-<a name="N10324"></a><a name="source-uris"></a>
+<a name="N1032F"></a><a name="source-uris"></a>
 <h4>Theory: source URIs</h4>
 <p>
             The "<span class="codefrag">site:</span>" URIs like "<span class="codefrag">site:todo</span>" are examples of
@@ -942,7 +952,7 @@ document.write("Last Published: " + document.lastModified);
             in the destination URI space, just like exotic XML source formats are
             translated into plain old HTML in the output.
           </p>
-<a name="N10343"></a><a name="future-schemes"></a>
+<a name="N1034E"></a><a name="future-schemes"></a>
 <h4>Future schemes</h4>
 <p>
             So far, the "<span class="codefrag">site:</span>" and "<span class="codefrag">ext:</span>" schemes are defined.
@@ -1012,7 +1022,7 @@ document.write("Last Published: " + document.lastModified);
           </p>
 </div>
     
-<a name="N103E6"></a><a name="concept"></a>
+<a name="N103F1"></a><a name="concept"></a>
 <h2 class="underlined_10">Concept</h2>
 <div class="section">
 <p>
@@ -1027,7 +1037,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N103FD"></a><a name="implementation"></a>
+<a name="N10408"></a><a name="implementation"></a>
 <h2 class="underlined_10">Implementation</h2>
 <div class="section">
 <p>Full details on the implementation of
