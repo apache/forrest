@@ -20,7 +20,7 @@
  * sure it does).
  *
  * Typical usage:
- * <script type="text/javascript" language="JavaScript" src="breadcrumbs.js"></script>
+ * <script type="text/javascript" src="breadcrumbs.js"></script>
  */
 
 /**

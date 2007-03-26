@@ -27,7 +27,6 @@ p.quote {
 <!--+|start favicon +-->
 <link href="../favicon.ico" rel="shortcut icon" />
 <!--+|start favicon +-->
-<script language="javascript" src="../themes/getBlank.js" type="text/javascript"> </script>
 <script src="../themes/menu.js" type="text/javascript"> </script>
 <!--+ |start content-title +-->
 <title>Dispatcher quickstart</title>
@@ -84,7 +83,7 @@ p.quote {
 <input name="sitesearch" type="hidden" value="mydomain" />
 </div>
 <div class="search-field">
-<input name="q" onBlur="getPrompt(this, 'Search the site with google');" onFocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
+<input name="q" onblur="getPrompt(this, 'Search the site with google');" onfocus="getBlank(this, 'Search the site with google');" size="25" type="text" value="Search the site with google" />
 </div>
 <div class="search-submit">
 <input name="Search" type="submit" value="Search" />
@@ -264,28 +263,35 @@ p.quote {
 </div>
 <a name="patch" title="Get ready"> </a>
 <h3 class="underlined_5">Get ready</h3>
+<div class="section">
 <ul>
         <li>Do 'svn update' on forrest/trunk</li>
         <li>Do the 'build clean; build' (necessary because the Dispatcher is changing rapidly and uses some Java)</li>
       </ul>
+</div>
 <a name="enable" title="Dispatcher-enable the existing site"> </a>
 <h3 class="underlined_5">Dispatcher-enable the existing site</h3>
+<div class="section">
 <ul>
         <li>Add the new plugins to forrest.properties ...
         ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core,org.apache.forrest.plugin.output.inputModule
         </li>
         <li>localhost:8888/index.html ... fantastic. See the pelt view.</li>
       </ul>
+</div>
 <a name="another-theme" title="Use another theme"> </a>
 <h3 class="underlined_5">Use another theme</h3>
+<div class="section">
 <ul>
         <li>Add &lt;property name="dispatcher.theme" value="common"/&gt; 
           to your forrest.properties.xml</li>
         <li>Re-start 'forrest run'</li>
         <li>localhost:8888/index.html ... See the new view.</li>
       </ul>
+</div>
 <a name="our-structurer" title="Create our own structurer by copy-and-customise"> </a>
 <h3 class="underlined_5">Create our own structurer by copy-and-customise</h3>
+<div class="section">
 <p>
         Copy the default structurer for the pelt theme and make local changes.
       </p>
@@ -313,7 +319,10 @@ p.quote {
 <ul>
         <li>Copy THEMER_PLUGIN/themes/pelt.fv into your project at
           ${themer.project.dir}/pelt.fv
-        </li>
+  </li>
+  <li>Copy THEMER_PLUGIN/themes/pelt/html/pelt-html.vt.xml into your
+          project at  ${themer.project.dir}/pelt/html/pelt-html.vt.xml
+  </li>
         <li>Re-start 'forrest run'</li>
         <li>localhost:8888/index.html ... See the same view, now structured
           by us.
@@ -323,15 +332,19 @@ p.quote {
         From here on there is no need to re-start 'forrest run'. Just edit
         the structurer and see the effect.
       </p>
+</div>
 <a name="remove-default-contract" title="Remove a default contract"> </a>
 <h3 class="underlined_5">Remove a default contract</h3>
+<div class="section">
 <ul>
-        <li>Remove one of the search boxes. Edit your pelt.fv and find the
-          "search-input" contract (there are two). Comment one out.
+        <li>Remove the top breadcrumb trail. Edit your pelt-html.vt.xml and find the
+          "branding-breadcrumbs" contract and comment it out.
         </li>
       </ul>
+</div>
 <a name="add-default-contract" title="Add a default contract"> </a>
 <h3 class="underlined_5">Add a default contract</h3>
+<div class="section">
 <p>
         Forrest provides many default contracts. If you are using the
         Forrestbar then choose "Devs =&gt; ls.contracts". Otherwise visit
@@ -339,15 +352,15 @@ p.quote {
       </p>
 <ul>
         <li>
-          See the usage detail for your chosen contract via the abovementioned list.
-          e.g. "siteinfo-compliance-links"
+          See the usage detail for your chosen contract via the above mentioned list.
+          e.g. "siteinfo-current-time"
         </li>
         <li>
           Insert it at the appropriate point in your structurer. Note that it
           will need to go inside the appropriate CSS hook, e.g.
         <pre class="code">  ...
   &lt;forrest:hook name="footer"&gt;
-    &lt;forrest:contract name="siteinfo-compliance-links"/&gt;
+    &lt;forrest:contract name="siteinfo-current-time"/&gt;
     ...
 </pre>
         </li>
@@ -355,9 +368,14 @@ p.quote {
 <p>
         Notice that you did not need to copy any other code to your project space.
         Forrest finds the default contract in its core (the themes.core plugin).
-      </p>
+</p>
+<p>You will find some commonly used contracts in place but commented out in both the common 
+        and the pelt structurer files. Feel free to umcomment them to activate them, move them
+around into other hooks or create new hooks for them.</p>
+</div>
 <a name="add-project-contract" title="Add a new project contract"> </a>
 <h3 class="underlined_5">Add a new project contract</h3>
+<div class="section">
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
@@ -401,13 +419,16 @@ p.quote {
         Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
         localhost:8888/ls.contracts.project.html
       </p>
+</div>
 <a name="manage" title="Decide how to manage your contracts"> </a>
 <h3 class="underlined_5">Decide how to manage your contracts</h3>
+<div class="section">
 <div class="fixme">
 <div class="label">Fixme (open)</div>
 <div class="content">
 Glean content from Ross' discussion:
 <a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=113748831226697">Re: Dispatcher quickstart</a>.
+</div>
 </div>
 </div>
 </div>
@@ -440,7 +461,7 @@ Glean content from Ross' discussion:
 </div>
 <div class="copyright">
             Copyright ©
-             2002-2006 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
+             2002-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a> </div>
 <!--+ |start compliance links +-->
 <div id="siteinfo-compliance-links">
 <a href="http://validator.w3.org/check?uri=referer">
