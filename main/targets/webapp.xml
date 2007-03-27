@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 
-<project default="webapp" basedir="." name="webapp">
+<project default="run-webapp" basedir="." name="run-webapp">
   
     <target name="project.webapp.defined" unless="project.webapp">
     <fail>
@@ -68,7 +68,7 @@
        Builds a cocoon webapp of your project for remote deployment.
        param: location to put generated webapp ${project.webapp}
        =============================================================== -->
-  <target name="webapp" depends="webapp-local, copy-xdocs, copy-content"
+  <target name="run-webapp" depends="webapp-local, copy-xdocs, copy-content"
    description="Generates a dynamic servlet-based website (an unpackaged webapp).">
    
    <!--
@@ -180,12 +180,14 @@
        Builds a cocoon .war for your project based on the siteplan.
        param: location to put generated war ${project.war}
        =============================================================== -->
- <target name="war" depends="webapp"
+ <target name="war" depends="run-webapp"
    description="* Generates a dynamic servlet-based website (a packaged .war file)">
 
+   <move file="${project.webapp}/WEB-INF/xconf/forrest-core-webapp.xconf" tofile="${project.webapp}/WEB-INF/xconf/forrest-core.xconf"/>
+     
    <jar destfile="${project.war}">
     <fileset dir="${project.webapp}"/>
-    <fileset dir="${forrest.home}">
+	<fileset dir="${forrest.home}">
       <include name="${build.plugins-dir}/**"/>
     </fileset>
    </jar>
