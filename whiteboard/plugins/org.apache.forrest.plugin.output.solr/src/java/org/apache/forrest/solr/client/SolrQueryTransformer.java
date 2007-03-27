@@ -17,6 +17,7 @@
 package org.apache.forrest.solr.client;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -43,14 +44,12 @@ public class SolrQueryTransformer extends AbstractSAXTransformer {
             rows=Integer.parseInt(userRows);
         else
             rows=10;
-        Map map =
-            request.getParameters();
         LinkedHashSet set = new LinkedHashSet();
-        Iterator keys = map.keySet().iterator();
-        while (keys.hasNext()) {
-            String element = (String) keys.next();
+        Enumeration keys = request.getParameterNames();
+        while (keys.hasMoreElements()) {
+            String element = (String) keys.nextElement();
             if(!"start".equals(element)){
-                String value = (String) map.get(element);
+                String value = (String) request.getParameter(element);
                 set.add(element+"="+value);
             }
         }

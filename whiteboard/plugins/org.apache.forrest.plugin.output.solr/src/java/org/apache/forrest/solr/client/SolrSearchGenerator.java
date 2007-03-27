@@ -1,6 +1,8 @@
 package org.apache.forrest.solr.client;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,13 +48,19 @@ public class SolrSearchGenerator extends ServiceableGenerator {
     public void setup(SourceResolver resolver, Map objectModel, String src,
             Parameters par) throws ProcessingException, SAXException, IOException {
         super.setup(resolver, objectModel, src, par);
+        map= new HashMap();
         this.request = ObjectModelHelper.getRequest(objectModel);
         destination = par.getParameter(DESTINATION_URL, SOLR_UPDATE_URL);
         query = request.getParameter(QUERY_PARAM);
         if (null== query){
             query = "DEFAULT_QUERY_STRING";
         }
-        map = request.getParameters();
+        // cocoon-2.1.x compatible
+        for (Enumeration iter = request.getParameterNames(); iter.hasMoreElements();) {
+            String name = (String) iter.nextElement();
+            System.out.println("xxx "+name);
+            map.put(name, request.getParameter(name));
+        }
     }
 
     public void generate() throws IOException, SAXException, ProcessingException {
