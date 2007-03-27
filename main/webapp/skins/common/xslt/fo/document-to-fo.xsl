@@ -783,6 +783,9 @@
         <xsl:when test="starts-with(string(@src),'images/')">
           <xsl:value-of select="concat($imagesdir,substring-after(@src,'images'))"/>
         </xsl:when>
+        <xsl:when test="contains(string(@src),'/images/')">
+          <xsl:value-of select="concat($imagesdir,substring-after(@src,'/images'))"/>
+        </xsl:when>
         <!-- already absolute -->
         <xsl:when test="contains(string(@src),':') or starts-with(string(@src),'/')">
           <xsl:value-of select="@src"/>
@@ -791,6 +794,7 @@
         <xsl:otherwise><xsl:value-of select="concat($xmlbasedir,@src)"/></xsl:otherwise>
       </xsl:choose>
       </xsl:variable>
+      
       <fo:external-graphic src="{$imgpath}">
         <xsl:if test="@height">
           <xsl:attribute name="height"><xsl:value-of select="@height"/></xsl:attribute>
@@ -799,6 +803,7 @@
           <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
         </xsl:if>
       </fo:external-graphic>
+      
       <!-- alt text -->
       <xsl:if test="//skinconfig/pdf/show-image-alt-text='true'">
         <xsl:if test="normalize-space(@alt)!=''">
