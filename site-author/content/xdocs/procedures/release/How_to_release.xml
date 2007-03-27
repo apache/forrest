@@ -337,7 +337,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 
         <section id="BuildDist">
             <title>Building the distribution</title>
-            <p>In this phase you build the release candidate to be tested.</p>
+            <p>In this phase the Release Manager builds the release candidate to be tested.</p>
             <note>You can practice the following steps (as far as creating the branch) without committing anything even
                 before code-freeze. This ensures a good release candidate.</note>
             <ol>
@@ -357,7 +357,7 @@ Decide the content of the release. Previously we just packed everything in trunk
                                 without errors.</p>
                         </li>
                         <li>
-                            <p>Change to the site-author-directory and run 'forrest'. The docs should build without
+                            <p>Change to the site-author directory and run 'forrest'. The docs should build without
                                 errors.</p>
                         </li>
 
@@ -440,21 +440,10 @@ Decide the content of the release. Previously we just packed everything in trunk
                 </li>
                 <li>
                     <p>Now we will build the release candidates for Windows and Unix.</p>
-                    <note>The reason for creating two separate archives is the line-endings dilemma between Windows and
-                        UNIX. SVN ensures correct line-endings on each operating system (as long as committers have been
-                        diligent when adding/updating the repository).</note>
                     <ul>
                         <li>
-                            <p>On a UNIX machine:<br /> Change to directory main and run <code>build release-dist</code>
-                                to generate the distributions on a UNIX machine.</p>
-                            <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
-                                *.zip archive.</p>
-                        </li>
-                        <li>
-                            <p>On a Windows machine:<br /> Change to directory main and run <code>build
-                                release-dist</code> to generate the distributions on a Windows machine.</p>
-                            <p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
-                                *.tar.gz archive.</p>
+                          Change to directory $FORREST_HOME/main and run <code>'build release-dist'</code>
+                          to generate the distributions.
                         </li>
                     </ul>
                 </li>
@@ -511,8 +500,7 @@ where
             <p>Get Forrest developers to test the actual distribution on various platforms.</p>
             <ol>
                 <li>
-                    <p>Upload the release candidates and signatures to a committer's webspace. Use the .tar.gz from the
-                        UNIX machine and .zip from the Windows machine.</p>
+                  Upload the release candidates and signatures to your committer's webspace.
                 </li>
                 <li>
                     <p>Use template <a href="test_and_vote_on_rel_cand.txt">test_and_vote_on_rel_cand.txt</a> for an
@@ -522,7 +510,7 @@ where
                       This is especially important if there has been more than one release candidate.</p>
                 </li>
                 <li>
-                    <p>During this testing phase, then Release Manager should:</p>
+                    <p>During this testing phase, the Release Manager should:</p>
                     <ul>
                         <li>Make sure that people are reporting that the distributions unpack on different systems without problems.</li>
                         <li>Make sure that people have followed the actual user instructions in the Forrest

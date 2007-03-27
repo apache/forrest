@@ -126,13 +126,10 @@
   <target name="release-dist" depends="init, dist-clean, dist-shbat" 
     description="Makes release distributions">
     <property name="release-name-bin" value="${name}-${forrest.version}"/>
-    <zip
-      file="${dist.dir}/${release-name-bin}.zip" >
-      <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
-    </zip>
+    <!-- Prepare *.tar.gz for "lf" eol-style systems -->
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}" excludes="*.bat"/>
     <tar longfile="gnu" compression="gzip"
       destfile="${dist.dir}/${release-name-bin}.tar.gz" >
-
       <tarfileset prefix="${release-name-bin}" dir="${dist-shbat.dir}"
         username="forrest" group="forrest">
         <exclude name="**/*.sh"/>
@@ -146,6 +143,12 @@
         <include name="**/forrest"/>
       </tarfileset>
     </tar>
+    <!-- Prepare *.zip for "crlf" eol-style systems -->
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}"/>
+    <zip
+      file="${dist.dir}/${release-name-bin}.zip" >
+      <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
+    </zip>
   </target>
 
 
@@ -279,7 +282,7 @@
   |    unix: $FORREST_HOME/bin/forrest -projecthelp
   |    win: %FORREST_HOME%\bin\forrest -projecthelp
   | will list options for the 'forrest' command
-  | More help at http://forrest.apache.org/ and forrest-dev@xml.apache.org
+  | More help at http://forrest.apache.org/ and dev AT forrest.apache.org
   *-----------------------------------------------------------------
     </echo>
   </target>
