@@ -52,7 +52,7 @@
         This is useful if you want to pull files from different directory structures,
         oe even remote repositories.</p>
         
-        <p>The target of "/remoteDemo/*.html"
+        <p>The target of "/remote.**.html"
         is generated from a source retrieved from the Forrest SVN.</p>
         
         <note>Because the above URL retrieves the source file from SVN it will
@@ -61,32 +61,30 @@
         you can enter the URL into the browser and it will work (however, note the 
         issue described below, regarding the site: and ext: protocols).</note>
         
-        <p>Go to <code>localhost:8888/remoteDemo/index.html</code>
+        <p>Go to <code>http://localhost:8888/remote.index.html</code>
           which will virtually re-load this page. However, rather than use
           the local xml source, the locationamp has retrieved the up-to-date
           source directly from the svn server.
-          Similarly <code>localhost:8888/remoteDemo/samples/index.html</code>
+          Similarly <code>http://localhost:8888/remote.samples/index.html</code>
         </p>
         <p>The match in src/documentation/content/locationmap.xml for this demo is ...</p>
         
         <source>
- &lt;match pattern="remoteDemo/**.xml"&gt;
+ &lt;match pattern="project.remote.**.xml"&gt;
    &lt;location src="http://svn.apache.org/repos/asf/forrest/trunk/main/fresh-site/src/documentation/content/xdocs/{1}.xml" /&gt;
  &lt;/match&gt;
         </source>
-        <p>See the src/documentation/content/sitemap.xmap for the match
-          that handles these remoteDemo requests ...
-        </p>
+        <p>Since we are using the locationmap naming convention, our new match get resolved
+          via the core forrest.xmap and we do not have to change any other files.</p>
       <source><![CDATA[
-<map:match pattern="remoteDemo/**.xml">
-  <map:generate src="{lm:remoteDemo/{1}.xml}"/>
-  <!-- or to abbreviate: <map:generate src="{lm:{0}}"/> -->
+<map:match pattern="**.xml">
+  <map:generate src="{lm:project.{0}}"/>
   <map:serialize type="xml"/>
 </map:match>
 ]]></source>
         <p>Note that because this is a wildcard matcher you can request any page
         from SVN simply by requesting 
-        <code>/remoteDemo/PATH/TO/FILE/FILENAME.html</code>. In addition, we
+        <code>/remote.PATH/TO/FILE/FILENAME.html</code>. In addition, we
         can request any other output format available via Forrest plugins.</p>
         
         <p>When including resources from remote repositories one has to
@@ -102,13 +100,13 @@
         <p>The locationmap can be used to rewrite URLs when the page is generated.
         For example, when the locationmap has:</p>
         <source>
- &lt;match pattern="rewriteDemo/**"&gt;
+ &lt;match pattern="project.rewrite.**"&gt;
    &lt;location src="http://cocoon.apache.org/{1}.html" /&gt;
  &lt;/match&gt;
         </source>
-        <p><a href="lm:rewriteDemo/index">This link is rewritten to
+        <p><a href="lm:rewrite.index">This link is rewritten to
         an offsite address</a> not
-        specified in the link, which has <code>href="lm:rewriteDemo/index"</code>.</p>
+        specified in the link, which has <code>href="lm:rewrite.index"</code>.</p>
       </section>
 
     </section>
