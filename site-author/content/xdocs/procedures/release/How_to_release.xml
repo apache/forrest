@@ -336,7 +336,7 @@ Decide the content of the release. Previously we just packed everything in trunk
         </section>
 
         <section id="BuildDist">
-            <title>Building the distribution</title>
+            <title>Building the release candidate packages</title>
             <p>In this phase the Release Manager builds the release candidate to be tested.</p>
             <note>You can practice the following steps (as far as creating the branch) without committing anything even
                 before code-freeze. This ensures a good release candidate.</note>
@@ -432,18 +432,18 @@ Decide the content of the release. Previously we just packed everything in trunk
                 </li>
                 <li>
                     <p>Take note of the SVN revision number of your trunk by running <code>svn info</code> from the
-                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".
+                        command line in the Release Candidate's root dir and look at the "Last Changed Rev: ######".
                       This will be used later for the svn log message when the branch is created.
                       Also it is helpful for ensuring that no new commits have been made,
                       i.e. people forgetting the code freeze.
                       From here on watch the svn@ list.</p>
                 </li>
                 <li>
-                    <p>Now we will build the release candidates for Windows and Unix.</p>
+                    <p>Now we will build the release candidate packages for Windows and Unix.</p>
                     <ul>
                         <li>
                           Change to directory $FORREST_HOME/main and run <code>'build release-dist'</code>
-                          to generate the distributions.
+                          to generate the release candidate packages.
                         </li>
                     </ul>
                 </li>
@@ -453,7 +453,7 @@ Decide the content of the release. Previously we just packed everything in trunk
                   i.e. ensure that you are not using your trunk working copy.
                 </li>
                 <li>
-                    <p id="signing">Sign the Release Candidates distribution file and create the *.asc and *.md5 files.</p>
+                    <p id="signing">Sign the Release Candidate packages and create the *.asc and *.md5 files.</p>
                     <p>Here is one example when using <a href="http://www.gnupg.org/(en)/download/index.html">gpg</a>
                         and openssl from the command line. </p>
                     <note>An windows version for openssl can be found at <a
@@ -485,7 +485,7 @@ svn copy -r ##### -m "Create the x.y release branch from r#####" \
 where
   'xy' is a compact form of the version (e.g. 04, 041, 05).
   '#####' is the SVN revision number that the branch was created from,
-  which was the revision that the release candidates were generated from.
+  which was the revision that the release candidate packages were generated from.
   (Remember that you recorded this number earlier.)
                   </source>
                   <p> See <a href="http://svn.apache.org/repos/asf/forrest/branches/">http://svn.apache.org/repos/asf/forrest/branches/</a>
@@ -497,10 +497,10 @@ where
 
         <section id="vote">
             <title>Testing the release candidate and voting</title>
-            <p>Get Forrest developers to test the actual distribution on various platforms.</p>
+            <p>Get Forrest developers to test the actual packges on various platforms.</p>
             <ol>
                 <li>
-                  Upload the release candidates and signatures to your committer's webspace.
+                  Upload the release candidate packages and signatures to your committer's webspace.
                 </li>
                 <li>
                     <p>Use template <a href="test_and_vote_on_rel_cand.txt">test_and_vote_on_rel_cand.txt</a> for an
@@ -512,7 +512,7 @@ where
                 <li>
                     <p>During this testing phase, the Release Manager should:</p>
                     <ul>
-                        <li>Make sure that people are reporting that the distributions unpack on different systems without problems.</li>
+                        <li>Make sure that people are reporting that the packages unpack on different systems without problems.</li>
                         <li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
                         <li>Encourage people to build some difficult sites.</li>
@@ -526,7 +526,7 @@ where
                   minor stuff or add some pet new feature that they have neglected. That can easily
                   introduce new problems.
                 </li>
-                <li>If necessary start again with <a href="#BuildDist">Building the distribution</a> and build another
+                <li>If necessary start again with <a href="#BuildDist">Building the packages</a> and build another
                     release candidate.</li>
                 <li>Tally the votes and report the result to the dev list.</li>
             </ol>
@@ -710,7 +710,7 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
                     to be ready for the next release.</p>
                     <fixme author="fso">I'd like to drop this step and rather word everything more flexibly.</fixme>
                 </li>
-                <li><p>Remove the release candidates from your public_html directory.</p></li>
+                <li><p>Remove the release candidate packages from your public_html directory.</p></li>
             </ol>
             
         </section>
