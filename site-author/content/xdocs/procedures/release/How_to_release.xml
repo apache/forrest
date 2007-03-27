@@ -416,15 +416,20 @@ Decide the content of the release. Previously we just packed everything in trunk
                      then it is using locationmap. See <a href="site:buildPlugin">buildPlugin</a>.</p>
                 </li>
                 <li>
-                    <p>Edit 4 files in tools/forrestbar to update the version number to match the new release: -
-                        install.rdf, line 24: &lt;em:version&gt;0.7&lt;/em:version&gt; - install.js,
-                        line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7"); -
-                        xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/> -
-                        xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number as well as
-                        change the link to point to the new release's docs: &lt;menuitem label=&quot;Current
-                        Docs (0.7)&quot;
-                        onclick=&quot;navigate(&apos;http://forrest.apache.org/docs_0_70/index.html&apos;);&quot;
-                        /&gt; </p>
+                  Edit 4 files in tools/forrestbar to update the version number to match the new release:
+                  <source><![CDATA[
+install.rdf, line 24: <em:version>0.7</em:version>
+
+install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7");
+
+xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/> 
+
+xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
+  as well as change the link to point to the new release's docs:
+    <menuitem label="Current Docs (0.7)"
+       onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');"/>
+        ]]>
+                    </source>
                     <fixme author="">There are probably other areas which have version numbers. How can we improve this? Possibly with XML Entities, possibly with Ant properties.</fixme>
                 </li>
                 <li>Commit all of the above changes.</li>
@@ -464,18 +469,17 @@ Decide the content of the release. Previously we just packed everything in trunk
                             href="http://www.slproweb.com/products/Win32OpenSSL.html"
                             >http://www.slproweb.com/products/Win32OpenSSL.html</a></note>
                     <source><![CDATA[
-        gpg --recv-key <myKey>
-        gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
-        --detach-sig --armor apache-forrest-0.7.tar.gz
-        gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-        apache-forrest-0.7.tar.gz]]></source>
+gpg --recv-key <myKey>
+gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
+  --detach-sig --armor apache-forrest-0.7.tar.gz
+gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
+  apache-forrest-0.7.tar.gz]]></source>
                     <p> ... should say "Good signature from ..."</p>
 
                     <source><![CDATA[
-        openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
-        apache-forrest-0.7.tar.gz
-        md5sum apache-forrest-0.7.tar.gz]]>
-                    </source>
+openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
+apache-forrest-0.7.tar.gz
+md5sum apache-forrest-0.7.tar.gz]]></source>
                     <p>... output should match that of the md5 file.</p>
                 </li>
                 <li>
