@@ -73,14 +73,7 @@
 
   <steps title="Understanding the HTML-Pipeline">
 
-    <warning>
-      The example sitemap fragments are out-of-date because since this
-      document was written, the core sitemaps in main/webapp/ have changed and
-      some of the specialised processing has moved to plugins.
-      View your source sitemaps when reading this document.
-      (See <a href="https://issues.apache.org/jira/browse/FOR-922">FOR-922</a>.)
-    </warning>
-
+   
     <p>
       The first part of this howto explains the html pipeline, so as to
       provide the background to enable you to add additional processing
@@ -100,7 +93,7 @@
         So let's see what happens, when a client asks Forrest to
         serve the document
         <br />
-        'http://some.domain.org/mytest/mybad.html'.
+        'http://my.domain.org/mytest/mybad.html'.
       </p>
     </section>
 
@@ -126,20 +119,18 @@
 
       <p>
         To help you to easily follow the next steps, we have added
-        comments and anchors to 'sitemap.xmap',
+        comments and markers to 'sitemap.xmap',
         so that you can quickly jump to all relevant sections
         and read them more easily.
       </p>
 
       <p class="instruction">
-        Follow this link to the
-        <a href="sitemap.xmap.html#Start+of+Sitemap">
+          Search for <code><![CDATA[map:sitemap]]></code> to find the 
           start of the Sitemap.
-        </a>
       </p>
 
       <p>
-        As the comment explains, this sitemap is the starting point
+        This sitemap is the starting point
         for all requests. So even if there are other sitemaps
         (which we will see later on), we always start looking for a
         matching pattern right here.
@@ -157,11 +148,7 @@
       </p>
       <p class="instruction">
         So let's skip right to the start of the
-        Pipelines-Section. Search for &lt;map:pipelines&gt; or
-        follow this link to the
-        <a href="sitemap.xmap.html#Start+of+Pipelines">
-          beginning of the pipelines-element
-        </a>
+          Pipelines-Section. Search for <code><![CDATA[map:pipelines]]></code>
       </p>
 
       <p>
@@ -184,35 +171,42 @@
         Like all Cocoon applications, Forrest knows which
         pipeline to use for processing a certain request by
         looking at the entry criteria for each pipeline it comes
-        across. These can be a match against a given pattern,
+        across. This can be a match against a given pattern,
         the test if a certain files exists or one of many other
         possible tests that Cocoon supports.
       </p>
 
-      <p class="instruction">
+      <p>
         To better know what we are talking about, let's follow
-        Forrest down the list to the
-        <a href="sitemap.xmap.html#Test+for+First+Pipeline">
-          Test for the First Pipeline
-        </a>.
+        Forrest down the list to the Test for the First Pipeline:
+      </p>
+
+      <p class="instruction">
+           Scroll down to the line
+           <code><![CDATA[<map:match pattern="cprofile.*">]]></code>
       </p>
 
       <p>
         Here you can see that very specialized matches need to occur
         early in the sitemap. The
         requested file (and pathname) is compared to a pattern
-        '*.xlex' that would match if our request ended with
-        '.xlex' and had no pathname. Since it doesn't, we don't
+        'cprofile.*' that would match if our request started with
+        'cprofile', endet with any kind of extension and had no pathname. Since it doesn't, we don't
         have a match and need to keep looking.
       </p>
 
       <p class="instruction">
-        Skip forward until we find the
-        <a href="sitemap.xmap.html#First+Match+for+%22**%2F*.html%22">
-          First Match for "**/*.html"
-        </a>
-        (&lt;map:match pattern="**/*.html"&gt;).
+        Skip forward until you find
+        <code><![CDATA[<map:match pattern="**/*.html">]]></code>.
+          
       </p>
+      
+        <note>While scrolling down you may have noticed the match-pattern  
+            <code><![CDATA[<map:match pattern="*.html">]]></code> a couple of
+            lines earlier. This will not match our request since *.something in Cocoon matches only
+            files in the root directory.
+        </note>
+        
     </section>
 
     <section id="html-pipeline">
@@ -223,18 +217,18 @@
       </p>
 <source><![CDATA[
 <map:match pattern="**/*.html">
-    <map:aggregate element="site">
-      <map:part src="cocoon:/skinconf.xml"/>
-      <map:part src="cocoon:/build-info"/>
-      <map:part src="cocoon:/{1}/tab-{2}.html"/>
-      <map:part src="cocoon:/{1}/menu-{2}.html"/>
-      <map:part src="cocoon:/{1}/body-{2}.html"/>
-    </map:aggregate>
-    <map:call resource="skinit">
-      <map:parameter name="type" value="site2xhtml"/>
-      <map:parameter name="path" value="{0}"/>
-    </map:call>
-</map:match>]]></source>
+        <map:aggregate element="site">
+          <map:part src="cocoon:/skinconf.xml"/>
+          <map:part src="cocoon:/build-info"/>
+          <map:part src="cocoon:/{1}/tab-{2}.html"/>
+          <map:part src="cocoon:/{1}/menu-{2}.html"/>
+          <map:part src="cocoon:/{1}/body-{2}.html"/>
+        </map:aggregate>
+        <map:call resource="skinit">
+          <map:parameter name="type" value="transform.site.xhtml"/>
+          <map:parameter name="path" value="{0}"/>
+        </map:call>
+      </map:match>]]></source>
       <p>
         In the first part of this pipeline, the
         aggregate-element assembles information required to build
@@ -259,7 +253,7 @@
         back into our pipeline.
         (The 'pseudo' goes back to the fact that unlike
         'http' or 'ftp', which are real protocols, you can use cocoon:
-        only within the cocoon environments as only they will know what to
+        only within the cocoon environments as only Cocoon will know what to
         do with it.)
       </p>
       <p>
@@ -330,10 +324,8 @@
       </p>
 
       <p class="instruction">
-         Search for '**body-*.html' from the beginning of the
-         sitemap or jump to the
-         <a href="sitemap.xmap.html#First+Match+for+%27**body-*.html%27">First Match for '**body-*.html'</a>
-         to see where we find our next match.
+          Search for <code><![CDATA[**body-*.html]]></code> from the beginning of the
+         sitemap to see where we find our next match.
       </p>
     </section>
     <section id="match-1">
@@ -345,12 +337,12 @@
        </p>
 <source><![CDATA[
 <map:select type="exists">
-   <map:when test="{properties:content.xdocs}mytests/mybad.ehtml">]]></source>
+          <map:when test="{lm:project.{1}{2}.ehtml}">]]></source>
        <p>
          we quickly discover that there can't be a file of
          that name in the project-directory.
          <br />
-         (The variable '{properties:content.xdocs}' is always replaced with
+           (The variable '{lm:project.}' is always replaced with
          the name of your project directory that you can change
          in the 'forrest.properties'-file.)
        </p>
@@ -364,8 +356,7 @@
       <title>Second Match for '**body-*.html'</title>
       <p class="instruction">
          Continue searching downwards for '**body-*.html' in the
-         sitemap-file or jump directly to the
-         <a href="sitemap.xmap.html#Second+Match+for+%27**body-*.html%27">Second Match for '**body-*.html'</a>.
+         sitemap-file.
       </p>
       <p>
         Looking at the pipeline that handles the request, we see that
@@ -418,8 +409,7 @@
         '/mytests/mybad.xml'.
       </p>
       <p>
-        We find it in the pattern
-        <a href="sitemap.xmap.html#First+Match+for+%27**.xml%27">'**.xml'></a>,
+        We find it in the pattern <code><![CDATA[<map:match pattern="**.xml">]]></code>,
         which is the standard handling for all xml-requests.
       </p>
       <p>
@@ -427,7 +417,7 @@
         this pipeline, it falls right through to the map:mount-element
         at the end:
         </p>
-      <source><![CDATA[<map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />]]></source>
+        <source><![CDATA[<map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />]]></source>
       <p>
         which makes Forrest load and process a secondary sitemap,
         the file 'forrest.xmap' in the same directory.
@@ -437,33 +427,23 @@
         matching pattern.
       </p>
       <p>
-        Our search leads us to the 
-        <a href="forrest.xmap.html#Second+Match+for+%27**.xml%27">
-          Second Match for '**.xml'
-        </a>,
-        a pipeline designed to handle internationalisation if that
-        feature is configured. Since it is not, all it does is
-        call the file-resolver-resource with the full pathname of
-        our file but no extension.
+        Our search first leads us to the matcher <code><![CDATA[<map:match type="wildcard" pattern="**.xml">]]></code> 
+          with a number of submatchers embedded into it. 
       </p>
-<source><![CDATA[
-<map:call resource="file-resolver">
-  <map:parameter name="uri" value="mytests/mybad"/>
-</map:call>]]></source>
-    </section>
-    <section id="file">
-      <title>Introducing the File-Resolver</title>
-      <p class="instruction">
-        To find out more about the working of the file-resolver,
-        search for the definition of the
-        <a href="forrest.xmap.html#Definition+of+File-Resolver-Resource">
-          &lt;map:resource name="file-resolver"&gt;
-        </a>
-        higher up in the file.
-      </p>
+      <p>The first one, <code><![CDATA[<map:match type="wildcard" pattern="**.xml">]]></code>, would handle input coming from Forrest plugins. 
+      We won't go into details here.</p>
       <p>
-        Here you will find a pipeline that tests for the existence of
-        the file with different extensions. '.html' is second in this
+        All further matchers <code><![CDATA[<map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.xml"> ]]></code>.
+        implement what we call a cascade of matchers. By testing for the existence of one source file after another Forrest will use and process the 
+        first of the tested source-formats found.  
+      </p>
+        
+      <note>Using the i18n-matcher here, Forrest will do a lot more than just finding content in one of many possible source formats. 
+          It will also make sure that the the proper language version of the conent (if there are several) is used. 
+          Read more about this matcher <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html">http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html</a></note>
+      <p>
+        Checking each matcher in turn you will find that a pipeline that tests for the existence of
+        the file with different extensions. '.html' is third in this
         list and leads to the processing steps shown below:
       </p>
     </section>
@@ -471,28 +451,25 @@
     <section id="process-html">
       <title>html-Default Processing</title>
       <p>
-        The default processing of html-files consists of four
+        The default processing of html-files consists of three
         processing steps:
       </p>
       <ol>
         <li>
-          <code>&lt;map:generate src="{properties:content.xdocs}{uri}.html" type="html"/&gt;</code><br/>
-            Using the html-generator, Forrest reads the html-document
+          <code><![CDATA[<map:generate src="{source}" type="html" />]]></code><br/>
+            Using Cocoons html-generator, Forrest reads the html-document
             from file and uses JTidy to clean up and convert it to xml
-            (which is required for all processing in cocoon pipelines).
+            (which is required for all processing in Cocoon pipelines).
             At the output of this transformer we will have a valid
             XHTML-document althought it might still contain some unwanted
             elements. We'll deal with those later (see
             <a href="#custom">When to customize</a>).
         </li>
         <li>
-            <code>&lt;map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/&gt;</code><br/>
-          Using the standard stylesheet 'html2document.xsl', this XHTML is 
-          transformed into Forrest standard document format.
-        </li>
-        <li>
-          <code>&lt;map:transform type="idgen"/&gt;</code><br/>
-          This step generates IDs required for navigation within the page.
+            <code><![CDATA[<map:transform src="{lm:transform.html.document}" />]]></code><br/>
+          Using the standard stylesheet 'html-to-document.xsl', this XHTML is 
+            transformed into Forrest's <a href="site:glossary">Standard Document Format</a>.  (refer to a detailed <a href="site:locationmap">explanation of locationsmaps</a> 
+          to understand exactly how and where that stylesheet is found!)
         </li>
         <li>
           <code>&lt;map:serialize type="xml-document"/&gt;</code><br/>
@@ -515,8 +492,8 @@
       <title>Returning to the '**body-*.html'-Pipeline</title>
       <p>
         On returning into the
-        <a href="sitemap.xmap.html#Returning+to+the+%27**body-*.html%27+Pipeline">'**body-*.html' pipeline</a>,
-        procesing continues with the next components in this pipeline:
+        '**body-*.html'-Pipeline (in sitemap.xmap),
+        processing continues with the next components in this pipeline:
       </p>
       <ul>
         <li>
@@ -535,7 +512,7 @@
           directory structure. It also resolves any special Forrest links.
         </li>
         <li>
-          The final transformation, as the name suggests, will take
+            The final transformation, <code><![CDATA[<map:transform src="{lm:transform.html.broken-links}" />]]></code> as the name suggests, will take
           care of reporting broken site-links.
         </li>
         <li>
@@ -598,24 +575,20 @@
         <title>How to customize?</title>
         <p>
           To add your own custom processing for a group of pages, you will
-          create a project sitemap with pipelines that process documents
+          enhance the project sitemap with pipelines that process your documents
           according to your specifications.
         </p>
         <p>
           This project sitemap is located in the file
           'src/documentation/sitemap.xmap' in your Forrest project directory
-          and will be created automatically when you seed a new project.
-          At this point it contains only one
-          <a href="project_sitemap.xmap.html#Example+pipeline+for+%27**custom.xml%27">
-          pipeline for handling the '**custom.xml'-pattern</a> as an example.
+          and is created automatically whenever you seed a new project.
+          At this point it already contains a  few examples for custom pipelines.
         </p>
         <p>
           To add your own custom processing, edit the file and add a new
           pipeline to the project sitemap. Since the project sitemap is
-          loaded into the main sitemap
-          <a href="sitemap.xmap.html#Insertion+Point+for+Project+Sitemap">
-          right at the top</a>, your pipeline intercepts practically all
-          of Forrest's standard pipelines.
+          loaded into the main sitemap right at the top (search for 'This is the user pipeline'),
+          your pipeline intercepts practically all of Forrest's standard pipelines.
         </p>
       </section>
 
@@ -668,24 +641,22 @@
     </map:match>
 </map:pipeline>]]></source>
         <p class="instruction">
-          Open the 'forrest.xmap', navigate to the file-resolver-section,
-          copy the four lines for handling *.html files and paste them into
-          your new pipeline.
+          Open the 'forrest.xmap', search for <code><![CDATA[<map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.html">]]></code>,
+          copy the three lines for handling *.html files and paste them into your new pipeline.
         </p>
 
 <source><![CDATA[
 <!--Custom Pipeline for my bad html-pages-->        
 <map:pipeline>
     <map:match pattern="mytest/*.xml">
-      <map:generate src="{properties:content.xdocs}{uri}.html" type="html"/>
-      <map:transform src="{forrest:forrest.stylesheets}/html2document.xsl"/>
-      <map:transform type="idgen"/>
+      <map:generate src="mytest/{1}.html" type="html" />
+      <map:transform src="{lm:transform.html.document}" />
       <map:serialize type="xml-document"/>
     </map:match>
 </map:pipeline>]]></source>
         <p>
           Your custom pipeline will now behave exactly like the standard
-          html-handler. Now all that is left to be done is creating the
+          html-handler. All that is left to be done is creating the
           custom transformation and adding it the pipeline.
         </p>
         <p class="instruction">
@@ -703,12 +674,11 @@
 <!--Custom Pipeline for my bad html-pages-->        
 <map:pipeline>
     <map:match pattern="mytest/*.xml">
-      <map:generate src="{properties:content.xdocs}{uri}.html" type="html" />]]>
-  <strong><![CDATA[
+      <map:generate src="mytest/{1}.html" type="html" />]]>
+      <strong><![CDATA[
       <map:transform src="{properties:resources.stylesheets}/fixMyBadHTML.xsl"/>]]>
-  </strong><![CDATA[
-      <map:transform src="{forrest:forrest.stylesheets}/html2document.xsl" />
-      <map:transform type="idgen" />
+      </strong><![CDATA[
+      <map:transform src="{lm:transform.html.document}" />
       <map:serialize type="xml-document"/>
     </map:match>
 </map:pipeline>]]></source>
