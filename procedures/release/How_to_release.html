@@ -266,7 +266,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="#adjustDocs">Preparing docs for next release cycle</a>
 </li>
 <li>
-<a href="#BuildDist">Building the distribution</a>
+<a href="#BuildDist">Building the release candidate packages</a>
 </li>
 <li>
 <a href="#vote">Testing the release candidate and voting</a>
@@ -318,7 +318,7 @@ some steps will need to be re-arranged.
 <p>The RM could do the whole job alone, which enables speedy process.
               There are not actually many tasks where assistants can help.
               However it is a good idea to have an assistant so as to pass
-              on the knowledge, to help document it, and to perceive potential flaws.
+              on the knowledge, to help document the process, and to perceive potential flaws.
               More than one assistant would probably hinder.
             </p>
 <p>The RM should be comfortable with using SVN and be familiar with
@@ -481,9 +481,13 @@ Decide the content of the release. Previously we just packed everything in trunk
 <div class="label">Note</div>
 <div class="content">There are various reasons for voting on the Release Plan, e.g. makes people aware that a code-freeze
                 is about to happen; encourage them to get involved with the release; ensure that the date is suitable
-                and people will be around to test and then vote on the actual release. See a good discussion <a href="http://marc.theaimsgroup.com/?t=114296877800003">in the archives</a>
-            
-</div>
+                and people will be around to test and then vote on the actual release.
+                This ensures that it is the PMC as a whole that prepares and issues the release,
+                rather than an individual. Such procedures give us the protection
+                accorded by the ASF being a corporation.
+                See a good discussion
+                <a href="http://marc.theaimsgroup.com/?t=114296877800003">in the archives</a>.
+            </div>
 </div>
 </div>
 
@@ -735,7 +739,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 
         
 <a name="N101D6"></a><a name="BuildDist"></a>
-<h2 class="underlined_10">Building the distribution</h2>
+<h2 class="underlined_10">Building the release candidate packages</h2>
 <div class="section">
 <p>In this phase the Release Manager builds the release candidate to be tested.</p>
 <div class="note">
@@ -862,16 +866,20 @@ Decide the content of the release. Previously we just packed everything in trunk
 </li>
                 
 <li>
-                    
-<p>Edit 4 files in tools/forrestbar to update the version number to match the new release: -
-                        install.rdf, line 24: &lt;em:version&gt;0.7&lt;/em:version&gt; - install.js,
-                        line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7"); -
-                        xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/&gt; -
-                        xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number as well as
-                        change the link to point to the new release's docs: &lt;menuitem label="Current
-                        Docs (0.7)"
-                        onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');"
-                        /&gt; </p>
+                  Edit 4 files in tools/forrestbar to update the version number to match the new release:
+                  <pre class="code">
+install.rdf, line 24: &lt;em:version&gt;0.7&lt;/em:version&gt;
+
+install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7");
+
+xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/&gt; 
+
+xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
+  as well as change the link to point to the new release's docs:
+    &lt;menuitem label="Current Docs (0.7)"
+       onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');"/&gt;
+        
+                    </pre>
                     
 <div class="fixme">
 <div class="label">Fixme ()</div>
@@ -898,7 +906,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 <li>
                     
 <p>Take note of the SVN revision number of your trunk by running <span class="codefrag">svn info</span> from the
-                        command line in the Release Candidates root dir and look at the "Last Changed Rev: ######".
+                        command line in the Release Candidate's root dir and look at the "Last Changed Rev: ######".
                       This will be used later for the svn log message when the branch is created.
                       Also it is helpful for ensuring that no new commits have been made,
                       i.e. people forgetting the code freeze.
@@ -908,36 +916,14 @@ Decide the content of the release. Previously we just packed everything in trunk
                 
 <li>
                     
-<p>Now we will build the release candidates for Windows and Unix.</p>
-                    
-<div class="note">
-<div class="label">Note</div>
-<div class="content">The reason for creating two separate archives is the line-endings dilemma between Windows and
-                        UNIX. SVN ensures correct line-endings on each operating system (as long as committers have been
-                        diligent when adding/updating the repository).</div>
-</div>
+<p>Now we will build the release candidate packages for Windows and Unix.</p>
                     
 <ul>
                         
 <li>
-                            
-<p>On a UNIX machine:<br> Change to directory main and run <span class="codefrag">build release-dist</span>
-                                to generate the distributions on a UNIX machine.</p>
-                            
-<p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
-                                *.zip archive.</p>
-                        
-</li>
-                        
-<li>
-                            
-<p>On a Windows machine:<br> Change to directory main and run <span class="codefrag">build
-                                release-dist</span> to generate the distributions on a Windows machine.</p>
-                            
-<p> Two archives are created: apache-forrest-X.Y.tar.gz apache-forrest-X.Y.zip. Ignore the
-                                *.tar.gz archive.</p>
-                        
-</li>
+                          Change to directory $FORREST_HOME/main and run <span class="codefrag">'build release-dist'</span>
+                          to generate the release candidate packages.
+                        </li>
                     
 </ul>
                 
@@ -952,7 +938,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 <li>
                     
 <a name="signing"></a>
-<p id="signing">Sign the Release Candidates distribution file and create the *.asc and *.md5 files.</p>
+<p id="signing">Sign the Release Candidate packages and create the *.asc and *.md5 files.</p>
                     
 <p>Here is one example when using <a href="http://www.gnupg.org/(en)/download/index.html">gpg</a>
                         and openssl from the command line. </p>
@@ -964,20 +950,19 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
                     
 <pre class="code">
-        gpg --recv-key &lt;myKey&gt;
-        gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
-        --detach-sig --armor apache-forrest-0.7.tar.gz
-        gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
-        apache-forrest-0.7.tar.gz</pre>
+gpg --recv-key &lt;myKey&gt;
+gpg --output crossley-apache-forrest-0.7.tar.gz.asc \
+  --detach-sig --armor apache-forrest-0.7.tar.gz
+gpg --verify crossley-apache-forrest-0.7.tar.gz.asc \
+  apache-forrest-0.7.tar.gz</pre>
                     
 <p> ... should say "Good signature from ..."</p>
 
                     
 <pre class="code">
-        openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
-        apache-forrest-0.7.tar.gz
-        md5sum apache-forrest-0.7.tar.gz
-                    </pre>
+openssl dgst -md5 -out apache-forrest-0.7.tar.gz.md5 \
+apache-forrest-0.7.tar.gz
+md5sum apache-forrest-0.7.tar.gz</pre>
                     
 <p>... output should match that of the md5 file.</p>
                 
@@ -996,7 +981,7 @@ svn copy -r ##### -m "Create the x.y release branch from r#####" \
 where
   'xy' is a compact form of the version (e.g. 04, 041, 05).
   '#####' is the SVN revision number that the branch was created from,
-  which was the revision that the release candidates were generated from.
+  which was the revision that the release candidate packages were generated from.
   (Remember that you recorded this number earlier.)
                   </pre>
                   
@@ -1010,18 +995,15 @@ where
 </div>
 
         
-<a name="N102C8"></a><a name="vote"></a>
+<a name="N102B0"></a><a name="vote"></a>
 <h2 class="underlined_10">Testing the release candidate and voting</h2>
 <div class="section">
-<p>Get Forrest developers to test the actual distribution on various platforms.</p>
+<p>Get Forrest developers to test the actual packges on various platforms.</p>
 <ol>
                 
 <li>
-                    
-<p>Upload the release candidates and signatures to a committer's webspace. Use the .tar.gz from the
-                        UNIX machine and .zip from the Windows machine.</p>
-                
-</li>
+                  Upload the release candidate packages and signatures to your committer's webspace.
+                </li>
                 
 <li>
                     
@@ -1039,7 +1021,7 @@ where
                     
 <ul>
                         
-<li>Make sure that people are reporting that the distributions unpack on different systems without problems.</li>
+<li>Make sure that people are reporting that the packages unpack on different systems without problems.</li>
                         
 <li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
@@ -1059,16 +1041,23 @@ where
                   introduce new problems.
                 </li>
                 
-<li>If necessary start again with <a href="#BuildDist">Building the distribution</a> and build another
+<li>If necessary start again with <a href="#BuildDist">Building the packages</a> and build another
                     release candidate.</li>
                 
 <li>Tally the votes and report the result to the dev list.</li>
             
 </ol>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+              It is vitally important that people review and vote against the actual final release packages
+              (and not just against their SVN working copy).
+            </div>
+</div>
 </div>
 
         
-<a name="N10304"></a><a name="FinalRel"></a>
+<a name="N102EC"></a><a name="FinalRel"></a>
 <h2 class="underlined_10">Finalizing the release</h2>
 <div class="section">
 <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
@@ -1141,7 +1130,7 @@ where
 </div>
 
         
-<a name="N1034E"></a><a name="UploadAndAnnounce"></a>
+<a name="N10336"></a><a name="UploadAndAnnounce"></a>
 <h2 class="underlined_10">Upload and announcement</h2>
 <div class="section">
 <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
@@ -1302,7 +1291,7 @@ where
 </div>
 
         
-<a name="N10404"></a><a name="cleanup"></a>
+<a name="N103EC"></a><a name="cleanup"></a>
 <h2 class="underlined_10">Cleanup</h2>
 <div class="section">
 <ol>
@@ -1391,14 +1380,14 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
 </li>
                 
 <li>
-<p>Remove the release candidates from your public_html directory.</p>
+<p>Remove the release candidate packages from your public_html directory.</p>
 </li>
             
 </ol>
 </div>
         
         
-<a name="N10458"></a><a name="conclusion"></a>
+<a name="N10440"></a><a name="conclusion"></a>
 <h2 class="underlined_10">Conclusion</h2>
 <div class="section">
 <p>All done!</p>
