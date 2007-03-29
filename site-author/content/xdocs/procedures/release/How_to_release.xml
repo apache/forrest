@@ -260,27 +260,22 @@ Decide the content of the release. Previously we just packed everything in trunk
 
                     <ol>
                         <li>
-                            <p>Move all version numbers one line down so that </p>
-                            <source>
-                                <![CDATA[
+                            <p>Move all version numbers one line down so that:</p>
+                            <source><![CDATA[
  <versions tab="docs">
     <overview label="Overview" href="versions/index.html"/>
     <v0.8 label="0.8-dev" href="site:index"/>
     <v0.7 label="0.7 (current)" href="site:v0.70//index"/>
     <v0.6 label="0.6" href="site:v0.60//index"/>
-  </versions>
-                        ]]>
-                            </source>
-                            <p>becomes</p>
-                            <source>
-                                <![CDATA[
+  </versions> ]]></source>
+                            <p>becomes:</p>
+                            <source><![CDATA[
  <versions tab="docs">
     <overview label="Overview" href="versions/index.html"/>
     <v0.9 label="0.9-dev" href="site:index"/>
     <v0.8 label="0.8 (current)" href="site:v0.80//index"/>
     <v0.7 label="0.7" href="site:v0.70//index"/>
-  </versions>
-                        ]]></source>
+  </versions> ]]></source>
                         </li>
                     </ol>
                 </li>
@@ -303,16 +298,21 @@ Decide the content of the release. Previously we just packed everything in trunk
                             date.</p>
                         </li>
                         <li>
-                            <p>Add a new &lt;release&gt; for development on the next version e.g. from:
-                                &lt;release version=&quot;0.7-dev&quot; date=&quot;not yet
-                                released&quot;&gt; ... to: &lt;release version=&quot;0.8-dev&quot;
-                                date=&quot;not yet released&quot;&gt; &lt;/release&gt;
-                                &lt;release version=&quot;0.7&quot;
-                                date=&quot;2002-02-13&quot;&gt; ...</p>
+                            <p>Add a new <code><![CDATA[<release>]]></code> section
+                              for development on the next version e.g. from:</p>
+                            <source><![CDATA[
+  <release version="0.7-dev" date="not yet released">
+  ... ]]></source>
+                            <p>to:</p>
+                            <source><![CDATA[
+  <release version="0.8-dev" date="not yet released">
+  ...
+  </release>
+  <release version="0.7" date="2005-06-23">
+  ...
+  ]]></source>
                         </li>
                     </ol>
-
-
                 </li>
                 <li>Temporarily remove the "dev" note from upgrading_xy.xml</li>
                 <li>
@@ -384,10 +384,10 @@ Decide the content of the release. Previously we just packed everything in trunk
                     <p>Update the version numbers at various places:</p>
                     <ul>
                         <li>
-                            <p>Edit main/build.xml and replace the '-dev' text with '' i.e. nothing: around line 45:
-                                &lt;property name=&quot;forrest.version&quot;
-                                value=&quot;0.7-dev&quot;/&gt; to: &lt;property
-                                name=&quot;forrest.version&quot; value=&quot;0.7&quot;/&gt; </p>
+                            <p>Edit main/build.xml and remove the "-dev" text around line 45:</p>
+                            <p><code><![CDATA[ <property name="forrest.version" value="0.8-dev"/> ]]></code></p>
+                            <p>to:</p>
+                            <p><code><![CDATA[ <property name="forrest.version" value="0.8"/> ]]></code></p>
                         </li>
 
                         <li>
@@ -397,10 +397,14 @@ Decide the content of the release. Previously we just packed everything in trunk
                                 &lt;description&gt; | Forrest Site Builder | | 0.7-dev |</p>
                         </li>
                         <li>
-                            <p>Edit plugins/build.xml and increase the docs version number to the next major release:
-                                around line 23: &lt;property name=&quot;forrest.version&quot;
-                                value=&quot;0.7&quot;/&gt; to: &lt;property
-                                name=&quot;forrest.version&quot; value=&quot;0.8&quot;/&gt; </p>
+                            <p>Edit plugins/build.xml and increase the docs version number to the next major release.
+                              Around line 23: 
+                            </p>
+                  <source><![CDATA[
+ <property name="forrest.version" value="0.8"/>
+to:
+ <property name="forrest.version" value="0.9"/>
+]]></source>
                             <note>This is deliberately a major version up. It is assumed that plugins will be developed
                                 against the next version of Forrest. Individual plugins can override this property in
                                 their own build files.</note>
