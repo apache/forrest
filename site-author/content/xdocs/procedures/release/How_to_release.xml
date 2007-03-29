@@ -16,7 +16,41 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
-  "http://forrest.apache.org/dtd/document-v20.dtd">
+  "http://forrest.apache.org/dtd/document-v20.dtd" [
+<!ENTITY c '0.7'>
+<!ENTITY cd 'docs_0_70'>
+<!ENTITY cs '0.70'>
+<!ENTITY d '0.8'>
+<!ENTITY dd 'docs_0_80'>
+<!ENTITY ds '0.80'>
+<!ENTITY dt '0.8-dev'>
+<!ENTITY n '0.9'>
+<!ENTITY nd 'docs_0_90'>
+<!ENTITY ns '0.90'>
+<!ENTITY nt '0.9-dev'>
+<!ENTITY p '0.6'>
+<!ENTITY pd 'docs_0_60'>
+<!ENTITY ps '0.60'>
+<!ENTITY rdate '2007-04-16'>
+]>
+<!-- The entities above are for the current state,
+  i.e. preparing for the upcoming release:
+  &c;  = current release version, e.g. 0.7
+  &cd; = current release version docs, e.g. docs_0_70
+  &cs; = current release version site URI, e.g. 0.70 (as in site:v0.70)
+  &d;  = development version, e.g. 0.8
+  &dd; = development version docs, e.g. docs_0_80
+  &ds; = development version site URI, e.g. 0.80 (as in site:v0.80)
+  &dt; = development version with -dev, e.g. 0.8-dev
+  &n;  = next version, e.g. 0.9
+  &nd; = next version docs, e.g. docs_0_90
+  &ns; = next version site URI, e.g. 0.90 (as in site:v0.90)
+  &nt; = next version with -dev, e.g. 0.9-dev
+  &p;  = previous version, e.g. 0.6
+  &ps; = previous version site URI, e.g. 0.60 (as in site:v0.60)
+  &pd; = previous version docs, e.g. docs_0_60
+  &rdate; = anticipated release date
+-->
 <document>
     <header>
         <title>How to release Forrest</title>
@@ -77,7 +111,7 @@ some steps will need to be re-arranged.
               <li><p>Major changes are listed in the site-author/status.xml using the "importance"
                 attribute. This will be used to generate the list of top changes for the Release Notes
                 and Announcement text.</p>
-                <p>http://localhost:8888/releaseNotes_0.8-dev.html</p>
+                <p>http://localhost:8888/releaseNotes_&dt;.html</p>
               </li>
               <li>
                 Committers (as many as possible) have their up-to-date PGP keys
@@ -123,9 +157,10 @@ Decide the content of the release. Previously we just packed everything in trunk
             <ol>
                 <li>
                     <p>If you have never done a release before or need to refresh your memory, read all about Apache
-                        releases in general at <a href="http://www.apache.org/dev/#releases"
-                            >http://www.apache.org/dev/#releases</a>. Make sure any assistants have read and understood
-                        this as well.</p>
+                        releases in general at
+                      <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>
+                      (note that these documents change often).
+                      Make sure any assistants have read and understood this as well.</p>
                 </li>
                 <li>
                     <p>Be familiar with the process of signing releases and generating MD5
@@ -191,8 +226,9 @@ Decide the content of the release. Previously we just packed everything in trunk
                     <p>Ensure that documentation is ready.</p>
                 </li>
                 <li>
-                    <p>Ensure that all relevant plugins have been deployed to plugins/0.8-dev/ See other notes at
-                        plugins/RELEASE_PROCESS.txt</p>
+                    <p>Ensure that all relevant plugins have been deployed to
+                      plugins/&d;/ (see other notes at
+                        plugins/RELEASE_PROCESS.txt).</p>
                     <fixme author="fso">Check and integrate plugins/RELEASE_PROCESS.txt as a new document.</fixme>
                 </li>
             </ol>
@@ -260,28 +296,28 @@ Decide the content of the release. Previously we just packed everything in trunk
 
                     <ol>
                         <li>
-                            <p>Move all version numbers one line down so that:</p>
-                            <source><![CDATA[
- <versions tab="docs">
-    <overview label="Overview" href="versions/index.html"/>
-    <v0.8 label="0.8-dev" href="site:index"/>
-    <v0.7 label="0.7 (current)" href="site:v0.70//index"/>
-    <v0.6 label="0.6" href="site:v0.60//index"/>
-  </versions> ]]></source>
+                            <p>Move all version numbers one line down so that the existing:</p>
+                            <source>
+ &lt;versions tab="docs">
+    &lt;overview label="Overview" href="versions/index.html"/>
+    &lt;v&d; label="&dt;" href="site:index"/>
+    &lt;v&c; label="&c; (current)" href="site:v&cs;//index"/>
+    &lt;v&p; label="&p;" href="site:v&ps;//index"/>
+  &lt;versions></source>
                             <p>becomes:</p>
-                            <source><![CDATA[
- <versions tab="docs">
-    <overview label="Overview" href="versions/index.html"/>
-    <v0.9 label="0.9-dev" href="site:index"/>
-    <v0.8 label="0.8 (current)" href="site:v0.80//index"/>
-    <v0.7 label="0.7" href="site:v0.70//index"/>
-  </versions> ]]></source>
+                            <source>
+ &lt;versions tab="docs">
+    &lt;overview label="Overview" href="versions/index.html"/>
+    &lt;v&n; label="&nt;" href="site:index"/>
+    &lt;v&d; label="&d; (current)" href="site:v&ds;//index"/>
+    &lt;v&c; label="&c;" href="site:v&cs;//index"/>
+  &lt;versions></source>
                         </li>
                     </ol>
                 </li>
                 <li>Similarly edit tabs.xml</li>
                 <li>
-                    <p>Remove the past versions (0.6) docs directory by doing 'svn rm site-author/content/xdocs/docs_0_60</p>
+                    <p>Remove the past versions (&p;) docs directory by doing 'svn rm site-author/content/xdocs/&pd;</p>
                 </li>
 
                 <li>
@@ -300,31 +336,32 @@ Decide the content of the release. Previously we just packed everything in trunk
                         <li>
                             <p>Add a new <code><![CDATA[<release>]]></code> section
                               for development on the next version e.g. from:</p>
-                            <source><![CDATA[
-  <release version="0.7-dev" date="not yet released">
-  ... ]]></source>
+                            <source>
+  &lt;release version="&dt;" date="not yet released">
+  ...</source>
                             <p>to:</p>
-                            <source><![CDATA[
-  <release version="0.8-dev" date="not yet released">
+                            <source>
+  &lt;release version="&nt;" date="not yet released">
   ...
-  </release>
-  <release version="0.7" date="2005-06-23">
-  ...
-  ]]></source>
+  &lt;release>
+  &lt;release version="&d;" date="&rdate;">
+  ...</source>
                         </li>
                     </ol>
                 </li>
                 <li>Temporarily remove the "dev" note from upgrading_xy.xml</li>
                 <li>
                     <p>Edit the Forrest home page in the "News and events" section and add a text like:</p>
-                    <source> Apache Forrest 0.xx was released on [Date]. [Important new features] </source>
+                    <source>
+ Apache Forrest &d; was released on &rdate;.
+ [### Add some important new features ###]</source>
                 </li>
                 <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'. Fix any linking errors.</li>
                 <li>
                   Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
                   It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
                   In this file, insert the list of important changes which is obtained by doing:
-                  http://localhost:8888/releaseNotes_0.8.txt
+                  http://localhost:8888/releaseNotes_&dt;.txt
                 </li>
                 <li>
                   Prepare the announcement text. Create a file etc/announcement-x.txt
@@ -346,7 +383,7 @@ Decide the content of the release. Previously we just packed everything in trunk
             <ol>
                 <li>Announce that the code-freeze has now commenced.
                   Use the template <a href="announce_code_freeze.txt">announce_code_freeze.txt</a>
-                  to send email to dev-list.
+                  to send email to dev list.
                   The meaning of "code-freeze" is defined in that template.
                 </li>
                 <li>
@@ -382,12 +419,14 @@ Decide the content of the release. Previously we just packed everything in trunk
 
                 <li>
                     <p>Update the version numbers at various places:</p>
-                    <ul>
+                    <ol>
                         <li>
                             <p>Edit main/build.xml and remove the "-dev" text around line 45:</p>
-                            <p><code><![CDATA[ <property name="forrest.version" value="0.8-dev"/> ]]></code></p>
-                            <p>to:</p>
-                            <p><code><![CDATA[ <property name="forrest.version" value="0.8"/> ]]></code></p>
+                          <source>
+ &lt;property name="forrest.version" value="&dt;"/>
+to:
+ &lt;property name="forrest.version" value="&d;"/>
+                          </source>
                         </li>
 
                         <li>
@@ -397,16 +436,16 @@ Decide the content of the release. Previously we just packed everything in trunk
                             <p>Edit plugins/build.xml and increase the docs version number to the next major release.
                               Around line 23: 
                             </p>
-                  <source><![CDATA[
- <property name="forrest.version" value="0.8"/>
+                          <source>
+ &lt;property name="forrest.version" value="&d;"/>
 to:
- <property name="forrest.version" value="0.9"/>
-]]></source>
+ &lt;property name="forrest.version" value="&n;"/>
+</source>
                             <note>This is deliberately a major version up. It is assumed that plugins will be developed
                                 against the next version of Forrest. Individual plugins can override this property in
                                 their own build files.</note>
                         </li>
-                    </ul>
+                    </ol>
 
                 </li>
                 <li>
@@ -417,18 +456,17 @@ to:
                 </li>
                 <li>
                   Edit 4 files in tools/forrestbar to update the version number to match the new release:
-                  <source><![CDATA[
-install.rdf, line 24: <em:version>0.7</em:version>
+                  <source>
+xpi/install.rdf, line 24: &lt;em:version>&d;&lt;em:version>
 
-install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "0.7");
+xpi/install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "&d;");
 
-xpi/chrome/content/contents.rdf, line 27: chrome:displayName="ForrestBar 0.7"/> 
+xpi/chrome/content/contents.rdf, line 28: chrome:displayName="ForrestBar &d;"/> 
 
 xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
   as well as change the link to point to the new release's docs:
-    <menuitem label="Current Docs (0.7)"
+    &lt;menuitem label="Current Docs (0.7)"
        onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');"/>
-        ]]>
                     </source>
                     <fixme author="">There are probably other areas which have version numbers. How can we improve this? Possibly with XML Entities, possibly with Ant properties.</fixme>
                 </li>
@@ -465,28 +503,28 @@ xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
                     <p id="signing">Sign the Release Candidate packages and create the *.asc and *.md5 files.</p>
                     <p>Here is one example when using gpg
                         and openssl from the command line. </p>
-                    <source><![CDATA[
-gpg --output apache-forrest-0.8.tar.gz.asc \
-  --detach-sig --armor apache-forrest-0.8.tar.gz
+                    <source>
+gpg --output apache-forrest-&d;.tar.gz.asc \
+  --detach-sig --armor apache-forrest-&d;.tar.gz
 
-gpg --verify apache-forrest-0.8.tar.gz.asc \
-  apache-forrest-0.8.tar.gz]]></source>
+gpg --verify apache-forrest-&d;.tar.gz.asc \
+  apache-forrest-&d;.tar.gz</source>
                     <p> ... should say "Good signature from ..."</p>
 
-                    <source><![CDATA[
-openssl dgst -md5 -out apache-forrest-0.8.tar.gz.md5 \
-apache-forrest-0.8.tar.gz
+                    <source>
+openssl dgst -md5 -out apache-forrest-&d;.tar.gz.md5 \
+apache-forrest-&d;.tar.gz
 
-md5sum apache-forrest-0.8.tar.gz]]></source>
+md5sum apache-forrest-&d;.tar.gz</source>
                     <p>... output should match that of the md5 file.</p>
                 </li>
                 <li>
                   <p>Create a maintenance branch in SVN. This command can be run from anywhere
                     because it uses full URLs.</p>
                   <source>
-svn copy -r ##### -m "Create the x.y release branch from r#####" \
+svn copy -r ##### -m "Create the ###xy### release branch from r#####" \
     https://svn.apache.org/repos/asf/forrest/trunk \
-    https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_###xy###_branch
 
 where
   'xy' is a compact form of the version (e.g. 04, 041, 05).
@@ -558,9 +596,9 @@ where
                 </li>
                 <li>
                     <p>Tag SVN by doing:</p>
-<source>svn copy -m "Create tag forrest_xy from release branch" \
-  https://svn.apache.org/repos/asf/forrest/branches/forrest_xy_branch \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_xy</source>
+<source>svn copy -m "Create tag forrest_###xy### from release branch" \
+  https://svn.apache.org/repos/asf/forrest/branches/forrest_###xy###_branch \
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###</source>
                     <p>where 'xy' is a compact (without the dots) form of the version number (e.g. 04,
                         041, 05).</p>
                   <p> See <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
@@ -571,9 +609,9 @@ where
                 </li>
                 <li>
                     <p>Tag the "site" SVN by doing:</p>
-<source>svn copy -m "Create tag forrest_xy release" \
+<source>svn copy -m "Create tag forrest_###xy### release" \
   https://svn.apache.org/repos/asf/forrest/site \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_xy</source>
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###</source>
                     <p>where 'xy' is a compact (without the dots) form of the version number (e.g. 04,
                         041, 05).</p>
                 </li>
@@ -595,7 +633,7 @@ where
             <ol>
                 <li>
                     <p>Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc and *.md5 files, and the
-                        RELEASE-NOTES-x.y.txt to people.apache.org at /www/www.apache.org/ dist/forrest/</p>
+                        RELEASE-NOTES-&d;.txt to people.apache.org at /www/www.apache.org/ dist/forrest/</p>
                     <p>Ensure correct file permissions by executing <code>'chgrp forrest *'</code> then
                       <code>'chmod 664 *'</code> in that directory.</p>
                     <p>Each PMC member has a server account and belongs to the forrest group.</p>
@@ -624,10 +662,10 @@ where
                         website, then send the announcement.</p>
                 </li>
                 <li>Create a copy of current dev-docs in trunk for the next development phase.
-                    Do 'cd site-author/content/xdocs' and 'svn copy docs_0_70 docs_0_80' (Adjust version
-                    numbers as needed).</li>
-                <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v0.80&gt;) above it.
-                    Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v0.90&gt;).
+                    Do 'cd site-author/content/xdocs' and 'svn copy &dd; &nd;'
+                </li>
+                <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
+                    Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v&ns;&gt;).
                 </li>
                 <li>
                     <p>Update the .htaccess file to redirect /docs/dev/ to the next version,
@@ -681,22 +719,15 @@ where
             <ol>
                 <li><p>Edit main/build.xml, increment the version and add a -dev tag:
                     around line 45:
-                    <![CDATA[<property name="version" value="0.8-dev"/>]]></p></li>
+                    &lt;property name="version" value="&nt;"/></p></li>
                 <li><p>Edit main/forrest.build.xml and update the version:
                     around line 32:</p>
-                    <source><![CDATA[
-    <property name="version" value="0.8-dev"/>  
-
-    around line 52:
-    <description>
-    |                 Forrest Site Builder                  |
-    |                        0.8-dev                        |
-                        ]]></source>
+                    <source>&lt;property name="version" value="&nt;"/></source>
                 </li>
                 <li>Return the "dev" note to upgrading_xy.xml</li>
                 <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
                 <li>Commit all of the above changes.</li>
-                <li>Remove the old generated docs from SVN forrest/site/docs_0_60
+                <li>Remove the old generated docs from SVN forrest/site/&pd;
                   which removes them from the website.
                 </li>
                 <li><p>Remove old dist files from the /www/www.apache.org/dist/forrest/ directory.
@@ -704,24 +735,20 @@ where
                 <li>Create a new plugins directory in the forrest/site SVN for the
                   next development phase:
                   <source>
-svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
+svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/&n;
                   </source>
                 </li>
                 <li><p>Do some Jira administration (need to be in the jira-administrators group)</p>
                     <ol>
                         <li><p>Tweak the "release" versions via "admin" interface at our Jira. Do this ...</p></li>
                         <li><p>Re-name the VersionIds using "Manage Versions" then "Edit details":
-                            e.g. 0.7-dev is renamed to 0.7 and 0.8 becomes 0.8-dev</p></li>
-                        <li><p>Mark 0.7 as released using "Manage Versions".</p></li>
+                            e.g. &dt; is renamed to &d; and &n; becomes &nt;</p></li>
+                        <li><p>Mark &d; as released using "Manage Versions".</p></li>
                         <li><p>Review the Issues for the old version and move any Incomplete ones up.</p></li>
                         <li><p>Change the "fixfor" attribute to the next version for the
                             "project.issues-rss-url" RSS feed in forrest.properties</p></li>
                     </ol>
                     
-                </li>
-                <li><p>Cleanup this "release process" document to set version number examples
-                    to be ready for the next release.</p>
-                    <fixme author="fso">I'd like to drop this step and rather word everything more flexibly.</fixme>
                 </li>
                 <li><p>Remove the release candidate packages from your public_html directory.</p></li>
             </ol>
