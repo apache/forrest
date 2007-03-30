@@ -78,6 +78,9 @@ imported document-to-html.xsl for details.
           </font>
         </p>
       </xsl:if>
+      <xsl:if test="header/version">
+        <xsl:apply-templates select="header/version"/>
+      </xsl:if>
     </div>
   </xsl:template>
 
