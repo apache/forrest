@@ -26,16 +26,15 @@
    <xsl:template match="/">
      <document>
        <header>
-         <title>Site Linkmap</title>
+         <title>Site Linkmap Table of Contents</title>
        </header>
        <body>
-        <section>
-          <title>Table of Contents</title>
+         <p>This is a map of the complete site and its structure.</p>
+
 <!-- FIXME: FOR-731 workaround for a side-effect of the workaround for FOR-675
-           <xsl:apply-templates select="*[not(self::site)]" />        
+         <xsl:apply-templates select="*[not(self::site)]" />        
 -->
-           <xsl:apply-templates select="*" />        
-        </section>
+         <xsl:apply-templates select="*" />        
        </body>
      </document>       
    </xsl:template>     
@@ -43,7 +42,22 @@
      <xsl:template match="*">
         <xsl:if test="@label">
           <ul>
-            <li><a href="{@href}"><xsl:value-of select="@label" /></a>&#160;&#160;&#160;_________________________&#160;&#160;<em><xsl:value-of select="name(.)" /></em></li>
+            <li>
+              <a>
+                <xsl:if test="@href!=''">
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="@href"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="@label"/>
+              <!-- force site element name to be on same line as label -->
+              </a>&#160;&#160;___________________&#160;&#160;<em><xsl:value-of select="name(.)" /></em>
+              <xsl:if test="@description">
+                <!-- allow description to flow to next line in a small window -->
+                <xsl:text>&#160;: </xsl:text>
+                <xsl:value-of select="normalize-space(@description)"/>
+              </xsl:if>
+            </li>
 
             <xsl:if test="*">
               <ul> 
