@@ -332,7 +332,7 @@ some steps might need to be re-arranged.
 <div class="section">
 <p>There are a number of things to be done by the project before the release will start.
               Don't leave these until the last minute.
-              It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins when the
+              It is not the Release Manager's job to fix bugs nor address blocker issues. The RM job begins after the
                 project is ready to do the release.</p>
 <ul>
               
@@ -341,6 +341,16 @@ some steps might need to be re-arranged.
 <li>The project made good progress towards fixing the Blockers and applying the outstanding patches.</li>
               
 <li>The documentation content is ready.</li>
+              
+<li>Supporting products (e.g. Ant, Xerces) should have been updated well before this
+                stage. Do not attempt such upgrades too close to the release, as it
+                will distract attention from other issues and possibly introduce new problems.
+              </li>
+              
+<li>Add some issues to the Roadmap for the important general issues that need to
+                happen before the release.
+                Some examples from last time: FOR-911, FOR-868, FOR-865, FOR-855, FOR-644.
+              </li>
               
 <li>
 <p>Relevant changes are listed in the site-author/status.xml and contributers have been attributed. Other changes are listed in the various plugins/status.xml files.</p>
@@ -381,7 +391,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 </div>
         
-<a name="N1006E"></a><a name="PrepProject"></a>
+<a name="N10074"></a><a name="PrepProject"></a>
 <h2 class="underlined_10">Preparing the project for the release</h2>
 <div class="section">
 <p>In this step the Release Manager starts the process to finalise the outstanding blocker issues. </p>
@@ -411,7 +421,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10095"></a><a name="PrepRM"></a>
+<a name="N1009B"></a><a name="PrepRM"></a>
 <h2 class="underlined_10">Preparations for the Release Manager</h2>
 <div class="section">
 <p>Particularly the Release Manager, but also anyone assisting, needs to be familiar
@@ -454,7 +464,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N100C3"></a><a name="PrepRelPlan"></a>
+<a name="N100C9"></a><a name="PrepRelPlan"></a>
 <h2 class="underlined_10">Preparing the Release Plan</h2>
 <div class="section">
 <p>Prepare the Release Plan to define the corner stones of the coming release</p>
@@ -494,7 +504,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N100F6"></a><a name="PrepCodeBase"></a>
+<a name="N100FC"></a><a name="PrepCodeBase"></a>
 <h2 class="underlined_10">Preparing the code base</h2>
 <div class="section">
 <p>Anyone can help with this phase.</p>
@@ -517,10 +527,22 @@ Decide the content of the release. Previously we just packed everything in trunk
 </li>
                 
 <li>
-                    
-<p>Ensure that documentation is ready.</p>
+                  Ensure that documentation structure and conntet is ready.
+                </li>
                 
-</li>
+<li>Ensure that the documentation is building properly, do 'cd site-author; forrest'. Fix any linking errors.</li>
+                
+<li>
+                  Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
+                  It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
+                  In this file, insert the list of important changes which is obtained by doing:
+                  http://localhost:8888/releaseNotes_0.8-dev.txt
+                </li>
+                
+<li>
+                  Prepare the announcement text. Create a file etc/announcement-x.txt
+                  (by 'svn move' the old one) and list the major new features, e.g. locationmap.
+                </li>
                 
 <li>
                   
@@ -553,7 +575,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10137"></a><a name="PrepTrunk"></a>
+<a name="N10143"></a><a name="PrepTrunk"></a>
 <h2 class="underlined_10">Preparing your working copy of SVN trunk</h2>
 <div class="section">
 <div class="fixme">
@@ -601,7 +623,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10168"></a><a name="PrepDistSvn"></a>
+<a name="N10174"></a><a name="PrepDistSvn"></a>
 <h2 class="underlined_10">Preparing the "dist" SVN</h2>
 <div class="section">
 <p>The SVN at
@@ -618,7 +640,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N1017C"></a><a name="adjustDocs"></a>
+<a name="N10188"></a><a name="adjustDocs"></a>
 <h2 class="underlined_10">Preparing docs for next release cycle</h2>
 <div class="section">
 <p>In this phase we get the docs ready for the release. You will
@@ -731,18 +753,6 @@ Decide the content of the release. Previously we just packed everything in trunk
 <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'. Fix any linking errors.</li>
                 
 <li>
-                  Create a new file, etc/RELEASE-NOTES-x.y.txt, where x.y is the version currently being released.
-                  It is best to copy an earlier RELEASE-NOTES file, to keep a common layout.
-                  In this file, insert the list of important changes which is obtained by doing:
-                  http://localhost:8888/releaseNotes_0.8-dev.txt
-                </li>
-                
-<li>
-                  Prepare the announcement text. Create a file etc/announcement-x.txt
-                  (by 'svn move' the old one) and list the major new features, e.g. locationmap.
-                </li>
-                
-<li>
                     
 <p>Edit the forrest/site-author/content/xdocs/mirrors.html and adjust all version-specific content.</p>
                 
@@ -755,7 +765,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N101F4"></a><a name="BuildDist"></a>
+<a name="N101FA"></a><a name="BuildDist"></a>
 <h2 class="underlined_10">Building the release candidate packages</h2>
 <div class="section">
 <p>In this phase the Release Manager builds the release candidate to be tested.</p>
@@ -999,7 +1009,7 @@ where
 </div>
 
         
-<a name="N102BC"></a><a name="vote"></a>
+<a name="N102C2"></a><a name="vote"></a>
 <h2 class="underlined_10">Testing the release candidate and voting</h2>
 <div class="section">
 <p>Get Forrest developers to test the actual packges on various platforms.</p>
@@ -1061,7 +1071,7 @@ where
 </div>
 
         
-<a name="N102F8"></a><a name="FinalRel"></a>
+<a name="N102FE"></a><a name="FinalRel"></a>
 <h2 class="underlined_10">Finalizing the release</h2>
 <div class="section">
 <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
@@ -1134,7 +1144,7 @@ where
 </div>
 
         
-<a name="N10342"></a><a name="UploadAndAnnounce"></a>
+<a name="N10348"></a><a name="UploadAndAnnounce"></a>
 <h2 class="underlined_10">Upload and announcement</h2>
 <div class="section">
 <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
@@ -1295,7 +1305,7 @@ where
 </div>
 
         
-<a name="N103F8"></a><a name="cleanup"></a>
+<a name="N103FE"></a><a name="cleanup"></a>
 <h2 class="underlined_10">Cleanup</h2>
 <div class="section">
 <ol>
@@ -1377,7 +1387,7 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
 </div>
         
         
-<a name="N10446"></a><a name="conclusion"></a>
+<a name="N1044C"></a><a name="conclusion"></a>
 <h2 class="underlined_10">Conclusion</h2>
 <div class="section">
 <p>All done!</p>
