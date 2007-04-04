@@ -79,6 +79,7 @@
           <map:part src="{lm:project.status}"/>
         </map:aggregate>
         <map:transform src="{lm:projectInfo.transform.releaseNotes.document}">
+          <map:parameter name="bugtracking-url" value="{properties:forrest.bugtracking-url}"/>
           <map:parameter name="versionNumber" value="{3}"/>
         </map:transform>
         <map:transform type="i18n">
@@ -89,7 +90,9 @@
 
       <map:match type="regexp" pattern="^(.*?)([^/]*)releaseSummary.xml$">
         <map:generate type="file" src="{lm:{0}}" />
-        <map:transform src="{lm:projectInfo.transform.releaseNotes.document}"/>
+        <map:transform src="{lm:projectInfo.transform.releaseNotes.document}">
+          <map:parameter name="bugtracking-url" value="{properties:forrest.bugtracking-url}"/>
+        </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
       
