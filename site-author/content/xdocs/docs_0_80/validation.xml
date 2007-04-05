@@ -292,14 +292,37 @@ size CDATA #IMPLIED&gt;
         <p>
           We now have a custom DTD and a catalog mapping which lets both
           Forrest and Cocoon
-          locate the DTD.  Now if we were to run <code>'forrest validate'</code>
+          locate the DTD.  Now if we were to run <code>'forrest validate-xdocs'</code>
           our download file would validate along with all the others.  If
-          something goes wrong, try running <code>'forrest -v validate'</code> to
-          see the error in more detail. Remember to raise the "verbosity"
-          level in <code>cocoon.xconf</code> if you suspect problems
-          with your catalog.
+          something goes wrong, try running <code>'forrest -v validate-xdocs'</code> to
+          see the error in more detail.
         </p>
       </section>
+    </section>
+
+    <section id="debug-catalog">
+      <title>Debugging the Catalog Entity Resolver</title>
+      <p>
+        If you suspect problems with your project catalog, then raise the "verbosity"
+        level in <code>src/documentation/classes/CatalogManager.properties</code>
+        and re-start forrest.
+        This should show your project catalogs being parsed and loaded.
+      </p>
+      <p>
+        However this configuration does not show your DTDs being resolved.
+        So raise the verbosity level in the central configuration at
+        <code>main/webapp/WEB-INF/properties/dev/core.properties</code>
+        and re-start forrest. This also shows the main catalogs being loaded
+        and shows the resolving of every DTD and entity set.
+      </p>
+      <p>
+        When a DTD is successfully resolved you should see the message:
+        <code>Resolved public:</code>
+      </p>
+      <p>
+        When debugging such issues, a network monitoring tool (e.g. ngrep.sf.net)
+        is useful to ensure that all resources are being locally resolved and not       wandering onto the network to find remote copies.
+      </p>
     </section>
 
     <section id="entities">
