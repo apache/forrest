@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>XML Validation (v0.8-dev)</title>
+<title>XML validation and entity resolution (v0.8-dev)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
@@ -223,7 +223,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../docs_0_80/cap.html">Sourcetype Action</a>
 </div>
 <div class="menupage">
-<div class="menupagetitle">XML Validation</div>
+<div class="menupagetitle">XML validation and entity resolution</div>
 </div>
 </div>
 <div class="menuitem">
@@ -313,13 +313,16 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>XML Validation</h1>
+<h1>XML validation and entity resolution</h1>
 <h3>DTDs, catalogs and whatnot</h3>
 <div id="motd-area">
         This is documentation for development version v0.8
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
+<li>
+<a href="#intro">Introduction</a>
+</li>
 <li>
 <a href="#xml_validation">XML validation</a>
 </li>
@@ -335,6 +338,9 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 <li>
+<a href="#debug-catalog">Debugging the Catalog Entity Resolver</a>
+</li>
+<li>
 <a href="#entities">Referring to entities</a>
 </li>
 <li>
@@ -343,10 +349,37 @@ document.write("Last Published: " + document.lastModified);
 <li>
 <a href="#relaxng">Validation using RELAX NG</a>
 </li>
+<li>
+<a href="#sitemap">Validation using Cocoon sitemap and the Cocoon Validation block</a>
+</li>
 </ul>
 </div>
     
-<a name="N10010"></a><a name="xml_validation"></a>
+<a name="N10010"></a><a name="intro"></a>
+<h2 class="underlined_10">Introduction</h2>
+<div class="section">
+<p>
+        When a source document uses a DTD to define its structure, then various abilities are enabled. Forrest handles the annoying side of this and takes advantage of the benefits.
+      </p>
+<p>
+        The xml parser must locate the DTDs and other entities. Forrest uses the XML
+        Catalog Entity Resolver to associate DTD references with local copies.
+      </p>
+<p>
+        Forrest also uses the XML Document Type Declaration to effect the
+        <a href="../docs_0_80/cap.html">Content Aware Pipelines</a>. Remember that you are
+        not required to use DTDs (for example Forrest can also respond to a namespace)
+        so RELAX NG or W3c XML Schema can be used.
+      </p>
+<p>
+        If you do use DTDs, then forrest is automatically configured to do XML validation.
+      </p>
+<p>
+        This document explains both the validation and entity resolution aspects of the Forrest XML framework.
+      </p>
+</div>
+    
+<a name="N1002A"></a><a name="xml_validation"></a>
 <h2 class="underlined_10">XML validation</h2>
 <div class="section">
 <p>
@@ -411,7 +444,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 
     
-<a name="N10049"></a><a name="Validating+new+XML+types"></a>
+<a name="N10063"></a><a name="Validating+new+XML+types"></a>
 <h2 class="underlined_10">Validating new XML types</h2>
 <div class="section">
 <p>
@@ -425,7 +458,7 @@ document.write("Last Published: " + document.lastModified);
         an entry to the <span class="codefrag">${project.schema-dir}/catalog.xcat</span> file.  This
         section describes the details of this process.
       </p>
-<a name="N1006A"></a><a name="Creating+or+extending+a+DTD"></a>
+<a name="N10084"></a><a name="Creating+or+extending+a+DTD"></a>
 <h3 class="underlined_5">Creating or extending a DTD</h3>
 <p>
           The main Forrest DTDs are designed to be modular and extensible, so
@@ -552,7 +585,7 @@ size CDATA #IMPLIED&gt;
           customizing a DTD.
         </div>
 </div>
-<a name="N100B1"></a><a name="catalog"></a>
+<a name="N100CB"></a><a name="catalog"></a>
 <h3 class="underlined_5">Associating DTDs with document types</h3>
 <p>
           Recall that our DOCTYPE declaration for our download document type
@@ -580,9 +613,15 @@ size CDATA #IMPLIED&gt;
 <p>
           Forrest provides a standard catalog file at
           <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span>
-          for the document
-          types that Forrest provides.  Projects can augment this with their
-          own catalog file located in
+          for the document types that Forrest supplies.
+        </p>
+<p>
+          An additional system-wide catalog can be configured for use by multiple forrest-based projects.
+          See the "local-catalog" parameter in <span class="codefrag">main/webapp/WEB-INF/xconf/forrest-core.xconf</span>
+        
+</p>
+<p>
+          Projects can augment this with their own catalog file located in
           <span class="codefrag">${project.schema-dir}/catalog.xcat</span> to use it you must
 	    specify either the path (full or relative) to your 
 	    <span class="codefrag">catalog.xcat</span> in the <span class="codefrag">CatalogManager.properties</span>
@@ -593,7 +632,7 @@ size CDATA #IMPLIED&gt;
           When Cocoon starts, it reads the <span class="codefrag">CatalogManager.properties</span> file from your
           <span class="codefrag">project.classes-dir</span>. This is usually src/documentation/classes/
           but you can change this in <span class="codefrag">forrest.properties</span>. When you seed 
-          a new site using <span class="codefrag">forrest seed-site</span> a sample catalog file
+          a new site using <span class="codefrag">forrest seed</span> a sample catalog file
           is placed in the site structure, you can use this as a template for your
           own files.
         </p>
@@ -618,17 +657,43 @@ size CDATA #IMPLIED&gt;
 <p>
           We now have a custom DTD and a catalog mapping which lets both
           Forrest and Cocoon
-          locate the DTD.  Now if we were to run <span class="codefrag">'forrest validate'</span>
+          locate the DTD.  Now if we were to run <span class="codefrag">'forrest validate-xdocs'</span>
           our download file would validate along with all the others.  If
-          something goes wrong, try running <span class="codefrag">'forrest -v validate'</span> to
-          see the error in more detail. Remember to raise the "verbosity"
-          level in <span class="codefrag">cocoon.xconf</span> if you suspect problems
-          with your catalog.
+          something goes wrong, try running <span class="codefrag">'forrest -v validate-xdocs'</span> to
+          see the error in more detail.
         </p>
 </div>
 
     
-<a name="N1010F"></a><a name="entities"></a>
+<a name="N1012F"></a><a name="debug-catalog"></a>
+<h2 class="underlined_10">Debugging the Catalog Entity Resolver</h2>
+<div class="section">
+<p>
+        If you suspect problems with your project catalog, then raise the "verbosity"
+        level in <span class="codefrag">src/documentation/classes/CatalogManager.properties</span>
+        and re-start forrest.
+        This should show your project catalogs being parsed and loaded.
+      </p>
+<p>
+        However this configuration does not show your DTDs being resolved.
+        So raise the verbosity level in the central configuration at
+        <span class="codefrag">main/webapp/WEB-INF/properties/dev/core.properties</span>
+        and re-start forrest. This also shows the main catalogs being loaded
+        and shows the resolving of every DTD and entity set.
+      </p>
+<p>
+        When a DTD is successfully resolved you should see the message:
+        <span class="codefrag">Resolved public:</span>
+      
+</p>
+<p>
+        When debugging such issues, a network monitoring tool (e.g. ngrep.sf.net)
+        is useful to ensure that all resources are being locally resolved and not       wandering onto the network to find remote copies.
+      </p>
+</div>
+
+    
+<a name="N1014B"></a><a name="entities"></a>
 <h2 class="underlined_10">Referring to entities</h2>
 <div class="section">
 <p>
@@ -651,7 +716,7 @@ size CDATA #IMPLIED&gt;
 </div>
 
     
-<a name="N10134"></a><a name="Validating+in+an+XML+editor"></a>
+<a name="N10170"></a><a name="Validating+in+an+XML+editor"></a>
 <h2 class="underlined_10">Validating in an XML editor</h2>
 <div class="section">
 <p>
@@ -665,7 +730,7 @@ size CDATA #IMPLIED&gt;
 </div>
 
     
-<a name="N10142"></a><a name="relaxng"></a>
+<a name="N1017E"></a><a name="relaxng"></a>
 <h2 class="underlined_10">Validation using RELAX NG</h2>
 <div class="section">
 <p>
@@ -681,6 +746,17 @@ size CDATA #IMPLIED&gt;
         know more about this, and perhaps extend it for your own use, then
         see <span class="codefrag">main/webapp/resources/schema/relaxng/README.txt</span>
         and the Ant targets in the various build.xml files.
+      </p>
+</div>
+
+    
+<a name="N10191"></a><a name="sitemap"></a>
+<h2 class="underlined_10">Validation using Cocoon sitemap and the Cocoon Validation block</h2>
+<div class="section">
+<p>
+        The content of pipelines can be validated at various points in the Cocoon sitemaps
+        using RELAX NG or W3C XML Schema.
+        See <a href="../howto-dev.html#debug-validation">notes</a>.
       </p>
 </div>
   
