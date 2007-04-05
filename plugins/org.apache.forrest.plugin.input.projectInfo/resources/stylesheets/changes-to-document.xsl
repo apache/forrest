@@ -36,6 +36,7 @@
     </xsl:call-template>
   </xsl:variable>
 
+ <xsl:variable name="bugzilla" select="'http://issues.apache.org/bugzilla/buglist.cgi?bug_id='"/>
  <xsl:param name="bugtracking-url" select="$bugzilla"/>
 
  <xsl:key name="contexts" match="changes/release/action" use="concat(../@version, '_', @context)"/>
