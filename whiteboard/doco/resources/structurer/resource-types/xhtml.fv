@@ -15,23 +15,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-  
 <forrest:views 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <!-- The following variables are used to contact data models and/or contracts. -->
+<!-- The following variables are used to contact data models and/or contracts. -->
   <jx:set var="getRequest" value="#{$cocoon/parameters/getRequest}"/>
   <jx:set var="getRequestExtension" value="#{$cocoon/parameters/getRequestExtension}" />
   <forrest:view type="html" hooksXpath="/html/body">
-    <!-- 
+<!-- 
         @type defines this structurer to html.
         @hooksXpath defines where all hooks will be injected (as prefix).
         -->
     <forrest:contract name="branding-css-links">
-      <!-- More information around this contract
+<!-- More information around this contract
         http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
         -->
-      <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
+<!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
       <forrest:property name="branding-css-links-input">
         <css url="common.css"/>
         <css>
@@ -44,7 +43,7 @@ limitations under the License.
         <meta http-equiv="content-type" content="text/html, charset=UTF-8"/>
       </forrest:property>
     </forrest:contract>
-    <!--
+<!--
         nuggets (extra data requested by the contract) are now defined in the contract element. 
         As well the former @nugget is now called @dataURI to reflect better the function of the attribute.
       -->
@@ -66,8 +65,7 @@ limitations under the License.
       <forrest:hook name="page">
         <forrest:hook name="leftbar">
           <forrest:contract name="nav-section" 
-            dataURI="cocoon://#{$getRequest}.navigation.xml">
-          </forrest:contract>
+            dataURI="cocoon://#{$getRequest}.navigation.xml"></forrest:contract>
         </forrest:hook>
         <forrest:hook name="content">
           <forrest:hook name="content-main">
@@ -87,6 +85,5 @@ limitations under the License.
         <forrest:contract name="siteinfo-last-published"/>
       </forrest:hook>
     </forrest:hook>
-    
   </forrest:view>
 </forrest:views>
