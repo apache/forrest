@@ -18,7 +18,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:map="http://apache.org/cocoon/sitemap/1.0" 
   xmlns:xalan="http://xml.apache.org/xalan">
-  
   <xsl:template name="print-selectors">
     <xsl:variable name="selectors.all">
       <xsl:for-each select="/map:sitemap/map:components/map:selectors//map:selector">
@@ -81,13 +80,11 @@
         <xsl:variable name="pos" select="position()"/>
         <xsl:variable name="current-selector" select="."/>
         <xsl:if test="$pos=1 or not($current-selector/@name=$selectors.all.new/*[$pos - 1]/@name) ">
-          <li>
-            <xsl:value-of select="./@name"/> - 
+          <li><xsl:value-of select="./@name"/> - 
               
                 <xsl:call-template name="xmap-sel-component-list">
               <xsl:with-param name="component" select="./@name"/>
-            </xsl:call-template>
-          </li>
+            </xsl:call-template></li>
         </xsl:if>
       </xsl:for-each>
     </ul>

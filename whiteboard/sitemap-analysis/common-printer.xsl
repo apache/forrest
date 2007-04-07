@@ -15,12 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
       xmlns:map="http://apache.org/cocoon/sitemap/1.0"
-      xmlns:xalan="http://xml.apache.org/xalan">
-
-
-  
-  
-</xsl:stylesheet>
+      xmlns:xalan="http://xml.apache.org/xalan"></xsl:stylesheet>

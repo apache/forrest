@@ -15,11 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:map="http://apache.org/cocoon/sitemap/1.0" 
   xmlns:xalan="http://xml.apache.org/xalan">
-  
   <xsl:template name="print-generators">
     <xsl:variable name="generators.all.new" select="xalan:nodeset($generators.all.sorted)"/>
     <p>
@@ -33,13 +31,11 @@
           <xsl:variable name="pos" select="position()"/>
           <xsl:variable name="current-generator" select="."/>
           <xsl:if test="$pos=1 or not($current-generator/@name=$generators.all.new/*[$pos - 1]/@name) ">
-            <li>
-              <xsl:value-of select="./@name"/> - 
+            <li><xsl:value-of select="./@name"/> - 
 
                   <xsl:call-template name="xmap-gen-component-list">
                 <xsl:with-param name="component" select="./@name"/>
-              </xsl:call-template>
-            </li>
+              </xsl:call-template></li>
           </xsl:if>
         </xsl:for-each>
       </ul>
@@ -148,12 +144,11 @@
       <xsl:copy-of select="."/>
     </xsl:for-each>
   </xsl:variable>
-  
   <xsl:template name="print-generator-usage">
     <xsl:for-each select="/map:sitemap//map:generate">
       <xsl:choose>
         <xsl:when test="./@type">
-          <li><xsl:value-of select="./@type"/></li>        
+          <li><xsl:value-of select="./@type"/></li>
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>
