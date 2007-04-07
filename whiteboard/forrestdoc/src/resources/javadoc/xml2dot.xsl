@@ -170,7 +170,7 @@
           <xsl:with-param name="input" select="returns/classref/@name" />
           <xsl:with-param name="marker" select="'.'" />
         </xsl:call-template>
-        <xsl:text></xsl:text>
+        <xsl:text> </xsl:text>
         <xsl:value-of select="@name" />( <!--
               -->
         <xsl:for-each select = "parameter">
