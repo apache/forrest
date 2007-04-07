@@ -127,12 +127,12 @@
     <xsl:text> )</xsl:text>
   </xsl:template>
   <xsl:template match="separator">
-    <xsl:text></xsl:text>
+    <xsl:text> </xsl:text>
     <xsl:value-of select="@type"/>
-    <xsl:text></xsl:text>
+    <xsl:text> </xsl:text>
   </xsl:template>
   <xsl:template match="occurrence">
-    <xsl:text></xsl:text>
+    <xsl:text> </xsl:text>
     <xsl:value-of select="@type"/>
   </xsl:template>
   <xsl:template match="attlist">
@@ -174,7 +174,7 @@
         <xsl:if test="enumeration">
         possible values: <xsl:for-each select="enumeration">
             <xsl:value-of select="@value"/>
-            <xsl:text></xsl:text>
+            <xsl:text> </xsl:text>
           </xsl:for-each>
           <br/>
         </xsl:if>
