@@ -17,95 +17,93 @@
 -->
 <?eclipse version="3.0"?>
 <plugin>
-
-     <extension
+  <extension
       point="org.eclipse.ui.preferencePages">
-      <page
+    <page
             class="org.apache.forrest.eclipse.preference.ForrestPreferences"
             name="Forrest Preferences"
             id="org.apache.forrest.eclipse.preference.ForrestPreferences"/>
-   </extension>
-   <extension
+  </extension>
+  <extension
          point="org.eclipse.ui.newWizards">
-      <category
+    <category
             name="Forrest"
             id="org.apache.forrest.eclipse"/>
-      <wizard
+    <wizard
             class="org.apache.forrest.eclipse.wizards.NewProjectWizard"
             category="org.apache.forrest.eclipse"
             project="true"
             name="Seed New Project"
             id="org.apache.forrest.eclipse.NewProjectWizard"/>
-      <wizard
+    <wizard
             class="org.apache.forrest.eclipse.wizards.NewXDoc"
             category="org.apache.forrest.eclipse"
             name="XDoc File"
             id="org.apache.forrest.eclipse.wizards.NewXDoc"/>
-      <wizard
+    <wizard
             category="org.apache.forrest.eclipse"
             class="org.apache.forrest.eclipse.wizards.NewViewDoc"
             id="org.apache.forrest.eclipse.wizards.NewViewDoc"
             name="View Doc"/>
-   </extension>
-   <extension
+  </extension>
+  <extension
          point="org.eclipse.ui.popupMenus">
-      <objectContribution
+    <objectContribution
             objectClass="org.eclipse.core.resources.IResource"
             id="org.apache.forrest.eclipse.siteContribution">
-         <menu
+      <menu
                label="Site"
                path="projStart"
                id="org.apache.forrest.eclipse.siteMenu">
-            <separator name="Server"/>
-            <separator name="Static"/>
-         </menu>
-         <action
+        <separator name="Server"/>
+        <separator name="Static"/>
+      </menu>
+      <action
                enablesFor="1"
                label="Start Test Server"
                icon="icons/start.png"
                class="org.apache.forrest.eclipse.popup.actions.StartForrest"
                menubarPath="org.apache.forrest.eclipse.siteMenu/Server"
                id="org.apache.forrest.eclipse.StartForrest"/>
-         <action
+      <action
                enablesFor="1"
                label="Stop Test Server"
                icon="icons/stop.png"
                class="org.apache.forrest.eclipse.popup.actions.StopForrest"
                menubarPath="org.apache.forrest.eclipse.siteMenu/Server"
                id="org.apache.forrest.eclipse.StopServer"/>
-         <action
+      <action
                enablesFor="1"
                label="Build Site"
                icon="icons/build.png"
                class="org.apache.forrest.eclipse.popup.actions.BuildSite"
                menubarPath="org.apache.forrest.eclipse.siteMenu/Static"
                id="org.apache.forrest.eclipse.BuildServer"/>
-         <action
+      <action
                enablesFor="1"
                label="Build WAR File"
                icon="icons/build.png"
                class="org.apache.forrest.eclipse.popup.actions.BuildWARSite"
                menubarPath="org.apache.forrest.eclipse.siteMenu/Static"
                id="org.apache.forrest.eclipse.BuildWARServer"/>
-         <action
+      <action
                class="org.apache.forrest.eclipse.popup.actions.ModifyConfigs"
                enablesFor="1"
                id="org.apache.forrest.eclipse.ModifyConfigs"
                label="Modify Configurations"
                menubarPath="org.apache.forrest.eclipse.configMenu"/>
-         <action
+      <action
                class="org.apache.forrest.eclipse.popup.actions.ModifyPlugins"
                enablesFor="1"
                id="org.apache.forrest.eclipse.ModifyPlugins"
                label="Modify Plugin Selection"
                menubarPath="org.apache.forrest.eclipse.configMenu"/>
-         <menu
+      <menu
                id="org.apache.forrest.eclipse.configMenu"
                label="Modify Project Configurations"
                path="projStart"/>
-      </objectContribution>
-   </extension>
-  
+    </objectContribution>
+  </extension>
   <extension point="org.eclipse.ui.editors">
     <editor id="org.eclipse.webbrowser"
       name="%viewWebBrowserTitle"
@@ -116,61 +114,59 @@
   </extension>
   <extension
         point="org.eclipse.ui.views">
-     <category
+    <category
            id="Forrest"
            name="Forrest"/>
-     <view
+    <view
            category="Forrest"
            class="org.apache.forrest.eclipse.views.SiteXMLView"
            icon="icons/start.png"
            id="org.apache.forrest.view.siteXML"
            name="SiteXML"/>
-     <view
+    <view
            category="Forrest"
            class="org.apache.forrest.eclipse.views.TabsXMLView"
            icon="icons/start.png"
            id="org.apache.forrest.view.tabsXML"
            name="TabsXML"/>
-     <view
+    <view
            category="Forrest"
            class="org.apache.forrest.eclipse.views.ForrestPropertiesView"
            id="org.apache.forrest.view.propertiesEditor"
            name="Properties"/>
-     <view
+    <view
            category="Forrest"
            class="org.apache.forrest.eclipse.views.LocationmapView"
            id="org.apache.forrest.view.locationmap"
            name="Locationmap"/>
   </extension>
-  
-   <extension
+  <extension
          id="treeDrop"
          name="Site XML Drop"
          point="org.eclipse.ui.dropActions">
-      <action
+    <action
             class="org.apache.forrest.eclipse.views.SiteXMLView"
-            id="SiteXMLDrop">
-      </action>
-   </extension>
-   <extension
+            id="SiteXMLDrop"></action>
+  </extension>
+  <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application>
-         <run class="org.apache.forrest.eclipse.Application"/>
-      </application>
-   </extension>
-   <extension
+    <application>
+      <run class="org.apache.forrest.eclipse.Application"/>
+    </application>
+  </extension>
+  <extension
          id="forrest"
          point="org.eclipse.core.runtime.products">
-      <product
+    <product
             application="org.apache.forrest.eclipse.application"
             name="Forrest IDE"/>
-   </extension>
-   <extension
+  </extension>
+  <extension
          point="org.eclipse.ui.perspectives">
-      <perspective
+    <perspective
             class="org.apache.forrest.eclipse.Perspective"
             id="org.apache.forrest.perspective.ContentObject"
             name="Content Object (Forrest)"/>
-   </extension>
+  </extension>
 </plugin>

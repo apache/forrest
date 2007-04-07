@@ -17,29 +17,24 @@
 -->
 <project default="newXDoc" basedir="." 
   name="Forrest Eclipse Plugin Resource Management">
-
   <description>
     Targets for the creation and management of Forrest site resources.
   </description>
-  	
   <property name="resource.dir" value=""/>
   <property name="resource.name" value=""/>
-
   <property name="title" value="New XDoc"/>
-  
   <target name="_initFilterTokens_newXDoc"
   	description="Initialise the filter tokens for creating a new XDoc file">
-  	<filter token="title" value="${title}"/>
+    <filter token="title" value="${title}"/>
   </target>
-	
-  <!-- ============================================ -->
-  <!-- Create a new XDoc                            -->
-  <!-- ============================================ -->
+<!-- ============================================ -->
+<!-- Create a new XDoc                            -->
+<!-- ============================================ -->
   <target name="newXDoc"
   	description="Create a new XDoc in the resource directory"
   	depends="_initFilterTokens_newXDoc">
-  	<mkdir dir="${resource.dir}"/>
-  	<copy file="new_xdoc.xml" 
+    <mkdir dir="${resource.dir}"/>
+    <copy file="new_xdoc.xml" 
   		  tofile="${resource.dir}/${resource.name}" 
   		  filtering="yes"/>
   </target>

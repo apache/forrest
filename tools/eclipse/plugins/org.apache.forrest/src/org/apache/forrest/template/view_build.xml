@@ -17,29 +17,24 @@
 -->
 <project default="newView" basedir="." 
   name="Forrest Eclipse Plugin Resource Management">
-
   <description>
     Targets for the creation and management of Forrest site resources.
   </description>
-  	
   <property name="resource.dir" value=""/>
   <property name="resource.name" value=""/>
-
   <property name="title" value="New View"/>
-  
   <target name="_initFilterTokens_newView"
   	description="Initialise the filter tokens for creating a new XDoc file">
-  	<filter token="title" value="${title}"/>
+    <filter token="title" value="${title}"/>
   </target>
-	
-  <!-- ============================================ -->
-  <!-- Create a new View                            -->
-  <!-- ============================================ -->
+<!-- ============================================ -->
+<!-- Create a new View                            -->
+<!-- ============================================ -->
   <target name="newView"
   	description="Create a new View in the resource directory"
   	depends="_initFilterTokens_newView">
-  	<mkdir dir="${resource.dir}"/>
-  	<copy file="new_view.fv" 
+    <mkdir dir="${resource.dir}"/>
+    <copy file="new_view.fv" 
   		  tofile="${resource.dir}/${resource.name}" 
   		  filtering="yes"/>
   </target>
