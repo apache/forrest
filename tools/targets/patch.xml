@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!--
   =======================================================================
    Use Apache Ant to generate a patch file for Apache Forrest.
@@ -25,72 +24,68 @@
   ant -f patch.xml
 -->
 <project name="create-patch" default="patchpackage" basedir="../..">
-    <property environment="env"/>
-    <property name="patch.package" value="patch.tar.gz"/>
-    <property name="patch.file" value="patch.txt"/>
-
-    <condition property="svn.found">
-        <or>
-            <available file="svn" filepath="${env.PATH}"/>
-            <available file="svn.exe" filepath="${env.PATH}"/>
-            <available file="svn.exe" filepath="${env.Path}"/>
-        </or>
-    </condition>
-
-    <target name="createpatch">
-        <fail unless="svn.found"
+  <property environment="env"/>
+  <property name="patch.package" value="patch.tar.gz"/>
+  <property name="patch.file" value="patch.txt"/>
+  <condition property="svn.found">
+    <or>
+      <available file="svn" filepath="${env.PATH}"/>
+      <available file="svn.exe" filepath="${env.PATH}"/>
+      <available file="svn.exe" filepath="${env.Path}"/>
+    </or>
+  </condition>
+  <target name="createpatch">
+    <fail unless="svn.found"
               message="You need a version of svn to create the patch"/>
-        <exec executable="svn" output="${patch.file}">
-            <arg value="diff"/>
-        </exec>
-    </target>
-
-    <target name="newfiles" depends="createpatch">
-        <delete file="${patch.package}"/>
-        <exec executable="svn" output="${patch.file}.tmp">
-            <arg value="status"/>
-        </exec>
-        <!-- the status columns make all lines invalid filenames (ignored by ant)
+    <exec executable="svn" output="${patch.file}">
+      <arg value="diff"/>
+    </exec>
+  </target>
+  <target name="newfiles" depends="createpatch">
+    <delete file="${patch.package}"/>
+    <exec executable="svn" output="${patch.file}.tmp">
+      <arg value="status"/>
+    </exec>
+<!-- the status columns make all lines invalid filenames (ignored by ant)
             we remove the status columns for the new files so the only valid
             filenames in the list are new files
         -->
-        <replace file="${patch.file}.tmp" token="?      " value=""/>
-        <tstamp>
-            <format property="year" pattern="yyyy"/>
-        </tstamp>
-        <fileset dir="${basedir}"
+    <replace file="${patch.file}.tmp" token="?      " value=""/>
+    <tstamp>
+      <format property="year" pattern="yyyy"/>
+    </tstamp>
+    <fileset dir="${basedir}"
             includesfile="${patch.file}.tmp"
             excludes="${patch.file}.tmp,${patch.file}"
             id="no.copyright.set">
-            <not>
-                <and>
-                    <contains text="Copyright"/>
-                    <contains text="Apache Software Foundation"/>
-                    <contains text="${year}"/>
-                </and>
-            </not>
-        </fileset>
-        <pathconvert pathsep="${line.separator}"
+      <not>
+        <and>
+          <contains text="Copyright"/>
+          <contains text="Apache Software Foundation"/>
+          <contains text="${year}"/>
+        </and>
+      </not>
+    </fileset>
+    <pathconvert pathsep="${line.separator}"
             setonempty="false"
             property="no.copyright"
             refid="no.copyright.set"/>
-        <fail if="no.copyright"
+    <fail if="no.copyright"
             message="Please include the Apache Copyright header (for ${year}) to these files and retry:${line.separator}${no.copyright}"/>
-    </target>
-
-    <target name="patchpackage" depends="newfiles">
-        <tar basedir="${basedir}"
+  </target>
+  <target name="patchpackage" depends="newfiles">
+    <tar basedir="${basedir}"
             tarfile="${patch.package}"
             compression="gzip"
             includesfile="${patch.file}.tmp"
             excludes="${patch.file}.tmp"/>
-        <delete file="${patch.file}.tmp"/>
-        <echo>
+    <delete file="${patch.file}.tmp"/>
+    <echo>
 Attach the following file to a new issue in the Forrest issue tracker
 (http://issues.apache.org/jira/secure/CreateIssue!default.jspa)
     ${patch.package} if you have added new files
     ${patch.file} if you have only modified existing files
 (Please review the patch first, to ensure that you have not added extra stuff.)
         </echo>
-    </target>
+  </target>
 </project>

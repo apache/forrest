@@ -18,25 +18,23 @@
  */
  -->
 <project default="forrest">
- <property environment="env" />
-
-<goal name="forrest" description="runs Forrest">
-  <property name="forrest.home" location="${env.FORREST_HOME}" />
-  <property name="forrest.ant.home" location="${forrest.home}/tools/ant" />
-  <java classname="org.apache.tools.ant.Main" 
+  <property environment="env" />
+  <goal name="forrest" description="runs Forrest">
+    <property name="forrest.home" location="${env.FORREST_HOME}" />
+    <property name="forrest.ant.home" location="${forrest.home}/tools/ant" />
+    <java classname="org.apache.tools.ant.Main" 
         fork="true" failonerror="true" maxmemory="128M">
-    <classpath>
-      <fileset dir="${forrest.ant.home}/lib">
-        <include name="*.jar" />
-      </fileset>
-      <pathelement path="${java.home}/../lib/tools.jar" />
-    </classpath>
-    <sysproperty key="ant.home" value="${forrest.ant.home}" />
-    <sysproperty key="forrest.home" value="${forrest.home}" />
-    <sysproperty key="basedir" value="${basedir}" />
-    <sysproperty key="java.endorsed.dirs" value="${forrest.home}/lib/endorsed" />
-    <arg line="-f ${forrest.home}/main/forrest.build.xml" />
-  </java>
-</goal> 
-
+      <classpath>
+        <fileset dir="${forrest.ant.home}/lib">
+          <include name="*.jar" />
+        </fileset>
+        <pathelement path="${java.home}/../lib/tools.jar" />
+      </classpath>
+      <sysproperty key="ant.home" value="${forrest.ant.home}" />
+      <sysproperty key="forrest.home" value="${forrest.home}" />
+      <sysproperty key="basedir" value="${basedir}" />
+      <sysproperty key="java.endorsed.dirs" value="${forrest.home}/lib/endorsed" />
+      <arg line="-f ${forrest.home}/main/forrest.build.xml" />
+    </java>
+  </goal>
 </project>
