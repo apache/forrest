@@ -4,10 +4,13 @@
 This directory contains files to help upgrade Cocoon to whatever is the latest
 stable version of Cocoon trunk.
 
-Instructions for use:
+Note: We are not up-to-date with the latest Cocoon trunk.
+See http://forrest.apache.org/docs_0_80/upgrading_08.html#cocoon
 
 FIXME: Latest Cocoon uses Maven, so this instructions needs to get updated.
 http://cocoon.zones.apache.org/daisy/documentation/g2/756.html
+
+Instructions for use:
 
 try this command to install:
 mvn -Dmaven.test.skip=true install
@@ -15,7 +18,7 @@ mvn -Dmaven.test.skip=true install
 
 NOTE:
 Make sure that you have set $COCOON_HOME like e.g.:
-export COCOON_HOME=/home/thorsten/apache/cocoon-trunk/
+export COCOON_HOME=/home/me/apache/cocoon-trunk/
 and do a 'build clean' there.
 
 -------------------------
@@ -88,3 +91,10 @@ svn ci -m "prework for upgrade to {cocoon.NEWrevision}"
 
 12. Now do 'svn commit' for the changed/new files in forrest/lib
     and use the Cocoon SVN revision number in your log message.
+
+------------------------------------------------------------------------
+Cleanup
+
+* There will be a new local.blocks.properties over in your cocoon-trunk
+Remove it to continue developing with Cocoon.
+
