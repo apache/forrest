@@ -17,146 +17,119 @@
 -->
 <project
  name="forrestdoc" default="project" basedir=".">
-
-   <!-- init -->
-   <tstamp />
-   <property file="build.properties"/>
-   
-   <path id="lib.classpath">
-      <fileset  dir="${lib.dir}">
-         <include name="*.jar" />
-      </fileset>
-      <fileset dir="${ant.home}/lib">
-         <include name="*.jar" />
-      </fileset>
-   </path>
-
-   <path id="task.classpath">
-      <path refid="lib.classpath"/>
-      <pathelement path="${build.classes.dir}"/>
-      <pathelement path="${ant.build.dir}"/>
-   </path>
-
-   <mkdir dir="${ant.build.dir}" />
-   <javac srcdir="${ant.src.dir}"
+<!-- init -->
+  <tstamp />
+  <property file="build.properties"/>
+  <path id="lib.classpath">
+    <fileset  dir="${lib.dir}">
+      <include name="*.jar" />
+    </fileset>
+    <fileset dir="${ant.home}/lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  <path id="task.classpath">
+    <path refid="lib.classpath"/>
+    <pathelement path="${build.classes.dir}"/>
+    <pathelement path="${ant.build.dir}"/>
+  </path>
+  <mkdir dir="${ant.build.dir}" />
+  <javac srcdir="${ant.src.dir}"
           debug="true"
           destdir="${ant.build.dir}"
           classpathref="lib.classpath" />
-             
-   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-   <taskdef name="extendedpathconvert" classname="org.apache.forrest.tools.taskdefs.PathConvert" classpathref="task.classpath"/>
-  
-   <!-- Targets -->
-   
-   <target name="compile"
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  <taskdef name="extendedpathconvert" classname="org.apache.forrest.tools.taskdefs.PathConvert" classpathref="task.classpath"/>
+<!-- Targets -->
+  <target name="compile"
            description="Compile the java code from ${src} into ${target}">
-      <mkdir dir="${build.classes.dir}" />
-      <javac srcdir="${src.dir}"
+    <mkdir dir="${build.classes.dir}" />
+    <javac srcdir="${src.dir}"
              debug="true"
              destdir="${build.classes.dir}"
              classpathref="lib.classpath" />
-   </target>
-
-   <target name="jar" depends="compile"
-           description="Put everything in ${target} into the ${jar.name}.jar file">   
-      <mkdir dir="${dist.dir}" />
-      <jar jarfile="${dist.dir}/${jar.name}-${version}.jar"
+  </target>
+  <target name="jar" depends="compile"
+           description="Put everything in ${target} into the ${jar.name}.jar file">
+    <mkdir dir="${dist.dir}" />
+    <jar jarfile="${dist.dir}/${jar.name}-${version}.jar"
            basedir="${build.classes.dir}" />
-      <jar jarfile="${dist.dir}/${jar.name}-anttools-${version}.jar"
+    <jar jarfile="${dist.dir}/${jar.name}-anttools-${version}.jar"
            basedir="${ant.build.dir}" />
-   </target>
-
-   <target name="clean"
-           description="Delete the ${target} and ${dist} directory trees">   
-      <delete dir="${build.dir}" />
-      <delete dir="${dist.dir}" />
-   </target>
-   
-   <target name="all" 
+  </target>
+  <target name="clean"
+           description="Delete the ${target} and ${dist} directory trees">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+  </target>
+  <target name="all" 
            description="test this project" 
-           depends="project">
-   </target>   
-   
-   <target name="project"  depends="compile"
+           depends="project"></target>
+  <target name="project"  depends="compile"
            description="create all possible docs for this project">
-         <echo>START</echo>
-         <trycatch property="foo" reference="bar">
-         <try>
-            <ant antfile="core.xml" dir="." target="project"
+    <echo>START</echo>
+    <trycatch property="foo" reference="bar">
+      <try>
+        <ant antfile="core.xml" dir="." target="project"
                 inheritAll="true" inheritRefs="true"/>
-         </try>
-         <catch>
-           <echo>In &lt;catch&gt;.</echo>
-         </catch>
-         <finally>
-           <echo>In &lt;finally&gt;.</echo>
-         </finally>
-       </trycatch>
-   </target>    
-   
-   <!-- driver targets -->   
-   
-   <target name="ws"  depends="compile"
+      </try>
+      <catch>
+        <echo>In &lt;catch&gt;.</echo>
+      </catch>
+      <finally>
+        <echo>In &lt;finally&gt;.</echo>
+      </finally>
+    </trycatch>
+  </target>
+<!-- driver targets -->
+  <target name="ws"  depends="compile"
            description="create all possible docs for this workspace">
-           
-     <property name="resolved.ws.dir" location="${ws.dir}"/>
-     <!--
+    <property name="resolved.ws.dir" location="${ws.dir}"/>
+<!--
      <property name="ws.build.dir" location="${ws.dir}/build/forrestdoc"/>    
      <property name="ws.temp.dir" location="${ws.dir}/build/temp"/>     
      -->
-     <property name="ws.build.dir" location="./build/ws/forrestdoc"/>    
-     <property name="ws.temp.dir" location="./build/temp/ws"/>     
-          
-     <mkdir dir="${ws.build.dir}" />
-     <mkdir dir="${ws.temp.dir}" />              
-              
-     <dirset dir="${ws.dir}" id="ws.project.dirs">
-        <include name="*"/>
-        <exclude name=".*"/>
-        <exclude name="Copy of*"/>
-        <exclude name="build"/>
-     </dirset>
-     
-     <extendedpathconvert pathsep="," type="xml" file="${ws.temp.dir}/dirs.xml" refid="ws.project.dirs">
-       <map from="${resolved.ws.dir}" to=""/>
-     </extendedpathconvert>     
-    
-     <xslt in="${ws.temp.dir}/dirs.xml" 
+    <property name="ws.build.dir" location="./build/ws/forrestdoc"/>
+    <property name="ws.temp.dir" location="./build/temp/ws"/>
+    <mkdir dir="${ws.build.dir}" />
+    <mkdir dir="${ws.temp.dir}" />
+    <dirset dir="${ws.dir}" id="ws.project.dirs">
+      <include name="*"/>
+      <exclude name=".*"/>
+      <exclude name="Copy of*"/>
+      <exclude name="build"/>
+    </dirset>
+    <extendedpathconvert pathsep="," type="xml" file="${ws.temp.dir}/dirs.xml" refid="ws.project.dirs">
+      <map from="${resolved.ws.dir}" to=""/>
+    </extendedpathconvert>
+    <xslt in="${ws.temp.dir}/dirs.xml" 
            out="${ws.build.dir}/projects.html" style="${resources.dir}/ws/dir2projects.xsl" />
-     <xslt in="${ws.temp.dir}/dirs.xml" 
-           out="${ws.build.dir}/projects-summary.html" style="${resources.dir}/ws/dir2projects-summary.xsl" />    
-     <copy file="${resources.dir}/ws/index.html" todir="${ws.build.dir}"/>    
-     <copy file="${resources.dir}/ws/styles.css" todir="${ws.build.dir}"/>
-               
+    <xslt in="${ws.temp.dir}/dirs.xml" 
+           out="${ws.build.dir}/projects-summary.html" style="${resources.dir}/ws/dir2projects-summary.xsl" />
+    <copy file="${resources.dir}/ws/index.html" todir="${ws.build.dir}"/>
+    <copy file="${resources.dir}/ws/styles.css" todir="${ws.build.dir}"/>
     <for param="current.project.dir">
       <path>
-       <dirset  refid="ws.project.dirs"/>
-      </path> 
-        <sequential>
-         <echo>START @{current.project.dir}</echo>
-         <trycatch property="foo" reference="bar">
-         <try>
+        <dirset  refid="ws.project.dirs"/>
+      </path>
+      <sequential>
+        <echo>START @{current.project.dir}</echo>
+        <trycatch property="foo" reference="bar">
+          <try>
             <ant antfile="core.xml" dir="." target="project"
                 inheritAll="true" inheritRefs="true">
               <property name="project.dir"    value="@{current.project.dir}"/>
-              <property name="target.dir"  value="${ws.build.dir}"/>  
-           </ant>
-         </try>
-         <catch>
-           <echo>In &lt;catch&gt;.</echo>
-         </catch>
-         <finally>
-           <echo>In &lt;finally&gt;.</echo>
-         </finally>
-       </trycatch>
-
-
-
-        </sequential>          
-    </for>          
-    
-   </target>    
-   
-   
+              <property name="target.dir"  value="${ws.build.dir}"/>
+            </ant>
+          </try>
+          <catch>
+            <echo>In &lt;catch&gt;.</echo>
+          </catch>
+          <finally>
+            <echo>In &lt;finally&gt;.</echo>
+          </finally>
+        </trycatch>
+      </sequential>
+    </for>
+  </target>
 </project>
-
