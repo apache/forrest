@@ -16,16 +16,13 @@
   limitations under the License.
 -->
 <project name="forrest" default="main">
-
   <property name="getsrc.svn.url" value="http://svn.apache.org/repos/asf/forrest/trunk"/>
   <target name="getsrc" depends="getsrc.clean-workdir, getsrc.svn"/>
-  
-  <!-- create this file to be an ant project (not stored in CVS or SVN)
+<!-- create this file to be an ant project (not stored in CVS or SVN)
   that sets deploy.svn.user and deploy.svn.password propeties -->
   <import file="deploy.svn.settings" optional="true"/>
   <property name="deploy.svn.url" value="https://svn.apache.org/repos/asf/forrest/site"/>
   <target name="deploy" depends="deploy.svn"/>
-
   <property environment="env"/>
   <import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/>
 </project>

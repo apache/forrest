@@ -16,30 +16,24 @@
   limitations under the License.
 -->
 <project name="build">
-
   <property name="build.work-dir"         location="work/${ant.project.name}"/>
   <property name="build.site-dir"         location="build/${ant.project.name}"/>
   <tstamp>
     <format property="logtime" pattern="yyyyMMddHHmmss"/>
   </tstamp>
-
   <property name="build.log-dir" location="logs"/>
   <mkdir dir="${build.log-dir}"/>
   <property name="build.logfile" location="${build.log-dir}/${ant.project.name}.log"/>
-  <property name="build.logfile-stored" location="${build.log-dir}/${ant.project.name}-${logtime}.log"/> 
-
+  <property name="build.logfile-stored" location="${build.log-dir}/${ant.project.name}-${logtime}.log"/>
   <target name="build.forrest" depends="getsrc">
-
-    <!-- defining this inside the target instead of at the top of the file
+<!-- defining this inside the target instead of at the top of the file
          so that getsrc.local can override -->
-    <property name="build.home-dir"         location="${build.work-dir}" />  
-  
+    <property name="build.home-dir"         location="${build.work-dir}" />
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
       <classpath>
         <pathelement location="${bot.home}/lib/ant-contrib-0.5.jar"/>
       </classpath>
     </taskdef>
-
     <trycatch property="errmsg" reference="exception">
       <try>
         <record name="${build.logfile}" action="start"/>
@@ -70,5 +64,4 @@
     </trycatch>
     <copy file="${build.logfile}" tofile="${build.logfile-stored}"/>
   </target>
-
 </project>

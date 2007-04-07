@@ -15,30 +15,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project name="forrestbot" basedir="." default="main">
-
   <property environment="ENV"/>
   <property name="forrest.root-dir" location="${ENV.FORREST_HOME}"/>
   <property name="bot.home" location="${forrest.root-dir}/tools/forrestbot"/>
-
   <import file="${forrest.root-dir}/main/forrest.build.xml"/>
-
-  <!-- include workstage implementations -->
+<!-- include workstage implementations -->
   <import file="${bot.home}/core/getsrc.xml"/>
   <import file="${bot.home}/core/build.xml"/>
   <import file="${bot.home}/core/deploy.xml"/>
   <import file="${bot.home}/core/notify.xml"/>
-
-  <!-- default implmentations for each workstages -->
+<!-- default implmentations for each workstages -->
   <target name="getsrc" depends="getsrc.clean-workdir, getsrc.cvs" description="FB: Get source via getsrc.cvs"/>
-
   <target name="build" depends="build.forrest" description="FB: Build via `forrest site`"/>
-
   <target name="deploy" depends="deploy.local" description="FB: Deploy via deploy.local"/>
-
   <target name="notify" depends="notify.local" description="FB: Notify via notify.local"/>
-
   <target name="clean">
     <antcall target="forrest.clean" inheritAll="false">
       <param name="project.home" value="${build.work-dir}"/>
@@ -46,8 +37,6 @@
       <param name="project.site-dir" value="${build.site-dir}"/>
     </antcall>
   </target>
-
-  <!-- run the workstages -->
+<!-- run the workstages -->
   <target name="main" depends="getsrc, build, deploy, notify" description="FB: getsrc, build, deploy, notify"/>
-
 </project>
