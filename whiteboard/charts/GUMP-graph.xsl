@@ -71,7 +71,7 @@
           <xsl:value-of select="$graph_width"/>
           <xsl:text>,0 0,0</xsl:text>
           <xsl:for-each select="datum">
-            <xsl:text></xsl:text>
+            <xsl:text> </xsl:text>
             <xsl:value-of select="(position() - 1) * $x_scale"/>
             <xsl:text>,</xsl:text>
             <xsl:value-of select="(@dependancy + @failed) * ($graph_height div (@passed + @dependancy + @failed))"/>
@@ -83,7 +83,7 @@
           <xsl:value-of select="$graph_width"/>
           <xsl:text>,0 0,0</xsl:text>
           <xsl:for-each select="datum">
-            <xsl:text></xsl:text>
+            <xsl:text> </xsl:text>
             <xsl:value-of select="(position() - 1) * $x_scale"/>
             <xsl:text>,</xsl:text>
             <xsl:value-of select="@failed * ($graph_height div (@passed + @dependancy + @failed))"/>
