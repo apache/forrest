@@ -21,15 +21,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.xmlmind.com/xmleditor/schema/configuration"
   xmlns:cfg="http://www.xmlmind.com/xmleditor/schema/configuration">
-
   <include location="toolBar.xml" />
-  
   <documentResources>
     <resource path="//img/@src"/>
     <resource path="//figure/@src"/>
     <resource path="//icon/@src"/>
   </documentResources>
-  
   <elementTemplate xmlns="" name="tableHeaded">
     <table>
       <tr>
@@ -46,7 +43,6 @@
       </tr>
     </table>
   </elementTemplate>
-
   <elementTemplate xmlns="" name="tableUnheaded">
     <table>
       <tr>
@@ -59,34 +55,27 @@
       </tr>
     </table>
   </elementTemplate>
-  
   <elementTemplate xmlns="" name="tableRow">
     <tr>
       <td></td>
       <td></td>
     </tr>
   </elementTemplate>
-  
-  <!-- Bindings =========================================================== -->
-  <!--   modified from xhtml & docbook config files =============== -->
-
-  <!-- attempt to behave like a word-processor. -->
-
+<!-- Bindings =========================================================== -->
+<!--   modified from xhtml & docbook config files =============== -->
+<!-- attempt to behave like a word-processor. -->
   <binding>
     <keyPressed code="ENTER" />
     <command name="forrest.splitOrInsertNewLine" />
   </binding>
-
   <binding>
     <keyPressed code="DELETE" />
     <command name="forrest.joinOrDeleteChar" />
   </binding>
-
   <binding>
     <keyPressed code="BACK_SPACE" />
     <command name="forrest.joinOrDeleteChar" parameter="backwards" />
   </binding>
-
   <command name="forrest.splitOrInsertNewLine">
     <macro trace="false">
       <choice>
@@ -98,7 +87,6 @@
       </choice>
     </macro>
   </command>
-
   <command name="forrest.joinOrDeleteChar">
     <macro trace="false">
       <choice>
@@ -110,43 +98,35 @@
       </choice>
     </macro>
   </command>
-
-  <!-- An easy way to insert a table row -->
+<!-- An easy way to insert a table row -->
   <binding>
     <keyPressed code="ENTER" modifiers="mod"/>
     <command name="add" parameter="after[implicitElement] #template(tr,tableRow)" />
   </binding>
-
-
-  <!-- An easy way to insert a br -->
+<!-- An easy way to insert a br -->
   <binding>
     <keyPressed code="ENTER" modifiers="shift" />
     <command name="forrest.insertLineBreak" />
   </binding>
-
   <command name="forrest.insertLineBreak">
     <macro>
       <sequence>
         <command name="insert" parameter="into br" />
-        <!-- harmless if macro fails starting from here -->
+<!-- harmless if macro fails starting from here -->
         <command name="insertNode" parameter="textAfter" />
         <command name="cancelSelection" />
       </sequence>
     </macro>
   </command>
-
   <command name="forrest.tableColumn">
     <class>com.xmlmind.xmleditapp.xhtml.table.TableColumn</class>
   </command>
   <command name="forrest.tableRow">
     <class>com.xmlmind.xmleditapp.xhtml.table.TableRow</class>
   </command>
-
-  <!-- Menu =========================================================== -->
-  <!--   modified from xhtml config files ============================= -->
-
+<!-- Menu =========================================================== -->
+<!--   modified from xhtml config files ============================= -->
   <menu label="Forrest" mnemonic="F">
-
     <item label="Insert Table With heading row"
           command="add"
           parameter="after[implicitElement] #template(table,tableHeaded)" />
@@ -185,7 +165,5 @@
           icon="xxe-config:common/icons/RowDelete16.gif"
           command="forrest.tableRow"
           parameter="delete"/>
-
   </menu>
-
 </configuration>

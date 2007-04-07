@@ -15,34 +15,28 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project basedir="." name="xxe-forrest" default="dist">
-
   <target name="-init">
     <property environment="env"/>
     <property name="version" value="1.4"/>
     <property name="dist.dir" location="dist"/>
     <property name="dist.name" value="XXE_forrest_config"/>
   </target>
-  
   <target name="clean" depends="-init" description="Clean all generated files">
-    <!-- created files -->
+<!-- created files -->
     <delete dir="${dist.dir}"/>
-    <!-- copied files -->
+<!-- copied files -->
     <delete dir="entity"/>
     <delete dir="dtd"/>
     <delete file="catalog.xml"/>
   </target>
-  
   <target name="dist" depends="-init, update" description="Build zip file">
     <mkdir dir="${dist.dir}"/>
     <zip destfile="${dist.dir}/${dist.name}-${version}.zip">
       <zipfileset prefix="forrest" dir="." excludes="dist/**"/>
     </zip>
   </target>
-  
   <target name="update" depends="clean, copy-dtds, copy-catalog" description="Update schemas from FORREST_HOME"/>
-  
   <target name="copy-dtds" depends="-init" description="Copy DTDs from FORREST_HOME">
     <copy todir=".">
       <fileset dir="${env.FORREST_HOME}/main/webapp/resources/schema/">
@@ -50,10 +44,8 @@
         <include name="dtd/**"/>
       </fileset>
     </copy>
-  </target>  
-
+  </target>
   <target name="copy-catalog" depends="-init" description="Copy Catalog from FORREST_HOME">
     <copy file="${env.FORREST_HOME}/main/webapp/resources/schema/catalog.forrest.xcat" tofile="catalog.xml"/>
-  </target>  
-
+  </target>
 </project>
