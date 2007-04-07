@@ -24,7 +24,7 @@
     </header>
     <body>
       <note>These are the top 25 open issues for the next release that are scheduled in our
-       <link href="http://issues.apache.org/jira/secure/BrowseProject.jspa?id=12310000">issue tracking system</link>
+       <link href="http://forrest.apache.org/issues.html">issue tracking system</link>
        (see 
        <link href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=12310000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
       The listing below is regenerated on each Forrest run.</note>
