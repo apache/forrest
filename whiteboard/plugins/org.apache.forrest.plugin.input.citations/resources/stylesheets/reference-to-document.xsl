@@ -20,7 +20,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
 
-  <xsl:import href="copyover.xsl"/>
+  <xsl:import href="lm://transform.xml.copyover.helper"/>
 
   <xsl:template match="references">
    <document>
