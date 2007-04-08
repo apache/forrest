@@ -365,7 +365,7 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</pre>
 <p>Note that forrestbot does not remove docs from the forrest/site SVN (FOR-392).
           So need to manually delete: 'cd /svn/forrest/site; svn delete oldDoc'.
           Then remove it from the forrestbot work directories:
-          'cd $FORREST_HOME; rm build/forrest-docs/oldDoc; rm work/svn-deploy/forrest-docs/oldDoc'.
+          'cd $FORREST_HOME/site-author; rm build/forrest-docs/oldDoc; rm work/svn-deploy/forrest-docs/oldDoc'.
         </p>
 <p>
 The generated docs are in build/forrest-docs
@@ -375,7 +375,7 @@ Here is a trick for reviewing changes that forrestbot is ready to deploy ...
 <pre class="code">
 forrest -f publish.xml build
 svn update work/svn-deploy/forrest-docs
-diff -rq build/forrest-docs work/svn-deploy/forrest-docs | grep -v "\.svn"</pre>
+diff -rq build/forrest-docs work/svn-deploy/forrest-docs | grep -v "\.svn" | grep differ</pre>
 </div>
 
 
