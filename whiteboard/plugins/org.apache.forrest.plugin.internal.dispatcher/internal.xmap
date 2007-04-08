@@ -90,6 +90,16 @@
      <map:pipes default="caching"/>
   </map:components>
   <map:pipelines>
+    <!--FOR-808 WORKAROUND
+      Creating a virtual skinconf from the properties module.
+      The core depends on a skinconf but the dispatcher not.
+      See as well FOR-829 where we use this config.-->
+    <map:pipeline>
+      <map:match pattern="skinconf.xml">
+        <map:generate src="cocoon://module.properties.properties" />
+        <map:serialize />
+      </map:match>
+    </map:pipeline>
     <!--
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
