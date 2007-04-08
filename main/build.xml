@@ -160,7 +160,44 @@
     depends="clean,dist-shbat" />
 
   <!-- =================================================================== -->
-  <!-- Use tidy.sf.net on a single xml-type file                           -->
+  <!-- Use xmlformat on various xml-type files                             -->
+  <!-- =================================================================== -->
+<!-- Notes:
+You need 'xmlformat' locally installed.
+Change the fileset/@dir to the tree that you want to clean.
+If you encounter invalid xml, uncomment the -v (not xmlformat job to validate).
+Remove any build directories in a tree before running.
+-->
+  <target name="xmlformat" depends="init">
+    <apply executable="xmlformat" parallel="false" verbose="yes">
+      <arg value="-f${forrest.home}/etc/xmlformat.conf"/>
+      <arg value="-i"/>
+<!--
+      <arg value="-v"/>
+-->
+      <srcfile/>
+      <fileset dir="${forrest.home}/etc/test-whitespace">
+        <patternset>
+          <include name="**/*.xml"/>
+          <include name="**/*.xsl"/>
+          <include name="**/*.xslt"/>
+          <include name="**/*.xmap"/>
+          <include name="**/*.jx"/>
+          <include name="**/*.ft"/>
+          <include name="**/*.fv"/>
+          <include name="**/*.html"/>
+          <include name="**/*.rdf"/>
+          <include name="**/*.xcat"/>
+          <include name="**/*.xhtml"/>
+          <include name="**/*.xhtml2"/>
+          <include name="**/*.xxe"/>
+        </patternset>
+      </fileset>
+    </apply>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Test tidy.sf.net on a single xml-type file                          -->
   <!-- See also etc/tidy-xml.pl                                            -->
   <!-- =================================================================== -->
   <target name="tidy-xml-file" depends="init">
