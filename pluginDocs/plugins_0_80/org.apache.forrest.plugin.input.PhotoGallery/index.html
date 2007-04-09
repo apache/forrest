@@ -11,7 +11,7 @@
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
 <link type="text/css" href="skin/profile.css" rel="stylesheet">
 <script src="skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="skin/fontsize.js" language="javascript" type="text/javascript"></script>
-<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="">
 </head>
 <body onload="init()">
 <script type="text/javascript">ndeSetTextSize();</script>
@@ -20,7 +20,7 @@
     |breadtrail
     +-->
 <div class="breadtrail">
-<a href="http://forrest.apache.org/">Apache Forrest</a> &gt; <a href="http://forrest.apache.org/pluginDocs/">Plugins</a><script src="skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+<a href="http://www.apache.org/">myGroup</a> &gt; <a href="http://forrest.apache.org/">myProject</a><script src="skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
 </div>
 <!--+
     |header
@@ -30,7 +30,7 @@
     |start group logo
     +-->
 <div class="grouplogo">
-<a href="http://forrest.apache.org/"><img class="logoImage" alt="Apache Forrest" src="images/project-logo.gif" title="Apache Forrest"></a>
+<a href="http://mygroup.org"><img class="logoImage" alt="MyGroup" src="images/group.png" title="MyGroup Description"></a>
 </div>
 <!--+
     |end group logo
@@ -38,21 +38,33 @@
 <!--+
     |start Project Logo
     +-->
-<div class="projectlogoA1">
-<a href=""><img class="logoImage" alt="Plugin: Photo Gallery input" src="images/project.png" title="org.apache.forrest.plugin.input.PhotoGallery plugin for Apache Forrest"></a>
+<div class="projectlogo">
+<a href="http://myproj.mygroup.org/"><img class="logoImage" alt="MyProject" src="images/project.png" title="MyProject Description"></a>
 </div>
 <!--+
     |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="mydomain" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
     +-->
 <!--+
     |start Tabs
     +-->
 <ul id="tabs">
 <li>
-<a class="base-not-selected" href="http://forrest.apache.org/pluginDocs">Forrest Plugins</a>
+<a class="unselected" href="http://forrest.apache.org/pluginDocs">Forrest Plugins</a>
 </li>
 <li class="current">
-<a class="base-selected" href="index.html">Home</a>
+<a class="selected" href="index.html">Home</a>
 </li>
 </ul>
 <!--+
@@ -93,16 +105,22 @@ document.write("Last Published: " + document.lastModified);
 <div class="menupagetitle">Index</div>
 </div>
 <div class="menuitem">
-<a href="http://forrest.apache.org/docs/plugins" title="Index of Forrest Plugins">Plugins Index</a>
-</div>
-<div class="menuitem">
 <a href="changes.html" title="History of Changes">Changes</a>
 </div>
 <div class="menuitem">
 <a href="todo.html" title="Todo List">Todo</a>
 </div>
 </div>
-<div id="credit"></div>
+<div onclick="SwitchMenu('menu_1.2', 'skin/')" id="menu_1.2Title" class="menutitle">Samples</div>
+<div id="menu_1.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="gallery/index.html" title="List of available galleries">Galleries</a>
+</div>
+</div>
+<div id="credit">
+<hr>
+<a href="http://forrest.apache.org/"><img border="0" title="Built with Apache Forrest" alt="Built with Apache Forrest - logo" src="images/built-with-forrest-button.png" style="width: 88px;height: 31px;"></a>
+</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
 <!--+
@@ -117,11 +135,6 @@ document.write("Last Published: " + document.lastModified);
     |start content
     +-->
 <div id="content">
-<div class="trail">Font size: 
-	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
-	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
-	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
-</div>
 <h1>Welcome to the org.apache.forrest.plugin.input.PhotoGallery Plugin</h1>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -132,51 +145,36 @@ document.write("Last Published: " + document.lastModified);
 </div> 
     
 <a name="N1000D"></a><a name="input.PhotoGallery+Plugin"></a>
-<h2 class="underlined_10">input.PhotoGallery Plugin</h2>
+<h2 class="boxed">input.PhotoGallery Plugin</h2>
 <div class="section">
-<p>This plugin creates a photo album from photographs.</p>
+<p>This plugin creates photo albums from sets of photographs.</p>
 <p>The pictures are expected under 
-      <span class="codefrag">{project:content.xdocs}/images/gallery/**</span> in 
-      folders called <span class="codefrag">preview</span>, <span class="codefrag">small</span> and  
-      <span class="codefrag">big</span>.</p>
-<p>To view a screen of thumbnails (generated from the <span class="codefrag">preview</span>
-      directory), you need to request an URL in the form of 
+      <span class="codefrag">{properties:content.xdocs}/images/gallery/**</span>.  To create your photo 
+      albums simply create a new directory for each photo album under the gallery 
+      directory. Place your original sized pictures into each gallery sub-directory. The thumbnail and small sized images will be automatically generated from these.</p>
+<p>Then place a simple album description file named album.xml in each
+      directory.  Look in the sample gallery for an example of this album.xml file.
+      A request for gallery/index.html then provides a list of
+      <a href="gallery/index.html">available galleries</a>
+      together with their titles and descriptions.
+      </p>
+<p>To view a screen of thumbnails, you need to request an URL in the form of 
       <span class="codefrag">gallery/**/index.html</span>. By default 20 pictures will be 
       displayed. If you have more than 20 then you will need to use an URL in
       the form of <span class="codefrag">gallery/**/index_X.html</span> (where X is the page 
       number you want to view). 
       See our <a href="gallery/demo/index_1.html">demo index</a> for an example.</p>
-<p>To view a single picture at a size optimised for the delivery mecahnism 
-      (generated from the <span class="codefrag">small</span> directory), you need to request an 
-      URL in the form of <span class="codefrag">gallery/**/pic_PICTURE_NUMBER.html</span>,
+<p>To view a single picture at a size optimised for the delivery mechanism, you 
+      need to request an URL in the form of <span class="codefrag">gallery/**/pic_PICTURE_NUMBER.html</span>,
       where PICTURE_NUMBER is the number of the picture you want to display.
       See our <a href="gallery/demo/pic_1.html">demo one picture</a>,
       <a href="gallery/demo/pic_2.html">demo two picture</a>, 
       <a href="gallery/demo/pic_3.html">demo three picture</a> for examples.</p>
-<p>To view a single picture at its natural size 
-      (generated from the <span class="codefrag">big</span> directory), you need to request an 
+<p>To view a single picture at its natural size, you need to request an 
       URL in the form of <span class="codefrag">gallery/**/fullPic_PICTURE_NUMBER.html</span>.
       See our <a href="gallery/demo/fullPic_1.html">demo one picture</a>,
       <a href="gallery/demo/fullPic_2.html">demo two picture</a>, 
       <a href="gallery/demo/fullPic_3.html">demo three picture</a> for examples.</p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">To create the relevant directory stuctures for your gallery simply
-      run the following script (unix only). We hope to enhance this plugin
-      so that it will automatically create the relevant images for you, but
-      for now you must do it by hand.
-      <span class="codefrag">
-      for i; do
-        echo -n "Converting:" $i "... ";
-        convert -size 100x100 $i -resize 100x100 preview/$i;
-        convert -size 400x400 $i -resize 400x400 small/$i;
-        convert -size 800x800 $i -resize 800x800 big/$i;
-        echo "finished.";
-      done
-      </span> 
-
-</div>
-</div>
 </div>
   
 </div>
@@ -196,10 +194,13 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div class="copyright">
         Copyright &copy;
-         2004-2006 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
-</div>
+         2005 The Acme Software Foundation.</div>
 <div id="logos">
-<a href="http://validator.w3.org/check/referer"><img style="height: 31px; width: 88px;" title="Valid HTML 4.01!" alt="Valid HTML 4.01!" src="skin/images/valid-html401.png" class="logoImage"></a><a href="http://jigsaw.w3.org/css-validator/check/referer"><img style="height: 31px; width: 88px;" title="Valid CSS!" alt="Valid CSS!" src="skin/images/vcss.png" class="logoImage"></a><a href="http://forrest.apache.org/"><img border="0" title="Built with Apache Forrest" alt="Built with Apache Forrest - logo" src="images/built-with-forrest-button.png" style="width: 88px;height: 31px;"></a>
+<a href="http://validator.w3.org/check/referer"><img style="height: 31px; width: 88px;" title="Valid HTML 4.01!" alt="Valid HTML 4.01!" src="skin/images/valid-html401.png" class="logoImage"></a><a href="http://jigsaw.w3.org/css-validator/check/referer"><img style="height: 31px; width: 88px;" title="Valid CSS!" alt="Valid CSS!" src="skin/images/vcss.png" class="logoImage"></a>
+</div>
+<div id="feedback">
+    Send feedback about the website to:
+  <a id="feedbackto" href="mailto:webmaster@foo.com?subject=Feedback%C2%A0index.html">webmaster@foo.com</a>
 </div>
 <!--+
     |end bottomstrip
