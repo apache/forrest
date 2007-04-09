@@ -84,25 +84,31 @@
       <p>For example, here is a locationmap entry based purely on filename:</p>
       
       <source><![CDATA[
-<map:transform src="{lm:xhtml-to-html.xsl}"/>
+<map:transform src="{lm:html-to-document.xsl}"/>
       ]]></source>
 
       <p>and here is that same entry using a "name" style.  One implies 
-      a certain physical location where as the one below is truly a name that 
+      a certain physical location, whereas the one below is truly a name that 
       needs to be resolved to a physical location.</p>
 
       <source><![CDATA[
-<map:transform src="{lm:transform.xhtml2.html}"/>
+<map:transform src="{lm:transform.html.document}"/>
       ]]></source>
-      
-      <p>Where the resource is provided by a plugin rather than Forrest itself
+
+      <p>Locationmaps are also used by plugins, and your project can also have its own locationmap.
+      </p>
+
+      <p>Where the resource is provided by a plugin rather than Forrest itself,
       this is prefixed with the last part of the plugin name. For example:</p>
 
       <source><![CDATA[
-<map:transform src="{lm:projectInfo.transform.doap.html}"/>
+<map:transform src="{lm:projectInfo.transform.changes.document}"/>
       ]]></source>
-      
-      <p>The format is essentially one of:</p>
+
+      <p>The above match means look in the projectInfo plugin for a transformer stylesheet with filename changes-to-document.xsl
+      </p>
+
+      <p>The naming convention is essentially one of:</p>
       
       <source>
 [PLUGIN_NAME.]resource-type(dot)from-format(dot)to-format
@@ -112,12 +118,59 @@
 [PLUGIN_NAME.]resource-type(dot)type(dot)name
       </source>
 
-      <p>Examples of these two:</p>
+      <p>Examples of these:</p>
       <source>
-transform.transform.xthml2.html
+transform.xthml2.html
 graphic.png.project-logo
 projectInfo.transform.changes.rss
       </source>
+  </section>
+  
+  <section id="process">
+    <title>Explanation of Locationmap processing</title>
+    <p>Some specific examples will explain. Please follow the relevant source files.</p>
+    <p>The document <a href="site:sitemap-explain">Cocoon sitemaps explained</a>
+      (better understand that document before trying to understand locationmaps)
+      has two specific transformers which use locationmap references.
+      The first one is:
+      <code><![CDATA[<map:transform src="{lm:transform.linkmap.document}"/>]]></code>
+    </p>
+    <p>
+      The Locationmap component first consults the primary locationmap
+      <code>$FORREST_HOME/main/webapp/locationmap.xml</code> file. This first mounts
+      any project locationmap if available, then the locationmaps from plugins,
+      then the rest of the core locationmaps in the <code>$FORREST_HOME/main/webapp/</code> directory.
+      As with sitemaps, the first match wins. So matches in your project locationmap
+      have precedence, then plugins, then core.
+    </p>
+    <p>So let us get back to our specifc example, 
+      "<code>lm:transform.linkmap.document</code>". The "lm:" part means use the locationmap
+      protocol. There is no specific match for this in your project locationmap, nor in
+      any of the plugin locationmaps, so this falls through to the core locationmaps.
+      However, you will not find any specific match for this in the core locationmaps,
+      so what is happening?
+    </p>
+    <p>See the last match in 
+      <code>$FORREST_HOME/main/webapp/locationmap-transforms.xml</code> file.
+      This a catchall matcher for any reference starting with "<code>transform.</code>"
+    </p>
+    <source><![CDATA[
+    <match pattern="transform.*.*">
+      <select>
+        ...
+        ...
+        <location src="{forrest:forrest.stylesheets}/{1}-to-{2}.xsl"/>
+      </select>
+    </match>]]></source>
+    <p>As you know from your understanding of Cocoon sitemaps, the first asterisk
+      yields "linkmap" and the second asterisk yields "document". So, ignoring the other
+      possible locations in this group which look in the various skins stylesheet
+      directories (see locationmap-transforms.xml source), it will finally resolve to
+      that last possible location to look for a stylesheet called
+      <code>linkmap-to-document.xsl</code> in the core stylesheets directory
+      <code>$FORREST_HOME/main/webapp/resources/stylesheets/</code>
+    </p>
+    <p>That explains the magic of the locationmap naming convention.</p>
   </section>
   
   <section id="selector">
@@ -139,7 +192,7 @@ projectInfo.transform.changes.rss
   </section>
     
     <section id="examples">
-      <title>Locationmap Examples</title>
+      <title>Other Locationmap examples</title>
       <section id="source-via-http">
         <title>Retrieving an XDoc via HTTP</title>
         
