@@ -138,6 +138,15 @@ document.write("Last Published: " + document.lastModified);
 <div onclick="SwitchMenu('menu_1.1.3.5', '../skin/')" id="menu_1.1.3.5Title" class="menutitle">Customize Forrest</div>
 <div id="menu_1.1.3.5" class="menuitemgroup">
 <div class="menuitem">
+<a href="../docs_0_80/sitemap-explain.html">Sitemaps explained</a>
+</div>
+<div class="menuitem">
+<a href="../docs_0_80/howto/howto-custom-html-source.html">Custom html source</a>
+</div>
+<div class="menuitem">
+<a href="../docs_0_80/project-sitemap.html">Project sitemap</a>
+</div>
+<div class="menuitem">
 <a href="../docs_0_80/howto/howto-editcss.html">Edit CSS (WYSIWYG)</a>
 </div>
 <div class="menuitem">
@@ -145,12 +154,6 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div class="menuitem">
 <a href="../docs_0_80/howto/howto-corner-images.html">CSS corner SVG</a>
-</div>
-<div class="menuitem">
-<a href="../docs_0_80/howto/howto-custom-html-source.html">Custom html source</a>
-</div>
-<div class="menuitem">
-<a href="../docs_0_80/project-sitemap.html">Project sitemap</a>
 </div>
 </div>
 <div onclick="SwitchMenu('menu_1.1.3.6', '../skin/')" id="menu_1.1.3.6Title" class="menutitle">Integrate Forrest with tools</div>
@@ -326,10 +329,13 @@ document.write("Last Published: " + document.lastModified);
 <a href="#namingConvention">Naming Convention</a>
 </li>
 <li>
+<a href="#process">Explanation of Locationmap processing</a>
+</li>
+<li>
 <a href="#selector">Multiple Location Selectors</a>
 </li>
 <li>
-<a href="#examples">Locationmap Examples</a>
+<a href="#examples">Other Locationmap examples</a>
 <ul class="minitoc">
 <li>
 <a href="#source-via-http">Retrieving an XDoc via HTTP</a>
@@ -410,20 +416,24 @@ document.write("Last Published: " + document.lastModified);
       disassociating the name/hint from the physical location.</p>
 <p>For example, here is a locationmap entry based purely on filename:</p>
 <pre class="code">
-&lt;map:transform src="{lm:xhtml-to-html.xsl}"/&gt;
+&lt;map:transform src="{lm:html-to-document.xsl}"/&gt;
       </pre>
 <p>and here is that same entry using a "name" style.  One implies 
-      a certain physical location where as the one below is truly a name that 
+      a certain physical location, whereas the one below is truly a name that 
       needs to be resolved to a physical location.</p>
 <pre class="code">
-&lt;map:transform src="{lm:transform.xhtml2.html}"/&gt;
+&lt;map:transform src="{lm:transform.html.document}"/&gt;
       </pre>
-<p>Where the resource is provided by a plugin rather than Forrest itself
+<p>Locationmaps are also used by plugins, and your project can also have its own locationmap.
+      </p>
+<p>Where the resource is provided by a plugin rather than Forrest itself,
       this is prefixed with the last part of the plugin name. For example:</p>
 <pre class="code">
-&lt;map:transform src="{lm:projectInfo.transform.doap.html}"/&gt;
+&lt;map:transform src="{lm:projectInfo.transform.changes.document}"/&gt;
       </pre>
-<p>The format is essentially one of:</p>
+<p>The above match means look in the projectInfo plugin for a transformer stylesheet with filename changes-to-document.xsl
+      </p>
+<p>The naming convention is essentially one of:</p>
 <pre class="code">
 [PLUGIN_NAME.]resource-type(dot)from-format(dot)to-format
       </pre>
@@ -431,16 +441,67 @@ document.write("Last Published: " + document.lastModified);
 <pre class="code">
 [PLUGIN_NAME.]resource-type(dot)type(dot)name
       </pre>
-<p>Examples of these two:</p>
+<p>Examples of these:</p>
 <pre class="code">
-transform.transform.xthml2.html
+transform.xthml2.html
 graphic.png.project-logo
 projectInfo.transform.changes.rss
       </pre>
 </div>
   
   
-<a name="N10073"></a><a name="selector"></a>
+<a name="N10079"></a><a name="process"></a>
+<h2 class="underlined_10">Explanation of Locationmap processing</h2>
+<div class="section">
+<p>Some specific examples will explain. Please follow the relevant source files.</p>
+<p>The document <a href="../docs_0_80/howto/../sitemap-explain.html">Cocoon sitemaps explained</a>
+      (better understand that document before trying to understand locationmaps)
+      has two specific transformers which use locationmap references.
+      The first one is:
+      <span class="codefrag">&lt;map:transform src="{lm:transform.linkmap.document}"/&gt;</span>
+    
+</p>
+<p>
+      The Locationmap component first consults the primary locationmap
+      <span class="codefrag">$FORREST_HOME/main/webapp/locationmap.xml</span> file. This first mounts
+      any project locationmap if available, then the locationmaps from plugins,
+      then the rest of the core locationmaps in the <span class="codefrag">$FORREST_HOME/main/webapp/</span> directory.
+      As with sitemaps, the first match wins. So matches in your project locationmap
+      have precedence, then plugins, then core.
+    </p>
+<p>So let us get back to our specifc example, 
+      "<span class="codefrag">lm:transform.linkmap.document</span>". The "lm:" part means use the locationmap
+      protocol. There is no specific match for this in your project locationmap, nor in
+      any of the plugin locationmaps, so this falls through to the core locationmaps.
+      However, you will not find any specific match for this in the core locationmaps,
+      so what is happening?
+    </p>
+<p>See the last match in 
+      <span class="codefrag">$FORREST_HOME/main/webapp/locationmap-transforms.xml</span> file.
+      This a catchall matcher for any reference starting with "<span class="codefrag">transform.</span>"
+    </p>
+<pre class="code">
+    &lt;match pattern="transform.*.*"&gt;
+      &lt;select&gt;
+        ...
+        ...
+        &lt;location src="{forrest:forrest.stylesheets}/{1}-to-{2}.xsl"/&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;</pre>
+<p>As you know from your understanding of Cocoon sitemaps, the first asterisk
+      yields "linkmap" and the second asterisk yields "document". So, ignoring the other
+      possible locations in this group which look in the various skins stylesheet
+      directories (see locationmap-transforms.xml source), it will finally resolve to
+      that last possible location to look for a stylesheet called
+      <span class="codefrag">linkmap-to-document.xsl</span> in the core stylesheets directory
+      <span class="codefrag">$FORREST_HOME/main/webapp/resources/stylesheets/</span>
+    
+</p>
+<p>That explains the magic of the locationmap naming convention.</p>
+</div>
+  
+  
+<a name="N100B5"></a><a name="selector"></a>
 <h2 class="underlined_10">Multiple Location Selectors</h2>
 <div class="section">
 <p>You can define multiple possble locations for a file in the locationmap
@@ -458,10 +519,10 @@ projectInfo.transform.changes.rss
 </div>
     
     
-<a name="N10084"></a><a name="examples"></a>
-<h2 class="underlined_10">Locationmap Examples</h2>
+<a name="N100C6"></a><a name="examples"></a>
+<h2 class="underlined_10">Other Locationmap examples</h2>
 <div class="section">
-<a name="N1008A"></a><a name="source-via-http"></a>
+<a name="N100CC"></a><a name="source-via-http"></a>
 <h3 class="underlined_5">Retrieving an XDoc via HTTP</h3>
 <p>Normally files are generated from <span class="codefrag">{properties:content.xdocs}</span>.
         Using the Locationmap it is possible to make these files come from elsewhere.
@@ -489,7 +550,7 @@ projectInfo.transform.changes.rss
 <div class="content">Because of the above limitation many of the links in the
         page generated from the above example are broken.</div>
 </div>
-<a name="N100B0"></a><a name="source-from-remote-cms"></a>
+<a name="N100F2"></a><a name="source-from-remote-cms"></a>
 <h3 class="underlined_5">Retrieving HTML from a CMS</h3>
 <p>Using the locationmap you can use Forrest to retrieve data from a 
         Content Management System (CMS), wither local or remote.
@@ -559,7 +620,7 @@ char-encoding=latin1
 <div class="content">This demo is an example only, it does not fully work at this time. For example, absolute URLs
         in the source document need to be rewritten to ensure that they are matched by the locationmap.</div>
 </div>
-<a name="N100EE"></a><a name="sourceResolving"></a>
+<a name="N10130"></a><a name="sourceResolving"></a>
 <h3 class="underlined_5">Source Resolving</h3>
 <p>As well as being able to use the locationmap as a parameter in the sitemap,
         it is also possible to use it as a psuedo-protocol within resources processed
@@ -569,7 +630,7 @@ char-encoding=latin1
           &lt;xsl:import src="lm://OOo.transform.write.xdoc"/&gt;
         
         </pre>
-<a name="N100FC"></a><a name="linkrewriting"></a>
+<a name="N1013E"></a><a name="linkrewriting"></a>
 <h3 class="underlined_5">Link Rewriting</h3>
 <p>The locationmap can be used to rewrite URLs when the page is generated.
         For example, when the locationmap has:</p>
@@ -581,7 +642,7 @@ char-encoding=latin1
 <p>With the above match in the locationmap, a link which has <span class="codefrag">href="lm:rewriteDemo/index"</span>
         will be rewritten to an offsite address at <span class="codefrag">domain.org</span>
 </p>
-<a name="N10112"></a><a name="debugging"></a>
+<a name="N10154"></a><a name="debugging"></a>
 <h3 class="underlined_5">Debugging Locationmaps</h3>
 <p>Debugging the locationmap can be difficult because Cocoons error messages no
         longer provide meaningful data. We hope to improve this over time, in the meantime
