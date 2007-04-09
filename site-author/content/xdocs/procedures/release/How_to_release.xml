@@ -67,7 +67,9 @@ some steps might need to be re-arranged.
 </warning>
             <p>This documents the steps that the Release Manager (RM) should follow when doing a Forrest release. Note
                 that it might have mistakes - we seem to discover something new each time and some steps might need to
-                happen in a different order. Fine tune these notes for next time. Do some practice runs.</p>
+                happen in a different order. Fine tune these notes for next time. Do some practice runs.
+              Read through these notes often in the lead up to the release to imagine the effect and order of some steps.
+            </p>
 
             <p>There are some steps that other committers, and even developers, can assist with, especially in the areas
                 of getting ready for the release and the final testing. Many of the steps can be done only by the
@@ -246,7 +248,7 @@ Decide the content of the release. Previously we just packed everything in trunk
                   http://localhost:8888/releaseNotes_&dt;.txt
                 </li>
                 <li>
-                  Prepare the announcement text. Create a file etc/announcement-x.txt
+                  Prepare the announcement text. Create a file admin/announcement-x.txt
                   (by 'svn move' the old one) and list the major new features, e.g. locationmap.
                 </li>
                 <li>
@@ -425,6 +427,12 @@ Decide the content of the release. Previously we just packed everything in trunk
                 <li>Do any final work, such as license header checks and xml code cleanup.
                 </li>
                 <li>
+                    <p>Ensure that your Java version is the lowest specified of our supported versions.</p>
+                    <note> Set the environment variable JAVA_HOME to the path of the Java version. Note for Windows: If
+                        you change the setting in system properties, you need to logout and login again for the changes
+                        to become effective.</note>
+                </li>
+                <li>
                     <p>Run the following quick tests from the command line of your system to ensure that all is well:</p>
                     <ul>
                         <li>
@@ -504,12 +512,6 @@ xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
                   Update the etc/RELEASE-NOTES-&d;.txt as described above.
                 </li>
                 <li>Commit all of the above changes.</li>
-                <li>
-                    <p>Set your Java version to be the lowest specified of our supported versions.</p>
-                    <note> Set the environment variable JAVA_HOME to the path of the Java version. Note for Windows: If
-                        you change the setting in system properties, you need to logout and login again for the changes
-                        to become effective.</note>
-                </li>
                 <li>
                     <p>Take note of the SVN revision number of your trunk by running <code>svn info</code> from the
                         command line in the Release Candidate's root dir and look at the "Last Changed Rev: ######".
