@@ -81,8 +81,8 @@
   <xsl:apply-templates select="notes"/>
   <section id="version_{@version}">
    <title><i18n:text i18n:key="majorChanges">Major Changes in Version</i18n:text><xsl:text> </xsl:text><xsl:value-of select="@version"/></title>
-   <note><i18n:text i18n:key="noteMajorChanges">This is not a complete list of changes, a
-           full list of changes in this release</i18n:text>
+   <note><i18n:text i18n:key="noteMajorChanges">This is not a complete list of changes, just some of the more important ones.
+     A full list of changes in this release</i18n:text>
    <xsl:text> </xsl:text>
    <a href="changes_{$versionNumber}.html"><i18n:text i18n:key="isavailable">is available</i18n:text></a>.</note>
    <xsl:for-each select="action[generate-id()=generate-id(key('ActionByVersionByContextByImportance',concat(../@version, '_', @context, '_high')))]">
