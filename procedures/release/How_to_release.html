@@ -299,7 +299,9 @@ some steps might need to be re-arranged.
 </div>
 <p>This documents the steps that the Release Manager (RM) should follow when doing a Forrest release. Note
                 that it might have mistakes - we seem to discover something new each time and some steps might need to
-                happen in a different order. Fine tune these notes for next time. Do some practice runs.</p>
+                happen in a different order. Fine tune these notes for next time. Do some practice runs.
+              Read through these notes often in the lead up to the release to imagine the effect and order of some steps.
+            </p>
 <p>There are some steps that other committers, and even developers, can assist with, especially in the areas
                 of getting ready for the release and the final testing. Many of the steps can be done only by the
                 Release Manager.</p>
@@ -308,14 +310,21 @@ some steps might need to be re-arranged.
 <a name="N10021"></a><a name="rm"></a>
 <h2 class="underlined_10">Who is the Release Manager</h2>
 <div class="section">
-<p>The Release Manager is a single person who makes all the decisions regarding the
-              actual preparations and the doing of the release.
-              Many projects have the same release manager for years.
-              The project developers have the role of testing, fixing issues,
+<p>The Release Manager is a single person who does the final work
+              of the release process to prepare and sign release packages,
+              co-ordinate testing and voting, uploading to the dist area and
+              ensuring mirrors, and sending the announcement.
+            </p>
+<p>
+              The project developers have the role of preparing the product to release quality, testing, fixing issues,
               and voting for the release candidate.
               The votes of the PMC will decide whether the product is fit for release.
             </p>
-<p>The RM could do the whole job alone, which enables speedy process.
+<p>The RM makes all the decisions regarding the
+              actual preparations and the doing of the release.
+              Many projects have the same release manager for years.
+            </p>
+<p>The RM could do the job alone, which enables speedy process.
               There are not actually many tasks where assistants can help.
               However it is a good idea to have an assistant so as to pass
               on the knowledge, to help document the process, and to perceive potential flaws.
@@ -327,7 +336,7 @@ some steps might need to be re-arranged.
             </p>
 </div>
         
-<a name="N10031"></a><a name="prep"></a>
+<a name="N10037"></a><a name="prep"></a>
 <h2 class="underlined_10">Tasks to be done by the project before the release can start</h2>
 <div class="section">
 <p>There are a number of things to be done by the project before the release will start.
@@ -391,7 +400,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 </div>
         
-<a name="N10074"></a><a name="PrepProject"></a>
+<a name="N1007A"></a><a name="PrepProject"></a>
 <h2 class="underlined_10">Preparing the project for the release</h2>
 <div class="section">
 <p>In this step the Release Manager starts the process to finalise the outstanding blocker issues. </p>
@@ -421,7 +430,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N1009B"></a><a name="PrepRM"></a>
+<a name="N100A1"></a><a name="PrepRM"></a>
 <h2 class="underlined_10">Preparations for the Release Manager</h2>
 <div class="section">
 <p>Particularly the Release Manager, but also anyone assisting, needs to be familiar
@@ -464,7 +473,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N100C9"></a><a name="PrepRelPlan"></a>
+<a name="N100CF"></a><a name="PrepRelPlan"></a>
 <h2 class="underlined_10">Preparing the Release Plan</h2>
 <div class="section">
 <p>Prepare the Release Plan to define the corner stones of the coming release.
@@ -508,7 +517,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N100FC"></a><a name="PrepCodeBase"></a>
+<a name="N10102"></a><a name="PrepCodeBase"></a>
 <h2 class="underlined_10">Preparing the code base</h2>
 <div class="section">
 <p>Anyone can help with this phase.</p>
@@ -544,7 +553,7 @@ Decide the content of the release. Previously we just packed everything in trunk
                 </li>
                 
 <li>
-                  Prepare the announcement text. Create a file etc/announcement-x.txt
+                  Prepare the announcement text. Create a file admin/announcement-x.txt
                   (by 'svn move' the old one) and list the major new features, e.g. locationmap.
                 </li>
                 
@@ -579,7 +588,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10143"></a><a name="PrepTrunk"></a>
+<a name="N10149"></a><a name="PrepTrunk"></a>
 <h2 class="underlined_10">Preparing your working copy of SVN trunk</h2>
 <div class="section">
 <div class="fixme">
@@ -627,7 +636,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10174"></a><a name="PrepDistSvn"></a>
+<a name="N1017A"></a><a name="PrepDistSvn"></a>
 <h2 class="underlined_10">Preparing the "dist" SVN</h2>
 <div class="section">
 <p>The SVN at
@@ -644,7 +653,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10188"></a><a name="adjustDocs"></a>
+<a name="N1018E"></a><a name="adjustDocs"></a>
 <h2 class="underlined_10">Preparing docs for next release cycle</h2>
 <div class="section">
 <p>In this phase we get the docs ready for the release. You will
@@ -783,7 +792,7 @@ Decide the content of the release. Previously we just packed everything in trunk
 </div>
 
         
-<a name="N10204"></a><a name="BuildDist"></a>
+<a name="N1020A"></a><a name="BuildDist"></a>
 <h2 class="underlined_10">Building the release candidate packages</h2>
 <div class="section">
 <p>In this phase the Release Manager builds the release candidate to be tested.</p>
@@ -808,6 +817,19 @@ Decide the content of the release. Previously we just packed everything in trunk
                 
 <li>Do any final work, such as license header checks and xml code cleanup.
                 </li>
+                
+<li>
+                    
+<p>Ensure that your Java version is the lowest specified of our supported versions.</p>
+                    
+<div class="note">
+<div class="label">Note</div>
+<div class="content"> Set the environment variable JAVA_HOME to the path of the Java version. Note for Windows: If
+                        you change the setting in system properties, you need to logout and login again for the changes
+                        to become effective.</div>
+</div>
+                
+</li>
                 
 <li>
                     
@@ -938,19 +960,6 @@ xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
                 
 <li>
                     
-<p>Set your Java version to be the lowest specified of our supported versions.</p>
-                    
-<div class="note">
-<div class="label">Note</div>
-<div class="content"> Set the environment variable JAVA_HOME to the path of the Java version. Note for Windows: If
-                        you change the setting in system properties, you need to logout and login again for the changes
-                        to become effective.</div>
-</div>
-                
-</li>
-                
-<li>
-                    
 <p>Take note of the SVN revision number of your trunk by running <span class="codefrag">svn info</span> from the
                         command line in the Release Candidate's root dir and look at the "Last Changed Rev: ######".
                       This will be used later for the svn log message when the branch is created.
@@ -1036,7 +1045,7 @@ where
 </div>
 
         
-<a name="N102D5"></a><a name="vote"></a>
+<a name="N102DB"></a><a name="vote"></a>
 <h2 class="underlined_10">Testing the release candidate and voting</h2>
 <div class="section">
 <p>Get Forrest developers to test the actual packges on various platforms.</p>
@@ -1098,7 +1107,7 @@ where
 </div>
 
         
-<a name="N10311"></a><a name="FinalRel"></a>
+<a name="N10317"></a><a name="FinalRel"></a>
 <h2 class="underlined_10">Finalizing the release</h2>
 <div class="section">
 <p>When a good release candidate has been achieved and affirmed by the vote, we'll finalize the release.</p>
@@ -1171,7 +1180,7 @@ where
 </div>
 
         
-<a name="N1035B"></a><a name="UploadAndAnnounce"></a>
+<a name="N10361"></a><a name="UploadAndAnnounce"></a>
 <h2 class="underlined_10">Upload and announcement</h2>
 <div class="section">
 <p>In this phase we'll upload the new Release, wait for it to be available on most mirror sites, then
@@ -1332,7 +1341,7 @@ where
 </div>
 
         
-<a name="N10411"></a><a name="cleanup"></a>
+<a name="N10417"></a><a name="cleanup"></a>
 <h2 class="underlined_10">Cleanup</h2>
 <div class="section">
 <ol>
@@ -1409,7 +1418,7 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/0.9
 </div>
         
         
-<a name="N1045B"></a><a name="conclusion"></a>
+<a name="N10461"></a><a name="conclusion"></a>
 <h2 class="underlined_10">Conclusion</h2>
 <div class="section">
 <p>All done!</p>
