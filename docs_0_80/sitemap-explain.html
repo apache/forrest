@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.8-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>Forrest Glossary (v0.8-dev)</title>
+<title>Cocoon sitemap explained (v0.8-dev)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="../skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="../skin/print.css" rel="stylesheet">
@@ -118,8 +118,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="../docs_0_80/your-project.html">Using Forrest</a>
 </div>
-<div onclick="SwitchMenu('menu_1.1.3', '../skin/')" id="menu_1.1.3Title" class="menutitle">How-To</div>
-<div id="menu_1.1.3" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.1.3', '../skin/')" id="menu_selected_1.1.3Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">How-To</div>
+<div id="menu_selected_1.1.3" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a href="../docs_0_80/howto/index.html">Overview</a>
 </div>
@@ -135,10 +135,10 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="">Use Forrest</a>
 </div>
-<div onclick="SwitchMenu('menu_1.1.3.5', '../skin/')" id="menu_1.1.3.5Title" class="menutitle">Customize Forrest</div>
-<div id="menu_1.1.3.5" class="menuitemgroup">
-<div class="menuitem">
-<a href="../docs_0_80/sitemap-explain.html">Sitemaps explained</a>
+<div onclick="SwitchMenu('menu_selected_1.1.3.5', '../skin/')" id="menu_selected_1.1.3.5Title" class="menutitle" style="background-image: url('../skin/images/chapter_open.gif');">Customize Forrest</div>
+<div id="menu_selected_1.1.3.5" class="selectedmenuitemgroup" style="display: block;">
+<div class="menupage">
+<div class="menupagetitle">Sitemaps explained</div>
 </div>
 <div class="menuitem">
 <a href="../docs_0_80/howto/howto-custom-html-source.html">Custom html source</a>
@@ -232,8 +232,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="../docs_0_80/changes.html">Changes</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">Glossary</div>
+<div class="menuitem">
+<a href="../docs_0_80/glossary.html">Glossary</a>
 </div>
 <div onclick="SwitchMenu('menu_1.1.8', '../skin/')" id="menu_1.1.8Title" class="menutitle">Reference docs</div>
 <div id="menu_1.1.8" class="menuitemgroup">
@@ -308,7 +308,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="glossary.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="sitemap-explain.pdf"><img alt="PDF -icon" src="../skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -316,230 +316,200 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>Forrest Glossary</h1>
+<h1>Cocoon sitemap explained</h1>
 <div id="motd-area">
         This is documentation for development version v0.8
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
-<div id="minitoc-area">
-<ul class="minitoc">
-<li>
-<a href="#Introduction">Introduction</a>
-</li>
-<li>
-<a href="#a">A</a>
-</li>
-<li>
-<a href="#c">C</a>
-</li>
-<li>
-<a href="#r">R</a>
-</li>
-<li>
-<a href="#s">S</a>
-</li>
-<li>
-<a href="#x">X</a>
-</li>
-</ul>
-</div>
-<a name="N10008"></a><a name="Introduction"></a>
-<h2 class="underlined_10">Introduction</h2>
-<div class="section">
-<introduction>
     
-<p>This is a glossary of terms and their definitions for the 
-    Apache Forrest project. Some plugins also have a glossary, for example
-    <a href="http://forrest.apache.org/pluginDocs/dev/org.apache.forrest.plugin.internal.dispatcher/">Dispatcher</a>.
+<p>
+      This document is intended to be a concise explanation of the Apache Cocoon
+      <a href="../docs_0_80/sitemap-ref.html">Sitemap</a> and its use in Apache Forrest. This
+      is a worked example showing the automatically generated Table of Contents.
+      Please follow the various sitemaps as we explain.
+    </p>
+    
+<pre class="code">
+cd $FORREST_HOME/site-author
+forrest run
+</pre>
+    
+<p>
+      In a separate browser window, open
+      <a href="../linkmap.html"><span class="codefrag">localhost:8888/linkmap.html</span></a> to see
+      the generated Table of Contents. This has been transformed from the
+      site.xml navigation configuration to show the layout of the whole site as
+      a ToC.
+    </p>
+    
+<p>
+      Cocoon consults the sitemaps to find out how to process the
+      <span class="codefrag">linkmap.html</span> request.
+    </p>
+    
+<p>
+      The main sitemap is <span class="codefrag">$FORREST_HOME/main/webapp/sitemap.xmap</span>
+      and if the match is not found there then other sitemaps are consulted. The
+      first match wins. Various sitemaps are responsible for different types of
+      processing and there are also sitemaps in the many plugins.
+    </p>
+    
+<p>
+      So let us see how <span class="codefrag">linkmap.html</span> is handled.
+    </p>
+    
+<p>
+      Open <span class="codefrag">$FORREST_HOME/main/webapp/sitemap.xmap</span> in another
+      window. Search for "linkmap" to find the following snippet:
+    </p>
+    
+<pre class="code">
+&lt;map:match pattern="linkmap.*"&gt;
+  &lt;map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" /&gt;
+&lt;/map:match&gt;
+    </pre>
+    
+<p>
+      Cocoon has passed through the other potential matches earlier in the
+      sitemap and now does further handling via the <span class="codefrag">linkmap.xmap</span>
+      sitemap.
+    </p>
+    
+<p>
+      Before going any further, it is necessary to understand the "**" and "*"
+      pattern matching and replacements. See the email thread: "Re: explain
+      sitemap matches and pass parameters to transformers"
+      <a href="http://issues.apache.org/jira/browse/FOR-874">FOR-874</a>.
+    </p>
+    
+<p>
+      Okay we will skip some explanation of processing. At this stage we are
+      only concerned with generating the internal xml. Later steps of processing
+      will transform that into the final html output and adorn it with
+      navigation menus and headers, etc. This is your main aim for most of your
+      sitemap work for input formats: handle the incoming requests, and
+      transform into the standard internal xml format. Then Forrest
+      automatically does the rest.
+    </p>
+    
+<p>
+      In another browser window, open <span class="codefrag">localhost:8888/linkmap.xml</span> to
+      see the internal xml format.
+    </p>
+    
+<p>
+      Open <span class="codefrag">$FORREST_HOME/main/webapp/linkmap.xmap</span> sitemap. Move to
+      the "map:pipeline" section.
+    </p>
+    
+<p>
+      A digression: The first match is not triggered because our request is for
+      <span class="codefrag">linkmap.xml</span> and this match handles
+      <span class="codefrag">linkmap.source.xml</span> to essentially re-direct it to
+      <span class="codefrag">linkmap.xml</span> instead. That is what the cocoon:// means:
+      generate it via a different request within this sitemap. Try
+      <span class="codefrag">localhost:8888/linkmap.source.xml</span> to see the exact same
+      internal xml format.
+    </p>
+    
+<p>
+      The second match exactly meets our pattern <span class="codefrag">linkmap.xml</span>
+    
+</p>
+    
+<pre class="code">
+&lt;map:match pattern="linkmap.xml"&gt;
+  &lt;map:generate src="cocoon://abs-linkmap" /&gt;
+  &lt;map:transform src="{lm:transform.linkmap.document}"/&gt;
+  &lt;map:serialize type="xml" /&gt;
+&lt;/map:match&gt;
+    </pre>
+    
+<p>
+      As with all pipelines, it starts with a generator to commence the xml
+      stream, then transforms it with a single transformer (there could be
+      multiple sequential transformers) and finally the serializer component.
+      Here it is:
+    </p>
+    
+<p>
+      The generator is not simply reading an xml file. It produces the xml via a
+      different part of this sitemap. Let us explain that later and assume for
+      now that it produces the xml from your site.xml file.
+    </p>
+    
+<p>
+      Move on to the transformer. It transforms the xml obtained from the
+      site.xml into the internal document xml format using an XSLT stylesheet.
+      The locationmap reference defines the source for that stylesheet:
+      "lm:transform.linkmap.document" is evaluated by the Locationmap to be the
+      <span class="codefrag">main/webapp/resources/stylesheets/linkmap-to-document.xsl</span>
+      stylesheet. See the <a href="../docs_0_80/locationmap.html">Locationmap</a>
+      documentation for explanation.
+    </p>
+    
+<p>
+      Now let us get back to that new request for "abs-linkmap". This is used a
+      number of times within this sitemap, hence it is its own pipeline. As
+      usual it starts with a generator, then a transformer, then a serializer.
+    </p>
+    
+<p>
+      Again the generator is sent to some other part of the sitemap hierarchy,
+      because this request is needed by many other parts of the system beyond
+      just this linkmap handling. You see that it is not matched within this
+      linkmap.xmap sitemap. Go to the main sitemap.xmap and search for
+      "site.navigation.links.xml" where you find the match that handles this by
+      looking for various Locationmap definitions to find and transform the
+      site.xml file.
+    </p>
+    
+<p>
+      Don't get lost, come back to the linkmap.xmap sitemap.
+    </p>
+    
+<p>
+      Following this generator, the transformer turns the links into absolute
+      references. This is then serialized as xml to finish this "abs-linkmap"
+      match which is the end of the generator in our main match.
+    </p>
+    
+<p>
+      A developer's trick will help to understand what is happening. Edit the
+      linkmap.xmap to comment-out the transformer ...
+    </p>
+    
+<pre class="code">
+
+      &lt;map:match pattern="linkmap.xml"&gt;
+        &lt;map:generate src="cocoon://abs-linkmap" /&gt;
+&lt;!--
+        &lt;map:transform src="{lm:transform.linkmap.document}"/&gt;
+--&gt;
+        &lt;map:serialize type="xml" /&gt;
+      &lt;/map:match&gt;
+
+    </pre>
+    
+<p>
+      Browser <span class="codefrag">localhost:8888/linkmap.xml</span> to see the result of the
+      "abs-linkmap" generation before it is transformed into the internal
+      document xml.
+    </p>
+    
+<p>
+      So now you understand some of the power of sitemaps.
+    </p>
+    
+<p>
+      A basic understanding of Cocoon's pipelines and their components will help
+      you to realise the true power. You should know about matchers, generators,
+      transformers and serializers and have a rough idea how they work together
+      in a pipeline. A good place to start learning about Cocoon is
+      <a href="http://cocoon.apache.org/2.1/userdocs/concepts/">Understanding
+      Apache Cocoon</a>. The Forrest <a href="../docs_0_80/sitemap-ref.html">Sitemap
+      Reference</a> will also be helpful.
     </p>
   
-</introduction>
-</div>
-<a name="N10015"></a><a name="a"></a>
-<h2 class="underlined_10">A</h2>
-<div class="section">
-<table class="ForrestTable" cellspacing="1" cellpadding="4">
-<tr>
-<th>Term</th><th>Definitions</th><th>Notes</th>
-</tr>
-<tr>
-<a name="AddContent"></a><td class="term" id="AddContent">Add content to this Glossary</td><td class="definitions">
-<p>
-        1. This glossary is incomplete, please help where you can by adding definitions to
-        existing items where needed. Also, add new Items to the glossary as
-        appropriate.<br>
-      
-</p>
-</td><td class="notes"></td>
-</tr>
-<tr>
-<a name="acronyms-mail"></a><td class="term" id="acronyms-mail">Abbreviations in electronic mail</td><td class="definitions">
-<p>
-        1. Abbreviations and acronyms are often used as shorthand in email, e.g. AFAIK "As Far As I Know", IMO "In My Opinion".
-        <br>
-      
-</p>
-</td><td class="notes">
-<ul>
-        
-<li>See Apache Cocoon
-        <a href="http://wiki.apache.org/cocoon/AbbreviationsInMails">Abbreviations In Mails</a>
-</li>
-      
-</ul>
-</td>
-</tr>
-<tr>
-<a name="ASF"></a><td class="term" id="ASF">The Apache Software Foundation (ASF)</td><td class="definitions">
-<p>
-        1. 
-        <a href="http://apache.org/">The Apache Software Foundation</a> is the home of Apache
-        Forrest.<br>
-      
-</p>
-</td><td class="notes"></td>
-</tr>
-</table>
-</div>
-<a name="N10054"></a><a name="c"></a>
-<h2 class="underlined_10">C</h2>
-<div class="section">
-<table class="ForrestTable" cellspacing="1" cellpadding="4">
-<tr>
-<th>Term</th><th>Definitions</th><th>Notes</th>
-</tr>
-<tr>
-<a name="CSS"></a><td class="term" id="CSS">Cascading Style Sheets (CSS)</td><td class="definitions">
-<p>
-        1. A simple mechanism for adding style (e.g. fonts, colors, spacing) to Web
-        documents. Source: 
-        <a href="http://www.w3.org/Style/CSS/">W3C</a>.<br>
-      
-</p>
-</td><td class="notes">
-<ul>
-        
-<li>See 
-        <a href="http://www.w3.org/Style/CSS/">W3C</a>
-</li>
-        
-<li>See 
-        <a href="http://www.csszengarden.com/">css Zen Garden</a>
-</li>
-      
-</ul>
-</td>
-</tr>
-</table>
-</div>
-<a name="N1007F"></a><a name="r"></a>
-<h2 class="underlined_10">R</h2>
-<div class="section">
-<table class="ForrestTable" cellspacing="1" cellpadding="4">
-<tr>
-<th>Term</th><th>Definitions</th><th>Notes</th>
-</tr>
-<tr>
-<a name="ReleaseCandidate"></a><td class="term" id="ReleaseCandidate">Release Candidate</td><td class="definitions">
-<p>
-                1. A temporary Forrest package build from trunk during the <a href="../procedures/release/How_to_release.html">release process</a> to be tested and evaluated.<br>
-                
-            
-</p>
-</td><td class="notes"></td>
-</tr>
-</table>
-</div>
-<a name="N1009C"></a><a name="s"></a>
-<h2 class="underlined_10">S</h2>
-<div class="section">
-<table class="ForrestTable" cellspacing="1" cellpadding="4">
-<tr>
-<th>Term</th><th>Definitions</th><th>Notes</th>
-</tr>
-<tr>
-<a name="SoC"></a><td class="term" id="SoC">Separation of Concerns (SoC)</td><td class="definitions">
-<p>
-        1. Different people, different skills, different purposes different code. Each can
-        concentrate on their separate, but well-integrated, area of concern.<br>
-      
-</p>
-</td><td class="notes">
-<ul>
-        
-<li>
-          
-<a href="http://cocoon.apache.org/2.1/introduction.html#Separation+of+Concerns+(SoC)">
-          Introducing Apache Cocoon</a>
-        
-</li>
-        
-<li>
-          
-<a href="http://excalibur.apache.org/developing/introduction.html#Separation_of_Concerns">
-          Apache Excalibur Introduction and Overview</a>
-        
-</li>
-      
-</ul>
-</td>
-</tr>
-<tr>
-<a name="Skins"></a><td class="term" id="Skins">Skins</td><td class="definitions">
-<p>
-        1. <br>
-      
-</p>
-</td><td class="notes"></td>
-</tr>
-<tr>
-<a name="StandardDocumentFormat"></a><td class="term" id="StandardDocumentFormat">Standard Document Format</td><td class="definitions">
-<p>
-            1. Forrests <em>internal</em> document format (defined by an XML-grammar). This format ist the common denominator 
-                for all things going into or coming out of Forrest's core processing. All input-plugins will translate their supported documents into this
-                format, all output-plugins will create the output by transforming this format into something else. Currently Forrest uses <a href="../docs_0_80/../dtdx/document-v13.dtdx.html">document-v13-dtd</a> as its internal format.
-            <br>
-        
-</p>
-</td><td class="notes"></td>
-</tr>
-</table>
-</div>
-<a name="N100E6"></a><a name="x"></a>
-<h2 class="underlined_10">X</h2>
-<div class="section">
-<table class="ForrestTable" cellspacing="1" cellpadding="4">
-<tr>
-<th>Term</th><th>Definitions</th><th>Notes</th>
-</tr>
-<tr>
-<a name="xdoc"></a><td class="term" id="xdoc">xdoc</td><td class="definitions">
-<p>
-        1. "xdoc" is an xml documentation stucture that started life at some other ASF
-        projects. Apache Forrest adopted it and enhanced it to be similar to xhtml2. "xdoc" is
-        currently the internal xml structure of Forrest (someday will be xhtml2). "xdocs" can be
-        used as an input source format.<br>
-      
-</p>
-</td><td class="notes">
-<ul>
-        
-<li>
-          
-<a href="../docs_0_80/../dtdx/dtd-docs.html">Reference docs</a>
-        
-</li>
-        
-<li>
-          
-<a href="../docs_0_80/../dtdx/document-v20.html">Sample xdoc</a>
-        
-</li>
-      
-</ul>
-</td>
-</tr>
-</table>
-</div>
 </div>
 <!--+
     |end content
