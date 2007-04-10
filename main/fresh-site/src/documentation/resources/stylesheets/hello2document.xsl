@@ -15,25 +15,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!--+
     | Transforms Hello document format.
     +-->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:template match="/">
     <document>
       <header>
-        <title>
-          <xsl:value-of select="greeting"/>
-        </title>
+        <title><xsl:value-of select="greeting"/></title>
       </header>
       <body>
-          <xsl:value-of select="greeting"/>
+        <xsl:value-of select="greeting"/>
       </body>
     </document>
   </xsl:template>
- 
 </xsl:stylesheet>
