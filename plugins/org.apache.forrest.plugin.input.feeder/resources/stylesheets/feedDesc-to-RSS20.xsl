@@ -18,25 +18,19 @@
 <!--
 Stylesheet for generating an aggregated feed from multple feeds.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  
-
   <xsl:output method="xml" version="1.0" encoding="UTF-8"/>
-    
   <xsl:template match="feedDescriptor">
     <rss version="2.0">
       <xsl:apply-templates/>
     </rss>
   </xsl:template>
-  
   <xsl:template match="feed">
     <xsl:variable name="url" select="url"/>
     <xsl:variable name="feed" select="document($url)"/>
     <xsl:apply-templates select="$feed/rss/channel"/>
   </xsl:template>
-
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>

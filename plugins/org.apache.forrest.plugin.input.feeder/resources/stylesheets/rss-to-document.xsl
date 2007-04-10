@@ -16,32 +16,34 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<xsl:strip-space elements="*"/>
-
-
-<xsl:template match="rss">
-  <document>
-    <header>
-      <title><xsl:value-of select="channel/title"/></title>
-    </header>
-    <body>
-      <xsl:apply-templates select="channel"/>
-    </body>
-  </document>
-</xsl:template>
-
-<xsl:template match="channel">
-  <section>
-    <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
-    <xsl:apply-templates select="item"/>
-  </section>
-</xsl:template>
-
-<xsl:template match="item">
-    <p class="itemTitle"><xsl:value-of select="title" disable-output-escaping="yes"/></p>
-    <p  class="itemLink"><link href="{link}"><xsl:value-of select="link"/></link></p>
-    <p  class="itemDescription"><xsl:value-of select="description" disable-output-escaping="yes"/></p>
-</xsl:template>
-
+  <xsl:strip-space elements="*"/>
+  <xsl:template match="rss">
+    <document>
+      <header>
+        <title><xsl:value-of select="channel/title"/></title>
+      </header>
+      <body>
+        <xsl:apply-templates select="channel"/>
+      </body>
+    </document>
+  </xsl:template>
+  <xsl:template match="channel">
+    <section>
+      <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
+      <xsl:apply-templates select="item"/>
+    </section>
+  </xsl:template>
+  <xsl:template match="item">
+    <p class="itemTitle">
+      <xsl:value-of select="title" disable-output-escaping="yes"/>
+    </p>
+    <p  class="itemLink">
+      <link href="{link}">
+      <xsl:value-of select="link"/>
+      </link>
+    </p>
+    <p  class="itemDescription">
+      <xsl:value-of select="description" disable-output-escaping="yes"/>
+    </p>
+  </xsl:template>
 </xsl:stylesheet>
