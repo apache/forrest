@@ -33,52 +33,43 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 </site>
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:dyn="http://exslt.org/dynamic"
   extension-element-prefixes="dyn">
-
-  
-
   <xsl:import href="../../../common/xslt/html/site-to-xhtml.xsl"/>
   <xsl:variable name="request" select="substring-before($filename,'.html')"/>
-
   <xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
   <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>
-    
   <xsl:template match="/">
-	    <xsl:apply-templates/>
+    <xsl:apply-templates/>
   </xsl:template>
-  
 <!--+
   |Overall site template
   +-->
   <xsl:template match="site">
     <xhtml>
       <head>
-    		<xsl:call-template name="getHead"/>
+        <xsl:call-template name="getHead"/>
 <!--+
   |stylesheets -> 
   |1. default css of the contracts
   |2. default css to overide the above created
   +-->
-         <style type="text/css">
-<xsl:call-template name="getCss"/>
-</style>
-            <link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
+        <style type="text/css">
+          <xsl:call-template name="getCss"/>
+        </style><link rel="stylesheet" href="{$root}skin/basic.css" type="text/css" 
                 />
 <!--+
   |title
   +-->
-            <title>
-                <xsl:value-of select="div[@id='content']/h1"/>
-            </title>
+        <title><xsl:value-of select="div[@id='content']/h1"/></title>
       </head>
       <body onload="init()">
-        <!--<p><xsl:value-of select="substring-before($filename,'.html')"/></p>-->
+<!--<p><xsl:value-of select="substring-before($filename,'.html')"/></p>-->
         <xsl:call-template name="getBody"/>
       </body>
-    </xhtml><!--
+    </xhtml>
+<!--
     <site>
       <name><xsl:value-of select="$filename"/></name>
       <call><xsl:call-template name="getHead"/></call>
@@ -87,29 +78,33 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     </site>-->
   </xsl:template>
   <xsl:template name="menu">
-<xsl:comment>+
+    <xsl:comment>+
     |start Menu
     +</xsl:comment>
-   <div id="nav">
-<ul>
-<!--menu - inner-->	
-            <xsl:for-each select = "div[@id='menu']/ul/li">
-              <xsl:call-template name = "innermenuli" >
-                  <xsl:with-param name="id" select="concat('1.', position())"/>
-              </xsl:call-template>
-            </xsl:for-each>
-</ul>
-</div>
-        <!--
+    <div id="nav">
+      <ul>
+<!--menu - inner-->
+        <xsl:for-each select = "div[@id='menu']/ul/li">
+          <xsl:call-template name = "innermenuli" >
+            <xsl:with-param name="id" select="concat('1.', position())"/>
+          </xsl:call-template>
+        </xsl:for-each>
+      </ul>
+    </div>
+<!--
 			<xsl:apply-templates select="div[@id='menu']/*" />
 		-->
-</xsl:template>  
-  <xsl:template name="innermenuli">   
+  </xsl:template>
+  <xsl:template name="innermenuli">
     <xsl:param name="id"/>
     <xsl:variable name="tagid">
       <xsl:choose>
-        <xsl:when test="descendant-or-self::node()/li/div/@class='current'"><xsl:value-of select="concat('menu_selected_',$id)"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="concat('menu_',concat(font,$id))"/></xsl:otherwise>
+        <xsl:when test="descendant-or-self::node()/li/div/@class='current'">
+          <xsl:value-of select="concat('menu_selected_',$id)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('menu_',concat(font,$id))"/>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="whichGroup">
@@ -118,46 +113,42 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <xsl:otherwise>menuitemgroup</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
-    
-    <li class="pagegroup"><strong><xsl:value-of select="h1"/></strong>
+    <li class="pagegroup"><strong>
+      <xsl:value-of select="h1"/></strong>
       <ul>
         <xsl:for-each select= "ul/li">
-
           <xsl:choose>
             <xsl:when test="a">
-              <li><a href="{a/@href}"><xsl:value-of select="a" /></a></li>
+              <li><a href="{a/@href}">
+                <xsl:value-of select="a" /></a></li>
             </xsl:when>
             <xsl:when test="div/@class='current'">
-              <li class="menupage">
-                <div class="menupagetitle"><xsl:value-of select="div" /></div>
+              <li class="menupage"><div class="menupagetitle">
+                  <xsl:value-of select="div" />
+                </div>
                 <xsl:if test="$config/toc/@max-depth&gt;0
                     and contains($minitoc-location,'menu')
                     and count(//tocitems/tocitem) >= $config/toc/@min-sections">
-                  <li class="menupageitemgroup">
-                      <xsl:for-each select = "//tocitems/tocitem">
-                        <div class="menupageitem">
-                          <xsl:choose>
-                            <xsl:when test="string-length(@title)>15">
-                              <a href="{@href}" title="{@title}"><xsl:value-of select="substring(@title,0,20)" />...</a>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <a href="{@href}"><xsl:value-of select="@title" /></a>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </div>
-                      </xsl:for-each>
-                  </li>
-                </xsl:if>
-              </li>
+                  <li class="menupageitemgroup"><xsl:for-each select = "//tocitems/tocitem">
+                      <div class="menupageitem">
+                        <xsl:choose>
+                          <xsl:when test="string-length(@title)>15"><a href="{@href}" title="{@title}">
+                            <xsl:value-of select="substring(@title,0,20)" />...</a>
+                          </xsl:when>
+                          <xsl:otherwise><a href="{@href}">
+                            <xsl:value-of select="@title" /></a>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </div>
+                    </xsl:for-each></li>
+                </xsl:if></li>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name = "innermenuli">
-                 <xsl:with-param name="id" select="concat($id, '.', position())"/>
+                <xsl:with-param name="id" select="concat($id, '.', position())"/>
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-
         </xsl:for-each>
       </ul></li>
   </xsl:template>

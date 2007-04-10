@@ -29,23 +29,22 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 </elements>
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="fct-bits/fct-bits.xsl"/>
   <xsl:param name="contextPath"/>
-  
-  <!--+
+<!--+
   |Overall site template
   +-->
   <xsl:template match="/">
     <elements>
-    <xsl:comment>context: <xsl:value-of select="$contextPath"/></xsl:comment>
+      <xsl:comment>context: <xsl:value-of select="$contextPath"/>
+      </xsl:comment>
 <!--+
   |XHTML-head
   +-->
-        <head>
-            <xsl:apply-templates select="contract" mode="xhtml-head"/>
-        </head>
+      <head>
+        <xsl:apply-templates select="contract" mode="xhtml-head"/>
+      </head>
 <!--+
   |XHTML-body
   +-->
@@ -54,5 +53,4 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       </body>
     </elements>
   </xsl:template>
-
 </xsl:stylesheet>

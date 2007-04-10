@@ -41,85 +41,68 @@ which is then merged by site2xhtml.xsl
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:import href="../../../common/xslt/html/tab-to-menu.xsl"/>
-  
   <xsl:template match="tabs">
-      <table class="tab" cellspacing="0" cellpadding="0" border="0"> 
+    <table class="tab" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <xsl:call-template name="base-tabs"/>
+      </tr>
+    </table>
+    <xsl:if test="tab[@dir=$longest-dir]/tab">
+      <table class="level2tab" cellspacing="0" cellpadding="0" border="0">
         <tr>
-          <xsl:call-template name="base-tabs"/>
+          <td>
+            <xsl:call-template name="level2tabs"/>
+          </td>
         </tr>
       </table>
-      <xsl:if test="tab[@dir=$longest-dir]/tab">
-      <table class="level2tab" cellspacing="0" cellpadding="0" border="0">
-          <tr>
-            <td>
-              <xsl:call-template name="level2tabs"/>
-            </td>
-          </tr>
-        </table>
-      </xsl:if>      
+    </xsl:if>
   </xsl:template>
-
   <xsl:template name="pre-separator">
-     <td class="tab pre-separator"></td>
+    <td class="tab pre-separator"></td>
   </xsl:template>
-
-  <xsl:template name="post-separator">
-  
-  </xsl:template>
-
+  <xsl:template name="post-separator"></xsl:template>
   <xsl:template name="separator">
-     <td class="tab separator"></td>
+    <td class="tab separator"></td>
   </xsl:template>
-
   <xsl:template name="level2-pre-separator">
-     <td class="tab pre-separator"></td>
+    <td class="tab pre-separator"></td>
   </xsl:template>
-
-  <xsl:template name="level2-post-separator">
-  
-  </xsl:template>
-
+  <xsl:template name="level2-post-separator"></xsl:template>
   <xsl:template name="level2-separator">
-     <td class="level2tab separator">|</td>
+    <td class="level2tab separator">|</td>
   </xsl:template>
-
   <xsl:template name="selected">
-        <td class="tab selected top-left TSTL"></td>
-        <td class="tab selected">
-           <xsl:call-template name="base-selected"/>
-        </td>
-        <td class="tab selected top-right TSTR"></td>
+    <td class="tab selected top-left TSTL"></td>
+    <td class="tab selected">
+      <xsl:call-template name="base-selected"/>
+    </td>
+    <td class="tab selected top-right TSTR"></td>
   </xsl:template>
-
   <xsl:template name="not-selected">
     <td>
       <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-         <td class="tab unselected top-left TUTL"></td>
+          <td class="tab unselected top-left TUTL"></td>
           <td class="tab unselected corner">
-             <xsl:call-template name="base-not-selected"/>
+            <xsl:call-template name="base-not-selected"/>
           </td>
           <td class="tab unselected top-right TUTR"></td>
-        </tr> 
+        </tr>
         <tr>
           <td colspan="3" class="spacer"/>
         </tr>
       </table>
     </td>
   </xsl:template>
-  
   <xsl:template name="level2-selected">
-        <td class="level2tab selected">
-           <xsl:call-template name="base-selected"/>
-        </td>
-  </xsl:template>
-
-  <xsl:template name="level2-not-selected">
-    <td class="level2tab unselected">
-      <xsl:call-template name="base-not-selected"/> 
+    <td class="level2tab selected">
+      <xsl:call-template name="base-selected"/>
     </td>
   </xsl:template>
-
+  <xsl:template name="level2-not-selected">
+    <td class="level2tab unselected">
+      <xsl:call-template name="base-not-selected"/>
+    </td>
+  </xsl:template>
 </xsl:stylesheet>

@@ -29,12 +29,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 </elements>
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="fct-bits/fct-bits.xsl"/>
   <xsl:param name="contextPath"/>
-  
-  <!--+
+<!--+
   |Overall site template
   +-->
   <xsl:template match="/">
@@ -47,7 +45,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
       <xsl:apply-templates />
     </div>
   </xsl:template>
-    <xsl:template match="contract">
+  <xsl:template match="contract">
     <div id="{@name}">
       <xsl:apply-templates />
     </div>

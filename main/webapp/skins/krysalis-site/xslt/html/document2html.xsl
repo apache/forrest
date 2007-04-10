@@ -28,16 +28,13 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
-  
   <xsl:template match="document">
-
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
         <table class="title">
-          <tr> 
-            <td valign="middle"> 
+          <tr>
+            <td valign="middle">
               <h1>
                 <xsl:value-of select="header/title"/>
               </h1>
@@ -60,9 +57,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
           <xsl:value-of select="header/abstract"/>
         </div>
       </xsl:if>
-
       <xsl:apply-templates select="body"/>
-
       <xsl:if test="header/authors">
         <p align="right">
           <font size="-2">
@@ -76,106 +71,96 @@ and tabs (tab2menu.xsl) to generate the final HTML.
           </font>
         </p>
       </xsl:if>
-
     </div>
   </xsl:template>
-
   <xsl:template match="body">
     <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
   </xsl:template>
-
   <xsl:template match="@id">
     <xsl:apply-imports/>
   </xsl:template>
-
-  <xsl:template match="section">
-    <a name="{generate-id()}"/>
+  <xsl:template match="section"><a name="{generate-id()}"/>
     <xsl:apply-templates select="@id"/>
-
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
-
     <xsl:choose>
       <xsl:when test="$level=1">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h1>
+            <xsl:value-of select="title"/>
+          </h1>
         </div>
-        <div class="section"><xsl:apply-templates/></div>  
+        <div class="section">
+          <xsl:apply-templates/>
+        </div>
       </xsl:when>
       <xsl:when test="$level=2">
         <div class="skinconf-heading-{$level}">
-          <h1><xsl:value-of select="title"/></h1>
+          <h1>
+            <xsl:value-of select="title"/>
+          </h1>
         </div>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:when>
-      <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
+<!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
-        <h4 class="faq"><xsl:value-of select="title"/></h4>
-        <div align="right"><a href="#{@id}-menu">^</a></div>
+        <h4 class="faq">
+          <xsl:value-of select="title"/>
+        </h4>
+        <div align="right"><a href="#{@id}-menu">^</a>
+        </div>
         <div style="margin-left: 15px">
           <xsl:apply-templates select="*[not(self::title)]"/>
         </div>
       </xsl:when>
       <xsl:when test="$level=3">
-        <h4><xsl:value-of select="title"/></h4>
+        <h4>
+          <xsl:value-of select="title"/>
+        </h4>
         <xsl:apply-templates select="*[not(self::title)]"/>
-
       </xsl:when>
-
       <xsl:otherwise>
-        <h5><xsl:value-of select="title"/></h5>
+        <h5>
+          <xsl:value-of select="title"/>
+        </h5>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:otherwise>
     </xsl:choose>
-
-  </xsl:template>  
-
+  </xsl:template>
   <xsl:template match="fixme | note | warning">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="link">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="jump">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="fork">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="source">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="anchor">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="icon">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="code">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="figure">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="table">
     <xsl:apply-imports/>
   </xsl:template>
-
   <xsl:template match="title">
-    <!-- do not show title elements, they are already in other places-->
+<!-- do not show title elements, they are already in other places-->
   </xsl:template>
-
 </xsl:stylesheet>

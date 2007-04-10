@@ -19,11 +19,8 @@
 This stylesheet generates 'tabs' at the top left of the screen.
 See the imported tab2menu.xsl for details.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:import href="../../../common/xslt/html/tab-to-menu.xsl"/>
-
   <xsl:template match="tabs">
     <div class="tab">
       <table cellspacing="0" cellpadding="0" border="0" summary="tab bar">
@@ -34,28 +31,22 @@ See the imported tab2menu.xsl for details.
     </div>
     <xsl:if test="tab[@dir=$longest-dir]/tab">
       <div class="level2tab">
-         <xsl:call-template name="level2tabs"/>
+        <xsl:call-template name="level2tabs"/>
       </div>
     </xsl:if>
   </xsl:template>
-
   <xsl:template name="pre-separator">
     <xsl:call-template name="separator"/>
   </xsl:template>
-
-  <xsl:template name="post-separator">
-  </xsl:template>
-
+  <xsl:template name="post-separator"></xsl:template>
   <xsl:template name="separator">
     <td width="6">
       <img src="{$root}skin/images/spacer.gif" width="6" height="8" alt=""/>
     </td>
   </xsl:template>
-
   <xsl:template name="level2-pre-separator"></xsl:template>
   <xsl:template name="level2-post-separator"></xsl:template>
   <xsl:template name="level2-separator">&#160;|&#160;</xsl:template>
-
   <xsl:template name="selected">
     <td valign="bottom">
       <table cellspacing="0" cellpadding="0" border="0"  style="height: 1.8em" summary="selected tab">
@@ -77,7 +68,6 @@ See the imported tab2menu.xsl for details.
       </table>
     </td>
   </xsl:template>
-
   <xsl:template name="not-selected">
     <td valign="bottom">
       <table cellspacing="0" cellpadding="0" border="0" style="height: 1.6em" summary="non selected tab">
@@ -93,19 +83,15 @@ See the imported tab2menu.xsl for details.
           </td>
         </tr>
         <tr>
-          <td height="1" colspan="3">
-          </td>
+          <td height="1" colspan="3"></td>
         </tr>
       </table>
     </td>
   </xsl:template>
-
   <xsl:template name="level2-not-selected">
     <xsl:call-template name="base-not-selected"/>
   </xsl:template>
-
   <xsl:template name="level2-selected">
-     <xsl:call-template name="base-selected"/>
+    <xsl:call-template name="base-selected"/>
   </xsl:template>
-
 </xsl:stylesheet>

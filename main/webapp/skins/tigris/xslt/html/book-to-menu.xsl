@@ -20,42 +20,32 @@ book-to-menu.xsl generates the HTML menu.  See the imported book-to-menu.xsl for
 details.
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-    <xsl:import href="../../../common/xslt/html/book-to-menu.xsl"/>
-
-    <xsl:template match="book">
-        <div class="menu">
-            <div class="body">
-                <xsl:apply-templates select="menu"/>
-            </div>
-        </div>
-        <div class="strut">
-            <xsl:text> </xsl:text>
-        </div>
-    </xsl:template>
-
-    <xsl:template match="menu-item[@type='hidden']"/>
-
-    <xsl:template match="menu | menu-item">
-        <div>
-            <a href="{@href}">
-                <xsl:value-of select="@label"/>
-            </a>
-            <xsl:apply-templates/>
-        </div>
-    </xsl:template>
-
-    <xsl:template name="selected">
-        <div class="selfref">
-            <xsl:value-of select="@label"/>
-            <xsl:apply-templates/>
-        </div>
-    </xsl:template>
-
-    <xsl:template name="print-external">
-        <xsl:apply-imports/>
-    </xsl:template>
-
+  <xsl:import href="../../../common/xslt/html/book-to-menu.xsl"/>
+  <xsl:template match="book">
+    <div class="menu">
+      <div class="body">
+        <xsl:apply-templates select="menu"/>
+      </div>
+    </div>
+    <div class="strut">
+<xsl:text> </xsl:text>
+    </div>
+  </xsl:template>
+  <xsl:template match="menu-item[@type='hidden']"/>
+  <xsl:template match="menu | menu-item">
+    <div><a href="{@href}">
+      <xsl:value-of select="@label"/></a>
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+  <xsl:template name="selected">
+    <div class="selfref">
+      <xsl:value-of select="@label"/>
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+  <xsl:template name="print-external">
+    <xsl:apply-imports/>
+  </xsl:template>
 </xsl:stylesheet>

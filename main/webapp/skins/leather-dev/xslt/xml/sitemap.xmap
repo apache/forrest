@@ -15,56 +15,45 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!-- CVS $Id: sitemap.xmap,v 1.26 2004/05/19 11:32:02 cziegeler Exp $ -->
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
 <!-- =========================== Components ================================ -->
-
- <map:components>
-  <map:generators default="file">
-   <map:generator name="linkstatus" src="org.apache.cocoon.generation.LinkStatusGenerator"/>
-   <map:generator name="calendar" src="org.apache.cocoon.generation.CalendarGenerator"/>
-  </map:generators>
-  <map:transformers default="xslt"/>
-  <map:readers default="resource"/>
-  <map:serializers default="html"/>
-  <map:matchers default="wildcard"/>
-  <map:selectors default="browser"/>
- </map:components>
-
+  <map:components>
+    <map:generators default="file">
+      <map:generator name="linkstatus" src="org.apache.cocoon.generation.LinkStatusGenerator"/>
+      <map:generator name="calendar" src="org.apache.cocoon.generation.CalendarGenerator"/>
+    </map:generators>
+    <map:transformers default="xslt"/>
+    <map:readers default="resource"/>
+    <map:serializers default="html"/>
+    <map:matchers default="wildcard"/>
+    <map:selectors default="browser"/>
+  </map:components>
 <!-- =========================== Views =================================== -->
-
- <map:views>
-  <map:view name="content" from-label="content">
-   <map:serialize type="xml"/>
-  </map:view>
-
-  <map:view from-label="content" name="pretty-content">
-    <map:transform src="context://stylesheets/system/xml2html.xslt"/>
-    <map:serialize type="html"/>
-  </map:view>
-
-  <map:view name="links" from-position="last">
-   <map:serialize type="links"/>
-  </map:view>
- </map:views>
-
+  <map:views>
+    <map:view name="content" from-label="content">
+      <map:serialize type="xml"/>
+    </map:view>
+    <map:view from-label="content" name="pretty-content">
+      <map:transform src="context://stylesheets/system/xml2html.xslt"/>
+      <map:serialize type="html"/>
+    </map:view>
+    <map:view name="links" from-position="last">
+      <map:serialize type="links"/>
+    </map:view>
+  </map:views>
 <!-- =========================== Pipelines ================================= -->
-
- <map:pipelines>
-  <map:pipeline>
-   <map:match pattern="">
-     <map:generate src="fct-bits/c-fontsize-fct.xml"/>
-     <map:transform src="contract.xsl">
-        <map:parameter name="contextPath" value="{request:contextPath}"/>
-     </map:transform>
-     <map:serialize type="xml"/>
-   </map:match>
-  </map:pipeline>  
-
- <!-- 
+  <map:pipelines>
+    <map:pipeline>
+      <map:match pattern="">
+        <map:generate src="fct-bits/c-fontsize-fct.xml"/>
+        <map:transform src="contract.xsl">
+          <map:parameter name="contextPath" value="{request:contextPath}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+<!-- 
 1. check all aviable fct
 2. check which fct are needed
 3. check where to place them
@@ -84,28 +73,27 @@ output e.g.
   </content>
 </contracts>
 -->
-  <map:pipeline>
-    <map:match pattern="contracts.xml">
-		  <map:generate type="directory" src="fct-bits">
-        <map:parameter name="depth" value="1"/>
-        <!-- sorted alphabetically -->
-      	<map:parameter name="reverse" value="false"/>
-      </map:generate>
-      <map:transform src="dir2contracts.xsl">
-        <map:parameter name="contentDir" value="{realpath:leather/fct-bits}"/>
-      </map:transform>
-      <map:serialize type="xml"/>
-    </map:match>
-  </map:pipeline>
-  
-  <map:pipeline>
-    <map:match pattern="ft">
-		   <map:generate src="ft-leather.xml"/>
-       <map:transform src="ft2xhtml.xsl">
+    <map:pipeline>
+      <map:match pattern="contracts.xml">
+        <map:generate type="directory" src="fct-bits">
+          <map:parameter name="depth" value="1"/>
+<!-- sorted alphabetically -->
+          <map:parameter name="reverse" value="false"/>
+        </map:generate>
+        <map:transform src="dir2contracts.xsl">
+          <map:parameter name="contentDir" value="{realpath:leather/fct-bits}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+    <map:pipeline>
+      <map:match pattern="ft">
+        <map:generate src="ft-leather.xml"/>
+        <map:transform src="ft2xhtml.xsl">
           <map:parameter name="contextPath" value="{request:contextPath}"/>
-       </map:transform>
-       <map:serialize type="xml"/>
-    </map:match>
-  </map:pipeline>
- </map:pipelines>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
 </map:sitemap>
