@@ -105,7 +105,13 @@
     description="Makes release distributions">
     <property name="release-name-bin" value="${name}-${forrest.version}"/>
 <!-- Prepare *.tar.gz for "lf" eol-style systems -->
-    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}" excludes="*.bat"/>
+<!-- FIXME: 2007-04-11
+     Leaving this alone. fixcrlf seems to mess with some images and jar files.
+    <fixcrlf eol="lf" srcdir="${dist-shbat.dir}">
+      <exclude name="**/*.bat"/>
+      <exclude name="**/*.jar"/>
+    </fixcrlf>
+-->
     <tar longfile="gnu" compression="gzip"
       destfile="${dist.dir}/${release-name-bin}.tar.gz" >
       <tarfileset prefix="${release-name-bin}" dir="${dist-shbat.dir}"
@@ -122,7 +128,13 @@
       </tarfileset>
     </tar>
 <!-- Prepare *.zip for "crlf" eol-style systems -->
-    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}"/>
+<!-- FIXME: 2007-04-11
+     Leaving this alone. fixcrlf seems to mess with some images and jar files.
+    <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}">
+      <exclude name="**/*.sh"/>
+      <exclude name="**/*.jar"/>
+    </fixcrlf>
+-->
     <zip
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
