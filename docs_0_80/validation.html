@@ -362,23 +362,28 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Introduction</h2>
 <div class="section">
 <p>
-        When a source document uses a DTD to define its structure, then various abilities are enabled. Forrest handles the annoying side of this and takes advantage of the benefits.
+        When a source document uses a DTD to define its structure, then various
+        abilities are enabled. Forrest handles the annoying side of this and
+        takes advantage of the benefits.
       </p>
 <p>
-        The xml parser must locate the DTDs and other entities. Forrest uses the XML
-        Catalog Entity Resolver to associate DTD references with local copies.
+        The xml parser must locate the DTDs and other entities. Forrest uses the
+        XML Catalog Entity Resolver to associate DTD references with local
+        copies.
       </p>
 <p>
         Forrest also uses the XML Document Type Declaration to effect the
-        <a href="../docs_0_80/cap.html">Content Aware Pipelines</a>. Remember that you are
-        not required to use DTDs (for example Forrest can also respond to a namespace)
-        so RELAX NG or W3c XML Schema can be used.
+        <a href="../docs_0_80/cap.html">Content Aware Pipelines</a>. Remember that you
+        are not required to use DTDs (for example Forrest can also respond to a
+        namespace) so RELAX NG or W3c XML Schema can be used.
       </p>
 <p>
-        If you do use DTDs, then forrest is automatically configured to do XML validation.
+        If you do use DTDs, then forrest is automatically configured to do XML
+        validation.
       </p>
 <p>
-        This document explains both the validation and entity resolution aspects of the Forrest XML framework.
+        This document explains both the validation and entity resolution aspects
+        of the Forrest XML framework.
       </p>
 </div>
     
@@ -386,22 +391,22 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">XML validation</h2>
 <div class="section">
 <p>
-        By default, Forrest will validate your XML before generating
-        HTML or a webapp from it, and fail if any XML files are not valid.
-        Validation can be performed manually by doing
-        '<span class="codefrag">forrest validate</span>' in the project root directory.
+        By default, Forrest will validate your XML before generating HTML or a
+        webapp from it, and fail if any XML files are not valid. Validation can
+        be performed manually by doing '<span class="codefrag">forrest validate</span>' in the
+        project root directory.
       </p>
 <p>
         For an XML file to be valid, it <em>must</em> have a document type
-        declaration at the top, indicating its content type.  Hence by
-        default, any Forrest-processed XML file that lacks a DOCTYPE
-        declaration will cause the build to break.
+        declaration at the top, indicating its content type. Hence by default,
+        any Forrest-processed XML file that lacks a DOCTYPE declaration will
+        cause the build to break.
       </p>
 <p>
         Despite the strict default behavior, Forrest is quite flexible about
-        validation.  Validation can be switched off for certain sections of a
-        project.  In validated sections, it is possible for projects to specify
-        exactly what files they want (and don't want) validated.  Forrest
+        validation. Validation can be switched off for certain sections of a
+        project. In validated sections, it is possible for projects to specify
+        exactly what files they want (and don't want) validated. Forrest
         validation is controlled through a set of properties in
         <span class="codefrag">forrest.properties</span>:
       </p>
@@ -439,13 +444,12 @@ document.write("Last Published: " + document.lastModified);
 <div class="label">Note</div>
 <div class="content">
         The <span class="codefrag">failonerror</span> properties only work for files validated
-        with Ant's &lt;xmlvalidate&gt; and not (yet) for those validated
-        with &lt;jing&gt;, where <span class="codefrag">failonerror</span> defaults to
+        with Ant's &lt;xmlvalidate&gt; and not (yet) for those validated with
+        &lt;jing&gt;, where <span class="codefrag">failonerror</span> defaults to
         <span class="codefrag">true</span>.
       </div>
 </div>
 </div>
-
     
 <a name="N10063"></a><a name="Validating+new+XML+types"></a>
 <h2 class="underlined_10">Validating new XML types</h2>
@@ -453,24 +457,25 @@ document.write("Last Published: " + document.lastModified);
 <p>
         Forrest provides an <a href="http://www.oasis-open.org/committees/entity/spec.html">OASIS Catalog</a>
         [see <a href="http://xml.apache.org/commons/components/resolver/resolver-article.html">tutorial</a>]
-        <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span>
-        as a means of associating public identifiers
-        (e.g. <span class="codefrag">-//APACHE//DTD Documentation V1.1//EN</span> above) with DTDs.
-        If you <a href="../docs_0_80/your-project.html#adding_new_content_type">add a new content type</a>, you
-        should add the DTD to <span class="codefrag">${project.schema-dir}/dtd/</span> and add
-        an entry to the <span class="codefrag">${project.schema-dir}/catalog.xcat</span> file.  This
-        section describes the details of this process.
+        <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span> as a
+        means of associating public identifiers (e.g. <span class="codefrag">-//APACHE//DTD
+        Documentation V1.1//EN</span> above) with DTDs. If you
+        <a href="../docs_0_80/your-project.html#adding_new_content_type">add a new content
+        type</a>, you should add the DTD to
+        <span class="codefrag">${project.schema-dir}/dtd/</span> and add an entry to the
+        <span class="codefrag">${project.schema-dir}/catalog.xcat</span> file. This section
+        describes the details of this process.
       </p>
 <a name="N10084"></a><a name="Creating+or+extending+a+DTD"></a>
 <h3 class="underlined_5">Creating or extending a DTD</h3>
 <p>
-          The main Forrest DTDs are designed to be modular and extensible, so
-          it is fairly easy to create a new document type that is a superset
-          of one from Forrest.  This is what we'll demonstrate here, using our
-          earlier <a href="../docs_0_80/your-project.html#adding_new_content_type">download format</a>
-          as an example.  Our download format adds a group of new elements to
-          the standard 'documentv13' format.  Our new elements are described
-          by the following DTD:
+          The main Forrest DTDs are designed to be modular and extensible, so it
+          is fairly easy to create a new document type that is a superset of one
+          from Forrest. This is what we'll demonstrate here, using our earlier
+          <a href="../docs_0_80/your-project.html#adding_new_content_type">download format</a>
+          as an example. Our download format adds a group of new elements to the
+          standard 'documentv13' format. Our new elements are described by the
+          following DTD:
         </p>
 <pre class="code">
 &lt;!ELEMENT release (downloads)&gt;
@@ -492,10 +497,10 @@ size CDATA #IMPLIED&gt;
           The
           <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v13.dtd</span>
           file provides a full description and basic example of how to pull in
-          modules.  In our example, our DTD reuses modules
+          modules. In our example, our DTD reuses modules
           <span class="codefrag">common-charents-v10.mod</span> and
-          <span class="codefrag">document-v13.mod</span>.  Here is the full DTD, with
-          explanation to follow.
+          <span class="codefrag">document-v13.mod</span>. Here is the full DTD, with explanation
+          to follow.
         </p>
 <pre class="code">
 &lt;!-- ===================================================================
@@ -552,137 +557,141 @@ size CDATA #IMPLIED&gt;
 &lt;!-- End of DTD --&gt;
 &lt;!-- =============================================================== --&gt;
         </pre>
-<p>This custom DTD should be placed in your project resources
-        directory at <span class="codefrag">src/documentation/resources/schema/dtd/</span>
+<p>
+          This custom DTD should be placed in your project resources directory
+          at <span class="codefrag">src/documentation/resources/schema/dtd/</span>
+        
 </p>
 <p>
-          The &lt;!ENTITY % ... &gt; blocks are so-called 
+          The &lt;!ENTITY % ... &gt; blocks are so-called
           <a href="http://www.xml.com/axml/target.html#dt-PERef">parameter
-            entities</a>.  They are like macros, whose content will be
-          inserted when a parameter-entity reference, like
-          <span class="codefrag">%common-charents;</span> or <span class="codefrag">%document;</span> is
-          inserted.
+          entities</a>. They are like macros, whose content will be inserted
+          when a parameter-entity reference, like <span class="codefrag">%common-charents;</span>
+          or <span class="codefrag">%document;</span> is inserted.
         </p>
 <p>
           In our DTD, we first pull in the 'common-charents' entity, which
-          defines character symbol sets.  We then define the 'document'
-          entity.  However, before the <span class="codefrag">%document;</span> PE reference, we
-          first override the 'local.section' entity.  This is a hook into
-          document-v13.mod.  By setting its value to '|release', we declare
-          that our &lt;release&gt; element is to be allowed wherever "local
-          sections" are used.  There are five or so such hooks for different
-          areas of the document; see document-v13.dtd for more details.  We then
-          import the %document; contents, and declare the rest of our DTD
-          elements.
+          defines character symbol sets. We then define the 'document' entity.
+          However, before the <span class="codefrag">%document;</span> PE reference, we first
+          override the 'local.section' entity. This is a hook into
+          document-v13.mod. By setting its value to '|release', we declare that
+          our &lt;release&gt; element is to be allowed wherever "local sections"
+          are used. There are five or so such hooks for different areas of the
+          document; see document-v13.dtd for more details. We then import the
+          %document; contents, and declare the rest of our DTD elements.
         </p>
 <p>
-          We now have a DTD for the 'download' document type. 
+          We now have a DTD for the 'download' document type.
         </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        
+          
 <a href="http://www.oasis-open.org/docbook/documentation/reference/html/ch05.html">Chapter
-            5: Customizing DocBook</a> of Norman Walsh's "DocBook: The
+          5: Customizing DocBook</a> of Norman Walsh's "DocBook: The
           Definitive Guide" gives a complete overview of the process of
           customizing a DTD.
         </div>
 </div>
-<a name="N100CB"></a><a name="catalog"></a>
+<a name="N100CC"></a><a name="catalog"></a>
 <h3 class="underlined_5">Associating DTDs with document types</h3>
 <p>
-          Recall that our DOCTYPE declaration for our download document type
-          is:
+          Recall that our DOCTYPE declaration for our download document type is:
         </p>
 <pre class="code">&lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
           "download-v10.dtd"&gt;
         </pre>
 <p>
-          We only care about the quoted section after <span class="codefrag">PUBLIC</span>, called
-          the "public identifier", which globally identifies our document type.
-          We cannot rely on the subsequent "system identifier" part
+          We only care about the quoted section after <span class="codefrag">PUBLIC</span>,
+          called the "public identifier", which globally identifies our document
+          type. We cannot rely on the subsequent "system identifier" part
           ("download-v10.dtd"), because as a relative reference it is liable to
-          break.  The solution Forrest uses is to ignore the system id, and rely
+          break. The solution Forrest uses is to ignore the system id, and rely
           on a mapping from the public ID to a stable DTD location, via a
-          Catalog file.</p>
+          Catalog file.
+        </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
           See <a href="http://xml.apache.org/commons/components/resolver/resolver-article.html">this article</a> for a good
           introduction to catalogs and the Cocoon documentation
-          <a href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
+          <a href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with
+          catalogs</a>.
         </div>
 </div>
 <p>
           Forrest provides a standard catalog file at
-          <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span>
-          for the document types that Forrest supplies.
+          <span class="codefrag">forrest/main/webapp/resources/schema/catalog.xcat</span> for the
+          document types that Forrest supplies.
         </p>
 <p>
-          An additional system-wide catalog can be configured for use by multiple forrest-based projects.
-          See the "local-catalog" parameter in <span class="codefrag">main/webapp/WEB-INF/xconf/forrest-core.xconf</span>
+          An additional system-wide catalog can be configured for use by
+          multiple forrest-based projects. See the "local-catalog" parameter in
+          <span class="codefrag">main/webapp/WEB-INF/xconf/forrest-core.xconf</span>
         
 </p>
 <p>
           Projects can augment this with their own catalog file located in
           <span class="codefrag">${project.schema-dir}/catalog.xcat</span> to use it you must
-	    specify either the path (full or relative) to your 
-	    <span class="codefrag">catalog.xcat</span> in the <span class="codefrag">CatalogManager.properties</span>
-	    file. If you provide a relative path you must set the property 
-	    <span class="codefrag">relative-catalogs</span> to "yes".
-	  </p>
+          specify either the path (full or relative) to your
+          <span class="codefrag">catalog.xcat</span> in the
+          <span class="codefrag">CatalogManager.properties</span> file. If you provide a relative
+          path you must set the property <span class="codefrag">relative-catalogs</span> to
+          "yes".
+        </p>
 <p>
-          When Cocoon starts, it reads the <span class="codefrag">CatalogManager.properties</span> file from your
-          <span class="codefrag">project.classes-dir</span>. This is usually src/documentation/classes/
-          but you can change this in <span class="codefrag">forrest.properties</span>. When you seed 
-          a new site using <span class="codefrag">forrest seed</span> a sample catalog file
-          is placed in the site structure, you can use this as a template for your
-          own files.
+          When Cocoon starts, it reads the
+          <span class="codefrag">CatalogManager.properties</span> file from your
+          <span class="codefrag">project.classes-dir</span>. This is usually
+          src/documentation/classes/ but you can change this in
+          <span class="codefrag">forrest.properties</span>. When you seed a new site using
+          <span class="codefrag">forrest seed</span> a sample catalog file is placed in the site
+          structure, you can use this as a template for your own files.
         </p>
 <p>
           Forrest uses the XML Catalog syntax by default, although the older
-          plain-text
-          format can also be used.  Here is what the XML Catalog format looks
-          like:
+          plain-text format can also be used. Here is what the XML Catalog
+          format looks like:
         </p>
-<pre class="code">&lt;?xml version="1.0"?&gt;
+<pre class="code">
+&lt;?xml version="1.0"?&gt;
 &lt;!-- OASIS XML Catalog for Forrest --&gt;
 &lt;catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"&gt;
   &lt;public publicId="-//Acme//DTD Download Documentation V1.0//EN"
     uri="dtd/download-v10.dtd"/&gt;
-&lt;/catalog&gt;</pre>
+&lt;/catalog&gt;
+        </pre>
 <p>
           The format is described in <a href="http://www.oasis-open.org/committees/entity/spec.html">the
-          spec</a>, and is fairly simple and very powerful.
-          The "<span class="codefrag">public</span>" elements map
-          a public identifier to a DTD (relative to the catalog file).
+          spec</a>, and is fairly simple and very powerful. The
+          "<span class="codefrag">public</span>" elements map a public identifier to a DTD
+          (relative to the catalog file).
         </p>
 <p>
-          We now have a custom DTD and a catalog mapping which lets both
-          Forrest and Cocoon
-          locate the DTD.  Now if we were to run <span class="codefrag">'forrest validate-xdocs'</span>
-          our download file would validate along with all the others.  If
-          something goes wrong, try running <span class="codefrag">'forrest -v validate-xdocs'</span> to
-          see the error in more detail.
+          We now have a custom DTD and a catalog mapping which lets both Forrest
+          and Cocoon locate the DTD. Now if we were to run <span class="codefrag">'forrest
+          validate-xdocs'</span> our download file would validate along with all
+          the others. If something goes wrong, try running <span class="codefrag">'forrest -v
+          validate-xdocs'</span> to see the error in more detail.
         </p>
 </div>
-
     
-<a name="N1012F"></a><a name="debug-catalog"></a>
+<a name="N10130"></a><a name="debug-catalog"></a>
 <h2 class="underlined_10">Debugging the Catalog Entity Resolver</h2>
 <div class="section">
 <p>
-        If you suspect problems with your project catalog, then raise the "verbosity"
-        level in <span class="codefrag">src/documentation/classes/CatalogManager.properties</span>
-        and re-start forrest.
-        This should show your project catalogs being parsed and loaded.
+        If you suspect problems with your project catalog, then raise the
+        "verbosity" level in
+        <span class="codefrag">src/documentation/classes/CatalogManager.properties</span> and
+        re-start forrest. This should show your project catalogs being parsed
+        and loaded.
       </p>
 <p>
-        However this configuration does not show your DTDs being resolved.
-        So raise the verbosity level in the central configuration at
-        <span class="codefrag">main/webapp/WEB-INF/properties/dev/core.properties</span>
-        and re-start forrest. This also shows the main catalogs being loaded
-        and shows the resolving of every DTD and entity set.
+        However this configuration does not show your DTDs being resolved. So
+        raise the verbosity level in the central configuration at
+        <span class="codefrag">main/webapp/WEB-INF/properties/dev/core.properties</span> and
+        re-start forrest. This also shows the main catalogs being loaded and
+        shows the resolving of every DTD and entity set.
       </p>
 <p>
         When a DTD is successfully resolved you should see the message:
@@ -690,76 +699,71 @@ size CDATA #IMPLIED&gt;
       
 </p>
 <p>
-        When debugging such issues, a network monitoring tool (e.g. ngrep.sf.net)
-        is useful to ensure that all resources are being locally resolved and not       wandering onto the network to find remote copies.
+        When debugging such issues, a network monitoring tool (e.g.
+        ngrep.sf.net) is useful to ensure that all resources are being locally
+        resolved and not wandering onto the network to find remote copies.
       </p>
 </div>
-
     
-<a name="N1014B"></a><a name="entities"></a>
+<a name="N1014C"></a><a name="entities"></a>
 <h2 class="underlined_10">Referring to entities</h2>
 <div class="section">
 <p>
         Look at the source of this document
         (<span class="codefrag">xdocs/docs/validation.xml</span>) and see how the entity set
-        <span class="codefrag">"Numeric and Special Graphic"</span> is declared in the
-        document type declaration.
+        <span class="codefrag">"Numeric and Special Graphic"</span> is declared in the document
+        type declaration.
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
 <tr>
           
-<td colspan="1" rowspan="1">ISOnum.pen</td> 
-          <td colspan="1" rowspan="1">&amp;half;</td> 
-          <td colspan="1" rowspan="1">&frac12;</td> 
+<td colspan="1" rowspan="1">ISOnum.pen</td>
+          <td colspan="1" rowspan="1">&amp;half;</td>
+          <td colspan="1" rowspan="1">&frac12;</td>
         
 </tr>
       
 </table>
 </div>
-
     
-<a name="N10170"></a><a name="Validating+in+an+XML+editor"></a>
+<a name="N10171"></a><a name="Validating+in+an+XML+editor"></a>
 <h2 class="underlined_10">Validating in an XML editor</h2>
 <div class="section">
 <p>
-        If you have an XML editor that understands SGML or XML catalogs, let
-        it know where the Forrest catalog file is, and you will be able to
-        validate any Forrest XML file, regardless of location, as you edit
-        your files. See the 
-        <a href="../docs_0_80/catalog.html">configuration notes</a> your favourite
-        editor.
+        If you have an XML editor that understands SGML or XML catalogs, let it
+        know where the Forrest catalog file is, and you will be able to validate
+        any Forrest XML file, regardless of location, as you edit your files.
+        See the <a href="../docs_0_80/catalog.html">configuration notes</a> your
+        favourite editor.
       </p>
 </div>
-
     
-<a name="N1017E"></a><a name="relaxng"></a>
+<a name="N1017F"></a><a name="relaxng"></a>
 <h2 class="underlined_10">Validation using RELAX NG</h2>
 <div class="section">
 <p>
         Other validation is also conducted during build-time using RELAX NG.
-        This validates all of the important configuration files, both in
-        Forrest itself and in your project. At the moment it processes all
-        skinconf.xml files, all sitemap.xmap files, and all XSLT stylesheets.
+        This validates all of the important configuration files, both in Forrest
+        itself and in your project. At the moment it processes all skinconf.xml
+        files, all sitemap.xmap files, and all XSLT stylesheets.
       </p>
 <p>
         The RNG grammars to do this are located in the
-        <span class="codefrag">main/webapp/resources/schema/relaxng</span> directory.
-        If you want to
-        know more about this, and perhaps extend it for your own use, then
-        see <span class="codefrag">main/webapp/resources/schema/relaxng/README.txt</span>
-        and the Ant targets in the various build.xml files.
+        <span class="codefrag">main/webapp/resources/schema/relaxng</span> directory. If you want
+        to know more about this, and perhaps extend it for your own use, then
+        see <span class="codefrag">main/webapp/resources/schema/relaxng/README.txt</span> and the
+        Ant targets in the various build.xml files.
       </p>
 </div>
-
     
-<a name="N10191"></a><a name="sitemap"></a>
+<a name="N10192"></a><a name="sitemap"></a>
 <h2 class="underlined_10">Validation using Cocoon sitemap and the Cocoon Validation block</h2>
 <div class="section">
 <p>
-        The content of pipelines can be validated at various points in the Cocoon sitemaps
-        using RELAX NG or W3C XML Schema.
-        See <a href="../howto-dev.html#debug-validation">notes</a>.
+        The content of pipelines can be validated at various points in the
+        Cocoon sitemaps using RELAX NG or W3C XML Schema. See
+        <a href="../howto-dev.html#debug-validation">notes</a>.
       </p>
 </div>
   

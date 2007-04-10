@@ -332,33 +332,41 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Usage">Usage</a>
 </li>
 </ul>
-</div> 
+</div>
     
 <a name="N1000E"></a><a name="Introduction"></a>
 <h2 class="underlined_10">Introduction</h2>
 <div class="section">
-<p>SourceTypeAction assigns a "type" (a string) to an XML file. This is
-        done based on information occuring in the header of the XML file, up to the
-        document (root) element. This type is then returned to the sitemap as a
-        variable with the name 'sourcetype'. If no matching sourcetype could be be
-        found, null is returned and thus the contents of the action element will not be
-        executed.</p>
-<p>SourceTypeAction works by pull-parsing the document and collecting
-        information such as the Public Id, the processing instructions, the document
-        element local name and namespace, and the xsi:schemaLocation and
-        xsi:noNamespaceSchemaLocation attributes. This information is then compared
-        with the rules described in the configuration of the SourceTypeAction.</p>
-</div> 
+<p>
+        SourceTypeAction assigns a "type" (a string) to an XML file. This is
+        done based on information occuring in the header of the XML file, up to
+        the document (root) element. This type is then returned to the sitemap
+        as a variable with the name 'sourcetype'. If no matching sourcetype
+        could be be found, null is returned and thus the contents of the action
+        element will not be executed.
+      </p>
+<p>
+        SourceTypeAction works by pull-parsing the document and collecting
+        information such as the Public Id, the processing instructions, the
+        document element local name and namespace, and the xsi:schemaLocation
+        and xsi:noNamespaceSchemaLocation attributes. This information is then
+        compared with the rules described in the configuration of the
+        SourceTypeAction.
+      </p>
+</div>
     
 <a name="N1001B"></a><a name="Configuration"></a>
 <h2 class="underlined_10">Configuration</h2>
 <div class="section">
-<p>The action should be declared and configured in the map:actions
-        section of your sitemap. Example:</p>
-<pre class="code">&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
+<p>
+        The action should be declared and configured in the map:actions section
+        of your sitemap. Example:
+      </p>
+<pre class="code">
+&lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
  &lt;map:components&gt;
-  &lt;...&gt;
-  <strong>&lt;map:actions&gt;
+  &lt;...&gt;<strong>
+&lt;map:actions&gt;
    &lt;map:action name="sourcetype"
       src="org.apache.forrest.sourcetype.SourceTypeAction"&gt;
     &lt;sourcetype name="download-v1.0"&gt;
@@ -367,63 +375,76 @@ document.write("Last Published: " + document.lastModified);
     &lt;/sourcetype&gt;      
    &lt;/map:action&gt;
   &lt;/map:actions&gt;</strong>
+
  &lt;/map:components&gt;
  &lt;...&gt;
-&lt;/map:sitemap&gt;</pre>
-<p>There are other examples in <span class="codefrag">main/webapp/forrest.xmap</span>
+&lt;/map:sitemap&gt;
+      </pre>
+<p>
+        There are other examples in <span class="codefrag">main/webapp/forrest.xmap</span>
+      
 </p>
-<p>Each sourcetype-tag declares a source type. Inside the sourcetype-tag
-        a number of rules can be defined, described below. The sourcetypes will be
-        checked in the same order as they are defined in the configuration, the first
-        sourcetype of which all rules match will be used.</p>
-<p>These are the available rules:</p>
-<dl> 
+<p>
+        Each sourcetype-tag declares a source type. Inside the sourcetype-tag a
+        number of rules can be defined, described below. The sourcetypes will be
+        checked in the same order as they are defined in the configuration, the
+        first sourcetype of which all rules match will be used.
+      </p>
+<p>
+        These are the available rules:
+      </p>
+<dl>
         
-<dt>document-declaration</dt> 
+<dt>document-declaration</dt>
         
 <dd>This rule checks the public ID. It takes one attribute
-          <span class="codefrag">public-id</span>.</dd> 
+          <span class="codefrag">public-id</span>.</dd>
         
-<dt>document-element</dt> 
+<dt>document-element</dt>
         
 <dd>This rule checks the local name and/or namespace of the document
           element. These are specified with the attributes <span class="codefrag">local-name</span> and
-          <span class="codefrag">namespace</span>. At least one of these two is required.</dd> 
+          <span class="codefrag">namespace</span>. At least one of these two is required.</dd>
         
-<dt>processing-instruction</dt> 
+<dt>processing-instruction</dt>
         
 <dd>This rule checks a processing instruction. It can take two
           attributes: <span class="codefrag">target</span> and <span class="codefrag">data</span>. The target attribute is
-          always required, the data attribute is optional.</dd> 
+          always required, the data attribute is optional.</dd>
         
-<dt>w3c-xml-schema</dt> 
+<dt>w3c-xml-schema</dt>
         
 <dd>This rule checks the value of the xsi:schemaLocation and
           xsi:noNamespaceSchemaLocation attributes on the document element. These are
           specified with the attributes <span class="codefrag">schema-location</span> and
-          <span class="codefrag">no-namespace-schema-location</span>.</dd> 
+          <span class="codefrag">no-namespace-schema-location</span>.</dd>
       
 </dl>
 <p>
-       Perhaps you need other methods. Please enhance the source at
-       <span class="codefrag">main/java/org/apache/forrest/sourcetype</span>
+        Perhaps you need other methods. Please enhance the source at
+        <span class="codefrag">main/java/org/apache/forrest/sourcetype</span>
       
 </p>
-</div> 
+</div>
     
-<a name="N1006D"></a><a name="Usage"></a>
+<a name="N1006E"></a><a name="Usage"></a>
 <h2 class="underlined_10">Usage</h2>
 <div class="section">
-<p>The source of which the sourcetype must be defined must be specified
-        using the 'src' attribute on the map:act element.</p>
-<pre class="code">&lt;map:act type="sourcetype" src="{1}"&gt;
-...
-&lt;/map:act&gt;</pre>
-<p>See a real-life example in the advanced section of the
-        <a href="your-project.html#adding_new_content_type_2">Using Forrest</a>
-        document.
+<p>
+        The source of which the sourcetype must be defined must be specified
+        using the 'src' attribute on the map:act element.
       </p>
-</div> 
+<pre class="code">
+&lt;map:act type="sourcetype" src="{1}"&gt;
+...
+&lt;/map:act&gt;
+      </pre>
+<p>
+        See a real-life example in the advanced section of the
+        <a href="your-project.html#adding_new_content_type_2">Using
+        Forrest</a> document.
+      </p>
+</div>
   
 </div>
 <!--+

@@ -265,14 +265,11 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Overview</h2>
 <div class="section">
 <p>
-        The server
-        <a href="http://forrest.zones.apache.org/">forrest.zones.apache.org</a>
-        provides our testing and demonstration area.
-        It is managed by Apache Forrest committers.
-        The material is intended for developer use only.
+        The server <a href="http://forrest.zones.apache.org/">forrest.zones.apache.org</a>
+        provides our testing and demonstration area. It is managed by Apache
+        Forrest committers. The material is intended for developer use only.
       </p>
 </div>
-
     
 <a name="N1001B"></a><a name="configuration"></a>
 <h2 class="underlined_10">Configuration</h2>
@@ -314,30 +311,30 @@ Hold them here until building properly.
 </pre>
 <p>
         All files are owned in the group "other" so any one of us can
-        edit/update. Make sure that your 'umask' is set properly so that
-        new files have group write permissions.
-        See the <a href="#admin-user">notes</a> about user administration.
- FIXME: Add a proper group.
+        edit/update. Make sure that your 'umask' is set properly so that new
+        files have group write permissions. See the
+        <a href="#admin-user">notes</a> about user administration. FIXME: Add a
+        proper group.
       </p>
 <p>
-        Cron runs the various Forrestbots and management tasks, such as
-        updating the forrest-trunk software; cleaning up old logfiles, etc.
-        FIXME: These are not yet managed under SVN, see ~crossley/my-crontab.txt
+        Cron runs the various Forrestbots and management tasks, such as updating
+        the forrest-trunk software; cleaning up old logfiles, etc. FIXME: These
+        are not yet managed under SVN, see ~crossley/my-crontab.txt
       </p>
 </div>
-
     
 <a name="N10052"></a><a name="software"></a>
 <h2 class="underlined_10">Software</h2>
 <div class="section">
 <p>
-          Global zone software is as described in
-          <a href="http://www.apache.org/dev/solaris-zones.html">zone administration</a>.
-        </p>
+        Global zone software is as described in
+        <a href="http://www.apache.org/dev/solaris-zones.html">zone
+        administration</a>.
+      </p>
 <p>
-          Various local software is installed in
-          <span class="codefrag">/export/opt/</span> (not managed with SVN) ...
-        </p>
+        Various local software is installed in <span class="codefrag">/export/opt/</span> (not
+        managed with SVN) ...
+      </p>
 <a name="N10065"></a><a name="s-forrest"></a>
 <h3 class="underlined_5">Forrest</h3>
 <p>
@@ -369,22 +366,22 @@ svn checkout of current release branch, manually updated as needed.
           To manually update -stable or -release do this:
         </p>
 <pre class="code">
+
 source $CONFIG/setenv-java-14.sh
 cd /export/opt/forrest-trunk-stable
 svn up
 cd main
 ./build.sh clean; ./build.sh
-</pre>
-</div>
 
+        </pre>
+</div>
     
 <a name="N10092"></a><a name="fb"></a>
 <h2 class="underlined_10">The forrestbots</h2>
 <div class="section">
 <p>
-        There are various forrestbots operating with different versions
-        of forrest.
-        Their home is at $CONFIG
+        There are various forrestbots operating with different versions of
+        forrest. Their home is at $CONFIG
       </p>
 <p>
         
@@ -408,44 +405,39 @@ builds various sites, only runs when needed, triggered via cron.
 Configuration files and the generated results are at $DOC_ROOT/fts/
 </pre>
 <p>
-        Forrestbot logs are at
-        $CONFIG/forrestbot-trunk*/logs/
-        and old ones are cleaned up by the crontab.
-        There is also a log file for each site that forrestbot builds
-        which captures the output of cron (cronout-*.txt).
-        Be sure to verify this logfile after making configuration changes.
+        Forrestbot logs are at $CONFIG/forrestbot-trunk*/logs/ and old ones are
+        cleaned up by the crontab. There is also a log file for each site that
+        forrestbot builds which captures the output of cron (cronout-*.txt). Be
+        sure to verify this logfile after making configuration changes.
       </p>
 </div>
-
     
 <a name="N100B3"></a><a name="admin"></a>
 <h2 class="underlined_10">Administration</h2>
 <div class="section">
 <p>
         See the general notes for the
-        <a href="http://www.apache.org/dev/solaris-zones.html">zone administration</a>.
+        <a href="http://www.apache.org/dev/solaris-zones.html">zone
+        administration</a>.
       </p>
 <p>
-        The project chair is the root user.
-        Committers can ask on the dev list to get a user account added or modified.
+        The project chair is the root user. Committers can ask on the dev list
+        to get a user account added or modified.
       </p>
 <p>
         Follow Leo's config ideas at
         <a href="http://wiki.apache.org/gump/GumpZonesConfig">GumpZonesConfig</a>.
       </p>
 <p>
-        Also keep an occasional eye on
-        $CONFIG/update-forrest-trunk.log
-        This is the output of the cronjob to do svn update to trunk
-        and re-build.
+        Also keep an occasional eye on $CONFIG/update-forrest-trunk.log This is
+        the output of the cronjob to do svn update to trunk and re-build.
       </p>
 <p>
-        FIXME:
-        Start apache2 on boot (using new Solaris init.d replacement called smf).
-        At the moment we need to realise that it is down and manually
-        restart as per http://www.apache.org/dev/solaris-zones.html
-        Also it seems that /var/run/apache2 is wiped out on reboot,
-        so need to mkdir again.
+        FIXME: Start apache2 on boot (using new Solaris init.d replacement
+        called smf). At the moment we need to realise that it is down and
+        manually restart as per http://www.apache.org/dev/solaris-zones.html
+        Also it seems that /var/run/apache2 is wiped out on reboot, so need to
+        mkdir again.
       </p>
 <pre class="code">
 sudo mkdir /var/run/apache2
@@ -453,11 +445,15 @@ sudo /usr/apache2/bin/apachectl -k start
 </pre>
 <a name="N100D4"></a><a name="admin-user"></a>
 <h3 class="underlined_5">User administration</h3>
-<p>After receiving your account, please be sure to configure it properly.</p>
-<p>See some notes at
-          <a href="http://www.apache.org/dev/solaris-zones.html">zone administration</a>
-          and the general notes for
-          <a href="http://www.apache.org/dev/new-committers-guide.html#shell">new committers</a> (especially the part about 'umask').
+<p>
+          After receiving your account, please be sure to configure it properly.
+        </p>
+<p>
+          See some notes at
+          <a href="http://www.apache.org/dev/solaris-zones.html">zone
+          administration</a> and the general notes for
+          <a href="http://www.apache.org/dev/new-committers-guide.html#shell">new
+          committers</a> (especially the part about 'umask').
         </p>
 <p>
           Look at the setup of some other users on our zone.
