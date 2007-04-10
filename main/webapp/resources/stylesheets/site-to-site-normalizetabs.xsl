@@ -45,10 +45,8 @@ Output would be:
 </site>
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:l="http://apache.org/forrest/linkmap/1.0">
-
-  <!-- Return a value for a node's @tab, either using an existing @tab or the first ancestor's -->
+<!-- Return a value for a node's @tab, either using an existing @tab or the first ancestor's -->
   <xsl:template name="gettab">
     <xsl:param name="node"/>
     <xsl:choose>
@@ -62,7 +60,6 @@ Output would be:
       </xsl:when>
     </xsl:choose>
   </xsl:template>
-
   <xsl:template match="//*">
     <xsl:variable name="newtab">
       <xsl:call-template name="gettab">
@@ -70,14 +67,13 @@ Output would be:
       </xsl:call-template>
     </xsl:variable>
     <xsl:copy>
-      <!-- <xsl:if test="not(normalize-space($newtab)='')"> -->
-        <xsl:attribute name="tab">
-          <xsl:value-of select="$newtab"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="@*|node()"/>
+<!-- <xsl:if test="not(normalize-space($newtab)='')"> -->
+      <xsl:attribute name="tab">
+        <xsl:value-of select="$newtab"/>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
-
   <xsl:template match="@*|node()" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>

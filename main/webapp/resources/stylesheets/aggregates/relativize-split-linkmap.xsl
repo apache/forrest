@@ -52,29 +52,21 @@ Where links like '#dreams.html' are assumed to be anchors in the aggregated
 document.
 
 -->
-
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:param name="path"/>
-  <!-- FIXME: This is a hard-code value -->
+<!-- FIXME: This is a hard-code value -->
   <xsl:param name="site-root" select="'http://localhost:8787/forrest/'"/>
-
   <xsl:variable name="tab">
     <xsl:value-of select="string(//*[starts-with(@href, $path)]/@tab)"/>
   </xsl:variable>
-
   <xsl:include href="../dotdots.xsl"/>
-
-  <!-- Path to site root, eg '../../' -->
+<!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
   <xsl:template match="@href">
-
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(., ':') and not(contains(substring-before(., ':'), '/'))">
@@ -85,32 +77,26 @@ document.
           contains(., '.jpg') or
           contains(., '.gif') or
           contains(., '.tif')">
-          <!-- Image links are always relative -->
-          <xsl:value-of select="$root"/><xsl:value-of select="."/>
+<!-- Image links are always relative -->
+          <xsl:value-of select="$root"/>
+          <xsl:value-of select="."/>
         </xsl:when>
-
         <xsl:when test="$tab='' or ../@tab=$tab">
           <xsl:value-of select="concat('#', .)"/>
         </xsl:when>
-
-        <!-- PDFs can handle inline images, but everything else must become an
+<!-- PDFs can handle inline images, but everything else must become an
         external link -->
         <xsl:when test="contains($path, '.pdf')">
-
-          <!-- Links to outside a PDF are all absolute -->
+<!-- Links to outside a PDF are all absolute -->
           <xsl:value-of select="concat($site-root, .)"/>
-
         </xsl:when>
         <xsl:otherwise>
-
-          <!-- Links outside a HTML are relative -->
-          <xsl:value-of select="$root"/><xsl:value-of select="."/>
-
+<!-- Links outside a HTML are relative -->
+          <xsl:value-of select="$root"/>
+          <xsl:value-of select="."/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-
   <xsl:include href="../copyover.xsl"/>
-
 </xsl:stylesheet>

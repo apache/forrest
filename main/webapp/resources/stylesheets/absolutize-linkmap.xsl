@@ -40,13 +40,11 @@ Output would be:
 This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-  <!-- Recursive template to collate @href's -->
+<!-- Recursive template to collate @href's -->
   <xsl:template name="absolutize">
     <xsl:param name="node"/>
-    <!-- Only append ancestor hrefs if we're not a uri-scheme: URL -->
+<!-- Only append ancestor hrefs if we're not a uri-scheme: URL -->
     <xsl:if test="not(contains($node/@href, ':')) or contains(substring-before($node/@href, ':'), '/')">
       <xsl:if test="$node/..">
         <xsl:call-template name="absolutize">
@@ -55,18 +53,16 @@ This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
       </xsl:if>
     </xsl:if>
     <xsl:value-of select="$node/@href"/>
-
   </xsl:template>
-
   <xsl:template match="@href">
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="starts-with(., '/')">
-          <!-- already is an absolute path, strip the leading slash -->
+<!-- already is an absolute path, strip the leading slash -->
           <xsl:value-of select="substring-after(., '/')"/>
         </xsl:when>
         <xsl:otherwise>
-          <!-- the path needs to be absolutized -->
+<!-- the path needs to be absolutized -->
           <xsl:call-template name="absolutize">
             <xsl:with-param name="node" select=".."/>
           </xsl:call-template>
@@ -74,7 +70,6 @@ This is applied to site.xml to generate the 'abs-linkmap' URIs in the sitemap.
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-
   <xsl:template match="@*|node()" priority="-1">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>

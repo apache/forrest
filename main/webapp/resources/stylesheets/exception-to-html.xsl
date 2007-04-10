@@ -15,39 +15,40 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ex="http://apache.org/cocoon/exception/1.0">
-
- <xsl:template match="/">
-   <html>
-     <head>
-       <title>Exception</title>
-     </head>
-     <body>
+  <xsl:template match="/">
+    <html>
+      <head>
+        <title>Exception</title>
+      </head>
+      <body>
         <xsl:apply-templates/>
-     </body>
-   </html>
- </xsl:template>
- 
- <xsl:template match="ex:exception-report">
-   <xsl:choose>
-     <xsl:when test="contains(ex:message, '(Access is denied)')">
-         <h1>An Error Occurred</h1>
-         
-         <p>It looks like there is a problem with an unresolved hint in the your locationmap.</p>         
-         
-         <p>More information can be found in the logs.</p>
-     </xsl:when>
-     <xsl:otherwise>
-         <h1>An Error Occurred</h1>
-         
-         <p><xsl:value-of select="ex:message"/></p>
-         
-         <p>More information can be found in the logs.</p>
-     </xsl:otherwise>
-   </xsl:choose>
- </xsl:template>
-
+      </body>
+    </html>
+  </xsl:template>
+  <xsl:template match="ex:exception-report">
+    <xsl:choose>
+      <xsl:when test="contains(ex:message, '(Access is denied)')">
+        <h1>An Error Occurred</h1>
+        <p>
+          It looks like there is a problem with an unresolved hint in the your
+          locationmap.
+        </p>
+        <p>
+          More information can be found in the logs.
+        </p>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>An Error Occurred</h1>
+        <p>
+          <xsl:value-of select="ex:message"/>
+        </p>
+        <p>
+          More information can be found in the logs.
+        </p>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>

@@ -20,7 +20,7 @@ This stylesheet contains templates for converting documentv11 to HTML.  See the
 imported document-to-html.xsl for details.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- Template that generates an id -->
+<!-- Template that generates an id -->
   <xsl:include href="lm://transform.xml.replaceCharsInString"/>
   <xsl:template name="generate-id">
     <xsl:choose>

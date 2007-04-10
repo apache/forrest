@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!--
 Contains the 'dotdots' template, which, given a path, will output a set of
 directory traversals to get back to the source directory. Handles both '/' and
@@ -37,15 +36,13 @@ Cannot handle ..'s in the path, so don't expect 'dir/subdir/../index.html' to
 work.
 
 -->
-
 <xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:template name="dotdots">
     <xsl:param name="path"/>
     <xsl:variable name="dirs" select="normalize-space(translate(concat($path, 'x'), ' /\', '_  '))"/>
-    <!-- The above does the following:
+<!-- The above does the following:
        o Adds a trailing character to the path. This prevents us having to deal
          with the special case of ending with '/'
        o Translates all directory separators to ' ', and normalize spaces,
@@ -54,14 +51,13 @@ work.
     -->
     <xsl:variable name="remainder" select="substring-after($dirs, ' ')"/>
     <xsl:if test="$remainder">
-      <xsl:text>../</xsl:text>
+<xsl:text>../</xsl:text>
       <xsl:call-template name="dotdots">
         <xsl:with-param name="path" select="translate($remainder, ' ', '/')"/>
-		<!-- Translate back to /'s because that's what the template expects. -->
+<!-- Translate back to /'s because that's what the template expects. -->
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-
 <!--
   Uncomment to test.
   Usage: saxon dotdots.xsl dotdots.xsl path='/my/test/path'
@@ -74,5 +70,4 @@ work.
     </xsl:call-template>
   </xsl:template>
  -->
-
 </xsl:stylesheet>

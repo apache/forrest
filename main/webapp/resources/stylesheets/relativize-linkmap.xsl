@@ -54,24 +54,17 @@ the result would be:
 
 
 -->
-
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:param name="path"/>
   <xsl:param name="site-root"/>
-
   <xsl:include href="dotdots.xsl"/>
-
-  <!-- Path to site root, eg '../../' -->
+<!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
   <xsl:template match="@href">
-
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(., ':') and not(contains(substring-before(., ':'), '/'))">
@@ -82,29 +75,23 @@ the result would be:
           contains(., '.jpg') or
           contains(., '.gif') or
           contains(., '.tif')">
-          <!-- Image links are always relative -->
-          <xsl:value-of select="$root"/><xsl:value-of select="."/>
+<!-- Image links are always relative -->
+          <xsl:value-of select="$root"/>
+          <xsl:value-of select="."/>
         </xsl:when>
-
-
-        <!-- PDFs can handle inline images, but everything else must become an
+<!-- PDFs can handle inline images, but everything else must become an
         external link -->
         <xsl:when test="contains($path, '.pdf')">
-
-          <!-- Links to outside a PDF are all absolute -->
+<!-- Links to outside a PDF are all absolute -->
           <xsl:value-of select="concat($site-root, .)"/>
-
         </xsl:when>
         <xsl:otherwise>
-
-          <!-- Links outside a HTML are relative -->
-          <xsl:value-of select="$root"/><xsl:value-of select="."/>
-
+<!-- Links outside a HTML are relative -->
+          <xsl:value-of select="$root"/>
+          <xsl:value-of select="."/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-
   <xsl:include href="copyover.xsl"/>
-
 </xsl:stylesheet>

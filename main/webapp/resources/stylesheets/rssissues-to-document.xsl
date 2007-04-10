@@ -16,30 +16,36 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<xsl:template match="rss">
-  <document>
-    <header>
-      <title>Open issues for the next release</title>
-    </header>
-    <body>
-      <note>These are the top 25 open issues for the next release that are scheduled in our
-       <link href="http://forrest.apache.org/issues.html">issue tracking system</link>
-       (see 
-       <link href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=12310000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link> open issues).
-      The listing below is regenerated on each Forrest run.</note>
-      <xsl:apply-templates select="channel/item"/>
-    </body>
-  </document>
-</xsl:template>
-
-<xsl:template match="item">
-  <section>
-    <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
-    <p><link href="{link}"><xsl:value-of select="link"/></link></p>
-    <!--<p><xsl:value-of select="description" disable-output-escaping="yes" /></p>-->
-    <p><xsl:value-of select="description" /></p>
-  </section>
-</xsl:template>
-
+  <xsl:template match="rss">
+    <document>
+      <header>
+        <title>Open issues for the next release</title>
+      </header>
+      <body>
+        <note>
+          These are the top 25 open issues for the next release that are
+          scheduled in our
+          <link href="http://forrest.apache.org/issues.html">issue tracking
+          system</link> (see
+          <link href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=12310000&amp;resolutionIds=-1&amp;tempMax=1000&amp;reset=true">all</link>
+          open issues). The listing below is regenerated on each Forrest run.
+        </note>
+        <xsl:apply-templates select="channel/item"/>
+      </body>
+    </document>
+  </xsl:template>
+  <xsl:template match="item">
+    <section>
+      <title><xsl:value-of select="title" disable-output-escaping="yes"/></title>
+      <p>
+        <link href="{link}">
+        <xsl:value-of select="link"/>
+        </link>
+      </p>
+<!--<p><xsl:value-of select="description" disable-output-escaping="yes" /></p>-->
+      <p>
+        <xsl:value-of select="description" />
+      </p>
+    </section>
+  </xsl:template>
 </xsl:stylesheet>

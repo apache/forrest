@@ -16,25 +16,19 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- document-v20.dtd to document-v13.dtd transformation -->
-
+<!-- document-v20.dtd to document-v13.dtd transformation -->
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-
-  <xsl:template match="a">
-    <link>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="node()"/>
-    </link>
+  <xsl:template match="a"><link>
+    <xsl:apply-templates select="@*"/>
+    <xsl:apply-templates select="node()"/></link>
   </xsl:template>
-
-  <!-- the obligatory copy-everything -->
+<!-- the obligatory copy-everything -->
   <xsl:template match="node() | @*">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>

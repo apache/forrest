@@ -21,11 +21,9 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:lucene="http://apache.org/cocoon/lucene/1.0"
   version="1.0">
-
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-
   <xsl:template match="lucene:index">
     <document>
       <header>
@@ -33,25 +31,25 @@
       </header>
       <body>
         <p>
-          <xsl:text>Lucene has created an index in a directory named </xsl:text>
+<xsl:text>Lucene has created an index in a directory named </xsl:text>
           <code>
-            <xsl:value-of select="@directory"/>
+          <xsl:value-of select="@directory"/>
           </code>
-          <xsl:text> below your servlet container's context
+<xsl:text> below your servlet container's context
           root. </xsl:text>
-          <xsl:text>It used the analyzer class </xsl:text>
+<xsl:text>It used the analyzer class </xsl:text>
           <code>
-            <xsl:value-of select="@analyzer"/>
+          <xsl:value-of select="@analyzer"/>
           </code>
-          <xsl:text> for this purpose.</xsl:text>
+<xsl:text> for this purpose.</xsl:text>
         </p>
         <p>
           <xsl:value-of select="count(lucene:document)"/>
-          <xsl:text> documents were indexed. </xsl:text>
-          <xsl:text>The index was created with a merge factor
+<xsl:text> documents were indexed. </xsl:text>
+<xsl:text>The index was created with a merge factor
           of </xsl:text>
           <xsl:value-of select="@merge-factor"/>
-          <xsl:text>, just in case you're interested.</xsl:text>
+<xsl:text>, just in case you're interested.</xsl:text>
         </p>
         <section>
           <title>Index creation time breakdown</title>
@@ -60,19 +58,18 @@
       </body>
     </document>
   </xsl:template>
-
   <xsl:template match="lucene:document">
     <p>
-      <xsl:text>The document </xsl:text>
+<xsl:text>The document </xsl:text>
       <strong>
-        <xsl:value-of select="@url"/>
+      <xsl:value-of select="@url"/>
       </strong>
-      <xsl:text> was indexed in </xsl:text>
+<xsl:text> was indexed in </xsl:text>
       <strong>
-        <xsl:value-of select="@elapsed-time"/>
-        <xsl:text>ms</xsl:text>
+      <xsl:value-of select="@elapsed-time"/>
+<xsl:text>ms</xsl:text>
       </strong>
-      <xsl:text>.</xsl:text>
+<xsl:text>.</xsl:text>
     </p>
   </xsl:template>
 </xsl:stylesheet>

@@ -18,17 +18,14 @@
 <xsl:stylesheet version="1.0"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns="http://www.w3.org/1999/xhtml">
-
-   <xsl:output
+  <xsl:output
         omit-xml-declaration="no" 
         method="xml"
         indent="yes"/>
-  
-   <!-- Identity transformation template -->			
-   <xsl:template match="/ | @* | * | comment() | processing-instruction() | text()"> 
-   	<xsl:copy> 
-   		<xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/> 
-   	</xsl:copy> 
-   </xsl:template> 
-   
+<!-- Identity transformation template -->
+  <xsl:template match="/ | @* | * | comment() | processing-instruction() | text()">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | * | comment() | processing-instruction() | text()"/>
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>

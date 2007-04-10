@@ -27,12 +27,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:lucene="http://apache.org/cocoon/lucene/1.0"
   version="1.0">
-
-  <!-- The URL of the document which the indexing information stems
+<!-- The URL of the document which the indexing information stems
   from -->
   <xsl:param name="document-url"/>
-
-  <!-- Creates a lucene:document element, and assigns the url
+<!-- Creates a lucene:document element, and assigns the url
   attribute as passed in via top-level param -->
   <xsl:template match="/">
     <lucene:document url="{$document-url}">
@@ -42,8 +40,7 @@
       </contents>
     </lucene:document>
   </xsl:template>
-
-  <!-- Copies document header, title, and version, and instructs
+<!-- Copies document header, title, and version, and instructs
   Lucene to store the contents of these elements (in addition to
   indexing them) -->
   <xsl:template match="/document/header/title |
@@ -56,8 +53,7 @@
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
-
-  <!-- Copies authors/person, and instructs
+<!-- Copies authors/person, and instructs
   Lucene to store the contents of the person element and to index the
   email and name attributes -->
   <xsl:template match="/document/header/authors/person"
@@ -67,17 +63,13 @@
       <xsl:value-of select="@name"/>
     </author>
   </xsl:template>
-
-  <!-- Everything else from document/header should be ignored -->
+<!-- Everything else from document/header should be ignored -->
   <xsl:template match="/document/header/notice |
                        /document/header/type"
-                mode="store">
-  </xsl:template>
-
-  <!-- Copies an element and its attributes (text content is handled
+                mode="store"></xsl:template>
+<!-- Copies an element and its attributes (text content is handled
   by implicit default template) -->
   <xsl:template match="*">
     <xsl:apply-templates/>
   </xsl:template>
-  
 </xsl:stylesheet>

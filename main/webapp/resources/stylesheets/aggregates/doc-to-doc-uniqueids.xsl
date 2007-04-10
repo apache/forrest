@@ -15,35 +15,35 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cinclude="http://apache.org/cocoon/include/1.0"
   xmlns:str="http://www.ora.com/XSLTCookbook/namespaces/strings" 
   exclude-result-prefixes="cinclude">
-  
   <xsl:include href="../external/str.find-last.xslt"/>
-
   <xsl:key name="node-id" match="*" use="@id"/>
-
-  <!-- If we encounter a section with an @id, make that @id globally unique by
+<!-- If we encounter a section with an @id, make that @id globally unique by
   prefixing the id of the current document -->
   <xsl:template match="section/document//@id">
-    <xsl:attribute name="id"><xsl:value-of select="concat(ancestor::section/@id, '#', .)"/></xsl:attribute>
+    <xsl:attribute name="id">
+      <xsl:value-of select="concat(ancestor::section/@id, '#', .)"/>
+    </xsl:attribute>
   </xsl:template>
-  
-  <!-- Make #fragment-id references inside each page globally unique -->
+<!-- Make #fragment-id references inside each page globally unique -->
   <xsl:template match="section/document//link/@href[starts-with(., '#')]">
-    <xsl:attribute name="href"><xsl:value-of select="concat('#', ancestor::section/@id, .)"/></xsl:attribute>
+    <xsl:attribute name="href">
+      <xsl:value-of select="concat('#', ancestor::section/@id, .)"/>
+    </xsl:attribute>
   </xsl:template>
-
-  <!-- Translate relative links to '#link' -->
+<!-- Translate relative links to '#link' -->
   <xsl:template match="section/document//link/@href[not(starts-with(., 'http:') or starts-with(., 'https:'))]">
-    <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="."/></xsl:attribute>
+    <xsl:attribute name="href">
+<xsl:text>#</xsl:text>
+      <xsl:value-of select="."/>
+    </xsl:attribute>
   </xsl:template>
-
   <xsl:template match="section/document//figure|img[starts-with(@src, 'my-images')]">
-    <!-- fix my-images/** links, which break as they are not relative to the site root -->
+<!-- fix my-images/** links, which break as they are not relative to the site root -->
     <xsl:variable name="page-root">
       <xsl:call-template name="str:substring-before-last">
         <xsl:with-param name="input" select="ancestor::section/@id"/>
@@ -57,5 +57,4 @@
     </xsl:copy>
   </xsl:template>
   <xsl:include href="../copyover.xsl"/>
-
 </xsl:stylesheet>
