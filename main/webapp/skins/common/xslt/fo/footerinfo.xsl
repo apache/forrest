@@ -18,7 +18,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
-
 <!--
 Named template to generate a short message in the PDF footer, from text in
 skinconf.xml.  By default, the message is a copyright statement.  If a credit
@@ -37,12 +36,13 @@ with @role='pdf' is present, that is used instead.  Eg:
         <xsl:value-of select="$pdfcredit/name"/>
       </xsl:if>
       <xsl:if test="not($pdfcredit) and not($disable-copyright-footer = 'true')">
-        <xsl:text>Copyright &#169; </xsl:text><xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
-          select="//skinconfig/vendor"/><xsl:text> All rights reserved.</xsl:text>
+<xsl:text>Copyright &#169; </xsl:text>
+        <xsl:value-of select="//skinconfig/year"/>&#160;<xsl:value-of
+          select="//skinconfig/vendor"/>
+<xsl:text> All rights reserved.</xsl:text>
       </xsl:if>
     </xsl:variable>
     <xsl:variable name="url" select="$pdfcredit/url"/>
-
     <fo:block-container font-style="italic" absolute-position="absolute"
       left="0pt" top="0pt" right="6.25in" bottom="150pt"
       font-size="10pt">
@@ -67,5 +67,4 @@ with @role='pdf' is present, that is used instead.  Eg:
       </xsl:if>
     </fo:block-container>
   </xsl:template>
-
 </xsl:stylesheet>

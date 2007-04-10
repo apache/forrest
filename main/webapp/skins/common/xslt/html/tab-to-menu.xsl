@@ -37,94 +37,68 @@ The output of this stylesheet is HTML of the form:
 which is then merged by site-to-xhtml.xsl
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-  <!-- ================================================================ -->
-  <!-- These templates SHOULD be overridden                             -->
-  <!-- ================================================================ -->
-
-  <!-- Called before first level 1 tag -->
-  <xsl:template name="pre-separator">
-  </xsl:template>
-
-  <!-- Called after last level 1 tag -->
-  <xsl:template name="post-separator">
-  </xsl:template>
-
-  <!-- Called between level 1 tags -->
+<!-- ================================================================ -->
+<!-- These templates SHOULD be overridden                             -->
+<!-- ================================================================ -->
+<!-- Called before first level 1 tag -->
+  <xsl:template name="pre-separator"></xsl:template>
+<!-- Called after last level 1 tag -->
+  <xsl:template name="post-separator"></xsl:template>
+<!-- Called between level 1 tags -->
   <xsl:template name="separator">
-    <xsl:text> | </xsl:text>
+<xsl:text> | </xsl:text>
   </xsl:template>
-  
-  <!-- Called before first level 2 tag -->
-  <xsl:template name="level2-pre-separator">
-  </xsl:template>
-
-  <!-- Called after last level 2 tag -->
-  <xsl:template name="level2-post-separator">
-  </xsl:template>
-
-  <!-- Called between level 2 tags -->
+<!-- Called before first level 2 tag -->
+  <xsl:template name="level2-pre-separator"></xsl:template>
+<!-- Called after last level 2 tag -->
+  <xsl:template name="level2-post-separator"></xsl:template>
+<!-- Called between level 2 tags -->
   <xsl:template name="level2-separator">
-    <xsl:text> | </xsl:text>
-  </xsl:template>  
-
-  <!--
+<xsl:text> | </xsl:text>
+  </xsl:template>
+<!--
   Note: sub-stylesheets can't do apply-imports here, because it would choose
   the 'tags' template and infinitely recurse. Hence call-template used instead.
   -->
-
-  <!-- Display a selected level 1 tab node -->
+<!-- Display a selected level 1 tab node -->
   <xsl:template name="selected">
     <xsl:call-template name="base-selected"/>
   </xsl:template>
-
-  <!-- Display an unselected level 1 tab node -->
+<!-- Display an unselected level 1 tab node -->
   <xsl:template name="not-selected">
     <xsl:call-template name="base-not-selected"/>
   </xsl:template>
-
-  <!-- Display a selected second level tab node -->
+<!-- Display a selected second level tab node -->
   <xsl:template name="level2-selected">
     <xsl:call-template name="base-selected"/>
   </xsl:template>
-
-  <!-- Display an unselected second level tab node -->
+<!-- Display an unselected second level tab node -->
   <xsl:template name="level2-not-selected">
     <xsl:call-template name="base-not-selected"/>
   </xsl:template>
-
-  <!-- ================================================================ -->
-  <!-- These templates CAN be overridden                             -->
-  <!-- ================================================================ -->
-
+<!-- ================================================================ -->
+<!-- These templates CAN be overridden                             -->
+<!-- ================================================================ -->
   <xsl:template match="tabs">
     <div class="tab">
       <xsl:call-template name="base-tabs"/>
     </div>
   </xsl:template>
-
-
-  <!-- ================================================================ -->
-  <!-- These templates SHOULD NOT be overridden                         -->
-  <!-- ================================================================ -->
-
+<!-- ================================================================ -->
+<!-- These templates SHOULD NOT be overridden                         -->
+<!-- ================================================================ -->
   <xsl:param name="path"/>
-
   <xsl:include href="dotdots.xsl"/>
   <xsl:include href="tabutils.xsl"/>
-
-  <!-- NOTE: Xalan has a bug (race condition?) where sometimes $root is only half-evaluated -->
+<!-- NOTE: Xalan has a bug (race condition?) where sometimes $root is only half-evaluated -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'skin/images')"/>
-
-  <!--
+<!--
     The longest path of any level 1 tab, whose path is a subset of the current URL.  Ie,
     the path of the 'current' level 1 tab.
   -->
@@ -133,8 +107,7 @@ which is then merged by site-to-xhtml.xsl
       <xsl:with-param name="tabfile" select="/"/>
     </xsl:call-template>
   </xsl:variable>
-
-  <!--
+<!--
     The longest path of any level 2 tab, whose path is a subset of the current URL.  Ie,
     the path of the 'current' level 2 tab.
   -->
@@ -143,33 +116,33 @@ which is then merged by site-to-xhtml.xsl
       <xsl:with-param name="tabfile" select="/"/>
     </xsl:call-template>
   </xsl:variable>
-  
   <xsl:variable name="matching-id">
     <xsl:call-template name="matching-id"/>
   </xsl:variable>
-
-  <!-- Called from tabs, after it has written the outer 'div class=tabs' and
+<!-- Called from tabs, after it has written the outer 'div class=tabs' and
   any other HTML -->
   <xsl:template name="base-tabs">
     <xsl:call-template name="pre-separator"/>
     <xsl:for-each select="tab">
-      <xsl:if test="position()!=1"><xsl:call-template name="separator"/></xsl:if>
+      <xsl:if test="position()!=1">
+        <xsl:call-template name="separator"/>
+      </xsl:if>
       <xsl:apply-templates select="." mode="level1"/>
     </xsl:for-each>
     <xsl:call-template name="post-separator"/>
   </xsl:template>
-
-  <!-- Called from tabs, after it has written the outer 'div class=tabs' and
+<!-- Called from tabs, after it has written the outer 'div class=tabs' and
   any other HTML -->
   <xsl:template name="level2tabs">
     <xsl:call-template name="level2-pre-separator"/>
     <xsl:for-each select="tab[@dir=$longest-dir]/tab|tab[@href=$longest-dir]/tab|tab[tab/@id=$matching-id]/tab">
-      <xsl:if test="position()!=1"><xsl:call-template name="level2-separator"/></xsl:if>
+      <xsl:if test="position()!=1">
+        <xsl:call-template name="level2-separator"/>
+      </xsl:if>
       <xsl:apply-templates select="." mode="level2"/>
     </xsl:for-each>
     <xsl:call-template name="level2-post-separator"/>
   </xsl:template>
-
   <xsl:template match="tab" mode="level1">
     <xsl:choose>
       <xsl:when test="@id and @id = $matching-id">
@@ -186,7 +159,6 @@ which is then merged by site-to-xhtml.xsl
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
   <xsl:template match="tab" mode="level2">
     <xsl:choose>
       <xsl:when test="@id and @id = $matching-id">
@@ -200,31 +172,24 @@ which is then merged by site-to-xhtml.xsl
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <!-- Called from 'selected' -->
-  <xsl:template name="base-selected">
-    <a class="selected">
-      <xsl:attribute name="href">
-        <xsl:call-template name="calculate-tab-href">
-          <xsl:with-param name="tab" select="."/>
-          <xsl:with-param name="path" select="$path"/>
-        </xsl:call-template>
-      </xsl:attribute>
-        <xsl:value-of select="@label"/>
-    </a>
+<!-- Called from 'selected' -->
+  <xsl:template name="base-selected"><a class="selected">
+    <xsl:attribute name="href">
+      <xsl:call-template name="calculate-tab-href">
+        <xsl:with-param name="tab" select="."/>
+        <xsl:with-param name="path" select="$path"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:value-of select="@label"/></a>
   </xsl:template>
-
-  <!-- Called from 'not-selected' -->
-  <xsl:template name="base-not-selected">
-    <a class="unselected">
-      <xsl:attribute name="href">
-        <xsl:call-template name="calculate-tab-href">
-          <xsl:with-param name="tab" select="."/>
-          <xsl:with-param name="path" select="$path"/>
-        </xsl:call-template>
-      </xsl:attribute>
-        <xsl:value-of select="@label"/>
-    </a>
+<!-- Called from 'not-selected' -->
+  <xsl:template name="base-not-selected"><a class="unselected">
+    <xsl:attribute name="href">
+      <xsl:call-template name="calculate-tab-href">
+        <xsl:with-param name="tab" select="."/>
+        <xsl:with-param name="path" select="$path"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:value-of select="@label"/></a>
   </xsl:template>
-
 </xsl:stylesheet>
