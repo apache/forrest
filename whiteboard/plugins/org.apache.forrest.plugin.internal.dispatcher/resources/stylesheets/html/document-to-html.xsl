@@ -19,7 +19,6 @@
 This stylesheet contains templates for converting documentv11 to HTML.  See the
 imported document2html.xsl for details.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="../common/xslt/html/document-to-html.xsl"/>
   <xsl:include href="../helper/generateId.xsl"/>
@@ -35,7 +34,7 @@ imported document2html.xsl for details.
           <xsl:value-of select="header/subtitle"/>
         </h3>
       </xsl:if>
-      <!--
+<!--
       <xsl:apply-templates select="header/type"/>
       <xsl:apply-templates select="header/notice"/>
       <xsl:apply-templates select="header/abstract"/>
@@ -57,27 +56,28 @@ imported document2html.xsl for details.
   <xsl:template match="body">
     <xsl:apply-templates/>
   </xsl:template>
-    <xsl:template name="tocLinkGenerator">
-      <a>
-      <xsl:attribute name="name"><xsl:call-template 
-        name="generate-id"/></xsl:attribute>
-      <xsl:attribute name="title">
-        <xsl:value-of select="title"/>
-      </xsl:attribute><xsl:text> </xsl:text>
-    </a>
+  <xsl:template name="tocLinkGenerator"><a>
+    <xsl:attribute name="name">
+      <xsl:call-template 
+        name="generate-id"/>
+    </xsl:attribute>
+    <xsl:attribute name="title">
+      <xsl:value-of select="title"/>
+    </xsl:attribute>
+<xsl:text> </xsl:text></a>
   </xsl:template>
-  <!--<xsl:template match="@id">
+<!--<xsl:template match="@id">
     <xsl:apply-imports/>
   </xsl:template>-->
-  <!-- Generate a <a name="..."> tag for an @id -->
-  <!--<xsl:template match="@id">
+<!-- Generate a <a name="..."> tag for an @id -->
+<!--<xsl:template match="@id">
     <xsl:if test="normalize-space(.)!=''">
       <a name="{.}">&#160;</a>
     </xsl:if>
   </xsl:template>-->
   <xsl:template match="section">
     <xsl:call-template name="tocLinkGenerator"/>
-   <!-- <xsl:apply-templates select="@id"/>-->
+<!-- <xsl:apply-templates select="@id"/>-->
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
     <xsl:choose>
       <xsl:when test="$level=1">
@@ -100,13 +100,12 @@ imported document2html.xsl for details.
           <xsl:apply-templates select="*[not(self::title)]"/>
         </div>
       </xsl:when>
-      <!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
+<!-- If a faq, answer sections will be level 3 (1=Q/A, 2=part) -->
       <xsl:when test="$level=3 and $notoc='true'">
         <h4 class="faq">
           <xsl:value-of select="title"/>
         </h4>
-        <div align="right">
-          <a href="#{@id}-menu">^</a>
+        <div align="right"><a href="#{@id}-menu">^</a>
         </div>
         <div style="margin-left: 15px">
           <xsl:apply-templates select="*[not(self::title)]"/>
@@ -148,7 +147,7 @@ imported document2html.xsl for details.
     <div class="{local-name()}">
       <div class="label">
         <xsl:choose>
-          <!-- FIXME: i18n Transformer here -->
+<!-- FIXME: i18n Transformer here -->
           <xsl:when test="@label">
             <xsl:value-of select="@label"/>
           </xsl:when>

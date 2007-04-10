@@ -32,28 +32,23 @@ Section handling
 -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:param name="dynamic-page" select="'false'"/>
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
-  <!-- <xsl:include href="split.xsl"/> -->
+<!-- <xsl:include href="split.xsl"/> -->
   <xsl:include href="dotdots.xsl"/>
   <xsl:include href="pathutils.xsl"/>
-
-  <!-- Path to site root, eg '../../' -->
+<!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
   <xsl:variable name="skin-img-dir" select="concat(string($root), 'themes/images')"/>
-
   <xsl:template match="/">
     <xsl:apply-templates mode="toc"/>
     <xsl:apply-templates/>
   </xsl:template>
-
   <xsl:template match="document">
     <div class="content">
       <table summary="" class="title">
@@ -84,64 +79,58 @@ Section handling
       <div class="attribution">
         <xsl:apply-templates select="header/authors"/>
         <xsl:if test="header/authors and header/version">
-          <xsl:text>; </xsl:text>
+<xsl:text>; </xsl:text>
         </xsl:if>
         <xsl:apply-templates select="header/version"/>
       </div>
     </div>
   </xsl:template>
-
   <xsl:template match="body">
     <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
   </xsl:template>
-
-
-  <!-- Generate a <a name="..."> tag for an @id -->
+<!-- Generate a <a name="..."> tag for an @id -->
   <xsl:template match="@id">
-    <xsl:if test="normalize-space(.)!=''">
-      <a name="{.}"/>
+    <xsl:if test="normalize-space(.)!=''"><a name="{.}"/>
     </xsl:if>
   </xsl:template>
-
   <xsl:template match="section">
-    <!-- count the number of section in the ancestor-or-self axis to compute
+<!-- count the number of section in the ancestor-or-self axis to compute
          the title element name later on -->
-    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/>
-    <a name="{generate-id()}"/>
+    <xsl:variable name="sectiondepth" select="count(ancestor-or-self::section)"/><a name="{generate-id()}"/>
     <xsl:apply-templates select="@id"/>
-    <!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
+<!-- generate a title element, level 1 -> h3, level 2 -> h4 and so on... -->
     <xsl:element name="{concat('h',$sectiondepth + 2)}">
       <xsl:value-of select="title"/>
       <xsl:if test="$notoc='true' and $sectiondepth = 3">
-        <span style="float: right"><a href="#{@id}-menu">^</a></span>
+        <span style="float: right"><a href="#{@id}-menu">^</a>
+        </span>
       </xsl:if>
     </xsl:element>
-
-    <!-- Indent FAQ entry text 15 pixels -->
+<!-- Indent FAQ entry text 15 pixels -->
     <xsl:variable name="indent">
       <xsl:choose>
         <xsl:when test="$notoc='true' and $sectiondepth = 3">
-          <xsl:text>15</xsl:text>
+<xsl:text>15</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>0</xsl:text>
+<xsl:text>0</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
     <div style="margin-left: {$indent} ; border: 2px">
-          <xsl:apply-templates select="*[not(self::title)]"/>
+      <xsl:apply-templates select="*[not(self::title)]"/>
     </div>
   </xsl:template>
-
   <xsl:template match="note | warning | fixme">
     <xsl:apply-templates select="@id"/>
     <div class="{local-name()}">
       <div class="label">
         <xsl:choose>
-          <!-- FIXME: i18n Transformer here -->
-          <xsl:when test="@label"><xsl:value-of select="@label"/></xsl:when>
+<!-- FIXME: i18n Transformer here -->
+          <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+          </xsl:when>
           <xsl:when test="local-name() = 'note'">Note</xsl:when>
           <xsl:when test="local-name() = 'warning'">Warning</xsl:when>
           <xsl:otherwise>Fixme (<xsl:value-of select="@author"/>)</xsl:otherwise>
@@ -152,43 +141,32 @@ Section handling
       </div>
     </div>
   </xsl:template>
-
   <xsl:template match="notice">
     <div class="notice">
-    <!-- FIXME: i18n Transformer here -->
-    <xsl:text>Notice: </xsl:text>
+<!-- FIXME: i18n Transformer here -->
+<xsl:text>Notice: </xsl:text>
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-
   <xsl:template match="link">
-    <xsl:apply-templates select="@id"/>
-    <a>
-      <xsl:if test="@class='jump'">
-        <xsl:attribute name="target">_top</xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@class='fork'">
-        <xsl:attribute name="target">_blank</xsl:attribute>
-      </xsl:if>
-      <xsl:copy-of select="@*"/>
-      <xsl:apply-templates/>
-    </a>
+    <xsl:apply-templates select="@id"/><a>
+    <xsl:if test="@class='jump'">
+      <xsl:attribute name="target">_top</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@class='fork'">
+      <xsl:attribute name="target">_blank</xsl:attribute>
+    </xsl:if>
+    <xsl:copy-of select="@*"/>
+    <xsl:apply-templates/></a>
   </xsl:template>
-
   <xsl:template match="jump">
-    <xsl:apply-templates select="@id"/>
-    <a href="{@href}" target="_top">
-      <xsl:apply-templates/>
-    </a>
+    <xsl:apply-templates select="@id"/><a href="{@href}" target="_top">
+    <xsl:apply-templates/></a>
   </xsl:template>
-
   <xsl:template match="fork">
-    <xsl:apply-templates select="@id"/>
-    <a href="{@href}" target="_blank">
-      <xsl:apply-templates/>
-    </a>
+    <xsl:apply-templates select="@id"/><a href="{@href}" target="_blank">
+    <xsl:apply-templates/></a>
   </xsl:template>
-
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:apply-templates select="@id"/>
     <div class="pre">
@@ -196,7 +174,6 @@ Section handling
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-
   <xsl:template match="source">
     <xsl:apply-templates select="@id"/>
     <pre class="code">
@@ -211,20 +188,15 @@ Section handling
 -->
     </pre>
   </xsl:template>
-
-  <xsl:template match="anchor">
-    <a name="{@id}">
-      <xsl:copy-of select="@id"/>
-    </a>
+  <xsl:template match="anchor"><a name="{@id}">
+    <xsl:copy-of select="@id"/></a>
   </xsl:template>
-
   <xsl:template match="icon">
     <xsl:apply-templates select="@id"/>
     <img class="icon">
       <xsl:copy-of select="@height | @width | @src | @alt | @id"/>
     </img>
   </xsl:template>
-
   <xsl:template match="code">
     <xsl:apply-templates select="@id"/>
     <span class="codefrag">
@@ -232,10 +204,8 @@ Section handling
       <xsl:value-of select="."/>
     </span>
   </xsl:template>
-
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
-    
     <div align="center">
       <xsl:copy-of select="@id"/>
       <img class="figure">
@@ -243,7 +213,6 @@ Section handling
       </img>
     </div>
   </xsl:template>
-
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
     <table cellpadding="4" cellspacing="1" class="ForrestTable">
@@ -251,26 +220,27 @@ Section handling
       <xsl:apply-templates/>
     </table>
   </xsl:template>
-
   <xsl:template match="acronym/@title">
     <xsl:attribute name="title">
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:attribute>
   </xsl:template>
-
   <xsl:template match="header/authors">
     <xsl:if test="person">
       <div id="content-authors">
         <xsl:for-each select="person">
           <div class="author">
-            <div class="name"><xsl:value-of select="@name"/></div>
-            <div class="email"><xsl:value-of select="@email"/></div>
+            <div class="name">
+              <xsl:value-of select="@name"/>
+            </div>
+            <div class="email">
+              <xsl:value-of select="@email"/>
+            </div>
           </div>
-		    </xsl:for-each>
+        </xsl:for-each>
       </div>
     </xsl:if>
   </xsl:template>
-
   <xsl:template match="version">
     <span class="version">
       <xsl:apply-templates select="@major"/>
@@ -287,42 +257,33 @@ Section handling
       </xsl:choose>
     </span>
   </xsl:template>
-
   <xsl:template match="@major">
      v<xsl:value-of select="."/>
   </xsl:template>
-
   <xsl:template match="@minor | @fix">
-     <xsl:value-of select="concat('.',.)"/>
+    <xsl:value-of select="concat('.',.)"/>
   </xsl:template>
-
   <xsl:template match="@tag">
-     <xsl:value-of select="concat('-',.)"/>
+    <xsl:value-of select="concat('-',.)"/>
   </xsl:template>
-
   <xsl:template match="type">
     <p class="type">
-    <!-- FIXME: i18n Transformer here -->
-    <xsl:text>Type: </xsl:text>
-    <xsl:value-of select="."/>
+<!-- FIXME: i18n Transformer here -->
+<xsl:text>Type: </xsl:text>
+      <xsl:value-of select="."/>
     </p>
   </xsl:template>
-
   <xsl:template match="abstract">
     <p>
       <xsl:apply-templates/>
     </p>
   </xsl:template>
-
-  <xsl:template name="email">
-    <a>
-      <xsl:attribute name="href">
-        <xsl:value-of select="concat('mailto:',@email)"/>
-      </xsl:attribute>
-       <xsl:value-of select="@name"/>
-    </a>
+  <xsl:template name="email"><a>
+    <xsl:attribute name="href">
+      <xsl:value-of select="concat('mailto:',@email)"/>
+    </xsl:attribute>
+    <xsl:value-of select="@name"/></a>
   </xsl:template>
-
   <xsl:template name="generate-id">
     <xsl:choose>
       <xsl:when test="@id">
@@ -336,13 +297,10 @@ Section handling
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
   <xsl:template match="node()|@*" mode="toc"/>
-
-  <!-- End of "toc" mode templates -->
-
+<!-- End of "toc" mode templates -->
   <xsl:template match="node()|@*" priority="-1">
-    <!-- id processing will create its own a-element so processing has to 
+<!-- id processing will create its own a-element so processing has to 
          happen outside the copied element 
     -->
     <xsl:apply-templates select="@id"/>
@@ -352,6 +310,4 @@ Section handling
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>
-

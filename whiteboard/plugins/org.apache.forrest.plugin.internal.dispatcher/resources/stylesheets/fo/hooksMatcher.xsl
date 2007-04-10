@@ -21,13 +21,12 @@
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-  <!--This template will match the different combinations for hooks-->
+<!--This template will match the different combinations for hooks-->
   <xsl:template match="hook">
-      <xsl:element name="fo:{@name}" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-        <xsl:apply-templates/>
-      </xsl:element>
+    <xsl:element name="fo:{@name}" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
-
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates 

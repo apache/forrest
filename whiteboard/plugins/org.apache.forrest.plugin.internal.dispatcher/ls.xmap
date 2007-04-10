@@ -37,7 +37,7 @@
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
-    <!-- ls.contracts 
+<!-- ls.contracts 
       list the default contracts-->
     <map:pipeline>
       <map:match pattern="ls.contracts.source.xml">
@@ -49,8 +49,7 @@
         </map:generate>
         <map:transform src="{lm:ls.contracts.xsl}" />
         <map:serialize />
-      </map:match>      
-      
+      </map:match>
       <map:match pattern="ls.contracts.**.plugin.**.source.xml">
         <map:generate src="{forrest:forrest.plugins}/{1}.plugin.{2}/resources/themes" type="xpathdirectory">
           <map:parameter name="xpath" value="/*" />
@@ -61,7 +60,6 @@
         <map:transform src="{lm:ls.contracts.xsl}" />
         <map:serialize type="xml-document"/>
       </map:match>
-      
       <map:match pattern="ls.contracts.project.source.xml">
         <map:generate src="{lm:themer.project.dir}" type="xpathdirectory">
           <map:parameter name="xpath" value="/*" />
@@ -76,14 +74,12 @@
         <map:generate src="cocoon:/ls.contracts.source.xml" />
         <map:transform src="{lm:ls.contracts-to-document.xsl}" />
         <map:serialize />
-      </map:match>      
-      
+      </map:match>
       <map:match pattern="ls.contracts.**.plugin.**.xml">
         <map:generate src="cocoon:/ls.contracts.{1}.plugin.{2}.source.xml" />
         <map:transform src="{lm:ls.contracts-to-document.xsl}" />
         <map:serialize />
       </map:match>
-      
       <map:match pattern="ls.contracts.project.xml">
         <map:generate src="cocoon:/ls.contracts.project.source.xml" />
         <map:transform src="{lm:ls.contracts-to-document.xsl}" />

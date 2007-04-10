@@ -19,10 +19,9 @@
 This stylesheet contains templates for converting documentv11 to HTML.  See the
 imported document2html.xsl for details.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="../helper/generateId.xsl"/>
-  <!--  Templates for "toc" mode.  This will generate a complete
+<!--  Templates for "toc" mode.  This will generate a complete
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
   <xsl:template match="document">
@@ -39,7 +38,8 @@ imported document2html.xsl for details.
     <xsl:param name="level"/>
     <tocitem level="{$level}">
       <xsl:attribute name="href">#<xsl:call-template 
-        name="generate-id"/></xsl:attribute>
+        name="generate-id"/>
+      </xsl:attribute>
       <xsl:attribute name="title">
         <xsl:value-of select="title"/>
       </xsl:attribute>

@@ -15,19 +15,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!--+
     | Replace element for the value on the project descriptor 
     | xmlns:for has to be replaced for the final version
     +-->
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:for="http://apache.org/forrest" version="1.0">
-
   <xsl:import href="lm://transform.xml.copyover.helper"/>
-
   <xsl:template match="for:*">
     <xsl:variable name="ln" select="local-name()"/>
     <xsl:value-of select="//*[@name = $ln]/@value"/>
   </xsl:template>
-
 </xsl:stylesheet>

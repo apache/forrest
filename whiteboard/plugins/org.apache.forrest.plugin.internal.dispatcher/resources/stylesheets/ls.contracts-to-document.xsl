@@ -20,7 +20,7 @@
   xmlns:dir="http://apache.org/cocoon/directory/2.0" 
   xmlns:session="http://apache.org/cocoon/session/1.0" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0" >
-  <!--
+<!--
       Create row for each document.  Information about the document is
       extracted from the document itself using the document()
       function.
@@ -32,9 +32,11 @@
       <document>
         <header>
           <title>ls.contract<xsl:if 
-            test="$requestedContract='false'">s</xsl:if><xsl:if 
+            test="$requestedContract='false'">s</xsl:if>
+            <xsl:if 
             test="$requestedContract!='false'">&#160;<xsl:value-of 
-            select="$requestedContract" /></xsl:if> </title>
+            select="$requestedContract" />
+            </xsl:if></title>
         </header>
         <body>
           <xsl:choose>
@@ -57,7 +59,7 @@
   <xsl:template match="forrest:theme">
     <xsl:variable select="@name" name="name"/>
     <section id="{$name}">
-      <title> theme name: <xsl:value-of select="@name" /> </title>
+      <title> theme name: <xsl:value-of select="@name" /></title>
       <xsl:apply-templates select="./forrest:contract">
         <xsl:with-param select="$name" name="theme"/>
       </xsl:apply-templates>
@@ -79,9 +81,7 @@
     </xsl:choose>
   </xsl:template>
   <xsl:template name="innerBodyLs">
-    <title>
-      <xsl:value-of select="@name" />
-    </title>
+    <title><xsl:value-of select="@name" /></title>
     <p class="file">
       <strong>file-name:</strong>
       <br/>

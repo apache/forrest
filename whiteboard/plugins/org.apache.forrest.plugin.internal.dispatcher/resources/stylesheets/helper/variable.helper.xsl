@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
   xmlns:forrest="http://apache.org/forrest/properties/1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -23,7 +22,7 @@
   <xsl:import href="lm://transform.xml.pathutils"/>
   <xsl:param name="path" select="'test.html'"/>
   <xsl:param name="theme" select="'notheme'"/>
-  <!-- Path (..'s) to the root directory -->
+<!-- Path (..'s) to the root directory -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
@@ -34,7 +33,7 @@
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-  <!-- Source filename (eg 'foo.xml') of current page -->
+<!-- Source filename (eg 'foo.xml') of current page -->
   <xsl:variable name="filename">
     <xsl:call-template name="filename">
       <xsl:with-param name="path" select="$path"/>

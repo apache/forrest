@@ -30,12 +30,12 @@
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
-    <!--
+<!--
       businessHelper
       This is the model producing factory.
     -->
     <map:pipeline>
-      <!-- intermediate format link rewritten-->
+<!-- intermediate format link rewritten-->
       <map:match pattern="**.source.rewritten.xml">
         <map:generate src="cocoon://{1}.xml" />
         <map:transform type="idgen" />
@@ -51,7 +51,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-      <!-- HTML rendered from intermediate format -->
+<!-- HTML rendered from intermediate format -->
       <map:match pattern="**.body.xml">
         <map:generate src="cocoon:/{1}.source.rewritten.xml" />
         <map:transform src="{lm:dataModel-html-document-to-html.xsl}">
@@ -61,7 +61,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-      <!-- TOC from source.rewritten-->
+<!-- TOC from source.rewritten-->
       <map:match pattern="**.toc.xml">
         <map:generate src="cocoon:/{1}.source.rewritten.xml" />
         <map:transform src="{lm:dataModel-xml-document-to-toc.xsl}" />
@@ -99,7 +99,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-      <!-- navigation for the current request -->
+<!-- navigation for the current request -->
       <map:match pattern="**.navigation.xml">
         <map:aggregate element="navigation">
           <map:part src="cocoon:/{1}.tab.xml" element="tab" />
@@ -125,7 +125,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-      <!-- navigation for the current request PART tab: relegated to a separate
+<!-- navigation for the current request PART tab: relegated to a separate
            sitemap to allow proper i18n. -->
       <map:match pattern="**.tab.xml">
         <map:mount uri-prefix="" src="dataModel-tabs.xmap" check-reload="yes" />
@@ -136,15 +136,15 @@
         <map:match pattern="**/*.book.xml">
           <map:select type="exists">
             <map:when test="{properties:content.xdocs}{1}/book.xml">
-              <!-- If a hand-created book.xml exists, use it -->
+<!-- If a hand-created book.xml exists, use it -->
               <map:parameter name="url"
                 value="{properties:content.xdocs}{1}/book.xml" />
               <map:generate src="{properties:content.xdocs}{1}/book.xml" />
             </map:when>
             <map:otherwise>
-              <!-- If no book.xml, generate it from the linkmap. -->
+<!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/{1}/menulinks-{2}" />
-              <!-- The above generates the subset of the linkmap relevant to our directory. -->
+<!-- The above generates the subset of the linkmap relevant to our directory. -->
               <map:transform
                 src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
             </map:otherwise>
@@ -153,15 +153,15 @@
         <map:match pattern="*.book.xml">
           <map:select type="exists">
             <map:when test="{properties:content.xdocs}/book.xml">
-              <!-- If a hand-created book.xml exists, use it -->
+<!-- If a hand-created book.xml exists, use it -->
               <map:parameter name="url"
                 value="{properties:content.xdocs}/book.xml" />
               <map:generate src="{properties:content.xdocs}/book.xml" />
             </map:when>
             <map:otherwise>
-              <!-- If no book.xml, generate it from the linkmap. -->
+<!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/menulinks-{1}" />
-              <!-- The above generates the subset of the linkmap relevant to our directory. -->
+<!-- The above generates the subset of the linkmap relevant to our directory. -->
               <map:transform
                 src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
             </map:otherwise>
@@ -173,7 +173,7 @@
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}" />
               <map:transform type="i18n">
-                <!-- We can use a default locale attribute or Request Parameter
+<!-- We can use a default locale attribute or Request Parameter
                   <map:parameter name="locale" value="{properties:forrest.locale}"/>
                   <map:parameter name="locale" value="{lang}{country}{variant}"-->
                 <map:parameter name="locale" value="{locale}" />

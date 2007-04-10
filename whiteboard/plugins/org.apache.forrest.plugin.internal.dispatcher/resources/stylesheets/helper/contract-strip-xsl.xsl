@@ -15,11 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
-  
   <xsl:template match="/">
     <xsl:copy-of select="forrest:contract/forrest:template/xsl:stylesheet"/>
   </xsl:template>

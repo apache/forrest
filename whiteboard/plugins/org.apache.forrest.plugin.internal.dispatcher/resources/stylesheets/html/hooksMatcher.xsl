@@ -21,13 +21,13 @@
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-  <!--This template will match the different combinations for hooks-->
+<!--This template will match the different combinations for hooks-->
   <xsl:template match="hook">
     <xsl:if test="@type='block' or not(@type)">
       <div>
         <xsl:call-template name="attributes"/>
         <xsl:if test="@nbsp='true'">
-          <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
         </xsl:if>
         <xsl:apply-templates/>
       </div>
@@ -36,7 +36,7 @@
       <span id="{@name}">
         <xsl:call-template name="attributes"/>
         <xsl:if test="@nbsp='true'">
-          <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
         </xsl:if>
         <xsl:apply-templates/>
       </span>

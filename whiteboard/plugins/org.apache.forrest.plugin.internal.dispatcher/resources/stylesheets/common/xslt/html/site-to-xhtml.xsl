@@ -33,34 +33,27 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 </site>
 
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:param name="path"/>
-
-  <!-- Path (..'s) to the root directory -->
+<!-- Path (..'s) to the root directory -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
-  <!-- Source filename (eg 'foo.xml') of current page -->
+<!-- Source filename (eg 'foo.xml') of current page -->
   <xsl:variable name="filename">
     <xsl:call-template name="filename">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
-  <!-- Path of Lucene search results page (relative to $root) -->
+<!-- Path of Lucene search results page (relative to $root) -->
   <xsl:param name="lucene-search" select="'lucene-search.html'"/>
-
   <xsl:variable name="filename-noext">
     <xsl:call-template name="filename-noext">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
 <!--  <xsl:template match="site">
     <html>
       <head>
@@ -339,5 +332,4 @@ if (VERSION > 3) {
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>-->
-
 </xsl:stylesheet>

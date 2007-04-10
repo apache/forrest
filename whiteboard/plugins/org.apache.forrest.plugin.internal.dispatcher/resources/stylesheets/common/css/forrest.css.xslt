@@ -16,26 +16,22 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- This is not used by Forrest but makes it possible to debug the 
+<!-- This is not used by Forrest but makes it possible to debug the 
        stylesheet in standalone editors -->
   <xsl:output method = "text"  omit-xml-declaration="yes"  />
-
 <!--
   If the skin doesn't override this, at least aural styles 
   and extra-css are present 
 -->
   <xsl:template match="skinconfig">
-
-   <xsl:call-template name="aural"/>
-   <xsl:call-template name="a-external"/>
-   <xsl:apply-templates/>
-   <xsl:call-template name="add-extra-css"/>
+    <xsl:call-template name="aural"/>
+    <xsl:call-template name="a-external"/>
+    <xsl:apply-templates/>
+    <xsl:call-template name="add-extra-css"/>
   </xsl:template>
-
   <xsl:template match="colors">
-   <xsl:apply-templates/>
+    <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template name="aural">
 
 /* ==================== aural ============================ */
@@ -64,7 +60,6 @@
   :active { voice-family: betty, female; pitch-range: 80; pitch: x-high }
 }
   </xsl:template>
-  
   <xsl:template name="a-external">
 a.external  {
   padding: 0 20px 0px 0px;
@@ -74,13 +69,10 @@ a.external  {
 	background-image: url(images/external-link.gif);
 }
   </xsl:template>
-  
   <xsl:template name="add-extra-css">
-    <xsl:text>/* extra-css */</xsl:text>
+<xsl:text>/* extra-css */</xsl:text>
     <xsl:value-of select="extra-css"/>
   </xsl:template>
-  
   <xsl:template match="*"></xsl:template>
   <xsl:template match="text()"></xsl:template>
-
 </xsl:stylesheet>
