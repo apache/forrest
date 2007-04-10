@@ -30,7 +30,7 @@
       </c:include>
       <c:include select="/*/*">
         <xsl:attribute name="src">zip:<xsl:value-of select="$src"/>!/content.xml</xsl:attribute>
-      </c:include>      
+      </c:include>
     </office:document>
   </xsl:template>
 </xsl:stylesheet>
