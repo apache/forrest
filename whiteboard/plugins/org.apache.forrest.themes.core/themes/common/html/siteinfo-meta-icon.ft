@@ -18,37 +18,39 @@
 <forrest:contract
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="siteinfo-meta-icon">
-
   <description>
-    <p><strong>siteinfo-meta-icon</strong> <br/>will output the html
-      additional shortcut icon in head element. This icon is generally
-      displayed by browser at the beginning of the URL. </p>
-    <p>This icon is directly searched in the <code>xdoc</code> directory.</p>
-  </description>
+    <p>
+      <strong>siteinfo-meta-icon</strong>
+      <br/>
+      will output the html additional shortcut icon in head element. This icon
+      is generally displayed by browser at the beginning of the URL.
+    </p>
 
-  <usage><![CDATA[<forrest:contract name="siteinfo-meta-icon">
+    <p>
+      This icon is directly searched in the <code>xdoc</code> directory.
+    </p>
+  </description>
+  <usage>
+<![CDATA[<forrest:contract name="siteinfo-meta-icon">
   <forrest:property name="siteinfo-meta-icon">
     <favicon-url>favico.ico</favicon-url>
   </forrest:property>
-</forrest:contract>]]></usage>
-
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="siteinfo-meta-icon" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <xsl:param name="defaultVariables" select="'test.html'"/>
-        <xsl:param name="siteinfo-meta-icon"/>
-        <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
-
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="siteinfo-meta-icon"/>
+      <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/html/head">
             <xsl:comment>+|start favicon +</xsl:comment>
-            <xsl:if test="$siteinfo-meta-icon/favicon-url">
-              <link rel="shortcut icon">
-                <xsl:attribute name="href">
-                  <xsl:value-of select="concat($root,$siteinfo-meta-icon/favicon-url)"/>
-                </xsl:attribute>
-              </link>
+            <xsl:if test="$siteinfo-meta-icon/favicon-url"><link rel="shortcut icon">
+              <xsl:attribute name="href">
+                <xsl:value-of select="concat($root,$siteinfo-meta-icon/favicon-url)"/>
+              </xsl:attribute></link>
             </xsl:if>
             <xsl:comment>+|start favicon +</xsl:comment>
           </forrest:part>

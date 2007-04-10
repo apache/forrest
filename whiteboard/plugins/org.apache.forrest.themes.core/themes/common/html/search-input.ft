@@ -18,25 +18,31 @@
 <forrest:contract name="search-input"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    <p>search-input will output the default search form.</p>
-    <p>To enable lucene search add provider="lucene" (default is google). 
-      @domain will enable sitesearch for the specific domain with google. In 
-      other words google will search the @domain for the query string.</p>
+    <p>
+      search-input will output the default search form.
+    </p>
+
+    <p>
+      To enable lucene search add provider="lucene" (default is google). @domain
+      will enable sitesearch for the specific domain with google. In other words
+      google will search the @domain for the query string.
+    </p>
   </description>
-  <usage><![CDATA[<forrest:contract name="search-input">
+  <usage>
+<![CDATA[<forrest:contract name="search-input">
   <forrest:property name="search-lucene">lucene-search.html</forrest:property>
   <forrest:property name="search-input">
     <search name="MyProject" domain="mydomain" provider="google"/>
   </forrest:property>
-</forrest:contract>]]></usage>
-  
+</forrest:contract>]]>
+  </usage>
   <forrest:template
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="search-input" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!--FIXME: IMO each search provider should provide a form. This form should be refactored into
+<!--FIXME: IMO each search provider should provide a form. This form should be refactored into
         a meta-search from-->
       <xsl:param name="search-lucene" select="'lucene-search.html'"/>
       <xsl:param name="search-input"/>
@@ -49,9 +55,10 @@
             <div class="search-input">
               <xsl:choose>
                 <xsl:when test="$search-input/search/@provider = 'lucene'">
-                  <!-- Lucene search -->
+<!-- Lucene search -->
                   <form method="get" action="{$root}{$search-lucene}">
-                    <div id="search-field"> <input type="text" id="query" 
+                    <div id="search-field">
+                      <input type="text" id="query" 
                       name="queryString" size="25" 
                       value="Search the site with {$search-input/search/@provider}:" 
                       onFocus="getBlank (this, 'Search the site with {$search-input/search/@provider}:');"/> 
@@ -84,5 +91,5 @@
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
-	</forrest:template>
+  </forrest:template>
 </forrest:contract>

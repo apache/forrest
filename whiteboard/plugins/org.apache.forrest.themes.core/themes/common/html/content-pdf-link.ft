@@ -20,25 +20,25 @@
   <description>
     content-pdf-link will output the PDF link with image to the content.
   </description>
-	<usage><![CDATA[<forrest:contract name="content-pdf-link"/>]]></usage>
-	<forrest:template
+  <usage>
+<![CDATA[<forrest:contract name="content-pdf-link"/>]]>
+  </usage>
+  <forrest:template
   	xmlns:forrest="http://apache.org/forrest/templates/1.0"
   	name="content-pdf-link" inputFormat="xsl" >
-  	<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>
       <xsl:variable name="filename-noext" select="$defaultVariables/*/*[@name='filename-noext']/@value"/>
-       <xsl:template match="/">
+      <xsl:template match="/">
         <forrest:content>
-          <forrest:part>
-            <a href="{$filename-noext}.pdf" class="format">
-              <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" 
+          <forrest:part><a href="{$filename-noext}.pdf" class="format">
+            <img class="skin" src="{$skin-img-dir}/pdfdoc.gif" 
                 alt="PDF - icon"/>
-              <span class="caption">PDF</span>
-            </a>
+            <span class="caption">PDF</span></a>
           </forrest:part>
         </forrest:content>
       </xsl:template>
-		</xsl:stylesheet>
-	</forrest:template>
+    </xsl:stylesheet>
+  </forrest:template>
 </forrest:contract>

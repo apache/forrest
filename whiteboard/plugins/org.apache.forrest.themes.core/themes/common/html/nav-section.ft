@@ -19,25 +19,32 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
     <p>
-      <strong>nav-section</strong> will output the navigation to pages within the current site section AKA menu.
+      <strong>nav-section</strong> will output the navigation to pages within
+      the current site section AKA menu.
     </p>
     <div class="note">
       <div class="label">Minitoc inclusion</div>
       <div class="content">
-        <p><code>&lt;toc&gt;</code> argument can be used to specify the minitoc depth.<br/>
-        This argument is facultative and no minitoc will be displayed if it is omitted.
+        <p>
+          <code>&lt;toc&gt;</code> argument can be used to specify the minitoc
+          depth.
+          <br/>
+          This argument is facultative and no minitoc will be displayed if it is
+          omitted.
         </p>
       </div>
     </div>
   </description>
-  <!--FIXME: Please add describtion about the params used in the contract -->
-  <usage><![CDATA[<forrest:contract name="nav-section" dataURI="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml">
+<!--FIXME: Please add describtion about the params used in the contract -->
+  <usage>
+<![CDATA[<forrest:contract name="nav-section" dataURI="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml">
   [<forrest:property name="nav-section-toc" nugget="get.toc">
     <jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.toc.xml"/>
   </forrest:property>]
   [<forrest:property name="toc" max-depth="2"/>]
   [<forrest:property name="expanding">false</forrest:property>]
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="nav-section" inputFormat="xsl">
@@ -72,7 +79,7 @@
           </forrest:part>
           <xsl:if test="$expanding = 'true'">
             <forrest:part xpath="/html/head">
-              <script type="text/javascript" src="{$root}themes/menu.js">&#160;</script>
+<script type="text/javascript" src="{$root}themes/menu.js">&#160;</script>
             </forrest:part>
           </xsl:if>
         </forrest:content>
@@ -82,7 +89,7 @@
         <xsl:comment>+ |start Menu +</xsl:comment>
         <div id="nav-section">
           <ul>
-            <!--menu - inner-->
+<!--menu - inner-->
             <xsl:for-each select = "$menuRoot/div[@id='menu']/ul/li">
               <xsl:call-template name = "innermenuli" >
                 <xsl:with-param name="id" select="concat('1.', position())"/>
@@ -110,8 +117,7 @@
             <xsl:otherwise></xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <li class="pagegroup{normalize-space($selected)}" id="{$tagid}Title">
-          <span>
+        <li class="pagegroup{normalize-space($selected)}" id="{$tagid}Title"><span>
             <xsl:if test="$expanding = 'true'">
               <xsl:attribute name="onclick">SwitchMenu('<xsl:value-of 
                 select="normalize-space($tagid)" />')</xsl:attribute>
@@ -122,44 +128,34 @@
             <xsl:for-each select= "ul/li">
               <xsl:choose>
                 <xsl:when test="a">
-                  <li class="menuitem">
-                    <a href="{a/@href}" title="{a/@title}">
-                      <xsl:value-of select="a" />
-                    </a>
-                  </li>
+                  <li class="menuitem"><a href="{a/@href}" title="{a/@title}">
+                    <xsl:value-of select="a" /></a></li>
                 </xsl:when>
                 <xsl:when test="div/@class='current'">
-                  <li class="menupage">
-                    <div class="menupagetitle">
+                  <li class="menupage"><div class="menupagetitle">
                       <xsl:value-of select="div" />
                     </div>
                     <xsl:if test="$max-depth&gt;0">
                       <ul>
-                        <li class="menupageitemgroup">
-                          <xsl:for-each select = 
+                        <li class="menupageitemgroup"><xsl:for-each select = 
                             "$nav-section-toc//tocitems/tocitem">
                             <div class="menupageitem">
                               <xsl:choose>
                                 <xsl:when 
-                                  test="string-length(normalize-space(@title))>15">
-                                  <a href="{@href}" 
-                                    title="{normalize-space(@title)}"> 
-                                    <xsl:value-of 
+                                  test="string-length(normalize-space(@title))>15"><a href="{@href}" 
+                                    title="{normalize-space(@title)}">
+                                  <xsl:value-of 
                                     select="substring(@title,0,20)" />...</a>
                                 </xsl:when>
-                                <xsl:otherwise>
-                                  <a href="{@href}" 
+                                <xsl:otherwise><a href="{@href}" 
                                     title="{normalize-space(@title)}">
-                                    <xsl:value-of select="@title" />
-                                  </a>
+                                  <xsl:value-of select="@title" /></a>
                                 </xsl:otherwise>
                               </xsl:choose>
                             </div>
-                          </xsl:for-each>
-                        </li>
+                          </xsl:for-each></li>
                       </ul>
-                    </xsl:if>
-                  </li>
+                    </xsl:if></li>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name = "innermenuli">
@@ -169,8 +165,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
-          </ul>
-        </li>
+          </ul></li>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>

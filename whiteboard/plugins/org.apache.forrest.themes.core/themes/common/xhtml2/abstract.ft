@@ -20,18 +20,19 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:html="http://www.w3.org/2002/06/xhtml2"
   name="abstract">
-  
   <description>
     abstract will output the documtent abstract.
   </description>
-  <usage><![CDATA[<forrest:contract name="abstract"/>]]></usage>
+  <usage>
+<![CDATA[<forrest:contract name="abstract"/>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="abstract" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
       xmlns:html="http://www.w3.org/2002/06/xhtml2"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!--<xsl:param name="defaultVariables" select="'test.html'"/>-->
-      <!--<xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>-->
+<!--<xsl:param name="defaultVariables" select="'test.html'"/>-->
+<!--<xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>-->
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
@@ -40,13 +41,13 @@
         </forrest:content>
       </xsl:template>
       <xsl:template match="html:head">
-          <xsl:if test="html:meta [@property='abstract']">
-            <xsl:copy-of select="html:meta[@property='abstract']"/>
-          </xsl:if>
-          <xsl:if test="not(html:meta[@property='abstract'])">
-            <meta property="abstract"/>
-          </xsl:if>
-        </xsl:template>
+        <xsl:if test="html:meta [@property='abstract']">
+          <xsl:copy-of select="html:meta[@property='abstract']"/>
+        </xsl:if>
+        <xsl:if test="not(html:meta[@property='abstract'])">
+          <meta property="abstract"/>
+        </xsl:if>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

@@ -20,12 +20,12 @@
   <description>
     nav-main will output the main or primary navigation AKA tabs.
   </description>
-  <usage><![CDATA[<forrest:contract name="nav-main-testing" nugget="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>]]>
-    </usage>
+  <usage>
+<![CDATA[<forrest:contract name="nav-main-testing" nugget="cocoon://#{$cocoon/parameters/getRequest}.navigation.xml"/>]]>
+  </usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   format="html" name="nav-main-testing" inputFormat="xsl" >
-
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="nav-main-testing" select="/"/>
@@ -34,10 +34,12 @@
         <forrest:content>
           <forrest:part>
              value-of select="$nav-main-testing-test1": <xsl:value-of select="$nav-main-testing-test1"/>
-            <div id="tabs"> <xsl:comment>+ |start Tabs new +</xsl:comment> 
-             <xsl:copy-of 
-              select="$nav-main-testing/navigation/tab/ul[@id='nav-main']"/> 
-              <xsl:comment>+ |end Tabs +</xsl:comment> </div>
+            <div id="tabs">
+              <xsl:comment>+ |start Tabs new +</xsl:comment>
+              <xsl:copy-of 
+              select="$nav-main-testing/navigation/tab/ul[@id='nav-main']"/>
+              <xsl:comment>+ |end Tabs +</xsl:comment>
+            </div>
           </forrest:part>
           <forrest:part xpath="/html/head">
              xXx nav-main-testing-foo testing -  xpath="/html/head"
@@ -45,5 +47,5 @@
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
-	</forrest:template>
+  </forrest:template>
 </forrest:contract>

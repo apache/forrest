@@ -30,13 +30,11 @@
        gradientUnits="objectBoundingBox" spreadMethod="pad" />
     <path d="M 0 0 L 200 0" style="stroke:#000000;stroke-width:1pt;" id="hr"/>
   </defs>
-
   <g transform="scale(0.08)">
     <g transform="translate(40, 0)">
       <rect width="230" height="300" x="0" y="0"
             style="fill:url(#pageshade);fill-rule:evenodd;
             stroke:#000000;stroke-width:1.25;"/>
-
       <g transform="translate(15, 60)">
         <use xlink:href="#hr" x="0" y="0"/>
         <use xlink:href="#hr" x="0" y="60"/>
@@ -44,7 +42,6 @@
         <use xlink:href="#hr" x="0" y="180"/>
       </g>
     </g>
-
     <g transform="translate(0,70),scale(1.1,1.6)">
       <rect width="200" height="100" x="0" y="0"
          style="fill:#ff0000;fill-rule:evenodd;

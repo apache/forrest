@@ -20,14 +20,17 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-title">
   <description>
-    content-title - Template will output the title (first h1 of the content) and the sub-title (first h3 of the content). 
+    content-title - Template will output the title (first h1 of the content) and
+    the sub-title (first h3 of the content).
   </description>
-  <usage><![CDATA[<forrest:contract name="content-title" dataURI="cocoon://#{$getRequest}.title.xml"/>
-]]></usage>
+  <usage>
+<![CDATA[<forrest:contract name="content-title" dataURI="cocoon://#{$getRequest}.title.xml"/>
+]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="content-title" inputFormat="xsl">
-     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-       <xsl:param name="content-title" select="/"/>
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="content-title" select="/"/>
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
@@ -39,8 +42,8 @@
           </forrest:part>
           <forrest:part xpath="/html/head">
             <xsl:comment>+ |start content-title +</xsl:comment>
-        <xsl:copy-of select="$content-title/*"/>
-        <xsl:comment>+ |end content-title +</xsl:comment>
+            <xsl:copy-of select="$content-title/*"/>
+            <xsl:comment>+ |end content-title +</xsl:comment>
           </forrest:part>
         </forrest:content>
       </xsl:template>

@@ -19,10 +19,11 @@ limitations under the License.
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-main-outline">
-<description>
+  <description>
     content-main-outline will output the main content outline of the document.
   </description>
-  <usage><![CDATA[<forrest:contract name="content-main-outline" dataURI="cocoon://#{$getRequest}.toc.xml"/>]]>
+  <usage>
+<![CDATA[<forrest:contract name="content-main-outline" dataURI="cocoon://#{$getRequest}.toc.xml"/>]]>
   </usage>
   <forrest:template
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -32,26 +33,23 @@ limitations under the License.
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       xmlns:fox="http://xml.apache.org/fop/extensions"
       version="1.0">
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/fox/outline">
             <xsl:apply-templates select="/tocitems"/>
           </forrest:part>
-        </forrest:content>  
+        </forrest:content>
       </xsl:template>
-
       <xsl:template match="tocitem">
         <fox:outline internal-destination="{@href}">
           <fox:label>
             <xsl:number format="1.1.1.1.1.1.1" count="tocitem" level="multiple"/>
-            <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
             <xsl:value-of select="@title"/>
           </fox:label>
           <xsl:apply-templates select="tocitem"/>
         </fox:outline>
       </xsl:template>
-
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

@@ -21,25 +21,27 @@
   <description>
     branding-fontsize lets users change the size of the font via javascript.
   </description>
-  <usage><![CDATA[<forrest:contract name="branding-fontsize"/>]]></usage>
+  <usage>
+<![CDATA[<forrest:contract name="branding-fontsize"/>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" name="branding-fontsize" inputFormat="xsl">
-<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:param name="defaultVariables"/>
-  <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
-    <xsl:template match="/">
-      <forrest:content>
-        <forrest:part xpath="/html/head">
-          <script type="text/javascript" src="{$root}themes/fontsize.js">&#160;</script>
-        </forrest:part>
-        <forrest:part>
-          <script type="text/javascript">ndeSetTextSize();</script>
-          <i18n:text >Font size:</i18n:text>
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="defaultVariables"/>
+      <xsl:variable name="root" select="$defaultVariables/*/*[@name='root']/@value"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/html/head">
+<script type="text/javascript" src="{$root}themes/fontsize.js">&#160;</script>
+          </forrest:part>
+          <forrest:part>
+<script type="text/javascript">ndeSetTextSize();</script>
+            <i18n:text >Font size:</i18n:text>
           &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>
           &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
           &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
-        </forrest:part>
-      </forrest:content>
-    </xsl:template>
-</xsl:stylesheet>
-</forrest:template>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
 </forrest:contract>

@@ -17,13 +17,15 @@
 -->
 <forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="siteinfo-copyright">
-
   <description>
-    <p><strong>siteinfo-copyright</strong> <br/>The following properties are
-      used to construct a copyright statement.</p>
+    <p>
+      <strong>siteinfo-copyright</strong>
+      <br/>
+      The following properties are used to construct a copyright statement.
+    </p>
   </description>
-
-  <usage><![CDATA[<forrest:contract name="siteinfo-copyright">
+  <usage>
+<![CDATA[<forrest:contract name="siteinfo-copyright">
   <forrest:property name="siteinfo-copyright">
     <copyright>
       <year [inception="[true|false]"]>2005</year>
@@ -32,8 +34,8 @@
       [<msg>All rights reserved.</msg>]
     </copyright>
   </forrest:property>
-</forrest:contract>]]></usage>
-
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="siteinfo-copyright" inputFormat="xsl">
     <xsl:stylesheet version="1.1"
@@ -41,7 +43,6 @@
       xmlns:java="http://xml.apache.org/xslt/java"
       exclude-result-prefixes="java">
       <xsl:param name="siteinfo-copyright"/>
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
@@ -51,28 +52,25 @@
             <xsl:call-template name="current-year">
               <xsl:with-param name="copyrightyear" select="$siteinfo-copyright/copyright/year"/>
             </xsl:call-template>
-            <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
             <xsl:choose>
-              <xsl:when test="$siteinfo-copyright/copyright/copyright-link">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:value-of select="$siteinfo-copyright/copyright/copyright-link"/>
-                  </xsl:attribute>
-                  <xsl:value-of select="$siteinfo-copyright/copyright/vendor"/>
-                </a>
+              <xsl:when test="$siteinfo-copyright/copyright/copyright-link"><a>
+                <xsl:attribute name="href">
+                  <xsl:value-of select="$siteinfo-copyright/copyright/copyright-link"/>
+                </xsl:attribute>
+                <xsl:value-of select="$siteinfo-copyright/copyright/vendor"/></a>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="$siteinfo-copyright/copyright/vendor"/>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
             <xsl:value-of select="$siteinfo-copyright/copyright/msg"/>
           </forrest:part>
         </forrest:content>
       </xsl:template>
-
       <xsl:template name="current-year">
-      <!-- Displays the current year after the inception year (in the copyright i.e: 2002-2005)
+<!-- Displays the current year after the inception year (in the copyright i.e: 2002-2005)
        - the copyright year (2005 by default) can be indicated in the copyrightyear parameter,
        - the year format (yyyy by default) can be indicated in the dateformat parameter,
        - the dates separator (- by default) can be indicated in the dateseparator parameter.
@@ -95,9 +93,9 @@
           <xsl:variable name="settz" select="java:setTimeZone($formatter, $tz)" />
           <xsl:variable name="date" select="java:java.util.Date.new()"/>
           <xsl:variable name="year" select="java:format($formatter, $date)"/>
-
           <xsl:if test="$copyrightyear != $year">
-            <xsl:value-of select="$dateseparator"/><xsl:value-of select="$year"/>
+            <xsl:value-of select="$dateseparator"/>
+            <xsl:value-of select="$year"/>
           </xsl:if>
         </xsl:if>
       </xsl:template>

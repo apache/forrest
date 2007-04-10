@@ -19,20 +19,27 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="branding-theme-profiler" type="nugget">
-  
   <description>
     <p>
-      <strong>branding-theme-profiler</strong> provides a quick 
-      way to change the colors of the theme (it not a "real" color-theme switcher).
+      <strong>branding-theme-profiler</strong> provides a quick way to change
+      the colors of the theme (it not a "real" color-theme switcher).
     </p>
-    <pre class="code"><![CDATA[ A theme is a presentation layer that provides an aggregation of
+    <pre class="code">
+<![CDATA[ A theme is a presentation layer that provides an aggregation of
 a) theme structure information (*.fv)
 b) theme style information (*.css & *.png|jpg|gif|...)
-c) theme functionality (*.js & *.ft)]]> </pre>
-    <p> A "real" theme switcher would change a/b/c. </p>
-    <p> A "real" color-theme switcher should also provide a possibility to 
-      change each color with a WEB-GUI. </p>
-    <pre class="code"><![CDATA[ <!--Color group: Forrest: example colors similar to forrest.apache.org-->
+c) theme functionality (*.js & *.ft)]]>
+    </pre>
+    <p>
+      A "real" theme switcher would change a/b/c.
+    </p>
+
+    <p>
+      A "real" color-theme switcher should also provide a possibility to change
+      each color with a WEB-GUI.
+    </p>
+    <pre class="code">
+<![CDATA[ <!--Color group: Forrest: example colors similar to forrest.apache.org-->
  <color name="breadtrail" value="#CFDCED" font="#0F3660" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
  <color name="header" value="#294563"/>
  <color name="tab-selected" value="#4A6D8C" link="#0F3660" vlink="#0F3660" hlink="#000066"/>
@@ -60,15 +67,14 @@ c) theme functionality (*.js & *.ft)]]> </pre>
  <color name="footer" value="#CEDFEF"/>]]>
     </pre>
     <p>
-      These values are used for the generated CSS files.
-      They essentially "override" the default colors defined in the chosen theme.
-      To customize the colors of any theme,
-      use one or all color elements and change the values
-      of the particular color elements that you wish to change.
-      Note that by default, if you do not overide them means that
-      the default colors provided by the theme are being used.
+      These values are used for the generated CSS files. They essentially
+      "override" the default colors defined in the chosen theme. To customize
+      the colors of any theme, use one or all color elements and change the
+      values of the particular color elements that you wish to change. Note that
+      by default, if you do not overide them means that the default colors
+      provided by the theme are being used.
     </p>
-    <div class="warning">  
+    <div class="warning">
       <div class="label">fixme</div>
       <div class="content">We need to use naming convention for the naming. To overcome following comment:<br/>
           Some of the element names are obscure, so comments are added to show how
@@ -80,28 +86,44 @@ c) theme functionality (*.js & *.ft)]]> </pre>
       <div class="label">Comments</div>
       <div class="content">
         <p>
-          pelt: breadtrail: the strip at the top of the page and the second strip under the tabs<br/>
-          pelt: header: top strip containing project and group logos<br/>
-          pelt: heading|subheading: section headings within the content<br/>
-          pelt: navstrip: the strip under the tabs which contains the published date<br/>
-          pelt: menu: the left-hand navigation panel<br/>
-          pelt: toolbox: the selected menu item<br/>
-          pelt: border: line border around selected menu item<br/>
-          pelt: searchbox: the background of the searchbox<br/>
-          pelt: body: any remaining parts, e.g. the bottom of the page<br/>
-          pelt: footer: the second from bottom strip containing credit logos and published date<br/>
-          pelt: feedback: the optional bottom strip containing feedback link<br/>
+          pelt: breadtrail: the strip at the top of the page and the second
+          strip under the tabs
+          <br/>
+          pelt: header: top strip containing project and group logos
+          <br/>
+          pelt: heading|subheading: section headings within the content
+          <br/>
+          pelt: navstrip: the strip under the tabs which contains the published
+          date
+          <br/>
+          pelt: menu: the left-hand navigation panel
+          <br/>
+          pelt: toolbox: the selected menu item
+          <br/>
+          pelt: border: line border around selected menu item
+          <br/>
+          pelt: searchbox: the background of the searchbox
+          <br/>
+          pelt: body: any remaining parts, e.g. the bottom of the page
+          <br/>
+          pelt: footer: the second from bottom strip containing credit logos and
+          published date
+          <br/>
+          pelt: feedback: the optional bottom strip containing feedback link
+          <br/>
         </p>
       </div>
     </div>
   </description>
-  <usage><![CDATA[<forrest:contract name="branding-theme-profiler">
+  <usage>
+<![CDATA[<forrest:contract name="branding-theme-profiler">
   <forrest:property name="branding-theme-profiler-theme">pelt</forrest:property>
   <forrest:property name="branding-theme-profiler">
     <color name="header" value="#ff0000"/>
     <!-- more colors -->
   </forrest:property>
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
    name="branding-theme-profiler" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
@@ -202,49 +224,42 @@ c) theme functionality (*.js & *.ft)]]> </pre>
     background-repeat: no-repeat;
     background-position: bottom left;
 }
-            <xsl:apply-templates select="$branding-theme-profiler/color"/> 
+            <xsl:apply-templates select="$branding-theme-profiler/color"/>
           </forrest:part>
         </forrest:content>
       </xsl:template>
-
-      <!-- ==================== main block colors ============================ -->
+<!-- ==================== main block colors ============================ -->
       <xsl:template match="color[@name='header']"> 
 #container #header { background-color: <xsl:value-of select="@value"/>;} </xsl:template>
-      
-<xsl:template match="color[@name='tab-selected']"> 
+      <xsl:template match="color[@name='tab-selected']"> 
 #nav-main .current { background-color: <xsl:value-of select="@value"/>;} 
 #nav-main .current a:link {  color: <xsl:value-of select="@link"/>;  }
 #nav-main .current a:visited { color: <xsl:value-of select="@vlink"/>; }
 #nav-main .current a:hover { color: <xsl:value-of select="@hlink"/>; }
-</xsl:template> 
-
-<xsl:template match="color[@name='tab-unselected']"> 
+</xsl:template>
+      <xsl:template match="color[@name='tab-unselected']"> 
 #nav-main li      { background-color: <xsl:value-of select="@value"/> ;} 
 #nav-main li a:link {  color: <xsl:value-of select="@link"/>;  }
 #nav-main li a:visited { color: <xsl:value-of select="@vlink"/>; }
 #nav-main li a:hover { color: <xsl:value-of select="@hlink"/>; }
-</xsl:template> 
-
-<xsl:template match="color[@name='subtab-selected']">
+</xsl:template>
+      <xsl:template match="color[@name='subtab-selected']">
 #level2tabs       { background-color: <xsl:value-of select="@value"/> ;} 
 #level2tabs a:link {  color: <xsl:value-of select="@link"/>;  }
 #level2tabs a:visited { color: <xsl:value-of select="@vlink"/>; }
 #level2tabs a:hover { color: <xsl:value-of select="@hlink"/>; }
-</xsl:template> 
-
+</xsl:template>
 <!--xsl:template match="color[@name='subtab-unselected']">
 .level2tabstrip { background-color: <xsl:value-of select="@value"/>;}
 .datenote { background-color: <xsl:value-of select="@value"/>;} 
 .level2tabstrip.unselected a:link {  color: <xsl:value-of select="@link"/>;  }
 .level2tabstrip.unselected a:visited { color: <xsl:value-of select="@vlink"/>; }
 .level2tabstrip.unselected a:hover { color: <xsl:value-of select="@hlink"/>; }
-</xsl:template--> 
-
-<xsl:template match="color[@name='heading']">
+</xsl:template-->
+      <xsl:template match="color[@name='heading']">
 .heading { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='subheading']">
+</xsl:template>
+      <xsl:template match="color[@name='subheading']">
 .boxed { background-color: <xsl:value-of select="@value"/>;} 
 .underlined_5   {border-bottom: solid 5px <xsl:value-of select="@value"/>;}
 .underlined_10   {border-bottom: solid 10px <xsl:value-of select="@value"/>;}
@@ -252,8 +267,8 @@ table caption {
 background-color: <xsl:value-of select="@value"/>; 
 color: <xsl:value-of select="@font"/>;
 }
-</xsl:template> 
-<xsl:template match="color[@name='feedback']">    
+</xsl:template>
+      <xsl:template match="color[@name='feedback']">    
 #feedback {
 color: <xsl:value-of select="@font"/>;
 background: <xsl:value-of select="@value"/>;
@@ -263,8 +278,7 @@ text-align: <xsl:value-of select="@align"/>;
 color: <xsl:value-of select="@font"/>;
 }   
 </xsl:template>
-
-<xsl:template match="color[@name='breadtrail']">
+      <xsl:template match="color[@name='breadtrail']">
 .breadtrail {
 background: <xsl:value-of select="@value"/>; 
 color: <xsl:value-of select="@font"/>;
@@ -274,30 +288,28 @@ color: <xsl:value-of select="@font"/>;
 .breadtrail a:hover { color: <xsl:value-of select="@hlink"/>; }
 </xsl:template>
 <!--Fix for other (old) profiles-->
-<xsl:template match="color[@name='navstrip']">
+      <xsl:template match="color[@name='navstrip']">
 #publishedStrip { 
 color: <xsl:value-of select="@font"/>;
 background: <xsl:value-of select="@value"/>; 
 }
-</xsl:template> 
+</xsl:template>
 <!--has to go after the nav-strip (no 'navstrip')-->
-<xsl:template match="color[@name='published']">
+      <xsl:template match="color[@name='published']">
 #publishedStrip { 
 color: <xsl:value-of select="@font"/>;
 background: <xsl:value-of select="@value"/>; 
 }
-</xsl:template> 
-<xsl:template match="color[@name='toolbox']">
+</xsl:template>
+      <xsl:template match="color[@name='toolbox']">
 #nav-section .menupagetitle  { background-color: <xsl:value-of select="@value"/>}
-</xsl:template> 
-
-<xsl:template match="color[@name='border']">
+</xsl:template>
+      <xsl:template match="color[@name='border']">
 #leftbar           { border-color: <xsl:value-of select="@value"/>;}
 #nav-section .menupagetitle  { border-color: <xsl:value-of select="@value"/>;}
 #nav-section .menupageitemgroup  { border-color: <xsl:value-of select="@value"/>;}
-</xsl:template> 
-
-<xsl:template match="color[@name='menu']">
+</xsl:template>
+      <xsl:template match="color[@name='menu']">
 #leftbar      { background-color: <xsl:value-of select="@value"/>;} 
 #leftbar  {  color: <xsl:value-of select="@font"/>;} 
 #leftbar a:link {  color: <xsl:value-of select="@link"/>;} 
@@ -305,8 +317,8 @@ background: <xsl:value-of select="@value"/>;
 #leftbar a:hover {  
 background-color: <xsl:value-of select="@value"/>;
 color: <xsl:value-of select="@hlink"/>;} 
-</xsl:template> 
-<xsl:template match="color[@name='dialog']"> 
+</xsl:template>
+      <xsl:template match="color[@name='dialog']"> 
 #nav-section .menupagetitle  { color: <xsl:value-of select="@font"/>;}    
 #nav-section .menupageitemgroup     { 
 background-color: <xsl:value-of select="@value"/>;
@@ -320,21 +332,20 @@ color: <xsl:value-of select="@font"/>;
 background-color: <xsl:value-of select="@value"/>;
 color: <xsl:value-of select="@hlink"/>;
 }
-</xsl:template> 
-<xsl:template match="color[@name='menuheading']">
+</xsl:template>
+      <xsl:template match="color[@name='menuheading']">
 #leftbar h1 {
 color: <xsl:value-of select="@font"/>;
 background-color: <xsl:value-of select="@value"/>;
 }   
-</xsl:template> 
-<xsl:template match="color[@name='searchbox']"> 
+</xsl:template>
+      <xsl:template match="color[@name='searchbox']"> 
 #header .searchbox { 
 background-color: <xsl:value-of select="@value"/> ;
 color: <xsl:value-of select="@font"/>; 
 } 
 </xsl:template>
-
-<xsl:template match="color[@name='body']">
+      <xsl:template match="color[@name='body']">
 body{ 
 background-color: <xsl:value-of select="@value"/>;
 color: <xsl:value-of select="@font"/>;
@@ -344,40 +355,31 @@ a:visited { color:<xsl:value-of select="@vlink"/>}
 a:hover { color:<xsl:value-of select="@hlink"/>} 
 
 </xsl:template>
-
-<xsl:template match="color[@name='footer']"> 
+      <xsl:template match="color[@name='footer']"> 
 #footer       { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-
+</xsl:template>
 <!-- ==================== other colors ============================ -->
-<xsl:template match="color[@name='highlight']"> 
+      <xsl:template match="color[@name='highlight']"> 
 .highlight        { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='fixme']"> 
+</xsl:template>
+      <xsl:template match="color[@name='fixme']"> 
 .fixme        { border-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='note']"> 
+</xsl:template>
+      <xsl:template match="color[@name='note']"> 
 .note         { border-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='warning']"> 
+</xsl:template>
+      <xsl:template match="color[@name='warning']"> 
 .warning         { border-color: <xsl:value-of select="@value"/>;} 
 </xsl:template>
-
-<xsl:template match="color[@name='code']"> 
+      <xsl:template match="color[@name='code']"> 
 .code         { border-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='table']"> 
+</xsl:template>
+      <xsl:template match="color[@name='table']"> 
 .ForrestTable      { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
-
-<xsl:template match="color[@name='table-cell']"> 
+</xsl:template>
+      <xsl:template match="color[@name='table-cell']"> 
 .ForrestTable td   { background-color: <xsl:value-of select="@value"/>;} 
-</xsl:template> 
+</xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

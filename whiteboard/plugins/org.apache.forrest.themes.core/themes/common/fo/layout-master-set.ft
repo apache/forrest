@@ -20,10 +20,12 @@ limitations under the License.
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="layout-master-set">
   <description>
-    <p>layout master set generate the ...</p>
+    <p>
+      layout master set generate the ...
+    </p>
   </description>
   <usage>
-    <![CDATA[<forrest:contract name="layout-master-set">
+<![CDATA[<forrest:contract name="layout-master-set">
       <forrest:property name="config">
         <!-- Settings specific to PDF output. -->
         <!-- 
@@ -60,42 +62,34 @@ limitations under the License.
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
       <xsl:param name="config"/>
-      
-      <!-- The page size to be used -->
+<!-- The page size to be used -->
       <xsl:variable name="pagesize"
         select="string($config/page/@size)"/>
-      
-      <!-- The page orientation ("portrait" or "landscape") -->
+<!-- The page orientation ("portrait" or "landscape") -->
       <xsl:variable name="pageorientation"
         select="string($config/page/@orientation)"/>
-      
-      <!-- Double-sided printing toggle -->
+<!-- Double-sided printing toggle -->
       <xsl:variable name="doublesided"
         select="string($config/margins/@double-sided)"/>
-      
-      <!-- The top page margin -->
+<!-- The top page margin -->
       <xsl:variable name="topmargin"
         select="string($config/margins/top)"/>
-      
-      <!-- The bottom page margin -->
+<!-- The bottom page margin -->
       <xsl:variable name="bottommargin"
         select="string($config/margins/bottom)"/>
-      
-      <!-- The inner page margin (always the left margin if
+<!-- The inner page margin (always the left margin if
       double-sided printing is off, alternating between left and right if
       it's on) -->
       <xsl:variable name="innermargin"
         select="string($config/margins/inner)"/>
-      
-      <!-- The outer page margin (always the right margin if
+<!-- The outer page margin (always the right margin if
       double-sided printing is off, alternating between right and left if
       it's on)-->
       <xsl:variable name="outermargin"
         select="string($config/margins/outer)"/>
-      
-      <!-- Determine page height for various page sizes (US Letter portrait
+<!-- Determine page height for various page sizes (US Letter portrait
       is the default) -->
-      <!-- FIXME: JJP:would this be better of a file? -->
+<!-- FIXME: JJP:would this be better of a file? -->
       <xsl:variable name="pageheight">
         <xsl:choose>
           <xsl:when test="$pageorientation = 'landscape'">
@@ -160,8 +154,7 @@ limitations under the License.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      
-      <!-- Determine page width for various page sizes (US Letter portrait
+<!-- Determine page width for various page sizes (US Letter portrait
       is the default) -->
       <xsl:variable name="pagewidth">
         <xsl:choose>
@@ -227,7 +220,6 @@ limitations under the License.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/layout-master-set">
@@ -244,7 +236,6 @@ limitations under the License.
               <fo:region-after region-name="first-footer"
                 extent=".5in" display-align="before"/>
             </fo:simple-page-master>
-                
             <fo:simple-page-master
               master-name="even-page"
               page-height="{$pageheight}"
@@ -277,7 +268,6 @@ limitations under the License.
               <fo:region-after region-name="even-footer"
                 extent=".5in" display-align="before"/>
             </fo:simple-page-master>
-            
             <fo:simple-page-master master-name="odd-page"
               page-height="{$pageheight}"
               page-width="{$pagewidth}"
@@ -293,26 +283,22 @@ limitations under the License.
               <fo:region-after region-name="odd-footer"
                 extent=".5in" display-align="before"/>
             </fo:simple-page-master>
-                
-                <fo:page-sequence-master master-name="book">
-                  <fo:repeatable-page-master-alternatives>
-                    <fo:conditional-page-master-reference
+            <fo:page-sequence-master master-name="book">
+              <fo:repeatable-page-master-alternatives>
+                <fo:conditional-page-master-reference
                       page-position="first"
                       master-reference="first-page"/>
-                    <fo:conditional-page-master-reference
+                <fo:conditional-page-master-reference
                       odd-or-even="odd"
                       master-reference="odd-page"/>
-                    <fo:conditional-page-master-reference
+                <fo:conditional-page-master-reference
                       odd-or-even="even"
                       master-reference="even-page"/>
-                  </fo:repeatable-page-master-alternatives>
-                </fo:page-sequence-master>
-              
+              </fo:repeatable-page-master-alternatives>
+            </fo:page-sequence-master>
           </forrest:part>
         </forrest:content>
-        
       </xsl:template>
-      
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

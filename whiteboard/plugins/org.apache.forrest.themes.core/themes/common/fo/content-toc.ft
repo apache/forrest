@@ -20,12 +20,17 @@ limitations under the License.
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-toc">
   <description>
-    <p>content-toc will output the table of content.</p>
-    <p>@toc-max-depth - Specifies how many "section" levels need to be included in the
-        generated Table of Contents (TOC).</p>
+    <p>
+      content-toc will output the table of content.
+    </p>
+
+    <p>
+      @toc-max-depth - Specifies how many "section" levels need to be included
+      in the generated Table of Contents (TOC).
+    </p>
   </description>
   <usage>
-    <![CDATA[<forrest:contract name="content-toc" dataURI="cocoon://#{$getRequest}.toc.xml">
+<![CDATA[<forrest:contract name="content-toc" dataURI="cocoon://#{$getRequest}.toc.xml">
       <forrest:property name="max-depth">2</forrest:property>
       <forrest:property name="page-break-after">[true|false]</forrest:property>
     </xsl:forrest:contract>]]>
@@ -39,7 +44,6 @@ limitations under the License.
       version="1.0">
       <xsl:param name="max-depth" select="2"/>
       <xsl:param name="page-break-after" select="'true'"/>
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
@@ -47,9 +51,9 @@ limitations under the License.
               font-weight="bold" space-after="5pt"
               space-before="5pt" text-align="justify"
               width="7.5in">
-              <!-- xsl:call-template name="insertPageBreaks"/ -->
-              <!-- FIXME - insert i18n stuff here -->
-              <xsl:text>Table of contents</xsl:text>
+<!-- xsl:call-template name="insertPageBreaks"/ -->
+<!-- FIXME - insert i18n stuff here -->
+<xsl:text>Table of contents</xsl:text>
             </fo:block>
             <fo:block font-family="sans" font-size="12pt"
               space-after="5pt" space-before="0pt"
@@ -62,9 +66,8 @@ limitations under the License.
           </forrest:part>
         </forrest:content>
       </xsl:template>
-
       <xsl:template match="tocitem">
-        <!-- FIXME: see bug FOR-640 -->
+<!-- FIXME: see bug FOR-640 -->
         <xsl:param name="depth" select="'1'"/>
         <fo:block space-before="5pt" text-align-last="justify"
           start-indent=".5em" text-indent=".5em">
@@ -76,7 +79,7 @@ limitations under the License.
                 <xsl:number count="tocitem"
                   format="1.1.1.1.1.1.1" level="multiple"/>
               </fo:inline>
-              <xsl:text>
+<xsl:text>
               </xsl:text>
               <xsl:value-of select="@title"/>
               <fo:leader leader-pattern="dots"/>
@@ -91,7 +94,6 @@ limitations under the License.
           </xsl:if>
         </fo:block>
       </xsl:template>
-
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

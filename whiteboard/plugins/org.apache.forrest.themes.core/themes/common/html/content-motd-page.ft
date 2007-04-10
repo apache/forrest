@@ -19,28 +19,48 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-motd-page">
-
   <description>
-    <p>Message of the day (MOTD). <br/> If the optional &lt;motd&gt; element is 
-      used, then messages will be appended depending on the URI string pattern.
-      </p>
-    <p> motd-option : <br/>Each option will match a pattern and apply its text. 
-      The "pattern" attribute specifies the pattern to be matched. This can be 
-      a specific page, or a general pattern to match a set of pages, e.g. 
-      everything in the "samples" directory. </p>
-    <p>motd-title : <br/>This text will be added in brackets after the 
-      &lt;html>&lt;title> and this can be empty. </p>
-    <p>motd-page : <br/>This text will be added in a panel on the face of the 
-      page, with the "motd-page-url" being the hyperlink "More". </p>
-    <p>Values for the "location" attribute are: </p>
+    <p>
+      Message of the day (MOTD).
+      <br/>
+      If the optional &lt;motd&gt; element is used, then messages will be
+      appended depending on the URI string pattern.
+    </p>
+
+    <p>
+      motd-option :
+      <br/>
+      Each option will match a pattern and apply its text. The "pattern"
+      attribute specifies the pattern to be matched. This can be a specific
+      page, or a general pattern to match a set of pages, e.g. everything in the
+      "samples" directory.
+    </p>
+
+    <p>
+      motd-title :
+      <br/>
+      This text will be added in brackets after the &lt;html>&lt;title> and this
+      can be empty.
+    </p>
+
+    <p>
+      motd-page :
+      <br/>
+      This text will be added in a panel on the face of the page, with the
+      "motd-page-url" being the hyperlink "More".
+    </p>
+
+    <p>
+      Values for the "location" attribute are:
+    </p>
     <ul>
       <li>page : on the face of the page, e.g. in the spare space of </li>
       <li>the toc alt : at the bottom of the left-hand navigation panel</li>
       <li>both : both </li>
     </ul>
   </description>
-
-  <usage><![CDATA[<forrest:contract name="content-motd-page">
+  <usage>
+<![CDATA[<forrest:contract name="content-motd-page">
   <forrest:property name="content-motd-page">
     <motd>
       <motd-option pattern="samples/sample.html">
@@ -59,15 +79,14 @@
       </motd-option>
     </motd>
   </forrest:property>
-</forrest:contract>]]></usage>
-
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="content-motd-page" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <xsl:param name="content-motd-page"/>
       <xsl:variable name="path" select="$defaultVariables/*/*[@name='path']/@value"/>
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
@@ -78,14 +97,12 @@
                   <div class="motd-area">
                     <xsl:value-of select="motd-page"/>
                     <xsl:if test="motd-page-url">
-                      <xsl:text> (</xsl:text>
-                      <a>
-                        <xsl:attribute name="href">
-                          <xsl:value-of select="motd-page-url"/>
-                        </xsl:attribute>
-                          <i18n:text >More</i18n:text>
-                      </a>
-                      <xsl:text>)</xsl:text>
+<xsl:text> (</xsl:text><a>
+                      <xsl:attribute name="href">
+                        <xsl:value-of select="motd-page-url"/>
+                      </xsl:attribute>
+                      <i18n:text >More</i18n:text></a>
+<xsl:text>)</xsl:text>
                     </xsl:if>
                   </div>
                 </xsl:if>

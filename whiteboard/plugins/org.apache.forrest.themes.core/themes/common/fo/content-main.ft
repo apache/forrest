@@ -19,10 +19,11 @@ limitations under the License.
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-main">
-<description>
+  <description>
     content-main will output the main content of the document.
   </description>
-  <usage><![CDATA[<forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.source.rewritten.xml">
+  <usage>
+<![CDATA[<forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.source.rewritten.xml">
        <forrest:property name="config">
         <!-- Settings specific to PDF output. -->
         <!-- 
@@ -64,25 +65,20 @@ limitations under the License.
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
       <xsl:param name="config"/>
-      <!-- left, justify, right -->
+<!-- left, justify, right -->
       <xsl:variable name="text-align"
         select="string($config/page/@text-align)"/>
-      
-      <!-- print URL of external links -->
+<!-- print URL of external links -->
       <xsl:variable name="show-external-urls"
         select="$config/show-external-urls"/>
-      
       <xsl:param name="numbersections" select="'true'"/>
-
-      <!-- page breaks after TOC and each page if an aggregate document -->
+<!-- page breaks after TOC and each page if an aggregate document -->
       <xsl:variable name="page-break-top-sections"
         select="'true'"/>
-
-      <!-- Section depth at which we stop numbering and just indent -->
+<!-- Section depth at which we stop numbering and just indent -->
       <xsl:param name="numbering-max-depth" select="'3'"/>
       <xsl:param name="imagesdir" select="."/>
       <xsl:param name="xmlbasedir"/>
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/body">
@@ -91,62 +87,50 @@ limitations under the License.
             </fo:block>
           </forrest:part>
         </forrest:content>
-        
       </xsl:template>
-
       <xsl:template match="anchor">
         <fo:block id="{@id}"/>
         <xsl:apply-templates/>
       </xsl:template>
-      
       <xsl:template match="section">
-        
         <xsl:param name="level">0</xsl:param>
-        
         <xsl:variable name="size">
-          <!-- 14pt for level 1 12pt for level 2 -->
+<!-- 14pt for level 1 12pt for level 2 -->
           <xsl:value-of select="14-number($level)"/>
         </xsl:variable>
-        
         <xsl:variable name="background-color"
           select="$config/page/@background-color"/>
         <xsl:variable name="heading-color"
           select="$config/headings/@color"/>
         <xsl:variable name="heading-type"
           select="$config/headings/@type"/>
- 
         <fo:block font-family="serif" font-size="{$size}pt"
           font-weight="bold" space-before="12pt"
           space-after="4pt" id="#{@id}">
-          
           <xsl:call-template name="insertPageBreaks"/>
-          
           <xsl:if test="$heading-type = 'boxed'">
             <xsl:attribute name="background-color">
               <xsl:value-of select="$heading-color"/>
             </xsl:attribute>
           </xsl:if>
-
           <xsl:if
             test="$numbersections = 'true' and number($level) &lt; $numbering-max-depth+1">
             <xsl:number format="1.1.1.1.1.1.1" count="section"
               level="multiple"/>
-            <xsl:text>. </xsl:text>
+<xsl:text>. </xsl:text>
           </xsl:if>
-
-          <!-- For sections 4  or more nestings deep, indent instead of number -->
+<!-- For sections 4  or more nestings deep, indent instead of number -->
           <xsl:if
             test="number($level) &gt; $numbering-max-depth+1">
             <xsl:attribute name="start-indent">
               <xsl:value-of select="4+number($level)"/>
-              <xsl:text>pt</xsl:text>
+<xsl:text>pt</xsl:text>
             </xsl:attribute>
           </xsl:if>
-          
           <xsl:value-of select="title"/>
         </fo:block>
         <xsl:if test="$heading-type = 'underlined'">
-          <!-- The non-breaking space in this block is required, otherwise
+<!-- The non-breaking space in this block is required, otherwise
           the block won't be rendered at all. -->
           <fo:block font-family="serif"
             font-size="{10 div (number($level) +1 )}pt"
@@ -160,10 +144,8 @@ limitations under the License.
           </xsl:apply-templates>
         </fo:block>
       </xsl:template>
-
-      <!-- Already taken into account with sections -->
+<!-- Already taken into account with sections -->
       <xsl:template match="title"/>
-
       <xsl:template match="p">
         <xsl:choose>
           <xsl:when
@@ -182,7 +164,6 @@ limitations under the License.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:template>
-      
       <xsl:template match="source">
         <xsl:variable name="color"
           select="$config/colors/color[@name='code']/@value"/>
@@ -196,7 +177,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:block>
       </xsl:template>
-      
       <xsl:template match="ol|ul">
         <fo:list-block
           provisional-distance-between-starts="18pt"
@@ -205,7 +185,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:list-block>
       </xsl:template>
-      
       <xsl:template match="ol/li">
         <fo:list-item>
           <xsl:if test="not(following-sibling::li[1])">
@@ -224,8 +203,7 @@ limitations under the License.
           </fo:list-item-body>
         </fo:list-item>
       </xsl:template>
-      
-      <!-- Emulate browser handling of these invalid combinations that our DTD
+<!-- Emulate browser handling of these invalid combinations that our DTD
       unfortunately allows -->
       <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol">
         <fo:list-item>
@@ -239,7 +217,6 @@ limitations under the License.
           </fo:list-item-body>
         </fo:list-item>
       </xsl:template>
-      
       <xsl:template match="ul/li">
         <fo:list-item>
           <xsl:if test="not(following-sibling::li[1])">
@@ -257,7 +234,6 @@ limitations under the License.
           </fo:list-item-body>
         </fo:list-item>
       </xsl:template>
-      
       <xsl:template match="dl">
         <fo:list-block
           provisional-distance-between-starts="18pt"
@@ -266,7 +242,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:list-block>
       </xsl:template>
-      
       <xsl:template match="dt">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
@@ -279,7 +254,6 @@ limitations under the License.
           </fo:list-item-body>
         </fo:list-item>
       </xsl:template>
-      
       <xsl:template match="dd">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
@@ -292,25 +266,21 @@ limitations under the License.
           </fo:list-item-body>
         </fo:list-item>
       </xsl:template>
-      
       <xsl:template match="strong">
         <fo:inline font-weight="bold">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
-      
       <xsl:template match="em">
         <fo:inline font-style="italic">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
-      
       <xsl:template match="code">
         <fo:inline font-family="monospace">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
-      
       <xsl:template match="warning">
         <xsl:variable name="color"
           select="$config/colors/color[@name='warning']/@value"/>
@@ -341,7 +311,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:block>
       </xsl:template>
-      
       <xsl:template match="note">
         <xsl:variable name="color"
           select="$config/colors/color[@name='note']/@value"/>
@@ -357,7 +326,7 @@ limitations under the License.
             <xsl:when test="@label">
               <xsl:value-of select="@label"/>
             </xsl:when>
-            <!-- insert i18n stuff here -->
+<!-- insert i18n stuff here -->
             <xsl:otherwise>Note: </xsl:otherwise>
           </xsl:choose>
           <xsl:value-of select="title"/>
@@ -372,7 +341,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:block>
       </xsl:template>
-      
       <xsl:template match="fixme">
         <xsl:variable name="color"
           select="$config/colors/color[@name='fixme']/@value"/>
@@ -384,9 +352,10 @@ limitations under the License.
           border-color="{$color}"
           background-color="{$color}">
           <xsl:call-template name="insertPageBreaks"/>
-          <!-- insert i18n stuff here --> FIXME (
+<!-- insert i18n stuff here --> FIXME (
           <xsl:value-of select="@author"/>):
-          <xsl:value-of select="title"/> </fo:block>
+          <xsl:value-of select="title"/>
+        </fo:block>
         <fo:block margin-left="0.25in" margin-right="0.25in"
           font-family="serif" font-size="8pt"
           space-after="10pt" border-after-style="solid"
@@ -397,7 +366,6 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:block>
       </xsl:template>
-      
       <xsl:template match="link|fork|jump">
         <xsl:variable name="color"
           select="$config/colors/color[@name = 'body']/@link"/>
@@ -422,7 +390,6 @@ limitations under the License.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:template>
-      
       <xsl:template match="figure|img">
         <fo:block text-align="center">
           <xsl:call-template name="insertPageBreaks"/>
@@ -431,22 +398,21 @@ limitations under the License.
               <xsl:value-of select="@id"/>
             </xsl:attribute>
           </xsl:if>
-          
-          <!-- Make relative paths absolute -->
+<!-- Make relative paths absolute -->
           <xsl:variable name="imgpath">
             <xsl:choose>
-              <!-- resources image dir -->
+<!-- resources image dir -->
               <xsl:when
                 test="starts-with(string(@src),'images/')">
                 <xsl:value-of
                   select="concat($imagesdir,substring-after(@src,'images'))"/>
               </xsl:when>
-              <!-- already absolute -->
+<!-- already absolute -->
               <xsl:when
                 test="contains(string(@src),':') or starts-with(string(@src),'/')">
                 <xsl:value-of select="@src"/>
               </xsl:when>
-              <!-- relative to document -->
+<!-- relative to document -->
               <xsl:otherwise>
                 <xsl:value-of
                   select="concat($xmlbasedir,@src)"/>
@@ -465,7 +431,7 @@ limitations under the License.
               </xsl:attribute>
             </xsl:if>
           </fo:external-graphic>
-          <!-- alt text -->
+<!-- alt text -->
           <xsl:if test="$config/show-image-alt-text='true'">
             <xsl:if test="normalize-space(@alt)!=''">
               <fo:block>
@@ -475,13 +441,11 @@ limitations under the License.
           </xsl:if>
         </fo:block>
       </xsl:template>
-      
       <xsl:template match="table">
-        <!-- FIXME: Apache FOP must have column widths specified at present,
+<!-- FIXME: Apache FOP must have column widths specified at present,
         this section can be removed when this limitation is removed from Fop.
         Unfortunately, this means that each column is a fixed width,
         but at least the table displays! -->
-        
         <xsl:variable name="max-number-columns-td">
           <xsl:for-each select="tr">
             <xsl:sort select="count(td|th)" data-type="number"
@@ -491,7 +455,6 @@ limitations under the License.
             </xsl:if>
           </xsl:for-each>
         </xsl:variable>
-        
         <xsl:variable name="max-number-columns-colspan">
           <xsl:for-each select="tr">
             <xsl:sort select="count(td|th)" data-type="number"
@@ -501,7 +464,6 @@ limitations under the License.
             </xsl:if>
           </xsl:for-each>
         </xsl:variable>
-        
         <xsl:variable name="max-number-columns">
           <xsl:choose>
             <xsl:when test="$max-number-columns-colspan&gt;$max-number-columns-td">
@@ -512,55 +474,47 @@ limitations under the License.
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        
         <xsl:variable name="column-width">
           <xsl:value-of
             select="6.25 div number($max-number-columns)"/>
           in </xsl:variable>
-        
         <fo:table>
-          
           <fo:table-column>
             <xsl:attribute name="column-width">
               <xsl:value-of select="$column-width"/>
             </xsl:attribute>
-            
             <xsl:attribute name="number-columns-repeated">
               <xsl:value-of
                 select="number($max-number-columns)"/>
             </xsl:attribute>
           </fo:table-column>
-          
-          <!-- End of hack for Fop support (if removing this hack, remember
+<!-- End of hack for Fop support (if removing this hack, remember
           you need the <fo:table> element) -->
-          
           <fo:table-body font-size="10pt"
             font-family="sans-serif">
             <xsl:apply-templates select="tr"/>
           </fo:table-body>
         </fo:table>
-        
-        <!-- FIXME: Apache Fop does not support the caption element yet.
+<!-- FIXME: Apache Fop does not support the caption element yet.
         
         
         This hack will display the table caption accordingly. -->
         <xsl:if test="caption">
           <fo:block text-align="center" font-weight="bold">
-            <!-- insert i18n stuff here --> Table
+<!-- insert i18n stuff here --> Table
             <xsl:text>
             </xsl:text>
             <xsl:number count="table" level="multiple"/>
-            <xsl:text>: </xsl:text>
-            <xsl:value-of select="caption"/> </fo:block>
+<xsl:text>: </xsl:text>
+            <xsl:value-of select="caption"/>
+          </fo:block>
         </xsl:if>
       </xsl:template>
-      
       <xsl:template match="tr">
         <fo:table-row>
           <xsl:apply-templates/>
         </fo:table-row>
       </xsl:template>
-      
       <xsl:template match="th">
         <xsl:variable name="border-color"
           select="$config/colors/color[@name = 'table']/@value"/>
@@ -582,7 +536,6 @@ limitations under the License.
           </fo:block>
         </fo:table-cell>
       </xsl:template>
-      
       <xsl:template match="td">
         <xsl:variable name="border-color"
           select="$config/colors/color[@name = 'table']/@value"/>
@@ -604,28 +557,21 @@ limitations under the License.
           </fo:block>
         </fo:table-cell>
       </xsl:template>
-      
       <xsl:template match="br">
         <fo:block></fo:block>
       </xsl:template>
-      
       <xsl:template match="legal">
         <fo:inline font-size="8pt">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
-
-      <!-- ====================================================================== -->
-      <!-- Local Extensions section -->
-      
-      
-      <!-- ====================================================================== -->
-      
+<!-- ====================================================================== -->
+<!-- Local Extensions section -->
+<!-- ====================================================================== -->
       <xsl:template match="citation">
         <fo:inline> [
           <xsl:value-of select="@def"/>] </fo:inline>
       </xsl:template>
-      
       <xsl:template match="p[@class='quote']">
         <fo:block start-indent="1em" space-before="4pt"
           space-after="4pt" background-color="#f0f0f0"
@@ -634,42 +580,30 @@ limitations under the License.
           <xsl:apply-templates/>
         </fo:block>
       </xsl:template>
-      
       <xsl:template name="insertPageBreaks">
-        
-        
-        <!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
+<!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
         <xsl:if
           test="contains(@class, 'pageBreakBefore') and preceding-sibling::node()">
           <xsl:attribute name="break-before">
             page</xsl:attribute>
         </xsl:if>
-        
-        
-        <!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
+<!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
         <xsl:if
           test="contains(@class, 'pageBreakAfter') and following-sibling::node()">
           <xsl:attribute name="break-after">
             page</xsl:attribute>
         </xsl:if>
       </xsl:template>
-
-      <!-- ====================================================================== -->
-      
-      
-      <!-- Temporary section - subject to change on short notice  -->
-      
-      
-      <!-- ====================================================================== -->
-      
+<!-- ====================================================================== -->
+<!-- Temporary section - subject to change on short notice  -->
+<!-- ====================================================================== -->
       <xsl:template match="//style">
-        <!-- HACK: The OpenOffice.org input plugin currently produces
+<!-- HACK: The OpenOffice.org input plugin currently produces
         intermediate documents that contain a style element, invalid per
         the Forrest Document DTD. This style element must be ignored
         here. To find out why this is done this way, read the comments
         attached to issue FOR-433. -->
       </xsl:template>
-      
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

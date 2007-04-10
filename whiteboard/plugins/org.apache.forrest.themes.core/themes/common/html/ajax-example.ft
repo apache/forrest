@@ -19,7 +19,6 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="ajax-example" type="nugget">
-  
   <description>
     <p>
       This contract is an example how to use ajax in forrest.
@@ -34,13 +33,15 @@
       <div class="content">This example <strong>only</strong> works in <strong>http://localhost:8888/</strong>.</div>
     </div>
   </description>
-  <usage><![CDATA[<forrest:contract name="ajax-example"/>]]></usage>
+  <usage>
+<![CDATA[<forrest:contract name="ajax-example"/>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="html" name="ajax-example" inputFormat="xsl" body="true" head="true">
     <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-        <xsl:template name="ajax-example-head">
-          <script type="text/javascript">
+      <xsl:template name="ajax-example-head">
+<script type="text/javascript">
              function preview(div){
                $(div).innerHTML="please stand by";
                var url = 'http://localhost:8888/less.contract.project-ajax-example.xml';
@@ -50,18 +51,20 @@
               alert('Sorry. There was an error.');
             }
         </script>
-        </xsl:template>
-        <xsl:template name="ajax-example-body">
-          <div class="warning">
-            <div class="label">Warning</div>
-            <div class="content">This example <strong>only</strong> works in <strong>http://localhost:8888/</strong>.</div>
-          </div>
-           <p>
-            This is an example how to use AJAX in forrest. The <a href="javascript:preview('testDiv')">test</a>
-           will update the testDiv with the output of url = 'http://localhost:8888/less.contract.project-ajax-example.xml';
-           </p>
-           <div id="testDiv">testDiv</div>
-        </xsl:template>
+      </xsl:template>
+      <xsl:template name="ajax-example-body">
+        <div class="warning">
+          <div class="label">Warning</div>
+          <div class="content">This example <strong>only</strong> works in <strong>http://localhost:8888/</strong>.</div>
+        </div>
+        <p>
+          This is an example how to use AJAX in forrest. The
+          <a href="javascript:preview('testDiv')">test</a> will update the
+          testDiv with the output of url =
+          'http://localhost:8888/less.contract.project-ajax-example.xml';
+        </p>
+        <div id="testDiv">testDiv</div>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

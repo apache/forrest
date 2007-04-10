@@ -20,10 +20,12 @@ limitations under the License.
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-abstract">
   <description>
-    <p>content-abstract will output the abstract of the content.</p>
+    <p>
+      content-abstract will output the abstract of the content.
+    </p>
   </description>
   <usage>
-    <![CDATA[<forrest:contract name="content-abstract" dataURI="cocoon://#{$getRequest}.abstract.xml"/>]]>
+<![CDATA[<forrest:contract name="content-abstract" dataURI="cocoon://#{$getRequest}.abstract.xml"/>]]>
   </usage>
   <forrest:template
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
@@ -32,22 +34,19 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
             <fo:block font-size="12pt" text-align="center"
               space-before="20pt" space-after="25pt" width="7.5in"
               font-family="serif" font-style="italic">
-              <!-- FIXME - Don't know how to manage the insertPageBreaks... -->
-              <!--xsl:call-template name="insertPageBreaks"/-->
+<!-- FIXME - Don't know how to manage the insertPageBreaks... -->
+<!--xsl:call-template name="insertPageBreaks"/-->
               <xsl:apply-templates select="//div[@class='abstract']"/>
             </fo:block>
           </forrest:part>
         </forrest:content>
-        
       </xsl:template>
-      
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

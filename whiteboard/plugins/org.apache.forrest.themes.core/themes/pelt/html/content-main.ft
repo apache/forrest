@@ -19,26 +19,32 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="content-main">
-
   <description>
-    <p>content-main <br/>Template will output the content-main.</p>
-    <p> properties:<br/> &lt;headings type="boxed"/> - Heading types can be
-      clean|underlined|boxed</p>
-  </description>
+    <p>
+      content-main
+      <br/>
+      Template will output the content-main.
+    </p>
 
-  <usage><![CDATA[<forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.body.xml"/>
+    <p>
+      properties:
+      <br/>
+      &lt;headings type="boxed"/> - Heading types can be clean|underlined|boxed
+    </p>
+  </description>
+  <usage>
+<![CDATA[<forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.body.xml"/>
   </forrest:property>
   <!-- Heading types can be clean|underlined|boxed  -->
   <forrest:property name="content-main-conf">
     <headings type="boxed"/>
   </forrest:property>
-</forrest:contract>]]></usage>
-
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="content-main" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="content-main-conf" select='boxed'/>
-
       <xsl:template match="/">
         <forrest:content>
           <forrest:part>
@@ -49,42 +55,50 @@
           </forrest:part>
         </forrest:content>
       </xsl:template>
-
-      <!--headings-->
+<!--headings-->
       <xsl:template match="div[@class = 'skinconf-heading-1']">
         <xsl:choose>
           <xsl:when test="$content-main-conf/headings/@type='underlined'">
-            <h2 class="underlined_10"><xsl:value-of select="h1"/></h2>
+            <h2 class="underlined_10">
+              <xsl:value-of select="h1"/>
+            </h2>
           </xsl:when>
           <xsl:when test="$content-main-conf/headings/@type='boxed'">
-            <h2 class="boxed"><xsl:value-of select="h1"/></h2>
+            <h2 class="boxed">
+              <xsl:value-of select="h1"/>
+            </h2>
           </xsl:when>
           <xsl:otherwise>
-            <h2 class="h3"><xsl:value-of select="h1"/></h2>
+            <h2 class="h3">
+              <xsl:value-of select="h1"/>
+            </h2>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:template>
-
       <xsl:template match="div[@class = 'section']">
         <div class="section">
           <xsl:apply-templates select="*|processing-instruction()"/>
         </div>
       </xsl:template>
-
       <xsl:template match="div[@class = 'skinconf-heading-2']">
         <xsl:choose>
           <xsl:when test="$content-main-conf/headings/@type='underlined'">
-            <h3 class="underlined_5"><xsl:value-of select="h2"/></h3>
+            <h3 class="underlined_5">
+              <xsl:value-of select="h2"/>
+            </h3>
           </xsl:when>
           <xsl:when test="$content-main-conf/headings/@type='boxed'">
-            <h3 class="boxed"><xsl:value-of select="h2"/></h3>
+            <h3 class="boxed">
+              <xsl:value-of select="h2"/>
+            </h3>
           </xsl:when>
           <xsl:otherwise>
-            <h3 class="h3"><xsl:value-of select="h2"/></h3>
+            <h3 class="h3">
+              <xsl:value-of select="h2"/>
+            </h3>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:template>
-
       <xsl:template match="@*|*|text()|processing-instruction()" priority="-1">
         <xsl:copy>
           <xsl:apply-templates select="@*|*|text()|processing-instruction()"/>

@@ -15,31 +15,46 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <forrest:contract name="siteinfo-feedback" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    <p>The feedback element will be used to construct a 
-      feedback link in the page appending: &lt;a href="@href">{@to}&lt;/a> </p>
+    <p>
+      The feedback element will be used to construct a feedback link in the page
+      appending: &lt;a href="@href">{@to}&lt;/a>
+    </p>
     <div class="note">
       <div class="label">Beware the link rewritting !</div>
       <div class="content">
-        <p>Forrest recognise links or e-mail address in the text of the site and automatically converts them into real links or mailto.<br/>
-        if the <em>to</em> attribute is of the following form : <code>\xxx.yyy@zzz.www</code> it is recognised as a mailto link and will be converted too.<br/>
+        <p>
+          Forrest recognise links or e-mail address in the text of the site and
+          automatically converts them into real links or mailto.
+          <br/>
+          if the <em>to</em> attribute is of the following form :
+          <code>\xxx.yyy@zzz.www</code> it is recognised as a mailto link and
+          will be converted too.
+          <br/>
         </p>
-        <p>To avoid this, you can <em>escape</em> the conversion by prefixing the email adress by the '\' character : <strong>\</strong><code>\xxx.yyy@zzz.www</code> will not be converted.<br/>
-        (Note that none of the previous examples are rewritten because we used the '\' character in the source !).</p>
+        <p>
+          To avoid this, you can <em>escape</em> the conversion by prefixing the
+          email adress by the '\' character :
+          <strong>\</strong><code>\xxx.yyy@zzz.www</code> will not be converted.
+          <br/>
+          (Note that none of the previous examples are rewritten because we used
+          the '\' character in the source !).
+        </p>
       </div>
     </div>
   </description>
-  <usage><![CDATA[<forrest:contract name="siteinfo-feedback">
+  <usage>
+<![CDATA[<forrest:contract name="siteinfo-feedback">
   <forrest:property name="siteinfo-feedback">
     <feedback to="\webmaster@foo.com"
       href="\mailto:webmaster@foo.com?subject=Feedback&#160;" >
       Send feedback about the website to:
     </feedback>
   </forrest:property>
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" 
     name="siteinfo-feedback" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
@@ -54,14 +69,12 @@
               <xsl:value-of select="$siteinfo-feedback/feedback"/>
               <xsl:choose>
                 <xsl:when 
-                  test="$siteinfo-feedback/feedback/@href and not($siteinfo-feedback/feedback/@href='')">
-                  <a id="feedbackto">
-                    <xsl:attribute name="href">
-                      <xsl:value-of select="$siteinfo-feedback/feedback/@href"/>
-                      <xsl:value-of select="$path"/>
-                    </xsl:attribute>
-                    <xsl:value-of select="$siteinfo-feedback/feedback/@to"/>
-                  </a>
+                  test="$siteinfo-feedback/feedback/@href and not($siteinfo-feedback/feedback/@href='')"><a id="feedbackto">
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="$siteinfo-feedback/feedback/@href"/>
+                    <xsl:value-of select="$path"/>
+                  </xsl:attribute>
+                  <xsl:value-of select="$siteinfo-feedback/feedback/@to"/></a>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="$siteinfo-feedback/feedback/@to"/>
