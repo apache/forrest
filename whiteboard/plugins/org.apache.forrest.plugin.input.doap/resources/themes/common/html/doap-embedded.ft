@@ -19,37 +19,40 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="doap-embedded">
-  
   <description>
-    <p>This template outputs html link elements for embedding DOAP files. </p>
-    <p>The contract requires the locations of DOAP files to be passed in as parameters using the following syntax :</p>
+    <p>
+      This template outputs html link elements for embedding DOAP files.
+    </p>
+
+    <p>
+      The contract requires the locations of DOAP files to be passed in as
+      parameters using the following syntax :
+    </p>
     <source>&lt;doap url="<em>food.rdf</em>"&gt;</source>
     <ul>
       <li><strong>url</strong> attribute indicates the location of the DOAP file.
       The <strong>url</strong> attribute is required.
-      </li>      
+      </li>
       <li><strong>title</strong> attribute indicates the title DOAP file.
       The <strong>title</strong> attribute is optional an has a default value of "DOAP".
-      </li> 
+      </li>
     </ul>
   </description>
-  
-  <usage><![CDATA[<forrest:contract name="doap-embedded">
+  <usage>
+<![CDATA[<forrest:contract name="doap-embedded">
       <forrest:property name="doap-embedded-links">
         <doap url="foo.rdf"/>
         <doap url="foo.bar.xml"/>
         ...
       </forrest:property>
-    </forrest:contract>]]></usage>
-    
+    </forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="doap-embedded" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:forrest="http://apache.org/forrest/templates/1.0">
-      
       <xsl:param name="doap-embedded-links"/>
-      
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/html/head">
@@ -57,23 +60,21 @@
           </forrest:part>
         </forrest:content>
       </xsl:template>
-      
-      <xsl:template match="doap[@url]">
-        <link rel="meta" type="application/rdf+xml">
-          <xsl:choose>
-            <xsl:when test="@title">
-              <xsl:attribute name="title">
-                <xsl:value-of select="@title"/>
-              </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="title">DOAP</xsl:attribute>
-            </xsl:otherwise>
-          </xsl:choose>
-          
-          <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
-        </link>
-      </xsl:template>      
+      <xsl:template match="doap[@url]"><link rel="meta" type="application/rdf+xml">
+        <xsl:choose>
+          <xsl:when test="@title">
+            <xsl:attribute name="title">
+              <xsl:value-of select="@title"/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="title">DOAP</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:attribute name="href">
+          <xsl:value-of select="@url"/>
+        </xsl:attribute></link>
+      </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

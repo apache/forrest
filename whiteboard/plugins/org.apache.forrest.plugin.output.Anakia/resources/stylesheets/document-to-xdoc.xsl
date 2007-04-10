@@ -24,39 +24,30 @@ No navigation is provided and no rendering of graphics is attempted.
 -->
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:template match="/">
     <xsl:apply-templates select="//document"/>
   </xsl:template>
-
   <xsl:template match="document">
     <document>
       <xsl:apply-templates select="header"/>
       <xsl:apply-templates select="body"/>
     </document>
   </xsl:template>
-
   <xsl:template match="header">
     <properties>
       <xsl:apply-templates/>
     </properties>
   </xsl:template>
-
   <xsl:template match="tbody">
     <xsl:apply-templates/>
   </xsl:template>
-
-  <xsl:template match="body//link">
-    <a>
-      <xsl:copy-of select="@*"/>
-      <xsl:apply-templates/>
-    </a>
+  <xsl:template match="body//link"><a>
+    <xsl:copy-of select="@*"/>
+    <xsl:apply-templates/></a>
   </xsl:template>
-
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>

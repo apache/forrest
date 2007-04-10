@@ -34,8 +34,6 @@ Section handling
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns="http://www.w3.org/2002/06/xhtml2">
-
-
   <xsl:template match="/document">
     <html xmlns="http://www.w3.org/2002/06/xhtml2" xml:lang="en"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -50,60 +48,60 @@ Section handling
       </head>
       <body>
         <xsl:apply-templates select="header/notice | header/abstract"/>
-        <xsl:apply-templates select="body/*"/>   
+        <xsl:apply-templates select="body/*"/>
         <xsl:apply-templates select="footer"/>
       </body>
     </html>
   </xsl:template>
-
-  <!-- Generate a <a name="..."> tag for an @id -->
+<!-- Generate a <a name="..."> tag for an @id -->
   <xsl:template match="@id">
-    <xsl:if test="normalize-space(.)!=''">
-      <a name="{.}"/>
+    <xsl:if test="normalize-space(.)!=''"><a name="{.}"/>
     </xsl:if>
   </xsl:template>
-
   <xsl:template match="section">
     <section>
-      <xsl:attribute name="xml:id"><xsl:value-of select="@id"/></xsl:attribute>
-      <h><xsl:value-of select="./title"/></h>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@id"/>
+      </xsl:attribute>
+      <h>
+        <xsl:value-of select="./title"/>
+      </h>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
-
-  <xsl:template match="section/title">
-    
-  </xsl:template>
-  
+  <xsl:template match="section/title"></xsl:template>
   <xsl:template match="abstract | legal">
     <xsl:element name="p">
-      <xsl:attribute name="property"><xsl:value-of select="local-name()"/></xsl:attribute>
-        <xsl:apply-templates/>
+      <xsl:attribute name="property">
+        <xsl:value-of select="local-name()"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="note | warning | fixme | notice">
     <xsl:element name="p">
-      <xsl:attribute name="class"><xsl:value-of select="local-name()"/></xsl:attribute>
-        <xsl:apply-templates/>
+      <xsl:attribute name="class">
+        <xsl:value-of select="local-name()"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="meta">
     <xsl:element name="meta">
-      <xsl:attribute name="property"><xsl:value-of select="./@name"/></xsl:attribute>
+      <xsl:attribute name="property">
+        <xsl:value-of select="./@name"/>
+      </xsl:attribute>
       <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="type | subtitle">
     <xsl:element name="meta">
-      <xsl:attribute name="property"><xsl:value-of select="local-name()"/></xsl:attribute>
+      <xsl:attribute name="property">
+        <xsl:value-of select="local-name()"/>
+      </xsl:attribute>
       <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
-  
-  
   <xsl:template match="version">
     <xsl:element name="meta">
       <xsl:attribute name="property">version</xsl:attribute>
@@ -130,34 +128,32 @@ Section handling
       <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="authors">
     <xsl:element name="meta">
       <xsl:attribute name="property">authors</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="person">
     <xsl:element name="meta">
       <xsl:attribute name="property">person</xsl:attribute>
-      <meta><xsl:attribute name="property">email</xsl:attribute></meta>
-      <meta><xsl:attribute name="property">name</xsl:attribute></meta>
+      <meta>
+        <xsl:attribute name="property">email</xsl:attribute>
+      </meta>
+      <meta>
+        <xsl:attribute name="property">name</xsl:attribute>
+      </meta>
     </xsl:element>
-  </xsl:template>  
-  
+  </xsl:template>
   <xsl:template match="footer">
     <section>
       <xsl:attribute name="property">footer</xsl:attribute>
-       <xsl:apply-templates/>
+      <xsl:apply-templates/>
     </section>
   </xsl:template>
-  
-    
   <xsl:template match="br">
     <l/>
   </xsl:template>
-
   <xsl:template match="p[@xml:space='preserve']">
     <xsl:apply-templates select="@id"/>
     <div class="pre">
@@ -165,27 +161,28 @@ Section handling
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-
   <xsl:template match="source">
     <blockcode>
       <xsl:apply-templates/>
     </blockcode>
   </xsl:template>
-
-  <xsl:template match="anchor">
-    <a id="{@id}">
-      <xsl:copy-of select="@id"/>
-    </a>
+  <xsl:template match="anchor"><a id="{@id}">
+    <xsl:copy-of select="@id"/></a>
   </xsl:template>
-  
   <xsl:template match="link | fork | jump">
     <xsl:element name="a">
-      <xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:value-of select="@href"/>
+      </xsl:attribute>
       <xsl:if test="./@role">
-        <xsl:attribute name="role"><xsl:value-of select="@role"/></xsl:attribute>
+        <xsl:attribute name="role">
+          <xsl:value-of select="@role"/>
+        </xsl:attribute>
       </xsl:if>
       <xsl:if test="./@title">
-        <xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:value-of select="@title"/>
+        </xsl:attribute>
       </xsl:if>
       <xsl:if test="local-name() = 'fork'">
         <xsl:attribute name="target">_blank</xsl:attribute>
@@ -193,40 +190,40 @@ Section handling
       <xsl:if test="local-name() = 'jump'">
         <xsl:attribute name="target">_top</xsl:attribute>
       </xsl:if>
-      <xsl:value-of select="."/>  
+      <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
-
   <xsl:template match="icon | figure  | img">
-  <!-- FIXME:  Where to match these to?  span doesn't allow 'style' attrib.-->
+<!-- FIXME:  Where to match these to?  span doesn't allow 'style' attrib.-->
     <p>
-      <xsl:attribute name="class"><xsl:value-of select="local-name()"/></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:value-of select="local-name()"/>
+      </xsl:attribute>
       <xsl:copy-of select="@src | @alt | @id"/>
-      
       <xsl:variable name="height-val">
-        <xsl:if test="./@height">height:<xsl:value-of select="./@height"/></xsl:if>
+        <xsl:if test="./@height">height:<xsl:value-of select="./@height"/>
+        </xsl:if>
       </xsl:variable>
       <xsl:variable name="width-val">
-        <xsl:if test="./@width">width:<xsl:value-of select="./@width"/></xsl:if>
+        <xsl:if test="./@width">width:<xsl:value-of select="./@width"/>
+        </xsl:if>
       </xsl:variable>
-      
       <xsl:if test="./@height or ./@width">
-        <xsl:attribute name="style"><xsl:value-of select="concat($height-val,';',$width-val)"/></xsl:attribute>
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat($height-val,';',$width-val)"/>
+        </xsl:attribute>
       </xsl:if>
     </p>
   </xsl:template>
-
-  
   <xsl:template match="table">
     <xsl:apply-templates select="@id"/>
     <table class="ForrestTable">
-      <!--FIXME: Should these be included as internal style snippets?-->
-      <!--@cellspacing | @cellpadding |-->
+<!--FIXME: Should these be included as internal style snippets?-->
+<!--@cellspacing | @cellpadding |-->
       <xsl:copy-of select="@border | @class | @bgcolor |@id"/>
       <xsl:apply-templates/>
     </table>
   </xsl:template>
-
   <xsl:template match="acronym">
     <xsl:element name="abbr">
       <xsl:attribute name="title">
@@ -235,14 +232,10 @@ Section handling
       <xsl:value-of select="."/>
     </xsl:element>
   </xsl:template>
-
-
   <xsl:template match="node()|@*" mode="toc"/>
-
-  <!-- End of "toc" mode templates -->
-
+<!-- End of "toc" mode templates -->
   <xsl:template match="node()|@*" priority="-1">
-    <!-- id processing will create its own a-element so processing has to 
+<!-- id processing will create its own a-element so processing has to 
          happen outside the copied element 
     -->
     <xsl:apply-templates select="@id"/>
@@ -252,6 +245,4 @@ Section handling
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>
-

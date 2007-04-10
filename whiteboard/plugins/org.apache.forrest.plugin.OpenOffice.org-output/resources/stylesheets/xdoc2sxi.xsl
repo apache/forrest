@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!--+
     | This stylesheets transforms hello world XML page to ZIP serializer's format.
     | After the serializer, result is an OpenOffice Impress document (sxi).
@@ -23,15 +22,13 @@
     | @author <a href="mailto:vgritsenko@apache.org>Vadim Gritsenko</a>
     | @version CVS $Id: page2sxi.xsl 36239 2005-08-11 18:28:06Z vgritsenko $
     +-->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:zip="http://apache.org/cocoon/zip-archive/1.0"
                 xmlns:text="http://openoffice.org/2000/text">
-
   <xsl:template match="document">
     <zip:archive>
-      <!--
+<!--
         <!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
       -->
       <zip:entry name="content.xml" serializer="xml">
@@ -149,8 +146,7 @@
           </office:body>
         </office:document-content>
       </zip:entry>
-
-      <!--
+<!--
         <!DOCTYPE office:document-meta PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
       -->
       <zip:entry name="meta.xml" serializer="xml">
@@ -162,7 +158,9 @@
                               office:version="1.0">
           <office:meta>
             <meta:generator>OpenOffice.org 1.0.3 (Win32)</meta:generator>
-            <dc:title><xsl:value-of select="title"/></dc:title>
+            <dc:title>
+              <xsl:value-of select="title"/>
+            </dc:title>
             <dc:subject>Cocoon Hello World Sample Document</dc:subject>
             <meta:creation-date>2003-05-08T08:20:04</meta:creation-date>
             <dc:date>2003-05-08T08:21:08</dc:date>
@@ -177,8 +175,7 @@
           </office:meta>
         </office:document-meta>
       </zip:entry>
-
-      <!--
+<!--
         <!DOCTYPE office:document-settings PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
       -->
       <zip:entry name="settings.xml" serializer="xml">
@@ -281,8 +278,7 @@
           </office:settings>
         </office:document-settings>
       </zip:entry>
-
-      <!--
+<!--
         <!DOCTYPE office:document-styles PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
       -->
       <zip:entry name="styles.xml" serializer="xml">
@@ -541,7 +537,8 @@
                     <style:properties text:space-before="1.6cm" text:min-label-width="0.8cm" fo:font-family="StarSymbol" fo:color="#000000" fo:font-size="75%"/>
                   </text:list-level-style-bullet>
                   <text:list-level-style-bullet text:level="3" text:bullet-char="�">
-                    <style:properties text:space-before="3cm" text:min-label-width="0.6cm" fo:font-family="StarSymbol" fo:color="#000000" fo:font-size="45%"/></text:list-level-style-bullet>
+                    <style:properties text:space-before="3cm" text:min-label-width="0.6cm" fo:font-family="StarSymbol" fo:color="#000000" fo:font-size="45%"/>
+                  </text:list-level-style-bullet>
                   <text:list-level-style-bullet text:level="4" text:bullet-char="?">
                     <style:properties text:space-before="4.2cm" text:min-label-width="0.6cm" fo:font-family="StarSymbol" fo:color="#000000" fo:font-size="75%"/>
                   </text:list-level-style-bullet>
@@ -637,8 +634,7 @@
           </office:master-styles>
         </office:document-styles>
       </zip:entry>
-
-      <!--
+<!--
         <!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
       -->
       <zip:entry name="META-INF/manifest.xml" serializer="xml">
@@ -653,26 +649,16 @@
       </zip:entry>
     </zip:archive>
   </xsl:template>
-
-  <xsl:template match="header">
-  </xsl:template>
-
+  <xsl:template match="header"></xsl:template>
   <xsl:template match="body">
     <text:p text:style-name="P1">This is the body</text:p>
   </xsl:template>
-  
-  <xsl:template match="section">
-  </xsl:template>
-  
-  <xsl:template match="p">
-  </xsl:template>
-
+  <xsl:template match="section"></xsl:template>
+  <xsl:template match="p"></xsl:template>
   <xsl:template match="@*|node()" priority="-2">
-    <!--<xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy>-->
+<!--<xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy>-->
   </xsl:template>
-  
   <xsl:template match="text()" priority="-1">
-    <!--<xsl:value-of select="."/>-->
+<!--<xsl:value-of select="."/>-->
   </xsl:template>
-
 </xsl:stylesheet>

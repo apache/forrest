@@ -15,37 +15,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<xsl:param name="filename"></xsl:param>
-
+  <xsl:param name="filename"></xsl:param>
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="head"/>
       <xsl:call-template name="body"/>
     </html>
   </xsl:template>
-  
   <xsl:template name="head">
     <head>
-      <!-- Configure the path to the editor.  We make it relative now, so that the
+<!-- Configure the path to the editor.  We make it relative now, so that the
       example ZIP file will work anywhere, but please NOTE THAT it's better to
       have it an absolute path, such as '/htmlarea/'. -->
-      <script type="text/javascript">
+<script type="text/javascript">
         _editor_url = "/edit_htmlArea";
         _editor_lang = "en";
       </script>
-      
-      <!-- load the main HTMLArea file, this will take care of loading the CSS and
+<!-- load the main HTMLArea file, this will take care of loading the CSS and
       other required core scripts. -->
-      <script type="text/javascript">
+<script type="text/javascript">
         <xsl:attribute name="src">/edit_htmlArea/htmlarea.js</xsl:attribute>
-      </script>  
-      
-      <!-- load the plugins -->
-      <script type="text/javascript">
+      </script>
+<!-- load the plugins -->
+<script type="text/javascript">
         // WARNING: using this interface to load plugin
         // will _NOT_ work if plugins do not have the language
         // loaded by HTMLArea.
@@ -68,8 +62,7 @@
         //HTMLArea.loadPlugin("CharacterMap");
         //HTMLArea.loadPlugin("DynamicCSS");
       </script>
-      
-      <script type="text/javascript">
+<script type="text/javascript">
       var editor = null;
       
       function initEditor() {
@@ -151,41 +144,37 @@
       </script>
     </head>
   </xsl:template>
-  
   <xsl:template name="body">
     <body onload="initEditor()">
       <form method="post" action="write.do">
         <label>Title:
           <input type="text" name="title" size="70">
-            <xsl:attribute name="value"><xsl:value-of select="/html/head/title"/></xsl:attribute>
+            <xsl:attribute name="value">
+              <xsl:value-of select="/html/head/title"/>
+            </xsl:attribute>
           </input>
         </label>
-        
         <hr/>
-        
         <textarea id="editor" name="editor" cols="80" rows="30">
-          <!--xsl:value-of select="normalize-space(.)"/-->
+<!--xsl:value-of select="normalize-space(.)"/-->
           <xsl:apply-templates/>
         </textarea>
-        
         <input type="hidden" name="filename">
-          <xsl:attribute name="value"><xsl:value-of select="$filename"/></xsl:attribute>
+          <xsl:attribute name="value">
+            <xsl:value-of select="$filename"/>
+          </xsl:attribute>
         </input>
-        
         <input type="submit" value="Submit" />
         <input type="reset" value="Reset" />
       </form>
     </body>
   </xsl:template>
-  
   <xsl:template match="body">
     <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template match="node()|@*" priority="-1">
-        <xsl:copy>
-              <xsl:apply-templates select="node()|@*"/>
-        </xsl:copy>
+    <xsl:copy>
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>

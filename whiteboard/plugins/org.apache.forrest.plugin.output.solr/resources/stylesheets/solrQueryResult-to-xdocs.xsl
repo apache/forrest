@@ -15,9 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
-
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="unescape.xsl"/>
   <xsl:param name="searchForm"/>
@@ -40,32 +37,37 @@
     <xsl:apply-templates select="paginator"/>
     <section id="result">
       <title>solr search result </title>
-      <p> Results
+      <p>
+        Results
         <xsl:if test="not($found=0)">
           <xsl:value-of select="$start+1"/>
           <xsl:choose>
             <xsl:when test="($start+$rows)&gt;$found and ($start+1 &lt; $found)">
               -
-              <xsl:value-of select="$found"/> </xsl:when>
+              <xsl:value-of select="$found"/>
+            </xsl:when>
             <xsl:when test="($start+$rows)&gt;$found and ($start+1 = $found)"/>
             <xsl:otherwise> -
-              <xsl:value-of select="$start+$rows"/> </xsl:otherwise>
+              <xsl:value-of select="$start+$rows"/>
+            </xsl:otherwise>
           </xsl:choose>
           of </xsl:if>
-        <xsl:value-of select="$found"/> for
-        <code>
-          <xsl:value-of select="$query"/>
-        </code>. (
-        <code>
-          <xsl:value-of select="$time"/>
-        </code> ms) </p>
+        <xsl:value-of select="$found"/>
+        for <code>
+        <xsl:value-of select="$query"/>
+        </code>. ( <code>
+        <xsl:value-of select="$time"/>
+        </code> ms)
+      </p>
       <xsl:for-each select="doc">
         <xsl:variable name="id" select="str[@name='id']"/>
         <section id="result-{$id}">
-          <title>
+          <title><xsl:value-of select="str[@name='title']"/></title>
+          <p>
+            <a href="{concat(substring-before($id,'.xml'),'.html')}">
             <xsl:value-of select="str[@name='title']"/>
-          </title>
-          <p><a href="{concat(substring-before($id,'.xml'),'.html')}"><xsl:value-of select="str[@name='title']"/></a> </p>
+            </a>
+          </p>
           <xsl:apply-templates
             select="//lst[@name='highlighting']/lst[@name=$id]"/>
         </section>
@@ -80,12 +82,12 @@
           <xsl:variable name="current" select="@current"/>
           <xsl:choose>
             <xsl:when test="$current='true'">
-              <xsl:text> </xsl:text><xsl:value-of select="@id"/><xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
+              <xsl:value-of select="@id"/>
+<xsl:text> </xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-              <a href="{concat($searchForm,'?',@queryString)}">
-                <xsl:value-of select="@id"/>
-              </a>
+            <xsl:otherwise><a href="{concat($searchForm,'?',@queryString)}">
+              <xsl:value-of select="@id"/></a>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>

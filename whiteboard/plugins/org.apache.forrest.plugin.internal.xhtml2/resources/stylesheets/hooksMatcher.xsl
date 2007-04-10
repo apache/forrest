@@ -15,11 +15,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!--This template will match the different combinations for forrest:hooks-->
+<!--This template will match the different combinations for forrest:hooks-->
   <xsl:template match="forrest:hook[@name and (@type='div' or not(@type))]">
     <div id="{@name}">
       <xsl:apply-templates/>
@@ -33,13 +32,13 @@
     </div>
   </xsl:template>
   <xsl:template match="forrest:hook[@class and @type='span']">
-    <span class="{@class}"> 
+    <span class="{@class}">
       <xsl:apply-templates/>
       <xsl:if test="@nbsp='true'">&#160;</xsl:if>
     </span>
   </xsl:template>
   <xsl:template match="forrest:hook[@name and @type='span']">
-    <span id="{@name}"> 
+    <span id="{@name}">
       <xsl:apply-templates/>
       <xsl:if test="@nbsp='true'">&#160;</xsl:if>
     </span>

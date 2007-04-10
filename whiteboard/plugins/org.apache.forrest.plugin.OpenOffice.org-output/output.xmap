@@ -16,28 +16,22 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
-<map:components>
-  <map:serializers>
-    <map:serializer logger="sitemap.serializer.sxw"  mime-type="application/vnd.sun.xml.writer" name="sxw" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
-    <map:serializer logger="sitemap.serializer.sxc"  mime-type="application/vnd.sun.xml.calc" name="sxc" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
-    <map:serializer logger="sitemap.serializer.sxd"  mime-type="application/vnd.sun.xml.draw" name="sxd" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
-    <map:serializer logger="sitemap.serializer.sxi"  mime-type="application/vnd.sun.xml.impress" name="sxi" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
-  </map:serializers>
-</map:components>
-
-<map:pipelines>
-
-  <map:pipeline>
-
-    <!-- FIXME: check there isn't a RAW sxi file available -->
-    <map:match type="regexp" pattern="^(.*?)([^/]*).sxi$">
-      <map:generate src="cocoon://{1}{2}.xml"/>
-      <map:transform type="xsltc" src="resources/stylesheets/xdoc2sxi.xsl"/>
-      <map:serialize type="sxi"/>
-    </map:match>  
-  
-  </map:pipeline>
-</map:pipelines>
-
+  <map:components>
+    <map:serializers>
+      <map:serializer logger="sitemap.serializer.sxw"  mime-type="application/vnd.sun.xml.writer" name="sxw" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+      <map:serializer logger="sitemap.serializer.sxc"  mime-type="application/vnd.sun.xml.calc" name="sxc" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+      <map:serializer logger="sitemap.serializer.sxd"  mime-type="application/vnd.sun.xml.draw" name="sxd" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+      <map:serializer logger="sitemap.serializer.sxi"  mime-type="application/vnd.sun.xml.impress" name="sxi" src="org.apache.cocoon.serialization.ZipArchiveSerializer"/>
+    </map:serializers>
+  </map:components>
+  <map:pipelines>
+    <map:pipeline>
+<!-- FIXME: check there isn't a RAW sxi file available -->
+      <map:match type="regexp" pattern="^(.*?)([^/]*).sxi$">
+        <map:generate src="cocoon://{1}{2}.xml"/>
+        <map:transform type="xsltc" src="resources/stylesheets/xdoc2sxi.xsl"/>
+        <map:serialize type="sxi"/>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
 </map:sitemap>

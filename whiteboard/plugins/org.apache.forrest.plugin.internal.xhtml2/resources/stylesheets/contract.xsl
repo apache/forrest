@@ -29,11 +29,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 </elements>
 
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
-  
   <xsl:param name="format"/>
   <xsl:template match="/">
     <xsl:copy-of select="forrest:contract/forrest:template[@format=$format]/xsl:stylesheet/*"/>

@@ -21,23 +21,25 @@
   xmlns:xhtml2="http://www.w3.org/2002/06/xhtml2"
   name="content-title" type="nugget">
   <description>
-    content-title - Template will output the title (first h1 of the content). 
+    content-title - Template will output the title (first h1 of the content).
     FIXME: in XHTML2 the title may be the heading of the first section
   </description>
-  <usage><![CDATA[<forrest:contract name="content-title"/>]]></usage>
+  <usage>
+<![CDATA[<forrest:contract name="content-title"/>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     format="xhtml" name="content-title" inputFormat="xsl" body="true" head="false">
-     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	    <xsl:template name="content-title-body" match="div[@id='content']/h1[position()=1]">
-	<xsl:comment>+
+    <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:template name="content-title-body" match="div[@id='content']/h1[position()=1]">
+        <xsl:comment>+
 	    |start content-title
 	    +</xsl:comment>
-        <!-- FIXME: Is this the right element to use, in the old XDoc we used the first <h1> element -->
-			  <xsl:copy-of select="xhtml2:body/xhtml2:h[position()=1]"/>
-<xsl:comment>+
+<!-- FIXME: Is this the right element to use, in the old XDoc we used the first <h1> element -->
+        <xsl:copy-of select="xhtml2:body/xhtml2:h[position()=1]"/>
+        <xsl:comment>+
     |end content-title
     +</xsl:comment>
-		  </xsl:template>
-	  </xsl:stylesheet>
+      </xsl:template>
+    </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

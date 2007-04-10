@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!--
 
@@ -56,31 +55,24 @@ will retrive the SCO called HowTo from the repository located at http://www.burr
 
 
 -->
-
-<xsl:param name="cmdRepositoryGetSCO">/repositoryCommand/getSCO/</xsl:param>
-
-<xsl:param name="repositoryURILabel">/repositoryURI/</xsl:param>
-
+  <xsl:param name="cmdRepositoryGetSCO">/repositoryCommand/getSCO/</xsl:param>
+  <xsl:param name="repositoryURILabel">/repositoryURI/</xsl:param>
 <!-- Return the burrokeet command in a path that includes one -->
-<xsl:template name="getRepositoryCommand">
-  <xsl:param name="path"/>
-  <xsl:if test="contains($path, $cmdRepositoryGetSCO)">getSCO</xsl:if>
-</xsl:template>
-
+  <xsl:template name="getRepositoryCommand">
+    <xsl:param name="path"/>
+    <xsl:if test="contains($path, $cmdRepositoryGetSCO)">getSCO</xsl:if>
+  </xsl:template>
 <!-- return the name of the SCO too use -->
-<xsl:template name="getSCOName">
-  <xsl:param name="path"/>
-  <xsl:variable name="fullCommand">
-    <xsl:value-of select="substring-after($path, $cmdRepositoryGetSCO)"/>
-  </xsl:variable>
-  <xsl:value-of select="substring-before($fullCommand, $repositoryURILabel)"/>
-</xsl:template>
-
+  <xsl:template name="getSCOName">
+    <xsl:param name="path"/>
+    <xsl:variable name="fullCommand">
+      <xsl:value-of select="substring-after($path, $cmdRepositoryGetSCO)"/>
+    </xsl:variable>
+    <xsl:value-of select="substring-before($fullCommand, $repositoryURILabel)"/>
+  </xsl:template>
 <!-- return the URI of the repository to use -->
-<xsl:template name="getRepositoryURI">
-  <xsl:param name="path"/>
-  <xsl:value-of select="substring-after($path, $repositoryURILabel)"/>
-</xsl:template>
-
-
+  <xsl:template name="getRepositoryURI">
+    <xsl:param name="path"/>
+    <xsl:value-of select="substring-after($path, $repositoryURILabel)"/>
+  </xsl:template>
 </xsl:stylesheet>

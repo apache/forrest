@@ -20,13 +20,18 @@
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="solr-add">
   <description>
-    <p> This is the solr-add contract, it will output a link to the solr server for updating the
-      solr index with the current document. When run in static mode it allows you to update the
-      Solr server with the content of your website at the same time you generate the site. </p>
+    <p>
+      This is the solr-add contract, it will output a link to the solr server
+      for updating the solr index with the current document. When run in static
+      mode it allows you to update the Solr server with the content of your
+      website at the same time you generate the site.
+    </p>
   </description>
-  <usage><![CDATA[<forrest:contract name="solr-add">
+  <usage>
+<![CDATA[<forrest:contract name="solr-add">
   <forrest:property name="request">#{$getRequest}</forrest:property>
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="solr-add" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
@@ -37,8 +42,7 @@
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/html/head">
-            <xsl:if test="not($request='linkmap') and not(contains($request,'solr-search')) and not(contains($request,'solr.add.do'))">
-              <link href="{normalize-space($root)}{$request}.solr.add.do.html"/>  
+            <xsl:if test="not($request='linkmap') and not(contains($request,'solr-search')) and not(contains($request,'solr.add.do'))"><link href="{normalize-space($root)}{$request}.solr.add.do.html"/>
             </xsl:if>
           </forrest:part>
         </forrest:content>

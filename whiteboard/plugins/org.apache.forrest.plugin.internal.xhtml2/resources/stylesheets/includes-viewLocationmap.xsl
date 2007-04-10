@@ -19,7 +19,6 @@
   xmlns:collection="http://apache.org/cocoon/collection/1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:dyn="http://exslt.org/dynamic">
-  
   <xsl:param name="defaultView" select="'default.fv'"/>
   <xsl:param name="rootElement" select="'/xdocs/'"/>
   <xsl:param name="viewExtension" select="'.fv'"/>
@@ -27,7 +26,7 @@
   <xsl:param name="root" select="'xdocs'"/>
   <xsl:param name="viewFallback" select="'resources/views/default.fv'"/>
   <xsl:variable name="lastFallback" select="boolean(/xdocs/*[local-name()=$defaultView])"/>
-   <!--
+<!--
     *viewSelector* project-xdocs
     will return which view is responsible for the requested path.
     If no view (choice|fallback) could be found the template will return the 
@@ -59,7 +58,7 @@
     view can be found in the requested child.
     -->
   <xsl:template match="/">
-    <!--<xsl:comment>
+<!--<xsl:comment>
       lastFallback: <xsl:value-of select="$lastFallback"/>
       root: <xsl:value-of select="$root"/>
       request: <xsl:value-of select="$path"/>
@@ -68,24 +67,23 @@
     </xsl:comment>-->
     <xsl:variable name="view2response">
       <xsl:call-template name="viewSelector">
-	      <xsl:with-param name="request" select="concat($path,$viewExtension)"/>
-	      <xsl:with-param name="rest" select="''"/>
-	    </xsl:call-template>
+        <xsl:with-param name="request" select="concat($path,$viewExtension)"/>
+        <xsl:with-param name="rest" select="''"/>
+      </xsl:call-template>
     </xsl:variable>
-    <!--Nothing can be found, returning the default.fv-->
+<!--Nothing can be found, returning the default.fv-->
     <xsl:if test="not($lastFallback) and $view2response=''">
       <xi:include href="{$viewFallback}"/>
     </xsl:if>
-    <!--The lastFallback can be found, returning this-->
+<!--The lastFallback can be found, returning this-->
     <xsl:if test="$lastFallback and $view2response=''">
       <xi:include href="{concat('file://', $root,$defaultView)}"/>
     </xsl:if>
-    <!--Some fallback can be found that is not the last one-->
+<!--Some fallback can be found that is not the last one-->
     <xsl:if test="$view2response!=''">
       <xi:include href="{concat('file://', $root,$view2response)}"/>
     </xsl:if>
   </xsl:template>
- 
   <xsl:template name="viewSelector">
     <xsl:param name="request" select="''"/>
     <xsl:param name="rest" select="''"/>
@@ -93,7 +91,7 @@
     <xsl:if test="contains($request,'/')">
       <xsl:variable name="nextRequest" select="substring-after($request,'/')"/>
       <xsl:variable name="currentDir" select="substring-before($request,'/')"/>
-      <!--<xsl:comment>
+<!--<xsl:comment>
         request: <xsl:value-of select="$request"/>
 	      currentDir: <xsl:value-of select="$currentDir"/>
         currentDir has default view: <xsl:value-of select="boolean(dyn:evaluate(concat($rootElement,$rest,$currentDir,'/',$defaultView)))"/>
@@ -101,59 +99,58 @@
         rest: <xsl:value-of select="$rest"/>
         view2response: <xsl:value-of select="$view2response"/>
 	    </xsl:comment>-->
-      <!--In the path are still directories-->
+<!--In the path are still directories-->
       <xsl:if test="boolean(dyn:evaluate(concat($rootElement,$rest,$currentDir,'/',$defaultView)))">
-        <!--<xsl:comment>view2response set - <xsl:value-of select="(concat($rest,$currentDir,'/',$defaultView)"/></xsl:comment>-->
+<!--<xsl:comment>view2response set - <xsl:value-of select="(concat($rest,$currentDir,'/',$defaultView)"/></xsl:comment>-->
         <xsl:variable name="viewTemp" select="concat($rest,$currentDir,'/',$defaultView)"/>
         <xsl:call-template name="viewSelector">
-			    <xsl:with-param name="request" select="$nextRequest"/>
-			    <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
-	        <xsl:with-param name="view2response" select="$viewTemp"/>
-			  </xsl:call-template>
+          <xsl:with-param name="request" select="$nextRequest"/>
+          <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
+          <xsl:with-param name="view2response" select="$viewTemp"/>
+        </xsl:call-template>
       </xsl:if>
       <xsl:if test="not(dyn:evaluate(concat($rootElement,$rest,$currentDir,'/',$defaultView)))">
-        <!--<xsl:comment>no view2response set</xsl:comment>-->
+<!--<xsl:comment>no view2response set</xsl:comment>-->
         <xsl:if test="$view2response=''">
           <xsl:variable name="viewTemp" select="''"/>
           <xsl:call-template name="viewSelector">
-				    <xsl:with-param name="request" select="$nextRequest"/>
-				    <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
-		        <xsl:with-param name="view2response" select="$viewTemp"/>
-				  </xsl:call-template>
+            <xsl:with-param name="request" select="$nextRequest"/>
+            <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
+            <xsl:with-param name="view2response" select="$viewTemp"/>
+          </xsl:call-template>
         </xsl:if>
         <xsl:if test="$view2response!=''">
           <xsl:variable name="viewTemp" select="$view2response"/>
           <xsl:call-template name="viewSelector">
-				    <xsl:with-param name="request" select="$nextRequest"/>
-				    <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
-		        <xsl:with-param name="view2response" select="$viewTemp"/>
-				  </xsl:call-template>
+            <xsl:with-param name="request" select="$nextRequest"/>
+            <xsl:with-param name="rest" select="concat($rest,$currentDir,'/')"/>
+            <xsl:with-param name="view2response" select="$viewTemp"/>
+          </xsl:call-template>
         </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if test="not(contains($request,'/'))">
-      <!--<xsl:comment>
+<!--<xsl:comment>
         request: <xsl:value-of select="$request"/>
         rest: <xsl:value-of select="$rest"/>
         iteration: <xsl:value-of select="number($iteration)"/>
         view2response: <xsl:value-of select="$view2response"/>
 	    </xsl:comment>-->
       <xsl:if test="not(dyn:evaluate(concat($rootElement, $rest, $request)))">
-        <!--<xsl:comment>no file specific override</xsl:comment>-->
+<!--<xsl:comment>no file specific override</xsl:comment>-->
         <xsl:if test="boolean(dyn:evaluate(concat($rootElement,$rest,$defaultView)))">
-          <!--<xsl:comment>dir specific override</xsl:comment>-->
+<!--<xsl:comment>dir specific override</xsl:comment>-->
           <xsl:value-of select="concat($rest,$defaultView)"/>
         </xsl:if>
         <xsl:if test="not(dyn:evaluate(concat($rootElement,$rest,$defaultView)))">
-          <!--<xsl:comment>no dir specific override</xsl:comment>-->
+<!--<xsl:comment>no dir specific override</xsl:comment>-->
           <xsl:value-of select="$view2response"/>
         </xsl:if>
       </xsl:if>
       <xsl:if test="boolean(dyn:evaluate(concat($rootElement, $rest, $request)))">
-        <!--<xsl:comment>file specific override</xsl:comment>-->
-         <xsl:value-of select="concat($rest, $request)"/>
+<!--<xsl:comment>file specific override</xsl:comment>-->
+        <xsl:value-of select="concat($rest, $request)"/>
       </xsl:if>
     </xsl:if>
   </xsl:template>
-  
 </xsl:stylesheet>

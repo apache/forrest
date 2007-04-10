@@ -15,21 +15,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"  
   xmlns:xi="http://www.w3.org/2001/XInclude"
   >
-
-	<xsl:param name="format"/>
-
+  <xsl:param name="format"/>
   <xsl:template match="/">
     <forrest:properties >
-	    <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
-	      <xi:include href="cocoon://get.contract-property.{@name}.{$format}"/>
-	    </xsl:for-each>
+      <xsl:for-each select="forrest:views/forrest:view[@type=$format]//forrest:contract">
+        <xi:include href="cocoon://get.contract-property.{@name}.{$format}"/>
+      </xsl:for-each>
     </forrest:properties>
   </xsl:template>
-  
 </xsl:stylesheet>

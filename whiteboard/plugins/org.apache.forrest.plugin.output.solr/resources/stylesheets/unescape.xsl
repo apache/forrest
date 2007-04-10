@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:template name="unescapeEm">
     <xsl:param name="val" select="''"/>
@@ -24,10 +23,8 @@
       <xsl:when test="$preEm or starts-with($val, '&lt;')">
         <xsl:variable name="insideEm" select="substring-before($val,
 '&lt;/')"/>
-        <xsl:value-of select="$preEm"/>
-        <em>
-          <xsl:value-of select="substring($insideEm, string-length($preEm)+5)"/>
-        </em>
+        <xsl:value-of select="$preEm"/><em>
+        <xsl:value-of select="substring($insideEm, string-length($preEm)+5)"/></em>
         <xsl:variable name="leftover"
           select="substring($val,
 string-length($insideEm) + 6)"/>

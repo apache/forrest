@@ -15,20 +15,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0" 
   xmlns:xi="http://www.w3.org/2001/XInclude" >
-  
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-  <!---->
+<!---->
   <xsl:template match="forrest:call-template">
     <xi:include 
       href="cocoon://prepare.view-templates.{@name}#xpointer(/*/*)"/>
   </xsl:template>
-  
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>

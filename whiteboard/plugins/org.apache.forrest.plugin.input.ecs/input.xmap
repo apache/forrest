@@ -16,27 +16,22 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
-<map:pipelines>
-
-  <map:pipeline>
-
-    <map:match pattern="**.ecs.xml">
-      <map:generate src="cocoon://{1}.ecs.source.xml"/>
-      <map:transform src="resources/stylesheets/ecs2xdoc.xsl">
-        <map:parameter name="file" value="{1}"/>
-      </map:transform>
-      <map:serialize type="xml"/>
-     </map:match>
-     
-    <map:match pattern="**.ecs.source.xml">
-      <map:aggregate element="ecs">
-        <map:part src="{properties:content.xdocs}/{1}.ecs.local.xml"/>
-        <map:part src="{properties:content.xdocs}/{1}.ecs.amazon.xml"/>
-      </map:aggregate>
-      <map:serialize type="xml"/>
-     </map:match>
-  </map:pipeline>
-</map:pipelines>
-
+  <map:pipelines>
+    <map:pipeline>
+      <map:match pattern="**.ecs.xml">
+        <map:generate src="cocoon://{1}.ecs.source.xml"/>
+        <map:transform src="resources/stylesheets/ecs2xdoc.xsl">
+          <map:parameter name="file" value="{1}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="**.ecs.source.xml">
+        <map:aggregate element="ecs">
+          <map:part src="{properties:content.xdocs}/{1}.ecs.local.xml"/>
+          <map:part src="{properties:content.xdocs}/{1}.ecs.amazon.xml"/>
+        </map:aggregate>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
 </map:sitemap>

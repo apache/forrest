@@ -18,49 +18,44 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dir="http://apache.org/cocoon/directory/2.0">
-
-  <xsl:param name="category"></xsl:param>                
-  
+  <xsl:param name="category"></xsl:param>
   <xsl:template match="dir:directory">
-    <document> 
-      <header> 
-        <title>Category: <xsl:value-of select="$category"/></title> 
-      </header> 
-      <body> 
+    <document>
+      <header>
+        <title>Category: <xsl:value-of select="$category"/></title>
+      </header>
+      <body>
         <section id="overview">
           <title>
-            My thoughts on <xsl:value-of select="$category"/>
-          </title> 
-   
+            My thoughts on <xsl:value-of select="$category"/></title>
           <xsl:apply-templates select="//dir:file"/>
-         
         </section>
-
       </body>
     </document>
   </xsl:template>
-  
   <xsl:template match="dir:file">
-   <xsl:if test="./dir:xpath/title">
-    
-    <xsl:variable name="dir-path">
-    <!-- 
+    <xsl:if test="./dir:xpath/title">
+      <xsl:variable name="dir-path">
+<!-- 
       pitiful i can't figure out how to do this without getting spaces polluting it:( 
       which is why it's all crammed together on one line.  embarrassing.    
     -->
-      <xsl:for-each select="ancestor::dir:directory"><xsl:if test="position() > 0"><xsl:value-of select="./@name"/>/</xsl:if></xsl:for-each>
-    </xsl:variable>
-    <p>
-      <strong>
+        <xsl:for-each select="ancestor::dir:directory">
+          <xsl:if test="position() > 0">
+            <xsl:value-of select="./@name"/>/</xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
+      <p>
+        <strong>
         <xsl:element name="a">
-          <xsl:attribute name="href">/<xsl:value-of select="$dir-path"/><xsl:value-of select="substring-before(./@name,'.xml')"/>.html</xsl:attribute>
+          <xsl:attribute name="href">/<xsl:value-of select="$dir-path"/>
+            <xsl:value-of select="substring-before(./@name,'.xml')"/>.html</xsl:attribute>
           <xsl:value-of select="./dir:xpath/title"/>
         </xsl:element>
-      </strong>
-      (<em>Published <xsl:value-of select="./@date"/></em>)
-    </p>
+        </strong> (<em>Published
+        <xsl:value-of select="./@date"/>
+        </em>)
+      </p>
     </xsl:if>
-  </xsl:template>   
-  
-  
+  </xsl:template>
 </xsl:stylesheet>

@@ -15,61 +15,51 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-  <!-- ============================================================ -->
-  <!-- IMS Maniifest Plugin                                         -->
-  <!-- This plugin replaces the site.xml and tabs.xml file with     -->
-  <!-- an IMS Manifest file conforming to the IMS specifications    -->
-  <!-- for Content Packages.                                        -->
-  <!--                                                              -->
-  <!-- In the absence of an IMSManifest.xml file the plugin will    -->
-  <!-- fallback to using the standard site.xml and tabs.xml files.  -->
-  <!-- ============================================================ -->
-
+<!-- ============================================================ -->
+<!-- IMS Maniifest Plugin                                         -->
+<!-- This plugin replaces the site.xml and tabs.xml file with     -->
+<!-- an IMS Manifest file conforming to the IMS specifications    -->
+<!-- for Content Packages.                                        -->
+<!--                                                              -->
+<!-- In the absence of an IMSManifest.xml file the plugin will    -->
+<!-- fallback to using the standard site.xml and tabs.xml files.  -->
+<!-- ============================================================ -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
   <map:components>
     <map:selectors>
       <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
-    
     <map:transformers default="xslt">
       <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="menu">
           <catalogue id="menu" name="menu" location="{properties:translations}"/>
         </catalogues>
-        <!-- Commented out to verify your translations
+<!-- Commented out to verify your translations
         <untranslated-text>untranslated</untranslated-text> -->
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    
     <map:actions>
       <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
     </map:actions>
   </map:components>
-  
   <map:resources>
     <map:resource name="skinit">
-        <map:transform src="{lm:{type}}">
-          <map:parameter name="notoc" value="{notoc}"/>
-          <!-- For backwards-compat with 0.2 - 0.4 skins -->
-          <map:parameter name="isfaq" value="{notoc}"/>
-          <map:parameter name="nopdf" value="{nopdf}"/>
-          <map:parameter name="path" value="{path}"/>
-          <map:parameter name="config-file" value="{properties:skinconf}"/>
-        </map:transform>
+      <map:transform src="{lm:{type}}">
+        <map:parameter name="notoc" value="{notoc}"/>
+<!-- For backwards-compat with 0.2 - 0.4 skins -->
+        <map:parameter name="isfaq" value="{notoc}"/>
+        <map:parameter name="nopdf" value="{nopdf}"/>
+        <map:parameter name="path" value="{path}"/>
+        <map:parameter name="config-file" value="{properties:skinconf}"/>
+      </map:transform>
       <map:serialize/>
     </map:resource>
-
   </map:resources>
-
-    
   <map:pipelines>
-  
-   <!-- ============================================================ -->
-   <!-- Linkmap.xmap overrides                                       -->
-   <!-- ============================================================ -->
-  
+<!-- ============================================================ -->
+<!-- Linkmap.xmap overrides                                       -->
+<!-- ============================================================ -->
     <map:pipeline>
       <map:match pattern="abs-linkmap">
         <map:select type="exists">
@@ -84,13 +74,10 @@
         <map:transform src="{transform.linkmap.linkmap-absolutized}" />
         <map:serialize type="xml" />
       </map:match>
-
     </map:pipeline>
-    
-   <!-- ============================================================ -->
-   <!-- tabs.xmap overrides                                          -->
-   <!-- ============================================================ -->
-  
+<!-- ============================================================ -->
+<!-- tabs.xmap overrides                                          -->
+<!-- ============================================================ -->
     <map:pipeline >
       <map:match pattern="**tab-*.html">
         <map:select type="exists">
@@ -107,16 +94,12 @@
           <map:parameter name="type" value="transform.tab.menu"/>
           <map:parameter name="path" value="{1}{2}.html"/>
         </map:call>
-      </map:match>      
+      </map:match>
     </map:pipeline>
- 
-    
-    <!-- ============================================================ -->
-    <!-- menu.xmap overrides                                          -->
-    <!-- ============================================================ -->
-    
+<!-- ============================================================ -->
+<!-- menu.xmap overrides                                          -->
+<!-- ============================================================ -->
     <map:pipeline internal-only="false">
-
       <map:match pattern="abs-menulinks">
         <map:select type="exists">
           <map:when test="{properties:content.xdocs}imsmanifest.xml">
@@ -135,7 +118,6 @@
           </map:when>
         </map:select>
       </map:match>
-
       <map:match pattern="**menulinks-*">
         <map:select type="exists">
           <map:when test="{properties:content.xdocs}imsmanifest.xml">
@@ -148,10 +130,8 @@
             <map:transform src="{transform.linkmap.linkmap-absolutized}" />
           </map:when>
         </map:select>
-
         <map:select type="config">
           <map:parameter name="value" value="{properties:forrest.menu-scheme}"/>
-
           <map:when test="tab_attributes">
             <map:transform src="{transform.linkmap.linkmap-normalizedtabs}" />
             <map:transform src="{transform.xml.xml-normalizedhrefs}"/>
@@ -159,64 +139,50 @@
               <map:parameter name="path" value="{1}{2}"/>
             </map:transform>
           </map:when>
-
         </map:select>
-
         <map:transform src="{transform.linkmap.linkmap-relativized}">
           <map:parameter name="path" value="{1}{2}" />
         </map:transform>
         <map:serialize type="xml" />
       </map:match>
-      
       <map:match pattern="**book-*">
-
         <map:select type="exists">
-
           <map:when test="{properties:content.xdocs}{1}book.xml">
-            <!-- If a hand-created book.xml exists, use it -->
+<!-- If a hand-created book.xml exists, use it -->
             <map:parameter name="url" value="{properties:content.xdocs}{1}book.xml" />
             <map:generate src="{properties:content.xdocs}{1}book.xml" />
           </map:when>
-
           <map:otherwise>
-            <!-- If no book.xml, generate it from the linkmap. -->
+<!-- If no book.xml, generate it from the linkmap. -->
             <map:generate src="cocoon:/{1}menulinks-{2}" />
-            <!-- The above generates the subset of the linkmap relevant to our directory. -->
+<!-- The above generates the subset of the linkmap relevant to our directory. -->
             <map:transform src="{lm:transform.site.book}" />
           </map:otherwise>
-
         </map:select>
-
         <map:select type="config">
           <map:parameter name="value" value="{properties:forrest.i18n}"/>
           <map:when test="true">
-
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}"/>
               <map:transform type="i18n">
-                <!-- We can use a default locale attribute or Request Parameter
+<!-- We can use a default locale attribute or Request Parameter
                 <map:parameter name="locale" value="{properties:forrest.locale}"/>
                 <map:parameter name="locale" value="{request-param:locale}"/>
                 -->
                 <map:parameter name="locale" value="{lang}{country}{variant}"/>
               </map:transform>
             </map:act>
-
           </map:when>
         </map:select>
-
         <map:serialize type="xml"/>
-
       </map:match>
     </map:pipeline>
-     
-    <!-- ============================================================ -->
-    <!-- Repository Commands                                          -->
-    <!-- ============================================================ -->
-    
+<!-- ============================================================ -->
+<!-- Repository Commands                                          -->
+<!-- ============================================================ -->
     <map:pipeline>
       <map:match pattern="repositoryCommand/getSCO/**/repositoryURI/**/*.xml">
-        <!-- FIXME: is there any way of preventing the need to copy this stuff manually when it changes in the forrest.xmap file in Forrest -->
+<!-- FIXME: is there any way of preventing the need to copy this stuff manually when it changes in the forrest.xmap file in Forrest -->
         <map:select type="exists">
           <map:when test="/{2}/{1}/src/documentation/content/xdocs/{3}.cwiki">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
@@ -229,7 +195,6 @@
               <map:serialize/>
             </map:match>
           </map:when>
-
           <map:when test="/{2}/{1}/src/documentation/content/xdocs/{3}.txt">
             <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
               <map:generate type="text2xml" src="http://{2}/{1}/src/documentation/content/xdocs/{3}.txt" />
@@ -239,10 +204,9 @@
               <map:serialize/>
             </map:match>
           </map:when>
-
           <map:when test="/{2}/{1}/src/documentation/content/xdocs/{3}.sxw">
             <map:aggregate element="openOffice">
-              <!-- FIXME: on windows we need three / after the protocol, on Linux we need 2 -->
+<!-- FIXME: on windows we need three / after the protocol, on Linux we need 2 -->
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxw!/meta.xml"/>
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxw!/styles.xml"/>
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxw!/content.xml"/>
@@ -262,11 +226,10 @@
               </map:otherwise>
             </map:select>
             <map:serialize/>
-          </map:when>     
-          
+          </map:when>
           <map:when test="/{2}/{1}/src/documentation/content/xdocs/{3}.sxi">
             <map:aggregate element="openOffice">
-              <!-- FIXME: on windows we need three / after the protocol, on LInux we need 2 -->
+<!-- FIXME: on windows we need three / after the protocol, on LInux we need 2 -->
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxi!/meta.xml"/>
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxi!/styles.xml"/>
               <map:part src="jar:http://{2}/{1}/src/documentation/content/xdocs/{3}.sxi!/content.xml"/>
@@ -287,7 +250,6 @@
             </map:select>
             <map:serialize/>
           </map:when>
-     
           <map:otherwise>
             <map:generate src="http://{2}/{1}/src/documentation/content/xdocs/{3}.xml"/>
             <map:serialize/>
@@ -295,6 +257,5 @@
         </map:select>
       </map:match>
     </map:pipeline>
-    
-  </map:pipelines>    
+  </map:pipelines>
 </map:sitemap>

@@ -15,16 +15,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
-  
   <xsl:template match="/">
     <xsl:apply-templates select="//forrest:template/xsl:stylesheet/xsl:template[contains(@name,'-css')]"/>
   </xsl:template>
-
-	<xsl:template match="xsl:template[contains(@name,'-css')]">
+  <xsl:template match="xsl:template[contains(@name,'-css')]">
     <xsl:value-of select="."/>
-	</xsl:template>
+  </xsl:template>
 </xsl:stylesheet>

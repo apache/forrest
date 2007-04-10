@@ -37,59 +37,59 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:resume="http://xmlresume.sourceforge.net/resume/0.0"
   exclude-result-prefixes="office meta  table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
-      
   <xsl:output method="xml" indent="yes" omit-xml-declaration="no"/>
   <xsl:output method="xml" version="1.0" encoding="UTF-8" 
     doctype-public="-//Sean Kelly//DTD Resume 1.5.1//EN" 
     doctype-system="http://xmlresume.sourceforge.net/dtd/resume.dtd"/>
-  
-  <!--+
+<!--+
       | keys to generate the structure
       +-->
   <xsl:key name="skillsets" match="text:h[@text:level='3']" use="generate-id((preceding-sibling::text:h[@text:level='2'])[last()])"/>
   <xsl:key name="skilltables" match="table:table" use="generate-id((preceding-sibling::text:h[@text:level='3'])[last()])"/>
-  
-  <!--+
+<!--+
       | start transforming 
       +-->
   <xsl:template match="office:document">
     <resume:resume>
       <resume:header>
         <resume:name>
-          <resume:firstname><xsl:value-of select="office:document-content/office:body/text:user-field-decls/text:user-field-decl[@text:name='firstname']/@text:string-value"/></resume:firstname>
-          <resume:surname><xsl:value-of select="office:document-content/office:body/text:user-field-decls/text:user-field-decl[@text:name='lastname']/@text:string-value"/></resume:surname>  
-        </resume:name>  
+          <resume:firstname>
+            <xsl:value-of select="office:document-content/office:body/text:user-field-decls/text:user-field-decl[@text:name='firstname']/@text:string-value"/>
+          </resume:firstname>
+          <resume:surname>
+            <xsl:value-of select="office:document-content/office:body/text:user-field-decls/text:user-field-decl[@text:name='lastname']/@text:string-value"/>
+          </resume:surname>
+        </resume:name>
       </resume:header>
-      
       <xsl:apply-templates select="office:document-content/office:body[1]/text:h[@text:level='2']"/>
     </resume:resume>
   </xsl:template>
-  
-  <!--+
+<!--+
       | 
       +-->
-    
-  <!--+
+<!--+
       | process the skillareas ( level 2 headings)
       +-->
   <xsl:template match="text:h[@text:level='2']">
     <resume:skillarea>
-      <resume:title><xsl:value-of select="."/></resume:title>
-      <xsl:apply-templates select="key('skillsets', generate-id())"/>  
-    </resume:skillarea>    
+      <resume:title>
+        <xsl:value-of select="."/>
+      </resume:title>
+      <xsl:apply-templates select="key('skillsets', generate-id())"/>
+    </resume:skillarea>
   </xsl:template>
-  
-  <!--+
+<!--+
       | process the skillsets ( level 3 headings)
       +-->
   <xsl:template match="text:h[@text:level='3']">
     <resume:skillset>
-      <resume:title><xsl:value-of select="."/></resume:title>
+      <resume:title>
+        <xsl:value-of select="."/>
+      </resume:title>
       <xsl:apply-templates select="key('skilltables', generate-id())/table:table-row"/>
-    </resume:skillset>    
+    </resume:skillset>
   </xsl:template>
-  
-  <!--+
+<!--+
       | process the Skills ( table rows)
       +-->
   <xsl:template match="table:table-row">
@@ -100,5 +100,4 @@
       <xsl:value-of select="table:table-cell[1]/text:p"/>
     </xsl:element>
   </xsl:template>
-  
 </xsl:stylesheet>

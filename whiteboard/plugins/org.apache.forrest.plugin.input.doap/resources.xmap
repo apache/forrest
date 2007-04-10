@@ -18,30 +18,24 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:serializers>
-       <map:serializer name="js" 
+      <map:serializer name="js" 
            src="org.apache.cocoon.serialization.TextSerializer"
            mime-type="application/javascript" 
            logger="sitemap.serializer.text" 
          />
     </map:serializers>
   </map:components>
-
-<map:pipelines>
-
+  <map:pipelines>
     <map:pipeline>
-
       <map:match pattern="projectDetails/allProjects.js">
         <map:generate type="file" src="cocoon://projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.JSON}"/>
         <map:serialize type="js"/>
-      </map:match>      
-
+      </map:match>
       <map:match pattern="projectDetails/**.rdf">
         <map:generate src="cocoon://projectDetails/{1}.source.xml" />
         <map:serialize type="xml"/>
-      </map:match>    
+      </map:match>
     </map:pipeline>
-  
-</map:pipelines>
-
+  </map:pipelines>
 </map:sitemap>

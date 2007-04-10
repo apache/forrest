@@ -16,50 +16,44 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-	<map:components>
-		<map:generators default="file">
-			<map:generator name="html"
+  <map:components>
+    <map:generators default="file">
+      <map:generator name="html"
 				src="org.apache.cocoon.generation.HTMLGenerator">
-				<jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
-			</map:generator>
-			<map:generator name="request" src="org.apache.cocoon.generation.RequestGenerator"/>
-		</map:generators>
-    
+        <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
+      </map:generator>
+      <map:generator name="request" src="org.apache.cocoon.generation.RequestGenerator"/>
+    </map:generators>
     <map:selectors>
       <map:selector logger="sitemap.selector.request-parameter" name="request-parameter" src="org.apache.cocoon.selection.RequestParameterSelector"/>
     </map:selectors>
-    
-	</map:components>
-  
+  </map:components>
   <map:resources>
     <map:resource name="daisy-to-document">
-        <map:aggregate element="daisyDocument">
-          <map:part src="cocoon://{properties:daisy.pathPrefix}{docID}.daisy.source" />
-          <map:part src="cocoon://daisy.site.{properties:daisy.navigation.docID}" />
-        </map:aggregate>
-        <map:transform src="{lm:daisy.transform.daisy.html}">
-          <map:parameter name="documentPath" value="{path}"/>
-          <map:parameter name="pathPrefix" value="{properties:daisy.pathPrefix}"/>
-          <map:parameter name="daisyExt" value="{properties:daisy.fileExt}"/>
-        </map:transform>
-        <map:transform src="{lm:transform.html.document}"/>
-        <map:select type="exists">
-          <map:when test="{properties:resources.stylesheets}/daisy/postFilter.xsl">
-            <map:transform src="{properties:resources.stylesheets}/daisy/postFilter.xsl"/>
-          </map:when>
-        </map:select>
-        <map:serialize/>
+      <map:aggregate element="daisyDocument">
+        <map:part src="cocoon://{properties:daisy.pathPrefix}{docID}.daisy.source" />
+        <map:part src="cocoon://daisy.site.{properties:daisy.navigation.docID}" />
+      </map:aggregate>
+      <map:transform src="{lm:daisy.transform.daisy.html}">
+        <map:parameter name="documentPath" value="{path}"/>
+        <map:parameter name="pathPrefix" value="{properties:daisy.pathPrefix}"/>
+        <map:parameter name="daisyExt" value="{properties:daisy.fileExt}"/>
+      </map:transform>
+      <map:transform src="{lm:transform.html.document}"/>
+      <map:select type="exists">
+        <map:when test="{properties:resources.stylesheets}/daisy/postFilter.xsl">
+          <map:transform src="{properties:resources.stylesheets}/daisy/postFilter.xsl"/>
+        </map:when>
+      </map:select>
+      <map:serialize/>
     </map:resource>
   </map:resources>
-
-	<map:pipelines>
-		<!-- ============================================================== -->
-		<!-- Repository pipeline                                            -->
-		<!-- ============================================================== -->
-		
+  <map:pipelines>
+<!-- ============================================================== -->
+<!-- Repository pipeline                                            -->
+<!-- ============================================================== -->
     <map:pipeline>
-      
-      <!-- Workaround: When Cocoondocs are generated the FAQ index page (id 856)
+<!-- Workaround: When Cocoondocs are generated the FAQ index page (id 856)
       has URLs that have the *.daisy.html extension. I don't have the time
       now to work out why this is, so the match below is a quick hack to get the
       FAQ pages working again.
@@ -76,14 +70,12 @@
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
-      
       <map:match pattern="{properties:daisy.pathPrefix}*{properties:daisy.fileExt}.xml">
         <map:call resource="daisy-to-document">
           <map:parameter name="docID" value="{1}"/>
           <map:parameter name="path" value="{0}"/>
         </map:call>
       </map:match>
-      
       <map:match pattern="{properties:daisy.pathPrefix}**{properties:daisy.fileExt}.xml">
         <map:call resource="daisy-to-document">
           <map:parameter name="docID" value="{1}"/>
@@ -91,6 +83,5 @@
         </map:call>
       </map:match>
     </map:pipeline>
-    
-	</map:pipelines>
+  </map:pipelines>
 </map:sitemap>

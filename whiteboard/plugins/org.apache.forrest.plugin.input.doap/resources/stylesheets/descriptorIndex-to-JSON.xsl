@@ -21,7 +21,6 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#">
-    
   <xsl:template match="/">
     {
       "items" : [
@@ -29,31 +28,24 @@
       ]
     } 
   </xsl:template>
-  
   <xsl:template match="descriptors">
     <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template match="descriptor">
     <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template match="doap:Project">
     {
       <xsl:apply-templates/>
     },
   </xsl:template>
-  
   <xsl:template match="doap:shortdesc">    
     shortdesc : <xsl:value-of select="."/>
   </xsl:template>
-  
   <xsl:template match="doap:name">    
     name : <xsl:value-of select="."/>,
   </xsl:template>
-  
   <xsl:template match="doap:homepage">    
     homepage : <xsl:value-of select="@rdf:resource"/>,
   </xsl:template>
 </xsl:stylesheet>
-

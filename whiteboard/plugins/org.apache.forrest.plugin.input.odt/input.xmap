@@ -16,29 +16,28 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
   <map:pipelines>
     <map:pipeline internal="true">
       <map:match pattern="**.xml">
-      <map:select type="exists">
-        <map:when test="{lm:project.{1}.odt}">
-          <map:aggregate element="odt">
-            <map:part src="cocoon:/{1}.meta.odt.xml" element="meta" />
-            <map:part src="cocoon:/{1}.styles.odt.xml" element="styles" />
-            <map:part src="cocoon:/{1}.content.odt.xml"
+        <map:select type="exists">
+          <map:when test="{lm:project.{1}.odt}">
+            <map:aggregate element="odt">
+              <map:part src="cocoon:/{1}.meta.odt.xml" element="meta" />
+              <map:part src="cocoon:/{1}.styles.odt.xml" element="styles" />
+              <map:part src="cocoon:/{1}.content.odt.xml"
               element="content" />
-          </map:aggregate>
-          <map:transform src="{lm:transform.odt-forrest.xhtml}">
-            <map:parameter name="path" value="{1}"/>
-          </map:transform>
-          <map:transform src="{lm:transform.xml.xml-namespace-stripped}" />
-          <map:transform src="{lm:transform.html.document}" />
-          <map:serialize type="xml" />
-        </map:when>
-      </map:select>
+            </map:aggregate>
+            <map:transform src="{lm:transform.odt-forrest.xhtml}">
+              <map:parameter name="path" value="{1}"/>
+            </map:transform>
+            <map:transform src="{lm:transform.xml.xml-namespace-stripped}" />
+            <map:transform src="{lm:transform.html.document}" />
+            <map:serialize type="xml" />
+          </map:when>
+        </map:select>
       </map:match>
     </map:pipeline>
-    <!-- FIXME - We can have just one pipeline to superseed the following... -->
+<!-- FIXME - We can have just one pipeline to superseed the following... -->
     <map:pipeline internal="true">
       <map:match pattern="**.meta.odt.xml">
         <map:generate src="zip:{lm:project.{1}.odt}!/meta.xml" />
@@ -58,5 +57,4 @@
       </map:match>
     </map:pipeline>
   </map:pipelines>
-
 </map:sitemap>

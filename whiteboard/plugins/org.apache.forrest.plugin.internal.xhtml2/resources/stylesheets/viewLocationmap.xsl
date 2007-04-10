@@ -18,25 +18,23 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:collection="http://apache.org/cocoon/collection/1.0">
   <xsl:variable name="includePattern" select="'.fv'"/>
-  
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="collection:collection">
     <dir name="{@name}">
-    	<xsl:apply-templates/>
+      <xsl:apply-templates/>
     </dir>
   </xsl:template>
   <xsl:template match="collection:resource[contains(@name,$includePattern)]">
     <view name="{@name}">
-    	<xsl:apply-templates/>
+      <xsl:apply-templates/>
     </view>
   </xsl:template>
-  <!--/collection:resource[contains(@name,$includePattern)]-->
- <!-- <xsl:template match="//*/*[contains(@name,$includePattern)]">
+<!--/collection:resource[contains(@name,$includePattern)]-->
+<!-- <xsl:template match="//*/*[contains(@name,$includePattern)]">
     <xsl:variable name="parent" select="../."/>
     <node id="{$parent/@name}"/>
    <!-#-<xsl:copy-of select="$parent"/>-#->
   </xsl:template>-->
-  
 </xsl:stylesheet>

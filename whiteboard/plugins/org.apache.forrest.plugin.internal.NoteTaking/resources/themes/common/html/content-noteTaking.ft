@@ -19,16 +19,17 @@
     xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
     xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="content-noteTaking" type="nugget">
-
   <description>
     content-noteTaking will output a text box to enable notes to be taken.
   </description>
-  <usage><![CDATA[<forrest:contract name="content-noteTaking">  
+  <usage>
+<![CDATA[<forrest:contract name="content-noteTaking">  
   <forrest:property name="content-noteTaking-srcDoc">#{$cocoon/parameters/getRequest}</forrest:properties>
   <forrest:property name="content-noteTaking-notes"><jx:import uri="cocoon://noteTaking/do/getNotes/#{$cocoon/parameters/getRequest}"/></forrest:properties>
   [<forrest:property name="content-noteTaking-cols" value="[Number of Columns]"/>]
   [<forrest:property name="content-noteTaking-rows" vlaue="Number of Rows]"/>]
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
       format="html" name="content-noteTaking" inputFormat="xsl" body="true" head="false">
     <xsl:stylesheet version="1.1"
@@ -47,11 +48,12 @@
       <xsl:template name="content-noteTaking-body">
         <xsl:variable name="notes">
           <xsl:choose>
-            <xsl:when test="not($content-noteTaking-notes='')"><xsl:value-of select="$content-noteTaking-notes"/></xsl:when>
+            <xsl:when test="not($content-noteTaking-notes='')">
+              <xsl:value-of select="$content-noteTaking-notes"/>
+            </xsl:when>
             <xsl:otherwise>Enter your notes here and click "SAVE" when done.</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        
         <form action="/noteTaking/do/addNote.html" method="post">
           <textarea name="note">
             <xsl:attribute name="cols">
@@ -63,14 +65,14 @@
             <xsl:value-of select="$notes"/>
           </textarea>
           <button type="submit">Save</button>
-          <!-- The path to the node we are writing -->
+<!-- The path to the node we are writing -->
           <input type="hidden" name="path">
-            <xsl:attribute name="value"><xsl:value-of select="$content-noteTaking-srcDoc"/></xsl:attribute>
+            <xsl:attribute name="value">
+              <xsl:value-of select="$content-noteTaking-srcDoc"/>
+            </xsl:attribute>
           </input>
         </form>
-        
       </xsl:template>
-
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

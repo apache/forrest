@@ -31,29 +31,25 @@
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
-    
     <map:pipes>
       <map:pipe name="navigation"
         src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
-        <parameter name="cache-expires" value="600"/> <!-- Expires in seconds -->
+        <parameter name="cache-expires" value="600"/>
+<!-- Expires in seconds -->
       </map:pipe>
     </map:pipes>
   </map:components>
-
-<map:pipelines>
-
-  <map:pipeline type="navigation">
-      <!-- ================================================================ -->
-      <!-- Site.xml snippets                                                -->
-      <!-- ================================================================ -->
-      
+  <map:pipelines>
+    <map:pipeline type="navigation">
+<!-- ================================================================ -->
+<!-- Site.xml snippets                                                -->
+<!-- ================================================================ -->
       <map:match pattern="projectDetails/descriptorIndex.xml">
         <map:generate type="file" src="{properties:content}/locationmap.xml" />
         <map:transform src="{lm:doap.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
         <map:serialize type="xml"/>
       </map:match>
-      
       <map:match pattern="projectDetails/index/by*/siteSnippet.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.siteSnippet_by{1}}">
@@ -61,8 +57,7 @@
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
-      
-      <!--
+<!--
         Create a snippet for inclusion in site.xml that lists all projects
         known in the locationmap-projects.xml file.
       -->
@@ -71,8 +66,7 @@
         <map:transform src="{lm:doap.transform.descriptorIndex.siteSnippet}"/>
         <map:serialize type="xml-document"/>
       </map:match>
-      
-      <!--
+<!--
         Create a snippet for inclusion in site.xml that lists all projects
         known in the locationmap-projects.xml that have the indicated 
         programming language. 
@@ -85,32 +79,26 @@
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
-
     </map:pipeline>
-  
-  <map:pipeline>
-
-      <!-- ================================================================ -->
-      <!-- indexes                                                     -->
-      <!-- ================================================================ -->
-      
-      <!-- FIXME: create the XSL for this pipeline
+    <map:pipeline>
+<!-- ================================================================ -->
+<!-- indexes                                                     -->
+<!-- ================================================================ -->
+<!-- FIXME: create the XSL for this pipeline
       
       <map:match pattern="projectDetails.index.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.html}"/>
         <map:serialize type="xml-document"/>
       </map:match>
-      -->      
-      
+      -->
       <map:match pattern="projectDetails/index/by*.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}">
           <map:parameter name="documentPath" value="{0}"/>
         </map:transform>
         <map:serialize type="xml-document"/>
-      </map:match> 
-      
+      </map:match>
       <map:match pattern="projectDetails/index/by*/*.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.indexBy{1}}">
@@ -119,31 +107,24 @@
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
-      
       <map:match pattern="projectDetails/source.xml">
         <map:generate type="file" src="{lm:doap.descriptor}" />
         <map:serialize type="xml"/>
       </map:match>
-      
       <map:match pattern="projectDetails/**.source.xml">
         <map:generate type="file" src="{lm:doap.descriptor.{1}}" />
         <map:serialize type="xml"/>
       </map:match>
-    
       <map:match pattern="projectDetails.xml">
         <map:generate src="cocoon:/projectDetails/source.xml" />
         <map:transform src="{lm:doap.transform.doap.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
-      
       <map:match pattern="projectDetails/**.xml">
         <map:generate src="cocoon:/projectDetails/{1}.source.xml" />
         <map:transform src="{lm:doap.transform.doap.document}"/>
         <map:serialize type="xml-document"/>
-      </map:match>      
-    
-  </map:pipeline>
-  
-</map:pipelines>
-
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
 </map:sitemap>

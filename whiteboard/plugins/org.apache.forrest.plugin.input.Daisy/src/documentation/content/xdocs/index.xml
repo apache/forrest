@@ -16,43 +16,44 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-  <header> 
-    <title>Welcome to the org.apache.forrest.plugin.input.Daisy Plugin</title> 
-  </header> 
-  <body> 
+<document>
+  <header>
+    <title>Welcome to the org.apache.forrest.plugin.input.Daisy Plugin</title>
+  </header>
+  <body>
     <section>
       <title>Apache Forrest - org.apache.forrest.plugin.input.Daisy Plugin</title>
-      <p>This plugin retrieves documents from a 
-      <a href="http://www.cocoondev.org/daisy">Daisy</a>
-      repository.</p>
+      <p>
+        This plugin retrieves documents from a
+        <a href="http://www.cocoondev.org/daisy">Daisy</a> repository.
+      </p>
     </section>
-    
     <section>
       <title>Usage</title>
-      
-      <p>This plugin allows content to be retrieved from a 
-      <a href="http://www.cocoondev.org/daisy/">Daisy CMS repository</a>
-      and displayed alongside any other Forrest content. Unlike many
-      other plugins there is some configuraiton of your project requried.</p>
-            
+      <p>
+        This plugin allows content to be retrieved from a
+        <a href="http://www.cocoondev.org/daisy/">Daisy CMS repository</a> and
+        displayed alongside any other Forrest content. Unlike many other plugins
+        there is some configuraiton of your project requried.
+      </p>
       <section>
         <title>Configuration</title>
-      
         <section>
           <title>Locationmap</title>
-          
-          <p>The project locationmap for a Daisy generated site is automatically
-          created from the daisy navigation documents. This allows the URL of the
-          published Forrest site to be set within the Daisy CMS system as opposed
-          to using the daisy ID for the page.</p>
-          
-          <p>In order for Forrest to know the id of the navigation document to be
-          used your project must set some required properties
-          (see below for details). The project also needs to provide the following match in
-          PROJECT_HOME/sitemap.xmap:</p>
-          
-          <source><![CDATA[
+          <p>
+            The project locationmap for a Daisy generated site is automatically
+            created from the daisy navigation documents. This allows the URL of
+            the published Forrest site to be set within the Daisy CMS system as
+            opposed to using the daisy ID for the page.
+          </p>
+          <p>
+            In order for Forrest to know the id of the navigation document to be
+            used your project must set some required properties (see below for
+            details). The project also needs to provide the following match in
+            PROJECT_HOME/sitemap.xmap:
+          </p>
+          <source>
+<![CDATA[
     <map:pipeline>
       <map:parameter name="expires" value="access plus 2 hours"/>
     
@@ -67,25 +68,27 @@
         <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
-          ]]></source>
-                            
-          <p>If your site needs to provide additional locationmap entries it can
-          do so by including them in 
-          <code>PROJECT_HOME/src/documentation/locationmap-include.xml</code>.
-          The matchers in this file will override any of the auto-generated matchers
-          from the Daisy navigation file. The location of this file can be changed
-          by overriding the locationmap pattern <code>daisy.locationmap.include</code>.</p>
-        
-          <note>The pipeline above
-          caches the navigation for 2 hours. This is because it is computationally
-          expensive to regenerate these files.</note>
+          ]]>
+          </source>
+          <p>
+            If your site needs to provide additional locationmap entries it can
+            do so by including them in
+            <code>PROJECT_HOME/src/documentation/locationmap-include.xml</code>.
+            The matchers in this file will override any of the auto-generated
+            matchers from the Daisy navigation file. The location of this file
+            can be changed by overriding the locationmap pattern
+            <code>daisy.locationmap.include</code>.
+          </p>
+          <note>
+            The pipeline above caches the navigation for 2 hours. This is
+            because it is computationally expensive to regenerate these files.
+          </note>
         </section>
-        
         <section>
           <title>Properties</title>
-          
-          <p>The table below describes all properties that this plugin exposes.</p>
-          
+          <p>
+            The table below describes all properties that this plugin exposes.
+          </p>
           <table>
             <tr>
               <th>Property Name</th>
@@ -132,80 +135,85 @@
           </table>
         </section>
       </section>
-      
       <section>
         <title>Using Daisy Navigation Documents</title>
-        <p>It is possible to use a daisy navigation document in place of a local
-        site.xml file. However, you may want to mix content from different sources
-        by adding other entries to site.xml, ones that are not sourced from the 
-        Daisy navigation document. Therefore, you still need a site.xml file.</p>
-        
-        <p>A minimal site.xml file for your project would be:</p>
-        
-        <source><![CDATA[
+        <p>
+          It is possible to use a daisy navigation document in place of a local
+          site.xml file. However, you may want to mix content from different
+          sources by adding other entries to site.xml, ones that are not sourced
+          from the Daisy navigation document. Therefore, you still need a
+          site.xml file.
+        </p>
+        <p>
+          A minimal site.xml file for your project would be:
+        </p>
+        <source>
+<![CDATA[
 <site label="MyProj" href="" 
   xmlns="http://apache.org/forrest/linkmap/1.0" 
   xmlns:xi="http://www.w3.org/2001/XInclude" 
   tab="">
   <xi:include href="cocoon://1208.daisy.navigation"/>
 </site>
-        ]]></source>
-        
-        <p>Note that we use <code>xi:include</code> to include a navigation
-        document in the site.xml file, in this case the document retrieved has
-        id 1208. By using include in this way the site editor is free to use
-        site.xml to reference content from other sources.</p>
-        
-        <note>As with the locationmap generation, the pipelines that generate the site.xml
-        snippets are cached for at least 1 hour. This is because it is computationally
-        expecnsive to regenerate these files. A future version of this plugin will provide
-        a more flexible caching mechanism. But for now you need to force a refresh 
-        during development.</note>
+        ]]>
+        </source>
+        <p>
+          Note that we use <code>xi:include</code> to include a navigation
+          document in the site.xml file, in this case the document retrieved has
+          id 1208. By using include in this way the site editor is free to use
+          site.xml to reference content from other sources.
+        </p>
+        <note>
+          As with the locationmap generation, the pipelines that generate the
+          site.xml snippets are cached for at least 1 hour. This is because it
+          is computationally expecnsive to regenerate these files. A future
+          version of this plugin will provide a more flexible caching mechanism.
+          But for now you need to force a refresh during development.
+        </note>
       </section>
-      
       <section>
         <title>Retrieving RAW content</title>
-        <p>If you want to retrieve the raw, unprocessed XML from
-        Daisy simply request the file with a <code>.daisy.source</code>
-        extenstion.</p>
+        <p>
+          If you want to retrieve the raw, unprocessed XML from Daisy simply
+          request the file with a <code>.daisy.source</code> extenstion.
+        </p>
       </section>
     </section>
-      
+    <section>
+      <title>Filtering Content</title>
+      <p>
+        You may not have full control of the content in the repository, or you
+        may wish to supress the presentation of some of the parts, for example,
+        the fields within the repository. There are two points at which you can
+        filter the content, at the point of retrieval (called a pre-filter) and
+        once the file has been converted to the internal Forrest format (called
+        a post-filter).
+      </p>
       <section>
-        <title>Filtering Content</title>
-        
-        <p>You may not have full control of the content in the repository, or
-        you may wish to supress the presentation of some of the parts, for 
-        example, the fields within the repository. There are two points at 
-        which you can filter the content, at the point of retrieval (called a
-        pre-filter) and once the file has been converted to the internal 
-        Forrest format (called a post-filter).</p>
-        
-        <section>
-          <title>Pre-Filters</title>
-          
-          <p>Pre-Filters are applied to the XML retrieved from the 
-          Daisy repository. To achieve this you can 
-          provide an XSL file called <code>daisy/preFilter.xsl</code> in your 
-          projects stylesheet directory (default location is 
-          <code>PROJECT_HOME/src/documentation/resources/stylesheets</code>).</p>
-        
-        </section>
-        
-        <section>
-          <title>Post-Filters</title>
-          
-          <p>Post-Filters are applied to the XDoc generated by 
-          Forrest. To achieve this you can 
-          provide an XSL file called <code>daisy/postFilter.xsl</code> in your 
-          projects stylesheet directory (default location is 
-          <code>PROJECT_HOME/src/documentation/resources/stylesheets</code>).</p>
-        
-          <p>The postFilter XSL file operates on the XDoc generated by Forrest. 
-          If you wish to look at this format of the document simply request 
-          the page with an <code>.xml</code> extension.</p>
-        
+        <title>Pre-Filters</title>
+        <p>
+          Pre-Filters are applied to the XML retrieved from the Daisy
+          repository. To achieve this you can provide an XSL file called
+          <code>daisy/preFilter.xsl</code> in your projects stylesheet directory
+          (default location is
+          <code>PROJECT_HOME/src/documentation/resources/stylesheets</code>).
+        </p>
+      </section>
+      <section>
+        <title>Post-Filters</title>
+        <p>
+          Post-Filters are applied to the XDoc generated by Forrest. To achieve
+          this you can provide an XSL file called
+          <code>daisy/postFilter.xsl</code> in your projects stylesheet
+          directory (default location is
+          <code>PROJECT_HOME/src/documentation/resources/stylesheets</code>).
+        </p>
+        <p>
+          The postFilter XSL file operates on the XDoc generated by Forrest. If
+          you wish to look at this format of the document simply request the
+          page with an <code>.xml</code> extension.
+        </p>
+      </section>
     </section>
-  </section>
   </body>
 </document>

@@ -15,9 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
-
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="command"/>
   <xsl:template match="/">
@@ -40,17 +37,23 @@
   <xsl:template match="result">
     <section id="result">
       <title>solr server response</title>
-      <p>Command: <xsl:value-of select="$command"/></p>
+      <p>
+        Command:
+        <xsl:value-of select="$command"/>
+      </p>
       <xsl:choose>
         <xsl:when test="not(@status='0')">
-          <warning>There was a problem:
-            <xsl:value-of select="."/></warning>
+          <warning>
+            There was a problem:
+            <xsl:value-of select="."/>
+          </warning>
         </xsl:when>
         <xsl:otherwise>
-          <p>Success.</p>
+          <p>
+            Success.
+          </p>
         </xsl:otherwise>
       </xsl:choose>
     </section>
   </xsl:template>
-  
 </xsl:stylesheet>

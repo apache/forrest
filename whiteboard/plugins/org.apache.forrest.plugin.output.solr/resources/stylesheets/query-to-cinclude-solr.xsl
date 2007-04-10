@@ -24,12 +24,9 @@ handled by uncommenting the relevant section.
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cinclude="http://apache.org/cocoon/include/1.0"
   xmlns:h="http://apache.org/cocoon/request/2.0">
-
-  <!-- The extension of the lucene index fragments. -->
+<!-- The extension of the lucene index fragments. -->
   <xsl:param name="host"/>
-
-
-  <!-- Creates the lucene:index root element from the Forrest
+<!-- Creates the lucene:index root element from the Forrest
   book. -->
   <xsl:template match="h:request ">
     <xsl:variable name="query">
@@ -41,13 +38,11 @@ handled by uncommenting the relevant section.
       </xsl:attribute>
     </cinclude:include>
   </xsl:template>
-
-  <!-- Recursively processes h:parameter elements. -->
+<!-- Recursively processes h:parameter elements. -->
   <xsl:template match="h:requestParameters">
     <xsl:for-each select="h:parameter">
       <xsl:value-of select="@name"/>=<xsl:value-of select="normalize-space(h:value/text())"/>
       <xsl:if test="position()!=last()">&amp;</xsl:if>
     </xsl:for-each>
   </xsl:template>
-
 </xsl:stylesheet>

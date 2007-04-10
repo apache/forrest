@@ -15,24 +15,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-  <!-- ============================================================ -->
-  <!-- Simplified-Docbook Plugin                                    -->
-  <!-- This plugin allows Simplified DocBook files to be            -->
-  <!-- used in a Forrest site                                       -->
-  <!-- ============================================================ -->
-
+<!-- ============================================================ -->
+<!-- Simplified-Docbook Plugin                                    -->
+<!-- This plugin allows Simplified DocBook files to be            -->
+<!-- used in a Forrest site                                       -->
+<!-- ============================================================ -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-
   <map:components>
     <map:serializers>
       <map:serializer name="fo2rtf" src="org.apache.cocoon.serialization.RTFSerializer" mime-type="application/msword"/>
     </map:serializers>
   </map:components>
-  
   <map:pipelines>
     <map:pipeline internal="true">
-
-      <!-- generate .rtf files from .fo -->
+<!-- generate .rtf files from .fo -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).rtf$">
         <map:generate src="cocoon://{1}{2}.fo"/>
         <map:serialize type="fo2rtf"/>

@@ -15,11 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
-
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- The URL of the document which the indexing information stems
+<!-- The URL of the document which the indexing information stems
   from -->
   <xsl:param name="document-url"/>
   <xsl:param name="project"/>
@@ -37,7 +34,7 @@
       </field>
     </doc>
   </xsl:template>
-  <!-- Copies document header, title, and version-->
+<!-- Copies document header, title, and version-->
   <xsl:template
     match="header/title |
                        header/subtitle |

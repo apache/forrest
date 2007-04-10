@@ -15,32 +15,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:tag="http://forrest.apache.org/TagExpansion/0.1"
     xmlns:resume="http://xmlresume.sourceforge.net/resume/0.0"
     version="1.0">
-    
   <xsl:import href="resume2xdoc.xsl"/>
-  
   <xsl:param name="candidateSkill"/>
-  
   <xsl:template match="/">
     <xsl:apply-templates select="resumes"/>
   </xsl:template>
-  
   <xsl:template match="resumes">
     <document>
       <header>
-          <xsl:choose>
-            <xsl:when test="$candidateSkill = ''">
-              <title>All Resumes on File</title>
-            </xsl:when>
-            <xsl:otherwise>
-              <title>All Candidates on File With '<xsl:value-of select="$candidateSkill"/>' Skill</title>
-            </xsl:otherwise>
-          </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="$candidateSkill = ''">
+            <title>All Resumes on File</title>
+          </xsl:when>
+          <xsl:otherwise>
+            <title>All Candidates on File With '<xsl:value-of select="$candidateSkill"/>' Skill</title>
+          </xsl:otherwise>
+        </xsl:choose>
       </header>
       <body>
         <xsl:for-each select="file/resume:resume">
@@ -56,21 +51,16 @@
       </body>
     </document>
   </xsl:template>
-  
   <xsl:template match="file">
     <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template match="resume:resume">
     <section>
-        <xsl:apply-templates select="resume:header"/>
-        <xsl:apply-templates select="resume:skillarea"/>
+      <xsl:apply-templates select="resume:header"/>
+      <xsl:apply-templates select="resume:skillarea"/>
     </section>
   </xsl:template>
-  
   <xsl:template match="resume:header">
-      <title><xsl:apply-templates select="resume:name"/></title>
+    <title><xsl:apply-templates select="resume:name"/></title>
   </xsl:template>
-  
-  
 </xsl:stylesheet>

@@ -19,25 +19,34 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="solr-search">
-  
   <description>
-    <p> This is the solr-search contract, it will output a search form to search an Apache solr server. </p>
-    <p>In your solr server change the following field definition in the schema.xml. We assume
-        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
-        "content" otherwise you need to prefix your queries.</p>
-      <source><![CDATA[<field name="content" type="text" indexed="true" stored="true" />
+    <p>
+      This is the solr-search contract, it will output a search form to search
+      an Apache solr server.
+    </p>
+
+    <p>
+      In your solr server change the following field definition in the
+      schema.xml. We assume "id" is already set as "uniqueKey" and you changed
+      the "defaultSearchField" to "content" otherwise you need to prefix your
+      queries.
+    </p>
+    <source>
+<![CDATA[<field name="content" type="text" indexed="true" stored="true" />
 <field name="title" type="text" indexed="true" stored="true"/>
 <field name="subtitle" type="text" indexed="true" stored="true"/>
 <field name="abstract" type="text" indexed="true" stored="true"/>
 <field name="version" type="text" indexed="true" stored="true"/>
-<field name="author" type="text" indexed="true" stored="true" multiValued="true"/>]]> </source>
+<field name="author" type="text" indexed="true" stored="true" multiValued="true"/>]]>
+    </source>
     <div class="warning">
       <div class="label">Warning</div>
       <div class="content">You need to include <![CDATA[<forrest:contract name="helper-form-blank"/>]]>
         in your view!!! If you are not, the contract will not work correctly.</div>
     </div>
   </description>
-  <usage><![CDATA[<forrest:contract name="solr-search">
+  <usage>
+<![CDATA[<forrest:contract name="solr-search">
  <forrest:property name="hidden">
   <input name="hl" type="hidden" value="true"/>
   <input name="hl.fl" type="hidden" value="content"/>
@@ -46,7 +55,8 @@
   <input name="rows" type="hidden" value="10"/>
   <input name="start" type="hidden" value="0"/>
  </forrest:property>
-</forrest:contract>]]></usage>
+</forrest:contract>]]>
+  </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
     name="solr-search" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
@@ -74,7 +84,8 @@
               <div class="searchSubmit">
                 <input name="Search" type="submit" value="Search"/>
               </div>
-            </form> </forrest:part>
+            </form>
+          </forrest:part>
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>

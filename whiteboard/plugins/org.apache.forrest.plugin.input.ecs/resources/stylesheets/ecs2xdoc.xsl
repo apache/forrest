@@ -15,17 +15,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:ecs="http://webservices.amazon.com/ECSECommerceService/2005-07-26"
     xmlns:str="http://exslt.org/strings"
     xmlns:xi="http://www.w3.org/2001/XInclude"
     extension-element-prefixes="str">
-
   <xsl:param name="file"/>
   <xsl:param name="type"/>
-
   <xsl:template match="/">
     <document>
       <header>
@@ -34,9 +31,7 @@
             <title>Search Results</title>
           </xsl:when>
           <xsl:when test="ecs:ItemLookupResponse">
-            <title>
-              <xsl:value-of select="ecs:Item/ecs:ItemAttributes/ecs:Title"/>
-            </title>
+            <title><xsl:value-of select="ecs:Item/ecs:ItemAttributes/ecs:Title"/></title>
           </xsl:when>
         </xsl:choose>
       </header>
@@ -45,30 +40,21 @@
       </body>
     </document>
   </xsl:template>
-
   <xsl:template match="ecs:ItemSearchResponse">
     <xsl:apply-templates select="//ecs:Item"/>
   </xsl:template>
-
   <xsl:template match="ecs:ItemLookupResponse">
     <xsl:apply-templates select="//ecs:Item"/>
   </xsl:template>
-
   <xsl:template match="OperationRequest"></xsl:template>
-
   <xsl:template match="Items">
     <xsl:apply-templates/>
   </xsl:template>
-
   <xsl:template match="Request"></xsl:template>
-
   <xsl:template match="item"/>
-
   <xsl:template match="ecs:Item">
     <section>
-      <title>
-        <xsl:value-of select="ecs:ItemAttributes/ecs:Title"/>
-      </title>
+      <title><xsl:value-of select="ecs:ItemAttributes/ecs:Title"/></title>
       <xsl:call-template name="images"/>
       <xsl:call-template name="additionalImages"/>
       <xsl:call-template name="itemAttributes"/>
@@ -78,38 +64,41 @@
       <xsl:call-template name="customerReviews"/>
     </section>
   </xsl:template>
-
   <xsl:template name="price">
     <xsl:if test="ecs:Offers">
       <div id="price">
-        <p>Price: <xsl:value-of select="ecs:Offers/ecs:Offer/ecs:OfferListing/ecs:Price/ecs:FormattedPrice"/>
-        (<xsl:value-of select="ecs:Offers/ecs:Offer/ecs:OfferListing/ecs:Availability"/>)</p>
+        <p>
+          Price:
+          <xsl:value-of select="ecs:Offers/ecs:Offer/ecs:OfferListing/ecs:Price/ecs:FormattedPrice"/>
+          (
+          <xsl:value-of select="ecs:Offers/ecs:Offer/ecs:OfferListing/ecs:Availability"/>
+          )
+        </p>
       </div>
     </xsl:if>
   </xsl:template>
-
   <xsl:template name="itemAttributes">
     <div id="ecs_itemAttributes">
       <xsl:call-template name="manufacturer"/>
       <xsl:call-template name="batteries"/>
     </div>
   </xsl:template>
-
   <xsl:template name="manufacturer">
     <xsl:if test="ecs:ItemAttributes/ecs:Manufacturer">
       <div id="ecs_manufacturer">
-        <p>Manufacturer: <xsl:value-of select="ecs:ItemAttributes/ecs:Manufacturer"/>
+        <p>
+          Manufacturer:
+          <xsl:value-of select="ecs:ItemAttributes/ecs:Manufacturer"/>
         </p>
       </div>
     </xsl:if>
   </xsl:template>
-
   <xsl:template name="batteries">
     <div id="ecs_batteries">
-
       <xsl:if test="ecs:ItemAttributes/ecs:Batteries">
         <p>
-           Batteries Required: <xsl:value-of select="ecs:ItemAttributes/ecs:Batteries"/>
+          Batteries Required:
+          <xsl:value-of select="ecs:ItemAttributes/ecs:Batteries"/>
           <xsl:if test="ecs:ItemAttributes/ecs:Batteries/@Units">
              x <xsl:value-of select="ecs:ItemAttributes/ecs:Batteries/@Units"/>
           </xsl:if>
@@ -124,39 +113,40 @@
           </xsl:choose>
         </p>
       </xsl:if>
-
     </div>
   </xsl:template>
-
   <xsl:template name="customerReviews">
     <div id="ecs_customerReviews">
       <section>
         <title>Customer Reviews</title>
         <div class="ecs_customerReviewsSummary">
-          <p>Average rating is <xsl:value-of select="ecs:CustomerReviews/ecs:AverageRating"/> 
-          out of 5.
-          (Rated by <xsl:value-of select="ecs:CustomerReviews/ecs:TotalReviews"/> people)</p>
+          <p>
+            Average rating is
+            <xsl:value-of select="ecs:CustomerReviews/ecs:AverageRating"/>
+            out of 5. (Rated by
+            <xsl:value-of select="ecs:CustomerReviews/ecs:TotalReviews"/>
+            people)
+          </p>
         </div>
         <xsl:apply-templates select="ecs:CustomerReviews/ecs:Review"/>
       </section>
     </div>
   </xsl:template>
-
   <xsl:template match="ecs:Review">
     <div>
       <xsl:attribute name="class">ecs_customerReview_<xsl:value-of select="position()"/>
       </xsl:attribute>
       <section>
-        <title>
-          <xsl:value-of select="ecs:Summary"/>
-        </title>
+        <title><xsl:value-of select="ecs:Summary"/></title>
         <xsl:apply-templates select="ecs:Content"/>
-        <p>Rating: <strong><xsl:value-of select="ecs:Rating"/>
-          </strong> out of 5</p>
+        <p>
+          Rating: <strong>
+          <xsl:value-of select="ecs:Rating"/>
+          </strong> out of 5
+        </p>
       </section>
     </div>
   </xsl:template>
-
   <xsl:template match="ecs:Content">
     <xsl:for-each select="str:split(., '&lt;p&gt;')">
       <p>
@@ -164,8 +154,6 @@
       </p>
     </xsl:for-each>
   </xsl:template>
-
-
   <xsl:template name="editorialReviews">
     <div id="ecs_editorialReviews">
       <section>
@@ -175,20 +163,16 @@
       </section>
     </div>
   </xsl:template>
-
   <xsl:template match="ecs:EditorialReview">
     <div>
       <xsl:attribute name="class">ecs_editorialReview_<xsl:value-of select="position()"/>
       </xsl:attribute>
       <section>
-        <title>
-          <xsl:value-of select="ecs:Source"/>
-        </title>
+        <title><xsl:value-of select="ecs:Source"/></title>
         <xsl:apply-templates select="ecs:Content"/>
       </section>
     </div>
   </xsl:template>
-
   <xsl:template name="images">
     <div id="ecs_smallImage">
       <img>
@@ -230,7 +214,6 @@
       </img>
     </div>
   </xsl:template>
-
   <xsl:template name="additionalImages">
     <xsl:for-each select="//ecs:ImageSets/ecs:ImageSet/ecs:MediumImage">
       <xsl:if test="@Category != 'primary'">
@@ -252,13 +235,11 @@
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-
   <xsl:template name="moreDetails">
-    <div id="ecs_moreDetails">
-      <fork>
-        <xsl:attribute name="href">
-          <xsl:value-of select="ecs:DetailPageURL"/>
-        </xsl:attribute>
+    <div id="ecs_moreDetails"><fork>
+      <xsl:attribute name="href">
+        <xsl:value-of select="ecs:DetailPageURL"/>
+      </xsl:attribute>
         More Details...
       </fork>
     </div>

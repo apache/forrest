@@ -21,27 +21,28 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#">
-  
   <xsl:key name="kDistinctCategory" match="doap:category" use="@rdf:resource"/>
-  
   <xsl:param name="categoryURL">http://projects.apache.org/category/</xsl:param>
-  
   <xsl:template match="/">
     <langIndex>
       <xsl:attribute name="label">Category Indexes</xsl:attribute>
       <xsl:for-each select="//doap:category[generate-id() = generate-id(key('kDistinctCategory', @rdf:resource))]">
         <xsl:sort select="@rdf:resource"/>
         <xsl:variable name="category" select="@rdf:resource"/>
-        <xsl:variable name="name"><xsl:value-of select="substring-after($category, $categoryURL)"/></xsl:variable>
+        <xsl:variable name="name">
+          <xsl:value-of select="substring-after($category, $categoryURL)"/>
+        </xsl:variable>
         <xsl:element name="{$name}">
-          <xsl:attribute name="label"><xsl:value-of select="$name"/></xsl:attribute>
+          <xsl:attribute name="label">
+            <xsl:value-of select="$name"/>
+          </xsl:attribute>
           <xsl:attribute name="href">/projectDetails/index/byCategory/<xsl:value-of select="$name"/>.html</xsl:attribute>
-          <xsl:attribute name="description">All projects in the category  <xsl:value-of select="$name"/></xsl:attribute>
+          <xsl:attribute name="description">All projects in the category  <xsl:value-of select="$name"/>
+          </xsl:attribute>
         </xsl:element>
       </xsl:for-each>
     </langIndex>
   </xsl:template>
-  
   <xsl:template match="descriptor">
     <xsl:variable name="name">
       <xsl:choose>
@@ -53,12 +54,14 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-      
     <project>
-      <xsl:attribute name="label"><xsl:value-of select="$name"/></xsl:attribute>
-      <xsl:attribute name="href"><xsl:value-of select="@href-noext"/>.html</xsl:attribute>
-      <xsl:attribute name="description">Project details for <xsl:value-of select="$name"/></xsl:attribute>
+      <xsl:attribute name="label">
+        <xsl:value-of select="$name"/>
+      </xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:value-of select="@href-noext"/>.html</xsl:attribute>
+      <xsl:attribute name="description">Project details for <xsl:value-of select="$name"/>
+      </xsl:attribute>
     </project>
   </xsl:template>
 </xsl:stylesheet>
-

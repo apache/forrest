@@ -20,7 +20,7 @@
     <map:generators default="file">
       <map:generator name="request"
         src="org.apache.cocoon.generation.RequestGenerator"/>
-       <map:generator name="solr-search"
+      <map:generator name="solr-search"
         logger="sitemap.generator.searchgenerator"
         src="org.apache.forrest.solr.client.SolrSearchGenerator" />
     </map:generators>
@@ -36,7 +36,7 @@
   </map:components>
   <map:pipelines>
     <map:pipeline>
-      <!-- Will dispatch a query against the solr server -->
+<!-- Will dispatch a query against the solr server -->
       <map:match pattern="solr-search.xml">
         <map:generate type="solr-search">
           <map:parameter name="destinationUrl" value="{properties:solr.select.url}"/>
@@ -47,7 +47,7 @@
         </map:transform>
         <map:serialize/>
       </map:match>
-      <!--Generating xdocs-->
+<!--Generating xdocs-->
       <map:match pattern="**.do.xml">
         <map:generate src="cocoon://{1}.do"/>
         <map:transform src="resources/stylesheets/solrResult-to-xdocs.xsl">

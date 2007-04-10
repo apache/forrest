@@ -17,43 +17,43 @@
 -->
 <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <!-- default plugin CSS -->
-    <forrest:contract name="branding-css-links">
-      <forrest:property name="branding-css-links-input">
-        <css url="solr.css" media="screen" theme="Pelt"/>
-      </forrest:property>
-    </forrest:contract>
-    <!-- In static mode solr-add allows you to update a Solr server with the content of your
+<!-- default plugin CSS -->
+  <forrest:contract name="branding-css-links">
+    <forrest:property name="branding-css-links-input">
+      <css url="solr.css" media="screen" theme="Pelt"/>
+    </forrest:property>
+  </forrest:contract>
+<!-- In static mode solr-add allows you to update a Solr server with the content of your
         website at the same time you generate the site. -->
-    <forrest:contract name="solr-add">
-      <forrest:property name="request">#{$getRequest}</forrest:property>
-    </forrest:contract>
-    <forrest:hook name="solr">
-      <forrest:hook class="solrSearch">
-      <!--Search interface (solr-search contract) to
+  <forrest:contract name="solr-add">
+    <forrest:property name="request">#{$getRequest}</forrest:property>
+  </forrest:contract>
+  <forrest:hook name="solr">
+    <forrest:hook class="solrSearch">
+<!--Search interface (solr-search contract) to
         search your solr server. -->
-        <forrest:contract name="solr-search">
-          <forrest:property name="hidden">
-            <input name="hl" type="hidden" value="true"/>
-            <input name="hl.fl" type="hidden" value="content"/>
-            <input name="fl" type="hidden" value="id,title"/>
-            <input name="indent" type="hidden" value="on"/>
-            <input name="rows" type="hidden" value="10"/>
-            <input name="start" type="hidden" value="0"/>
-          </forrest:property>
-        </forrest:contract>
-      </forrest:hook>
-      <jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
-      <!-- If the userAgent is the cocoon crawler then we do not want to 
+      <forrest:contract name="solr-search">
+        <forrest:property name="hidden">
+          <input name="hl" type="hidden" value="true"/>
+          <input name="hl.fl" type="hidden" value="content"/>
+          <input name="fl" type="hidden" value="id,title"/>
+          <input name="indent" type="hidden" value="on"/>
+          <input name="rows" type="hidden" value="10"/>
+          <input name="start" type="hidden" value="0"/>
+        </forrest:property>
+      </forrest:contract>
+    </forrest:hook>
+    <jx:set var="userAgent" value="${cocoon.request.getHeader('User-Agent')}"/>
+<!-- If the userAgent is the cocoon crawler then we do not want to 
       output the actionbar. The cocoon crawler does not provide the request
       header "User-Agent" meaning null.-->
-      <jx:if test="${null!=userAgent}">
-        <forrest:hook class="solrActionbar">
-        <!-- GUI to manage your project in solr. -->
-          <forrest:contract name="solr-actionbar">
-            <forrest:property name="request">#{$getRequest}</forrest:property>
-          </forrest:contract>
-        </forrest:hook>
-      </jx:if>
-    </forrest:hook>
+    <jx:if test="${null!=userAgent}">
+      <forrest:hook class="solrActionbar">
+<!-- GUI to manage your project in solr. -->
+        <forrest:contract name="solr-actionbar">
+          <forrest:property name="request">#{$getRequest}</forrest:property>
+        </forrest:contract>
+      </forrest:hook>
+    </jx:if>
+  </forrest:hook>
 </forrest:template>

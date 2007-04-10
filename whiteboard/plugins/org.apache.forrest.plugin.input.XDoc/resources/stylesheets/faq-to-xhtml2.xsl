@@ -34,10 +34,7 @@ Section handling
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns="http://www.w3.org/2002/06/xhtml2">
-  
   <xsl:import href="howto-to-xhtml2.xsl"/>
-  
-  
   <xsl:template match="/faqs | /document">
     <html xmlns="http://www.w3.org/2002/06/xhtml2" xml:lang="en"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -53,26 +50,26 @@ Section handling
       </head>
       <body>
         <xsl:apply-templates select="header/abstract"/>
-        
         <xsl:apply-templates select="*[not(name()='header')]"/>
-
       </body>
     </html>
   </xsl:template>
-  
   <xsl:template match="faq | part">
     <section>
       <xsl:if test="./@id">
-        <xsl:attribute name="xml:id"><xsl:value-of select="@id"/></xsl:attribute>
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@id"/>
+        </xsl:attribute>
       </xsl:if>
-      <xsl:attribute name="class"><xsl:value-of select="local-name()"/></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:value-of select="local-name()"/>
+      </xsl:attribute>
       <xsl:if test="./@title">
-        <h><xsl:value-of select="./@title"/></h>
+        <h>
+          <xsl:value-of select="./@title"/>
+        </h>
       </xsl:if>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
-
-  
 </xsl:stylesheet>
-

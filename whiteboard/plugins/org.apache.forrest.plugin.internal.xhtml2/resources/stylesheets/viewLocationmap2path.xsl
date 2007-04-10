@@ -17,19 +17,15 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:collection="http://apache.org/cocoon/collection/1.0">
-  
   <xsl:template match="/">
-   <xsl:apply-templates/>
+    <xsl:apply-templates/>
   </xsl:template>
- 
   <xsl:template match="dir[view or dir]">
     <xsl:element name="{@name}">
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
-  
   <xsl:template match="view">
     <xsl:element name="{@name}"/>
   </xsl:template>
- 
 </xsl:stylesheet>

@@ -21,13 +21,9 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#">
-  
   <xsl:include href="descriptorIndex-to-indexByCommon.xsl"/>
-  
   <xsl:key name="kDistinctCategory" match="doap:category" use="@rdf:resource"/>
-  
   <xsl:param name="filter"/>
-  
   <xsl:template match="/">
     <document>
       <header>
@@ -46,21 +42,19 @@
               <xsl:sort select="@rdf:resource"/>
               <xsl:variable name="category" select="@rdf:resource"/>
               <section>
-                  <title><xsl:value-of select="$category"/></title>
-                  <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
+                <title><xsl:value-of select="$category"/></title>
+                <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
               </section>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
-        
         <xsl:if test="//descriptor[not(descendant::doap:category)]">
           <section>
-              <title>Uncategorised</title>
-              <xsl:apply-templates select="//descriptor[not(descendant::doap:category)]"/>
+            <title>Uncategorised</title>
+            <xsl:apply-templates select="//descriptor[not(descendant::doap:category)]"/>
           </section>
         </xsl:if>
       </body>
     </document>
   </xsl:template>
 </xsl:stylesheet>
-

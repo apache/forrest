@@ -15,18 +15,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:req="http://apache.org/cocoon/request/2.0"
                 xmlns:source="http://apache.org/cocoon/source/1.0">
-
   <xsl:param name="filepath"/>
-  
   <xsl:template match="page">
     <page>
       <source:write create="true">
-        <source:source><xsl:value-of select="$filepath"/><xsl:value-of select="meta[@name='filename']/@content"/></source:source>
+        <source:source>
+          <xsl:value-of select="$filepath"/>
+          <xsl:value-of select="meta[@name='filename']/@content"/>
+        </source:source>
         <source:path>html</source:path>
         <source:fragment>
           <xsl:call-template name="head"/>
@@ -35,24 +35,20 @@
       </source:write>
     </page>
   </xsl:template>
-  
   <xsl:template name="head">
     <head>
       <xsl:apply-templates select="/page/meta"/>
       <xsl:apply-templates select="/page/title"/>
     </head>
   </xsl:template>
-  
   <xsl:template name="body">
     <body>
       <xsl:copy-of select="/page/content/html/body/*"/>
     </body>
   </xsl:template>
-    
   <xsl:template match="node()|@*" priority="-1">
-        <xsl:copy>
-              <xsl:apply-templates select="node()|@*"/>
-        </xsl:copy>
+    <xsl:copy>
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:copy>
   </xsl:template>
 </xsl:stylesheet>
-

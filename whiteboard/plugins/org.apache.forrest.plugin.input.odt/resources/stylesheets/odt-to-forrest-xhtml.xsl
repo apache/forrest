@@ -26,55 +26,50 @@
   xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0">
   <xsl:import href="lm://transform.odt.xhtml"/>
   <xsl:param name="path" select="'odt path name'"/>
-  
   <xsl:include href="lm://transform.xml.dotdots"/>
   <xsl:include href="lm://transform.xml.pathutils"/>
-
-  <!-- Calculate dirname -->
+<!-- Calculate dirname -->
   <xsl:variable name="dirname">
     <xsl:call-template name="dirname">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-  <!-- Calculate filename -->
+<!-- Calculate filename -->
   <xsl:variable name="filename">
     <xsl:call-template name="filename">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-  <!-- Path to site root, eg '../../' -->
+<!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
       <xsl:with-param name="path" select="$path"/>
     </xsl:call-template>
   </xsl:variable>
-
   <xsl:template match="/">
     <xsl:apply-templates select="/odt/content/*"/>
   </xsl:template>
   <xsl:template match="office:document-content">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title>
-          <xsl:choose>
-            <!-- display title element from ODT File:Properties -->
+        <title><xsl:choose>
+<!-- display title element from ODT File:Properties -->
             <xsl:when 
               test="//odt/meta/office:document-meta/office:meta/dc:title">
               <xsl:value-of 
                 select="//odt/meta/office:document-meta/office:meta/dc:title"/>
             </xsl:when>
-            <!-- if no title element, display 1st h1 -->
+<!-- if no title element, display 1st h1 -->
             <xsl:when 
               test="not(//odt/meta/office:document-meta/office:meta/dc:title) and
         office:body/office:text/text:h[1] != ''">
               <xsl:value-of select="office:body/office:text/text:h[1]"/>
             </xsl:when>
             <xsl:otherwise>
-              <!-- if no title element or h1 elements, display $filename -->
+<!-- if no title element or h1 elements, display $filename -->
               <xsl:value-of select="$filename"/>
             </xsl:otherwise>
-          </xsl:choose>
-        </title>
+          </xsl:choose></title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <xsl:apply-templates select="office:automatic-styles"/>
       </head>
@@ -83,234 +78,227 @@
       </body>
     </html>
   </xsl:template>
-
 <!-- FIXME : this is not XHTML -->
 <!-- Case of Notes -->
-<xsl:template match="text:p[@text:style-name='Forrest_3a__20_Note']">
-	<note>
-		<xsl:apply-templates/>
-		<xsl:if test="count(node())=0"><br /></xsl:if>
-	</note>
-</xsl:template>
-<xsl:template match="text:span[@text:style-name='Forrest_3a__20_Title']">
-	<xsl:attribute name="label">
-		<xsl:value-of select="."/>
-	</xsl:attribute>
-</xsl:template>
-
+  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Note']">
+    <note>
+      <xsl:apply-templates/>
+      <xsl:if test="count(node())=0">
+        <br />
+      </xsl:if>
+    </note>
+  </xsl:template>
+  <xsl:template match="text:span[@text:style-name='Forrest_3a__20_Title']">
+    <xsl:attribute name="label">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
 <!-- FIXME : this is not XHTML -->
 <!-- Case of Warnings -->
-<xsl:template match="text:p[@text:style-name='Forrest_3a__20_Warning']">
-	<warning>
-		<xsl:apply-templates/>
-		<xsl:if test="count(node())=0"><br /></xsl:if>
-	</warning>
-</xsl:template>
-
+  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Warning']">
+    <warning>
+      <xsl:apply-templates/>
+      <xsl:if test="count(node())=0">
+        <br />
+      </xsl:if>
+    </warning>
+  </xsl:template>
 <!-- Case of Fixme  - still a problem to retrieve the author...-->
 <!-- FIXME : this is not XHTML -->
-<xsl:template match="text:p[@text:style-name='Forrest_3a__20_Fixme']">
-	<fixme>
-		<xsl:apply-templates/>
-		<xsl:if test="count(node())=0"><br /></xsl:if>
-	</fixme>
-</xsl:template>
-
+  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Fixme']">
+    <fixme>
+      <xsl:apply-templates/>
+      <xsl:if test="count(node())=0">
+        <br />
+      </xsl:if>
+    </fixme>
+  </xsl:template>
 <!-- Case of Sources -->
 <!-- FIXME : this is not XHTML -->
-<xsl:template match="text:p[@text:style-name='Forrest_3a__20_Source']">
-	<source>
-		<xsl:apply-templates/>
-		<xsl:if test="count(node())=0"><br /></xsl:if>
-	</source>
-</xsl:template>
-
+  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Source']">
+    <source>
+      <xsl:apply-templates/>
+      <xsl:if test="count(node())=0">
+        <br />
+      </xsl:if>
+    </source>
+  </xsl:template>
 <!-- Otherwise -->
-
 <!-- FIXME : An idea should be to add a class attribute to <p> in order to be able to keep the original
              layout. Maybe depending on a properties keepLayout=True. -->
-<xsl:template match="text:p">
-	<p>
-		<xsl:variable name="styleName" select="@text:style-name"/>
-		<xsl:variable name='layout'>
-			<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
-		</xsl:variable>
-		<xsl:call-template name="displayLayout">
-			<xsl:with-param name="layout" select="$layout"/>
-		</xsl:call-template>
-	</p>
-</xsl:template>
-
+  <xsl:template match="text:p">
+    <p>
+      <xsl:variable name="styleName" select="@text:style-name"/>
+      <xsl:variable name='layout'>
+        <xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
+      </xsl:variable>
+      <xsl:call-template name="displayLayout">
+        <xsl:with-param name="layout" select="$layout"/>
+      </xsl:call-template>
+    </p>
+  </xsl:template>
 <!-- Instead of using styles like in the Lenya file, we try here to recognise the style to use XHTML specific
      tags such as <em>, <strong>, <sup> and <sub>... -->
-<xsl:template match="text:span">	
-	<xsl:variable name="styleName" select="@text:style-name"/>
-	<!-- the style can be either in content or in style, we try both, one of them does not exist and so is empty... -->
-	<xsl:variable name='layout'>
-		<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
-	</xsl:variable>
-	<xsl:call-template name="displayLayout">
-		<xsl:with-param name="layout" select="$layout"/>
-	</xsl:call-template>
-</xsl:template>
-
-<xsl:template name='displayLayout'>
-	<xsl:param name='layout' select="NONE"/>
-	<xsl:variable name="tag">
-		<xsl:choose>
-			<xsl:when test="contains($layout,',')">
-				<xsl:value-of select="normalize-space(substring-before($layout,','))"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="normalize-space($layout)"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-	<xsl:choose>
-		<xsl:when test="not($tag='NONE') and not($tag='')">
-			<xsl:element name="{$tag}">
-				<xsl:call-template name="displayLayout">
-					<xsl:with-param name="layout" select="substring-after($layout,',')"/>
-				</xsl:call-template>
-			</xsl:element>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:apply-templates/>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-	
-<xsl:template match="style:style">
-	<xsl:param name="text"/>
-	<xsl:variable name="styleName" select="@style:name"/>
-	<xsl:choose>
-		<xsl:when test='./style:text-properties/@*[last()]'>
-			<xsl:apply-templates select="./style:text-properties/@*[last()]"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:variable name="parentStyleName" select="@style:parent-style-name"/>
-			<xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$parentStyleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$parentStyleName]"/>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-
-<xsl:template match="style:text-properties/@*">
-	<xsl:param name="text"/>
-	<xsl:param name="indStyle" select="count(../@*)"/>
-	<xsl:choose>
-		<!-- Case of the code style - generally rendered with Courier -->
-		<xsl:when test="name()='style:font-name' and starts-with(.,'Courier')">
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-				<xsl:with-param name="tag" select="'code'"/>
-			</xsl:call-template>
-		</xsl:when>
-		<!-- Case of the emphasys style - generally rendered with Italic -->
-		<xsl:when test="name()='fo:font-style' and .='italic'">
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-				<xsl:with-param name="tag" select="'em'"/>
-			</xsl:call-template>
-		</xsl:when>
-		<!-- Case of the strong style -->
-		<xsl:when test="name()='fo:font-weight' and .='bold'">
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-				<xsl:with-param name="tag" select="'strong'"/>
-			</xsl:call-template>
-		</xsl:when>
-		<!-- Case of the exponent style -->
-		<xsl:when test="name()='style:text-position' and starts-with(.,'super')">
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-				<xsl:with-param name="tag" select="'sup'"/>
-			</xsl:call-template>
-		</xsl:when>
-		<!-- Case of the subscript style -->
-		<xsl:when test="name()='style:text-position' and starts-with(.,'sub')">
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-				<xsl:with-param name="tag" select="'sub'"/>
-			</xsl:call-template>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:call-template name="addLayout2List">
-				<xsl:with-param name="text" select="$text"/>
-				<xsl:with-param name="indStyle" select="$indStyle"/>
-			</xsl:call-template>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-
-<xsl:template name="addLayout2List">
-	<xsl:param name="text"/>
-	<xsl:param name="indStyle"/>
-	<xsl:param name="tag" select="NONE"/>
-	<!-- Add a layout tag -->
-	<!-- If the tag has been supplied, we add it to the layout list... -->
-	<xsl:if test="not($tag='NONE') and not(normalize-space($tag)='')">
-		<xsl:value-of select='$tag'/>,
+  <xsl:template match="text:span">
+    <xsl:variable name="styleName" select="@text:style-name"/>
+<!-- the style can be either in content or in style, we try both, one of them does not exist and so is empty... -->
+    <xsl:variable name='layout'>
+      <xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
+    </xsl:variable>
+    <xsl:call-template name="displayLayout">
+      <xsl:with-param name="layout" select="$layout"/>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template name='displayLayout'>
+    <xsl:param name='layout' select="NONE"/>
+    <xsl:variable name="tag">
+      <xsl:choose>
+        <xsl:when test="contains($layout,',')">
+          <xsl:value-of select="normalize-space(substring-before($layout,','))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="normalize-space($layout)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="not($tag='NONE') and not($tag='')">
+        <xsl:element name="{$tag}">
+          <xsl:call-template name="displayLayout">
+            <xsl:with-param name="layout" select="substring-after($layout,',')"/>
+          </xsl:call-template>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template match="style:style">
+    <xsl:param name="text"/>
+    <xsl:variable name="styleName" select="@style:name"/>
+    <xsl:choose>
+      <xsl:when test='./style:text-properties/@*[last()]'>
+        <xsl:apply-templates select="./style:text-properties/@*[last()]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="parentStyleName" select="@style:parent-style-name"/>
+        <xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$parentStyleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$parentStyleName]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template match="style:text-properties/@*">
+    <xsl:param name="text"/>
+    <xsl:param name="indStyle" select="count(../@*)"/>
+    <xsl:choose>
+<!-- Case of the code style - generally rendered with Courier -->
+      <xsl:when test="name()='style:font-name' and starts-with(.,'Courier')">
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+          <xsl:with-param name="tag" select="'code'"/>
+        </xsl:call-template>
+      </xsl:when>
+<!-- Case of the emphasys style - generally rendered with Italic -->
+      <xsl:when test="name()='fo:font-style' and .='italic'">
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+          <xsl:with-param name="tag" select="'em'"/>
+        </xsl:call-template>
+      </xsl:when>
+<!-- Case of the strong style -->
+      <xsl:when test="name()='fo:font-weight' and .='bold'">
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+          <xsl:with-param name="tag" select="'strong'"/>
+        </xsl:call-template>
+      </xsl:when>
+<!-- Case of the exponent style -->
+      <xsl:when test="name()='style:text-position' and starts-with(.,'super')">
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+          <xsl:with-param name="tag" select="'sup'"/>
+        </xsl:call-template>
+      </xsl:when>
+<!-- Case of the subscript style -->
+      <xsl:when test="name()='style:text-position' and starts-with(.,'sub')">
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+          <xsl:with-param name="tag" select="'sub'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="addLayout2List">
+          <xsl:with-param name="text" select="$text"/>
+          <xsl:with-param name="indStyle" select="$indStyle"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="addLayout2List">
+    <xsl:param name="text"/>
+    <xsl:param name="indStyle"/>
+    <xsl:param name="tag" select="NONE"/>
+<!-- Add a layout tag -->
+<!-- If the tag has been supplied, we add it to the layout list... -->
+    <xsl:if test="not($tag='NONE') and not(normalize-space($tag)='')">
+      <xsl:value-of select='$tag'/>,
 	</xsl:if>
-	<!-- if the style index is not the first (1), we continue - note we start from the end... -->
-	<xsl:if test="not($indStyle=1)">
-		<xsl:apply-templates select="../@*[number($indStyle)-1]">
-			<xsl:with-param name="text" select="$text"/>
-			<xsl:with-param name="indStyle" select="number($indStyle)-1"/>
-		</xsl:apply-templates>
-	</xsl:if>
-</xsl:template>
-
-  <!--+
+<!-- if the style index is not the first (1), we continue - note we start from the end... -->
+    <xsl:if test="not($indStyle=1)">
+      <xsl:apply-templates select="../@*[number($indStyle)-1]">
+        <xsl:with-param name="text" select="$text"/>
+        <xsl:with-param name="indStyle" select="number($indStyle)-1"/>
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:template>
+<!--+
       | Images
       +-->
-<xsl:template match="draw:image[@xlink:show]">
-	<xsl:variable name="href"><xsl:value-of select="@xlink:href"/></xsl:variable>
-	<xsl:choose>
-		<xsl:when test="starts-with($href, 'http:')">
-			<img src="{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<img src="./{$root}{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-
-  <!--+
+  <xsl:template match="draw:image[@xlink:show]">
+    <xsl:variable name="href">
+      <xsl:value-of select="@xlink:href"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="starts-with($href, 'http:')">
+        <img src="{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <img src="./{$root}{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+<!--+
       | Links
       +-->
 <!-- A little more detailled than in the Lenya file, we add a title and a target attribute if it is supplied... -->
-<xsl:template match="text:a">
-	<!-- There is a strange behaviour with the links, a .. is used when pointing to a sub-folder instead of '.' -->
-	<!-- we replace it by '.' in the next variable... -->
-	<xsl:variable name="href">
-		<xsl:choose>
-			<xsl:when test="starts-with(@xlink:href,'..')">
-				<xsl:value-of select="substring-after(@xlink:href,'.')"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="@xlink:href"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-			
-	<a href="{$href}">
-		<xsl:if test="@office:target-frame-name">
-			<xsl:attribute name="target">
-				<xsl:value-of select="@office:target-frame-name"/>
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:if test="@office:name">
-			<xsl:attribute name="title">
-				<xsl:value-of select="@office:name"/>
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:apply-templates/>
-	</a>
-</xsl:template>
-
+  <xsl:template match="text:a">
+<!-- There is a strange behaviour with the links, a .. is used when pointing to a sub-folder instead of '.' -->
+<!-- we replace it by '.' in the next variable... -->
+    <xsl:variable name="href">
+      <xsl:choose>
+        <xsl:when test="starts-with(@xlink:href,'..')">
+          <xsl:value-of select="substring-after(@xlink:href,'.')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@xlink:href"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable><a href="{$href}">
+    <xsl:if test="@office:target-frame-name">
+      <xsl:attribute name="target">
+        <xsl:value-of select="@office:target-frame-name"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@office:name">
+      <xsl:attribute name="title">
+        <xsl:value-of select="@office:name"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates/></a>
+  </xsl:template>
 </xsl:stylesheet>

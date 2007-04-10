@@ -18,20 +18,16 @@
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
-  
   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
   <xsl:strip-space elements="forrest:properties"/>
   <xsl:param name="contract"/>
-  
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
-  
   <xsl:template match="forrest:property[@name=$contract]">
-    <xsl:comment> properties <xsl:value-of select="$contract"/> </xsl:comment>
+    <xsl:comment> properties <xsl:value-of select="$contract"/>
+    </xsl:comment>
     <xsl:copy-of select="*"/>
   </xsl:template>
-  
   <xsl:template match="forrest:property"/>
-
 </xsl:stylesheet>

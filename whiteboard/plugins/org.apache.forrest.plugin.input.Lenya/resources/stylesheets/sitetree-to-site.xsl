@@ -15,11 +15,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:site="http://apache.org/cocoon/lenya/sitetree/1.0">
   <xsl:template match="/">
-    <!--href="" xmlns="http://apache.org/forrest/linkmap/1.0"-->
+<!--href="" xmlns="http://apache.org/forrest/linkmap/1.0"-->
     <site label="docu">
       <about label="About">
         <index label="Index" href="index.html" description="Welcome to Doco"/>
@@ -29,7 +28,8 @@
   </xsl:template>
   <xsl:template match="site:node">
     <xsl:element name="{@id}">
-      <xsl:attribute name="href"> <xsl:value-of select="@id"/>/</xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:value-of select="@id"/>/</xsl:attribute>
       <xsl:attribute name="label">
         <xsl:value-of select="site:label"/>
       </xsl:attribute>

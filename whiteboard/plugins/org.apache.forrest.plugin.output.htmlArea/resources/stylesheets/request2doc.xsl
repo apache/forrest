@@ -15,11 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:req="http://apache.org/cocoon/request/2.0">
-  
   <xsl:template match="/req:request">
     <page>
       <xsl:apply-templates select="req:requestParameters" mode="meta"/>
@@ -28,38 +26,31 @@
       </content>
     </page>
   </xsl:template>
-  
   <xsl:template name="body">
     <body>
       <xsl:apply-templates select="req:requestParameters" mode="body"/>
     </body>
   </xsl:template>
-  
   <xsl:template match="req:requestParameters" mode="meta">
-      <meta name="filename">
-        <xsl:attribute name="content"><xsl:apply-templates select="req:parameter[@name='filename']"/></xsl:attribute>
-      </meta>
-      <xsl:apply-templates select="req:parameter[@name='title']"/>
+    <meta name="filename">
+      <xsl:attribute name="content">
+        <xsl:apply-templates select="req:parameter[@name='filename']"/>
+      </xsl:attribute>
+    </meta>
+    <xsl:apply-templates select="req:parameter[@name='title']"/>
   </xsl:template>
-  
   <xsl:template match="req:requestParameters" mode="body">
-      <xsl:apply-templates select="req:parameter[@name='editor']"/>
+    <xsl:apply-templates select="req:parameter[@name='editor']"/>
   </xsl:template>
-  
   <xsl:template match="req:parameter[@name='title']">
-    <title>
-      <xsl:value-of select="req:value"/>
-    </title>
+    <title><xsl:value-of select="req:value"/></title>
   </xsl:template>
-  
   <xsl:template match="req:parameter[@name='filename']">
     <filename>
       <xsl:value-of select="req:value"/>
     </filename>
   </xsl:template>
-  
   <xsl:template match="req:parameter[@name='editor']">
-      <xsl:value-of select="normalize-space(.)"/>
+    <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
-
 </xsl:stylesheet>

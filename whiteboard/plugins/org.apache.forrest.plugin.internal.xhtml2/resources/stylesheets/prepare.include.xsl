@@ -15,21 +15,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"  
   xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:alias="http://www.w3.org/1999/XSL/TransformAlias">
-    <xsl:namespace-alias 
+  <xsl:namespace-alias 
          stylesheet-prefix="alias" result-prefix="xsl"/>
-
-	<xsl:param name="format"/>
+  <xsl:param name="format"/>
   <xsl:key name="contract-name" match="forrest:contract" use="@name" />
-  
   <xsl:template match="/">
     <alias:stylesheet version="1.0">
-      <!--NOTE:
+<!--NOTE:
         contracts are allowed only to be importet once! Thx to
         http://www.jenitennison.com/xslt/grouping/muenchian.html-->
       <xsl:for-each 
@@ -39,5 +36,4 @@
       </xsl:for-each>
     </alias:stylesheet>
   </xsl:template>
-
 </xsl:stylesheet>
