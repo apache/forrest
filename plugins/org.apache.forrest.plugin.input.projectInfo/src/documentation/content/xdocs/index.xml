@@ -16,168 +16,198 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-  <header> 
-    <title>Welcome to the org.apache.forrest.plugin.input.projectInfo Plugin</title> 
-  </header> 
-  <body> 
+<document>
+  <header>
+    <title>Welcome to the org.apache.forrest.plugin.input.projectInfo Plugin</title>
+  </header>
+  <body>
     <section>
       <title>Apache Forrest - org.apache.forrest.plugin.input.projectInfo Plugin</title>
-      <p>This plugin generates project info from various configuration files.</p>
+      <p>
+        This plugin generates project info from various configuration files.
+      </p>
     </section>
-    
     <section>
       <title>Changes</title>
-      <p>By maintaining a file called <code>status.xml</code> you can manage a list
-      changes to your code base. This list can then be generated as a changes 
-      page and/or an RSS feed of those changes. For example, here are the 
-      <a href="changes.html">changes</a> for this plugin, here is the same
-      list of changes as an <a href="changes.rss">RSS feed</a>.</p>
-      
-      <p>It's possible to limit the displayed changes to a particular version
-      number as well. For example, here are the changes for 
-      <a href="changes_0.1.html">version 0.1</a> of this plugin (and
-      as an <a href="changes_0.1.rss">RSS feed</a>).</p>
-      
-      <p>If you want to only retrieve the changes for the most recent version
-      of the project then you can do that too. Here are the changes in the 
-      <a href="changes_current.html">current development version</a> of this 
-      plugin (and once more as an <a href="changes_current.rss">RSS feed</a>).</p>
-      
+      <p>
+        By maintaining a file called <code>status.xml</code> you can manage a
+        list changes to your code base. This list can then be generated as a
+        changes page and/or an RSS feed of those changes. For example, here are
+        the <a href="changes.html">changes</a> for this plugin, here is the same
+        list of changes as an <a href="changes.rss">RSS feed</a>.
+      </p>
+      <p>
+        It's possible to limit the displayed changes to a particular version
+        number as well. For example, here are the changes for
+        <a href="changes_0.1.html">version 0.1</a> of this plugin (and as an
+        <a href="changes_0.1.rss">RSS feed</a>).
+      </p>
+      <p>
+        If you want to only retrieve the changes for the most recent version of
+        the project then you can do that too. Here are the changes in the
+        <a href="changes_current.html">current development version</a> of this
+        plugin (and once more as an <a href="changes_current.rss">RSS feed</a>).
+      </p>
     </section>
-    
     <section>
       <title>SVN Changes</title>
-      <p>You can generate as well the changes with svn. For this you need to 
-        point forrest to the directory where the svn logs are. The defaut is 
-        set to <code>{properties:content}svn-log/</code> and you can change it by 
-        setting <code>projectInfo.svn.log.dir</code> in your project 
-        locationmap.</p>
-      <p>We created a log file for demonstration with the following command:</p>
+      <p>
+        You can generate as well the changes with svn. For this you need to
+        point forrest to the directory where the svn logs are. The defaut is set
+        to <code>{properties:content}svn-log/</code> and you can change it by
+        setting <code>projectInfo.svn.log.dir</code> in your project
+        locationmap.
+      </p>
+      <p>
+        We created a log file for demonstration with the following command:
+      </p>
       <source>
 cd forrest/trunk/plugins/org.apache.forrest.plugin.input.projectInfo
 svn log --xml -v . > src/documentation/content/svn-log/log.svn.xml</source>
-      <p>This file reflect all changes that have been done to this plugin. You 
-        can see the result <a href="log.svn.html">log.svn.html</a>.</p>
-      <p>You see the only context we have definied is "code". This is 
-        controlled by a mapper file. The defaut is set to 
-        <code>{properties:content}path-to-context.xml</code> and you can change it 
-        by setting <code>projectInfo.svn.mapper</code> in your project 
-        locationmap.</p>
-      <source><![CDATA[<paths>
+      <p>
+        This file reflect all changes that have been done to this plugin. You
+        can see the result <a href="log.svn.html">log.svn.html</a>.
+      </p>
+      <p>
+        You see the only context we have definied is "code". This is controlled
+        by a mapper file. The defaut is set to
+        <code>{properties:content}path-to-context.xml</code> and you can change
+        it by setting <code>projectInfo.svn.mapper</code> in your project
+        locationmap.
+      </p>
+      <source>
+<![CDATA[<paths>
   <path context="Code">/forrest</path>
-</paths>]]></source>
-      <p>If the log file is growing, one is looking into splitting the file. 
-        You can find out the revision number of the first and last commit of a 
-        month within the log by requesting <a 
-        href="log.svn-revision.xml">log.svn-revision.xml</a>.</p>
-      <p>We implemented as well a small svn cli output to generate log files 
-        per month <a href="log.svn-sh.xml">log.svn-sh.xml</a>. The defaut url is set to 
-        <code>http://svn.myHost.org/repos</code> and you can change it 
-        by setting <code>project.svn.url</code> in your project 
-        locationmap.</p>
+</paths>]]>
+      </source>
+      <p>
+        If the log file is growing, one is looking into splitting the file. You
+        can find out the revision number of the first and last commit of a month
+        within the log by requesting
+        <a 
+        href="log.svn-revision.xml">log.svn-revision.xml</a>.
+      </p>
+      <p>
+        We implemented as well a small svn cli output to generate log files per
+        month <a href="log.svn-sh.xml">log.svn-sh.xml</a>. The defaut url is set
+        to <code>http://svn.myHost.org/repos</code> and you can change it by
+        setting <code>project.svn.url</code> in your project locationmap.
+      </p>
     </section>
-    
     <section>
       <title>To Do List</title>
-      <p>The status.xml file can also be used to manage a list of todo items for
-      the community. For example, here is a 
-      <a href="todo.html">psuedo todo list</a> for this plugin (our real todo list
-      is managed in an Issue Tracker, one day we hope to add support for that
-      here too).</p>
+      <p>
+        The status.xml file can also be used to manage a list of todo items for
+        the community. For example, here is a <a href="todo.html">psuedo todo
+        list</a> for this plugin (our real todo list is managed in an Issue
+        Tracker, one day we hope to add support for that here too).
+      </p>
     </section>
-    
     <section>
       <title>Release Notes</title>
-      <p>To produce release notes you must maintain a <code>status.xml</code> file
-      for your project and request a page with an URL such as 
-      <code>http://domain.com/releaseNotes_0.7-dev.html</code>, this will be produce
-      the release notes for 0.7-dev.</p>
-      
-      <p>If the version number ends with <code>-dev</code> a warning will be included 
-      in the generated page, informing the reader that it is a development version and
-      therefore the list of changes is incomplete.</p>
-
-      <p>For a <code>status.xml</code> <code>action</code> toi be included in the 
-      release notes it must have an attribute <code>importance="high"</code>. When
-      writing actions in <code>status.xml</code> you should write them with the
-      following two questions in mind:</p>
-
+      <p>
+        To produce release notes you must maintain a <code>status.xml</code>
+        file for your project and request a page with an URL such as
+        <code>http://domain.com/releaseNotes_0.7-dev.html</code>, this will be
+        produce the release notes for 0.7-dev.
+      </p>
+      <p>
+        If the version number ends with <code>-dev</code> a warning will be
+        included in the generated page, informing the reader that it is a
+        development version and therefore the list of changes is incomplete.
+      </p>
+      <p>
+        For a <code>status.xml</code> <code>action</code> toi be included in the
+        release notes it must have an attribute <code>importance="high"</code>.
+        When writing actions in <code>status.xml</code> you should write them
+        with the following two questions in mind:
+      </p>
       <ul>
         <li>should it be importance="high"?</li>
         <li>will the action read correctly in the release notes?</li>
       </ul>
-      
-      <p>The introductory text in the release notes comes from the (optional) 
-      element <code>notes</code> (a child of the <code>release</code> element).</p>
-      
-      <note>The same options with respect to retrieveing specific versions of the
-      release notes are available as with the changes feature (discuseed above).</note>
+      <p>
+        The introductory text in the release notes comes from the (optional)
+        element <code>notes</code> (a child of the <code>release</code>
+        element).
+      </p>
+      <note>
+        The same options with respect to retrieveing specific versions of the
+        release notes are available as with the changes feature (discuseed
+        above).
+      </note>
     </section>
-    
     <section>
       <title>Developers List</title>
-      <p>The status.xml file can also contain a list of committers and 
-      contributors which can, optionally, be displayed as part of the changes file.</p>
-      
-      <p>At the time of writing this functionality is quite minimal, being just
-      a list of authors at the end of the changes document. However, in future 
-      releases it is intended that a more configurable output will be 
-      available.</p>
-      
+      <p>
+        The status.xml file can also contain a list of committers and
+        contributors which can, optionally, be displayed as part of the changes
+        file.
+      </p>
+      <p>
+        At the time of writing this functionality is quite minimal, being just a
+        list of authors at the end of the changes document. However, in future
+        releases it is intended that a more configurable output will be
+        available.
+      </p>
       <section>
         <title>Contributor List</title>
-        <p>It may be that some items have been contributed by authors other
-        than those listed in the developer list. These are accredited in a
-        <code>due-to</code> attribute of the <code>action</code> element in
-        status.xml. A list of this contributors is made available at the
-        end of the release notes for each version.</p>
+        <p>
+          It may be that some items have been contributed by authors other than
+          those listed in the developer list. These are accredited in a
+          <code>due-to</code> attribute of the <code>action</code> element in
+          status.xml. A list of this contributors is made available at the end
+          of the release notes for each version.
+        </p>
       </section>
     </section>
-    
-    
     <section>
       <title>Use Cases</title>
-      <p>Projects can manage a document describing various use cases for the
-      application. These use cases can then be used to generate useful developer
-      and user documentation, as well as helping to track the implementation
-      status of features.</p>
-      
-      <p>Some of the uses of this feature are:</p>
-
+      <p>
+        Projects can manage a document describing various use cases for the
+        application. These use cases can then be used to generate useful
+        developer and user documentation, as well as helping to track the
+        implementation status of features.
+      </p>
+      <p>
+        Some of the uses of this feature are:
+      </p>
       <ul>
         <li>during design - what needs to be done</li>
         <li>during development - what needs to be done/has been done</li>
         <li>during use - user documentation of common activities</li>
         <li>during maintenance - how something was implemented</li>
       </ul>
-      
-      <p>To see some examples take a look at:</p>
-      
+      <p>
+        To see some examples take a look at:
+      </p>
       <ul>
         <li><a href="docs/user/useCases/all.html">User Docs</a> for the Use Case features of this plugin</li>
         <li><a href="docs/developer/useCases/all.html">Developer Docs</a> for the Use Case features of this plugin</li>
       </ul>
     </section>
-    
     <section>
       <title>Experimental Features</title>
-      <p>These features are operational, however, they are not fully developed and
-      may change considerably before they become part of the official feature set.
-      You can use them, but be prepared for changes, possibly without warning. If you
-      do use these features we recomend that you join the developers mailing list.</p>
-      
+      <p>
+        These features are operational, however, they are not fully developed
+        and may change considerably before they become part of the official
+        feature set. You can use them, but be prepared for changes, possibly
+        without warning. If you do use these features we recomend that you join
+        the developers mailing list.
+      </p>
       <section>
         <title>Configuration</title>
-        <p>This plugin uses an experimental properties system that allows plugins
-        to expose configuration information to the project. It is likely that at
-        least some of these configuration options will eventually move into Dispatcher
-        based contracts. In the meantime, you can use this config system to control
-        some aspects of the display information. See the 
-        <code>forrest.properties.xml</code> file for a description of the config
-        options available. To alter the configuration simply override these
-        properties in your projects <code>forrest.properties.xml</code> file.</p>
-        
+        <p>
+          This plugin uses an experimental properties system that allows plugins
+          to expose configuration information to the project. It is likely that
+          at least some of these configuration options will eventually move into
+          Dispatcher based contracts. In the meantime, you can use this config
+          system to control some aspects of the display information. See the
+          <code>forrest.properties.xml</code> file for a description of the
+          config options available. To alter the configuration simply override
+          these properties in your projects <code>forrest.properties.xml</code>
+          file.
+        </p>
       </section>
     </section>
   </body>

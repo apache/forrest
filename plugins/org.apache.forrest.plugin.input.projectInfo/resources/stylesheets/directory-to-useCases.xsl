@@ -21,23 +21,24 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:resume="http://xmlresume.sourceforge.net/resume/0.0"
                 xmlns:cinclude="http://apache.org/cocoon/include/1.0">
-                
   <xsl:template match="dir:directory">
     <useCaseAggregate>
       <xsl:apply-templates select="dir:file"/>
     </useCaseAggregate>
   </xsl:template>
-  
   <xsl:template match="dir:file">
     <xsl:variable name="name" select="substring-before(@name,'.xml')"/>
     <file>
-      <xsl:attribute name="filename"><xsl:value-of select="$name"/></xsl:attribute>
+      <xsl:attribute name="filename">
+        <xsl:value-of select="$name"/>
+      </xsl:attribute>
       <cinclude:include>
-        <xsl:attribute name="src"><xsl:value-of select="concat('cocoon:/docs/agregate/useCases/',$name, '.source.xml')"/></xsl:attribute>
+        <xsl:attribute name="src">
+          <xsl:value-of select="concat('cocoon:/docs/agregate/useCases/',$name, '.source.xml')"/>
+        </xsl:attribute>
       </cinclude:include>
     </file>
-  </xsl:template>   
-  
+  </xsl:template>
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>

@@ -16,14 +16,10 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:param name="versionNumber"/>
-
   <xsl:variable name="changes-url"
     select="concat(../skinconfig/project-url, 'changes.html')"/>
-
   <xsl:template match="status">
-      
     <rss version="0.91">
       <channel>
         <xsl:choose>
@@ -36,25 +32,35 @@
           <xsl:otherwise>
             <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
           </xsl:otherwise>
-        </xsl:choose>
-
-        <link><xsl:value-of select="$changes-url"/></link>
-
-        
+        </xsl:choose><link>
+        <xsl:value-of select="$changes-url"/></link>
         <xsl:choose>
           <xsl:when test="$versionNumber = 'current'">
-            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+            <description>
+              <xsl:value-of select="../skinconfig/project-name"/>
+              (
+              <xsl:value-of select="//release[1]/@version"/>
+              ) Changes
+            </description>
           </xsl:when>
           <xsl:when test="$versionNumber">
-            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</description>
+            <description>
+              <xsl:value-of select="../skinconfig/project-name"/>
+              (
+              <xsl:value-of select="$versionNumber"/>
+              ) Changes
+            </description>
           </xsl:when>
           <xsl:otherwise>
-            <description><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</description>
+            <description>
+              <xsl:value-of select="../skinconfig/project-name"/>
+              (
+              <xsl:value-of select="//release[1]/@version"/>
+              ) Changes
+            </description>
           </xsl:otherwise>
         </xsl:choose>
-
         <language>en-us</language>
-
         <xsl:choose>
           <xsl:when test="$versionNumber">
             <xsl:choose>
@@ -73,30 +79,22 @@
             <xsl:apply-templates/>
           </xsl:otherwise>
         </xsl:choose>
-    
         <xsl:apply-templates select="changes/release[1]/action"/>
       </channel>
     </rss>
   </xsl:template>
-  
   <xsl:template match="action">
     <item>
-      <title>
-        <xsl:value-of select="@context" />
-        <xsl:text> </xsl:text>
+      <title><xsl:value-of select="@context" />
+<xsl:text> </xsl:text>
         <xsl:value-of select="@type" />
-
         <xsl:if test="@fixes-bug">
           (bug <xsl:value-of select="@fixes-bug" />)
-        </xsl:if>
-
-      </title>
-
-      <link><xsl:value-of select="$changes-url"/></link>
-
+        </xsl:if></title><link>
+      <xsl:value-of select="$changes-url"/></link>
       <description>
         <xsl:value-of select="@context" />
-        <xsl:text> </xsl:text>
+<xsl:text> </xsl:text>
         <xsl:value-of select="@type" />
         by
         <xsl:value-of select="@dev" />
@@ -109,9 +107,7 @@
       </description>
     </item>
   </xsl:template>
-
   <xsl:template match="skinconfig"/>
   <xsl:template match="notes"/>
   <xsl:template match="todo"/>
 </xsl:stylesheet>
-

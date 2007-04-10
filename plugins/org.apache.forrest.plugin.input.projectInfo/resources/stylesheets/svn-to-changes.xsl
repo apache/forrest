@@ -38,23 +38,43 @@
     </changes>
   </xsl:template>
   <xsl:template match="logentry">
-    <action> <xsl:attribute name="dev"><xsl:value-of 
-      select="author"/></xsl:attribute> <xsl:variable name="type"> <xsl:choose> 
-      <xsl:when test="contains(paths/path[1]/@action, 'A')">add</xsl:when> 
-      <xsl:when test="contains(paths/path[1]/@action, 'M')">update</xsl:when> 
-      <xsl:when test="contains(paths/path[1]/@action, 'R')">update</xsl:when> 
-      <xsl:when test="contains(paths/path[1]/@action, 'D')">remove</xsl:when> 
-      </xsl:choose> </xsl:variable> <xsl:attribute name="type"><xsl:value-of 
-      select="$type"/></xsl:attribute> <xsl:variable name="version"> 
-      <xsl:call-template name="context"> <xsl:with-param name="path"> 
-      <xsl:value-of select="paths/path[1]"/> </xsl:with-param> 
-      </xsl:call-template> </xsl:variable> <xsl:variable name="path"> 
-      <xsl:value-of select="paths/path[1]"/> </xsl:variable> <xsl:attribute 
-      name="context"> <xsl:value-of select="$version"/> 
+    <action>
+      <xsl:attribute name="dev">
+        <xsl:value-of 
+      select="author"/>
+      </xsl:attribute>
+      <xsl:variable name="type">
+        <xsl:choose>
+          <xsl:when test="contains(paths/path[1]/@action, 'A')">add</xsl:when>
+          <xsl:when test="contains(paths/path[1]/@action, 'M')">update</xsl:when>
+          <xsl:when test="contains(paths/path[1]/@action, 'R')">update</xsl:when>
+          <xsl:when test="contains(paths/path[1]/@action, 'D')">remove</xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:attribute name="type">
+        <xsl:value-of 
+      select="$type"/>
+      </xsl:attribute>
+      <xsl:variable name="version">
+        <xsl:call-template name="context">
+          <xsl:with-param name="path">
+            <xsl:value-of select="paths/path[1]"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="path">
+        <xsl:value-of select="paths/path[1]"/>
+      </xsl:variable>
+      <xsl:attribute 
+      name="context">
+        <xsl:value-of select="$version"/>
       </xsl:attribute>[<xsl:value-of select="$version"/>] <xsl:value-of 
-      select="msg"/><xsl:text> </xsl:text><link 
-      href="http://svn.apache.org/viewcvs.cgi?rev={@revision}&amp;view=rev">Diff</link><xsl:text> 
-      </xsl:text> </action>
+      select="msg"/>
+<xsl:text> </xsl:text><link 
+      href="http://svn.apache.org/viewcvs.cgi?rev={@revision}&amp;view=rev">Diff</link>
+<xsl:text> 
+      </xsl:text>
+    </action>
   </xsl:template>
   <xsl:template name="context">
     <xsl:param name="path"/>

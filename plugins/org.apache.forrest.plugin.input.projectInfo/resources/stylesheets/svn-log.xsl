@@ -25,6 +25,8 @@
       <xsl:apply-templates/>
     </shell>
   </xsl:template>
-  <xsl:template match="changes">svn log -r <xsl:value-of select="revision/@first"/>:<xsl:value-of select="revision/@last"/> --xml -v <xsl:value-of select="$url"/> > <xsl:value-of select="$path-prefix"/><xsl:value-of select="@release"/><xsl:value-of select="$ext"/>
-</xsl:template>
+  <xsl:template match="changes">svn log -r <xsl:value-of select="revision/@first"/>:<xsl:value-of select="revision/@last"/> --xml -v <xsl:value-of select="$url"/> > <xsl:value-of select="$path-prefix"/>
+    <xsl:value-of select="@release"/>
+    <xsl:value-of select="$ext"/>
+  </xsl:template>
 </xsl:stylesheet>
