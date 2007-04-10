@@ -16,39 +16,31 @@
   limitations under the License.
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
 <beans>
-
-	<!-- ============================================= -->
-	<!--                 Readers					   -->
-	<!-- ============================================= -->
-
-	<bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
-	<bean id="tradeDoubler"
+<!-- ============================================= -->
+<!--                 Readers					   -->
+<!-- ============================================= -->
+  <bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
+  <bean id="tradeDoubler"
 		class="org.apache.forrest.core.reader.ChainedReader">
-		<property name="docType" 
+    <property name="docType" 
 		          value="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"/>
-    </bean>
-	
-	<!-- ============================================= -->
-	<!--               Input Plugins                   -->
-	<!-- ============================================= -->
-
-	<bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
+  </bean>
+<!-- ============================================= -->
+<!--               Input Plugins                   -->
+<!-- ============================================= -->
+  <bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
 		class="org.apache.forrest.core.plugin.XSLTInputPlugin">
-		<property name="xsltURL"
+    <property name="xsltURL"
 			value="/src/xslt/tradeDoublerFeed-to-internal.xsl" />
-	</bean>
-
-	<!-- ============================================= -->
-	<!--               Output Plugins                  -->
-	<!-- ============================================= -->
-
-	<bean id="htmlOutputPlugin"
+  </bean>
+<!-- ============================================= -->
+<!--               Output Plugins                  -->
+<!-- ============================================= -->
+  <bean id="htmlOutputPlugin"
 		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
-		<property name="pattern" value=".*(html|htm)" />
-		<property name="xsltPath"
+    <property name="pattern" value=".*(html|htm)" />
+    <property name="xsltPath"
 			value="/xdocs/samples/xslt/internal-to-html.xsl" />
-	</bean>
-
+  </bean>
 </beans>

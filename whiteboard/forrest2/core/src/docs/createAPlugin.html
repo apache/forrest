@@ -15,72 +15,77 @@
   limitations under the License.
 -->
 <html>
-<body>
-
-<h1>How to create an input plugin</h1>
-
-<p>The first thing to do when creating an input plugin is to decide if
-you can best achieve your objectives using XSLT or Java. Generally, if
-your input document is an XML document then you should use XSLT, 
-otherwise you will need to use Java.</p>
-
-<h2>Creating an XSLT Plugin</h2>
-
-<p>Creating an XSLT plugin is a matter of creating an XSLT stylesheet
-and registering a copy of the XSLTInputPlugin that will use your
-stylesheet.</p>
-
-<p>An XSLT plugin has two defining properties. One is the URL
-of the XSLT file to be used, the other is a property that defines
-what type of document can be processed by this plugin.</p>
-
-<h3>Register the Plugin</h3>
-
-<p>Plugins are registered with Forrest2 using the Spring Framework.
-This means that you need to add an entry to the forrestContext.xml
-file, such as:</p>
-
+  <body>
+    <h1>How to create an input plugin</h1>
+    <p>
+      The first thing to do when creating an input plugin is to decide if you
+      can best achieve your objectives using XSLT or Java. Generally, if your
+      input document is an XML document then you should use XSLT, otherwise you
+      will need to use Java.
+    </p>
+    <h2>Creating an XSLT Plugin</h2>
+    <p>
+      Creating an XSLT plugin is a matter of creating an XSLT stylesheet and
+      registering a copy of the XSLTInputPlugin that will use your stylesheet.
+    </p>
+    <p>
+      An XSLT plugin has two defining properties. One is the URL of the XSLT
+      file to be used, the other is a property that defines what type of
+      document can be processed by this plugin.
+    </p>
+    <h3>Register the Plugin</h3>
+    <p>
+      Plugins are registered with Forrest2 using the Spring Framework. This
+      means that you need to add an entry to the forrestContext.xml file, such
+      as:
+    </p>
 <![CDATA[  
 <bean id="org.apache.forrest.example.affiliateProductCatalogue.TradeDoublerProductFeed"
 		class="org.apache.forrest.core.plugin.XSLTInputPlugin">
 		<property name="xsltURL"
 			value="/src/xslt/tradeDoublerFeed-to-internal.xsl" />
 </bean>]]>
-
-<p>This input plugin will take an XML source document and process it with the indicated
-stylesheet. The result is expected to be an document using the internal Forrest2 format.</p>
-
-<h2>Creating an Java Plugin</h2>
-
-<h3>Create a new java project to house your plugin</h3>
-
-<h3>Create a class file that will be the controller for the plugin.</h3>
-<p>This should extend the abstact class <br/>
-	org.apache.forrest.core.plugin.AbstractInputPlugin</p>
-
-<p>You must implement the following method:</p>
-<div class="code"><pre>
+    <p>
+      This input plugin will take an XML source document and process it with the
+      indicated stylesheet. The result is expected to be an document using the
+      internal Forrest2 format.
+    </p>
+    <h2>Creating an Java Plugin</h2>
+    <h3>Create a new java project to house your plugin</h3>
+    <h3>Create a class file that will be the controller for the plugin.</h3>
+    <p>
+      This should extend the abstact class
+      <br/>
+      org.apache.forrest.core.plugin.AbstractInputPlugin
+    </p>
+    <p>
+      You must implement the following method:
+    </p>
+    <div class="code">
+      <pre>
 	public IDocument process(IDocument doc)
-</pre></div>
-
-<p>The process method should create an instance of an 
-	org.apache.forrest.core.document.InternalDocument by performing whatever
-	process is required to generate an internal Forrest document from the
-	source docuemnt.</p>
-
-<h3>Register the Plugin</h3>
-
-<p>Plugins are registered with Forrest2 using the Spring Framework.
-This means that you need to add an entry to the forrestContext.xml
-file, such as:</p>
-
+</pre>
+    </div>
+    <p>
+      The process method should create an instance of an
+      org.apache.forrest.core.document.InternalDocument by performing whatever
+      process is required to generate an internal Forrest document from the
+      source docuemnt.
+    </p>
+    <h3>Register the Plugin</h3>
+    <p>
+      Plugins are registered with Forrest2 using the Spring Framework. This
+      means that you need to add an entry to the forrestContext.xml file, such
+      as:
+    </p>
 <![CDATA[  <bean id="helloWorldInput"
     class="org.apache.forrest.test.core.plugins.input.HelloWorldInputPlugin"/>]]>
-
-<p>The Forrest controller will read all the files that it finds in the classpath that
-match this naming convention.</p>
-
-<pre><![CDATA[
+    <p>
+      The Forrest controller will read all the files that it finds in the
+      classpath that match this naming convention.
+    </p>
+    <pre>
+<![CDATA[
 
 
 
@@ -128,6 +133,7 @@ World message.
 ==============================
 How to create an Output Plugin
 ==============================
-]]></pre>
-</body>
+]]>
+    </pre>
+  </body>
 </html>

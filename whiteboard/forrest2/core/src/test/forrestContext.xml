@@ -16,38 +16,29 @@
   limitations under the License.
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans>	
-	
-	<!-- ============================================= -->
-	<!--                 Readers					   -->
-	<!-- ============================================= -->
-
-
-	<bean id="http" class="org.apache.forrest.core.reader.HTTPReader"></bean>
-	<bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
-	<bean id="hello"
+<beans>
+<!-- ============================================= -->
+<!--                 Readers					   -->
+<!-- ============================================= -->
+  <bean id="http" class="org.apache.forrest.core.reader.HTTPReader"></bean>
+  <bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
+  <bean id="hello"
 		class="org.apache.forrest.core.reader.ChainedReader">
-		<property name="docType" 
+    <property name="docType" 
 		          value="org.apache.forrest.helloWorld"/>
-    </bean>
-	
-	<!-- ============================================= -->
-	<!--               Input Plugins                   -->
-	<!-- ============================================= -->
-
-	<bean id="org.apache.forrest.hellowWorld"
+  </bean>
+<!-- ============================================= -->
+<!--               Input Plugins                   -->
+<!-- ============================================= -->
+  <bean id="org.apache.forrest.hellowWorld"
 		class="org.apache.forrest.test.core.plugins.input.HelloWorldInputPlugin" />
-
-	<!-- ============================================= -->
-	<!--               Output Plugins                  -->
-	<!-- ============================================= -->
-
-	<bean id="html"
+<!-- ============================================= -->
+<!--               Output Plugins                  -->
+<!-- ============================================= -->
+  <bean id="html"
 		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
-		<property name="pattern" value="html" />
-		<property name="xsltPath"
+    <property name="pattern" value="html" />
+    <property name="xsltPath"
 			value="/xdocs/samples/xslt/internal-to-html.xsl" />
-	</bean>
-
+  </bean>
 </beans>

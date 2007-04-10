@@ -16,40 +16,31 @@
   limitations under the License.
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
 <beans>
-
-	<!-- ============================================= -->
-	<!--                 Readers					   -->
-	<!-- ============================================= -->
-
-	<bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
-	<bean id="http" class="org.apache.forrest.core.reader.HTTPReader"></bean>
-	<bean id="site" class="org.apache.forrest.reader.Forrest1SiteElementReader"></bean>
-		
-	<!-- ============================================= -->
-	<!--               Input Plugins                   -->
-	<!-- ============================================= -->
-
-	<bean id="org.apache.forrest.xdoc2"
+<!-- ============================================= -->
+<!--                 Readers					   -->
+<!-- ============================================= -->
+  <bean id="file" class="org.apache.forrest.core.reader.FileReader"></bean>
+  <bean id="http" class="org.apache.forrest.core.reader.HTTPReader"></bean>
+  <bean id="site" class="org.apache.forrest.reader.Forrest1SiteElementReader"></bean>
+<!-- ============================================= -->
+<!--               Input Plugins                   -->
+<!-- ============================================= -->
+  <bean id="org.apache.forrest.xdoc2"
       class="org.apache.forrest.core.plugin.XSLTInputPlugin">
-      <property name="xsltURL" value="src/resources/xslt/xdoc2-to-internal.xsl"/>
-    </bean>
-    
-	<bean id="org.apache.forrest.site"
+    <property name="xsltURL" value="src/resources/xslt/xdoc2-to-internal.xsl"/>
+  </bean>
+  <bean id="org.apache.forrest.site"
       class="org.apache.forrest.core.plugin.XSLTInputPlugin">
-      <property name="xsltURL" value="src/resources/xslt/site-to-internal.xsl"/>
-    </bean>
-
-	<!-- ============================================= -->
-	<!--               Output Plugins                  -->
-	<!-- ============================================= -->
-
-	<bean id="htmlOutputPlugin"
+    <property name="xsltURL" value="src/resources/xslt/site-to-internal.xsl"/>
+  </bean>
+<!-- ============================================= -->
+<!--               Output Plugins                  -->
+<!-- ============================================= -->
+  <bean id="htmlOutputPlugin"
 		class="org.apache.forrest.core.plugin.XSLTOutputPlugin">
-		<property name="pattern" value=".*(html|htm)" />
-		<property name="xsltPath"
+    <property name="pattern" value=".*(html|htm)" />
+    <property name="xsltPath"
 			value="/xdocs/samples/xslt/internal-to-html.xsl" />
-	</bean>
-
+  </bean>
 </beans>

@@ -15,20 +15,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1" exclude-result-prefixes="i18n">
-
 <!--+
   |Overall site template
   +-->
   <xsl:template match="/">
     <html>
-        <head>
-            <title>
-                <xsl:value-of select="div[@id='content']/h1"/>
-            </title>
-        </head>
+      <head>
+        <title><xsl:value-of select="div[@id='content']/h1"/></title>
+      </head>
       <body>
         <ul>
           <xsl:apply-templates/>
@@ -36,7 +32,6 @@
       </body>
     </html>
   </xsl:template>
-  
   <xsl:template match="*">
     <someElement/>
   </xsl:template>

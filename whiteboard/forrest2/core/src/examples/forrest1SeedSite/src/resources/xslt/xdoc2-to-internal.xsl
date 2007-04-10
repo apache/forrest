@@ -18,26 +18,24 @@
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/2002/06/xhtml2"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:html="http://www.w3.org/2002/06/xhtml2">
-
-	<xsl:template match="document">
-		<html xmlns="http://www.w3.org/2002/06/xhtml2" 
+  <xsl:template match="document">
+    <html xmlns="http://www.w3.org/2002/06/xhtml2" 
 		      xml:lang="en" 
 		      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 		      xsi:schemaLocation="http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd">
-			<xsl:apply-templates/>
-		</html>
-	</xsl:template>
-	
-	<xsl:template match="header">
-	  <head>
-	    <xsl:apply-templates/>
-	  </head>
-	</xsl:template>
-	
-	<xsl:template match="title">
-	  <h><xsl:apply-templates/></h>
-	</xsl:template>
-	
+      <xsl:apply-templates/>
+    </html>
+  </xsl:template>
+  <xsl:template match="header">
+    <head>
+      <xsl:apply-templates/>
+    </head>
+  </xsl:template>
+  <xsl:template match="title">
+    <h>
+      <xsl:apply-templates/>
+    </h>
+  </xsl:template>
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
