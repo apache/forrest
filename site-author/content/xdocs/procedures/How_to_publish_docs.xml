@@ -18,69 +18,88 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
   "http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
-    <header>
-        <title>How to Publish Forrest Documentation</title>
-        <abstract>This documents the steps that the Documentation Coordinator should follow to update the Forrest
-            Website.</abstract>
-    </header>
-    <body>
-
-        <fixme author="open">This is work in progress!</fixme>
-        <section id="About">
-          <title>Introduction</title>
-          <p>All documentation about Apache Forrest is managed as a Forrest-built project located in the
-              site-author directory of forrest/trunk SVN. The Apapce Forrest website is updated by generating static pages from
-              the site-author-project and committing them to the forrest/site SVN, which is then
-              'svn checkout' on the forrest.apache.org webserver to create the website.</p>
-          <p>
-            See other notes for the Documentation Coordinator <a href="site:roles">role</a>.
-          </p>
-        </section>
-        <section id="forrestbot-local">
-          <title>Updating the site with a local forrestbot</title>
-          <p>Do once, create $FORREST_HOME/deploy.svn.settings file. These 
-            credentials are needed by forrestbot so that it can do your 'svn add' 
-            and 'svn commit' etc. to the forrest/site/ repository. The 
-            deploy.svn.settings file looks like:</p>
-          <source><![CDATA[<?xml version="1.0"?>
+  <header>
+    <title>How to Publish Forrest Documentation</title>
+    <abstract>
+      This documents the steps that the Documentation Coordinator should follow
+      to update the Forrest Website.
+    </abstract>
+  </header>
+  <body>
+    <fixme author="open">
+      This is work in progress!
+    </fixme>
+    <section id="About">
+      <title>Introduction</title>
+      <p>
+        All documentation about Apache Forrest is managed as a Forrest-built
+        project located in the site-author directory of forrest/trunk SVN. The
+        Apapce Forrest website is updated by generating static pages from the
+        site-author-project and committing them to the forrest/site SVN, which
+        is then 'svn checkout' on the forrest.apache.org webserver to create the
+        website.
+      </p>
+      <p>
+        See other notes for the Documentation Coordinator
+        <a href="site:roles">role</a>.
+      </p>
+    </section>
+    <section id="forrestbot-local">
+      <title>Updating the site with a local forrestbot</title>
+      <p>
+        Do once, create $FORREST_HOME/deploy.svn.settings file. These
+        credentials are needed by forrestbot so that it can do your 'svn add'
+        and 'svn commit' etc. to the forrest/site/ repository. The
+        deploy.svn.settings file looks like:
+      </p>
+      <source>
+<![CDATA[<?xml version="1.0"?>
 <project>
     <property name="deploy.svn.user" value="myApacheUsername"/>
     <property name="deploy.svn.password" value="myPassword"/>
-</project>]]> </source>
-          <p>Generating and publishing the main docs is very easy using a local forrestbot:
-          </p>
-
-          <source>cd site-author
+</project>]]>
+      </source>
+      <p>
+        Generating and publishing the main docs is very easy using a local
+        forrestbot:
+      </p>
+      <source>cd site-author
 forrest -f publish.xml build
 forrest -f publish.xml deploy</source>
-          <p>This builds the documentation locally then deploys it by committing
-            it to the <a href="https://svn.apache.org/repos/asf/forrest/site">forrest/site SVN</a>.
-            Then a cronjob on the server will automatically publish it. However, if
-            instant turnaround is required, then do this:
-          </p>
-          <source>ssh people.apache.org
+      <p>
+        This builds the documentation locally then deploys it by committing it
+        to the
+        <a href="https://svn.apache.org/repos/asf/forrest/site">forrest/site
+        SVN</a>. Then a cronjob on the server will automatically publish it.
+        However, if instant turnaround is required, then do this:
+      </p>
+      <source>ssh people.apache.org
 cd /www/forrest.apache.org
 svn update</source>
-          <p>
-            Publishing documentation for a particular plugin is done by:
-          </p>
-          <source>cd plugins/myPluginName
+      <p>
+        Publishing documentation for a particular plugin is done by:
+      </p>
+      <source>cd plugins/myPluginName
 $FORREST_HOME/tools/ant/bin/ant deploy-docs</source>
-          <p>
-            See further information in the 
-            <a href="site:buildPlugin">buildPlugin</a> doc.
-          </p>
-          <p>See some general notes about managing
-            <a href="http://www.apache.org/dev/project-site.html">project websites</a>.
-          </p>
-        </section>
-
-        <section id="OrgDoc">
-            <title>original docs</title>
-            <p>There have been a few explantions of our docs processing on the forrest-dev mail list.
-              Need to glean the info from them. Here is the content of some:</p>
-            <source>
-                <![CDATA[
+      <p>
+        See further information in the
+        <a href="site:buildPlugin">buildPlugin</a> doc.
+      </p>
+      <p>
+        See some general notes about managing
+        <a href="http://www.apache.org/dev/project-site.html">project
+        websites</a>.
+      </p>
+    </section>
+    <section id="OrgDoc">
+      <title>original docs</title>
+      <p>
+        There have been a few explantions of our docs processing on the
+        forrest-dev mail list. Need to glean the info from them. Here is the
+        content of some:
+      </p>
+      <source>
+<![CDATA[
                 To publish from trunk/site-author/
                 
                 Do once:
@@ -128,25 +147,26 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</source>
                 The second word is treated as an ant target to be called.
                 Just leave it out and forrestbot will use a default message.
                  ]]>
-            </source>
-        <p>Some more notes that need to be integrated above ...
-        </p>
-        <p>Note that forrestbot does not remove docs from the forrest/site SVN (FOR-392).
-          So need to manually delete: 'cd /svn/forrest/site; svn delete oldDoc'.
-          Then remove it from the forrestbot work directories:
-          'cd $FORREST_HOME/site-author; rm build/forrest-docs/oldDoc; rm work/svn-deploy/forrest-docs/oldDoc'.
-        </p>
-        <p>
-The generated docs are in build/forrest-docs
-which is the name given to it in the forrestbot descriptor (site-author/publish.xml).
-Here is a trick for reviewing changes that forrestbot is ready to deploy ...
-        </p>
-        <source>
+      </source>
+      <p>
+        Some more notes that need to be integrated above ...
+      </p>
+      <p>
+        Note that forrestbot does not remove docs from the forrest/site SVN
+        (FOR-392). So need to manually delete: 'cd /svn/forrest/site; svn delete
+        oldDoc'. Then remove it from the forrestbot work directories: 'cd
+        $FORREST_HOME/site-author; rm build/forrest-docs/oldDoc; rm
+        work/svn-deploy/forrest-docs/oldDoc'.
+      </p>
+      <p>
+        The generated docs are in build/forrest-docs which is the name given to
+        it in the forrestbot descriptor (site-author/publish.xml). Here is a
+        trick for reviewing changes that forrestbot is ready to deploy ...
+      </p>
+      <source>
 forrest -f publish.xml build
 svn update work/svn-deploy/forrest-docs
 diff -rq build/forrest-docs work/svn-deploy/forrest-docs | grep -v "\.svn" | grep differ</source>
-        </section>
-
-
-    </body>
+    </section>
+  </body>
 </document>

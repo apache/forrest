@@ -16,78 +16,85 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-  <header> 
-    <title>Upgrading to Apache Forrest 0.8-dev</title> 
-  </header> 
-  <body> 
+<document>
+  <header>
+    <title>Upgrading to Apache Forrest 0.8-dev</title>
+  </header>
+  <body>
     <section id="introduction">
       <title>Introduction</title>
-<note>
-This is the <strong>development</strong> version of Apache Forrest which can
-be obtained from the Subversion repository or from a code snapshot.
-See the notes for obtaining and <a href="site:build">Building Forrest</a>.
-</note>
+      <note>
+        This is the <strong>development</strong> version of Apache Forrest which
+        can be obtained from the Subversion repository or from a code snapshot.
+        See the notes for obtaining and <a href="site:build">Building
+        Forrest</a>.
+      </note>
       <p>
-      This page describes some changes to Apache Forrest that affect people who are
-      upgrading to the 0.8 version.
-      If you have other issues, then please discuss on either the
-      <a href="site:mail-lists/forrest-dev">dev</a> or
-      <a href="site:mail-lists/forrest-user">user</a>
-      mailing lists.
-      As more experience is gained, this document will be updated.  
+        This page describes some changes to Apache Forrest that affect people
+        who are upgrading to the 0.8 version. If you have other issues, then
+        please discuss on either the
+        <a href="site:mail-lists/forrest-dev">dev</a> or
+        <a href="site:mail-lists/forrest-user">user</a> mailing lists. As more
+        experience is gained, this document will be updated.
       </p>
       <p>
-      (If you are upgrading from a version prior to 0.7 then you will need
-      to see the notes for the previous upgrade.)
+        (If you are upgrading from a version prior to 0.7 then you will need to
+        see the notes for the previous upgrade.)
       </p>
     </section>
-
     <section id="new">
       <title>New Features</title>
       <p>
-        The following list shows some of the key new features.
-        For the full list of changes, see the main
-        <a href="site:changes">change log</a> and also for each plugin.
+        The following list shows some of the key new features. For the full list
+        of changes, see the main <a href="site:changes">change log</a> and also
+        for each plugin.
       </p>
       <ul>
         <li><a href="site:locationmap">Locationmaps</a>.</li>
       </ul>
-      <p>Many new initial plugins are in the "whiteboard". See the entries in the
-        <a href="site:changes">change log</a> and see each plugin's documentation and changes log.
-        This includes the new Dispatcher.
-        See <a href="site:status-themes">Status of Themes: Skins and Dispatcher</a>.
+      <p>
+        Many new initial plugins are in the "whiteboard". See the entries in the
+        <a href="site:changes">change log</a> and see each plugin's
+        documentation and changes log. This includes the new Dispatcher. See
+        <a href="site:status-themes">Status of Themes: Skins and Dispatcher</a>.
       </p>
     </section>
-
     <section id="locationmaps">
       <title>Locationmaps</title>
-      <p>The <a href="site:locationmap">Locationmaps</a> define the mapping from requests to locations
-        which enables content and resources to be located at various different sources.
+      <p>
+        The <a href="site:locationmap">Locationmaps</a> define the mapping from
+        requests to locations which enables content and resources to be located
+        at various different sources.
       </p>
-      <p>Adding a default locationmap to your project is not required, but is advisable.
-       Sooner or later you will use it. Having a default one also reduces the verbosity
-       of the log files. Copy one from a fresh 'forrest seed' to
-       <code>PROJECT_HOME/src/documentation/content/locationmap.xml</code>
+      <p>
+        Adding a default locationmap to your project is not required, but is
+        advisable. Sooner or later you will use it. Having a default one also
+        reduces the verbosity of the log files. Copy one from a fresh 'forrest
+        seed' to
+        <code>PROJECT_HOME/src/documentation/content/locationmap.xml</code>
       </p>
-      <warning>If you do use locationmaps and an entry for a specific request is 
-      missing Forrest generates a confusing error message. Please ask on our
-      mailing lists for help in debugging your problem (hint, turn on locationmap
-      debugging in [FORREST_HOME]/main/webapp/WEB-INF/logkit.xconf, restart Forrest,
-      request the broken pages and visit [SITE_HOM]/build/webapp/logs/locationmap.xml).
-      This issue will be fixed in the next version of Forrest.</warning>
+      <warning>
+        If you do use locationmaps and an entry for a specific request is
+        missing Forrest generates a confusing error message. Please ask on our
+        mailing lists for help in debugging your problem (hint, turn on
+        locationmap debugging in
+        [FORREST_HOME]/main/webapp/WEB-INF/logkit.xconf, restart Forrest,
+        request the broken pages and visit
+        [SITE_HOM]/build/webapp/logs/locationmap.xml). This issue will be fixed
+        in the next version of Forrest.
+      </warning>
     </section>
-
     <section id="modules">
       <title>Forrest configuration simplification</title>
       <p>
-        <strong>FOR-920</strong> Merging the
-        <code>defaults</code> and
-        <code>project</code> modules to the new
-        <code>properties</code> module. You can use it like {properties:forrest.home}
-        </p>
-      <p> In all custom code (e.g. project sitemaps or plugins) you need to do the following: </p>
-      
+        <strong>FOR-920</strong> Merging the <code>defaults</code> and
+        <code>project</code> modules to the new <code>properties</code> module.
+        You can use it like {properties:forrest.home}
+      </p>
+      <p>
+        In all custom code (e.g. project sitemaps or plugins) you need to do the
+        following:
+      </p>
       <ul>
         <li>find:
           <code>{defaults:</code> and replace with
@@ -102,92 +109,89 @@ See the notes for obtaining and <a href="site:build">Building Forrest</a>.
           <code>{properties:</code></li>
       </ul>
     </section>
-
     <section id="clean">
       <title>Run a clean target after upgrade</title>
       <p>
-        Do 'forrest clean-work' in each of your projects. This also removes
-        the old Cocoon disk cache.
+        Do 'forrest clean-work' in each of your projects. This also removes the
+        old Cocoon disk cache.
       </p>
     </section>
-
     <section id="to2to">
       <title>New filename convention for stylesheets</title>
       <p>
-        There is now a filenaming convention for stylesheets (e.g. document-to-html.xsl).
-        This assists with automating the location of such resources.
-        See <a href="site:locationmap">Locationmap</a>.
+        There is now a filenaming convention for stylesheets (e.g.
+        document-to-html.xsl). This assists with automating the location of such
+        resources. See <a href="site:locationmap">Locationmap</a>.
       </p>
-      <p>For the default use of Forrest, this makes no difference. However, if
-        you have developed your own skin then you will need to do some filename changes, e.g.
-        <code>'cd skins/my-skin/xslt/html; mv tab2menu.xsl tab-to-menu.xsl'</code> (do each of book2menu.xsl document2html.xsl site2xhtml.xsl tab2menu.xsl).
-        It is advisable to follow this naming convention for your other resources,
-        which will mean that you can utilise the locationmap.
+      <p>
+        For the default use of Forrest, this makes no difference. However, if
+        you have developed your own skin then you will need to do some filename
+        changes, e.g. <code>'cd skins/my-skin/xslt/html; mv tab2menu.xsl
+        tab-to-menu.xsl'</code> (do each of book2menu.xsl document2html.xsl
+        site2xhtml.xsl tab2menu.xsl). It is advisable to follow this naming
+        convention for your other resources, which will mean that you can
+        utilise the locationmap.
       </p>
     </section>
-
     <section id="docs">
       <title>Notes about documentation</title>
-      <p>After each release, the "Versioned Docs" are copied to form the new "dev" set.
-        Ideally the docs are then upgraded in readiness for the new release.
-        This has not been completed for the 0.8 release. In particular there are
-        example snippets of sitemaps which have not yet been upgraded to reflect the changes to the sitemaps and the separation of some core stuff into plugins.
-        See issues
-        <a href="http://issues.apache.org/jira/browse/FOR-546">FOR-546</a>
-        and 
-        <a href="http://issues.apache.org/jira/browse/FOR-922">FOR-922</a>
-        and others.
+      <p>
+        After each release, the "Versioned Docs" are copied to form the new
+        "dev" set. Ideally the docs are then upgraded in readiness for the new
+        release. This has not been completed for the 0.8 release. In particular
+        there are example snippets of sitemaps which have not yet been upgraded
+        to reflect the changes to the sitemaps and the separation of some core
+        stuff into plugins. See issues
+        <a href="http://issues.apache.org/jira/browse/FOR-546">FOR-546</a> and
+        <a href="http://issues.apache.org/jira/browse/FOR-922">FOR-922</a> and
+        others.
       </p>
     </section>
-
     <section id="cocoon">
       <title>Notes about Cocoon version</title>
       <p>
-        The last time that we upgraded our packaged version of Cocoon trunk
-        was using their SVN r351990 on 2005-12-08. Since then a number of things
+        The last time that we upgraded our packaged version of Cocoon trunk was
+        using their SVN r351990 on 2005-12-08. Since then a number of things
         have happened to cause us to fall out of synchronisation with Cocoon.
-        There is various discussion about this in the Forrest and Cocoon dev mail archives.
+        There is various discussion about this in the Forrest and Cocoon dev
+        mail archives.
       </p>
       <p>
         If you use your own version of Cocoon, then you will know about the
-        upgrade notes in the $FORREST_HOME/etc/cocoon_upgrade directory.
-        You might be able to advance a bit beyond the SVN revision, but not much.
+        upgrade notes in the $FORREST_HOME/etc/cocoon_upgrade directory. You
+        might be able to advance a bit beyond the SVN revision, but not much.
         Please help to rectify this situation.
       </p>
     </section>
-
     <section id="xmlformat">
       <title>Whitespace and indenting of xml files with xmlformat</title>
       <p>
         All xml type files have been formatted using xmlformat. You can apply
-        this to your own work if necessary by using the same configuration
-        as the Forrest project.
-        See notes at <a href="http://issues.apache.org/jira/browse/FOR-644">FOR-644</a>.
+        this to your own work if necessary by using the same configuration as
+        the Forrest project. See notes at
+        <a href="http://issues.apache.org/jira/browse/FOR-644">FOR-644</a>.
       </p>
     </section>
-
     <section id="tips">
       <title>General upgrade tips</title>
       <p>
-      Synchronise your project's skinconf.xml and forrest.properties files.
+        Synchronise your project's skinconf.xml and forrest.properties files.
       </p>
       <p>
-      Take advantage of the separation of concerns. In a new workspace,
-      create a fresh
-      '<code>forrest seed</code>' site, then tweak its forrest.properties
-      and skinconf.xml until it reflects your old site.
-      When it is ready, replace your project's skinconf.xml and
-      forrest.properties files.
-      Any remaining issues would concern other aspects of your configuration,
-      such as site.xml and your actual content.
+        Take advantage of the separation of concerns. In a new workspace, create
+        a fresh '<code>forrest seed</code>' site, then tweak its
+        forrest.properties and skinconf.xml until it reflects your old site.
+        When it is ready, replace your project's skinconf.xml and
+        forrest.properties files. Any remaining issues would concern other
+        aspects of your configuration, such as site.xml and your actual content.
       </p>
     </section>
-
     <section>
       <title>To be continued...</title>
-      <p>...as more issues are discovered/remembered :)  Please send feedback
-      to the
-      <a href="site:mail-lists/forrest-dev">mailing list</a>.</p>
+      <p>
+        ...as more issues are discovered/remembered :) Please send feedback to
+        the <a href="site:mail-lists/forrest-dev">mailing list</a>.
+      </p>
     </section>
   </body>
 </document>
