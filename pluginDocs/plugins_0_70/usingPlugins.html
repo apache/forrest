@@ -185,85 +185,103 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1000D"></a><a name="overview"></a>
 <h2 class="underlined_10">Overview</h2>
 <div class="section">
-<p>Forrest provides the core functionality for generating documentation
-      in various output formats from a range of input formats. However, it
-      does not end there. Forrest can be extended through the addition of
-      plugins. This document serves as an introduction to the Forrest
-      plugin mechanism.</p>
+<p>
+        Forrest provides the core functionality for generating documentation in
+        various output formats from a range of input formats. However, it does
+        not end there. Forrest can be extended through the addition of plugins.
+        This document serves as an introduction to the Forrest plugin mechanism.
+      </p>
 <a name="N10016"></a><a name="What+plugins+are+available%3F"></a>
 <h3 class="underlined_5">What plugins are available?</h3>
-<p>You can run the command <span class="codefrag">forrest available-plugins</span> to get
-        a list of the known plugins for Forrest.</p>
-<p>If you would like to have your own plugin added to this list then
-        contact the <a href="../../mail-lists.html">developer mailing list</a>.</p>
+<p>
+          You can run the command <span class="codefrag">forrest available-plugins</span> to get
+          a list of the known plugins for Forrest.
+        </p>
+<p>
+          If you would like to have your own plugin added to this list then
+          contact the <a href="../../mail-lists.html">developer mailing list</a>.
+        </p>
 </div>
-        
     
 <a name="N1002B"></a><a name="How+is+a+Plugin+Installed%3F"></a>
 <h2 class="underlined_10">How is a Plugin Installed?</h2>
 <div class="section">
-<p>If a site requires one or more plugins then the site designer will 
-      have named them in the <span class="codefrag">project.required.plugins</span> property 
-      in the projects <span class="codefrag">forrest.properties</span> file. When Forrest 
-      builds the site it will automatically discover the plugin and install 
-      it. In otherwords, the user need do nothing. For example, 
-      <span class="codefrag">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</span>
-      will cause Forrest to load the plugins called "org.apache.forrest.plugin.input.OpenOffice.org" and
-      "org.apache.forrest.plugin.input.simplifiedDocbook".</p>
-<p>In the absence of a version number for the plugin (as is the case in the examples above)
-      the most recent version that is applicabe to your release of Forrest will be used. This
-      may result in unexpected behaviour if a new version of the plugin has been released that
-      is incompatible with your current site. To force Forrest into using a specific version of 
-      a plugin you shuld add "-VERSION_NUMBER" to the end of the plugin name. For example,
-      to force forrest to use the 1.0 version of the OpenOffice.org plugin you would use
-      <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span> If you define a version of the
-      plugin that does not exist then it will fall back to using the most recent version avialable.
-      This feature is useful when 
-      developing a new site as you can quickly force a plugin upgrade by deleting all installed 
-      plugins (use the command 'ant cleanPlugins'). However, this might result in the installation
-      of an in-development plugin, therefore in a production environment you should always specify
-      a known working version.</p>
-<p>By default a new forrest project includes plugins to generate 
-      PDF output from your source documents.</p>
+<p>
+        If a site requires one or more plugins then the site designer will have
+        named them in the <span class="codefrag">project.required.plugins</span> property in the
+        projects <span class="codefrag">forrest.properties</span> file. When Forrest builds the
+        site it will automatically discover the plugin and install it. In
+        otherwords, the user need do nothing. For example,
+        <span class="codefrag">project.required.plugins=org.apache.forrest.plugin.input.OpenOffice.org,org.apache.forrest.plugin.input.simplifiedDocbook</span>
+        will cause Forrest to load the plugins called
+        "org.apache.forrest.plugin.input.OpenOffice.org" and
+        "org.apache.forrest.plugin.input.simplifiedDocbook".
+      </p>
+<p>
+        In the absence of a version number for the plugin (as is the case in the
+        examples above) the most recent version that is applicabe to your
+        release of Forrest will be used. This may result in unexpected behaviour
+        if a new version of the plugin has been released that is incompatible
+        with your current site. To force Forrest into using a specific version
+        of a plugin you shuld add "-VERSION_NUMBER" to the end of the plugin
+        name. For example, to force forrest to use the 1.0 version of the
+        OpenOffice.org plugin you would use
+        <span class="codefrag">org.apache.forrest.plugin.input.OpenOffice.org-1.0</span> If you
+        define a version of the plugin that does not exist then it will fall
+        back to using the most recent version avialable. This feature is useful
+        when developing a new site as you can quickly force a plugin upgrade by
+        deleting all installed plugins (use the command 'ant cleanPlugins').
+        However, this might result in the installation of an in-development
+        plugin, therefore in a production environment you should always specify
+        a known working version.
+      </p>
+<p>
+        By default a new forrest project includes plugins to generate PDF output
+        from your source documents.
+      </p>
 <a name="N10046"></a><a name="Upgrading+from+a+Version+of+Forrest+Without+Plugins"></a>
 <h3 class="underlined_5">Upgrading from a Version of Forrest Without Plugins</h3>
-<p>The plugin functionality was introduced in version 0.7 of Forrest.
-        At this time some of the functionality previously in Forrest was
-        extracted into a plugin. However, we have not broken backward 
-        compatability with earlier versions. In the absence of a
-        <span class="codefrag">project.required.plugins</span> property in the projects 
-        <span class="codefrag">forrest.properties</span> file all plugins that contain 
-        functionality previously part of Forrest itself will be loaded
-        automatically. Unless you intend to use new functionality provided
-        by a plugin you will not need to make any changes top your project.</p>
-<p>If you do require additional plugin functionality, be sure to
-        include all required plugins in the 
-        <span class="codefrag">project.required.plugins</span> property in the project's
-        <span class="codefrag">forrest.properties</span>. You can view
-        <span class="codefrag">main/webapp/default-forrest.properties</span>
-        to see the names of plugins that provide previously core 
-        functionality.</p>
-<p>It is also worth noting that there is a small performance 
-        improvement if you remove plugins that are not in use. Therefore,
-        if you do not use one or more of the plugins named in the 
-        <span class="codefrag">project.required.plugins</span> property of 
-        <span class="codefrag">main/webapp/default-forrest.properties</span>
-        it is recomended that you override this value in your project's
-        <span class="codefrag">forrest.properties</span> file.</p>
+<p>
+          The plugin functionality was introduced in version 0.7 of Forrest. At
+          this time some of the functionality previously in Forrest was
+          extracted into a plugin. However, we have not broken backward
+          compatability with earlier versions. In the absence of a
+          <span class="codefrag">project.required.plugins</span> property in the projects
+          <span class="codefrag">forrest.properties</span> file all plugins that contain
+          functionality previously part of Forrest itself will be loaded
+          automatically. Unless you intend to use new functionality provided by
+          a plugin you will not need to make any changes top your project.
+        </p>
+<p>
+          If you do require additional plugin functionality, be sure to include
+          all required plugins in the <span class="codefrag">project.required.plugins</span>
+          property in the project's <span class="codefrag">forrest.properties</span>. You can
+          view <span class="codefrag">main/webapp/default-forrest.properties</span> to see the
+          names of plugins that provide previously core functionality.
+        </p>
+<p>
+          It is also worth noting that there is a small performance improvement
+          if you remove plugins that are not in use. Therefore, if you do not
+          use one or more of the plugins named in the
+          <span class="codefrag">project.required.plugins</span> property of
+          <span class="codefrag">main/webapp/default-forrest.properties</span> it is recomended
+          that you override this value in your project's
+          <span class="codefrag">forrest.properties</span> file.
+        </p>
 </div>
-    
     
 <a name="N1006F"></a><a name="Avoiding+Plugin+Conflicts"></a>
 <h2 class="underlined_10">Avoiding Plugin Conflicts</h2>
 <div class="section">
-<p>Clashes between plugins can occur. For example, the simplified-docbook 
-      and full docbook plugins may try and process the same files. In this 
-      instance the one that is mounted first will take precedence. Plugins 
-      are mounted in the order they appear in the 
-      <span class="codefrag">project.required.plugins</span> property, therefore the mounting 
-      order and therefore processing precedence is under user control.</p>
+<p>
+        Clashes between plugins can occur. For example, the simplified-docbook
+        and full docbook plugins may try and process the same files. In this
+        instance the one that is mounted first will take precedence. Plugins are
+        mounted in the order they appear in the
+        <span class="codefrag">project.required.plugins</span> property, therefore the mounting
+        order and therefore processing precedence is under user control.
+      </p>
 </div>
-    
     
 <a name="N1007C"></a><a name="Further+Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>

@@ -401,25 +401,26 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
 <p>
-      Users who want to integrate HTML-pages that require custom
-      adjustments and everybody who wants to learn more about Forrest's
-      pipelines in general.
+      Users who want to integrate HTML-pages that require custom adjustments and
+      everybody who wants to learn more about Forrest's pipelines in general.
     </p>
 </div>
 <a name="N10018"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      Integrating legacy HTML pages is a common task when migrating
-      existing websites to Forrest. This document explains how to implement
-      custom processing which is required when Forrest's standard pipeline
-      for html does not suffice.
+      Integrating legacy HTML pages is a common task when migrating existing
+      websites to Forrest. This document explains how to implement custom
+      processing which is required when Forrest's standard pipeline for html
+      does not suffice.
     </p>
 </div>
 <a name="N10020"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
-<p>To follow these instructions you will need:</p>
+<p>
+      To follow these instructions you will need:
+    </p>
 <ol>
       
 <li>
@@ -456,125 +457,124 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Understanding the HTML-Pipeline</h2>
 <div class="section">
 <p>
-      The first part of this howto explains the html pipeline, so as to
-      provide the background to enable you to add additional processing
-      for legacy html documents. If you already know how pipelines work,
-      then skip to the section about
-      <a href="#custom">Customizing the html pipeline</a>.
+      The first part of this howto explains the html pipeline, so as to provide
+      the background to enable you to add additional processing for legacy html
+      documents. If you already know how pipelines work, then skip to the
+      section about <a href="#custom">Customizing the html pipeline</a>.
     </p>
 <a name="N1004F"></a><a name="example"></a>
 <h3 class="underlined_5">Driven by Example</h3>
 <p>
-        The best way to learn about Forrest pipelines is follow
-        the processing of an imaginary request through the forrest
-        machinery.
+        The best way to learn about Forrest pipelines is follow the processing
+        of an imaginary request through the forrest machinery.
       </p>
 <p>
-        So let's see what happens, when a client asks Forrest to
-        serve the document
+        So let's see what happens, when a client asks Forrest to serve the
+        document
         <br>
         'http://my.domain.org/mytest/mybad.html'.
       </p>
 <a name="N1005E"></a><a name="sitemap"></a>
 <h3 class="underlined_5">Finding the Sitemap</h3>
 <p>
-        Like all applications based on Apache Cocoon, each request for
-        a given document is processed by searching a sitemap for a
-        matching processing pipeline. With Forrest, this core sitemap
-        is found in the file
+        Like all applications based on Apache Cocoon, each request for a given
+        document is processed by searching a sitemap for a matching processing
+        pipeline. With Forrest, this core sitemap is found in the file
         'main/webapp/sitemap.xmap' in Forrest's program directory.
       </p>
 <p class="instruction">
-        Open the file 'main/webapp/sitemap.xmap' in Forrest's
-        program directory with a text editor of your choice.
+        Open the file 'main/webapp/sitemap.xmap' in Forrest's program directory
+        with a text editor of your choice.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        Any simple text editor will suffice, since the XML in
-        this file is quite simple in structure and easy to read.
+        Any simple text editor will suffice, since the XML in this file is quite
+        simple in structure and easy to read.
       </div>
 </div>
 <p class="instruction">
-          Search for <span class="codefrag">map:sitemap</span> to find the 
-          start of the Sitemap.
+        Search for <span class="codefrag">
+map:sitemap
+        </span> to find the start of the Sitemap.
       </p>
 <p>
-        This sitemap is the starting point
-        for all requests. So even if there are other sitemaps
-        (which we will see later on), we always start looking for a
-        matching pattern right here.
+        This sitemap is the starting point for all requests. So even if there
+        are other sitemaps (which we will see later on), we always start looking
+        for a matching pattern right here.
       </p>
 <a name="N10079"></a><a name="pipelines"></a>
 <h3 class="underlined_5">Find the Beginning of the Pipelines Section</h3>
 <p>
-        Modular as everything else in Cocoon, Forrest's sitemap
-        starts with a long list of declarations for all the
-        components used later on. We can safely ignore these at
-        the moment.
+        Modular as everything else in Cocoon, Forrest's sitemap starts with a
+        long list of declarations for all the components used later on. We can
+        safely ignore these at the moment.
       </p>
 <p class="instruction">
-        So let's skip right to the start of the
-          Pipelines-Section. Search for <span class="codefrag">map:pipelines</span>
+        So let's skip right to the start of the Pipelines-Section. Search for
+        <span class="codefrag">
+map:pipelines
+        </span>
       
 </p>
 <p>
-        Within the pipelines-element you will find a long list
-        of pipeline-Elements (no trailing 's'), each one of them defining a
+        Within the pipelines-element you will find a long list of
+        pipeline-Elements (no trailing 's'), each one of them defining a
         processing pipeline within Forrest.
       </p>
 <p>
-        When handling a request, Forrest will check the
-        Pipelines from top to bottom until it encounters a
-        Pipeline that will take care of our request.
+        When handling a request, Forrest will check the Pipelines from top to
+        bottom until it encounters a Pipeline that will take care of our
+        request.
       </p>
 <a name="N10090"></a><a name="matches"></a>
 <h3 class="underlined_5">Looking for a Match</h3>
 <p>
-        Like all Cocoon applications, Forrest knows which
-        pipeline to use for processing a certain request by
-        looking at the entry criteria for each pipeline it comes
-        across. This can be a match against a given pattern,
-        the test if a certain files exists or one of many other
-        possible tests that Cocoon supports.
+        Like all Cocoon applications, Forrest knows which pipeline to use for
+        processing a certain request by looking at the entry criteria for each
+        pipeline it comes across. This can be a match against a given pattern,
+        the test if a certain files exists or one of many other possible tests
+        that Cocoon supports.
       </p>
 <p>
-        To better know what we are talking about, let's follow
-        Forrest down the list to the Test for the First Pipeline:
+        To better know what we are talking about, let's follow Forrest down the
+        list to the Test for the First Pipeline:
       </p>
 <p class="instruction">
-           Scroll down to the line
-           <span class="codefrag">&lt;map:match pattern="cprofile.*"&gt;</span>
+        Scroll down to the line <span class="codefrag">
+&lt;map:match pattern="cprofile.*"&gt;
+        </span>
       
 </p>
 <p>
-        Here you can see that very specialized matches need to occur
-        early in the sitemap. The
-        requested file (and pathname) is compared to a pattern
-        'cprofile.*' that would match if our request started with
-        'cprofile', endet with any kind of extension and had no pathname. Since it doesn't, we don't
-        have a match and need to keep looking.
+        Here you can see that very specialized matches need to occur early in
+        the sitemap. The requested file (and pathname) is compared to a pattern
+        'cprofile.*' that would match if our request started with 'cprofile',
+        endet with any kind of extension and had no pathname. Since it doesn't,
+        we don't have a match and need to keep looking.
       </p>
 <p class="instruction">
-        Skip forward until you find
-        <span class="codefrag">&lt;map:match pattern="**/*.html"&gt;</span>.
-          
+        Skip forward until you find <span class="codefrag">
+&lt;map:match pattern="**/*.html"&gt;
+        </span>.
       </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">While scrolling down you may have noticed the match-pattern  
-            <span class="codefrag">&lt;map:match pattern="*.html"&gt;</span> a couple of
-            lines earlier. This will not match our request since *.something in Cocoon matches only
-            files in the root directory.
-        </div>
+<div class="content">
+        While scrolling down you may have noticed the match-pattern <span class="codefrag">
+&lt;map:match pattern="*.html"&gt;
+        </span> a couple of lines earlier. This will not match our request since
+        *.something in Cocoon matches only files in the root directory.
+      </div>
 </div>
 <a name="N100B4"></a><a name="html-pipeline"></a>
 <h3 class="underlined_5">Processing in the '**/*.html' Pipeline</h3>
-<p>  
-        Let's take a quick look at this pipeline to understand
-        what's happening here:
+<p>
+        Let's take a quick look at this pipeline to understand what's happening
+        here:
       </p>
 <pre class="code">
+
 &lt;map:match pattern="**/*.html"&gt;
         &lt;map:aggregate element="site"&gt;
           &lt;map:part src="cocoon:/skinconf.xml"/&gt;
@@ -587,59 +587,60 @@ document.write("Last Published: " + document.lastModified);
           &lt;map:parameter name="type" value="transform.site.xhtml"/&gt;
           &lt;map:parameter name="path" value="{0}"/&gt;
         &lt;/map:call&gt;
-      &lt;/map:match&gt;</pre>
+      &lt;/map:match&gt;
+      </pre>
 <p>
-        In the first part of this pipeline, the
-        aggregate-element assembles information required to build
-        a Forrest page with menu and tabs from different sources.
-        Then the call to the skinit-resource picks up the
-        aggregated info and generates a page in the
-        style of the current skin. That's easy, isn't it?
+        In the first part of this pipeline, the aggregate-element assembles
+        information required to build a Forrest page with menu and tabs from
+        different sources. Then the call to the skinit-resource picks up the
+        aggregated info and generates a page in the style of the current skin.
+        That's easy, isn't it?
       </p>
 <p>
-        Well, the complex part begins, when we take a closer look at
-        the sources of the aggregation.
-      </p>
-<pre class="code">&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;</pre>
-<p>
-        This mysterious element is most easily explained as a
-        secondary request to the Forrest system.
-      </p>
-<p>
-        The 'cocoon:'-part is called a pseudo-protocol and tells the
-        processor to ask Forrest for the resource named behind
-        the colon, process that request and feed the output as input
-        back into our pipeline.
-        (The 'pseudo' goes back to the fact that unlike
-        'http' or 'ftp', which are real protocols, you can use cocoon:
-        only within the cocoon environments as only Cocoon will know what to
-        do with it.)
-      </p>
-<p>
-        So even though we have already seen the end of our pipeline
-        (the skinning), we still don't know, what goes into the skinning and
-        where it comes from. To find out, we have to look at the sources
+        Well, the complex part begins, when we take a closer look at the sources
         of the aggregation.
+      </p>
+<pre class="code">
+&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;
+      </pre>
+<p>
+        This mysterious element is most easily explained as a secondary request
+        to the Forrest system.
+      </p>
+<p>
+        The 'cocoon:'-part is called a pseudo-protocol and tells the processor
+        to ask Forrest for the resource named behind the colon, process that
+        request and feed the output as input back into our pipeline. (The
+        'pseudo' goes back to the fact that unlike 'http' or 'ftp', which are
+        real protocols, you can use cocoon: only within the cocoon environments
+        as only Cocoon will know what to do with it.)
+      </p>
+<p>
+        So even though we have already seen the end of our pipeline (the
+        skinning), we still don't know, what goes into the skinning and where it
+        comes from. To find out, we have to look at the sources of the
+        aggregation.
       </p>
 <a name="N100D5"></a><a name="protocols"></a>
 <h3 class="underlined_5">Following the Pseudo-Protocols</h3>
 <p>
-        To find out what goes into our aggregation, we'll need to look
-        at the pipeline that is called by
+        To find out what goes into our aggregation, we'll need to look at the
+        pipeline that is called by
       </p>
-<pre class="code">&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;</pre>
+<pre class="code">
+&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;
+      </pre>
 <p>
-        To do that, it's always a good idea to write down what this
-        call actually looks like when all the variables are replaced by real
-        values.
-        A safe way to do that is to look at the matcher to start with,
-        build a list of the numbered variables and their meaning in the
-        current context and then assemble the actual expression(s) from it.
+        To do that, it's always a good idea to write down what this call
+        actually looks like when all the variables are replaced by real values.
+        A safe way to do that is to look at the matcher to start with, build a
+        list of the numbered variables and their meaning in the current context
+        and then assemble the actual expression(s) from it.
       </p>
-<p>In our example the matcher pattern
-       <span class="codefrag">**/*.html</span> is applied to the request-name
-       <span class="codefrag">mytest/mybad.html</span>, so we have three variables
-       altogether:
+<p>
+        In our example the matcher pattern <span class="codefrag">**/*.html</span> is applied to
+        the request-name <span class="codefrag">mytest/mybad.html</span>, so we have three
+        variables altogether:
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
@@ -668,75 +669,86 @@ document.write("Last Published: " + document.lastModified);
 </tr>
       
 </table>
-<p>If we insert that into </p>
-<pre class="code">&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;</pre>
-<p>we get</p>
-<pre class="code">&lt;map:part src="cocoon:/mytest/body-mybad.html"/&gt;</pre>
 <p>
-        As you can easily tell, we are suddenly calling for a whole
-        new document. Let's see where that takes us:
+        If we insert that into
+      </p>
+<pre class="code">
+&lt;map:part src="cocoon:/{1}/body-{2}.html"/&gt;
+      </pre>
+<p>
+        we get
+      </p>
+<pre class="code">
+&lt;map:part src="cocoon:/mytest/body-mybad.html"/&gt;
+      </pre>
+<p>
+        As you can easily tell, we are suddenly calling for a whole new
+        document. Let's see where that takes us:
       </p>
 <a name="N10139"></a><a name="call"></a>
 <h3 class="underlined_5">Second Call for Content</h3>
 <p>
-        Processing of cocoon-calls is not much different from
-        normal requests by a client. When you launch a call like
+        Processing of cocoon-calls is not much different from normal requests by
+        a client. When you launch a call like
       </p>
-<pre class="code">&lt;map:part src="cocoon:/mytest/body-mybad.html"/&gt;</pre>
+<pre class="code">
+&lt;map:part src="cocoon:/mytest/body-mybad.html"/&gt;
+      </pre>
 <p>
-        Forrest will once again start searching its main sitemap
-        from the beginning and look for a pipeline to match that call.
+        Forrest will once again start searching its main sitemap from the
+        beginning and look for a pipeline to match that call.
       </p>
 <p class="instruction">
-          Search for <span class="codefrag">**body-*.html</span> from the beginning of the
-         sitemap to see where we find our next match.
+        Search for <span class="codefrag">
+**body-*.html
+        </span> from the beginning of the sitemap to see where we find our next
+        match.
       </p>
 <a name="N10151"></a><a name="match-1"></a>
 <h3 class="underlined_5">First Match for '**body-*.html'</h3>
 <p>
-         Our first match is different to the previous ones because
-         there is a second condition placed inside the matcher.
-         Doing the replacements
-       </p>
+        Our first match is different to the previous ones because there is a
+        second condition placed inside the matcher. Doing the replacements
+      </p>
 <pre class="code">
+
 &lt;map:select type="exists"&gt;
-          &lt;map:when test="{lm:project.{1}{2}.ehtml}"&gt;</pre>
+          &lt;map:when test="{lm:project.{1}{2}.ehtml}"&gt;
+      </pre>
 <p>
-         we quickly discover that there can't be a file of
-         that name in the project-directory.
-         <br>
-           (The variable '{lm:project.}' is always replaced with
-         the name of your project directory that you can change
-         in the 'forrest.properties'-file.)
-       </p>
+        we quickly discover that there can't be a file of that name in the
+        project-directory.
+        <br>
+        (The variable '{lm:project.}' is always replaced with the name of your
+        project directory that you can change in the 'forrest.properties'-file.)
+      </p>
 <p>
-         So we have a pipeline, but it doesn't do anything.
-         In this case Forrest will simply keep looking for
-         the next match further down.
-       </p>
+        So we have a pipeline, but it doesn't do anything. In this case Forrest
+        will simply keep looking for the next match further down.
+      </p>
 <a name="N10167"></a><a name="match-2"></a>
 <h3 class="underlined_5">Second Match for '**body-*.html'</h3>
 <p class="instruction">
-         Continue searching downwards for '**body-*.html' in the
-         sitemap-file.
+        Continue searching downwards for '**body-*.html' in the sitemap-file.
       </p>
 <p>
-        Looking at the pipeline that handles the request, we see that
-        the cocoon-protocol is once again invoked
+        Looking at the pipeline that handles the request, we see that the
+        cocoon-protocol is once again invoked
       </p>
-<pre class="code">&lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;</pre>
+<pre class="code">
+&lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
+      </pre>
 <p>
         this time as a direct generator of input for our pipeline.
       </p>
 <p>
-        So once again we ask Forrest to process a request for content.
-        To know what matcher to look for, let's first expand the variables:
+        So once again we ask Forrest to process a request for content. To know
+        what matcher to look for, let's first expand the variables:
       </p>
 <p>
-        In our example the matcher pattern
-        <span class="codefrag">**body-*.html</span> is applied to the request-name
-        <span class="codefrag">mytest/body-mybad.html</span>.
-        Which means that we have three variables altogether:
+        In our example the matcher pattern <span class="codefrag">**body-*.html</span> is applied
+        to the request-name <span class="codefrag">mytest/body-mybad.html</span>. Which means
+        that we have three variables altogether:
       </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
         
@@ -768,11 +780,15 @@ document.write("Last Published: " + document.lastModified);
 <p>
         If we insert that into
       </p>
-<pre class="code">&lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;</pre>
+<pre class="code">
+&lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
+      </pre>
 <p>
         we get
       </p>
-<pre class="code">&lt;map:generate src="cocoon:/mytests/mybad.xml"/&gt;</pre>
+<pre class="code">
+&lt;map:generate src="cocoon:/mytests/mybad.xml"/&gt;
+      </pre>
 <a name="N101CF"></a><a name="match-3"></a>
 <h3 class="underlined_5">Third Call for Content</h3>
 <p class="instruction">
@@ -780,57 +796,70 @@ document.write("Last Published: " + document.lastModified);
         '/mytests/mybad.xml'.
       </p>
 <p>
-        We find it in the pattern <span class="codefrag">&lt;map:match pattern="**.xml"&gt;</span>,
-        which is the standard handling for all xml-requests.
+        We find it in the pattern <span class="codefrag">
+&lt;map:match pattern="**.xml"&gt;
+        </span>, which is the standard handling for all xml-requests.
       </p>
 <p>
-        Since our request fulfils none of the secondary criteria in
-        this pipeline, it falls right through to the map:mount-element
-        at the end:
-        </p>
-<pre class="code">&lt;map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" /&gt;</pre>
+        Since our request fulfils none of the secondary criteria in this
+        pipeline, it falls right through to the map:mount-element at the end:
+      </p>
+<pre class="code">
+&lt;map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" /&gt;
+      </pre>
 <p>
-        which makes Forrest load and process a secondary sitemap,
-        the file 'forrest.xmap' in the same directory.
+        which makes Forrest load and process a secondary sitemap, the file
+        'forrest.xmap' in the same directory.
       </p>
 <p class="instruction">
-        Open the file 'forrest.xmap' and continue the search for a
-        matching pattern.
+        Open the file 'forrest.xmap' and continue the search for a matching
+        pattern.
       </p>
 <p>
-        Our search first leads us to the matcher <span class="codefrag">&lt;map:match type="wildcard" pattern="**.xml"&gt;</span> 
-          with a number of submatchers embedded into it. 
+        Our search first leads us to the matcher <span class="codefrag">
+&lt;map:match type="wildcard" pattern="**.xml"&gt;
+        </span> with a number of submatchers embedded into it.
       </p>
-<p>The first one, <span class="codefrag">&lt;map:match type="wildcard" pattern="**.xml"&gt;</span>, would handle input coming from Forrest plugins. 
-      We won't go into details here.</p>
 <p>
-        All further matchers <span class="codefrag">&lt;map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.xml"&gt; </span>.
-        implement what we call a cascade of matchers. By testing for the existence of one source file after another Forrest will use and process the 
-        first of the tested source-formats found.  
+        The first one, <span class="codefrag">
+&lt;map:match type="wildcard" pattern="**.xml"&gt;
+        </span>, would handle input coming from Forrest plugins. We won't go
+        into details here.
+      </p>
+<p>
+        All further matchers <span class="codefrag">
+&lt;map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.xml"&gt; 
+        </span>. implement what we call a cascade of matchers. By testing for
+        the existence of one source file after another Forrest will use and
+        process the first of the tested source-formats found.
       </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">Using the i18n-matcher here, Forrest will do a lot more than just finding content in one of many possible source formats. 
-          It will also make sure that the the proper language version of the conent (if there are several) is used. 
-          Read more about this matcher <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html">http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html</a>
+<div class="content">
+        Using the i18n-matcher here, Forrest will do a lot more than just
+        finding content in one of many possible source formats. It will also
+        make sure that the the proper language version of the conent (if there
+        are several) is used. Read more about this matcher
+        <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html">http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/matching/LocaleMatcher.html</a>
+      
 </div>
 </div>
 <p>
-        Checking each matcher in turn you will find that a pipeline that tests for the existence of
-        the file with different extensions. '.html' is third in this
-        list and leads to the processing steps shown below:
+        Checking each matcher in turn you will find that a pipeline that tests
+        for the existence of the file with different extensions. '.html' is
+        third in this list and leads to the processing steps shown below:
       </p>
-<a name="N10209"></a><a name="process-html"></a>
+<a name="N1020A"></a><a name="process-html"></a>
 <h3 class="underlined_5">html-Default Processing</h3>
 <p>
-        The default processing of html-files consists of three
-        processing steps:
+        The default processing of html-files consists of three processing steps:
       </p>
 <ol>
         
 <li>
+<span class="codefrag">
+&lt;map:generate src="{source}" type="html" /&gt;</span>
           
-<span class="codefrag">&lt;map:generate src="{source}" type="html" /&gt;</span>
 <br>
             Using Cocoons html-generator, Forrest reads the html-document
             from file and uses JTidy to clean up and convert it to xml
@@ -842,8 +871,9 @@ document.write("Last Published: " + document.lastModified);
         </li>
         
 <li>
-            
-<span class="codefrag">&lt;map:transform src="{lm:transform.html.document}" /&gt;</span>
+<span class="codefrag">
+&lt;map:transform src="{lm:transform.html.document}" /&gt;</span>
+          
 <br>
           Using the standard stylesheet 'html-to-document.xsl', this XHTML is 
             transformed into Forrest's <a href="../../docs_0_80/glossary.html">Standard Document Format</a>.  (refer to a detailed <a href="../../docs_0_80/locationmap.html">explanation of locationsmaps</a> 
@@ -851,8 +881,8 @@ document.write("Last Published: " + document.lastModified);
         </li>
         
 <li>
-          
 <span class="codefrag">&lt;map:serialize type="xml-document"/&gt;</span>
+          
 <br>
           Finally the document is serialized as XML and returned to the
           calling pipeline.
@@ -860,35 +890,32 @@ document.write("Last Published: " + document.lastModified);
       
 </ol>
 <p>
-        As a result, we now hand back the content of the html-document
-        in Forrest standard document format to the calling pipeline
+        As a result, we now hand back the content of the html-document in
+        Forrest standard document format to the calling pipeline
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        To look at the output of this pipeline you can simply
-        point you browser to 'http://localhost:8888/mytest/mybad.xml'
-        (assuming that you are currently running Forrest on your
-        machine and there is an html-page of that name).
+        To look at the output of this pipeline you can simply point you browser
+        to 'http://localhost:8888/mytest/mybad.xml' (assuming that you are
+        currently running Forrest on your machine and there is an html-page of
+        that name).
       </div>
 </div>
-<a name="N1023D"></a><a name="body"></a>
+<a name="N1023E"></a><a name="body"></a>
 <h3 class="underlined_5">Returning to the '**body-*.html'-Pipeline</h3>
 <p>
-        On returning into the
-        '**body-*.html'-Pipeline (in sitemap.xmap),
+        On returning into the '**body-*.html'-Pipeline (in sitemap.xmap),
         processing continues with the next components in this pipeline:
       </p>
 <ul>
         
 <li>
-          
 <strong>idgen</strong> will generate unique IDs for all elements
           that need to be referenced within a page (mainly headlines).
         </li>
         
 <li>
-          
 <strong>xinclude</strong> would process any xinclude statements
           in the source.
           Since HTML does not support this mechanism, nothing happens
@@ -896,14 +923,14 @@ document.write("Last Published: " + document.lastModified);
         </li>
         
 <li>
-          
 <strong>linkrewriter</strong> adjusts links between pages
           so that they will still work in the final Forrest output
           directory structure. It also resolves any special Forrest links.
         </li>
         
 <li>
-            The final transformation, <span class="codefrag">&lt;map:transform src="{lm:transform.html.broken-links}" /&gt;</span> as the name suggests, will take
+            The final transformation, <span class="codefrag">
+&lt;map:transform src="{lm:transform.html.broken-links}" /&gt;</span> as the name suggests, will take
           care of reporting broken site-links.
         </li>
         
@@ -916,50 +943,49 @@ document.write("Last Published: " + document.lastModified);
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        To look at the output of this pipeline you can simply
-        point you browser to 'http://localhost:8888/mytest/body-mybad.html'
-        (assuming that you are currently running Forrest on your machine
-        and there is an html-page of that name).
+        To look at the output of this pipeline you can simply point you browser
+        to 'http://localhost:8888/mytest/body-mybad.html' (assuming that you are
+        currently running Forrest on your machine and there is an html-page of
+        that name).
       </div>
 </div>
-<a name="N10268"></a><a name="aggregate"></a>
+<a name="N10266"></a><a name="aggregate"></a>
 <h3 class="underlined_5">Returning to the '**/*.html'-Pipeline</h3>
 <p>
-        At the end of this pipeline, processing returns the results into
-        the aggregation section of the
-        <a href="#html-pipeline">'**/*.html' Pipeline</a>,
-        merges it with other data, skins and serializes for presentation
-        in the requesting client.
+        At the end of this pipeline, processing returns the results into the
+        aggregation section of the <a href="#html-pipeline">'**/*.html'
+        Pipeline</a>, merges it with other data, skins and serializes for
+        presentation in the requesting client.
       </p>
-<a name="N10276"></a><a name="custom"></a>
+<a name="N10274"></a><a name="custom"></a>
 <h3 class="underlined_5">Customizing the html pipeline</h3>
 <p>
         In this last part of this document, we will show how to customize the
         HTML-pipeline to add your additional steps to the default processing.
       </p>
-<a name="N1027F"></a><a name="when"></a>
+<a name="N1027D"></a><a name="when"></a>
 <h4>When to customize?</h4>
 <p>
-          The html-Pipeline in Forrest is designed to be able to also
-          integrate legacy html-Pages in a Forrest project. In doing so,
-          it will fix common markup errors and convert html to Forrest's
-          intermediate document format.
+          The html-Pipeline in Forrest is designed to be able to also integrate
+          legacy html-Pages in a Forrest project. In doing so, it will fix
+          common markup errors and convert html to Forrest's intermediate
+          document format.
         </p>
 <p>
           Due to the nature of html as presentational markup, there is no way
-          this automated process can identify elements in your pages that
-          are not required or even unwanted in the Forrest environment. 
+          this automated process can identify elements in your pages that are
+          not required or even unwanted in the Forrest environment.
         </p>
 <p>
           A good example are pages from sites where the navigational elements
-          (menus, tabs etc.) are embedded in the html of each page.
-          Since Forrest can't know what is an unwanted menu and what belongs
-          to the page body that you want to keep, you will need to customize
-          the process to remove elements that are not needed. If you don't,
-          then you will see the original page from your legacy website,
-          menu and all, embedded in your new Forrest site.
+          (menus, tabs etc.) are embedded in the html of each page. Since
+          Forrest can't know what is an unwanted menu and what belongs to the
+          page body that you want to keep, you will need to customize the
+          process to remove elements that are not needed. If you don't, then you
+          will see the original page from your legacy website, menu and all,
+          embedded in your new Forrest site.
         </p>
-<a name="N1028F"></a><a name="how"></a>
+<a name="N1028D"></a><a name="how"></a>
 <h4>How to customize?</h4>
 <p>
           To add your own custom processing for a group of pages, you will
@@ -968,68 +994,72 @@ document.write("Last Published: " + document.lastModified);
         </p>
 <p>
           This project sitemap is located in the file
-          'src/documentation/sitemap.xmap' in your Forrest project directory
-          and is created automatically whenever you seed a new project.
-          At this point it already contains a  few examples for custom pipelines.
+          'src/documentation/sitemap.xmap' in your Forrest project directory and
+          is created automatically whenever you seed a new project. At this
+          point it already contains a few examples for custom pipelines.
         </p>
 <p>
           To add your own custom processing, edit the file and add a new
-          pipeline to the project sitemap. Since the project sitemap is
-          loaded into the main sitemap right at the top (search for 'This is the user pipeline'),
-          your pipeline intercepts practically all of Forrest's standard pipelines.
+          pipeline to the project sitemap. Since the project sitemap is loaded
+          into the main sitemap right at the top (search for 'This is the user
+          pipeline'), your pipeline intercepts practically all of Forrest's
+          standard pipelines.
         </p>
-<a name="N1029F"></a><a name="what"></a>
+<a name="N1029D"></a><a name="what"></a>
 <h4>What to intercept?</h4>
 <p>
           Where to intercept standard processing is really a matter of your
-          choice. A good rule is to replace as little standard handling
-          as possible so that future changes in the Forrest architecture are
-          less likely to break your application.
+          choice. A good rule is to replace as little standard handling as
+          possible so that future changes in the Forrest architecture are less
+          likely to break your application.
         </p>
 <p>
-          In our case all we need to do is add a transformation that
-          removes all the unwanted elements. The best place to do this
-          would be right after the generator has converted our document to
-          xhtml.
+          In our case all we need to do is add a transformation that removes all
+          the unwanted elements. The best place to do this would be right after
+          the generator has converted our document to xhtml.
         </p>
 <p>
-          However, since we can only replace a complete pipeline,
-          we'll create a new pipeline that intercepts **.xml for our pages,
-          copy the steps the original processor is doing and add a
-          transformation of our own to it.
+          However, since we can only replace a complete pipeline, we'll create a
+          new pipeline that intercepts **.xml for our pages, copy the steps the
+          original processor is doing and add a transformation of our own to it.
         </p>
-<a name="N102AF"></a><a name="intercept"></a>
+<a name="N102AD"></a><a name="intercept"></a>
 <h4>Intercept pattern</h4>
 <p>
-          Take great care when intercepting very basic pipelines.
-          Instead of designing our custom pipeline to match the
-          original **.xml pattern, try to narrow your matcher down to
-          something that will only match your pages.
+          Take great care when intercepting very basic pipelines. Instead of
+          designing our custom pipeline to match the original **.xml pattern,
+          try to narrow your matcher down to something that will only match your
+          pages.
         </p>
 <p>
-          If all your pages are located in a directory called mytest,
-          then use a matcher like '/mytest/*.xml' to avoid highjacking
-          the processing for all the other requests.
+          If all your pages are located in a directory called mytest, then use a
+          matcher like '/mytest/*.xml' to avoid highjacking the processing for
+          all the other requests.
         </p>
 <p class="instruction">
-          Add a new pipeline in your project sitemap and set the matcher
-          to '/mytest/*.xml'.
+          Add a new pipeline in your project sitemap and set the matcher to
+          '/mytest/*.xml'.
         </p>
 <p>
           The new pipeline should look like this and does nothing so far.
         </p>
 <pre class="code">
+
 &lt;!--Custom Pipeline for my bad html-pages--&gt;        
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
 
     &lt;/map:match&gt;
-&lt;/map:pipeline&gt;</pre>
+&lt;/map:pipeline&gt;
+        </pre>
 <p class="instruction">
-          Open the 'forrest.xmap', search for <span class="codefrag">&lt;map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.html"&gt;</span>,
-          copy the three lines for handling *.html files and paste them into your new pipeline.
+          Open the 'forrest.xmap', search for <span class="codefrag">
+&lt;map:match type="i18n" pattern="{properties:content.xdocs}{1}.*.html"&gt;
+          </span>, copy the three lines for handling *.html files and paste them
+          into your new pipeline.
         </p>
 <pre class="code">
+
 &lt;!--Custom Pipeline for my bad html-pages--&gt;        
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
@@ -1037,47 +1067,49 @@ document.write("Last Published: " + document.lastModified);
       &lt;map:transform src="{lm:transform.html.document}" /&gt;
       &lt;map:serialize type="xml-document"/&gt;
     &lt;/map:match&gt;
-&lt;/map:pipeline&gt;</pre>
+&lt;/map:pipeline&gt;
+        </pre>
 <p>
           Your custom pipeline will now behave exactly like the standard
-          html-handler. All that is left to be done is creating the
-          custom transformation and adding it the pipeline.
+          html-handler. All that is left to be done is creating the custom
+          transformation and adding it the pipeline.
         </p>
 <p class="instruction">
-          Design and test a new XSL-Transformation that removes the
-          unwanted elements and save it in your project's stylesheet
-          directory, usually src/documentation/resources/stylesheets
-          (defined in project.stylesheets-dir of forrest.properties),
-          which is central storage for all stylesheets in a project.
+          Design and test a new XSL-Transformation that removes the unwanted
+          elements and save it in your project's stylesheet directory, usually
+          src/documentation/resources/stylesheets (defined in
+          project.stylesheets-dir of forrest.properties), which is central
+          storage for all stylesheets in a project.
         </p>
 <p class="instruction">
           Add the new transformation as a new line, straight after the
-          generator, and save the changes. 
+          generator, and save the changes.
         </p>
 <pre class="code">
+
 &lt;!--Custom Pipeline for my bad html-pages--&gt;        
 &lt;map:pipeline&gt;
     &lt;map:match pattern="mytest/*.xml"&gt;
-      &lt;map:generate src="mytest/{1}.html" type="html" /&gt;
-      <strong>
-      &lt;map:transform src="{properties:resources.stylesheets}/fixMyBadHTML.xsl"/&gt;
-      </strong>
+      &lt;map:generate src="mytest/{1}.html" type="html" /&gt;<strong>
+
+      &lt;map:transform src="{properties:resources.stylesheets}/fixMyBadHTML.xsl"/&gt;</strong>
+
       &lt;map:transform src="{lm:transform.html.document}" /&gt;
       &lt;map:serialize type="xml-document"/&gt;
     &lt;/map:match&gt;
-&lt;/map:pipeline&gt;</pre>
+&lt;/map:pipeline&gt;
+        </pre>
 <p>
-          Done! You have just added your own custom-processing.
-          Don't forget to view the pages to verify that it is working
-          properly.
+          Done! You have just added your own custom-processing. Don't forget to
+          view the pages to verify that it is working properly.
         </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-          Our pipeline does not exactly do what the original pipeline does.
-          To make things easier, we omitted the internationalization part
-          in our pipeline. So if you need to create multi-language sites,
-          make sure that you adjust your pipeline accordingly.
+          Our pipeline does not exactly do what the original pipeline does. To
+          make things easier, we omitted the internationalization part in our
+          pipeline. So if you need to create multi-language sites, make sure
+          that you adjust your pipeline accordingly.
         </div>
 </div>
 </div>
