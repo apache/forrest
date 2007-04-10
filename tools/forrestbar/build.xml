@@ -16,18 +16,17 @@
   limitations under the License.
 -->
 <project default="forrestbar" basedir="." name="forrestbar">
-
-  <description>Build script for the ForrestBar</description>
-
-  <!-- Default init values-->
+  <description>
+    Build script for the ForrestBar
+  </description>
+<!-- Default init values-->
   <target name="init">
     <property name="build.dir" location="build"/>
     <xmlproperty file="properties.xml" keeproot="false" collapseAttributes="true" />
   </target>
-
-  <!-- =================================================================== -->
-  <!-- ForrestBar for Mozilla 1.x and Firefox 0.9-1.5+                     -->
-  <!-- =================================================================== -->
+<!-- =================================================================== -->
+<!-- ForrestBar for Mozilla 1.x and Firefox 0.9-1.5+                     -->
+<!-- =================================================================== -->
   <target name="forrestbar" depends="init">
     <property name="xpi.dir" location="xpi"/>
     <mkdir dir="${build.dir}" />
@@ -41,16 +40,12 @@
       <fileset dir="${build.dir}/work/forrestbar-jar/chrome" includes="content/**/*" />
     </jar>
     <copy file="${xpi.dir}/install.js"
-          todir="${build.dir}/work/forrestbar" overwrite="true">
-    </copy>
+          todir="${build.dir}/work/forrestbar" overwrite="true"></copy>
     <copy file="${xpi.dir}/install.rdf"
-          todir="${build.dir}/work/forrestbar" overwrite="true">
-    </copy>
+          todir="${build.dir}/work/forrestbar" overwrite="true"></copy>
     <copy file="${xpi.dir}/chrome.manifest"
-          todir="${build.dir}/work/forrestbar" overwrite="true">
-    </copy>
+          todir="${build.dir}/work/forrestbar" overwrite="true"></copy>
     <zip zipfile="${build.dir}/forrestbar.xpi"
       basedir="${build.dir}/work/forrestbar" />
   </target>
-
 </project>
