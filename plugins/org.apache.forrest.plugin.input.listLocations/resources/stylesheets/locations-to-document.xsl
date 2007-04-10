@@ -15,92 +15,85 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0"> 
-
+    version="1.0">
   <xsl:template match="/">
     <xsl:apply-templates select="//locations"/>
   </xsl:template>
- 
   <xsl:template match="locations">
     <document>
       <header>
-        <title>
-          <xsl:choose>
+        <title><xsl:choose>
             <xsl:when test="@title!=''">
               <xsl:value-of select="@title"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:text>Locations</xsl:text>
+<xsl:text>Locations</xsl:text>
             </xsl:otherwise>
-          </xsl:choose>
-        </title>
+          </xsl:choose></title>
       </header>
       <body>
         <xsl:apply-templates/>
       </body>
     </document>
   </xsl:template>
-
   <xsl:template match="introduction">
     <section id="introduction">
-      <title>
-        <xsl:choose>
+      <title><xsl:choose>
           <xsl:when test="@title!=''">
             <xsl:value-of select="@title"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>Introduction</xsl:text>
+<xsl:text>Introduction</xsl:text>
           </xsl:otherwise>
-        </xsl:choose>
-      </title>
-      <p><xsl:value-of select="."/></p>
+        </xsl:choose></title>
+      <p>
+        <xsl:value-of select="."/>
+      </p>
     </section>
   </xsl:template>
-
   <xsl:template match="location">
     <section id="{id}">
       <title><xsl:value-of select="title"/></title>
       <p>
         <xsl:choose>
-          <xsl:when test="url">
-            <a>
-              <xsl:attribute name="href">
-                <xsl:value-of select="url"/>
-              </xsl:attribute>
-              <xsl:value-of select="title"/>
-            </a>
+          <xsl:when test="url"><a>
+            <xsl:attribute name="href">
+              <xsl:value-of select="url"/>
+            </xsl:attribute>
+            <xsl:value-of select="title"/></a>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="title"/>
           </xsl:otherwise>
         </xsl:choose>
-        at <xsl:value-of select="place"/>
+        at
+        <xsl:value-of select="place"/>
       </p>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
-
   <xsl:template match="notes">
     <xsl:apply-templates/>
   </xsl:template>
-
   <xsl:template match="note">
-    <p><xsl:apply-templates/></p>
+    <p>
+      <xsl:apply-templates/>
+    </p>
   </xsl:template>
-  
   <xsl:template match="geoPoint">
-    <p>Latitude: <xsl:apply-templates select="latitude"/> Longitude: <xsl:apply-templates select="longitude"/></p>
+    <p>
+      Latitude:
+      <xsl:apply-templates select="latitude"/>
+      Longitude:
+      <xsl:apply-templates select="longitude"/>
+    </p>
   </xsl:template>
-
   <xsl:template match="id | title | place | url"/>
-
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>
