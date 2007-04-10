@@ -15,38 +15,34 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project default="dispatcher.dispatch" basedir="." name="dispatcher.dispatch">
-  
-   <!-- ===============================================================
+<!-- ===============================================================
        Makes the dispatch.
        param: location of log-file ${project.logkitfile}
        ===============================================================
    -->
-
-   <target name="dispatcher.dispatch" depends="dispatcher.init, dispatcher.-prepare-classpath" 
+  <target name="dispatcher.dispatch" depends="dispatcher.init, dispatcher.-prepare-classpath" 
                        description="Generates a static website for this project">
-<dirname property="home" file="${dispatcher.home}/foo.xml"/>
-     <echo>${home}</echo>
-        <java classname="org.apache.forrest.dispatcher.Cli"
+    <dirname property="home" file="${dispatcher.home}/foo.xml"/>
+    <echo>${home}</echo>
+    <java classname="org.apache.forrest.dispatcher.Cli"
           fork="true"
           dir="${dispatcher.build.dir}"  
           maxmemory="${dispatcher.maxmemory}"
           failonerror="false"
           resultproperty="buildResult">
-          <arg value="${home}"/>
-          <jvmarg line="${dispatcher.jvmargs}"/>
-          <classpath>
-            <path refid="dispatcher.cp"/>
-          </classpath>
-          <syspropertyset>
-            <propertyref prefix="dispatcher."/>
-            <propertyref prefix="project."/>
-            <propertyref name="user.home"/>
-            <propertyref name="global.home"/>
-          </syspropertyset>
-        </java> 
-  
+      <arg value="${home}"/>
+      <jvmarg line="${dispatcher.jvmargs}"/>
+      <classpath>
+        <path refid="dispatcher.cp"/>
+      </classpath>
+      <syspropertyset>
+        <propertyref prefix="dispatcher."/>
+        <propertyref prefix="project."/>
+        <propertyref name="user.home"/>
+        <propertyref name="global.home"/>
+      </syspropertyset>
+    </java>
     <if>
       <equals arg1="${buildResult}" arg2="1"/>
       <then>
@@ -58,13 +54,10 @@ There appears to be a problem with your site build.
         </fail>
       </then>
     </if>
-
     <echo>
 -----------------------------
 Static test page was successfully generated.
 ------------------------------
     </echo>
   </target>
-  
-
 </project>
