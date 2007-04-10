@@ -38,68 +38,52 @@ Uses        :  content/xdocs/**.xml, context/xdocs/**.ehtml,
 
 $Revision$
 ==================================================== -->
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
-
-    <!-- Lucene search generator: Creates a hit list from a query and
+<!-- Lucene search generator: Creates a hit list from a query and
     an existing index. -->
     <map:generators default="file">
       <map:generator name="search"
         logger="sitemap.generator.searchgenerator"
         src="org.apache.cocoon.generation.SearchGenerator" />
     </map:generators>
-
-    <!-- Lucene index transformer: Creates a new Lucene index. -->
+<!-- Lucene index transformer: Creates a new Lucene index. -->
     <map:transformers default="xslt">
       <map:transformer name="index"
         logger="sitemap.transformer.luceneindextransformer"
         src="org.apache.cocoon.transformation.LuceneIndexTransformer"/>
     </map:transformers>
-
     <map:readers default="resource"/>
     <map:serializers default="html"/>
     <map:matchers default="wildcard"/>
-
   </map:components>
-  <!-- =========================== Pipelines ================================= -->
+<!-- =========================== Pipelines ================================= -->
   <map:pipelines>
-
     <map:pipeline internal-only="false">
-
-      <!-- ===== INDEX CREATION ===== -->
-
-      <!-- Creates or updates the Lucene index -->
+<!-- ===== INDEX CREATION ===== -->
+<!-- Creates or updates the Lucene index -->
       <map:match pattern="lucene-update.xml">
         <map:generate src="cocoon:/index-creation.lucene"/>
         <map:transform type="index"/>
         <map:transform src="{lm:transform.lucene-update.xdoc}"/>
         <map:serialize type="xml"/>
       </map:match>
-
-
-      <!-- ===== INDEX QUERYING ===== -->
-
-      <!-- Searches the Lucene index using the search expression given
+<!-- ===== INDEX QUERYING ===== -->
+<!-- Searches the Lucene index using the search expression given
       in the request param named "queryString" -->
       <map:match pattern="lucene-search.xml">
         <map:generate type="search">
-          <!-- Important: This value must match that of the
+<!-- Important: This value must match that of the
           "directory" parameter passed to book-to-cinclude-lucene.xsl (see
           below) -->
           <map:parameter name="index" value="lucene-index"/>
           <map:parameter name="query-string" value="queryString"/>
         </map:generate>
-
         <map:transform src="{lm:transform.lucene-search.xdoc}"/>
-
         <map:serialize type="xml"/>
       </map:match>
-
-
-      <!-- ===== DOCUMENTS FOR LUCENE INDEX TRANSFORMER ===== -->
-
-      <!-- Generates a document suitable for processing by the
+<!-- ===== DOCUMENTS FOR LUCENE INDEX TRANSFORMER ===== -->
+<!-- Generates a document suitable for processing by the
       LuceneIndexTransformer, using sources across the whole site -->
       <map:match pattern="index-creation.lucene">
         <map:generate src="cocoon://abs-linkmap"/>
@@ -108,7 +92,7 @@ $Revision$
           <map:parameter name="analyzer" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
           <map:parameter name="merge-factor" value="20"/>
           <map:parameter name="update-index" value="true"/>
-          <!-- Important: This value must match that of the
+<!-- Important: This value must match that of the
           "index" parameter passed to the search generator (see
           above) -->
           <map:parameter name="directory" value="lucene-index"/>
@@ -116,8 +100,7 @@ $Revision$
         <map:transform type="cinclude"/>
         <map:serialize type="xml"/>
       </map:match>
-
-      <!-- Creates a lucene:document from a Forrest document body -->
+<!-- Creates a lucene:document from a Forrest document body -->
       <map:match pattern="**body-*.lucene">
         <map:select type="exists">
           <map:when test="{properties:content.xdocs}{1}{2}.ehtml">
@@ -133,8 +116,7 @@ $Revision$
         </map:transform>
         <map:serialize type="xml"/>
       </map:match>
-
-      <!-- Creates a lucene:document from a Forrest document (same as
+<!-- Creates a lucene:document from a Forrest document (same as
       above, as search-relevant information is only contained in the
       body) -->
       <map:match pattern="*.lucene">
@@ -145,13 +127,9 @@ $Revision$
         <map:generate src="cocoon:/{1}/body-{2}.lucene"/>
         <map:serialize type="xml"/>
       </map:match>
-
-      <!-- ===== TODO: ERROR HANDLING ===== -->
-
-      <!-- Must do something about malformed (unparseable) queries or
+<!-- ===== TODO: ERROR HANDLING ===== -->
+<!-- Must do something about malformed (unparseable) queries or
       a non-existant index. -->
-
     </map:pipeline>
-
   </map:pipelines>
 </map:sitemap>

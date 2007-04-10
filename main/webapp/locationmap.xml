@@ -15,11 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <!-- Default Forrest locationmap -->
-
 <locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
-
   <components>
     <matchers default="lm">
       <matcher 
@@ -27,17 +24,16 @@
         src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
     </matchers>
     <selectors default="exists">
-          <selector name="exists" logger="sitemap.selector.exists"  
+      <selector name="exists" logger="sitemap.selector.exists"  
                     src="org.apache.forrest.sourceexists.SourceExistsSelector" />
     </selectors>
   </components>
-  
   <locator>
-    <!-- ================================== -->
-    <!-- Mount project specific locationmap -->
-    <!-- ================================== -->
+<!-- ================================== -->
+<!-- Mount project specific locationmap -->
+<!-- ================================== -->
     <select>
-      <!-- Normally it is discouraged to use the cocoon:
+<!-- Normally it is discouraged to use the cocoon:
       protocol in the locationmap as this provides too much indirection.
       
       However, this is a special case since it allows individual 
@@ -46,62 +42,51 @@
       and we want the site structure to also come from that repository
       -->
       <mount src="cocoon://locationmap-project.xml"/>
-    </select>     
-    
-    <!-- ================================== -->
-    <!-- Mount plugin specific locationmap -->
-    <!-- project files                      -->
-    <!-- ================================== -->
+    </select>
+<!-- ================================== -->
+<!-- Mount plugin specific locationmap -->
+<!-- project files                      -->
+<!-- ================================== -->
     <select>
       <mount src="{properties:temp-dir}/locationmap.xml"/>
     </select>
-    
-    <!-- ================================== -->
-    <!-- Forrest files                      -->
-    <!-- ================================== -->
+<!-- ================================== -->
+<!-- Forrest files                      -->
+<!-- ================================== -->
     <match pattern="forrest.schema.**">
-        <location src="{forrest:forrest.context}/resources/schema/dtd/{1}.dtd" />
+      <location src="{forrest:forrest.context}/resources/schema/dtd/{1}.dtd" />
     </match>
-    
-    <!-- ================================== -->
-    <!-- Mount forrest locationmaps         -->
-    <!-- ================================== -->
+<!-- ================================== -->
+<!-- Mount forrest locationmaps         -->
+<!-- ================================== -->
     <select>
       <mount src="{forrest:forrest.context}/locationmap-transforms.xml"/>
     </select>
-    
     <select>
       <mount src="{forrest:forrest.context}/locationmap-skins.xml"/>
     </select>
-    
     <select>
       <mount src="{forrest:forrest.context}/locationmap-i18n.xml"/>
     </select>
-
     <select>
       <mount src="{forrest:forrest.context}/locationmap-skinconf.xml"/>
     </select>
-    
     <select>
       <mount src="{forrest:forrest.context}/locationmap-plugin.xml"/>
     </select>
-    
-    <!--  FIXME: this should be part of a chaperon plugin -->
+<!--  FIXME: this should be part of a chaperon plugin -->
     <select>
       <mount src="{forrest:forrest.context}/locationmap-chaperon.xml"/>
     </select>
-
-    <!-- ================================== -->
-    <!-- project files                      -->
-    <!-- ================================== -->
+<!-- ================================== -->
+<!-- project files                      -->
+<!-- ================================== -->
     <match pattern="project.xmap.sitemap">
-        <location src="{properties:sitemap}" />
+      <location src="{properties:sitemap}" />
     </match>
-    
     <match pattern="project.build-info">
       <location src="{properties:temp-dir}/build-info.xml" />
     </match>
-    
     <match pattern="project.images.**.*">
       <select>
         <location src="{properties:resources.images}{1}.{2}" />
@@ -110,18 +95,14 @@
         <location src="{properties:content.xdocs}{1}.{2}" />
       </select>
     </match>
-    
     <match pattern="project.js.**">
       <location src="resources/scripts/{1}.js" />
     </match>
-    
     <match pattern="project.xml.site">
       <location src="{properties:content.xdocs}site.xml" />
     </match>
-    
     <match pattern="project.**">
       <location src="{properties:content.xdocs}{1}" />
     </match>
-    
   </locator>
 </locationmap>

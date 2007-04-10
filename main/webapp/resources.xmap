@@ -43,8 +43,8 @@ $Revision: 1.13 $
       <map:serializer mime-type="image/png"
           name="svg2png"
           src="org.apache.cocoon.serialization.SVGSerializer">
-            <!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
-            <!-- <parameter name="gamma" type="float" value="0.48"/> -->
+<!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
+<!-- <parameter name="gamma" type="float" value="0.48"/> -->
         <parameter name="gamma" type="float" value="0"/>
       </map:serializer>
       <map:serializer name="text" mime-type="text/plain" src="org.apache.cocoon.serialization.TextSerializer"/>
@@ -55,32 +55,27 @@ $Revision: 1.13 $
         <parameter name="groups" value="true"/>
       </map:transformer>
     </map:transformers>
-
     <map:readers default="resource" />
     <map:matchers default="wildcard" />
   </map:components>
-
   <map:resources>
-
-   <map:resource name="read-svg2png-corner-resource">
+    <map:resource name="read-svg2png-corner-resource">
       <map:call resource="pipe-svg2png-corner-resource">
         <map:parameter name="path" value="{lm:skin.images.corner.{path}.{name}}" />
         <map:parameter name="orientation-tb" value="{orientation-tb}"/>
         <map:parameter name="orientation-lr" value="{orientation-lr}"/>
-        <map:parameter name="size" value="{size}"/>   
+        <map:parameter name="size" value="{size}"/>
         <map:parameter name="bg-color-name" value="{bg-color-name}"/>
         <map:parameter name="stroke-color-name" value="{stroke-color-name}"/>
-        <map:parameter name="fg-color-name" value="{fg-color-name}"/>   
+        <map:parameter name="fg-color-name" value="{fg-color-name}"/>
       </map:call>
     </map:resource>
-  
     <map:resource name="pipe-text-resource">
       <map:call resource="generate-transformed-resource">
         <map:parameter name="path" value="{path}" />
       </map:call>
       <map:serialize type="text" mime-type="{mime-type}"/>
     </map:resource>
-
     <map:resource name="pipe-aggregate-svg2png-resource">
       <map:call resource="generate-aggregate-resource">
         <map:parameter name="path" value="{path}" />
@@ -89,7 +84,6 @@ $Revision: 1.13 $
       <map:transform src="{lm:transform.xml.extracted-svg}"/>
       <map:serialize type="svg2png" />
     </map:resource>
-
     <map:resource name="pipe-transformed-svg2png-resource">
       <map:call resource="generate-transformed-resource">
         <map:parameter name="path" value="{path}" />
@@ -97,7 +91,6 @@ $Revision: 1.13 $
       <map:call resource="transform-project2text"/>
       <map:serialize type="svg2png" />
     </map:resource>
-
     <map:resource name="pipe-svg2png-corner-resource">
       <map:generate src="cocoon://skinconf.xml" />
       <map:transform src="{path}">
@@ -117,43 +110,35 @@ $Revision: 1.13 $
       <map:call resource="transform-project2text"/>
       <map:serialize type="svg2png" />
     </map:resource>
-
     <map:resource name="generate-aggregate-resource">
       <map:aggregate element="resource">
         <map:part src="cocoon://skinconf.xml" />
         <map:part src="{path}"/>
       </map:aggregate>
     </map:resource>
-
     <map:resource name="generate-transformed-resource">
       <map:generate src="cocoon://skinconf.xml" />
       <map:transform src="{path}"/>
     </map:resource>
-
     <map:resource name="transform-project2text">
       <map:transform src="{lm:transform.project.text}"/>
     </map:resource>
-
     <map:resource name="read-linked-text">
       <map:generate type="text" src="{path}" />
       <map:transform type="pattern" src="resources/chaperon/grammars/link.xlex"/>
       <map:transform src="resources/chaperon/stylesheets/pattern2link.xsl"/>
       <map:serialize type="text" mime-type="text/css"/>
     </map:resource>
-
   </map:resources>
-
   <map:pipelines>
     <map:pipeline>
       <map:match pattern="**skin/**.js">
         <map:read src="{lm:skin.js.{2}}" mime-type="application/x-javascript" />
       </map:match>
-
-      <!-- @deprecated -->
+<!-- @deprecated -->
       <map:match pattern="**.js">
         <map:read src="{lm:project.js.{1}}" mime-type="application/x-javascript" />
       </map:match>
-
       <map:match pattern="**skin/**.css">
         <map:select type="exists">
           <map:when test="{lm:skin.css.xslt.{2}}">
@@ -169,61 +154,53 @@ $Revision: 1.13 $
           </map:otherwise>
         </map:select>
       </map:match>
-
-         <!-- @deprecated -->
+<!-- @deprecated -->
       <map:match pattern="**.css">
         <map:read src="resources/css/{1}.css" mime-type="text/css" />
       </map:match>
-      
-     <!-- special case corner generator pipeline -->
-     <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.png">
+<!-- special case corner generator pipeline -->
+      <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.png">
         <map:call resource="read-svg2png-corner-resource">
-           <map:parameter name="path" value="images/{1}" />
-           <map:parameter name="name" value="{2}c" />
-           <map:parameter name="orientation-tb" value="{3}"/>
-           <map:parameter name="orientation-lr" value="{4}"/>
-           <map:parameter name="size" value="{5}"/>    
-           <map:parameter name="bg-color-name" value="{6}"/>
-           <map:parameter name="stroke-color-name" value="{7}"/>
-           <map:parameter name="fg-color-name" value="{8}"/>    
+          <map:parameter name="path" value="images/{1}" />
+          <map:parameter name="name" value="{2}c" />
+          <map:parameter name="orientation-tb" value="{3}"/>
+          <map:parameter name="orientation-lr" value="{4}"/>
+          <map:parameter name="size" value="{5}"/>
+          <map:parameter name="bg-color-name" value="{6}"/>
+          <map:parameter name="stroke-color-name" value="{7}"/>
+          <map:parameter name="fg-color-name" value="{8}"/>
         </map:call>
-     </map:match>
-     
-     <!-- special case corner generator pipeline SVG -->
-     <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.svg">
-      <map:generate src="cocoon://skinconf.xml" />
-      <map:transform src="{lm:skin.images.corner.images/{1}.{2}c}">
-         <map:parameter name="orientation-tb" value="{3}"/>
-         <map:parameter name="orientation-lr" value="{4}"/>
-         <map:parameter name="size" value="{5}"/>    
-         <map:parameter name="bg-color-name" value="{6}"/>
-         <map:parameter name="stroke-color-name" value="{7}"/>
-         <map:parameter name="fg-color-name" value="{8}"/>
-      </map:transform>
-      <map:call resource="transform-project2text"/>
-      <map:serialize type="xml" />
-     </map:match>
-     
-     <!-- DEBUG: special case corner generator pipeline PNG from SVG-->
-     <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.test.png">
-      <map:generate src="cocoon:/skin/images{1}/{2}c-{3}-{4}-{5}-1{6}-2{7}-3{8}.svg" />
-      <map:serialize type="svg2png" />
-     </map:match>
-
+      </map:match>
+<!-- special case corner generator pipeline SVG -->
+      <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.svg">
+        <map:generate src="cocoon://skinconf.xml" />
+        <map:transform src="{lm:skin.images.corner.images/{1}.{2}c}">
+          <map:parameter name="orientation-tb" value="{3}"/>
+          <map:parameter name="orientation-lr" value="{4}"/>
+          <map:parameter name="size" value="{5}"/>
+          <map:parameter name="bg-color-name" value="{6}"/>
+          <map:parameter name="stroke-color-name" value="{7}"/>
+          <map:parameter name="fg-color-name" value="{8}"/>
+        </map:transform>
+        <map:call resource="transform-project2text"/>
+        <map:serialize type="xml" />
+      </map:match>
+<!-- DEBUG: special case corner generator pipeline PNG from SVG-->
+      <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.test.png">
+        <map:generate src="cocoon:/skin/images{1}/{2}c-{3}-{4}-{5}-1{6}-2{7}-3{8}.svg" />
+        <map:serialize type="svg2png" />
+      </map:match>
       <map:match pattern="skin/images**/*.*">
         <map:read src="{lm:skin.images.{1}/{2}.{3}}" mime-type="image/{3}" />
       </map:match>
-
-      <!-- handles images local to a contributor directory -->
+<!-- handles images local to a contributor directory -->
       <map:match pattern="**my-images/**.*">
         <map:read src="{lm:project.images.{1}my-images/{2}.{3}}" mime-type="image/{3}" />
       </map:match>
-
       <map:match type="regexp" pattern="^(.*?)([^/]*).svg$">
         <map:generate src="{lm:project.{1}{2}.svg}"/>
         <map:serialize type="xml"/>
       </map:match>
-
       <map:match pattern="images/**.*">
         <map:select type="exists">
           <map:when test="{lm:skin.images.{1}.{2}}">
@@ -239,7 +216,6 @@ $Revision: 1.13 $
           </map:otherwise>
         </map:select>
       </map:match>
-
       <map:match pattern="**/images/**.*">
         <map:select type="exists">
           <map:when test="{lm:project.images.{1}/images/{2}.{3}}">
@@ -250,7 +226,6 @@ $Revision: 1.13 $
           </map:when>
         </map:select>
       </map:match>
-      
       <map:match pattern="**.png">
         <map:select type="exists">
           <map:when test="{lm:project.images.{1}.svg}">
@@ -268,7 +243,6 @@ $Revision: 1.13 $
           </map:when>
         </map:select>
       </map:match>
-
       <map:match pattern="**.ico">
         <map:select type="exists">
           <map:when test="{lm:project.images.{1}.ico}">

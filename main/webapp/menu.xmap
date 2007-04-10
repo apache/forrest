@@ -29,7 +29,6 @@ See http://forrest.apache.org/docs/sitemap-ref.html#menu_generation_impl
 
 $Revision: 1.2 $
 ==================================================== -->
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file"/>
@@ -39,7 +38,7 @@ $Revision: 1.2 $
         <catalogues default="menu">
           <catalogue id="menu" name="menu" location="{lm:project.translations}"/>
         </catalogues>
-        <!-- Commented out to verify your translations
+<!-- Commented out to verify your translations
         <untranslated-text>untranslated</untranslated-text> -->
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
@@ -49,13 +48,10 @@ $Revision: 1.2 $
       <map:selector logger="sitemap.selector.config" name="config" src="org.apache.cocoon.selection.SimpleSelector" />
     </map:selectors>
   </map:components>
-
   <map:pipelines>
-
-    <!-- ============================================================ -->
-    <!-- SOURCE FORMATS                                               -->
-    <!-- ============================================================ -->
-
+<!-- ============================================================ -->
+<!-- SOURCE FORMATS                                               -->
+<!-- ============================================================ -->
     <map:pipeline internal-only="false">
       <map:match pattern="abs-menulinks">
         <map:generate src="cocoon://site.navigation.links.xml"/>
@@ -64,7 +60,6 @@ $Revision: 1.2 $
         <map:transform src="{lm:transform.xml.xml-normalizedhrefs}"/>
         <map:serialize type="xml"/>
       </map:match>
-
       <map:match pattern="**menulinks-*">
         <map:generate src="cocoon://site.navigation.links.xml"/>
         <map:transform src="{lm:transform.linkmap.linkmap-absolutized}" />
@@ -77,66 +72,49 @@ $Revision: 1.2 $
               <map:parameter name="path" value="{1}{2}"/>
             </map:transform>
           </map:when>
-
           <map:when test="directories">
             <map:transform type="xpath">
               <map:parameter name="include" value="//*[@href='{1}']" />
             </map:transform>
           </map:when>
-
-          </map:select>
-
+        </map:select>
         <map:transform src="{lm:transform.linkmap.linkmap-relativized}">
           <map:parameter name="path" value="{1}{2}" />
         </map:transform>
         <map:serialize type="xml" />
       </map:match>
     </map:pipeline>
-
-    <!-- ============================================================ -->
-    <!-- INTERMEDIATE FORMATS                                         -->
-    <!-- ============================================================ -->
-
+<!-- ============================================================ -->
+<!-- INTERMEDIATE FORMATS                                         -->
+<!-- ============================================================ -->
     <map:pipeline>
       <map:match pattern="**book-*">
-
         <map:select type="exists">
-
           <map:when test="{lm:project.{1}book.xml}">
-            <!-- If a hand-created book.xml exists, use it -->
+<!-- If a hand-created book.xml exists, use it -->
             <map:parameter name="url" value="{lm:project.{1}book.xml}" />
             <map:generate src="{lm:project.{1}book.xml}" />
           </map:when>
-
           <map:otherwise>
-            <!-- If no book.xml, generate it from the linkmap. -->
+<!-- If no book.xml, generate it from the linkmap. -->
             <map:generate src="cocoon:/{1}menulinks-{2}" />
-            <!-- The above generates the subset of the linkmap relevant to our directory. -->
+<!-- The above generates the subset of the linkmap relevant to our directory. -->
             <map:transform src="{lm:transform.site.book}" />
           </map:otherwise>
-
         </map:select>
-
         <map:select type="config">
           <map:parameter name="value" value="{properties:forrest.i18n}"/>
           <map:when test="true">
-
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}"/>
               <map:transform type="i18n">
                 <map:parameter name="locale" value="{locale}"/>
               </map:transform>
             </map:act>
-
           </map:when>
         </map:select>
-
         <map:serialize type="xml"/>
-
       </map:match>
-
     </map:pipeline>
-
-
   </map:pipelines>
 </map:sitemap>

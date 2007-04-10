@@ -21,8 +21,6 @@
 Provides access to the plugins descriptor files.
 
 ==================================================== -->
-
-
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
@@ -32,43 +30,38 @@ Provides access to the plugins descriptor files.
     <map:transformers default="xslt"/>
     <map:matchers default="wildcard"/>
   </map:components>
-
   <map:pipelines>
- 
-     <map:pipeline>       
-       <map:match pattern="corePlugins.xml">
-         <map:generate type="xpathdirectory" src="{forrest:forrest.plugins-src}">
-            <map:parameter name="depth" value="2"/>
-            <map:parameter name="xpath" value="/project"/>
-            <map:parameter name="xmlFiles" value="build\.xml$"/>
-         </map:generate>
-         <map:transform src="{lm:transform.pluginBuildFiles.pluginDescriptor}">
-           <map:parameter name="type" value="released"/>
-         </map:transform>
-         <map:serialize type="xml"/>
-       </map:match>
-       
-       <map:match pattern="whiteboardPlugins.xml">
-         <map:generate type="xpathdirectory" src="{forrest:forrest.whiteboard-plugins-src}">
-            <map:parameter name="depth" value="2"/>
-            <map:parameter name="xpath" value="/project"/>
-            <map:parameter name="xmlFiles" value="build\.xml$"/>
-         </map:generate>
-         <map:transform src="{lm:transform.pluginBuildFiles.pluginDescriptor}">
-           <map:parameter name="type" value="whiteboard"/>
-         </map:transform>
-         <map:serialize type="xml"/>
-       </map:match>
-
-       <map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp">
-         <map:generate src="cocoon:/plugins.xml"/>
-         <map:transform src="{lm:transform.plugins.xdoc}">
-           <map:parameter name="pluginDocsVersion" value="{1}"/>
-         </map:transform>
-         <map:serialize type="xml"/>
-       </map:match>
-       
-       <!-- This match is used if we want to generate the plugins.xml
+    <map:pipeline>
+      <map:match pattern="corePlugins.xml">
+        <map:generate type="xpathdirectory" src="{forrest:forrest.plugins-src}">
+          <map:parameter name="depth" value="2"/>
+          <map:parameter name="xpath" value="/project"/>
+          <map:parameter name="xmlFiles" value="build\.xml$"/>
+        </map:generate>
+        <map:transform src="{lm:transform.pluginBuildFiles.pluginDescriptor}">
+          <map:parameter name="type" value="released"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="whiteboardPlugins.xml">
+        <map:generate type="xpathdirectory" src="{forrest:forrest.whiteboard-plugins-src}">
+          <map:parameter name="depth" value="2"/>
+          <map:parameter name="xpath" value="/project"/>
+          <map:parameter name="xmlFiles" value="build\.xml$"/>
+        </map:generate>
+        <map:transform src="{lm:transform.pluginBuildFiles.pluginDescriptor}">
+          <map:parameter name="type" value="whiteboard"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp">
+        <map:generate src="cocoon:/plugins.xml"/>
+        <map:transform src="{lm:transform.plugins.xdoc}">
+          <map:parameter name="pluginDocsVersion" value="{1}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+<!-- This match is used if we want to generate the plugins.xml
             from the plugin build.xml files. However, it is currently
             disabled since the 0.8 release will not bundle the plugin
             sources so this match will not work.
@@ -83,17 +76,13 @@ Provides access to the plugins descriptor files.
          <map:serialize type="xml"/>
        </map:match>
        -->
-       
-       <map:match pattern="plugins.xml">
-          <map:aggregate element="pluginList">
-            <map:part src="{lm:plugin.descriptor.forrest}"/>
-            <map:part src="{lm:plugin.descriptor.whiteboard}"/>
-          </map:aggregate>
-         <map:serialize type="xml"/>
-       </map:match>
-       
-     </map:pipeline>     
+      <map:match pattern="plugins.xml">
+        <map:aggregate element="pluginList">
+          <map:part src="{lm:plugin.descriptor.forrest}"/>
+          <map:part src="{lm:plugin.descriptor.whiteboard}"/>
+        </map:aggregate>
+        <map:serialize type="xml"/>
+      </map:match>
+    </map:pipeline>
   </map:pipelines>
-
 </map:sitemap>
-
