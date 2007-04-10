@@ -15,10 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project default="site" basedir="." name="site">
-  
-   <!-- ===============================================================
+<!-- ===============================================================
        Makes the site.
        param: name of the skin to use ${project.skin} (now)
        param: location to find the content ${content-dir}(now)
@@ -28,11 +26,9 @@
        param: location of log-file ${project.logkitfile}
        ===============================================================
    -->
-
-   <target name="site" depends="init, -prepare-classpath, check-contentdir, validate" 
+  <target name="site" depends="init, -prepare-classpath, check-contentdir, validate" 
                        if="project.content.present"
                        description="* Generates a static HTML website for this project">
-
     <sequential>
       <parallel>
         <java classname="org.apache.cocoon.Main"
@@ -61,14 +57,13 @@
             <propertyref name="user.home"/>
             <propertyref name="global.home"/>
           </syspropertyset>
-        </java> 
-  
+        </java>
         <sequential>
           <echo>
   Copying the various non-generated resources to site.
   Warnings will be issued if the optional project resources are not found.
   This is often the case, because they are optional and so may not be available.</echo>
-          <!-- 
+<!-- 
           | Copy all non-xdocs content across, as we cannot rely on crawling to
           | discover the whole URI space.  Note: we are emulating the sitemap here;
           | please ensure they keep in synch.
@@ -76,33 +71,33 @@
           <echo message="Copying project resources and images to site ..."/>
           <copy toDir="${project.site-dir}" 
             overwrite="true" failonerror="false">
-              <fileset dir="${content-dir}/content"> <!-- FIXME: what about raw-content-dir? -->
-                <exclude name="xdocs/**"/> <!-- FIXME: should use properties since they can be overridden in forrest.properties -->
-              </fileset>
+            <fileset dir="${content-dir}/content">
+<!-- FIXME: what about raw-content-dir? -->
+              <exclude name="xdocs/**"/>
+<!-- FIXME: should use properties since they can be overridden in forrest.properties -->
+            </fileset>
             <fileset dir="${project.webapp}/resources" includes="images"/>
           </copy>
-  
-          <!-- Copy skin images -->
+<!-- Copy skin images -->
           <echo message="Copying main skin images to site ..."/>
           <mkdir dir="${project.site-dir}/skin/images"/>
-           <!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
-           <!-- Copy forrest skin images -->
-           <!-- Do the common ones first followed by those for the skin. -->
+<!-- FIXME: we will only be using either project skins or forrest skins - only copy those necessary (don't forget common) -->
+<!-- Copy forrest skin images -->
+<!-- Do the common ones first followed by those for the skin. -->
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
-             <fileset dir="${forrest.skins-dir}/common/images">
-               <exclude name="**/*.xslt"/>
-             </fileset>
+            <fileset dir="${forrest.skins-dir}/common/images">
+              <exclude name="**/*.xslt"/>
+            </fileset>
           </copy>
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
-             <fileset dir="${forrest.skins-dir}/${project.skin}/images">
-               <exclude name="**/*.xslt"/>
-             </fileset>
+            <fileset dir="${forrest.skins-dir}/${project.skin}/images">
+              <exclude name="**/*.xslt"/>
+            </fileset>
           </copy>
-  
-          <!-- Copy project skin images -->
-          <!-- Do the common ones first followed by those for the skin. -->
+<!-- Copy project skin images -->
+<!-- Do the common ones first followed by those for the skin. -->
           <echo message="Copying project skin images to site ..."/>
           <copy toDir="${project.site-dir}/skin/images" overwrite="true"
             failonerror="false">
@@ -114,9 +109,8 @@
               <exclude name="**/*.xslt"/>
             </fileset>
           </copy>
-  
-          <!-- Copy all other non-resource files -->
-          <!-- Do the common ones first followed by those for the skin. -->
+<!-- Copy all other non-resource files -->
+<!-- Do the common ones first followed by those for the skin. -->
           <echo message="Copying main skin css and js files to site ..."/>
           <copy toDir="${project.site-dir}/skin" 
             overwrite="true"
@@ -140,10 +134,8 @@
               <exclude name="skinconf.xsl"/>
             </fileset>
           </copy>
-          
-          
-          <!-- Copy all other non-resource files from project skins-->
-          <!-- Do the common ones first followed by those for the skin. -->
+<!-- Copy all other non-resource files from project skins-->
+<!-- Do the common ones first followed by those for the skin. -->
           <echo message="Copying project skin css and js files to site ..."/>
           <copy toDir="${project.site-dir}/skin" 
             overwrite="true"
@@ -176,14 +168,12 @@ Cocoon will report the status of each document:
   - in column 1: *=okay X=brokenLink ^=pageSkipped (see FAQ).
   </echo>
         </sequential>
-      </parallel>     
-      
+      </parallel>
       <echo>
   Copying broken links file to site root.
       </echo>
       <copy toFile="${project.site-dir}/broken-links.xml" file="${project.brokenlinkfile}"/>
     </sequential>
-    
     <if>
       <equals arg1="${buildResult}" arg2="1"/>
       <then>
@@ -201,8 +191,7 @@ Read the output above:
         </fail>
       </then>
     </if>
-
-    <!-- Fix inconsistent line endings. Workaround for FOR-492
+<!-- Fix inconsistent line endings. Workaround for FOR-492
       Default "eol" attribute will set line endings appropriate to current OS.
     -->
 <!-- However, due to Ant bug 39585, fixcrlf/@eol is broken on "Mac OS X" so
@@ -215,18 +204,17 @@ Read the output above:
       <equals arg1="${isUnix}" arg2="true"/>
       <then>
         <fixcrlf srcdir="${project.site-dir}" eol="unix">
-                <include name="**/*.html"/>
+          <include name="**/*.html"/>
         </fixcrlf>
       </then>
       <else>
         <fixcrlf srcdir="${project.site-dir}">
-                <include name="**/*.html"/>
-                <!-- The CSS Includes are a workaround for FOR-925 -->
-                <include name="**/*.css"/>
+          <include name="**/*.html"/>
+<!-- The CSS Includes are a workaround for FOR-925 -->
+          <include name="**/*.css"/>
         </fixcrlf>
       </else>
     </if>
-
     <echo>
 -----------------------------
 Static site was successfully generated at:
@@ -234,6 +222,4 @@ ${project.site-dir}
 ------------------------------
     </echo>
   </target>
-  
-
 </project>

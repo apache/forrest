@@ -16,9 +16,6 @@
   limitations under the License.
 -->
 <project default="seed" basedir="." name="Forrest Seed Targets">
-
-
-
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
 <!-- **                                                             ** -->
@@ -28,51 +25,50 @@
 <!-- **                                                             ** -->
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
-
-
-  <!-- ===============================================================
+<!-- ===============================================================
         Copies a template structure over to your project dir.
        =============================================================== -->
   <target name="seed" depends="ensure-nocontent"
     description="Seeds a directory with a template project doc structure">
-     <copy todir="${project.home}" overwrite="false">
-        <fileset dir="${forrest.core}/fresh-site"/>
-     </copy>
-     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-sample.txt">
-        <filterchain><expandproperties/></filterchain>
+    <copy todir="${project.home}" overwrite="false">
+      <fileset dir="${forrest.core}/fresh-site"/>
+    </copy>
+    <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-sample.txt">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
     </loadfile>
     <echo>${template-project-created-message}</echo>
   </target>
-  
   <target name="seed-sample" description="* Seeds a directory with a template project doc structure">
     <antcall target="seed"/>
   </target>
-  
   <target name="seed-basic" depends="ensure-nocontent"
     description="* Seeds a basic example (1 file) and structure">
-     <copy todir="${project.home}" overwrite="false">
-        <fileset dir="${forrest.core}/template-sites/basic"/>
-     </copy>
-     <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-basic.txt">
-        <filterchain><expandproperties/></filterchain>
+    <copy todir="${project.home}" overwrite="false">
+      <fileset dir="${forrest.core}/template-sites/basic"/>
+    </copy>
+    <loadfile  property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-basic.txt">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
     </loadfile>
     <echo>${template-project-created-message}</echo>
   </target>
-
   <target name="seed-benchmark" depends="ensure-nocontent"
     description="* Seeds a site to use for benchmarking measurements">
-     <copy todir="${project.home}" overwrite="false">
+    <copy todir="${project.home}" overwrite="false">
       <fileset dir="${forrest.core}/template-sites/benchmark"/>
-     </copy>
-     <loadfile property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-basic.txt">
-      <filterchain><expandproperties/></filterchain>
+    </copy>
+    <loadfile property="template-project-created-message" srcFile="${forrest.core}/var/template-project-created-message-basic.txt">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
     </loadfile>
     <echo>${template-project-created-message}</echo>
   </target>
-
   <target name="seedTestBusiness"  depends="ensure-nocontent"
     description="A test business site">
-    
     <property name="project.display.name" value="The Forresters"/>
     <property name="project.description" value="The Forresters is a (fictitious) company providing support for the users and developers of the Apache Forrest Project."/>
     <property name="project.domain" value="forrest.apache.org"/>
@@ -84,20 +80,16 @@
     <property name="copyright.owner" value="The Apache Software Foundation"/>
     <property name="search.provider" value="google"/>
     <property name="search.box.location" value="default"/>
-    
     <property name="seed-template" value="business"/>
     <antcall target="-copyTemplate"/>
   </target>
-
   <target name="seed-business"  depends="ensure-nocontent, getProperties"
     description="A typical business site">
     <property name="seed-template" value="business"/>
     <antcall target="-copyTemplate"/>
   </target>
-
   <target name="getProperties" 
     depends="getProjectProperties, getGroupProperties, getSearchProperties"/>
-  
   <target name="getProjectProperties">
     <input message="What is the name of the project you wish to create a site for?"
            addproperty="project.display.name"/>
@@ -108,7 +100,6 @@
     <input message="What is the URL for this project?"
            addproperty="project.url"/>
   </target>
-  
   <target name="getGroupProperties">
     <input message="What name of the group you wish to create a site for?"
            addproperty="group.display.name"/>
@@ -121,7 +112,6 @@
     <input message="Who is the copyright owner of the site?"
            addproperty="copyright.owner"/>
   </target>
-  
   <target name="getSearchProperties">
     <input message="Which search provider would you like to use?"
            validargs="google,lucene"
@@ -132,26 +122,25 @@
            defaultvalue="default"
            addproperty="search.box.location"/>
   </target>
-  
   <target name="-copyTemplate">
-     <copy todir="${project.home}" overwrite="false" filtering="true">
-        <fileset dir="${forrest.core}/template-sites/${seed-template}"/>
-        <filterset>
-          <!-- Project properties -->
-          <filter token="project.display.name" value="${project.display.name}"/>
-          <filter token="project.description" value="${project.description}"/>
-          <filter token="project.domain" value="${project.domain}"/>
-          <filter token="project.url" value="${project.url}"/>
-          <!-- Group properties -->
-          <filter token="group.display.name" value="${group.display.name}"/>
-          <filter token="group.description" value="${group.description}"/>
-          <filter token="group.domain" value="${group.domain}"/>
-          <filter token="group.url" value="${group.url}"/>
-          <filter token="copyright.owner" value="${copyright.owner}"/>
-          <!-- Search properties -->
-          <filter token="search.provider" value="${search.provider}"/>
-          <filter token="search.box.location" value="${search.box.location}"/>
-        </filterset>
-     </copy>
+    <copy todir="${project.home}" overwrite="false" filtering="true">
+      <fileset dir="${forrest.core}/template-sites/${seed-template}"/>
+      <filterset>
+<!-- Project properties -->
+        <filter token="project.display.name" value="${project.display.name}"/>
+        <filter token="project.description" value="${project.description}"/>
+        <filter token="project.domain" value="${project.domain}"/>
+        <filter token="project.url" value="${project.url}"/>
+<!-- Group properties -->
+        <filter token="group.display.name" value="${group.display.name}"/>
+        <filter token="group.description" value="${group.description}"/>
+        <filter token="group.domain" value="${group.domain}"/>
+        <filter token="group.url" value="${group.url}"/>
+        <filter token="copyright.owner" value="${copyright.owner}"/>
+<!-- Search properties -->
+        <filter token="search.provider" value="${search.provider}"/>
+        <filter token="search.box.location" value="${search.box.location}"/>
+      </filterset>
+    </copy>
   </target>
 </project>
