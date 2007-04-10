@@ -16,11 +16,10 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-	<xsl:template match="skins">
-      <project default="echoskins">
-      	<target name="echoskins">
-      	<echo>Available skins:
+  <xsl:template match="skins">
+    <project default="echoskins">
+      <target name="echoskins">
+        <echo>Available skins:
 Forrest provides the following default skins which should meet most needs:
 
 Current:
@@ -35,17 +34,15 @@ See http://forrest.apache.org/docs/skins.html
 Additional skins which are maintained by other people are available from
 outside the Forrest distribution. Currently these are only basic test skins
 to demonstrate the concept of a remote skin respository.</echo>
-  	    <xsl:apply-templates select="skin" />
-	    </target>
-	  </project>
-	</xsl:template>
-	
-	<xsl:template match="skin">
-<echo>
+        <xsl:apply-templates select="skin" />
+      </target>
+    </project>
+  </xsl:template>
+  <xsl:template match="skin">
+    <echo>
 * <xsl:value-of select="@name"/> - <xsl:value-of select="normalize-space(description)"/>
   - author: <xsl:value-of select="@author"/>
-  - website: <xsl:value-of select="@website"/> 	    
-</echo>
-	</xsl:template>	
-	
+  - website: <xsl:value-of select="@website"/>
+    </echo>
+  </xsl:template>
 </xsl:stylesheet>

@@ -20,19 +20,15 @@
   xmlns:xcat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
   exclude-result-prefixes="xcat"
 >
-
   <xsl:output method="xml" indent="yes"/>
-
   <xsl:param name="plugin-catalog-path"/>
-
   <xsl:key name="existing-catalogs" match="xcat:nextCatalog" use="@catalog"/>
-
   <xsl:template match="xcat:catalog">
     <xsl:element name="catalog"
       namespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
       <xsl:apply-templates/>
-       <xsl:if test="not(key('existing-catalogs', $plugin-catalog-path))">
-         <xsl:element name="nextCatalog"
+      <xsl:if test="not(key('existing-catalogs', $plugin-catalog-path))">
+        <xsl:element name="nextCatalog"
             namespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
           <xsl:attribute name="catalog">
             <xsl:value-of select="$plugin-catalog-path"/>
@@ -41,11 +37,9 @@
       </xsl:if>
     </xsl:element>
   </xsl:template>
-
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
-
 </xsl:stylesheet>

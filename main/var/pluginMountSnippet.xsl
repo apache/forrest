@@ -17,47 +17,39 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:map="http://apache.org/cocoon/sitemap/1.0">
-   <xsl:output method="xml" indent="yes" />
-
-   <xsl:param name="plugin-name" />
-   <xsl:param name="plugin-type" />
-
-   <xsl:template match="map:sitemap">
-     <map:sitemap>
+  <xsl:output method="xml" indent="yes" />
+  <xsl:param name="plugin-name" />
+  <xsl:param name="plugin-type" />
+  <xsl:template match="map:sitemap">
+    <map:sitemap>
       <xsl:apply-templates/>
-     </map:sitemap>
-   </xsl:template>
-   
-   <xsl:template match="map:pipelines">
-     <map:pipelines>
+    </map:sitemap>
+  </xsl:template>
+  <xsl:template match="map:pipelines">
+    <map:pipelines>
       <xsl:apply-templates/>
-     </map:pipelines>
-   </xsl:template>
-
-   <xsl:template match="map:pipeline">
-     <map:pipeline>
-       <xsl:apply-templates/>
-       <xsl:element name="map:select">
-         <xsl:attribute name="type">exists</xsl:attribute>
-         <xsl:element name="map:when">
-           <xsl:attribute name="test">{forrest:forrest.plugins}/<xsl:value-of select="$plugin-name"/>/<xsl:value-of select="$plugin-type"/>.xmap</xsl:attribute>
-           <xsl:element name="map:mount">
-             <xsl:attribute name="uri-prefix"/>
-             <xsl:attribute name="src">{forrest:forrest.plugins}/<xsl:value-of select="$plugin-name"/>/<xsl:value-of select="$plugin-type"/>.xmap</xsl:attribute> 
-             <xsl:attribute name="check-reload">yes</xsl:attribute>  
-             <xsl:attribute name="pass-through">true</xsl:attribute>
-           </xsl:element>
-         </xsl:element>
-       </xsl:element>
-     </map:pipeline>
-    </xsl:template>
-    
-    
-
+    </map:pipelines>
+  </xsl:template>
+  <xsl:template match="map:pipeline">
+    <map:pipeline>
+      <xsl:apply-templates/>
+      <xsl:element name="map:select">
+        <xsl:attribute name="type">exists</xsl:attribute>
+        <xsl:element name="map:when">
+          <xsl:attribute name="test">{forrest:forrest.plugins}/<xsl:value-of select="$plugin-name"/>/<xsl:value-of select="$plugin-type"/>.xmap</xsl:attribute>
+          <xsl:element name="map:mount">
+            <xsl:attribute name="uri-prefix"/>
+            <xsl:attribute name="src">{forrest:forrest.plugins}/<xsl:value-of select="$plugin-name"/>/<xsl:value-of select="$plugin-type"/>.xmap</xsl:attribute>
+            <xsl:attribute name="check-reload">yes</xsl:attribute>
+            <xsl:attribute name="pass-through">true</xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </xsl:element>
+    </map:pipeline>
+  </xsl:template>
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
     </xsl:copy>
   </xsl:template>
 </xsl:stylesheet>
-

@@ -16,11 +16,10 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-	<xsl:template match="plugins">
-      <project default="echoplugins">
-      	<target name="echoplugins">
-      	<echo>Available plugins:
+  <xsl:template match="plugins">
+    <project default="echoplugins">
+      <target name="echoplugins">
+        <echo>Available plugins:
 Forrest provides basic functionality for creating documentation in various
 formats from a range of source formats. However, additional functionlaity
 can be provided through plugins.
@@ -28,32 +27,28 @@ can be provided through plugins.
 Plugins may be maintained by other people and be available from
 outside the Forrest distribution. The list below details all known plugins.
 </echo>
-
-<echo>
+        <echo>
 =============
 Input Plugins
 =============
 </echo>
-  	    <xsl:apply-templates select="plugin[@type='input']" />
-
-<echo>
+        <xsl:apply-templates select="plugin[@type='input']" />
+        <echo>
 ==============
 Output Plugins
 ==============
 </echo>
-  	    <xsl:apply-templates select="plugin[@type='output']" />
-
-<echo>
+        <xsl:apply-templates select="plugin[@type='output']" />
+        <echo>
 ================
 Internal Plugins
 ================
 </echo>
-  	    <xsl:apply-templates select="plugin[@type='internal']" />
-	    </target>
-	  </project>
-	</xsl:template>
-	
-	<xsl:template match="plugin">
+        <xsl:apply-templates select="plugin[@type='internal']" />
+      </target>
+    </project>
+  </xsl:template>
+  <xsl:template match="plugin">
     <echo>
     * <xsl:value-of select="@name"/>
       - <xsl:value-of select="normalize-space(description)"/>
@@ -61,8 +56,7 @@ Internal Plugins
       - Author: <xsl:value-of select="@author"/>
       - Website: <xsl:value-of select="@website"/>
       - Version:  <xsl:value-of select="@version"/>
-      - Required Forrest Version: <xsl:value-of select="forrestVersion"/> 
+      - Required Forrest Version: <xsl:value-of select="forrestVersion"/>
     </echo>
-	</xsl:template>	
-	
+  </xsl:template>
 </xsl:stylesheet>
