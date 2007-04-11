@@ -4,7 +4,7 @@
         <link href="../themes/common.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
         <link href="../themes/leather-dev.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
         <link href="../themes/pelt.screen.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
-        
+
         <link href="../how/howto-dispatcher-contracts.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
         <link href="../themes/pelt.print.css" media="print" rel="stylesheet" title="Pelt" type="text/css" />
         <style type="text/css">/* Extra css */ 
@@ -156,8 +156,9 @@ p.quote {
 <h1 class="content-title">How to write a forrest:contract</h1>
 <!--+ |end content-title +-->
 <!--+ |start content-abstract +-->
-    This How-To will explain how we wrote the contracts for the dispatcher and hope afterwards you will be able to do the same.
-  <!--+ |end content-abstract +--><!--+ |start content-minitoc +--><div id="content-minitoc-area">
+      This How-To will explain how we wrote the contracts for the dispatcher and
+      hope afterwards you will be able to do the same.
+    <!--+ |end content-abstract +--><!--+ |start content-minitoc +--><div id="content-minitoc-area">
 <ul class="minitoc">
 <li>
 <a href="#Intended Audience">Intended Audience</a>
@@ -204,23 +205,25 @@ p.quote {
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-The "Dispatcher" (aka "Views") is new functionality which is still in development phase. That is why it is in the
-"whiteboard" section of the Forrest distribution. This HowTo is a good start but still needs more work.
-      See <a href="http://forrest.apache.org/docs_0_80/status-themes.html">Status of Themes: Skins and Dispatcher</a>.
-</div>
+      The "Dispatcher" (aka "Views") is new functionality which is still in
+      development phase. That is why it is in the "whiteboard" section of the
+      Forrest distribution. This HowTo is a good start but still needs more
+      work. See <a href="http://forrest.apache.org/docs_0_80/status-themes.html">Status of Themes: Skins and
+      Dispatcher</a>.
+    </div>
 </div>
 <p>
-      Devs and skin developer that wants to get started with forrest:contract development. 
-      To really understand this how-to you need basic and sometimes advanced understanding of 
-      the "old fashion" skin development process.
+      Devs and skin developer that wants to get started with forrest:contract
+      development. To really understand this how-to you need basic and sometimes
+      advanced understanding of the "old fashion" skin development process.
     </p>
 </div>
 <a name="Purpose" title="Purpose"> </a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      This setup guide will explain how to create a forrest:contract from scratch and 
-      how this forrest:contract work with the core parts of forrest.
+      This setup guide will explain how to create a forrest:contract from
+      scratch and how this forrest:contract work with the core parts of forrest.
     </p>
 </div>
 <a name="Prerequisites" title="Prerequisites"> </a>
@@ -235,20 +238,27 @@ The "Dispatcher" (aka "Views") is new functionality which is still in developmen
 <div class="section">
 <div class="note">
 <div class="label">Note</div>
-<div class="content">The following content is from many mails around the topic, this how-to tries to be the 
-      consolidation of this thread. It is mainly based on the thread "[RT] Why using views" - 
-      in comparison with "old fashion" skins - usecase i18n</div>
+<div class="content">
+      The following content is from many mails around the topic, this how-to
+      tries to be the consolidation of this thread. It is mainly based on the
+      thread "[RT] Why using views" - in comparison with "old fashion" skins -
+      usecase i18n
+    </div>
 </div>
 <p>
-      By working on the i18n integration for "pelt" we again encountered the reasons for using the dispatcher. ;-)
-      The maintenance problem was to change the captions of the skin features (contracts) to enable
-      support for i18n. The case is that the <span class="codefrag">site2xhtml.xsl</span> has a lot of repeating code. 
+      By working on the i18n integration for "pelt" we again encountered the
+      reasons for using the dispatcher. ;-) The maintenance problem was to
+      change the captions of the skin features (contracts) to enable support for
+      i18n. The case is that the <span class="codefrag">site2xhtml.xsl</span> has a lot of
+      repeating code.
     </p>
 <p>
-      For example the "last-publish"-contract could be found 2 times in the code.  
-      This is not the only contract that was (is) doubled in the code. The problem with that is that 
-      we needed to search the code for each caption and senselessly repeat the following 
-      maintenance step of adding the &lt;i18n:text/&gt;-tags.
+      For example the "last-publish"-contract could be found 2 times in the
+      code. This is not the only contract that was (is) doubled in the code. The
+      problem with that is that we needed to search the code for each caption
+      and senselessly repeat the following maintenance step of adding the
+&lt;i18n:text/&gt;
+      -tags.
     </p>
 <pre class="code">
 
@@ -262,16 +272,18 @@ The "Dispatcher" (aka "Views") is new functionality which is still in developmen
 <a name="enhanceMaintenance" title="Enhance the maintenance"> </a>
 <h3 class="underlined_5">Enhance the maintenance</h3>
 <div class="section">
-<p>Now we can enhance the maintenance for the future and we give these code snippets 
-        contracts names (based on their functionality). This naming enables us to keep
-the contract separate from the position code itself. In xsl you would
-simply do:
+<p>
+        Now we can enhance the maintenance for the future and we give these code
+        snippets contracts names (based on their functionality). This naming
+        enables us to keep the contract separate from the position code itself.
+        In xsl you would simply do:
       </p>
 <ol>
         <li>replace the script by &lt;xsl:call-template name="siteinfo-last-published"/&gt;</li>
         <li>and add:</li>
       </ol>
-<pre class="code">&lt;xsl:template name="siteinfo-last-published"&gt;
+<pre class="code">
+&lt;xsl:template name="siteinfo-last-published"&gt;
  &lt;script type="text/javascript"&gt;
   document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
  &lt;/script&gt;
@@ -279,13 +291,14 @@ simply do:
       </pre>
 <p>
         This allows us in a next maintenance to just change the code of
-        &lt;xsl:template name="siteinfo-last-published"/&gt; and apply it in any position where
-        it is placed.  
+&lt;xsl:template name="siteinfo-last-published"/&gt;
+        and apply it in any position where it is placed.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        Now this refactoring of the site2xhtml.xsl is exactly what we doing in creating contracts for the dispatcher.
+        Now this refactoring of the site2xhtml.xsl is exactly what we doing in
+        creating contracts for the dispatcher.
       </div>
 </div>
 </div>
@@ -294,11 +307,11 @@ simply do:
 <div class="section">
 <p>
         To start a new forrest:contract you can copy the 'blank.ft' from
-        <span class="codefrag">org.apache.forrest.plugin.themes.core/themes/common/html/blank.ft</span>. 
+        <span class="codefrag">org.apache.forrest.plugin.themes.core/themes/common/html/blank.ft</span>.
       </p>
 <p>
-        The 'blank.ft' is a simple xml file with the following code which you can use to base new contracts 
-        on:
+        The 'blank.ft' is a simple xml file with the following code which you
+        can use to base new contracts on:
       </p>
 <pre class="code">
 &lt;forrest:contract 
@@ -330,50 +343,67 @@ simply do:
 &lt;/forrest:contract&gt;
       </pre>
 <p>
-        The most important is the name of the contract <span class="codefrag">&lt;forrest:contract name="blank"/&gt;</span>. 
-        This name is the same as the file name of the contract (without file extension) <span class="codefrag">blank.ft</span>. 
+        The most important is the name of the contract <span class="codefrag">
+&lt;forrest:contract name="blank"/&gt;
+        </span>. This name is the same as the file name of the contract (without
+        file extension) <span class="codefrag">blank.ft</span>.
       </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">This is a <strong>naming convention</strong> that you need
-        to always meet. All @name attributes must be the file name of the contract without file extension.
+<div class="content">
+        This is a <strong>naming convention</strong> that you need to always
+        meet. All @name attributes must be the file name of the contract without
+        file extension.
       </div>
 </div>
 <p>
-        The <span class="codefrag">&lt;description/&gt;</span> tag needs to be filled in with some information
-        that is explaining the contract to the webdesigner. The better explained the more efficient
-        for the web designer to pick the right contract.
+        The <span class="codefrag">
+&lt;description/&gt;
+        </span> tag needs to be filled in with some information that is
+        explaining the contract to the webdesigner. The better explained the
+        more efficient for the web designer to pick the right contract.
       </p>
-<pre class="code">&lt;description&gt;
+<pre class="code">
+&lt;description&gt;
   siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
 &lt;/description&gt;
       </pre>
 <p>
-        In the <span class="codefrag">&lt;usage/&gt;</span> tag we have to explain how the designer can use 
-        the contract in his structurer.
+        In the <span class="codefrag">
+&lt;usage/&gt;
+        </span> tag we have to explain how the designer can use the contract in
+        his structurer.
       </p>
-<pre class="code">&lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;]]&gt;&lt;/usage&gt;
+<pre class="code">
+&lt;usage&gt;&lt;![CDATA[&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;]]&gt;&lt;/usage&gt;
       </pre>
 <p>
-              To put contract code into the <span class="codefrag">&lt;head&gt;&lt;/head&gt;</span> section, this needs to be declared in the contract as :-
-        <span class="codefrag">&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;</span>
-        Simply by leaving out the xpath declaration and the code will go into body. You can use 
-        <span class="codefrag">&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;&lt;forrest:part&gt;...&lt;/forrest:part&gt;</span>
-        if you need content in both head and body.
+        To put contract code into the <span class="codefrag">
+&lt;head&gt;&lt;/head&gt;
+        </span> section, this needs to be declared in the contract as :- <span class="codefrag">
+&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;
+        </span> Simply by leaving out the xpath declaration and the code will go
+        into body. You can use <span class="codefrag">
+&lt;forrest:part xpath="/html/head"&gt;...&lt;/forrest:part&gt;&lt;forrest:part&gt;...&lt;/forrest:part&gt;
+        </span> if you need content in both head and body.
       </p>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-              The last paragraph about &lt;forrest:part/&gt; has replaced the older way of
-              &lt;forrest:template name="blank" body="false" head="false"&gt;.
-        Please be aware that this part of the dispatcher is still a moving target and may change still.
+        The last paragraph about
+&lt;forrest:part/&gt;
+        has replaced the older way of
+&lt;forrest:template name="blank" body="false" head="false"&gt;
+        . Please be aware that this part of the dispatcher is still a moving
+        target and may change still.
       </div>
 </div>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        It is possible to use contracts in different input/output formats. 
-        We are focusing for now on format="html" as output and the inputFormat="xsl".
+        It is possible to use contracts in different input/output formats. We
+        are focusing for now on format="html" as output and the
+        inputFormat="xsl".
       </div>
 </div>
 </div>
@@ -383,13 +413,14 @@ simply do:
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        We use basic naming convention for contracts. Like
-        "naming does not say anything about layout position, but functionality of the contract".
+        We use basic naming convention for contracts. Like "naming does not say
+        anything about layout position, but functionality of the contract".
       </div>
 </div>
-<p> 
-        Now let us pick up the example we started with and create a "siteinfo-last-published-howto" contract.
-        Save the blank.ft to <span class="codefrag">{project.home}/src/documentation/resources/themes/common/html/siteinfo-last-published-howto.ft</span>.
+<p>
+        Now let us pick up the example we started with and create a
+        "siteinfo-last-published-howto" contract. Save the blank.ft to
+        <span class="codefrag">{project.home}/src/documentation/resources/themes/common/html/siteinfo-last-published-howto.ft</span>.
       </p>
 <p>
         Now the maintenance-optimized code (xpath="/html/body/*") was:
@@ -399,9 +430,11 @@ simply do:
  &lt;script type="text/javascript"&gt;
   document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
  &lt;/script&gt;
-&lt;/xsl:template&gt;</pre>
+&lt;/xsl:template&gt;
+      </pre>
 <p>
-        In this code we have to do the following steps to use it in our contract:
+        In this code we have to do the following steps to use it in our
+        contract:
       </p>
 <ul>
         <li>Search and replace "siteinfo-last-published" with "siteinfo-last-publish-howto-body"</li>
@@ -416,8 +449,11 @@ debug string -
  &lt;script type="text/javascript"&gt;
   document.write("&lt;i18n:text &gt;Last Published:&lt;/i18n:text&gt;&amp;#160;" + document.lastModified);
  &lt;/script&gt;
-&lt;/xsl:template&gt;</pre>
-<p>Now we have to do some last steps in the siteinfo-last-publish-howto.ft</p>
+&lt;/xsl:template&gt;
+      </pre>
+<p>
+        Now we have to do some last steps in the siteinfo-last-publish-howto.ft
+      </p>
 <ul>
         <li>Search and replace "blank" with "siteinfo-last-publish-howto"</li>
         <li>Add description and usage of the contract</li>
@@ -426,7 +462,8 @@ debug string -
 <p>
         As the result your code should look like this:
       </p>
-<pre class="code">&lt;forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
+<pre class="code">
+&lt;forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
   name="siteinfo-last-published-howto"&gt;
   &lt;description&gt;
     siteinfo-last-published-howto will output the last published date of the site with the help of jscript.
@@ -456,34 +493,42 @@ debug string -
 <h3 class="underlined_5">Activating the contract</h3>
 <div class="section">
 <p>
-        To see whether the new contract works we need to add it to our structurer.
-        The contract usage contains the contract-tag <span class="codefrag">&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;</span>
-        Please see <a href="../how/howto-dispatcher-structurer.html">Getting started with the "structurer"</a> for more details.
+        To see whether the new contract works we need to add it to our
+        structurer. The contract usage contains the contract-tag <span class="codefrag">
+&lt;forrest:contract name="siteinfo-last-published-howto"/&gt;
+        </span> Please see <a href="../how/howto-dispatcher-structurer.html">Getting started
+        with the "structurer"</a> for more details.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        Next to write are parameter-contracts with advanced features of the dispatcher. 
+        Next to write are parameter-contracts with advanced features of the
+        dispatcher.
       </div>
 </div>
 </div>
 <a name="pluginContracts" title="Plugin Supplied Contracts"> </a>
 <h3 class="underlined_5">Plugin Supplied Contracts</h3>
 <div class="section">
-<p>It is possible for plugins to provide contracts for use in the dispatcher.
-      For details on how this is done see the <a href="http://forrest.apache.org/docs/howto/howto-buildPlugin.html#Dispatcher">Plugin HowTo</a>.</p>
+<p>
+        It is possible for plugins to provide contracts for use in the
+        dispatcher. For details on how this is done see the
+        <a href="http://forrest.apache.org/docs/howto/howto-buildPlugin.html#Dispatcher">Plugin
+        HowTo</a>.
+      </p>
 </div>
 </div>
 <a name="Further Reading" title="Further Reading"> </a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
-      Congratulations you are now able to work with structurer contracts. 
-      From here we recommend to read the following How-To's (if not already done):
+      Congratulations you are now able to work with structurer contracts. From
+      here we recommend to read the following How-To's (if not already done):
     </p>
 <ul>
       <li>
-<a href="../how/howto-dispatcher-structurer.html">Getting started with the "structurer"</a> </li>
+<a href="../how/howto-dispatcher-structurer.html">Getting started with the "structurer"</a>
+</li>
     </ul>
 </div>
 <a name="Feedback" title="Feedback"> </a>
