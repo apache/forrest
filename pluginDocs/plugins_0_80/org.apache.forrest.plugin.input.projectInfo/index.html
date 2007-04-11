@@ -77,7 +77,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -196,92 +196,117 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 </ul>
-</div> 
+</div>
     
 <a name="N1000D"></a><a name="Apache+Forrest+-+org.apache.forrest.plugin.input.projectInfo+Plugin"></a>
 <h2 class="underlined_10">Apache Forrest - org.apache.forrest.plugin.input.projectInfo Plugin</h2>
 <div class="section">
-<p>This plugin generates project info from various configuration files.</p>
+<p>
+        This plugin generates project info from various configuration files.
+      </p>
 </div>
-    
     
 <a name="N10017"></a><a name="Changes"></a>
 <h2 class="underlined_10">Changes</h2>
 <div class="section">
-<p>By maintaining a file called <span class="codefrag">status.xml</span> you can manage a list
-      changes to your code base. This list can then be generated as a changes 
-      page and/or an RSS feed of those changes. For example, here are the 
-      <a href="changes.html">changes</a> for this plugin, here is the same
-      list of changes as an <a href="changes.rss">RSS feed</a>.</p>
-<p>It's possible to limit the displayed changes to a particular version
-      number as well. For example, here are the changes for 
-      <a href="changes_0.1.html">version 0.1</a> of this plugin (and
-      as an <a href="changes_0.1.rss">RSS feed</a>).</p>
-<p>If you want to only retrieve the changes for the most recent version
-      of the project then you can do that too. Here are the changes in the 
-      <a href="changes_current.html">current development version</a> of this 
-      plugin (and once more as an <a href="changes_current.rss">RSS feed</a>).</p>
+<p>
+        By maintaining a file called <span class="codefrag">status.xml</span> you can manage a
+        list changes to your code base. This list can then be generated as a
+        changes page and/or an RSS feed of those changes. For example, here are
+        the <a href="changes.html">changes</a> for this plugin, here is the same
+        list of changes as an <a href="changes.rss">RSS feed</a>.
+      </p>
+<p>
+        It's possible to limit the displayed changes to a particular version
+        number as well. For example, here are the changes for
+        <a href="changes_0.1.html">version 0.1</a> of this plugin (and as an
+        <a href="changes_0.1.rss">RSS feed</a>).
+      </p>
+<p>
+        If you want to only retrieve the changes for the most recent version of
+        the project then you can do that too. Here are the changes in the
+        <a href="changes_current.html">current development version</a> of this
+        plugin (and once more as an <a href="changes_current.rss">RSS feed</a>).
+      </p>
 </div>
-    
     
 <a name="N10042"></a><a name="SVN+Changes"></a>
 <h2 class="underlined_10">SVN Changes</h2>
 <div class="section">
-<p>You can generate as well the changes with svn. For this you need to 
-        point forrest to the directory where the svn logs are. The defaut is 
-        set to <span class="codefrag">{properties:content}svn-log/</span> and you can change it by 
-        setting <span class="codefrag">projectInfo.svn.log.dir</span> in your project 
-        locationmap.</p>
-<p>We created a log file for demonstration with the following command:</p>
+<p>
+        You can generate as well the changes with svn. For this you need to
+        point forrest to the directory where the svn logs are. The defaut is set
+        to <span class="codefrag">{properties:content}svn-log/</span> and you can change it by
+        setting <span class="codefrag">projectInfo.svn.log.dir</span> in your project
+        locationmap.
+      </p>
+<p>
+        We created a log file for demonstration with the following command:
+      </p>
 <pre class="code">
 cd forrest/trunk/plugins/org.apache.forrest.plugin.input.projectInfo
 svn log --xml -v . &gt; src/documentation/content/svn-log/log.svn.xml</pre>
-<p>This file reflect all changes that have been done to this plugin. You 
-        can see the result <a href="log.svn.html">log.svn.html</a>.</p>
-<p>You see the only context we have definied is "code". This is 
-        controlled by a mapper file. The defaut is set to 
-        <span class="codefrag">{properties:content}path-to-context.xml</span> and you can change it 
-        by setting <span class="codefrag">projectInfo.svn.mapper</span> in your project 
-        locationmap.</p>
-<pre class="code">&lt;paths&gt;
+<p>
+        This file reflect all changes that have been done to this plugin. You
+        can see the result <a href="log.svn.html">log.svn.html</a>.
+      </p>
+<p>
+        You see the only context we have definied is "code". This is controlled
+        by a mapper file. The defaut is set to
+        <span class="codefrag">{properties:content}path-to-context.xml</span> and you can change
+        it by setting <span class="codefrag">projectInfo.svn.mapper</span> in your project
+        locationmap.
+      </p>
+<pre class="code">
+&lt;paths&gt;
   &lt;path context="Code"&gt;/forrest&lt;/path&gt;
-&lt;/paths&gt;</pre>
-<p>If the log file is growing, one is looking into splitting the file. 
-        You can find out the revision number of the first and last commit of a 
-        month within the log by requesting <a href="log.svn-revision.xml">log.svn-revision.xml</a>.</p>
-<p>We implemented as well a small svn cli output to generate log files 
-        per month <a href="log.svn-sh.xml">log.svn-sh.xml</a>. The defaut url is set to 
-        <span class="codefrag">http://svn.myHost.org/repos</span> and you can change it 
-        by setting <span class="codefrag">project.svn.url</span> in your project 
-        locationmap.</p>
+&lt;/paths&gt;
+      </pre>
+<p>
+        If the log file is growing, one is looking into splitting the file. You
+        can find out the revision number of the first and last commit of a month
+        within the log by requesting
+        <a href="log.svn-revision.xml">log.svn-revision.xml</a>.
+      </p>
+<p>
+        We implemented as well a small svn cli output to generate log files per
+        month <a href="log.svn-sh.xml">log.svn-sh.xml</a>. The defaut url is set
+        to <span class="codefrag">http://svn.myHost.org/repos</span> and you can change it by
+        setting <span class="codefrag">project.svn.url</span> in your project locationmap.
+      </p>
 </div>
-    
     
 <a name="N10081"></a><a name="To+Do+List"></a>
 <h2 class="underlined_10">To Do List</h2>
 <div class="section">
-<p>The status.xml file can also be used to manage a list of todo items for
-      the community. For example, here is a 
-      <a href="todo.html">psuedo todo list</a> for this plugin (our real todo list
-      is managed in an Issue Tracker, one day we hope to add support for that
-      here too).</p>
+<p>
+        The status.xml file can also be used to manage a list of todo items for
+        the community. For example, here is a <a href="todo.html">psuedo todo
+        list</a> for this plugin (our real todo list is managed in an Issue
+        Tracker, one day we hope to add support for that here too).
+      </p>
 </div>
-    
     
 <a name="N1008F"></a><a name="Release+Notes"></a>
 <h2 class="underlined_10">Release Notes</h2>
 <div class="section">
-<p>To produce release notes you must maintain a <span class="codefrag">status.xml</span> file
-      for your project and request a page with an URL such as 
-      <span class="codefrag">http://domain.com/releaseNotes_0.7-dev.html</span>, this will be produce
-      the release notes for 0.7-dev.</p>
-<p>If the version number ends with <span class="codefrag">-dev</span> a warning will be included 
-      in the generated page, informing the reader that it is a development version and
-      therefore the list of changes is incomplete.</p>
-<p>For a <span class="codefrag">status.xml</span> <span class="codefrag">action</span> toi be included in the 
-      release notes it must have an attribute <span class="codefrag">importance="high"</span>. When
-      writing actions in <span class="codefrag">status.xml</span> you should write them with the
-      following two questions in mind:</p>
+<p>
+        To produce release notes you must maintain a <span class="codefrag">status.xml</span>
+        file for your project and request a page with an URL such as
+        <span class="codefrag">http://domain.com/releaseNotes_0.7-dev.html</span>, this will be
+        produce the release notes for 0.7-dev.
+      </p>
+<p>
+        If the version number ends with <span class="codefrag">-dev</span> a warning will be
+        included in the generated page, informing the reader that it is a
+        development version and therefore the list of changes is incomplete.
+      </p>
+<p>
+        For a <span class="codefrag">status.xml</span> <span class="codefrag">action</span> toi be included in the
+        release notes it must have an attribute <span class="codefrag">importance="high"</span>.
+        When writing actions in <span class="codefrag">status.xml</span> you should write them
+        with the following two questions in mind:
+      </p>
 <ul>
         
 <li>should it be importance="high"?</li>
@@ -289,44 +314,58 @@ svn log --xml -v . &gt; src/documentation/content/svn-log/log.svn.xml</pre>
 <li>will the action read correctly in the release notes?</li>
       
 </ul>
-<p>The introductory text in the release notes comes from the (optional) 
-      element <span class="codefrag">notes</span> (a child of the <span class="codefrag">release</span> element).</p>
+<p>
+        The introductory text in the release notes comes from the (optional)
+        element <span class="codefrag">notes</span> (a child of the <span class="codefrag">release</span>
+        element).
+      </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">The same options with respect to retrieveing specific versions of the
-      release notes are available as with the changes feature (discuseed above).</div>
+<div class="content">
+        The same options with respect to retrieveing specific versions of the
+        release notes are available as with the changes feature (discuseed
+        above).
+      </div>
 </div>
 </div>
-    
     
 <a name="N100C9"></a><a name="Developers+List"></a>
 <h2 class="underlined_10">Developers List</h2>
 <div class="section">
-<p>The status.xml file can also contain a list of committers and 
-      contributors which can, optionally, be displayed as part of the changes file.</p>
-<p>At the time of writing this functionality is quite minimal, being just
-      a list of authors at the end of the changes document. However, in future 
-      releases it is intended that a more configurable output will be 
-      available.</p>
+<p>
+        The status.xml file can also contain a list of committers and
+        contributors which can, optionally, be displayed as part of the changes
+        file.
+      </p>
+<p>
+        At the time of writing this functionality is quite minimal, being just a
+        list of authors at the end of the changes document. However, in future
+        releases it is intended that a more configurable output will be
+        available.
+      </p>
 <a name="N100D5"></a><a name="Contributor+List"></a>
 <h3 class="underlined_5">Contributor List</h3>
-<p>It may be that some items have been contributed by authors other
-        than those listed in the developer list. These are accredited in a
-        <span class="codefrag">due-to</span> attribute of the <span class="codefrag">action</span> element in
-        status.xml. A list of this contributors is made available at the
-        end of the release notes for each version.</p>
+<p>
+          It may be that some items have been contributed by authors other than
+          those listed in the developer list. These are accredited in a
+          <span class="codefrag">due-to</span> attribute of the <span class="codefrag">action</span> element in
+          status.xml. A list of this contributors is made available at the end
+          of the release notes for each version.
+        </p>
 </div>
-    
-    
     
 <a name="N100E6"></a><a name="Use+Cases"></a>
 <h2 class="underlined_10">Use Cases</h2>
 <div class="section">
-<p>Projects can manage a document describing various use cases for the
-      application. These use cases can then be used to generate useful developer
-      and user documentation, as well as helping to track the implementation
-      status of features.</p>
-<p>Some of the uses of this feature are:</p>
+<p>
+        Projects can manage a document describing various use cases for the
+        application. These use cases can then be used to generate useful
+        developer and user documentation, as well as helping to track the
+        implementation status of features.
+      </p>
+<p>
+        Some of the uses of this feature are:
+      </p>
 <ul>
         
 <li>during design - what needs to be done</li>
@@ -338,7 +377,9 @@ svn log --xml -v . &gt; src/documentation/content/svn-log/log.svn.xml</pre>
 <li>during maintenance - how something was implemented</li>
       
 </ul>
-<p>To see some examples take a look at:</p>
+<p>
+        To see some examples take a look at:
+      </p>
 <ul>
         
 <li>
@@ -350,24 +391,29 @@ svn log --xml -v . &gt; src/documentation/content/svn-log/log.svn.xml</pre>
 </ul>
 </div>
     
-    
 <a name="N10114"></a><a name="Experimental+Features"></a>
 <h2 class="underlined_10">Experimental Features</h2>
 <div class="section">
-<p>These features are operational, however, they are not fully developed and
-      may change considerably before they become part of the official feature set.
-      You can use them, but be prepared for changes, possibly without warning. If you
-      do use these features we recomend that you join the developers mailing list.</p>
+<p>
+        These features are operational, however, they are not fully developed
+        and may change considerably before they become part of the official
+        feature set. You can use them, but be prepared for changes, possibly
+        without warning. If you do use these features we recomend that you join
+        the developers mailing list.
+      </p>
 <a name="N1011D"></a><a name="Configuration"></a>
 <h3 class="underlined_5">Configuration</h3>
-<p>This plugin uses an experimental properties system that allows plugins
-        to expose configuration information to the project. It is likely that at
-        least some of these configuration options will eventually move into Dispatcher
-        based contracts. In the meantime, you can use this config system to control
-        some aspects of the display information. See the 
-        <span class="codefrag">forrest.properties.xml</span> file for a description of the config
-        options available. To alter the configuration simply override these
-        properties in your projects <span class="codefrag">forrest.properties.xml</span> file.</p>
+<p>
+          This plugin uses an experimental properties system that allows plugins
+          to expose configuration information to the project. It is likely that
+          at least some of these configuration options will eventually move into
+          Dispatcher based contracts. In the meantime, you can use this config
+          system to control some aspects of the display information. See the
+          <span class="codefrag">forrest.properties.xml</span> file for a description of the
+          config options available. To alter the configuration simply override
+          these properties in your projects <span class="codefrag">forrest.properties.xml</span>
+          file.
+        </p>
 </div>
   
 </div>
