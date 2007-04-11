@@ -4,7 +4,7 @@
         <link href="../themes/common.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
         <link href="../themes/leather-dev.css" media="screen" rel="alternate stylesheet" title="common" type="text/css" />
         <link href="../themes/pelt.screen.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
-        
+
         <link href="../how/howto-dispatcher-quickstart.dispatcher.css" media="screen" rel="stylesheet" title="Pelt" type="text/css" />
         <link href="../themes/pelt.print.css" media="print" rel="stylesheet" title="Pelt" type="text/css" />
         <style type="text/css">/* Extra css */ 
@@ -211,15 +211,18 @@ p.quote {
 <a name="Intended Audience" title="Intended Audience"> </a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
-<p>People who are helping to develop the Dispatcher.</p>
+<p>
+      People who are helping to develop the Dispatcher.
+    </p>
 <div class="warning">
 <div class="label">Warning</div>
-<div class="content"> The "Dispatcher" (previously known as "Views") is new functionality which is 
-      still in development phase. That is why it is in the "whiteboard" section 
-      of Forrest. This document will also need to change to keep pace.
-      We are working at the moment on moving this plugin
-      from the whiteboard into the core plugins.
-      See <a href="http://forrest.apache.org/docs_0_80/status-themes.html">Status of Themes: Skins and Dispatcher</a>.
+<div class="content">
+      The "Dispatcher" (previously known as "Views") is new functionality which
+      is still in development phase. That is why it is in the "whiteboard"
+      section of Forrest. This document will also need to change to keep pace.
+      We are working at the moment on moving this plugin from the whiteboard
+      into the core plugins. See <a href="http://forrest.apache.org/docs_0_80/status-themes.html">Status of
+      Themes: Skins and Dispatcher</a>.
     </div>
 </div>
 </div>
@@ -227,22 +230,21 @@ p.quote {
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      This document will get you started. We will Dispatcher-enable an
-      existing site and show how to add/remove ready-made contacts.
-      Then we will discuss how add your own new contracts.
+      This document will get you started. We will Dispatcher-enable an existing
+      site and show how to add/remove ready-made contacts. Then we will discuss
+      how add your own new contracts.
     </p>
 <p>
-      This document encourages developers to get involved with
-      fine-tuning and testing the dispatcher. Please help to
-      enhance the current core contracts so that people do not
-      need to re-invent the wheel.
+      This document encourages developers to get involved with fine-tuning and
+      testing the dispatcher. Please help to enhance the current core contracts
+      so that people do not need to re-invent the wheel.
     </p>
 </div>
 <a name="Prerequisites" title="Prerequisites"> </a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
-      <li>Using Forrest trunk of SVN (i.e. forrest-0.8-dev).
+      <li>Using Forrest trunk of SVN (i.e. head of development).
       </li>
       <li>Followed the installation instructions below.</li>
       <li>You have an existing forrest site and want to try the
@@ -254,11 +256,13 @@ p.quote {
 <div class="section">
 <div class="note">
 <div class="label">Note</div>
-<div class="content"> When developing with the dispatcher we assume you are using 'forrest 
-      run' and the following workflow "change files -&gt; refresh browser".<br /> 
-      Installing a mozilla browser and the 
-      <a href="http://forrest.apache.org/tools/forrestbar.html">Forrestbar</a> helps a lot with developing,
-      but is not necessary.
+<div class="content">
+      When developing with the dispatcher we assume you are using 'forrest run'
+      and the following workflow "change files -&gt; refresh browser".
+      <br />
+      Installing a mozilla browser and the
+      <a href="http://forrest.apache.org/tools/forrestbar.html">Forrestbar</a> helps a lot with developing, but
+      is not necessary.
     </div>
 </div>
 <a name="patch" title="Get ready"> </a>
@@ -266,7 +270,7 @@ p.quote {
 <div class="section">
 <ul>
         <li>Do 'svn update' on forrest/trunk</li>
-        <li>Do the 'build clean; build' (necessary because the Dispatcher is changing rapidly and uses some Java)</li>
+        <li>Do the 'cd main; build clean; build' (necessary because the Dispatcher is changing rapidly and uses some Java)</li>
       </ul>
 </div>
 <a name="enable" title="Dispatcher-enable the existing site"> </a>
@@ -299,29 +303,31 @@ p.quote {
 <div class="label">Note</div>
 <div class="content">
         At this stage of rapid development of the Dispatcher, be sure to keep
-        your copy synchronised. Use 'diff' against the known svn version of
-        the core pelt.fv to track your local changes.
-        Also please consider contributing new contracts and changes to the
-        default structurers to the Forrest projects. That eases your local
-        version management and everyone will benefit.
+        your copy synchronised. Use 'diff' against the known svn version of the
+        core pelt.fv to track your local changes. Also please consider
+        contributing new contracts and changes to the default structurers to the
+        Forrest projects. That eases your local version management and everyone
+        will benefit.
       </div>
 </div>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        We use <span class="codefrag">${themer.project.dir}</span> for PROJECT_HOME/src/documentation/resources/themes
-        (create the new directory folder first).
-        You can change this location by adding &lt;match pattern="themer.project.dir"&gt;
+        We use <span class="codefrag">${themer.project.dir}</span> for
+        PROJECT_HOME/src/documentation/resources/themes (create the new
+        directory folder first). You can change this location by adding
+&lt;match pattern="themer.project.dir"&gt;
           &lt;location src="{properties:resources}/themes" /&gt;
-        &lt;/match&gt;  to your locationmap and point to another directory.
+        &lt;/match&gt; 
+        to your locationmap and point to another directory.
       </div>
 </div>
 <ul>
         <li>Copy THEMER_PLUGIN/themes/pelt.fv into your project at
           ${themer.project.dir}/pelt.fv
   </li>
-  <li>Copy THEMER_PLUGIN/themes/pelt/html/pelt-html.vt.xml into your
-          project at  ${themer.project.dir}/pelt/html/pelt-html.vt.xml
+        <li>Copy THEMER_PLUGIN/themes/pelt/panels/pelt-html.panel.xml into your
+          project at  ${themer.project.dir}/pelt/panels/pelt-html.panel.xml
   </li>
         <li>Re-start 'forrest run'</li>
         <li>localhost:8888/index.html ... See the same view, now structured
@@ -329,15 +335,15 @@ p.quote {
         </li>
       </ul>
 <p>
-        From here on there is no need to re-start 'forrest run'. Just edit
-        the structurer and see the effect.
+        From here on there is no need to re-start 'forrest run'. Just edit the
+        structurer and see the effect.
       </p>
 </div>
 <a name="remove-default-contract" title="Remove a default contract"> </a>
 <h3 class="underlined_5">Remove a default contract</h3>
 <div class="section">
 <ul>
-        <li>Remove the top breadcrumb trail. Edit your pelt-html.vt.xml and find the
+        <li>Remove the top breadcrumb trail. Edit your pelt-html.panel.xml and find the
           "branding-breadcrumbs" contract and comment it out.
         </li>
       </ul>
@@ -346,8 +352,8 @@ p.quote {
 <h3 class="underlined_5">Add a default contract</h3>
 <div class="section">
 <p>
-        Forrest provides many default contracts. If you are using the
-        Forrestbar then choose "Devs =&gt; ls.contracts". Otherwise visit
+        Forrest provides many default contracts. If you are using the Forrestbar
+        then choose "Devs =&gt; ls.contracts". Otherwise visit
         localhost:8888/ls.contracts.html
       </p>
 <ul>
@@ -358,20 +364,37 @@ p.quote {
         <li>
           Insert it at the appropriate point in your structurer. Note that it
           will need to go inside the appropriate CSS hook, e.g.
-        <pre class="code">  ...
+        <pre class="code">
+  ...
   &lt;forrest:hook name="footer"&gt;
     &lt;forrest:contract name="siteinfo-current-time"/&gt;
     ...
-</pre>
-        </li>
+
+          </pre>
+</li>
       </ul>
 <p>
-        Notice that you did not need to copy any other code to your project space.
-        Forrest finds the default contract in its core (the themes.core plugin).
-</p>
-<p>You will find some commonly used contracts in place but commented out in both the common 
-        and the pelt structurer files. Feel free to umcomment them to activate them, move them
-around into other hooks or create new hooks for them.</p>
+        Notice that you did not need to copy any other code to your project
+        space. Forrest finds the default contract in its core (the themes.core
+        plugin).
+      </p>
+<p>
+        You will find some commonly used contracts in place but commented out in
+        both the common and the pelt structurer files. Feel free to uncomment
+        them to activate them, move them around into other hooks or create new
+        hooks for them.
+      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        Work is currently under way for implementing Panels (was tiles).
+        Currently we now have a 'panels' sub-dir for each 'theme'. This panels
+        sub-dir currently contains a main html panel
+        '%themename%-html.panel.xml' and a CSS panel
+        '%themename%-css.panel.xml'. So you can change a collection of HTML and
+        CSS outputs from these two XML files.
+      </div>
+</div>
 </div>
 <a name="add-project-contract" title="Add a new project contract"> </a>
 <h3 class="underlined_5">Add a new project contract</h3>
@@ -379,9 +402,9 @@ around into other hooks or create new hooks for them.</p>
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-        Carefully consider the purpose of your contracts. If they are useful
-        in a wider context, then they belong in plugins or the core of Forrest.
-        See below for further discussion on this important topic.
+        Carefully consider the purpose of your contracts. If they are useful in
+        a wider context, then they belong in plugins or the core of Forrest. See
+        below for further discussion on this important topic.
       </div>
 </div>
 <p>
@@ -390,12 +413,13 @@ around into other hooks or create new hooks for them.</p>
         ${themer.project.dir}/THEME_NAME/OUTPUT_FORMAT/
       </p>
 <p>
-       Project-based contracts common to all themes go in
+        Project-based contracts common to all themes go in
         ${themer.project.dir}/common/OUTPUT_FORMAT/
       </p>
 <p>
         To get started quickly (it is not a project-based contract but a demo),
-        copy one of the default contracts. e.g. copy siteinfo-current-time.ft to become siteinfo-doodad.ft ...
+        copy one of the default contracts. e.g. copy siteinfo-current-time.ft to
+        become siteinfo-doodad.ft ...
       </p>
 <ul>
         <li>
@@ -415,7 +439,7 @@ around into other hooks or create new hooks for them.</p>
         </li>
       </ul>
 <p>
-        See a list of your project-based contracts and their usage notes via 
+        See a list of your project-based contracts and their usage notes via
         Forrestbar "Devs =&gt; ls.contracts.project". Otherwise visit
         localhost:8888/ls.contracts.project.html
       </p>
@@ -426,31 +450,37 @@ around into other hooks or create new hooks for them.</p>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
 <div class="content">
-Glean content from Ross' discussion:
-<a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=113748831226697">Re: Dispatcher quickstart</a>.
-</div>
+        Glean content from Ross' discussion:
+        <a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=113748831226697">Re:
+        Dispatcher quickstart</a>.
+      </div>
 </div>
 </div>
 </div>
 <a name="Further Reading" title="Further Reading"> </a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
-<p> Congratulations you are now able to work with the Dispatcher. From here 
-      we recommend to read the following How-Tos: </p>
+<p>
+      Congratulations you are now able to work with the Dispatcher. From here we
+      recommend to read the following How-Tos:
+    </p>
 <ul>
       <li>
-        <a href="../how/howto-dispatcher-structurer.html">How to use the structurer</a>
-      </li>
+<a href="../how/howto-dispatcher-structurer.html">How to use the structurer</a>
+</li>
       <li>
-        <a href="../how/howto-dispatcher-contracts.html">Create your own contract 
+<a href="../how/howto-dispatcher-contracts.html">Create your own contract 
           implementation</a>
-      </li>
+</li>
     </ul>
 </div>
 <a name="Feedback" title="Feedback"> </a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
-<p> Please provide feedback about this document via the <a href="http://forrest.apache.org/mail-lists.html">mailing lists</a>. </p>
+<p>
+      Please provide feedback about this document via the
+      <a href="http://forrest.apache.org/mail-lists.html">mailing lists</a>.
+    </p>
 </div>
 <!--+ |end content-main +-->
 </div>
