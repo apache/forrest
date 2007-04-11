@@ -319,6 +319,12 @@ You have just released a plugin. There are other tasks to complete. For example:
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
     <echo>Deploying unversioned plugin ${plugin-name} to the download server</echo>
 
+  	
+    <!-- Put unversioned plugin in the ${forrest.version} directory -->
+    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
+            overwrite="true" 
+            file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/> 
+      
     <!-- Put unversioned plugin in the top-level directory -->
     <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip" 
           overwrite="true" 
