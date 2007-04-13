@@ -365,13 +365,18 @@ You have just released a plugin. There are other tasks to complete. For example:
   </target>
   
   <target name="dist"
-          description="Build the distribution archive for all the plugins"
-          depends="init">
+          description="Build the distribution archive for a plugin"
+          depends="jar">
     <mkdir dir="${forrest.plugins.dist.dir}/${forrest.version}"/>  
-    <zip destfile="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"
-       basedir="${forrest.plugins.dir}/${plugin-name}"
-       includes="**"
-       excludes="**/build/**"/>
+    <zip destfile="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip">
+      <zipfileset dir="${forrest.plugins.dir}/${plugin-name}">
+        <include name="**"/>
+        <exclude name="**/build/**"/>
+      </zipfileset>
+      <zipfileset dir="${build.dir}" prefix="lib">
+        <include name="${plugin-name}.jar"/>
+      </zipfileset>
+    </zip>
   </target>
   
   <target name="seedPlugin"
