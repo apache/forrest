@@ -1,20 +1,24 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><add><doc><field name="id">org.apache.forrest.plugin.output.solr:index.xml</field><field name="title">Welcome to the org.apache.forrest.plugin.output.solr Plugin</field><field name="content"> 
+<?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">org.apache.forrest.plugin.output.solr:index.xml</field><field name="title">Welcome to the org.apache.forrest.plugin.output.solr Plugin</field><field name="content">
     
       Apache Forrest - org.apache.forrest.plugin.output.solr Plugin
-       Generates
-        solr documents from xdos. Further when run with the
-        dispatcher in static mode it allows you to update a Solr server with the content of your
-        website at the same time you generate the site ( solr-add contract). In dynamic mode
-        (as servlet) it provides a GUI to manage your project in solr ( solr-actionbar
-        contract ) and a search interface ( solr-search contract) to search your solr server.
-        
+      
+        Generates solr documents from xdos. Further when
+        run with the dispatcher in static mode it allows you to update a Solr
+        server with the content of your website at the same time you generate
+        the site ( solr-add contract). In dynamic mode (as servlet) it provides
+        a GUI to manage your project in solr ( solr-actionbar contract ) and a
+        search interface ( solr-search contract) to search your solr server.
+      
     
     
       Dispatcher activation
-      You can see some
-        screenshots and activate the different
-        contracts by using following snippets. Explanation given within xml comments.
-          &lt;!-- default plugin CSS --&gt;
+      
+        You can see some screenshots and
+        activate the different contracts by using following snippets.
+        Explanation given within xml comments.
+      
+      
+    &lt;!-- default plugin CSS --&gt;
     &lt;forrest:contract name="branding-css-links"&gt;
       &lt;forrest:property name="branding-css-links-input"&gt;
         &lt;css url="solr.css" media="screen" theme="Pelt"/&gt;
@@ -58,57 +62,69 @@
           &lt;/forrest:contract&gt;
         &lt;/forrest:hook&gt;
       &lt;/jx:if&gt;
-    &lt;/forrest:hook&gt;  
-      You can as well use the above aggregated to a tiles, like:
-      &lt;jx:import uri="cocoon://prepare.tiles.solrbar"/&gt;
+    &lt;/forrest:hook&gt;
+      
+      
+        You can as well use the above aggregated to a tiles, like:
+      
+      
+&lt;jx:import uri="cocoon://prepare.panels.solrbar"/&gt;
+      
     
     
       Solr activation
-      The host server urls can be configured by adding the following properties to your
-        project forrest.properties.xml in case you do not use the default values.
-      &lt;property name="solr.select.url" value="http://localhost:8983/solr/select"/&gt;
+      
+        The host server urls can be configured by adding the following
+        properties to your project forrest.properties.xml in case you do not use
+        the default values.
+      
+      
+&lt;property name="solr.select.url" value="http://localhost:8983/solr/select"/&gt;
 &lt;property name="solr.update.url" value="http://localhost:8983/solr/update"/&gt;
-      In your solr server add the following field definitions to the schema.xml. We assume
-        "id" is already set as "uniqueKey" and you changed the "defaultSearchField" to
-        "content" otherwise you need to prefix your queries.
-      &lt;field name="content" type="text" indexed="true" stored="true" /&gt;
+      
+      
+        In your solr server add the following field definitions to the
+        schema.xml. We assume "id" is already set as "uniqueKey" and you changed
+        the "defaultSearchField" to "content" otherwise you need to prefix your
+        queries.
+      
+      
+&lt;field name="content" type="text" indexed="true" stored="true" /&gt;
 &lt;field name="title" type="text" indexed="true" stored="true"/&gt;
 &lt;field name="subtitle" type="text" indexed="true" stored="true"/&gt;
 &lt;field name="abstract" type="text" indexed="true" stored="true"/&gt;
 &lt;field name="version" type="text" indexed="true" stored="true"/&gt;
-&lt;field name="author" type="text" indexed="true" stored="true" multiValued="true"/&gt; 
+&lt;field name="author" type="text" indexed="true" stored="true" multiValued="true"/&gt;
+      
     
     
       Samples
-      This section includes links to a number of samples using this plugin. The plugin is
-        intended to be self documenting through these samples. If you require further help
-        please ask on the user mailing list.
+      
+        This section includes links to a number of samples using this plugin.
+        The plugin is intended to be self documenting through these samples. If
+        you require further help please ask on the user mailing list.
       
       
-        
-          index.solr - the xdocs-to-solrDoc.xsl
+        index.solr - the xdocs-to-solrDoc.xsl
           transforms xdocs to solr docs.
-        
-          index.solr.add - surround the solr docs with an
+        index.solr.add - surround the solr docs with an
           add statement.
-        
-          index.solr.delete - surround the solr docs id with a
+        index.solr.delete - surround the solr docs id with a
           delete statement.
+        solr.commit - commit statement for solr.
         
-          solr.commit - commit statement for solr.
+        solr.optimize - optimize statement for solr.
         
-        
-          solr.optimize - optimize statement for solr.
-        
-        
-          index-creation.solr.add - is
+        index-creation.solr.add - is
           generating and adding an "add" statement for solr with the whole site as solr docs as
           input. This will index your whole project if you add ".do.html" to the url.
       
-      Aboves pages suffixed with
-        .do.html will trigger the underlying statment on the solr server. We
-        do not link them in this document since the links would be crawled. This is as well the
-        reason why the gui is deactivated. Each the gui would trigger the delete,
-        add, commit and optimze statement against the solr server for every page.
+      
+        Aboves pages suffixed with .do.html will trigger the
+        underlying statment on the solr server. We do not link them in this
+        document since the links would be crawled. This is as well the reason
+        why the gui is deactivated. Each the gui would trigger the delete, add,
+        commit and optimze statement against the solr server for every page.
+      
     
   </field></doc></add>
