@@ -215,6 +215,17 @@
             <xsl:value-of select="forrestVersion" />
           </td>
         </tr>
+        <xsl:if test="../@type='whiteboard'">
+          <tr>
+            <th width="25%">
+              Warning
+            </th>
+            <td>
+              This plugin is in the whiteboard development area.
+              See notes in the <a href="#introduction">introduction</a> above.
+            </td>
+          </tr>
+        </xsl:if>
       </table>
     </section>
   </xsl:template>
