@@ -56,7 +56,7 @@
             The second section lists plugins in the whiteboard, that is plugins
             that may change considerably in how they work before their first
             official release. These plugins may not be fully functional, in most
-            cases they are usable, but use them with caution as they are not
+            cases they are usable, but developers should use them with caution as they are not
             considered stable. You would need to keep up-to-date with the dev@
             mailing list.
           </p>
@@ -80,11 +80,11 @@
           <section>
             <title>Whiteboard Plugins</title>
             <warning>
-              See <a href="#introduction">introduction</a> for notes about
+              See <a href="#introduction">introduction</a> for warnings about
               plugins in development.
             </warning>
-            <div class="frame warning">
-              <div class="label">Warning</div>
+            <div class="frame note">
+              <div class="label">Note</div>
               <div class="content">Plugins in this section may not automatically
               deploy when you run Forrest as they are still in development.
               You may need to perform some manual installation steps to use 
@@ -215,6 +215,17 @@
             <xsl:value-of select="forrestVersion" />
           </td>
         </tr>
+        <xsl:if test="../@type='whiteboard'">
+          <tr>
+            <th width="25%">
+              Warning
+            </th>
+            <td>
+              This plugin is in the whiteboard development area.
+              See notes in the <a href="#introduction">introduction</a> above.
+            </td>
+          </tr>
+        </xsl:if>
       </table>
     </section>
   </xsl:template>

@@ -143,6 +143,12 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
         String forrestPropertiesStringURI;
 
         try {
+            // get forrest.properties and load the values
+            forrestPropertiesStringURI = projectHome
+                    + SystemUtils.FILE_SEPARATOR + "forrest.properties";
+            filteringProperties = loadAntPropertiesFromURI(filteringProperties,
+                    forrestPropertiesStringURI);
+            
             // get the values from local.forrest.properties.xml
             forrestPropertiesStringURI = projectHome
                     + SystemUtils.FILE_SEPARATOR
@@ -196,11 +202,6 @@ public class ForrestConfModule extends DefaultsModule implements InputModule,
                             filteringProperties, forrestPropertiesStringURI);
                 }
             }
-            // get forrest.properties and load the values
-            forrestPropertiesStringURI = projectHome
-                    + SystemUtils.FILE_SEPARATOR + "forrest.properties";
-            filteringProperties = loadAntPropertiesFromURI(filteringProperties,
-                    forrestPropertiesStringURI);
 
             // get default-forrest.properties and load the values
             String defaultForrestPropertiesStringURI = contextHome
