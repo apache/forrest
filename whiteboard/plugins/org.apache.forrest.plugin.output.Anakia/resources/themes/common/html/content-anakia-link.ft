@@ -15,24 +15,33 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="content-anakia-link" type="nugget"
-  xmlns:forrest="http://apache.org/forrest/templates/1.0">
+<forrest:contract name="content-anakia-link"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
-    content-anakia-link will output the XDOC link with image to the content in
+    content-anakia-link will output the XDOC image iwth a link to the content in
     Anakia xdoc format.
   </description>
   <usage>
 <![CDATA[<forrest:contract name="content-anakia-link"/>]]>
   </usage>
-  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" 
-    format="html" name="content-anakia-link" inputFormat="xsl" body="true" head="false">
+  <forrest:template
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="content-anakia-link" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-anakia-link-body"><a href="{$filename-noext}.xdoc" class="format">
-        <img class="skin" 
-          src="{$skin-img-dir}/xmldoc.gif" alt="XML - icon" />
-        <span
-          class="caption">XDOC</span></a>
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:variable name="skin-img-dir" 
+          select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>
+      <xsl:variable name="filename-noext" 
+          select="$defaultVariables/*/*[@name='filename-noext']/@value"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part><a href="{$filename-noext}.xdoc" class="format">
+            <img class="skin" src="{$skin-img-dir}/xmldoc.gif" 
+                  alt="xml - icon"/>
+            <span class="caption">XDOC</span></a>
+          </forrest:part>
+        </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
