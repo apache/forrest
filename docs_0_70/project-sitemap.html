@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>Using project sitemaps (v0.7)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -283,7 +283,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -312,7 +312,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <h1>Using project sitemaps</h1>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -331,51 +331,57 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 </ul>
-</div> 
+</div>
     
 <a name="N1000D"></a><a name="introduction"></a>
 <h2 class="underlined_10">Introduction</h2>
 <div class="section">
-<p>After Forrest 0.6 it is now possible for projects to intercept
-      the core sitemaps, without needing to copy the main sitemaps and keep
-      them synchonised. This will enable hassle-free update to
-      future Forrest versions.</p>
+<p>
+        After Forrest 0.6 it is now possible for projects to intercept the core
+        sitemaps, without needing to copy the main sitemaps and keep them
+        synchonised. This will enable hassle-free update to future Forrest
+        versions.
+      </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        We advise you to spend time to understand the Apache Cocoon sitemap.
-        See <a href="http://cocoon.apache.org/2.1/userdocs/concepts/sitemap.html">Cocoon sitemap</a>
-        and <a href="http://cocoon.apache.org/2.1/userdocs/concepts/">Cocoon concepts</a>
-        and related component documentation.
-        The Forrest sitemap is broken into multiple files. The main one is
-        <strong>sitemap.xmap</strong> which delegates to others.  See the
-         <a href="../docs_0_70/sitemap-ref.html">Sitemap Reference</a> for a tour of the
-        default sitemap.
+        We advise you to spend time to understand the Apache Cocoon sitemap. See
+        <a href="http://cocoon.apache.org/2.1/userdocs/concepts/sitemap.html">Cocoon sitemap</a> and
+        <a href="http://cocoon.apache.org/2.1/userdocs/concepts/">Cocoon concepts</a> and related
+        component documentation. The Forrest sitemap is broken into multiple
+        files. The main one is <strong>sitemap.xmap</strong> which delegates to
+        others. See the <a href="../docs_0_70/sitemap-ref.html">Sitemap
+        Reference</a> for a tour of the default sitemap.
       </div>
 </div>
 </div>
-
     
 <a name="N10029"></a><a name="how"></a>
 <h2 class="underlined_10">How does it work?</h2>
 <div class="section">
-<p>If a project has a <span class="codefrag">sitemap.xmap</span> file in it's 
-      documentation dir, that gets mounted automatically by Forrest and 
-      becomes part of the processing: it is a preprocessing step, and 
-      is the first one to handle the request. Because of this it can 
-      serve any file directly. If it does not want to 
-      serve a file, it can simply not match the URL and Forrest will take 
-      care of it as usual.</p>
-<p>The cool thing is that if that pipeline serves an xml representation, 
-      Forrest will provide a skinned version of it.</p>
-<p>So if the project sitemap matches test.xml and transforms that to a
-      correctly structured Forrest intermediate "document-v*",
-      then the user will see test.html fully rendered by Forrest.</p>
-<p>Of course, to resolve the directories in your sitemap it is important 
-      to use the 'project:' and 'forrest:' variables to prevent any possible 
-      issue in the future.</p>
+<p>
+        If a project has a <span class="codefrag">sitemap.xmap</span> file in it's documentation
+        dir, that gets mounted automatically by Forrest and becomes part of the
+        processing: it is a preprocessing step, and is the first one to handle
+        the request. Because of this it can serve any file directly. If it does
+        not want to serve a file, it can simply not match the URL and Forrest
+        will take care of it as usual.
+      </p>
+<p>
+        The cool thing is that if that pipeline serves an xml representation,
+        Forrest will provide a skinned version of it.
+      </p>
+<p>
+        So if the project sitemap matches test.xml and transforms that to a
+        correctly structured Forrest intermediate "document-v*", then the user
+        will see test.html fully rendered by Forrest.
+      </p>
+<p>
+        Of course, to resolve the directories in your sitemap it is important to
+        use the 'project:' and 'forrest:' variables to prevent any possible
+        issue in the future.
+      </p>
 </div>
-
     
 <a name="N1003F"></a><a name="examples"></a>
 <h2 class="underlined_10">Example uses of this technique</h2>
@@ -383,11 +389,11 @@ document.write("Last Published: " + document.lastModified);
 <a name="N10045"></a><a name="download"></a>
 <h3 class="underlined_5">Adding a new content type</h3>
 <p>
-          See the section "Advanced customizations: sitemap.xmap" in
-          the <a href="../docs_0_70/your-project.html">Using Forrest</a> document
+          See the section "Advanced customizations: sitemap.xmap" in the
+          <a href="../docs_0_70/your-project.html">Using Forrest</a> document
           and then follow the
-          <a href="../docs_0_70/your-project.html#adding_new_content_type">Example:
-          Adding a new content type</a>.
+          <a href="../docs_0_70/your-project.html#adding_new_content_type">Example: Adding
+          a new content type</a>.
         </p>
 </div>
   

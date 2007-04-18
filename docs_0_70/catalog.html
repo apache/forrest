@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>Using Catalog Entity Resolver for local DTDs (v0.7)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -283,7 +283,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -312,7 +312,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <h1>Using Catalog Entity Resolver for local DTDs</h1>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -373,26 +373,25 @@ document.write("Last Published: " + document.lastModified);
 <div class="section">
 <p>
         This is a collection of notes for configuring the Catalog Entity
-        Resolver with your favourite XML tools (validating parsers and
-        editors).
+        Resolver with your favourite XML tools (validating parsers and editors).
       </p>
 <p>
         All XML documents declare their ruleset - the Document Type Definition
         (DTD). When Forrest processes the documents, it uses the Resolver to
-        find Forrest's local copies of the DTDs, rather than trundling out
-        onto the network.
+        find Forrest's local copies of the DTDs, rather than trundling out onto
+        the network.
       </p>
 <p>
-        Many Java-based XML tools already have an entity resolver, probably
-        the same one that Forrest uses. Many non-Java tools also have an
-        entity resolver. To use these tools with documents based on the
-        Forrest DTDs, you need to configure the tools.
+        Many Java-based XML tools already have an entity resolver, probably the
+        same one that Forrest uses. Many non-Java tools also have an entity
+        resolver. To use these tools with documents based on the Forrest DTDs,
+        you need to configure the tools.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        The information provided here is not intended to endorse any
-        particular tool.
+        The information provided here is not intended to endorse any particular
+        tool.
       </div>
 </div>
 <p>
@@ -400,7 +399,6 @@ document.write("Last Published: " + document.lastModified);
         please send them to the forrest-dev mailing list.
       </p>
 </div>
-
     
 <a name="N10023"></a><a name="config"></a>
 <h2 class="underlined_10">General configuration notes</h2>
@@ -415,11 +413,10 @@ document.write("Last Published: " + document.lastModified);
         supplied by Forrest at either:
         <span class="codefrag">$FORREST_HOME/main/webapp/resources/schema/catalog.xcat</span>
         (for XML Catalog) or
-        <span class="codefrag">$FORREST_HOME/main/webapp/resources/schema/catalog</span>
-        (for TR 9401 Catalog).
+        <span class="codefrag">$FORREST_HOME/main/webapp/resources/schema/catalog</span> (for TR
+        9401 Catalog).
       </p>
 </div>
-
     
 <a name="N10039"></a><a name="tools"></a>
 <h2 class="underlined_10">Configuring specific tools</h2>
@@ -427,8 +424,8 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1003F"></a><a name="system"></a>
 <h3 class="underlined_5">Operating system catalog</h3>
 <p>
-          Some operating systems already provide a system-wide catalog that
-          is used by many tools. This is usually located at
+          Some operating systems already provide a system-wide catalog that is
+          used by many tools. This is usually located at
           <span class="codefrag">/etc/xml/catalog</span> or at
           <span class="codefrag">/usr/share/sgml/catalog</span> files.
         </p>
@@ -436,28 +433,31 @@ document.write("Last Published: " + document.lastModified);
           For an XML Catalog, add this line:
         </p>
 <pre class="code">
+
 &lt;nextCatalog
 catalog="/usr/local/svn/forrest/main/webapp/resources/schema/catalog.xcat"/&gt;
+        
         </pre>
 <p>
           For a TR 9401 Catalog, add this line:
         </p>
 <pre class="code">
+
 CATALOG \
 "/usr/local/svn/forrest/main/webapp/resources/schema/catalog"
+        
         </pre>
 <p>
-          Actually you probably do not want to touch that system catalog,
-          so rather create your own catalog file in your home directory
-          which refers to both the Forrest catalog and your system catalog.
+          Actually you probably do not want to touch that system catalog, so
+          rather create your own catalog file in your home directory which
+          refers to both the Forrest catalog and your system catalog.
         </p>
 <a name="N10060"></a><a name="xmllint"></a>
 <h3 class="underlined_5">xmllint validating parser</h3>
 <p>
-          "xmllint" is part of the "libxml2" package.
-          It is very fast and powerful, with are many facilities. It can
-          validate whole directories of files at once.
-          Set the SGML_CATALOG_FILES environment variable.
+          "xmllint" is part of the "libxml2" package. It is very fast and
+          powerful, with are many facilities. It can validate whole directories
+          of files at once. Set the SGML_CATALOG_FILES environment variable.
         </p>
 <pre class="code">
 export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:\
@@ -467,26 +467,25 @@ xmllint --valid --catalogs --noout mydoc.xml
 <a name="N1006E"></a><a name="vim"></a>
 <h3 class="underlined_5">Vim</h3>
 <p>
-            The following .vimrc entries are useful:
-          </p>
+          The following .vimrc entries are useful:
+        </p>
 <pre class="code">
 au FileType xml set efm=%A%f:%l:\ %.%#error:\ %m,%-Z%p^,%-C%.%#
 au FileType xml set makeprg=xmllint\ --noout\ --valid\ --catalogs\ %
         </pre>
 <a name="N1007C"></a><a name="emacs"></a>
 <h3 class="underlined_5">Emacs</h3>
-<p>See 
-        <a href="http://www.thaiopensource.com/nxml-mode/">nXML mode</a>
-        and 
-        <a href="http://www.dpawson.co.uk/relaxng/nxml/">FAQ</a>.
+<p>
+          See <a href="http://www.thaiopensource.com/nxml-mode/">nXML
+          mode</a> and
+          <a href="http://www.dpawson.co.uk/relaxng/nxml/">FAQ</a>.
         </p>
 <a name="N1008E"></a><a name="onsgmls"></a>
 <h3 class="underlined_5">onsgmls validating parser</h3>
 <p>
-          "onsgmls" is part of the "Open SP" package.
-          You need to also tell it where to find an "SGML declaration".
-          The easiest way is to create your own little "my-catalog" file,
-          containing this:
+          "onsgmls" is part of the "Open SP" package. You need to also tell it
+          where to find an "SGML declaration". The easiest way is to create your
+          own little "my-catalog" file, containing this:
         </p>
 <pre class="code">
 SGMLDECL "/usr/share/sgml/xml.dcl"
@@ -502,58 +501,68 @@ onsgmls -c path/to/my-catalog -wall -wxml -s mydoc.xml
 <a name="N100A3"></a><a name="jedit"></a>
 <h3 class="underlined_5">jEdit - Open Source programmer's text editor</h3>
 <pre class="code">
+
 Select the menu:
 Utilities &gt; Global Options &gt; Plugins:XML &gt; Catalogs
 Select the "+" button, and use the "File System Browser"
 to specify the TR9401 Catalog file:
 "forrest/main/webapp/resources/schema/catalog"
+        
         </pre>
 <pre class="code">
+
 On version 4.2. Select the menu:
 Plugins &gt; Plugins Options &gt; Plugins:XML &gt; Catalogs
 Select the "+" button, and use the "File System Browser"
 to specify the TR9401 Catalog file:
 "forrest/main/webapp/resources/schema/catalog"
+        
         </pre>
 <a name="N100B2"></a><a name="oxygenxml"></a>
 <h3 class="underlined_5">oXygen XML Editor</h3>
 <pre class="code">
+
 Select the menu:
 Options &gt; Preferences &gt; XML Catalog
 Specify the XML Catalog file:
 "forrest/main/webapp/resources/schema/catalog.xcat"
+        
         </pre>
 <a name="N100BD"></a><a name="xmlspy"></a>
 <h3 class="underlined_5">xmlspy</h3>
 <pre class="code">
+
 Add the following entry to the file CustomCatalog.xml
 (located in XMLSpy install directory):
 
 &lt;nextCatalog
 catalog="file://localhost/C:/apache/forrest/main/webapp/
 resources/schema/catalog.xcat"/&gt;
+        
         </pre>
 <a name="N100C8"></a><a name="xxe"></a>
 <h3 class="underlined_5">XMLmind XML Editor (XXE)</h3>
 <a name="N100CE"></a><a name="XXE+v2.5p2+or+older"></a>
 <h4>XXE v2.5p2 or older</h4>
 <pre class="code">
+
 Select the menu:
 Options &gt; Options &gt; Schema &gt; Add File
 Specify the XML Catalog file:
 "forrest/main/webapp/resources/schema/catalog.xcat"
-        </pre>
+        
+          </pre>
 <a name="N100D9"></a><a name="XXE+v2.5p3%2B"></a>
 <h4>XXE v2.5p3+</h4>
-<p>XXE supports catalogs by automatic detection via configuration files.  
-            Download the <a target="_blank" href="http://www.splike.com/howtos/xxe_forrest.html">XXE 
-            Forrest Config</a> files from splike.com; this also add support for WYSIWYG 
-            editing of forrest documents.
-            Note: This configuration suite has recently been added to the
-            Forrest scratchpad.
-            </p>
+<p>
+            XXE supports catalogs by automatic detection via configuration
+            files. Download the
+            <a target="_blank" href="http://www.splike.com/howtos/xxe_forrest.html">XXE
+            Forrest Config</a> files from splike.com; this also add support
+            for WYSIWYG editing of forrest documents. Note: This configuration
+            suite has recently been added to the Forrest scratchpad.
+          </p>
 </div>
-
     
 <a name="N100E9"></a><a name="info"></a>
 <h2 class="underlined_10">Further information and resources</h2>
@@ -561,24 +570,23 @@ Specify the XML Catalog file:
 <p>
         Forrest and Cocoon use the
         <a href="http://xml.apache.org/commons/components/resolver/">Catalog
-        Entity Resolver</a>
-        that is provided by the
+        Entity Resolver</a> that is provided by the
         <a href="http://xml.apache.org/commons/">Apache XML Commons</a>
         project. The resolver is packaged with the Forrest distribution at
         <span class="codefrag">lib/core/xml-commons-resolver-x.y.jar</span>
       
 </p>
 <p>
-        Other Forrest documentation has some notes about configuring the
-        entity resolver for your own DTDs. See
-        <a href="../docs_0_70/validation.html">XML Validation</a>.
+        Other Forrest documentation has some notes about configuring the entity
+        resolver for your own DTDs. See <a href="../docs_0_70/validation.html">XML
+        Validation</a>.
       </p>
 <p>
         Cocoon has extensive documentation about the entity resolver. See
         <a href="http://cocoon.apache.org/2.1/userdocs/concepts/catalog.html">Entity resolution with catalogs</a>.
       </p>
 </div>
-
+  
 </div>
 <!--+
     |end content

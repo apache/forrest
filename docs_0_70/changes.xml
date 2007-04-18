@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.3//EN" "document-v13.dtd">
 <document xmlns:i18n="http://apache.org/cocoon/i18n/2.1"><header><title>History of Changes </title></header><body><p><link href="changes.rss"><img alt="RSS" src="../images/rss.png"/></link></p><section id="introduction"><title>Introduction and explanation of symbols</title><p>Changes are sorted by "type" and then chronologically with the most recent at the top. These symbols denote the various action types:<icon alt="add" src="../images/add.jpg"/>=add, <icon alt="fix" src="../images/fix.jpg"/>=fix, <icon alt="remove" src="../images/remove.jpg"/>=remove, <icon alt="update" src="../images/update.jpg"/>=update</p></section>
-    <section id="version_0.8-dev"><title>Version 0.8-dev (not yet released)</title>
-        <p>See each
-          <link href="site:plugins/index">plugin</link>
-          for its detailed changes.
+    <section id="version_0.8"><title>Version 0.8 (2007-04-18)</title>
+        <p>
+          See each <link href="site:plugins/index">plugin</link> for its
+          detailed changes.
         </p>
       <section><title>Changes to Build</title><ul><li><icon alt="add" src="../images/add.jpg"/>
         Add new build target "clean-build".
        Committed by CD.</li></ul></section><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="../images/add.jpg"/>
+        Add initial DOAP plugin to Whiteboard.
+       Committed by RDG.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add initial Solr plugin to Whiteboard.
+       Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added initial whiteboard input plugin "odt".
         Use OpenDocument ODT as input.
        Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
@@ -75,6 +79,10 @@
         Thanks to the many people who were involved with addressing this issue.
         See the commit logs associated with FOR-200.
        Committed by RDG. Thanks to Community. See Issue <link href="http://issues.apache.org/jira/browse/FOR-200">FOR-200</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Prototype of new xml-based properties system. Projects and plugins can use a
+        forrest.properties.xml file. At this stage, it supplements the existing
+        forrest.properties file. See the projectInfo plugin for an example of its use.
+       Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-588">FOR-588</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
         Add notes about naming convention for locationmap references.
         Gathered from a ForrestFriday IRC session (thanks to Tim Williams for writing them up).
         See <link href="site:locationmap">locationmap docs</link>.
@@ -130,8 +138,8 @@
         do some steps of the cocoon update process. Still there are some steps 
         that should rather be done by a script, rather than committer interaction. 
         Updated the readme to state that some steps could be done by the 
-        script. <link href="http://svn.apache.org/viewcvs.cgi?rev=280710&amp;view=rev">Diff</link> 
-         Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
+        script. <link href="http://svn.apache.org/viewcvs.cgi?rev=280710&amp;view=rev">Diff</link>
+       Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
         Refactored the view resolver code of the internal.view plugin. Created an action that
         is doing the same as before the combination of sitemap+xsl. <br/>Added 2 java classes to package
         org.apache.forrest.plugin.internal.view.acting:<br/>
@@ -167,7 +175,7 @@
         answering the questions, do "forrest seedTestBusiness". More seed sites will be added
         in the future.
        Committed by RDG.</li><li><icon alt="add" src="../images/add.jpg"/>
-        Added support for a locationmap. This enables content to be retrieved from a location
+        Added support for Locationmaps. This enables content to be retrieved from a location
         that is defined in a locationmap file. A project-based file can be located at 
         <code>PROJECT_HOME/src/documentation/content/locationmap.xml</code> while core locationmaps
         are at <code>$FORREST_HOME/main/webapp/locationmap-*.xml</code> files.<br/>The
@@ -183,6 +191,27 @@
         Thanks to Unico Hommes for the original locationmap implementation which
         was added to Forrest long ago.
        Committed by RDG.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+        Handling of document/header/version elements is now re-enabled.
+       Committed by DC. See Issue <link href="http://issues.apache.org/jira/browse/FOR-973">FOR-973</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+              Thanks to Gunther Sablon for reporting this issue. Plugins were not being
+              deployed to a Webapp WAR file correctly.
+       Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-735">FOR-735</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+         Hard coded URLs of versions causing maintenance issues in the generated Plugins Index.
+         Use a parameter instead to construct the URL per version.
+       Committed by DC. See Issue <link href="http://issues.apache.org/jira/browse/FOR-963">FOR-963</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+              Fixes problem if contexts were not utilized in status.xml, an incorrect changes document would be
+              generated.
+       Committed by RDG. Thanks to Vadim Gritsenko. See Issue <link href="http://issues.apache.org/jira/browse/FOR-958">FOR-958</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+        With comments &amp; thanks also to Paul Kronenwetter, fixes a bug
+        where duplicate apply-templates was causing duplicate content with span
+        classes.
+       Committed by SNM. Thanks to Vronk Duat. See Issue <link href="http://issues.apache.org/jira/browse/FOR-704">FOR-704</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+              Fix caching problem that made a restart neccessary after
+              making a locationmap resource location change.
+       Committed by TWW. See Issue <link href="http://issues.apache.org/jira/browse/FOR-732">FOR-732</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+        After doing 'forrest clean' then Forrest could not be run without network access, due to
+        not being able to retrieve plugin descriptor files.
+       Committed by DC. See Issue <link href="http://issues.apache.org/jira/browse/FOR-927">FOR-927</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         When using html as source, the "a" elements were not rendered properly if both
         @href and @name attributes. A side-effect of this fix is that now all other
         attributes such as @title or @target are copied over.
@@ -191,12 +220,24 @@
        Committed by DC. Thanks to Jim Dixon. See Issue <link href="http://issues.apache.org/jira/browse/FOR-448">FOR-448</link>.</li><li><icon alt="remove" src="../images/remove.jpg"/>
         Remove xconf support for plugins. Cocoon has moved away from this
         XConfToolTask xpatch technique.
-        <link href="http://svn.apache.org/viewvc?rev=354749&amp;view=rev">Diff</link> 
-       Committed by RDG.</li><li><icon alt="update" src="../images/update.jpg"/> FOR-924 Readding the loading from
+        <link href="http://svn.apache.org/viewvc?rev=354749&amp;view=rev">Diff</link>
+       Committed by RDG.</li><li><icon alt="update" src="../images/update.jpg"/>
+        Enhanced the Message of the Day (MOTD) facility to enable specific matches.
+        See skinconf.xml from a "seed" site for configuration details.
+        The @starts-with=true anchors the URI string to the start, otherwise contains.
+        To use it, declare skinconfig-v08-1.dtd in your skinconf.xml file.
+       Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
+        Improved the autogenerated site linkmap.html page. Do not show empty links for group labels.
+        Use a better title and introduction.
+        Use @description if available.
+       Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
+        Rename webapp build target to run-webapp to distinguish the resulting 
+        webapp from one suitable for deployment (use the war target for that)
+        and provide a new xconf that is used in the war to ensure plugins can be found in war files
+       Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-735">FOR-735</link>.</li><li><icon alt="update" src="../images/update.jpg"/> FOR-924 Readding the loading from
         (default-)forrest.properties which got removed in r430588 when closing FOR-916.
         Thanks Martin Stockhammer for pointing it out, providing us with a patch and for your
-        contribution.  Committed by TS. Thanks to Martin Stockhammer. See Issue <link href="http://issues.apache.org/jira/browse/FOR-924">FOR-924</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
-        <strong>FOR-920</strong> Merging the defaults and project modules to the new
+        contribution.  Committed by TS. Thanks to Martin Stockhammer. See Issue <link href="http://issues.apache.org/jira/browse/FOR-924">FOR-924</link>.</li><li><icon alt="update" src="../images/update.jpg"/><strong>FOR-920</strong> Merging the defaults and project modules to the new
         properties module. You can use it like {properties:forrest.home}, please refer to
         the
         <link href="site:upgrading_08">update documentation</link> how to
@@ -255,12 +296,6 @@
         Update the Forrest plugin for the XMLmind XML Editor at 
         <link href="site:tools/xxe">tools/xxe</link>
        Committed by RDG. Thanks to Sjur N. Moshagen. See Issue <link href="http://issues.apache.org/jira/browse/FOR-779">FOR-779</link>, <link href="http://issues.apache.org/jira/browse/FOR-780">FOR-780</link>, <link href="http://issues.apache.org/jira/browse/FOR-722">FOR-722</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
-        Plugin: PhotoGallery.
-        Automated the image variant (e.g. thumb, small) creation. Note that this
-        is not
-        backward-compatible, so existing users need to move original images
-        from the old "big" directory and remove the "preview" and "small" directories.
-       Committed by TWW.</li><li><icon alt="update" src="../images/update.jpg"/>
         Upgrade our packaged Cocoon to cocoon-2.2.0-dev-r351990 and enhanced the notes
         about how to upgrade.
        Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
@@ -271,7 +306,7 @@
        Committed by RDG.</li><li><icon alt="update" src="../images/update.jpg"/>
         Add a new xslt template "add.class" to properly append extra class attributes
         to note|warning|fixme|code elements to enable extra CSS classification.
-        <link href="http://svn.apache.org/viewvc?rev=358325&amp;view=rev">Diff</link> 
+        <link href="http://svn.apache.org/viewvc?rev=358325&amp;view=rev">Diff</link>
        Committed by JS.</li><li><icon alt="update" src="../images/update.jpg"/>
         Review and synchronise our Cocoon configuration.
        Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
@@ -295,17 +330,17 @@
          Committed by FSO.</li><li><icon alt="update" src="../images/update.jpg"/> Added 
         LocationmapSourceFactory.java. With this it is possible to request 
         locationmap source via lm://my-location which makes it easier to use it 
-        without contacting a input module in java and any other files. <link href="http://svn.apache.org/viewcvs.cgi?rev=355474&amp;view=rev">Diff</link> 
+        without contacting a input module in java and any other files. <link href="http://svn.apache.org/viewcvs.cgi?rev=355474&amp;view=rev">Diff</link>
        Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/> Added variable.helper.xsl 
         to the core, should be enhanced by matching the 
         default.forrest.properties.xml. This xsl will produce all variables we 
         use in skins to the new property system. Moved pathutils.xsl to the 
-        core from the skins. <link href="http://svn.apache.org/viewcvs.cgi?rev=356240&amp;view=rev">Diff</link> 
+        core from the skins. <link href="http://svn.apache.org/viewcvs.cgi?rev=356240&amp;view=rev">Diff</link>
        Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/> Added helper 
         stylesheets to locationmap and core stylesheets. generateId.xsl (will 
         generate a unique id) and replaceCharsInString.xsl (will find and 
-        replace character in a string) <link href="http://svn.apache.org/viewcvs.cgi?rev=358150&amp;view=rev">Diff</link> 
-         Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>
+        replace character in a string) <link href="http://svn.apache.org/viewcvs.cgi?rev=358150&amp;view=rev">Diff</link>
+       Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>
         Fixed and enhanced the Forrest plugin for the XMLmind XML Editor at
         <link href="site:tools/xxe">tools/xxe</link>
        Committed by DC. Thanks to Sjur N. Moshagen. See Issue <link href="http://issues.apache.org/jira/browse/FOR-581">FOR-581</link>, <link href="http://issues.apache.org/jira/browse/FOR-720">FOR-720</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
@@ -318,13 +353,13 @@
         about how to upgrade.
        Committed by JJP.</li><li><icon alt="update" src="../images/update.jpg"/>Removed 
         the project.theme-dir property by adding it to the lm like suggest by 
-        Ross. <link href="http://svn.apache.org/viewcvs.cgi?rev=328839&amp;view=rev">Diff</link> 
-         Committed by TS. Thanks to Ross Gardler.</li><li><icon alt="update" src="../images/update.jpg"/> Changed the 'local 
+        Ross. <link href="http://svn.apache.org/viewcvs.cgi?rev=328839&amp;view=rev">Diff</link>
+       Committed by TS. Thanks to Ross Gardler.</li><li><icon alt="update" src="../images/update.jpg"/> Changed the 'local 
         forrest' caption to host:port format. Added localhost as option. added 
-        structurer xml view to devs. <link href="http://svn.apache.org/viewcvs.cgi?rev=329431&amp;view=rev">Diff</link> 
-         Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>Allowed as well 
-        localhost as local address for jetty for the forrestbar. <link href="http://svn.apache.org/viewcvs.cgi?rev=329177&amp;view=rev">Diff</link> 
-         Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>
+        structurer xml view to devs. <link href="http://svn.apache.org/viewcvs.cgi?rev=329431&amp;view=rev">Diff</link>
+       Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>Allowed as well 
+        localhost as local address for jetty for the forrestbar. <link href="http://svn.apache.org/viewcvs.cgi?rev=329177&amp;view=rev">Diff</link>
+       Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>
         The xml comments from source files were not being generated to the output.
        Committed by DG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-555">FOR-555</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Add Cocoon Profiler block. Use this during development to list the
@@ -349,14 +384,33 @@
         This work was enabled via a "Google Summer of Code" project.
         See <link href="site:tools/eclipse">docs</link>.
        Committed by RDG. Thanks to Anil Ramnanan.</li><li><icon alt="update" src="../images/update.jpg"/> Added new 
-        seed targets seed-basic and seed-sample. That closes FOR-253. <link href="http://svn.apache.org/viewcvs.cgi?rev=231130&amp;view=rev">Diff</link> 
-         Committed by TS. See Issue <link href="http://issues.apache.org/jira/browse/FOR-253">FOR-253</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Fixed sample 
+        seed targets seed-basic and seed-sample. That closes FOR-253. <link href="http://svn.apache.org/viewcvs.cgi?rev=231130&amp;view=rev">Diff</link>
+       Committed by TS. See Issue <link href="http://issues.apache.org/jira/browse/FOR-253">FOR-253</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Fixed sample 
         sites from the seedTestBusiness FOR-670: forrest seedTestBusiness; 
-        forrest site fails resume dtd validation <link href="http://svn.apache.org/viewcvs.cgi?rev=279892&amp;view=rev">Diff</link> 
-         Committed by TS. Thanks to kevin. See Issue <link href="http://issues.apache.org/jira/browse/FOR-670">FOR-670</link>.</li></ul></section><section><title>Changes to Documentation</title><ul><li><icon alt="add" src="../images/add.jpg"/>
+        forrest site fails resume dtd validation <link href="http://svn.apache.org/viewcvs.cgi?rev=279892&amp;view=rev">Diff</link>
+       Committed by TS. Thanks to kevin. See Issue <link href="http://issues.apache.org/jira/browse/FOR-670">FOR-670</link>.</li></ul></section><section><title>Changes to Documentation</title><ul><li><icon alt="add" src="../images/add.jpg"/>
 <!-- Please keep this action at the top -->
         Added document to facilitate
         <link href="site:upgrading_08">upgrading to v0.8</link>
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        New section to explain <link href="site:locationmap">Locationmap processing</link>
+        and the magic of the naming convention.
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        New document to explain <link href="site:sitemap-explain">Cocoon sitemaps</link> using a specific worked example.
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add explanation of
+        <link href="site:procedures/forrest-dev/debug-modes">Cocoon Running Modes</link>
+        for setting different properties.
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Added <link href="site:faq/docs">notes</link> to explain the main documentation,
+        as well as documentation and examples in each plugins and documentation
+        and examples in the 'forrest seed-sample' site.
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Added notes about <link href="site:validation/catalog">configuring</link>
+        a system-wide XML Catalog Entity Resolver to share local DTDs between multiple projects.
+       Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Added notes about <link href="site:validation/debug-catalog">debugging</link>
+        the XML Catalog Entity Resolver for local DTDs.
        Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added doc to explain
         <link href="site:status-themes">Skins and Dispatcher status</link>. 
@@ -392,8 +446,8 @@
        Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
         Add notes about how to use the <link href="site:bugs">Issue Tracker</link>.
        Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>Added basic instructions to 
-        deploy and install the forrestbar from the source as readme.txt<link href="http://svn.apache.org/viewcvs.cgi?rev=328688&amp;view=rev">Diff</link> 
-         Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
+        deploy and install the forrestbar from the source as readme.txt<link href="http://svn.apache.org/viewcvs.cgi?rev=328688&amp;view=rev">Diff</link>
+       Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
         We now have a regular 24-hour IRC session once per month. Developers get together.
         See <link href="site:forrest-friday">ForrestFriday</link>.
        Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
@@ -415,8 +469,11 @@
         Added document to explain the process for
         <link href="site:committed">Becoming an Apache Forrest
         committer</link>.
-       Committed by DC. Thanks to Addison Berry. See Issue <link href="http://issues.apache.org/jira/browse/FOR-603">FOR-603</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
-        <strong>FOR-920</strong> - Addings notes how to
+       Committed by DC. Thanks to Addison Berry. See Issue <link href="http://issues.apache.org/jira/browse/FOR-603">FOR-603</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+              Update docs to reflect locationmap naming conventions.
+       Committed by TS. See Issue <link href="http://issues.apache.org/jira/browse/FOR-861">FOR-861</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+              Add a HowTo sample document to the fresh-site samples.
+       Committed by RDG. Thanks to Randy Metcalfe. See Issue <link href="http://issues.apache.org/jira/browse/FOR-959">FOR-959</link>.</li><li><icon alt="update" src="../images/update.jpg"/><strong>FOR-920</strong> - Addings notes how to
         <link href="site:upgrading_08">update</link> the different module calls in
         custom code.  Committed by TS.</li><li><icon alt="update" src="../images/update.jpg"/>
         Added FAQ to explain the Cocoon Cache and some ways to enhance responsiveness.
@@ -465,20 +522,18 @@
         Add section about managing the plugins descriptors to
         <link href="site:buildPlugin">Howto Build Plugins</link> doc.
        Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
-       Added section "linking to external css files" to howto-structurer-dsl doc.
-       Committed by TS. Thanks to Paul Bolger. See Issue <link href="http://issues.apache.org/jira/browse/FOR-768">FOR-768</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Clarify the FAQ about using
         <link href="site:faq/rawHTML">raw HTML</link>
         docs with no decoration.
        Committed by RDG. See Issue <link href="http://issues.apache.org/jira/browse/FOR-666">FOR-666</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Clarify documentation for Forrestbot.
        Committed by DC. Thanks to Addison Berry. See Issue <link href="http://issues.apache.org/jira/browse/FOR-568">FOR-568</link>.</li><li><icon alt="update" src="../images/update.jpg"/> Added information about 
-        how to debug forrest java classes to the faq <link href="http://svn.apache.org/viewcvs.cgi?rev=291361&amp;view=rev">Diff</link> 
-         Committed by TS.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Bertrand Delacretaz (BD), Cyriaque Dupoirieux (CD), David Crossley (DC), Diwaker Gupta (DG), Ferdinand Soethe (FSO), Juan Jose Pablos (JJP), Johannes Schaefer (JS), Ross Gardler (RDG), Thorsten Scherler (TS), Tim Williams (TWW).</p><p>This is a list of other contributors:<br/>Addison Berry, Alan Chandler, Anil Ramnanan, Brian Dube, Clay Leeds, Community, Dave Brosius, David Crossley, Gavin, Gavin McDonald, Jan Materne, Jim Dixon, Joachim Breitsprecher, Josias Thoeny, kevin, Martin Stockhammer, Mathieu Champlon, Paul Bolger, Paul Devine, Paul Kronenwetter, Phillip Evens, Pier Fumagalli, Rasik Pandey, Richard Calmbach, Ross Gardler, Sjur N. Moshagen, Steve Masover, Tom HANAX, Torsten Stolpmann.</p></section></section>
+        how to debug forrest java classes to the faq <link href="http://svn.apache.org/viewcvs.cgi?rev=291361&amp;view=rev">Diff</link>
+       Committed by TS.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Bertrand Delacretaz (BD), Cyriaque Dupoirieux (CD), David Crossley (DC), Diwaker Gupta (DG), Ferdinand Soethe (FSO), Juan Jose Pablos (JJP), Johannes Schaefer (JS), Ross Gardler (RDG), Sjur N Moshagen (SNM), Thorsten Scherler (TS), Tim Williams (TWW).</p><p>This is a list of other contributors:<br/>Addison Berry, Alan Chandler, Anil Ramnanan, Brian Dube, Clay Leeds, Community, Dave Brosius, David Crossley, Gavin, Gavin McDonald, Jan Materne, Jim Dixon, Joachim Breitsprecher, Josias Thoeny, kevin, Martin Stockhammer, Mathieu Champlon, Paul Devine, Paul Kronenwetter, Phillip Evens, Pier Fumagalli, Randy Metcalfe, Rasik Pandey, Richard Calmbach, Ross Gardler, Sjur N. Moshagen, Steve Masover, Tom HANAX, Torsten Stolpmann, Vadim Gritsenko, Vronk Duat.</p></section></section>
     <section id="version_0.7.1-dev"><title>Version 0.7.1-dev (not released)</title>
-        <p>See each
-          <link href="site:v0.70//plugins/index">plugin</link>
-          for its detailed changes.
+        <p>
+          See each <link href="site:v0.70//plugins/index">plugin</link> for its
+          detailed changes.
         </p>
       <section><title>Changes to the Code Base</title><ul><li><icon alt="update" src="../images/update.jpg"/>
         Howto-v20 now properly handles a/@class=fork etc. attribute to enable
@@ -508,9 +563,9 @@
         <link href="site:v0.70//upgrading_07">upgrading to v0.7</link>
        Committed by DC.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>David Crossley (DC), Ferdinand Soethe (FSO).</p><p>This is a list of other contributors:<br/>Steve Masover.</p></section></section>
     <section id="version_0.7"><title>Version 0.7 (2005-06-23)</title>
-        <p>See each
-          <link href="site:v0.70//plugins/index">plugin</link>
-          for its detailed changes.
+        <p>
+          See each <link href="site:v0.70//plugins/index">plugin</link> for its
+          detailed changes.
         </p>
       <section><title>Changes to Project Administration</title><ul><li><icon alt="add" src="../images/add.jpg"/>
         Added testing facilities to plugins to facilitate integration testing. 
@@ -548,12 +603,8 @@
         in the build.xml of plugins/ and whiteboard/plugins/. That allows to create
         new plugins in the whiteboard/plugin/ directory.
        Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
-        Activated multiple output formats to be configured via a View.
-       Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added viewHelper plugin and removed experimental leather plugin.
         Enhanced the documentation of view/viewHelper.
-       Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
-        Added contracts and nuggets to the "view" plugins.
        Committed by TS.</li><li><icon alt="add" src="../images/add.jpg"/>
         Created a new plugin org.apache.forrest.plugin.internal.view from the fbits core
         and removed the fbits plugin.
@@ -599,7 +650,13 @@
         The brokenlinks file now contains referer information.
         Upgraded lib/core/cocoon.jar and added attribute "show-referrers"
         to the Cocoon cli.xconf
-       Committed by DC. Thanks to Upayavira. See Issue <link href="http://issues.apache.org/jira/browse/FOR-204">FOR-204</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
+       Committed by DC. Thanks to Upayavira. See Issue <link href="http://issues.apache.org/jira/browse/FOR-204">FOR-204</link>.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add initial PDF plugin
+       Committed by RDG.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add initial Wiki plugin
+       Committed by RDG.</li><li><icon alt="add" src="../images/add.jpg"/>
+        Add initial Feeder plugin
+       Committed by RDG.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         The "extra-css" from skinconf.xml is now inserted at the very end
         of the CSS. That enables it to properly override other elements.
        Committed by DC.</li><li><icon alt="fix" src="../images/fix.jpg"/>
@@ -645,8 +702,6 @@
        Committed by DC.</li><li><icon alt="update" src="../images/update.jpg"/>
           Enable skinconf to specify optional page number format for PDF.
         Committed by DC. Thanks to Cyriaque Dupoirieux. See Issue <link href="http://issues.apache.org/jira/browse/FOR-355">FOR-355</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
-          Do not limit status.xml contexts in projectInfo plugin.
-        Committed by JJP. Thanks to Cyriaque Dupoirieux. See Issue <link href="http://issues.apache.org/jira/browse/FOR-514">FOR-514</link>.</li><li><icon alt="update" src="../images/update.jpg"/>
         Split plugins.xml between plugins.xml in main plugins dir and
         whiteboard-plugins.xml in whiteboard/plugins and added relevant docs
         to plugins index page.
@@ -688,8 +743,7 @@
         Update fop-0.20.5 just with optional jimi support.
         This fixes the issue building the Apache FOP site.
         Replace libraries to use the cocoon-2.2.0-dev version.
-       Committed by JJP.</li><li><icon alt="update" src="../images/update.jpg"/>
-        <link href="site:v0.70//faq/requirements">Java 1.4 is required</link>
+       Committed by JJP.</li><li><icon alt="update" src="../images/update.jpg"/><link href="site:v0.70//faq/requirements">Java 1.4 is required</link>
         starting with Forrest-0.7-dev
        Committed by DC.</li></ul></section><section><title>Changes to Documentation</title><ul><li><icon alt="add" src="../images/add.jpg"/>
 <!-- Please keep this action at the top -->
@@ -912,19 +966,11 @@
 	&lt;map:generator name="serverpages" 
 	src="org.apache.cocoon.generation.ServerPagesGenerator"/&gt;
        Committed by JJP. See Issue <link href="http://issues.apache.org/jira/browse/FOR-56">FOR-56</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
-        docbook2document.xsl: remove unnecessary / from template matches.
-       Committed by JJP. Thanks to Sean Wheller. See Issue <link href="http://issues.apache.org/jira/browse/FOR-317">FOR-317</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
-        docbook2document.xsl: docinfo element. never in OASIS Docbook XML DTD 
-       Committed by JJP. Thanks to Sean Wheller. See Issue <link href="http://issues.apache.org/jira/browse/FOR-316">FOR-316</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
-        docbook2document.xsl: handle the xref and xreflabel.
-       Committed by DC. Thanks to Sean Wheller. See Issue <link href="http://issues.apache.org/jira/browse/FOR-308">FOR-308</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Proper positioning of icon/links for PDF, XML, POD, Print content
         options on pelt skin.
        Committed by DC. Thanks to Arturo Vazquez.</li><li><icon alt="fix" src="../images/fix.jpg"/>
         Allow forrest to run in a project directory with a space in the name.
-       Committed by DB. See Issue <link href="http://issues.apache.org/jira/browse/FOR-267">FOR-267</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/>
-        Openoffice2forrest: add support for merged cells in tables.
-       Committed by JJP. See Issue <link href="http://issues.apache.org/jira/browse/FOR-262">FOR-262</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/> 
+       Committed by DB. See Issue <link href="http://issues.apache.org/jira/browse/FOR-267">FOR-267</link>.</li><li><icon alt="fix" src="../images/fix.jpg"/> 
         Fixed the domain bug of the searchbox in pelt.  
        Committed by TS.</li><li><icon alt="fix" src="../images/fix.jpg"/> 
         Fixed the menu in pelt by adding getMenu.js and changing the site2xhtml.xsl. 
@@ -1242,7 +1288,7 @@
        Committed by DC.</li><li><icon alt="add" src="../images/add.jpg"/>
         Added a mechanism to enable impoverished XML tools that do not use
         the Catalog Entity Resolver to fetch the DTDs direct from the website.
-        See <link href="site:v0.60//upgrading_06">upgrading to v0.6</link>
+        See notes for "Upgrading to v0.6".
         Please help to upgrade our /dtd/.htaccess file (see issue FOR-107)
         and please help to address the SVN Issue
         <link href="http://subversion.tigris.org/issues/show_bug.cgi?id=1233">1233</link>.
@@ -1261,8 +1307,7 @@
        Committed by JJP.</li><li><icon alt="update" src="../images/update.jpg"/>
         Forrest is now a top-level Apache project. The new website is at
         <link href="http://forrest.apache.org/">http://forrest.apache.org/</link>
-       Committed by DC.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Dave Brondsema (DB), David Crossley (DC), Juan Jose Pablos (JJP), Nicola Ken Barozzi (NKB), Ross Gardler (RDG), Reinhard Pötz (RP), Thorsten Scherler (TS).</p><p>This is a list of other contributors:<br/>Apache Infrastructure, Arturo Vazquez, Eric Burghard, Eric BURGHARD, Fabio Rinaldi, Florian G. Haas, Jan Materne, Johannes Schaefer, Juan Jose Pablos, Nick Chalko, Pierrick Brihaye, Ramón Prades, Rick Tessner, Rob Exley, Ross Gardler, Sean Wheller, Sebastian Bergmann, Stephan E. Schlierf, Unico Hommes.</p></section></section>
-
+       Committed by DC.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Antonio Gallardo (AG), Dave Brondsema (DB), David Crossley (DC), Juan Jose Pablos (JJP), Nicola Ken Barozzi (NKB), Ross Gardler (RDG), Reinhard Pötz (RP), Thorsten Scherler (TS).</p><p>This is a list of other contributors:<br/>Apache Infrastructure, Arturo Vazquez, Eric Burghard, Eric BURGHARD, Fabio Rinaldi, Florian G. Haas, Jan Materne, Johannes Schaefer, Juan Jose Pablos, Nick Chalko, Pierrick Brihaye, Ramón Prades, Rick Tessner, Rob Exley, Ross Gardler, Sebastian Bergmann, Stephan E. Schlierf, Unico Hommes.</p></section></section>
     <section id="version_0.5.1"><title>Version 0.5.1 (2003-10-06)</title><section><title>Changes to Build</title><ul><li><icon alt="fix" src="../images/fix.jpg"/>
         forrest.antproxy.xml script now properly fails when Cocoon fails
        Committed by JT.</li></ul></section><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="../images/add.jpg"/>
@@ -1285,7 +1330,6 @@
         The 'forrest' command no longer sources /etc/antrc and
         ~/.antrc, which solves problems on some *nix distributions.
        Committed by JT.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Jeff Turner (JT).</p></section></section>
-
     <section id="version_0.5"><title>Version 0.5 (2003-09-13)</title><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="../images/add.jpg"/>
         Added @label support for note and warning elements.
        Committed by SN.</li><li><icon alt="add" src="../images/add.jpg"/>
@@ -1561,7 +1605,6 @@
         Added page for ForrestBar on the site with a simple link and an autoinstall link
         to the forrestbar.xpi generated by Gump every day.
        Committed by NKB.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Jeff Turner (JT), Marc Portier (MP), Nicola Ken Barozzi (NKB).</p><p>This is a list of other contributors:<br/>Berin Loritsch, Bernhard Brandmair, Cathy Zura.</p></section></section>
-
     <section id="version_0.3"><title>Version 0.3 (2003-01-30)</title><section><title>Changes to Build</title><ul><li><icon alt="add" src="../images/add.jpg"/>
         Allow configuration of a project local-catalog and the entity resolver
         verbosity level, via forrest.properties configuration. This replaces
@@ -1604,8 +1647,7 @@
         it.  A new <code>forrest backcopy</code> command will copy
         <code>build/webapp/content/xdocs</code> content back to
         <code>src/documentation/content/xdocs</code>.
-       Committed by JT.</li><li><icon alt="fix" src="../images/fix.jpg"/>
-        <code>forrest-site</code> skin is now HTML 4.0.1 compliant.  The
+       Committed by JT.</li><li><icon alt="fix" src="../images/fix.jpg"/><code>forrest-site</code> skin is now HTML 4.0.1 compliant.  The
         compliance validator logo can be switched off with a
         <code>skinconf.xml</code> element.
        Committed by JT.</li><li><icon alt="fix" src="../images/fix.jpg"/>
@@ -1791,8 +1833,7 @@
        Committed by NKB.</li><li><icon alt="update" src="../images/update.jpg"/>
         Updated project descriptor: now it should be usable by Gump.
         Added basic Forrest descriptor.
-       Committed by NKB.</li></ul></section><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="../images/add.jpg"/>
-        <link href="site:v0.70//cap">SourceAction</link> or the so-called 
+       Committed by NKB.</li></ul></section><section><title>Changes to the Code Base</title><ul><li><icon alt="add" src="../images/add.jpg"/><link href="site:v0.70//cap">SourceAction</link> or the so-called 
         'content aware pipelines' enables conditional processing of XML
         documents based on their grammar, being indicated by their DTD,
         XML Schema PI, root element, or a processing instruction (PI)
@@ -1833,8 +1874,7 @@
         by placing these files in src/documentation/conf
        Committed by JT.</li><li><icon alt="add" src="../images/add.jpg"/>
         added NekoDTD-based DTD documentation using a custom Cocoon Generator
-       Committed by SN.</li><li><icon alt="add" src="../images/add.jpg"/>
-        <link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102471820523388">draft forrest toolbar for Mozilla</link>
+       Committed by SN.</li><li><icon alt="add" src="../images/add.jpg"/><link href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=102471820523388">draft forrest toolbar for Mozilla</link>
        Committed by NKB.</li><li><icon alt="add" src="../images/add.jpg"/>
         Initial import of <link href="site:v0.70//libre-intro">Libre</link>
         facility - replacement for */book.xml
@@ -1932,4 +1972,4 @@
         validated using these DTDs and OASIS Catalogs.
        Committed by DC. Thanks to <link href="mailto:stevenn@outerthought.org">Steven Noels</link>.</li></ul></section><section><title>Contributors to this release</title><p>We thank the following people for their contributions to this release.</p><p>This is a list of all people who participated as committers:<br/>Bert Van Kets (BK), David Crossley (DC), Jeff Turner (JT), Nicola Ken Barozzi (NKB), Stefano Mazzocchi (SM), Steven Noels (SN).</p><p>This is a list of other contributors:<br/>Bert Van Kets, Bruno Dumon, Kevin Ross, Leo Simons, Marc Portier, Peter Donald, Steven Noels.</p></section></section>
   <section id="all-committers"><title>All Committers</title><p>This is a list of all people who have ever participated
-           as committers on this project.</p><ul><li>Stefano Mazzocchi (SM)</li><li>Sam Ruby (SR)</li><li>John Morrison (JM)</li><li>David Crossley (DC)</li><li>Steven Noels (SN)</li><li>Nicola Ken Barozzi (NKB)</li><li>Konstantin Piroumian (KP)</li><li>Bert Van Kets (BK)</li><li>Marc Portier (MP)</li><li>Jeff Turner (JT)</li><li>Juan Jose Pablos (JJP)</li><li>Dave Brondsema (DB)</li><li>Antonio Gallardo (AG)</li><li>Reinhard Pötz (RP)</li><li>Ross Gardler (RDG)</li><li>Thorsten Scherler (TS)</li><li>Rick Tessner (RFT)</li><li>Ferdinand Soethe (FSO)</li><li>Johannes Schaefer (JS)</li><li>Cyriaque Dupoirieux (CD)</li><li>Bertrand Delacretaz (BD)</li><li>Tim Williams (TWW)</li><li>Diwaker Gupta (DG)</li><li>Volunteer needed (open)</li></ul></section></body></document>
+           as committers on this project.</p><ul><li>Stefano Mazzocchi (SM)</li><li>Sam Ruby (SR)</li><li>John Morrison (JM)</li><li>David Crossley (DC)</li><li>Steven Noels (SN)</li><li>Nicola Ken Barozzi (NKB)</li><li>Konstantin Piroumian (KP)</li><li>Bert Van Kets (BK)</li><li>Marc Portier (MP)</li><li>Jeff Turner (JT)</li><li>Juan Jose Pablos (JJP)</li><li>Dave Brondsema (DB)</li><li>Antonio Gallardo (AG)</li><li>Reinhard Pötz (RP)</li><li>Ross Gardler (RDG)</li><li>Thorsten Scherler (TS)</li><li>Rick Tessner (RFT)</li><li>Ferdinand Soethe (FSO)</li><li>Johannes Schaefer (JS)</li><li>Cyriaque Dupoirieux (CD)</li><li>Bertrand Delacretaz (BD)</li><li>Tim Williams (TWW)</li><li>Diwaker Gupta (DG)</li><li>Gavin McDonald (GM)</li><li>Sjur N Moshagen (SNM)</li><li>Volunteer needed (open)</li></ul></section></body></document>

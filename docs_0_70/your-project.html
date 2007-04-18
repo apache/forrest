@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>Using Forrest (v0.7)</title>
 <link type="text/css" href="../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -283,7 +283,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -313,7 +313,7 @@ document.write("Last Published: " + document.lastModified);
 <h1>Using Forrest</h1>
 <h3>A tutorial on how to use Forrest in your own projects</h3>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -426,38 +426,50 @@ document.write("Last Published: " + document.lastModified);
 <h2 class="underlined_10">Introduction</h2>
 <div class="section">
 <p>
-        This tutorial will lead you through the process of installing Forrest, and using
-        it to create a new project, or add Forrest-based docs to an existing project.
+        This tutorial will lead you through the process of installing Forrest,
+        and using it to create a new project, or add Forrest-based docs to an
+        existing project.
       </p>
 </div>
-
-   
+    
 <a name="N1001A"></a><a name="installing"></a>
 <h2 class="underlined_10">Installing Forrest</h2>
 <div class="section">
 <p>
-       
-<a href="http://forrest.apache.org/mirrors.cgi">Download</a> the latest release
-       of Forrest and follow the index.html in the top-level, or
-       if you want to try the development version, then
-       <a href="../docs_0_70/build.html">build Forrest</a> from source.
-     </p>
+        
+<a href="http://forrest.apache.org/mirrors.cgi">Download</a> the latest release of
+        Forrest and follow the index.html in the top-level, or if you want to
+        try the development version, then
+        <a href="../docs_0_70/build.html">build Forrest</a> from
+        source.
+      </p>
 <a name="N1002B"></a><a name="Setting+up+the+Environment"></a>
 <h3 class="underlined_5">Setting up the Environment</h3>
 <p>
-       After downloading and extracting forrest, you need to add environment variables.
-       </p>
+          After downloading and extracting forrest, you need to add environment
+          variables.
+        </p>
 <a name="N10034"></a><a name="In+Unix%2FLinux%3A"></a>
 <h4>In Unix/Linux:</h4>
-<p class="instruction">change directory to the top-level of the forrest distribution and do ...</p>
-<p class="instruction">~/apache-forrest-0.7$ export FORREST_HOME=`pwd`</p>
-<p class="instruction">~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin</p>
+<p class="instruction">
+            change directory to the top-level of the forrest distribution and do
+            ...
+          </p>
+<p class="instruction">
+            ~/apache-forrest-0.7$ export FORREST_HOME=`pwd`
+          </p>
+<p class="instruction">
+            ~/apache-forrest-0.7$ export PATH=$PATH:$FORREST_HOME/bin
+          </p>
 <a name="N10046"></a><a name="Permanently+Setting+The+Environment+Variables+for+Linux%2FUnix"></a>
 <h5>Permanently Setting The Environment Variables for Linux/Unix</h5>
-<p>Export only changes the variables during that terminal session for that 
-           user, this is useful for testing. To permanently add the variable edit either 
-           <span class="codefrag">/etc/bash.bashrc</span> (for all users) or <span class="codefrag">~/.bash_profile</span>
-           (for individual users). Add these lines to the end of the file you edit:</p>
+<p>
+              Export only changes the variables during that terminal session for
+              that user, this is useful for testing. To permanently add the
+              variable edit either <span class="codefrag">/etc/bash.bashrc</span> (for all users)
+              or <span class="codefrag">~/.bash_profile</span> (for individual users). Add these
+              lines to the end of the file you edit:
+            </p>
 <pre class="code">
       FORREST_HOME=/full/path/to/forrest
       export FORREST_HOME
@@ -467,26 +479,42 @@ document.write("Last Published: " + document.lastModified);
           </pre>
 <a name="N1005B"></a><a name="Windows+2000"></a>
 <h4>Windows 2000</h4>
-<p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
-<p class="instruction">add a new variable <span class="codefrag">FORREST_HOME</span> as <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
+<p class="instruction">
+            Go to "My Computer", "Properties", "Advanced", "Environment
+            Variables"
+          </p>
+<p class="instruction">
+            add a new variable <span class="codefrag">FORREST_HOME</span> as
+            <span class="codefrag">C:\full\path\to\apache-forrest-0.7</span>
+          
 </p>
-<p class="instruction">edit <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
+<p class="instruction">
+            edit <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
+          
 </p>
-<a name="N10078"></a><a name="In+Windows+XP%3A"></a>
+<a name="N1007A"></a><a name="In+Windows+XP%3A"></a>
 <h4>In Windows XP:</h4>
-<p class="instruction">Go to "My Computer", "Properties", "Advanced", "Environment Variables"</p>
-<p class="instruction">Create a New variable with name: FORREST_HOME value: C:\full\path\to\apache-forrest-0.7</p>
-<p class="instruction">Edit PATH by adding ;%FORREST_HOME%\bin to the end of the current value.</p>
+<p class="instruction">
+            Go to "My Computer", "Properties", "Advanced", "Environment
+            Variables"
+          </p>
+<p class="instruction">
+            Create a New variable with name: FORREST_HOME value:
+            C:\full\path\to\apache-forrest-0.7
+          </p>
+<p class="instruction">
+            Edit PATH by adding ;%FORREST_HOME%\bin to the end of the current
+            value.
+          </p>
 </div>
-   
-   
-<a name="N1008D"></a><a name="The+%27forrest%27+Command"></a>
+    
+<a name="N1008F"></a><a name="The+%27forrest%27+Command"></a>
 <h2 class="underlined_10">The 'forrest' Command</h2>
 <div class="section">
 <p>
-         To see what the 'forrest' command can do, type 'forrest -projecthelp'.
-         The build targets that are marked with * are the commonly used ones.
-         </p>
+        To see what the 'forrest' command can do, type 'forrest -projecthelp'.
+        The build targets that are marked with * are the commonly used ones.
+      </p>
 <pre class="code">
   Apache Forrest.  Run 'forrest -projecthelp' to list options
   
@@ -532,15 +560,15 @@ document.write("Last Published: " + document.lastModified);
   Default target: site
        </pre>
 <p>
-          As 'site' is the default target, just running 'forrest' without options will
-          generate a "static HTML website". For example, typing 'forrest' in the
-         top-level "forrest/site-author" directory would build Forrest's own website.
-         But we're going to be building a new site for your project, so read on.
-        </p>
+        As 'site' is the default target, just running 'forrest' without options
+        will generate a "static HTML website". For example, typing 'forrest' in
+        the top-level "forrest/site-author" directory would build Forrest's own
+        website. But we're going to be building a new site for your project, so
+        read on.
+      </p>
 </div>
-
     
-<a name="N1009E"></a><a name="seeding_new"></a>
+<a name="N100A0"></a><a name="seeding_new"></a>
 <h2 class="underlined_10">Seeding a new project</h2>
 <div class="section">
 <p>
@@ -548,9 +576,8 @@ document.write("Last Published: " + document.lastModified);
         documentation set to your project, which you can then customize.
       </p>
 <p>
-        To try this out, create a completely new directory (outside the
-        Forrest distribution), then change directory
-        to it, and do 'forrest seed':
+        To try this out, create a completely new directory (outside the Forrest
+        distribution), then change directory to it, and do 'forrest seed':
       </p>
 <pre class="code">
 [/home/me/forrest/my-test]$ forrest seed
@@ -613,7 +640,8 @@ Total time: 5 seconds
 <div class="label">Note</div>
 <div class="content">
         As you have probably noticed, we like to document things right in the
-        script, on the theory that people only read online docs when desperate :)
+        script, on the theory that people only read online docs when desperate
+        :)
       </div>
 </div>
 <p>
@@ -677,22 +705,22 @@ Total time: 5 seconds
 |-- status.xml
       </pre>
 <p>
-        To render this to HTML, type 'forrest'. You should have a HTML site rendered
-        into the <span class="codefrag">build/site</span> directory:
+        To render this to HTML, type 'forrest'. You should have a HTML site
+        rendered into the <span class="codefrag">build/site</span> directory:
       </p>
 <div id="" style="text-align: center;">
 <img id="" class="figure" alt="New project" src="images/new-project.png" height="356" width="500"></div>
 <p>
         Practise with adding new content. Change to the directory
         <span class="codefrag">src/documentation/content/xdocs</span> and copy the file
-        <span class="codefrag">index.xml</span> to create <span class="codefrag">my-new-file.xml</span> as a
-        new document. Edit it to change some text. Add an entry to 
-        <span class="codefrag">site.xml</span> by copying one of the other entries and
-        changing it to suit. Now do 'forrest' to see the result.
+        <span class="codefrag">index.xml</span> to create <span class="codefrag">my-new-file.xml</span> as a new
+        document. Edit it to change some text. Add an entry to
+        <span class="codefrag">site.xml</span> by copying one of the other entries and changing
+        it to suit. Now do 'forrest' to see the result.
       </p>
 </div>
     
-<a name="N100D4"></a><a name="seeding_existing"></a>
+<a name="N100D6"></a><a name="seeding_existing"></a>
 <h2 class="underlined_10">Seeding an existing project</h2>
 <div class="section">
 <p>
@@ -706,27 +734,28 @@ Total time: 5 seconds
         If your project already has XML documentation, it may be easier to tell
         Forrest where the XML sources are, rather than rearrange your project
         directories to accommodate Forrest. This can be done by editing
-        <span class="codefrag">forrest.properties</span> (consult
-        the <a href="#Changing_the_layout">Changing the layout</a>
-        section for more details).
+        <span class="codefrag">forrest.properties</span> (consult the
+        <a href="#Changing_the_layout">Changing the layout</a> section for
+        more details).
       </p>
 </div>
     
-<a name="N100E8"></a><a name="customizing"></a>
+<a name="N100EA"></a><a name="customizing"></a>
 <h2 class="underlined_10">Customizing your project</h2>
 <div class="section">
 <p>
-        Having seeded a project with template docs, you will now want to customize it
-        to your project's needs. Here we will deal with configuring the skin, and
-        changing the project layout.
+        Having seeded a project with template docs, you will now want to
+        customize it to your project's needs. Here we will deal with configuring
+        the skin, and changing the project layout.
       </p>
-<a name="N100F1"></a><a name="skinconf.xml"></a>
+<a name="N100F3"></a><a name="skinconf.xml"></a>
 <h3 class="underlined_5">Configuring the Forrest skin: skinconf.xml</h3>
 <p>
           Most Forrest skins can be customized through a single XML file,
           <span class="codefrag">src/documentation/skinconf.xml</span>, which looks like this:
         </p>
 <pre class="code">
+
 &lt;!--
 Skin configuration file. This file contains details of your project,
 which will be used to configure the chosen Forrest skin.
@@ -886,36 +915,36 @@ which will be used to configure the chosen Forrest skin.
   &lt;/credits&gt;
 
 &lt;/skinconfig&gt;
-</pre>
+
+        </pre>
 <p>
-          Customise this file for your project. The <span class="codefrag">images/</span> directory
-          mentioned in 'project-logo' and 'group-logo' elements corresponds to the
-          <span class="codefrag">src/documentation/resources/images</span> directory
-          (this mapping is done automatically by the sitemap).
+          Customise this file for your project. The <span class="codefrag">images/</span>
+          directory mentioned in 'project-logo' and 'group-logo' elements
+          corresponds to the <span class="codefrag">src/documentation/resources/images</span>
+          directory (this mapping is done automatically by the sitemap).
         </p>
 <p>
-          Having edited this file (and ensured it is valid XML), re-run the 'forrest'
-          command in the site root, and the site would be updated.
+          Having edited this file (and ensured it is valid XML), re-run the
+          'forrest' command in the site root, and the site would be updated.
         </p>
-<a name="N1010E"></a><a name="Changing_the_layout"></a>
+<a name="N10110"></a><a name="Changing_the_layout"></a>
 <h3 class="underlined_5">Changing the layout: forrest.properties</h3>
 <p>
-          Forrest allows you to place files anywhere you want in your
-          project, so long as you tell Forrest where you have placed the
-          major file types.
+          Forrest allows you to place files anywhere you want in your project,
+          so long as you tell Forrest where you have placed the major file
+          types.
         </p>
 <p>
           The <span class="codefrag">forrest.properties</span> file maps from your directory
-          layout to Forrest's. If you generated your site with 'forrest seed', you
-          will have one pre-written, with all the entries commented out.
+          layout to Forrest's. If you generated your site with 'forrest seed',
+          you will have one pre-written, with all the entries commented out.
         </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-         You only need to un-comment entries if you are going to change them
-         to something different.
-         If you keep in synchronisation with the 'forrest seed' defaults,
-         then it is easy to diff each time that you update.
+          You only need to un-comment entries if you are going to change them to
+          something different. If you keep in synchronisation with the 'forrest
+          seed' defaults, then it is easy to diff each time that you update.
         </div>
 </div>
 <p>
@@ -942,21 +971,23 @@ which will be used to configure the chosen Forrest skin.
 #project.classes-dir=${project.content-dir}/classes
        </pre>
 <p>
-         For example, if you wish to keep XML documentation in src/xdocs rather than
-         <span class="codefrag">src/documentation/content/xdocs</span> simply change the
-         definition for project.xdocs-dir
-       </p>
+          For example, if you wish to keep XML documentation in src/xdocs rather
+          than <span class="codefrag">src/documentation/content/xdocs</span> simply change the
+          definition for project.xdocs-dir
+        </p>
 <pre class="code">project.xdocs-dir=src/xdocs</pre>
 <p>
-         For example, to emulate the simple 
-         <a href="http://maven.apache.org/">Maven</a> format:
-       </p>
-<div class="pre">
+          For example, to emulate the simple
+          <a href="http://maven.apache.org/">Maven</a> format:
+        </p>
+<pre class="code">
          /xdocs
          /xdocs/images
          /xdocs/stylesheets
-       </div>
-<p>Here are the required property definitions:</p>
+       </pre>
+<p>
+          Here are the required property definitions:
+        </p>
 <pre class="code">
 project.content-dir=xdocs
 project.sitemap-dir=${project.content-dir}
@@ -968,17 +999,16 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-           Internally, Forrest rearranges the specified directory into the default
-           <span class="codefrag">src/documentation/content/xdocs</span> structure. In the layout above, we have
-           overlapping directories, so you will end up with duplicate files. This small
-           glitch doesn't usually cause problems; just always remember that all links
-           are resolved through the sitemap.
-         </div>
+          Internally, Forrest rearranges the specified directory into the
+          default <span class="codefrag">src/documentation/content/xdocs</span> structure. In the
+          layout above, we have overlapping directories, so you will end up with
+          duplicate files. This small glitch doesn't usually cause problems;
+          just always remember that all links are resolved through the sitemap.
+        </div>
 </div>
 </div>
-
     
-<a name="N1014D"></a><a name="adding_content"></a>
+<a name="N1014F"></a><a name="adding_content"></a>
 <h2 class="underlined_10">Adding content</h2>
 <div class="section">
 <p>
@@ -986,71 +1016,72 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <span class="codefrag">src/documentation/content/xdocs</span>
       
 </p>
-<a name="N10159"></a><a name="site.xml"></a>
+<a name="N1015B"></a><a name="site.xml"></a>
 <h3 class="underlined_5">site.xml</h3>
 <p>
-          When adding a new xml document, you would add an entry to the project's
-          <span class="codefrag">site.xml</span> file. This site.xml is like a site index, and is rendered as
-          the vertical column of links in the default skin.  Look at Forrest's own
-          xdocs for an example.  More detailed info about site.xml is provided in 
-          the document <a href="../docs_0_70/linking.html">Menus and Linking</a>.
+          When adding a new xml document, you would add an entry to the
+          project's <span class="codefrag">site.xml</span> file. This site.xml is like a site
+          index, and is rendered as the vertical column of links in the default
+          skin. Look at Forrest's own xdocs for an example. More detailed info
+          about site.xml is provided in the document
+          <a href="../docs_0_70/linking.html">Menus and Linking</a>.
         </p>
-<a name="N1016A"></a><a name="tabs.xml"></a>
+<a name="N1016C"></a><a name="tabs.xml"></a>
 <h3 class="underlined_5">tabs.xml</h3>
 <p>
-          The <span class="codefrag">tabs.xml</span> file is used to produce the 'tabs'.
-          which enable users to quickly jump to sections of your site.
-          See the
-          <a href="../docs_0_70/linking.html#menu_generation">menu generation</a> documentation
-          for more details, and again, consult Forrest's own docs for a usage
-          example.
+          The <span class="codefrag">tabs.xml</span> file is used to produce the 'tabs'. which
+          enable users to quickly jump to sections of your site. See the
+          <a href="../docs_0_70/linking.html#menu_generation">menu generation</a>
+          documentation for more details, and again, consult Forrest's own docs
+          for a usage example.
         </p>
 <div id="" style="text-align: center;">
 <img id="" class="figure" alt="Tabs" src="images/tabs.png"></div>
-<p>You can have one or two levels of tabs. The images above show a 
-        single level. However, you can create a second level that
-        will only be displayed when its parent tab is selected. For example,
-        the <span class="codefrag">tabs.xml</span> snippet below will display either one or
-        two rows of tabs, depending on which of the top level tabs is selected.
-        The first row will have two tabs: one labelled <span class="codefrag">How-Tos</span>
-        and the other labelled <span class="codefrag">Apache XML Projects</span>. When the 
-        <span class="codefrag">How-Tos</span> tab is selected there will
-        be no second row of tabs. However, when the <span class="codefrag">Apache XML
-        Projects</span> tab is selected, a second row of tabs will be displayed
-        below the first.</p>
+<p>
+          You can have one or two levels of tabs. The images above show a single
+          level. However, you can create a second level that will only be
+          displayed when its parent tab is selected. For example, the
+          <span class="codefrag">tabs.xml</span> snippet below will display either one or two
+          rows of tabs, depending on which of the top level tabs is selected.
+          The first row will have two tabs: one labelled <span class="codefrag">How-Tos</span>
+          and the other labelled <span class="codefrag">Apache XML Projects</span>. When the
+          <span class="codefrag">How-Tos</span> tab is selected there will be no second row of
+          tabs. However, when the <span class="codefrag">Apache XML Projects</span> tab is
+          selected, a second row of tabs will be displayed below the first.
+        </p>
 <pre class="code">
+
   &lt;tab label="How-Tos" dir="community/howto/"/&gt;
   &lt;tab label="Apache XML Projects" href="http://xml.apache.org"&gt;
     &lt;tab label="Forrest" href="http://forrest.apache.org/"/&gt;
     &lt;tab label="Xerces" href="http://xml.apache.org/xerces"/&gt;
   &lt;/tab&gt;
-</pre>
-<a name="N10195"></a><a name="images"></a>
+
+        </pre>
+<a name="N10197"></a><a name="images"></a>
 <h3 class="underlined_5">Images</h3>
 <p>
           Images usually go in the <span class="codefrag">content/xdocs/images/</span> directory.
-          The default sitemap
-          maps this directory to <span class="codefrag">images/</span> so image tags will typically look
-          like <span class="codefrag">&lt;figure src="images/project-logo.png" alt="Project Logo"/&gt;</span> 
+          The default sitemap maps this directory to <span class="codefrag">images/</span> so
+          image tags will typically look like <span class="codefrag">&lt;figure
+          src="images/project-logo.png" alt="Project Logo"/&gt;</span>
         
 </p>
 </div>
-
     
-<a name="N101A9"></a><a name="sitemap.xmap"></a>
+<a name="N101AB"></a><a name="sitemap.xmap"></a>
 <h2 class="underlined_10">Advanced customizations: sitemap.xmap</h2>
 <div class="section">
 <p>
-        The Cocoon sitemap is a set of rules for generating content (HTML, PDFs etc)
-        from XML sources. Forrest has a default sitemap, which is adequate for
-        everyday sites. For example, the
-        <a href="http://forrest.apache.org/">Forrest website</a> itself uses the
-        default sitemap.
+        The Cocoon sitemap is a set of rules for generating content (HTML, PDFs
+        etc) from XML sources. Forrest has a default sitemap, which is adequate
+        for everyday sites. For example, the <a href="http://forrest.apache.org/">Forrest
+        website</a> itself uses the default sitemap.
       </p>
 <p>
-        Sometimes, one needs to go beyond the default set of rules. This is where
-        Forrest really shines, because its Cocoon backend allows virtually any
-        processing pipeline to be defined. For example, one can:
+        Sometimes, one needs to go beyond the default set of rules. This is
+        where Forrest really shines, because its Cocoon backend allows virtually
+        any processing pipeline to be defined. For example, one can:
       </p>
 <ul>
         
@@ -1081,43 +1112,42 @@ project.skinconf=${project.content-dir}/skinconf.xml
       
 </ul>
 <p>
-        The Forrest sitemaps are at
-        <span class="codefrag">main/webapp/*.xmap</span>
+        The Forrest sitemaps are at <span class="codefrag">main/webapp/*.xmap</span>
       
 </p>
 <p>
         You can add pre-processing sitemaps to your project
         <span class="codefrag">src/documentation</span> directory (or wherever
         <span class="codefrag">${project.sitemap-dir}</span> points to). Get a copy of a simple
-        sitemap.xmap from a 'forrest seed site'. </p>
-<p>Any match that
-        is not handled, passes through to be handled by the default Forrest
-        sitemaps - obviously extremely powerful. The capability is described
-        in 
-        "<a href="../docs_0_70/project-sitemap.html">Using project sitemaps</a>"
-        and some worked examples are shown in the following sections here.
+        sitemap.xmap from a 'forrest seed site'.
+      </p>
+<p>
+        Any match that is not handled, passes through to be handled by the
+        default Forrest sitemaps - obviously extremely powerful. The capability
+        is described in "<a href="../docs_0_70/project-sitemap.html">Using project
+        sitemaps</a>" and some worked examples are shown in the following
+        sections here.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-        We advise you to spend time to understand the Apache Cocoon sitemap.
-        See <a href="http://cocoon.apache.org/2.1/userdocs/concepts/sitemap.html">Cocoon sitemap</a>
-        and <a href="http://cocoon.apache.org/2.1/userdocs/concepts/">Cocoon concepts</a>
-        and related component documentation.
-        The Forrest sitemap is broken into multiple files. The main one is
-        <strong>sitemap.xmap</strong> which delegates to others.  See the
-         <a href="../docs_0_70/sitemap-ref.html">Sitemap Reference</a> for a tour of the
-        default sitemap.
+        We advise you to spend time to understand the Apache Cocoon sitemap. See
+        <a href="http://cocoon.apache.org/2.1/userdocs/concepts/sitemap.html">Cocoon sitemap</a> and
+        <a href="http://cocoon.apache.org/2.1/userdocs/concepts/">Cocoon concepts</a> and related
+        component documentation. The Forrest sitemap is broken into multiple
+        files. The main one is <strong>sitemap.xmap</strong> which delegates to
+        others. See the <a href="../docs_0_70/sitemap-ref.html">Sitemap
+        Reference</a> for a tour of the default sitemap.
       </div>
 </div>
-<a name="N10211"></a><a name="adding_new_content_type"></a>
+<a name="N10213"></a><a name="adding_new_content_type"></a>
 <h3 class="underlined_5">Example: Adding a new content type</h3>
 <p>
-          There are two methods for detecting types of documents
-          and doing special handling. The more complete solution is
-          <a href="#adding_new_content_type_2">described</a>
-          in the advanced section below. However, this basic method
-          is also worth understanding.
+          There are two methods for detecting types of documents and doing
+          special handling. The more complete solution is
+          <a href="#adding_new_content_type_2">described</a> in the
+          advanced section below. However, this basic method is also worth
+          understanding.
         </p>
 <p>
           Follow this worked example. In a fresh directory do 'forrest seed'
@@ -1126,12 +1156,13 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <p>
           An example scenario is that we have a specialised list of downloads
           for a certain software package. It would be best to represent the
-          download information in a custom XML format. This means that it
-          will have its own document type declaration. We will need
-          to detect this new document type via our project sitemap
-          and also provide a mapping to a local copy of this DTD.
+          download information in a custom XML format. This means that it will
+          have its own document type declaration. We will need to detect this
+          new document type via our project sitemap and also provide a mapping
+          to a local copy of this DTD.
         </p>
-<pre class="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<pre class="code">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE document PUBLIC "-//Acme//DTD Download Documentation V1.0//EN"
   "dtd/download-v10.dtd"&gt;
 &lt;document&gt; 
@@ -1170,18 +1201,22 @@ project.skinconf=${project.content-dir}/skinconf.xml
       &lt;p&gt;....&lt;/p&gt;
     &lt;/section&gt;
   &lt;/body&gt;
-&lt;/document&gt;</pre>
-<p>This file called "<span class="codefrag">download.xml</span>" would be placed in
-          your content directory (typically
+&lt;/document&gt;
+        </pre>
+<p>
+          This file called "<span class="codefrag">download.xml</span>" would be placed in your
+          content directory (typically
           <span class="codefrag">src/documentation/content/xdocs</span>) and an entry added to
           <span class="codefrag">site.xml</span>
+        
 </p>
 <p>
           To handle these special tags, one would write a stylesheet to convert
-          them to the intermediate Forrest xdocs structure. Here is such a stylesheet,
-          called "<span class="codefrag">download2document.xsl</span>" ...
+          them to the intermediate Forrest xdocs structure. Here is such a
+          stylesheet, called "<span class="codefrag">download2document.xsl</span>" ...
         </p>
-<pre class="code">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<pre class="code">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
@@ -1213,104 +1248,110 @@ project.skinconf=${project.content-dir}/skinconf.xml
   &lt;/xsl:template&gt;
 
 &lt;/xsl:stylesheet&gt;
-</pre>
+
+        </pre>
 <p>
-            Place this file in the default stylesheets directory,
-            <span class="codefrag">src/documentation/resources/stylesheets</span> (or wherever
-            ${project.stylesheets-dir} points).
-          </p>
+          Place this file in the default stylesheets directory,
+          <span class="codefrag">src/documentation/resources/stylesheets</span> (or wherever
+          ${project.stylesheets-dir} points).
+        </p>
 <p>
-            Now we will create a project sitemap to control the
-            transformation of our custom xml
-            structure into the Forrest intermediate xdocs structure.
-          </p>
+          Now we will create a project sitemap to control the transformation of
+          our custom xml structure into the Forrest intermediate xdocs
+          structure.
+        </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-            The <a href="../docs_0_70/sitemap-ref.html">Sitemap
-            Reference</a> provides details about how the sitemap works.
-          </div>
+          The <a href="../docs_0_70/sitemap-ref.html">Sitemap Reference</a>
+          provides details about how the sitemap works.
+        </div>
 </div>
 <p>
-            Add the following match to the file
-            <span class="codefrag">src/documentation/sitemap.xmap</span> ...
-          </p>
-<pre class="code">&lt;?xml version="1.0"?&gt;
+          Add the following match to the file
+          <span class="codefrag">src/documentation/sitemap.xmap</span> ...
+        </p>
+<pre class="code">
+&lt;?xml version="1.0"?&gt;
 &lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
  &lt;map:pipelines&gt;
   &lt;map:pipeline&gt;
   ...
   <strong>
+
    &lt;map:match pattern="**download.xml"&gt;
     &lt;map:generate src="{properties:content.xdocs}{1}download.xml" /&gt;
     &lt;map:transform src="{properties:resources.stylesheets}/download2document.xsl" /&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
+
   &lt;/map:pipeline&gt;
  &lt;/map:pipelines&gt;
 &lt;/map:sitemap&gt;
-</pre>
+
+        </pre>
 <p>
-            That will intercept the request for the body content, for only
-            this specific "download" document, and will transform it into the
-            intermediate Forrest "document" format. The normal Forrest machinery
-            will handle the aggregation with navigation menus etc. and will
-            apply the normal skin.
-          </p>
-<a name="N1025D"></a><a name="new_dtd"></a>
+          That will intercept the request for the body content, for only this
+          specific "download" document, and will transform it into the
+          intermediate Forrest "document" format. The normal Forrest machinery
+          will handle the aggregation with navigation menus etc. and will apply
+          the normal skin.
+        </p>
+<a name="N10260"></a><a name="new_dtd"></a>
 <h4>Registering a new DTD</h4>
 <p>
-                 By default, Forrest requires that all XML files be valid, i.e.
-                 they must have a DOCTYPE declaration and associated DTD, and
-                 validate against it.  Our new 'downloads' document type is no
-                 exception.  The <a href="../docs_0_70/validation.html">XML
-                   Validation</a> document continues this example, showing how
-                 to register a new document type.  Briefly, this involves:
-               </p>
+            By default, Forrest requires that all XML files be valid, i.e. they
+            must have a DOCTYPE declaration and associated DTD, and validate
+            against it. Our new 'downloads' document type is no exception. The
+            <a href="../docs_0_70/validation.html">XML Validation</a> document
+            continues this example, showing how to register a new document type.
+            Briefly, this involves:
+          </p>
 <ul>
-                 
+            
 <li>Create a new DTD or (in our case) extend an existing
                    one.</li>
-                 
+            
 <li>Place the new DTD in the
                    <span class="codefrag">${project.schema-dir}/dtd</span> directory.</li>
-                 
+            
 <li>Add an XML Catalog to enable a mapping from the
                    DOCTYPE public id to the relevant DTD file.</li>
-                 
+            
 <li>Tell the system about your catalog.</li>
-               
+          
 </ul>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-                 Please see <a href="../docs_0_70/validation.html">XML Validation</a>
-                 for the complete description for those steps.
-               </div>
+            Please see <a href="../docs_0_70/validation.html">XML Validation</a>
+            for the complete description for those steps.
+          </div>
 </div>
-<a name="N10285"></a><a name="adding_new_content_type_2"></a>
+<a name="N10288"></a><a name="adding_new_content_type_2"></a>
 <h3 class="underlined_5">Example: Adding a new content type (advanced)</h3>
 <p>
-              The simple user sitemap in the previous example is fine for
-              simple situations. For a complete solution to the "Download DTD"
-              issue we need a more advanced sitemap which will do different
-              processing depending on the type of the source document.
-            </p>
+          The simple user sitemap in the previous example is fine for simple
+          situations. For a complete solution to the "Download DTD" issue we
+          need a more advanced sitemap which will do different processing
+          depending on the type of the source document.
+        </p>
 <p>
-              We need to digress and explain the powerful 
-              <a href="../docs_0_70/cap.html">SourceTypeAction (content aware pipelines)</a>.
-              It is a Cocoon sitemap component that peeks at the top-part of
-              a document to look for hints about the type of the document.
-              It has four methods: document-declaration, document-element and
-              namespace, processing-instruction, w3c-xml-schema.
-            </p>
+          We need to digress and explain the powerful
+          <a href="../docs_0_70/cap.html">SourceTypeAction (content aware
+          pipelines)</a>. It is a Cocoon sitemap component that peeks at the
+          top-part of a document to look for hints about the type of the
+          document. It has four methods: document-declaration, document-element
+          and namespace, processing-instruction, w3c-xml-schema.
+        </p>
 <p>
-             Now to return to our specific example which uses SourceTypeAction
-             to detect the Document Type Declaration. Let us show the sitemap
-             and then explain it.
-            </p>
-<pre class="code">&lt;?xml version="1.0"?&gt;
+          Now to return to our specific example which uses SourceTypeAction to
+          detect the Document Type Declaration. Let us show the sitemap and then
+          explain it.
+        </p>
+<pre class="code">
+&lt;?xml version="1.0"?&gt;
 &lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
 
  &lt;map:components&gt;
@@ -1355,185 +1396,201 @@ project.skinconf=${project.content-dir}/skinconf.xml
   &lt;/map:pipeline&gt;
  &lt;/map:pipelines&gt;
 &lt;/map:sitemap&gt;
-</pre>
+
+        </pre>
 <p>
-              This is the type of processing that happens in the main
-              <span class="codefrag">main/webapp/forrest.xmap</span> sitemap. We have
-              added similar handling to our project sitemap. Basically, this
-              uses the <a href="../docs_0_70/cap.html">SourceTypeAction (content aware pipelines)</a>
-              to detect the doctype. The new document-v11.dtd needs to be also
-              added to your project Catalog as
-              <a href="#new_dtd">described above</a>.
-            </p>
+          This is the type of processing that happens in the main
+          <span class="codefrag">main/webapp/forrest.xmap</span> sitemap. We have added similar
+          handling to our project sitemap. Basically, this uses the
+          <a href="../docs_0_70/cap.html">SourceTypeAction (content aware
+          pipelines)</a> to detect the doctype. The new document-v11.dtd
+          needs to be also added to your project Catalog as
+          <a href="#new_dtd">described above</a>.
+        </p>
 <p>
-              Note that any sitemap component must be declared before it
-              can be used, because the project sitemap is the first sitemap
-              to be consulted.
-            </p>
-<a name="N102AE"></a><a name="integrating_rss"></a>
+          Note that any sitemap component must be declared before it can be
+          used, because the project sitemap is the first sitemap to be
+          consulted.
+        </p>
+<a name="N102B1"></a><a name="integrating_rss"></a>
 <h3 class="underlined_5">Example: integrating external RSS content</h3>
-<p>Similar to the previous example, we can integrate RSS into our
-              site simply by providing a match in our project sitemap.xmap ...
-            </p>
-<pre class="code">&lt;?xml version="1.0"?&gt;
+<p>
+          Similar to the previous example, we can integrate RSS into our site
+          simply by providing a match in our project sitemap.xmap ...
+        </p>
+<pre class="code">
+&lt;?xml version="1.0"?&gt;
 &lt;map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0"&gt;
  &lt;map:pipelines&gt;
-  &lt;map:pipeline&gt;
-  <strong>
+  &lt;map:pipeline&gt;<strong>
+
    &lt;map:match pattern="**weblog.xml"&gt;
     &lt;map:generate src="http://blogs.cocoondev.org/stevenn/index.rss"/&gt;
     &lt;map:transform src="{forrest:forrest.stylesheets}/rss2document.xsl"/&gt;
     &lt;map:serialize type="xml"/&gt;
    &lt;/map:match&gt;
 </strong>
+
    &lt;map:match pattern="......."&gt;
     &lt;!-- handle other project-specific matches --&gt;
    &lt;/map:match&gt;
   &lt;/map:pipeline&gt;
  &lt;/map:pipelines&gt;
 &lt;/map:sitemap&gt;
-</pre>
-<p>You will probably want to copy the core Forrest 
-              <span class="codefrag">rss2document.xsl</span> to your project,
-              customise it to your needs, and refer to it with
-              <span class="codefrag">src="{properties:resources.stylesheets}/rss2document.xsl"</span>.
-              Then of course you would add an entry to site.xml to link
-              to weblog.html
-            </p>
-</div>
 
-      
-<a name="N102C9"></a><a name="skins"></a>
+        </pre>
+<p>
+          You will probably want to copy the core Forrest
+          <span class="codefrag">rss2document.xsl</span> to your project, customise it to your
+          needs, and refer to it with
+          <span class="codefrag">src="{properties:resources.stylesheets}/rss2document.xsl"</span>.
+          Then of course you would add an entry to site.xml to link to
+          weblog.html
+        </p>
+</div>
+    
+<a name="N102CC"></a><a name="skins"></a>
 <h2 class="underlined_10">Forrest skins</h2>
 <div class="section">
 <p>
-          As Forrest separates content from presentation, we can plug in different
-          "skins" to instantly change a site's look and feel.  Forrest provides one
-          primary skin, <span class="codefrag">pelt</span>, and some others in various
-          states of development.
-          To change the skin, edit the <span class="codefrag">forrest.properties</span> file
-          to set <span class="codefrag">project.skin=leather-dev</span> or some other skin name.
-          If running in dynamic mode you need to restart Forrest in order to see
-          the new skin.
-        </p>
+        As Forrest separates content from presentation, we can plug in different
+        "skins" to instantly change a site's look and feel. Forrest provides one
+        primary skin, <span class="codefrag">pelt</span>, and some others in various states of
+        development. To change the skin, edit the
+        <span class="codefrag">forrest.properties</span> file to set
+        <span class="codefrag">project.skin=leather-dev</span> or some other skin name. If
+        running in dynamic mode you need to restart Forrest in order to see the
+        new skin.
+      </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-          Forrest supplies a collection of 
-          <a href="../docs_0_70/skins.html">default skins</a> which are configurable
-          and so should meet the needs of most projects. The aim is to provide
-          many capabilities so that extra skins are not needed.
-        </div>
+        Forrest supplies a collection of <a href="../docs_0_70/skins.html">default
+        skins</a> which are configurable and so should meet the needs of most
+        projects. The aim is to provide many capabilities so that extra skins
+        are not needed.
+      </div>
 </div>
-<a name="N102E2"></a><a name="skin-configuration"></a>
+<a name="N102E5"></a><a name="skin-configuration"></a>
 <h3 class="underlined_5">Configuration of skins</h3>
 <p>
           All configuration is done via your project
-          <span class="codefrag">src/documentation/skinconf.xml</span> file.
-          It contains many comments to describe each capability.
-          Please read those, there is no point repeating here.
-          </p>
-<a name="N102EF"></a><a name="new_skin"></a>
+          <span class="codefrag">src/documentation/skinconf.xml</span> file. It contains many
+          comments to describe each capability. Please read those, there is no
+          point repeating here.
+        </p>
+<a name="N102F2"></a><a name="new_skin"></a>
 <h3 class="underlined_5">Defining a new skin</h3>
-<p>Consider discussing your needs on the mailing lists. There may
-          be planned enhancements to the core skins. Also consider contributing
+<p>
+          Consider discussing your needs on the mailing lists. There may be
+          planned enhancements to the core skins. Also consider contributing
           your extensions to the core skins, rather than write your own skin.
           Bear in mind that you could be creating an update and management
           issue. Anyway, ...
-          </p>
+        </p>
 <p>
-            Projects can define their own skin in the
-            <span class="codefrag">src/documentation/skins</span> directory (or wherever
-            <span class="codefrag">${project.skins-dir}</span> points). The default sitemap assumes a
-            certain skin layout, so the easiest way to create a new skin is by
-            copying an existing Forrest skin.  For example, copy
-            <span class="codefrag">main/webapp/skins/pelt</span>
-            to your project area at
-            <span class="codefrag">src/documentation/skins/my-fancy-skin</span> and add
-            <span class="codefrag">project.skin=my-fancy-skin</span> to forrest.properties
-          </p>
+          Projects can define their own skin in the
+          <span class="codefrag">src/documentation/skins</span> directory (or wherever
+          <span class="codefrag">${project.skins-dir}</span> points). The default sitemap assumes
+          a certain skin layout, so the easiest way to create a new skin is by
+          copying an existing Forrest skin. For example, copy
+          <span class="codefrag">main/webapp/skins/pelt</span> to your project area at
+          <span class="codefrag">src/documentation/skins/my-fancy-skin</span> and add
+          <span class="codefrag">project.skin=my-fancy-skin</span> to forrest.properties
+        </p>
 <p>
-            The two most interesting XSLT stylesheets involved are:
-          </p>
+          The two most interesting XSLT stylesheets involved are:
+        </p>
 <dl>
-            
+          
 <dt>
 <span class="codefrag">xslt/html/document2html.xsl</span>
 </dt>
-            
+          
 <dd>
               This stylesheet is applied to individual Forrest xdocs XML files, and
               converts them to HTML suitable for embedding in a larger HTML page.
             </dd>
-            
+          
 <dt>
 <span class="codefrag">xslt/html/site2xhtml.xsl</span>
 </dt>
-            
+          
 <dd>
               This stylesheet generates the final HTML file from an intermediate
               'site' structure produced by the other stylesheets. It defines the general
               layout, and adds the header and footer.
             </dd>
-          
+        
 </dl>
 <p>
-            Typically there is a lot of commonality between skins.  XSLT
-            provides an 'import' mechanism whereby one XSLT can extend another.
-            Forrest XSLTs typically 'import' from a common base:
-          </p>
+          Typically there is a lot of commonality between skins. XSLT provides
+          an 'import' mechanism whereby one XSLT can extend another. Forrest
+          XSLTs typically 'import' from a common base:
+        </p>
 <pre class="code">
+
 &lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
 
   &lt;xsl:import href="../../../common/xslt/html/document2html.xsl"/&gt;
 
-  <strong>... overrides of default templates ...</strong> 
-&lt;/xsl:stylesheet&gt;</pre>
-<p>In order to use this feature in your custom skins you must copy
-          the common skin from the forrest distribution into your custom skins 
-          directory (from <span class="codefrag">main/webapp/skins/common</span>).
-          This will protect your skin from changes in the Forrest common skin,
-          but you must remember to update this skin in order to take advantage
-          of new features added over time by the Forrest team.</p>
+  <strong>... overrides of default templates ...</strong>
+ 
+&lt;/xsl:stylesheet&gt;
+        </pre>
+<p>
+          In order to use this feature in your custom skins you must copy the
+          common skin from the forrest distribution into your custom skins
+          directory (from <span class="codefrag">main/webapp/skins/common</span>). This will
+          protect your skin from changes in the Forrest common skin, but you
+          must remember to update this skin in order to take advantage of new
+          features added over time by the Forrest team.
+        </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">The above paragraph means that if you do copy an existing skin
-          as this section recomends you will also need to copy the common skin
-          since all existing skins import the common skin.</div>
+<div class="content">
+          The above paragraph means that if you do copy an existing skin as this
+          section recomends you will also need to copy the common skin since all
+          existing skins import the common skin.
+        </div>
 </div>
-<p>This is particularly relevant for menu rendering (book2menu.xsl),
-            where the common stylesheet does the 'logic' of which item is
-            selected, and over-riding stylesheets define the presentation.</p>
+<p>
+          This is particularly relevant for menu rendering (book2menu.xsl),
+          where the common stylesheet does the 'logic' of which item is
+          selected, and over-riding stylesheets define the presentation.
+        </p>
 </div>
-
     
-<a name="N10336"></a><a name="webapp"></a>
+<a name="N10339"></a><a name="webapp"></a>
 <h2 class="underlined_10">Interactive Forrest: faster turnaround when developing your docs</h2>
 <div class="section">
 <p>
-        In comparison to simpler tools (like 
-        <a href="http://jakarta.apache.org/velocity/anakia.html">Anakia</a>) the Cocoon command-line mode
-        (and hence Forrest command-line mode) is slow.
-        As the <a href="../docs_0_70/dreams.html">dream list</a> notes, Forrest was
-        originally intended to be used for
-        dynamic sites, and the Cocoon crawler used only to create static
-        snapshots for mirroring.  This section describes how, by using
-        a "live" Forrest webapp instance, the Forrest-based documentation
-        development can be faster and easier than with comparable tools.
+        In comparison to simpler tools (like
+        <a href="http://jakarta.apache.org/velocity/anakia.html">Anakia</a>) the Cocoon command-line mode (and
+        hence Forrest command-line mode) is slow. As the
+        <a href="../docs_0_70/dreams.html">dream list</a> notes, Forrest was
+        originally intended to be used for dynamic sites, and the Cocoon crawler
+        used only to create static snapshots for mirroring. This section
+        describes how, by using a "live" Forrest webapp instance, the
+        Forrest-based documentation development can be faster and easier than
+        with comparable tools.
       </p>
-<a name="N10347"></a><a name="forrest_run"></a>
+<a name="N1034A"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
-          Type '<span class="codefrag">forrest run</span>' in your project root to start Forrest's
-          built-in Jetty web server.  Once it has started, point your browser at
-          <a href="http://localhost:8888/">http://localhost:8888/</a>, which
-          will show your website, rendered on demand as each link is followed.
+          Type '<span class="codefrag">forrest run</span>' in your project root to start
+          Forrest's built-in Jetty web server. Once it has started, point your
+          browser at
+          <a href="http://localhost:8888/">http://localhost:8888/</a>,
+          which will show your website, rendered on demand as each link is
+          followed.
         </p>
-<p>(Alternatively, if you wish to run Forrest from within an existing
+<p>
+          (Alternatively, if you wish to run Forrest from within an existing
           servlet container, type <span class="codefrag">forrest webapp</span> to build an open
           webapp in <span class="codefrag">build/webapp/</span>)
         </p>
-<a name="N10360"></a><a name="using_webapp"></a>
+<a name="N10363"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
@@ -1542,16 +1599,18 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
 </div>
     
-<a name="N1036F"></a><a name="invoking_from_ant"></a>
+<a name="N10372"></a><a name="invoking_from_ant"></a>
 <h2 class="underlined_10">Invoking Forrest from Ant</h2>
 <div class="section">
 <p>
         Ant has an
         <a href="http://ant.apache.org/manual/CoreTasks/import.html">&lt;import&gt;</a>
-        task which can be used to invoke Forrest from Ant.  All targets and properties
-        are imported and can be used in your project build.  Here is a simple example:
+        task which can be used to invoke Forrest from Ant. All targets and
+        properties are imported and can be used in your project build. Here is a
+        simple example:
       </p>
 <pre class="code">
+
 &lt;project name="myproject" default="hello"&gt;
      &lt;!-- FORREST_HOME must be set as an environment variable --&gt;
      &lt;property environment="env"/&gt;
@@ -1563,32 +1622,35 @@ project.skinconf=${project.content-dir}/skinconf.xml
        &lt;echo&gt;something here&lt;/echo&gt;
      &lt;/target&gt;
 &lt;/project&gt;
-        </pre>
+        
+      </pre>
 <div class="warning">
 <div class="label">Warning</div>
-<div class="content">There is a bug in the plugin download mechanism in
-      Forrest 0.7 that may prevent
-      your plugins being installed correctly when calling Forrest from ANT. You
-      can work around this bug by either ensuring a version number is 
-      defined for the plugin in forrest.properties or by manually 
-      installing the required plugins.
+<div class="content">
+        There is a bug in the plugin download mechanism in Forrest 0.7 that may
+        prevent your plugins being installed correctly when calling Forrest from
+        ANT. You can work around this bug by either ensuring a version number is
+        defined for the plugin in forrest.properties or by manually installing
+        the required plugins.
       </div>
 </div>
-<p>Because you are using your own version
-      of Ant to do Forrest's work, you will need to provide the
-      supporting catalog entity resolver:
-      '<span class="codefrag">cp forrest/lib/core/xml-commons-resolver-1.1.jar $ANT_HOME/lib</span>'
-      </p>
-<p>Note: The technique described above requires Ant 1.6+ otherwise
-        the &lt;import&gt;
-        task will not be available for you to use. Forrest
-        bundles the latest version of Ant, so you can invoke your project
-        like this: '<span class="codefrag">forrest -f myproject.xml</span>'.
-        This will not run the '<span class="codefrag">forrest</span>' command. It will just
-        use Forrest's Ant and resolver to execute your buildfile.
+<p>
+        Because you are using your own version of Ant to do Forrest's work, you
+        will need to provide the supporting catalog entity resolver: '<span class="codefrag">cp
+        forrest/lib/core/xml-commons-resolver-1.1.jar $ANT_HOME/lib</span>'
       </p>
 <p>
-        Another option is to use the Forrest Antlet from the Krysalis Project's <a href="http://antworks.sourceforge.net/importer/">Antworks Importer</a>.
+        Note: The technique described above requires Ant 1.6+ otherwise the
+        &lt;import&gt; task will not be available for you to use. Forrest
+        bundles the latest version of Ant, so you can invoke your project like
+        this: '<span class="codefrag">forrest -f myproject.xml</span>'. This will not run the
+        '<span class="codefrag">forrest</span>' command. It will just use Forrest's Ant and
+        resolver to execute your buildfile.
+      </p>
+<p>
+        Another option is to use the Forrest Antlet from the Krysalis Project's
+        <a href="http://antworks.sourceforge.net/importer/">Antworks
+        Importer</a>.
       </p>
 <p>
         The <a href="../tools/forrestbot.html">Forrestbot</a> provides workstages

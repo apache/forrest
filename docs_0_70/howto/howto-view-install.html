@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>How to install the view package (v0.7)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -283,7 +283,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -312,10 +312,11 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <h1>How to install the view package</h1>
 <div class="abstract">
-    This How-To describes the setup of the plugins (needed to work with forrest:views and forrest:contracts) and a fresh seed.
-  </div>
+      This How-To describes the setup of the plugins (needed to work with
+      forrest:views and forrest:contracts) and a fresh seed.
+    </div>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -362,14 +363,14 @@ document.write("Last Published: " + document.lastModified);
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-"Views" are a new functionality which is still in development phase. That is why it is in the
-"whiteboard" section of the Forrest distribution.
-This HowTo is a good start but still needs proof-reading.
-</div>
+      "Views" are a new functionality which is still in development phase. That
+      is why it is in the "whiteboard" section of the Forrest distribution. This
+      HowTo is a good start but still needs proof-reading.
+    </div>
 </div>
 <p>
-      Users/devs who wants to get started with view development.
-      This setup guide is valid for both users and devs.
+      Users/devs who wants to get started with view development. This setup
+      guide is valid for both users and devs.
     </p>
 </div>
 <a name="N1001B"></a><a name="Purpose"></a>
@@ -393,15 +394,17 @@ This HowTo is a good start but still needs proof-reading.
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
 <p>
-      The process of setting up the plugin is quite involved. We promise it will be easier in the future. 
-      Some of the instructions have to be modified with your local settings.
+      The process of setting up the plugin is quite involved. We promise it will
+      be easier in the future. Some of the instructions have to be modified with
+      your local settings.
     </p>
 <a name="N10036"></a><a name="localBuild"></a>
 <h3 class="underlined_5">Build the view and the viewHelper plugins</h3>
 <p>
-        The first step is to build the view and the viewHelper plugins. Change to a console of your choice
-        and go (cd) to the trunk version of forrest {forrest-trunk}. Then do an update and after this 
-        deploy both plugins locally.
+        The first step is to build the view and the viewHelper plugins. Change
+        to a console of your choice and go (cd) to the trunk version of forrest
+        {forrest-trunk}. Then do an update and after this deploy both plugins
+        locally.
       </p>
 <pre class="code">
 cd {forrest-trunk}
@@ -413,11 +416,12 @@ ant local-deploy
       </pre>
 <a name="N10044"></a><a name="newSeed"></a>
 <h3 class="underlined_5">Seed a new project</h3>
-<p> 
-				Go to the dir where you want to seed a new project and seed it. 
-        Next we have to prepare a default.fv directory ("conf") in project.conf-dir (forrest.properties) 
-        of the fresh seed. This will be needed as soon you modify the default view of your project.
-        A "templates" directory is needed as well, for your project-specific contract implementations.
+<p>
+        Go to the dir where you want to seed a new project and seed it. Next we
+        have to prepare a default.fv directory ("conf") in project.conf-dir
+        (forrest.properties) of the fresh seed. This will be needed as soon you
+        modify the default view of your project. A "templates" directory is
+        needed as well, for your project-specific contract implementations.
       </p>
 <pre class="code">
 cd ~/src/newSeed
@@ -428,47 +432,58 @@ mkdir src/documentation/resources/templates
 <a name="N10052"></a><a name="forrestProperties"></a>
 <h3 class="underlined_5">Modifying forrest.properties</h3>
 <p>
-        Now we have to tell forrest that we are planning to use the view plugins. We will do that
-        by editing to the forrest.properties to add the plugins:
+        Now we have to tell forrest that we are planning to use the view
+        plugins. We will do that by editing to the forrest.properties to add the
+        plugins:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.output.viewHelper.xhtml,org.apache.forrest.plugin.internal.view
       </pre>
 <p>
-	     We also have to change the project skin to leather-dev. The reason for this is that the plugins are still
-       not independent from the "old fashion skins".  
+        We also have to change the project skin to leather-dev. The reason for
+        this is that the plugins are still not independent from the "old fashion
+        skins".
       </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">We are exchanging only site2xhtml.xsl of leather-dev skin by the plugins and some contracts 
-      	are based on e.g. document2html.xsl output of leather-dev.</div>
+<div class="content">
+        We are exchanging only site2xhtml.xsl of leather-dev skin by the plugins
+        and some contracts are based on e.g. document2html.xsl output of
+        leather-dev.
+      </div>
 </div>
 <pre class="code">
 project.skin=leather-dev
       </pre>
 <a name="N1006A"></a><a name="testing"></a>
 <h3 class="underlined_5">Test your new view-based project</h3>
-<p> 
+<p>
         Now you have finished the preparation and the setup to finally try
       </p>
 <pre class="code">
 forrest run
       </pre>
-<p>then point to <a href="http://localhost:8888/">http://localhost:8888/</a> and you should see the default
-        view-based skin.</p>
+<p>
+        then point to
+        <a href="http://localhost:8888/">http://localhost:8888/</a> and you
+        should see the default view-based skin.
+      </p>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">When developing styles with views 'forrest run' is the quickest
-way. You will see you do not have to build your project to see the
-changes on your pages when working with *.fv. </div>
+<div class="content">
+        When developing styles with views 'forrest run' is the quickest way. You
+        will see you do not have to build your project to see the changes on
+        your pages when working with *.fv.
+      </div>
 </div>
 <a name="N10082"></a><a name="availableContracts"></a>
 <h3 class="underlined_5">Available contracts</h3>
-<p> 
-	     To start working with views you need to know which contracts you can use. 
-	     For this we will install another plugin <span class="codefrag">org.apache.forrest.plugin.input.viewHelper.xhtml.ls</span>.
-	     The setup is:
-	    </p>
+<p>
+        To start working with views you need to know which contracts you can
+        use. For this we will install another plugin
+        <span class="codefrag">org.apache.forrest.plugin.input.viewHelper.xhtml.ls</span>. The
+        setup is:
+      </p>
 <pre class="code">
 cd {forrest-trunk}
 svn up
@@ -476,39 +491,41 @@ cd whiteboard/plugins/org.apache.forrest.plugin.input.viewHelper.xhtml.ls/
 ant local-deploy
 </pre>
 <p>
-        The newly installed plugin will show the available contracts listed in an html page.
-        First we have to tell forrest that we are planning to use the new plugin. We will do that
-        by editing the forrest.properties of the <a href="../../docs_0_70/howto/howto-view-install.html">newSeed</a> 
-        to <strong>add</strong> the plugin:
+        The newly installed plugin will show the available contracts listed in
+        an html page. First we have to tell forrest that we are planning to use
+        the new plugin. We will do that by editing the forrest.properties of the
+        <a href="../../docs_0_70/howto/howto-view-install.html">newSeed</a> to <strong>add</strong>
+        the plugin:
       </p>
 <pre class="code">
 project.required.plugins=org.apache.forrest.plugin.input.viewHelper.xhtml.ls
       </pre>
 <p>
-        Now point your browser to <span class="codefrag">http://localhost:8888/ls.contracts.html</span>. 
-        On this page you will find all contracts that you can use in your project.
+        Now point your browser to
+        <span class="codefrag">http://localhost:8888/ls.contracts.html</span>. On this page you
+        will find all contracts that you can use in your project.
       </p>
 </div>
 <a name="N100A7"></a><a name="Further Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
-      Congratulations, you are now able to work with views. 
-      From here we recommend reading the following How-To's:
+      Congratulations, you are now able to work with views. From here we
+      recommend reading the following How-To's:
     </p>
 <ul>
       
 <li>
-<a href="../../docs_0_70/howto/howto-view-dsl.html">Getting started with forrest:view DSL</a> 
+<a href="../../docs_0_70/howto/howto-view-dsl.html">Getting started with forrest:view DSL</a>
 </li>
       
 <li>
-<a href="../../docs_0_70/howto/howto-view-contracts.html">Create your own contract implementation</a> 
+<a href="../../docs_0_70/howto/howto-view-contracts.html">Create your own contract implementation</a>
 </li>
     
 </ul>
 </div>
-<a name="N100BE"></a><a name="Feedback"></a>
+<a name="N100BC"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>

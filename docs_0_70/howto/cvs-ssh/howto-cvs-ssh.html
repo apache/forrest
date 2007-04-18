@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>CVS through SSH (v0.7)</title>
 <link type="text/css" href="../../../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../../../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../../../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../../../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../../../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../../../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../../../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -124,7 +124,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -152,9 +152,13 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
 <h1>CVS through SSH</h1>
-<div class="abstract">This How-To describes the steps necessary to configure an SSH enabled CVS connection. It is recommended to configure an SSH enabled CVS connection to work with Apache code repositories.</div>
+<div class="abstract">
+      This How-To describes the steps necessary to configure an SSH enabled CVS
+      connection. It is recommended to configure an SSH enabled CVS connection
+      to work with Apache code repositories.
+    </div>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -198,41 +202,52 @@ document.write("Last Published: " + document.lastModified);
 <a name="N10013"></a><a name="Intended audience"></a>
 <h2 class="underlined_10">Intended audience</h2>
 <div class="section">
-<p>This How-to is aimed at developers who have been granted committer access to CVS repositories for particular projects.</p>
+<p>
+      This How-to is aimed at developers who have been granted committer access
+      to CVS repositories for particular projects.
+    </p>
 </div>
 <a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
-<p> 
-              Using SSH to access CVS repositories is recommended for security reasons. By configuring CVS to work with remote repository using private/public SSH keys you'll be able to run CVS commands without a need to enter your password every time you need access to CVS through SSH.
-        </p>
+<p>
+      Using SSH to access CVS repositories is recommended for security reasons.
+      By configuring CVS to work with remote repository using private/public SSH
+      keys you'll be able to run CVS commands without a need to enter your
+      password every time you need access to CVS through SSH.
+    </p>
 </div>
 <a name="N10023"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <ul>
-            
+      
 <li>Account on the local machine.</li>
-            
+      
 <li>Commiter access to the project(s). <em>This also imply having account on the CVS host machine.</em>
-</li>        
-            
+</li>
+      
 <li>Cygwin - a Unix environment for Windows systems. You can get it <a href="http://www.redhat.com/software/tools/cygwin/">here</a>. <em>Not required for Linux/*nix users.</em>
 </li>
-            
+      
 <li>A CVS GUI application (for Windows users only), e.g. WinCVS. <em>It is not required, but can be very useful.</em>
 </li>
-        
+    
 </ul>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">If you are behind a firewall check that you can communicate through the 22 port. For anonymous access you will need 2401 one.</div>
+<div class="content">
+      If you are behind a firewall check that you can communicate through the 22
+      port. For anonymous access you will need 2401 one.
+    </div>
 </div>
 </div>
 <a name="N10044"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
-<p>How to proceed.</p>
+<p>
+      How to proceed.
+    </p>
 <a name="N1004C"></a><a name="Terms"></a>
 <h3 class="underlined_5">Terms</h3>
 <dl>
@@ -246,25 +261,33 @@ document.write("Last Published: " + document.lastModified);
         
 <dd>Concurrent Version System See <a href="http://www.cvshome.org">CVS Home Page</a>
 </dd>
-         
+      
 </dl>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-<strong>$</strong> represents local, <strong>%</strong> remote machine.</div>
+      
+<strong>$</strong> represents local, <strong>%</strong> remote machine.
+    </div>
 </div>
-<a name="N10070"></a><a name="Setting+up+domain+users"></a>
+<a name="N10071"></a><a name="Setting+up+domain+users"></a>
 <h3 class="underlined_5">Setting up domain users</h3>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">This step is necessary only for Windows users. Linux users can happily skip this section and pass to <a href="#ssh_access">Setting up SSH access</a> section</div>
+<div class="content">
+        This step is necessary only for Windows users. Linux users can happily
+        skip this section and pass to <a href="#ssh_access">Setting up SSH
+        access</a> section
+      </div>
 </div>
-<p>If you are a domain user then you should be added to Cygwin users list (See <span class="codefrag">[cygwin-dir]/etc/passwd</span>). 
-            </p>
+<p>
+        If you are a domain user then you should be added to Cygwin users list
+        (See <span class="codefrag">[cygwin-dir]/etc/passwd</span>).
+      </p>
 <ul>
-              
+        
 <li>Start Cygwin, then enter following commands:</li>
-            
+      
 </ul>
 <pre class="code">
 $ whoami
@@ -275,20 +298,24 @@ $ exit
     </pre>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">Replace 'userxxx' by your account name</div>
+<div class="content">
+        Replace 'userxxx' by your account name
+      </div>
 </div>
 <ul>
-      
+        
 <li>Start Cygwin/shell again and check that everything's Ok:</li>
-    
+      
 </ul>
 <pre class="code">
 $ whoami
 userxxx
             </pre>
-<a name="N1009B"></a><a name="ssh_access"></a>
+<a name="N1009C"></a><a name="ssh_access"></a>
 <h3 class="underlined_5">Setting up SSH access</h3>
-<p>Start Cygwin/shell, then enter:</p>
+<p>
+        Start Cygwin/shell, then enter:
+      </p>
 <pre class="code">
 $ ssh-user-config
   Shall I create an SSH1 RSA identity file for you? (yes/no) no
@@ -303,15 +330,22 @@ $ ssh-user-config
   Configuration finished. Have fun!
     </pre>
 <p>
-      Now you have configured SSH on your machine. Next you have to setup access to the CVS machine.
-    </p>
+        Now you have configured SSH on your machine. Next you have to setup
+        access to the CVS machine.
+      </p>
 <div class="warning">
 <div class="label">Warning</div>
-<div class="content">Having an empty passphrase isn't recommended for security reasons. See <span class="codefrag">ssh-agent</span> documentation on how to configure automatic passphrase retaining.</div>
+<div class="content">
+        Having an empty passphrase isn't recommended for security reasons. See
+        <span class="codefrag">ssh-agent</span> documentation on how to configure automatic
+        passphrase retaining.
+      </div>
 </div>
-<a name="N100B2"></a><a name="Setting+up+passphrase+access"></a>
+<a name="N100B3"></a><a name="Setting+up+passphrase+access"></a>
 <h3 class="underlined_5">Setting up passphrase access</h3>
-<p>Perform the following:</p>
+<p>
+        Perform the following:
+      </p>
 <pre class="code">
 $ scp ~/.ssh/id_dsa.pub userxxx@cvs.apache.org:.
 $ ssh -l userxxx -L 2401:localhost:2401 cvs.apache.org
@@ -324,86 +358,99 @@ $ ssh -l userxxx -L 2401:localhost:2401 cvs.apache.org
             </pre>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">Note, that the account name on CVS machine can differ from your local account name.</div>
+<div class="content">
+        Note, that the account name on CVS machine can differ from your local
+        account name.
+      </div>
 </div>
 <p>
-            Check that your configuration is correct:
-            </p>
+        Check that your configuration is correct:
+      </p>
 <pre class="code">
 $ ssh userxxx@cvs.apache.org
             </pre>
 <div class="note">
 <div class="label">Note</div>
-<div class="content">If this command doesn't work then it can mean that you have an old version of SSH. In this case try <span class="codefrag">ssh -l userxxx cvs.apache.org</span>. Run <span class="codefrag">ssh --help</span> to get all available options.</div>
+<div class="content">
+        If this command doesn't work then it can mean that you have an old
+        version of SSH. In this case try <span class="codefrag">ssh -l userxxx
+        cvs.apache.org</span>. Run <span class="codefrag">ssh --help</span> to get all available
+        options.
+      </div>
 </div>
 <p>
-            If now you are logged in to the to the CVS machine without entering the password then everything's Ok.
-            </p>
-<a name="N100D6"></a><a name="Getting+the+project+from+CVS"></a>
+        If now you are logged in to the to the CVS machine without entering the
+        password then everything's Ok.
+      </p>
+<a name="N100D7"></a><a name="Getting+the+project+from+CVS"></a>
 <h3 class="underlined_5">Getting the project from CVS</h3>
-<p>Now you are ready to get a project from CVS using SSH connection.</p>
-<p>E.g. how it is done using Cygwin/shell</p>
+<p>
+        Now you are ready to get a project from CVS using SSH connection.
+      </p>
+<p>
+        E.g. how it is done using Cygwin/shell
+      </p>
 <pre class="code">
 $ export CVS_RSH=/bin/ssh
 $ cvs -d :ext:userxxx@cvs.apache.org:/home/cvs co xml-cocoon2            
             </pre>
-<a name="N100E7"></a><a name="How+to+setup+WinCVS"></a>
+<a name="N100E8"></a><a name="How+to+setup+WinCVS"></a>
 <h3 class="underlined_5">How to setup WinCVS</h3>
 <ul>
-                
+        
 <li>Add ssh.exe directory to your system PATH environment variable. Say: <br>
-                
 <span class="codefrag">C:\&gt;set PATH=%PATH%;C:\cygwin\bin</span>
 </li>
-                
+        
 <li>Add <span class="codefrag">CVS_RSH=ssh</span> environment variable</li>
-            
+      
 </ul>
 <p>
-            Start WinCVS, then:
-            </p>
+        Start WinCVS, then:
+      </p>
 <ul>
-                
+        
 <li>From the main menu select <strong>Admin</strong>
 </li>
-                
+        
 <li>Then select <strong>Preferences</strong>
 </li>
-                
+        
 <li>In the dialog that comes up: <br>
                 Set the CVSROOT to <span class="codefrag">userxxx@cvs.apache.org:/home/cvs</span>
 </li>
-                
-<li>Set the Authentication to SSH Server</li>                
-                
+        
+<li>Set the Authentication to SSH Server</li>
+        
 <li>Click Ok</li>
-            
+      
 </ul>
 <a name="N1011B"></a><a name="References"></a>
 <h3 class="underlined_5">References</h3>
 <p>
-                You can find more on CVS, SSH and WinCVS here:
-            </p>
+        You can find more on CVS, SSH and WinCVS here:
+      </p>
 <ul>
-                
+        
 <li>
 <a href="http://www.cvshome.org">CVS Home Page</a>
-</li>            
-                
+</li>
+        
 <li>
 <a href="http://www.openssh.org">OpenSSH</a>
-</li>            
-                
+</li>
+        
 <li>
 <a href="http://www.redhat.com/software/tools/cygwin/">Cygwin Home Page</a>
-</li>            
-                
+</li>
+        
 <li>
 <a href="http://odin.himinbi.org/wincvs-over-ssh/">WinCVS over SSH</a>
 </li>
-            
+      
 </ul>
 </div>
+<span class="version">1.0</span>
 </div>
 <!--+
     |end content

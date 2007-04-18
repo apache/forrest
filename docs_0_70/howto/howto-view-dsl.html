@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="Apache Forrest" name="Generator">
-<meta name="Forrest-version" content="0.8-dev">
+<meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
 <title>How to use the forrest:view config-DSL (v0.7)</title>
 <link type="text/css" href="../../skin/basic.css" rel="stylesheet">
@@ -87,7 +87,7 @@
     |start Subtabs
     +-->
 <div id="level2tabs">
-<a class="selected" href="../../docs_0_70/index.html">0.70 (current)</a><a class="unselected" href="../../docs_0_80/index.html">0.80-dev (under development)</a><a class="unselected" href="../../docs_0_60/index.html">0.60 (past)</a>
+<a class="unselected" href="../../docs_0_80/index.html">0.80 (current)</a><a class="unselected" href="../../docs_0_90/index.html">0.90-dev (under development)</a><a class="selected" href="../../docs_0_70/index.html">0.70 (past)</a>
 </div>
 <!--+
     |end Endtabs
@@ -100,7 +100,7 @@ document.write("Last Published: " + document.lastModified);
     |breadtrail
     +-->
 <div class="breadtrail">
-             
+
              &nbsp;
            </div>
 <!--+
@@ -283,7 +283,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div id="credit">
 <hr>
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="roundbottom">
 <img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
@@ -312,11 +312,11 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <h1>How to use the forrest:view config-DSL</h1>
 <div class="abstract">
-    This How-To describes the usage of the forrest:view config Domain Specific Language 
-    to create a beautiful website in no time.
-  </div>
+      This How-To describes the usage of the forrest:view config Domain Specific
+      Language to create a beautiful website in no time.
+    </div>
 <div id="motd-area">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.7
        (<a href="http://forrest.apache.org/versions/">More</a>)</div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -360,21 +360,23 @@ document.write("Last Published: " + document.lastModified);
 <div class="warning">
 <div class="label">Warning</div>
 <div class="content">
-"Views" are a new functionality which is still in development phase. That is why it is in the
-"whiteboard" section of the Forrest distribution.
-This HowTo is far from being finished. 
-</div>
+      "Views" are a new functionality which is still in development phase. That
+      is why it is in the "whiteboard" section of the Forrest distribution. This
+      HowTo is far from being finished.
+    </div>
 </div>
 <p>
-      This part of the views is dedicated to web designers and users with some knowlegde of css.
+      This part of the views is dedicated to web designers and users with some
+      knowlegde of css.
     </p>
 </div>
 <a name="N1001B"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      This how-to will show you how to write a <strong> forrest:view</strong>  from the ground up. 
-      We will focus on html as the output format and show how to add your own css implementation to the view.
+      This how-to will show you how to write a <strong> forrest:view</strong>
+      from the ground up. We will focus on html as the output format and show
+      how to add your own css implementation to the view.
     </p>
 </div>
 <a name="N10026"></a><a name="Prerequisites"></a>
@@ -402,56 +404,68 @@ This HowTo is far from being finished.
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-      When developing with views we assume you are using 'forrest run' and the following workflow:<br>
+      When developing with views we assume you are using 'forrest run' and the
+      following workflow:
+      <br>
       change files -&gt; refresh browser
     </div>
 </div>
 <p>
-      We developed <strong> forrest:view</strong>  to let the user decide where to place elements
-    	in, e.g., html pages.
-      We started this work with the <span class="codefrag">skinconf.xml</span> where you could configure certain elements and
-      their positions. These elements were known by established names and it was up to the skin-designer to support 
-      this configuration and the elements.
+      We developed <strong> forrest:view</strong> to let the user decide where
+      to place elements in, e.g., html pages. We started this work with the
+      <span class="codefrag">skinconf.xml</span> where you could configure certain elements and
+      their positions. These elements were known by established names and it was
+      up to the skin-designer to support this configuration and the elements.
     </p>
 <p>
-     We started by grouping the elements (from skinconf) and using css contracts that 
-     we added as @attributes, e.g. <span class="codefrag">&lt;div id="content-main"/&gt; </span>. That made it 
-     possible to use the same elements in different skins. For the full list  of these contracts refer to the
+      We started by grouping the elements (from skinconf) and using css
+      contracts that we added as @attributes, e.g. <span class="codefrag">
+&lt;div id="content-main"/&gt;
+      </span>. That made it possible to use the same elements in different
+      skins. For the full list of these contracts refer to the
       <a href="http://svn.apache.org/repos/asf/forrest/trunk/main/webapp/skins/leather-dev/contracts.initial.txt">
-        initial contract list
-      </a>.
+      initial contract list </a>.
     </p>
 <p>
-     Around these contracts we developed a configuration Domain Specific Language and called it<strong> forrest:view</strong> .
-    <strong> forrest:view</strong> allows us to define the order in which <strong>forrest:contract</strong>s appear, and also to group
-     them using <strong>forrest:hook</strong>s.
+      Around these contracts we developed a configuration Domain Specific
+      Language and called it<strong> forrest:view</strong> . <strong>
+      forrest:view</strong> allows us to define the order in which
+      <strong>forrest:contract</strong>s appear, and also to group them using
+      <strong>forrest:hook</strong>s.
     </p>
 <p>
-     
-<strong>forrest:hook</strong>s are containers that are only used for layout reasons. They <strong>do not</strong> add 
-     any content nor functionality to the output. They add <strong>only</strong> layout information to 
-     the output. Actually a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;</span> will be transformed
-     to <span class="codefrag">&lt;div id="layoutId"/&gt; </span>
+      
+<strong>forrest:hook</strong>s are containers that are only used for
+      layout reasons. They <strong>do not</strong> add any content nor
+      functionality to the output. They add <strong>only</strong> layout
+      information to the output. Actually a <span class="codefrag">
+&lt;forrest:hook name="layoutId"/&gt;
+      </span> will be transformed to <span class="codefrag">
+&lt;div id="layoutId"/&gt;
+      </span>
     
 </p>
 <p>
-     
-<strong>forrest:contract</strong>s add functionality or extra content that a skin can use to display the requested
-     document (content-main). Sometimes a contract delivers <strong>format-specific markup</strong>, other times it delivers
-     a <strong>format-independent string</strong>.
+      
+<strong>forrest:contract</strong>s add functionality or extra content that
+      a skin can use to display the requested document (content-main). Sometimes
+      a contract delivers <strong>format-specific markup</strong>, other times
+      it delivers a <strong>format-independent string</strong>.
     </p>
 <a name="N10089"></a><a name="emptyView"></a>
 <h3 class="underlined_5">Empty view file</h3>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;    
   &lt;/forrest:view&gt;  
 &lt;/forrest:views&gt;
       </pre>
 <p>
-       
-<strong> forrest:view</strong>  is designed to be available for any format that can use<strong>
-       	forrest:view</strong>  as a configuration file.
-	The only format we have implemented is xhtml for now. This is also true for the delivered contracts.
+        
+<strong> forrest:view</strong> is designed to be available for any
+        format that can use<strong> forrest:view</strong> as a configuration
+        file. The only format we have implemented is xhtml for now. This is also
+        true for the delivered contracts.
       </p>
 <p>
         Now lets start to skin our site. :)
@@ -459,32 +473,39 @@ This HowTo is far from being finished.
 <a name="N100A0"></a><a name="firstView"></a>
 <h3 class="underlined_5">Creating your first view</h3>
 <p>
-				In this section we will create a new view. We will override the default view of the view plugin
-        for the index page of the <a href="../../docs_0_70/howto/howto-view-install.html">newSeed</a>.
-        To do this we will create a file called <span class="codefrag">index.fv</span> and save it in our xdocs directory. 
-				This will <strong>only</strong> make the index.html page look different from the rest of the project.
-			</p>
-<p>
-        Remember: pointing your browser to <span class="codefrag">http://localhost:8888/ls.contracts.html</span> will
-        show a page with all contracts that you can use in your project.
+        In this section we will create a new view. We will override the default
+        view of the view plugin for the index page of the
+        <a href="../../docs_0_70/howto/howto-view-install.html">newSeed</a>. To do this we will create
+        a file called <span class="codefrag">index.fv</span> and save it in our xdocs directory.
+        This will <strong>only</strong> make the index.html page look different
+        from the rest of the project.
       </p>
 <p>
-        Let's use the blank view from the earlier step and add the content-main contract. In 
-        ls.contracts.html we find the information about how to use the contract in our view. Our 
-        <span class="codefrag">index.fv</span> should look like:
+        Remember: pointing your browser to
+        <span class="codefrag">http://localhost:8888/ls.contracts.html</span> will show a page
+        with all contracts that you can use in your project.
       </p>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<p>
+        Let's use the blank view from the earlier step and add the content-main
+        contract. In ls.contracts.html we find the information about how to use
+        the contract in our view. Our <span class="codefrag">index.fv</span> should look like:
+      </p>
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;    
     &lt;forrest:contract name="content-main"/&gt;
   &lt;/forrest:view&gt;  
 &lt;/forrest:views&gt;
       </pre>
 <p>
-        Let's try our new view by pointing to <span class="codefrag">http://localhost:8888/index.html</span>. 
-        We will see only the main content. :) Now let's add the section navigation to our view.
-        The contract usage in the view can be looked up in ls.contracts.html. Our view now looks like:
+        Let's try our new view by pointing to
+        <span class="codefrag">http://localhost:8888/index.html</span>. We will see only the main
+        content. :) Now let's add the section navigation to our view. The
+        contract usage in the view can be looked up in ls.contracts.html. Our
+        view now looks like:
       </p>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;    
     &lt;forrest:contract name="content-main"/&gt;
     &lt;forrest:contract name="nav-section"/&gt;
@@ -492,17 +513,19 @@ This HowTo is far from being finished.
 &lt;/forrest:views&gt;
       </pre>
 <p>
-        We now see the main content and the section navigation in the order 
-        we placed them in the view, but we want them next to each other 
-        (left: nav-section; right: content-main).
+        We now see the main content and the section navigation in the order we
+        placed them in the view, but we want them next to each other (left:
+        nav-section; right: content-main).
       </p>
 <a name="N100D1"></a><a name="hookView"></a>
 <h3 class="underlined_5">Hooks in views</h3>
 <p>
-        We will now use for the first time a <span class="codefrag">&lt;forrest:hook name="layoutId"/&gt;</span>.
-        Hooks are the styling side of views. We can imitate an arbitrary html skeleton 
-        with their help. Before we explain how to use your own css in views we will use the default css.
-        In the default.css we can find 
+        We will now use for the first time a <span class="codefrag">
+&lt;forrest:hook name="layoutId"/&gt;
+        </span>. Hooks are the styling side of views. We can imitate an
+        arbitrary html skeleton with their help. Before we explain how to use
+        your own css in views we will use the default css. In the default.css we
+        can find
       </p>
 <pre class="code">/* menu */
 #leftbar {
@@ -513,21 +536,24 @@ This HowTo is far from being finished.
 }
       </pre>
 <p>
-        With this information we can see the purpose of <span class="codefrag">&lt;forrest:hook name="leftbar"/&gt;</span> 
-        and add contracts into that container. 
+        With this information we can see the purpose of <span class="codefrag">
+&lt;forrest:hook name="leftbar"/&gt;
+        </span> and add contracts into that container.
       </p>
 <p>
         If we want to put the nav-section contract into the left side position
         of the site we need to place the contract into that hook like so:
       </p>
-<pre class="code">&lt;forrest:hook name="leftbar"&gt;
+<pre class="code">
+&lt;forrest:hook name="leftbar"&gt;
   &lt;forrest:contract name="nav-section"/&gt;
 &lt;/forrest:hook&gt;
-			</pre>
+      </pre>
 <p>
         Our view will then look like:
       </p>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;
     &lt;forrest:hook name="leftbar"&gt;
       &lt;forrest:contract name="nav-section"/&gt;
@@ -539,15 +565,19 @@ This HowTo is far from being finished.
 <a name="N100F6"></a><a name="cssView"></a>
 <h3 class="underlined_5">CSS in views</h3>
 <p>
-        We now know how to place contracts and hooks in our view, but until this stage we have only
-      	used the default.css. 
-        CSS support within views is as easy as placing contracts/hooks. To override the default.css
-        stylesheet we use another tag within our view <span class="codefrag">&lt;forrest:css url="default.css"/&gt;</span>.
+        We now know how to place contracts and hooks in our view, but until this
+        stage we have only used the default.css. CSS support within views is as
+        easy as placing contracts/hooks. To override the default.css stylesheet
+        we use another tag within our view <span class="codefrag">
+&lt;forrest:css url="default.css"/&gt;
+        </span>.
       </p>
 <p>
-      	Now we will create a new file as <span class="codefrag">{properties:skins-dir}{path}/{name}.css</span>. In our case
-        we will save a file called howTo.css in newSeed/src/documentation/skins/css/howTo.css containing only 
-        the following css:
+        Now we will create a new file as <span class="codefrag">
+{properties:skins-dir}{path}/{name}.css
+        </span>. In our case we will save a file called howTo.css in
+        newSeed/src/documentation/skins/css/howTo.css containing only the
+        following css:
       </p>
 <pre class="code">/* menu */
 #leftbar {
@@ -558,19 +588,26 @@ This HowTo is far from being finished.
 }
       </pre>
 <p>
-        We just changed the border-style to 'solid', the background to '#CCCCFF' and the color to '#000000'. 
-        Now we have to add a new tag to tell that we want to override the default.css. We are doing this 
-        by adding the tag <span class="codefrag">&lt;forrest:css url="howTo.css"/&gt;</span> to our view.
+        We just changed the border-style to 'solid', the background to '#CCCCFF'
+        and the color to '#000000'. Now we have to add a new tag to tell that we
+        want to override the default.css. We are doing this by adding the tag
+        <span class="codefrag">
+&lt;forrest:css url="howTo.css"/&gt;
+        </span> to our view.
       </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
         
-<span class="codefrag">&lt;forrest:css url="howTo.css"/&gt;</span> has to be the direct son of 
-        <span class="codefrag">&lt;forrest:view type="xhtml"&gt;</span>!!!
+<span class="codefrag">
+&lt;forrest:css url="howTo.css"/&gt;
+        </span> has to be the direct son of <span class="codefrag">
+&lt;forrest:view type="xhtml"&gt;
+        </span>!!!
       </div>
 </div>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;
   	&lt;forrest:css url="howTo.css"/&gt;
     &lt;forrest:hook name="leftbar"&gt;
@@ -581,11 +618,11 @@ This HowTo is far from being finished.
 &lt;/forrest:views&gt;
       </pre>
 <p>
-        Now you see a white page where the menu is sourrounded by a solid border with the defined background.
-         For a second example let's change the content-main by adding another hook 
-         <span class="codefrag">&lt;forrest:hook name="content"/&gt;</span>.   We need to add the new layout
-      	container
-         to our howTo.css:
+        Now you see a white page where the menu is sourrounded by a solid border
+        with the defined background. For a second example let's change the
+        content-main by adding another hook <span class="codefrag">
+&lt;forrest:hook name="content"/&gt;
+        </span>. We need to add the new layout container to our howTo.css:
       </p>
 <pre class="code">
 /* The actual content */
@@ -596,9 +633,11 @@ This HowTo is far from being finished.
 }
       </pre>
 <p>
-        Then we have to add the 'content-main' contract to the 'content' hook.  The resulting view looks like:
+        Then we have to add the 'content-main' contract to the 'content' hook.
+        The resulting view looks like:
       </p>
-<pre class="code">&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
+<pre class="code">
+&lt;forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0" &gt;
   &lt;forrest:view type="xhtml"&gt;
   	&lt;forrest:css url="howTo.css"/&gt;
     &lt;forrest:hook name="leftbar"&gt;
@@ -611,13 +650,14 @@ This HowTo is far from being finished.
 &lt;/forrest:views&gt;
       </pre>
 <p>
-        We are now able to place contracts and layout containers and add custom css to the view.
+        We are now able to place contracts and layout containers and add custom
+        css to the view.
       </p>
 <div class="fixme">
 <div class="label">Fixme (thorsten)</div>
 <div class="content">
-        Let us now look into advanced features of views. 
-        I will write a how-to for advanced contracts soon. :)
+        Let us now look into advanced features of views. I will write a how-to
+        for advanced contracts soon. :)
       </div>
 </div>
 </div>
@@ -625,18 +665,18 @@ This HowTo is far from being finished.
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <p>
-      Congratulations, you are now able to work with the view DSL. 
-      From here we recommend reading the following How-To's:
+      Congratulations, you are now able to work with the view DSL. From here we
+      recommend reading the following How-To's:
     </p>
 <ul>
       
 <li>
-<a href="../../docs_0_70/howto/howto-view-contracts.html">Create your own contract implementation</a> 
+<a href="../../docs_0_70/howto/howto-view-contracts.html">Create your own contract implementation</a>
 </li>
     
 </ul>
 </div>
-<a name="N1014B"></a><a name="Feedback"></a>
+<a name="N1014A"></a><a name="Feedback"></a>
 <h2 class="underlined_10">Feedback</h2>
 <div class="section">
 <p>
