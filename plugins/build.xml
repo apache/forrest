@@ -175,6 +175,12 @@
 		  description="Deploy the plugin documentation"
 		  depends="clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
     <echo>Deploying plugin documentation to the web server</echo>
+	<if>
+        <contains string="${forrest.version}" substring="0.7"/>
+      <then>
+        <property name="docsVersion" value="0_70"/>
+      </then>
+    <else>
     <if>
       <contains string="${forrest.version}" substring="0.8"/>
       <then>
@@ -194,6 +200,8 @@
         </if>
       </else>
     </if>
+  </else>
+</if>
 <!-- Copy plugin docs into sandbox -->
     <copy todir="${deploy.docs.sandbox.dir}/plugins_${docsVersion}/${plugin-name}" 
   	      overwrite="true">
