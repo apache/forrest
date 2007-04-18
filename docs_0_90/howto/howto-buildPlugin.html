@@ -1,0 +1,1049 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="Apache Forrest" name="Generator">
+<meta name="Forrest-version" content="0.9-dev">
+<meta name="Forrest-skin-name" content="pelt">
+<title>How to Build a Plugin (v0.9-dev)</title>
+<link type="text/css" href="../../skin/basic.css" rel="stylesheet">
+<link media="screen" type="text/css" href="../../skin/screen.css" rel="stylesheet">
+<link media="print" type="text/css" href="../../skin/print.css" rel="stylesheet">
+<link type="text/css" href="../../skin/profile.css" rel="stylesheet">
+<script src="../../skin/getBlank.js" language="javascript" type="text/javascript"></script><script src="../../skin/getMenu.js" language="javascript" type="text/javascript"></script><script src="../../skin/fontsize.js" language="javascript" type="text/javascript"></script>
+<link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body onload="init()">
+<script type="text/javascript">ndeSetTextSize();</script>
+<div id="top">
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+<a href="http://www.apache.org/">apache</a> &gt; <a href="http://forrest.apache.org/">forrest</a><script src="../../skin/breadcrumbs.js" language="JavaScript" type="text/javascript"></script>
+</div>
+<!--+
+    |header
+    +-->
+<div class="header">
+<!--+
+    |start group logo
+    +-->
+<div class="grouplogo">
+<a href="http://www.apache.org/"><img class="logoImage" alt="Apache" src="../../images/apache-forrest.png" title="The Apache Software Foundation"></a>
+</div>
+<!--+
+    |end group logo
+    +-->
+<!--+
+    |start Project Logo
+    +-->
+<div class="projectlogo">
+<a href="http://forrest.apache.org/"><img class="logoImage" alt="Forrest" src="../../images/project-logo.gif" title="Apache Forrest"></a>
+</div>
+<!--+
+    |end Project Logo
+    +-->
+<!--+
+    |start Search
+    +-->
+<div class="searchbox">
+<form action="http://www.google.com/search" method="get" class="roundtopsmall">
+<input value="forrest.apache.org" name="sitesearch" type="hidden"><input onFocus="getBlank (this, 'Search the site with google');" size="25" name="q" id="query" type="text" value="Search the site with google">&nbsp; 
+                    <input name="Search" value="Search" type="submit">
+</form>
+</div>
+<!--+
+    |end search
+    +-->
+<!--+
+    |start Tabs
+    +-->
+<ul id="tabs">
+<li>
+<a class="unselected" href="../../index.html">Welcome</a>
+</li>
+<li>
+<a class="unselected" href="../../contrib.html">Developers</a>
+</li>
+<li class="current">
+<a class="selected" href="../../versions/index.html">Versioned Docs</a>
+</li>
+<li>
+<a class="unselected" href="../../pluginDocs/index.html">Plugins</a>
+</li>
+<li>
+<a class="unselected" href="../../tools/index.html">Tools</a>
+</li>
+</ul>
+<!--+
+    |end Tabs
+    +-->
+</div>
+</div>
+<div id="main">
+<div id="publishedStrip">
+<!--+
+    |start Subtabs
+    +-->
+<div id="level2tabs">
+<a class="unselected" href="../../docs_0_80/index.html">0.80 (current)</a><a class="selected" href="../../docs_0_90/index.html">0.90-dev (under development)</a><a class="unselected" href="../../docs_0_70/index.html">0.70 (past)</a>
+</div>
+<!--+
+    |end Endtabs
+    +-->
+<script type="text/javascript"><!--
+document.write("Last Published: " + document.lastModified);
+//  --></script>
+</div>
+<!--+
+    |breadtrail
+    +-->
+<div class="breadtrail">
+
+             &nbsp;
+           </div>
+<!--+
+    |start Menu, mainarea
+    +-->
+<!--+
+    |start Menu
+    +-->
+<div id="menu">
+<div onclick="SwitchMenu('menu_selected_1.1', '../../skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">0.90-dev</div>
+<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../../docs_0_90/index.html">Overview</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/your-project.html">Using Forrest</a>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.1.3', '../../skin/')" id="menu_selected_1.1.3Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">How-To</div>
+<div id="menu_selected_1.1.3" class="selectedmenuitemgroup" style="display: block;">
+<div class="menuitem">
+<a href="../../docs_0_90/howto/index.html">Overview</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.3.2', '../../skin/')" id="menu_1.1.3.2Title" class="menutitle">Install Forrest</div>
+<div id="menu_1.1.3.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/build.html" title="Build and install the current                     unreleased version">Building Forrest from Source</a>
+</div>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/upgrading_09.html">Upgrading to 0.9</a>
+</div>
+<div class="menuitem">
+<a href="">Use Forrest</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.3.5', '../../skin/')" id="menu_1.1.3.5Title" class="menutitle">Customize Forrest</div>
+<div id="menu_1.1.3.5" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/sitemap-explain.html">Sitemaps explained</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-custom-html-source.html">Custom html source</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/project-sitemap.html">Project sitemap</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-editcss.html">Edit CSS (WYSIWYG)</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-pdf-tab.html" title="Generate one pdf-document for all pages of a tab">Create tab PDF</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-corner-images.html">CSS corner SVG</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.3.6', '../../skin/')" id="menu_1.1.3.6Title" class="menutitle">Integrate Forrest with tools</div>
+<div id="menu_1.1.3.6" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-forrest-from-maven.html">Maven Integration</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/catalog.html">Using DTD Catalogs</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_selected_1.1.3.7', '../../skin/')" id="menu_selected_1.1.3.7Title" class="menutitle" style="background-image: url('../../skin/images/chapter_open.gif');">Extend Forrest</div>
+<div id="menu_selected_1.1.3.7" class="selectedmenuitemgroup" style="display: block;">
+<div class="menupage">
+<div class="menupagetitle">Build a Plugin</div>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/skin-package.html">Package new Skins</a>
+</div>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/howto-asf-mirror.html">Download mirror</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.3.9', '../../skin/')" id="menu_1.1.3.9Title" class="menutitle">Adding Documentation</div>
+<div id="menu_1.1.3.9" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../howto-howto.html" title="Instructions for writing                 a new howto-document">Write a How-to</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.3.9.2', '../../skin/')" id="menu_1.1.3.9.2Title" class="menutitle">Multipage HowTo</div>
+<div id="menu_1.1.3.9.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/howto/multi/howto-multi.html">Introduction</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/multi/step1.html">Step 1</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/multi/step2.html">Step 2</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/multi/step3.html">Step 3</a>
+</div>
+</div>
+</div>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/faq.html">FAQs</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.5', '../../skin/')" id="menu_1.1.5Title" class="menutitle">Background</div>
+<div id="menu_1.1.5" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/linking.html">Menus and Linking</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/searching.html">Search Options in Forrest</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/locationmap.html">Locationmap</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/sitemap-ref.html">Sitemap Reference</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/skins.html" title="About default skins, their naming and features">Skins</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/status-themes.html">Dispatcher versus Skins</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/cap.html">Sourcetype Action</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/validation.html">XML validation and entity resolution</a>
+</div>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/changes.html">Changes</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/glossary.html">Glossary</a>
+</div>
+<div onclick="SwitchMenu('menu_1.1.8', '../../skin/')" id="menu_1.1.8Title" class="menutitle">Reference docs</div>
+<div id="menu_1.1.8" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_1.1.8.1', '../../skin/')" id="menu_1.1.8.1Title" class="menutitle">DTD documentation</div>
+<div id="menu_1.1.8.1" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../dtdx/dtd-docs.html">Overview</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/document-v20.dtdx.html">document-v20</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/howto-v20.dtdx.html">howto-v20</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/faq-v20.dtdx.html">faq-v20</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/document-v13.dtdx.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/howto-v13.dtdx.html">howto-v13</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/faq-v13.dtdx.html">faq-v13</a>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.8.2', '../../skin/')" id="menu_1.1.8.2Title" class="menutitle">Doc samples</div>
+<div id="menu_1.1.8.2" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../dtdx/document-v13.html">document-v13</a>
+</div>
+<div class="menuitem">
+<a href="../../dtdx/document-v20.html">document-v20</a>
+</div>
+</div>
+</div>
+<div onclick="SwitchMenu('menu_1.1.9', '../../skin/')" id="menu_1.1.9Title" class="menutitle">Older Docs</div>
+<div id="menu_1.1.9" class="menuitemgroup">
+<div class="menuitem">
+<a href="../../docs_0_90/primer.html">Forrest Primer</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/libre-intro.html">Libre</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/dreams.html">Dream list</a>
+</div>
+<div class="menuitem">
+<a href="../../docs_0_90/howto/cvs-ssh/howto-cvs-ssh.html">CVS over SSH</a>
+</div>
+</div>
+</div>
+<div id="credit">
+<hr>
+        This is documentation for development version v0.9-dev
+       (<a href="http://forrest.apache.org/versions/">More</a>)</div>
+<div id="roundbottom">
+<img style="display: none" class="corner" height="15" width="15" alt="" src="../../skin/images/rc-b-l-15-1body-2menu-3menu.png"></div>
+<!--+
+  |alternative credits
+  +-->
+<div id="credit2">
+<a href="http://apachecon.com/2007/EU/"><img border="0" title="ApacheCon Europe 2007" alt="ApacheCon Europe 2007 - logo" src="http://apache.org/ads/ApacheCon/2007-europe-125x125.png" style="width: 125px;height: 125px;"></a><a href="http://people.apache.org/calendar.html#200711"><img border="0" title="ApacheCon US 2007" alt="ApacheCon US 2007 - logo" src="http://apache.org/ads/ApacheCon/2007-usa-125x125.png" style="width: 125px;height: 125px;"></a>
+</div>
+</div>
+<!--+
+    |end Menu
+    +-->
+<!--+
+    |start content
+    +-->
+<div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="howto-buildPlugin.pdf"><img alt="PDF -icon" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
+<div class="trail">Font size: 
+	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
+	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
+	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
+</div>
+<h1>How to Build a Plugin</h1>
+<div class="abstract">
+      This How-To describes the steps necessary to build a plugin for Forrest.
+      Forrest uses plugins to add new input formats, output formats and to
+      change its default behaviour. Since plugins are downloaded when needed and
+      can be hosted at any location, plugin code can be developed independently
+      of Apache Forrest. This how-to describes each of the major steps in
+      creating a plugin and then works through some examples of plugin creation
+      in order to illustrate the materials.
+    </div>
+<div id="motd-area">
+        This is documentation for development version v0.9-dev
+       (<a href="http://forrest.apache.org/versions/">More</a>)</div>
+<div id="minitoc-area">
+<ul class="minitoc">
+<li>
+<a href="#Intended Audience">Intended Audience</a>
+</li>
+<li>
+<a href="#Purpose">Purpose</a>
+</li>
+<li>
+<a href="#Prerequisites">Prerequisites</a>
+</li>
+<li>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#typeOfPlugin">Type of Plugin</a>
+</li>
+<li>
+<a href="#ant">Make ant available on the command-line</a>
+</li>
+<li>
+<a href="#seed">Seed a New Plugin</a>
+<ul class="minitoc">
+<li>
+<a href="#edit-template">Edit the Plugin Template</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#edit-sitemap">Edit the Plugin sitemap file(s)</a>
+<ul class="minitoc">
+<li>
+<a href="#components">Components, Actions and Resources</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#resources">Create the Necessary Resource Files</a>
+<ul class="minitoc">
+<li>
+<a href="#dtd-catalog">Entity catalog for DTDs and other resources</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#samples">Create Samples in the Documentation</a>
+</li>
+<li>
+<a href="#test">Testing a Plugin</a>
+<ul class="minitoc">
+<li>
+<a href="#Testing+During+Development">Testing During Development</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#release">Releasing a Plugin</a>
+<ul class="minitoc">
+<li>
+<a href="#register">Register the Plugin with Apache Forrest</a>
+</li>
+<li>
+<a href="#deploy">Deploying the Plugin</a>
+</li>
+<li>
+<a href="#descriptor">Managing the plugins descriptors</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#experimental">Experimental Functionality</a>
+<ul class="minitoc">
+<li>
+<a href="#Locationmap">Locationmap</a>
+</li>
+<li>
+<a href="#Dispatcher">Dispatcher</a>
+</li>
+<li>
+<a href="#Plugin+Properties">Plugin Properties</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#examples">Examples</a>
+<ul class="minitoc">
+<li>
+<a href="#input">Input Plugin</a>
+</li>
+<li>
+<a href="#output">Output Plugin</a>
+</li>
+<li>
+<a href="#internal">Internal Plugin</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#extension">Further Reading</a>
+</li>
+<li>
+<a href="#summarise">Summarise the Entire Process</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<a name="N10013"></a><a name="Intended Audience"></a>
+<h2 class="underlined_10">Intended Audience</h2>
+<div class="section">
+<p>
+      Users needing to add additional input formats or output formats or to
+      change the operation of the Forrest internals.
+    </p>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+      Please make sure that you are using forrest 0.8 or above if you want use
+      plugins. Forrest 0.6 will not work!!!
+    </div>
+</div>
+</div>
+<a name="N1001E"></a><a name="Purpose"></a>
+<h2 class="underlined_10">Purpose</h2>
+<div class="section">
+<p>
+      This How-To will illustrate how to build a plugin, publish a plugin and
+      configure a Forrest project to use their plugin.
+    </p>
+</div>
+<a name="N10026"></a><a name="Prerequisites"></a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<p>
+      Plugin developers should have:
+    </p>
+<ul>
+      
+<li>a basic knowledge of XML, XSLT and Cocoon pipelines</li>
+      
+<li>a clear use-case for extending Forrest</li>
+      
+<li>read
+        <a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">Plugin Infrastructure</a>
+</li>
+      
+<li>verified with the Apache Forrest developer community that the
+      required functionality does not already exist</li>
+    
+</ul>
+</div>
+<a name="N10040"></a><a name="Steps"></a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<p>
+      Here is how to proceed.
+    </p>
+<a name="N10048"></a><a name="typeOfPlugin"></a>
+<h3 class="underlined_5">Type of Plugin</h3>
+<p>
+        There are three types of plugin, each with a clear purpose, you must
+        first decide which <a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">type of
+        plugin</a> you need to build.
+      </p>
+<a name="N10056"></a><a name="ant"></a>
+<h3 class="underlined_5">Make ant available on the command-line</h3>
+<p>
+        The following instructions rely heavily on
+        <a href="http://ant.apache.org/">Apache Ant</a> to automate some steps
+        in the process. Since ant is distributed as part of Forrest, all you
+        need to do is add Forrest's 'ant' executable directory to your system
+        path. The name of this directory is <span class="codefrag">tools/ant/bin</span> in your
+        Forrest program directory. Alternatively you can prefix all calls to ant
+        in the following instructions with the full path of the ant binary
+        directory, i.e. $FORREST_HOME/tools/ant/bin/ant
+      </p>
+<p>
+        If instead you really want to use your own version of Ant, then you will
+        need to copy forrest/lib/core/xml-commons-resolver.jar to $ANT_HOME/lib
+        directory, otherwise the building of your plugins will go across the
+        network to get the DTDs on every xml parse. Be aware that Forrest might
+        be relying on some Ant features in its version.
+      </p>
+<a name="N1006A"></a><a name="seed"></a>
+<h3 class="underlined_5">Seed a New Plugin</h3>
+<p>
+        Regardless of the type of plugin you are building, the directory
+        structure is almost identical, as are most of the required configuration
+        files. In this How-To we will assume that you are creating a plugin in
+        the Forrest source tree. All plugins are developed in the
+        <span class="codefrag">forrest/plugins</span> directory or the
+        <span class="codefrag">forrest/whiteboard/plugins</span> directory.
+      </p>
+<p class="instruction">
+        Run the following set of commands:
+      </p>
+<pre class="code">
+      cd [path_to_forrest]/whiteboard/plugins
+      ant seedPlugin
+      </pre>
+<p>
+        The above ant target will ask you the name of the plugin and some
+        additional information such as a brief description and will build a
+        minimal plugin directory structure and configuration. You will need to
+        customise these files to build your plugin.
+      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        Although you can name your project anything you like we do have some
+        <a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">naming conventions</a> that we
+        recommend you follow. Plugins intended to be held at forrest.apache.org
+        must follow the naming convention.
+      </div>
+</div>
+<p>
+        You can also build your plugins from a location outside of the Forrest
+        directory structure, for example from within your own project. If you
+        don't already have one, create a plugins directory, for example:
+      </p>
+<pre class="code">
+      cd $PROJECT_HOME
+      mkdir plugins
+      </pre>
+<p>
+        Then copy $FORREST_HOME/whiteboard/plugins/build.xml to
+        $PROJECT_HOME/plugins. There are a couple of changes you now need to
+        make to the newly copied build.xml file. Open up 'build.xml' for
+        editing. You can change the project name value to something more
+        suitable.Find the property name for forrest.plugins.dir and change the
+        location to read
+      </p>
+<pre class="code">location="."</pre>
+<p class="instruction">
+        So, revised commands for $PROJECT_HOME/plugins:
+      </p>
+<pre class="code">
+      cd [path_to_project_home]/plugins
+      ant seedPlugin
+      </pre>
+<p>
+        See <a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">Plugin Infrastructure</a> for
+        more information about the plugin directory structure and configuration
+        files.
+      </p>
+<a name="N100A8"></a><a name="edit-template"></a>
+<h4>Edit the Plugin Template</h4>
+<p>
+          You now have a skeleton plugin project. However, it doesn't do
+          anything useful yet. Now is a good time to edit some of the files
+          provided.
+        </p>
+<p>
+          Here are some general notes:
+        </p>
+<a name="N100B4"></a><a name="status"></a>
+<h5>status.xml</h5>
+<p>
+            This file is used to track changes to the plugin project and to
+            manage lists of things that still need to be done. At this stage you
+            should correct the <span class="codefrag">person</span> entry near the top of the
+            file. It is also a good idea to add a few key milestones in the task
+            list towards the bottom of the file.
+          </p>
+<p>
+            As you work on the plugin you should record all major changes in
+            this file so that it can then be used as a changelog for your
+            plugin.
+          </p>
+<a name="N100C4"></a><a name="forrest-properties"></a>
+<h5>forrest.properties</h5>
+<p>
+            This file defines many configuration parameters for Forrest. It does
+            not need to be customised in most cases. However, see for more
+            details.
+          </p>
+<a name="N100CE"></a><a name="skinconf"></a>
+<h5>src/documentation/skinconf.xml</h5>
+<p>
+            This configures the skin for your plugins documentation. There are
+            some items that need to be configured in here, for example, the
+            copyright information. The file is heavily commented so probably
+            best to read through it, changing what you need to.
+          </p>
+<a name="N100D8"></a><a name="doc"></a>
+<h5>Documentation</h5>
+<p>
+            It is also a good idea to start writing the documentation at this
+            stage. The above process created a very simple plugin documentation
+            site for you. All you have to do is add the content.
+          </p>
+<a name="N100E2"></a><a name="hosted"></a>
+<h5>Style notes for plugins hosted at forrest.apache.org</h5>
+<p>
+            After seeding a new plugin, copy the configuration from an existing
+            plugin (e.g. org.apache.forrest.plugin.input.projectInfo). Copy
+            src/documentation/skinconf.xml (and edit to suit) and
+            src/documentation/content/xdocs/images/project-logo.gif
+          </p>
+<a name="N100EE"></a><a name="edit-sitemap"></a>
+<h3 class="underlined_5">Edit the Plugin sitemap file(s)</h3>
+<p>
+        The plugin <span class="codefrag">xmap</span> file is a Cocoon sitemap that is mounted at
+        a strategic place in the Forrest pipeline. It is in this file that you
+        will instruct Forrest how to operate. An input plugin must provide a
+        <span class="codefrag">input.xmap</span> file, an output plugin must provide a
+        <span class="codefrag">output.xmap</span> file, whilst an internal plugin provides a
+        <span class="codefrag">internal.xmap</span> file. In addition, an input plugin may
+        provide a <span class="codefrag">resources.xmap</span> file to allow the plugin to handle
+        items such as JavaScript files.
+      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        All input plugins should allow the original source to be retrieved by
+        requesting the document with a <span class="codefrag">*.source.xml</span> extension. So
+        you should ensure that you provide such a match.
+      </div>
+</div>
+<p>
+        It is beyond the scope of this How-To to give details about how to build
+        your plugins XMap. See the <a href="../../docs_0_90/sitemap-ref.html">Sitemap
+        Reference</a> for general information. See also
+        <a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">Plugin Infrastructure</a> for some
+        hints and tips on creating plugin sitemaps. In addition, as with all
+        development work on Forrest, you will find the
+        <a href="../../mail-lists.html#forrest-dev">developer mailing list</a> a very
+        good resource (check the archives before posting, please).
+      </p>
+<a name="N1011B"></a><a name="components"></a>
+<h4>Components, Actions and Resources</h4>
+<p>
+          If your plugin uses any components (i.e. generators, transformers or
+          serializers), actions or resources they must be defined in either the
+          xmap for this plugin or one of its parents. The parents of an
+          <span class="codefrag">input.xmap</span> are <span class="codefrag">sitemap.xmap</span> and
+          <span class="codefrag">forrest.xmap</span>, whilst the parent of both
+          <span class="codefrag">output.xmap</span> and <span class="codefrag">internal.xmap</span> are
+          <span class="codefrag">sitemap.xmap</span>
+        
+</p>
+<p>
+          If you want to use the realpath where the sitemap.xmap of your plugin
+          resides then you need to use
+          <span class="codefrag">{forrest:forrest.plugins}/PLUGIN_NAME</span> instead of
+          <span class="codefrag">{realpath:/}</span>.
+        </p>
+<p>
+          See the examples below for more details.
+        </p>
+<a name="N10144"></a><a name="resources"></a>
+<h3 class="underlined_5">Create the Necessary Resource Files</h3>
+<div class="fixme">
+<div class="label">Fixme (open)</div>
+<div class="content">
+        Discuss the XSL files and other such resources
+      </div>
+</div>
+<a name="N1014E"></a><a name="dtd-catalog"></a>
+<h4>Entity catalog for DTDs and other resources</h4>
+<p>
+          If the plugin uses non-core DTDs and other entities, then add them to
+          the <span class="codefrag">resources/schema</span> directory and configure a
+          catalog.xcat file. The best way to do this is to copy an example from
+          another plugin (e.g. "listLocations" has a simple example; "glossary"
+          has a more complex example) and edit it to suit.
+        </p>
+<a name="N1015C"></a><a name="samples"></a>
+<h3 class="underlined_5">Create Samples in the Documentation</h3>
+<p>
+        Plugin documentation should provide (as a minimum) an index page that
+        provides an overview and a set of samples that demonstrate the
+        functionality of the plugin. Typically these samples will be provided in
+        a <span class="codefrag">samples</span> subdirectory in the plugin documentation and will
+        be referenced from both <span class="codefrag">site.xml</span> and <span class="codefrag">tabs.xml</span>
+        configuration files.
+      </p>
+<p>
+        Try to provide a sample for all the major functions of your plugin and
+        document any configuration that is available.
+      </p>
+<a name="N10172"></a><a name="test"></a>
+<h3 class="underlined_5">Testing a Plugin</h3>
+<p>
+        Since your documentation for the plugin illustrates all of its
+        functionality, you can use that site for testing the plugin. However,
+        you must first deploy in your local install of Forrest. Each plugin
+        contains a buildfile that includes a <span class="codefrag">test</span> target. This
+        target, by default, builds the documentation for your plugin.
+      </p>
+<p class="instruction">
+        Run the command <span class="codefrag">ant test</span> in the plugins directory.
+      </p>
+<p>
+        Of course, the build should complete without errors.
+      </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        You can also use <span class="codefrag">forrest run</span> to interactively examine your
+        documentation (point your browser at
+        <a href="http://localhost:8888">http://localhost:8888</a>).
+      </div>
+</div>
+<p>
+        It is also a really good idea to build proper tests for your plugins
+        using a suitable testing framework, for example,
+        <a href="http://webtest.canoo.com/">WebTest</a>. We recommend that you
+        extend the <span class="codefrag">test</span> target in your plugins build file because
+        this target is also used when performing integration tests on Forrest.
+        In addition, we recommend that you use the samples in your documentation
+        for your tests, this way you are documenting your plugin at the same
+        time as writing your tests.
+      </p>
+<p>
+        Ensure that your sitemaps are robust and handle matches for files in
+        sub-directories, as well as those at the root level.
+      </p>
+<a name="N1019F"></a><a name="Testing+During+Development"></a>
+<h4>Testing During Development</h4>
+<p>
+          In the current plugin system plugins are not used from their src
+          directories, they must first be deployed locally. To do this run the
+          command <span class="codefrag">$FORREST_HOME/tools/ant/bin/ant local-deploy</span>
+        
+</p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+          The "test" target will do this deployment automatically for you. You
+          need only run it manually if you wish to test the plugin whilst
+          editing content in a live Forrest instance.
+        </div>
+</div>
+<p>
+          When you make changes to the plugin while doing its development, then
+          you need to do the local-deploy again for those changes to have
+          effect.
+        </p>
+<p>
+          In most cases you can locally deploy a plugin without having to
+          restart Forrest. However, if your plugin changes any configuration
+          files in the <span class="codefrag">conf</span> directory you will, most likely, have
+          to restart Forrest to see these changes.
+        </p>
+<a name="N101B9"></a><a name="release"></a>
+<h3 class="underlined_5">Releasing a Plugin</h3>
+<a name="N101BF"></a><a name="register"></a>
+<h4>Register the Plugin with Apache Forrest</h4>
+<div class="fixme">
+<div class="label">Fixme (rdg)</div>
+<div class="content">
+          Describe making a request of Forrest devs for inclusion
+        </div>
+</div>
+<a name="N101CA"></a><a name="deploy"></a>
+<h4>Deploying the Plugin</h4>
+<p>
+          To deploy the plugin so that others can use it, it must be made
+          available as a zip from the URL indicated in the
+          <span class="codefrag">plugins.xml</span> file. The plugins build file provides targets
+          to assist with this task.
+        </p>
+<p class="instruction">
+          To deploy a plugin simply run the command <span class="codefrag">ant deploy</span> from
+          within the plugin directory.
+        </p>
+<p>
+          This command will, by default, deploy to the Apache Forrest web site.
+          In order to do this you need commit access to Forrest. If you want to
+          deploy your plugin to a different location you can build the zip of
+          your plugin with <span class="codefrag">ant dist</span> and then copy the zip file from
+          <span class="codefrag">build/dist</span> to wherever you intend to host the plugin.
+        </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+          Running this command on any plugin will also deploy any changes to the
+          <span class="codefrag">plugins.xml</span> file. If you are deploying to your own
+          website you will have to request changes to the
+          <span class="codefrag">plugins.xml</span> and ask the Forrest committers to publish the
+          new document.
+        </div>
+</div>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+          Running the <span class="codefrag">deploy</span> or <span class="codefrag">dist</span> targets will
+          always run the <span class="codefrag">test</span> target first. This is to ensure that
+          you only deploy working plugins. This adds a little time to the deploy
+          cycle, but we feel the peace of mind is worth it.
+        </div>
+</div>
+<a name="N101FC"></a><a name="descriptor"></a>
+<h4>Managing the plugins descriptors</h4>
+<p>
+          The files plugins/plugins.xml and whiteboard/plugins/plugins.xml are
+          the "Plugins Descriptor" files. Each plugin is described with its
+          name, purpose, location, and version information. These descriptors
+          are deployed to the forrest website.
+        </p>
+<p>
+          Each plugin has a build.xml file which defines its version
+          information. Please keep that synchronised with the plugins.xml files.
+          Later
+          <a href="http://issues.apache.org/jira/browse/FOR-533">FOR-533</a>
+          will generate this from the various build.xml files.
+        </p>
+<p>
+          The Apache Forrest committers manage these files in SVN and publish
+          them as needed. Here are some notes.
+        </p>
+<p>
+          When a plugin gains new functionality, then it will be dependent on a
+          more recent version of Forrest. Deploy the plugin one final time
+          before implementing the new work. For example, if current release is
+          0.7 then ...
+        </p>
+<ul>
+          
+<li>Review the docs and ensure any version numbers in text are "0.7"</li>
+          
+<li>Edit the skinconf.xml to ensure that all version numbers are "0.7", e.g. the MOTD.</li>
+          
+<li>Edit the plugin's descriptors to ensure that the "forrestVersion" is 0.7 and that the "version" is appropriate. </li>
+          
+<li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_70"</li>
+          
+<li>Edit status.xml to set the release date. Ensure that the changes notes are complete.</li>
+        
+</ul>
+<p>
+          Now the plugin gains functionality that binds it to 0.8-dev (e.g.
+          converted to use locationmap) so ...
+        </p>
+<ul>
+          
+<li>Review the docs and ensure any version numbers in text are
+             "0.8"</li>
+          
+<li>Edit the skinconf.xml to ensure that all version numbers are
+             "0.8-dev", e.g. the MOTD.</li>
+          
+<li>Edit the plugin's descriptors to ensure that the "forrestVersion" is
+             0.8 and that the "version" is incremented. </li>
+          
+<li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_80"</li>
+          
+<li>Edit status.xml to add a new section and set the release date.
+             Start adding changes notes.</li>
+        
+</ul>
+<a name="N1023B"></a><a name="experimental"></a>
+<h3 class="underlined_5">Experimental Functionality</h3>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+        This section describes functionality that is considered experimental.
+        This functionality may be defective and is not part of the official
+        release at this time, use at your own risk. If you do choose to use this
+        functionality then we recomend that you join the Forrest dev list in
+        order to keep abreast of the changes as they occur.
+      </div>
+</div>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+        For an example of each of these features in use see the
+        <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.
+      </div>
+</div>
+<a name="N1024A"></a><a name="Locationmap"></a>
+<h4>Locationmap</h4>
+<p>
+          Plugins can use the Forrest locationmap to expose resources to your
+          project and other plgins. To use this functionality add your
+          <span class="codefrag">locationmap.xml</span> file to the root of the plugin directory.
+        </p>
+<p>
+          We have an
+          <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a> for
+          the status of locationmap development.
+        </p>
+<a name="N1025E"></a><a name="Dispatcher"></a>
+<h4>Dispatcher</h4>
+<p>
+          Dispatcher (previous codename Forrest Views) is the collective name
+          for the various pieces of functionality that are intended to replace
+          skins in the future. They allow for a much more configurable system of
+          defining the contents and look and feel of a site.
+        </p>
+<p>
+          Plugins can expose contracts, resources and tiles for use in
+          structurer files used within Dispatcher-based sites. In order to do
+          this you should develop your contracts as normal and place them in
+          <span class="codefrag">PLUGIN_HOME/resources/themes</span>. However, this, by itself,
+          is not sufficient to export your contracts. You will also need to add
+          the following match to your plugin's <span class="codefrag">locationmap.xml</span>
+          file:
+        </p>
+<pre class="code">
+
+    &lt;match pattern="resolvePluginContract.*.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.ft" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.ft" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+    &lt;match pattern="resolvePluginThemes.*.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/{1}/{2}.{1}" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/{1}/{2}.{1}" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+    &lt;match pattern="resolvePluginTiles.**"&gt;
+      &lt;select type="exists"&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.theme}/html/{1}.vt.xml" /&gt;
+        &lt;location src="{forrest:forrest.plugins}/PLUGIN_NAME/resources/themes/{properties:dispatcher.fallback.theme}/html/{1}.vt.xml" /&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+        </pre>
+<p>
+          Of course, you should replace <span class="codefrag">PLUGIN_NAME</span> with the name
+          of your plugin.
+        </p>
+<p>
+          Once Dispatcher becomes stable we will add this matches to the default
+          locationmap which is generated when you seed a new plugin, but for now
+          it must be done manually.
+        </p>
+<a name="N1027E"></a><a name="Plugin+Properties"></a>
+<h4>Plugin Properties</h4>
+<p>
+          Plugins can define properties that each project can over-ride. For
+          more information see the issue below.
+        </p>
+<p>
+          We have an
+          <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a> for
+          the status of this new configuration system.
+        </p>
+<a name="N10290"></a><a name="examples"></a>
+<h3 class="underlined_5">Examples</h3>
+<p>
+        This section will provide some example plugins to help illustrate the
+        steps discussed above.
+      </p>
+<a name="N10299"></a><a name="input"></a>
+<h4>Input Plugin</h4>
+<div class="fixme">
+<div class="label">Fixme (RDG)</div>
+<div class="content">
+          Discuss OpenOffice.org plugin here
+        </div>
+</div>
+<a name="N102A4"></a><a name="output"></a>
+<h4>Output Plugin</h4>
+<div class="fixme">
+<div class="label">Fixme (RDG)</div>
+<div class="content">
+          Discuss s5 plugin here
+        </div>
+</div>
+<a name="N102AF"></a><a name="internal"></a>
+<h4>Internal Plugin</h4>
+<div class="fixme">
+<div class="label">Fixme (RDG)</div>
+<div class="content">
+          Discuss IMSManifest plugin here
+        </div>
+</div>
+<a name="N102BB"></a><a name="extension"></a>
+<h3 class="underlined_5">Further Reading</h3>
+<ul>
+        
+<li>
+<a href="../../pluginDocs/plugins_0_90/pluginInfrastructure.html">Plugin Infrastructure Documentation</a> for Developers</li>
+        
+<li>
+<a href="../../pluginDocs/plugins_0_90/">Plugins Documentation</a> for users</li>
+      
+</ul>
+<a name="N102D1"></a><a name="summarise"></a>
+<h3 class="underlined_5">Summarise the Entire Process</h3>
+<div class="fixme">
+<div class="label">Fixme (open)</div>
+<div class="content">
+        In a few sentences, remind the reader what they have just learned. This
+        helps to reinforce the main points of your How-To.
+      </div>
+</div>
+</div>
+<span class="version">0.3.0</span>
+</div>
+<!--+
+    |end content
+    +-->
+<div class="clearboth">&nbsp;</div>
+</div>
+<div id="footer">
+<!--+
+    |start bottomstrip
+    +-->
+<div class="lastmodified">
+<script type="text/javascript"><!--
+document.write("Last Published: " + document.lastModified);
+//  --></script>
+</div>
+<div class="copyright">
+        Copyright &copy;
+         2002-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+</div>
+<!--+
+    |end bottomstrip
+    +-->
+</div>
+</body>
+</html>
