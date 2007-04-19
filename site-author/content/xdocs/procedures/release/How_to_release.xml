@@ -832,11 +832,68 @@ where
           </p></li>
       </ol>
     </section>
+    <section id="prepSite">
+      <title>Prepare the site-author docs for next development phase</title>
+      <note>
+        Before doing anything, skip to the next section to get the upload commenced.
+      </note>
+      <p>
+        While waiting for the mirrors to catch up, you will copy the docs set for the
+        next development, then call off the code-freeze. Do this ...
+      </p>
+      <ul>
+        <li>Create a copy of current dev-docs in trunk for the next development phase.
+          Do 'cd site-author/content/xdocs' and 'svn copy &dd; &nd;'
+                </li>
+        <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
+            Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v&ns;&gt;).
+            </li>
+        <li><p>Edit site-author/status.xml to add a new <code>
+<![CDATA[<release>]]>
+            </code> section above it for development on the next version.
+          Add one placeholder action for the next "upgrading" doc.
+              </p>
+              <source>
+  &lt;release version="&nt;" date="not yet released">
+    &lt;introduction>
+    ...
+  &lt;/release>
+  &lt;release version="&d;" date="&rdate;">
+    &lt;action
+    ...</source></li>
+        <li>Return the "dev" note to upgrading_xy.xml</li>
+        <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
+        <li><p>
+            Edit main/build.xml, increment the version and add a -dev tag:
+            around line 45: &lt;property name="version" value="&nt;"/>
+          </p></li>
+        <li><p>
+            Edit main/forrest.build.xml and update the version: around line 32:
+          </p>
+          <source>&lt;property name="version" value="&nt;"/></source></li>
+        <li><p>
+            Update the .htaccess file to redirect /docs/dev/ to the next
+            version, and do other changes noted in the .htaccess file. See
+            site-author/content/.htaccess
+          </p>
+          <fixme author="fso">
+            Need to go through .htaccess and clean up.
+          </fixme></li>
+        <li>
+                  Update the release version number and release date in our DOAP file.
+                  See site-author/content/doap.xml
+                </li>
+        <li>Commit all of the above changes.</li>
+        <li>Send email to the dev list to remind people about the new docs set &nd;
+        and that we don't update &pd; set. Also remind about the new release branch
+        of svn. See example email from the 0.8 release.</li>
+      </ul>
+    </section>
     <section id="UploadAndAnnounce">
       <title>Upload and announcement</title>
       <p>
         In this phase we'll upload the new Release, wait for it to be available
-        on most mirror sites, then announce the new release.
+        on most mirror sites, publish the new website, then announce the release.
       </p>
       <note>
         During this phase there is a lot of waiting. While things are happening
@@ -894,25 +951,6 @@ where
             When you see that a good proportion of the mirrors have received the
             release, then update the website, then send the announcement.
           </p></li>
-        <li>Create a copy of current dev-docs in trunk for the next development phase.
-                    Do 'cd site-author/content/xdocs' and 'svn copy &dd; &nd;'
-                </li>
-        <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
-                    Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v&ns;&gt;).
-                </li>
-        <li><p>
-            Update the .htaccess file to redirect /docs/dev/ to the next
-            version, and do other changes noted in the .htaccess file. See
-            site-author/content/.htaccess
-          </p>
-          <fixme author="fso">
-            Need to go through .htaccess and clean up.
-          </fixme></li>
-        <li>
-                  Update the release version number and release date in our DOAP file.
-                  See site-author/content/doap.xml
-                </li>
-        <li>Commit all of the above changes.</li>
         <li><p>
             Rebuild (Forrest site) and publish the Forrest website as normal. Be
             sure to use the new version of trunk for building the docs. Refer to
@@ -928,10 +966,9 @@ where
             their website. See http://xml.apache.org/guidelines.html#website-top
           </p></li>
         <li><p>
-            Send <a href="announce_release.txt">announce_release.txt</a>as email
-            to 'dev@forrest.apache.org', 'user@forrest.apache.org',
-            'announce@apache.org', 'announcements@xml.apache.org'. Sign the
-            email (e.g. PGP).
+            Send <a href="announce_release.txt">announce_release.txt</a> as email to
+            the Forrest user and dev list and the ASF-wide announce lists.
+            Sign the email (e.g. PGP).
           </p>
           <p>
             See previous announcements for examples:
@@ -958,30 +995,6 @@ where
     <section id="cleanup">
       <title>Cleanup</title>
       <ol>
-        <li><p>
-            Edit main/build.xml, increment the version and add a -dev tag:
-            around line 45: &lt;property name="version" value="&nt;"/>
-          </p></li>
-        <li><p>
-            Edit main/forrest.build.xml and update the version: around line 32:
-          </p>
-          <source>&lt;property name="version" value="&nt;"/></source></li>
-        <li><p>Edit site-author/status.xml to add a new <code>
-<![CDATA[<release>]]>
-                </code> section above it for development on the next version.
-          Add one placeholder action for the next "upgrading" doc.
-              </p>
-              <source>
-  &lt;release version="&nt;" date="not yet released">
-    &lt;introduction>
-    ...
-  &lt;/release>
-  &lt;release version="&d;" date="&rdate;">
-    &lt;action
-    ...</source></li>
-        <li>Return the "dev" note to upgrading_xy.xml</li>
-        <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
-        <li>Commit all of the above changes.</li>
         <li>Remove the old generated docs from SVN forrest/site/&pd;
                   which removes them from the website.
                 </li>
