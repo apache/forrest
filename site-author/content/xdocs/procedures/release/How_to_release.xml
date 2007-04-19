@@ -752,6 +752,7 @@ where
             <li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
             <li>Encourage people to build some difficult sites.</li>
+            <li>Remind people about how long remains for testing.</li>
           </ul></li>
         <li>If substantial problems are revealed (not just minor glitches) then co-ordinate their
                   fixing by other developers. Doing the fixing of issues is not the Release Manager's job.
@@ -761,7 +762,8 @@ where
                   introduce new problems.
                 </li>
         <li>If necessary start again with <a href="#BuildDist">Building the packages</a> and build another
-                    release candidate.</li>
+          release candidate. Remember to do 'svn update' first and to record the
+          new SVN revision number.</li>
         <li>Tally the votes and report the result to the dev list.</li>
       </ol>
       <note>
@@ -778,7 +780,8 @@ where
       <ol>
         <li><p>
             If there have been changes to the trunk since the branch was
-            created, then merge trunk to branch.
+            created, then merge trunk to branch. Remember to use a proper commit message
+            which includes th erevision number used for the merge (see the SVN Book).
           </p>
           <fixme author="fso">
             What is the purpose of this step? It doesn't seem to be right
@@ -794,17 +797,17 @@ where
         <li><p>
             Tag SVN by doing:
           </p>
-          <source>svn copy -m "Create tag forrest_###xy### from release branch" \
+          <source>svn copy -m "Create tag forrest_###xy###_release from release branch" \
   https://svn.apache.org/repos/asf/forrest/branches/forrest_###xy###_branch \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###</source>
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_release</source>
           <p>
-            where 'xy' is a compact (without the dots) form of the version
+            where '###xy###' is a compact (without the dots) form of the version
             number (e.g. 04, 041, 05).
           </p>
           <p>
             See
             <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
-            for examples of past tags, e.g. forrest_07
+            for examples of past tags, e.g. forrest_08_release
           </p>
           <fixme author="fso">
             If we change procedure to create an rc-branch this will become a
@@ -814,11 +817,11 @@ where
         <li><p>
             Tag the "site" SVN by doing:
           </p>
-          <source>svn copy -m "Create tag forrest_###xy### release" \
+          <source>svn copy -m "Create tag forrest_###xy###_release_site from site" \
   https://svn.apache.org/repos/asf/forrest/site \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###</source>
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_release_site</source>
           <p>
-            where 'xy' is a compact (without the dots) form of the version
+            where '###xy###' is a compact (without the dots) form of the version
             number (e.g. 04, 041, 05).
           </p></li>
         <li><p>
