@@ -31,7 +31,7 @@
 <!ENTITY p '0.6'>
 <!ENTITY pd 'docs_0_60'>
 <!ENTITY ps '0.60'>
-<!ENTITY rdate '2007-04-16'>
+<!ENTITY rdate '2007-04-18'>
 ]>
 <!-- The entities above are for the current state,
   i.e. preparing for the upcoming release (using 0.8 as the example):
@@ -86,6 +86,17 @@
         The lead-up to the release is a good opportunity to build the project community
         and to draw in new developers. The steps in this process try to maximise that.
       </p>
+      <fixme author="open">
+        Some of the complexity in this process is due to site-author docs accompanying
+        the release. That is a good thing because then they have local docs.
+        However it complicates this process because the documentation version numbers,
+        xdocs layout, site.xml navigation, etc. all need to be relevant for
+        packing with the release. Trunk needs to stay that way during testing of RCs.
+        Just before the release announcement, certain things need to be updated to
+        create and publish the website. Then following the release, updated to be
+        ready for the next develoment cycle. Much of that process in unavoidable, but
+        some could be simplified.
+      </fixme>
     </section>
     <section id="rm">
       <title>Who is the Release Manager</title>
@@ -413,9 +424,14 @@
         these changes after the code-freeze, but do not publish to the website
         until after the release.
       </p>
+      <fixme author="dc">
+        We definitely need to use automated version number strings where possible.
+        It is too easy to miss some, as we did with 0.8 release. 
+        We have a set of core xml entities available.
+      </fixme>
       <ol>
         <li><p>
-            Edit "versions" entries in site.xml as follows:
+            Edit site.xml as follows:
           </p>
           <ol>
             <li><p>
@@ -441,6 +457,22 @@
           </ol></li>
         <li>Similarly edit tabs.xml</li>
         <li><p>
+            Further edit site.xml to configure the menu labels. See an example site.xml
+            from a past release. Basically do this ...
+          </p>
+          <ol>
+            <li>Add section &lt;v&ns;> with minimal content above the &lt;v&ds;> section.</li>
+            <li>Edit the label@ and description@ attributes for each of the three sections.
+              &lt;v&ns;> and &lt;v&ds;> and &lt;v&cs;></li>
+            <li>Remove the label@ attribute for the &lt;v&cs;> section. This prevents
+              it from appearing in the <a href="site:linkmap">linkmap ToC</a>.</li>
+            <li>Remove the whole section &lt;v&ps;> of the past docs.</li>
+          </ol></li>
+        <li>Edit version numbers in xdocs/versions/index.xml</li>
+        <li>Edit version numbers in xdocs/pluginDocs/index.xml</li>
+        <li>Edit version numbers in MOTD section of site-author/skinconf.xml</li>
+        <li>Edit version numbers in main/fresh-site/..../site.xml and tabs.xml</li>
+        <li><p>
             Remove the past versions (&p;) docs directory by doing 'svn rm
             site-author/content/xdocs/&pd;
           </p></li>
@@ -456,31 +488,23 @@
                   Verify localhost:8888/forrest-issues.html
                 </li>
         <li><p>
-            Edit site-author/status.xml:
-          </p>
-          <ol>
-            <li><p>
-                Remove the -dev from the current &lt;release&gt; tag, and set
-                the release date.
+            Edit site-author/status.xml to 
+                Remove the "-dev" from the current &lt;release&gt; tag, and set
+                the anticipated release date. Remove the "-dev" from the text intro.
               </p></li>
-            <li><p>
-                Add a new <code>
-<![CDATA[<release>]]>
-                </code> section for development on the next version e.g. from:
-              </p>
-              <source>
-  &lt;release version="&dt;" date="not yet released">
-  ...</source>
-              <p>
-                to:
-              </p>
-              <source>
-  &lt;release version="&nt;" date="not yet released">
-  ...
-  &lt;release>
-  &lt;release version="&d;" date="&rdate;">
-  ...</source></li>
-          </ol></li>
+        <li>Validate status.xml (e.g. with xmllint).</li>
+        <li>
+          <p>
+            Create a new directory as a stub for the next section of development docs. 
+            Create a placeholder index page and upgrading notes. See a past release
+            for example. Do this ...
+          </p>
+          <source>
+svn mkdir &nd;
+svn copy &dd;/index.xml &nd;
+svn copy &dd;/upgrading.xml &nd;
+... edit those docs to suit. Emphasise developers and encourage svn.</source>
+        </li>
         <li>Temporarily remove the "dev" note from upgrading_xy.xml</li>
         <li><p>
             Edit the Forrest home page in the "News and events" section and add
@@ -489,7 +513,9 @@
           <source>
  Apache Forrest &d; was released on &rdate;.
  [### Add some important new features ###]</source></li>
-        <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'. Fix any linking errors.</li>
+        <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'.
+          Fix any linking errors. Review changes.html to ensure section numbering.</li>
+        <li>Edit the site-author/content/doap.xml to add the new release date.</li>
         <li><p>
             Edit the forrest/site-author/content/xdocs/mirrors.html and adjust
             all version-specific content.
@@ -935,6 +961,19 @@ where
             Edit main/forrest.build.xml and update the version: around line 32:
           </p>
           <source>&lt;property name="version" value="&nt;"/></source></li>
+        <li><p>Edit site-author/status.xml to add a new <code>
+<![CDATA[<release>]]>
+                </code> section above it for development on the next version.
+          Add one placeholder action for the next "upgrading" doc.
+              </p>
+              <source>
+  &lt;release version="&nt;" date="not yet released">
+    &lt;introduction>
+    ...
+  &lt;/release>
+  &lt;release version="&d;" date="&rdate;">
+    &lt;action
+    ...</source></li>
         <li>Return the "dev" note to upgrading_xy.xml</li>
         <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
         <li>Commit all of the above changes.</li>
