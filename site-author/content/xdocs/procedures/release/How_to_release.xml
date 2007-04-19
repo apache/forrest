@@ -562,13 +562,49 @@ svn copy &dd;/upgrading.xml &nd;
             become effective.
           </note></li>
         <li><p>
+            Update the version numbers at various places:
+          </p>
+          <ol>
+            <li><p>
+                Edit main/build.xml and remove the "-dev" text around line 48:
+              </p>
+              <source>
+ &lt;property name="forrest.version" value="&dt;"/>
+to:
+ &lt;property name="forrest.version" value="&d;"/>
+                          </source></li>
+            <li>
+                          Similarly in main/forrest.build.xml around line 28.
+                        </li>
+            <li><p>
+                Edit plugins/build.xml to increase the docs version number to
+                the next major release. Around line 23:
+              </p>
+              <source>
+ &lt;property name="forrest.version" value="&d;"/>
+to:
+ &lt;property name="forrest.version" value="&n;"/>
+</source>
+              <note>
+                This is deliberately a major version up. It is assumed that
+                plugins will be developed against the next version of Forrest.
+                Individual plugins can override this property in their own build
+                files.
+              </note></li>
+          </ol>
+          <fixme author="">
+            There are probably other areas which have version numbers. How can
+            we improve this? Possibly with XML Entities, possibly with Ant
+            properties.
+          </fixme></li>
+        <li><p>
             Run the following quick tests from the command line of your system
             to ensure that all is well:
           </p>
           <ul>
             <li><p>
                 Change to the main directory and run <code>build test</code>.
-                The build should conclude without errors.
+                The build should conclude without errors from both seed builds.
               </p></li>
             <li><p>
                 Change to the site-author directory and run 'forrest'. The docs
@@ -597,55 +633,15 @@ svn copy &dd;/upgrading.xml &nd;
             been removed and no other files have been changed. The status
             command should report no changes.
           </p></li>
-        <li><p>
-            Update the version numbers at various places:
-          </p>
-          <ol>
-            <li><p>
-                Edit main/build.xml and remove the "-dev" text around line 45:
-              </p>
-              <source>
- &lt;property name="forrest.version" value="&dt;"/>
-to:
- &lt;property name="forrest.version" value="&d;"/>
-                          </source></li>
-            <li>
-                          Similarly in main/forrest.build.xml around line 32.
-                        </li>
-            <li><p>
-                Edit plugins/build.xml and increase the docs version number to
-                the next major release. Around line 23:
-              </p>
-              <source>
- &lt;property name="forrest.version" value="&d;"/>
-to:
- &lt;property name="forrest.version" value="&n;"/>
-</source>
-              <note>
-                This is deliberately a major version up. It is assumed that
-                plugins will be developed against the next version of Forrest.
-                Individual plugins can override this property in their own build
-                files.
-              </note></li>
-          </ol>
-          <fixme author="">
-            There are probably other areas which have version numbers. How can
-            we improve this? Possibly with XML Entities, possibly with Ant
-            properties.
-          </fixme></li>
         <li>
-                  Edit 4 files in tools/forrestbar to update the version number to match the new release:
+                  Edit 3 files in tools/forrestbar to update the version number to match the new release:
                   <source>
 xpi/install.rdf, line 24: &lt;em:version>&d;&lt;em:version>
 
 xpi/install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "&d;");
 
-xpi/chrome/content/contents.rdf, line 28: chrome:displayName="ForrestBar &d;"/> 
+xpi/chrome/content/contents.rdf, line 25: chrome:displayName="ForrestBar &d;"/> 
 
-xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
-  as well as change the link to point to the new release's docs:
-    &lt;menuitem label="Current Docs (0.7)"
-       onclick="navigate('http://forrest.apache.org/docs_0_70/index.html');"/>
                     </source></li>
         <li>Build the forrestbar and replace site-author/content/xdocs/tools/forrestbar.xpi
                 </li>
@@ -662,6 +658,12 @@ xpi/chrome/content/forrestbarOverlay.xul, about line 40 edit the version number
             been made, i.e. people forgetting the code freeze. From here on
             watch the svn@ list.
           </p></li>
+        <li><p>Cleanup your working copy to remove any extra files.</p>
+          <source>
+cd $FORREST_HOME
+find . -name build | xargs rm -rf
+svn status --no-ignore</source>
+        </li>
         <li><p>
             Now we will build the release candidate packages for Windows and
             Unix.
@@ -707,12 +709,12 @@ md5sum apache-forrest-&d;.tar.gz</source>
             anywhere because it uses full URLs.
           </p>
           <source>
-svn copy -r ##### -m "Create the ###xy### release branch from r#####" \
+svn copy -r ##### -m "Create the &d; release branch from r#####" \
     https://svn.apache.org/repos/asf/forrest/trunk \
-    https://svn.apache.org/repos/asf/forrest/branches/forrest_###xy###_branch
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_#xy#_branch
 
 where
-  'xy' is a compact form of the version (e.g. 04, 041, 05).
+  '#xy#' is a compact form of the version (e.g. 04, 041, 05).
   '#####' is the SVN revision number that the branch was created from,
   which was the revision that the release candidate packages were generated from.
   (Remember that you recorded this number earlier.)
