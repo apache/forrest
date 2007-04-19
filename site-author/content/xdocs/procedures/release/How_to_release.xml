@@ -19,13 +19,16 @@
   "http://forrest.apache.org/dtd/document-v20.dtd" [
 <!ENTITY c '0.7'>
 <!ENTITY cd 'docs_0_70'>
+<!ENTITY cp 'plugins_0_70'>
 <!ENTITY cs '0.70'>
 <!ENTITY d '0.8'>
 <!ENTITY dd 'docs_0_80'>
+<!ENTITY dp 'plugins_0_80'>
 <!ENTITY ds '0.80'>
 <!ENTITY dt '0.8-dev'>
 <!ENTITY n '0.9'>
 <!ENTITY nd 'docs_0_90'>
+<!ENTITY np 'plugins_0_90'>
 <!ENTITY ns '0.90'>
 <!ENTITY nt '0.9-dev'>
 <!ENTITY p '0.6'>
@@ -37,13 +40,16 @@
   i.e. preparing for the upcoming release (using 0.8 as the example):
   &c;  = current release version, e.g. 0.7
   &cd; = current release version docs, e.g. docs_0_70
+  &cp; = current release version plugin docs, e.g. plugins_0_70
   &cs; = current release version site URI, e.g. 0.70 (as in site:v0.70)
   &d;  = development version, e.g. 0.8
   &dd; = development version docs, e.g. docs_0_80
+  &dp; = development version plugin docs, e.g. plugins_0_80
   &ds; = development version site URI, e.g. 0.80 (as in site:v0.80)
   &dt; = development version with -dev, e.g. 0.8-dev
   &n;  = next version, e.g. 0.9
   &nd; = next version docs, e.g. docs_0_90
+  &np; = next version plugin docs, e.g. plugins_0_90
   &ns; = next version site URI, e.g. 0.90 (as in site:v0.90)
   &nt; = next version with -dev, e.g. 0.9-dev
   &p;  = previous version, e.g. 0.6
@@ -151,6 +157,9 @@
         <li>The project updates the Roadmap to schedule the realistic Issues.</li>
         <li>The project made good progress towards fixing the Blockers and applying the outstanding patches.</li>
         <li>The documentation content is ready.</li>
+        <li>Plugins have been reviewed and deployed as necessary. Some perhaps need to
+          go through a release process. This should happen independently of the release process.
+        </li>
         <li>Supporting products (e.g. Ant, Xerces) should have been updated well before this
                 stage. Do not attempt such upgrades too close to the release, as it
                 will distract attention from other issues and possibly introduce new problems.
@@ -261,6 +270,9 @@
           </p></li>
         <li>Get a printout of this document to scribble notes as you go.</li>
         <li>Use a text file to prepare/record your svn merge commands.</li>
+        <li>Browse the dev mail list to see what happened around the previous release.
+          Some mails will be useful to glean words to re-use.
+        </li>
       </ul>
     </section>
     <section id="PrepRelPlan">
@@ -479,7 +491,6 @@
         <li><p>
             Edit site-author/conf/cli.xconf where it excludes old docs from
             being generated (a trick to speed up). Adjust the version numbers.
-            Comment-out these exclusions until after the release.
           </p></li>
         <li>
                   Change the "fixfor" attribute to the next version for the
@@ -778,10 +789,14 @@ where
         vote, we'll finalize the release.
       </p>
       <ol>
+        <li>
+            Remove the release candidate packages from your public_html
+            directory.
+        </li>
         <li><p>
             If there have been changes to the trunk since the branch was
             created, then merge trunk to branch. Remember to use a proper commit message
-            which includes th erevision number used for the merge (see the SVN Book).
+            which includes the revision number used for the merge (see the SVN Book).
           </p>
           <fixme author="fso">
             What is the purpose of this step? It doesn't seem to be right
@@ -842,16 +857,20 @@ where
         next development, then call off the code-freeze. Do this ...
       </p>
       <ul>
-        <li>Create a copy of current dev-docs in trunk for the next development phase.
-          Do 'cd site-author/content/xdocs' and 'svn copy &dd; &nd;'
+        <li>Create a copy of current dev-docs in trunk for the next development phase ...
+           <source>
+cd site-author/content/xdocs
+svn copy &dd; &nd;
+svn copy pluginDocs/&dp; &np;</source>
                 </li>
-        <li>Open site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
+        <li>Edit site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
             Increment the first decimal of the sections name to reflect the next planned release (e.g. &lt;v&ns;&gt;).
             </li>
         <li><p>Edit site-author/status.xml to add a new <code>
 <![CDATA[<release>]]>
             </code> section above it for development on the next version.
           Add one placeholder action for the next "upgrading" doc.
+          Do the same in the release branch for a possible x.y.1
               </p>
               <source>
   &lt;release version="&nt;" date="not yet released">
@@ -861,8 +880,13 @@ where
   &lt;release version="&d;" date="&rdate;">
     &lt;action
     ...</source></li>
-        <li>Return the "dev" note to upgrading_xy.xml</li>
+        <li>Return the "dev" note to upgrading_xy.xml and add some of the orginal
+          general points that still apply.</li>
         <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
+        <li>Add new plugins directories to the "forrest/site" SVN ...
+           <source>
+svn mkdir pluginDocs/&np;
+svn mkdir plugins/&n;</source></li>
         <li><p>
             Edit main/build.xml, increment the version and add a -dev tag:
             around line 45: &lt;property name="version" value="&nt;"/>
@@ -871,6 +895,8 @@ where
             Edit main/forrest.build.xml and update the version: around line 32:
           </p>
           <source>&lt;property name="version" value="&nt;"/></source></li>
+        <li>Edit version numbers in plugins/build.xml</li>
+        <li>Edit version numbers in tools/forrestbar</li>
         <li><p>
             Update the .htaccess file to redirect /docs/dev/ to the next
             version, and do other changes noted in the .htaccess file. See
@@ -880,8 +906,8 @@ where
             Need to go through .htaccess and clean up.
           </fixme></li>
         <li>
-                  Update the release version number and release date in our DOAP file.
-                  See site-author/content/doap.xml
+                  Update the release version number and release date in xdocs/index.xml
+                  and site-author/content/doap.xml
                 </li>
         <li>Commit all of the above changes.</li>
         <li>Send email to the dev list to remind people about the new docs set &nd;
@@ -894,6 +920,8 @@ where
       <p>
         In this phase we'll upload the new Release, wait for it to be available
         on most mirror sites, publish the new website, then announce the release.
+        The reason for waiting, is because when you send the announcement, most of
+        the mirrors need to be up-to-date or your audience will grumble.
       </p>
       <note>
         During this phase there is a lot of waiting. While things are happening
@@ -905,13 +933,11 @@ where
         <li><p>
             Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc
             and *.md5 files, and the RELEASE-NOTES-&d;.txt to people.apache.org
-            at /www/www.apache.org/ dist/forrest/
+            at /www/www.apache.org/ dist/forrest/ directory.
           </p>
           <p>
             Ensure correct file permissions by executing <code>'chgrp forrest
-            *'</code> then <code>'chmod 664 *'</code> in that directory.
-          </p>
-          <p>
+            *'</code> then <code>'chmod g+w *'</code> in that directory.
             Each PMC member has a server account and belongs to the forrest
             group.
           </p>
@@ -938,10 +964,12 @@ where
           </p>
           <p>
             For some mirrors, this takes only a few hours. However others are
-            slow. How long to wait is a tradeoff, e.g. 8 hours.
+            slow. How long to wait is a tradeoff, e.g. 8 hours has been the norm.
           </p>
           <p>
             See <a href="http://www.apache.org/mirrors/">Status of mirrors</a>.
+            It is a very useful service and fun to watch. See the "age histogram"i
+            near the bottom.
           </p>
           <p>
             Take note of the time that the eu.apache.org mirror is updated, then
@@ -951,12 +979,27 @@ where
             When you see that a good proportion of the mirrors have received the
             release, then update the website, then send the announcement.
           </p></li>
+        <li>Ensure that docs are *not* being excluded via site-author/conf/cli.xconf
+           as we need to re-build the whole site.</li>
+        <li>Before re-building and deploying the new website, check the time.
+          Remember that an 'svn up' happens our on server just after the hour, then
+          a bit later the rsync happens and the site is live about 20 minutes past.
+          This site deployment will take some time, mostly because you are actually
+          doing a fresh installation of a local forrestbot (it does 'svn co forrest/site').
+        </li>
         <li><p>
-            Rebuild (Forrest site) and publish the Forrest website as normal. Be
+            Re-build and publish the Forrest website as normal. Be
             sure to use the new version of trunk for building the docs. Refer to
             <a href="site:howToPublishDocs">Publishing Forrest Documentation</a>
-            for details.
+            for details. Beware, there is a forrestbot bug whereby with a brand new
+            forrest installation, the first deploy only does the added files. So deploy again. 
           </p></li>
+        <li>Test the new Forrest <a href="http://forrest.apache.org/">website</a>
+          and the redirects
+          <a href="http://forrest.apache.org/docs/">f.a.o/docs/</a> and
+          <a href="http://forrest.apache.org/docs/dev/">f.a.o/docs/dev/</a> and the
+          <a href="http://forrest.apache.org/mirrors.cgi">download</a> page.
+        </li>
         <li><p>
             Update the xml.apache.org website (Forrest is part of the Apache XML
             federation of projects). Edit
@@ -974,13 +1017,14 @@ where
             See previous announcements for examples:
           </p>
           <ul>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=103746673310573">0.2</a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=104399934113331">0.3 </a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=jakarta-announce&amp;m=104510734501302">0.4</a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=106352706005681">0.5</a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=106541447606765">0.5.1</a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=109784461425740">0.6</a></li>
-            <li><a href="http://marc.theaimsgroup.com/?l=xml-apache-announce&amp;m=111960678028211">0.7</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=103746673310573">0.2</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=104399934113331">0.3 </a></li>
+            <li><a href="http://marc.info/?l=jakarta-announce&amp;m=104510734501302">0.4</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=106352706005681">0.5</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=106541447606765">0.5.1</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=109784461425740">0.6</a></li>
+            <li><a href="http://marc.info/?l=xml-apache-announce&amp;m=111960678028211">0.7</a></li>
+            <li><a href="http://marc.info/?l=apache-announce&amp;m=117688881228702">0.8</a></li>
           </ul></li>
         <li><p>
             Do the Freshmeat announcement:
@@ -1003,11 +1047,10 @@ where
             directory. They have already been automatically archived at
             archive.apache.org/dist/forrest/
           </p></li>
-        <li>Create a new plugins directory in the forrest/site SVN for the
-                  next development phase:
-                  <source>
-svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/&n;
-                  </source></li>
+          <li>Tidy up any "site:v&c;" references. These will refer to old documentation
+            that will be removed at the next release. Especially status.xml file will
+            have such. Generalise as many as possible.
+          </li>
         <li><p>
             Do some Jira administration (need to be in the jira-administrators
             group)
@@ -1023,16 +1066,12 @@ svn mkdir https://svn.apache.org/repos/asf/forrest/site/plugins/&n;
               </p></li>
             <li><p>
                 Mark &d; as released using "Manage Versions".
-              </p></li>
-            <li><p>
-                Review the Issues for the old version and move any Incomplete
-                ones up.
+                Review the Issues for the old version.
               </p></li>
           </ol></li>
-        <li><p>
-            Remove the release candidate packages from your public_html
-            directory.
-          </p></li>
+        <li>Deploy the Forrest site again. It will automatically rebuild the
+            <a href="site:forrest-issues">Open Issues</a> page.
+        </li>
       </ol>
     </section>
     <section id="conclusion">
