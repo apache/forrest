@@ -74,6 +74,20 @@
             <map:serialize type="xml-document"/>
           </map:match>
         </map:when>
+        <!-- Google Code Wiki Markup -->
+        <map:when test="{lm:project.{uri}.wiki}">
+          <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
+            <map:generate type="text2xml" src="{lm:project.{1}{2}.wiki}" />
+            <map:transform type="lexer"   src="cocoon:/googlewiki.xlex"/>
+            <map:transform type="parser"  src="cocoon:/googlewiki.xgrm"/>
+            <map:transform type="xsltc" 
+              src="{lm:wiki.transform.googlewiki.xdoc}">
+              <map:parameter name="name" value="{2}" />
+              <map:parameter name="spaceless-filenames" value="true"/>
+            </map:transform>
+            <map:serialize type="xml-document"/>
+          </map:match>
+        </map:when>
       </map:select>
     </map:resource>
   </map:resources>
