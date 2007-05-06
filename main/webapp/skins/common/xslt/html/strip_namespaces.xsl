@@ -20,9 +20,14 @@
   <!-- Fixes FOR-555. This might not be the best solution though, but it sure works -->
   <xsl:template match="comment()">
     <xsl:copy>
-      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+      <xsl:apply-templates select="@*|*|text()|comment()"/>
     </xsl:copy>
   </xsl:template>
+    
+    <!-- If processed by rule below processing instructions disappaer -->
+    <xsl:template match="processing-instruction()">
+        <xsl:copy-of select="."/>
+    </xsl:template>  
     
   <xsl:template match="*">
       <!-- remove element prefix (if any) -->
