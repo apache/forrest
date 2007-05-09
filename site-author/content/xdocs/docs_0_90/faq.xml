@@ -543,6 +543,31 @@ forrest -Dproject.start-uri=live-sites.html
         </ol>
       </answer>
     </faq>
+    <faq id="output-filename-extension">
+      <question>How to use a different filename extension for output, e.g. *.php? </question>
+      <answer>
+        <p>
+          Use the power of the Cocoon sitemaps. There is default handling for *.php (see main/webapp/sitemap.xmap) to map the 'php' extension to an internal request for "html". See more about <link href="#php">PHP</link> below.
+        </p>
+        <p>
+          Use the same internal re-direction technique for your special needs, e.g. copy that php match to your project sitemap and use ".htm" instead.
+        </p>
+      </answer>
+    </faq>
+    <faq id="php">
+      <question> How to generate pages ready for serving via PHP? </question>
+      <answer>
+        <p>
+          Use the *.php filename extension (see <link href="#output-filename-extension">above</link>)
+          for the output html links in site.xml navigation. Add your php processing instructions to the source documents.
+        </p>
+        <p>
+          However, beware <link href="http://issues.apache.org/jira/browse/FOR-999">FOR-999</link>
+          "processing-instruction nodes in source are not always passed through to html output"
+          whereby only PIs in certain body elements are handled.
+        </p>
+      </answer>
+    </faq>
     <faq id="label-entity">
       <question> How to use special characters in the labels of the site.xml file? </question>
       <answer>

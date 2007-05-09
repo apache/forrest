@@ -579,9 +579,16 @@ $Revision: 1.12 $
         </map:select>
         <map:serialize type="xml"/>
       </map:match>
+<!-- handle PHP -->
+      <map:match type="regexp" pattern="^(.*?)([^/]*).php$">
+        <map:generate src="cocoon://{1}{2}.html"/>
+        <map:serialize type="html"/>
+      </map:match>
+<!-- handle Lucene requests -->
       <map:match pattern="**.lucene">
         <map:mount uri-prefix="" src="search.xmap" check-reload="yes" />
       </map:match>
+<!-- resources for plugins -->
       <map:select type="exists">
         <map:when test="{lm:plugin.xmap.resources}">
           <map:mount uri-prefix="" 
@@ -590,6 +597,7 @@ $Revision: 1.12 $
                       pass-through="true"/>
         </map:when>
       </map:select>
+<!-- various other resources -->
       <map:match pattern="**.js">
         <map:mount uri-prefix="" src="resources.xmap" check-reload="yes" />
       </map:match>
