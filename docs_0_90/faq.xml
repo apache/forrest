@@ -428,7 +428,24 @@ forrest -Dproject.start-uri=live-sites.html
           <li>Name the uri-attribute whatever you'd like your start page to be.</li>
           <li>Don't forget to create that page and refer to it in your site.xml</li>
         </ol>
-      </section><section id="label-entity"><title>2.14.  How to use special characters in the labels of the site.xml file? </title>
+      </section><section id="output-filename-extension"><title>2.14. How to use a different filename extension for output, e.g. *.php? </title>
+        <p>
+          Use the power of the Cocoon sitemaps. There is default handling for *.php (see main/webapp/sitemap.xmap) to map the 'php' extension to an internal request for "html". See more about <link href="#php">PHP</link> below.
+        </p>
+        <p>
+          Use the same internal re-direction technique for your special needs, e.g. copy that php match to your project sitemap and use ".htm" instead.
+        </p>
+      </section><section id="php"><title>2.15.  How to generate pages ready for serving via PHP? </title>
+        <p>
+          Use the *.php filename extension (see <link href="#output-filename-extension">above</link>)
+          for the output html links in site.xml navigation. Add your php processing instructions to the source documents.
+        </p>
+        <p>
+          However, beware <link href="http://issues.apache.org/jira/browse/FOR-999">FOR-999</link>
+          "processing-instruction nodes in source are not always passed through to html output"
+          whereby only PIs in certain body elements are handled.
+        </p>
+      </section><section id="label-entity"><title>2.16.  How to use special characters in the labels of the site.xml file? </title>
         <p>
           Use the numeric values for character entities. For example, rather
           than using <code>
@@ -444,7 +461,7 @@ forrest -Dproject.start-uri=live-sites.html
           <link href="http://issues.apache.org/jira/browse/FOR-244">Issue
           FOR-244</link>.
         </p>
-      </section><section id="encoding"><title>2.15. Does Forrest handle accents for non-English languages?</title>
+      </section><section id="encoding"><title>2.17. Does Forrest handle accents for non-English languages?</title>
         <p>
           Yes, Forrest can process text in any language, so you can include:
         </p>
@@ -513,7 +530,7 @@ forrest -Dproject.start-uri=live-sites.html
           <link href="http://www.alanwood.net/unicode/">Alan Wood's Unicode
           resources</link>.
         </p>
-      </section><section id="xml-entities"><title>2.16. How to use XML entities, for example string
+      </section><section id="xml-entities"><title>2.18. How to use XML entities, for example string
         replacement?</title>
         <p>
           A set of symbols is available. See the demonstration in a fresh
@@ -522,7 +539,7 @@ forrest -Dproject.start-uri=live-sites.html
           trademark symbol "My Project Name&#8482;". Avoid lengthy typing and
           potential spelling errors.
         </p>
-      </section><section id="cleanSite"><title>2.17.  How to make Forrest clean up the project build directories? </title>
+      </section><section id="cleanSite"><title>2.19.  How to make Forrest clean up the project build directories? </title>
         <p>
           By default Forrest does not clean its build directories in the project
           workspaces. This enables Cocoon to use its disk cache to speed up
@@ -535,7 +552,7 @@ forrest -Dproject.start-uri=live-sites.html
           which include the Cocoon cache and the Cocoon logs). Doing 'forrest
           clean' will remove both sections.
         </p>
-      </section><section id="i18n"><title>2.18. How can I internationalise (i18n) my content?</title>
+      </section><section id="i18n"><title>2.20. How can I internationalise (i18n) my content?</title>
         <p>
           The i18n features of Forrest are still under development (as of 0.7)
           however there are some features available. For example, navigation
@@ -550,7 +567,7 @@ forrest -Dproject.start-uri=live-sites.html
           i18n Transformer</link>. You can see an example of how it works in the
           above linked issue.
         </p>
-      </section><section id="rawHTML"><title>2.19. How can I include HTML content that is not to be skinned by Forrest?</title>
+      </section><section id="rawHTML"><title>2.21. How can I include HTML content that is not to be skinned by Forrest?</title>
         <p>
           To serve, for example a legacy HTML site, add something like the
           following to your project's sitemap and place the source content at
@@ -587,7 +604,7 @@ forrest -Dproject.start-uri=live-sites.html
           <li>forrest</li>
           <li><code>http://localhost:8888/samples/linking.html#no-decoration</code></li>
         </ol>
-      </section><section id="javascript"><title>2.20. How to include additional Javascript and CSS files?</title>
+      </section><section id="javascript"><title>2.22. How to include additional Javascript and CSS files?</title>
         <p>
           Place various resources (e.g. javascript, css) into the "project
           skins" directory. The default forrest.properties has this at
@@ -603,7 +620,7 @@ forrest -Dproject.start-uri=live-sites.html
           forrest/main/webapp/resources.xmap Search for "javascript" then follow
           to the &lt;map:resource name="skin-read"&gt; section.
         </p>
-      </section><section id="linkmap"><title>2.21. How to show a Table Of Contents for the whole site?</title>
+      </section><section id="linkmap"><title>2.23. How to show a Table Of Contents for the whole site?</title>
         <p>
           Every site has an automatically generated document at
           <code>/linkmap.html</code> which is produced from the site.xml

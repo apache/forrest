@@ -419,29 +419,35 @@ document.write("Last Published: " + document.lastModified);
 <a href="#defaultStartPage">2.13.  How can I use a start-up-page other than index.html? </a>
 </li>
 <li>
-<a href="#label-entity">2.14.  How to use special characters in the labels of the site.xml file? </a>
+<a href="#output-filename-extension">2.14. How to use a different filename extension for output, e.g. *.php? </a>
 </li>
 <li>
-<a href="#encoding">2.15. Does Forrest handle accents for non-English languages?</a>
+<a href="#php">2.15.  How to generate pages ready for serving via PHP? </a>
 </li>
 <li>
-<a href="#xml-entities">2.16. How to use XML entities, for example string
+<a href="#label-entity">2.16.  How to use special characters in the labels of the site.xml file? </a>
+</li>
+<li>
+<a href="#encoding">2.17. Does Forrest handle accents for non-English languages?</a>
+</li>
+<li>
+<a href="#xml-entities">2.18. How to use XML entities, for example string
         replacement?</a>
 </li>
 <li>
-<a href="#cleanSite">2.17.  How to make Forrest clean up the project build directories? </a>
+<a href="#cleanSite">2.19.  How to make Forrest clean up the project build directories? </a>
 </li>
 <li>
-<a href="#i18n">2.18. How can I internationalise (i18n) my content?</a>
+<a href="#i18n">2.20. How can I internationalise (i18n) my content?</a>
 </li>
 <li>
-<a href="#rawHTML">2.19. How can I include HTML content that is not to be skinned by Forrest?</a>
+<a href="#rawHTML">2.21. How can I include HTML content that is not to be skinned by Forrest?</a>
 </li>
 <li>
-<a href="#javascript">2.20. How to include additional Javascript and CSS files?</a>
+<a href="#javascript">2.22. How to include additional Javascript and CSS files?</a>
 </li>
 <li>
-<a href="#linkmap">2.21. How to show a Table Of Contents for the whole site?</a>
+<a href="#linkmap">2.23. How to show a Table Of Contents for the whole site?</a>
 </li>
 </ul>
 </li>
@@ -1153,8 +1159,37 @@ forrest -Dproject.start-uri=live-sites.html
         
 </ol>
 </div>
-<a name="N1024A"></a><a name="label-entity"></a>
-<h4 class="faq">2.14.  How to use special characters in the labels of the site.xml file? </h4>
+<a name="N1024A"></a><a name="output-filename-extension"></a>
+<h4 class="faq">2.14. How to use a different filename extension for output, e.g. *.php? </h4>
+<div align="right">
+<a href="#output-filename-extension-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>
+          Use the power of the Cocoon sitemaps. There is default handling for *.php (see main/webapp/sitemap.xmap) to map the 'php' extension to an internal request for "html". See more about <a href="#php">PHP</a> below.
+        </p>
+<p>
+          Use the same internal re-direction technique for your special needs, e.g. copy that php match to your project sitemap and use ".htm" instead.
+        </p>
+</div>
+<a name="N10259"></a><a name="php"></a>
+<h4 class="faq">2.15.  How to generate pages ready for serving via PHP? </h4>
+<div align="right">
+<a href="#php-menu">^</a>
+</div>
+<div style="margin-left: 15px">
+<p>
+          Use the *.php filename extension (see <a href="#output-filename-extension">above</a>)
+          for the output html links in site.xml navigation. Add your php processing instructions to the source documents.
+        </p>
+<p>
+          However, beware <a href="http://issues.apache.org/jira/browse/FOR-999">FOR-999</a>
+          "processing-instruction nodes in source are not always passed through to html output"
+          whereby only PIs in certain body elements are handled.
+        </p>
+</div>
+<a name="N1026C"></a><a name="label-entity"></a>
+<h4 class="faq">2.16.  How to use special characters in the labels of the site.xml file? </h4>
 <div align="right">
 <a href="#label-entity-menu">^</a>
 </div>
@@ -1176,8 +1211,8 @@ forrest -Dproject.start-uri=live-sites.html
           FOR-244</a>.
         </p>
 </div>
-<a name="N10263"></a><a name="encoding"></a>
-<h4 class="faq">2.15. Does Forrest handle accents for non-English languages?</h4>
+<a name="N10285"></a><a name="encoding"></a>
+<h4 class="faq">2.17. Does Forrest handle accents for non-English languages?</h4>
 <div align="right">
 <a href="#encoding-menu">^</a>
 </div>
@@ -1255,8 +1290,8 @@ forrest -Dproject.start-uri=live-sites.html
           resources</a>.
         </p>
 </div>
-<a name="N102B5"></a><a name="xml-entities"></a>
-<h4 class="faq">2.16. How to use XML entities, for example string
+<a name="N102D7"></a><a name="xml-entities"></a>
+<h4 class="faq">2.18. How to use XML entities, for example string
         replacement?</h4>
 <div align="right">
 <a href="#xml-entities-menu">^</a>
@@ -1270,8 +1305,8 @@ forrest -Dproject.start-uri=live-sites.html
           potential spelling errors.
         </p>
 </div>
-<a name="N102C0"></a><a name="cleanSite"></a>
-<h4 class="faq">2.17.  How to make Forrest clean up the project build directories? </h4>
+<a name="N102E2"></a><a name="cleanSite"></a>
+<h4 class="faq">2.19.  How to make Forrest clean up the project build directories? </h4>
 <div align="right">
 <a href="#cleanSite-menu">^</a>
 </div>
@@ -1289,8 +1324,8 @@ forrest -Dproject.start-uri=live-sites.html
           clean' will remove both sections.
         </p>
 </div>
-<a name="N102CB"></a><a name="i18n"></a>
-<h4 class="faq">2.18. How can I internationalise (i18n) my content?</h4>
+<a name="N102ED"></a><a name="i18n"></a>
+<h4 class="faq">2.20. How can I internationalise (i18n) my content?</h4>
 <div align="right">
 <a href="#i18n-menu">^</a>
 </div>
@@ -1310,8 +1345,8 @@ forrest -Dproject.start-uri=live-sites.html
           above linked issue.
         </p>
 </div>
-<a name="N102DE"></a><a name="rawHTML"></a>
-<h4 class="faq">2.19. How can I include HTML content that is not to be skinned by Forrest?</h4>
+<a name="N10300"></a><a name="rawHTML"></a>
+<h4 class="faq">2.21. How can I include HTML content that is not to be skinned by Forrest?</h4>
 <div align="right">
 <a href="#rawHTML-menu">^</a>
 </div>
@@ -1361,8 +1396,8 @@ forrest -Dproject.start-uri=live-sites.html
         
 </ol>
 </div>
-<a name="N1030A"></a><a name="javascript"></a>
-<h4 class="faq">2.20. How to include additional Javascript and CSS files?</h4>
+<a name="N1032C"></a><a name="javascript"></a>
+<h4 class="faq">2.22. How to include additional Javascript and CSS files?</h4>
 <div align="right">
 <a href="#javascript-menu">^</a>
 </div>
@@ -1383,8 +1418,8 @@ forrest -Dproject.start-uri=live-sites.html
           to the &lt;map:resource name="skin-read"&gt; section.
         </p>
 </div>
-<a name="N10318"></a><a name="linkmap"></a>
-<h4 class="faq">2.21. How to show a Table Of Contents for the whole site?</h4>
+<a name="N1033A"></a><a name="linkmap"></a>
+<h4 class="faq">2.23. How to show a Table Of Contents for the whole site?</h4>
 <div align="right">
 <a href="#linkmap-menu">^</a>
 </div>
@@ -1411,9 +1446,9 @@ forrest -Dproject.start-uri=live-sites.html
           project.start-uri in the forrest.properties file.
         </p>
 </div>
-<a name="N10336"></a><a name="technical"></a>
+<a name="N10358"></a><a name="technical"></a>
 <h3 class="underlined_5">3. Technical</h3>
-<a name="N1033A"></a><a name="java-code"></a>
+<a name="N1035C"></a><a name="java-code"></a>
 <h4 class="faq">3.1. Where is the Java code?</h4>
 <div align="right">
 <a href="#java-code-menu">^</a>
@@ -1437,7 +1472,7 @@ forrest -Dproject.start-uri=live-sites.html
           with specialised purpose, e.g. PhotoGallery.
         </p>
 </div>
-<a name="N10348"></a><a name="populate-cache"></a>
+<a name="N1036A"></a><a name="populate-cache"></a>
 <h4 class="faq">3.2. How to enhance the responsiveness of the cache?</h4>
 <div align="right">
 <a href="#populate-cache-menu">^</a>
@@ -1467,7 +1502,7 @@ forrest -Dproject.start-uri=live-sites.html
           <a href="http://wiki.apache.org/cocoon/ApacheModProxy">CocoonAndApacheModProxy</a>.
         </p>
 </div>
-<a name="N10362"></a><a name="proxy_config"></a>
+<a name="N10384"></a><a name="proxy_config"></a>
 <h4 class="faq">3.3. I'm behind a proxy and it's preventing Plugins from being downloaded, what should I
         do?</h4>
 <div align="right">
@@ -1493,7 +1528,7 @@ forrest -Dproject.start-uri=live-sites.html
         </div>
 </div>
 </div>
-<a name="N10386"></a><a name="CVS_revison_tags"></a>
+<a name="N103A8"></a><a name="CVS_revison_tags"></a>
 <h4 class="faq">3.4. How can I generate html-pages to show the Revision tag of CVS or SVN?</h4>
 <div align="right">
 <a href="#CVS_revison_tags-menu">^</a>
@@ -1515,7 +1550,7 @@ forrest -Dproject.start-uri=live-sites.html
           properties.
         </p>
 </div>
-<a name="N1039B"></a><a name="cli-xconf"></a>
+<a name="N103BD"></a><a name="cli-xconf"></a>
 <h4 class="faq">3.5.  How to control the processing of URIs by Cocoon, e.g. exclude certain URIs, include
         other additional ones. </h4>
 <div align="right">
@@ -1574,7 +1609,7 @@ forrest -Dproject.start-uri=live-sites.html
         </div>
 </div>
 </div>
-<a name="N103D8"></a><a name="ignoring_javadocs"></a>
+<a name="N103FA"></a><a name="ignoring_javadocs"></a>
 <h4 class="faq">3.6.  How do I stop Forrest breaking on links to external files that may not exist, like
         javadocs? </h4>
 <div align="right">
@@ -1587,7 +1622,7 @@ forrest -Dproject.start-uri=live-sites.html
           patterns for URLs to exclude.
         </p>
 </div>
-<a name="N103E7"></a><a name="claimed_patterns"></a>
+<a name="N10409"></a><a name="claimed_patterns"></a>
 <h4 class="faq">3.7. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#claimed_patterns-menu">^</a>
@@ -1606,7 +1641,7 @@ forrest -Dproject.start-uri=live-sites.html
           (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N103F9"></a><a name="build_msg_a"></a>
+<a name="N1041B"></a><a name="build_msg_a"></a>
 <h4 class="faq">3.8. What do the symbols and numbers mean when Forrest lists each document that it has
         built? </h4>
 <div align="right">
@@ -1640,7 +1675,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         
 </ul>
 </div>
-<a name="N10417"></a><a name="headless_operation"></a>
+<a name="N10439"></a><a name="headless_operation"></a>
 <h4 class="faq">3.9.  When generating PNG images from SVG, I get an error: Can't connect to X11 window
         server using ':0.0' as the value of the DISPLAY variable. </h4>
 <div align="right">
@@ -1659,7 +1694,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           FAQ</a>.
         </p>
 </div>
-<a name="N10433"></a><a name="project-logo-svg"></a>
+<a name="N10455"></a><a name="project-logo-svg"></a>
 <h4 class="faq">3.10.  
         The project logo that is generated from SVG is truncating my project name.
       </h4>
@@ -1680,7 +1715,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           resources.
         </p>
 </div>
-<a name="N1044B"></a><a name="catalog"></a>
+<a name="N1046D"></a><a name="catalog"></a>
 <h4 class="faq">3.11.  How do i configure my favourite XML editor or parser to find the local Forrest
         DTDs? </h4>
 <div align="right">
@@ -1693,7 +1728,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           DTDs</a>.
         </p>
 </div>
-<a name="N10457"></a><a name="project-dtd"></a>
+<a name="N10479"></a><a name="project-dtd"></a>
 <h4 class="faq">3.12. How to configure the Catalog Entity Resolver to use my own local project DTDs?</h4>
 <div align="right">
 <a href="#project-dtd-menu">^</a>
@@ -1704,7 +1739,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           configuration guidance.
         </p>
 </div>
-<a name="N10463"></a><a name="local-catalog"></a>
+<a name="N10485"></a><a name="local-catalog"></a>
 <h4 class="faq">3.13. We need an additional system-wide catalog to share DTDs between projects</h4>
 <div align="right">
 <a href="#local-catalog-menu">^</a>
@@ -1715,7 +1750,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           configuration guidance.
         </p>
 </div>
-<a name="N1046F"></a><a name="debug-catalog"></a>
+<a name="N10491"></a><a name="debug-catalog"></a>
 <h4 class="faq">3.14. How to debug the Catalog Entity Resolver and local DTDs?</h4>
 <div align="right">
 <a href="#debug-catalog-menu">^</a>
@@ -1725,7 +1760,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           See <a href="../docs_0_90/validation.html#debug-catalog">XML validation</a>.
         </p>
 </div>
-<a name="N1047B"></a><a name="skin"></a>
+<a name="N1049D"></a><a name="skin"></a>
 <h4 class="faq">3.15.  How to make the site look better and change its skin? </h4>
 <div align="right">
 <a href="#skin-menu">^</a>
@@ -1744,7 +1779,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <a href="../docs_0_90/your-project.html#new_skin">own skin</a>.
         </p>
 </div>
-<a name="N10492"></a><a name="xsp"></a>
+<a name="N104B4"></a><a name="xsp"></a>
 <h4 class="faq">3.16. How do I enable XSP processing?</h4>
 <div align="right">
 <a href="#xsp-menu">^</a>
@@ -1808,7 +1843,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           Wiki page.
         </p>
 </div>
-<a name="N104C9"></a><a name="breadcrumbs"></a>
+<a name="N104EB"></a><a name="breadcrumbs"></a>
 <h4 class="faq">3.17. How do breadcrumbs work? Why don't they work locally?</h4>
 <div align="right">
 <a href="#breadcrumbs-menu">^</a>
@@ -1834,7 +1869,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           ones that are specified in <span class="codefrag">skinconf.xml</span>.
         </p>
 </div>
-<a name="N104DE"></a><a name="run_port"></a>
+<a name="N10500"></a><a name="run_port"></a>
 <h4 class="faq">3.18. How do I make forrest run listen on a different port?</h4>
 <div align="right">
 <a href="#run_port-menu">^</a>
@@ -1852,7 +1887,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         
 </p>
 </div>
-<a name="N104F2"></a><a name="debugging"></a>
+<a name="N10514"></a><a name="debugging"></a>
 <h4 class="faq">3.19. Can I run Forrest with Java debugging turned on?</h4>
 <div align="right">
 <a href="#debugging-menu">^</a>
@@ -1868,7 +1903,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           property is uncommented in that file.
         </p>
 </div>
-<a name="N10503"></a><a name="checksums"></a>
+<a name="N10525"></a><a name="checksums"></a>
 <h4 class="faq">3.20. How do I enable Cocoon's document checksum feature?</h4>
 <div align="right">
 <a href="#checksums-menu">^</a>
@@ -1901,9 +1936,9 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           installation-wide cli.xconf file.
         </p>
 </div>
-<a name="N1051F"></a><a name="old_faqs"></a>
+<a name="N10541"></a><a name="old_faqs"></a>
 <h3 class="underlined_5">4. Older version: 0.6</h3>
-<a name="N10523"></a><a name="old_claimed_patterns"></a>
+<a name="N10545"></a><a name="old_claimed_patterns"></a>
 <h4 class="faq">4.1. Some of my files are not being processed because they use common filenames. </h4>
 <div align="right">
 <a href="#old_claimed_patterns-menu">^</a>
@@ -1922,9 +1957,9 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           (<a href="http://issues.apache.org/jira/browse/FOR-217">FOR-217</a>).
         </p>
 </div>
-<a name="N10535"></a><a name="general"></a>
+<a name="N10557"></a><a name="general"></a>
 <h3 class="underlined_5">5. General</h3>
-<a name="N10539"></a><a name="generating_menus"></a>
+<a name="N1055B"></a><a name="generating_menus"></a>
 <h4 class="faq">5.1. What is the relationship between site.xml and book.xml? </h4>
 <div align="right">
 <a href="#generating_menus-menu">^</a>
@@ -1941,7 +1976,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <a href="../docs_0_90/linking.html">Menus and Linking</a>.
         </p>
 </div>
-<a name="N10554"></a><a name="docbook"></a>
+<a name="N10576"></a><a name="docbook"></a>
 <h4 class="faq">5.2.  How do I use DocBook as the XML documentation format? </h4>
 <div align="right">
 <a href="#docbook-menu">^</a>
@@ -2056,7 +2091,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           configuration guidance.
         </p>
 </div>
-<a name="N1058D"></a><a name="version"></a>
+<a name="N105AF"></a><a name="version"></a>
 <h4 class="faq">5.3.  How to report which version of Forrest is being used and the properties that are
         set? </h4>
 <div align="right">
@@ -2073,7 +2108,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <span class="codefrag">'forrest -v'</span> will provide verbose build messages.
         </p>
 </div>
-<a name="N105A1"></a><a name="logs"></a>
+<a name="N105C3"></a><a name="logs"></a>
 <h4 class="faq">5.4.  Where are the log files to find more infomation about errors? </h4>
 <div align="right">
 <a href="#logs-menu">^</a>
@@ -2100,7 +2135,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           the standard output.
         </p>
 </div>
-<a name="N105C5"></a><a name="how_can_I_help"></a>
+<a name="N105E7"></a><a name="how_can_I_help"></a>
 <h4 class="faq">5.5.  How to help? </h4>
 <div align="right">
 <a href="#how_can_I_help-menu">^</a>
@@ -2114,7 +2149,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           faults that are obvious to everyone else. Don't be shy!
         </p>
 </div>
-<a name="N105D1"></a><a name="patch"></a>
+<a name="N105F3"></a><a name="patch"></a>
 <h4 class="faq">5.6.  How to contribute a patch? </h4>
 <div align="right">
 <a href="#patch-menu">^</a>
@@ -2133,7 +2168,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           in.
         </p>
 </div>
-<a name="N105EC"></a><a name="jobs"></a>
+<a name="N1060E"></a><a name="jobs"></a>
 <h4 class="faq">5.7.  How can job positions be advertised? </h4>
 <div align="right">
 <a href="#jobs-menu">^</a>
