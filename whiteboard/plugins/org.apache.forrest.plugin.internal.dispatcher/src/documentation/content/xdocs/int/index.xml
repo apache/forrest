@@ -47,6 +47,22 @@
   <property name="dispatcher.themer" value="org.apache.forrest.themes.core"/>
   <property name="dispatcher.home" value="org.apache.forrest.plugin.internal.dispatcher"/>]]>
       </source>
+      <section>
+        <title>Using properties in contracts</title>
+        <p> In the contract body you can access all forrest properties by</p>
+        <source>
+          <![CDATA[<xsl:param name="defaultVariables" select="'test.html'"/>]]>
+        </source>
+        <p>then extract the variable like:</p>
+        <source>
+          <![CDATA[<xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='THE_PROPERTY']/@value"/>]]>
+        </source>
+        <p>more information which variables are available can be found at
+          http://localhost:8888/**.props which connects to the
+          org.apache.forrest.plugin.output.inputModule plugin. A custom generator
+          contacts the forrest properties input module to get all aviable key/values and
+          outputs them to xml (dtd like forrest.properties.xml). </p>
+      </section>
     </section>
     <section id="lm">
       <title>locationmap.xml</title>
