@@ -1,0 +1,558 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+%token htitle5 "=====";
+%token htitle4 "====";
+%token htitle3 "===";
+%token htitle2 "==";
+%token htitle1 "=";
+
+%token emitem "''";
+%token strongitem "'''";
+%token ulitem "__";
+%token subitem "\,\,"; 
+%token supitem "\^";
+%token typewriteritem "`";
+
+
+/* various smileys */
+/*
+%token sm1 ":)";
+%token sm2 ";)";
+%token sm3 ":D";
+ ;) :D {1} {de} {OK} (./)
+*/
+
+%token source "\{\{\{ (\}{0,2}[^\}])* \}\}\}";
+
+
+
+%token rule10 "^\-\-\-\-\-\-\-\-\-\-";
+%token rule9 "^\-\-\-\-\-\-\-\-\-";
+%token rule8 "^\-\-\-\-\-\-\-\-";
+%token rule7 "^\-\-\-\-\-\-\-";
+%token rule6 "^\-\-\-\-\-\-";
+%token rule5 "^\-\-\-\-\-";
+%token rule4 "^\-\-\-\-";
+
+%token rule0  "^\-+";
+
+
+
+
+
+%token tablecolumnitem "\ *\|\|";
+
+
+/* TO CHECK */
+/*%token anchor "\[( [^\[\|\]]* \| )? # [^\[\|\]]* \]"; */
+/* %token link   "\[( [^\[\|\]]* \| )?   [^\[\|\]]* \]"; */
+
+/*
+%token anchor "\[( [^\[\ \]]* \| )? # [^\[\]]* \]";
+%token link   "\[( [^\[\ \]]* \| )?   [^\[\]]* \]";
+*/
+
+%token anchor  "\[#( [^\[\ \]]* ) (\ +[^\[\]]*)?\]";
+%token link   "\[( [^\[\ \]]* ) (\ +[^\[\]]*)?\]";
+
+%token xmarkup "\<[^\>]*\>";
+
+%token comment "^#.*";
+
+%token text  "([^\ \t\n\r\[\{\}\|\*\\\-\^\,_#'`=] 
+		| \,[^\,]
+		| _[^_] 
+		| \{[^\{] 
+		| \}[^\}] 
+		| '[^'] 
+                | \[\[ 
+		| \\[^\\] 
+		| \-{1,3}[^\-\n\r])
+              ([^    \n\r\[\{\}\|\\\-\^\,_'`=]     
+		| \,[^\,]
+		| _[^_] 
+		| \{[^\{] 
+		| \}[^\}] 
+		| '[^'] 
+                | \[\[ 
+		| \\[^\\] 
+		| \-{1,3}[^\-\n\r] 
+		| \|[^\|\ \t])*";
+
+
+%right softbreak "\r(\n?) | \n";
+
+%right break "\\\\";
+
+%right hardbreak "(\r(\n?) | \n) (\r(\n?) | \n)+";
+
+/* lists */
+
+%token bulleted1item "^\ \*";
+%token bulleted2item "^\ \ \*";
+%token bulleted3item "^\ \ \ \*";
+
+%token numbered1item "^\ 1\.";
+%token numbered2item "^\ \ 1\.";
+%token numbered3item "^\ \ \ 1\.";
+
+%token lettered1item "^\ a\.";
+%token lettered2item "^\ \ a\.";
+%token lettered3item "^\ \ \ a\.";
+
+%token roman1item "^\ i\.";
+%token roman2item "^\ \ i\.";
+%token roman3item "^\ \ \ i\.";
+
+%token plain1item "^\ ";
+%token plain2item "^\ \ ";
+%token plain3item "^\ \ \ ";
+
+%ignore "[\ \t]+";
+
+%start document;
+
+%%
+
+document 
+  : paragraphs sections
+  | sections
+  | paragraphs
+  ;  
+
+sections
+  : sections1
+  | sections2
+  | sections3
+  | sections4
+  | sections5
+  ;
+
+sections1
+  : section1 
+  | sections1 section1
+  ;
+
+section1
+  : title1 sections2
+  | title1 paragraphs 
+  | title1 paragraphs sections2
+  | title1 
+  ;
+
+sections2
+  : section2
+  | sections2 section2
+  ;
+
+section2
+  : title2 paragraphs 
+  | title2 paragraphs sections3
+  | title2 sections3
+  | title2 
+  ;
+
+sections3
+  : section3
+  | sections3 section3
+  ;
+
+section3
+  : title3 paragraphs 
+  | title3 paragraphs sections4
+  | title3 sections4
+  | title3
+  ;
+
+sections4
+  : section4
+  | sections4 section4
+  ;
+
+section4
+  : title4 paragraphs 
+  | title4 paragraphs sections5 
+  | title4 sections5 
+  | title4
+  ;
+
+sections5
+  : section5
+  | sections5 section5
+  ;
+
+section5
+  : title5 paragraphs 
+  | title5
+  ;
+
+title1
+  : htitle1 textsequence htitle1 softbreak
+  | htitle1 textsequence htitle1 hardbreak
+  ;
+
+title2
+  : htitle2 textsequence htitle2 softbreak
+  | htitle2 textsequence htitle2 hardbreak
+  ;
+
+title3
+  : htitle3 textsequence htitle3 softbreak
+  | htitle3 textsequence htitle3 hardbreak
+  ;
+
+title4
+  : htitle4 textsequence htitle4 softbreak
+  | htitle4 textsequence htitle4 hardbreak
+  ;
+
+title5
+  : htitle5 textsequence htitle5 softbreak
+  | htitle5 textsequence htitle5 hardbreak
+  ;
+
+paragraphs  
+  : paragraphs paragraph hardbreak
+  | paragraphs paragraph 
+  | paragraph hardbreak
+  | paragraph
+  ;
+
+paragraph 
+  : alist1
+  | textsequence
+  | rulen
+  | rulen softbreak
+  | plainNitem source %prec softbreak
+  | plainNitem source softbreak
+  | source %prec softbreak
+  | source softbreak
+  | comment softbreak
+  | comment hardbreak
+  | table
+  | plainNitem table
+  ;
+
+
+rulen
+  : rule4
+  | rule5
+  | rule6
+  | rule7
+  | rule8
+  | rule9
+  | rule10
+  | rule0
+  ;
+
+
+alist1
+  : bulletedlist1
+  | letteredlist1
+  | romanlist1
+  | numberedlist1
+  | plainlist1
+  ;
+
+alist2
+  : bulletedlist2
+  | letteredlist2
+  | romanlist2
+  | numberedlist2
+  | plainlist2
+  ;
+
+alist3
+  : bulletedlist3
+  | letteredlist3
+  | romanlist3
+  | numberedlist3
+  | plainlist3
+  ;
+
+/* bulleted list */
+
+bulletedlist1 
+  : bulletedlist1 bulletedlistitem1 
+  | bulletedlistitem1               
+  | bulletedlist1 alist2     
+  | alist2                   
+  ;
+
+
+bulletedlist2 
+  : bulletedlist2 bulletedlistitem2 
+  | bulletedlistitem2               
+  | bulletedlist2 alist3     
+  | alist3                   
+  ; 
+
+bulletedlist3 
+  : bulletedlist3 bulletedlistitem3 
+  | bulletedlistitem3               
+  ; 
+
+
+bulletedlistitem1 
+  : bulleted1item textsequence
+  ;
+
+bulletedlistitem2 
+  : bulleted2item textsequence
+  ;
+
+bulletedlistitem3 
+  : bulleted3item textsequence
+  ;
+
+/* lettered list */
+
+letteredlist1 
+  : letteredlist1 letteredlistitem1 
+  | letteredlistitem1               
+  | letteredlist1 alist2     
+  | alist2                   
+  ;
+
+letteredlist2 
+  : letteredlist2 letteredlistitem2 
+  | letteredlistitem2               
+  | letteredlist2 alist3     
+  | alist3                   
+  ; 
+
+letteredlist3 
+  : letteredlist3 letteredlistitem3 
+  | letteredlistitem3               
+  ; 
+
+
+letteredlistitem1 
+  : lettered1item textsequence
+  ;
+
+letteredlistitem2 
+  : lettered2item textsequence
+  ;
+
+letteredlistitem3 
+  : lettered3item textsequence
+  ;
+
+/* roman list */
+
+romanlist1 
+  : romanlist1 romanlistitem1 
+  | romanlistitem1               
+  | romanlist1 alist2     
+  | alist2                   
+  ;
+
+romanlist2 
+  : romanlist2 romanlistitem2 
+  | romanlistitem2               
+  | romanlist2 alist3     
+  | alist3                   
+  ; 
+
+romanlist3 
+  : romanlist3 romanlistitem3 
+  | romanlistitem3               
+  ; 
+
+
+romanlistitem1 
+  : roman1item textsequence
+  ;
+
+romanlistitem2 
+  : roman2item textsequence
+  ;
+
+romanlistitem3 
+  : roman3item textsequence
+  ;
+
+
+/* numbered list */
+
+numberedlist1 
+  : numberedlist1 numberedlistitem1 
+  | numberedlistitem1               
+  | numberedlist1 alist2     
+  | alist2                   
+  ;
+
+numberedlist2 
+  : numberedlist2 numberedlistitem2 
+  | numberedlistitem2               
+  | numberedlist2 alist3     
+  | alist3                   
+  ; 
+
+numberedlist3 
+  : numberedlist3 numberedlistitem3 
+  | numberedlistitem3               
+  ; 
+
+
+numberedlistitem1 
+  : numbered1item textsequence
+  ;
+
+numberedlistitem2 
+  : numbered2item textsequence
+  ;
+
+numberedlistitem3 
+  : numbered3item textsequence
+  ;
+
+/* plain list */
+
+plainlist1 
+  : plainlistitem1 plainlist1
+  | plainlistitem1               
+  | plainlist1 alist2     
+  | alist2                   
+  ;
+
+plainlist2 
+  : plainlist2 plainlistitem2 
+  | plainlistitem2               
+  | plainlist2 alist3     
+  | alist3                   
+  ; 
+
+plainlist3 
+  : plainlist3 plainlistitem3 
+  | plainlistitem3               
+  ; 
+
+
+plainlistitem1 
+  : plain1item textsequence
+  ;
+
+plainlistitem2 
+  : plain2item textsequence
+  ;
+
+plainlistitem3 
+  : plain3item textsequence
+  ;
+
+plainNitem
+  : plain1item
+  | plain2item
+  | plain3item
+  ;
+
+/* table */
+
+table
+  : tablerows
+  ;
+
+tablerows
+  : tablerow softbreak tablerows
+  | tablerow softbreak
+  | tablerow hardbreak
+  ;
+
+tablerow
+  : tablecolumns tablecolumnitem
+  ;
+
+tablecolumns
+  : tablecolumns tablecolumn
+  | tablecolumn 
+  ;
+
+tablecolumn
+  : tablecolumnitems textblock
+  | tablecolumnitems xmarkup textblock
+  ;
+  
+tablecolumnitems
+  : tablecolumnitem tablecolumnitems   
+  | tablecolumnitem
+  ;
+
+textsequence 
+  : textsequence textblock softbreak
+  | textsequence textblock 
+  | textblock softbreak  
+  | textblock
+  | textsequence textblock break
+  | textblock break
+  ;
+
+/*
+isequence
+  : isequence iblock softbreak
+  | isequence iblock 
+  | iblock softbreak  
+  | iblock
+  | isequence iblock break
+  | iblock break
+  ; 
+*/
+
+textblock 
+  : link
+  | anchor
+  | strongblock                      
+  | emblock 
+  | ulblock           
+  | codeblock
+  | supblock
+  | subblock
+  | xmarkup
+  | text
+  ;
+
+/*
+iblock
+  : indent textblock
+  ;
+*/
+
+emblock 
+  : emitem text emitem
+  ;
+
+ulblock 
+  : ulitem text ulitem
+  ;
+
+strongblock 
+  : strongitem text strongitem
+  ;
+
+supblock 
+  : supitem text supitem
+  ;
+
+subblock 
+  : subitem text subitem
+  ;
+
+codeblock 
+  : typewriteritem text typewriteritem
+  ;
