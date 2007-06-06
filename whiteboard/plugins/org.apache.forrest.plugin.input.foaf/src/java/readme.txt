@@ -1,2 +1,1 @@
 Place any java source code that your plugin requires in this directory.
-Place any java source code that your plugin requires in this directory.
