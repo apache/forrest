@@ -24,11 +24,7 @@
                 xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	            xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:asfext="http://projects.apache.org/ns/asfext#"
-                >
-                
-    
-  <xsl:import href="lm://foaf.transform.locationmap.descriptorIndex"/>
-                
+                >                
   <xsl:template match="/">
     <xsl:apply-templates select="doap:Project|rdf:RDF|atom:feed" />
   </xsl:template>
@@ -340,12 +336,30 @@
   <xsl:template name="project-contributors">
     <section>
       <title>Contributors</title>
-      <note>This list may not be exhaustive.</note>
-      <xsl:apply-templates select="doap:maintainer"/>
+      <xsl:choose>
+        <xsl:when test="doap:maintainer">
+          <note>This list may not be exhaustive.</note>
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:maintainer">
+                <tr>
+                  <td><xsl:apply-templates select="foaf:Person/foaf:name"/></td>
+                  <td><xsl:apply-templates select="foaf:Person/foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:when>
+        <xsl:otherwise>
+          <p>Contributor data not available.</p>
+        </xsl:otherwise>
+      </xsl:choose>
     </section>
   </xsl:template>
   
-  <xsl:template match="foaf:Person">
-    <p>A person</p>
+  <xsl:template match="foaf:name">
+    <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 </xsl:stylesheet>
