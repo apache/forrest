@@ -22,9 +22,13 @@
                 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
                 xmlns:doap="http://usefulinc.com/ns/doap#"
                 xmlns:foaf="http://xmlns.com/foaf/0.1/"
-		xmlns:dc="http://purl.org/dc/elements/1.1/"
+	            xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:asfext="http://projects.apache.org/ns/asfext#"
                 >
+                
+    
+  <xsl:import href="lm://foaf.transform.locationmap.descriptorIndex"/>
+                
   <xsl:template match="/">
     <xsl:apply-templates select="doap:Project|rdf:RDF|atom:feed" />
   </xsl:template>
@@ -35,14 +39,12 @@
     <xsl:apply-templates select="atom:entry/atom:content/doap:Project" />
   </xsl:template>
   <xsl:template match="doap:Project">
-    <xsl:call-template name="project" />
-  </xsl:template>
-  <xsl:template name="project">
     <document>
       <xsl:call-template name="header" />
       <xsl:call-template name="body" />
     </document>
   </xsl:template>
+
   <xsl:template name="header">
     <header><link rel="stylesheet" type="text/css" href="../html/projects.css" />
       <title>Information about <xsl:value-of select="doap:name"/></title>
@@ -52,6 +54,7 @@
     <body>
       <xsl:call-template name="project-header" />
       <xsl:call-template name="project-summary" />
+      <xsl:call-template name="project-contributors" />
       <section>
         <title>Description</title>
         <xsl:choose>
@@ -332,5 +335,17 @@
       </p>
       <xsl:call-template name="project-scm" />
     </section>
+  </xsl:template>
+  
+  <xsl:template name="project-contributors">
+    <section>
+      <title>Contributors</title>
+      <note>This list may not be exhaustive.</note>
+      <xsl:apply-templates select="doap:maintainer"/>
+    </section>
+  </xsl:template>
+  
+  <xsl:template match="foaf:Person">
+    <p>A person</p>
   </xsl:template>
 </xsl:stylesheet>
