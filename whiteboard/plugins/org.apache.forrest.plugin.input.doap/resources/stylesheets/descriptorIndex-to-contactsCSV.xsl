@@ -38,7 +38,7 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="doap:maintainer">
-      <xsl:if test="foaf:Person/foaf:mbox/@rdf:resource">
+      <xsl:if test="starts-with(foaf:Person/foaf:mbox/@rdf:resource, 'mailto:')">
         <xsl:value-of select="normalize-space(../doap:name)" />,<xsl:apply-templates />
 <xsl:text>
 
@@ -46,9 +46,30 @@
       </xsl:if>
     </xsl:template>
     <xsl:template match="foaf:Person">
-        <xsl:value-of select="normalize-space(foaf:name)" />,<xsl:value-of select="normalize-space(foaf:mbox/@rdf:resource)" />
+        <xsl:apply-templates select="foaf:name" />,<xsl:apply-templates select="foaf:mbox" />
+    </xsl:template>
+    
+    <xsl:template match="foaf:name">
+      <xsl:choose>
+          <xsl:when test="contains(., ' ')">
+            <xsl:value-of select="normalize-space(substring-before(., ' '))"/>,<xsl:value-of select="normalize-space(substring-after(., ' '))"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>,</xsl:text><xsl:value-of select="normalize-space(.)"/>
+          </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="foaf:mbox">
+      <xsl:if test="starts-with(@rdf:resource, 'mailto:')">
+        <xsl:value-of select="substring(@rdf:resource,8)"/>
+      </xsl:if>
     </xsl:template>
 
+    <xsl:template match="text()">
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:template>
+    
     <xsl:template
-        match="@*|text()|*|processing-instruction()|comment()" />
+        match="@*|*|processing-instruction()|comment()" />
 </xsl:stylesheet>
