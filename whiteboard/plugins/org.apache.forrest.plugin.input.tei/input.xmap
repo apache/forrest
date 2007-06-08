@@ -34,6 +34,9 @@
     <map:selectors default="parameter">
         <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
     </map:selectors>
+    <map:transformers default="xslt">   
+        <map:transformer name="xinclude" src="org.apache.cocoon.transformation.XIncludeTransformer" logger="sitemap.transformer.xinclude" pool-grow="2" pool-max="16" pool-min="2" />
+    </map:transformers>
   </map:components>
 
   <map:resources>    
@@ -44,6 +47,7 @@
 
           <map:when test="TEI-2">
             <map:generate src="{lm:project.{../../1}.xml}" />
+	        <map:transform type="xinclude"/>
             <map:transform src="{lm:tei.transform.tei.document}" />
             <map:serialize type="xml-document"/>
           </map:when>
@@ -55,6 +59,7 @@
 
           <map:when test="TEI-2">
             <map:generate src="{lm:project.{../../1}.xml}" />
+	        <map:transform type="xinclude"/>
             <map:transform src="{lm:tei.transform.tei.document}" />
             <map:serialize type="xml-document"/>
           </map:when>
