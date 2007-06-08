@@ -29,10 +29,6 @@
  </xsl:template>
 
 <xsl:template match="foaf:Person">
-     <xsl:call-template name="person" />
-</xsl:template>
-
-<xsl:template name="person">
     <document>
       <xsl:call-template name="header" />
       <xsl:call-template name="body" />
