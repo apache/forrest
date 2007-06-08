@@ -34,17 +34,16 @@
     <xsl:template match="descriptor">
         <xsl:apply-templates />
     </xsl:template>
-    <xsl:template match="doap:Project">
-        <xsl:apply-templates />
-    </xsl:template>
+    
+    <xsl:template match="doap:Project"><xsl:apply-templates /></xsl:template>
+    
     <xsl:template match="doap:maintainer">
       <xsl:if test="starts-with(foaf:Person/foaf:mbox/@rdf:resource, 'mailto:')">
-        <xsl:value-of select="normalize-space(../doap:name)" />,<xsl:apply-templates />
-<xsl:text>
-
-</xsl:text>
-      </xsl:if>
+      <!-- the stange formatting in this line is to ensure only one line break after each record (there has to be a tidier way of doing this - any clue?) -->
+        <xsl:value-of select="normalize-space(../doap:name)" />,<xsl:apply-templates /><xsl:text> 
+</xsl:text></xsl:if>
     </xsl:template>
+    
     <xsl:template match="foaf:Person">
         <xsl:apply-templates select="foaf:name" />,<xsl:apply-templates select="foaf:mbox" />
     </xsl:template>
