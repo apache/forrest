@@ -28,6 +28,9 @@
     <xsl:template match="/">
         <xsl:apply-templates />
     </xsl:template>
+    <xsl:template match="rdf:RDF">
+        <xsl:apply-templates />
+    </xsl:template>
     <xsl:template match="descriptors">
         <xsl:apply-templates />
     </xsl:template>
