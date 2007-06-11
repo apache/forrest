@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Welcome to SKOS Plugin for Forrest</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Apache Forrest - SKOS Plugin</title>
+      <p>
+        Rendering <link href="ext:skos">SKOS</link>, a set of 
+	<link href="ext:skos/specs">specifications</link> to 
+	support the representation of thesauri, classification schemes, 
+	taxonomies, etc.
+      </p>
+    </section>
+    <section id="samples">
+      <title>Samples</title>
+      <note>
+        This plugin is in an early development stage.
+      </note>
+      <p>
+        This section includes samples that have been made available so far to 
+	show the existing functionality of the plugin.
+      </p>
+      <section id="glossary">
+        <title>Glossary</title>
+        <p>
+	  This sample generates a glossary from a collection of 
+	  <code>skos:Concept</code>s written in RDF/XML format.
+        </p>
+	<p>An example would be:</p>
+        <source>
+<![CDATA[
+<skos:Concept rdf:about="http://forrest.apache.org/docs/glossary#Dispatcher">
+  <skos:prefLabel>Dispatcher</skos:prefLabel>
+  <skos:definition>
+  ...
+  </skos:definition>
+  <skos:related rdf:resource="http://forrest.apache.org/docs/glossary#Contracts"/>
+</skos:Concept>
+]]>
+        </source>
+        <note>
+          We <link href="site:todo">plan</link> to provide a wider support 
+	  for the format in the near future.
+        </note>
+        <p>
+        The location of the glossary is specified in the locationmap
+        with the hint <code>skos.glossary</code>. This defaults to a file
+        called <code>glossary.xml</code> in 
+	<code>src/documentation/content/xdocs/</code> relative to the plugin 
+	root. To place your glossary in a different location, simply add a 
+	matcher like that shown below in your project locationmap file.
+        </p>
+        <source>
+<![CDATA[
+    <match pattern="skos.glossary">
+      <location src="[path/to/skos/glossary/]" />
+    </match>    
+      ]]>
+        </source>
+        <p>
+          To retrieve the SKOS source file in its raw form, request the file
+          <code>glossary/source.xml</code>.
+        </p>
+        <p>
+        To retrieve the project details page request the file
+        <code>glossary.[FORMAT]</code>.
+      </p>
+      </section>
+    </section>
+  </body>
+</document>
