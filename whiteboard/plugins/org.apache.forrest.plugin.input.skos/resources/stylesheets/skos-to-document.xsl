@@ -24,66 +24,75 @@
   <xsl:template match="/">
     <xsl:apply-templates select="rdf:RDF" />
   </xsl:template>
+
   <xsl:template match="rdf:RDF">
     <document>
       <xsl:call-template name="header"/>
       <xsl:call-template name="body"/>
     </document>
   </xsl:template>
+
   <xsl:template name="header">
     <header>
       <title>Glossary</title>
     </header>
   </xsl:template>
+
   <xsl:template name="body">
     <body>
       <xsl:apply-templates/>
     </body>
   </xsl:template>
+
   <xsl:template match="skos:Concept">
     <xsl:call-template name="concept"/>
   </xsl:template>
-  <xsl:template match="skos:prefLabel">
-    <xsl:apply-templates/>
-  </xsl:template>
-  <xsl:template match="skos:definition">
-    <p>
-      <xsl:apply-templates/>
-    </p>
-  </xsl:template>
-  <xsl:template name="concept">
-  <dl>
-    <xsl:attribute name="id">
-      <xsl:value-of select="skos:prefLabel/text()"/>
-    </xsl:attribute>
-    <dt>
-      <xsl:apply-templates select="skos:prefLabel"/>
-    </dt>
-    <dd>
-      <xsl:apply-templates select="skos:definition"/>
-    </dd>
-    <xsl:if test="skos:related">
-    <dd>
-      <p>See Also: </p>
-      <ul>
-        <xsl:apply-templates select="skos:related"/>
-      </ul>
-    </dd>
-    </xsl:if>
-  </dl>
-</xsl:template>
 
-<xsl:template match="skos:related">
-  <xsl:variable name="relatedTerm" 
-  		select="@rdf:resource"/>
-  <xsl:for-each select="../../skos:Concept">
-  <xsl:if test="$relatedTerm = @rdf:about">
+  <xsl:template match="skos:prefLabel">
+    <em class="bold">
+      <xsl:apply-templates/>
+    </em>
+  </xsl:template>
+
+  <xsl:template match="skos:definition">
     <li>
-      <link href="#{skos:prefLabel/text()}">
-	<xsl:value-of select="skos:prefLabel/text()"/>
-      </link>
+      <xsl:apply-templates/>
     </li>
-  </xsl:if>
-  </xsl:for-each>
-</xsl:template>
+  </xsl:template>
+
+  <xsl:template name="concept">
+    <dl class="{local-name(.)}" id="{skos:prefLabel/text()}">
+      <dt>
+        <xsl:apply-templates select="skos:prefLabel"/>
+      </dt>
+      <dd class="{local-name(.)}">
+        <ol>
+          <xsl:apply-templates select="skos:definition"/>
+        </ol>
+      </dd>
+      <xsl:if test="skos:related">
+        <dd class="{local-name(skos:related)}">
+          <p>See Also: </p>
+          <ul>
+            <xsl:apply-templates select="skos:related"/>
+          </ul>
+        </dd>
+      </xsl:if>
+    </dl>
+  </xsl:template>
+
+  <xsl:template match="skos:related">
+    <xsl:variable name="relatedTerm" 
+     		  select="@rdf:resource"/>
+    <xsl:for-each select="../../skos:Concept">
+    <xsl:if test="$relatedTerm = @rdf:about">
+      <li>
+        <link href="#{skos:prefLabel/text()}">
+	  <xsl:value-of select="skos:prefLabel/text()"/>
+        </link>
+      </li>
+    </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
 </xsl:stylesheet>
