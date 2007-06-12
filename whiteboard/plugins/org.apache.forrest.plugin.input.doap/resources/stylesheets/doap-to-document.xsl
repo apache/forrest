@@ -76,7 +76,7 @@
     <xsl:value-of select="."/></a>
   </xsl:template>
   <xsl:template match="doap:programming-language"><a>
-    <xsl:attribute name="href">index/byLang/<xsl:value-of select="."/>.html</xsl:attribute>
+    <xsl:attribute name="href">/projectDetails/index/byLang/<xsl:value-of select="."/>.html</xsl:attribute>
     <xsl:value-of select="."/></a>
     <xsl:if test="not(position() = last())">
 <xsl:text>, </xsl:text>
