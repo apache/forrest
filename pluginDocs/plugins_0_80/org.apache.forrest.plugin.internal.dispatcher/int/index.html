@@ -157,6 +157,11 @@ p.quote {
 </li>
 <li>
 <a href="#fpx">forrest.properties.xml</a>
+<ul class="minitoc">
+<li>
+<a href="#Using+properties+in+contracts">Using properties in contracts</a>
+</li>
+</ul>
 </li>
 <li>
 <a href="#lm">locationmap.xml</a>
@@ -197,6 +202,23 @@ p.quote {
   &lt;property name="dispatcher.themer" value="org.apache.forrest.themes.core"/&gt;
   &lt;property name="dispatcher.home" value="org.apache.forrest.plugin.internal.dispatcher"/&gt;
       </pre>
+<a name="Using+properties+in+contracts" title="Using properties in contracts"> </a>
+<h3 class="underlined_5">Using properties in contracts</h3>
+<div class="section">
+<p> In the contract body you can access all forrest properties by</p>
+<pre class="code">
+          &lt;xsl:param name="defaultVariables" select="'test.html'"/&gt;
+        </pre>
+<p>then extract the variable like:</p>
+<pre class="code">
+          &lt;xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='THE_PROPERTY']/@value"/&gt;
+        </pre>
+<p>more information which variables are available can be found at
+          http://localhost:8888/**.props which connects to the
+          org.apache.forrest.plugin.output.inputModule plugin. A custom generator
+          contacts the forrest properties input module to get all aviable key/values and
+          outputs them to xml (dtd like forrest.properties.xml). </p>
+</div>
 </div>
 <a name="lm" title="locationmap.xml"> </a>
 <h2 class="underlined_10">locationmap.xml</h2>
