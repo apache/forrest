@@ -67,6 +67,34 @@
         </xsl:choose>
       </section>
       <xsl:call-template name="project-releases" />
+      
+      <xsl:if test="foaf:seeAlso[@dc:format='application/rss+xml' or @dc:format='application/atom+xml']">
+        <section>
+          <title>News Feeds</title>
+        <!-- we need the empty statement in the following script element
+otherwise it doesn't load for some reason -->
+        <script type="text/javascript"
+            src="http://www.google.com/jsapi?key=ABQIAAAA6Z-D4RJHDFYPA_4r805bNBS35Y06UsNZ7zMjADH_v2yM8_26AhRQPRif3s-hl0DX2y8IOnAwSo3WgA">;</script>
+            
+        <xsl:element name="script">
+          <xsl:attribute name="type">text/javascript</xsl:attribute>
+                google.load("feeds", "1");
+             
+                function initialize() {
+                  var feedControl = new google.feeds.FeedControl();
+                  <xsl:for-each select="foaf:seeAlso[@dc:format='application/rss+xml' or @dc:format='application/atom+xml']">
+                    feedControl.addFeed('<xsl:value-of select="./@rdf:resource"/>', '<xsl:value-of select="./@dc:title"/>');
+                  </xsl:for-each>
+                  feedControl.draw(document.getElementById('Feeds'),
+                      {
+                        drawMode : google.feeds.FeedControl.DRAW_MODE_TABBED
+                      });
+                }
+                google.setOnLoadCallback(initialize);
+         </xsl:element>
+         <div id="Feeds"/>
+         </section>
+       </xsl:if>
     </body>
   </xsl:template>
   <xsl:template match="@rdf:resource"><a>
@@ -257,8 +285,7 @@
               <tr>
                 <td class="left">Checkout</td>
                 <td class="right">
-                  <pre>svn co <xsl:apply-templates select="doap:location/@rdf:resource" />
-                  </pre>
+                  <pre>svn co <xsl:apply-templates select="doap:location/@rdf:resource" /></pre>
                 </td>
               </tr>
             </table>
