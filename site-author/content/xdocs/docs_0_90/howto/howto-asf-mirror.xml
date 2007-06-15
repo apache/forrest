@@ -31,8 +31,9 @@
     <ul>
       <li>Any Apache project that uses Forrest to generate their website
         will need to have a mirrors page.</li>
-      <li>Also anyone interested in the use of embedding html form
+      <li>Anyone interested in the use of embedding html form
         elements into a generated Forrest page.</li>
+      <li>Anyone needing to add extra documents to the processing.</li>
     </ul>
   </audience>
   <purpose title="Purpose">
@@ -60,6 +61,15 @@
     </ul>
   </prerequisites>
   <steps title="Steps">
+    <p>
+     See the example for the Apache Forrest website. The following files are involved:
+    </p>
+    <source>
+$FORREST_HOME/site-author/content/xdocs/site.xml (search for "mirrors")
+$FORREST_HOME/site-author/content/xdocs/mirrors.html
+$FORREST_HOME/site-author/content/mirrors.cgi
+$FORREST_HOME/site-author/conf/cli.xconf (search for "mirrors")
+$FORREST_HOME/site-author/forrest.properties (search for "project.configfile")</source>
     <section id="cgi">
       <title>Add the mirrors.cgi as a raw file</title>
       <p>
@@ -119,11 +129,9 @@
       <p>
         The Cocoon command-line interface
         (<link href="http://cocoon.apache.org/2.1/userdocs/offline/">CLI</link>)
-        to the rescue. Add an entry to your project's cli.xconf by copying the
-        default one from
-        <code>$FORREST_HOME/main/webapp/WEB-INF/cli.xconf</code> to your
-        <code>src/documentation/conf/</code> directory (or wherever
-        ${forrest.conf-dir} points). Add the following entry ...
+        to the rescue. Add the following entry to your project's cli.xconf file.
+        See the FAQ about adding and configuring a project-based
+        <link href="site:faq/cli-xconf">cli.xconf</link>
       </p>
       <source>
 <![CDATA[
@@ -131,20 +139,48 @@
   <uri type="append" src="mirrors.html"/>
 </uris>]]>
       </source>
+      <note>
+        Due to Issue
+        <link href="http://issues.apache.org/jira/browse/FOR-480">FOR-480</link>
+        the generated mirrors.html will end up in forrest/main/site/mirrors.html
+        rather than in the project's build directory. So use the following workaround
+        in your cli.xconf file ...
+      </note>
+      <p>
+        This example comes from $FORREST_HOME/site-author/conf/cli.xconf file.
+        The path is relative to $FORREST_HOME/main/webapp/ directory. A full
+        pathname should also work.
+      </p>
+      <source>
+<![CDATA[
+<uris name="mirrors" follow-links="false">
+  <uri type="append" src="mirrors.html"
+      dest="../../site-author/build/site">
+  </uri>
+</uris>]]>
+      </source>
+    </section>
+    <section id="exclude">
+      <title>Exclude mirrors CGI token URIs from processing</title>
+      <p>
+        The mirrors.html has special URIs which are processed by the mirrors CGI script.
+        These URIs need to be excluded from processing by Cocoon. Add the following
+        entries to your conf/cli.xconf ...
+      </p>
+      <source>
+<![CDATA[
+<!-- Exclude tokens used in URLs to ASF mirrors (interpreted by a CGI) -->
+<exclude pattern="[preferred]/**"/>
+<exclude pattern="[location]"/>]]>
+      </source>
     </section>
     <section id="forrest">
       <title>Run 'forrest' to build your site</title>
       <p>
         That is all that you need to do, Forrest will take care of it from
-        there. Run the '<code>forrest</code>' command. The mirrors.html page
-        will be generated with the skin applied.
+        there. Run the '<code>forrest site</code>' command, or forrestbot.
+        The mirrors.html page will be generated with the skin applied.
       </p>
-      <note>
-        Due to Issue
-        <link href="http://issues.apache.org/jira/browse/FOR-480">FOR-480</link>,
-        the generated mirror.html will end up in forrest/main/site/mirrors.html
-        rather than in the project's build directory.
-      </note>
     </section>
   </steps>
 </howto>
