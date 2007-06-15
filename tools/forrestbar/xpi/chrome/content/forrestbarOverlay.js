@@ -82,6 +82,12 @@ function searchCommits(engine, searchID)
   }
 }
 
+function searchSiteCommits(engine, searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://www.mail-archive.com/search?l=site-svn@forrest.apache.org&q=' + searchItem.value);
+}
+
 function searchIssue(searchID)
 {
   var searchItem = document.getElementById(searchID);
