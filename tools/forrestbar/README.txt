@@ -19,7 +19,7 @@ cd $FORREST_HOME/tools/forrestbar
 $FORREST_HOME/tools/ant/bin/ant
 2) install
 Point your browser to:
-$FORREST_HOME/tools/forrestbar/build/forrestbar.xpi
+file:///%FORREST_HOME%/tools/forrestbar/build/forrestbar.xpi
 Follow instructions and restart the browser.
 
 

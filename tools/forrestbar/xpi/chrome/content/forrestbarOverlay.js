@@ -58,7 +58,7 @@ function searchDev(engine, searchID)
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.devel&sort=date&query=' + searchItem.value);
   } else {
-    navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=dev_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+    navigate('http://www.mail-archive.com/search?l=dev@forrest.apache.org&q=' + searchItem.value);
   }
 }
 
@@ -68,7 +68,7 @@ function searchUser(engine, searchID)
   if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
   } else {
-    navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=user_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+    navigate('http://www.mail-archive.com/search?l=user@forrest.apache.org&q=' + searchItem.value);
   }
 }
 
@@ -78,7 +78,7 @@ function searchCommits(engine, searchID)
   if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.cvs&sort=date&query=' + searchItem.value);
   } else {
-    navigate('http://www.mail-archive.com/cgi-bin/htsearch?method=and&format=short&config=svn_forrest_apache_org&restrict=&exclude=&words=' + searchItem.value);
+    navigate('http://www.mail-archive.com/search?l=svn@forrest.apache.org&q=' + searchItem.value);
   }
 }
 
