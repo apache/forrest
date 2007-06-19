@@ -20,6 +20,8 @@
                 version="1.0">
 <!-- left, justify, right -->
   <xsl:variable name="text-align" select="string(//skinconfig/pdf/page/@text-align)"/>
+<!-- prefix which turns relative URLs into absolute ones, empty by default -->
+  <xsl:variable name="url-prefix" select="string(//skinconfig/pdf/url-prefix)"/>
 <!-- print URL of external links -->
   <xsl:variable name="show-external-urls" select="//skinconfig/pdf/show-external-urls"/>
 <!-- disable the table of content (enabled by default) -->
@@ -707,11 +709,28 @@
         </fo:basic-link>
       </xsl:when>
       <xsl:otherwise>
-        <fo:basic-link color="{$color}" text-decoration="underline" external-destination="{@href}">
+        <!-- Make relative URLs absolute -->
+        <xsl:variable name="href">
+          <xsl:choose>
+            <!-- already absolute -->
+            <xsl:when test="contains(@href,'://')">
+              <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- add prefix if one is set -->
+            <xsl:when test="$url-prefix != ''">
+              <xsl:value-of select="concat($url-prefix,@href)"/>
+            </xsl:when>
+            <!-- keep as is -->
+            <xsl:otherwise>
+              <xsl:value-of select="@href"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:basic-link color="{$color}" text-decoration="underline" external-destination="{$href}">
           <xsl:apply-templates/>
         </fo:basic-link>
         <xsl:if test="$show-external-urls = 'true' and @href != string(.)">
-          (<xsl:value-of select="@href"/>)
+          (<xsl:value-of select="$href"/>)
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
