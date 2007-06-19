@@ -22,6 +22,8 @@
   <xsl:variable name="text-align" select="string(//skinconfig/pdf/page/@text-align)"/>
 <!-- print URL of external links -->
   <xsl:variable name="show-external-urls" select="//skinconfig/pdf/show-external-urls"/>
+<!-- disable the table of content (enabled by default) -->
+  <xsl:variable name="disable-toc" select="string(//skinconfig/pdf/disable-toc)"/>
 <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable name="toc-max-depth" select="number(//skinconfig/toc/@max-depth)"/>
 <!-- The page size to be used -->
@@ -246,8 +248,8 @@
         text-align="center">
         <xsl:apply-templates select="footer"/>
       </fo:block>
-<!-- don't list page number on first page if it's contents is just the TOC -->
-      <xsl:if test="not($toc-max-depth > 0 and $page-break-top-sections)">
+<!-- don't list page number on first page if its content is just the TOC -->
+      <xsl:if test="$disable-toc = 'true' or not($toc-max-depth > 0 and $page-break-top-sections)">
         <xsl:call-template name="insertPageNumber">
           <xsl:with-param name="text-align">start</xsl:with-param>
         </xsl:call-template>
@@ -894,7 +896,7 @@
     </fo:inline>
   </xsl:template>
   <xsl:template match="body[count(//section) != 0]">
-    <xsl:if test="$toc-max-depth > 0">
+    <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
       <fo:block font-family="serif" font-size="14pt" font-weight="bold"
       space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
         <xsl:call-template name="insertPageBreaks"/>
