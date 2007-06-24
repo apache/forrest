@@ -79,7 +79,6 @@
             <xsl:apply-templates/>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="changes/release[1]/action"/>
       </channel>
     </rss>
   </xsl:template>
