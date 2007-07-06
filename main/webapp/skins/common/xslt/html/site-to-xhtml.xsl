@@ -312,7 +312,7 @@ if (VERSION > 3) {
       </xsl:attribute>
     </meta>
   </xsl:template>
-<!-- meta information from v 2.0 documents
+<!-- meta elements from document-v20
        FIXME: the match is really inefficient -->
   <xsl:template name="meta-data">
     <xsl:for-each select="//meta-data/meta">
