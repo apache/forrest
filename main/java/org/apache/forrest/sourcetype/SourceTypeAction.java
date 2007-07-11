@@ -42,6 +42,7 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
 {
     protected List sourceTypes = new ArrayList();
     protected static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
+    protected static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
     public void configure(Configuration configuration) throws ConfigurationException
     {
@@ -97,6 +98,12 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
                 else if (event.type == XMLEvent.ELEMENT)
                 {
                     ElementEvent elementEvent = (ElementEvent)event;
+		    if (elementEvent.element.uri == RDF_NAMESPACE) 
+		    {
+			while ((event = parser.nextEvent()) != null && 
+				elementEvent.element.uri == RDF_NAMESPACE)
+			    event = parser.nextEvent();
+		    }
                     sourceInfo.setDocumentElementLocalName(elementEvent.element.localpart);
                     sourceInfo.setDocumentElementNamespace(elementEvent.element.uri);
 
@@ -104,7 +111,7 @@ public class SourceTypeAction extends AbstractLogEnabled implements Configurable
                     sourceInfo.setXsiNoNamespaceSchemaLocation(elementEvent.attributes.getValue(XSI_NAMESPACE, "noNamespaceSchemaLocation"));
 
                     // stop parsing after the root element
-                    break;
+		    break;
                 }
             }
         }
