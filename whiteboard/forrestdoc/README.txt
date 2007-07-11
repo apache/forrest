@@ -1,6 +1,11 @@
 See http://issues.apache.org/jira/browse/FOR-820
 for explanation and links to some of the email discussion.
 
+Note that forrestdoc is not yet used at all by 'forrest'.
+It was simply copied from the now defunct "Apache Jakarta Alexandria".
+
+------------------------------------------------------------------------
+
   build project
   
 and see Forrestdoc generate documentation for itself in build/project
