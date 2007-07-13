@@ -751,8 +751,8 @@ if (VERSION > 3) {
       </div>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="div[@id='skinconf-toc-page']">
 <!-- Message of the day -->
+  <xsl:template match="div[@id='motd-page']">
     <xsl:if test="$config/motd">
       <xsl:for-each select="$config/motd/motd-option">
         <xsl:choose>
@@ -793,6 +793,8 @@ if (VERSION > 3) {
         </xsl:choose>
       </xsl:for-each>
     </xsl:if>
+  </xsl:template>
+  <xsl:template match="div[@id='skinconf-toc-page']">
 <!-- Table of Contents ToC -->
     <xsl:if test="$config/toc">
       <xsl:if test="contains($minitoc-location,'page')">

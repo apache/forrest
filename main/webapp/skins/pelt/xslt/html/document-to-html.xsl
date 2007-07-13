@@ -57,11 +57,15 @@ imported document-to-html.xsl for details.
         <xsl:apply-templates select="header/version"/>
       </div>
     -->
-      <xsl:if test="header/abstract">
-        <div class="abstract">
-          <xsl:value-of select="header/abstract"/>
-        </div>
-      </xsl:if>
+      <div id="front-matter">
+        <div id="motd-page"/>
+        <xsl:if test="header/abstract">
+          <div class="abstract">
+            <xsl:value-of select="header/abstract"/>
+          </div>
+        </xsl:if>
+        <div id="skinconf-toc-page"/>
+      </div>
       <xsl:apply-templates select="body"/>
       <xsl:if test="header/authors">
         <p align="right">
@@ -82,7 +86,6 @@ imported document-to-html.xsl for details.
     </div>
   </xsl:template>
   <xsl:template match="body">
-    <div id="skinconf-toc-page"/>
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="@id">
