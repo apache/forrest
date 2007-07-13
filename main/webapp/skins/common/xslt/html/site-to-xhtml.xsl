@@ -330,6 +330,13 @@ if (VERSION > 3) {
         </xsl:if>
       </xsl:element>
     </xsl:for-each>
+    <xsl:for-each select="//meta-data/a">
+<!-- FIXME: the document/header/link elements were earlier transformed to "a"
+along with all other "link" elements. -->
+      <xsl:element name="link">
+        <xsl:apply-templates select="@*"/>
+      </xsl:element>
+    </xsl:for-each>
   </xsl:template>
   <xsl:template name="feedback">
     <div id="feedback">
