@@ -21,18 +21,31 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#">
-  <xsl:template match="/">{ "items" : [<xsl:apply-templates/>]} 
+  <xsl:template match="/">{ "items": [<xsl:apply-templates select="descriptors"/>]} 
   </xsl:template>
   
-  <xsl:template match="descriptors"><xsl:apply-templates/></xsl:template>
+  <xsl:template match="descriptors"><xsl:apply-templates select="descriptor"/></xsl:template>
   
-  <xsl:template match="descriptor"><xsl:apply-templates/></xsl:template>
+  <xsl:template match="descriptor">
+    {<xsl:apply-templates select="doap:Project|rdf:RDF|atom:feed"/>
+    }<xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="atom:feed"><xsl:apply-templates select="atom:entry/atom:content/doap:Project"/></xsl:template>
   
-  <xsl:template match="doap:Project">{<xsl:apply-templates/>},</xsl:template>
+  <xsl:template match="rdf:RDF"><xsl:apply-templates select="doap:Project"/></xsl:template>
   
-  <xsl:template match="doap:shortdesc">shortdesc : <xsl:value-of select="."/></xsl:template>
+  <xsl:template match="doap:Project">
+    "label":"<xsl:value-of select="doap:name"/>",
+    <xsl:apply-templates select="doap:name|doap:shortdesc|doap:homepage"/>
+  </xsl:template>
   
-  <xsl:template match="doap:name">name : <xsl:value-of select="."/>,</xsl:template>
+  <xsl:template match="doap:homepage">
+    "<xsl:value-of select="local-name(.)"/>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
   
-  <xsl:template match="doap:homepage">homepage : <xsl:value-of select="@rdf:resource"/>,</xsl:template>
+  <xsl:template match="doap:*">
+    "<xsl:value-of select="local-name(.)"/>":"<xsl:value-of select="normalize-space(.)"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
+    
 </xsl:stylesheet>
