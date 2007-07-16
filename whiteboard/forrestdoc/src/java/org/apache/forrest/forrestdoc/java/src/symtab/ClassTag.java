@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,8 @@ import org.apache.forrest.forrestdoc.java.src.util.JSComparable;
 
 /**
  * An occurrence of an HTML Tag in a file
+ *
+ * @version $Id: $
  */
 public class ClassTag implements JSComparable {
 
@@ -39,8 +41,8 @@ public class ClassTag implements JSComparable {
 
     /**
      * Method getKey
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getKey() {
         return _key;
@@ -48,8 +50,8 @@ public class ClassTag implements JSComparable {
 
     /**
      * Method getTag
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getTag() {
         return _tag;
@@ -57,32 +59,25 @@ public class ClassTag implements JSComparable {
 
     /**
      * Constructor to define a new tag
-     * 
-     * @param key 
-     * @param tag 
+     *
+     * @param key
+     * @param tag
      */
     ClassTag(String key, String tag) {
 
         _key = key;
         _tag = tag;
-
-        // System.out.println("new ClassTag");
     }
 
     /**
-     * return a string representation of the occurrence
-     * 
-     * @return 
+     * @see java.lang.Object#toString()
      */
     public String toString() {
         return _tag;
     }
 
     /**
-     * Method compareTo
-     * 
-     * @param o 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.util.JSComparable#compareTo(java.lang.Object)
      */
     public int compareTo(Object o) {
 

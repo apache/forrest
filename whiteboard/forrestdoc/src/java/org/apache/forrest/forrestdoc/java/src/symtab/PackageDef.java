@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,8 +30,15 @@ import java.util.Vector;
 
 /**
  * Definition of a package.
+ *
+ * @version $Id: $
  */
 public class PackageDef extends ScopedDef implements java.io.Serializable {
+
+    private static final long serialVersionUID = 5247243972234423013L;
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( PackageDef.class );
 
     // ==========================================================================
     // ==  Methods
@@ -37,10 +46,10 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Constructor to create a package object
-     * 
-     * @param name        
-     * @param occ         
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param parentScope
      */
     PackageDef(String name, // the name of the package
                Occurrence occ, // where it was defined (NULL)
@@ -58,7 +67,11 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
                     new File(SymbolTable.getSymbolTable().getOutDirPath()
                     + File.separatorChar + relPath);
 
-            // System.out.println("checking for def files in "+outputDir.getAbsolutePath());
+            if (log.isDebugEnabled())
+            {
+                log.debug("PackageDef(String, Occurrence, ScopedDef) - checking for def files in "+outputDir.getAbsolutePath());
+            }
+
             FilenameFilter filter = new FilenameFilter() {
 
                 public boolean accept(File dir, String defName) {
@@ -69,15 +82,20 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
             if (files != null) {
 
-                // System.out.println("def files are:");
+                if (log.isDebugEnabled())
+                {
+                    log.debug("PackageDef(String, Occurrence, ScopedDef) - def files are:");
+                }
                 for (int i = 0; i < files.length; i++) {
                     String filename = files[i].getName();
 
-                    // System.out.println("\t"+filename);
                     String className = filename.substring(0, filename.length()
                             - ".def".length());
 
-                    // System.out.println("className="+className);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("PackageDef(String, Occurrence, ScopedDef) - filename="+filename+", className="+className);
+                    }
                     persistedDefs.put(className, files[i]);
                 }
             }
@@ -86,8 +104,8 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Method getDefinitions
-     * 
-     * @return 
+     *
+     * @return
      */
     public Hashtable getDefinitions() {
         return getElements();
@@ -95,18 +113,19 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Method persistDefinitions
-     * 
-     * @param path 
+     *
+     * @param path
      */
     public void persistDefinitions(String path) {
+        if (log.isDebugEnabled())
+        {
+            log.debug("persistDefinitions(String) - String path=" + path);
+        }
 
-        // System.out.println("\tpath="+path);
         Enumeration e;
         Definition d;
-        Occurrence o;
         String newPath;
         File currentFile = null;
-        Vector files = new Vector(20, 20);
 
         if (hasElements()) {
             JavaHashtable ht = getElements();
@@ -127,7 +146,10 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
                         new File(currentFile.getParent()).mkdirs();
 
-                        // System.out.println("\tWriting "+currentFile.getAbsolutePath());
+                        if (log.isDebugEnabled())
+                        {
+                            log.debug("persistDefinitions(String) - Writing "+currentFile.getAbsolutePath());
+                        }
                         FileOutputStream fos =
                                 new FileOutputStream(currentFile);
                         ObjectOutputStream output = new ObjectOutputStream(fos);
@@ -137,7 +159,7 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
                         output.close();
                         fos.close();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        log.error( "Exception: " + ex.getMessage(), ex );
                     }
                 }
             }
@@ -146,8 +168,8 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Method persistReferences
-     * 
-     * @param path 
+     *
+     * @param path
      */
     public void persistReferences(String path) {
 
@@ -166,9 +188,7 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
     }
 
     /**
-     * Method accept
-     * 
-     * @param visitor 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#accept(org.apache.forrest.forrestdoc.java.src.symtab.Visitor)
      */
     public void accept(Visitor visitor) {
 
@@ -236,8 +256,8 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Method generateClassList
-     * 
-     * @return 
+     *
+     * @return
      */
     public Vector generateClassList() {
 
@@ -291,15 +311,9 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
     }
 
     /**
-     * Generate HTML tags for this package
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
-
-        Enumeration e;
-        Definition d;
-        Occurrence o;
 
         // if we found any definitions in this package, report them
         if (hasElements()) {
@@ -308,10 +322,7 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
     }
 
     /**
-     * Method getOccurrenceTag
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#getOccurrenceTag(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public HTMLTag getOccurrenceTag(Occurrence occ) {
         return null;
@@ -320,23 +331,28 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
     // TBD: reimplement to search outputdir for this class if the class isn't already loaded
 
     /**
-     * Method lookup
-     * 
-     * @param name 
-     * @param type 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#lookup(java.lang.String, java.lang.Class)
      */
     Definition lookup(String name, Class type) {
 
-        boolean debug = false;    // name.endsWith("SymbolTable");
+        if (log.isDebugEnabled())
+        {
+            log.debug("lookup(String, Class) - String name=" + name);
+        }
 
-        // if (debug)      System.out.println("PackageDef.lookup "+name);
         Definition result = super.lookup(name, type);
 
-        // if (debug) System.out.println("PackageDef.lookup:super.lookup returned "+result);
+        if (log.isDebugEnabled())
+        {
+            log.debug("lookup(String, Class) - result=" + result);
+        }
         if ((result == null) || (result instanceof DummyClass)) {
 
-            // System.out.println(getName()+": PackageDef.lookup(\""+name+"\", \""+type.getName()+"\") returned "+(result == null ? "null" : result.getClass().getName()));
+            if (log.isDebugEnabled())
+            {
+                log.debug("lookup(String, Class) - " + getName() + ": PackageDef.lookup(\"" + name + "\", \""
+                    + type.getName() + "\") returned " + ( result == null ? "null" : result.getClass().getName() ));
+            }
             ClassDef classDef = ClassDef.findLoadedClass(getName(), name);
 
             if (classDef == null) {
@@ -350,17 +366,20 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
             }
         }
 
-        // if (result == null) {
-        // System.out.println("not found: "+name);
-        // }
+        if (result == null) {
+            if (log.isDebugEnabled())
+            {
+                log.debug("lookup(String, Class) - not found: "+name);
+            }
+        }
         return result;
     }
 
     /**
      * Method loadClassDef
-     * 
-     * @param name 
-     * @return 
+     *
+     * @param name
+     * @return
      */
     public ClassDef loadClassDef(String name) {
 
@@ -369,10 +388,10 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
         if (defFile != null) {
             try {
-
-                // new Exception("traceback").printStackTrace();
-                System.out.println("loading " + name + " from " + defFile);
-                System.out.flush();
+                if ( log.isInfoEnabled() )
+                {
+                    log.info( "loading " + name + " from " + defFile);
+                }
 
                 FileInputStream fis = new FileInputStream(defFile);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -382,9 +401,8 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
                 ois.close();
                 fis.close();
 
-                // System.out.println("loaded Class "+name); System.out.flush();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.error( "Exception: " + ex.getMessage(), ex );
             }
         }
 
@@ -393,9 +411,9 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
     /**
      * Method writeObject
-     * 
-     * @param out 
-     * @throws java.io.IOException 
+     *
+     * @param out
+     * @throws java.io.IOException
      */
     private void writeObject(ObjectOutputStream out)
             throws java.io.IOException {
@@ -411,9 +429,7 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
     }
 
     /**
-     * Method toString
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#toString()
      */
     public String toString() {
 
@@ -434,13 +450,6 @@ public class PackageDef extends ScopedDef implements java.io.Serializable {
 
         return str;
     }
-
-    // // DEBUG METHOD
-    // void add(Definition def)
-    // {
-    // System.out.println("adding "+def+" to package "+getName());
-    // super.add(def);
-    // }
 
     /** Field _currentPackPath */
     private static String _currentPackPath;

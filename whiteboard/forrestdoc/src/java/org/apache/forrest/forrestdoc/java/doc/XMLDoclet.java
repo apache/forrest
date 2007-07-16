@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,26 +17,45 @@
 
 package org.apache.forrest.forrestdoc.java.doc;
 
-import com.sun.javadoc.*;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Vector;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.ConstructorDoc;
+import com.sun.javadoc.Doc;
+import com.sun.javadoc.Doclet;
+import com.sun.javadoc.ExecutableMemberDoc;
+import com.sun.javadoc.FieldDoc;
+import com.sun.javadoc.MethodDoc;
+import com.sun.javadoc.PackageDoc;
+import com.sun.javadoc.Parameter;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.Tag;
+import com.sun.javadoc.ThrowsTag;
+import com.sun.javadoc.Type;
 
 /**
  * Main Doclet class to generate JavaDocXML.  This doclet generates the
  * document conforming to DTD specified in javadoc-v04draft.dtd.
+ *
+ * @version $Id: $
  */
-
 public class XMLDoclet extends Doclet {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( XMLDoclet.class );
 
     private String xmlns = "jvx";
     private String encodingFormat = "ISO-8859-1";
@@ -56,8 +75,8 @@ public class XMLDoclet extends Doclet {
         }
 
         File writer = new File(targetFileName);
-        StreamResult result = new StreamResult(writer);        
-            
+        StreamResult result = new StreamResult(writer);
+
         // SAX2.0 ContentHandler.
         handler = tFactory.newTransformerHandler();
 
@@ -668,8 +687,7 @@ public class XMLDoclet extends Doclet {
             new XMLDoclet(root);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+            log.error( "Exception: " + e.getMessage(), e );
             return false;
         }
     }

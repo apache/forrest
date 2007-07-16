@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,8 @@ import java.io.OutputStream;
 
 /**
  * Class LineOutputWriter
- * 
- * @version %I%, %G%
+ *
+ * @version $Id: $
  */
 public class LineOutputWriter extends HTMLOutputWriter {
 
@@ -39,8 +39,8 @@ public class LineOutputWriter extends HTMLOutputWriter {
 
     /**
      * Constructor LineOutputWriter
-     * 
-     * @param output 
+     *
+     * @param output
      */
     public LineOutputWriter(OutputStream output) {
 
@@ -48,15 +48,10 @@ public class LineOutputWriter extends HTMLOutputWriter {
 
         _lineNumber = 1;
         _firstLine = true;
-        _oldLength = 1;
-        _spaceString = "";
     }
 
     /**
-     * Method write
-     * 
-     * @param c 
-     * @throws IOException 
+     * @see java.io.OutputStreamWriter#write(int)
      */
     public void write(int c) throws IOException {
 
@@ -74,10 +69,7 @@ public class LineOutputWriter extends HTMLOutputWriter {
     }
 
     /**
-     * Method writeHTML
-     * 
-     * @param c 
-     * @throws IOException 
+     * @see org.apache.forrest.forrestdoc.java.src.HTMLOutputWriter#writeHTML(int)
      */
     public void writeHTML(int c) throws IOException {
 
@@ -95,10 +87,7 @@ public class LineOutputWriter extends HTMLOutputWriter {
     }
 
     /**
-     * Method write
-     * 
-     * @param s 
-     * @throws IOException 
+     * @see java.io.Writer#write(java.lang.String)
      */
     public void write(String s) throws IOException {
 
@@ -110,10 +99,7 @@ public class LineOutputWriter extends HTMLOutputWriter {
     }
 
     /**
-     * Method writeHTML
-     * 
-     * @param s 
-     * @throws IOException 
+     * @see org.apache.forrest.forrestdoc.java.src.HTMLOutputWriter#writeHTML(java.lang.String)
      */
     public void writeHTML(String s) throws IOException {
 
@@ -126,8 +112,8 @@ public class LineOutputWriter extends HTMLOutputWriter {
 
     /**
      * Method writeLineNumber
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     public void writeLineNumber() throws IOException {
 
@@ -154,10 +140,4 @@ public class LineOutputWriter extends HTMLOutputWriter {
 
     /** Field _firstLine */
     private boolean _firstLine;
-
-    /** Field _oldLength */
-    private int _oldLength;
-
-    /** Field _spaceString */
-    private String _spaceString;
 }

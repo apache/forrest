@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
  */
 
 package org.apache.forrest.forrestdoc.js.doc;
+
+import org.apache.log4j.Logger;
 
 import org.apache.tools.ant.BuildException;
 
@@ -29,12 +31,17 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 
 /**
- *         Searches all javascript files and creates a index HTML
- *         with links to documentation
+ * Searches all javascript files and creates a index HTML
+ * with links to documentation
+ *
+ * @version $Id: $
  */
 public class GenerateHTMLIndex {
 
-    private static File file, file2 = null;
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( GenerateHTMLIndex.class );
+
+    private static File file = null;
     private static FileInputStream fis;
     private static FileOutputStream fos;
     private static BufferedReader br;
@@ -59,13 +66,13 @@ public class GenerateHTMLIndex {
         }
 
         file = new File(jSDir);
-        
+
         if (!file.isDirectory()) {
             throw new BuildException("destDir has to be a directory");
         }
-        
+
         collectFiles(file, v);
-        
+
         try {
             fos = new FileOutputStream(destDir + "index.htm");
 
@@ -75,6 +82,7 @@ public class GenerateHTMLIndex {
                 file.mkdir();
                 fos = new FileOutputStream(destDir + "index.htm");
             } catch (FileNotFoundException e) {
+                log.error( "FileNotFoundException: " + e.getMessage(), e );
             }
         }
         try {
@@ -103,9 +111,17 @@ public class GenerateHTMLIndex {
                 file = (File) v.get(i);
                 docGenerator = new GenerateHTMLDoc(file, destDir);
             }
-            System.out.println("Number of .js files: " + v.size());
+
+            if ( log.isInfoEnabled() )
+            {
+                log.info( "Number of .js files: " + v.size());
+            }
+
             for (int i = 0; i < v.size(); i++) {
-                System.out.println(file.getName());
+                if ( log.isInfoEnabled() )
+                {
+                    log.info( "file: " + file.getName());
+                }
                 file = (File) v.get(i);
 
                 fos.write(("<TR>" + LINE_SEPARATOR).getBytes());
@@ -134,7 +150,7 @@ public class GenerateHTMLIndex {
                     }
 
                 } catch (FileNotFoundException fnfe) {
-                    fnfe.printStackTrace();
+                    log.error( "FileNotFoundException: " + fnfe.getMessage(), fnfe );
                 }
 
                 fos.write(("</TD>" + LINE_SEPARATOR).getBytes());
@@ -146,45 +162,24 @@ public class GenerateHTMLIndex {
             fos.write("</html>".getBytes());
 
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            log.error( "IOException: " + ioe.getMessage(), ioe );
         }
 
     }
-    
+
     private void collectFiles(File baseDir, Vector fileVector) {
         File[] fileList = baseDir.listFiles();
         for (int i = 0; i < fileList.length; i++) {
             if (fileList[i].isDirectory()){
                 collectFiles(fileList[i], fileVector);
-            }    
+            }
             else if (fileList[i].getName().indexOf(".js") != -1) {
                 v.addElement(fileList[i]);
             }
         }
-    }    
-            
+    }
+
     public static void main(String[] args) {
         GenerateHTMLIndex index = new GenerateHTMLIndex(args[0], args[1]);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

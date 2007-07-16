@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.Externalizable;
 import java.io.FileWriter;
@@ -26,8 +28,13 @@ import java.util.Vector;
 
 /**
  * A definition of a method in a class
+ *
+ * @version $Id: $
  */
 public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( MethodDef.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -56,17 +63,15 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
      * Default constructor needs to be public for deserialization.
      */
     public MethodDef() {
-
-        // System.out.println("constructing MethodDef");
     }
 
     /**
      * Constructor to create a method definition object
-     * 
-     * @param name        
-     * @param occ         
-     * @param type        
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param type
+     * @param parentScope
      */
     MethodDef(String name, // the name of the method
               Occurrence occ, // where it was defined
@@ -77,18 +82,16 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
         super(name, occ, parentScope);
 
         this.type = type;
-
-// System.out.println("constructing method "+name);
     }
 
     /**
      * Constructor to create a method definition object
-     * 
-     * @param name        
-     * @param className   
-     * @param occ         
-     * @param type        
-     * @param parentScope 
+     *
+     * @param name
+     * @param className
+     * @param occ
+     * @param type
+     * @param parentScope
      */
     MethodDef(String name, // the name of the method
               String className, // className (for constructor methods)
@@ -103,14 +106,12 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
         } else {
             this.className = className;
         }
-
-        // System.out.println("constructing method "+name);
     }
 
     /**
      * Method getParameters
-     * 
-     * @return 
+     *
+     * @return
      */
     public Vector getParameters() {
         return parameters;
@@ -118,8 +119,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Method getExceptions
-     * 
-     * @return 
+     *
+     * @return
      */
     public Vector getExceptions() {
         return exceptions;
@@ -127,8 +128,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Method getClassName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getClassName() {
         return className;
@@ -136,8 +137,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Add a thrown exception to the method's exception list
-     * 
-     * @param excep 
+     *
+     * @param excep
      */
     void add(ClassDef excep) {
 
@@ -150,8 +151,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Add a parameter to the method's parameter list
-     * 
-     * @param param 
+     *
+     * @param param
      */
     void add(VariableDef param) {
 
@@ -164,8 +165,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Method getFullName
-     * 
-     * @return 
+     *
+     * @return
      */
     String getFullName() {
 
@@ -196,8 +197,8 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * Find out how many parameters this method has
-     * 
-     * @return 
+     *
+     * @return
      */
     int getParamCount() {
 
@@ -209,9 +210,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Return the return type of the method
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.TypedDef#getType()
      */
     public Definition getType() {
         return type;
@@ -219,15 +218,20 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * lookup the name as a local variable or local class in this class
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     *
+     * @param name
+     * @param numParams
+     * @param type
+     * @return
      */
     Definition lookup(String name, int numParams, Class type) {
 
-        // System.out.println("MethodDef:lookup:"+name+","+numParams);
+        if (log.isDebugEnabled())
+        {
+            log.debug("lookup(String, int, Class) - String name=" + name);
+            log.debug("lookup(String, int, Class) - String numParams=" + numParams);
+        }
+
         if (numParams == -1) {
 
             // look for it in the method's scope
@@ -255,9 +259,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Method generateReferences
-     * 
-     * @param output 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateReferences(java.io.FileWriter)
      */
     public void generateReferences(FileWriter output) {
 
@@ -302,20 +304,16 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
             output.write("</p>");
         } catch (IOException e) {
+            log.error( "IOException: " + e.getMessage(), e );
         }
-        ;
     }
 
     /**
-     * Write information about this method to the report
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
 
         String methodName = getName();
-        String linkString;
-        String linkFileName;
 
         if ((methodName != null)
                 && (methodName.indexOf("~constructor~") >= 0)) {
@@ -340,22 +338,17 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
         tagList.addElement(t);
 
-        String definerName = getOccurrence().getClassName();
-        
         if(parameters != null) {
             parameters.generateTags(tagList);
         }
-        
+
         if(elements != null){
             elements.tagElements(tagList);
         }
     }
 
     /**
-     * Method getOccurrenceTag
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#getOccurrenceTag(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public HTMLTag getOccurrenceTag(Occurrence occ) {
 
@@ -385,13 +378,15 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Resolve references to other symbols for pass 2
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#resolveTypes(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveTypes(SymbolTable symbolTable) {
 
-        // System.out.println("MethodDef.resolveTypes: resolving "+getFullName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveTypes(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         // if we have parameters and/or exceptions, resolve them
         if (parameters != null) {
             parameters.resolveTypes(symbolTable);
@@ -418,17 +413,15 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
 
     /**
      * set the list of exceptions that this method can throw
-     * 
-     * @param exceptions 
+     *
+     * @param exceptions
      */
     void setExceptions(JavaVector exceptions) {
         this.exceptions = exceptions;
     }
 
     /**
-     * Method getClassScopeName
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getClassScopeName()
      */
     String getClassScopeName() {
 
@@ -449,10 +442,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Method writeExternal
-     * 
-     * @param out 
-     * @throws java.io.IOException 
+     * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws java.io.IOException {
 
@@ -472,11 +462,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Method readExternal
-     * 
-     * @param in 
-     * @throws ClassNotFoundException 
-     * @throws IOException            
+     * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws ClassNotFoundException, IOException {
@@ -495,10 +481,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Visitor design pattern.  Let visitor visit this definition,
-     * then call accept method on this method's elements.
-     * 
-     * @param visitor 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#accept(org.apache.forrest.forrestdoc.java.src.symtab.Visitor)
      */
     public void accept(Visitor visitor) {
         visitor.visit(this);
@@ -506,9 +489,7 @@ public class MethodDef extends ScopedDef implements TypedDef, Externalizable {
     }
 
     /**
-     * Method toString
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#toString()
      */
     public String toString() {
 

@@ -19,7 +19,7 @@ package org.apache.forrest.forrestdoc.java.src.util;
 /**
  * Interface JSComparable
  * 
- * @version %I%, %G%
+ * @version $Id: $
  */
 public interface JSComparable {
 

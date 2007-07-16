@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,8 +29,13 @@ import java.util.Enumeration;
  * A visitor (in the Visitor design pattern sense) for persisting
  * references.  All references to anything in a package are stored
  * in that package's references.txt file.
+ *
+ * @version $Id: $
  */
 public class ReferencePersistor implements Visitor, ReferenceTypes {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( ReferencePersistor.class );
 
     /**
      * @param outDirPath the root of the output directory tree
@@ -52,9 +59,7 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
     }
 
     /**
-     * Prepare to process this package.  Close the previous package's file.
-     * 
-     * @param def 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Visitor#visit(org.apache.forrest.forrestdoc.java.src.symtab.PackageDef)
      */
     public void visit(PackageDef def) {
 
@@ -65,7 +70,11 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
         String finalDirPath = outDirPath + File.separatorChar
                 + def.getName().replace('.', File.separatorChar);
 
-        // System.out.println("visit:finalDirPath="+finalDirPath);
+        if (log.isDebugEnabled())
+        {
+            log.debug("visit(PackageDef) - String finalDirPath=" + finalDirPath);
+        }
+
         File dir = new File(finalDirPath);
 
         dir.mkdirs();
@@ -77,7 +86,7 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
 
             fw = new FileWriter(filePath, append);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error( "IOException: " + ex.getMessage(), ex );
 
             fw = null;    // TBD: fix this hack
         }
@@ -89,33 +98,35 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
         // ReferentType -- Class Method, or Variable
         // ReferentClass - name of this referent's class.  If that class is an inner class, format is outer.inner
         // ReferentTag - referent's name as used below [TBD: change usage in Pass1]
-        // 
+        //
         // Referent's URL in source code is {ReferentFileClass}_java.html#{ReferentTag}
         // Referent's URL in referent list is {ReferentFileClass}_java_ref.html#{ReferentTag}
         // Referent class's name in package list is {ReferentClass}
-        // 
+        //
         pw.println(
                 "# ReferentFileClass | ReferentClass | ReferentType | ReferentTag | ReferringPackage | ReferringClass | ReferringMethod | ReferringFile | ReferringLineNumber");
     }
 
     /**
      * Method getReferentFileClass
-     * 
-     * @param def 
-     * @return 
+     *
+     * @param def
+     * @return
      */
     private String getReferentFileClass(Definition def) {
 
         String temp = def.getOccurrence().getFile().getName();    // HACK!
 
-        // System.out.println("name="+def.getClassScopeName()+" temp="+temp);
+        if (log.isDebugEnabled())
+        {
+            log.debug("getReferentFileClass(Definition) - name="+def.getClassScopeName()+" temp="+temp);
+        }
+
         return temp.substring(0, temp.length() - ".java".length());
     }
 
     /**
-     * Method visit
-     * 
-     * @param def 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Visitor#visit(org.apache.forrest.forrestdoc.java.src.symtab.ClassDef)
      */
     public void visit(ClassDef def) {
 
@@ -123,8 +134,12 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
             return;
         }
 
-        // System.out.println(def.getName()+" is defined in "+def.getOccurrence().getFile().getName());
-        // System.out.println("persist "+def.getName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("visit(ClassDef) - " + def.getName()+" is defined in "+def.getOccurrence().getFile().getName());
+            log.debug("visit(ClassDef) - persist "+def.getName());
+        }
+
         String referentFileClass = getReferentFileClass(def);
         String referentTag = def.getClassScopeName();
         String referentClass;
@@ -142,9 +157,7 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
     }
 
     /**
-     * Method visit
-     * 
-     * @param def 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Visitor#visit(org.apache.forrest.forrestdoc.java.src.symtab.MethodDef)
      */
     public void visit(MethodDef def) {
 
@@ -166,9 +179,7 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
     }
 
     /**
-     * Method visit
-     * 
-     * @param def 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Visitor#visit(org.apache.forrest.forrestdoc.java.src.symtab.VariableDef)
      */
     public void visit(VariableDef def) {
 
@@ -207,23 +218,23 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
 
     /**
      * Method persist
-     * 
-     * @param referentFileClass 
-     * @param referentType      
-     * @param referentTag       
-     * @param referentClass     
-     * @param def               
+     *
+     * @param referentFileClass
+     * @param referentType
+     * @param referentTag
+     * @param referentClass
+     * @param def
      */
     private void persist(String referentFileClass, String referentType,
                          String referentTag, String referentClass,
                          Definition def) {
 
-        // System.out.println("persist: referentType="+referentType+" referentTag="+referentTag);
-        // boolean debugFlag = referentClass.equals("ReferencePersistor") && referentTag.equals("ReferencePersistor");
-        // if (debugFlag) {
-        // System.out.println("references "+references);
-        // System.out.println("output file "+filePath);
-        // }
+        if (log.isDebugEnabled())
+        {
+            log.debug("persist(String, String, String, String, Definition) - String referentFileClass=" + referentFileClass);
+            log.debug("persist(String, String, String, String, Definition) - String referentType=" + referentType);
+        }
+
         JavaVector refs = def.getReferences();
 
         if (refs != null) {
@@ -232,7 +243,6 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
             while (enumList.hasMoreElements()) {
                 Occurrence occ = (Occurrence) enumList.nextElement();
 
-                // if (debugFlag) System.out.println("occ="+occ);
                 persist(referentFileClass, referentType, referentTag,
                         referentClass, occ);
             }
@@ -244,12 +254,12 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
 
     /**
      * Method persist
-     * 
-     * @param referentFileClass 
-     * @param referentType      
-     * @param referentTag       
-     * @param referentClass     
-     * @param occ               
+     *
+     * @param referentFileClass
+     * @param referentType
+     * @param referentTag
+     * @param referentClass
+     * @param occ
      */
     private void persist(String referentFileClass, String referentType,
                          String referentTag, String referentClass,
@@ -284,8 +294,7 @@ public class ReferencePersistor implements Visitor, ReferenceTypes {
             bw.close();
             fw.close();
         } catch (IOException ex) {
-            System.err.println("Hell has frozen over.");
-            ex.printStackTrace();
+            log.error( "Hell has frozen over.", ex);
         }
     }
 

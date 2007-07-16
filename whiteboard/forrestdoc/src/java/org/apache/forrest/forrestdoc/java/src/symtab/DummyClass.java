@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -24,8 +26,13 @@ import java.io.ObjectOutput;
 /**
  * A stub symbol that is used to temporarily hold the name of a class
  * until it can be properly resolved
+ *
+ * @version $Id: $
  */
 public class DummyClass extends ClassDef implements Externalizable {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( DummyClass.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -48,9 +55,9 @@ public class DummyClass extends ClassDef implements Externalizable {
 
     /**
      * Constructor to create a placeholder class object
-     * 
-     * @param name 
-     * @param occ  
+     *
+     * @param name
+     * @param occ
      */
     public DummyClass(String name, Occurrence occ) {
         super(name, occ, null, null, null);
@@ -59,60 +66,54 @@ public class DummyClass extends ClassDef implements Externalizable {
     /**
      * Constructor to create a placeholder class object
      * This version provides a means to set the package containing the class
-     * 
-     * @param name        
-     * @param occ         
-     * @param packageName 
+     *
+     * @param name
+     * @param occ
+     * @param packageName
      */
     public DummyClass(String name, Occurrence occ, String packageName) {
 
         super(name, occ, null, null, null);
 
         this.packageName = packageName;
-
-        // if (name.equals("SymbolTable"))
-        // new Exception("occ="+occ).printStackTrace();
-        // System.out.println("DummyClass packageName="+packageName);
     }
 
     /**
      * Get the name of the package in which this class is defined
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPackage() {
         return packageName;
     }
 
     /**
-     * Write information about this unresolved class to the tagList
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
-        System.out.println(getQualifiedName() + " (Undefined Class/Interface)");
-        System.out.println(getReferences());
+        if ( log.isInfoEnabled() )
+        {
+            log.info( getQualifiedName() + " (Undefined Class/Interface)");
+            log.info( getReferences());
+        }
     }
 
     /**
-     * Persist this object
-     * 
-     * @param out 
-     * @throws IOException 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        // System.out.println("persisting DummyClass "+getName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeExternal(ObjectOutput) - getName()" + getName());
+        }
+
         out.writeObject(getName());
         out.writeObject(packageName);
     }
 
     /**
-     * Restore this object
-     * 
-     * @param in 
-     * @throws IOException            
-     * @throws ClassNotFoundException 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {

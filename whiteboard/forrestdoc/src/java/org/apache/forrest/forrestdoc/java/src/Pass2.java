@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
 package org.apache.forrest.forrestdoc.java.src;
 
 import org.apache.forrest.forrestdoc.java.src.symtab.ReferenceTypes;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -48,11 +49,13 @@ import java.util.Vector;
  * Load reference.txt
  * Sort references
  * Generate HTML one public class at a time.
+ *
+ * @version $Id: $
  */
 public class Pass2 {
 
-    /** Field debug */
-    public static final boolean debug = false;
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( Pass2.class );
 
     /** Field DEFAULT_DIR */
     public static final String DEFAULT_DIR = ".";
@@ -64,8 +67,8 @@ public class Pass2 {
 
     /**
      * Method getOutDir
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getOutDir() {
         return _outDir;
@@ -73,8 +76,8 @@ public class Pass2 {
 
     /**
      * Method setOutDir
-     * 
-     * @param d 
+     *
+     * @param d
      */
     public void setOutDir(String d) {
         _outDir = d;
@@ -82,8 +85,8 @@ public class Pass2 {
 
     /**
      * Method getTitle
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getTitle() {
         return _title;
@@ -91,8 +94,8 @@ public class Pass2 {
 
     /**
      * Method setTitle
-     * 
-     * @param t 
+     *
+     * @param t
      */
     public void setTitle(String t) {
         _title = t;
@@ -100,8 +103,8 @@ public class Pass2 {
 
     /**
      * Method getVerbose
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean getVerbose() {
         return _verbose;
@@ -109,8 +112,8 @@ public class Pass2 {
 
     /**
      * Method setVerbose
-     * 
-     * @param val 
+     *
+     * @param val
      */
     public void setVerbose(boolean val) {
         _verbose = val;
@@ -126,21 +129,28 @@ public class Pass2 {
 
     /**
      * Method run
-     * 
-     * @param args 
-     * @throws IOException 
+     *
+     * @param args
+     * @throws IOException
      */
     public void run(String[] args) throws IOException {
 
-        // System.out.println("outdir="+getOutDir());
         File outDir = new File(getOutDir());
+
+        if (log.isDebugEnabled())
+        {
+            log.debug("run(String[]) - File outDir=" + outDir);
+        }
 
         walkDirectories(null, outDir);
         Collections.sort(packageNames, stringComparator());
 
         // Create package files
         // I.e. generate HTML list of classes in each package
-        // System.out.println("\nWriting package files...");
+        if (log.isDebugEnabled())
+        {
+            log.debug("run(String[]) - Writing package files");
+        }
         createPackageFiles();
         createPackageSummaryFiles();
 
@@ -155,10 +165,10 @@ public class Pass2 {
 
     /**
      * Method walkDirectories
-     * 
-     * @param packageName 
-     * @param outDir      
-     * @throws IOException 
+     *
+     * @param packageName
+     * @param outDir
+     * @throws IOException
      */
     private void walkDirectories(String packageName, File outDir)
             throws IOException {
@@ -194,15 +204,18 @@ public class Pass2 {
 
     /**
      * Method processRefFile
-     * 
-     * @param packageName 
-     * @param refFile     
-     * @throws IOException 
+     *
+     * @param packageName
+     * @param refFile
+     * @throws IOException
      */
     private void processRefFile(String packageName, File refFile)
             throws IOException {
+        if (log.isDebugEnabled())
+        {
+            log.debug("processRefFile(String, File) - File refFile=" + refFile);
+        }
 
-        // System.out.println("process "+refFile.getAbsolutePath());
         HashMap classes = (HashMap) packageClasses.get(packageName);
 
         if (classes == null) {
@@ -291,16 +304,20 @@ public class Pass2 {
             closeOutputFile(bw, prevReferentFileClass);
         }
 
-        // System.out.println("class list for "+packageName+" is "+classes);
+        if (log.isDebugEnabled())
+        {
+            log.debug("processRefFile(String, File) - class list for "+packageName+" is "+classes);
+        }
+
         packageClasses.put(packageName, classes);
     }
 
     /**
      * Method closeOutputFile
-     * 
-     * @param bw                
-     * @param referentFileClass 
-     * @throws IOException 
+     *
+     * @param bw
+     * @param referentFileClass
+     * @throws IOException
      */
     private void closeOutputFile(BufferedWriter bw, String referentFileClass)
             throws IOException {
@@ -309,21 +326,27 @@ public class Pass2 {
         bw.flush();
         bw.close();
 
-        // System.out.println("close output file");
+        if (log.isDebugEnabled())
+        {
+            log.debug("closeOutputFile(BufferedWriter, String) - close output file");
+        }
     }
 
     /**
      * Method openOutputFile
-     * 
-     * @param packageName 
-     * @param ref         
-     * @return 
-     * @throws IOException 
+     *
+     * @param packageName
+     * @param ref
+     * @return
+     * @throws IOException
      */
     private BufferedWriter openOutputFile(String packageName, Reference ref)
             throws IOException {
+        if (log.isDebugEnabled())
+        {
+            log.debug("openOutputFile(String, Reference) - Reference ref=" + ref.referentFileClass);
+        }
 
-        // System.out.println("open output file for referent class "+ref.referentFileClass);
         File rootDir = new File(getOutDir());
         String relPath = (packageName == null)
                 ? ref.referentFileClass
@@ -347,26 +370,29 @@ public class Pass2 {
 
     /**
      * Method closeSection
-     * 
-     * @param bw          
-     * @param referentTag 
-     * @throws IOException 
+     *
+     * @param bw
+     * @param referentTag
+     * @throws IOException
      */
     private void closeSection(BufferedWriter bw, String referentTag)
             throws IOException {
 
         bw.write("</p>");
 
-        // System.out.println("close section for referent "+referentTag);
+        if (log.isDebugEnabled())
+        {
+            log.debug("closeSection(BufferedWriter, String) - close section for referent " + referentTag);
+        }
     }
 
     /**
      * Method openSection
-     * 
-     * @param bw              
-     * @param referentPackage 
-     * @param ref             
-     * @throws IOException 
+     *
+     * @param bw
+     * @param referentPackage
+     * @param ref
+     * @throws IOException
      */
     private void openSection(
             BufferedWriter bw, String referentPackage, Reference ref)
@@ -407,16 +433,19 @@ public class Pass2 {
             bw.write("<p>open section " + ref.referentType + "</p>");
         }
 
-        // System.out.println("open section for referent "+ref.referentTag);
+        if (log.isDebugEnabled())
+        {
+            log.debug("openSection(BufferedWriter, String, Reference) - open section for referent=" + ref.referentTag);
+        }
     }
 
     /**
      * Method writeLink
-     * 
-     * @param bw              
-     * @param referentPackage 
-     * @param ref             
-     * @throws IOException 
+     *
+     * @param bw
+     * @param referentPackage
+     * @param ref
+     * @throws IOException
      */
     private void writeLink(
             BufferedWriter bw, String referentPackage, Reference ref)
@@ -461,10 +490,10 @@ public class Pass2 {
 
     /**
      * Return path to referring X_java.html file, relative to referent directory.
-     * 
-     * @param referentPackage 
-     * @param ref             
-     * @return 
+     *
+     * @param referentPackage
+     * @param ref
+     * @return
      */
     private String sourceName(String referentPackage, Reference ref) {
 
@@ -479,9 +508,9 @@ public class Pass2 {
 
     /**
      * Method getBackupPath
-     * 
-     * @param packageName 
-     * @return 
+     *
+     * @param packageName
+     * @return
      */
     private String getBackupPath(String packageName) {
 
@@ -490,7 +519,10 @@ public class Pass2 {
         int dirs = 0;
         String newPath;
 
-        // System.out.println("gBP Package Name for BackupPath: "+ packageName);
+        if (log.isDebugEnabled())
+        {
+            log.debug("getBackupPath(String) - String packageName=" + packageName);
+        }
         dirs = st.countTokens();
 
         for (int j = 0; j < dirs; j++) {
@@ -499,7 +531,11 @@ public class Pass2 {
 
         newPath = backup;
 
-        // System.out.println("gBP Package Name for newpath: "+newPath);
+        if (log.isDebugEnabled())
+        {
+            log.debug("getBackupPath(String) - String newPath=" + newPath);
+        }
+
         return (newPath);
     }
 
@@ -510,7 +546,6 @@ public class Pass2 {
 
         String packageName;
         String fileName;
-        Vector tags;
         File file;
         PrintWriter pw;
 
@@ -523,7 +558,11 @@ public class Pass2 {
 
             List classes = orderedPackageClasses(packageName);
 
-            // System.out.println(packageName+" has "+classes.size()+" classes");
+            if (log.isDebugEnabled())
+            {
+                log.debug("createPackageFiles() - " + packageName+" has "+classes.size()+" classes");
+            }
+
             totalClassCount += classes.size();
             fileName = getOutDir() + File.separatorChar
                     + packageName.replace('.', File.separatorChar)
@@ -554,10 +593,9 @@ public class Pass2 {
                 while (iter.hasNext()) {
                     ClassFile cf = (ClassFile) iter.next();
                     String className = cf.className;
-                    String fileClassName = (String) cf.fileName;
-                    int j = className.indexOf('.');
+                    String fileClassName = cf.fileName;
+                    //int j = className.indexOf('.');
                     String anchor;
-                    String filePrefix;
 
                     // if (j == -1)
                     // {
@@ -579,19 +617,18 @@ public class Pass2 {
                 pw.println("</body></html>");
                 pw.close();
             } catch (Exception ex) {
-                System.err.println("Error writing file:" + fileName);
-                ex.printStackTrace();
+                log.error( "Error writing file:" + fileName, ex );
             }
         }
 
-        System.out.println(totalClassCount + " classes total");
+        println(totalClassCount + " classes total");
     }
 
     /**
      * Return alphabetized list of all classes in a package, including inner classes.
-     * 
-     * @param packageName 
-     * @return 
+     *
+     * @param packageName
+     * @return
      */
     private List orderedPackageClasses(String packageName) {
 
@@ -617,8 +654,8 @@ public class Pass2 {
 
     /**
      * Method orderedAllClasses
-     * 
-     * @return 
+     *
+     * @return
      */
     private List orderedAllClasses() {
 
@@ -656,8 +693,8 @@ public class Pass2 {
 
     /**
      * Method stringComparator
-     * 
-     * @return 
+     *
+     * @return
      */
     private Comparator stringComparator() {
 
@@ -675,8 +712,8 @@ public class Pass2 {
 
     /**
      * Method classFileComparator
-     * 
-     * @return 
+     *
+     * @return
      */
     private Comparator classFileComparator() {
 
@@ -726,7 +763,7 @@ public class Pass2 {
             pw.println("</FRAMESET>");
             pw.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Exception: " + e.getMessage(), e );
         }
     }
 
@@ -766,7 +803,7 @@ public class Pass2 {
             pw.println("</body></html>");
             pw.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Exception: " + e.getMessage(), e );
         }
     }
 
@@ -793,7 +830,7 @@ public class Pass2 {
             while (iter.hasNext()) {
                 ClassFile cf = (ClassFile) iter.next();
                 String className = cf.className;
-                String fileClassName = (String) cf.fileName;
+                String fileClassName = cf.fileName;
                 String anchor = className;
                 String tag =
                         "<p class=\"classListItem\"><a href=\"" + fileClassName
@@ -806,7 +843,7 @@ public class Pass2 {
             pw.println("</body></html>");
             pw.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Exception: " + e.getMessage(), e );
         }
     }
 
@@ -817,7 +854,6 @@ public class Pass2 {
 
         String packageName;
         String fileName;
-        Vector tags;
         File file;
         PrintWriter pw;
 
@@ -830,7 +866,11 @@ public class Pass2 {
 
             List classes = orderedPackageClasses(packageName);
 
-            // System.out.println(packageName+" has "+classes.size()+" classes");
+            if (log.isDebugEnabled())
+            {
+                log.debug("createPackageSummaryFiles() - " + packageName+" has "+classes.size()+" classes" );
+            }
+
             totalClassCount += classes.size();
             fileName = getOutDir() + File.separatorChar
                     + packageName.replace('.', File.separatorChar)
@@ -861,16 +901,14 @@ public class Pass2 {
                 pw.println("</tr>");
                 pw.println("</thead>");
                 pw.println("<tbody>");
-                
+
                 Iterator iter = classes.iterator();
 
                 while (iter.hasNext()) {
                     ClassFile cf = (ClassFile) iter.next();
                     String className = cf.className;
-                    String fileClassName = (String) cf.fileName;
-                    int j = className.indexOf('.');
+                    String fileClassName = cf.fileName;
                     String anchor;
-                    String filePrefix;
 
                     anchor = className;
                     pw.println("<tr>");
@@ -884,19 +922,18 @@ public class Pass2 {
                 }
                 pw.println("</tbody>");
                 pw.println("</table>");
-                
+
                 createPackageSummaryFilesExtras(pw, getBackupPath(packageName), "package-summary.html");
                 pw.println("          <hr></hr>\n" +
                         "          Copyright &copy; 2001-2003 Apache Software Foundation. All Rights Reserved.");
                 pw.println("</body></html>");
                 pw.close();
             } catch (Exception ex) {
-                System.err.println("Error writing file:" + fileName);
-                ex.printStackTrace();
+                log.error( "Error writing file:" + fileName, ex);
             }
         }
     }
-    
+
     private void createPackageSummaryFilesExtras(PrintWriter pw, String root, String current) {
         pw.println("<div class=\"overview\">");
         pw.println("<ul>");
@@ -915,8 +952,8 @@ public class Pass2 {
         pw.println("</ul>");
         pw.println("</div>");
     }
-    
-    
+
+
     /**
      * Method createOverviewSummaryFrame
      */
@@ -967,7 +1004,7 @@ public class Pass2 {
             pw.println("</body></html>");
             pw.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error( "Error writing file:" + fileName, e);
         }
     }
 
@@ -995,7 +1032,7 @@ public class Pass2 {
      */
     public void initializeDefaults() {
 
-        String outdir = (String) System.getProperty("outdir");
+        String outdir = System.getProperty("outdir");
 
         if (outdir == null) {
             outdir = DEFAULT_DIR;
@@ -1003,7 +1040,7 @@ public class Pass2 {
 
         setOutDir(outdir);
 
-        String title = (String) System.getProperty("title");
+        String title = System.getProperty("title");
 
         if (title == null) {
             title = "Pass2: " + outdir;
@@ -1012,7 +1049,7 @@ public class Pass2 {
         setTitle(title);
 
         boolean verbose = false;
-        String verboseStr = (String) System.getProperty("verbose");
+        String verboseStr = System.getProperty("verbose");
 
         if (verboseStr != null) {
             verboseStr = verboseStr.trim();
@@ -1030,8 +1067,8 @@ public class Pass2 {
 
     /**
      * Method createDirs
-     * 
-     * @param f 
+     *
+     * @param f
      */
     private void createDirs(File f) {
 
@@ -1043,11 +1080,16 @@ public class Pass2 {
         }
     }
 
+    private void println(String description) {
+        System.out.print("\n");
+        System.out.println(description);
+    }
+
     /**
      * Method main
-     * 
-     * @param args 
-     * @throws Exception 
+     *
+     * @param args
+     * @throws Exception
      */
     public void main(String args[]) throws Exception {
 
@@ -1080,8 +1122,8 @@ class Reference {
 
     /**
      * Constructor Reference
-     * 
-     * @param line 
+     *
+     * @param line
      */
     Reference(String line) {
 
@@ -1128,8 +1170,6 @@ class Reference {
 
 /**
  * Class ClassFile
- * 
- * @version %I%, %G%
  */
 class ClassFile {
 
@@ -1141,9 +1181,9 @@ class ClassFile {
 
     /**
      * Constructor ClassFile
-     * 
-     * @param className 
-     * @param fileName  
+     *
+     * @param className
+     * @param fileName
      */
     public ClassFile(String className, String fileName) {
         this.className = className;

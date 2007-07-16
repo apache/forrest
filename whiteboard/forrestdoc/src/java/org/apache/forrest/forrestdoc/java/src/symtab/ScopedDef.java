@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
 
+import org.apache.log4j.Logger;
+
 import org.apache.forrest.forrestdoc.java.src.xref.JavaToken;
 
 import java.util.Hashtable;
@@ -23,11 +25,13 @@ import java.util.Hashtable;
 /**
  * An abstract class representing a symbol that provides a scope that
  * contains other symbols.
+ *
+ * @version $Id: $
  */
 public abstract class ScopedDef extends Definition {
 
-    /** Field debug */
-    public static final boolean debug = false;
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( ScopedDef.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -65,10 +69,10 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Constructor to create the base part of a scoped definition
-     * 
-     * @param name        
-     * @param occ         
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param parentScope
      */
     ScopedDef(String name, // the scoped name
               Occurrence occ, // where it's defined
@@ -82,8 +86,8 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Method getSymbols
-     * 
-     * @return 
+     *
+     * @return
      */
     public Hashtable getSymbols() {
         return elements;
@@ -91,8 +95,8 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Add a symbol to our scope
-     * 
-     * @param def 
+     *
+     * @param def
      */
     void add(Definition def) {
 
@@ -133,14 +137,17 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Add a token to the list of unresolved references
-     * 
-     * @param t 
+     *
+     * @param t
      */
     void addUnresolved(JavaToken t) {
 
         // be lazy in our creation of the reference vector
         // (many definitions might not contain refs to other symbols)
-        // System.out.println("Adding unresolved reference to:"+getQualifiedName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("addUnresolved(JavaToken) - Adding unresolved reference to:"+getQualifiedName());
+        }
         if (unresolvedStuff == null) {
             unresolvedStuff = new JavaVector();
         }
@@ -150,8 +157,8 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Return whether or not this scope actually contains any elements
-     * 
-     * @return 
+     *
+     * @return
      */
     public JavaHashtable getElements() {
         return elements;
@@ -159,8 +166,8 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Return whether or not this scope actually contains any elements
-     * 
-     * @return 
+     *
+     * @return
      */
     boolean hasElements() {
         return !elements.isEmpty();
@@ -170,22 +177,15 @@ public abstract class ScopedDef extends Definition {
      * Return if this is a base or default scope.  This is used when printing
      * information to the report so we won't prefix elements in these
      * scopes.
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isDefaultOrBaseScope() {
         return iAmDefaultOrBaseScope;
     }
 
     /**
-     * Lookup a method in the scope
-     * This is usually just a hashtable lookup, but if the element returned
-     * is a MultiDef, we need to ask it to find the best match
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#lookup(java.lang.String, int, java.lang.Class)
      */
     Definition lookup(String name, int numParams, Class type) {
 
@@ -214,8 +214,8 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Create tag info about elements
-     * 
-     * @param tagList 
+     *
+     * @param tagList
      */
     void tagElements(HTMLTagContainer tagList) {
 
@@ -228,16 +228,15 @@ public abstract class ScopedDef extends Definition {
     static private int resolveLevel = 0;
 
     /**
-     * Resolve referenced names
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#resolveTypes(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveTypes(SymbolTable symbolTable) {
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveTypes(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+            log.debug("resolveTypes(SymbolTable) - resolving types for "+this.getQualifiedName());
+        }
 
-        // for (int i=0; i<resolveLevel; i++) {
-        // System.out.print("\t");
-        // }
-        // System.out.println("resolving types for "+this.getQualifiedName());
         resolveLevel++;
 
         symbolTable.pushScope(this);           // push the current scope
@@ -249,19 +248,18 @@ public abstract class ScopedDef extends Definition {
     }
 
     /**
-     * Resolve referenced names
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#resolveRefs(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveRefs(SymbolTable symbolTable) {
 
-        // for (int i=0; i<resolveLevel; i++) {
-        // System.out.print("\t");
-        // }
-        // System.out.println("resolving refs for "+this.getQualifiedName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveRefs(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+            log.debug("resolveRefs(SymbolTable) - resolving types for "+this.getQualifiedName());
+        }
+
         resolveLevel++;
 
-        // System.out.println("!ScopedDef:resolveRefs:"+getQualifiedName());
         symbolTable.pushScope(this);    // push the current scope
 
         if (unresolvedStuff != null) {    // resolve refs to other syms
@@ -279,18 +277,15 @@ public abstract class ScopedDef extends Definition {
 
     /**
      * Indicate that this scope is a base scope or default package
-     * 
-     * @param val 
+     *
+     * @param val
      */
     void setDefaultOrBaseScope(boolean val) {
         iAmDefaultOrBaseScope = val;
     }
 
     /**
-     * Method getOccurrenceTag
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getOccurrenceTag(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public HTMLTag getOccurrenceTag(Occurrence occ) {
         return null;

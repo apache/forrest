@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.Externalizable;
 import java.io.FileWriter;
@@ -25,44 +27,42 @@ import java.util.Hashtable;
 
 /**
  * Class ClassDefProxy
- * 
- * @version %I%, %G%
+ *
+ * @version $Id: $
  */
 public class ClassDefProxy extends ClassDef implements Externalizable {
 
-    /** Field whereCreated */
-    private Throwable whereCreated = null;
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( ClassDefProxy.class );
 
     /**
      * Default constructor is public for deserialization.
      */
     public ClassDefProxy() {
-        whereCreated = new Throwable();
     }
 
     /**
      * Constructor ClassDefProxy
-     * 
-     * @param ref 
+     *
+     * @param ref
      */
     public ClassDefProxy(ClassDef ref) {
 
-        whereCreated = new Throwable();
-
         if (ref.getName().equals("RuntimeException")) {
-            new Exception("what's up with this: " + ref).printStackTrace();
+            log.error( "ClassDefProxy(ClassDef) - what's up with this: " + ref );
         }
 
-        // System.out.println("ref="+ref);
+        if (log.isDebugEnabled())
+        {
+            log.debug("ClassDefProxy(ClassDef) - ClassDef ref=" + ref);
+        }
         setName(ref.getName());
 
         this.packageName = ref.getPackageName();
     }
 
     /**
-     * Method getSuperClass
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#getSuperClass()
      */
     public ClassDef getSuperClass() {
 
@@ -72,9 +72,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method isClass
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#isClass()
      */
     public boolean isClass() {
 
@@ -84,9 +82,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method isInterface
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#isInterface()
      */
     public boolean isInterface() {
 
@@ -97,9 +93,9 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
 
     /**
      * Method getOccurenceTag
-     * 
-     * @param occ 
-     * @return 
+     *
+     * @param occ
+     * @return
      */
     public HTMLTag getOccurenceTag(Occurrence occ) {
 
@@ -109,9 +105,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getSourceName
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getSourceName()
      */
     public String getSourceName() {
 
@@ -121,9 +115,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getRefName
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getRefName()
      */
     public String getRefName() {
 
@@ -133,10 +125,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getRelativePath
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getRelativePath(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     String getRelativePath(Occurrence occ) {
 
@@ -146,9 +135,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getOccurrence
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getOccurrence()
      */
     public Occurrence getOccurrence() {
 
@@ -158,9 +145,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getParentScope
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getParentScope()
      */
     public ScopedDef getParentScope() {
 
@@ -170,9 +155,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getPackagePath
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getPackagePath()
      */
     public String getPackagePath() {
 
@@ -182,9 +165,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getReferences
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getReferences()
      */
     public JavaVector getReferences() {
 
@@ -194,34 +175,29 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method lookup
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#lookup(java.lang.String, int, java.lang.Class)
      */
     Definition lookup(String name, int numParams, Class type) {
 
         load();
 
-        // System.out.println("ClassDefProxy.lookup: "+getName()+" lookup name="+name+" numParams="+numParams+" type="+type);
+        if (log.isDebugEnabled())
+        {
+            log.debug("lookup(String, int, Class) - " + getName()+" lookup name="+name+" numParams="+numParams+" type="+type);
+        }
+
         return ref.lookup(name, numParams, type);
     }
 
     /**
-     * Method getSymbols
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#getSymbols()
      */
     public Hashtable getSymbols() {
         return null;
     }
 
     /**
-     * Method getElements
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#getElements()
      */
     public JavaHashtable getElements() {
 
@@ -231,9 +207,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method hasElements
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#hasElements()
      */
     boolean hasElements() {
 
@@ -243,9 +217,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method isDefaultOrBaseScope
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#isDefaultOrBaseScope()
      */
     public boolean isDefaultOrBaseScope() {
 
@@ -270,22 +242,21 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
      * Method closeImports
      */
     void closeImports() {
-        new Exception().printStackTrace();
+        if (log.isDebugEnabled())
+        {
+            log.debug("closeImports() - closed");
+        }
     }
 
     /**
-     * Method isTopLevel
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.HasImports#isTopLevel()
      */
     boolean isTopLevel() {
         return packageName != null;
     }
 
     /**
-     * Method setImports
-     * 
-     * @param imports 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.HasImports#setImports(org.apache.forrest.forrestdoc.java.src.symtab.JavaHashtable)
      */
     void setImports(JavaHashtable imports) {
         load();
@@ -293,9 +264,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method addImplementer
-     * 
-     * @param def 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#addImplementer(org.apache.forrest.forrestdoc.java.src.symtab.ClassDef)
      */
     void addImplementer(ClassDef def) {
 
@@ -304,9 +273,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method addSubclass
-     * 
-     * @param subclass 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#addSubclass(org.apache.forrest.forrestdoc.java.src.symtab.ClassDef)
      */
     void addSubclass(ClassDef subclass) {
 
@@ -315,35 +282,27 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method getImplementers
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#getImplementers()
      */
     public JavaVector getImplementers() {
         return null;
     }
 
     /**
-     * Method getSubClasses
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#getSubClasses()
      */
     JavaVector getSubClasses() {
         return null;
     }
 
     /**
-     * Method generateReferences
-     * 
-     * @param output 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#generateReferences(java.io.FileWriter)
      */
     public void generateReferences(FileWriter output) {
     }
 
     /**
-     * Method generateTags
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
         load();
@@ -351,9 +310,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Method addReference
-     * 
-     * @param occ 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#addReference(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public void addReference(Occurrence occ) {
         load();
@@ -361,10 +318,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * Visitor design pattern.  Allow visitor to visit this definition,
-     * then call accept method on its elements.
-     * 
-     * @param visitor 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#accept(org.apache.forrest.forrestdoc.java.src.symtab.Visitor)
      */
     public void accept(Visitor visitor) {
         load();
@@ -372,24 +326,21 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     }
 
     /**
-     * serialize
-     * 
-     * @param out 
-     * @throws IOException 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        // System.out.println("writeExternal "+getName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeExternal(ObjectOutput) - getName()=" + getName());
+        }
+
         out.writeObject(getName());
         out.writeObject(packageName);
     }
 
     /**
-     * deserialize
-     * 
-     * @param in 
-     * @throws IOException            
-     * @throws ClassNotFoundException 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {
@@ -409,8 +360,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
     private void load() {
 
         if (packageName == null) {
-            System.out.println("null packageName, name=" + getName());
-            System.exit(1);
+            log.error( "null packageName, name=" + getName());
         }
 
         if (ref == null) {
@@ -418,7 +368,10 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
 
             if (ref == null) {
 
-                // System.out.println("apparently not yet loaded: "+packageName+"."+getName());
+                if (log.isDebugEnabled())
+                {
+                    log.debug("load() - apparently not yet loaded: "+packageName+"."+getName());
+                }
                 PackageDef packageDef =
                         SymbolTable.getSymbolTable().lookupPackage(packageName);
 
@@ -427,8 +380,7 @@ public class ClassDefProxy extends ClassDef implements Externalizable {
         }
 
         if (ref == null) {
-            new Exception("cannot load ClassDef for "
-                    + getName()).printStackTrace();
+            log.error("cannot load ClassDef for " + getName());
         }
     }
 

@@ -32,6 +32,9 @@ import java.io.PrintWriter;
 /**
  * Runs the javasrc converter as a task inside
  * the well known build tool "ant" (see ant.apache.org).
+ *
+ * @see <a href="http://ant.apache.org">http://ant.apache.org</a>
+ * @version $Id: $
  */
 public class JavaSrcTask extends MatchingTask {
 
@@ -59,7 +62,7 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Returns the directory where the Java sources are stored.
-     * 
+     *
      * @return String directory name
      */
     public File getSrcDir() {
@@ -68,7 +71,7 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Sets the directory where the Java sources are stored.
-     * 
+     *
      * @param javaDir directory name
      */
     public void setSrcDir(File javaDir) {
@@ -77,7 +80,7 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Returns the directory where the HTML output is written.
-     * 
+     *
      * @return String directory name
      */
     public File getDestDir() {
@@ -86,7 +89,7 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Sets the directory where the HTML output is written.
-     * 
+     *
      * @param htmlDir directory name
      */
     public void setDestDir(File htmlDir) {
@@ -94,7 +97,7 @@ public class JavaSrcTask extends MatchingTask {
     }
 
     /**
-     * @throws BuildException 
+     * @throws BuildException
      * @see org.apache.tools.ant.Task#execute()
      */
     public void execute() throws BuildException {
@@ -161,8 +164,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method getRecurse
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean getRecurse() {
         return recurse;
@@ -170,8 +173,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method setRecurse
-     * 
-     * @param recurse 
+     *
+     * @param recurse
      */
     public void setRecurse(boolean recurse) {
         this.recurse = recurse;
@@ -179,8 +182,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method getTitle
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getTitle() {
         return title;
@@ -188,8 +191,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method setTitle
-     * 
-     * @param title 
+     *
+     * @param title
      */
     public void setTitle(String title) {
         this.title = title;
@@ -197,8 +200,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method getVerbose
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean getVerbose() {
         return verbose;
@@ -206,8 +209,8 @@ public class JavaSrcTask extends MatchingTask {
 
     /**
      * Method setVerbose
-     * 
-     * @param verbose 
+     *
+     * @param verbose
      */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -311,8 +314,8 @@ public class JavaSrcTask extends MatchingTask {
             "}";
     /**
      * Method printCSSFile
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private void printCSSFile() throws IOException {
 

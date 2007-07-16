@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,20 @@
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
 
+import org.apache.log4j.Logger;
+
 /**
  * An extended Stack class to provide simple lookup and type
  * resolution methods
+ *
+ * @version $Id: $
  */
 class JavaStack extends java.util.Stack {
+
+    private static final long serialVersionUID = -3104650488343130699L;
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( JavaStack.class );
 
     // ==========================================================================
     // ==  Methods
@@ -34,8 +43,8 @@ class JavaStack extends java.util.Stack {
 
     /**
      * Find the class definition in the stack closest to the top
-     * 
-     * @return 
+     *
+     * @return
      */
     Definition findTopmostClass() {
 
@@ -54,10 +63,10 @@ class JavaStack extends java.util.Stack {
     /**
      * a wrapper to lookup a non-method -- calls the real lookup
      * method passing -1 for num parameters (meaning no parameters)
-     * 
-     * @param name 
-     * @param type 
-     * @return 
+     *
+     * @param name
+     * @param type
+     * @return
      */
     Definition lookup(String name, Class type) {
         return lookup(name, -1, type);
@@ -65,11 +74,11 @@ class JavaStack extends java.util.Stack {
 
     /**
      * Lookup a method in the stack
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     *
+     * @param name
+     * @param numParams
+     * @param type
+     * @return
      */
     Definition lookup(String name, int numParams, Class type) {
 
@@ -79,17 +88,27 @@ class JavaStack extends java.util.Stack {
         for (int i = size() - 1; i > -1; i--) {
             Definition ld = (Definition) elementAt(i);
 
-            // System.out.println("JavaStack:looking in "+ld.getName());
+            if (log.isDebugEnabled())
+            {
+                log.debug("lookup(String, int, Class) - looking in "+ld.getName());
+            }
+
             Definition d = ld.lookup(name, numParams, type);
 
             if (d != null) {
 
-                // System.out.println("JavaStack.lookup returning "+d+" type="+type);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("lookup(String, int, Class) - returning "+d+" type="+type);
+                }
                 return d;
             }
         }
 
-        // System.out.println("JavaStack.lookup returning null");
+        if (log.isDebugEnabled())
+        {
+            log.debug("lookup(String, int, Class) - returning null");
+        }
         return null;
     }
 }

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +24,12 @@ import java.util.Vector;
  * Because methods can be overloaded and member data can have the same name
  * as a method, we provide this dummy definition to hold a list of all
  * definitions in a scope with the same name.
+ *
+ * @version $Id: $
  */
 public class MultiDef extends Definition {
+
+    private static final long serialVersionUID = -4453495874767512434L;
 
     // ==========================================================================
     // ==  Class Variables
@@ -44,9 +48,9 @@ public class MultiDef extends Definition {
      * it will be replacing.
      * This is just a convenience form of the real constructor
      * that takes a Definition as the base for the new MultiDef
-     * 
-     * @param name   
-     * @param oldDef 
+     *
+     * @param name
+     * @param oldDef
      */
     MultiDef(String name, // the name of the definition
              Definition oldDef) {    // a standing def with its name
@@ -55,10 +59,10 @@ public class MultiDef extends Definition {
 
     /**
      * Constructor to create a new multidef object
-     * 
-     * @param name        
-     * @param occ         
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param parentScope
      */
     MultiDef(String name, // the name of the definition
              Occurrence occ, // where it was defined
@@ -72,24 +76,15 @@ public class MultiDef extends Definition {
 
     /**
      * Add a definition to the list of symbols with the same name
-     * 
-     * @param def 
+     *
+     * @param def
      */
     void addDef(Definition def) {
         defs.addElement(def);
     }
 
     /**
-     * Lookup a symbol in the list of symbols
-     * This is a rather lame approximation that just returns the first match
-     * based on number of parameters.  A real routine to perform this would
-     * use the best-fit parameter type matching algorithm described
-     * in the Java Language Specification
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#lookup(java.lang.String, int, java.lang.Class)
      */
     Definition lookup(String name, // the name to locate
                       int numParams, // number of params
@@ -123,19 +118,14 @@ public class MultiDef extends Definition {
     }
 
     /**
-     * Write information about all the definitions contained within this to
-     * the tagList
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
         defs.generateTags(tagList);
     }
 
     /**
-     * Let definitions generate references
-     * 
-     * @param output 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateReferences(java.io.FileWriter)
      */
     public void generateReferences(FileWriter output) {
         defs.generateReferences(output);
@@ -143,17 +133,15 @@ public class MultiDef extends Definition {
 
     /**
      * Method getDefs
-     * 
-     * @return 
+     *
+     * @return
      */
     public Vector getDefs() {
         return defs;
     }
 
     /**
-     * Resolve references to other symbols
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#resolveTypes(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveTypes(SymbolTable symbolTable) {
 
@@ -164,9 +152,7 @@ public class MultiDef extends Definition {
     }
 
     /**
-     * Resolve references to other symbols
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#resolveRefs(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveRefs(SymbolTable symbolTable) {
 
@@ -180,10 +166,7 @@ public class MultiDef extends Definition {
     }
 
     /**
-     * Method getOccurrenceTag
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getOccurrenceTag(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public HTMLTag getOccurrenceTag(Occurrence occ) {
         return null;

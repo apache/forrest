@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ import java.io.ObjectOutput;
 
 /**
  * An occurrence of an indentifier in a file
+ *
+ * @version $Id: $
  */
 public class Occurrence implements java.io.Externalizable {
 
@@ -57,8 +59,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getLine
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getLine() {
         return line;
@@ -66,8 +68,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getColumn
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getColumn() {
         return column;
@@ -75,8 +77,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getFile
-     * 
-     * @return 
+     *
+     * @return
      */
     public File getFile() {
         return file;
@@ -84,8 +86,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getPackageName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPackageName() {
         return _packageName;
@@ -93,8 +95,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getClassName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getClassName() {
         return _className;
@@ -102,8 +104,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getMethodName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getMethodName() {
         return _methodName;
@@ -111,8 +113,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getDefinition
-     * 
-     * @return 
+     *
+     * @return
      */
     public Definition getDefinition() {
         return _myDefinition;
@@ -120,8 +122,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method setPackageName
-     * 
-     * @param packageName 
+     *
+     * @param packageName
      */
     public void setPackageName(String packageName) {
 
@@ -134,8 +136,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method setClassName
-     * 
-     * @param className 
+     *
+     * @param className
      */
     public void setClassName(String className) {
 
@@ -148,8 +150,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method setMethodName
-     * 
-     * @param methodName 
+     *
+     * @param methodName
      */
     public void setMethodName(String methodName) {
 
@@ -162,8 +164,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method setDefinition
-     * 
-     * @param def 
+     *
+     * @param def
      */
     public void setDefinition(Definition def) {
         _myDefinition = def;
@@ -171,8 +173,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getOccurrenceTag
-     * 
-     * @return 
+     *
+     * @return
      */
     public HTMLTag getOccurrenceTag() {
 
@@ -189,9 +191,9 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Constructor to define a new occurrence
-     * 
-     * @param file 
-     * @param line 
+     *
+     * @param file
+     * @param line
      */
     Occurrence(File file, int line) {
         this.file = file;
@@ -200,10 +202,10 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Constructor to define a new occurrence
-     * 
-     * @param file   
-     * @param line   
-     * @param column 
+     *
+     * @param file
+     * @param line
+     * @param column
      */
     Occurrence(File file, int line, int column) {
 
@@ -214,11 +216,11 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Constructor to define a new occurrence
-     * 
-     * @param file        
-     * @param line        
-     * @param column      
-     * @param packageName 
+     *
+     * @param file
+     * @param line
+     * @param column
+     * @param packageName
      */
     Occurrence(File file, int line, int column, String packageName) {
 
@@ -233,13 +235,13 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Constructor to define a new occurrence
-     * 
-     * @param file        
-     * @param line        
-     * @param column      
-     * @param packageName 
-     * @param className   
-     * @param methodName  
+     *
+     * @param file
+     * @param line
+     * @param column
+     * @param packageName
+     * @param className
+     * @param methodName
      */
     Occurrence(File file, int line, int column, String packageName,
                String className, String methodName) {
@@ -261,8 +263,8 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * Method getLinkReference
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getLinkReference() {
 
@@ -277,27 +279,22 @@ public class Occurrence implements java.io.Externalizable {
 
     /**
      * return a string representation of the occurrence
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getLocation() {
         return "[" + file + ":" + line + ":" + column + "]";
     }
 
     /**
-     * return a string representation of the occurrence
-     * 
-     * @return 
+     * @see java.lang.Object#toString()
      */
     public String toString() {
         return "Occurrence [" + file + "," + line + "," + column + "]";
     }
 
     /**
-     * serialize
-     * 
-     * @param out 
-     * @throws IOException 
+     * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
 
@@ -310,14 +307,8 @@ public class Occurrence implements java.io.Externalizable {
         out.writeObject(_myDefinition);
     }
 
-    /* deserialize */
-
     /**
-     * Method readExternal
-     * 
-     * @param in 
-     * @throws IOException            
-     * @throws ClassNotFoundException 
+     * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {

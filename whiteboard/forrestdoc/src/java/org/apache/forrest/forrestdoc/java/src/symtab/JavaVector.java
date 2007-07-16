@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import org.apache.forrest.forrestdoc.java.src.xref.JavaToken;
 
@@ -28,9 +30,14 @@ import java.util.Vector;
 /**
  * An extended Vector class to provide simple lookup and type resolution
  * methods
+ *
+ * @version $Id: $
  */
 public class JavaVector extends java.util.Vector
         implements java.io.Externalizable {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( JavaVector.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -55,8 +62,8 @@ public class JavaVector extends java.util.Vector
 
     /**
      * Add a new element to the vector (used for debugging)
-     * 
-     * @param o 
+     *
+     * @param o
      */
     public void addElement(Definition o) {
 
@@ -69,9 +76,9 @@ public class JavaVector extends java.util.Vector
 
     /**
      * get an element from the
-     * 
-     * @param name 
-     * @return 
+     *
+     * @param name
+     * @return
      */
     public Definition getElement(String name) {
 
@@ -90,8 +97,8 @@ public class JavaVector extends java.util.Vector
 
     /**
      * Write information about each element in the vector to the report,
-     * 
-     * @param tagList 
+     *
+     * @param tagList
      */
     void generateTags(HTMLTagContainer tagList) {
 
@@ -104,8 +111,8 @@ public class JavaVector extends java.util.Vector
 
     /**
      * Method generateReferences
-     * 
-     * @param output 
+     *
+     * @param output
      */
     void generateReferences(FileWriter output) {
 
@@ -124,12 +131,16 @@ public class JavaVector extends java.util.Vector
 
     /**
      * Resolve references that are stored as JavaTokens
-     * 
-     * @param symbolTable 
+     *
+     * @param symbolTable
      */
     public void resolveRefs(SymbolTable symbolTable) {
 
-        // System.out.println("JavaVector:resolveRefs");
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveRefs(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         if (!resolvingRefs) {
             resolvingRefs = true;
 
@@ -139,7 +150,11 @@ public class JavaVector extends java.util.Vector
             while (e.hasMoreElements()) {
                 JavaToken t = (JavaToken) e.nextElement();
 
-                // System.out.println("!resolve "+t.getText()+" file="+t.getFile().getAbsolutePath()+":"+t.getLine());
+                if (log.isDebugEnabled())
+                {
+                    log.debug("resolveRefs(SymbolTable) - resolve "+t.getText()+" file="+t.getFile().getAbsolutePath()+":"+t.getLine());
+                }
+
                 Definition d = symbolTable.lookup(t.getText(),
                         t.getParamCount(), null);
 
@@ -149,7 +164,10 @@ public class JavaVector extends java.util.Vector
 
                 if (d != null) {
 
-                    // System.out.println("Found reference:"+d.getQualifiedName());
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("resolveRefs(SymbolTable) - Found reference:"+d.getQualifiedName());
+                    }
                     d.addReference(new Occurrence(t.getFile(), t.getLine(),
                             t.getColumn(),
                             t.getPackageName(),
@@ -157,17 +175,21 @@ public class JavaVector extends java.util.Vector
                             t.getMethodName()));
                     d.resolveRefs(symbolTable);
                 }
-
-                // else
-                // System.out.println("Could not resolve "+t.getText());
+                else
+                {
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("resolveRefs(SymbolTable) - Could not resolve "+t.getText());
+                    }
+                }
             }
         }
     }
 
     /**
      * Resolve the types of dummy elements in the vector
-     * 
-     * @param symbolTable 
+     *
+     * @param symbolTable
      */
     public void resolveTypes(SymbolTable symbolTable) {
 
@@ -182,12 +204,18 @@ public class JavaVector extends java.util.Vector
                 if (d instanceof DummyClass) {
                     String pkg = ((DummyClass) d).getPackage();
 
-                    // System.out.println("JavaVector.resolveTypes: resolving pkg="+pkg+" name="+d.getName());
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("resolveTypes(SymbolTable) - resolving pkg="+pkg+" name="+d.getName());
+                    }
                     Definition newD = symbolTable.lookupDummy(d);
 
                     if (newD != null) {
 
-                        // System.out.println("JavaVector.resolveTypes: resolved pkg="+pkg+" name="+d.getName());
+                        if (log.isDebugEnabled())
+                        {
+                            log.debug("resolveTypes(SymbolTable) - resolved pkg="+pkg+" name="+d.getName());
+                        }
                         newD.addReference(d.getOccurrence());
                         removeElement(d);
                         addElement(newD);
@@ -200,10 +228,7 @@ public class JavaVector extends java.util.Vector
     }
 
     /**
-     * Method writeExternal
-     * 
-     * @param out 
-     * @throws IOException 
+     * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
 
@@ -227,11 +252,7 @@ public class JavaVector extends java.util.Vector
     }
 
     /**
-     * Method readExternal
-     * 
-     * @param in 
-     * @throws IOException            
-     * @throws ClassNotFoundException 
+     * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {
@@ -244,8 +265,8 @@ public class JavaVector extends java.util.Vector
     /**
      * Visitor design pattern.  Call accept method of each
      * element.
-     * 
-     * @param visitor 
+     *
+     * @param visitor
      */
     public void accept(Visitor visitor) {
 

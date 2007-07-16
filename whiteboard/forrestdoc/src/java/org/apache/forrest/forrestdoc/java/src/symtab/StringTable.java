@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,8 @@ import java.util.Hashtable;
  * Keeps track of all strings encountered in the file that represent
  * identifiers.  This way we only ever keep a single copy of a string
  * and all symbols refer to it.
+ *
+ * @version $Id: $
  */
 class StringTable {
 
@@ -42,9 +44,9 @@ class StringTable {
 
     /**
      * Get a name from the StringTable
-     * 
-     * @param name 
-     * @return 
+     *
+     * @param name
+     * @return
      */
     String getName(String name) {
 
@@ -64,9 +66,7 @@ class StringTable {
     }
 
     /**
-     * Write out that this is a string table...
-     * 
-     * @return 
+     * @see java.lang.Object#toString()
      */
     public String toString() {
         return "StringTable";

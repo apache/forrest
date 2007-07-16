@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src;
+
+import org.apache.log4j.Logger;
 
 import org.apache.forrest.forrestdoc.java.src.symtab.HTMLTag;
 import org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer;
@@ -40,10 +42,13 @@ import java.util.Vector;
 
 /**
  * Class Pass1
- * 
- * @version %I%, %G%
+ *
+ * @version $Id: $
  */
 public class Pass1 implements FileListener {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( Pass1.class );
 
     /** Field DEFAULT_DIR */
     public static final String DEFAULT_DIR = ".";
@@ -65,8 +70,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method getOutDir
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getOutDir() {
         return _outDir;
@@ -74,8 +79,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method setOutDir
-     * 
-     * @param d 
+     *
+     * @param d
      */
     public void setOutDir(String d) {
         _outDir = d;
@@ -83,8 +88,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method getTitle
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getTitle() {
         return _title;
@@ -92,8 +97,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method setTitle
-     * 
-     * @param t 
+     *
+     * @param t
      */
     public void setTitle(String t) {
         _title = t;
@@ -101,8 +106,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method getRecurse
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean getRecurse() {
         return _doRecurse;
@@ -110,8 +115,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method setRecurse
-     * 
-     * @param recurse 
+     *
+     * @param recurse
      */
     public void setRecurse(boolean recurse) {
         _doRecurse = recurse;
@@ -119,8 +124,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method setVerbose
-     * 
-     * @param verbose 
+     *
+     * @param verbose
      */
     public void setVerbose(boolean verbose) {
         _verbose = verbose;
@@ -128,17 +133,15 @@ public class Pass1 implements FileListener {
 
     /**
      * Method getVerbose
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean getVerbose() {
         return _verbose;
     }
 
     /**
-     * Method notify
-     * 
-     * @param path 
+     * @see org.apache.forrest.forrestdoc.java.src.xref.FileListener#notify(java.lang.String)
      */
     public void notify(String path) {
         printAdvancement(path);
@@ -147,8 +150,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method run
-     * 
-     * @param args 
+     *
+     * @param args
      */
     public void run(String[] args) {
 
@@ -160,9 +163,11 @@ public class Pass1 implements FileListener {
 
             // if we have at least one command-line argument
             if (args.length > 0) {
-                System.out.println("\noutDirPath is " + getOutDir());
+                print("outDirPath is " + getOutDir());
+
                 symbolTable.setOutDirPath(getOutDir());
-                System.out.print("\nParsing");
+
+                println("Parsing");
 
                 // for each directory/file specified on the command line
                 for (int i = 0; i < args.length; i++) {
@@ -170,21 +175,22 @@ public class Pass1 implements FileListener {
                             getRecurse(), this);    // parse it
                 }
 
-                System.out.print("\nResolving types");
+                println("Resolving types");
 
                 // resolve the types of all symbols in the symbol table
                 symbolTable.resolveTypes();
                 symbolTable.resolveRefs();
             } else {
-                System.out.println(USAGE);
+                println(USAGE);
+                return;
             }
 
             // Iterate through each package
             Hashtable packageTable = symbolTable.getPackages();
             Enumeration pEnum = packageTable.elements();
 
-            System.out.print("\nPersisting definitions");
-            
+            println("Persisting definitions");
+
             while (pEnum.hasMoreElements()) {
                 PackageDef pDef = (PackageDef) pEnum.nextElement();
 
@@ -229,12 +235,12 @@ public class Pass1 implements FileListener {
                 pDef.persistDefinitions(getOutDir());
             }
 
-            System.out.print("\nPersisting references");
+            println("Persisting references");
+
             symbolTable.persistRefs(getOutDir());
         } catch (Exception e) {
-            System.err.println("exception: " + e);
-            e.printStackTrace(System.err);                  // so we can get stack trace
-            System.exit(1);                                 // make this behavior an option?
+            log.error( "Exception: " + e.getMessage(), e );
+            //System.exit(1);                                 // make this behavior an option?
         }
     }
 
@@ -243,7 +249,7 @@ public class Pass1 implements FileListener {
      */
     public void initializeDefaults() {
 
-        String outdir = (String) System.getProperty("outdir");
+        String outdir = System.getProperty("outdir");
 
         if (outdir == null) {
             outdir = DEFAULT_DIR;
@@ -251,7 +257,7 @@ public class Pass1 implements FileListener {
 
         setOutDir(outdir);
 
-        String title = (String) System.getProperty("title");
+        String title = System.getProperty("title");
 
         if (title == null) {
             title = "Pass1: " + outdir;
@@ -260,7 +266,7 @@ public class Pass1 implements FileListener {
         setTitle(title);
 
         boolean doRecurse = true;
-        String recurseStr = (String) System.getProperty("recurse");
+        String recurseStr = System.getProperty("recurse");
 
         if (recurseStr != null) {
             recurseStr = recurseStr.trim();
@@ -276,7 +282,7 @@ public class Pass1 implements FileListener {
         setRecurse(doRecurse);
 
         boolean verbose = false;
-        String verboseStr = (String) System.getProperty("verbose");
+        String verboseStr = System.getProperty("verbose");
 
         if (verboseStr != null) {
             verboseStr = verboseStr.trim();
@@ -294,8 +300,8 @@ public class Pass1 implements FileListener {
 
     /**
      * Method createDirs
-     * 
-     * @param f 
+     *
+     * @param f
      */
     public void createDirs(File f) {
 
@@ -309,10 +315,10 @@ public class Pass1 implements FileListener {
 
     /**
      * Method getBackupPath
-     * 
-     * @param tagList 
-     * @param element 
-     * @return 
+     *
+     * @param tagList
+     * @param element
+     * @return
      */
     public String getBackupPath(Object[] tagList, int element) {
 
@@ -344,9 +350,9 @@ public class Pass1 implements FileListener {
     /**
      * Returns the path to the top level of the source hierarchy from the files
      * og\f a given class.
-     * 
+     *
      * @param packageName the package to get the backup path for
-     * @return 
+     * @return
      * @returns the path from the package to the top level, as a string
      */
     public static String getBackupPath(String packageName) {
@@ -356,7 +362,11 @@ public class Pass1 implements FileListener {
         int dirs = 0;
         String newPath = "";
 
-        // System.out.println("gBP Package Name for BackupPath: "+ packageName);
+        if (log.isDebugEnabled())
+        {
+            log.debug("getBackupPath(String) - Package Name for BackupPath=" + packageName);
+        }
+
         dirs = st.countTokens();
 
         for (int j = 0; j < dirs; j++) {
@@ -365,17 +375,21 @@ public class Pass1 implements FileListener {
 
         newPath = backup;
 
-        // System.out.println("gBP Package Name for newpath: "+newPath);
+        if (log.isDebugEnabled())
+        {
+            log.debug("getBackupPath(String) - Package Name for newPath=" + newPath);
+        }
+
         return (newPath);
     }
 
     /**
      * Method createClassFile
-     * 
-     * @param tagList 
-     * @param element 
-     * @return 
-     * @throws IOException 
+     *
+     * @param tagList
+     * @param element
+     * @return
+     * @throws IOException
      */
     public HTMLOutputWriter createClassFile(Object[] tagList, int element)
             throws IOException {
@@ -404,15 +418,15 @@ public class Pass1 implements FileListener {
 
         String fileName = t.getFile().toString();
 
-        if (debug) {
-            System.out.println("Package name=" + t.getPackageName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("createClassFile(Object[], int) - Package name=" + t.getPackageName());
         }
 
         String packagePath = packageName.replace('.', File.separatorChar);
-        String htmlPackagePath = packageName.replace('.', '/');
+        //String htmlPackagePath = packageName.replace('.', '/');
         String pathName = getOutDir() + File.separatorChar + packagePath;
 
-        // System.out.println("fileName="+fileName);
         int position = fileName.lastIndexOf(File.separatorChar);
 
         if (position == -1) {
@@ -420,8 +434,8 @@ public class Pass1 implements FileListener {
         }
 
         String baseName = fileName.substring(position, fileName.length());
-        String className = baseName.substring(
-                0, baseName.lastIndexOf('.')).replace(File.separatorChar, '.');
+        //String className = baseName.substring(
+        //        0, baseName.lastIndexOf('.')).replace(File.separatorChar, '.');
 
         baseName = baseName.replace('.', '_');
         baseName = baseName + ".html";
@@ -451,10 +465,10 @@ public class Pass1 implements FileListener {
 
     /**
      * Method finishFile
-     * 
-     * @param input  
-     * @param output 
-     * @throws IOException 
+     *
+     * @param input
+     * @param output
+     * @throws IOException
      */
     public void finishFile(LineNumberReader input, HTMLOutputWriter output)
             throws IOException {
@@ -473,26 +487,28 @@ public class Pass1 implements FileListener {
 
     /**
      * Method writeUntilNextTag
-     * 
-     * @param t      
-     * @param input  
-     * @param output 
-     * @throws IOException 
+     *
+     * @param t
+     * @param input
+     * @param output
+     * @throws IOException
      */
     public void writeUntilNextTag(
             HTMLTag t, LineNumberReader input, HTMLOutputWriter output)
             throws IOException {
 
-        if (debug) {
-            System.out.print("\nLooking for next tag line:|");
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeUntilNextTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - Looking for next tag line:|");
         }
 
         while ((_currentChar != -1)
                 && (input.getLineNumber() + 1) != t.getLine()) {
             output.writeHTML(_currentChar);
 
-            if (debug) {
-                System.out.write(_currentChar);
+            if (log.isDebugEnabled())
+            {
+                log.debug("writeUntilNextTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - _currentChar" + _currentChar);
             }
 
             _currentChar = input.read();
@@ -501,24 +517,26 @@ public class Pass1 implements FileListener {
         // Write out last carriage return
         output.writeHTML(_currentChar);
 
-        if (debug) {
-            System.out.write(_currentChar);
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeUntilNextTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - _currentChar" + _currentChar);
         }
 
         _currentChar = input.read();
 
-        if (debug) {
-            System.out.println("|");
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeUntilNextTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - |");
         }
     }
 
     /**
      * Method writeComment
-     * 
-     * @param t      
-     * @param input  
-     * @param output 
-     * @throws IOException 
+     *
+     * @param t
+     * @param input
+     * @param output
+     * @throws IOException
      */
     public void writeComment(
             HTMLTag t, LineNumberReader input, HTMLOutputWriter output)
@@ -526,7 +544,6 @@ public class Pass1 implements FileListener {
 
         int length = t.getLength();
         int i = 0;
-        StringBuffer sb = new StringBuffer(length);
 
         output.write("<span class=\"comment\">");
 
@@ -556,20 +573,21 @@ public class Pass1 implements FileListener {
 
     /**
      * Method writeHTMLTag
-     * 
-     * @param t      
-     * @param input  
-     * @param output 
-     * @throws IOException 
+     *
+     * @param t
+     * @param input
+     * @param output
+     * @throws IOException
      */
     public void writeHTMLTag(
             HTMLTag t, LineNumberReader input, HTMLOutputWriter output)
             throws IOException {
 
         // Write out line from current column to tag start column
-        if (debug) {
-            System.out.println("\nCurrent column=" + _currentColumn);
-            System.out.print("\nWriting up to tag start:|");
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - Current column=" + _currentColumn);
+            log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - Writing up to tag start:|");
         }
 
         while (_currentColumn < t.getStartColumn()) {
@@ -579,8 +597,9 @@ public class Pass1 implements FileListener {
                 _currentColumn = 0;
             }
 
-            if (debug) {
-                System.out.write(_currentChar);
+            if (log.isDebugEnabled())
+            {
+                log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - _currentChar=" + _currentChar);
             }
 
             _currentChar = input.read();
@@ -588,8 +607,9 @@ public class Pass1 implements FileListener {
             _currentColumn++;
         }
 
-        if (debug) {
-            System.out.println("|");
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - |");
         }
 
         // Check for comment
@@ -604,8 +624,9 @@ public class Pass1 implements FileListener {
             // Write HTML tag
             output.write(t.getText());
 
-            if (debug) {
-                System.out.println("Wrote tag:" + t.getText());
+            if (log.isDebugEnabled())
+            {
+                log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - Wrote tag:" + t.getText());
             }
 
             // Read past original token
@@ -613,13 +634,15 @@ public class Pass1 implements FileListener {
 
             length = length - t.getNumBreaks();
 
-            if (debug) {
-                System.out.print("\nSkipping:\"");
+            if (log.isDebugEnabled())
+            {
+                log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - Skipping:\"");
             }
 
             for (int j = 0; j < length; j++) {
-                if (debug) {
-                    System.out.write(_currentChar);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("writeHTMLTag(HTMLTag, LineNumberReader, HTMLOutputWriter) - _currentChar=" + _currentChar);
                 }
 
                 if (_currentChar == '\n') {
@@ -643,7 +666,6 @@ public class Pass1 implements FileListener {
 
         int length = t.getLength();
         int i = 0;
-        StringBuffer sb = new StringBuffer(length);
 
         output.write("<span class=\"string\">");
 
@@ -673,7 +695,6 @@ public class Pass1 implements FileListener {
 
         int length = t.getLength();
         int i = 0;
-        StringBuffer sb = new StringBuffer(length);
 
         output.write("<strong>");
 
@@ -698,17 +719,15 @@ public class Pass1 implements FileListener {
     }
     /**
      * Method createClassFiles
-     * 
-     * @param tagList 
+     *
+     * @param tagList
      */
     public void createClassFiles(Vector tagList) {
 
         HTMLTag t;
         File javaFile;
-        File htmlFile = null;
         LineNumberReader input;
         HTMLOutputWriter output;
-        String line;
         Object[] sortedList;
 
         sortedList = JSCollections.sortVector(tagList);
@@ -718,7 +737,7 @@ public class Pass1 implements FileListener {
         javaFile = t.getFile();
 
         printAdvancement("Writing tags for file " + javaFile.toString());
- 
+
         // Create first file
         try {
             output = createClassFile(sortedList, 0);
@@ -728,22 +747,18 @@ public class Pass1 implements FileListener {
             _currentChar = input.read();
             _currentColumn = 1;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("1: Could not open file:"
-                    + javaFile.getAbsolutePath());
-            System.out.println("   or html file.");
-            System.exit(1);
+            log.error( "1: Could not open file:" + javaFile.getAbsolutePath() + " or html file.", e );
             return;
         }
 
         for (int i = 0; i < sortedList.length; i++) {
             t = (HTMLTag) sortedList[i];
 
-            if (debug) {
-                System.out.println("\nTag Text=\"" + t.getText() + "\"");
-                System.out.println("Length=" + t.getOrigLength());
-                System.out.println("Line,col=" + t.getLine() + ","
-                        + t.getStartColumn());
+            if (log.isDebugEnabled())
+            {
+                log.debug("createClassFiles(Vector) - nTag Text=\"" + t.getText() + "\"");
+                log.debug("createClassFiles(Vector) - Length=" + t.getOrigLength());
+                log.debug("createClassFiles(Vector) - Line,col=" + t.getLine() + "," + t.getStartColumn());
             }
 
             // Check for new java file encountered.
@@ -751,12 +766,10 @@ public class Pass1 implements FileListener {
             String currentFile = javaFile.toString();
             String newFile = t.getFile().toString();
 
-            if (debug) {
-                System.out.println("cur file=|" + currentFile + "|");
-            }
-
-            if (debug) {
-                System.out.println("new file=|" + newFile + "|");
+            if (log.isDebugEnabled())
+            {
+                log.debug("createClassFiles(Vector) - cur file=|" + currentFile + "|");
+                log.debug("createClassFiles(Vector) - new file=|" + newFile + "|");
             }
 
             if (!newFile.equals(currentFile)) {
@@ -774,12 +787,8 @@ public class Pass1 implements FileListener {
                     output = createClassFile(sortedList, i);
                     _currentColumn = 1;
                     _currentChar = input.read();
-
-                    // System.out.println("javaFile="+javaFile);
                 } catch (Exception e) {
-                    System.out.println("2: Error handling tag:" + t);
-                    System.out.println(e);
-                    e.printStackTrace();
+                    log.error( "2: Error handling tag:" + t, e );
 
                     continue;
                 }
@@ -793,9 +802,7 @@ public class Pass1 implements FileListener {
                 try {
                     writeUntilNextTag(t, input, output);
                 } catch (Exception e) {
-                    System.out.println("3: Error handling tag:" + t);
-                    System.out.println(e);
-                    e.printStackTrace();
+                    log.error( "3: Error handling tag:" + t, e );
 
                     continue;
                 }
@@ -804,9 +811,7 @@ public class Pass1 implements FileListener {
             try {
                 writeHTMLTag(t, input, output);
             } catch (Exception e) {
-                System.out.println("4: Error handling tag:" + t);
-                System.out.println(e);
-                e.printStackTrace();
+                log.error( "4: Error handling tag:" + t, e );
 
                 continue;
             }
@@ -815,9 +820,18 @@ public class Pass1 implements FileListener {
         // Finish writing out the file
         try {
             finishFile(input, output);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            log.error( "IOException: " + e.getMessage(), e );
         }
-        ;
+    }
+
+    private void print(String description) {
+        System.out.print(description);
+    }
+
+    private void println(String description) {
+        System.out.print("\n");
+        System.out.print(description);
     }
 
     private void printAdvancement(String description) {
@@ -827,10 +841,11 @@ public class Pass1 implements FileListener {
             System.out.print(".");
         }
     }
+
     /**
      * Method main
-     * 
-     * @param args 
+     *
+     * @param args
      */
     public static void main(String args[]) {
 
@@ -857,7 +872,4 @@ public class Pass1 implements FileListener {
 
     /** Field _verbose */
     private boolean _verbose;
-
-    /** Field debug */
-    private boolean debug = false;
 }

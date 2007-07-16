@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ import java.util.Vector;
 
 /**
  * HTMLTagContainer contains a mapping from files to lists of HTMLTags.
+ *
+ * @version $Id: $
  */
 public class HTMLTagContainer {
 
@@ -35,8 +37,8 @@ public class HTMLTagContainer {
 
     /**
      * Method getFileTable
-     * 
-     * @return 
+     *
+     * @return
      */
     public Hashtable getFileTable() {
         return _fileTable;
@@ -44,8 +46,8 @@ public class HTMLTagContainer {
 
     /**
      * Method elements
-     * 
-     * @return 
+     *
+     * @return
      */
     public Enumeration elements() {
         return (_fileTable.elements());
@@ -53,8 +55,8 @@ public class HTMLTagContainer {
 
     /**
      * Method addElement
-     * 
-     * @param t 
+     *
+     * @param t
      */
     public void addElement(HTMLTag t) {
 

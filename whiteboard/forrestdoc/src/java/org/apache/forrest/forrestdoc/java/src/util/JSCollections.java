@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,16 +22,16 @@ import java.util.Vector;
 
 /**
  * Class JSCollections
- * 
- * @version %I%, %G%
+ *
+ * @version $Id: $
  */
 public class JSCollections {
 
     /**
      * Method sortEnumeration
-     * 
-     * @param unsortedItems 
-     * @return 
+     *
+     * @param unsortedItems
+     * @return
      */
     public static Vector sortEnumeration(Enumeration unsortedItems) {
 
@@ -77,15 +77,11 @@ public class JSCollections {
 
     /**
      * Method sortVector
-     * 
-     * @param unsortedItems 
-     * @return 
+     *
+     * @param unsortedItems
+     * @return
      */
     public static Object[] sortVector(Vector unsortedItems) {
-
-        Object element;
-        Vector sortedItems;
-        JSComparable value;
 
         if (unsortedItems == null) {
             return (null);
@@ -105,22 +101,20 @@ public class JSCollections {
     }
 }
 
-// Comparator.java
-// delegate object to hand to QuickSort for callback compare
-
 /**
  * Class QSComparator
- * 
- * @version %I%, %G%
+ * delegate object to hand to QuickSort for callback compare
+ *
+ * @version $Id: $
  */
 class QSComparator implements Comparator {
 
     /**
      * Method compare
-     * 
-     * @param a 
-     * @param b 
-     * @return 
+     *
+     * @param a
+     * @param b
+     * @return
      */
     public int compare(Object a, Object b) {
         return (((JSComparable) a).compareTo((JSComparable) b));
@@ -128,17 +122,17 @@ class QSComparator implements Comparator {
 
     /**
      * Method equals
-     * 
-     * @param a 
-     * @param b 
-     * @return 
+     *
+     * @param a
+     * @param b
+     * @return
      */
     public boolean equals(Object a, Object b) {
 
         if (((JSComparable) a).compareTo((JSComparable) b) == 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

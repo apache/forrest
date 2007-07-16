@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ package org.apache.forrest.forrestdoc.java.src.symtab;
  * tool we don't actually perform any type conversions, but we thought it
  * would be a good example of how some constructs can be used in similar
  * ways, even though it might not appear like the proper model.
+ *
+ * @version $Id: $
  */
 class PrimitiveDef extends ClassDef {
 
@@ -32,10 +34,10 @@ class PrimitiveDef extends ClassDef {
 
     /**
      * Constructor to create a primitive type object
-     * 
-     * @param name        
-     * @param superClass  
-     * @param parentScope 
+     *
+     * @param name
+     * @param superClass
+     * @param parentScope
      */
     PrimitiveDef(String name, // the name of the primitive
                  ClassDef superClass, // the superclass (if applicable)
@@ -44,9 +46,7 @@ class PrimitiveDef extends ClassDef {
     }
 
     /**
-     * Write information about this primitive type to the tagList
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ClassDef#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
 

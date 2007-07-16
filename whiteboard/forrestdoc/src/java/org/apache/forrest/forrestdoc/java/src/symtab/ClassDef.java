@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
+
+import org.apache.log4j.Logger;
 
 import java.io.Externalizable;
 import java.io.FileWriter;
@@ -32,8 +34,13 @@ import java.util.Vector;
  * These are merged together because there are places where we just don't
  * know if something is an interface or class (because we are not looking
  * at the classes/interfaces that are imported.)
+ *
+ * @version $Id: $
  */
 public class ClassDef extends HasImports implements Externalizable {
+
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( ClassDef.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -95,22 +102,25 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Method findLoadedClass
-     * 
-     * @param packageName 
-     * @param name        
-     * @return 
+     *
+     * @param packageName
+     * @param name
+     * @return
      */
     protected static ClassDef findLoadedClass(String packageName, String name) {
 
         String qualifiedName = packageName + "." + name;
+        if (log.isDebugEnabled())
+        {
+            log.debug("findLoadedClass(String, String) - String qualifiedName=" + qualifiedName);
+            Enumeration keys = allClassDefs.keys();
+            StringBuffer sb = new StringBuffer("allClassDefs={");
+            while (keys.hasMoreElements()) {
+                sb.append( ((String)keys.nextElement())+", ");
+            }
+            log.debug("findLoadedClass(String, String) - " + sb.toString());
+        }
 
-        // System.out.println("looking for ClassDef "+qualifiedName);
-        // Enumeration keys = allClassDefs.keys();
-        // System.out.print("allClassDefs={");
-        // while (keys.hasMoreElements()) {
-        // System.out.print(((String)keys.nextElement())+", ");
-        // }
-        // System.out.println("}");
         return (ClassDef) allClassDefs.get(qualifiedName);
     }
 
@@ -122,12 +132,12 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Constructor to set up a class
-     * 
-     * @param name        
-     * @param occ         
-     * @param superClass  
-     * @param interfaces  
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param superClass
+     * @param interfaces
+     * @param parentScope
      */
     ClassDef(String name, // thhe name of the class
              Occurrence occ, // where it was defined
@@ -148,8 +158,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Adds a reference to the list of classes that implement this interface
-     * 
-     * @param def 
+     *
+     * @param def
      */
     void addImplementer(ClassDef def) {
 
@@ -161,8 +171,8 @@ public class ClassDef extends HasImports implements Externalizable {
     /**
      * Add a reference to a class that extends this class
      * (or an interface that extends this interface
-     * 
-     * @param subclass 
+     *
+     * @param subclass
      */
     void addSubclass(ClassDef subclass) {
         getSubClasses().addElement(subclass);
@@ -170,8 +180,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * get the list of classes that implement this interface
-     * 
-     * @return 
+     *
+     * @return
      */
     JavaVector getImplementers() {
 
@@ -185,8 +195,8 @@ public class ClassDef extends HasImports implements Externalizable {
     /**
      * Return the list of interfaces that this class implements
      * (or the interfaces that this interface extends)
-     * 
-     * @return 
+     *
+     * @return
      */
     public JavaVector getInterfaces() {
         return interfaces;
@@ -194,8 +204,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * return a list of all subclasses/subinterfaces of this
-     * 
-     * @return 
+     *
+     * @return
      */
     JavaVector getSubClasses() {
 
@@ -208,8 +218,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Return a reference to the superclass of this class
-     * 
-     * @return 
+     *
+     * @return
      */
     public ClassDef getSuperClass() {
         return superClass;
@@ -217,8 +227,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Does this represent a Java class?
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isClass() {
         return classOrInterface == CLASS;
@@ -226,8 +236,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Does this represent a Java interface?
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isInterface() {
         return classOrInterface == INTERFACE;
@@ -239,12 +249,7 @@ public class ClassDef extends HasImports implements Externalizable {
     private static Set goals = new HashSet();
 
     /**
-     * Lookup a method in the class or its superclasses
-     * 
-     * @param name      
-     * @param numParams 
-     * @param type      
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#lookup(java.lang.String, int, java.lang.Class)
      */
     Definition lookup(String name, int numParams, Class type) {
 
@@ -252,8 +257,7 @@ public class ClassDef extends HasImports implements Externalizable {
                 + type;
 
         if (goals.contains(goal)) {
-            System.out.println("detected infinite loop: " + goal);
-            new Exception().printStackTrace();
+            log.error( "detected infinite loop: " + goal, new Exception("infinite loop") );
 
             return null;
         }
@@ -269,7 +273,10 @@ public class ClassDef extends HasImports implements Externalizable {
                 setType(CLASS);
                 getSuperClass().setType(CLASS);
 
-                // System.out.println("ClassDef.lookup: "+getName()+" looking for name="+name+" numParams="+numParams+" type="+type);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("lookup(String, int, Class) - " + getName()+" looking for name="+name+" numParams="+numParams+" type="+type);
+                }
                 d = getSuperClass().lookup(name, numParams, type);
             }
         }
@@ -288,18 +295,16 @@ public class ClassDef extends HasImports implements Externalizable {
         return d;
     }
 
-    // 
-    // Generate all references to this class (and to things in this class).
-    // 
-
     /**
-     * Method generateReferences
-     * 
-     * @param output 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateReferences(java.io.FileWriter)
      */
     public void generateReferences(FileWriter output) {
+        if (log.isDebugEnabled())
+        {
+            log.debug("generateReferences(FileWriter) - FileWriter output=" + output);
+            log.debug("generateReferences(FileWriter) - Generating references for:"+getName());
+        }
 
-        // System.out.println("Generating references for:"+getName());
         try {
             output.write("<p class=\"classReflist\">");
 
@@ -369,16 +374,14 @@ public class ClassDef extends HasImports implements Externalizable {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error( "Exception: " + ex.getMessage(), ex );
 
             return;
         }
     }
 
     /**
-     * Write information about the class to the tagList
-     * 
-     * @param tagList 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#generateTags(org.apache.forrest.forrestdoc.java.src.symtab.HTMLTagContainer)
      */
     public void generateTags(HTMLTagContainer tagList) {
 
@@ -397,10 +400,7 @@ public class ClassDef extends HasImports implements Externalizable {
     }
 
     /**
-     * Method getOccurrenceTag
-     * 
-     * @param occ 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#getOccurrenceTag(org.apache.forrest.forrestdoc.java.src.symtab.Occurrence)
      */
     public HTMLTag getOccurrenceTag(Occurrence occ) {
 
@@ -412,20 +412,22 @@ public class ClassDef extends HasImports implements Externalizable {
             linkFileName = getRelativePath(occ) + getSourceName();
             linkString = "<a class=\"classRef\" href=" + linkFileName + "#"
                     + getClassScopeName() + ">" + getName() + "</a>";
-    
+
             t = new HTMLTag(occ, getName(), linkString);
         }
         return t;
     }
 
     /**
-     * resolve referenced symbols
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.HasImports#resolveTypes(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveTypes(SymbolTable symbolTable) {
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveTypes(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+            log.debug("resolveTypes(SymbolTable) - resolving: "+getQualifiedName());
+        }
 
-        // System.err.println("resolving: "+getQualifiedName());
         // resolve superclass laundry
         super.resolveTypes(symbolTable);
 
@@ -444,7 +446,7 @@ public class ClassDef extends HasImports implements Externalizable {
             // get its package name and look up the class/interace
             String pkg = ((DummyClass) newSuperClass).getPackage();
 
-            newSuperClass = (ClassDef) symbolTable.lookupDummy(newSuperClass);
+            newSuperClass = symbolTable.lookupDummy(newSuperClass);
 
             if (newSuperClass == null) {
                 newSuperClass = new DummyClass(
@@ -482,9 +484,7 @@ public class ClassDef extends HasImports implements Externalizable {
     }
 
     /**
-     * Method resolveRefs
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.HasImports#resolveRefs(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveRefs(SymbolTable symbolTable) {
 
@@ -502,8 +502,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Method generateClassList
-     * 
-     * @param tagList 
+     *
+     * @param tagList
      */
     public void generateClassList(Vector tagList) {
 
@@ -549,8 +549,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Set the list of interfaces that this class implements
-     * 
-     * @param interfaces 
+     *
+     * @param interfaces
      */
     void setInterfaces(JavaVector interfaces) {
         this.interfaces = interfaces;
@@ -558,8 +558,8 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * set the superclass of this class
-     * 
-     * @param superClass 
+     *
+     * @param superClass
      */
     void setSuperClass(ClassDef superClass) {
 
@@ -571,17 +571,15 @@ public class ClassDef extends HasImports implements Externalizable {
 
     /**
      * Specify if this is a class or interface once we know
-     * 
-     * @param type 
+     *
+     * @param type
      */
     void setType(int type) {
         classOrInterface = type;
     }
 
     /**
-     * Method getClassScopeName
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#getClassScopeName()
      */
     String getClassScopeName() {
 
@@ -598,14 +596,15 @@ public class ClassDef extends HasImports implements Externalizable {
     }
 
     /**
-     * Method writeExternal
-     * 
-     * @param out 
-     * @throws java.io.IOException 
+     * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws java.io.IOException {
 
-        // System.out.println("externalizing "+getName());
+        if (log.isDebugEnabled())
+        {
+            log.debug("writeExternal(ObjectOutput) - externalizing "+getName());
+        }
+
         out.writeObject(getName());
         out.writeObject(getPackageName());
         out.writeObject(getOccurrence());
@@ -617,7 +616,10 @@ public class ClassDef extends HasImports implements Externalizable {
         }
 
         if ((parentScopeOut == null) && (getPackageName() == null)) {
-            new Exception().printStackTrace();    // DEBUG
+            if (log.isDebugEnabled())
+            {
+                log.debug("writeExternal(ObjectOutput) - parentScopeOut and getPackageName() are null");
+            }
         }
 
         out.writeObject(parentScopeOut);
@@ -638,11 +640,7 @@ public class ClassDef extends HasImports implements Externalizable {
     }
 
     /**
-     * Method readExternal
-     * 
-     * @param in 
-     * @throws IOException            
-     * @throws ClassNotFoundException 
+     * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
      */
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {
@@ -670,17 +668,17 @@ public class ClassDef extends HasImports implements Externalizable {
         setupFileNames();
 
         String qualifiedName = packageName + "." + getName();
+        if (log.isDebugEnabled())
+        {
+            log.debug("readExternal(ObjectInput) - String qualifiedName=" + qualifiedName);
+        }
 
-        // System.out.println("ClassDef.readExternal: registering class "+qualifiedName);
         allClassDefs.put(qualifiedName, this);
         SymbolTable.endReadExternal();
     }
 
     /**
-     * Visitor design pattern.  Allow visitor to visit this definition,
-     * then call accept method on its elements.
-     * 
-     * @param visitor 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#accept(org.apache.forrest.forrestdoc.java.src.symtab.Visitor)
      */
     public void accept(Visitor visitor) {
         visitor.visit(this);
@@ -688,9 +686,7 @@ public class ClassDef extends HasImports implements Externalizable {
     }
 
     /**
-     * Method toString
-     * 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.Definition#toString()
      */
     public String toString() {
 

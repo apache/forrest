@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,10 +16,18 @@
  */
 package org.apache.forrest.forrestdoc.java.src.symtab;
 
+import org.apache.log4j.Logger;
+
 /**
  * An abstract class representing a symbol that can import packages.
+ *
+ * @version $Id: $
  */
 abstract class HasImports extends ScopedDef {
+    /**
+    * Logger for this class
+    */
+    private static final Logger log = Logger.getLogger( HasImports.class );
 
     // ==========================================================================
     // ==  Class Variables
@@ -40,10 +48,10 @@ abstract class HasImports extends ScopedDef {
 
     /**
      * Constructor to set up an object that can have imports
-     * 
-     * @param name        
-     * @param occ         
-     * @param parentScope 
+     *
+     * @param name
+     * @param occ
+     * @param parentScope
      */
     HasImports(String name, // name of the symbol
                Occurrence occ, // where it's defined
@@ -53,20 +61,24 @@ abstract class HasImports extends ScopedDef {
 
     /**
      * Tell the symbol table that we are done with our imports
-     * 
-     * @param symbolTable 
+     *
+     * @param symbolTable
      */
     void closeImports(SymbolTable symbolTable) {
 
-        // System.out.println("Closing imports");
+        if (log.isDebugEnabled())
+        {
+            log.debug("closeImports(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         symbolTable.closeImports();
     }
 
     /**
      * Ask if this is a toplevel class or not
      * This is true if the parentScope is a package
-     * 
-     * @return 
+     *
+     * @return
      */
     boolean isTopLevel() {
         return (getParentScope() instanceof PackageDef);
@@ -74,23 +86,29 @@ abstract class HasImports extends ScopedDef {
 
     /**
      * Tell the symbol table that we need to import some classes
-     * 
-     * @param symbolTable 
+     *
+     * @param symbolTable
      */
     void openImports(SymbolTable symbolTable) {
 
-        // System.out.println("Opening imports");
+        if (log.isDebugEnabled())
+        {
+            log.debug("openImports(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         symbolTable.openImports(imports);
     }
 
     /**
-     * Resolve any referenced symbols
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#resolveTypes(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveTypes(SymbolTable symbolTable) {
 
-        // System.out.println("Resolving imports");
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveTypes(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         // this was commented out.  Why?
         // if (imports != null)            // resolve imported classes/packages
         // imports.resolveTypes(symbolTable);
@@ -104,13 +122,15 @@ abstract class HasImports extends ScopedDef {
     }
 
     /**
-     * Resolve any referenced symbols
-     * 
-     * @param symbolTable 
+     * @see org.apache.forrest.forrestdoc.java.src.symtab.ScopedDef#resolveRefs(org.apache.forrest.forrestdoc.java.src.symtab.SymbolTable)
      */
     void resolveRefs(SymbolTable symbolTable) {
 
-        // System.out.println("Resolving imports");
+        if (log.isDebugEnabled())
+        {
+            log.debug("resolveRefs(SymbolTable) - SymbolTable symbolTable=" + symbolTable);
+        }
+
         // this was commented out.  Why?
         // if (imports != null)            // resolve imported classes/packages
         // imports.resolveRefs(symbolTable);
@@ -125,8 +145,8 @@ abstract class HasImports extends ScopedDef {
 
     /**
      * Set the list of imported classes/packages
-     * 
-     * @param imports 
+     *
+     * @param imports
      */
     void setImports(JavaHashtable imports) {
         this.imports = imports;

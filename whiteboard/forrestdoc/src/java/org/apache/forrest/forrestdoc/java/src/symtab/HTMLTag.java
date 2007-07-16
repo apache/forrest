@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ import org.apache.forrest.forrestdoc.java.src.util.JSComparable;
 
 /**
  * An occurrence of an HTML Tag in a file
+ *
+ * @version $Id: $
  */
 public class HTMLTag implements JSComparable {
 
@@ -41,9 +43,6 @@ public class HTMLTag implements JSComparable {
 
     /** The end column of the occurrence */
     private int endColumn;
-
-    /** Character num of start of token */
-    private int charNum = 0;
 
     /** The text for the tag */
     private String replaceText;
@@ -72,8 +71,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getLine
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getLine() {
         return line;
@@ -81,8 +80,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getStartColumn
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getStartColumn() {
         return startColumn;
@@ -90,8 +89,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getEndColumn
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getEndColumn() {
         return endColumn;
@@ -99,8 +98,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getFile
-     * 
-     * @return 
+     *
+     * @return
      */
     public File getFile() {
         return file;
@@ -108,8 +107,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getText
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getText() {
         return replaceText;
@@ -117,8 +116,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getPackageName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPackageName() {
         return packageName;
@@ -126,8 +125,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getLength
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getLength() {
         return length;
@@ -135,8 +134,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method isComment
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isComment() {
         return (type == TYPE_COMMENT);
@@ -144,26 +143,26 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method isLiteral
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isLiteral() {
         return (type == TYPE_LITERAL);
     }
-    
+
     /**
      * Method isKeyword
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isKeyword() {
         return (type == TYPE_KEYWORD);
     }
-    
+
     /**
      * Method getNumBreaks
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getNumBreaks() {
         return numBreaks;
@@ -171,8 +170,8 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Method getOrigLength
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getOrigLength() {
         return origLength;
@@ -180,15 +179,13 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Constructor to define a new tag
-     * 
-     * @param o           
-     * @param origText    
-     * @param replaceText 
+     *
+     * @param o
+     * @param origText
+     * @param replaceText
      */
     HTMLTag(Occurrence o, String origText, String replaceText) {
 
-        // if (origText.equals("SymbolTable"))
-        // new Exception("occ="+o+" origText="+origText+" replaceText="+replaceText).printStackTrace();
         this.file = o.getFile();
         this.line = o.getLine();
         this.startColumn = o.getColumn();
@@ -208,19 +205,17 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Constructor to define a new tag
-     * 
-     * @param f           
-     * @param l           
-     * @param c           
-     * @param packageName 
-     * @param origText    
-     * @param replaceText 
+     *
+     * @param f
+     * @param l
+     * @param c
+     * @param packageName
+     * @param origText
+     * @param replaceText
      */
     HTMLTag(File f, int l, int c, String packageName, String origText,
             String replaceText) {
 
-        // if (origText.equals("SymbolTable"))
-        // new Exception().printStackTrace();
         this.file = f;
         this.line = l;
         this.startColumn = c;
@@ -240,12 +235,12 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Constructor for comment.  Doesn't store text
-     * 
-     * @param f           
-     * @param l           
-     * @param c           
-     * @param packageName 
-     * @param length      
+     *
+     * @param f
+     * @param l
+     * @param c
+     * @param packageName
+     * @param length
      */
     HTMLTag(File f, int l, int c, String packageName, int length) {
 
@@ -259,12 +254,12 @@ public class HTMLTag implements JSComparable {
 
     /**
      * Constructor for comment.  Doesn't store text
-     * 
-     * @param f           
-     * @param l           
-     * @param c           
-     * @param packageName 
-     * @param length      
+     *
+     * @param f
+     * @param l
+     * @param c
+     * @param packageName
+     * @param length
      */
     HTMLTag(File f, int l, int c, String packageName, int length, int type) {
 
@@ -275,11 +270,9 @@ public class HTMLTag implements JSComparable {
         this.packageName = packageName;
         this.type = type;
     }
-    
+
     /**
-     * return a string representation of the occurrence
-     * 
-     * @return 
+     * @see java.lang.Object#toString()
      */
     public String toString() {
         return "HTMLTag [" + file + "," + line + "," + startColumn + "-"
@@ -287,10 +280,7 @@ public class HTMLTag implements JSComparable {
     }
 
     /**
-     * Method compareTo
-     * 
-     * @param o 
-     * @return 
+     * @see org.apache.forrest.forrestdoc.java.src.util.JSComparable#compareTo(java.lang.Object)
      */
     public int compareTo(Object o) {
 

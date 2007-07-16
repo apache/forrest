@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ import java.io.File;
  * the parser.  We've extended it to save information about the file from
  * which the token was created, and the number of parameters (telling if the
  * symbol looked like a method invocation or some other symbol reference.)
+ *
+ * @version $Id: $
  */
 public class JavaToken extends antlr.CommonToken {
 
@@ -55,18 +57,14 @@ public class JavaToken extends antlr.CommonToken {
     protected String methodName;
 
     /**
-     * Method getColumn
-     * 
-     * @return 
+     * @see antlr.CommonToken#getColumn()
      */
     public int getColumn() {
         return column;
     }
 
     /**
-     * Method setColumn
-     * 
-     * @param c 
+     * @see antlr.CommonToken#setColumn(int)
      */
     public void setColumn(int c) {
         column = c;
@@ -74,8 +72,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method getPackageName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getPackageName() {
         return packageName;
@@ -83,8 +81,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method setPackageName
-     * 
-     * @param name 
+     *
+     * @param name
      */
     public void setPackageName(String name) {
 
@@ -97,8 +95,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method getClassName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getClassName() {
         return className;
@@ -106,8 +104,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method setClassName
-     * 
-     * @param name 
+     *
+     * @param name
      */
     public void setClassName(String name) {
 
@@ -120,8 +118,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method getMethodName
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getMethodName() {
         return methodName;
@@ -129,8 +127,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Method setMethodName
-     * 
-     * @param name 
+     *
+     * @param name
      */
     public void setMethodName(String name) {
 
@@ -153,8 +151,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Constructor JavaToken
-     * 
-     * @param t 
+     *
+     * @param t
      */
     public JavaToken(JavaToken t) {
 
@@ -176,8 +174,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * get the File that contained the text scanned for this token
-     * 
-     * @return 
+     *
+     * @return
      */
     public File getFile() {
         return file;
@@ -186,8 +184,8 @@ public class JavaToken extends antlr.CommonToken {
     /**
      * get the number of parameters for this token (if it represents a
      * method invocation
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getParamCount() {
         return paramCount;
@@ -195,8 +193,8 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Sets the file property of this token
-     * 
-     * @param file 
+     *
+     * @param file
      */
     public void setFile(File file) {
         this.file = file;
@@ -204,17 +202,15 @@ public class JavaToken extends antlr.CommonToken {
 
     /**
      * Sets the parameter count property of this token
-     * 
-     * @param count 
+     *
+     * @param count
      */
     public void setParamCount(int count) {
         paramCount = count;
     }
 
     /**
-     * Method toString
-     * 
-     * @return 
+     * @see antlr.CommonToken#toString()
      */
     public String toString() {
 

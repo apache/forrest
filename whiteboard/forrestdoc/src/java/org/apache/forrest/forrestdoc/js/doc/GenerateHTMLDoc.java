@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,25 @@
 
 package org.apache.forrest.forrestdoc.js.doc;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *         Class that mounts a Document in HTML as document
+ * Class that mounts a Document in HTML as document
+ *
+ * @version $Id: $
  */
 public class GenerateHTMLDoc {
 
-    private static FileInputStream fis;
+    /** Logger for this class  */
+    private static final Logger log = Logger.getLogger( GenerateHTMLDoc.class );
+
     private static FileOutputStream fos;
     private static BufferedReader br;
     private static String LINE_SEPARATOR = String.valueOf((char) 13) + String.valueOf((char) 10);
@@ -49,7 +54,7 @@ public class GenerateHTMLDoc {
             br = new BufferedReader(new FileReader(fis));
 
         } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
+            log.error( "FileNotFoundException: " + fnfe.getMessage(), fnfe );
         }
 
         try {
@@ -148,51 +153,17 @@ public class GenerateHTMLDoc {
             fos.write("</html>".getBytes());
 
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            log.error( "IOException: " + ioe.getMessage(), ioe );
         }
-        System.out.println("Html generated with success!");
 
+        if ( log.isInfoEnabled() )
+        {
+            log.info( "Html generated with success!");
+        }
     }
 
     public static void main(String args[]) throws Exception{
 
         GenerateHTMLDoc main1 = new GenerateHTMLDoc(new File(args[0]), args[1]);
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
