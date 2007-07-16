@@ -14,20 +14,31 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.apache.forrest.forrestdoc.ant.doc;
+package org.apache.alexandria.vizant;
+
+import org.apache.forrest.forrestdoc.ant.doc.VizWriter;
 
 public class BufferedWriter implements VizWriter {
     StringBuffer buffer = new StringBuffer();
-    
+
+    /**
+     * @see org.apache.forrest.forrestdoc.ant.doc.VizWriter#print(java.lang.String)
+     */
     public void print(String str) {
-	buffer.append(str);
+        buffer.append(str);
     }
-    
+
+    /**
+     * @see org.apache.forrest.forrestdoc.ant.doc.VizWriter#println(java.lang.String)
+     */
     public void println(String str) {
-	buffer.append(str).append("\n");
+        buffer.append(str).append("\n");
     }
-    
+
+    /**
+     * @return
+     */
     public String getString() {
-	return buffer.toString();
+        return buffer.toString();
     }
 }
