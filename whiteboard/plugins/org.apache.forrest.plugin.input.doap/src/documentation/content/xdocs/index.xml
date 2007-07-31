@@ -133,6 +133,32 @@
         in the collection of DOAP files by requesting 
         <a href="projectDetails/contacts.csv">projectDetails/contacts.csv</a>.</p>
       </section>
+      <section>
+        <title>Categories</title>
+        <warning>This functionality is alpha quality and may change in the near future.
+        In fact this was written by someone (me) who knows very little of RDF and currently
+        has no network access or texts to inform this implementation. It is very likely there
+        is a much better way to do this in the RDF world, I've tried, as much as possible,
+        to make it possible to refactor this code when I'm more informed about how to do
+        this. Use at your own risk, or better still, tell us how to improve it.</warning>
+        
+        <p>Projects can be assigned to one or more categories using the <code>doap:category</code>
+        element. We recommend the use of an <code>rdf:resource</code> attribute to
+        identify the category the project applies to. But what value should be given 
+        to the <code>rdf:resource</code> attribute?</p>
+        
+        <p>At present we are using the categories defined by the Apache Software 
+        Foundation. In the future we are likely to use the JISC standards catalogue
+        as well.</p>
+        
+        <fixme author="rdg">Add links to previous para</fixme>
+        
+        <p>When rendering the category this plugin will attempt to resolve a proper name
+        for the category. First, it will look in the <code>categoriesDefinitions.xml</code>
+        file contained within this plugin. If no match is found in there it will look for
+        a <code>dc:title</code> attribute in the doap file itself. If no such attribute is
+        found it will use the value of <code>rdf:resource</code> attribute.</p>
+      </section>
     </section>
     <section>
         <title>Dispatcher</title>
