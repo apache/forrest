@@ -42,14 +42,21 @@
   <map:pipelines>
     <map:pipeline type="navigation">
 <!-- ================================================================ -->
-<!-- Site.xml snippets                                                -->
+<!-- Utility pipelines                                                -->
 <!-- ================================================================ -->
+      <map:match pattern="projectDetails/categoryDefinitions.xml">
+        <map:generate type="file" src="{lm:doap.categoryDefinitions}" />
+        <map:serialize type="xml"/>
+      </map:match>
       <map:match pattern="projectDetails/descriptorIndex.xml">
         <map:generate type="file" src="{properties:content}/locationmap.xml" />
         <map:transform src="{lm:doap.transform.locationmap.descriptorIndex}"/>
         <map:transform type="cinclude"/>
         <map:serialize type="xml"/>
       </map:match>
+<!-- ================================================================ -->
+<!-- Site.xml snippets                                                -->
+<!-- ================================================================ -->
       <map:match pattern="projectDetails/index/by*/siteSnippet.xml">
         <map:generate type="file" src="cocoon:/projectDetails/descriptorIndex.xml" />
         <map:transform src="{lm:doap.transform.descriptorIndex.siteSnippet_by{1}}">
@@ -115,13 +122,19 @@
         <map:generate type="file" src="{lm:doap.descriptor.{1}}" />
         <map:serialize type="xml"/>
       </map:match>
-      <map:match pattern="projectDetails.xml">
-        <map:generate src="cocoon:/projectDetails/source.xml" />
+      <map:match pattern="projectDetails.xml">        
+        <map:aggregate element="projectDetails">
+          <map:part src="cocoon:/projectDetails/categoryDefinitions.xml"/>
+          <map:part src="cocoon:/projectDetails/source.xml"/>
+        </map:aggregate>
         <map:transform src="{lm:doap.transform.doap.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
-      <map:match pattern="projectDetails/**.xml">
-        <map:generate src="cocoon:/projectDetails/{1}.source.xml" />
+      <map:match pattern="projectDetails/**.xml">        
+        <map:aggregate element="projectDetails">
+          <map:part src="cocoon:/projectDetails/categoryDefinitions.xml"/>
+          <map:part src="cocoon:/projectDetails/{1}.source.xml"/>
+        </map:aggregate>
         <map:transform src="{lm:doap.transform.doap.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
