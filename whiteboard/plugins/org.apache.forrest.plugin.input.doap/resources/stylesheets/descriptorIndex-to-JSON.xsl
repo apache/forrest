@@ -37,11 +37,22 @@
   
   <xsl:template match="doap:Project">
     "label":"<xsl:value-of select="doap:name"/>",
+    <xsl:call-template name="categories"/>
     <xsl:apply-templates select="doap:name|doap:shortdesc|doap:homepage"/>
   </xsl:template>
   
   <xsl:template match="doap:homepage">
     "<xsl:value-of select="local-name(.)"/>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="categories">
+    <xsl:if test="doap:category">
+      "Category" : [<xsl:apply-templates select="doap:category"/>],
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="doap:category">
+    "<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
   <xsl:template match="doap:*">

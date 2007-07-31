@@ -21,6 +21,11 @@
   xmlns:cinclude="http://apache.org/cocoon/include/1.0">
   <xsl:template match="lm:locationmap">
     <descriptors>
+      <categories>        
+          <cinclude:include>
+            <xsl:attribute name="src">cocoon:/projectDetails/categoryDefinitions.xml</xsl:attribute>
+          </cinclude:include>
+      </categories>
       <xsl:apply-templates/>
     </descriptors>
   </xsl:template>

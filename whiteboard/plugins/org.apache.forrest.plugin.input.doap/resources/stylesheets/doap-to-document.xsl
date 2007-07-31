@@ -26,7 +26,10 @@
                 xmlns:asfext="http://projects.apache.org/ns/asfext#"
                 >                
   <xsl:template match="/">
-    <xsl:apply-templates select="doap:Project|rdf:RDF|atom:feed" />
+    <xsl:apply-templates select="projectDetails" />
+  </xsl:template>
+  <xsl:template match="projectDetails">
+    <xsl:apply-templates select="doap:Project|rdf:RDF|atom:feed"/>
   </xsl:template>
   <xsl:template match="rdf:RDF">
     <xsl:apply-templates select="doap:Project" />
@@ -92,7 +95,9 @@ otherwise it doesn't load for some reason -->
                 }
                 google.setOnLoadCallback(initialize);
          </xsl:element>
-         <div id="Feeds"/>
+         <div id="Feeds">
+           <p>Loading feeds...</p>
+         </div>
          </section>
        </xsl:if>
     </body>
@@ -111,30 +116,65 @@ otherwise it doesn't load for some reason -->
     </xsl:if>
   </xsl:template>
   <xsl:template match="doap:category">
-    <xsl:value-of select="@rdf:resource"/>
-    <xsl:if test="not(position() = last())">
-<xsl:text>, </xsl:text>
-    </xsl:if>
+    <xsl:variable name="category" select="@rdf:resource"/>
+    <li>
+        <xsl:choose>
+          <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
+            <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@rdf:resource"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+    </li>
   </xsl:template>
   <xsl:template match="foaf:seeAlso">
     <xsl:choose>
-      <xsl:when test="@dc:format='application/rss+xml'"><a class="rss-rss-link">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@rdf:resource"/>
-        </xsl:attribute> RSS
-           </a>
+      <xsl:when test="@dc:format='application/rss+xml'">
+        <a class="rss-rss-link">
+            <xsl:attribute name="href">
+              <xsl:value-of select="@rdf:resource"/>
+            </xsl:attribute> 
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>RSS</xsl:otherwise>
+            </xsl:choose>
+        </a>
       </xsl:when>
-      <xsl:when test="@dc:format='application/atom+xml'"><a class="rss-atom-link">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@rdf:resource"/>
-        </xsl:attribute> Atom
-           </a>
+      <xsl:when test="@dc:format='application/atom+xml'">
+        <a class="rss-atom-link">        
+            <xsl:attribute name="href">
+              <xsl:value-of select="@rdf:resource"/>
+            </xsl:attribute> 
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>ATOM</xsl:otherwise>
+            </xsl:choose>
+        </a>
       </xsl:when>
-      <xsl:when test="@dc:format='application/rdf+xml'"><a class="rss-rdf-link">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@rdf:resource"/>
-        </xsl:attribute> RDF
-           </a>
+      <xsl:when test="@dc:format='application/rdf+xml'">
+        <a class="rss-rdf-link">
+            <xsl:attribute name="href">
+              <xsl:value-of select="@rdf:resource"/>
+            </xsl:attribute> 
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>RDF</xsl:otherwise>
+            </xsl:choose>
+        </a>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -174,7 +214,9 @@ otherwise it doesn't load for some reason -->
             <td class="right">
               <xsl:choose>
                 <xsl:when test="doap:category">
-                  <xsl:apply-templates select="doap:category" />
+                  <ul>
+                    <xsl:apply-templates select="doap:category" />
+                  </ul>
                 </xsl:when>
                 <xsl:otherwise>
                        None Defined
