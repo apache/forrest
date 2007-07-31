@@ -23,8 +23,12 @@
   The remaining ones are the bogus ones caused by FOR-284 which are
   then excluded by cli.xconf
 -->
+
+<!--  This match needs to cover all namespaces -->
+
   <xsl:template match="@*">
-    <xsl:attribute name="{name(.)}">
+    <!--  Note this strips namespaces from attributes -->
+    <xsl:attribute name="{local-name(.)}">
       <xsl:choose>
         <xsl:when test="contains(., 'site:') or contains(., 'ext:')">
           <xsl:value-of select="concat('error:', .)"/>
