@@ -20,7 +20,8 @@
   xmlns:atom="http://www.w3.org/2005/Atom"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
-  xmlns:doap="http://usefulinc.com/ns/doap#">
+  xmlns:doap="http://usefulinc.com/ns/doap#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
   <xsl:include href="descriptorIndex-to-indexByCommon.xsl"/>
   <xsl:key name="kDistinctCategory" match="doap:category" use="@rdf:resource"/>
   <xsl:param name="filter"/>
@@ -42,7 +43,23 @@
               <xsl:sort select="@rdf:resource"/>
               <xsl:variable name="category" select="@rdf:resource"/>
               <section>
-                <title><xsl:value-of select="$category"/></title>
+                <title>
+                    <xsl:choose>
+                      <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
+                        <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:choose>
+                          <xsl:when test="@dc:title">
+                            <xsl:value-of select="@dc:title"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="@rdf:resource"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                </title>
                 <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
               </section>
             </xsl:for-each>
