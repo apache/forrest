@@ -20,7 +20,8 @@
   xmlns:atom="http://www.w3.org/2005/Atom"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
-  xmlns:doap="http://usefulinc.com/ns/doap#">
+  xmlns:doap="http://usefulinc.com/ns/doap#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
   <xsl:template match="/">{ "items": [<xsl:apply-templates select="descriptors"/>]} 
   </xsl:template>
   
@@ -52,7 +53,22 @@
   </xsl:template>
   
   <xsl:template match="doap:category">
-    "<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+    <xsl:variable name="category" select="@rdf:resource"/>
+    "<xsl:choose>
+          <xsl:when test="//descriptors/categories/categories/doap:category[@rdf:resource = $category]/@dc:title">
+            <xsl:value-of select="//descriptors/categories/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@rdf:resource"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
   <xsl:template match="doap:*">
