@@ -15,59 +15,88 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project
- name="forrestdoc" default="project" basedir=".">
-<!-- init -->
+
+<!-- ====================================================================== -->
+<!-- Ant build file (http://ant.apache.org/) for Ant 1.6.5 or above.        -->
+<!-- ====================================================================== -->
+
+<project name="forrestdoc" default="project" basedir=".">
+
+  <!-- Init -->
   <tstamp />
+
   <property file="build.properties"/>
+  
+  <!-- Get specific lib TODO -->
+  <mkdir dir="${build.dir}"/>
+
+  <get src="http://repo1.maven.org/maven2/junit/junit/3.8.1/junit-3.8.1.jar" 
+       dest="${build.dir}/junit-3.8.1.jar" 
+       usetimestamp="true" 
+       ignoreerrors="true"/>
+
   <path id="lib.classpath">
-    <fileset  dir="${lib.dir}">
+    <fileset dir="${lib.dir}">
       <include name="*.jar" />
+    </fileset>
+    <fileset dir="${basedir}/../../lib/core">
+      <include name="log4j-1.2.13.jar" />
+    </fileset>
+    <fileset dir="${build.dir}">
+      <include name="junit-3.8.1.jar" />
     </fileset>
     <fileset dir="${ant.home}/lib">
       <include name="*.jar" />
     </fileset>
+    <fileset dir="${java.home}/../lib">
+      <include name="tools.jar" />
+    </fileset>
   </path>
+
   <path id="task.classpath">
     <path refid="lib.classpath"/>
     <pathelement path="${build.classes.dir}"/>
-    <pathelement path="${ant.build.dir}"/>
   </path>
-  <mkdir dir="${ant.build.dir}" />
-  <javac srcdir="${ant.src.dir}"
-          debug="true"
-          destdir="${ant.build.dir}"
-          classpathref="lib.classpath" />
+
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-  <taskdef name="extendedpathconvert" classname="org.apache.forrest.tools.taskdefs.PathConvert" classpathref="task.classpath"/>
-<!-- Targets -->
+
+  <!-- Targets -->
   <target name="compile"
-           description="Compile the java code from ${src} into ${target}">
+          description="Compile the java code from ${src} into ${target}">
     <mkdir dir="${build.classes.dir}" />
     <javac srcdir="${src.dir}"
-             debug="true"
-             destdir="${build.classes.dir}"
-             classpathref="lib.classpath" />
+           debug="true"
+           destdir="${build.classes.dir}"
+           classpathref="lib.classpath" />
+
+    <copy todir="${build.classes.dir}">
+      <fileset dir="${resources.dir}" casesensitive="yes"/>
+    </copy>
   </target>
+
   <target name="jar" depends="compile"
-           description="Put everything in ${target} into the ${jar.name}.jar file">
+          description="Put everything in ${target} into the ${jar.name}.jar file">
     <mkdir dir="${dist.dir}" />
     <jar jarfile="${dist.dir}/${jar.name}-${version}.jar"
            basedir="${build.classes.dir}" />
     <jar jarfile="${dist.dir}/${jar.name}-anttools-${version}.jar"
            basedir="${ant.build.dir}" />
   </target>
+
   <target name="clean"
-           description="Delete the ${target} and ${dist} directory trees">
+          description="Delete the ${target} and ${dist} directory trees">
     <delete dir="${build.dir}" />
     <delete dir="${dist.dir}" />
   </target>
-  <target name="all" 
-           description="test this project" 
-           depends="project"></target>
-  <target name="project"  depends="compile"
-           description="create all possible docs for this project">
-    <echo>START</echo>
+
+  <target name="all"
+          description="test this project"
+          depends="project"/>
+
+  <target name="project"
+          depends="compile"
+          description="Create all possible docs for this project">
+    <echo>start</echo>
     <trycatch property="foo" reference="bar">
       <try>
         <ant antfile="core.xml" dir="." target="project"
@@ -81,13 +110,15 @@
       </finally>
     </trycatch>
   </target>
-<!-- driver targets -->
-  <target name="ws"  depends="compile"
-           description="create all possible docs for this workspace">
+
+  <!-- driver targets -->
+  <target name="ws"
+          depends="compile"
+          description="Create all possible docs for this workspace">
     <property name="resolved.ws.dir" location="${ws.dir}"/>
-<!--
-     <property name="ws.build.dir" location="${ws.dir}/build/forrestdoc"/>    
-     <property name="ws.temp.dir" location="${ws.dir}/build/temp"/>     
+    <!--
+     <property name="ws.build.dir" location="${ws.dir}/build/forrestdoc"/>
+     <property name="ws.temp.dir" location="${ws.dir}/build/temp"/>
      -->
     <property name="ws.build.dir" location="./build/ws/forrestdoc"/>
     <property name="ws.temp.dir" location="./build/temp/ws"/>
@@ -102,9 +133,9 @@
     <extendedpathconvert pathsep="," type="xml" file="${ws.temp.dir}/dirs.xml" refid="ws.project.dirs">
       <map from="${resolved.ws.dir}" to=""/>
     </extendedpathconvert>
-    <xslt in="${ws.temp.dir}/dirs.xml" 
+    <xslt in="${ws.temp.dir}/dirs.xml"
            out="${ws.build.dir}/projects.html" style="${resources.dir}/ws/dir2projects.xsl" />
-    <xslt in="${ws.temp.dir}/dirs.xml" 
+    <xslt in="${ws.temp.dir}/dirs.xml"
            out="${ws.build.dir}/projects-summary.html" style="${resources.dir}/ws/dir2projects-summary.xsl" />
     <copy file="${resources.dir}/ws/index.html" todir="${ws.build.dir}"/>
     <copy file="${resources.dir}/ws/styles.css" todir="${ws.build.dir}"/>
@@ -118,8 +149,8 @@
           <try>
             <ant antfile="core.xml" dir="." target="project"
                 inheritAll="true" inheritRefs="true">
-              <property name="project.dir"    value="@{current.project.dir}"/>
-              <property name="target.dir"  value="${ws.build.dir}"/>
+              <property name="project.dir" value="@{current.project.dir}"/>
+              <property name="target.dir" value="${ws.build.dir}"/>
             </ant>
           </try>
           <catch>
