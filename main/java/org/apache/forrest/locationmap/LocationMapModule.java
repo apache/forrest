@@ -79,7 +79,7 @@ public class LocationMapModule extends AbstractLogEnabled
         debug("LM Configured cache-lifespan: " + m_cacheTtl);
         
         if (m_cacheAll == true) {
-        	m_locationsCache = new HashMap();
+            m_locationsCache = new HashMap();
             m_cacheLastLoaded = new Date();
         }
     }
