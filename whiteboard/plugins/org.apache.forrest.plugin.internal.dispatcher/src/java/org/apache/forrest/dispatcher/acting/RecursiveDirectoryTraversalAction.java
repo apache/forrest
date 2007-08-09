@@ -96,6 +96,7 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
         this.prepare(parameters, source);
         String uri = this.getProjectDir() + this.getRequest()
                 + this.getProjectExtension();
+        map = new HashMap();
         Map returnMap = act(uri);
         return returnMap;
     }
