@@ -62,10 +62,29 @@
         <map:transform src="{lm:foaf.transform.foaf.document}"/>
         <map:serialize type="xml-document"/>
       </map:match>
+      <map:match pattern="people/person-*/source.xml">
+        <map:generate type="file" src="{lm:foaf.descriptor.{1}}" />
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="people/person-*.xml">
+        <map:generate src="cocoon:/people/person-{1}/source.xml" />
+        <map:transform src="{lm:foaf.transform.foaf.document}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+       <map:match pattern="people/index/source.xml">
+        <map:generate type="file" src="{lm:multiple.foaf.descriptors}" />
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="people/index.xml">
+        <map:generate type="file" src="cocoon:/people/index/source.xml" />
+        <map:transform src="{lm:foaf.transform.foafs.index}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
       <map:match pattern="personDetails/**.xml">
         <map:generate src="cocoon:/personDetails/{1}.source.xml" />
         <map:transform src="{lm:foaf.transform.foaf.document}"/>
         <map:serialize type="xml-document"/>
+        
       </map:match>
     </map:pipeline>
   </map:pipelines>

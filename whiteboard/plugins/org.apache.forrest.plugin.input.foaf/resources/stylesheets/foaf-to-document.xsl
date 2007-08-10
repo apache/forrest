@@ -19,7 +19,6 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-  xmlns="http://www.w3.org/1999/xhtml"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
   exclude-result-prefixes="rdf dc foaf">
@@ -41,22 +40,19 @@
     </header>
 </xsl:template>
 
-
- 
 <xsl:template name="body">
 <body>
   <section>
-  <div class="content">  
- 
-    <h1>FOAF Metadata of <xsl:value-of select="foaf:name"/> </h1>
-    <p><img src="{./foaf:depiction/@rdf:resource}" alt="Photograph" height="120" border="0" /></p>
+   <title>FOAF Metadata of <xsl:value-of select="foaf:name"/> </title>
+   <xsl:choose>
+   <xsl:when test="foaf:depiction/@rdf:resource">
+    <p><img src="{foaf:depiction/@rdf:resource}" height="120" border="0" /></p>
+    </xsl:when>
+    </xsl:choose>
     <p>
     <table>
-      <thead align="left">
       <tr><th>Property</th><th>Value</th></tr>
-		</thead>
-      <tbody>
-      <tr><td>Name</td><td>
+	  <tr><td>Name</td><td>
       <xsl:choose >
       	<xsl:when test="foaf:name">
       		<xsl:value-of select="foaf:name"/>
@@ -65,8 +61,16 @@
          	<xsl:value-of select="foaf:firstName"/> <xsl:text>  </xsl:text><xsl:value-of select="foaf:surname"/> 
       	</xsl:otherwise>   
       </xsl:choose></td></tr>
-      <tr><td>Id</td><td><a href="{./@rdf:ID}"><xsl:value-of select="./@rdf:ID"/></a></td></tr>
-      <tr><td>Nick</td><td><xsl:value-of select="foaf:nick"/></td></tr>
+      <xsl:choose>
+      <xsl:when test="./@rdf:ID">
+      	<tr><td>Id</td><td><a href="{./@rdf:ID}"><xsl:value-of select="./@rdf:ID"/></a></td></tr>
+      </xsl:when>
+      </xsl:choose>
+      <xsl:choose>
+      <xsl:when test="foaf:nick">
+      	<tr><td>Nick</td><td><xsl:value-of select="foaf:nick"/></td></tr>
+      </xsl:when>
+      </xsl:choose>
       <tr><td>Mbox</td>
       <xsl:choose>
       	<xsl:when test="foaf:mbox_sha1sum">
@@ -77,36 +81,43 @@
       	</xsl:otherwise>
       	</xsl:choose>
       	</tr>
-      <tr><td>Phone</td><td><a href="{foaf:phone/@rdf:resource}"><xsl:value-of select="foaf:phone/@rdf:resource"/></a></td></tr>
-      <tr><td>Homepage</td><td><a href="{foaf:homepage/@rdf:resource}"><xsl:value-of select="foaf:homepage/@rdf:resource"/></a></td></tr>
-     <tr><td>Work Place Homepage</td><td><a href="{foaf:workplaceHomepage/@rdf:resource}"><xsl:value-of select="foaf:workplaceHomepage/@rdf:resource"/></a></td></tr>
-     <tr><td>School Homepage</td><td><a href="{foaf:schoolHomepage/@rdf:resource}"><xsl:value-of select="foaf:schoolHomepage/@rdf:resource"/></a></td></tr>
-     </tbody>
+      <xsl:choose>
+      <xsl:when test="foaf:phone/@rdf:resource">
+      	<tr><td>Phone</td><td><a href="{foaf:phone/@rdf:resource}"><xsl:value-of select="foaf:phone/@rdf:resource"/></a></td></tr>
+      </xsl:when>
+      </xsl:choose>
+      <xsl:choose>
+      <xsl:when test="foaf:homepage/@rdf:resource">
+      	<tr><td>Homepage</td><td><a href="{foaf:homepage/@rdf:resource}"><xsl:value-of select="foaf:homepage/@rdf:resource"/></a></td></tr>
+     </xsl:when>
+     </xsl:choose>
+     <xsl:choose>
+     <xsl:when test="foaf:workplaceHomepage/@rdf:resource">
+     	<tr><td>Work Place Homepage</td><td><a href="{foaf:workplaceHomepage/@rdf:resource}"><xsl:value-of select="foaf:workplaceHomepage/@rdf:resource"/></a></td></tr>
+     </xsl:when>
+     </xsl:choose>
+     <xsl:choose>
+     <xsl:when test="foaf:schoolHomepage/@rdf:resource">
+     	<tr><td>School Homepage</td><td><a href="{foaf:schoolHomepage/@rdf:resource}"><xsl:value-of select="foaf:schoolHomepage/@rdf:resource"/></a></td></tr>
+    </xsl:when>
+    </xsl:choose>
     </table>
-
     </p>
+    </section>
     
-    <br /><br /><br />
-
-    <h2>Knows</h2>
+    <br/>
+    
+    <section>
+    <title>Friends</title>
     <p>
-    <table border="1">
-     <thead align="left">
-      <tr><th>ID</th><th>Name</th><th>Project Page</th><th>Mail</th><th>Link to FOAF</th></tr>
-     </thead>
-     <tbody>
+    <table>
+      <tr><th>ID</th><th>Name</th><th>Mail</th></tr>
       <xsl:apply-templates select="foaf:knows"/>
-     </tbody>
-    </table>
+     </table>
     </p>
+    </section>
 
-    <br /><br /><br />
-
-    <p>
-    </p>
-    </div>
-   </section>
-   </body>
+    </body>
  </xsl:template>
 
  <xsl:template match="foaf:*">
@@ -147,7 +158,6 @@
      	</xsl:otherwise>   
      </xsl:choose>
      </td>
-	<td><a href="{foaf:id/@rdf:resource}"><xsl:value-of select="foaf:id/@rdf:resource" /></a></td>
    <td>
    <xsl:choose>
    	<xsl:when test="foaf:mbox_sha1sum">
@@ -158,8 +168,6 @@
    	</xsl:otherwise>
    </xsl:choose>
    </td>
-   <td><a href="rdfs:seeAlso/@rdf:resource"><xsl:value-of select="rdfs:seeAlso/@rdf:resource" /></a></td>
-
    </tr>
   </xsl:for-each>
 </xsl:template> 
