@@ -47,14 +47,14 @@ function navigate(url) {
 
 function search(searchID)
 {
-  searchDev('aims', searchID);
+  searchDev('marc', searchID);
 }
 
 function searchDev(engine, searchID)
 {
   var searchItem = document.getElementById(searchID);
-  if (engine == 'aims') {
-    navigate('http://marc.theaimsgroup.com/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
+  if (engine == 'marc') {
+    navigate('http://marc.info/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.devel&sort=date&query=' + searchItem.value);
   } else {
@@ -65,7 +65,9 @@ function searchDev(engine, searchID)
 function searchUser(engine, searchID)
 {
   var searchItem = document.getElementById(searchID);
-  if (engine == 'gmane') {
+  if (engine == 'marc') {
+    navigate('http://marc.info/?l=forrest-user&r=1&w=2&q=b&s=' + searchItem.value);
+  } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=user@forrest.apache.org&q=' + searchItem.value);
@@ -75,7 +77,9 @@ function searchUser(engine, searchID)
 function searchCommits(engine, searchID)
 {
   var searchItem = document.getElementById(searchID);
-  if (engine == 'gmane') {
+  if (engine == 'marc') {
+    navigate('http://marc.info/?l=forrest-svn&r=1&w=2&q=b&s=' + searchItem.value);
+  } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.cvs&sort=date&query=' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=svn@forrest.apache.org&q=' + searchItem.value);
@@ -85,7 +89,11 @@ function searchCommits(engine, searchID)
 function searchSiteCommits(engine, searchID)
 {
   var searchItem = document.getElementById(searchID);
+  if(engine == 'marc') {
+  navigate('http://marc.info/?l=forrest-site-svn&r=1&w=2&q=b&s=' + searchItem.value);
+  } else {
   navigate('http://www.mail-archive.com/search?l=site-svn@forrest.apache.org&q=' + searchItem.value);
+  }
 }
 
 function searchIssue(searchID)
