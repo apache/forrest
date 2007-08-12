@@ -63,7 +63,7 @@
       </xsl:choose></td></tr>
       <xsl:choose>
       <xsl:when test="./@rdf:ID">
-      	<tr><td>Id</td><td><a href="{./@rdf:ID}"><xsl:value-of select="./@rdf:ID"/></a></td></tr>
+      	<tr><td>Id</td><td><xsl:value-of select="./@rdf:ID"/></td></tr>
       </xsl:when>
       </xsl:choose>
       <xsl:choose>
