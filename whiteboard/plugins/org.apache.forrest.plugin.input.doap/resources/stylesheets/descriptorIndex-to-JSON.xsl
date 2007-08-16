@@ -21,7 +21,8 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
   xmlns:doap="http://usefulinc.com/ns/doap#"
-  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/">
   <xsl:template match="/">{ "items": [<xsl:apply-templates select="descriptors"/>]} 
   </xsl:template>
   
@@ -39,6 +40,7 @@
   <xsl:template match="doap:Project">
     "label":"<xsl:value-of select="doap:name"/>",
     <xsl:call-template name="categories"/>
+    <xsl:call-template name="maintainers"/>
     <xsl:apply-templates select="doap:name|doap:shortdesc|doap:homepage"/>
   </xsl:template>
   
@@ -46,9 +48,23 @@
     "<xsl:value-of select="local-name(.)"/>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
+  <xsl:template name="maintainers">
+    <xsl:if test="doap:maintainer|doap:developer|doap:helper">
+      "person" : [<xsl:apply-templates select="doap:maintainer|doap:developer|doap:helper"/>],
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="doap:maintainer|doap:developer|doap:helper">
+    <xsl:apply-templates select="foaf:Person"/><xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="foaf:Person">
+    "<xsl:value-of select="foaf:name"/>"
+  </xsl:template>
+  
   <xsl:template name="categories">
     <xsl:if test="doap:category">
-      "Category" : [<xsl:apply-templates select="doap:category"/>],
+      "category" : [<xsl:apply-templates select="doap:category"/>],
     </xsl:if>
   </xsl:template>
   
