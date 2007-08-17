@@ -41,6 +41,7 @@
     "label":"<xsl:value-of select="doap:name"/>",
     <xsl:call-template name="categories"/>
     <xsl:call-template name="maintainers"/>
+    <xsl:call-template name="programming-language"/>
     <xsl:apply-templates select="doap:name|doap:shortdesc|doap:homepage"/>
   </xsl:template>
   
@@ -55,11 +56,11 @@
   </xsl:template>
   
   <xsl:template match="doap:maintainer|doap:developer|doap:helper">
-    <xsl:apply-templates select="foaf:Person"/><xsl:if test="not(position()=last())">, </xsl:if>
+    <xsl:apply-templates select="foaf:Person"/>
   </xsl:template>
   
   <xsl:template match="foaf:Person">
-    "<xsl:value-of select="foaf:name"/>"
+    "<xsl:value-of select="foaf:name"/>"<xsl:if test="not(position()=last())">,</xsl:if>
   </xsl:template>
   
   <xsl:template name="categories">
@@ -85,6 +86,16 @@
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>"<xsl:if test="not(position()=last())">, </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="programming-language">
+    <xsl:if test="doap:programming-language">
+      "programming-language" : [<xsl:apply-templates select="doap:programming-language"/>],
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="doap:programming-language">
+    "<xsl:value-of select="."/>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
   <xsl:template match="doap:*">
