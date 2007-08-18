@@ -42,26 +42,28 @@
             <xsl:for-each select="//doap:category[generate-id() = generate-id(key('kDistinctCategory', @rdf:resource))]">
               <xsl:sort select="@rdf:resource"/>
               <xsl:variable name="category" select="@rdf:resource"/>
-              <section>
-                <title>
-                    <xsl:choose>
-                      <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
-                        <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
-                      </xsl:when>
-                      <xsl:otherwise>
+              <xsl:if test="//descriptor[descendant::doap:category[@rdf:resource = $category]]">
+                  <section>
+                    <title>
                         <xsl:choose>
-                          <xsl:when test="@dc:title">
-                            <xsl:value-of select="@dc:title"/>
+                          <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
+                            <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
                           </xsl:when>
                           <xsl:otherwise>
-                            <xsl:value-of select="@rdf:resource"/>
+                            <xsl:choose>
+                              <xsl:when test="@dc:title">
+                                <xsl:value-of select="@dc:title"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:value-of select="@rdf:resource"/>
+                              </xsl:otherwise>
+                            </xsl:choose>
                           </xsl:otherwise>
                         </xsl:choose>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                </title>
-                <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
-              </section>
+                    </title>
+                    <xsl:apply-templates select="//descriptor[descendant::doap:category[@rdf:resource = $category]]"/>
+                  </section>
+              </xsl:if>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
