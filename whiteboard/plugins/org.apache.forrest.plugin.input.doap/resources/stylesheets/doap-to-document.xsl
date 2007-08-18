@@ -313,9 +313,11 @@ otherwise it doesn't load for some reason -->
     </section>
   </xsl:template>
   <xsl:template name="project-scm">
-    <div class="content">
+      <p>
+        Access to the source code:
+      </p>
       <xsl:choose>
-        <xsl:when test="doap:repository">
+        <xsl:when test="doap:repository/doap:SVNRepository">
           <xsl:for-each select="doap:repository/doap:SVNRepository">
             <table>
               <tr>
@@ -333,13 +335,31 @@ otherwise it doesn't load for some reason -->
             </table>
           </xsl:for-each>
         </xsl:when>
+        <xsl:when test="doap:repository/doap:CVSRepository">
+          <xsl:for-each select="doap:repository/doap:CVSRepository">
+            <table>
+              <tr>
+                <td class="left">Browse</td>
+                <td class="right">
+                  <xsl:apply-templates select="doap:browse/@*" />
+                </td>
+              </tr>
+              <tr>
+                <td class="left">Checkout</td>
+                <td class="right">
+                  <pre>cvs -d<xsl:apply-templates select="doap:anon-root" /> login</pre>
+                  <pre>cvs -z3 -d<xsl:apply-templates select="doap:anon-root" /> co -P <xsl:apply-templates select="doap:module" /></pre>
+                </td>
+              </tr>
+            </table>
+          </xsl:for-each>
+        </xsl:when>
         <xsl:otherwise>
           <p>
             No source control information provided.
           </p>
         </xsl:otherwise>
       </xsl:choose>
-    </div>
   </xsl:template>
   <xsl:template match="doap:release/doap:Version">
     <tr>
@@ -359,7 +379,7 @@ otherwise it doesn't load for some reason -->
       <title>Source and Releases</title>
       <div class="content">
         <xsl:choose>
-          <xsl:when test="doap:doanload-page">
+          <xsl:when test="doap:download-page">
             <p>
               Releases can be downloaded from
               <xsl:apply-templates select="doap:download-page/@*" />
@@ -395,9 +415,6 @@ otherwise it doesn't load for some reason -->
           </p>
         </xsl:otherwise>
       </xsl:choose>
-      <p>
-        Access to the source code:
-      </p>
       <xsl:call-template name="project-scm" />
     </section>
   </xsl:template>
