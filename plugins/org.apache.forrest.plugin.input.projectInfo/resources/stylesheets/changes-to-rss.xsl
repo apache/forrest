@@ -15,29 +15,50 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:forrest="http://apache.org/forrest/properties/1.0">
   <xsl:param name="versionNumber"/>
-  <xsl:variable name="changes-url"
-    select="concat(../skinconfig/project-url, 'changes.html')"/>
+  <xsl:variable name="changes-url">
+    <xsl:choose>
+      <xsl:when test="/*/skinconfig">
+        <xsl:value-of select="concat(/*/skinconfig/project-url, 'changes.html')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat(/*/forrest:properties/forrest:property[@name='project.url']/@value, 'changes.html')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:template match="status">
+    <xsl:variable name="project-name">
+      <xsl:choose>
+        <xsl:when test="../skinconfig">
+          <xsl:value-of select="../skinconfig/project-name"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="../forrest:properties/forrest:property[@name='project.name']/@value"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <rss version="0.91">
       <channel>
         <xsl:choose>
           <xsl:when test="$versionNumber = 'current'">
-            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+            <title><xsl:value-of select="$project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
           </xsl:when>
           <xsl:when test="$versionNumber">
-            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</title>
+            <title><xsl:value-of select="$project-name"/> (<xsl:value-of select="$versionNumber"/>) Changes</title>
           </xsl:when>
           <xsl:otherwise>
-            <title><xsl:value-of select="../skinconfig/project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
+            <title><xsl:value-of select="$project-name"/> (<xsl:value-of select="//release[1]/@version"/>) Changes</title>
           </xsl:otherwise>
         </xsl:choose><link>
         <xsl:value-of select="$changes-url"/></link>
         <xsl:choose>
           <xsl:when test="$versionNumber = 'current'">
             <description>
-              <xsl:value-of select="../skinconfig/project-name"/>
+              <xsl:value-of select="$project-name"/>
               (
               <xsl:value-of select="//release[1]/@version"/>
               ) Changes
@@ -45,7 +66,7 @@
           </xsl:when>
           <xsl:when test="$versionNumber">
             <description>
-              <xsl:value-of select="../skinconfig/project-name"/>
+              <xsl:value-of select="$project-name"/>
               (
               <xsl:value-of select="$versionNumber"/>
               ) Changes
@@ -53,7 +74,7 @@
           </xsl:when>
           <xsl:otherwise>
             <description>
-              <xsl:value-of select="../skinconfig/project-name"/>
+              <xsl:value-of select="$project-name"/>
               (
               <xsl:value-of select="//release[1]/@version"/>
               ) Changes
