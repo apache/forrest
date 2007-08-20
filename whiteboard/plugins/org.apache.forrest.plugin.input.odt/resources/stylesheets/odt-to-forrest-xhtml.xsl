@@ -78,65 +78,128 @@
       </body>
     </html>
   </xsl:template>
-<!-- FIXME : this is not XHTML -->
-<!-- Case of Notes -->
-  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Note']">
-    <note>
-      <xsl:apply-templates/>
-      <xsl:if test="count(node())=0">
-        <br />
-      </xsl:if>
-    </note>
-  </xsl:template>
-  <xsl:template match="text:span[@text:style-name='Forrest_3a__20_Title']">
-    <xsl:attribute name="label">
-      <xsl:value-of select="."/>
-    </xsl:attribute>
-  </xsl:template>
-<!-- FIXME : this is not XHTML -->
-<!-- Case of Warnings -->
-  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Warning']">
-    <warning>
-      <xsl:apply-templates/>
-      <xsl:if test="count(node())=0">
-        <br />
-      </xsl:if>
-    </warning>
-  </xsl:template>
-<!-- Case of Fixme  - still a problem to retrieve the author...-->
-<!-- FIXME : this is not XHTML -->
-  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Fixme']">
-    <fixme>
-      <xsl:apply-templates/>
-      <xsl:if test="count(node())=0">
-        <br />
-      </xsl:if>
-    </fixme>
-  </xsl:template>
-<!-- Case of Sources -->
-<!-- FIXME : this is not XHTML -->
-  <xsl:template match="text:p[@text:style-name='Forrest_3a__20_Source']">
-    <source>
-      <xsl:apply-templates/>
-      <xsl:if test="count(node())=0">
-        <br />
-      </xsl:if>
-    </source>
-  </xsl:template>
-<!-- Otherwise -->
 <!-- FIXME : An idea should be to add a class attribute to <p> in order to be able to keep the original
              layout. Maybe depending on a properties keepLayout=True. -->
   <xsl:template match="text:p">
-    <p>
-      <xsl:variable name="styleName" select="@text:style-name"/>
-      <xsl:variable name='layout'>
-        <xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
-      </xsl:variable>
-      <xsl:call-template name="displayLayout">
-        <xsl:with-param name="layout" select="$layout"/>
-      </xsl:call-template>
-    </p>
+    <xsl:variable name="styleName" select="@text:style-name"/>
+    <xsl:variable name="tag">
+       <xsl:call-template name="selectTag">
+         <xsl:with-param name="currentStyle" select="$styleName"/>
+       </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="not($tag='p')">
+        <xsl:variable name="precessorIsTheSame">
+          <xsl:call-template name="isEqualToStyle">
+            <xsl:with-param name="currentStyle" select="$styleName"/>
+            <xsl:with-param name="styleToFind" select="preceding-sibling::*[1]/@text:style-name"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="not($precessorIsTheSame='true')">
+            <xsl:element name="{$tag}">
+              <xsl:apply-templates select="text:span[starts-with(@text:style-name,'Forrest_3a__20_')]"/>
+              <xsl:apply-templates/>
+              <xsl:apply-templates select="following-sibling::*[1]" mode="followingline">
+                <xsl:with-param name="styleToFind" select="$styleName"/>
+              </xsl:apply-templates>
+            </xsl:element>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="{$tag}">
+          <xsl:variable name='layout'>
+            <xsl:apply-templates select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$styleName]|//odt/styles/office:document-styles/office:styles/style:style[@style:name=$styleName]"/>
+          </xsl:variable>
+          <xsl:call-template name="displayLayout">
+            <xsl:with-param name="layout" select="$layout"/>
+          </xsl:call-template>
+          <xsl:if test="count(node())=0">
+            <br />
+          </xsl:if>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
+
+  <xsl:template match="text:p" mode="followingline">
+    <xsl:param name="styleToFind"/>
+    <xsl:variable name="isSameStyle">
+      <xsl:call-template name="isEqualToStyle">
+        <xsl:with-param name="currentStyle" select="@text:style-name"/>
+        <xsl:with-param name="styleToFind" select="$styleToFind"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$isSameStyle='true'">
+      <xsl:apply-templates/>
+      <xsl:apply-templates select="following-sibling::*[1]" mode="followingline">
+        <xsl:with-param name="styleToFind" select="$styleToFind"/>
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*" mode="followingline"/>
+
+  <!-- Calculates the tag to insert. -->
+  <!-- the specific tags starts with 'Forrest_3a__20_' -->
+  <!-- else the <p> tag is returned -->
+  <xsl:template name="selectTag">
+    <xsl:param name="currentStyle"/>
+      <xsl:choose>
+        <xsl:when test="starts-with($currentStyle,'Forrest_3a__20_')">
+          <xsl:value-of select="translate(normalize-space(substring-after($currentStyle,'Forrest_3a__20_')),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="parentStyleName">
+            <xsl:value-of select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$currentStyle]/@style:parent-style-name"/>
+            <xsl:value-of select="//odt/styles/office:document-styles/office:styles/style:style[@style:name=$currentStyle]/@style:parent-style-name"/>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="not($parentStyleName='')">
+              <xsl:call-template name="selectTag">
+                <xsl:with-param name="currentStyle" select="$parentStyleName"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:if test="$currentStyle">p</xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:template>
+
+  <!-- Try to find the styleToFind in the inheritance tree of currentStyle -->
+  <!-- returns 'true' if found -->
+  <xsl:template name="isEqualToStyle">
+    <xsl:param name="currentStyle"/>
+    <xsl:param name="styleToFind"/>
+    <xsl:choose>
+      <xsl:when test='$currentStyle=$styleToFind or not($currentStyle) or not($styleToFind)'>true</xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="parentStyleName">
+          <xsl:value-of select="//odt/content/office:document-content/office:automatic-styles/style:style[@style:name=$currentStyle]/@style:parent-style-name"/>
+          <xsl:value-of select="//odt/styles/office:document-styles/office:styles/style:style[@style:name=$currentStyle]/@style:parent-style-name"/>
+        </xsl:variable>
+        <xsl:if test='not($parentStyleName="")'>
+          <xsl:call-template name="isEqualToStyle">
+            <xsl:with-param name="currentStyle" select="$parentStyleName"/>
+            <xsl:with-param name="styleToFind" select="$styleToFind"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+<!-- FIXME : this is not XHTML -->
+  <xsl:template match="text:span[starts-with(@text:style-name,'Forrest_3a__20_')]">
+    <xsl:variable name="attr" select="translate(normalize-space(substring-after(@text:style-name,'Forrest_3a__20_')),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+    <xsl:attribute name="{$attr}">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
+
 <!-- Instead of using styles like in the Lenya file, we try here to recognise the style to use XHTML specific
      tags such as <em>, <strong>, <sup> and <sub>... -->
   <xsl:template match="text:span">
@@ -149,6 +212,7 @@
       <xsl:with-param name="layout" select="$layout"/>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template name='displayLayout'>
     <xsl:param name='layout' select="NONE"/>
     <xsl:variable name="tag">
@@ -247,7 +311,7 @@
 <!-- If the tag has been supplied, we add it to the layout list... -->
     <xsl:if test="not($tag='NONE') and not(normalize-space($tag)='')">
       <xsl:value-of select='$tag'/>,
-	</xsl:if>
+    </xsl:if>
 <!-- if the style index is not the first (1), we continue - note we start from the end... -->
     <xsl:if test="not($indStyle=1)">
       <xsl:apply-templates select="../@*[number($indStyle)-1]">
