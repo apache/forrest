@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+    <header>
+        <title>Forrest multiple sites experiment</title>
+    </header>
+    <body>
+        <section id="overview">
+            <title>Overview</title>
+            <p>
+                A recurring need for Forrest users is the ability to
+                manage multiple sites within a single forrest project.
+                This is an experiment to make it work.
+            </p>
+
+            <section>
+                <title>Requirements</title>
+                <ul>
+                    <li>
+                        Host multiple sites in a single instance of
+                        Forrest
+                    </li>
+                    <li>Allow each subsite to have its own theme</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <title>Background</title>
+
+            <p>
+                See the
+                <a
+                    href="http://marc.info/?l=forrest-dev&amp;m=112299873832343&amp;w=2">
+                    Summary of a discussion
+                </a>
+                many of the Forrest devs had at ApacheCon quite some
+                time ago. Note that this discussion was pre dispatcher
+                days, but the basic ideas are still relevant.
+            </p>
+        </section>
+
+        <section>
+            <title>Design</title>
+
+            <p>
+                This design is back of envelope. I'm hoping lots of
+                others will find the time to look it over and comment.
+            </p>
+
+            <section>
+                <title>Definitions</title>
+
+                <dl>
+                    <dt>Forrest Project</dt>
+                    <dd>
+                        is the controlling project it contains the
+                        "master" content. It also contains the
+                        configuration information that pulls everything
+                        together (i.e. contains one or more content
+                        objects) and is where we run the "forrest *"
+                        commands to make things happen. The Forrest
+                        Project is sometimes referred to as the master
+                        project.
+                    </dd>
+
+                    <dt>Content Object</dt>
+                    <dd>
+                        this is a section of content in the Forrest
+                        Project. It is itself a forrest project (i.e.
+                        can contain other content objects). As a Forrest
+                        Project it can be built independently or as a
+                        content object embedded within another Forrest
+                        Project. Content objects, when embedded in
+                        another Forrest project is sometimes referred to
+                        as a sub project.
+                    </dd>
+                </dl>
+            </section>
+
+            <section>
+                <title>Expected Problems</title>
+
+                <p>
+                    The core Forrest sitemaps are almost certainly
+                    insufficient to process sub sites.
+                </p>
+            </section>
+        </section>
+
+        <section>
+            <title>Testing</title>
+
+            <p>
+                Since llamar has a use case we will implement this on a
+                simple seed set and llamar can test it on a more complex
+                implementation locally.
+            </p>
+
+            <p>
+                The test site will consist of a seed-basic site as the
+                forrest project, a standard seed site as the first sub
+                project and a standard seed-business site as the second
+                sub project. The URL space will be:
+            </p>
+
+            <ul>
+                <li>/ - master project (your looking at it now)</li>
+                <li>/seed - seed project</li>
+                <li>
+                    /secondSeed - a second seed project, but with a
+                    different theme
+                </li>
+            </ul>
+
+            <p>
+                I have created the various seed sites in
+                whiteboard/multipleSites/[master|subsite-seed|subsite-secondSeed]
+            </p>
+            
+            <section>
+              <title>Test URLs</title>
+              
+              <p>This list of URLs demonstrates and tests the features of the
+              multple sites version of Forrest.</p>
+              
+              <ul>
+                <li><a href="seed/index.html">Seed index</a> - the index page for the sirst subsite</li>
+              </ul>
+            </section>
+        </section>
+
+
+        <section>
+            <title>Implementation</title>
+
+            <p>Like all good open source software development we'll go with an incremental
+            development style. Lets just get it working and then pretty it up later. This section
+            describes the current implementation and records things we think we ought to do in the
+            future. At some point the "things to do" section will move into the issue tracker, but
+            at this early stage of experimentation here is just fine.</p>
+
+            <section>
+              <title>Mounting Subsites</title>
+              
+              <p>The locationmap allows us to locate content from subsite content objects.
+              So we need to add entries to the locationmap will extend the locations searched 
+              for content. Add the following to the master projects locationmap.</p>
+              
+              <source><![CDATA[
+<match pattern="project.seed/**">
+    <location src="{properties:subsite.xdocs.seed}/{1}" />
+</match>
+              ]]></source>
+              
+              <p>Note that this snippet uses a new property. This is defined in the 
+              <code>forrest.properties.xml</code> file like this:</p>
+              
+              <source><![CDATA[
+<property name="subsite.xdocs.seed" value="C:\projects\forrest\whiteboard\multipleSites\subsite-seed\src\documentation\content\xdocs"/>
+              ]]></source>
+              
+              <p>Obviously you need to make this value reflect your setup.</p>
+              
+              <fixme author="rdg">We can't have absolute locations to the content like this.</fixme>
+              
+                <section>
+                  <title>Potential Improvements</title>
+                  
+                  <p>Create a a <code>siteplan.xml</code> document that describes
+                  in a less verbose way which content objects should be included
+                  in this master project and where they are to be found. This can
+                  then be used to generate the relevant locationmap
+                  files.</p>
+                  
+                  <p>The use of relative locations in the locationmap means that content 
+                  objects are not easily moved about.</p>
+                  
+                  <p>some kind of lookup mechanism for content objects would allow us to move
+                  content objects around without breaking master projects. Perhaps the
+                  plugin mechanism would work here. That is a content object is a new kind of
+                  plugin.</p>
+                 </section>
+            </section>
+               
+        </section>
+        
+        <section>
+          <title>Known Problems</title>
+          
+          <ul>
+            <li>locationmaps in subsites are not used</li>
+            <li>sitemaps in subsites are not used</li>
+          </ul>
+        </section>
+            
+    </body>
+</document>
