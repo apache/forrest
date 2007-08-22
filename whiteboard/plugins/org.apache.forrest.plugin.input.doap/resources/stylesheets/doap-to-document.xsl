@@ -429,13 +429,13 @@ otherwise it doesn't load for some reason -->
             <tr>
               <th>Name</th>
               <th>Email</th>
-            </tr>
-            <xsl:for-each select="doap:maintainer">
+      </tr>
+      <xsl:for-each select="doap:maintainer/foaf:Person">
                 <tr>
-                  <td><xsl:apply-templates select="foaf:Person/foaf:name"/></td>
-                  <td><xsl:apply-templates select="foaf:Person/foaf:mbox/@rdf:resource"/></td>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
                 </tr>
-            </xsl:for-each>
+        </xsl:for-each>
           </table>
         </xsl:when>
         <xsl:otherwise>
@@ -448,4 +448,18 @@ otherwise it doesn't load for some reason -->
   <xsl:template match="foaf:name">
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
+
+  <!-- FIXME:OPEN Below match needs improvement before enabling
+  Need to test for no or empty mbox to leave alternate message-->
+  <!--<xsl:template match="foaf:mbox">
+          <xsl:choose>
+                  <xsl:when test="@rdf:resource!=' '">
+                          <xsl:apply-templates select="@rdf:resource"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                          <p>Not Provided</p>
+                  </xsl:otherwise>
+          </xsl:choose>
+  </xsl:template>-->
+
 </xsl:stylesheet>
