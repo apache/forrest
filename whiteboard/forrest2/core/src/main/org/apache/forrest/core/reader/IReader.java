@@ -43,7 +43,7 @@ public interface IReader {
 	 * 
 	 * @param controller - the forrest controller in use
 	 * @param requestURI - the URI being requested
-	 * @param sourceNode - the source node we are trying to use to resole this document
+	 * @param sourceNode - the source node we are trying to use to resolve this document
 	 * @param matcher - the matcher that produced this source node
 	 * 
 	 * @return
