@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
+
+    <property file="${ivy.repository.dir}/build.properties"/>
+    <property file="${basedir}/local.build.properties" />
+    <property name="project.build.dir" location="build"/>
+    
+    <target name="configure">
+        <ivy:configure file="${ivy.repository.dir}/ivyconf.xml" />
+    </target>
+    
+    <target name="resolve" depends="configure, clean-lib" description="--> retrieve dependencies with ivy">
+        <ivy:resolve />
+    </target>
+    
+    <target name="report" depends="resolve" description="--> generates a report of dependencies">
+        <ivy:report todir="${build.dir}"/>
+    </target>
+    
+    <target name="new-version">
+        <propertyfile file="${basedir}/version.properties">
+            <entry  key="version" type="int" operation="+" default="0" />
+        </propertyfile>
+    </target>
+
+    <target name="check-version">
+        <!-- test existence of version file -->
+        <available file="${basedir}/version.properties" property="version.exists"/>
+    </target>
+
+    <target name="init-version" depends="check-version" unless="version.exists">
+        <!-- init version file if it doesn't exist -->
+        <echo message="version=1" file="${basedir}/version.properties" />
+    </target>
+
+    <target name="version" depends="init-version">
+        <!-- copy version file in classpath for later inclusion in jar -->
+        <mkdir dir="${project.build.classes.dir}"/>
+        <copy file="${basedir}/version.properties" tofile="${project.build.classes.dir}/${ant.project.name}.properties" overwrite="true" />
+        <property file="${project.build.classes.dir}/${ant.project.name}.properties" />
+    </target>
+
+    <target name="local-version">
+        <tstamp>
+            <format property="now" pattern="yyyyMMddHHmmss"/>
+        </tstamp>
+        <property name="revision" value="${now}"/>
+        <!-- used only to create a local version and put the corresponding file in the jar so that it will be displayed by the module -->
+        <mkdir dir="${project.build.classes.dir}"/>
+        <echo message="version=${revision}" file="${project.build.classes.dir}/${ant.project.name}.properties" append="false" />
+
+        <property file="${project.build.classes.dir}/${ant.project.name}.properties" />
+    </target>
+
+    <target name="clean-local" depends="configure" description="cleans the local repository for the current module">
+       <delete dir="${ivy.local.default.root}/${ant.project.name}"/>
+    </target>
+
+    <target name="clean-lib" description="--> clean the project libraries directory (dependencies)">
+        <delete includeemptydirs="true" dir="${project.lib.dir}"/>
+    </target>
+
+    <target name="clean-build" description="--> clean the project built files">
+        <delete includeemptydirs="true" dir="${project.build.dir}"/>
+    </target>
+
+    <target name="clean-dist" description="--> clean the project distribution files">
+        <delete includeemptydirs="true" dir="${dist.dir}"/>
+    </target>
+
+    <target name="clean" depends="clean-build, clean-lib" description="--> clean the project and reset version number">
+      <delete file="${basedir}/version.properties"/>
+    </target>
+</project>
