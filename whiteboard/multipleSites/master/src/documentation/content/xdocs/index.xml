@@ -141,7 +141,8 @@
               multple sites version of Forrest.</p>
               
               <ul>
-                <li><a href="seed/index.html">Seed index</a> - the index page for the sirst subsite</li>
+                <li><a href="seed/index.html">Seed index</a> - the index page for the first subsite</li>
+                <li><a href="secondSeed/index.html">Second seed index</a> - the index page for the second subsite</li>
               </ul>
             </section>
         </section>
@@ -166,6 +167,10 @@
               <source><![CDATA[
 <match pattern="project.seed/**">
     <location src="{properties:subsite.xdocs.seed}/{1}" />
+</match>
+
+<match pattern="project.secondSeed/**">
+    <location src="{properties:subsite.xdocs.secondSeed}/{1}" />
 </match>
               ]]></source>
               
@@ -197,6 +202,46 @@
                   plugin mechanism would work here. That is a content object is a new kind of
                   plugin.</p>
                  </section>
+            </section>
+            
+            <section>
+              <title>Navigation</title>
+              <p>Navigation is controlled by the main Forrest project. There are two aspects to
+              navigation <code>site.xml</code> and <code>tab.xml</code>.</p>
+              
+              <section>
+                <title>site.xml</title>
+                
+                <p>To include a site.xml file from a contained content object simply add something like the
+                following to your master <code>site.xml</code>:</p>
+                
+                <source><![CDATA[
+  <subsite1 label="First Subsite" tab="home" href="seed/">
+    <xi:include href="cocoon://seed/site.xml"/>
+  </subsite1>
+    
+    <xi:include href="cocoon://seed/site.xml"/>
+                ]]></source> 
+                
+                <warning>For this to work your content objects <code>site.xml</code> file must define a tab
+                under which the navigation details will be visible. 
+                See <a href="https://issues.apache.org/jira/browse/FOR-1042">FOR-1042</a></warning>
+                
+                <warning>For the second technique to work your content objects <code>site.xml</code> 
+                must define a href under which the content can be found, but this means the content
+                object will not work in stand alone mode. 
+                See <a href="https://issues.apache.org/jira/browse/FOR-1043">FOR-1043</a></warning>
+                
+                <warning>Conversion of sub site.xml files to navigation documents is currently incomplete.
+                See <a href="https://issues.apache.org/jira/browse/FOR-1044">FOR-1044</a></warning>
+                
+              </section>
+              
+              <section>
+                <title>tabs.xml</title>
+                <fixme author="rdg">Subsites should provide sub-tabs for use within the master.
+                For now, they are unsupported.</fixme>
+              </section>
             </section>
                
         </section>
