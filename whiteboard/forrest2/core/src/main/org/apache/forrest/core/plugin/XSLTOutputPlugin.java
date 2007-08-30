@@ -33,6 +33,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.forrest.core.Controller;
 import org.apache.forrest.core.document.DefaultOutputDocument;
 import org.apache.forrest.core.document.IDocument;
+import org.apache.forrest.core.document.AbstractSourceDocument;
+import org.apache.forrest.core.exception.ProcessingException;
 import org.apache.log4j.Logger;
 
 /**
@@ -59,17 +61,16 @@ public class XSLTOutputPlugin extends BaseOutputPlugin {
 		final TransformerFactory tFactory = TransformerFactory.newInstance();
 		log.debug("Processing document with output stylesheet from " + this.getXsltPath());
 		try {
-			final String xsltURL = this.getClass().getResource(
-					this.getXsltPath()).toExternalForm();
-			final File xslt = new File(new URI(xsltURL));
+            final AbstractSourceDocument xsltDoc = controller.getSourceDocuments(new URI(this.getXsltPath()));
 			Transformer transformer;
-			transformer = tFactory.newTransformer(new StreamSource(xslt));
-			final StringReader reader = new StringReader(doc
-					.getContentAsString());
+			transformer = tFactory.newTransformer(new StreamSource(new StringReader(xsltDoc.getContentAsString())));
+            log.debug("Got transformer ");
+			final StringReader reader = new StringReader(doc.getContentAsString());
 			final StreamSource in = new StreamSource(reader);
 			final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			final StreamResult out = new StreamResult(outStream);
 			transformer.transform(in, out);
+            log.debug("Transformed");
 			return new DefaultOutputDocument(doc.getRequestURI(), outStream.toString());
 		} catch (final TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -83,7 +84,11 @@ public class XSLTOutputPlugin extends BaseOutputPlugin {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-		}
+		} catch (final ProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
 	}
 
 	public String getXsltPath() {
