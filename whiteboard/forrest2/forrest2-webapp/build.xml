@@ -16,74 +16,24 @@
   limitations under the License.
 -->
 <project xmlns:ivy="antlib:fr.jayasoft.ivy.ant" name="forrest2-webapp" default="run">
-  <property file="local.build.properties" />
-  <property name="project.name" value="forrest2" />
-  <property name="project.core.src.dir" location="src/core" />
-  <property name="project.core.test.src.dir" location="src/test" />
-  <property name="project.dist.dir" location="dist" />
-  <property name="project.build.classes.dir" location="build/classes" />
-  <property name="test.reports" location="build/reports" />
-  <property name="compile.debug" value="off" />
-  <property name="ivy.jar.dir" location="tools/ivy" />
-<!-- try to load ivy here from local tools/ivy dir, in case the user has not already dropped
-	      it into ant's lib dir (note that the latter copy will always take precedence).
-	      We will not fail as long as local lib dir exists (it may be empty) and
-	      ivy is in at least one of ant's lib dir or the local lib dir. -->
-  <path id="ivy.lib.path">
-    <fileset dir="${ivy.jar.dir}" includes="*.jar" />
-  </path>
-  <taskdef resource="fr/jayasoft/ivy/ant/antlib.xml" uri="antlib:fr.jayasoft.ivy.ant" classpathref="ivy.lib.path" />
-  <target name="clean">
-    <delete dir="${project.build.classes.dir}" />
-    <delete dir="${project.dist.dir}" />
-  </target>
-  <target name="init" depends="clean">
-    <mkdir dir="${project.build.classes.dir}" />
-    <mkdir dir="${project.dist.dir}" />
-    <ivy:cachepath pathid="lib.path.id" conf="default" />
-  </target>
-  <target name="run" depends="init" description="* Run Jetty (instant live webapp)" >
-    <echo>
-	  Note: Use Ctrl-C to stop the Jetty server
-	    </echo>
-    <if>
-      <os family="dos" />
-      <then>
-        <echo>
-	         ... and reply 'n' and press [Enter] 
-	  	     when asked about aborting the batch!
-	      </echo>
-      </then>
-    </if>
-    <java classname="org.mortbay.jetty.Server" 
-			dir="${forrest.webapp}" 
-			fork="yes" 
-			maxmemory="${forrest.maxmemory}" 
-			failonerror="yes">
-      <classpath>
-        <path refid="lib.path.id" />
-      </classpath>
-      <jvmarg line="${forrest.jvmargs}" />
-      <arg value="${forrest.webapp}/jettyconf.xml" />
-    </java>
-  </target>
-<!-- ================================= 
-	          Ivy Targets           
-    ================================= -->
-  <target name="resolve">
-    <ivy:configure file="./ivyconf.xml" />
-    <ivy:resolve file="ivy.xml" conf="default" />
-  </target>
-  <target name="retrieve-default" depends="resolve">
-    <ivy:retrieve pattern="lib/default/[artifact]-[revision].[ext]" conf="default" />
-  </target>
-  <target name="retrieve-test" depends="resolve">
-    <ivy:retrieve pattern="lib/test/[artifact]-[revision].[ext]" conf="test" />
-  </target>
-  <target name="retrieve-all" depends="resolve">
-    <ivy:retrieve pattern="lib/[conf]/[artifact]-[revision].[ext]" conf="*" />
-  </target>
-  <target name="deliver" depends="retrieve-all">
-    <ivy:deliver deliverpattern="distrib/[artifact]-[revision].[ext]" pubrevision="1.1b4" pubdate="20050115123254" status="milestone" />
-  </target>
+     <property file="local.build.properties"/>
+     <property file="build.properties"/>
+           
+     <!-- try to load ivy here from local tools/ivy dir, in case the user has not already dropped
+   	      it into ant's lib dir (note that the latter copy will always take precedence).
+   	      We will not fail as long as local lib dir exists (it may be empty) and
+   	      ivy is in at least one of ant's lib dir or the local lib dir. -->
+     <path id="ivy.lib.path">
+       <fileset dir="${ivy.repository.dir}" includes="*.jar" />
+     </path>
+
+     <taskdef resource="fr/jayasoft/ivy/ant/antlib.xml" uri="antlib:fr.jayasoft.ivy.ant" classpathref="ivy.lib.path" />
+       
+     <import file="${ivy.repository.dir}/build-scripts/common-webapp.xml"/>
+
+     <target name="post-deploy-webapp">
+        <copy todir="${serveltEngine.webapp.dir}/${ant.project.name}/WEB-INF/classes">
+            <fileset dir="${content.object.dir}/src" />
+        </copy>    
+     </target>
 </project>
