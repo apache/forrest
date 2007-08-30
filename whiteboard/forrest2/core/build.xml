@@ -41,7 +41,15 @@
     
   <import file="${ivy.repository.dir}/build-scripts/common-java.xml"/>
 
-  <target name="copy-content-object-resources" depends="init">
+    <target name="copy-core-resources" depends="init">
+      <copy todir="${project.build.classes.dir}">
+        <fileset dir="${project.core.src.dir}">
+          <exclude name="**/*.java"/>
+        </fileset>
+      </copy>
+    </target>
+    
+    <target name="copy-content-object-resources" depends="init">
     <copy todir="${content.object.build.dir}">
       <fileset dir="${content.object.src.dir}">
         <exclude name="**/*.java"/>
@@ -49,7 +57,7 @@
     </copy>
   </target>
 
-  <target name="compile-content-object" depends="compile-core, copy-content-object-resources">
+  <target name="compile-content-object" depends="compile-core, copy-content-object-resources, copy-core-resources">
     <javac destdir="${content.object.build.dir}" debug="${compile.debug}">
       <classpath>
         <pathelement path="${project.build.classes.dir}"/>
