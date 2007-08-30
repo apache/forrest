@@ -48,12 +48,12 @@ public abstract class AbstractSourceNode {
 	private URI sourceURI;
 
 	/**
-	 * Construct a new LocationNode from an XML node.
-	 * 
-	 * @param element
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
+     * Construct a new LocationNode from an XML node.
+     * 
+     * @param element
+     * @throws URISyntaxException
+     * @throws IOException
+     */
 	public AbstractSourceNode(final Node element) throws URISyntaxException,
 			IOException {
 		final NamedNodeMap atts = element.getAttributes();
@@ -81,19 +81,20 @@ public abstract class AbstractSourceNode {
 	}
 
 	/**
-	 * 
-	 * @param sourceURI
-	 * @return
-	 * @throws ProcessingException -
-	 *             if the path to the resource cannot be resolved
-	 */
+     * 
+     * @param sourceURI
+     * @return
+     * @throws ProcessingException -
+     *             if the path to the resource cannot be resolved
+     */
 	private URL resolveClasspathURI(final URI sourceURI)
 			throws ProcessingException {
-		URL resourceURL;
-		resourceURL = this.getClass().getResource(sourceURI.getSchemeSpecificPart());
-		if (resourceURL == null)
-			throw new ProcessingException(
-					"Cannot find the classpath resource: " + sourceURI);
+        log.debug("Resolving classpath URI: " + sourceURI);
+		URL resourceURL = resourceURL = this.getClass().getResource(sourceURI.getSchemeSpecificPart());
+		if (resourceURL == null) {
+		  throw new ProcessingException(
+				"Cannot find the classpath resource: " + sourceURI);
+        }
 		return resourceURL;
 	}
 
@@ -110,16 +111,16 @@ public abstract class AbstractSourceNode {
 	}
 
 	/**
-	 * Resolve the supplied URI and return a URL that can be used to attempt to
-	 * retrieve the resource. A resolved uri has all variables substituted with
-	 * their values.
-	 * 
-	 * @param requestURI -
-	 *            the full request URI
-	 * @return
-	 * @throws MalformedURLException
-	 * @throws ProcessingException
-	 */
+     * Resolve the supplied URI and return a URL that can be used to attempt to
+     * retrieve the resource. A resolved uri has all variables substituted with
+     * their values.
+     * 
+     * @param requestURI -
+     *            the full request URI
+     * @return
+     * @throws MalformedURLException
+     * @throws ProcessingException
+     */
 	public URL resolveURL(AbstractMatcher matcher, URI requestURI)
 			throws MalformedURLException, ProcessingException {
 		URI uri = matcher.substituteVariables(requestURI, getSourceURI());
