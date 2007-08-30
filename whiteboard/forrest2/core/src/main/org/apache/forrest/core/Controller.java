@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,22 +107,13 @@ public class Controller implements IController {
 	 */
 	public Controller(final String locationmapPath, final String contextPath)
 			throws URISyntaxException, SAXException, IOException {
-		final File file = new File(contextPath);
-		if (file.exists()) {
-			log.info("Using Spring Context definition in " + contextPath);
-			this.context = new FileSystemXmlApplicationContext(file.getPath());
-		} else {
-			log.info("Using default spring context definition");
-			this.context = new ClassPathXmlApplicationContext(
-					"defaultForrestContext.xml");
-		}
-		this.initLocationmap(locationmapPath);
+        init(locationmapPath, new File(contextPath));
 	}
 
 	/**
 	 * Create a controller that uses the default location for the locationmap
-	 * definition file and forrest context file. That is "src/locationmap.xml"
-	 * and "src/forrestContext.xml" respectively..
+	 * definition file and forrest context file. That is files in the classpath
+     * called "locationmap.xml" and "forrestContext.xml" respectively.
 	 * 
 	 * @throws URISyntaxException
 	 * @throws IOException
@@ -131,8 +123,25 @@ public class Controller implements IController {
 	 * 
 	 */
 	public Controller() throws URISyntaxException, SAXException, IOException {
-		this("src/locationmap.xml", "src/forrestContext.xml");
+        URL locationmapURL = this.getClass().getResource("/locationmap.xml");
+        URL contextURL = this.getClass().getResource("/forrestContext.xml");
+        log.debug("Using locationmap at " + locationmapURL);
+        log.debug("Using context at " + contextURL);
+		init(locationmapURL.getPath(), new File(contextURL.getPath()));
 	}
+    
+    public void init(final String locationmapPath, File context) throws URISyntaxException, SAXException, IOException {
+        if (context.exists()) {
+            log.info("Using Spring Context definition in " + context.getPath());
+            this.context = new FileSystemXmlApplicationContext(context.getPath());
+        } else {
+            log.info("Using default spring context definition");
+            this.context = new ClassPathXmlApplicationContext(
+                    "defaultForrestContext.xml");
+        }
+        log.info("Using locationmap at " + locationmapPath);
+        this.initLocationmap(locationmapPath);
+    }
 
 	/**
 	 * Initialises the locationmap for use.
