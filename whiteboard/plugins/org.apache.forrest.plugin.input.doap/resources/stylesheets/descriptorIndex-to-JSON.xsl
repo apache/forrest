@@ -23,6 +23,42 @@
   xmlns:doap="http://usefulinc.com/ns/doap#"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:foaf="http://xmlns.com/foaf/0.1/">
+
+ <xsl:template name="replaceString">
+   <xsl:param name="string" />
+   <xsl:param name="old" />
+   <xsl:param name="new" />
+     <xsl:choose>
+       <xsl:when test="contains($string, $old)">
+           <xsl:value-of select="substring-before($string, $old)"/><xsl:value-of
+ select="$new" /><xsl:call-template name="replaceString">
+                   <xsl:with-param name="string"><xsl:value-of select="substring-after($string, $old)" /></xsl:with-param>
+                   <xsl:with-param name="new"><xsl:value-of select="$new" /></xsl:with-param>
+                   <xsl:with-param name="old"><xsl:value-of select="$old" /></xsl:with-param>
+                 </xsl:call-template>
+       </xsl:when>
+       <xsl:otherwise>
+       <xsl:value-of select="$string" />
+       </xsl:otherwise>
+     </xsl:choose>
+ </xsl:template>
+
+
+ <xsl:template name="json-escape">
+     <xsl:param name="text"/>
+          <xsl:call-template name="replaceString">
+                   <xsl:with-param name="string">
+                       <xsl:call-template name="replaceString">
+                          <xsl:with-param name="string"><xsl:value-of select="$text" /></xsl:with-param>
+                          <xsl:with-param name="new">\\</xsl:with-param>
+                          <xsl:with-param name="old">\</xsl:with-param>
+                        </xsl:call-template></xsl:with-param>
+                  <xsl:with-param name="new">\"</xsl:with-param>
+                   <xsl:with-param name="old">"</xsl:with-param>
+           </xsl:call-template>
+</xsl:template>
+
+
   <xsl:template match="/">{ "items": [<xsl:apply-templates select="descriptors"/>]} 
   </xsl:template>
   
@@ -38,7 +74,7 @@
   <xsl:template match="rdf:RDF"><xsl:apply-templates select="doap:Project"/></xsl:template>
   
   <xsl:template match="doap:Project">
-    "label":"<xsl:value-of select="doap:name"/>",
+    "label":"<xsl:call-template name="json-escape"><xsl:with-param name="text" select="doap:name"/></xsl:call-template>",
     <xsl:call-template name="categories"/>
     <xsl:call-template name="maintainers"/>
     <xsl:call-template name="programming-language"/>
@@ -46,7 +82,7 @@
   </xsl:template>
   
   <xsl:template match="doap:homepage">
-    "<xsl:value-of select="local-name(.)"/>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+    "<xsl:call-template name="json-escape"><xsl:with-param name="text" select="local-name(.)"/></xsl:call-template>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
   <xsl:template name="maintainers">
@@ -60,7 +96,7 @@
   </xsl:template>
   
   <xsl:template match="foaf:Person">
-    "<xsl:value-of select="foaf:name"/>"<xsl:if test="not(position()=last())">,</xsl:if>
+    "<xsl:call-template name="json-escape"><xsl:with-param name="text" select="foaf:name"/></xsl:call-template>"<xsl:if test="not(position()=last())">,</xsl:if>
   </xsl:template>
   
   <xsl:template name="categories">
@@ -95,11 +131,11 @@
   </xsl:template>
   
   <xsl:template match="doap:programming-language">
-    "<xsl:value-of select="."/>"<xsl:if test="not(position()=last())">, </xsl:if>
+    "<xsl:call-template name="json-escape"><xsl:with-param name="text" select="."/></xsl:call-template>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
   <xsl:template match="doap:*">
-    "<xsl:value-of select="local-name(.)"/>":"<xsl:value-of select="normalize-space(.)"/>"<xsl:if test="not(position()=last())">, </xsl:if>
+    "<xsl:call-template name="json-escape"><xsl:with-param name="text" select="local-name(.)"/></xsl:call-template>":"<xsl:call-template name="json-escape"><xsl:with-param name="text" select="normalize-space(.)"/></xsl:call-template>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
     
 </xsl:stylesheet>
