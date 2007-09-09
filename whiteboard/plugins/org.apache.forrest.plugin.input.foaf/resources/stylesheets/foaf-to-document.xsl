@@ -24,24 +24,15 @@
   exclude-result-prefixes="rdf dc foaf">
 
  <xsl:template match="/">
-  <xsl:apply-templates select="rdf:RDF/foaf:Person"/>
+   <document>
+     <xsl:call-template name="header" />
+     <body>
+       <xsl:apply-templates select="rdf:RDF/foaf:Person"/>
+     </body>
+   </document>
  </xsl:template>
 
 <xsl:template match="foaf:Person">
-    <document>
-      <xsl:call-template name="header" />
-      <xsl:call-template name="body" />
-    </document>
-</xsl:template>
-
-<xsl:template name="header">
-    <header>
-      <title>Information about <xsl:value-of select="foaf:name"/></title>
-    </header>
-</xsl:template>
-
-<xsl:template name="body">
-<body>
   <section>
    <title>FOAF Metadata of <xsl:value-of select="foaf:name"/> </title>
    <xsl:choose>
@@ -116,9 +107,13 @@
      </table>
     </p>
     </section>
+</xsl:template>
 
-    </body>
- </xsl:template>
+<xsl:template name="header">
+    <header>
+      <title>Person details</title>
+    </header>
+</xsl:template>
 
  <xsl:template match="foaf:*">
  <section>
