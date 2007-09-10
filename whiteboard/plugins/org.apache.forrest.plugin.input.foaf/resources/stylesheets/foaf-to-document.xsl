@@ -37,14 +37,9 @@
             <title>
                 <xsl:value-of select="foaf:name" />
             </title>
-            <xsl:choose>
-                <xsl:when test="foaf:depiction/@rdf:resource">
-                    <p>
-                        <img src="{foaf:depiction/@rdf:resource}"
-                            height="120" border="0" />
-                    </p>
-                </xsl:when>
-            </xsl:choose>
+
+            <xsl:apply-templates select="foaf:depiction/@rdf:resource" />
+
             <p>
                 <table>
                     <tr>
@@ -67,26 +62,7 @@
                             </xsl:choose>
                         </td>
                     </tr>
-                    <xsl:choose>
-                        <xsl:when test="./@rdf:ID">
-                            <tr>
-                                <td>Id</td>
-                                <td>
-                                    <xsl:value-of select="./@rdf:ID" />
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when test="foaf:nick">
-                            <tr>
-                                <td>Nick</td>
-                                <td>
-                                    <xsl:value-of select="foaf:nick" />
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
+
                     <tr>
                         <td>Mbox</td>
                         <xsl:choose>
@@ -99,7 +75,7 @@
                             <xsl:otherwise>
                                 <td>
                                     <a
-                                        href="mailto:{foaf:mbox/@rdf:resource}">
+                                        href="{foaf:mbox/@rdf:resource}">
                                         <xsl:value-of
                                             select="foaf:mbox/@rdf:resource" />
                                     </a>
@@ -107,64 +83,9 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </tr>
-                    <xsl:choose>
-                        <xsl:when test="foaf:phone/@rdf:resource">
-                            <tr>
-                                <td>Phone</td>
-                                <td>
-                                    <a
-                                        href="{foaf:phone/@rdf:resource}">
-                                        <xsl:value-of
-                                            select="foaf:phone/@rdf:resource" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when test="foaf:homepage/@rdf:resource">
-                            <tr>
-                                <td>Homepage</td>
-                                <td>
-                                    <a
-                                        href="{foaf:homepage/@rdf:resource}">
-                                        <xsl:value-of
-                                            select="foaf:homepage/@rdf:resource" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when
-                            test="foaf:workplaceHomepage/@rdf:resource">
-                            <tr>
-                                <td>Work Place Homepage</td>
-                                <td>
-                                    <a
-                                        href="{foaf:workplaceHomepage/@rdf:resource}">
-                                        <xsl:value-of
-                                            select="foaf:workplaceHomepage/@rdf:resource" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when
-                            test="foaf:schoolHomepage/@rdf:resource">
-                            <tr>
-                                <td>School Homepage</td>
-                                <td>
-                                    <a
-                                        href="{foaf:schoolHomepage/@rdf:resource}">
-                                        <xsl:value-of
-                                            select="foaf:schoolHomepage/@rdf:resource" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </xsl:when>
-                    </xsl:choose>
+                    
+                    <xsl:apply-templates />
+
                 </table>
             </p>
 
@@ -278,4 +199,74 @@
         </xsl:for-each>
     </xsl:template>
 
+    <xsl:template match="foaf:depiction/@rdf:resource">
+        <p>
+            <img src="{foaf:depiction/@rdf:resource}" height="120"
+                border="0" />
+        </p>
+    </xsl:template>
+
+    <xsl:template match="@rdf:ID">
+        <tr>
+            <td>Id</td>
+            <td>
+                <xsl:value-of select="." />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:nick">
+        <tr>
+            <td>Nick</td>
+            <td>
+                <xsl:value-of select="foaf:nick" />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:phone/@rdf:resource">
+        <tr>
+            <td>Phone</td>
+            <td>
+                <a href="{foaf:phone/@rdf:resource}">
+                    <xsl:value-of select="foaf:phone/@rdf:resource" />
+                </a>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:homepage/@rdf:resource">
+        <tr>
+            <td>Homepage</td>
+            <td>
+                <a href="{foaf:homepage/@rdf:resource}">
+                    <xsl:value-of select="foaf:homepage/@rdf:resource" />
+                </a>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:workplaceHomepage/@rdf:resource">
+        <tr>
+            <td>Work Place Homepage</td>
+            <td>
+                <a href="{foaf:workplaceHomepage/@rdf:resource}">
+                    <xsl:value-of
+                        select="foaf:workplaceHomepage/@rdf:resource" />
+                </a>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:schoolHomepage/@rdf:resource">
+        <tr>
+            <td>School Homepage</td>
+            <td>
+                <a href="{foaf:schoolHomepage/@rdf:resource}">
+                    <xsl:value-of
+                        select="foaf:schoolHomepage/@rdf:resource" />
+                </a>
+            </td>
+        </tr>
+    </xsl:template>
 </xsl:stylesheet>
