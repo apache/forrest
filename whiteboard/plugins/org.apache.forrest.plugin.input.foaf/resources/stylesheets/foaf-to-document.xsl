@@ -21,6 +21,7 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:wot="http://xmlns.com/wot/0.1/"
     exclude-result-prefixes="rdf dc foaf">
 
     <xsl:template match="/">
@@ -252,4 +253,6 @@
                 </td>
             </tr>
     </xsl:template>
+    
+    <xsl:template match="*"/>
 </xsl:stylesheet>
