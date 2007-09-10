@@ -34,7 +34,7 @@
 
 <xsl:template match="foaf:Person">
   <section>
-   <title>FOAF Metadata of <xsl:value-of select="foaf:name"/> </title>
+   <title><xsl:value-of select="foaf:name"/> </title>
    <xsl:choose>
    <xsl:when test="foaf:depiction/@rdf:resource">
     <p><img src="{foaf:depiction/@rdf:resource}" height="120" border="0" /></p>
@@ -94,19 +94,21 @@
     </xsl:choose>
     </table>
     </p>
-    </section>
     
     <br/>
     
-    <section>
-    <title>Friends</title>
-    <p>
-    <table>
-      <tr><th>ID</th><th>Name</th><th>Mail</th></tr>
-      <xsl:apply-templates select="foaf:knows"/>
-     </table>
-    </p>
-    </section>
+    <xsl:if test="foaf:knows">
+        <section>
+            <title>Friends</title>
+            <p>
+            <table>
+              <tr><th>ID</th><th>Name</th><th>Mail</th></tr>
+              <xsl:apply-templates select="foaf:knows"/>
+             </table>
+            </p>
+        </section>
+    </xsl:if>
+  </section>
 </xsl:template>
 
 <xsl:template name="header">
