@@ -40,7 +40,6 @@
 
             <xsl:apply-templates select="foaf:depiction/@rdf:resource" />
 
-            <p>
                 <table>
                     <tr>
                         <th>Property</th>
@@ -84,28 +83,18 @@
                         </xsl:choose>
                     </tr>
                     
-                    <xsl:apply-templates />
-
+                    <xsl:apply-templates select="*[not(local-name(.) = 'knows')]"/>
                 </table>
-            </p>
+                    
+                <xsl:if test="foaf:knows">
+                  <section>
+                    <title>Knows</title>
+                    <table>
+                      <xsl:apply-templates select="foaf:knows"/>
+                    </table>
+                  </section>
+                </xsl:if>
 
-            <br />
-
-            <xsl:if test="foaf:knows">
-                <section>
-                    <title>Friends</title>
-                    <p>
-                        <table>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Mail</th>
-                            </tr>
-                            <xsl:apply-templates select="foaf:knows" />
-                        </table>
-                    </p>
-                </section>
-            </xsl:if>
         </section>
     </xsl:template>
 
@@ -115,21 +104,7 @@
         </header>
     </xsl:template>
 
-    <xsl:template match="foaf:*">
-        <section>
-            <tr>
-                <td>
-                    <xsl:value-of select="local-name()" />
-                </td>
-                <td>
-                    <xsl:value-of select="." />
-                </td>
-            </tr>
-        </section>
-    </xsl:template>
-
     <xsl:template match="foaf:currentProject">
-        <section>
             <tr>
                 <td>
                     <xsl:value-of select="./@dc:title" />
@@ -143,11 +118,9 @@
                     <xsl:value-of select="./@rdfs:comment" />
                 </td>
             </tr>
-        </section>
     </xsl:template>
 
     <xsl:template match="foaf:publications">
-        <section>
             <tr>
                 <td>
                     <xsl:value-of select="./@dc:title" />
@@ -161,7 +134,6 @@
                     <xsl:value-of select="./@dc:date" />
                 </td>
             </tr>
-        </section>
     </xsl:template>
 
     <xsl:template match="foaf:knows">
@@ -268,5 +240,16 @@
                 </a>
             </td>
         </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:*">
+            <tr>
+                <td>
+                    <xsl:value-of select="local-name()" />
+                </td>
+                <td>
+                    <xsl:value-of select="." />
+                </td>
+            </tr>
     </xsl:template>
 </xsl:stylesheet>
