@@ -45,7 +45,7 @@
                     <tr>
                         <th>Property</th>
                         <th>Value</th>
-                    </tr>
+                    </tr>    
                     <tr>
                         <td>Name</td>
                         <td>
@@ -61,27 +61,6 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td>Mbox</td>
-                        <xsl:choose>
-                            <xsl:when test="foaf:mbox_sha1sum">
-                                <td>
-                                    <xsl:value-of
-                                        select="foaf:mbox_sha1sum" />
-                                </td>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <td>
-                                    <a
-                                        href="{foaf:mbox/@rdf:resource}">
-                                        <xsl:value-of
-                                            select="foaf:mbox/@rdf:resource" />
-                                    </a>
-                                </td>
-                            </xsl:otherwise>
-                        </xsl:choose>
                     </tr>
                     
                     <xsl:apply-templates select="*[not(local-name(.) = 'knows')]"/>
@@ -103,6 +82,35 @@
         <header>
             <title>Person details</title>
         </header>
+    </xsl:template>
+    
+    <xsl:template match="foaf:name">
+    </xsl:template>
+    
+    <xsl:template match="foaf:firstname">
+    </xsl:template>
+    
+    <xsl:template match="foaf:surname">
+    </xsl:template>
+
+    <xsl:template match="foaf:mbox_sha1sum">
+        <tr>
+            <td>Mbox SH1Sum</td>
+            <td>
+                <xsl:value-of select="." />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="foaf:mbox">
+        <tr>
+            <td>Mbox</td>
+            <td>
+                <a href="{@rdf:resource}">
+                    <xsl:value-of select="@rdf:resource" />
+                </a>
+            </td>
+        </tr>
     </xsl:template>
 
     <xsl:template match="foaf:currentProject">
