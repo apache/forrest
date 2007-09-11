@@ -34,7 +34,7 @@
     
     <xsl:template match="@*|*|text()|processing-instruction()|comment()">
       <xsl:copy>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
       </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

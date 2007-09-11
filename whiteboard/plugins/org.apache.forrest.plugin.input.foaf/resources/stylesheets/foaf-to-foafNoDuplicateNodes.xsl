@@ -32,16 +32,16 @@
       <xsl:apply-templates select="document($seeAlsoFile)/rdf:RDF/foaf:Person/*"/>
     </xsl:template>
     
-    <xsl:template match="text()|processing-instruction()|comment()">
+    <xsl:template match="@*|text()|processing-instruction()|comment()">
       <xsl:copy>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
       </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="@*|node()">
+    <xsl:template match="node()">
        <xsl:if test="not(node()) or not(preceding-sibling::node()[.=string(current()) and name()=name(current())])">
         <xsl:copy>
-          <xsl:apply-templates/>
+          <xsl:apply-templates  select="@*|*|text()|processing-instruction()|comment()"/>
         </xsl:copy>
       </xsl:if>
     </xsl:template>
