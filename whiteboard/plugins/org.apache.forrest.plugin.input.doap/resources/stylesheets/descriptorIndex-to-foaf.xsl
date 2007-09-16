@@ -24,7 +24,12 @@
   xmlns:foaf="http://xmlns.com/foaf/0.1/">
   <xsl:template match="descriptors">
     <rdf:RDF>
-      <xsl:apply-templates select="//doap:maintainer"/>      
+      <xsl:apply-templates select="//doap:maintainer"/>
+      <xsl:apply-templates select="//doap:developer"/>
+      <xsl:apply-templates select="//doap:documenter"/>
+      <xsl:apply-templates select="//doap:translator"/>
+      <xsl:apply-templates select="//doap:tester"/>
+      <xsl:apply-templates select="//doap:helper"/>      
     </rdf:RDF>
   </xsl:template>
   
