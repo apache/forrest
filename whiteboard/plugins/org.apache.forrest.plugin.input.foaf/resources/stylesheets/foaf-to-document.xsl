@@ -261,6 +261,33 @@
         </tr>
     </xsl:template>
 
+    <xsl:template match="foaf:holdsAccount">
+      <xsl:apply-templates/>
+    </xsl:template>
+    
+    <xsl:template match="foaf:OnlineAccount">
+        <xsl:choose>
+            <xsl:when test="foaf:accountServiceHomepage">
+              <tr>
+                <td>
+                  <link href="{foaf:homepage/@rdf:resource}">
+                    <xsl:value-of select="foaf:accountServiceHomepage/@rdf:resource" />
+                  </link>
+                </td>
+                <td>
+                  <xsl:if test="foaf:seeAlso">
+                      <link href="{foaf:seeAlso/@rdf:resource}">
+                        <xsl:value-of select="foaf:seeAlso/@dc:format" />
+                      </link>
+                  </xsl:if>
+                </td>
+              </tr>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="foaf:schoolHomepage/@rdf:resource">
         <tr>
             <td>School Homepage</td>
