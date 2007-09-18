@@ -106,9 +106,16 @@
         <tr>
             <td>Mbox</td>
             <td>
-                <a href="{@rdf:resource}">
+              <xsl:choose>
+                  <xsl:when test="starts-with(@rdf:resource, 'mailto:')">
+                    <link href="{@rdf:resource}">
+                        <xsl:value-of select="@rdf:resource" />
+                    </link>
+                  </xsl:when>
+                  <xsl:otherwise>
                     <xsl:value-of select="@rdf:resource" />
-                </a>
+                  </xsl:otherwise>
+              </xsl:choose>
             </td>
         </tr>
     </xsl:template>
@@ -119,9 +126,9 @@
                     <xsl:value-of select="./@dc:title" />
                 </td>
                 <td>
-                    <a href="{./@rdf:resource}">
+                    <link href="{./@rdf:resource}">
                         <xsl:value-of select="./@rdf:resource" />
-                    </a>
+                    </link>
                 </td>
                 <td>
                     <xsl:value-of select="./@rdfs:comment" />
@@ -135,9 +142,9 @@
                     <xsl:value-of select="./@dc:title" />
                 </td>
                 <td>
-                    <a href="{./@rdf:resource}">
+                    <link href="{./@rdf:resource}">
                         <xsl:value-of select="./@rdf:resource" />
-                    </a>
+                    </link>
                 </td>
                 <td>
                     <xsl:value-of select="./@dc:date" />
@@ -169,10 +176,10 @@
                             <xsl:value-of select="foaf:mbox_sha1sum" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <a href="{foaf:mbox/@rdf:resource}">
+                            <link href="{foaf:mbox/@rdf:resource}">
                                 <xsl:value-of
                                     select="foaf:mbox/@rdf:resource" />
-                            </a>
+                            </link>
                         </xsl:otherwise>
                     </xsl:choose>
                 </td>
@@ -209,9 +216,9 @@
         <tr>
             <td>Phone</td>
             <td>
-                <a href="{foaf:phone/@rdf:resource}">
+                <link href="{foaf:phone/@rdf:resource}">
                     <xsl:value-of select="foaf:phone/@rdf:resource" />
-                </a>
+                </link>
             </td>
         </tr>
     </xsl:template>
@@ -220,9 +227,9 @@
         <tr>
             <td>Homepage</td>
             <td>
-                <a href="{foaf:homepage/@rdf:resource}">
+                <link href="{foaf:homepage/@rdf:resource}">
                     <xsl:value-of select="foaf:homepage/@rdf:resource" />
-                </a>
+                </link>
             </td>
         </tr>
     </xsl:template>
@@ -231,10 +238,10 @@
         <tr>
             <td>Work Place Homepage</td>
             <td>
-                <a href="{foaf:workplaceHomepage/@rdf:resource}">
+                <link href="{foaf:workplaceHomepage/@rdf:resource}">
                     <xsl:value-of
                         select="foaf:workplaceHomepage/@rdf:resource" />
-                </a>
+                </link>
             </td>
         </tr>
     </xsl:template>
@@ -243,10 +250,10 @@
         <tr>
             <td>School Homepage</td>
             <td>
-                <a href="{foaf:schoolHomepage/@rdf:resource}">
+                <link href="{foaf:schoolHomepage/@rdf:resource}">
                     <xsl:value-of
                         select="foaf:schoolHomepage/@rdf:resource" />
-                </a>
+                </link>
             </td>
         </tr>
     </xsl:template>
