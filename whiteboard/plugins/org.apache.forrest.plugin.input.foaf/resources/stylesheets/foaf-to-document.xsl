@@ -22,6 +22,8 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:wot="http://xmlns.com/wot/0.1/"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:pm="http://www.web-semantics.org/ns/pm#"
     exclude-result-prefixes="rdf dc foaf">
 
     <xsl:template match="/">
@@ -120,20 +122,33 @@
         </tr>
     </xsl:template>
 
+    <!--  FIXME: This is a bit of a hack. Different people use different
+          ways of capturing project details. We need to refactor this to
+          make it work regardless of how they express this data. -->
     <xsl:template match="foaf:currentProject">
-            <tr>
-                <td>
-                    <xsl:value-of select="./@dc:title" />
-                </td>
-                <td>
-                    <link href="{./@rdf:resource}">
-                        <xsl:value-of select="./@rdf:resource" />
-                    </link>
-                </td>
-                <td>
-                    <xsl:value-of select="./@rdfs:comment" />
-                </td>
-            </tr>
+      <xsl:choose>
+        <xsl:when test="@dc:title">
+          <tr>
+            <td>Project</td>
+            <td>
+              <link href="{@rdf:resource}">
+                <xsl:value-of select="@dc:title" />
+              </link>
+              <xsl:value-of select="@rdfs:comment" />
+            </td>
+          </tr>
+        </xsl:when>
+        <xsl:when test="doap:Project">
+          <tr>
+            <td>Project</td>
+            <td>
+              <link href="{doap:Project/pm:homepage/@rdf:resource}">
+                  <xsl:value-of select="doap:Project/pm:name" />
+              </link>
+            </td>
+          </tr>
+        </xsl:when>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template match="foaf:publications">
