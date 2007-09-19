@@ -76,7 +76,7 @@
   <xsl:template match="doap:Project">
     "label":"<xsl:call-template name="json-escape"><xsl:with-param name="text" select="doap:name"/></xsl:call-template>",
     <xsl:call-template name="categories"/>
-    <xsl:call-template name="maintainers"/>
+    <xsl:call-template name="contributors"/>
     <xsl:call-template name="programming-language"/>
     <xsl:apply-templates select="doap:name|doap:shortdesc|doap:homepage"/>
   </xsl:template>
@@ -85,14 +85,14 @@
     "<xsl:call-template name="json-escape"><xsl:with-param name="text" select="local-name(.)"/></xsl:call-template>":"<xsl:apply-templates select="@rdf:resource"/>"<xsl:if test="not(position()=last())">, </xsl:if>
   </xsl:template>
   
-  <xsl:template name="maintainers">
+  <xsl:template name="contributors">
     <xsl:if test="doap:maintainer|doap:developer|doap:helper">
       "person" : [<xsl:apply-templates select="doap:maintainer|doap:developer|doap:helper"/>],
     </xsl:if>
   </xsl:template>
   
   <xsl:template match="doap:maintainer|doap:developer|doap:helper">
-    <xsl:apply-templates select="foaf:Person"/>
+    <xsl:apply-templates select="foaf:Person"/><xsl:if test="not(following-sibling::doap:maintainer|doap:developer|doap:helper)">,</xsl:if>
   </xsl:template>
   
   <xsl:template match="foaf:Person">
