@@ -108,18 +108,22 @@
         <tr>
             <td>Mbox</td>
             <td>
-              <xsl:choose>
-                  <xsl:when test="starts-with(@rdf:resource, 'mailto:')">
-                    <link href="{@rdf:resource}">
-                        <xsl:value-of select="@rdf:resource" />
-                    </link>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="@rdf:resource" />
-                  </xsl:otherwise>
-              </xsl:choose>
+              <xsl:apply-templates select="@rdf:resource"/>
             </td>
         </tr>
+    </xsl:template>
+    
+    <xsl:template match="@rdf:resource">
+      <xsl:choose>
+          <xsl:when test="starts-with(., 'mailto:')">
+            <link href="{.}">
+                <xsl:value-of select="." />
+            </link>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="." />
+          </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <!--  FIXME: This is a bit of a hack. Different people use different
@@ -171,9 +175,6 @@
         <xsl:for-each select="foaf:Person">
             <tr>
                 <td>
-                    <xsl:value-of select="./@rdf:ID" />
-                </td>
-                <td>
                     <xsl:choose>
                         <xsl:when test="foaf:name">
                             <xsl:value-of select="foaf:name" />
@@ -190,11 +191,11 @@
                         <xsl:when test="foaf:mbox_sha1sum">
                             <xsl:value-of select="foaf:mbox_sha1sum" />
                         </xsl:when>
+                        <xsl:when test="foaf:mbox">
+                          <xsl:apply-templates select="foaf:mbox/@rdf:resource"/>
+                        </xsl:when>
                         <xsl:otherwise>
-                            <link href="{foaf:mbox/@rdf:resource}">
-                                <xsl:value-of
-                                    select="foaf:mbox/@rdf:resource" />
-                            </link>
+                          No MBox specified
                         </xsl:otherwise>
                     </xsl:choose>
                 </td>
