@@ -41,7 +41,7 @@
                 <xsl:value-of select="foaf:name" />
             </title>
 
-            <xsl:apply-templates select="foaf:depiction/@rdf:resource" />
+            <xsl:apply-templates select="foaf:depiction" />
 
                 <table>
                     <tr>
@@ -65,7 +65,7 @@
                         </td>
                     </tr>
                     
-                    <xsl:apply-templates select="*[not(local-name(.) = 'knows') and not(local-name(.) = 'holdsAccount')  and not(local-name(.) = 'currentProject')]"/>
+                    <xsl:apply-templates select="*[not(local-name(.) = 'depiction') and not(local-name(.) = 'knows') and not(local-name(.) = 'holdsAccount')  and not(local-name(.) = 'currentProject')]"/>
                 </table>
                     
                 <xsl:if test="foaf:currentProject">
@@ -215,10 +215,10 @@
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template match="foaf:depiction/@rdf:resource">
+    <xsl:template match="foaf:depiction">
         <p>
-            <img src="{foaf:depiction/@rdf:resource}" height="120"
-                border="0" />
+            <img src="{@rdf:resource}" height="120"
+                border="0" alt="depiction"/>
         </p>
     </xsl:template>
 
@@ -235,18 +235,16 @@
         <tr>
             <td>Nick</td>
             <td>
-                <xsl:value-of select="foaf:nick" />
+                <xsl:value-of select="." />
             </td>
         </tr>
     </xsl:template>
 
-    <xsl:template match="foaf:phone/@rdf:resource">
+    <xsl:template match="foaf:phone">
         <tr>
             <td>Phone</td>
             <td>
-                <link href="{foaf:phone/@rdf:resource}">
-                    <xsl:value-of select="foaf:phone/@rdf:resource" />
-                </link>
+              <xsl:apply-templates select="@*"/>
             </td>
         </tr>
     </xsl:template>
@@ -294,7 +292,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="foaf:schoolHomepage/@rdf:resource">
+    <xsl:template match="foaf:schoolHomepage">
         <tr>
             <td>School Homepage</td>
             <td>
