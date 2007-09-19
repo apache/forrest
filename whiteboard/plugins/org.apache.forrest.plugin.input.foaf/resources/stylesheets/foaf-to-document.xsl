@@ -65,8 +65,26 @@
                         </td>
                     </tr>
                     
-                    <xsl:apply-templates select="*[not(local-name(.) = 'knows')]"/>
+                    <xsl:apply-templates select="*[not(local-name(.) = 'knows') and not(local-name(.) = 'holdsAccount')  and not(local-name(.) = 'currentProject')]"/>
                 </table>
+                    
+                <xsl:if test="foaf:currentProject">
+                  <section>
+                    <title>Current Project(s)</title>
+                    <ul>
+                      <xsl:apply-templates select="foaf:currentProject"/>
+                    </ul>
+                  </section>
+                </xsl:if>
+                    
+                <xsl:if test="foaf:holdsAccount">
+                  <section>
+                    <title>Accounts</title>
+                    <table>
+                      <xsl:apply-templates select="foaf:holdsAccount"/>
+                    </table>
+                  </section>
+                </xsl:if>
                     
                 <xsl:if test="foaf:knows">
                   <section>
@@ -115,7 +133,7 @@
     
     <xsl:template match="@rdf:resource">
       <xsl:choose>
-          <xsl:when test="starts-with(., 'mailto:')">
+          <xsl:when test="starts-with(., 'mailto:') or starts-with(., 'http:')">
             <link href="{.}">
                 <xsl:value-of select="." />
             </link>
@@ -132,25 +150,19 @@
     <xsl:template match="foaf:currentProject">
       <xsl:choose>
         <xsl:when test="@dc:title">
-          <tr>
-            <td>Project</td>
-            <td>
+          <li>
               <link href="{@rdf:resource}">
                 <xsl:value-of select="@dc:title" />
               </link>
               <xsl:value-of select="@rdfs:comment" />
-            </td>
-          </tr>
+          </li>
         </xsl:when>
         <xsl:when test="doap:Project">
-          <tr>
-            <td>Project</td>
-            <td>
-              <link href="{doap:Project/pm:homepage/@rdf:resource}">
-                  <xsl:value-of select="doap:Project/pm:name" />
-              </link>
-            </td>
-          </tr>
+          <li>
+            <link href="{doap:Project/pm:homepage/@rdf:resource}">
+              <xsl:value-of select="doap:Project/pm:name" />
+            </link>
+          </li>
         </xsl:when>
       </xsl:choose>
     </xsl:template>
@@ -239,25 +251,20 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="foaf:homepage/@rdf:resource">
+    <xsl:template match="foaf:homepage">
         <tr>
             <td>Homepage</td>
             <td>
-                <link href="{foaf:homepage/@rdf:resource}">
-                    <xsl:value-of select="foaf:homepage/@rdf:resource" />
-                </link>
+              <xsl:apply-templates select="@*"/>
             </td>
         </tr>
     </xsl:template>
 
-    <xsl:template match="foaf:workplaceHomepage/@rdf:resource">
+    <xsl:template match="foaf:workplaceHomepage">
         <tr>
             <td>Work Place Homepage</td>
             <td>
-                <link href="{foaf:workplaceHomepage/@rdf:resource}">
-                    <xsl:value-of
-                        select="foaf:workplaceHomepage/@rdf:resource" />
-                </link>
+              <xsl:apply-templates select="@*"/>
             </td>
         </tr>
     </xsl:template>
@@ -270,10 +277,8 @@
         <xsl:choose>
             <xsl:when test="foaf:accountServiceHomepage">
               <tr>
-                <td>
-                  <link href="{foaf:homepage/@rdf:resource}">
-                    <xsl:value-of select="foaf:accountServiceHomepage/@rdf:resource" />
-                  </link>
+                <td>                  
+                  <xsl:apply-templates select="foaf:homepage/@rdf:resource"/>
                 </td>
                 <td>
                   <xsl:if test="foaf:seeAlso">
@@ -293,10 +298,7 @@
         <tr>
             <td>School Homepage</td>
             <td>
-                <link href="{foaf:schoolHomepage/@rdf:resource}">
-                    <xsl:value-of
-                        select="foaf:schoolHomepage/@rdf:resource" />
-                </link>
+              <xsl:apply-templates select="@*"/>
             </td>
         </tr>
     </xsl:template>
@@ -307,7 +309,14 @@
                     <xsl:value-of select="local-name()" />
                 </td>
                 <td>
-                    <xsl:value-of select="." />
+                    <xsl:choose>
+                      <xsl:when test="text()">
+                        <xsl:value-of select="." />
+                      </xsl:when>
+                      <xsl:when test="@rdf:resource">
+                        <xsl:apply-templates select="@rdf:resource"/>
+                      </xsl:when>
+                    </xsl:choose>
                 </td>
             </tr>
     </xsl:template>
