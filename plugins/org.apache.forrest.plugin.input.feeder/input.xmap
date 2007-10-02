@@ -23,15 +23,20 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:pipelines>
     <map:pipeline>
+      
+      <map:match pattern="**/*.tagFeed.rss.xml">
+        <map:generate src="cocoon://{1}/{2}.tagFeed.rss"/>
+        <map:transform src="{lm:feeder.transform.rss.document}"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      
       <map:match pattern="*.rss.xml">
-        <map:generate src="{lm:project.{1}.xml}"/>
-        <map:transform src="{lm:feeder.transform.feedDesc.RSS20}"/>
+        <map:generate src="cocoon://{1}.rss"/>
         <map:transform src="{lm:feeder.transform.rss.document}"/>
         <map:serialize type="xml"/>
       </map:match>
       <map:match pattern="**/*.rss.xml">
-        <map:generate src="{lm:project.{1}/{2}.xml}"/>
-        <map:transform src="{lm:feeder.transform.feedDesc.RSS20}"/>
+        <map:generate src="cocoon://{1}/{2}.rss"/>
         <map:transform src="{lm:feeder.transform.rss.document}"/>
         <map:serialize type="xml"/>
       </map:match>
