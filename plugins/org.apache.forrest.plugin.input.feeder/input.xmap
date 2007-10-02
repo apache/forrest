@@ -24,6 +24,14 @@
   <map:pipelines>
     <map:pipeline>
       
+      <map:match pattern="*.tagFeed.rss.xml">
+        <map:generate src="cocoon://{1}.tagFeed.rss"/>
+        <map:transform src="{lm:feeder.transform.rss.document}">
+          <map:parameter name="title" value="Items tagged with {1}"/> 
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      
       <map:match pattern="**/*.tagFeed.rss.xml">
         <map:generate src="cocoon://{1}/{2}.tagFeed.rss"/>
         <map:transform src="{lm:feeder.transform.rss.document}">
