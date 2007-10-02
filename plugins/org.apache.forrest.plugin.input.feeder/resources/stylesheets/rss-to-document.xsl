@@ -17,10 +17,19 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:strip-space elements="*"/>
+  <xsl:param name="title"/>
+  
   <xsl:template match="rss">
     <document>
       <header>
-        <title><xsl:value-of select="channel/title"/></title>
+        <xsl:choose>
+          <xsl:when test="$title">
+            <title><xsl:value-of select="$title"/></title>
+          </xsl:when>
+          <xsl:otherwise>
+            <title><xsl:value-of select="channel/title"/></title>
+          </xsl:otherwise>
+        </xsl:choose>
       </header>
       <body>
         <xsl:apply-templates select="channel"/>
