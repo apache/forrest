@@ -420,29 +420,102 @@ otherwise it doesn't load for some reason -->
   </xsl:template>
   
   <xsl:template name="project-contributors">
-    <section>
-      <title>Contributors</title>
-      <xsl:choose>
-        <xsl:when test="doap:maintainer">
-          <note>This list may not be exhaustive.</note>
+    <xsl:if test="doap:helper|doap:developer|doap:documentor|doap:translator|doap:tester|doap:helper">
+      <section>
+        <title>Contributors</title>
+        <note>This list may not be exhaustive.</note>
+        <xsl:if test="doap:maintainer">
           <table>
+            <caption>Maintainers</caption>
             <tr>
               <th>Name</th>
               <th>Email</th>
-      </tr>
-      <xsl:for-each select="doap:maintainer/foaf:Person">
+            </tr>
+            <xsl:for-each select="doap:maintainer/foaf:Person">
                 <tr>
                         <td><xsl:apply-templates select="foaf:name"/></td>
                         <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
                 </tr>
-        </xsl:for-each>
+            </xsl:for-each>
           </table>
-        </xsl:when>
-        <xsl:otherwise>
-          <p>Contributor data not available.</p>
-        </xsl:otherwise>
-      </xsl:choose>
-    </section>
+        </xsl:if>
+        <xsl:if test="doap:developer">
+          <table>
+            <caption>Developers</caption>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:developer/foaf:Person">
+                <tr>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
+        <xsl:if test="doap:documentor">
+          <table>
+            <caption>Documentors</caption>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:documentor/foaf:Person">
+                <tr>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
+        <xsl:if test="doap:translator">
+          <table>
+            <caption>Translators</caption>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:translator/foaf:Person">
+                <tr>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
+        <xsl:if test="doap:tester">
+          <table>
+            <caption>Testers</caption>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:tester/foaf:Person">
+                <tr>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
+        <xsl:if test="doap:helper">
+          <table>
+            <caption>Helpers</caption>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            <xsl:for-each select="doap:helper/foaf:Person">
+                <tr>
+                        <td><xsl:apply-templates select="foaf:name"/></td>
+                        <td><xsl:apply-templates select="foaf:mbox/@rdf:resource"/></td>
+                </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
+      </section>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="foaf:name">
