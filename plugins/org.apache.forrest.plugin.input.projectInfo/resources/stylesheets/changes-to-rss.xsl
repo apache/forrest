@@ -15,32 +15,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0" 
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:forrest="http://apache.org/forrest/properties/1.0">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="versionNumber"/>
-  <xsl:variable name="changes-url">
-    <xsl:choose>
-      <xsl:when test="/*/skinconfig">
-        <xsl:value-of select="concat(/*/skinconfig/project-url, 'changes.html')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat(/*/forrest:properties/forrest:property[@name='project.url']/@value, 'changes.html')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
+  <xsl:param name="changes-url"
+    select="concat(//skinconfig/project-url, 'changes.html')"/>
+  <xsl:param name="project-name" select="//skinconfig/project-name"/>
   <xsl:template match="status">
-    <xsl:variable name="project-name">
-      <xsl:choose>
-        <xsl:when test="../skinconfig">
-          <xsl:value-of select="../skinconfig/project-name"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="../forrest:properties/forrest:property[@name='project.name']/@value"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     <rss version="0.91">
       <channel>
         <xsl:choose>
@@ -100,12 +80,13 @@
             <xsl:apply-templates/>
           </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="changes/release[1]/action"/>
       </channel>
     </rss>
   </xsl:template>
   <xsl:template match="action">
     <item>
-      <title><xsl:value-of select="@context" />
+      <title><xsl:value-of select="$project-name"/><xsl:text> </xsl:text><xsl:value-of select="@context" />
 <xsl:text> </xsl:text>
         <xsl:value-of select="@type" />
         <xsl:if test="@fixes-bug">

@@ -32,7 +32,10 @@
           <map:part src="cocoon://skinconf.xml"/>
           <map:part src="{lm:project.status}"/>
         </map:aggregate>
-        <map:transform src="{lm:projectInfo.transform.changes.rss}"/>
+        <map:transform src="{lm:projectInfo.transform.changes.rss}">
+          <map:parameter name="changes-url" value="{properties:projectInfo.url}/changes.html"/>
+          <map:parameter name="project-name" value="{properties:projectInfo.project.fullname}"/>
+        </map:transform>
         <map:serialize type="rss091" />
       </map:match>
       <map:match type="regexp" pattern="^(.*?)([^/]*)changes_(.*).rss$">
@@ -42,6 +45,8 @@
         </map:aggregate>
         <map:transform src="{lm:projectInfo.transform.changes.rss}">
           <map:parameter name="versionNumber" value="{3}"/>
+          <map:parameter name="changes-url" value="{properties:projectInfo.url}"/>
+          <map:parameter name="project-name" value="{properties:project.name}"/>
         </map:transform>
         <map:serialize type="rss091" />
       </map:match>
