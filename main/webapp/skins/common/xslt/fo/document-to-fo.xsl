@@ -922,7 +922,7 @@
 <!-- insert i18n stuff here -->
 <xsl:text>Table of contents</xsl:text>
       </fo:block>
-      <fo:block font-family="sans" font-size="12pt" space-after="5pt"
+      <fo:block font-family="sans-serif" font-size="12pt" space-after="5pt"
       space-before="0pt" text-align="justify" width="7.5in">
         <xsl:if test="$page-break-top-sections">
           <xsl:attribute name="break-after">page</xsl:attribute>
