@@ -89,14 +89,14 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="not($tag='p')">
-        <xsl:variable name="precessorIsTheSame">
+        <xsl:variable name="predecessorIsTheSame">
           <xsl:call-template name="isEqualToStyle">
             <xsl:with-param name="currentStyle" select="$styleName"/>
             <xsl:with-param name="styleToFind" select="preceding-sibling::*[1]/@text:style-name"/>
           </xsl:call-template>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="not($precessorIsTheSame='true')">
+          <xsl:when test="not($predecessorIsTheSame='true')">
             <xsl:element name="{$tag}">
               <xsl:apply-templates select="text:span[starts-with(@text:style-name,'Forrest_3a__20_')]"/>
               <xsl:apply-templates/>
