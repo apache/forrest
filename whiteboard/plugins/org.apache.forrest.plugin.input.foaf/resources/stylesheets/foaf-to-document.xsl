@@ -222,6 +222,8 @@
         </p>
     </xsl:template>
 
+    <xsl:template match="@dc:format"/>
+
     <xsl:template match="@rdf:ID">
         <tr>
             <td>Id</td>
