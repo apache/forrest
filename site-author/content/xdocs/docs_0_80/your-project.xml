@@ -78,7 +78,21 @@
       PATH=$PATH:$FORREST_HOME/bin
       export PATH
           </source>
-          </section>
+  </section>
+  <section>
+          <title>The Debian update-alternatives system</title>
+          <p>If your system uses the alternatives system to manage application binaries and their locations, you may use that to link Forrest into your system's binary directory, instead of explicitly exporting environment variables. To check if your system has the alternatives system installed, execute this command: </p>
+          <p><code>update-alternatives --version </code></p>
+          <p>Update-alternatives will print its version if it is installed. If so, you may then add an entry for Forrest. Installing an update-alternatives entry may need to be run with root privileges. On some systems, that can be achieved with the "sudo" command, which executes single commands as the super user: for example, Ubuntu's GNU/Linux system uses this feature. Or you may need to contact a system administrator to install. </p>
+          <p>To install a Forrest entry, first, gather the path to Forrest's executable, and also note its version. In this example, Forrest has been unpacked and placed into '/opt/Apache/apache-forrest-0.8' (the executable is at bin/forrest). Then execute this command (here we use sudo to execute update-alternatives with root privileges): </p>
+          <p><code>sudo update-alternatives --install /usr/bin/forrest forrest '/opt/Apache/apache-forrest-0.8/bin/forrest' 800 </code></p>
+          <p>The arguments to this command include '/usr/bin/forrest' as the system's location for the binary link, 'forrest' as the update-alternatives short name for this entry, '/opt/Apache/apache-forrest-0.8/bin/forrest' as the actual binary's location, and '800' as the priority. </p>
+          <p>Alternatives entries have a priority because you may install other versions of Forrest, and switch among them using update-alternatives: the highest priority entry will be selected as the default until you explicitly select another one to become active. Here, we have chosen a number based on Forrest's version: version 0.8 is installed, and priority 800 leaves room for adding several other versions; for instance, 0.90 may use priority 900, and 1.0 may be 1000. </p>
+          <p>Forrest should now be available on your command line. Execute: <code>forrest --help</code></p>
+          <p>Forrest should print its help text. For more help with the alternatives system, use:</p>
+
+          <p><code>update-alternatives --help</code> or <code>man update-alternatives</code></p>
+  </section>
         </section>
         <section>
           <title>Windows 2000</title>
