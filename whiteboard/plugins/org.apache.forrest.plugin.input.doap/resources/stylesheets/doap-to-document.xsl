@@ -25,6 +25,52 @@
 	            xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:asfext="http://projects.apache.org/ns/asfext#"
                 >                
+
+
+
+<!-- 
+  a quick and dirty function to get a 
+  user-displayable label for a category 
+-->
+
+<xsl:template name="category-to-label"> <xsl:param name="category"/>
+        <xsl:choose>
+          <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
+            <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="@dc:title">
+                <xsl:value-of select="@dc:title"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@rdf:resource"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+</xsl:template>
+
+ <xsl:template name="replaceString">
+   <xsl:param name="string" />
+   <xsl:param name="old" />
+   <xsl:param name="new" />
+     <xsl:choose>
+       <xsl:when test="contains($string, $old)">
+           <xsl:value-of select="substring-before($string, $old)"/><xsl:value-of
+ select="$new" /><xsl:call-template name="replaceString">
+                   <xsl:with-param name="string"><xsl:value-of select="substring-after($string, $old)" /></xsl:with-param>
+                   <xsl:with-param name="new"><xsl:value-of select="$new" /></xsl:with-param>
+                   <xsl:with-param name="old"><xsl:value-of select="$old" /></xsl:with-param>
+                 </xsl:call-template>
+       </xsl:when>
+       <xsl:otherwise>
+       <xsl:value-of select="$string" />
+       </xsl:otherwise>
+     </xsl:choose>
+ </xsl:template>
+
+
   <xsl:template match="/">
     <xsl:apply-templates select="projectDetails" />
   </xsl:template>
@@ -118,21 +164,17 @@ otherwise it doesn't load for some reason -->
   <xsl:template match="doap:category">
     <xsl:variable name="category" select="@rdf:resource"/>
     <li>
-        <xsl:choose>
-          <xsl:when test="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title">
-            <xsl:value-of select="//projectDetails/categories/doap:category[@rdf:resource = $category]/@dc:title"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:choose>
-              <xsl:when test="@dc:title">
-                <xsl:value-of select="@dc:title"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="@rdf:resource"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
-        </xsl:choose>
+	<a>
+    <xsl:attribute name="href">/projectDetails/index/byCategory.html#<xsl:call-template name="replaceString"><xsl:with-param name="string"><xsl:call-template name="category-to-label"><xsl:with-param name="category" select="@rdf:resource"/></xsl:call-template></xsl:with-param><xsl:with-param name="old"><xsl:text> </xsl:text></xsl:with-param><xsl:with-param name="new">+</xsl:with-param></xsl:call-template></xsl:attribute>
+
+        <xsl:call-template name="category-to-label"> 
+          <xsl:with-param name="category" select="@rdf:resource"/>  
+       </xsl:call-template></a>
+
+	<a>
+        <xsl:attribute name="href"><xsl:value-of select="@rdf:resource"/></xsl:attribute>
+       <xsl:text>[visit]</xsl:text>
+       </a>
     </li>
   </xsl:template>
   <xsl:template match="foaf:seeAlso">
