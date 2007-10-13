@@ -43,7 +43,7 @@
 
             <xsl:apply-templates select="foaf:depiction" />
 
-                <table>
+                <table class="foaf-data">
                     <tr>
                         <th>Property</th>
                         <th>Value</th>
@@ -116,7 +116,7 @@
     <xsl:template match="foaf:mbox_sha1sum">
         <tr>
             <td>Mbox SH1Sum</td>
-            <td>
+            <td class="foaf-mbox_sha1sum-value">
                 <xsl:value-of select="." />
             </td>
         </tr>
@@ -198,19 +198,23 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </td>
-                <td>
                     <xsl:choose>
                         <xsl:when test="foaf:mbox_sha1sum">
-                            <xsl:value-of select="foaf:mbox_sha1sum" />
+                	    <td>
+                               <xsl:value-of select="foaf:mbox_sha1sum" />
+        	            </td>
                         </xsl:when>
                         <xsl:when test="foaf:mbox">
-                          <xsl:apply-templates select="foaf:mbox/@rdf:resource"/>
+	                    <td>
+                               <xsl:apply-templates select="foaf:mbox/@rdf:resource"/>
+                	    </td>
                         </xsl:when>
                         <xsl:otherwise>
-                          No MBox specified
+                            <td>
+                              No MBox specified
+                            </td>
                         </xsl:otherwise>
                     </xsl:choose>
-                </td>
             </tr>
         </xsl:for-each>
     </xsl:template>
