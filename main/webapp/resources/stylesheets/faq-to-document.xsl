@@ -25,10 +25,7 @@
         <title><xsl:value-of select="@title"/></title>
       </header>
       <body>
-        <section>
-          <title>Questions</title>
-          <xsl:apply-templates select="faq|part"/>
-        </section>
+        <xsl:apply-templates select="faq|part"/>
       </body>
     </document>
   </xsl:template>
