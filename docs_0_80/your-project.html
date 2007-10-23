@@ -294,7 +294,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://www.cocoongt.org/"><img border="0" title="Cocoon GT 2007" alt="Cocoon GT 2007 - logo" src="http://www.cocoongt.org/images/cocoon_gt_2007_125x125.jpg" style="width: 125px;height: 125px;"></a><a href="http://us.apachecon.com/"><img border="0" title="ApacheCon US 2007" alt="ApacheCon US 2007 - logo" src="http://apache.org/ads/ApacheCon/2007-usa-125x125.png" style="width: 125px;height: 125px;"></a><a href="http://www.ossummit.com/"><img border="0" title="OS Summit Asia 2007" alt="OS Summit Asia 2007 - logo" src="http://www.ossummit.com/ads/ossummit_button_3.jpg" style="width: 125px;height: 125px;"></a>
+<a href="http://us.apachecon.com/"><img border="0" title="ApacheCon US 2007" alt="ApacheCon US 2007 - logo" src="http://apache.org/ads/ApacheCon/2007-usa-125x125.png" style="width: 125px;height: 125px;"></a><a href="http://www.ossummit.com/"><img border="0" title="OS Summit Asia 2007" alt="OS Summit Asia 2007 - logo" src="http://www.ossummit.com/ads/ossummit_button_3.jpg" style="width: 125px;height: 125px;"></a><a href="http://eu.apachecon.com/"><img border="0" title="ApacheCon Europe 2008" alt="ApacheCon Europe 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-europe-125x125.png" style="width: 125px;height: 125px;"></a>
 </div>
 </div>
 <!--+
@@ -486,7 +486,26 @@ document.write("Last Published: " + document.lastModified);
       PATH=$PATH:$FORREST_HOME/bin
       export PATH
           </pre>
-<a name="N10062"></a><a name="Windows+2000"></a>
+<a name="N10061"></a><a name="The+Debian+update-alternatives+system"></a>
+<h5>The Debian update-alternatives system</h5>
+<p>If your system uses the alternatives system to manage application binaries and their locations, you may use that to link Forrest into your system's binary directory, instead of explicitly exporting environment variables. To check if your system has the alternatives system installed, execute this command: </p>
+<p>
+<span class="codefrag">update-alternatives --version </span>
+</p>
+<p>Update-alternatives will print its version if it is installed. If so, you may then add an entry for Forrest. Installing an update-alternatives entry may need to be run with root privileges. On some systems, that can be achieved with the "sudo" command, which executes single commands as the super user: for example, Ubuntu's GNU/Linux system uses this feature. Or you may need to contact a system administrator to install. </p>
+<p>To install a Forrest entry, first, gather the path to Forrest's executable, and also note its version. In this example, Forrest has been unpacked and placed into '/opt/Apache/apache-forrest-0.8' (the executable is at bin/forrest). Then execute this command (here we use sudo to execute update-alternatives with root privileges): </p>
+<p>
+<span class="codefrag">sudo update-alternatives --install /usr/bin/forrest forrest '/opt/Apache/apache-forrest-0.8/bin/forrest' 800 </span>
+</p>
+<p>The arguments to this command include '/usr/bin/forrest' as the system's location for the binary link, 'forrest' as the update-alternatives short name for this entry, '/opt/Apache/apache-forrest-0.8/bin/forrest' as the actual binary's location, and '800' as the priority. </p>
+<p>Alternatives entries have a priority because you may install other versions of Forrest, and switch among them using update-alternatives: the highest priority entry will be selected as the default until you explicitly select another one to become active. Here, we have chosen a number based on Forrest's version: version 0.8 is installed, and priority 800 leaves room for adding several other versions; for instance, 0.90 may use priority 900, and 1.0 may be 1000. </p>
+<p>Forrest should now be available on your command line. Execute: <span class="codefrag">forrest --help</span>
+</p>
+<p>Forrest should print its help text. For more help with the alternatives system, use:</p>
+<p>
+<span class="codefrag">update-alternatives --help</span> or <span class="codefrag">man update-alternatives</span>
+</p>
+<a name="N1008F"></a><a name="Windows+2000"></a>
 <h4>Windows 2000</h4>
 <p class="instruction">
             Go to "My Computer", "Properties", "Advanced", "Environment
@@ -501,7 +520,7 @@ document.write("Last Published: " + document.lastModified);
             edit <span class="codefrag">PATH</span> as <span class="codefrag">%PATH%;%FORREST_HOME%\bin</span>
           
 </p>
-<a name="N10081"></a><a name="In+Windows+XP%3A"></a>
+<a name="N100AE"></a><a name="In+Windows+XP%3A"></a>
 <h4>In Windows XP:</h4>
 <p class="instruction">
             Go to "My Computer", "Properties", "Advanced", "Environment
@@ -517,7 +536,7 @@ document.write("Last Published: " + document.lastModified);
           </p>
 </div>
     
-<a name="N10096"></a><a name="The+%27forrest%27+Command"></a>
+<a name="N100C3"></a><a name="The+%27forrest%27+Command"></a>
 <h2 class="underlined_10">The 'forrest' Command</h2>
 <div class="section">
 <p>
@@ -577,7 +596,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N100A7"></a><a name="seeding_new"></a>
+<a name="N100D4"></a><a name="seeding_new"></a>
 <h2 class="underlined_10">Seeding a new project</h2>
 <div class="section">
 <p>
@@ -748,7 +767,7 @@ Total time: 5 seconds
       </p>
 </div>
     
-<a name="N100EC"></a><a name="seeding_existing"></a>
+<a name="N10119"></a><a name="seeding_existing"></a>
 <h2 class="underlined_10">Seeding an existing project</h2>
 <div class="section">
 <p>
@@ -768,7 +787,7 @@ Total time: 5 seconds
       </p>
 </div>
     
-<a name="N10100"></a><a name="customizing"></a>
+<a name="N1012D"></a><a name="customizing"></a>
 <h2 class="underlined_10">Customizing your project</h2>
 <div class="section">
 <p>
@@ -776,7 +795,7 @@ Total time: 5 seconds
         customize it to your project's needs. Here we will deal with configuring
         the skin, and changing the project layout.
       </p>
-<a name="N10109"></a><a name="skinconf.xml"></a>
+<a name="N10136"></a><a name="skinconf.xml"></a>
 <h3 class="underlined_5">Configuring the Forrest skin: skinconf.xml</h3>
 <p>
           Most Forrest skins can be customized through a single XML file,
@@ -955,7 +974,7 @@ which will be used to configure the chosen Forrest skin.
           Having edited this file (and ensured it is valid XML), re-run the
           'forrest' command in the site root, and the site would be updated.
         </p>
-<a name="N10126"></a><a name="Changing_the_layout"></a>
+<a name="N10153"></a><a name="Changing_the_layout"></a>
 <h3 class="underlined_5">Changing the layout: forrest.properties</h3>
 <p>
           Forrest allows you to place files anywhere you want in your project,
@@ -1035,7 +1054,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </div>
 </div>
     
-<a name="N10165"></a><a name="adding_content"></a>
+<a name="N10192"></a><a name="adding_content"></a>
 <h2 class="underlined_10">Adding content</h2>
 <div class="section">
 <p>
@@ -1043,7 +1062,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         <span class="codefrag">src/documentation/content/xdocs</span>
       
 </p>
-<a name="N10171"></a><a name="site.xml"></a>
+<a name="N1019E"></a><a name="site.xml"></a>
 <h3 class="underlined_5">site.xml</h3>
 <p>
           When adding a new xml document, you would add an entry to the
@@ -1053,7 +1072,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           about site.xml is provided in the document
           <a href="../docs_0_90/linking.html">Menus and Linking</a>.
         </p>
-<a name="N10182"></a><a name="tabs.xml"></a>
+<a name="N101AF"></a><a name="tabs.xml"></a>
 <h3 class="underlined_5">tabs.xml</h3>
 <p>
           The <span class="codefrag">tabs.xml</span> file is used to produce the 'tabs'. which
@@ -1085,7 +1104,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
   &lt;/tab&gt;
 
         </pre>
-<a name="N101AD"></a><a name="images"></a>
+<a name="N101DA"></a><a name="images"></a>
 <h3 class="underlined_5">Images</h3>
 <p>
           Images usually go in the <span class="codefrag">resources/images/</span> directory. The
@@ -1096,7 +1115,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
 </p>
 </div>
     
-<a name="N101C1"></a><a name="sitemap.xmap"></a>
+<a name="N101EE"></a><a name="sitemap.xmap"></a>
 <h2 class="underlined_10">Advanced customizations: sitemap.xmap</h2>
 <div class="section">
 <p>
@@ -1167,7 +1186,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         for a tour of the default sitemap.
       </div>
 </div>
-<a name="N10229"></a><a name="adding_new_content_type"></a>
+<a name="N10256"></a><a name="adding_new_content_type"></a>
 <h3 class="underlined_5">Example: Adding a new content type</h3>
 <p>
           There are two methods for detecting types of documents and doing
@@ -1325,7 +1344,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           will handle the aggregation with navigation menus etc. and will apply
           the normal skin.
         </p>
-<a name="N10276"></a><a name="new_dtd"></a>
+<a name="N102A3"></a><a name="new_dtd"></a>
 <h4>Registering a new DTD</h4>
 <p>
             By default, Forrest requires that all XML files be valid, i.e. they
@@ -1356,7 +1375,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
             the complete description for those steps.
           </div>
 </div>
-<a name="N1029E"></a><a name="adding_new_content_type_2"></a>
+<a name="N102CB"></a><a name="adding_new_content_type_2"></a>
 <h3 class="underlined_5">Example: Adding a new content type (advanced)</h3>
 <p>
           The simple user sitemap in the previous example is fine for simple
@@ -1439,7 +1458,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           used, because the project sitemap is the first sitemap to be
           consulted.
         </p>
-<a name="N102C7"></a><a name="integrating_rss"></a>
+<a name="N102F4"></a><a name="integrating_rss"></a>
 <h3 class="underlined_5">Example: integrating external RSS content</h3>
 <p>
           Similar to the previous example, we can integrate RSS into our site
@@ -1476,7 +1495,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         </p>
 </div>
     
-<a name="N102E2"></a><a name="skins"></a>
+<a name="N1030F"></a><a name="skins"></a>
 <h2 class="underlined_10">Forrest skins</h2>
 <div class="section">
 <p>
@@ -1499,7 +1518,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         are not needed.
       </div>
 </div>
-<a name="N102FE"></a><a name="skin-configuration"></a>
+<a name="N1032B"></a><a name="skin-configuration"></a>
 <h3 class="underlined_5">Configuration of skins</h3>
 <p>
           All configuration is done via your project
@@ -1507,7 +1526,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           comments to describe each capability. Please read those, there is no
           point repeating here.
         </p>
-<a name="N1030B"></a><a name="new_skin"></a>
+<a name="N10338"></a><a name="new_skin"></a>
 <h3 class="underlined_5">Defining a new skin</h3>
 <p>
           Consider discussing your needs on the mailing lists. There may be
@@ -1589,7 +1608,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         </p>
 </div>
     
-<a name="N10352"></a><a name="webapp"></a>
+<a name="N1037F"></a><a name="webapp"></a>
 <h2 class="underlined_10">Interactive Forrest: faster turnaround when developing your docs</h2>
 <div class="section">
 <p>
@@ -1602,7 +1621,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         using a "live" Forrest webapp instance, the Forrest-based documentation
         development can be faster and easier than with comparable tools.
       </p>
-<a name="N10363"></a><a name="forrest_run"></a>
+<a name="N10390"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
           Type '<span class="codefrag">forrest run</span>' in your project root to start
@@ -1617,7 +1636,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           servlet container, type <span class="codefrag">forrest webapp</span> to build an open
           webapp in <span class="codefrag">build/webapp/</span>)
         </p>
-<a name="N1037C"></a><a name="using_webapp"></a>
+<a name="N103A9"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
@@ -1626,7 +1645,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
 </div>
     
-<a name="N1038B"></a><a name="invoking_from_ant"></a>
+<a name="N103B8"></a><a name="invoking_from_ant"></a>
 <h2 class="underlined_10">Invoking Forrest from Ant</h2>
 <div class="section">
 <p>
@@ -1694,7 +1713,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
       </p>
 </div>
   
-<span class="version">SVN: $Revision: 527010 $ $Date: 2007-04-10 13:48:52 +1000 (Tue, 10 Apr 2007) $</span>
+<span class="version">SVN: $Revision: 582711 $ $Date: 2007-10-08 15:32:32 +1000 (Mon, 08 Oct 2007) $</span>
 </div>
 <!--+
     |end content
