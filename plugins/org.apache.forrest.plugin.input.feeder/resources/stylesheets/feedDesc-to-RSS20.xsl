@@ -19,18 +19,51 @@
 Stylesheet for generating an aggregated feed from multple feeds.
 -->
 <xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rss="http://purl.org/rss/1.0/">
   <xsl:output method="xml" version="1.0" encoding="UTF-8"/>
   <xsl:template match="feedDescriptor">
     <rss version="2.0">
       <xsl:apply-templates/>
     </rss>
   </xsl:template>
+  
   <xsl:template match="feed">
     <xsl:variable name="url" select="url"/>
     <xsl:variable name="feed" select="document($url)"/>
-    <xsl:apply-templates select="$feed/rss/channel"/>
+    <xsl:choose>
+        <!--  Standard RSS Feed  -->
+        <xsl:when test="$feed/rss">
+            <xsl:apply-templates select="$feed/rss/channel"/>
+        </xsl:when>
+        <!--  RSS as RDF as used in, for example, del.icio.us -->
+        <xsl:when test="$feed/rdf:RDF">
+            <xsl:apply-templates select="$feed/*" mode="delicious"/>
+        </xsl:when>
+    </xsl:choose>
   </xsl:template>
+  
+  <xsl:template match="rdf:RDF" mode="delicious">
+    <channel>
+      <xsl:apply-templates select="rss:channel" mode="delicious"/>
+      <xsl:apply-templates select="rss:item" mode="delicious"/>
+    </channel>
+  </xsl:template>
+  
+  <xsl:template match="rss:channel" mode="delicious">
+    <title><xsl:value-of select="rss:title"/></title>
+    <link><xsl:value-of select="rss:link"/></link>
+    <description><xsl:value-of select="rss:description"/></description>
+  </xsl:template>
+  
+  <xsl:template match="rss:item" mode="delicious">
+    <item>
+      <title><xsl:value-of select="rss:title"/></title>
+      <link><xsl:value-of select="rss:link"/></link>
+    </item>
+  </xsl:template>
+  
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
