@@ -44,11 +44,8 @@
   </xsl:template>
   <xsl:template match="item">
     <p class="itemTitle">
-      <xsl:value-of select="title" disable-output-escaping="yes"/>
-    </p>
-    <p  class="itemLink">
-      <link href="{link}">
-      <xsl:value-of select="link"/>
+      <link href="{link}">        
+        <xsl:value-of select="title" disable-output-escaping="yes"/>
       </link>
     </p>
     <p  class="itemDescription">
