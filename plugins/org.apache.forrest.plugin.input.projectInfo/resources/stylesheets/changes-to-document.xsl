@@ -38,6 +38,17 @@
   <xsl:key name="committers" match="developers/person" use="@id"/>
   <xsl:key name="distinct-committer" match="changes/release/action" use="concat(../@version, '_', @dev)"/>
   <xsl:key name="distinct-contributor" match="changes/release/action" use="concat(../@version, '_', @due-to)"/>
+  <!-- versionNumber: detect the value "current" or use the number that was supplied -->
+  <xsl:variable name="realVersionNumber">
+    <xsl:choose>
+      <xsl:when test="$versionNumber='current' or $versionNumber=''">
+        <xsl:value-of select="//release[1]/@version"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$versionNumber"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:template match="/">
     <xsl:apply-templates select="//changes"/>
   </xsl:template>
@@ -57,7 +68,15 @@
       </header>
       <body>
         <p>
-          <link href="changes.rss">
+          <link>
+          <xsl:choose>
+            <xsl:when test="$versionNumber">
+              <xsl:attribute name="href">changes_<xsl:value-of select="$versionNumber"/>.rss</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="href">changes.rss</xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
           <img src="{$root}images/rss.png" alt="RSS"/>
           </link>
         </p>
