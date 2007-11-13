@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Licensed to the Apache Software Foundation (ASF) under one or more
-    contributor license agreements.  See the NOTICE file distributed with
-    this work for additional information regarding copyright ownership.
-    The ASF licenses this file to You under the Apache License, Version 2.0
-    (the "License"); you may not use this file except in compliance with
-    the License.  You may obtain a copy of the License at
-    
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
 -->
 <document xmlns:ex='http://http://simile.mit.edu/wiki/Exhibit'>
-    <header>
-        <title>Exhibit Sample</title>
-    </header>
-    <body>
-        <section>
-            <title>Exhibit Sample</title>
-            <table>
-                <tr>
-                    <td>
-                        <div id="exhibit-control-panel"></div>
-                        <div id="exhibit-view-panel">
-                           <div ex:role="exhibit-view"
-                               ex:viewClass="Exhibit.TileView"
-                               ex:showAll="true"
-                               ex:orders=".name, .homepage"
-                               ex:possibleOrders=".name, .homepage">
-                              <p>Loading Exhibit AJAX browser...</p>
-                              <p>For this to work you computer must be connected to the Internet.</p>
-                           </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div id="exhibit-browse-panel" ex:facets=".Category"></div>
-                    </td>
-                </tr>
-            </table>
-        </section>
-    </body>
+	<header>
+		<title>Exhibit Sample</title>
+	</header>
+	<body>
+		<section>
+			<title>Exhibit Sample</title>
+			<table>
+				<tr valign="top">
+					<td>
+						<div ex:role="facet" ex:expression=".category"
+							ex:facetLabel="Category">
+						</div>
+						<div ex:role="facet" ex:expression=".person"
+							ex:facetLabel="Person">
+						</div>
+						<div ex:role="facet"
+							ex:expression=".programming-language"
+							ex:facetLabel="Programming Language">
+						</div>
+					</td>
+					<td>
+						<div ex:role="viewPanel">
+							<p>Loading Exhibit Browser...</p>
+							<p>
+								Note, you must be connected to the
+								Internet for this to work.
+							</p>
+							<div ex:role="exhibit-view"
+								ex:viewClass="Exhibit.TabularView"
+								ex:columns=".name, .homepage, .category"
+								ex:columnLabels="Name, Home Page, Categories"
+								ex:columnFormats="text, url, list" ex:sortColumn="0"
+								ex:sortAscending="true">
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+		</section>
+	</body>
 </document>

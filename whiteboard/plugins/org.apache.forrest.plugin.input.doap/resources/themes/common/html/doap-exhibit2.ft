@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    name="doap-exhibit2">
+    <description>
+        <p>
+            Embeds the necessary Exhibit v2 scripts to enable the DOAP
+            catalogue to be browsed using Exhibit from MIT.
+        </p>
+    </description>
+    <usage>
+        <![CDATA[<forrest:contract name="doap-exhibit2"/>]]>
+    </usage>
+    <forrest:template
+        xmlns:forrest="http://apache.org/forrest/templates/1.0"
+        name="doap-exhibit2" inputFormat="xsl">
+        <xsl:stylesheet version="1.1"
+            xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            xmlns:forrest="http://apache.org/forrest/templates/1.0">
+            <xsl:template match="/">
+                <forrest:content>
+                    <forrest:part xpath="/html/head">
+                        <link href="projectDetails/allProjects.json"
+                            type="application/json" rel="exhibit/data" />
+                        <script
+                            src="http://static.simile.mit.edu/exhibit/api-2.0/exhibit-api.js"
+                            type="text/javascript">
+                            <!--  This empty statement is required due to a bug relating to empty script tags in Firefox -->;
+                        </script>
+                    </forrest:part>
+                </forrest:content>
+            </xsl:template>
+        </xsl:stylesheet>
+    </forrest:template>
+</forrest:contract>
