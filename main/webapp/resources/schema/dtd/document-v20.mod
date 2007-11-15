@@ -115,7 +115,8 @@ NOTES:
         Indicates that the element requires to have hyperlink attributes.
 ==================================================================== -->
 <!ENTITY % link.att 'href      CDATA             #REQUIRED
-                     title     CDATA             #IMPLIED'>
+                     title     CDATA             #IMPLIED
+                     rel       CDATA             #IMPLIED'>
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
