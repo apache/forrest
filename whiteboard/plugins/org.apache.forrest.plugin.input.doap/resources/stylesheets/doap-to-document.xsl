@@ -115,6 +115,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </section>
+      <xsl:call-template name="project-relatedTo"/>
       <xsl:call-template name="project-releases" />
       
       <xsl:if test="foaf:seeAlso[@dc:format='application/rss+xml' or @dc:format='application/atom+xml']">
@@ -415,6 +416,30 @@ otherwise it doesn't load for some reason -->
         <xsl:value-of  select="doap:created" />
       </td>
     </tr>
+  </xsl:template>
+  <xsl:template name="project-relatedTo">
+    <xsl:if test="asfext:relatedTo">
+	    <section>
+	      <title>Related To</title>
+	      <ul>
+	        <xsl:for-each select="asfext:relatedTo/doap:Project/doap:name|asfext:relatedTo/doap:Project/atom:feed/atom:entry/atom:content/doap:Project">
+	          <li>
+	            <xsl:choose>
+	              <xsl:when test="doap:homepage">
+	                <a>
+	                  <xsl:attribute name="href"><xsl:value-of select="doap:homepage/@rdf:resource"/></xsl:attribute>
+	                  <xsl:value-of select="doap:name"/>
+	                </a>
+	              </xsl:when>
+	              <xsl:otherwise>
+	                <xsl:value-of select="doap:name"/>
+	              </xsl:otherwise>
+	            </xsl:choose>
+	          </li>
+	        </xsl:for-each>
+	      </ul>
+	    </section>
+    </xsl:if>
   </xsl:template>
   <xsl:template name="project-releases">
     <section>
