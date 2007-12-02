@@ -435,6 +435,9 @@ otherwise it doesn't load for some reason -->
 	                <xsl:value-of select="doap:name"/>
 	              </xsl:otherwise>
 	            </xsl:choose>
+	            <xsl:if test="doap:shortdesc">
+	              <xsl:text> - </xsl:text><xsl:value-of select="doap:shortdesc"/>
+	            </xsl:if>
 	          </li>
 	        </xsl:for-each>
 	      </ul>
