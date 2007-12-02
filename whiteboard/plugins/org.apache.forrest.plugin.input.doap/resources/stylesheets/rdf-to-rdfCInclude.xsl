@@ -41,6 +41,12 @@
       </cinclude:cached-include>
   </xsl:template>
   
+  <xsl:template match="doap:Project/@rdf:resource">
+      <cinclude:cached-include>
+        <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+      </cinclude:cached-include>
+  </xsl:template>
+  
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
