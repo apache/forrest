@@ -452,8 +452,7 @@ otherwise it doesn't load for some reason -->
           <xsl:when test="doap:download-page">
             <p>
               Releases can be downloaded from
-              <xsl:apply-templates select="doap:download-page/@*" />
-              .
+              <xsl:apply-templates select="doap:download-page/@*" />.
             </p>
           </xsl:when>
           <xsl:otherwise>
