@@ -149,12 +149,25 @@ otherwise it doesn't load for some reason -->
        </xsl:if>
     </body>
   </xsl:template>
-  <xsl:template match="@rdf:resource"><a>
-    <xsl:attribute name="href">
-      <xsl:value-of select="."/>
-    </xsl:attribute>
-    <xsl:value-of select="."/></a>
+  
+  <xsl:template match="@rdf:resource">
+    <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="."/>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="../@dc:title">
+          <xsl:value-of select="../@dc:title"/>
+        </xsl:when>    
+        <xsl:otherwise>
+    	  <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </a>
   </xsl:template>
+  
+  <xsl:template match="@dc:title"/>
+  
   <xsl:template match="doap:programming-language"><a>
     <xsl:attribute name="href">/projectDetails/index/byLang/<xsl:value-of select="."/>.html</xsl:attribute>
     <xsl:value-of select="."/></a>
@@ -272,11 +285,13 @@ otherwise it doesn't load for some reason -->
             <td class="right">
               <xsl:choose>
                 <xsl:when test="doap:mailing-list/@*">
-                  <xsl:apply-templates select="doap:mailing-list/@*" />
+                  <ul>
+                    <xsl:apply-templates select="doap:mailing-list" />
+                  </ul>
                 </xsl:when>
                 <xsl:otherwise>
-                       None Defined
-                     </xsl:otherwise>
+                  None Defined
+                </xsl:otherwise>
               </xsl:choose>
             </td>
           </tr>
@@ -585,6 +600,10 @@ otherwise it doesn't load for some reason -->
         </xsl:if>
       </section>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="doap:mailing-list">
+    <li><xsl:apply-templates select="@rdf:resource" /></li>
   </xsl:template>
   
   <xsl:template match="foaf:name">
