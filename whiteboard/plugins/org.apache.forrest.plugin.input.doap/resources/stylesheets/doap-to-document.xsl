@@ -184,11 +184,6 @@ otherwise it doesn't load for some reason -->
         <xsl:call-template name="category-to-label"> 
           <xsl:with-param name="category" select="@rdf:resource"/>  
        </xsl:call-template></a>
-
-	<a>
-        <xsl:attribute name="href"><xsl:value-of select="@rdf:resource"/></xsl:attribute>
-       <xsl:text>[visit]</xsl:text>
-       </a>
     </li>
   </xsl:template>
   <xsl:template match="foaf:seeAlso">
