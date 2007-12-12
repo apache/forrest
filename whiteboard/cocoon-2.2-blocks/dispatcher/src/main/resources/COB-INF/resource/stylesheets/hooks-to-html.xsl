@@ -33,7 +33,12 @@
       </div>
     </xsl:if>
     <xsl:if test="@type='inline'">
-      <span id="{@name}">
+      <span>
+        <xsl:if test="@name">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@name"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:call-template name="attributes"/>
         <xsl:if test="@nbsp='true'">
 <xsl:text> </xsl:text>

@@ -17,26 +17,19 @@
 -->
 <!--
 This stylesheet contains templates for converting documentv11 to HTML.  See the
-imported document-to-html.xsl for details.
+imported document2html.xsl for details.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<!-- Template that generates an id -->
-  <xsl:include href="lm://transform.xml.replaceCharsInString"/>
+<!--  Templates for "toc" mode.  This will generate a complete
+        Table of Contents for the document.  This will then be used
+        by the site2xhtml to generate a Menu ToC and a Page ToC -->
   <xsl:template name="generate-id">
     <xsl:choose>
       <xsl:when test="@id">
-        <xsl:call-template name="replaceCharsInString">
-          <xsl:with-param name="stringIn" select="@id"/>
-          <xsl:with-param name="charsIn" select="' '"/>
-          <xsl:with-param name="charsOut" select="'-'"/>
-        </xsl:call-template>
+        <xsl:value-of select="@id"/>
       </xsl:when>
-      <xsl:when test="@title">
-        <xsl:call-template name="replaceCharsInString">
-          <xsl:with-param name="stringIn" select="@title"/>
-          <xsl:with-param name="charsIn" select="' '"/>
-          <xsl:with-param name="charsOut" select="'-'"/>
-        </xsl:call-template>
+      <xsl:when test="title">
+        <xsl:value-of select="title"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="generate-id(.)"/>

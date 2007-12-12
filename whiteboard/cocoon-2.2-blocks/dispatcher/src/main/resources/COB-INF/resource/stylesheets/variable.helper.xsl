@@ -18,8 +18,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:forrest="http://apache.org/forrest/properties/1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="lm://transform.xml.dotdots"/>
-  <xsl:import href="lm://transform.xml.pathutils"/>
+  <xsl:import href="dotdots.xsl"/>
+  <xsl:import href="pathutils.xsl"/>
   <xsl:param name="path" select="'test.html'"/>
   <xsl:param name="theme" select="'notheme'"/>
 <!-- Path (..'s) to the root directory -->
