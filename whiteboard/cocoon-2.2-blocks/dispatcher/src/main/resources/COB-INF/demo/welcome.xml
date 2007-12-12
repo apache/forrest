@@ -7,7 +7,7 @@
   (the "License"); you may not use this file except in compliance with
   the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +16,92 @@
   limitations under the License.
 -->
 <content>
-  <h1>Apache Cocoon: Welcome</h1>
-  <p>This block <strong>org.apache.forrest:dispatcher</strong> was created by the Cocoon block archetype.</p>
+  <h1>Apache Forrest Dispatcher: Welcome</h1>
+  <p>This block
+    <strong>org.apache.forrest:dispatcher</strong> was created by the Cocoon block
+    archetype.</p>
   <p/>
-  <p><a href="spring-bean">Link</a> to the output of a simple Flowscript that accesses a Spring bean.</p>
+  <h2>About the dispatcher</h2>
+  <p>This block provides the basic infrastructure to work with the dispatcher which has been
+    ported from Apache Forrest.</p>
+  <p>The aim of the "dispatcher" concept is to provide a flexible framework for creating site
+    and page specific layout in different formats from different content through an advanced
+    seperation of concerns. </p>
+  <p> The dispatcher is a filter that limits the data-model to a minimum by only requesting what
+    the structurer (e.g. common-html.panel.xml) need. This leads to a different URL
+    handling focus - away from document centric. A document can (but does not have to) be behind
+    a certain URL. Like said a structurer can request any given data as input not only a document
+    and the core contracts (like navigation). It may be the main enhancement in comparison to
+    skins (classical aggregation approach) that this concept lets you easily extend the
+    default data models provided by forrest/cocoon. </p>
+  <p> Since the dispatcher has implemented a fallback concept it makes maintenance of custom
+    themes which are based on the dispatcher core components very easy and less time consuming. The
+    principal is to override or extend only certain parts (contracts) of the core. This is
+    based on the observation that normally only a small percentage of core skin contracts have
+    been changed.</p>
+  <h2>How to install the dispatcher in your project?</h2>
+  <!--<p>Since the dispatcher is not yet official part of cocoon, you need to install
+    the patch from <a href="https://issues.apache.org/jira/browse/COCOON-2145">COCOON-2145</a></p>
+  <p>On Linux you apply the patch, once donwloaded into the parent cocoon directory, executing:<pre>patch -p0 &lt; COCOON-2145.patch</pre></p>-->
+  <p>1.) The dispatcher has some dependencies to other forrest components
+    (propertiesGenerator and locationmap). You will need to install this two blocks as well. Define in your pom.xml:<pre>
+<![CDATA[<dependency>
+  <groupId>org.apache.forrest</groupId>
+  <artifactId>dispatcher</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.forrest</groupId>
+  <artifactId>locationmap</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.forrest</groupId>
+  <artifactId>propertiesGenerator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>]]></pre></p>
+  <p>2.) In your applicationContext.xml (spring configuration) add the following to the
+    <em>org.apache.cocoon.sitemap.SitemapServlet</em> configuration block:</p>
+  <pre><![CDATA[<servlet:connections>
+  <entry key="propertiesGenerator" value-ref="org.apache.forrest.propertiesGenerator.block"/>
+  <entry key="dispatcher" value-ref="org.apache.forrest.dispatcher.block"/>
+</servlet:connections>]]></pre>
+  <p>3.) Create a file called locationmap.xml in the same directory where your sitemap.xmap resist and paste the following into this file:</p>
+  <pre><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
+  <components>
+    <matchers default="lm">
+      <matcher 
+        name="lm" 
+        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
+    </matchers>
+    <selectors default="exists">
+      <selector name="exists" logger="sitemap.selector.exists"  
+                    src="org.apache.forrest.sourceexists.SourceExistsSelector" />
+    </selectors>
+  </components>
+  <locator>
+<!-- ================================== -->
+<!-- Project specific matches           -->
+<!-- ================================== -->
+    
+    <match pattern="project.themer">
+      <location src="context://themer"/>
+    </match>
+<!-- ================================== -->
+<!-- Mount dispatcher specific locationmap -->
+<!-- project files                      -->
+<!-- ================================== -->
+    <select>
+      <mount src="{block-filepath:dispatcher/}/locationmap.xml"/>
+    </select>
+  </locator>
+</locationmap>]]></pre>
+  <p>4.) Finally in your webapp sitemap.xmap add a mount to the dispatcher like:</p>
+  <pre><![CDATA[<map:mount src="blockcontext:/dispatcher/sitemap.xmap"  uri-prefix=""/>]]></pre>
+  <p>Further you need to implement the match for the loctionmap that we created in step 3:</p>
+  <pre><![CDATA[<map:match pattern="locationmap.xml">
+  <map:generate src="locationmap.xml"/>
+  <map:serialize type="xhtml"/>
+</map:match>]]></pre>
 </content>

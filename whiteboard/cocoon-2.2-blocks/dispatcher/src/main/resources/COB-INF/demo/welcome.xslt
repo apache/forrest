@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <html>
       <head>
-        <title>Apache Cocoon: Welcome!</title>
+        <title>Apache Forrest Dispatcher Block: Welcome!</title>
       </head>
       <body>
         <xsl:copy-of select="content/*"/>
