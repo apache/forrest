@@ -18,16 +18,20 @@
   und
 -->
 <!--+
-    | @version $Id: servlet-service.xml 578865 2007-09-24 16:09:46Z reinhard $
+    | @version $Id: servlet-service.xml 523714 2007-03-29 13:54:20Z gkossakowski $
     +-->
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:servlet="http://cocoon.apache.org/schema/servlet"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
   http://cocoon.apache.org/schema/servlet http://cocoon.apache.org/schema/servlet/cocoon-servlet-1.0.xsd">
-
-  <bean id="org.apache.forrest.dispatcher.service" class="org.apache.cocoon.sitemap.SitemapServlet">
-    <servlet:context mount-path="/dispatcher" context-path="blockcontext:/dispatcher/"/>
+  
+  <bean id="org.apache.forrest.dispatcher.block" class="org.apache.cocoon.sitemap.SitemapServlet">
+    <servlet:context mount-path="/dispatcher" context-path="blockcontext:/dispatcher/">
+      <servlet:connections>
+        <entry key="propertiesGenerator" value-ref="org.apache.forrest.propertiesGenerator.block"/>
+      </servlet:connections>
+    </servlet:context>
   </bean>
-
+  
 </beans>
