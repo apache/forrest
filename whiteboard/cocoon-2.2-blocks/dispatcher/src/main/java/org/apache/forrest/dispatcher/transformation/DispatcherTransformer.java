@@ -256,11 +256,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         return this.validity;
     }
 
-    /**
-     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     */
-    public void service(ServiceManager manager) throws ServiceException {
+    public void setManager(ServiceManager manager) throws ServiceException {
         super.service(manager);
+        this.manager=manager;
     }
 
     /**
@@ -672,9 +670,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             if (contract == null)
                 contract = new ContractBeanDOMImpl(this.manager,
                         parameterHelper, defaultProperties, (URIResolver) this);
-            // This is not needed since the manager did not change.
-            // else
-            // contract.initialize();
         } catch (Exception e) {
             String error = DispatcherException.ERROR_500 + "\n"
                     + "component: ContractBean" + "\n"
@@ -802,13 +797,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             Document node = (Document) contract.getContractResultData()
                     .getNode();
             Document root = this.rootNode.getOwnerDocument();
-            /*
-             * debug code - uncomment it if you need it! will output the
-             * contract resulting data to sysout
-             */
-            // DOMSource source = new DOMSource(node);
-            // StreamResult result = new StreamResult(System.out);
-            // contract.getContractTransformer().transform(source, result);
             /*
              * append this node to the current path after testing where there is
              * a fixed location for the contract content. If so then add it
@@ -1068,21 +1056,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
                                 + xslSource.getURI());
             }
 
-            // if (m_checkIncludes) {
-            // // Populate included validities
-            // List includes = (List) m_includesMap.get(base);
-            // if (includes != null) {
-            // SourceValidity included = xslSource.getValidity();
-            // if (included != null) {
-            // includes.add(new Object[] { xslSource.getURI(),
-            // xslSource.getValidity() });
-            // } else {
-            // // One of the included stylesheets is not cacheable
-            // m_includesMap.remove(base);
-            // }
-            // }
-            // }
-
             return new StreamSource(is.getByteStream(), is.getSystemId());
         } catch (SourceException e) {
             if (getLogger().isDebugEnabled()) {
@@ -1114,7 +1087,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
             m_resolver.release(xslSource);
         }
     }
-
+    
     /**
      * Return a new <code>InputSource</code> object that uses the
      * <code>InputStream</code> and the system ID of the <code>Source</code>
@@ -1123,8 +1096,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
      * @throws IOException
      *             if I/O error occured.
      */
-    private static InputSource getInputSource(final Source source)
-            throws IOException, SourceException {
+    private static InputSource getInputSource(final Source source) throws IOException, SourceException {
         final InputSource newObject = new InputSource(source.getInputStream());
         newObject.setSystemId(source.getURI());
         return newObject;
