@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- Default Forrest locationmap for the structurer/themer -->
+<locationmap xmlns="http://apache.org/forrest/locationmap/1.0">
+  <components>
+    <matchers default="lm">
+      <matcher name="lm"
+        src="org.apache.forrest.locationmap.WildcardLocationMapHintMatcher"/>
+    </matchers>
+    <actions default="RecursiveDirectoryTraversalAction">
+      <action name="RecursiveDirectoryTraversalAction"
+        src="org.apache.forrest.dispatcher.acting.RecursiveDirectoryTraversalAction"/>
+      <action name="resourceTypeAction"
+        src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/>
+    </actions>
+    <selectors default="exists">
+      <selector name="exists" logger="sitemap.selector.exists"
+        src="org.apache.forrest.sourceexists.SourceExistsSelector"/>
+    </selectors>
+  </components>
+  <locator>
+    
+    <!-- DEMO -->
+    
+    <match pattern="demo">
+      <location src="{lm:dispatcher.home}locationmap.xml"/>
+    </match>
+    
+    <!-- Base location of the dispatcher-->
+    <match pattern="dispatcher.home">
+      <location src="blockcontext:/dispatcher/"/>
+    </match>
+    
+    <!-- Base location of the themer -->
+    <match pattern="dispatcher.themer">
+      <location src="{lm:dispatcher.home}resource/themer"/>
+    </match>
+    
+    <!-- contracts (e.g. html) that can be used in the project. -->
+    <match pattern="themer.contracts.dir">
+      <location src="{lm:dispatcher.themer}/themes" />
+    </match>
+    
+    <!-- resource types -->
+    <match pattern="dispatcher.structurer.resourceType.**">
+      <select>
+        <location
+          src="{lm:project.themer}/structurer/resource-types/{1}{global:dispatcher.theme-ext}"/>
+        <location
+          src="{lm:dispatcher.themer}/structurer/resource-types/{1}{global:dispatcher.theme-ext}"/>
+      </select>
+    </match>
+    <!-- 
+    FIXME - Problem with the pattern
+    ********************************
+    We have encountered a strange problem with the pattern 'resolve.structurer.**'.
+    The {1} sometimes matches nothing, whereas {../1} is OK.
+    On the contrary, the {../1} sometimes matches nothing, whereas {1} is OK.
+    As a temporary workaround, we put {../1}{1} which covers all the cases.
+    CF. FOR-893
+    
+    structurer templating
+    *********************
+    URL specific structurer templates (project-based) e.g. index.fv
+    * either in the structurer/url
+    or via RecursiveDirectoryTraversalAction e.g. samples/common.fv
+    
+    If no structurer template can be found in the project, 
+    we use either the templates provided by the
+    a) custom implementation of the themes.core
+    b) themes.core
+    where we test for 
+    1) {global:dispatcher.theme}{global:dispatcher.theme-ext}
+    2) {global:dispatcher.fallback.theme}{global:dispatcher.fallback.theme-ext}
+    -->
+    <match pattern="resolve.structurer.**">
+      <select type="exists">
+        <!-- project-based 
+        url-based (url location) -->
+        <location
+          src="{lm:project.themer}/structurer/url/{1}{global:dispatcher.theme-ext}"/>
+        <act type="RecursiveDirectoryTraversalAction">
+          <parameter value="{../1}{1}" name="request"/>
+          <parameter value="{global:dispatcher.theme}" name="projectFallback"/>
+          <parameter value="{global:dispatcher.theme-ext}"
+            name="projectExtension"/>
+          <parameter value="{lm:project.themer}/structurer/url/" name="projectDir"/>
+          <!--  url
+          project-based theme-based = directory-based / parent-directory based (recursively) -->
+          <location src="{uri}"/>
+        </act>
+        <!-- themes-dir: project-application-based theme-dir-based -->
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.theme}{global:dispatcher.theme-ext}"/>
+        <!-- themes-dir: project-application-based default -->
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.fallback.theme}{global:dispatcher.fallback.theme-ext}"/>
+        <!-- themer: forrest-application-based theme-based -->
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.theme}{global:dispatcher.theme-ext}"/>
+        <!-- themer: forrest-application-based default -->
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}{global:dispatcher.fallback.theme-ext}"/>
+      </select>
+    </match>
+    
+    
+    <!-- Structurer panels - You can group elements to a template and call it from any structurer. -->
+    <match pattern="resolve.panels.**">
+      <select type="exists">
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.theme}/panels/{1}{global:dispatcher.panel.ext}"/>
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.fallback.theme}/panels/{1}{global:dispatcher.panel.ext}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.theme}/panels/{1}{global:dispatcher.panel.ext}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}/panels/{1}{global:dispatcher.panel.ext}"/>
+      </select>
+    </match>
+    <!-- Some input need to be striped by their root element. -->
+    <match pattern="root-strip.xsl">
+      <select type="exists">
+        <location
+          src="{lm:dispatcher.home}resource/stylesheets/root-strip.xsl"/>
+      </select>
+    </match>
+    <!-- Project implementation of templates have priority before default ones.
+    If no implementation can be found we use the noFt (~ - no forrest:template) implementation.  
+    {1} name of the contract -->
+    <match pattern="resolve.contract.*.**">
+      <select type="exists">
+        <!-- project-based theme -->
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.theme}/{1}/{2}{global:dispatcher.contract.ext}"/>
+        <!-- project-based default fallback -->
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.fallback.theme}/{1}/{2}{global:dispatcher.contract.ext}"/>
+        <!-- forrest-application-based theme -->
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.theme}/{1}/{2}{global:dispatcher.contract.ext}"/>
+        <!--  forrest-application-based default fallback -->
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}/{1}/{2}{global:dispatcher.contract.ext}"/>
+        <!--  forrest-application-based no found -->
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}/{1}/noFt{global:dispatcher.contract.ext}"/>
+      </select>
+    </match>
+    <!-- contracts have to be striped to their stylesheet for aggregation. -->
+    <match pattern="contract-strip-xsl.xsl">
+      <select type="exists">
+        <location
+          src="{lm:dispatcher.home}resource/stylesheets/contract-strip-xsl.xsl"/>
+      </select>
+    </match>
+    <match pattern="hooks-to-*.xsl">
+      <select type="exists">
+        <location
+          src="{lm:dispatcher.home}resource/stylesheets/{0}"/>
+      </select>
+    </match>
+    <match pattern="strip-dispatcher-remains-**.xsl">
+      <select type="exists">
+        <location
+          src="{lm:dispatcher.home}resource/stylesheets/{0}"/>
+      </select>
+    </match>
+    <!-- contracts (e.g. html) that can be used in the project. -->
+    <match pattern="ls.contracts.xsl">
+      <location
+        src="{lm:dispatcher.home}resource/stylesheets/ls.contracts.xsl"/>
+    </match>
+    <match pattern="ls.contracts-to-document.xsl">
+      <location
+        src="{lm:dispatcher.home}resource/stylesheets/ls.contracts-to-document.xsl"/>
+    </match>
+    <!-- generic match for theme image resource -->
+    <!-- 
+    {1} name
+    {2} extension (note we assume e.g. {1}.gif)
+    -->
+    <match pattern="themes/images/**.*">
+      <select type="exists">
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.theme}/images/{1}.{2}"/>
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.fallback.theme}/images/{1}.{2}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.theme}/images/{1}.{2}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}/images/{1}.{2}"/>
+      </select>
+    </match>
+    <!-- generic match for theme resource like css and js. -->
+    <!-- 
+    {1} name
+    {2} extension (note we assume e.g. PATH/css/{1}.css)
+    -->
+    <match pattern="themes/**.*">
+      <select type="exists">
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.theme}/{2}/{1}.{2}"/>
+        <location
+          src="{lm:project.themer}/themes/{global:dispatcher.fallback.theme}/{2}/{1}.{2}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.theme}/{2}/{1}.{2}"/>
+        <location
+          src="{lm:dispatcher.themer}/themes/{global:dispatcher.fallback.theme}/{2}/{1}.{2}"/>
+      </select>
+    </match>
+    <!--  Extracts the style sheet from the contract.  -->
+    <match pattern="contract-strip-xsl.xsl">
+      <location
+        src="{lm:dispatcher.home}resource/stylesheets/contract-strip-xsl.xsl"/>
+    </match>
+    <match pattern="transform.xml.variable.helper">
+      <location
+        src="{lm:dispatcher.home}resource/stylesheets/variable.helper.xsl"/>
+    </match>
+    <!-- Id generation -->
+    <match pattern="generateId.xsl">
+      <location
+        src="{lm:dispatcher.home}resource/stylesheets/generateId.xsl"/>
+    </match>
+    <match pattern="namespace-stripped">
+      <location src="{lm:dispatcher.home}resource/stylesheets/strip_namespaces.xsl"/>
+    </match>
+  </locator>
+</locationmap>
