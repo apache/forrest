@@ -86,13 +86,13 @@
   </xsl:template>
   
   <xsl:template name="contributors">
-    <xsl:if test="doap:maintainer|doap:developer|doap:helper">
-      "person" : [<xsl:apply-templates select="doap:maintainer|doap:developer|doap:helper"/>],
+    <xsl:if test="doap:documentor|doap:maintainer|doap:developer|doap:helper">
+      "person" : [<xsl:apply-templates select="doap:maintainer|doap:documentor|doap:developer|doap:helper"/>],
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="doap:maintainer|doap:developer|doap:helper">
-    <xsl:apply-templates select="foaf:Person"/><xsl:if test="not(following-sibling::doap:maintainer|doap:developer|doap:helper)">,</xsl:if>
+  <xsl:template match="doap:documentor|doap:maintainer|doap:developer|doap:helper">
+    <xsl:apply-templates select="foaf:Person"/><xsl:if test="following-sibling::doap:maintainer|following-sibling::doap:documentor|following-sibling::doap:developer|following-sibling::doap:helper">,</xsl:if>
   </xsl:template>
   
   <xsl:template match="foaf:Person">
