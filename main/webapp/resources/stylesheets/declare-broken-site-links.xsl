@@ -24,20 +24,17 @@
   then excluded by cli.xconf
 -->
 
-<!--  This match needs to cover all namespaces -->
-
   <xsl:template match="@*">
-    <!--  Note this strips namespaces from attributes -->
-    <xsl:attribute name="{local-name(.)}">
       <xsl:choose>
         <xsl:when test="contains(., 'site:') or contains(., 'ext:')">
-          <xsl:value-of select="concat('error:', .)"/>
+          <xsl:attribute name="{name(.)}">
+            <xsl:value-of select="concat('error:', .)"/>
+          </xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="."/>
+          <xsl:copy><xsl:value-of select="."/></xsl:copy>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:attribute>
   </xsl:template>
   <xsl:template match="/ | * | comment() | processing-instruction() | text()">
     <xsl:copy>
