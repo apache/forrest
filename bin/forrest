@@ -70,9 +70,11 @@ ANT_HOME="$FORREST_HOME/tools/ant"
 if [ "$cygwin" = "true" ] ; then
   S=';'
   FORREST_DOT_HOME=`cygpath -w "$FORREST_HOME"`
+  FORREST_SHELL_HOME=`cygpath -u "$FORREST_HOME"`
 else
   S=':'
   FORREST_DOT_HOME=$FORREST_HOME
+  FOREST_SHELL_HOME=$FORREST_HOME
 fi
 
 # set the ant file to use
@@ -82,7 +84,7 @@ CP="$CLASSPATH"
 export CP
 unset CLASSPATH
 
-for i in $FORREST_HOME/lib/endorsed/*.jar; do
+for i in $FORREST_SHELL_HOME/lib/endorsed/*.jar; do
   if [ "$cygwin" = "true" ] ; then
     LIB=`cygpath -w $i`
   else
