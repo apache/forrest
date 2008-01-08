@@ -15,14 +15,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE skinconfig PUBLIC "-//APACHE//DTD Skin Configuration V0.7-1//EN" "http://forrest.apache.org/dtd/skinconfig-v07-1.dtd"
-[
-  <!ENTITY skinconf-common PUBLIC "-//Apache Forrest//ENTITIES Skin Configuration common plugins V0.7-1//EN" "">
-]>
-<skinconfig>
-  &skinconf-common;
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:pipelines>
+    <map:pipeline>
+      
+      <map:match pattern="samples/glossary/**.rdf">
+        <map:generate src="cocoon://samples/glossary/{1}.source.xml" />
+        <map:serialize type="xml"/>
+      </map:match>
 
-  <project-name>Plugin: SKOS</project-name>
-  <project-url>http://sina.khakbaz.com:8888/</project-url>
-  <project-description>SKOS plugin for Apache Forrest</project-description>
-</skinconfig>
+    </map:pipeline>
+  </map:pipelines>
+</map:sitemap>

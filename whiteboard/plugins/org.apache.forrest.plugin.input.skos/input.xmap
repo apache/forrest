@@ -16,12 +16,35 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
   <!-- Components -->
   <map:components>
+    <map:generators>
+      <map:generator name="directory"
+                     src="org.apache.cocoon.generation.DirectoryGenerator"/>
+    </map:generators>
     <map:selectors default="parameter">
       <map:selector logger="sitemap.selector.parameter" name="parameter"
                     src="org.apache.cocoon.selection.ParameterSelector"/>
     </map:selectors>
+    <map:transformers default="xslt">
+      <map:transformer name="cinclude" 
+                  src="org.apache.cocoon.transformation.CIncludeTransformer"/>
+      <map:transformer name="i18n"
+                       src="org.apache.cocoon.transformation.I18nTransformer">
+        <catalogues default="projectInfo">
+          <!--
+          <catalogue id="skos" name="SKOSMessages"
+                     location="{lm:skos.translations}"/>
+          -->
+          <catalogue id="projectInfo" name="ProjectInfoMessages" 
+                     location="{lm:project.translations}"/>
+          <catalogue id="other" name="OtherMessages"
+                     location="{lm:project.translations}"/>
+        </catalogues>
+        <cache-at-startup>true</cache-at-startup>
+      </map:transformer>
+    </map:transformers>
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype"
                   src="org.apache.forrest.sourcetype.SourceTypeAction">
@@ -30,11 +53,62 @@
         </sourcetype>
       </map:action>
     </map:actions>
+    <map:pipes>
+      <map:pipe name="navigation"
+                src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
+        <parameter name="cache-expires" value="0"/>
+      </map:pipe>
+    </map:pipes>
   </map:components>
   <!-- /Components -->
 
   <!-- Pipelines -->
   <map:pipelines>
+    <map:pipeline type="navigation">
+      <!-- Glossary bundle -->
+      <map:match pattern="samples/glossary/glossaryBundle.xml">
+        <map:generate type="file" src="{properties:content}/locationmap.xml"/>
+        <map:transform src="{lm:skos.transform.locationmap.glossaryBundle}"/>
+        <map:transform type="cinclude"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Not being used by samples -->
+      <map:match pattern="samples/glossary/index.siteSnippet.xml">
+        <map:generate type="file" src="cocoon:/samples/glossary/glossaryBundle.xml"/>
+        <map:transform src="{lm:skos.transform.glossaryBundle.siteSnippet}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+    </map:pipeline>
+
+    <map:pipeline>
+      <!-- Glossary Indexs  -->
+      <map:match pattern="samples/glossary/index/*.xml">
+        <map:generate type="file" src="cocoon://samples/glossary/glossaryBundle.xml"/>
+        <map:transform src="{lm:skos.transform.glossaryBundle.index.{1}}">
+          <map:parameter name="documentPath" value="{0}"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      <map:match pattern="samples/glossary/index/*/*.xml">
+        <map:generate type="file" src="cocoon://samples/glossary/glossaryBundle.xml"/>
+        <map:transform src="{lm:skos.transform.glossaryBundle.index.{1}}">
+          <map:parameter name="documentPath" value="{0}"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+      <!-- Glossary sources in SKOS RDF/XML -->
+      <map:match pattern="samples/glossary/**.source.xml">
+        <map:generate type="file" src="{lm:skos.glossary.{1}}"/>
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="samples/glossary/**.xml">
+        <map:generate type="file" src="cocoon://samples/glossary/{1}.source.xml"/>
+        <map:transform src="{lm:skos.transform.skos.document}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
+    </map:pipeline>
+
+    <!-- SourceTypeAction
     <map:pipeline>
       <map:match pattern="**skos.xml">
         <map:generate src="{properties:content.xdocs}{1}skos.xml"/>
@@ -53,6 +127,7 @@
         <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
+    -->
   </map:pipelines>
   <!-- /Pipelines -->
 </map:sitemap>

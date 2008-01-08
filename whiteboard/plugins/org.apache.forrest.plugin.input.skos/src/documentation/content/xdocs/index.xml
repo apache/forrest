@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
-			  "http://forrest.apache.org/dtd/document-v20.dtd">
+                          "http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
   <header>
     <title>Welcome to SKOS Plugin for Forrest</title>
@@ -26,9 +26,9 @@
       <title>Apache Forrest - SKOS Plugin</title>
       <p>
         Rendering <a href="ext:skos">SKOS</a>, a set of 
-	<a href="ext:skos/specs">specifications</a> to 
-	support the representation of thesauri, classification schemes, 
-	taxonomies, etc.
+        <a href="ext:skos/specs">specifications</a> to 
+        support the representation of thesauri, classification schemes, 
+        taxonomies, etc.
       </p>
     </section>
     <section id="samples">
@@ -38,47 +38,65 @@
       </note>
       <p>
         This section includes samples that have been made available so far to 
-	demonstrate the existing functionalities of the plugin.
+        demonstrate the existing functionalities of the plugin.
       </p>
       <section id="glossary">
         <title>Glossary</title>
         <p>
-	  This sample generates a <a href="site:glossary">glossary</a> from 
-	  a collection of <code>skos:Concept</code>s written in RDF/XML format.
+          This sample generates a glossary from a collection of 
+          <code>skos:Concept</code>s written in RDF/XML format.
+          An example would be:
         </p>
-	<p>An example would be:</p>
         <source>
 <![CDATA[
-<skos:Concept rdf:about="http://forrest.apache.org/docs/glossary#Dispatcher">
-  <skos:prefLabel>Dispatcher</skos:prefLabel>
+<rdf:Description rdf:about="http://example.org/glossary/logic#">
+  <dc:title>Glossary of Logic</dc:title>
+  ...
+</rdf:Description>
+
+<skos:Concept rdf:about="http://example.org/glossary/logic#categorical_proposition">
+  <skos:prefLabel>categorical proposition</skos:prefLabel>
   <skos:definition>
   ...
   </skos:definition>
   <skos:definition>
   ...
   </skos:definition>
-  <skos:related rdf:resource="http://forrest.apache.org/docs/glossary#Contracts"/>
+  <skos:related rdf:resource="http://example.org/glossary/logic#proposition"/>
 </skos:Concept>
 ]]>
         </source>
-        <note>
-          We <a href="site:todo">plan</a> to provide a wider support 
-	  for the format in the near future.
-        </note>
         <p>
-          To retrieve the glossary file in its raw form --SKOS RDF/XML, please 
-	  request the file <code>samples/glossary-skos/source.xml</code>.
+          A map of available glossaries must be provided in the 
+          <a href="ext:forrest/locationmap">locationmap</a>, 
+          which is by default located in <code>{properties:content}</code>. The 
+          following example shows how to map glossaries in the locationmap.
         </p>
+        <source>
+<![CDATA[
+    <match pattern="skos.glossary.logic">
+      <location src="http://example.org/glossary/logic.rdf"/>
+    </match>
+    <match pattern="skos.glossary.string-theory">
+      <location src="{properties:content}skos/glossaries/string-theory.rdf"/>
+    </match>
+]]>
+        </source>
         <p>
-        To retrieve the glossary in other formats, please request the file
-        <code>samples/glossary-skos.[FORMAT]</code>. The following formats are 
-	currently supported:
+          Here are some requests served by the plugin.
         </p>
         <ul id="glossary-formats">
-	  <li><a href="site:glossary">HTML</a></li>
-	  <li><a href="/samples/glossary-skos.pdf">PDF</a></li>
-	  <li><a href="/samples/glossary-skos.xml">XDoc</a></li>
-	</ul>
+          <li>
+            <a href="site:glossary/all">List of all available glossaries</a>
+          </li>
+          <li>
+            An example glossary published by W3C in 
+            <a href="/samples/glossary/rdf-mt.html">HTML</a>, 
+            <a href="/samples/glossary/rdf-mt.pdf">PDF</a>, 
+            <a href="/samples/glossary/rdf-mt.rdf">RDF</a>, and
+            <a href="/samples/glossary/rdf-mt.xml">XDoc</a> formats.
+          </li>
+        </ul>
       </section>
     </section>
   </body>
