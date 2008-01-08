@@ -211,7 +211,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://us.apachecon.com/"><img border="0" title="ApacheCon US 2007" alt="ApacheCon US 2007 - logo" src="http://apache.org/ads/ApacheCon/2007-usa-125x125.png" style="width: 125px;height: 125px;"></a><a href="http://eu.apachecon.com/"><img border="0" title="ApacheCon Europe 2008" alt="ApacheCon Europe 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-europe-125x125.png" style="width: 125px;height: 125px;"></a>
+<a href="http://eu.apachecon.com/"><img border="0" title="ApacheCon Europe 2008" alt="ApacheCon Europe 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-europe-125x125.png" style="width: 125px;height: 125px;"></a>
 </div>
 </div>
 <!--+
@@ -328,7 +328,7 @@ Hold them here until building properly.
       </p>
 </div>
     
-<a name="N10052"></a><a name="software"></a>
+<a name="N10050"></a><a name="software"></a>
 <h2 class="underlined_10">Software</h2>
 <div class="section">
 <p>
@@ -340,7 +340,13 @@ Hold them here until building properly.
         Various local software is installed in <span class="codefrag">/export/opt/</span> (not
         managed with SVN) ...
       </p>
-<a name="N10065"></a><a name="s-forrest"></a>
+<p>
+        Our Apache httpd server is managed using
+        <a href="http://www.apache.org/dev/solaris-zones.html#apache2_smf">Solaris SMF</a>
+        
+       so should always come back up automatically after a failure or machine reboot.
+      </p>
+<a name="N1006A"></a><a name="s-forrest"></a>
 <h3 class="underlined_5">Forrest</h3>
 <p>
           
@@ -381,7 +387,7 @@ cd main
         </pre>
 </div>
     
-<a name="N10092"></a><a name="fb"></a>
+<a name="N10097"></a><a name="fb"></a>
 <h2 class="underlined_10">The forrestbots</h2>
 <div class="section">
 <p>
@@ -397,7 +403,6 @@ cd main
 forrestbot operating with trunk.
 builds various sites automatically, triggered via cron.
 Configuration files and the generated results are at $DOC_ROOT/ft/
-FIXME: The web interface is coming soon.
 </pre>
 <p>
         
@@ -417,7 +422,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
       </p>
 </div>
     
-<a name="N100B3"></a><a name="admin"></a>
+<a name="N100B8"></a><a name="admin"></a>
 <h2 class="underlined_10">Administration</h2>
 <div class="section">
 <p>
@@ -453,18 +458,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         Keep an occasional eye on $CONFIG/update-forrest-trunk.log This is
         the output of the cronjob to do svn update to trunk and re-build.
       </p>
-<p>
-        FIXME: Start apache2 on boot (using new Solaris init.d replacement
-        called smf). At the moment we need to realise that it is down and
-        manually restart as per http://www.apache.org/dev/solaris-zones.html
-        Also it seems that /var/run/apache2 is wiped out on reboot, so need to
-        mkdir again.
-      </p>
-<pre class="code">
-sudo mkdir /var/run/apache2
-sudo /usr/apache2/bin/apachectl -k start
-</pre>
-<a name="N100E9"></a><a name="admin-user"></a>
+<a name="N100E7"></a><a name="admin-user"></a>
 <h3 class="underlined_5">User administration</h3>
 <p>
           After receiving your account, please be sure to configure it properly.
@@ -481,13 +475,13 @@ sudo /usr/apache2/bin/apachectl -k start
         </p>
 </div>
     
-<a name="N10102"></a><a name="other"></a>
+<a name="N10100"></a><a name="other"></a>
 <h2 class="underlined_10">Other notes</h2>
 <div class="section">
 <ul>
         
 <li>See some other discussion in the thread
-          <a href="http://marc.info/?l=forrest-dev&m=111717382712670">Re: zone for testing forrest</a>
+          <a href="http://marc.info/?l=forrest-dev&m=111717382712670" rel="nofollow">Re: zone for testing forrest</a>
 </li>
       
 </ul>
@@ -510,7 +504,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div class="copyright">
         Copyright &copy;
-         2002-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+         2002-2008 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
 </div>
 <!--+
     |end bottomstrip
