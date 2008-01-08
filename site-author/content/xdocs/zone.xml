@@ -36,21 +36,31 @@
         <code>https://svn.apache.org/repos/asf/forrest/zone</code> and
         additional private stuff is in our pmc/forrest/zone SVN.
       </p>
-      <note label="Config">
+      <p>
+        <strong>config</strong>
+      </p>
+<!-- FIXME: create better layout for notes, just dumping text inside source elements for now. -->
+      <source>
 creates /export/home/config ... $CONFIG
 directories /forrestbot-*/ are the forrestbot homes, see below.
 setenv*.sh ... these are sourced by the forrestbots and other
   cronjobs and user configs, to set the environment.
-      </note>
-      <note label="htdocs">
+</source>
+      <p>
+        <strong>htdocs</strong>
+      </p>
+      <source>
 creates /var/apache2/htdocs ... $DOC_ROOT
 directories /ft/ and /fts/ are the forrestbot config and results, see below.
-      </note>
-      <note label="test-sources">
+</source>
+      <p>
+        <strong>test-sources</strong>
+      </p>
+      <source>
 A place to hold sources for various test sites.
 Normally these would be in the relevant project's SVN.
 Hold them here until building properly.
-      </note>
+</source>
       <p>
         All files are owned in the group "other" so any one of us can
         edit/update. Make sure that your 'umask' is set properly so that new
@@ -75,18 +85,33 @@ Hold them here until building properly.
         Various local software is installed in <code>/export/opt/</code> (not
         managed with SVN) ...
       </p>
+      <p>
+        Our Apache httpd server is managed using
+        <a href="http://www.apache.org/dev/solaris-zones.html#apache2_smf">Solaris SMF</a>
+        
+       so should always come back up automatically after a failure or machine reboot.
+      </p>
       <section id="s-forrest">
         <title>Forrest</title>
-        <note label="forrest-trunk">
+        <p>
+          <strong>forrest-trunk</strong>
+        </p>
+        <source>
 svn checkout of trunk.
 automatically 'svn update' and 'build' via cron: $CONFIG/update-forrest-trunk.sh
-        </note>
-        <note label="forrest-trunk-stable">
+</source>
+        <p>
+          <strong>forrest-trunk-stable</strong>
+        </p>
+        <source>
 svn checkout of trunk, manually updated as needed.
-        </note>
-        <note label="forrest-release">
+</source>
+        <p>
+          <strong>forrest-release</strong>
+        </p>
+        <source>
 svn checkout of current release branch, manually updated as needed.
-</note>
+</source>
         <p>
           To manually update -stable or -release do this:
         </p>
@@ -107,17 +132,23 @@ cd main
         There are various forrestbots operating with different versions of
         forrest. Their home is at $CONFIG
       </p>
-      <note label="$CONFIG/forrestbot-trunk">
+      <p>
+        <strong>$CONFIG/forrestbot-trunk</strong>
+      </p>
+      <source>
 forrestbot operating with trunk.
 builds various sites automatically, triggered via cron.
 Configuration files and the generated results are at $DOC_ROOT/ft/
 FIXME: The web interface is coming soon.
-      </note>
-      <note label="$CONFIG/forrestbot-trunk-stable">
+</source>
+      <p>
+        <strong>$CONFIG/forrestbot-trunk-stable</strong>
+      </p>
+      <source>
 forrestbot operating with trunk-stable.
 builds various sites, only runs when needed, triggered via cron.
 Configuration files and the generated results are at $DOC_ROOT/fts/
-      </note>
+</source>
       <p>
         Forrestbot logs are at $CONFIG/forrestbot-trunk*/logs/ and old ones are
         cleaned up by the crontab. There is also a log file for each site that
@@ -160,12 +191,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         Keep an occasional eye on $CONFIG/update-forrest-trunk.log This is
         the output of the cronjob to do svn update to trunk and re-build.
       </p>
-      <p>
-        The Forrest zone is set up using SMF and so should always come back up
-        automatically after a failure or reboot. See how it is configured on the
-        <a href="http://www.apache.org/dev/solaris-zones.html#apache2_smf"> Apache2
-        SMF</a> section of the Solaris Zones page.
-      </p>
+
       <section id="admin-user">
         <title>User administration</title>
         <p>
